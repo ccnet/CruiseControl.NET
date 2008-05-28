@@ -20,9 +20,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         public enum CleanUpMethod
         {
             KeepLastXBuilds,
-            DeleteBuildsOlderThanXDays
+            DeleteBuildsOlderThanXDays,
+            KeepMaximumXHistoryDataEntries
         }
-        
+
         private CleanUpMethod cleanUpMethod;
         private Int32 cleanUpValue;
 
@@ -44,34 +45,51 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         {
             get { return cleanUpValue; }
             set { cleanUpValue = value; }
-        }        
+        }
 
 
         public void Run(IIntegrationResult result)
         {
-            string BuildLogFolder = result.BuildLogDirectory;
-
-            if (BuildLogFolder == null )
-                {
-                    Log.Debug("Cleaning up the artifact folder not possible because the buildlog folder is NULL. \n Check that the XML Log publisher is before the Artifacts Cleanup publisher in the config.") ;
-                    return;
-                }
 
             switch (cleanUpMethod)
             {
                 case CleanUpMethod.KeepLastXBuilds:
-                    KeepLastXBuilds(BuildLogFolder, CleaningUpValue);
+                    if (BuildLogFolderSet(result))
+                    {
+                        KeepLastXBuilds(result.BuildLogDirectory, CleaningUpValue);
+                    }
                     break;
-                    
+
                 case CleanUpMethod.DeleteBuildsOlderThanXDays:
-                    DeleteBuildsOlderThanXDays(BuildLogFolder, CleaningUpValue);
+                    if (BuildLogFolderSet(result))
+                    {
+                        DeleteBuildsOlderThanXDays(result.BuildLogDirectory, CleaningUpValue);
+                    }
+                    break;
+
+                case CleanUpMethod.KeepMaximumXHistoryDataEntries:
+                    KeepMaximumXHistoryDataEntries(result, cleanUpValue);
                     break;
 
                 default:
-                    throw new NotImplementedException("Unmapped cleaning up method used");                    
+                    throw new NotImplementedException("Unmapped cleaning up method used");
             }
         }
 
+        private bool BuildLogFolderSet(IIntegrationResult result)
+        {
+            string BuildLogFolder = result.BuildLogDirectory;
+
+            if (BuildLogFolder == null || BuildLogFolder.Length == 0)
+            {
+                Log.Debug("Cleaning up the artifact folder not possible because the buildlog folder is NULL. \n Check that the XML Log publisher is before the Artifacts Cleanup publisher in the config.");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
 
         private void DeleteBuildsOlderThanXDays(string buildLogFolder, Int32 daysToKeep)
         {
@@ -91,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         private void KeepLastXBuilds(string buildLogFolder, Int32 buildToKeep)
         {
-            System.Collections.ArrayList BuildLogFiles = 
+            System.Collections.ArrayList BuildLogFiles =
                 new System.Collections.ArrayList(System.IO.Directory.GetFiles(buildLogFolder));
 
             BuildLogFiles.Sort();
@@ -106,8 +124,43 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         private void DeleteFile(string fileName)
         {
-                System.IO.File.Delete(fileName);
+            System.IO.File.Delete(fileName);
         }
 
+        private void KeepMaximumXHistoryDataEntries(IIntegrationResult result, Int32 entriesToKeep)
+        {
+            string HistoryXmlData = Publishers.ModificationHistoryPublisher.LoadHistory(result.ArtifactDirectory);
+
+            if (HistoryXmlData.Length == 0)
+            {
+                return;
+            }
+            System.Xml.XmlDocument XmlDoc = new System.Xml.XmlDocument();
+
+            XmlDoc.LoadXml(HistoryXmlData);
+
+            if (XmlDoc.FirstChild.ChildNodes.Count == 0)
+            {
+                return;
+            }
+
+
+            Int32 CurrentAmountOfNodes = XmlDoc.FirstChild.ChildNodes.Count;
+            System.IO.StringWriter CleanedHistoryData = new System.IO.StringWriter();
+
+            for (int i = CurrentAmountOfNodes - entriesToKeep; i <= CurrentAmountOfNodes - 1; i++)
+            {
+                CleanedHistoryData.WriteLine(XmlDoc.FirstChild.ChildNodes[i].OuterXml);
+            }
+
+
+            System.IO.StreamWriter HistoryWriter = new System.IO.StreamWriter(
+                    System.IO.Path.Combine(result.ArtifactDirectory,
+                                            Publishers.ModificationHistoryPublisher.DataHistoryFileName));
+
+            HistoryWriter.WriteLine(CleanedHistoryData.ToString());
+            HistoryWriter.Close();
+
+        }
     }
 }

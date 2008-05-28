@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     [ReflectorType("modificationHistory")]
     public class ModificationHistoryPublisher : ITask
     {
-        private const string DataHistoryFileName = "HistoryData.xml";
+        public const string DataHistoryFileName = "HistoryData.xml";
         private bool onlyLogWhenChangesFound = false;
 
 
