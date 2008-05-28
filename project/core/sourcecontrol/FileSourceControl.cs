@@ -83,6 +83,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public void GetSource(IIntegrationResult result)
 		{
+            result.BuildProgressInformation.SignalStartRunTask("Getting source from FileSourceControl");
+
 			if (AutoGetSource)
 				fileSystem.Copy(RepositoryRoot, result.WorkingDirectory);
 		}
