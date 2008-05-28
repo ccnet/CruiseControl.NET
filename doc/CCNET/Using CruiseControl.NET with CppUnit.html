@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <title>CruiseControl.NET : Using CruiseControl.NET with CppUnit</title>
@@ -27,7 +28,7 @@ I used CppUnit 1.12.0</p>
 <p>In &lt;exec&gt; and .bat file for launching tests.<br/>
 It is required that this but file first delete privious results.<br/>
 Than launch tests and using XmlOutputter, put results at "Results.xml"</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;exec&gt;</span>
     	<span class="code-tag">&lt;executable&gt;</span>TestRunner.bat<span class="code-tag">&lt;/executable&gt;</span>
     	<span class="code-tag">&lt;baseDirectory&gt;</span>***<span class="code-tag">&lt;/baseDirectory&gt;</span>
@@ -38,7 +39,7 @@ Than launch tests and using XmlOutputter, put results at "Results.xml"</p>
 <p>I like that build can be identified by NUnit, so I use the same method.<br/>
 And send to NUnit, exe file that return 1 or 0, depend on result.<br/>
 It has something</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java"><span class="code-object">int</span> main(<span class="code-object">int</span> argc, <span class="code-object">char</span>* argv[])
 {
 ...
@@ -49,7 +50,7 @@ It has something</p>
 <p>It is a usual way for CppUnit. Who used cppUnit just once, should know these strings.</p>
 
 <p>Then I add to log recieved results.</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;nunit&gt;</span>
     	<span class="code-tag">&lt;path&gt;</span>IsSucessful.exe<span class="code-tag">&lt;/path&gt;</span>
     	<span class="code-tag">&lt;assemblies&gt;</span>
@@ -71,14 +72,14 @@ It has something</p>
 
 <h1><a name="UsingCruiseControl.NETwithCppUnit-Dashboard"></a>Dashboard</h1>
 <p>I've updated <b>unittests.xsl</b> , to make tests in usual manner.<br/>
-Changed unittests.xsl is attached - <a href="../786491/unittests.xsl">unittests.xsl</a>.</p>
+Changed unittests.xsl is attached - <a href="download/attachments/786491/unittests.xsl">unittests.xsl</a>.</p>
 
 <h2><a name="UsingCruiseControl.NETwithCppUnit-HowcppUnitxmllooks."></a>How cppUnit xml looks.</h2>
 <p>You can find standart example at cppunit-cvs-1.12.0\contrib\xml-xsl\tests.xml.<br/>
-In same folder xsl-transformation for cppUnit to JUnit, but I don't know how to use "double transformation" for CC.NET dashboard. <img class="emoticon" src="./icons/emoticons/sad.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></p>
+In same folder xsl-transformation for cppUnit to JUnit, but I don't know how to use "double transformation" for CC.NET dashboard. <img class="emoticon" src="images/icons/emoticons/sad.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></p>
 
 <p>And here is my example</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;TestRun&gt;</span>
   <span class="code-tag">&lt;FailedTests&gt;</span>
     <span class="code-tag">&lt;FailedTest id=<span class="code-quote">"5"</span>&gt;</span>
@@ -124,7 +125,7 @@ In same folder xsl-transformation for cppUnit to JUnit, but I don't know how to 
 </div></div>
 
 <h2><a name="UsingCruiseControl.NETwithCppUnit-Variables"></a>Variables</h2>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag"><span class="code-comment">&lt;!-- CppUnit Cases --&gt;</span></span>
 	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"cppunit.result.list"</span> select=<span class="code-quote">"/cruisecontrol/build/TestRun"</span>/&gt;</span>
 	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"cppunit.failed.list"</span> select=<span class="code-quote">"$cppunit.result.list/FailedTests/FailedTest"</span>/&gt;</span>
@@ -138,7 +139,7 @@ In same folder xsl-transformation for cppUnit to JUnit, but I don't know how to 
 </div></div>
 
 <h2><a name="UsingCruiseControl.NETwithCppUnit-UpdateTestStatistic"></a>Update Test Statistic</h2>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml">&lt;!-- <span class="code-quote">"Old"</span> 
 	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"total.time"</span> select=<span class="code-quote">"$nunit2.time + $junit.time"</span>/&gt;</span>
 	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"total.notrun.count"</span> select=<span class="code-quote">"$nunit2.notrun.count"</span>/&gt;</span>
@@ -156,7 +157,7 @@ In same folder xsl-transformation for cppUnit to JUnit, but I don't know how to 
 
 <h2><a name="UsingCruiseControl.NETwithCppUnit-ShortDetails"></a>Short Details</h2>
 <p>First add "apply-templates"</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag"><span class="code-comment">&lt;!-- Short Information *Next Line added* --&gt;</span></span>
 <span class="code-tag">&lt;<span class="code-keyword">xsl:apply-templates</span> select=<span class="code-quote">"$cppunit.failed.list"</span>/&gt;</span>
 <span class="code-tag"><span class="code-comment">&lt;!-- Next line helps you to identify the place --&gt;</span></span>		
@@ -166,7 +167,7 @@ In same folder xsl-transformation for cppUnit to JUnit, but I don't know how to 
 </div></div>
 
 <p>Then add template before "&lt;!-- Unit Test Errors --&gt;"</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag"><span class="code-comment">&lt;!-- CppUnit Failed Test --&gt;</span></span>
 	<span class="code-tag">&lt;<span class="code-keyword">xsl:template</span> match=<span class="code-quote">"FailedTest"</span>&gt;</span>
         <span class="code-tag">&lt;tr&gt;</span>
@@ -181,7 +182,7 @@ In same folder xsl-transformation for cppUnit to JUnit, but I don't know how to 
 
 <h2><a name="UsingCruiseControl.NETwithCppUnit-DetailedInformaton"></a>Detailed Informaton</h2>
 <p>First add "call-template"</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag"><span class="code-comment">&lt;!-- Detailed Information *Next Lines added* --&gt;</span></span>
 <span class="code-tag">&lt;<span class="code-keyword">xsl:call-template</span> name=<span class="code-quote">"cppunittestdetail"</span>&gt;</span>
 	<span class="code-tag">&lt;<span class="code-keyword">xsl:with-param</span> name=<span class="code-quote">"detailnodes"</span> select=<span class="code-quote">"$cppunit.failed.list"</span>/&gt;</span>
@@ -193,7 +194,7 @@ In same folder xsl-transformation for cppUnit to JUnit, but I don't know how to 
 </div></div>
 
 <p>Then add template before "&lt;!-- JUnit Test Errors And Failures Detail Template --&gt;"</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;<span class="code-keyword">xsl:template</span> name=<span class="code-quote">"cppunittestdetail"</span>&gt;</span>
 	<span class="code-tag">&lt;<span class="code-keyword">xsl:param</span> name=<span class="code-quote">"detailnodes"</span>/&gt;</span>
 
@@ -219,7 +220,7 @@ In same folder xsl-transformation for cppUnit to JUnit, but I don't know how to 
 </div></div>
 
 <p>If you done all rigth - Now it should all work.<br/>
-Modified file you can find in attaches - <a href="../786491/unittests.xsl">unittests.xsl</a>, all this inderts marked by (DEmon) <img class="emoticon" src="./icons/emoticons/smile.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></p>
+Modified file you can find in attaches - <a href="download/attachments/786491/unittests.xsl">unittests.xsl</a>, all this inderts marked by (DEmon) <img class="emoticon" src="images/icons/emoticons/smile.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></p>
 
 <h1><a name="UsingCruiseControl.NETwithCppUnit-ToDo"></a>ToDo</h1>
 <ul class="alternate" type="square">
@@ -234,8 +235,8 @@ Modified file you can find in attaches - <a href="../786491/unittests.xsl">unitt
                         </div>
 
                         <div class="greybox" align="left">
-                                                            <img src="icons/bullet_blue.gif" height="8" width="8" alt=""/>
-                                <a href="../786491/unittests.xsl">unittests.xsl</a> (application/octet-stream)
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="download/attachments/786491/unittests.xsl">unittests.xsl</a> (application/octet-stream)
                                 <br/>
                                                     </div>
 				    
@@ -244,10 +245,10 @@ Modified file you can find in attaches - <a href="../786491/unittests.xsl">unitt
 	    </table>
 	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:44</font></td>
 		    </tr>
 	    </table>
     </body>

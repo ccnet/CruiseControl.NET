@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <title>CruiseControl.NET : Subversion Source Control Block</title>
@@ -21,8 +22,8 @@
 				    <p>CruiseControl.NET provides basic support for Subversion repositories. Checking for changes, checking out or updating sources, and tagging-by-copying are supported, but more advanced features such as using Subversion revision numbers are not yet supported. Subversion support is under active development and will improve over time.</p>
 
 <p>To configure the CruiseControl.NET server to monitor a Subversion repository, edit ccnet.config and configure sourcecontrol to point at your repository.</p>
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">SVN Checkout</b><br />As of the CCNet 1.2 release, the SVN provider now supports automatic checkout of source.  If the working directory does not contain a <tt>.svn</tt> folder (or <tt>&#95;svn</tt> folder), the SVN block will automatically perform a checkout instead of an update.  The <tt>trunkUrl</tt> must be specified for checkout to function.</td></tr></table>
-<div class="code"><div class="codeContent">
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>SVN Checkout</b><br />As of the CCNet 1.2 release, the SVN provider now supports automatic checkout of source.  If the working directory does not contain a <tt>.svn</tt> folder (or <tt>&#95;svn</tt> folder), the SVN block will automatically perform a checkout instead of an update.  The <tt>trunkUrl</tt> must be specified for checkout to function.</td></tr></table></div>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"svn"</span>&gt;</span>
 	<span class="code-tag">&lt;trunkUrl&gt;</span>svn://svn.mycompany.com/myfirstproject/trunk<span class="code-tag">&lt;/trunkUrl&gt;</span>
 	<span class="code-tag">&lt;workingDirectory&gt;</span>c:\dev\ccnet<span class="code-tag">&lt;/workingDirectory&gt;</span>
@@ -117,7 +118,7 @@
 <h3><a name="SubversionSourceControlBlock-LinkingmodificationstoWebSVN"></a>Linking modifications to WebSVN</h3>
 
 <p>You can link the modifications detected by CruiseControl.NET to the appropriate WebSVN page by adding the following additional configuration information to the Subversion source control section:</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;webUrlBuilder type=<span class="code-quote">"websvn"</span>&gt;</span>
                 <span class="code-tag">&lt;url&gt;</span>http://localhost:7899/websvn/diff.php?repname=MiniACE&amp;amp;path={0}&amp;amp;rev={1}&amp;amp;sc=1<span class="code-tag">&lt;/url&gt;</span>
 <span class="code-tag">&lt;/webUrlBuilder&gt;</span></pre>
@@ -125,7 +126,7 @@
 <p>Change the <b>&lt;url&gt;</b> element to point to the root url for the WebSVN site.  The <b>path</b> and <b>rev</b> parameters will be filled in by CruiseControl.NET when it generates the link to the code file page.</p>
 
 <p>NOTE: The standard url for WebSVN 1.38 contains rep=3 r instead of repname=MiniACE.  Adding a new repository to the SvnParentPath will change the number of the rep parameter, so you may need to make the following change to diff.php to decode the repname parameter:</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">$repname = @$_REQUEST[<span class="code-quote">"repname"</span>];
 
 <span class="code-keyword">if</span> (isset($repname))
@@ -135,7 +136,7 @@
 </div></div>
 <p>The WebSVN WebUrlBuilder can also be used to connect to a <a href="http://www.viewvc.org/">ViewCV</a> site. Here is an example used by CCNet to link to the file revision pages on <a href="http://svn.sourceforge.net/viewvc/ccnet">SourceForge</a>.</p>
 
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">&lt;webUrlBuilder type=<span class="code-quote">"websvn"</span>&gt;
    &lt;url&gt;http:<span class="code-comment">//svn.sourceforge.net/viewvc/ccnet/{0}?view=markup&amp;pathrev={1}&lt;/url&gt;
 </span>&lt;/webUrlBuilder&gt;</pre>
@@ -144,14 +145,14 @@
 <h3><a name="SubversionSourceControlBlock-SVNoverSSL"></a>SVN over SSL</h3>
 
 <p>When connecting to a Subversion repository via SSL (https), you may be required to accept an issued server certificate. This generally requires responding to a command-line prompt that the certificate should be accepted permanently.  For CruiseControl.NET, all Subversion commands are executed using the <b>&#45;-non-interactive</b> switch, which will cause this prompt to be skipped and the subsequent Subversion command to fail with a message like this:</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">svn: PROPFIND request failed on '/svnroot/ccnet'
 svn: PROPFIND of '/svnroot/ccnet': Server certificate verification failed: issuer is not trusted (https:<span class="code-comment">//ccnet.svn.sourceforge.net)</span></pre>
 </div></div>
 <p>As the failure will happen on the first Subversion command to be executed, this failure will not show up as a broken build, but will instead show up in the server log.</p>
 
 <p>One way to resolve this problem is to execute a command against the Subversion repository from the command-line logged in as the user that you are using to run CCNet (certificates are cached by user account, so you must accept the certificate for the appropriate user).  For example, try executing the following command (where <b>trunk_url</b> is the svn url for your repository):</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">svn list [trunk_url]</pre>
 </div></div>
 <p>When prompted to accept the certificate, type 'P' to permanently accept it.</p>
@@ -168,7 +169,7 @@ svn: PROPFIND of '/svnroot/ccnet': Server certificate verification failed: issue
 <p>To connect to Subversion with the svn+ssh protocol, here is an excerpt from the article <a href="http://www.woodwardweb.com/archive/200511.html">HowTo: Configure SVN+SSH with Subclipse on Windows</a> by Martin Woodward.  For more details, see the complete <a href="http://www.woodwardweb.com/archive/200511.html">article</a>.</p>
 
 
-<div class="panel"><div class="panelHeader"><b>HowTo: Configure SVN+SSH with Subclipse on Windows</b></div><div class="panelContent">
+<div class="panel" style="border-width: 1px;"><div class="panelHeader" style="border-bottom-width: 1px;"><b>HowTo: Configure SVN+SSH with Subclipse on Windows</b></div><div class="panelContent">
 <p><b>Solution:</b><br/>
 You need to create an environment variable called "SVN_SSH" that points to an executable file that accepts the same command line arguments as ssh on unix. I did this by doing the following:-</p>
 <ol>
@@ -180,7 +181,7 @@ Variable value: C:\\Program Files\\TortoiseSVN\\bin\\TortoisePlink.exe</pre></li
 </ol>
 
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>The "\ \"(double-back-slash) is very important, otherwise it won't work. Equally, you cannot use the plink.exe that comes with putty as that fires up a command shell window which is really annoying. The TortoisePlink.exe is a windows implementation of plink that doesn't bring up any UI</td></tr></table>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>The "\ \"(double-back-slash) is very important, otherwise it won't work. Equally, you cannot use the plink.exe that comes with putty as that fires up a command shell window which is really annoying. The TortoisePlink.exe is a windows implementation of plink that doesn't bring up any UI</td></tr></table></div>
 </div></div>
 
 <h3><a name="SubversionSourceControlBlock-KnownIssues"></a>Known Issues</h3>
@@ -193,61 +194,23 @@ Variable value: C:\\Program Files\\TortoiseSVN\\bin\\TortoisePlink.exe</pre></li
 <p>I've found that svn has a trouble with --xml parameter. My russian Log Messages were not readable.<br/>
 I found a quick solution for it, next items could be customized to any languges. But be sure this is not the panacea.<br/>
 So in all .xsl files where <em>comments</em> or <em>filename</em> in Russian local I've added folowing "translation"</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;<span class="code-keyword">xsl:value-of</span> select=<span class="code-quote">"translate(comment,'??????????????????????????????????????????????????????????????????','????????????????????????????????????????????????????????????????')"</span>/&gt;</span></pre>
 </div></div>
-<p>where <em>comment</em> from /cruisecontrol/modifications/modification, and "??" in second parameter are symbols to delete, all others are mathed with third parameters. As I found xsl could only translate char strings <img class="emoticon" src="./icons/emoticons/sad.gif" height="20" width="20" align="absmiddle" alt="" border="0"/>, if some one know the way to translate double-char symbols, please note about it.<br/>
+<p>where <em>comment</em> from /cruisecontrol/modifications/modification, and "??" in second parameter are symbols to delete, all others are mathed with third parameters. As I found xsl could only translate char strings <img class="emoticon" src="images/icons/emoticons/sad.gif" height="20" width="20" align="absmiddle" alt="" border="0"/>, if some one know the way to translate double-char symbols, please note about it.<br/>
 In this way you can help your self for modification for any charset.<br/>
 I agree with everyone that it is a rude solution. But for my no time to wait untill svn or cc.net will be customized for that feature.</p>
 
 				    
-                                            <div class="tabletitle">
-                            <a name="comments">Comments:</a>
-                        </div>
-
-                        <table border="0" width="100%">
-                                                        <tr>
-                                <td >
-                                    <a name="comment-763"></a>
-                                    <font class="smallfont"><p>WebSVN's URL format has changed in 1.40.  As such, there is no need to make the change to diff.php described above</p>
-
-<p>Tim</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by  at Jun 10, 2004 07:57
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-786471"></a>
-                                    <font class="smallfont"><p>In svn log I have russian text, in CruiseControl I see some random not-readable symbols. How could it be fixed?</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by makh_dv@qarea.com at Feb 12, 2007 05:32
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-786515"></a>
-                                    <font class="smallfont"><p>I'm experiencing a problem with multiple svn blocks for different repositories. It seems to get the latest revision numbers mixed up. I've posted to the ccnet-users group <a href="http://groups.google.com.ag/group/ccnet-user/browse_thread/thread/3167b4f596c459b5">here</a></p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by mark@bakedbeans.com at Feb 21, 2007 04:55
-                                    </div>
-                                </td>
-                            </tr>
-                                                    </table>
                     			    </td>
 		    </tr>
 	    </table>
 	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:44</font></td>
 		    </tr>
 	    </table>
     </body>

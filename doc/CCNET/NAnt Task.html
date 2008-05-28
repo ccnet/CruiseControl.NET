@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <title>CruiseControl.NET : NAnt Task</title>
@@ -15,18 +16,18 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 22, 2006 by <font color="#0050B2">gfeldman</font>.
+					    This page last changed on Apr 23, 2008 by <font color="#0050B2">rosspatterson</font>.
 				    </div>
 
 				    <h3><a name="NAntTask-Examples"></a>Examples</h3>
 
 <p>Minimalist Example:</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;nant /&gt;</span></pre>
 </div></div>
 
 <p>Full example:</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;nant&gt;</span>
   <span class="code-tag">&lt;executable&gt;</span>c:\fromcvs\myrepo\myproject\tools\nant\nant.exe<span class="code-tag">&lt;/executable&gt;</span>
   <span class="code-tag">&lt;baseDirectory&gt;</span>c:\fromcvs\myrepo\myproject<span class="code-tag">&lt;/baseDirectory&gt;</span>
@@ -113,49 +114,12 @@
 
 <p>CruiseControl.NET expects NAnt to generate its output as Xml so that the build results can be parsed and rendered appropriately.  To accomplish this, CruiseControl.NET will, by default, launch NAnt using the "<b>-logger:NAnt.Core.XmlLogger</b>" argument.  If you want to override this behaviour, specify the <b>logger</b> property in the NAntBuilder configuration in the <b>ccnet.config</b> file.  If this element is specified but is empty then NAnt will be started with the default logger (though this may cause some problems for CCNet).  It is also possible to instruct NAnt to log its output to an Xml file and then merge the file into the build using the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>.</p>
 
-<p><img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: the configuration of which NAnt logger to use was orginally specified in the <b>ccnet.exe.config</b> file.  This has now been deprecated, and the "NAnt.Logger" element in the &lt;appSettings&gt; section can now be removed.</p>
-
-<h3><a name="NAntTask-SourceControlandNAnt"></a>Source Control and NAnt</h3>
-<p>While CruiseControl.NET will detect modifications for you it will not check out changes. It is up to you to add targets to your nant script to do that for you.  So, first you need to create a 'bootstrap' build file that is used to get the latest changes to your source tree whenever an update is comitted. A good place to put this build file is in the same directory as your project's normal buildfile. This bootstrap file should do 2 things:</p>
-
-<ul>
-	<li>Get the latest code from source control</li>
-	<li>Call the appropriate target in the actual project build file</li>
-</ul>
-
-
-<p>The following is an example for a project under CVS control (it assumes that a propery called 'cvs.executable' is passed in from CruiseControl.NET - you can do this in the build/buildArgs section of the ccnet.config file):</p>
-
-<div class="code"><div class="codeContent">
-<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"ccnetlaunch"</span> default=<span class="code-quote">"go"</span>&gt;</span>
-  <span class="code-tag">&lt;target name=<span class="code-quote">"go"</span> depends=<span class="code-quote">"update,build"</span>/&gt;</span>
-  <span class="code-tag">&lt;target name=<span class="code-quote">"update"</span>&gt;</span>
-    <span class="code-tag">&lt;ifnot propertyexists=<span class="code-quote">"cvs.executable"</span>&gt;</span>
-        <span class="code-tag">&lt;fail message=<span class="code-quote">"cvs.executable property not set, so can't update"</span> /&gt;</span>
-    <span class="code-tag">&lt;/ifnot&gt;</span>
-    <span class="code-tag">&lt;echo message=<span class="code-quote">"CVS Executable at [${cvs.executable}]"</span> /&gt;</span>
-    &lt;exec 
-        basedir=<span class="code-quote">"."</span> 
-        program=<span class="code-quote">"${cvs.executable}"</span> 
-        commandline=<span class="code-quote">"-q update -P -d"</span> 
-    /&gt;
-  <span class="code-tag">&lt;/target&gt;</span>
-  <span class="code-tag">&lt;target name=<span class="code-quote">"build"</span>&gt;</span>
-    &lt;nant 
-        buildfile=<span class="code-quote">"myproject.build"</span> 
-        target=<span class="code-quote">"ContinuousIntegration"</span> 
-        inheritall=<span class="code-quote">"true"</span>
-    /&gt;
-  <span class="code-tag">&lt;/target&gt;</span>
-<span class="code-tag">&lt;/project&gt;</span></pre>
-</div></div>
-
-<p>NOTE: The bootstrap buildfile above only updates the buildserver's local copy of your project's source. Before you even run CruiseControl.NET for the first time you need to checkout your project to the location on your machine where CruiseControl.NET will build it.</p>
+<p><img class="emoticon" src="images/icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: the configuration of which NAnt logger to use was orginally specified in the <b>ccnet.exe.config</b> file.  This has now been deprecated, and the "NAnt.Logger" element in the &lt;appSettings&gt; section can now be removed.</p>
 
 <h3><a name="NAntTask-NUnitandNAnt"></a>NUnit and NAnt</h3>
 <p>CruiseControl.NET uses xsl to process the build log and produce html for display on the web page. Since xml is so easy to parse the nunit2 task in NAnt can produce xml output. The tasks must be configured to do that in order for test results to show up on the web page. Typically this is done by adding a formatter element to the nunit2 task and setting the type to be "Xml". Additionally the usefile flag of the formatter element must be set to "false". If it isn't the nunit2 task will try and save the output to a file and not write it out to the build log.</p>
 
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;target name=<span class="code-quote">"test.unit"</span> depends=<span class="code-quote">"compile"</span> description=<span class="code-quote">"runs unit tests"</span>&gt;</span>
 	<span class="code-tag">&lt;nunit2&gt;</span>
 		<span class="code-tag">&lt;formatter type=<span class="code-quote">"Xml"</span> usefile=<span class="code-quote">"false"</span>/&gt;</span>
@@ -167,7 +131,7 @@
 
 <p>It would be pretty tedious for developers to read the xml output when they run the build locally. Define a property for the build output type and set it to "Plain" and use the property in the formatter element..</p>
 
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;property name=<span class="code-quote">"outputType"</span> value=<span class="code-quote">"Plain"</span>/&gt;</span>
 	...
 	<span class="code-tag">&lt;formatter type=<span class="code-quote">"${outputType}"</span> usefile=<span class="code-quote">"false"</span>/&gt;</span>
@@ -176,7 +140,7 @@
 
 <p>Then in the ccnet.config file pass in a different value for outputType.</p>
 
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;nant&gt;</span>
 	...
 	<span class="code-tag">&lt;buildArgs&gt;</span><span class="code-quote">"-DoutputType=Xml"</span><span class="code-tag">&lt;/buildArgs&gt;</span>
@@ -188,7 +152,7 @@
 
 <p>CCNet will pass the current build label to NAnt via the NAnt property <tt>CCNetLabel</tt>.  This means that you can access use this property to, for example, archive the newly built assemblies in a folder with the same name as the build label (this is what we do on <a href="http://ccnetlive.thoughtworks.com/CCNet-builds/">CCNetLive </a>.  Here's some example NAnt script demonstrating how to do this:</p>
 
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;target name=<span class="code-quote">"dist.publish"</span> depends=<span class="code-quote">"dist"</span>&gt;</span>
 	<span class="code-tag">&lt;ifnot propertyexists=<span class="code-quote">"CCNetLabel"</span>&gt;</span>
 		<span class="code-tag">&lt;fail message=<span class="code-quote">"CCNetLabel property not set, so can't create labelled distribution files"</span> /&gt;</span>
@@ -277,10 +241,10 @@
 	    </table>
 	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:44</font></td>
 		    </tr>
 	    </table>
     </body>

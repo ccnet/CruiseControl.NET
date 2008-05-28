@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <title>CruiseControl.NET : Filter Trigger</title>
@@ -15,20 +16,20 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jan 28, 2008 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on Mar 13, 2008 by <font color="#0050B2">rosspatterson</font>.
 				    </div>
 
 				    <p>The <a href="" title="Filter Trigger">Filter Trigger</a> allows you to prevent builds from occurring at certain times or on certain days (such as when your source control repository is undergoing backup).  It is used to decorate an existing trigger.  For example, if you have set up a <a href="Interval Trigger.html" title="Interval Trigger">Interval Trigger</a> to cause a new build every 5 minutes, you can use the Filter Trigger to create a window during which the build will not run.  </p>
 
 <p>The filter will exclude modifications that occur between the start time and the end time on the days specified. If the start time is greater than the end time then the filtered time will span across midnight.  For example, if the start time is 23:00 and the end time is 3:00 then builds will be suppressed from 23:00-23:59 and 0:00-3:00 on the days specified.</p>
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='warningMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Nested trigger syntax is different</b><br />
-<p>As shown below, the configuration of the nested trigger is not the same as when using that trigger outside a filter trigger.  When using the <tt>&lt;filterTrigger&gt;</tt> element, the inner trigger <em>must</em> be specified with the <tt>&lt;trigger&gt;</tt> element.  You could <em>not</em> use the <tt>&lt;intervalTrigger&gt;</tt> trigger element in this example.</p></td></tr></table>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Nested trigger syntax is different</b><br />
+<p>As shown below, the configuration of the nested trigger is not the same as when using that trigger outside a filter trigger.  When using the <tt>&lt;filterTrigger&gt;</tt> element, the inner trigger <em>must</em> be specified with the <tt>&lt;trigger&gt;</tt> element.  You could <em>not</em> use the <tt>&lt;intervalTrigger&gt;</tt> trigger element in this example.</p></td></tr></table></div>
 
 <h4><a name="FilterTrigger-Example"></a>Example</h4>
-<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>NOTE: Like all triggers, the filterTrigger must be enclosed within a triggers element in the appropriate <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a></td></tr></table>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>NOTE: Like all triggers, the filterTrigger must be enclosed within a triggers element in the appropriate <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a></td></tr></table></div>
 
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;filterTrigger startTime=<span class="code-quote">"23:30"</span> endTime=<span class="code-quote">"23:45"</span>&gt;</span>
     <span class="code-tag">&lt;trigger type=<span class="code-quote">"intervalTrigger"</span> seconds=<span class="code-quote">"60"</span> /&gt;</span>
     <span class="code-tag">&lt;weekDays&gt;</span>
@@ -79,13 +80,13 @@
 </tr>
 </tbody></table>
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>NOTE: Times should be specified in a locale-specific format (e.g., H:mm am/pm is acceptable for US locales).</td></tr></table>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>NOTE: Times should be specified in hh:mm or hh:mm:ss 24 hour format (i.e., ranging from 00:00:00 to 23:59:59).</td></tr></table></div>
 
 <h4><a name="FilterTrigger-NestedFilterTriggers%3A"></a>Nested Filter Triggers:</h4>
 
 <p>Sometimes you would like to suppress builds that occur either between certain times or on certain days or in multiple combinations of dates and times.  To acheive this, you can nest multiple filter triggers.  For example, the following xml configures a trigger to filter builds between 7pm and 7am on weekdays and at any time on Saturdays and Sundays.</p>
 
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;filterTrigger startTime=<span class="code-quote">"19:00"</span> endTime=<span class="code-quote">"07:00"</span>&gt;</span>
     <span class="code-tag">&lt;trigger type=<span class="code-quote">"filterTrigger"</span> startTime=<span class="code-quote">"0:00"</span> endTime=<span class="code-quote">"23:59:59"</span>&gt;</span>
         <span class="code-tag">&lt;trigger type=<span class="code-quote">"intervalTrigger"</span> name=<span class="code-quote">"continuous"</span> seconds=<span class="code-quote">"900"</span> buildCondition=<span class="code-quote">"ForceBuild"</span>/&gt;</span>
@@ -105,10 +106,10 @@
 	    </table>
 	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:44</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <title>CruiseControl.NET : SCM Policy</title>
@@ -20,7 +21,7 @@
 
 				    <p>This page describes Source Control, Build Management and Issue Tracking policy for the CruiseControl.NET project.</p>
 
-<p><img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> This is how CruiseControl.NET manages itself as a project in development. If you are just <b>using</b> CruiseControl.NET you of course do not need to follow these same guidelines, but you might find them useful as a example.</p>
+<p><img class="emoticon" src="images/icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> This is how CruiseControl.NET manages itself as a project in development. If you are just <b>using</b> CruiseControl.NET you of course do not need to follow these same guidelines, but you might find them useful as a example.</p>
 
 <h2><a name="SCMPolicy-SourceControl"></a>Source Control</h2>
 
@@ -60,11 +61,11 @@
 <ol>
 	<li>Make sure you have a <em>clean</em> working directory of the trunk which is up-to-date and as no pending changes (if necessary check out a new working directory somewhere else on your machine)</li>
 	<li>Perform a merge in the root of your CCNet Trunk working directory. Apply the changes from the repository revision number that relates to your checkin to the branch and the revision before.
-<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Example</b><br />If your changes appeared in revision 2396, you would use the following merge recipe: <br clear="all" /> <tt>svn merge -r2395:2396 <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_1_0">https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_1_0</a></tt> </td></tr></table>
-<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Example</b><br />If you use TortoiseSVN, click merge on the top level directory of trunk. In the "From" box select the branch url, then click the topmost Show log button. Pick the revision number you want to merge in.  Tortoise automatically fills in the rest of the dialog - so then click OK.</td></tr></table></li>
-	<li><b>Run a local build!</b> You need to make sure that your merge has worked on the trunk so don't go blindly committing. <img class="emoticon" src="./icons/emoticons/smile.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></li>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Example</b><br />If your changes appeared in revision 2396, you would use the following merge recipe: <br clear="all" /> <tt>svn merge -r2395:2396 <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_1_0">https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_1_0</a></tt> </td></tr></table></div>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Example</b><br />If you use TortoiseSVN, click merge on the top level directory of trunk. In the "From" box select the branch url, then click the topmost Show log button. Pick the revision number you want to merge in.  Tortoise automatically fills in the rest of the dialog - so then click OK.</td></tr></table></div></li>
+	<li><b>Run a local build!</b> You need to make sure that your merge has worked on the trunk so don't go blindly committing. <img class="emoticon" src="images/icons/emoticons/smile.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></li>
 	<li>Commit, mentioning in your commit message that you have done a merge, and what versions you merged
-<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Example</b><br /> CCNET-570 - cctray displays "Project is not automatically triggered" if the no next build date is set <br clear="all" /> (merged from 1.0, revision 2396) </td></tr></table></li>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Example</b><br /> CCNET-570 - cctray displays "Project is not automatically triggered" if the no next build date is set <br clear="all" /> (merged from 1.0, revision 2396) </td></tr></table></div></li>
 	<li>Check CCNetLive that your build has passed and that the files that have been committed are exactly those included in the change to the branch</li>
 </ol>
 
@@ -82,7 +83,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> RB_1_0 </td>
-<td class='confluenceTd'> <img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> </td>
+<td class='confluenceTd'> <img class="emoticon" src="images/icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> </td>
 <td class='confluenceTd'> 2005-09-29 </td>
 <td class='confluenceTd'> ver-1_0_0_1171 </td>
 <td class='confluenceTd'> Version 1.0 Release Branch </td>
@@ -107,10 +108,10 @@
 	    </table>
 	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:44</font></td>
 		    </tr>
 	    </table>
     </body>

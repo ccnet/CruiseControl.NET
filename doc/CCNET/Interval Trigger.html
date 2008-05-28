@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <title>CruiseControl.NET : Interval Trigger</title>
@@ -15,23 +16,23 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jan 02, 2007 by <font color="#0050B2">gfeldman</font>.
+					    This page last changed on Feb 12, 2008 by <font color="#0050B2">rosspatterson</font>.
 				    </div>
 
 				    <p>The Interval Trigger is used to specify that an integration should be run periodically, after a certain amount of time. By default, an integration will only be triggered if modifications have been detected since the last integration.  The trigger can also be configured to force a build even if no changes have occurred to source control.  The items to watch for modifications are specified with <a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a>.</p>
 
 <h4><a name="IntervalTrigger-Examples"></a>Examples</h4>
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>NOTE: Like all triggers, the intervalTrigger must be enclosed within a triggers element in the appropriate <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a></td></tr></table>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>NOTE: Like all triggers, the intervalTrigger must be enclosed within a triggers element in the appropriate <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a></td></tr></table></div>
 
 <p>Minimalist example:</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;intervalTrigger /&gt;</span></pre>
 </div></div>
 
 <p>Full example:</p>
-<div class="code"><div class="codeContent">
-<pre class="code-xml"><span class="code-tag">&lt;intervalTrigger name=<span class="code-quote">"continuous"</span> seconds=<span class="code-quote">"30"</span> buildCondition=<span class="code-quote">"ForceBuild"</span>/&gt;</span></pre>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;intervalTrigger name=<span class="code-quote">"continuous"</span> seconds=<span class="code-quote">"30"</span> buildCondition=<span class="code-quote">"ForceBuild"</span> initialIntervalSeconds=<span class="code-quote">"30"</span>/&gt;</span></pre>
 </div></div>
 
 <h4><a name="IntervalTrigger-ConfigurationElements%3A"></a>Configuration Elements:</h4>
@@ -65,9 +66,17 @@
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> IfModificationExists </td>
 </tr>
+<tr>
+<td class='confluenceTd'> initialIntervalSeconds </td>
+<td class='confluenceTd'> The number of seconds after server startup before triggering the first integration cycle. </td>
+<td class='confluenceTd'> int </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> value of seconds </td>
+</tr>
 </tbody></table>
 
-<p><img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: this class replaces the <b>PollingIntervalTrigger</b> and the <b>ForceBuildIntervalTrigger</b>.</p>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>This trigger replaces the <b>PollingIntervalTrigger</b> and the <b>ForceBuildIntervalTrigger</b>.</td></tr></table></div>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>The initialIntervalSeconds is new in CruiseControl.Net release 1.4</td></tr></table></div>
 
 				    
                     			    </td>
@@ -75,10 +84,10 @@
 	    </table>
 	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:44</font></td>
 		    </tr>
 	    </table>
     </body>

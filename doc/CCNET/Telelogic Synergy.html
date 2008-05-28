@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <title>CruiseControl.NET : Telelogic Synergy</title>
@@ -22,8 +23,8 @@
 
 <p>This page describes integration of CruiseControl.NET with Telelogic's Synergy SCM product suite, specifically CM Synergy as well as ChangeSynergy.  Detection of modifications is entirely task based rather than object based, which may present problems for pre-6.3 lifecycles. Successful integration may be published through shared manual task folders and/or baselining.</p>
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='warningMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Warning</b><br />
-<p>This integration has been thoroughly tested against CM Synergy 6.3 SP4 and ChangeSynergy 4.3 SP3 Windows/Informix with the DCM option enabled.  While untested, CM Synergy installations on Unix/Informix or Unix/Oracle should function properly.</p></td></tr></table>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Warning</b><br />
+<p>This integration has been thoroughly tested against CM Synergy 6.3 SP4 and ChangeSynergy 4.3 SP3 Windows/Informix with the DCM option enabled.  While untested, CM Synergy installations on Unix/Informix or Unix/Oracle should function properly.</p></td></tr></table></div>
 
 <h2><a name="TelelogicSynergy-Background"></a>Background</h2>
 
@@ -50,7 +51,7 @@
 
 <h2><a name="TelelogicSynergy-CMSynergyExampleConfigurations"></a>CM Synergy Example Configurations</h2>
 
-<div class="code" style="border-style: solid; "><div class="codeHeader" style="border-bottom-style: solid; "><b>Example using Defaults</b></div><div class="codeContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;"><b>Example using Defaults</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"synergy"</span>&gt;</span>
     <span class="code-tag">&lt;connection&gt;</span>
         <span class="code-tag">&lt;host&gt;</span>myserver<span class="code-tag">&lt;/host&gt;</span>
@@ -67,7 +68,7 @@
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
 
-<div class="code" style="border-style: solid; "><div class="codeHeader" style="border-bottom-style: solid; "><b>Full Example</b></div><div class="codeContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;"><b>Full Example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"synergy"</span>&gt;</span>
     <span class="code-tag">&lt;connection&gt;</span>
         <span class="code-tag">&lt;host&gt;</span>myserver<span class="code-tag">&lt;/host&gt;</span>
@@ -101,8 +102,8 @@
 
 <h2><a name="TelelogicSynergy-CMSynergyConfigurationElements"></a>CM Synergy Configuration Elements</h2>
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='tipMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/check.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Configuration Reuse</b><br />
-<p>By creating separate child nodes for the &lt;connection&gt;, &lt;project&gt;, and &lt;changeSynergy&gt; configuration elements, it is very easy to create reusable blocks of XML.  For more information on XML DTD entities and reusable configuration blocks, see  <a href="http://jira.public.thoughtworks.org/browse/CCNET-239">JIRA issue CCNET-239</a> and <a href="http://peeps.dallas.focus-technologies.com/roller/page/nithy/20040128#using_the_entity_includes_in">Nithy Palanivelu's Weblog </a></p></td></tr></table>
+<div class='panelMacro'><table class='tipMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/check.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Configuration Reuse</b><br />
+<p>By creating separate child nodes for the &lt;connection&gt;, &lt;project&gt;, and &lt;changeSynergy&gt; configuration elements, it is very easy to create reusable blocks of XML.  For more information on XML DTD entities and reusable configuration blocks, see  <a href="http://jira.public.thoughtworks.org/browse/CCNET-239">JIRA issue CCNET-239</a> and <a href="http://peeps.dallas.focus-technologies.com/roller/page/nithy/20040128#using_the_entity_includes_in">Nithy Palanivelu's Weblog </a></p></td></tr></table></div>
 
 <h4><a name="TelelogicSynergy-%3Cconnection%3Enode%28required%29"></a>&lt;connection&gt; node (required)</h4>
 <table class='confluenceTable'><tbody>
@@ -192,11 +193,11 @@
 </tr>
 </tbody></table>
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">The Polling Feature</b><br />
-<p>The polling feature is useful if your Synergy installation routinely goes offline (i.e., "protected mode").  Long runing builds may inadventently conflict with the routine downtime schedules.  For example, polling allows your build to queue CM Synergy commands until the nightly backup completes.</p></td></tr></table>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>The Polling Feature</b><br />
+<p>The polling feature is useful if your Synergy installation routinely goes offline (i.e., "protected mode").  Long runing builds may inadventently conflict with the routine downtime schedules.  For example, polling allows your build to queue CM Synergy commands until the nightly backup completes.</p></td></tr></table></div>
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Environmental Variables</b><br />
-<p>Environmental variable support enables you to keep your sensitive build manager credentials out of the CCNET configuration file.  This is especially important if the configuration file is under source control, whereby it would be readable by all CM Synergy users.</p></td></tr></table>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Environmental Variables</b><br />
+<p>Environmental variable support enables you to keep your sensitive build manager credentials out of the CCNET configuration file.  This is especially important if the configuration file is under source control, whereby it would be readable by all CM Synergy users.</p></td></tr></table></div>
 
 <h4><a name="TelelogicSynergy-%3Cproject%3Enode%28required%29"></a>&lt;project&gt; node (required)</h4>
 <table class='confluenceTable'><tbody>
@@ -290,8 +291,8 @@
 </tr>
 </tbody></table>
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='warningMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Security Warning</b><br />
-<p>Be careful about specifying a ChangeSynergy username and password.  If you do not specify these optional values, the end-user will be prompted by ChangeSynergy to enter valid credentials.  If an anonymous access account is used, specify a user that has only read-only permissions within ChangeSynergy.  This will prevent someone from modifying objects, such as tasks, through ChangeSynergy.  If you specify an impersonation account with write permissions, a malicious user could bypass auditing in ChangeSynergy.</p></td></tr></table>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Security Warning</b><br />
+<p>Be careful about specifying a ChangeSynergy username and password.  If you do not specify these optional values, the end-user will be prompted by ChangeSynergy to enter valid credentials.  If an anonymous access account is used, specify a user that has only read-only permissions within ChangeSynergy.  This will prevent someone from modifying objects, such as tasks, through ChangeSynergy.  If you specify an impersonation account with write permissions, a malicious user could bypass auditing in ChangeSynergy.</p></td></tr></table></div>
 
 
 <ul>
@@ -305,10 +306,10 @@
 	    </table>
 	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:44</font></td>
 		    </tr>
 	    </table>
     </body>

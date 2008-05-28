@@ -1,0 +1,263 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Configuration Preprocessor</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Configuration Preprocessor
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on May 15, 2008 by <font color="#0050B2">rosspatterson</font>.
+				    </div>
+
+				    <p>The CCNet configuration preprocessor acts on the ccnet.config file.  Preprocessor directives are specified in the XML namespace "urn:ccnet.config.builder" to distinguish them from ordinary configuration markup.  Any markup not in the preprocessor's namespace are passed through unchanged.</p>
+
+<h2><a name="ConfigurationPreprocessor-PreparingtoUsethePreprocessor"></a>Preparing to Use the Preprocessor</h2>
+<p>The configuration preprocessor is invoked by declaring an XML Namespace of "urn:ccnet.config.builder" on the root configuration element ("&lt;cruisecontrol&gt;").  The namespace abbreviation you choose must be specified on any preprocessor directives you use.  For the rest of this explanation, we will specify it as "cb", a mnemonic for "configuration builder".</p>
+
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cruisecontrol xmlns:cb=<span class="code-quote">"urn:ccnet.config.builder"</span>&gt;</pre>
+</div></div>
+
+<h2><a name="ConfigurationPreprocessor-PreprocessorElements"></a>Preprocessor Elements</h2>
+<p>The configuration preprocessor has several elements that control its processing of your configuration.</p>
+
+<ul>
+	<li>The <b>&lt;define&gt;</b> element is used to define constants to be expanded later.</li>
+	<li>The <b>&lt;include&gt;</b> element is used to include the contents of another file.</li>
+	<li>The <b>&lt;scope&gt;</b> element is used to encapsulate sections that change the value of an existing constant.</li>
+</ul>
+
+
+<h2><a name="ConfigurationPreprocessor-DefiningPreprocessorConstants"></a>Defining Preprocessor Constants</h2>
+<p>The <b>&lt;define&gt;</b> element is used to define a preprocessor constant.  It can be used in several ways:</p>
+
+<h3><a name="ConfigurationPreprocessor-Textconstants%28valuesarestrings%29%3A"></a>Text constants (values are strings):</h3>
+
+<p>Define a constant named "foo" with a value of "bar":</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define foo=<span class="code-quote">"bar"</span>/&gt;</pre>
+</div></div>
+
+<p>You can define more than one constant in the same define element:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define a=<span class="code-quote">"1"</span> b=<span class="code-quote">"2"</span> c=<span class="code-quote">"3"</span>/&gt;</pre>
+</div></div>
+
+<h3><a name="ConfigurationPreprocessor-Nodesetconstants%28valuesareXMLfragments%29%3A"></a>Nodeset constants (values are XML fragments):</h3>
+<p>Define a constant named "baz" with a value of an xml fragment:<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define name=<span class="code-quote">"baz"</span>&gt; 
+  &lt;some_element&gt;
+    &lt;some_inner_element/&gt;
+  &lt;/some_element&gt;
+&lt;/cb:define&gt;</pre>
+</div></div></p>
+
+<p>Any valid XML inside the define element is considered to be the constant's value.  This includes elements, attributes, text nodes, and comments.</p>
+
+<h2><a name="ConfigurationPreprocessor-ExpandingPreprocessorConstantValues"></a>Expanding Preprocessor Constant Values</h2>
+<p>Once defined, preprocessor constants can be expanded in two ways: as text references or as XML references.</p>
+
+<h3><a name="ConfigurationPreprocessor-TextReferences"></a>Text References</h3>
+<p>References of the form "$(const_name)" which are found in attribute values or text nodes will be expanded such that the text value replaces the reference.  If no constant exists with the given name and there exists a windows environment variable with the same name, that environment variable's value will be used.</p>
+
+<h4><a name="ConfigurationPreprocessor-Examples"></a>Examples</h4>
+<p>Use in an attribute:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define foo=<span class="code-quote">"bar"</span>/&gt;
+&lt;somexml attr1=<span class="code-quote">"$(foo)"</span>/&gt;</pre>
+</div></div>
+<p>expands to: </p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;somexml attr1=<span class="code-quote">"bar"</span>/&gt;</pre>
+</div></div>
+
+<p>Use as text of an element:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define foo=<span class="code-quote">"bar"</span>/&gt;
+&lt;somexml&gt;$(foo)&lt;/somexml&gt;</pre>
+</div></div>
+<p>expands to:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;somexml&gt;bar&lt;/somexml&gt;</pre>
+</div></div>
+<p>Use of Windows environment variables:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;env dir=<span class="code-quote">"$(PATH)"</span>/&gt;</pre>
+</div></div>
+<p>expands to:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;env dir=<span class="code-quote">"... your PATH environment value ..."</span>/&gt;</pre>
+</div></div>
+
+<h3><a name="ConfigurationPreprocessor-XMLReferences"></a>XML References</h3>
+<p>When the preprocessor encounters an element in the preprocessor namespace, and the element name is not one of the predefined keywords (define,scope,config-template, etc), the element will be replaced by the constant value associated with the element name.</p>
+
+<h4><a name="ConfigurationPreprocessor-Examples"></a>Examples</h4>
+
+<p>Use as text of an element:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define foo=<span class="code-quote">"bar"</span>/&gt;
+&lt;sample&gt;
+  &lt;cb:foo/&gt;
+&lt;/sample&gt;</pre>
+</div></div>
+<p>expands to:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;sample&gt;
+  bar
+&lt;/sample&gt;</pre>
+</div></div>
+
+<p>Uses as sub-element:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define name=<span class="code-quote">"baz"</span>&gt; 
+  &lt;some_element&gt;
+    &lt;some_inner_element/&gt;
+  &lt;/some_element&gt;
+&lt;/cb:define&gt;
+&lt;sample&gt;
+  &lt;cb:baz/&gt;
+&lt;/sample&gt;</pre>
+</div></div>
+<p>expands to:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;sample&gt;
+  &lt;some_element&gt;
+    &lt;some_inner_element/&gt;
+  &lt;/some_element&gt;
+&lt;/sample&gt;</pre>
+</div></div>
+
+<p>If a constant reference refers to a constant which has not been defined and which does not exist as an OS environment variable, an error will occur.</p>
+
+<h2><a name="ConfigurationPreprocessor-NestedExpansionsandParameters"></a>Nested Expansions and Parameters</h2>
+
+<p>Constant references can be nested, <em>i.e.</em>, the value of constant "zed" can contain a reference to constant "alpha".</p>
+
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define alpha=<span class="code-quote">"alphaval"</span>/&gt;
+&lt;cb:define zed=<span class="code-quote">"zedval/$(alpha)"</span>/&gt;
+
+&lt;z&gt;$(zed)&lt;/z&gt;</pre>
+</div></div>
+<p>expands to:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;z&gt;zedval/alphaval&lt;/z&gt;</pre>
+</div></div>
+
+<p>In addition, using the cb:varname call syntax outlined above, constant values can be passed as part of the call element.  Consider the following definition, in which neither "gamma" nor "delta" have yet been defined:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define name=<span class="code-quote">"beta"</span>&gt;
+  &lt;hello&gt;
+    &lt;cb:gamma/&gt;  
+    &lt;hi attr1=<span class="code-quote">"$(delta)"</span>/&gt;
+  &lt;/hello&gt;
+&lt;/cb:define&gt;</pre>
+</div></div>
+
+<p>Since gamma and delta have not been defined, they must be passed in with the reference to beta.  This is done as follows:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:beta delta=<span class="code-quote">"deltaval"</span>&gt;
+  &lt;cb:define name=<span class="code-quote">"gamma"</span>&gt;
+    &lt;gamma_element&gt;hi&lt;/gamma_element&gt;
+  &lt;/cb:define&gt;
+&lt;/cb:beta&gt;</pre>
+</div></div>
+
+<p>This will expand to: </p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;hello&gt;
+  &lt;gamma_element&gt;hi&lt;/gamma_element&gt;
+  &lt;hi attr1=<span class="code-quote">"deltaval"</span> /&gt;
+&lt;/hello&gt;</pre>
+</div></div>
+
+<h2><a name="ConfigurationPreprocessor-Scopes"></a>Scopes</h2>
+
+<p>The <b>&lt;scope&gt;</b> element can be used to control the scope of a preprocessor definition.  You may not define the same constant twice within the same scope, however you may introduce a nested scope which redefines a particular value in an outer scope.  A scope is semantically equivalent to a stack frame in traditional programming terms.</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:scope a=<span class="code-quote">"a_val"</span> b=<span class="code-quote">"b_val"</span>&gt;
+  &lt;test attr=<span class="code-quote">"$(a)"</span> attr2=<span class="code-quote">"$(b)"</span>/&gt;
+  &lt;cb:scope a=<span class="code-quote">"a_val_redefined"</span>&gt;
+    &lt;test attr=<span class="code-quote">"$(a)"</span> attr2=<span class="code-quote">"$(b)"</span>/&gt;
+  &lt;/cb:scope&gt;
+&lt;/cb:scope&gt;</pre>
+</div></div>
+<p>expands to:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;test attr=<span class="code-quote">"a_val"</span> att2=<span class="code-quote">"b_val"</span>/&gt;
+&lt;test attr=<span class="code-quote">"a_val_redefined"</span> att2=<span class="code-quote">"b_val"</span>/&gt;</pre>
+</div></div>
+
+<h2><a name="ConfigurationPreprocessor-Comments"></a>Comments</h2>
+<p>XML Comments whose first character is '#' will not be copied to the output.  All other comments will.</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;!-- This comment will appear in the output file--&gt;
+&lt;!--# This comment will not --&gt;</pre>
+</div></div>
+
+<h2><a name="ConfigurationPreprocessor-Includingfiles"></a>Including files</h2>
+<p>The <b>&lt;include&gt;</b> element is used to include the contents of another file.  The element is replaced with the contents of that file, which must be a valid XML document.  The file is specified as a URL, relative to the file that contains the <b>&lt;include&gt;</b> element.</p>
+
+<p>Assuming that the CCNet configuration file "ccnet.config" includes the file "projects\project.config":</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">... lines before ...
+&lt;cb:include href=<span class="code-quote">"projects/project.config"</span>/&gt;
+... lines after ...</pre>
+</div></div>
+<p>and that the "projects\project.config" file includes a file called "EmailConfig.xml" from the same directory as "ccnet.config":</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;project&gt;
+  ... project definition ...
+  &lt;publishers&gt;
+    &lt;cb:include href=<span class="code-quote">"../EMailConfig.xml"</span>/&gt;
+    ... more publishers ...
+  &lt;/publishers&gt;
+&lt;/project&gt;</pre>
+</div></div>
+<p>and that the "EMailConfig.xml" file contains an <a href="Email Publisher.html" title="Email Publisher">Email Publisher</a> definition:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;email&gt;
+  ... email configuration info ...
+&lt;/email&gt;</pre>
+</div></div>
+<p>the results would be:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">... lines before ...
+&lt;project&gt;
+  ... project definition ...
+  &lt;publishers&gt;
+    &lt;email&gt;
+      ... email configuration info ...
+    &lt;/email&gt;
+    ... more publishers ...
+  &lt;/publishers&gt;
+&lt;/project&gt;
+... lines after ...</pre>
+</div></div>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:43</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <title>CruiseControl.NET : Filtered Source Control Block</title>
@@ -15,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Dec 06, 2007 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on Apr 28, 2008 by <font color="#0050B2">rosspatterson</font>.
 				    </div>
 
 				    <h3><a name="FilteredSourceControlBlock-WhatisFilteredSourceControl%3F"></a>What is FilteredSourceControl?</h3>
@@ -28,7 +29,7 @@
 
 <h3><a name="FilteredSourceControlBlock-ConfigurationExamples"></a>Configuration Examples</h3>
 
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"filtered"</span>&gt;</span>
     <span class="code-tag">&lt;sourceControlProvider type=<span class="code-quote">"vss"</span> autoGetSource=<span class="code-quote">"true"</span>&gt;</span>
       <span class="code-tag">&lt;project&gt;</span>$/Kunigunda/ServiceLocator<span class="code-tag">&lt;/project&gt;</span>
@@ -96,6 +97,7 @@
 <td class='confluenceTd'> false </td>
 </tr>
 </tbody></table>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Unlike most source control blocks, this one does not support the <b>timeout</b> configuration element</td></tr></table></div>
 
 <p><a name="FilteredSourceControlBlock-PathFilter"></a> <b>PathFilter element</b></p>
 
@@ -172,7 +174,7 @@
 <td class='confluenceTd'> true </td>
 </tr>
 </tbody></table>
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Comment filters are available starting with build #1.3.0.3052.</td></tr></table>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Comment filters are available starting with build #1.3.0.3052.</td></tr></table></div>
 
 <h3><a name="FilteredSourceControlBlock-UsingthePathFilter%3A"></a>Using the PathFilter:</h3>
 
@@ -236,18 +238,18 @@
 </tr>
 </tbody></table>
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Paths do not include the roots</b><br />Paths do not include the root server identifiers. For example, if you are using subversion source control on server "myserver" and trying to exclude path "svn://myserver/project1/excludedir/&#42;.&#42;" your node should be "/project1/excludedir/&#42;.&#42;".</td></tr></table>
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Path separators are not characters</b><br />Path separators are not compared as characters, but rather as separations between path elements.  The separators "\", "/" and the .Net System.IO.Path.DirectorySeparatorChar are all treated interchangably.  This means that the patterns "/Kunigunda/Sources/Test.cs" and "\Kunigunda\Sources\Test.cs" both match the file named "Test.cs" in the folder named "Sources" under the folder named "Kunigunda".</td></tr></table>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Paths do not include the roots</b><br />Paths do not include the root server identifiers. For example, if you are using subversion source control on server "myserver" and trying to exclude path "svn://myserver/project1/excludedir/&#42;.&#42;" your node should be "/project1/excludedir/&#42;.&#42;".</td></tr></table></div>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Path separators are not characters</b><br />Path separators are not compared as characters, but rather as separations between path elements.  The separators "\", "/" and the .Net System.IO.Path.DirectorySeparatorChar are all treated interchangably.  This means that the patterns "/Kunigunda/Sources/Test.cs" and "\Kunigunda\Sources\Test.cs" both match the file named "Test.cs" in the folder named "Sources" under the folder named "Kunigunda".</td></tr></table></div>
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">StarTeam needs the full path</b><br />With StarTeam, use the entire file path as recognized by StarTeam, such<br/>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>StarTeam needs the full path</b><br />With StarTeam, use the entire file path as recognized by StarTeam, such<br/>
 as what is displayed when clicking File/Properties/Working File within<br/>
 StarTeam.
 
 <p>Examples:</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">c:\project\module1\**
 c:\project\module2\**\filethatdoesntaffectbuild.txt</pre>
-</div></div></td></tr></table>
+</div></div></td></tr></table></div>
 
 
 <h3><a name="FilteredSourceControlBlock-Potentialenhancements%3A"></a>Potential enhancements:</h3>
@@ -267,10 +269,10 @@ UserFilter and ActionFilter by <b>Perry Ismangil</b>.</p>
 	    </table>
 	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:44</font></td>
 		    </tr>
 	    </table>
     </body>

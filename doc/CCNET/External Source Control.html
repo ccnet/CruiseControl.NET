@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <title>CruiseControl.NET : External Source Control</title>
@@ -15,48 +16,45 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Dec 06, 2007 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on Apr 28, 2008 by <font color="#0050B2">rosspatterson</font>.
 				    </div>
 
 				    <h3><a name="ExternalSourceControl-ExternalSourceControlConfiguration"></a>External Source Control Configuration</h3>
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Note: The External source control block is available in CCNet build 1.3.0.3053 and later.</td></tr></table>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Note: The External source control block is available in CCNet build 1.3.0.3053 and later.</td></tr></table></div>
 
 <h4><a name="ExternalSourceControl-Typical%2FMinimalConfiguration"></a>Typical / Minimal Configuration</h4>
 
-<p>For most uses the following is all you'll need in your <a href="Configuring the Server.html" title="Configuring the Server"><tt>ccnet.config</tt> </a>:</p>
-
-<div class="code"><div class="codeContent">
-<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"external"</span>&gt;</span> 
-    <span class="code-tag">&lt;executable&gt;</span>path to command-line application<span class="code-tag">&lt;/executable&gt;</span> 
+<p>For most uses the following is all you'll need in your <a href="Configuring the Server.html" title="Configuring the Server"><tt>ccnet.config</tt></a>:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"external"</span>&gt;</span>
+    <span class="code-tag">&lt;executable&gt;</span>path to command-line application<span class="code-tag">&lt;/executable&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
-
 <p>This will:</p>
 <ul>
-	<li>monitor AccuRev for any changes in the workspace located at the project working directory</li>
-	<li>retrieve the lastest source from AccuRev when any changes are detected</li>
-	<li>apply a label to (<em>i.e.</em>, make a snapshot of) the built files at the end of each successful build</li>
+	<li>monitor for any changes in the workspace located at the project working directory, by passing GETMODS to the external executable</li>
+	<li>retrieve the lastest source when any changes are detected, by passing GETSOURCE to the external executable</li>
+	<li>apply a label to (<em>i.e.</em>, make a snapshot of) the built files at the end of each successful build, by passing SETLABEL to the external executable</li>
 </ul>
-
 
 
 <h4><a name="ExternalSourceControl-FullConfiguration"></a>Full Configuration</h4>
 
-<div class="code"><div class="codeContent">
-<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"external"</span>&gt;</span> 
-    <span class="code-tag">&lt;executable&gt;</span>path to command-line application<span class="code-tag">&lt;/executable&gt;</span> 
-    <span class="code-tag">&lt;args&gt;</span>arguments for the command-line application<span class="code-tag">&lt;/args&gt;</span> 
-    <span class="code-tag">&lt;autoGetSource&gt;</span>false<span class="code-tag">&lt;/autoGetSource&gt;</span> 
-    <span class="code-tag">&lt;labelOnSuccess&gt;</span>false<span class="code-tag">&lt;/labelOnSuccess&gt;</span> 
-    <span class="code-tag">&lt;environment&gt;</span> 
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"external"</span>&gt;</span>
+    <span class="code-tag">&lt;executable&gt;</span>path to command-line application<span class="code-tag">&lt;/executable&gt;</span>
+    <span class="code-tag">&lt;args&gt;</span>arguments for the command-line application<span class="code-tag">&lt;/args&gt;</span>
+    <span class="code-tag">&lt;autoGetSource&gt;</span>false<span class="code-tag">&lt;/autoGetSource&gt;</span>
+    <span class="code-tag">&lt;labelOnSuccess&gt;</span>false<span class="code-tag">&lt;/labelOnSuccess&gt;</span>
+    <span class="code-tag">&lt;environment&gt;</span>
         <span class="code-tag">&lt;var&gt;</span>name=value<span class="code-tag">&lt;/var&gt;</span>
         <span class="code-tag">&lt;var&gt;</span>name=value<span class="code-tag">&lt;/var&gt;</span>
         ...
-    <span class="code-tag">&lt;/environment&gt;</span> 
+    <span class="code-tag">&lt;/environment&gt;</span>
+    <span class="code-tag">&lt;timeout units=<span class="code-quote">"minutes"</span>&gt;</span>10<span class="code-tag">&lt;/timeout&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
-
 <table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Element </th>
@@ -70,7 +68,7 @@
 <td class='confluenceTd'> Specifies the command line arguments to be passed to the source control command. </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> no </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> "" </td>
 </tr>
 <tr>
 <td class='confluenceTd'> autoGetSource </td>
@@ -84,7 +82,7 @@
 <td class='confluenceTd'> Specifies any environment variables to set for the source control command </td>
 <td class='confluenceTd'> complex </td>
 <td class='confluenceTd'> no </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> (none) </td>
 </tr>
 <tr>
 <td class='confluenceTd'> executable </td>
@@ -116,15 +114,13 @@
 <h5><a name="ExternalSourceControl-GetModifications"></a>GetModifications</h5>
 
 <p>The GetModifications function is invoked as the <b>GETMODS</b> operation, and specifying a starting and ending timestamp:</p>
-
 <ul>
 	<li><em>executable</em> <b>GETMODS</b> "<em>fromtimestamp</em>" "<em>totimestamp</em>" <em>args</em></li>
 </ul>
 
 
 <p>The source control command should search for modifications between these two times inclusively, write their details to the standard output stream in the XML format used by the <a href="Modification Writer Task.html" title="Modification Writer Task">Modification Writer Task</a>, and exit with exit status 0 (any other status indicates an error and will fail the build).  For example, the following represents two modifications, numbered 12244 and 12245.</p>
-
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;?xml version=<span class="code-quote">"1.0"</span> encoding=<span class="code-quote">"utf-8"</span>?&gt;</span>
 <span class="code-tag">&lt;ArrayOfModification&gt;</span>
     <span class="code-tag">&lt;Modification&gt;</span>
@@ -157,7 +153,6 @@
 <h5><a name="ExternalSourceControl-GetSource"></a>GetSource</h5>
 
 <p>The GetSource function is invoked as the <b>GETSOURCE</b> operation, and specifying a working directory path and the target timestamp:</p>
-
 <ul>
 	<li><em>executable</em> <b>GETSOURCE</b> "<em>workingdirectory</em>" "<em>timestamp</em>" <em>args</em></li>
 </ul>
@@ -168,7 +163,6 @@
 <h5><a name="ExternalSourceControl-LabelSourceControl"></a>LabelSourceControl</h5>
 
 <p>The LabelSourceControl function is invoked as the <b>SETLABEL</b> operation, and specifying a label to be applied and the target timestamp:</p>
-
 <ul>
 	<li><em>executable</em> <b>SETLABEL</b> "<em>label</em>" "<em>sourcetimestamp</em>" <em>args</em></li>
 </ul>
@@ -182,10 +176,10 @@
 	    </table>
 	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:44</font></td>
 		    </tr>
 	    </table>
     </body>

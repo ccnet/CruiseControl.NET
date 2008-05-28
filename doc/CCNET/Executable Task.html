@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <title>CruiseControl.NET : Executable Task</title>
@@ -15,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on May 02, 2007 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on May 20, 2008 by <font color="#0050B2">rosspatterson</font>.
 				    </div>
 
 				    <p>The Executable Task lets you invoke any command line executable. It doesn't offer as much specific integration as (for example) the <a href="NAnt Task.html" title="NAnt Task">NAnt Task</a>, but does allow you to hook almost anything up as a build process to CCNet.  CCNet will examine the exit code when the executable ends and act accordingly.</p>
@@ -24,18 +25,24 @@
 
 <p>Minimalist example:</p>
 
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;exec executable=<span class="code-quote">"c:\projects\myproject\build.bat"</span>/&gt;</span></pre>
 </div></div>
 
 <p>Full example:</p>
 
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;exec&gt;</span>
     <span class="code-tag">&lt;executable&gt;</span>make<span class="code-tag">&lt;/executable&gt;</span>
     <span class="code-tag">&lt;baseDirectory&gt;</span>D:\dev\MyProject<span class="code-tag">&lt;/baseDirectory&gt;</span>
     <span class="code-tag">&lt;buildArgs&gt;</span>all<span class="code-tag">&lt;/buildArgs&gt;</span>
     <span class="code-tag">&lt;buildTimeoutSeconds&gt;</span>10<span class="code-tag">&lt;/buildTimeoutSeconds&gt;</span>
+    <span class="code-tag">&lt;successExitCodes&gt;</span>0,1,3,5<span class="code-tag">&lt;/successExitCodes&gt;</span>
+    <span class="code-tag">&lt;environment&gt;</span>
+        <span class="code-tag">&lt;var&gt;</span>name=value<span class="code-tag">&lt;/var&gt;</span>
+        <span class="code-tag">&lt;var&gt;</span>name=value<span class="code-tag">&lt;/var&gt;</span>
+        ...
+    <span class="code-tag">&lt;/environment&gt;</span>
 <span class="code-tag">&lt;/exec&gt;</span></pre>
 </div></div>
 
@@ -77,11 +84,25 @@
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> 600 (10 minutes) </td>
 </tr>
+<tr>
+<td class='confluenceTd'> successExitCodes </td>
+<td class='confluenceTd'> A comma-separated list of exit codes that indicate success. </td>
+<td class='confluenceTd'> list of ints </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> environment </td>
+<td class='confluenceTd'> Specifies any environment variables to set for the executable. </td>
+<td class='confluenceTd'> complex </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> (none) </td>
+</tr>
 </tbody></table>
 
 <h3><a name="ExecutableTask-IntegrationProperties"></a>Integration Properties</h3>
 
-<p>The following parameters are passed to the external program using environment variables:</p>
+<p>The following parameters are passed to the external program using environment variables, in addition to those you specify in the &lt;environment&gt; element.:</p>
 
 <table class='confluenceTable'><tbody>
 <tr>
@@ -141,7 +162,7 @@
 </tr>
 </tbody></table>
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Windows seems to change the case of environment variables occasionally. If your task target doesn't find one of these properties, try using all upper case or all lower case versions of these properties.</td></tr></table>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Windows seems to change the case of environment variables occasionally. If your task target doesn't find one of these properties, try using all upper case or all lower case versions of these properties.</td></tr></table></div>
 
 <h3><a name="ExecutableTask-Exitcodes"></a>Exit codes</h3>
 <table class='confluenceTable'><tbody>
@@ -151,7 +172,7 @@
 <th class='confluenceTh'> CCNet Behavior </th>
 </tr>
 <tr>
-<td class='confluenceTd'> 0 </td>
+<td class='confluenceTd'> a code in &lt;successExitCodes&gt; </td>
 <td class='confluenceTd'> Success </td>
 <td class='confluenceTd'> The build continues </td>
 </tr>
@@ -178,10 +199,10 @@
 	    </table>
 	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:44</font></td>
 		    </tr>
 	    </table>
     </body>

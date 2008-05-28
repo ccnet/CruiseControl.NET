@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <title>CruiseControl.NET : FAQ</title>
@@ -47,7 +48,7 @@
 
 <p>For example, with a NAnt task you could use:
 <br clear="all" />
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">&lt;nant&gt;
   &lt;buildFile&gt;ProjectA.build&lt;/buildFile&gt;
   &lt;targetList&gt;TargetX&lt;/buildFile&gt;
@@ -77,7 +78,7 @@ Then if the task crashes and CCNet doesn't merge in the NAnt log file, you can g
 
 <h4><a name="FAQ-I%27mtryingtoaccesssomeinformationsuppliedbytheserver%2CbutIcan%27t.What%27sgoingwrong%3F"></a><em>I'm trying to access some information supplied by the server, but I can't. What's going wrong?</em></h4>
 
-<p>Many of the examples on the mailing list and user's blogs showing how to use information from the server (such as the build label) are based on the <a href="NAnt Task.html" title="NAnt Task">NAnt task</a>, and date from before the first release candidate. Around that time, most of the property names changed, for example <tt>ccnet.label</tt> became <tt>CCNetLabel</tt>. Check the documentation page for the task you are using (ideally the one installed on your machine which should be accurate for the build of CruiseControl you installed) and make sure your build script is using the correct name for the property.</p>
+<p>Many of the examples on the mailing list and user's blogs showing how to use information from the server (such as the build label) are based on the <a href="NAnt Task.html" title="NAnt Task">NAnt Task</a>, and date from before the first release candidate. Around that time, most of the property names changed, for example <tt>ccnet.label</tt> became <tt>CCNetLabel</tt>. Check the documentation page for the task you are using (ideally the one installed on your machine which should be accurate for the build of CruiseControl you installed) and make sure your build script is using the correct name for the property.</p>
 
 <h4><a name="FAQ-Accordingtothedocumentation%2CIneedfilexxxxxxxx.yyy.Thatfileisn%27tinthedistribution%2CwheredoIfindit%3F"></a><em>According to the documentation, I need file xxxxxxxx.yyy. That file isn't in the distribution, where do I find it?</em></h4>
 
@@ -91,7 +92,7 @@ Then if the task crashes and CCNet doesn't merge in the NAnt log file, you can g
 
 <p>The easiest way to find out what ErrorLevel is returned by the tool is to use a small batch file like this:
 <br clear="all" />
-<div class="code"><div class="codeHeader"><b>VerifyToolReturn.bat</b></div><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;"><b>VerifyToolReturn.bat</b></div><div class="codeContent panelContent">
 <pre class="code-java">C:\Path\To\Your\Tool.exe -Command -Line -Parameters <span class="code-quote">"As triggered by CruiseControl.Net"</span>
 Echo %ErrorLevel%</pre>
 </div></div><br clear="all" /> <br clear="all" />
@@ -216,13 +217,13 @@ You can reduce some duplication in the configuration with the use of DTD entitie
 
 <h4><a name="FAQ-HowdoIusemyownXSLstylesheetsforreports%3F"></a><em>How do I use my own XSL stylesheets for reports?</em></h4>
 
-<p>Both the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> and <a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">Xsl Report Build Plugin</a> can be configured to use custom stylesheets. Change the configuration of the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> if you want to add a stylesheet to the main Build Report, or add a new <a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">Xsl Report Build Plugin</a> instance if you want a totally new page for the report.</p>
+<p>Both the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> and <a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">XSL Report Build Plugin</a> can be configured to use custom stylesheets. Change the configuration of the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> if you want to add a stylesheet to the main Build Report, or add a new <a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">XSL Report Build Plugin</a> instance if you want a totally new page for the report.</p>
 
 <h4><a name="FAQ-HowdoIpreventalltheseunwantedmessagesfromshowingupinthewarning%2FerrorsectionsoftheWebDashboard%3F"></a><em>How do I prevent all these unwanted messages from showing up in the warning/error sections of the WebDashboard?</em></h4>
 
 <p>When executing external processes, CCNet will identify any output written to the standard error stream in the error or warnings section of the WebDashboard.  To supress these messages, you can redirect the stderr stream to stdout as shown in the example below.  '2' refers to stderr and '&gt;&amp;1' redirects it to stdout ('&amp;1').
 <br clear="all" />
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">dir /f 2&gt;&amp;1</pre>
 </div></div><br clear="all" /> <br clear="all" />
 <br clear="all" />
@@ -256,10 +257,10 @@ You can reduce some duplication in the configuration with the use of DTD entitie
 	    </table>
 	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:44</font></td>
 		    </tr>
 	    </table>
     </body>

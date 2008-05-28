@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <title>CruiseControl.NET : Visual Studio Task</title>
@@ -15,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on May 02, 2007 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on May 13, 2008 by <font color="#0050B2">rosspatterson</font>.
 				    </div>
 
 				    <p>Most complex build processes use <a href="http://nant.sourceforge.net">NAnt </a> or <a href="http://msdn2.microsoft.com/en-us/library/ms171452.aspx">MSBuild </a> to script the build.  However, for simple projects that just need to build a Visual Studio.NET solution, the Visual Studio task <tt>&lt;devenv&gt;</tt> provides an easier method.</p>
@@ -23,14 +24,14 @@
 <h4><a name="VisualStudioTask-Examples"></a>Examples</h4>
 
 <p>Minimalist example:</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;devenv&gt;</span>
     <span class="code-tag">&lt;solutionfile&gt;</span>src\MyProject.sln<span class="code-tag">&lt;/solutionfile&gt;</span>
     <span class="code-tag">&lt;configuration&gt;</span>Debug<span class="code-tag">&lt;/configuration&gt;</span>
 <span class="code-tag">&lt;/devenv&gt;</span></pre>
 </div></div>
 <p>Full example:</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;devenv&gt;</span>
     <span class="code-tag">&lt;solutionfile&gt;</span>src\MyProject.sln<span class="code-tag">&lt;/solutionfile&gt;</span>
     <span class="code-tag">&lt;configuration&gt;</span>Debug<span class="code-tag">&lt;/configuration&gt;</span>
@@ -38,6 +39,7 @@
     <span class="code-tag">&lt;project&gt;</span>MyProject<span class="code-tag">&lt;/project&gt;</span>
     <span class="code-tag">&lt;executable&gt;</span>c:\program files\Microsoft Visual Studio .NET\Common7\IDE\devenv.com<span class="code-tag">&lt;/executable&gt;</span>
     <span class="code-tag">&lt;buildTimeoutSeconds&gt;</span>600<span class="code-tag">&lt;/buildTimeoutSeconds&gt;</span>
+    <span class="code-tag">&lt;version&gt;</span>VS2002<span class="code-tag">&lt;/version&gt;</span>
 <span class="code-tag">&lt;/devenv&gt;</span></pre>
 </div></div>
 
@@ -84,7 +86,7 @@
 <td class='confluenceTd'> The path to <tt>devenv.com</tt>. </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
-<td class='confluenceTd'> If not specified, CC.NET will try to find this path from the registry for VS.NET 2003 and 2002 in that order.  If you need to use VS.NET 2005, or if you need to use VS.NET 2002 when VS.NET 2003 is installed, you should specify this property to point to the location of <tt>devenv.com</tt> for the correct VS.NET version. </td>
+<td class='confluenceTd'> (see below) </td>
 </tr>
 <tr>
 <td class='confluenceTd'> buildTimeoutSeconds </td>
@@ -93,9 +95,19 @@
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> 600 (10 minutes) </td>
 </tr>
+<tr>
+<td class='confluenceTd'> version </td>
+<td class='confluenceTd'> The version of Visual Studio. </td>
+<td class='confluenceTd'> One of VS2002, VS2003, VS2005, VS2008, 7.0, 7.1, 8.0, or 9.0 </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> (see below) </td>
+</tr>
 </tbody></table>
-<p><img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Note: this task requires you to have Visual Studio .NET installed on your integration server.</p>
-<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Often programmers like to use a centralised project to build an entire software system.  They define specific dependencies and the build order on that specific project to reproduce the behaviours of an nmake build.</td></tr></table>
+
+<p>If executable and version are not specified, CC.NET will search the registry for VS.NET 2008, 2005, 2003, and 2002 in that order.  If you need to use a specific version when a newer version is installed, you should specify the version property to identify it, or specify the executable property to point to the location of correct version of <tt>devenv.com</tt>.</p>
+
+<p><img class="emoticon" src="images/icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Note: this task requires you to have Visual Studio .NET installed on your integration server.</p>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Often programmers like to use a centralised project to build an entire software system.  They define specific dependencies and the build order on that specific project to reproduce the behaviours of an nmake build.</td></tr></table></div>
 
 				    
                     			    </td>
@@ -103,10 +115,10 @@
 	    </table>
 	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:44</font></td>
 		    </tr>
 	    </table>
     </body>

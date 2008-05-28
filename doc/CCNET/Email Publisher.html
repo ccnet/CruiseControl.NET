@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <title>CruiseControl.NET : Email Publisher</title>
@@ -15,20 +16,19 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Dec 10, 2007 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on May 07, 2008 by <font color="#0050B2">williams</font>.
 				    </div>
 
 				    <p>The email publisher can be used to send email to any number of users. It is common to include one user who gets an email for every build and then also send email to every developer who checked code in for this build.</p>
 
-<p><img class="emoticon" src="./icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> People tend to prefer to use <a href="CCTray.html" title="CCTray">CCTray</a> rather than email for instant notification these days.</p>
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Make sure that all of the Merge Publishers, along with the <a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publisher</a> task are done before the <tt>&lt;email&gt;</tt> publisher, or else you won't be able to include output from the build in the email.<br/>
+<p><img class="emoticon" src="images/icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> People tend to prefer to use <a href="CCTray.html" title="CCTray">CCTray</a> rather than email for instant notification these days.</p>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Make sure that all of the Merge Publishers, along with the <a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publisher</a> task are done before the <tt>&lt;email&gt;</tt> publisher, or else you won't be able to include output from the build in the email.<br/>
 A common mistake is to put the email task in the &lt;tasks&gt; section instead of the &lt;publishers&gt; section.<br/>
 If an error occurs in the &lt;tasks&gt; section, the remaining tasks in that section are skipped, and CC.Net goes right to the &lt;publishers&gt; section.<br/>
-So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never get any failure messages.</td></tr></table>
-
-<div class="code"><div class="codeContent">
-<pre class="code-xml">&lt;email from=<span class="code-quote">"buildmaster@mycompany.com"</span> mailhost=<span class="code-quote">"smtp.mycompany.com"</span> mailport=<span class="code-quote">"25"</span> 
-           mailhostUsername=<span class="code-quote">"smtpuser"</span> mailhostPassword=<span class="code-quote">"smtppassword"</span> includeDetails=<span class="code-quote">"TRUE"</span>&gt;
+So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never get any failure messages.</td></tr></table></div>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml">&lt;email from=<span class="code-quote">"buildmaster@mycompany.com"</span> mailhost=<span class="code-quote">"smtp.mycompany.com"</span> mailport=<span class="code-quote">"25"</span> includeDetails=<span class="code-quote">"TRUE"</span>
+           mailhostUsername=<span class="code-quote">"smtpuser"</span> mailhostPassword=<span class="code-quote">"smtppassword"</span> useSSL=<span class="code-quote">"FALSE"</span>&gt;
 
     <span class="code-tag">&lt;users&gt;</span>
         <span class="code-tag">&lt;user name=<span class="code-quote">"BuildGuru"</span> group=<span class="code-quote">"buildmaster"</span> address=<span class="code-quote">"buildguru@mycompany.com"</span>/&gt;</span>
@@ -54,8 +54,7 @@ So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never
 
 <h3><a name="EmailPublisher-ConfigurationElements%3A"></a>Configuration Elements:</h3>
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>The authentication elements, mailhostUsername and mailhostPassword, are available starting in CCNet 1.2.</td></tr></table>
-
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>The authentication elements, mailhostUsername and mailhostPassword, are available starting in CCNet 1.2.</td></tr></table></div>
 <table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
@@ -91,6 +90,13 @@ So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> "" </td>
+</tr>
+<tr>
+<td class='confluenceTd'> useSSL </td>
+<td class='confluenceTd'> Use SSL for sending the mail <br clear="all" /> </td>
+<td class='confluenceTd'> boolean <br clear="all" /> </td>
+<td class='confluenceTd'> false <br clear="all" /> </td>
+<td class='confluenceTd'> false <br clear="all" /> </td>
 </tr>
 <tr>
 <td class='confluenceTd'> from </td>
@@ -136,9 +142,18 @@ The converters will be used when the name of the modifier is not set in the user
 <td class='confluenceTd'> n/a </td>
 </tr>
 </tbody></table>
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>When includedDetails = True, the message body will contain more information. This detailed information is constructed from xsl transformations on the build log.<br/>
-These xls files are defined in the ccnet.exe.config in the xslFiles section. (see also : <a href="Server Application Config File.html" title="Server Application Config File">Server Application Config File</a>). when adjustig this, restart the console/service.</td></tr></table>
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>The groups node may be empty, but the group section must exist.</td></tr></table>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>When includedDetails = True, the message body will contain more information. This detailed information is constructed from xsl transformations on the build log.<br/>
+These xls files are defined in the ccnet.exe.config in the xslFiles section. (see also : <a href="Server Application Config File.html" title="Server Application Config File">Server Application Config File</a>). when adjustig this, restart the console/service.</td></tr></table></div>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>The groups node may be empty, but the group section must exist.</td></tr></table></div>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>For sending mail via gmail :<br/>
+mailhost="smtp.gmail.com"<br/>
+mailport="587"<br/>
+mailhostUsername="xxx.yyy@gmail.com"<br/>
+mailhostPassword="yourpassword"<br/>
+useSSL="TRUE"</p>
+</td></tr></table></div>
+
 
 <h4><a name="EmailPublisher-UserConfigurationElement%3A"></a>User Configuration Element:</h4>
 
@@ -171,7 +186,7 @@ These xls files are defined in the ccnet.exe.config in the xslFiles section. (se
 <p>Users do not need to belong to a group.  If they are not in a group then they may still receive emails when they have committed changes that are part of the current build, depending on the setting of "modifierNotificationTypes" and the state of the build.</p>
 
 <p>See the section on the &lt;converters&gt; setting for manipulations that can be done to transform a user name to an address if the address is not specified.</p>
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td> It is essential that the value of the name attribute matches the name for the user in the sourcecontrol system.  This is the only way that CruiseControl.Net can reconcile the user that committed a change with the address to send the email to.  </td></tr></table>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td> It is essential that the value of the name attribute matches the name for the user in the sourcecontrol system.  This is the only way that CruiseControl.Net can reconcile the user that committed a change with the address to send the email to.</td></tr></table></div>
 
 <h4><a name="EmailPublisher-GroupConfigurationElement%3A"></a>Group Configuration Element:</h4>
 
@@ -203,7 +218,7 @@ These xls files are defined in the ccnet.exe.config in the xslFiles section. (se
 <td class='confluenceTd'> true </td>
 </tr>
 </tbody></table>
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>The ability to configure notifications for successful builds is available starting in CCNet 1.3.</td></tr></table>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>The ability to configure notifications for successful builds is available starting in CCNet 1.3.</td></tr></table></div>
 
 <h4><a name="EmailPublisher-ConvertersConfigurationElement%3A"></a>Converters Configuration Element:</h4>
 
@@ -213,8 +228,7 @@ These xls files are defined in the ccnet.exe.config in the xslFiles section. (se
 
 <h5><a name="EmailPublisher-RegularExpressionConverterElement%3A"></a>Regular Expression Converter Element:</h5>
 
-<p>The &lt;regexConverter&gt; element matches the username against a regular expression pattern and modifies it according to a specified replacement.  The regular expression language is that of Microsoft's .Net <a href="http://msdn2.microsoft.com/en-us/library/system.text.regularexpressions.regex.aspx"><b>System.Text.RegularExpressions.Regex</b></a> class. </p>
-
+<p>The &lt;regexConverter&gt; element matches the username against a regular expression pattern and modifies it according to a specified replacement.  The regular expression language is that of Microsoft's .Net <a href="http://msdn2.microsoft.com/en-us/library/system.text.regularexpressions.regex.aspx"><b>System.Text.RegularExpressions.Regex</b></a> class.</p>
 <table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
@@ -235,12 +249,12 @@ These xls files are defined in the ccnet.exe.config in the xslFiles section. (se
 <td class='confluenceTd'> yes </td>
 </tr>
 </tbody></table>
-<p>The <b>find</b> attribute contains a regular expression that is matched against the source control userid.  The <b>replace</b> attribute contains a replacement expression that is used to modify the address.  </p>
+<p>The <b>find</b> attribute contains a regular expression that is matched against the source control userid.  The <b>replace</b> attribute contains a replacement expression that is used to modify the address.</p>
 
 <h6><a name="EmailPublisher-Example%3AAppending%22@TheCompany.com%22totheusername"></a>Example : Appending "@TheCompany.com" to the username</h6>
 
 <p>This will transform the source control userid "js" into "js@TheCompany.com"</p>
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">&lt;converters&gt;
     &lt;converter find=<span class="code-quote">"$"</span> replace=<span class="code-quote">"@TheCompany.com"</span> /&gt;
 &lt;/converters&gt;</pre>
@@ -277,12 +291,11 @@ These xls files are defined in the ccnet.exe.config in the xslFiles section. (se
 <td class='confluenceTd'> Send mail when the status of the build changes from "Failed" to "Success". </td>
 </tr>
 </tbody></table>
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Users who contribute modifications to a failed build are "sticky".  As long as the builds continue to fail, CruiseControl.Net remembers each user who contributed a change to any of the builds.  When a build finally succeeds, this list of "failure modifiers" is cleared.</td></tr></table>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Users who contribute modifications to a failed build are "sticky".  As long as the builds continue to fail, CruiseControl.Net remembers each user who contributed a change to any of the builds.  When a build finally succeeds, this list of "failure modifiers" is cleared.</td></tr></table></div>
 
 <h3><a name="EmailPublisher-Troubleshooting"></a>Troubleshooting</h3>
 
 <p>You can find further troubleshooting hints on the <a href="http://www.systemwebmail.com/faq/4.3.9.aspx">System.Web.Mail faq site</a></p>
-
 
 				    
                     			    </td>
@@ -290,10 +303,10 @@ These xls files are defined in the ccnet.exe.config in the xslFiles section. (se
 	    </table>
 	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:44</font></td>
 		    </tr>
 	    </table>
     </body>

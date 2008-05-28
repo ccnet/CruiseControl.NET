@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <title>CruiseControl.NET : Setting up from scratch  Part 01</title>
@@ -22,7 +23,7 @@
 The first parts will seem overdone for users who used CCNet before, but it is intended for the real starters. Later parts contain tips/situations for people with the basic knowledge.</p>
 
 <p>Typically a build system consists of 2 servers and X development machines, they can be on different physical machines, but they can also be hosted on 1 machine.<br/>
-Or 1 physical machine with virtual machines on it, everything is possible <img class="emoticon" src="./icons/emoticons/wink.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></p>
+Or 1 physical machine with virtual machines on it, everything is possible <img class="emoticon" src="images/icons/emoticons/wink.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></p>
 
 <p>These 2 servers are :&nbsp;&nbsp;&nbsp;<br/>
 ° Build server&nbsp; : referenced as BuildServer<br/>
@@ -67,7 +68,7 @@ Once this is done, you will have :<br/>
 </tr>
 </tbody></table>
 <p><br clear="all" />
-<div class="panel"><div class="panelContent">
+<div class="panel" style="border-width: 1px;"><div class="panelContent">
 <p>note : this is not the best folder structure for sources, but for these example it will do fine.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for setting up development trees, see Tree Surgeon (<a href="http://www.codeplex.com/treesurgeon">http://www.codeplex.com/treesurgeon</a>),&nbsp; CIFactory (<a href="http://www.cifactory.org/joomla">http://www.cifactory.org/joomla</a>), ...</p>
 </div></div><br clear="all" /> <br clear="all" />
@@ -80,7 +81,7 @@ We'll just use a batch file, and play a bit with that.<br/>
 Make a subfolder in c:\projects, named Example01<br/>
 Create a command script named 'test.cmd' with the following contents
 <br clear="all" />
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">@echo off
 set</pre>
 </div></div><br clear="all" /></p>
@@ -92,7 +93,7 @@ set</pre>
 
 <p>Start the build service, (there is a desktop icon) you will see a command window wit the following :
 <br clear="all" />
-<div class="panel"><div class="panelContent">
+<div class="panel" style="border-width: 1px;"><div class="panelContent">
 <p>[CCNet Server:DEBUG] The trace level is currently set to debug.&nbsp; This will cause CCNet to log at the most verbose level,<br/>
 which is useful for setting up or debugging the server.&nbsp; Once your server is running smoothly, we recommend changing<br/>
 this setting in C:\Program Files\CruiseControl.NET\server\ccnet.exe.config to a lower level.<br/>
@@ -106,7 +107,7 @@ Since there are no projects, we'll add one for this simple script. Leave the CCN
 Modify CCNet.config, found in \program files\CruiseControl.Net\server<br/>
 Enter the following text :
 <br clear="all" />
-<div class="code"><div class="codeContent">
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">&lt;cruisecontrol&gt;
     &lt;project&gt;
         &lt;name&gt;SimpleExample&lt;/name&gt;
@@ -123,7 +124,7 @@ Enter the following text :
 </div></div><br clear="all" /></p>
 
 <p>You'll see that the command window of the server added the following lines.<br/>
-<div class="panel"><div class="panelContent">
+<div class="panel" style="border-width: 1px;"><div class="panelContent">
 <p>[680:INFO] Configuration changed: Restarting CruiseControl.NET Server<br/>
 [680:INFO] Reading configuration file "C:\Program Files\CruiseControl.NET\server\ccnet.config"<br/>
 [SimpleExample:INFO] Starting integrator for project: SimpleExample</p>
@@ -133,12 +134,12 @@ Enter the following text :
 
 <p>open your browser and surf to <a href="http://localhost/ccnet">http://localhost/ccnet</a><br/>
 you will see the project : SimpleExample<br/>
-<img src="../4882433/Pic001.gif" align="absmiddle" border="0" /></p>
+<img src="download/attachments/4882433/Pic001.gif" align="absmiddle" border="0"/></p>
 
 <p>Press the 'Force' button to force the build. Next press 'Refresh Status' to view the result.
-<br clear="all" />  <img src="../4882433/Pic002.gif" align="absmiddle" border="0" /></p>
+<br clear="all" />  <img src="download/attachments/4882433/Pic002.gif" align="absmiddle" border="0"/></p>
 
-<p>You see that the build was successfull <img class="emoticon" src="./icons/emoticons/biggrin.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></p>
+<p>You see that the build was successfull <img class="emoticon" src="images/icons/emoticons/biggrin.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></p>
 
 <p>Clicking on the project name 'SimpleExample' will show a page with project related information. From there on you can go to individual builds.</p>
 
@@ -154,11 +155,11 @@ you will see the project : SimpleExample<br/>
                         </div>
 
                         <div class="greybox" align="left">
-                                                            <img src="icons/bullet_blue.gif" height="8" width="8" alt=""/>
-                                <a href="../4882433/Pic001.gif">Pic001.gif</a> (image/gif)
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="download/attachments/4882433/Pic001.gif">Pic001.gif</a> (image/gif)
                                 <br/>
-                                                            <img src="icons/bullet_blue.gif" height="8" width="8" alt=""/>
-                                <a href="../4882433/Pic002.gif">Pic002.gif</a> (image/gif)
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="download/attachments/4882433/Pic002.gif">Pic002.gif</a> (image/gif)
                                 <br/>
                                                     </div>
 				    
@@ -167,10 +168,10 @@ you will see the project : SimpleExample<br/>
 	    </table>
 	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:43</font></td>
 		    </tr>
 	    </table>
     </body>

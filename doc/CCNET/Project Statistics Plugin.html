@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <title>CruiseControl.NET : Project Statistics Plugin</title>
@@ -15,15 +16,16 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on May 05, 2006 by <font color="#0050B2">akumar</font>.
+					    This page last changed on Mar 17, 2008 by <font color="#0050B2">williams</font>.
 				    </div>
 
-				    <p>The Project Statistics Plugin displays the statistics for the project.</p>
+				    <p>The Project Statistics Plugin displays the statistics for the project. Since version 1.4 the graphs of Eden Ridgway are incorporated into CCNet.</p>
 
 <h3><a name="ProjectStatisticsPlugin-Example"></a>Example</h3>
 
-<div class="code"><div class="codeContent">
-<pre class="code-xml"><span class="code-tag">&lt;projectStatisticsPlugin xslFileName=<span class="code-quote">"xsl\statistics.xsl"</span> /&gt;</span></pre>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;projectStatisticsPlugin xslFileName=<span class="code-quote">"xsl\statistics.xsl"</span> /&gt;</span>        <span class="code-tag"><span class="code-comment">&lt;!-- the old statistics page of CCNet --&gt;</span></span>
+<span class="code-tag">&lt;projectStatisticsPlugin xslFileName=<span class="code-quote">"xsl\StatisticsGraphs.xsl"</span> /&gt;</span>  <span class="code-tag"><span class="code-comment">&lt;!-- the new statistics page with the graphs of Eden, this is the default of CCNet now--&gt;</span></span></pre>
 </div></div>
 
 <h3><a name="ProjectStatisticsPlugin-ConfigurationElements"></a>Configuration Elements</h3>
@@ -45,16 +47,88 @@
 </tr>
 </tbody></table>
 
+<h3><a name="ProjectStatisticsPlugin-"></a></h3>
+
+
+<h3><a name="ProjectStatisticsPlugin-"></a></h3>
+
+
+<h3><a name="ProjectStatisticsPlugin-Configurationofthegraphs"></a>Configuration of the graphs</h3>
+
+<p>For a full reference, you can check out Eden's Blog at : <a href="http://ridgway.co.za/archive/2007/05/21/adding-custom-graphs-to-the-cruisecontrol.net-statistics-replacement.aspx" title="Eden Ridgway Blog : Adding Custom Graphs to CCNet Statistics">Adding Custom Graphs to CCNet</a></p>
+
+<p>Below the information from Eden's Blog :</p>
+
+<p>In version 2.7 of CCNet graphs I made some further improvements to the manner in which graphs are configured.&nbsp; Now any customisations that need to be done are housed in the <font color="#0000ff"><b>GraphConfiguration.js</b></font>file (in the webdashboard\javascript folder).&nbsp; The logic in the graph generation is now also resilient to problems such as blank or non-numeric data in the custom nodes.</p>
+
+<p>If you want to include custom data in your report you should read the Statistics Publisher Wiki page to get the it included in the report.xml file (which you will find in your artifacts folder for each project).</p>
+
+<p><b><ins>Configuration Setup</ins></b></p>
+
+<p>There are 3 areas of configuration, the:</p>
+<ol>
+	<li><b>Recent Graphs Tab</b>&#45; the details of which are stored in the &#95;recentGraphConfigurations array of configuration/option objects.&nbsp; The datasource of each refers to the &#95;recentStatistics object array, that contains up to the last 20 build statistics.</li>
+	<li>Manner in which <b>Summary Data is calculated</b>&#45; this is stored in the &#95;summaryConfiguration object that contains functions that accept successful and failed build arrays for a day and return an numeric value for each.</li>
+	<li><b>Historic Builds Tab</b>&#45; is configured in the same way as the Recent Graphs Tab, except is defined in the &#95;historicGraphConfigurations array and each configuration object uses the &#95;summarisedStatistics datasource.&nbsp; This datasource contains, the item index, DurationInSeconds, TestsPassed (calculated properties not present in the report.xml file) and the summary data properties defined in &#95;summaryConfiguration.</li>
+</ol>
+
+
+<p><b><ins>Example Customisation</ins></b></p>
+
+<p>Lets say that one wanted to add a complexity graph to the recent and historic tabs, the changes required would be this:</p>
+<ol>
+	<li>One would edit the &#95;recentGraphConfigurations array and add the following (assuming that the xml element node [in the report.xml file] that contains the data is called AverageComplexity):<br/>
+<font color="#0000ff">var&nbsp;</font><font color="#000000">&#95;recentGraphConfigurations&nbsp;</font><font color="#0000ff">=</font><br/>
+<font color="#0000ff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">[</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#006400">//...&nbsp;Other&nbsp;configuration&nbsp;objects&nbsp;excluded&nbsp;for&nbsp;brevity</font><br/>
+<font color="#006400">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">{</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;graphName:&nbsp;</font><font color="#808080">"Complexity"</font><font color="#000000">,</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dataSource:&nbsp;_recentStatistics,</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numXTicks:&nbsp;_numberRecentGraphXTicks,</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;series:&nbsp;[</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {&nbsp;name:&nbsp;</font><font color="#808080">"Average&nbsp;Complexity"</font><font color="#000000">,&nbsp;attributeName:&nbsp;</font><font color="#808080">"AverageComplexity"</font><font color="#000000">,&nbsp;color:&nbsp;</font><font color="#808080">"blue"&nbsp;</font>{color:#000000}}<br/>
+<font color="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ]</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;]</font><font color="#0000ff">;</font></li>
+</ol>
+
+
+<ol>
+	<li>Then the manner in which you want to summarise the data on a daily basis needs to be defined in summaryConfiguration.&nbsp; Note that all the standard summary functions are contained in the QueryFunctions.js file and include methods such as (getLastValue, select, distinct, sum, average, count, min and max).&nbsp; Say we wanted to display the average complexity value for the day, the configuration would be defined like this:<br/>
+<font color="#0000ff">var&nbsp;</font><font color="#000000">&#95;summaryConfiguration&nbsp;</font><font color="#0000ff">=</font><br/>
+<font color="#0000ff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">{</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#006400">//Other&nbsp;attributes...</font><br/>
+<font color="#006400">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">averageComplexity:&nbsp;</font><font color="#0000ff">function</font><font color="#000000">(successfulBuilds,&nbsp;failedBuilds)&nbsp;{&nbsp;</font><font color="#0000ff">return&nbsp;</font><font color="#000000">average(successfulBuilds,&nbsp;</font><font color="#808080">"AverageComplexity"</font><font color="#000000">)&nbsp;}</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;}</font><font color="#0000ff">;</font></li>
+	<li>Lastly the summarised data collected by the function above for each day must be configured for the history tab, like this:<br/>
+<font color="#0000ff">var&nbsp;</font><font color="#000000">&#95;historicGraphConfigurations&nbsp;</font><font color="#0000ff">=</font><br/>
+<font color="#0000ff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">[</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#006400">//Other&nbsp;configuration&nbsp;objects...</font><br/>
+<font color="#006400">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">{</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;graphName:&nbsp;</font><font color="#808080">"Complexity"</font><font color="#000000">,</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dataSource:&nbsp;_summarisedStatistics,</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numXTicks:&nbsp;_numberHistoricGraphXTicks,</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;series:&nbsp;[</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; {&nbsp;name:&nbsp;</font><font color="#808080">"Average&nbsp;Complexity"</font><font color="#000000">,&nbsp;attributeName:&nbsp;</font><font color="#808080">"averageComplexity"</font><font color="#000000">,&nbsp;color:&nbsp;</font><font color="#808080">"blue"&nbsp;</font>{color:#000000}}<br/>
+<font color="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ]</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</font><br/>
+<font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;]</font><font color="#0000ff">;</font><br/>
+Note how the attribute name here corresponds to the attribute name defined in &#95;summaryConfiguration and not the original statistic configuration element.
+<br clear="all" />
+<br clear="all" /></li>
+</ol>
+
+
 				    
                     			    </td>
 		    </tr>
 	    </table>
 	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:44</font></td>
 		    </tr>
 	    </table>
     </body>
