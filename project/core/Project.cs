@@ -228,7 +228,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public void Initialize()
 		{
-			Log.Info(string.Format("Initiatizing Project [{0}]", Name));
+			Log.Info(string.Format("Initializing Project [{0}]", Name));
             CreateDirectoryIfItDoesntExist(this.WorkingDirectory);
             CreateDirectoryIfItDoesntExist(this.ArtifactDirectory);
             SourceControl.Initialize(this);
