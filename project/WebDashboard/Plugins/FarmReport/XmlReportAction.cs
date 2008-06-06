@@ -25,6 +25,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 			XmlTextWriter xmlWriter = new XmlTextWriter(stringWriter);
 			xmlWriter.WriteStartElement("Projects");
 
+            // bvc enhancement
+            xmlWriter.WriteAttributeString("CCType","CCNet"); // to identify the type of cruisecontrol, .Net, .rb, ...
+            //todo xmlWriter.WriteAttributeString("CCVersion", farmService.GetServerVersion( )); // to identify the version of the server
+
+
 			foreach (ProjectStatusOnServer projectStatusOnServer in allProjectStatus.StatusAndServerList)
 			{
 			    WriteProjectStatus(xmlWriter, projectStatusOnServer.ProjectStatus);
@@ -46,6 +51,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 	        xmlWriter.WriteAttributeString("lastBuildTime", XmlConvert.ToString(status.LastBuildDate, XmlDateTimeSerializationMode.Local));
 	        xmlWriter.WriteAttributeString("nextBuildTime", XmlConvert.ToString(status.NextBuildTime, XmlDateTimeSerializationMode.Local));
 	        xmlWriter.WriteAttributeString("webUrl", status.WebURL);
+            xmlWriter.WriteAttributeString("CurrentMessage", status.CurrentMessage);
+            xmlWriter.WriteAttributeString("BuildStage", status.BuildStage);
 	        xmlWriter.WriteEndElement();
 	    }
 	}
