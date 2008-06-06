@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
     public class BuildProgressInformation
     {
         private string _listenerFile;
-        private string _buildInformation;
+        private string _buildInformation = string.Empty;
         private DateTime _lastTimeQueried;
         private const Int32 buildStageCheckIntervalInSeconds = 5;
 
