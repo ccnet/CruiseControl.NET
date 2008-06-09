@@ -49,13 +49,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 
             // Install a special XmlResolver for the resolution of 
             // preprocessor includes (which use the xslt document() function).
-            // The resolver keeps track of the filesystem path of the outermost document
+            // The resolver keeps track of the URI path of the outermost document and any includes
             // and uses it to resolve relative include paths.  
             if ( resolver == null )
             {
-                resolver = new PreprocessorUrlResolver( input.BaseURI );
+                resolver = new PreprocessorUrlResolver();
             }
-            
 
             XsltArgumentList xslt_args = new XsltArgumentList();
 

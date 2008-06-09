@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ConstantDict = System.Collections.Generic.Dictionary<string,ThoughtWorks.CruiseControl.Core.Config.Preprocessor.Constant>;
 
 namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
@@ -293,7 +294,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             Uri new_include = _resolver.ResolveUri( current_include, href );
 
             AddToFileset( new_include );
-            
+
+            Log.Debug(string.Format("Beginning include level {0} for \"{1}\" included by \"{2}\", resolved to \"{3}\"",
+                _include_stack.Count + 1, href, current_include, new_include));
             XPathDocument doc =
                 new XPathDocument(
                     ( Stream )
@@ -303,16 +306,17 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             // Push href onto the include stack so that any nested includes will 
             // resolve relative to it.
             _include_stack.Push( new_include );
-            // Modify the resolver's base directory to reflect the (newly) current include.
-            _resolver.BaseDir = new_include.LocalPath;
 
             return doc.CreateNavigator();
         }
 
         public void pop_include()
         {
+            Uri thisInclude = _include_stack.Peek();
+            int thisLevel = _include_stack.Count;
             _include_stack.Pop();
-            _resolver.BaseDir = _include_stack.Peek().AbsolutePath;
+            Log.Debug(string.Format("Ending include level {0} for \"{1}\" included by \"{2}\"",
+                thisLevel, thisInclude, _include_stack.Peek()));
         }
 
         #endregion

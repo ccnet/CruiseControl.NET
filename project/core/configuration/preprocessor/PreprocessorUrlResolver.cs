@@ -1,47 +1,45 @@
 using System;
-using System.IO;
 using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 {
     class PreprocessorUrlResolver : XmlUrlResolver
     {
-        private string _base_path;
-
         public event EventHandler< UrlResolvedArgs > UrlResolved;
-        public PreprocessorUrlResolver( string base_path )
+        public PreprocessorUrlResolver( )
         {            
-            _base_path = base_path;
         }
 
+        /// <summary>
+        /// Resolve the absolute URI from the base and relative URIs, evaluating the relative URI
+        /// in the base URI's context.
+        /// </summary>
+        /// <param name="baseUri">The base URI used to resolve the relative URI.</param>
+        /// <param name="relativeUri">
+        /// The URI string to resolve. The URI can be absolute or relative. If absolute, this value
+        /// effectively replaces the baseUri value. If relative, it combines with the baseUri 
+        /// (following the rules of <see cref="System.Uri(Uri, Uri)"/>) to make an absolute URI.
+        /// </param>
+        /// <returns>
+        /// A <see cref="System.Uri"/> representing the absolute URI, or the base URI if the relative URI
+        /// is null or empty.
+        /// </returns>
         public override Uri ResolveUri(Uri baseUri, string relativeUri)
         {
             Uri uri;
             if ( String.IsNullOrEmpty( relativeUri ) )
             {
-                uri = new Uri( _base_path );
+                uri = baseUri;
             }
             else
             {
-                Uri uri_rel = new Uri( relativeUri, UriKind.RelativeOrAbsolute );
-                if ( uri_rel.IsAbsoluteUri )
-                {
-                    uri = uri_rel;
-                }
-                else
-                {
-                    uri = new Uri( Path.Combine( BaseDir, relativeUri ) );
-                }
+                string uriString = Uri.UnescapeDataString(relativeUri);
+                Uri uri_rel = new Uri(uriString, UriKind.RelativeOrAbsolute);
+                uri = new Uri(baseUri, uri_rel); 
             }
             if ( UrlResolved != null )
                 UrlResolved( this, new UrlResolvedArgs( uri ) );
             return uri;
-        }
-
-        public string BaseDir
-        {
-            get { return Path.GetDirectoryName( _base_path ) + Path.DirectorySeparatorChar; }
-            set { _base_path = value; }
         }
     }
 

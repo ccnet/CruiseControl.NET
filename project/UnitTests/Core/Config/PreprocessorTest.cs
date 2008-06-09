@@ -12,10 +12,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
     [TestFixture]
     public class PreprocessorTest
     {
-        private const string FAKE_ROOT = @"c:\temp\";
+        private const string FAKE_ROOT = @"c:\temp folder\";
 
         private readonly PreprocessorUrlResolver _resolver =
-            new PreprocessorUrlResolver( FAKE_ROOT );
+            new PreprocessorUrlResolver();
 
         [Test]
         public void TestDefineConst()
@@ -265,13 +265,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
     internal class TestResolver : PreprocessorUrlResolver
     {
+        /// <summary>
+        /// The base string of the URIs, to remove later.
+        /// </summary>
         private readonly string _original_base_path;
-        public TestResolver (string base_path) : base( base_path )
+        public TestResolver(string base_path)
         {
             _original_base_path = Path.GetDirectoryName( base_path ) +
                                   Path.DirectorySeparatorChar;
         }
 
+        /// <summary>
+        /// Return the resource represented by the specified URI as a Stream.
+        /// </summary>
+        /// <param name="absoluteUri">The URI for the resource.</param>
+        /// <param name="role">Ignroed.</param>
+        /// <param name="ofObjectToReturn">Ignored.</param>
+        /// <returns>A Stream connected to the resource.</returns>
         public override object GetEntity (
             Uri absoluteUri, string role, Type ofObjectToReturn)
         {
@@ -287,9 +297,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             set {  }
         }
 
+        /// <summary>
+        /// Resolve an absolute URI to a resource name.
+        /// </summary>
+        /// <param name="absoluteUri"></param>
+        /// <returns></returns>
         private string Resolve( Uri absoluteUri )
         {
-            return absoluteUri.PathAndQuery.Substring( _original_base_path.Length ).Replace( '/', '.' );
+            return absoluteUri.LocalPath.Substring(_original_base_path.Length).Replace('\\', '.');
         }
     }
 }
