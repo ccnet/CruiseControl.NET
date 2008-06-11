@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	public class MsBuildTask : ITask
 	{
 		public const string defaultExecutable = @"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe";
-		public const string DefaultLogger = "ThoughtWorks.CruiseControl.MsBuild.XmlLogger,ThoughtWorks.CruiseControl.MsBuild.dll";
+        public const string DefaultLogger = "";
 		public const string LogFilename = "msbuild-results.xml";
 		public const int DefaultTimeout = 600;
 
@@ -107,8 +107,19 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.Append("/l:");
-			builder.Append(StringUtil.AutoDoubleQuoteString(Logger));
-			builder.Append(";");
+            if (Logger == DefaultLogger)
+            {                
+                builder.Append(StringUtil.AutoDoubleQuoteString(
+                               string.Format("{0}{1}ThoughtWorks.CruiseControl.MsBuild.dll",
+                                   System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+                                   System.IO.Path.DirectorySeparatorChar)));
+            }
+            else
+            {
+                builder.Append(StringUtil.AutoDoubleQuoteString(Logger));
+            }
+            			
+            builder.Append(";");
 			builder.Append(StringUtil.AutoDoubleQuoteString(MsBuildOutputFile(result)));
 			return builder.ToString();
 		}
