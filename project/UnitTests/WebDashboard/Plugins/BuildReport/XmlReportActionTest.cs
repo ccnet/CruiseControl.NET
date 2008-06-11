@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			XmlFragmentResponse response = (XmlFragmentResponse) reportAction.Execute(null);
 			string xml = response.ResponseFragment;
 
-			Assert.AreEqual("<Projects />", xml);
+			Assert.AreEqual("<Projects CCType=\"CCNet\" />", xml);
 
 			mockFarmService.Verify();
 		}
