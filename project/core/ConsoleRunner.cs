@@ -31,6 +31,10 @@ namespace ThoughtWorks.CruiseControl.Core
 			Console.WriteLine("OS Version: {0}\tServer locale: {1}", Environment.OSVersion, CultureInfo.CurrentCulture);
 			Console.WriteLine();
 
+            // In DEBUG builds, give the developer a chance to debug our execution
+            if (parser.LaunchDebugger)
+                System.Diagnostics.Debugger.Launch();
+
 			if (parser.ShowHelp)
 			{
 				Log.Warning(ArgumentParser.Usage);

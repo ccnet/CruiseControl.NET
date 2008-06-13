@@ -32,6 +32,9 @@ Options:
 			{
 				options.Add(option, null);
 			}
+#if DEBUG
+            options.Add("debugger", null);
+#endif
 		}
 
 		private void Parse(string[] args)
@@ -79,6 +82,11 @@ Options:
 		{
 			get { return GetOption("help") != null; }
 		}
+
+	    public bool LaunchDebugger
+	    {
+            get { return GetOption("debugger") != null; }
+	    }
 
 		private string GetOption(string optionRequired)
 		{
