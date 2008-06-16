@@ -49,9 +49,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
 		private ArrayList messages = new ArrayList();
 
-//        private static DateTime lastTimeBuildStageChecked ;
-        //private const Int32 buildStageCheckPeriodInSeconds = 5;
-
 
 		[ReflectorProperty("prebuild", Required=false)]
 		public ITask[] PrebuildTasks = new ITask[0];
