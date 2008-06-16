@@ -26,8 +26,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			rdoWebPage.Checked =
 				(configuration.TrayIconDoubleClickAction == TrayIconDoubleClickAction.NavigateToWebPageOfFirstProject);
 
-			numPollPeriod.Value = configuration.PollPeriodSeconds;
-
+			if (configuration.PollPeriodSeconds <= numPollPeriod.Minimum)
+            {
+                configuration.PollPeriodSeconds = (int)numPollPeriod.Minimum; 
+            }
+            else
+            {
+                numPollPeriod.Value = configuration.PollPeriodSeconds;
+            }
+            
 			txtFixUserName.DataBindings.Add("Text", configuration, "FixUserName");
 		}
 
