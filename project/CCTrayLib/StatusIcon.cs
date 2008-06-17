@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		{
 			try
 			{
-				using (FileStream stream = File.Open(file, FileMode.Open))
+				using (FileStream stream = File.Open(file, FileMode.Open, FileAccess.Read))
 				{
 					return new StatusIcon(LoadIconFromStreamPreservingColourDepth(stream));
 				}
