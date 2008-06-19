@@ -148,19 +148,31 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return GetTextReader(LogFile);
 		}
 
+        /// <summary>
+        /// Generate a userid-login option if needed.
+        /// </summary>
+        /// <param name="doubleQuotes">If true, wrap the entire option in double-quotes ('"').</param>
+        /// <returns>The option, possibly <see cref="String.Empty"/>.</returns>
+        /// <remarks>
+        /// PVCS allows users to have no password, so we have three different choices (five if you count
+        /// the double quotes):
+        /// <list type="ul">
+        /// <item>(nothing)</item>
+        /// <item> -id"username" </item>
+        /// <item> -id"username":"password" </item>
+        /// <item> "-id"username"" </item>
+        /// <item> "-id"username":"password"" </item>
+        /// </list>
+        /// </remarks>
 		public string GetLogin(bool doubleQuotes)
 		{
-			//Two conditions need to be checked: We need to make sure either the username is empty
-			//but the password is not or that both are not empty.  This allows us to create the id
-			//logic needed by PVCS
-			if (Password.Length > 0)
-			{
-				string quotes = doubleQuotes ? "\"\"" : string.Empty;
-				return string.Format(" {2}-id\"{0}\":\"{1}\"{2} ", Username, Password, quotes);
-			}
-			else
-				return string.Empty;
-		}
+            if (Username.Length == 0)
+                return string.Empty;
+            string quotes = doubleQuotes ? "\"\"" : string.Empty;
+            if (Password.Length == 0)
+				return string.Format(" {1}-id\"{0}\"{1} ", Username, quotes);
+            return string.Format(" {2}-id\"{0}\":\"{1}\"{2} ", Username, Password, quotes);
+        }
 
 		private void ExecuteNonPvcsFunction(string content)
 		{

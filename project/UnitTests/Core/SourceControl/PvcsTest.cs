@@ -160,6 +160,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(" \"\"-id\"foo\":\"bar\"\"\" ", pvcs.GetLogin(true));
 		}
 
+        [Test]
+        public void GetLoginIdStringWithoutPassword()
+        {
+            pvcs.Username = "foo";
+            pvcs.Password = "";
+            Assert.AreEqual(" -id\"foo\" ", pvcs.GetLogin(false));
+        }
+
 		[Test]
 		public void GetExeFilenameShouldNotBeRootedIfPathIsNotSpecified()
 		{
