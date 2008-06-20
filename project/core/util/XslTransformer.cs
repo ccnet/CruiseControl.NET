@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         private static void LoadStylesheet(XslCompiledTransform transform, string xslFileName)
 		{
-            XsltSettings settings = new XsltSettings(false, true);
+            XsltSettings settings = new XsltSettings(true, true);
 
             try
 			{
