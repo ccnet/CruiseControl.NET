@@ -92,7 +92,12 @@
 		
 		                    <xsl:text>&#0160;&#0160;&#0160;&#0160;Changed Files: </xsl:text>
 		                    <xsl:value-of select="count(modifications/modification)"  />
-		              </span>
+
+				    <xsl:text>&#0160;&#0160;&#0160;&#0160; </xsl:text>
+		                    <xsl:value-of select="(modifications/modification/comment)"  />
+
+
+                  </span>
 		          </th>
 		      </tr>
 		      <tr>
