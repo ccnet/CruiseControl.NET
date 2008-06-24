@@ -48,6 +48,48 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			Assert.IsTrue(subPubDir.Combine("SubSubDir").Combine(fileName).Exists(), "File not found in sub sub directory");
 		}
 
+        [Test]
+        public void ShouldNotCopyFilesIfBuildBrokenAndAlwaysCopyIsSetToFalse()
+        {
+            SystemPath subRoot = srcRoot.CreateSubDirectory("SubDir");
+            SystemPath subSubRoot = subRoot.CreateSubDirectory("SubSubDir");
+            srcRoot.CreateTextFile(fileName, fileContents);
+            subRoot.CreateTextFile(fileName, fileContents);
+            subSubRoot.CreateTextFile(fileName, fileContents);
+
+            result = IntegrationResultMother.CreateFailed("99");
+
+            publisher.Run(result);
+
+            Assert.IsFalse(labelPubDir.Combine(fileName).Exists(), "File found in build number directory");
+            SystemPath subPubDir = labelPubDir.Combine("SubDir");
+            Assert.IsFalse(subPubDir.Combine(fileName).Exists(), "File found in sub directory");
+            Assert.IsFalse(subPubDir.Combine("SubSubDir").Combine(fileName).Exists(), "File found in sub sub directory");
+        }
+
+
+        [Test]
+        public void ShouldCopyFilesIfBuildBrokenAndAlwaysCopyIsSetToTrue()
+        {
+            SystemPath subRoot = srcRoot.CreateSubDirectory("SubDir");
+            SystemPath subSubRoot = subRoot.CreateSubDirectory("SubSubDir");
+            srcRoot.CreateTextFile(fileName, fileContents);
+            subRoot.CreateTextFile(fileName, fileContents);
+            subSubRoot.CreateTextFile(fileName, fileContents);
+
+            result = IntegrationResultMother.CreateFailed("99");
+
+            publisher.AlwaysPublish = true;
+            publisher.Run(result);
+
+            Assert.IsTrue(labelPubDir.Combine(fileName).Exists(), "File not found in build number directory");
+            SystemPath subPubDir = labelPubDir.Combine("SubDir");
+            Assert.IsTrue(subPubDir.Combine(fileName).Exists(), "File not found in sub directory");
+            Assert.IsTrue(subPubDir.Combine("SubSubDir").Combine(fileName).Exists(), "File not found in sub sub directory");
+        }
+
+
+
 		[Test]
 		public void SourceRootShouldBeRelativeToIntegrationWorkingDirectory()
 		{

@@ -14,10 +14,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 		[ReflectorProperty("useLabelSubDirectory", Required=false)]
 		public bool UseLabelSubDirectory = true;
-		
+
+        [ReflectorProperty("alwaysPublish", Required = false)]
+        public bool AlwaysPublish = false;
+
+
 		public void Run(IIntegrationResult result)
 		{
-			if (result.Succeeded)
+            if (result.Succeeded || AlwaysPublish)
 			{
 				DirectoryInfo srcDir = new DirectoryInfo(result.BaseFromWorkingDirectory(SourceDir));
 				DirectoryInfo pubDir = new DirectoryInfo(result.BaseFromArtifactsDirectory(PublishDir));
