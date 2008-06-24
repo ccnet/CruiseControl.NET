@@ -244,8 +244,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="isCaseSensitive">Wheter or not match should be performed
         /// case sisitively.</param>
         /// <returns><c>true</c>if the pattern matches.</returns>
+        /// <remarks>If <paramref name="str"/> is null or an empty string, the match always fails.</remarks>
         public static bool MatchPath(string pattern, string str, bool isCaseSensitive)
         {
+            if (string.IsNullOrEmpty(str))
+                return false;               // A null string can't match anything
             // When str starts with a separator, pattern has to start with a
             // separator or the first pattern must be any directories.
             string[] patDirs = SplitPath(pattern);

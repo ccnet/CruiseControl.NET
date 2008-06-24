@@ -305,6 +305,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			Assert.IsTrue(PathUtils.Match("*", "theName", true));
 			Assert.IsTrue(PathUtils.Match("*", "theName.dat", true));
 		}
+
+        [Test]
+        public void NullOrEmptyTargetShouldNotMatchPattern()
+        {
+            Assert.IsFalse(PathUtils.MatchPath("/theFolder/*", null, true));
+            Assert.IsFalse(PathUtils.MatchPath("/theFolder/*", null, false));
+            Assert.IsFalse(PathUtils.MatchPath("/theFolder/*", "", true));
+            Assert.IsFalse(PathUtils.MatchPath("/theFolder/*", "", false));
+        }
 	}
 
 	internal class TestCase
