@@ -6,17 +6,17 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
-	[ReflectorType("rss")]
-	// This publisher generates a rss file reporting the latest results for a Project.
-	// We use .NET's XMLSerialization to generate the XML
-	// ToDo - more on this, or delete it!
-	public class RssPublisher : ITask
-	{
-		private const string RSSFilename = "RSSData.xml";
+    [ReflectorType("rss")]
+    // This publisher generates a rss file reporting the latest results for a Project.
+    // We use .NET's XMLSerialization to generate the XML
+    // ToDo - more on this, or delete it!
+    public class RssPublisher : ITask
+    {
+        private const string RSSFilename = "RSSData.xml";
 
         private static string RSSDataFileLocation(string artifactDirectory)
         {
-            return System.IO.Path.Combine(artifactDirectory, RSSFilename);            
+            return System.IO.Path.Combine(artifactDirectory, RSSFilename);
         }
 
         public static string LoadRSSDataDocument(string artifactDirectory)
@@ -31,123 +31,149 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return result;
         }
 
-		public void Run(IIntegrationResult result)
-		{
-            using (StreamWriter stream = File.CreateText(RSSDataFileLocation(result.ArtifactDirectory)))
-			{
-				stream.Write(GenerateDocument(result));
-			}
-		}
-
-		public Document GenerateDocument(IIntegrationResult result)
-		{
-			Document document = new Document();
-			document.Channel = GenerateChannel(result);
-
-			return document;
-		}
-
-		public Channel GenerateChannel(IIntegrationResult result)
-		{
-			Channel channel = new Channel();
-			channel.Link = result.ProjectUrl;
-			channel.Title = "CruiseControl.NET - " + result.ProjectName;
-			channel.Description = "The latest build results for " + result.ProjectName;
-			channel.Items = GenerateItems(result);
-
-			return channel;
-		}
-
-		public ArrayList GenerateItems(IIntegrationResult result)
-		{
-			ArrayList items = new ArrayList();
-
-			Item item = new Item();
-			items.Add(item);
-
-            item.Title = string.Format("Build {0} : {1}", result.Label, result.Status.ToString());
-            item.Description = GetBuildModifications(result);
-
-
-			return items;
-		}
-
-        private string GetBuildModifications(IIntegrationResult result)
+        public void Run(IIntegrationResult result)
         {
-            System.Text.StringBuilder mods = new System.Text.StringBuilder();
+            using (StreamWriter stream = File.CreateText(RSSDataFileLocation(result.ArtifactDirectory)))
+            {
+                stream.Write(GenerateDocument(result));
+            }
+        }
+
+        public string GenerateDocument(IIntegrationResult result)
+        {
+
+            System.IO.StringWriter RSSInfo = new StringWriter();
+
+            RSSInfo.WriteLine("<?xml version=\"1.0\"?>");
+            RSSInfo.WriteLine("<rss version=\"2.0\" ");
+            RSSInfo.WriteLine("     xmlns:content=\"http://purl.org/rss/1.0/modules/content/\" ");
+            RSSInfo.WriteLine(">");
+            RSSInfo.WriteLine("  <channel> ");
+            RSSInfo.WriteLine("    <title>CruiseControl.NET - {0}</title>", result.ProjectName);
+            RSSInfo.WriteLine("    <link>{0}</link>", result.ProjectUrl);
+            RSSInfo.WriteLine("    <description>The latest build results for {0}</description>", result.ProjectName);
+            RSSInfo.WriteLine("    <language>en</language>");
+            RSSInfo.WriteLine("    <ttl>5</ttl>");
+            RSSInfo.WriteLine("    <item>");
+            RSSInfo.WriteLine("        <title>Build {0} : {1}  {2}  {3}</title>", result.Label, result.Status.ToString(), GetAmountOfModifiedfiles(result), GetFirstCommentedModification(result));
+            RSSInfo.WriteLine("        <description>{0}</description>", GetAmountOfModifiedfiles(result));
 
             if (result.HasModifications())
             {
-                mods.AppendLine("Modifications in Build :");
+                RSSInfo.WriteLine("        <content:encoded>{0}</content:encoded>", GetBuildModifications(result));
+            }
 
-                for (int i = 0; i < result.Modifications.Length; i++)
+            RSSInfo.WriteLine("    </item>");
+            RSSInfo.WriteLine("  </channel> ");
+            RSSInfo.WriteLine("</rss>");
+
+            return RSSInfo.ToString();
+        }
+
+        private string GetAmountOfModifiedfiles(IIntegrationResult result)
+        {
+            switch (result.Modifications.Length)
+            {
+                case 0:
+                    return "No changed files found in build";
+                case 1:
+                    return "1 changed file found in build";
+                default:
+                    return string.Format("{0} changed files found in build", result.Modifications.Length);
+            }
+        }
+
+        private string GetFirstCommentedModification(IIntegrationResult result)
+        {
+            if (result.HasModifications() )
+            {
+                for (int i = 0; i <= result.Modifications.Length - 1; i++)
                 {
-                    ArrayList LoggedModifications  = new ArrayList();
-                    if (!LoggedModifications.Contains(result.Modifications[i].Comment ))
-                    {
-                        LoggedModifications.Add(result.Modifications[i].Comment);
-                        
-                        mods.AppendLine(string.Format("- {0} {1}", 
-                                        result.Modifications[i].UserName, 
-                                        result.Modifications[i].Comment));                        
-                    }
+                    if (result.Modifications[i].Comment.Length > 0 )
+                        return "First Comment : " + result.Modifications[i].Comment;
                 }
+                
+                return "";
             }
             else
             {
-                mods.Append("No Modifications found in Build");
+                return "";
             }
-           
-            return mods.ToString();        
         }
-	}
-
-	[XmlRoot(ElementName = "rss")]
-	public class Document
-	{
-		[XmlAttribute("version")]
-		public string Version = "0.91";
-
-		[XmlElement("channel")]
-		public Channel Channel;
-
-		public override string ToString()
-		{
-			return XmlUtil.StringSerialize(this);
-		}
-	}
-
-	public class Channel
-	{
-		[XmlElement("title")]
-		public string Title;
-
-		[XmlElement("link")]
-		public string Link;
-
-		[XmlElement("description")]
-		public string Description;
-
-		[XmlElement("language")]
-		public string Language = "en";
-
-        [XmlElement("ttl")]
-        public string TTL = "10";
 
 
-		[XmlElement(Type = typeof(Item), ElementName="item")]
-		public ArrayList Items = new ArrayList();
-	}
+        private string GetBuildModifications(IIntegrationResult result)
+        {
 
-	public class Item
-	{
-		[XmlElement("title")]
-		public string Title;
+            System.IO.StringWriter mods = new StringWriter();
+            string ModificationCheck = "";
+            string PreviousModificationCheck = "";
 
-		[XmlElement("link")]
-		public string Link;
+            ArrayList LoggedModifications = new ArrayList();
 
-		[XmlElement(ElementName = "description")]
-		public string Description;
-	}
+            mods.WriteLine("<![CDATA[");
+
+            mods.WriteLine("<h4>Modifications in build :</h4>");
+
+
+
+            mods.WriteLine("<table cellpadding=\"5\">");
+
+            for (int i = 0; i < result.Modifications.Length; i++)
+            {
+                ModificationCheck = result.Modifications[i].UserName + "__CCNET__" + result.Modifications[i].Comment;
+
+                if (!LoggedModifications.Contains(ModificationCheck))
+                {
+                    LoggedModifications.Add(ModificationCheck);
+
+                    mods.WriteLine(string.Format("<tr><td>{0}</td><td>{1}</td></tr>",
+                                    result.Modifications[i].UserName,
+                                    result.Modifications[i].Comment));
+                }
+            }
+            mods.WriteLine("</table>");
+
+
+            mods.WriteLine("<h4>Detailed information of the modifications in the build :</h4>");
+
+            mods.WriteLine("<table cellpadding=\"5\">");
+
+            PreviousModificationCheck = "";
+            LoggedModifications = new ArrayList();
+
+            for (int i = 0; i < result.Modifications.Length; i++)
+            {
+                ModificationCheck = result.Modifications[i].UserName + "__CCNET__" + result.Modifications[i].Comment;
+
+                if (PreviousModificationCheck != ModificationCheck)
+                {
+                    mods.WriteLine(string.Format("<tr><td>{0}</td><td>{1}</td></tr>",
+                                    result.Modifications[i].UserName,
+                                    result.Modifications[i].Comment));
+
+                    mods.WriteLine(string.Format("<font size=2><tr><td>{2}</td><td>{0}/{1}</td></tr></font>",
+                                    result.Modifications[i].FolderName,
+                                    result.Modifications[i].FileName,
+                                    result.Modifications[i].Type));
+
+                    PreviousModificationCheck = ModificationCheck;
+                }
+                else
+                {
+
+                    mods.WriteLine(string.Format("<font size=2><tr><td>{2}</td><td>{0}/{1}</td></tr></font>",
+                                    result.Modifications[i].FolderName,
+                                    result.Modifications[i].FileName,
+                                    result.Modifications[i].Type));
+                }
+            }
+            mods.WriteLine("</table>");
+
+            mods.WriteLine("]]>");
+
+            return mods.ToString();
+        }
+    }
+
 }

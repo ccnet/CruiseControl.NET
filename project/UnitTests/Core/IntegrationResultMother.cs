@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			result.StartTime = date;
 			result.EndTime = date;
 			result.Label = "2.0";
-			result.ArtifactDirectory = Path.GetTempPath();
+			result.ArtifactDirectory = Path.GetTempPath();            
 			return result;
 		}
 
@@ -103,6 +103,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			result.Label = label;
 			return result;
 		}
+
+        public static IntegrationResult CreateFailed(Modification[] modifications)
+        {
+            IntegrationResult result = CreateFailed();
+            result.Modifications = modifications;
+            return result;
+        }
 
 		public static IIntegrationResult CreateStillFailing()
 		{
