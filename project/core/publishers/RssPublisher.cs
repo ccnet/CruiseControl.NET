@@ -148,11 +148,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
                 if (PreviousModificationCheck != ModificationCheck)
                 {
-                    mods.WriteLine(string.Format("<tr><td>{0}</td><td>{1}</td></tr>",
+                    mods.WriteLine(string.Format("<tr><td><b>{0}</b></td><td>{1}</td></tr>",
                                     result.Modifications[i].UserName,
                                     result.Modifications[i].Comment));
 
-                    mods.WriteLine(string.Format("<font size=2><tr><td>{2}</td><td>{0}/{1}</td></tr></font>",
+                    mods.WriteLine(string.Format("<tr><td><font size=2>{2}</font></td><td><font size=2>{0}/{1}</font></td></tr>",
                                     result.Modifications[i].FolderName,
                                     result.Modifications[i].FileName,
                                     result.Modifications[i].Type));
@@ -162,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 else
                 {
 
-                    mods.WriteLine(string.Format("<font size=2><tr><td>{2}</td><td>{0}/{1}</td></tr></font>",
+                    mods.WriteLine(string.Format("<tr><td><font size=2>{2}</font></td><td><font size=2>{0}/{1}</font></td></tr>",
                                     result.Modifications[i].FolderName,
                                     result.Modifications[i].FileName,
                                     result.Modifications[i].Type));

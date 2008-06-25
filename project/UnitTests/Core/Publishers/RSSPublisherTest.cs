@@ -173,7 +173,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             Modification[] mods = OneModification();           
             result = IntegrationResultMother.CreateSuccessful(mods);
             result.ProjectUrl = "http://somewhere/someplace.html";
-            string ExpectedXMLItemData = "<title>Build 2.0 : Success  1 changed file found in build  First Comment : some comment</title><description>1 changed file found in build</description><content:encoded xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"><![CDATA[\r\n<h4>Modifications in build :</h4>\r\n<table cellpadding=\"5\">\r\n<tr><td>Coder</td><td>some comment</td></tr>\r\n</table>\r\n<h4>Detailed information of the modifications in the build :</h4>\r\n<table cellpadding=\"5\">\r\n<tr><td>Coder</td><td>some comment</td></tr>\r\n<font size=2><tr><td>Modified</td><td>$/SomeMainFolder/TheFolder/thecode.cs</td></tr></font>\r\n</table>\r\n]]></content:encoded>";
+            string ExpectedXMLItemData = "<title>Build 2.0 : Success  1 changed file found in build  First Comment : some comment</title><description>1 changed file found in build</description><content:encoded xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"><![CDATA[\r\n<h4>Modifications in build :</h4>\r\n<table cellpadding=\"5\">\r\n<tr><td>Coder</td><td>some comment</td></tr>\r\n</table>\r\n<h4>Detailed information of the modifications in the build :</h4>\r\n<table cellpadding=\"5\">\r\n<tr><td><b>Coder</b></td><td>some comment</td></tr>\r\n<tr><td><font size=2>Modified</font></td><td><font size=2>$/SomeMainFolder/TheFolder/thecode.cs</font></td></tr>\r\n</table>\r\n]]></content:encoded>";
 
 
             /// Execute
@@ -188,18 +188,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
         }
 
-        private static Modification[] OneModification()
-        {
-            Modification[] mods = new Modification[1];
-            mods[0] = new Modification();
-            mods[0].Comment = "some comment";
-            mods[0].FileName = "thecode.cs";
-            mods[0].FolderName = "$/SomeMainFolder/TheFolder";
-            mods[0].Type = "Modified";
-            mods[0].UserName = "Coder";
-
-            return mods;
-        }
 
         [Test]
         public void ItemDataForOKBuild1Modification1UserMultipleFiles()
@@ -224,7 +212,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
             result = IntegrationResultMother.CreateSuccessful(mods);
             result.ProjectUrl = "http://somewhere/someplace.html";
-            string ExpectedXMLItemData = "<title>Build 2.0 : Success  2 changed files found in build  First Comment : some comment</title><description>2 changed files found in build</description><content:encoded xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"><![CDATA[\r\n<h4>Modifications in build :</h4>\r\n<table cellpadding=\"5\">\r\n<tr><td>Coder</td><td>some comment</td></tr>\r\n</table>\r\n<h4>Detailed information of the modifications in the build :</h4>\r\n<table cellpadding=\"5\">\r\n<tr><td>Coder</td><td>some comment</td></tr>\r\n<font size=2><tr><td>Modified</td><td>$/SomeMainFolder/TheFolder/thecode.cs</td></tr></font>\r\n<font size=2><tr><td>Modified</td><td>$/SomeMainFolder/TheFolder/anothercode.cs</td></tr></font>\r\n</table>\r\n]]></content:encoded>";
+            string ExpectedXMLItemData = "<title>Build 2.0 : Success  2 changed files found in build  First Comment : some comment</title><description>2 changed files found in build</description><content:encoded xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"><![CDATA[\r\n<h4>Modifications in build :</h4>\r\n<table cellpadding=\"5\">\r\n<tr><td>Coder</td><td>some comment</td></tr>\r\n</table>\r\n<h4>Detailed information of the modifications in the build :</h4>\r\n<table cellpadding=\"5\">\r\n<tr><td><b>Coder</b></td><td>some comment</td></tr>\r\n<tr><td><font size=2>Modified</font></td><td><font size=2>$/SomeMainFolder/TheFolder/thecode.cs</font></td></tr>\r\n<tr><td><font size=2>Modified</font></td><td><font size=2>$/SomeMainFolder/TheFolder/anothercode.cs</font></td></tr>\r\n</table>\r\n]]></content:encoded>";
 
 
             /// Execute
@@ -278,7 +266,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
             result = IntegrationResultMother.CreateSuccessful(mods);
             result.ProjectUrl = "http://somewhere/someplace.html";
-            string ExpectedXMLItemData = "<title>Build 2.0 : Success  4 changed files found in build  First Comment : some comment</title><description>4 changed files found in build</description><content:encoded xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"><![CDATA[\r\n<h4>Modifications in build :</h4>\r\n<table cellpadding=\"5\">\r\n<tr><td>Coder</td><td>some comment</td></tr>\r\n<tr><td>GreatCoder</td><td>some change</td></tr>\r\n</table>\r\n<h4>Detailed information of the modifications in the build :</h4>\r\n<table cellpadding=\"5\">\r\n<tr><td>Coder</td><td>some comment</td></tr>\r\n<font size=2><tr><td>Modified</td><td>$/SomeMainFolder/TheFolder/thecode.cs</td></tr></font>\r\n<font size=2><tr><td>Modified</td><td>$/SomeMainFolder/TheFolder/anothercode.cs</td></tr></font>\r\n<tr><td>GreatCoder</td><td>some change</td></tr>\r\n<font size=2><tr><td>Modified</td><td>$/SomeMainFolder/TheFolder/subdivision/myfile.cs</td></tr></font>\r\n<font size=2><tr><td>Modified</td><td>$/SomeMainFolder/TheFolder/subdivision/myfileFactory.cs</td></tr></font>\r\n</table>\r\n]]></content:encoded>";
+            string ExpectedXMLItemData = "<title>Build 2.0 : Success  4 changed files found in build  First Comment : some comment</title><description>4 changed files found in build</description><content:encoded xmlns:content=\"http://purl.org/rss/1.0/modules/content/\"><![CDATA[\r\n<h4>Modifications in build :</h4>\r\n<table cellpadding=\"5\">\r\n<tr><td>Coder</td><td>some comment</td></tr>\r\n<tr><td>GreatCoder</td><td>some change</td></tr>\r\n</table>\r\n<h4>Detailed information of the modifications in the build :</h4>\r\n<table cellpadding=\"5\">\r\n<tr><td><b>Coder</b></td><td>some comment</td></tr>\r\n<tr><td><font size=2>Modified</font></td><td><font size=2>$/SomeMainFolder/TheFolder/thecode.cs</font></td></tr>\r\n<tr><td><font size=2>Modified</font></td><td><font size=2>$/SomeMainFolder/TheFolder/anothercode.cs</font></td></tr>\r\n<tr><td><b>GreatCoder</b></td><td>some change</td></tr>\r\n<tr><td><font size=2>Modified</font></td><td><font size=2>$/SomeMainFolder/TheFolder/subdivision/myfile.cs</font></td></tr>\r\n<tr><td><font size=2>Modified</font></td><td><font size=2>$/SomeMainFolder/TheFolder/subdivision/myfileFactory.cs</font></td></tr>\r\n</table>\r\n]]></content:encoded>";
 
 
             /// Execute
@@ -291,6 +279,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
             Assert.AreEqual(ExpectedXMLItemData, SelectedNode.InnerXml);
 
+        }
+
+
+
+        private static Modification[] OneModification()
+        {
+            Modification[] mods = new Modification[1];
+            mods[0] = new Modification();
+            mods[0].Comment = "some comment";
+            mods[0].FileName = "thecode.cs";
+            mods[0].FolderName = "$/SomeMainFolder/TheFolder";
+            mods[0].Type = "Modified";
+            mods[0].UserName = "Coder";
+
+            return mods;
         }
 
 
