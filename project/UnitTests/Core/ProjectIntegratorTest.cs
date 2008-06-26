@@ -1,3 +1,5 @@
+using System.IO;
+using System.Reflection;
 using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
@@ -11,11 +13,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	public class ProjectIntegratorTest : IntegrationFixture
 	{
 		private const string TestQueueName = "projectQueue";
+	    private static readonly string tempDir = Path.GetTempPath() + Assembly.GetExecutingAssembly().FullName + "\\";
 		private LatchMock integrationTriggerMock;
 		private LatchMock projectMock;
 		private ProjectIntegrator integrator;
 		private IntegrationQueueSet integrationQueues;
 		private IIntegrationQueue integrationQueue;
+
+        private readonly string tempWorkingDir1 = tempDir + "tempWorkingDir1";
+        private readonly string tempArtifactDir1 = tempDir + "tempArtifactDir1";
 
 		[SetUp]
 		public void SetUp()
@@ -28,6 +34,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectMock.SetupResult("QueueName", TestQueueName);
 			projectMock.SetupResult("QueuePriority", 0);
 			projectMock.SetupResult("Triggers", integrationTriggerMock.MockInstance);
+            projectMock.SetupResult("WorkingDirectory", tempWorkingDir1);
+            projectMock.SetupResult("ArtifactDirectory", tempArtifactDir1);
 
 			integrationQueues = new IntegrationQueueSet();
 			integrationQueues.Add(TestQueueName);
@@ -43,7 +51,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 				integrator.Stop();
 				integrator.WaitForExit();
 			}
-		}
+            if (Directory.Exists(tempWorkingDir1))
+                Directory.Delete(tempWorkingDir1, true);
+            if (Directory.Exists(tempArtifactDir1))
+                Directory.Delete(tempArtifactDir1, true);
+        }
 
 		private void VerifyAll()
 		{
@@ -412,6 +424,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			otherProjectMock.SetupResult("QueueName", TestQueueName);
 			otherProjectMock.SetupResult("QueuePriority", 0);
 			otherProjectMock.SetupResult("Triggers", integrationTriggerMock.MockInstance);
+            otherProjectMock.SetupResult("WorkingDirectory", tempDir + "tempWorkingDir2");
+            otherProjectMock.SetupResult("ArtifactDirectory", tempDir + "tempArtifactDir2");
 
 			IProject otherProject = (IProject) otherProjectMock.MockInstance;
 			IProject project = (IProject) projectMock.MockInstance;

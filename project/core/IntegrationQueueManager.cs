@@ -128,8 +128,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				// Force the queue to be created if it does not exist already.
 				integrationQueues.Add(project.QueueName);
-                // Initialize the project.
-                project.Initialize();
 			}
 			projectIntegrators = projectIntegratorListFactory.CreateProjectIntegrators(configuration.Projects, integrationQueues);
 

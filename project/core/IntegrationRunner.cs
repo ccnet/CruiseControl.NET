@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -23,6 +24,8 @@ namespace ThoughtWorks.CruiseControl.Core
             IIntegrationResult result = resultManager.StartNewIntegration(request);
             IIntegrationResult lastResult = resultManager.LastIntegrationResult;
 
+            CreateDirectoryIfItDoesntExist(result.WorkingDirectory);
+            CreateDirectoryIfItDoesntExist(result.ArtifactDirectory);
             result.MarkStartTime();
             result.Modifications = GetModifications(lastResult, result);
             if (result.ShouldRunBuild())
@@ -67,5 +70,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			resultManager.FinishIntegration();
 			target.PublishResults(result);
 		}
+
+        private static void CreateDirectoryIfItDoesntExist(string directory)
+        {
+            if (! Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+        }
     }
 }

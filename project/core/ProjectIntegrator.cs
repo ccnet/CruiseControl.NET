@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -29,7 +30,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			trigger = project.Triggers;
 			this.project = project;
 			this.integrationQueue = integrationQueue;
-		}
+            // Make sure the project's directories exist.
+            if (!Directory.Exists(project.WorkingDirectory))
+                Directory.CreateDirectory(project.WorkingDirectory);
+            if (!Directory.Exists(project.ArtifactDirectory))
+                Directory.CreateDirectory(project.ArtifactDirectory);
+        }
 
 		public string Name
 		{
