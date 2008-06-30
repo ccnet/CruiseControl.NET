@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             try
             {
                 Execute(CreateHistoryProcessInfo(from, to, tempOutputFileName));
-                TextReader outputReader = new StreamReader(tempOutputFileName);
+                TextReader outputReader = new StreamReader(tempOutputFileName, System.Text.Encoding.Default);
                 try
                 {
                     return ParseModifications(outputReader, from.StartTime, to.StartTime);
