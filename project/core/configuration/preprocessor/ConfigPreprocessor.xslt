@@ -51,11 +51,18 @@
     </xsl:attribute>
   </xsl:template>
 
-  <!-- Include directive -->
-  <xsl:template match="cb:include">  
-    <!-- Recurse into the included doc-->
-    <xsl:apply-templates select="env:push_include(@href)"/>    
-    <xsl:for-each select="env:pop_include()"/>    
+  <!-- Include another document specified by a URI, substituting constant values in 
+       for $(xxx) names in the URI. -->
+  <xsl:template match="cb:include">
+    <!-- Expand any defined values ("$(...)") in the URI -->
+    <xsl:variable name="docName" >
+      <xsl:for-each select="@href">
+        <xsl:call-template name="EvalTextConstants"/>
+      </xsl:for-each>
+    </xsl:variable>
+    <!-- Recurse into the included doc -->
+    <xsl:apply-templates select="env:push_include($docName)"/>
+    <xsl:for-each select="env:pop_include()"/>
   </xsl:template>
 
   <!-- Text constant definition, value is text node -->

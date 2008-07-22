@@ -181,7 +181,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             }
         }
 
-        private static XmlDocument _Preprocess( string filename )
+        [Test]
+        public void TestIncludeVariable()
+        {
+            using (XmlReader input = GetInput("TestIncludeVariable.xml"))
+            {
+                ConfigPreprocessorEnvironment env;
+                using (XmlWriter output = GetOutput())
+                {
+                    ConfigPreprocessor preprocessor = new ConfigPreprocessor();
+                    env = preprocessor.PreProcess(input, output,
+                        new TestResolver(FAKE_ROOT + "TestIncludeVariable.xml"),
+                        new Uri(FAKE_ROOT + "TestIncludeVariable.xml"));
+                }
+                AssertNodeExists(ReadOutputDoc().CreateNavigator(),
+                                  "/includeVariable/included/included2");
+
+                Assert.AreEqual(env.Fileset.Length, 3);
+                Assert.AreEqual(GetTestPath("testincludevariable.xml"), env.Fileset[0]);
+                Assert.AreEqual(GetTestPath(@"subfolder\testincluded.xml"), env.Fileset[1]);
+                Assert.AreEqual(GetTestPath("testincluded2.xml"), env.Fileset[2]);
+            }
+        }
+        
+        private static XmlDocument _Preprocess(string filename)
         {
             using( XmlReader input = GetInput( filename ) )
             {
