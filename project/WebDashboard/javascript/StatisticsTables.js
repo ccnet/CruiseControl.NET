@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright (c) 2007, the Eden Ridgway
 All rights reserved.
 
@@ -372,6 +372,20 @@ function shouldColumnWrap(currentRowData, attributeName)
         return true;
     }
 
-    return (currentRowData != null && currentRowData[attributeName].toString().length > 35);
-  
+	// The attribute in question may not be present in all instances of the data.             
+	// In places where the attribute is not present, no wrapping will be necessary.           
+	var attribute;                                                                            
+	                                                                                          
+	if (currentRowData != null)                                                               
+	{                                                                                         
+		attribute = currentRowData[attributeName];                                        
+	}                                                                                         
+	                                                                                          
+	if ( attribute == null )                                                                  
+	{                                                                                         
+		return false;                                                                     
+	}                                                                                         
+                                                                                                 
+    return (attribute.toString().length > 35);                                                   
+ 
 }
