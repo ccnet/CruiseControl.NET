@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Packaging a Release</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Packaging a Release
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on May 29, 2008 by <font color="#0050B2">rosspatterson</font>.
+				    </div>
+
+				    <p>The process of producing a new stable release of CruiseControl.NET is as follows (note that some steps require non-default permissions):</p>
+<ol>
+	<li>Choose the release number "<em>x.y</em>".  In most cases, <em>x</em> will remain the same and <em>y</em> will increase by 1 from the previous release.</li>
+	<li>Rename the release in Jira to be a valid release name (requires ccnet_administrator group membership on Jira)
+	<ol>
+		<li>"Administer Project"</li>
+		<li>"Manage Versions"</li>
+		<li>"Edit Details" on "Next"</li>
+		<li>Set the version number to "<em>x</em>.<em>y</em>".</li>
+		<li>Set the description to "CCNet <em>x</em>.<em>y</em> Release"</li>
+		<li>Set the release date to today's date.</li>
+	</ol>
+	</li>
+	<li>Add a new release "Next"
+	<ol>
+		<li>"Add Version"
+		<ol>
+			<li>Name = "Next"</li>
+			<li>Description = "Issues that will be resolved in the next release"</li>
+			<li>Schedule = "<em>x</em>.<em>y</em>"</li>
+		</ol>
+		</li>
+	</ol>
+	</li>
+	<li>Move the open Jira issues from the new version number to "Next":
+	<ol>
+		<li>"Browse Project"</li>
+		<li>"Road Map"</li>
+		<li>"All Versions"</li>
+		<li>Select "Bulk change all n issues"</li>
+		<li>Select the checkbox in the table header</li>
+		<li>Press the "Next -&gt;" button</li>
+		<li>Select "Edit issues"</li>
+		<li>Press the "Next -&gt;" button</li>
+		<li>Check "Change Fix Version/s:" and choose release "Next".</li>
+		<li>Press the "Next -&gt;" button.</li>
+		<li>Press the "Confirm" button.</li>
+	</ol>
+	</li>
+	<li>Move any resolved Jira issues from non-release and non-"Next" releases (<em>e.g.</em>, "Soon", "Medium Term") to the new version number:
+	<ol>
+		<li>"Browse Project"</li>
+		<li>"Road Map"</li>
+		<li>"All Versions"</li>
+		<li>Find any release names that have non-"UNRESOLVED" entries and click on those release names (one at a time, of course):
+		<ol>
+			<li>Select "Bulk change all n issues"</li>
+			<li>Select the checkbox in the table header</li>
+			<li>Press the "Next -&gt;" button</li>
+			<li>Select "Edit issues"</li>
+			<li>Press the "Next -&gt;" button</li>
+			<li>Check "Change Fix Version/s:" and choose release "Next".</li>
+			<li>Press the "Next -&gt;" button.</li>
+			<li>Press the "Confirm" button.</li>
+		</ol>
+		</li>
+	</ol>
+	</li>
+	<li>Create new release notes using the <a href="http://jira.public.thoughtworks.org/ConfigureReleaseNote.jspa?projectId=10000">CCNet Jira Release Notes generator </a> and the new version number.</li>
+	<li>Add a new page to Confluence (child of <a href="Download.html" title="Download">Download</a>) to contain generated release notes.
+	<ol>
+		<li>Go to <a href="http://confluence.public.thoughtworks.org/display/CCNET/Download">http://confluence.public.thoughtworks.org/display/CCNET/Download</a></li>
+		<li>Click on "Add Child Page"</li>
+		<li>Set the name to "CCNet x.y Release Notes"</li>
+		<li>Paste in the text-version of the release notes.</li>
+		<li>Massage it into shape:
+		<ol>
+			<li>Wikify the headings: "** <em>X</em>" -&gt; "h4. <em>X</em>"</li>
+			<li>Fix up the Jira-entry names: "    * [<em>X</em>] <em>Y</em>" -&gt; "* <em>X</em> <em>Y</em>"</li>
+			<li>Add to the top:<div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
+<pre>h2. Highlights of the CCNet x.y release
+
+h4. ...title...
+
+...description...
+
+h4. ...title...
+
+...description...
+
+...
+
+h2. Upgrading to CCNet x.y
+
+{warning:title=...synopsis...}
+...whatever breaking changes there are in release x.y...
+{warning}
+{note:title=Upgrading from a version before x.y-1?}
+See the release notes for the [CCNet x.y-1 release|CCNet x.y-1 Release Notes].
+{note}
+
+h2. Release Notes - CruiseControl .NET - Version x.y
+
+This is a list of [Jira Issues resolved by this release|_the Release Notes URL from ???_] :
+</pre>
+</div></div></li>
+			<li>Add some highlights.</li>
+			<li>Note any breaking changes.</li>
+		</ol>
+		</li>
+	</ol>
+	</li>
+	<li>Update version number in the ccnet.nsi and cctray.nsi installer files.
+	<ol>
+		<li>&#33;define PRODUCT&#95;VERSION "<em>x</em>.<em>y</em>"</li>
+	</ol>
+	</li>
+	<li>Update the copyright year:
+	<ol>
+		<li>Update the "AssemblyCopyrightAttribute" value in the /ccnet.build file's "createAssemblyInfo" task:
+		<ol>
+			<li>&lt;attribute type="AssemblyCopyrightAttribute" value="Copyright Â© <em>yyyy</em> ThoughtWorks Inc." /&gt;</li>
+		</ol>
+		</li>
+		<li>Update the "AssemblyCopyrightAttribute" value in  the /project/CommonAssemblyInfo.cs file:
+		<ol>
+			<li>[assembly: AssemblyCopyrightAttribute("Copyright © <em>yyyy</em> ThoughtWorks Inc.")]</li>
+		</ol>
+		</li>
+	</ol>
+	</li>
+	<li>Update the CruiseControl.NET Live version number for CCNet by editting the ccnet.config file.
+	<ol>
+		<li>"svn checkout <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/environments">https://ccnet.svn.sourceforge.net/svnroot/ccnet/environments</a>"</li>
+		<li>Change the &lt;prefix&gt; value in the &lt;labeller&gt; element to "<em>x</em>.<em>y</em>.0".</li>
+		<li>Change the &lt;artifactDirectory&gt; value to "e:\download-area\CCNet-Builds&#95;x_.<em>y</em>"</li>
+	</ol>
+	</li>
+	<li><a href="http://confluence.public.thoughtworks.org/spaces/exportspace.action?key=CCNET">Export </a> Confluence space as Html.   Extract the exported zip into your local ccnet\docs folder, and then check the modified Html files into SVN.  This way the next CCNetLive build will package the latest documentation from Confluence.&nbsp; Update CruiseControl.NET documentation version number in the confluence site template.
+	<ol>
+		<li>Choose "HTML Output"</li>
+		<li>De-select "Include comments".</li>
+		<li>Make sure all pages are selected.</li>
+		<li>Press the "Export" button and wait for the file to download.</li>
+		<li>Save the resulting "CCNET-<em>yyyymmdd</em>-<em>hh</em>&#95;<em>mm</em>&#95;<em>ss</em>.zip" file.</li>
+		<li>Delete all files (but not folders) in your "/doc" folder.</li>
+		<li>Unzip the export ZIP file into your "/doc" folder.</li>
+		<li>Ensure than all the line-end sequences in the text (.css, .html, and .xsl) files are CRLF if you're using a Windows system, or LF if Unix.  Confluence runs on a Unix system, so they are likely to be LF in the export file.  Consider using a tool like ToFroWin CR/LF converter (from <a href="http://sysd.org/stas/node/34">http://sysd.org/stas/node/34</a>) or the unix2dos and dos2unix commands to do so.</li>
+		<li>Add any new files to the Subversion repository:
+		<ol>
+			<li>svn add <em>filename</em></li>
+			<li>If the file is a text file:
+			<ol>
+				<li>svn propset svn:eol native</li>
+				<li>svn propset svn:keywords "Author Date Id Revision"</li>
+			</ol>
+			</li>
+		</ol>
+		</li>
+		<li>Delete any obsolete files and folders:
+		<ol>
+			<li>svn status /doc</li>
+			<li>Find all items marked with a "!" (<em>i.e.</em>, missing items)</li>
+			<li>svn delete /doc/item1 /doc/item2 ... /doc/itemn</li>
+		</ol>
+		</li>
+		<li>svn commit</li>
+	</ol>
+	</li>
+	<li>Tag all source with the new version number at url <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/tags">https://ccnet.svn.sourceforge.net/svnroot/ccnet/tags</a>:
+	<ol>
+		<li>svn copy <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk">https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk</a> <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/tags/ccnet_x_y_final">https://ccnet.svn.sourceforge.net/svnroot/ccnet/tags/ccnet_x_y_final</a> -m "Tag source for CCNet x.y"</li>
+	</ol>
+	</li>
+	<li>Create a release branch with the new version number at the url <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_x_y">https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_x_y</a>:
+	<ol>
+		<li>svn copy <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk">https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk</a> <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_x_y">https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_x_y</a> -m "Build release branch for CCNet x.y"</li>
+	</ol>
+	</li>
+	<li>Download the source and binary distributions from <a href="http://ccnetlive.thoughtworks.com/CCNet-builds/">CCNetLive </a> that contain the newly packaged documentation</li>
+	<li>Upload the source and binary distributions to <a href="ftp://upload.sourceforge.net/incoming">SourceForge </a> and go through the SourceForge release process.  Rename the distribution files to include the version number&#33;  (Distributions with the same filenames can cause problems for SourceForge mirrors).</li>
+	<li>Add news of the release on <a href="http://www.sourceforge.net/projects/ccnet">SourceForge </a> and the <a href="News.html" title="News">Confluence news blog</a>.</li>
+	<li>Email the <a href="mailto:ccnet-user@googlegroups.com">CCNet users list </a> to notify the users that the new release is ready.</li>
+	<li>Set the currently released version to <a href="http://jira.public.thoughtworks.org/secure/project/ViewProject.jspa?pid=10000">"Released" </a> on the Jira.</li>
+	<li>Create a new 'Next' unreleased version in Jira and schedule it immediately before 'Soon'</li>
+</ol>
+
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jul 28, 2008 22:42</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

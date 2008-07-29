@@ -16,12 +16,12 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Aug 15, 2005 by <font color="#0050B2">gtackley@thoughtworks.com</font>.
+					    This page last changed on Jul 21, 2008 by <font color="#0050B2">rosspatterson</font>.
 				    </div>
 
-				    <p>Most build processes interact with external tools that write their output to file (eg. NUnit or FxCop or NCover).  In order to make the output of these tools available to CruiseControl.NET to be used in the build process or displayed in the CCNet web page or included in CCNet emails,  these files need to be merged into the CCNet integration.</p>
+				    <p>Most build processes interact with external tools that write their output to file (<em>e.g.</em> NUnit, FxCop, or NCover).  To make the output of these tools available to CruiseControl.NET to be used in the build process or displayed in the CruiseControl.NET web page or included in CruiseControl.NET emails, these files need to be merged into the CruiseControl.NET integration.</p>
 
-<p>To merge these files, you need to include a <b>File Merge Task</b> in your CCNet project.  To do so, you need to modify your <b>ccnet.config</b> file as follows:</p>
+<p>To merge these files, you need to include a <b>File Merge Task</b> in your CruiseControl.NET project.  To do so, you need to modify your <b>ccnet.config</b> file as follows:</p>
 
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;cruisecontrol&gt;</span>
@@ -40,6 +40,7 @@
 </div></div>
 
 <div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>You should place your File Merge Tasks in the &lt;publishers /&gt; section of your <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a> before your <a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publisher</a>.</td></tr></table></div>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>The files processed by File Merge Task must be in XML format.</td></tr></table></div>
 
 <p>Modify the contents of the <b>&lt;files&gt;</b> element to contain the path of the files that you wish to merge.  The file can be specified using an asterisk ("&#42;") wildcard in order to include multiple files that match the specified pattern (ie. "*<b>-results.xml</b>" will merge all files ending with the suffix "<b>-results.xml</b>").   The asterisk wildcard can only be used in the filename, not in the path.</p>
 
@@ -49,11 +50,12 @@
 
 <p>If you have set up the configuration for the <b>File Merge Task</b> as described above and you are still not ending up with the appropriate results showing up within the web application, please try the following steps:</p>
 <ol>
-	<li>Click the <b>orginal log</b> link and check to see if the merged content is included in the xml.  If it is missing then got onto step 2.  If it is present and is still not showing up in the web page then try emailing the <a href="mailto:ccnet-user@lists.sourceforge.net">CCNet users list </a>.</li>
+	<li>Click the <b>orginal log</b> link and check to see if the merged content is included in the xml.  If it is missing then got onto step 2.  If it is present and is still not showing up in the web page then try emailing the <a href="mailto:ccnet-user@googlegroups.com">CCNet users list </a>.</li>
 	<li>Have you put the File Merge Tasks in the &lt;publishers /&gt; section of your <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a> before your <a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publisher</a>?</li>
 	<li>Check the folder that contains the files that should be merged.  If they are not there then you need to dig into your build script to find out why they aren't getting created.</li>
-	<li>If the files are there but aren't getting merged, double-check your <b>ccnet.config</b> file.  Is the Xml specified correctly as specified above?  Remember case matters.</li>
+	<li>If the files are there but aren't getting merged, double-check your <b>ccnet.config</b> file.  Is the configuration specified correctly as specified above?  Remember that case matters in XML tag and attribute names.</li>
 	<li>Check the <b>ccnet.log</b> file.  You should see Info-level log messages stating that the files have been merged.</li>
+	<li>Does the file contain valid XML data?  The File Merge Task only expects to process XML files.  It will attempt to clean up non-XML files and write errors to the <b>ccnet.log</b> file, but it isn't always successful.</li>
 </ol>
 
 
@@ -67,7 +69,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:44</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jul 28, 2008 22:41</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -16,19 +16,16 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 28, 2008 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on Jun 11, 2008 by <font color="#0050B2">iolsen</font>.
 				    </div>
 
 				    <h3><a name="SourceGearVaultSourceControlBlock-SourceGearVaultConfigurationExamples"></a>SourceGear Vault Configuration Examples</h3>
 
 <p>Minimal example:</p>
-
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"vault"</span> /&gt;</span></pre>
 </div></div>
-
 <p>Full example:</p>
-
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"vault"</span> autoGetSource=<span class="code-quote">"true"</span> applyLabel=<span class="code-quote">"true"</span>&gt;</span>
            <span class="code-tag">&lt;executable&gt;</span>c:\program files\sourcegear\vault client\vault.exe<span class="code-tag">&lt;/executable&gt;</span>
@@ -54,7 +51,7 @@
 <th class='confluenceTh'> Required </th>
 <th class='confluenceTh'> Default </th>
 <th class='confluenceTh'> Required CC.NET Version </th>
-<th class='confluenceTh'> Required Vault Version</th>
+<th class='confluenceTh'> Required Vault Version </th>
 </tr>
 <tr>
 <td class='confluenceTd'> executable </td>
@@ -66,10 +63,10 @@
 <td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
-<td class='confluenceTd'> username</td>
+<td class='confluenceTd'> username </td>
 <td class='confluenceTd'> Vault user id that CCNet should use to authenticate </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">&#42;</a> </td>
 <td class='confluenceTd'> null </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'>&nbsp;</td>
@@ -78,7 +75,7 @@
 <td class='confluenceTd'> password </td>
 <td class='confluenceTd'> Password for the Vault user </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">&#42;</a> </td>
 <td class='confluenceTd'> null </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'>&nbsp;</td>
@@ -87,7 +84,7 @@
 <td class='confluenceTd'> host </td>
 <td class='confluenceTd'> The name of the Vault server </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">&#42;</a> </td>
 <td class='confluenceTd'> null </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'>&nbsp;</td>
@@ -96,7 +93,7 @@
 <td class='confluenceTd'> repository </td>
 <td class='confluenceTd'> The name of the Vault repository to monitor. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">&#42;</a> </td>
 <td class='confluenceTd'> null </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'>&nbsp;</td>
@@ -139,8 +136,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> useWorkingDirectory </td>
-<td class='confluenceTd'> <b>CC.NET 1.0</b>: Determines the working directory into which Vault files will be retrieved. Supply true if you want CCNet to use the Vault folder working directory created for the build user using the Vault GUI (recommended). Supply false if CCNet should use the CCNet working directory.
-<br clear="all" />
+<td class='confluenceTd'> <b>CC.NET 1.0</b>: Determines the working directory into which Vault files will be retrieved. Supply true if you want CCNet to use the Vault folder working directory created for the build user using the Vault GUI (recommended). Supply false if CCNet should use the CCNet working directory. <br clear="all" />
 <br clear="all" />
 <b>CC.NET 1.1</b>: Determines if the source will be retrieved into a <a href="#SourceGearVaultSourceControlBlock-workingFolder">Vault Working Folder</a>. </td>
 <td class='confluenceTd'> bool </td>
@@ -151,10 +147,10 @@
 </tr>
 <tr>
 <td class='confluenceTd'> historyArgs </td>
-<td class='confluenceTd'> Extra arguments to be included in the history commandline  </td>
+<td class='confluenceTd'> Extra arguments to be included in the history commandline </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
-<td class='confluenceTd'> -excludeactions label -rowlimit 0 </td>
+<td class='confluenceTd'> &#45;excludeactions label &#45;rowlimit 0 </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'>&nbsp;</td>
 </tr>
@@ -169,8 +165,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> workingDirectory </td>
-<td class='confluenceTd'> The root folder where the latest source will retrieved from Vault.  This path can either be absolute or it can be relative to the CCNet project working directory.
-<br clear="all" />
+<td class='confluenceTd'> The root folder where the latest source will retrieved from Vault.  This path can either be absolute or it can be relative to the CCNet project working directory. <br clear="all" />
 <br clear="all" />
 <b>CC.NET 1.1</b>: If this element is missing or empty, Vault will attempt to use the directory set as the user's working folder.  Note that this is simply the destination path on disk.  Whether or not this location is a <a href="#SourceGearVaultSourceControlBlock-workingFolder">Vault Working Folder</a> is determined by the useWorkingFolder element.  To use the same path as the project, it is necessary to use "." (without the quotes) rather than leaving this empty, as you could in CC.NET 1.0. </td>
 <td class='confluenceTd'> string </td>
@@ -207,7 +202,7 @@
 <td class='confluenceTd'> proxyServer </td>
 <td class='confluenceTd'> The host name of the HTTP proxy Vault should use. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">&#42;</a> </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'> 1.1.0.2172 </td>
 <td class='confluenceTd'> 3.0.6 </td>
@@ -216,7 +211,7 @@
 <td class='confluenceTd'> proxyPort </td>
 <td class='confluenceTd'> The port on the HTTP proxy Vault should use. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">&#42;</a> </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'> 1.1.0.2172 </td>
 <td class='confluenceTd'> 3.0.6 </td>
@@ -225,7 +220,7 @@
 <td class='confluenceTd'> proxyUser </td>
 <td class='confluenceTd'> The user name for the HTTP proxy Vault should use. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">&#42;</a> </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'> 1.1.0.2172 </td>
 <td class='confluenceTd'> 3.0.6 </td>
@@ -234,7 +229,7 @@
 <td class='confluenceTd'> proxyPassword </td>
 <td class='confluenceTd'> The password for the HTTP proxy Vault should use. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">&#42;</a> </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'> 1.1.0.2172 </td>
 <td class='confluenceTd'> 3.0.6 </td>
@@ -243,7 +238,7 @@
 <td class='confluenceTd'> proxyDomain </td>
 <td class='confluenceTd'> The Windows domain of the HTTP proxy Vault should use. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">&#42;</a> </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'> 1.1.0.2172 </td>
 <td class='confluenceTd'> 3.0.6 </td>
@@ -267,14 +262,17 @@
 <td class='confluenceTd'>&nbsp;</td>
 </tr>
 </tbody></table>
+<p><a name="SourceGearVaultSourceControlBlock-optional"></a>&#42;: it is possible to deposit these values with the Vault command-line client so that they do not need to be stored in the ccnet.config file.  Type <b>vault help rememberlogin</b> at a command prompt (where vault.exe is accessible) for information.</p>
 
-<p><a name="SourceGearVaultSourceControlBlock-optional"></a>*: it is possible to deposit these values with the Vault command-line client so that they do not need to be stored in the ccnet.config file.  Type <b>vault help rememberlogin</b> at a command prompt (where vault.exe is accessible) for information.</p>
+<h3><a name="SourceGearVaultSourceControlBlock-PluginavailableforVault4.1%5C%28orFortress1.1%29"></a>Plugin available for Vault 4.1&#43; (or Fortress 1.1+)</h3>
+
+<p>SourceGear has released a plugin that offers better performance and accuracy by interacting directly with Vault via its API, rather than the command line.  The configuration format is almost identical to this one, making migration easy.  The plugin and its documentation can be downloaded from <a href="http://www.sourcegear.com/downloads.html">SourceGear's site</a>.</p>
 
 <p><a name="SourceGearVaultSourceControlBlock-workingFolder"></a></p>
+
 <h3><a name="SourceGearVaultSourceControlBlock-VaultWorkingFolderDefined"></a><em>Vault</em> <em>Working</em> <em>Folder</em> Defined</h3>
 
 <p>Most version control systems have distinct commands for "get me the source" and "get me the source into a folder where I may make changes."  Vault is no exception.  A <em>working folder</em> is a folder where Vault will keep track of your changes.  If you're using CC.NET 1.1.0.2172+, the useWorkingFolder setting determines whether Vault retrieves source into a working folder.  For build purposes, there are typically two situations where you want to retrieve source into a working folder:</p>
-
 <ol>
 	<li>Your build script changes source and checks in the change</li>
 	<li>It's taking longer than you'd like to retrieve the source</li>
@@ -283,12 +281,12 @@
 
 <p>Because of the additional state information kept by Vault for working folders, retrieving source into a working folder is usually faster than into a non-working folder.  The trade-off is that more disk space will be used for cache and state data.</p>
 
-
 <h3><a name="SourceGearVaultSourceControlBlock-FilteringoutLabelChanges"></a>Filtering out Label Changes</h3>
 
 <p>If you are using Vault 3.x or later, labels will automatically be filtered.  However, if you are using an earlier version of Vault and you apply a label as part of your build process, this will kick off another build.  you will need to use a <a href="Filtered Source Control Block.html" title="Filtered Source Control Block">Filtered Source Control Block</a> to get around this.  If your build server uses a specific user id to integrate with Vault, you can set up a UserFilter to filter out all changes made by that user.</p>
 
-<h3><a name="SourceGearVaultSourceControlBlock-ProblemswithCCServiceandVault3.0.2"></a>Problems with CCService and Vault 3.0.2+</h3>
+<h3><a name="SourceGearVaultSourceControlBlock-ProblemswithCCServiceandVault3.0.2%5C"></a>Problems with CCService and Vault 3.0.2&#43;</h3>
+
 <p>If you are experiencing problems detecting modifications using CCService after upgrading to Vault 3.0.2, it may be related to the enhanced security features of the Vault server.  You should try the following process to fix this issue:</p>
 <ul>
 	<li>reinstall the Vault Server to have the IIS Process Model run as System (ie. not Machine)</li>
@@ -297,21 +295,22 @@
 
 
 <h3><a name="SourceGearVaultSourceControlBlock-ProblemswithreleasespriortoVault3.0"></a>Problems with releases prior to Vault 3.0</h3>
-<p>For versions of Vault prior to 3.0, the <b>-excludeactions</b> argument is not supported.  To get around this problem you should explicitly specify the <b>&lt;historyArgs&gt;</b> element in your <b>ccnet.config</b> file so that it does not contain that argument (ie. set it to &lt;historyArgs&gt;-rowlimit 0&lt;/historyArgs&gt;.</p>
+
+<p>For versions of Vault prior to 3.0, the <b>&#45;excludeactions</b> argument is not supported.  To get around this problem you should explicitly specify the <b>&lt;historyArgs&gt;</b> element in your <b>ccnet.config</b> file so that it does not contain that argument (ie. set it to &lt;historyArgs&gt;-rowlimit 0&lt;/historyArgs&gt;.</p>
 
 <h3><a name="SourceGearVaultSourceControlBlock-NAntVaultTasks"></a>NAnt Vault Tasks</h3>
 
 <p>SourceGear has produced some NAnt tasks for Vault that can be downloaded from <a href="http://www.sourcegear.com/vault/downloads.html">here</a>.</p>
 
-<h3><a name="SourceGearVaultSourceControlBlock-Turningoffthecreationofsgbakfolders"></a>Turning off the creation of _sgbak folders</h3>
+<h3><a name="SourceGearVaultSourceControlBlock-Turningoffthecreationof%5Csgbakfolders"></a>Turning off the creation of &#95;sgbak folders</h3>
 
-<p>Using CC.NET 1.1.0.2172+ and Vault 3.1.7+, _sgbak folders are never created.</p>
+<p>Using CC.NET 1.1.0.2172&#43; and Vault 3.1.7+, &#95;sgbak folders are never created.</p>
 
-<p>Using older versions, the use of the _sgbak folder can be turned off using the GUI client.  This is a user and machine-specific setting, so you need to launch the GUI client on the CCNet machine and log in as the same Vault user that CCNet is using (as specified it ccnet.config).</p>
+<p>Using older versions, the use of the &#95;sgbak folder can be turned off using the GUI client.  This is a user and machine-specific setting, so you need to launch the GUI client on the CCNet machine and log in as the same Vault user that CCNet is using (as specified it ccnet.config).</p>
 
-<p>Tools|Options -&gt; Local Files -&gt; Cache/Backup Locations -&gt; Un-check "Save files in backup folder before overwriting"</p>
+<p>Tools&#124;Options &#45;&gt; Local Files &#45;&gt; Cache/Backup Locations &#45;&gt; Un-check "Save files in backup folder before overwriting"</p>
 
-<p>Code contributed by Ryan Duffield and Leo von Wyss.</p>
+<p>Code contributed by Ryan Duffield, Leo von Wyss and <a href="http://ianolsen.com">Ian Olsen</a>.</p>
 
 				    
                     			    </td>
@@ -322,7 +321,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on May 28, 2008 12:44</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jul 28, 2008 22:41</font></td>
 		    </tr>
 	    </table>
     </body>
