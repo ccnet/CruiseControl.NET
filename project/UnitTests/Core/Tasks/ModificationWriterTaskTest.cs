@@ -44,6 +44,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.Run(result);
 		}
 
+
+        [Test]
+        public void ShouldWriteOutModificationsToFileAsXmlWithBuildTimeAppended()
+        {
+
+            IntegrationResult result = IntegrationResultMother.CreateSuccessful();
+            string newFileName = string.Format("artifactDir\\modifications_{0}.xml",result.StartTime.ToString("yyyyMMddHHmmssfff"));
+
+            mockIO.Expect("Save", newFileName , new IsValidXml().And(new HasChildElements(2)));
+
+            result.ArtifactDirectory = "artifactDir";
+            result.Modifications = new Modification[]
+				{
+					ModificationMother.CreateModification("foo.txt", @"c\src"),
+					ModificationMother.CreateModification("bar.txt", @"c\src")
+				};
+            task.AppendTimeStamp = true;
+            task.Run(result);
+        
+        }
+
+
 		[Test]
 		public void ShouldSaveEmptyFileIfNoModificationsSpecified()
 		{
@@ -54,6 +76,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.Filename = "output.xml";
 			task.Run(result);
 		}
+
+
+        [Test]
+        public void ShouldSaveEmptyFileIfNoModificationsSpecifiedWithBuildTimeAppended()
+        {
+
+            IntegrationResult result = IntegrationResultMother.CreateSuccessful();
+            string newFileName = string.Format("artifactDir\\output_{0}.xml", result.StartTime.ToString("yyyyMMddHHmmssfff"));
+            mockIO.Expect("Save", newFileName, new IsValidXml().And(new HasChildElements(0)));
+
+            result.ArtifactDirectory = "artifactDir";
+            task.Filename = "output.xml";
+            task.AppendTimeStamp = true;
+
+
+            task.Run(result);
+        }
+
 
 		[Test]
 		public void ShouldRebaseDirectoryRelativeToArtifactDir()
@@ -66,6 +106,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.Run(result);
 		}
 
+
+        [Test]
+        public void ShouldRebaseDirectoryRelativeToArtifactDirWithBuildTimeAppended()
+        {
+            IntegrationResult result = IntegrationResultMother.CreateSuccessful();
+            string newFileName = string.Format("artifactDir\\relativePath\\modifications_{0}.xml", result.StartTime.ToString("yyyyMMddHHmmssfff"));
+
+            mockIO.Expect("Save", newFileName, new IsValidXml().And(new HasChildElements(0)));
+
+            result.ArtifactDirectory = "artifactDir";
+            task.OutputPath = "relativePath";
+            task.AppendTimeStamp = true;
+            
+            task.Run(result);
+        }
+
+
 		[Test]
 		public void ShouldWriteXmlUsingUTF8Encoding()
 		{
@@ -76,18 +133,58 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.Run(result);			
 		}
 
+
+
+        [Test]
+        public void ShouldWriteXmlUsingUTF8EncodingWithBuildTimeAppended()
+        {
+            IntegrationResult result = IntegrationResultMother.CreateSuccessful();
+            string newFileName = string.Format("artifactDir\\modifications_{0}.xml", result.StartTime.ToString("yyyyMMddHHmmssfff"));
+
+            mockIO.Expect("Save", newFileName, new StartsWith("<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
+
+            result.ArtifactDirectory = "artifactDir";
+            task.AppendTimeStamp = true;
+
+
+            task.Run(result);
+        }
+
+
+
 		[Test]
 		public void LoadFromConfigurationXml()
 		{
 			ModificationWriterTask writer = (ModificationWriterTask) NetReflector.Read(@"<modificationWriter filename=""foo.xml"" path=""c:\bar"" />");
 			Assert.AreEqual("foo.xml", writer.Filename);
 			Assert.AreEqual(@"c:\bar", writer.OutputPath);
+            Assert.AreEqual(false, writer.AppendTimeStamp);
+
 		}
+
+
+        [Test]
+        public void LoadFromConfigurationXmlWithBuildTimeSetToTrue()
+        {
+            ModificationWriterTask writer = (ModificationWriterTask)NetReflector.Read(@"<modificationWriter filename=""foo.xml"" path=""c:\bar"" appendTimeStamp=""true""/>");
+            Assert.AreEqual("foo.xml", writer.Filename);
+            Assert.AreEqual(@"c:\bar", writer.OutputPath);
+            Assert.AreEqual(true, writer.AppendTimeStamp);
+
+        }
+
 
 		[Test]
 		public void LoadFromMinimalConfigurationXml()
 		{
 			NetReflector.Read(@"<modificationWriter />");
 		}
+
+
+
+
+      
+
+
 	}
 }

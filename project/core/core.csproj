@@ -690,6 +690,7 @@
     <Compile Include="tasks\MergeFilesTask.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tasks\ModificationReaderTask.cs" />
     <Compile Include="tasks\ModificationWriterTask.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,0 +1,84 @@
+using System.IO;
+using System.Xml.Serialization;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
+
+namespace ThoughtWorks.CruiseControl.Core.Tasks
+{
+    /// <summary>
+    /// Reads modifications from file back into the current integration result
+    /// </summary>
+    [ReflectorType("modificationReader")]
+    public class ModificationReaderTask : ITask
+    {
+
+        private readonly IFileSystem fileSystem;
+
+        public ModificationReaderTask()
+            : this(new SystemIoFileSystem())
+        { }
+
+        public ModificationReaderTask(IFileSystem fileSystem)
+        {
+            this.fileSystem = fileSystem;
+        }
+
+        public void Run(IIntegrationResult result)
+        {
+            string[] Files = GetModificationFiles(result);
+            System.Collections.ArrayList AllModifications = new System.Collections.ArrayList();
+            
+
+            foreach (string file in Files)
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(Modification[]));
+                StringReader reader = new StringReader(this.fileSystem.Load(file).ReadToEnd());
+                object dummy = serializer.Deserialize(reader);
+                reader.Close();
+                System.Collections.ArrayList currentModification = new System.Collections.ArrayList((Modification[])dummy);
+
+                AllModifications.AddRange(currentModification);
+            }
+            
+            Modification[] newMods = new Modification[result.Modifications.Length + AllModifications.Count];
+
+            //copy existing modifications
+            result.Modifications.CopyTo(newMods, 0);
+
+            // copy modifications read from the file(s)
+            int modificationCounter = result.Modifications.Length;
+            foreach (Modification mod in AllModifications)
+            {
+                newMods[modificationCounter] = mod;
+                modificationCounter++;
+            }
+
+            result.Modifications = newMods;
+      
+        }
+
+
+        private string[] GetModificationFiles(IIntegrationResult result)
+        {
+            System.IO.FileInfo fi = new FileInfo(Path.Combine(result.BaseFromArtifactsDirectory(OutputPath), Filename));
+            string FileSearchPattern = fi.Name.Remove(fi.Name.Length - fi.Extension.Length) + "*" + fi.Extension;
+
+            return System.IO.Directory.GetFiles(fi.DirectoryName,FileSearchPattern);        
+        }
+
+
+        /// <summary>
+        /// The fileName to use to store the modifications
+        /// </summary>
+        [ReflectorProperty("filename", Required = false)]
+        public string Filename = "modifications.xml";
+
+        /// <summary>
+        /// Path of the file
+        /// </summary>
+        [ReflectorProperty("path", Required = false)]
+        public string OutputPath;
+
+    }
+    
+}

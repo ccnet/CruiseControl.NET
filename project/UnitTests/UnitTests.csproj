@@ -712,6 +712,7 @@
     <Compile Include="Core\Tasks\MergeFileTaskTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\Tasks\ModificationReaderTaskTest.cs" />
     <Compile Include="Core\Tasks\ModificationWriterTaskTest.cs">
       <SubType>Code</SubType>
     </Compile>
