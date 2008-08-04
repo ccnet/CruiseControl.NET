@@ -83,7 +83,7 @@
 			</font>
 		</td>
     <td align="Center">
-      <form method="post">
+      <form method="post" style="margin-bottom:0px;">
       <input type="hidden" name="projectName" value="$projectGridRow.Name" />
 			<input type="hidden" name="serverName" value="$projectGridRow.ServerName" />
 				<font color="Black">
