@@ -24,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         {
             writerTask = new ModificationWriterTask();
             readerTask = new ModificationReaderTask();
+
             writerTask.AppendTimeStamp = true;
 
             ClearExistingModificationFiles();
@@ -39,6 +40,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [TearDown]
         public void TearDown()
         {
+            if (System.IO.Directory.Exists(readerTask.OutputPath))
+            {
+                System.IO.Directory.Delete(readerTask.OutputPath,true);
+            }
         }
 
 
@@ -90,19 +95,53 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         }
 
 
+        [Test]
+        public void ShouldAddReadModificationsToExistingOnes()
+        {
+            // integration with modifications
+            result = IntegrationResultMother.CreateSuccessful(modifications);
+            writerTask.Run(result);
+
+
+            // new integration with modifications, 
+            // modifications toread from the saved file should be added
+            result = IntegrationResultMother.CreateSuccessful(modifications);
+            Assert.AreEqual(2, result.Modifications.Length);
+
+            // read the saved modifications into the current integration result
+            readerTask.Run(result);
+
+            Assert.AreEqual(4, result.Modifications.Length);
+
+        }
+
+
 
         private void ClearExistingModificationFiles()
         {
             result = IntegrationResultMother.CreateSuccessful();
+            writerTask.OutputPath = result.BaseFromArtifactsDirectory("ReaderTest");
+            readerTask.OutputPath = writerTask.OutputPath;
 
-            System.IO.FileInfo fi = new System.IO.FileInfo(System.IO.Path.Combine(result.BaseFromArtifactsDirectory(writerTask.OutputPath), writerTask.Filename));
-            string FileSearchPattern = fi.Name.Remove(fi.Name.Length - fi.Extension.Length) + "*" + fi.Extension;
-
-            foreach (string file in System.IO.Directory.GetFiles(fi.DirectoryName, FileSearchPattern))
+            if (System.IO.Directory.Exists(readerTask.OutputPath))
             {
-                System.IO.File.Delete(file);
+                System.IO.Directory.Delete(readerTask.OutputPath,true);
             }
+            System.IO.Directory.CreateDirectory(readerTask.OutputPath);
+            
+            //System.IO.FileInfo fi = new System.IO.FileInfo(System.IO.Path.Combine(result.BaseFromArtifactsDirectory(writerTask.OutputPath), writerTask.Filename));
+            //string FileSearchPattern = fi.Name.Remove(fi.Name.Length - fi.Extension.Length) + "*" + fi.Extension;
+
+            //foreach (string file in System.IO.Directory.GetFiles(fi.DirectoryName, FileSearchPattern))
+            //{
+            //    System.IO.File.Delete(file);
+            //}
 
         }
+
+
+     
+            
+
     }
 }
