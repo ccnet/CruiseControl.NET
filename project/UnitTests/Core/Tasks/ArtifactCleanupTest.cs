@@ -17,11 +17,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
     {
         public static readonly string FULL_CONFIGURED_LOG_DIR = "FullConfiguredLogDir";
         public static readonly string FULL_CONFIGURED_LOG_DIR_PATH = Path.GetFullPath(TempFileUtil.GetTempPath(FULL_CONFIGURED_LOG_DIR));
+        public static readonly string SOURCE_DIR = "SourceDir";
+        public static readonly string SOURCE_DIR_PATH = Path.GetFullPath(TempFileUtil.GetTempPath(SOURCE_DIR));
+
 
         public static readonly string ARTIFACTS_DIR = "Artifacts";
         public static readonly string ARTIFACTS_DIR_PATH = Path.GetFullPath(TempFileUtil.GetTempPath(ARTIFACTS_DIR));
         
-        private XmlLogPublisher publisher;
+        private XmlLogPublisher logPublisher;
+        private BuildPublisher buildPublisher;
         private ArtifactCleanUpTask artifactCleaner;
 
 
@@ -33,10 +37,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
             TempFileUtil.CreateTempDir(FULL_CONFIGURED_LOG_DIR);
             TempFileUtil.CreateTempDir(ARTIFACTS_DIR);
+            TempFileUtil.CreateTempDir(SOURCE_DIR);
 
+            TempFileUtil.CreateTempFile(SOURCE_DIR_PATH, "myfile.txt", "some content");
 
-            publisher = new XmlLogPublisher();
+            logPublisher = new XmlLogPublisher();
+            buildPublisher = new BuildPublisher();
             artifactCleaner = new ArtifactCleanUpTask();
+            
+            buildPublisher.AlwaysPublish = true;
+            buildPublisher.UseLabelSubDirectory = true;
+            buildPublisher.SourceDir = SOURCE_DIR_PATH;
+
         }
 
         [TearDown]
@@ -44,6 +56,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         {
             TempFileUtil.DeleteTempDir(FULL_CONFIGURED_LOG_DIR);
             TempFileUtil.DeleteTempDir(ARTIFACTS_DIR);
+            TempFileUtil.DeleteTempDir(SOURCE_DIR);
         }
 
 
@@ -54,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, 1, ARTIFACTS_DIR_PATH);      
             
             // make a build
-            publisher.Run(result);
+            logPublisher.Run(result);
 
             //clear the data of this build, so delete all build files
             artifactCleaner.CleaningUpMethod = ArtifactCleanUpTask.CleanUpMethod.KeepLastXBuilds;
@@ -81,7 +94,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 result = CreateIntegrationResult(IntegrationStatus.Success, i, ARTIFACTS_DIR_PATH);
 
                 // make a build
-                publisher.Run(result);
+                logPublisher.Run(result);
 
             }
 
@@ -102,13 +115,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         {
             IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, 1, ARTIFACTS_DIR_PATH);
 
+
             for (int i = 2; i < 10; i++ )
             {
                 // Setup
                 result = CreateIntegrationResult(IntegrationStatus.Success, i, ARTIFACTS_DIR_PATH);
 
                 // make a build
-                publisher.Run(result);
+                logPublisher.Run(result);
 
             }
 
@@ -134,6 +148,35 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             result.ArtifactDirectory = artifactFolder;
 
             return result;
+        }
+
+
+
+        [Test]
+        public void KeepLast5PublishedBuilds()
+        {
+            IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, 1, ARTIFACTS_DIR_PATH);
+                    
+            for (int i = 1; i <= 10; i++)
+            {
+                // Setup
+                result = CreateIntegrationResult(IntegrationStatus.Success, i, ARTIFACTS_DIR_PATH);
+                // publish the build
+                logPublisher.Run(result);
+                buildPublisher.Run(result);
+            }
+
+
+            //clear the data of this build, so delete all build files
+            artifactCleaner.CleaningUpMethod = ArtifactCleanUpTask.CleanUpMethod.KeepLastXSubDirs;
+            artifactCleaner.CleaningUpValue = 2;
+
+            // run the cleaning procedure
+            artifactCleaner.Run(result);
+
+            // verify if 3 builds are still available ( 32wanted + 1 buildlog folder that also is in artifacts folder
+            Assert.AreEqual(3, System.IO.Directory.GetDirectories(result.ArtifactDirectory).Length, "published builds are not removed");
+
         }
 
     }

@@ -21,7 +21,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         {
             KeepLastXBuilds,
             DeleteBuildsOlderThanXDays,
-            KeepMaximumXHistoryDataEntries
+            KeepMaximumXHistoryDataEntries,
+            DeleteSubDirsOlderThanXDays,
+            KeepLastXSubDirs
         }
 
         private CleanUpMethod cleanUpMethod;
@@ -71,10 +73,90 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     KeepMaximumXHistoryDataEntries(result, cleanUpValue);
                     break;
 
+                case CleanUpMethod.DeleteSubDirsOlderThanXDays:
+                    DeleteSubDirsOlderThanXDays(result, cleanUpValue);
+                    break;
+
+                case CleanUpMethod.KeepLastXSubDirs:
+                    KeepLastXSubDirs(result, cleanUpValue);
+                    break;
+
                 default:
                     throw new NotImplementedException("Unmapped cleaning up method used");
             }
         }
+
+
+        private void KeepLastXSubDirs(IIntegrationResult result, Int32 amountToKeep)
+        {
+            string[] OldFolders;
+            System.Collections.ArrayList sortingName = new System.Collections.ArrayList();
+            
+            const string dateFormat = "yyyyMMddHHmmssffffff";
+
+            OldFolders = System.IO.Directory.GetDirectories(result.ArtifactDirectory);
+
+            foreach (string OldFolder in OldFolders)
+            {
+                if (OldFolder != result.BuildLogDirectory)
+                {
+                    sortingName.Add(System.IO.Directory.GetCreationTime(OldFolder).ToString(dateFormat) + OldFolder);
+                }
+            }
+
+            sortingName.Sort();
+
+            int AmountToDelete = sortingName.Count - amountToKeep;
+
+            for (int i = 0; i < AmountToDelete; i++)
+            {
+                string OldFolder = sortingName[0].ToString().Substring(dateFormat.Length);
+                DeleteFolder(OldFolder);
+                sortingName.RemoveAt(0); 
+            }                        
+        }
+
+
+        private void DeleteSubDirsOlderThanXDays(IIntegrationResult result, Int32 daysToKeep)
+        {
+            string[] OldFolders;
+            
+            OldFolders = System.IO.Directory.GetDirectories(result.ArtifactDirectory);
+
+            foreach (string OldFolder in OldFolders)
+            {
+                if ( (System.IO.Directory.GetCreationTime(OldFolder).Date < DateTime.Now.Date.AddDays(-daysToKeep)) && (OldFolder != result.BuildLogDirectory) )
+                {
+                    DeleteFolder(OldFolder);
+                }
+            }
+        }
+
+
+
+
+
+
+        private void DeleteFolder(string folderName)
+        {
+            SetFilesToNormalAttribute(folderName);
+            System.IO.Directory.Delete(folderName);
+        }
+
+        private void SetFilesToNormalAttribute(string folderName)
+        {
+            foreach (string file in System.IO.Directory.GetFiles(folderName))
+            {
+                System.IO.File.SetAttributes(file, System.IO.FileAttributes.Normal);
+                System.IO.File.Delete(file);
+            }
+
+            foreach (string subFolder in System.IO.Directory.GetDirectories(folderName))
+            {
+                DeleteFolder(subFolder);
+            }
+        }
+
 
         private bool BuildLogFolderSet(IIntegrationResult result)
         {
