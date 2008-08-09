@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             _env_stack.Push( new ConstantDict() );
             // Record the input file as the outer-most "include"
             _include_stack.Push( input_file_path );
-            _fileset[ input_file_path.LocalPath.ToLower() ] = true;
+            _fileset[ input_file_path.LocalPath ] = true;
             _resolver = resolver;
         }                        
        
@@ -61,11 +61,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         
         public void AddToFileset (Uri url)
         {
-            _fileset[url.LocalPath.ToLower()] = true;
+            _fileset[url.LocalPath] = true;
         }
 
         /// <summary>
-        /// Get the of all files seen by the preprocessor
+        /// Get the list of all files seen by the preprocessor
         /// </summary>
         public string[] Fileset
         {

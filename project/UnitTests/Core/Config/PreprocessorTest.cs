@@ -95,9 +95,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                                   "/includer/included/included2" );
 
                 Assert.AreEqual( env.Fileset.Length, 3 );
-                Assert.AreEqual(GetTestPath("testincluder.xml"), env.Fileset[0]);
-                Assert.AreEqual(GetTestPath(@"subfolder\testincluded.xml"), env.Fileset[1]);
-                Assert.AreEqual(GetTestPath("testincluded2.xml"), env.Fileset[2]);
+                Assert.AreEqual(GetTestPath("TestIncluder.xml"), env.Fileset[0]);
+                Assert.AreEqual(GetTestPath(@"Subfolder\TestIncluded.xml"), env.Fileset[1]);
+                Assert.AreEqual(GetTestPath("TestIncluded2.xml"), env.Fileset[2]);
             }
         }
 
@@ -120,7 +120,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                 Assert.AreEqual(env.Fileset.Length, 4);
 
                 Assert.AreEqual(GetTestPath("TestIncludeStack1.xml"), env.Fileset[0]);
-                Assert.AreEqual(GetTestPath(@"subfolder\TestIncludeStack2.xml"), env.Fileset[1]);
+                Assert.AreEqual(GetTestPath(@"Subfolder\TestIncludeStack2.xml"), env.Fileset[1]);
                 Assert.AreEqual(GetTestPath("TestIncludeStack3.xml"), env.Fileset[2]);
                 Assert.AreEqual(GetTestPath("TestIncludeStack4.xml"), env.Fileset[3]);
             }
@@ -198,9 +198,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                                   "/includeVariable/included/included2");
 
                 Assert.AreEqual(env.Fileset.Length, 3);
-                Assert.AreEqual(GetTestPath("testincludevariable.xml"), env.Fileset[0]);
-                Assert.AreEqual(GetTestPath(@"subfolder\testincluded.xml"), env.Fileset[1]);
-                Assert.AreEqual(GetTestPath("testincluded2.xml"), env.Fileset[2]);
+                Assert.AreEqual(GetTestPath("TestIncludeVariable.xml"), env.Fileset[0]);
+                Assert.AreEqual(GetTestPath(@"Subfolder\TestIncluded.xml"), env.Fileset[1]);
+                Assert.AreEqual(GetTestPath("TestIncluded2.xml"), env.Fileset[2]);
             }
         }
         
@@ -220,7 +220,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
         private static string GetTestPath( string relative_path )
         {
-            return Path.Combine(FAKE_ROOT, relative_path).ToLower();
+            return Path.Combine(FAKE_ROOT, relative_path);
         }
 
         private static void AssertNodeValue(IXPathNavigable doc, string xpath, string expected_val)
