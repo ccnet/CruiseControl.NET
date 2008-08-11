@@ -101,6 +101,45 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("Replaced", mods[0].Type);
 		}
 
+        [Test]
+        public void ParseMinimalModification()
+        {
+            string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<log>
+    <logentry revision=""4"">
+    </logentry>
+</log>
+            ";
+            Modification[] mods = svn.Parse(new StringReader(xml), new DateTime(2007, 2, 1, 23, 17, 8), new DateTime(2007, 2, 3, 23, 17, 9));
+            Assert.AreEqual(0, mods.Length, "Number of modifications found");
+        }
+
+        [Test]
+        public void ParseMinimalAcceptableModification()
+        {
+            string xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<log>
+    <logentry revision=""4"">
+        <date>2007-02-02T23:17:08.718100Z</date>
+        <paths>
+            <path action=""R"">/foo/addedfile.txt</path>
+        </paths>
+    </logentry>
+</log>
+            ";
+            Modification[] mods = svn.Parse(new StringReader(xml), new DateTime(2007, 2, 1, 23, 17, 8), new DateTime(2007, 2, 3, 23, 17, 9));
+            Assert.AreEqual(1, mods.Length, "Number of modifications found");
+            Assert.AreEqual(4, mods[0].ChangeNumber, "Revision number");
+            Assert.IsEmpty(mods[0].Comment, "Message should be empty");
+            Assert.IsNull(mods[0].EmailAddress, "Email address should be null");
+            Assert.AreEqual("addedfile.txt", mods[0].FileName, "File name");
+            Assert.AreEqual("/foo", mods[0].FolderName, "Folder name");
+            Assert.AreEqual(CreateDate("2007-02-02T23:17:08.718100Z"), mods[0].ModifiedTime, "Timestamp");
+            Assert.AreEqual("Replaced", mods[0].Type, "Modification type");
+            Assert.IsEmpty(mods[0].UserName, "Userid should be empty");
+            Assert.IsEmpty(mods[0].Version, "File version should be empty");
+        }
+
 		private DateTime CreateDate(string dateString)
 		{
 			return DateTime.Parse(dateString);
