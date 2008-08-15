@@ -180,6 +180,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			result.WorkingDirectory = DefaultWorkingDirectory;
 			builder.Run(result);
 		}
+		
+		[Test]
+		public void ShouldRunWithMultipleTargetsSpecified()
+		{
+			CollectingConstraint constraint = new CollectingConstraint();
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			
+			builder.Targets = new string[3] { "targeta", "targetb", "targetc" };
+			builder.Run(result);
+			
+			ProcessInfo info = (ProcessInfo)constraint.Parameter;
+			Assert.AreEqual("targeta targetb targetc", info.Arguments);
+		}
 
 		[Test]
 		public void IfConfiguredBaseDirectoryIsNotSetUseProjectWorkingDirectoryAsBaseDirectory()
@@ -262,6 +275,81 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(0, builder.Targets.Length);
 			builder.TargetsForPresentation = null;
 			Assert.AreEqual(0, builder.Targets.Length);
+		}
+		
+		[Test]
+		public void SilentOptionShouldAddSilentArgument()
+		{
+			CollectingConstraint constraint = new CollectingConstraint();
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			builder.Silent = true;
+			builder.Run(result);
+			ProcessInfo info = (ProcessInfo)constraint.Parameter;
+			Assert.AreEqual("--silent", info.Arguments);
+		}
+		
+		[Test]
+		public void SilentAndTraceOptionShouldAddSilentAndTraceArgument()
+		{
+			CollectingConstraint constraint = new CollectingConstraint();
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			builder.Silent = true;
+			builder.Trace = true;
+			builder.Run(result);
+			ProcessInfo info = (ProcessInfo)constraint.Parameter;
+			Assert.AreEqual("--silent --trace", info.Arguments);
+		}
+		
+		[Test]
+		public void QuietOptionShouldAddQuietArgument()
+		{
+			CollectingConstraint constraint = new CollectingConstraint();
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			builder.Quiet = true;
+			builder.Run(result);
+			ProcessInfo info = (ProcessInfo)constraint.Parameter;
+			Assert.AreEqual("--quiet", info.Arguments);
+		}
+		
+		[Test]
+		public void QuietAndTraceOptionShouldAddQuietAndTraceArgument()
+		{
+			CollectingConstraint constraint = new CollectingConstraint();
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			builder.Quiet = true;
+			builder.Trace = true;
+			builder.Run(result);
+			ProcessInfo info = (ProcessInfo)constraint.Parameter;
+			Assert.AreEqual("--quiet --trace", info.Arguments);
+		}
+		
+		[Test]
+		public void TraceOptionShouldAddTraceArgument()
+		{
+			CollectingConstraint constraint = new CollectingConstraint();
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			builder.Trace = true;
+			builder.Run(result);
+			ProcessInfo info = (ProcessInfo)constraint.Parameter;
+			Assert.AreEqual("--trace", info.Arguments);
+		}
+		
+		[Test]
+		public void SilentAndQuietOptionShouldOnlyAddSilentArgument()
+		{
+			CollectingConstraint constraint = new CollectingConstraint();
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			builder.Silent = true;
+			builder.Quiet = true;
+			builder.Run(result);
+			ProcessInfo info = (ProcessInfo)constraint.Parameter;
+			Assert.AreEqual("--silent", info.Arguments);
+		}
+		
+		[Test]
+		public void ConstructorShouldNotThrowException()
+		{
+			new RakeTask();
 		}
 	}
 }
