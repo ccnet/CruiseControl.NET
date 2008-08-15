@@ -97,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldSetFailedStatusAndBuildOutputAsAResultOfFailedBuild()
 		{
-			ExpectToExecuteAndReturnWithMonitor(FailedProcessResult(), new ProcessMonitor());
+			ExpectToExecuteAndReturnWithMonitor(FailedProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
 
 			IIntegrationResult result = IntegrationResult();
 			task.Run(result);
@@ -118,13 +118,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			ExpectToExecuteAndThrowWithMonitor();
 
 			task.Run(IntegrationResult());
+			Verify();
 		}
 
 		[Test]
 		public void ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] {constraint, new IsAnything()});
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] {constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
 
 			IntegrationResult result = (IntegrationResult) IntegrationResult();
 			result.Label = "1.0";
@@ -177,7 +178,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 				expectedBaseDirectory = Path.Combine(expectedBaseDirectory, relativeDirectory);
 			}
 			CheckBaseDirectory(IntegrationResultForWorkingDirectoryTest(), expectedBaseDirectory);
-			Verify();
 		}
 
 		[Test]
@@ -190,7 +190,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		private void CheckBaseDirectory(IIntegrationResult result, string expectedBaseDirectory)
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] {constraint, new IsAnything()});
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] {constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
 
 			task.Run(result);
 
@@ -241,7 +241,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldPassSuccessExitCodesToProcessExecutor()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, new IsAnything() });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
 
 			IntegrationResult result = (IntegrationResult)IntegrationResult();
 			result.Label = "1.0";

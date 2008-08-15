@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.IO;
-using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -15,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public const string DefaultLogger = "NAnt.Core.XmlLogger";
 		public const bool DefaultNoLogo = true;
 
-		private ProcessExecutor executor;
+		private readonly ProcessExecutor executor;
 
 		public NAntTask()
 			: this(new ProcessExecutor())
@@ -74,8 +72,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				throw new BuilderException(this, "NAnt process timed out (after " + BuildTimeoutSeconds + " seconds)");
 			}
-
-            
 		}
 
 		private ProcessInfo CreateProcessInfo(IIntegrationResult result)
@@ -129,7 +125,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			buffer.AppendArgument("-logger:{0}", Logger);
 		}
 
-		private void AppendIntegrationResultProperties(ProcessArgumentBuilder buffer, IIntegrationResult result)
+		private static void AppendIntegrationResultProperties(ProcessArgumentBuilder buffer, IIntegrationResult result)
 		{
 			// We have to sort this alphabetically, else the unit tests
 			// that expect args in a certain order are unpredictable
@@ -152,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		public override string ToString()
 		{
-			string baseDirectory = ConfiguredBaseDirectory != null ? ConfiguredBaseDirectory : "";
+			string baseDirectory = ConfiguredBaseDirectory ?? "";
 			return string.Format(@" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", baseDirectory, string.Join(", ", Targets), Executable, BuildFile);
 		}
 
@@ -160,30 +156,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			get
 			{
-				StringBuilder combined = new StringBuilder();
-				foreach (string file in Targets)
-				{
-					if (combined.Length > 0) combined.Append(Environment.NewLine);
-					combined.Append(file);
-				}
-				return combined.ToString();
+				return StringUtil.ArrayToNewLineSeparatedString(Targets);
 			}
 			set
 			{
-				if (StringUtil.IsBlank(value))
-				{
-					Targets = new string[0];
-					return;
-				}
-				ArrayList targets = new ArrayList();
-				using (StringReader reader = new StringReader(value))
-				{
-					while (reader.Peek() >= 0)
-					{
-						targets.Add(reader.ReadLine());
-					}
-				}
-				Targets = (string[])targets.ToArray(typeof(string));
+				Targets = StringUtil.NewLineSeparatedStringToArray(value);
 			}
 		}
 	}

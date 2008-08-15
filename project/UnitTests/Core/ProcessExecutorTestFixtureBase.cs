@@ -60,22 +60,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		protected void ExpectToExecuteWithMonitor(ProcessInfo processInfo, ProcessMonitor monitor)
 		{
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[2]);
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[2] { processInfo, monitor });
 		}
 
 		protected void ExpectToExecuteAndThrowWithMonitor()
 		{
-			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[2]);
+			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[2] { new IsAnything(), ProcessMonitor.GetProcessMonitorByProject("test") });
 		}
 
 		protected void ExpectToExecuteAndReturnWithMonitor(ProcessResult result, ProcessMonitor monitor)
 		{
-			mockProcessExecutor.ExpectAndReturn("Execute", result, new object[2]);
+			mockProcessExecutor.ExpectAndReturn("Execute", result, new object[2] { new IsAnything(), monitor });
 		}
 
 		protected void ExpectToExecuteArgumentsWithMonitor(string args)
 		{
-			ExpectToExecuteWithMonitor(NewProcessInfo(args), new ProcessMonitor());
+			ExpectToExecuteWithMonitor(NewProcessInfo(args), ProcessMonitor.GetProcessMonitorByProject("test"));
 		}
 
 		protected virtual IIntegrationResult IntegrationResult()
@@ -114,7 +114,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		protected IntegrationResult IntegrationResultForWorkingDirectoryTest()
 		{
-			return (IntegrationResult) Integration("project", "projectWorkingDirectory", "projectArtifactDirectory");
+			return (IntegrationResult) Integration("test", "projectWorkingDirectory", "projectArtifactDirectory");
 		}
 	}
 }

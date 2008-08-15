@@ -1,9 +1,8 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -20,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	{
 		public const int DEFAULT_BUILD_TIMEOUT = 600;
 
-		private ProcessExecutor executor;
+		private readonly ProcessExecutor executor;
 
 		public ExecutableTask() : this(new ProcessExecutor())
 		{}
@@ -115,8 +114,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 // The executable produced some output.  We need to transform it into an XML build report 
                 // fragment so the rest of CC.Net can process it.
                 ProcessResult newResult = new ProcessResult(
-                    MakeBuildResult(processResult.StandardOutput, ""), 
-                    MakeBuildResult(processResult.StandardError, "Error"), 
+                    StringUtil.MakeBuildResult(processResult.StandardOutput, ""),
+					StringUtil.MakeBuildResult(processResult.StandardError, "Error"), 
                     processResult.ExitCode, 
                     processResult.TimedOut,
 					processResult.Failed);
@@ -135,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			ProcessInfo info = new ProcessInfo(Executable, BuildArgs, BaseDirectory(result), successExitCodes);
 			info.TimeOut = BuildTimeoutSeconds*1000;
-            SetConfiguredEnvironmentVariables(info.EnvironmentVariables, this.EnvironmentVariables);
+            SetConfiguredEnvironmentVariables(info.EnvironmentVariables, EnvironmentVariables);
             IDictionary properties = result.IntegrationProperties;
 			foreach (string key in properties.Keys)
 			{
@@ -167,54 +166,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return string.Format(@" BaseDirectory: {0}, Executable: {1}", ConfiguredBaseDirectory, Executable);
 		}
 
-        /// <summary>
-        /// Convert a stream of text lines separated with newline sequences into an XML build result.
-        /// </summary>
-        /// <param name="input">the text stream</param>
-        /// <param name="msgLevel">the message level, if any.  Values are "Error" and "Warning".</param>
-        /// <returns>the build result string</returns>
-        /// <remarks>If there are any non-blank lines in the input, they are each wrapped in a
-        /// <code>&lt;message&gt</code> element and the entire set is wrapped in a
-        /// <code>&lt;buildresults&gt;</code> element and returned.  Each line of the input is encoded
-        /// as XML CDATA rules require.  If the input is empty or contains only whitspace, an 
-        /// empty string is returned.
-        /// Note: If we can't manage to understand the input, we just return it unchanged.
-        /// </remarks>
-        private static string MakeBuildResult(string input, string msgLevel)
-        {
-            StringBuilder output = new StringBuilder();
-
-            // Pattern for capturing a line of text, exclusive of the line-ending sequence.
-            // A "line" is an non-empty unbounded sequence of characters followed by some 
-            // kind of line-ending sequence (CR, LF, or any combination thereof) or 
-            // end-of-string.
-            Regex linePattern = new Regex(@"([^\r\n]+)");
-
-            MatchCollection lines = linePattern.Matches(input);
-            if (lines.Count > 0)
-            {
-                output.Append(System.Environment.NewLine);
-                output.Append("<buildresults>");
-                output.Append(System.Environment.NewLine);
-                foreach (Match line in lines)
-                {
-                    output.Append("  <message");
-                    if (msgLevel != "")
-                        output.AppendFormat(" level=\"{0}\"", msgLevel);
-                    output.Append(">");
-                    output.Append(XmlUtil.EncodePCDATA(line.ToString()));
-                    output.Append("</message>");
-                    output.Append(System.Environment.NewLine);
-                }
-                output.Append("</buildresults>");
-                output.Append(System.Environment.NewLine);
-            }
-            else
-                output.Append(input);       // All of that stuff failed, just return our input
-            return output.ToString();
-        }
-
-        /// <summary>
+		/// <summary>
         /// Pass the project's environment variables to the process.
         /// </summary>
         /// <param name="variablePool">The collection of environment variables to be updated.</param>
@@ -222,7 +174,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <remarks>
         /// Any variable without a value will be set to an empty string.
         /// </remarks>
-        private static void SetConfiguredEnvironmentVariables(StringDictionary variablePool, EnvironmentVariable[] varsToSet)
+        private static void SetConfiguredEnvironmentVariables(StringDictionary variablePool, IEnumerable<EnvironmentVariable> varsToSet)
         {
             foreach (EnvironmentVariable item in varsToSet)
                 variablePool[item.name] = item.value;

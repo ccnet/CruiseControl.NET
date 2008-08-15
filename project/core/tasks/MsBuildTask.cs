@@ -1,6 +1,5 @@
-using System;
-using System.IO;
 using System.Collections;
+using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -75,7 +74,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 
 			builder.AddArgument("/nologo");
-			if (! StringUtil.IsBlank(Targets)) builder.AddArgument("/t:" + Targets);
+			if (!StringUtil.IsBlank(Targets))
+			{
+				builder.AddArgument("/t:");
+				string targets = string.Empty;
+				foreach (string target in Targets.Split(';'))
+				{
+					if (targets != string.Empty) targets = string.Format("{0};{1}", targets, StringUtil.AutoDoubleQuoteString(target));
+					else targets = StringUtil.AutoDoubleQuoteString(target);
+				}
+				builder.Append(targets);
+			}
 			builder.AppendArgument(GetPropertyArgs(result));
 			builder.AppendArgument(BuildArgs);
 			builder.AddArgument(ProjectFile);
@@ -84,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return builder.ToString();
 		}
 
-		private string GetPropertyArgs(IIntegrationResult result)
+		private static string GetPropertyArgs(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.Append("/p:");
@@ -111,8 +120,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             {                
                 builder.Append(StringUtil.AutoDoubleQuoteString(
                                string.Format("{0}{1}ThoughtWorks.CruiseControl.MsBuild.dll",
-                                   System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                                   System.IO.Path.DirectorySeparatorChar)));
+                                   Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+                                   Path.DirectorySeparatorChar)));
             }
             else
             {
@@ -124,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return builder.ToString();
 		}
 
-		private string MsBuildOutputFile(IIntegrationResult result)
+		private static string MsBuildOutputFile(IIntegrationResult result)
 		{
 			return Path.Combine(result.ArtifactDirectory, LogFilename);
 		}

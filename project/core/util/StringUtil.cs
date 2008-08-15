@@ -3,13 +3,12 @@ using System.Collections;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class StringUtil
 	{
-		private static Regex NullStringRegex = new Regex("\0");
+		private static readonly Regex NullStringRegex = new Regex("\0");
 
 		// public for testing only
 		public const string DEFAULT_DELIMITER = ",";
@@ -97,11 +96,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			string revised = input;
 			foreach (string removal in removals)
 			{
-                int i = 0;
-                while ((i = revised.IndexOf(removal)) > -1)
-                {
-                    revised = revised.Remove(i, removal.Length);
-                }
+				int i;
+				while ((i = revised.IndexOf(removal)) > -1)
+				{
+					revised = revised.Remove(i, removal.Length);
+				}
 			}
 			return revised;
 		}
@@ -120,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			{
 				if (IsBlank(s)) continue;
 				if (builder.Length > 0) builder.Append(separator);
-				builder.Append(s.ToString());
+				builder.Append(s);
 			}
 			return builder.ToString();
 		}
@@ -136,14 +135,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		}
 
 		public static string RemoveInvalidCharactersFromFileName(string fileName)
-        {
-            return Strip(fileName,"\\", "/", ":", "*", "?", "\"", "<", ">", "|");
-
-        }
+		{
+			return Strip(fileName, "\\", "/", ":", "*", "?", "\"", "<", ">", "|");
+		}
 
 		public static string AutoDoubleQuoteString(string value)
 		{
-			if (!StringUtil.IsBlank(value) && (value.IndexOf(' ') > -1) && (value.IndexOf("\"") == -1))
+			if (!IsBlank(value) && (value.IndexOf(' ') > -1) && (value.IndexOf("\"") == -1))
 			{
 				return string.Format("\"{0}\"", value);
 			}
@@ -152,12 +150,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public static string RemoveTrailingPathDelimeter(string directory)
 		{
-			return StringUtil.IsBlank(directory) ? string.Empty : directory.TrimEnd(new char[] { Path.DirectorySeparatorChar });
+			return IsBlank(directory) ? string.Empty : directory.TrimEnd(new char[] {Path.DirectorySeparatorChar});
 		}
 
 		public static string IntegrationPropertyToString(object value)
 		{
-			return StringUtil.IntegrationPropertyToString(value, DEFAULT_DELIMITER);
+			return IntegrationPropertyToString(value, DEFAULT_DELIMITER);
 		}
 
 		public static string IntegrationPropertyToString(object value, string delimiter)
@@ -168,7 +166,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 			else if (value is ArrayList)
 			{
-				string[] tmp = (string[])((ArrayList)value).ToArray(typeof(string));
+				string[] tmp = (string[]) ((ArrayList) value).ToArray(typeof (string));
 				if (tmp.Length > 1)
 				{
 					return string.Format("\"{0}\"", string.Join(delimiter, tmp));
@@ -180,8 +178,85 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 			else
 			{
-				throw new ArgumentException(string.Format("The IntegrationProperty type {0} is not supported yet", value.GetType().ToString()));
-			}			
-		}		
+				throw new ArgumentException(
+					string.Format("The IntegrationProperty type {0} is not supported yet", value.GetType()));
+			}
+		}
+
+		/// <summary>
+		/// Convert a stream of text lines separated with newline sequences into an XML build result.
+		/// </summary>
+		/// <param name="input">the text stream</param>
+		/// <param name="msgLevel">the message level, if any.  Values are "Error" and "Warning".</param>
+		/// <returns>the build result string</returns>
+		/// <remarks>If there are any non-blank lines in the input, they are each wrapped in a
+		/// <code>&lt;message&gt</code> element and the entire set is wrapped in a
+		/// <code>&lt;buildresults&gt;</code> element and returned.  Each line of the input is encoded
+		/// as XML CDATA rules require.  If the input is empty or contains only whitspace, an 
+		/// empty string is returned.
+		/// Note: If we can't manage to understand the input, we just return it unchanged.
+		/// </remarks>
+		public static string MakeBuildResult(string input, string msgLevel)
+		{
+			StringBuilder output = new StringBuilder();
+
+			// Pattern for capturing a line of text, exclusive of the line-ending sequence.
+			// A "line" is an non-empty unbounded sequence of characters followed by some 
+			// kind of line-ending sequence (CR, LF, or any combination thereof) or 
+			// end-of-string.
+			Regex linePattern = new Regex(@"([^\r\n]+)");
+
+			MatchCollection lines = linePattern.Matches(input);
+			if (lines.Count > 0)
+			{
+				output.Append(Environment.NewLine);
+				output.Append("<buildresults>");
+				output.Append(Environment.NewLine);
+				foreach (Match line in lines)
+				{
+					output.Append("  <message");
+					if (msgLevel != "")
+						output.AppendFormat(" level=\"{0}\"", msgLevel);
+					output.Append(">");
+					output.Append(XmlUtil.EncodePCDATA(line.ToString()));
+					output.Append("</message>");
+					output.Append(Environment.NewLine);
+				}
+				output.Append("</buildresults>");
+				output.Append(Environment.NewLine);
+			}
+			else
+				output.Append(input); // All of that stuff failed, just return our input
+			return output.ToString();
+		}
+
+		public static string ArrayToNewLineSeparatedString(string[] input)
+		{
+			StringBuilder combined = new StringBuilder();
+			foreach (string file in input)
+			{
+				if (combined.Length > 0) combined.Append(Environment.NewLine);
+				combined.Append(file);
+			}
+			return combined.ToString();
+		}
+
+		public static string[] NewLineSeparatedStringToArray(string input)
+		{
+			string[] array = new string[0];
+			if (IsBlank(input)) return array;
+
+			ArrayList targets = new ArrayList();
+			using (StringReader reader = new StringReader(input))
+			{
+				while (reader.Peek() >= 0)
+				{
+					targets.Add(reader.ReadLine());
+				}
+			}
+			array = (string[])targets.ToArray(typeof(string));
+			return array;
+		}
+		
 	}
 }

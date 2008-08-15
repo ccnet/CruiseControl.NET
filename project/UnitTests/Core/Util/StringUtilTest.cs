@@ -228,5 +228,44 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			StringUtil.IntegrationPropertyToString(new object());
 			StringUtil.IntegrationPropertyToString(new object(), "-");
 		}
+
+		[Test]
+		public void TestMakeBuildResult()
+		{
+			Assert.AreEqual(Environment.NewLine + "<buildresults>" + Environment.NewLine + "  <message>"
+				+ "foo" + "</message>" + Environment.NewLine + "</buildresults>"
+				+ Environment.NewLine, StringUtil.MakeBuildResult("foo", ""));
+			Assert.AreEqual(Environment.NewLine + "<buildresults>" + Environment.NewLine + "  <message level=\"Error\">"
+				+ "foo" + "</message>" + Environment.NewLine + "</buildresults>"
+				+ Environment.NewLine, StringUtil.MakeBuildResult("foo", "Error"));
+			Assert.AreEqual("", StringUtil.MakeBuildResult("", ""));
+		}
+
+		[Test]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void TestMakeBuildResultThrowsArgumentNullException()
+		{
+			StringUtil.MakeBuildResult(null, "");
+		}
+
+		[Test]
+		public void TestArrayToNewLineSeparatedString()
+		{
+			Assert.AreEqual("foo", StringUtil.ArrayToNewLineSeparatedString(new string[] { "foo" }));
+			Assert.AreEqual("foo" + Environment.NewLine + "bar", StringUtil.ArrayToNewLineSeparatedString(new string[] {"foo", "bar"}));
+			Assert.AreEqual("", StringUtil.ArrayToNewLineSeparatedString(new string[0]));
+			Assert.AreEqual("", StringUtil.ArrayToNewLineSeparatedString(new string[1] { "" }));
+			Assert.AreEqual("", StringUtil.ArrayToNewLineSeparatedString(new string[1] { null }));
+		}
+
+		[Test]
+		public void TestNewLineSeparatedStringToArray()
+		{
+			Assert.AreEqual(new string[] { "foo" }, StringUtil.NewLineSeparatedStringToArray("foo"));
+			Assert.AreEqual(new string[] { "foo", "bar" }, StringUtil.NewLineSeparatedStringToArray("foo" + Environment.NewLine + "bar"));
+			Assert.AreEqual(new string[0], StringUtil.NewLineSeparatedStringToArray(""));
+			Assert.AreEqual(new string[0], StringUtil.NewLineSeparatedStringToArray(null));
+			Assert.AreEqual(new string[1] { "" }, StringUtil.NewLineSeparatedStringToArray(Environment.NewLine));
+		}
 	}
 }

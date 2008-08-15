@@ -61,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void AddQuotesAroundTargetsWithSpaces()
 		{
-			ExpectToExecuteArgumentsWithMonitor(@"/nologo ""/t:first;next task"" " + IntegrationProperties() + DefaultLogger());
+			ExpectToExecuteArgumentsWithMonitor(@"/nologo /t:first;""next task"" " + IntegrationProperties() + DefaultLogger());
 			task.Targets = "first;next task";
 			task.Run(result);
 		}
@@ -72,8 +72,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			// NOTE: Property names are sorted alphabetically when passed as process arguments
 			// Tests that look for the correct arguments will fail if the following properties
 			// are not sorted alphabetically.
-            string expectedProperties = string.Format(@"/p:CCNetArtifactDirectory={2};CCNetBuildCondition=IfModificationExists;CCNetBuildDate={0};CCNetBuildTime={1};CCNetFailureUsers=System.Collections.ArrayList;CCNetIntegrationStatus=Success;CCNetLabel=My Label;CCNetLastIntegrationStatus=Success;CCNetListenerFile={2}ListenFile.xml;CCNetNumericLabel=0;CCNetProject=test;CCNetRequestSource=foo;CCNetWorkingDirectory=c:\source\", testDateString, testTimeString, result.ArtifactDirectory);
-            ExpectToExecuteArgumentsWithMonitor(@"/nologo " + @"""" + expectedProperties + @"""" + DefaultLogger());
+            string expectedProperties = string.Format(@"/p:CCNetArtifactDirectory={2};CCNetBuildCondition=IfModificationExists;CCNetBuildDate={0};CCNetBuildTime={1};CCNetFailureUsers=;CCNetIntegrationStatus=Success;CCNetLabel=""My Label"";CCNetLastIntegrationStatus=Success;CCNetListenerFile={3};CCNetNumericLabel=0;CCNetProject=test;CCNetRequestSource=foo;CCNetWorkingDirectory=c:\source\", testDateString, testTimeString, StringUtil.AutoDoubleQuoteString(result.ArtifactDirectory), StringUtil.AutoDoubleQuoteString(Path.GetTempPath() + "test_ListenFile.xml"));
+            ExpectToExecuteArgumentsWithMonitor(@"/nologo " + expectedProperties + DefaultLogger());
 			result.Label = @"My Label";
 			task.Run(result);
 		}
@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			ProcessInfo info = NewProcessInfo("/nologo " + IntegrationProperties() + DefaultLogger());
 			info.WorkingDirectory = Path.Combine(DefaultWorkingDirectory, "src");
-			ExpectToExecuteWithMonitor(info, new ProcessMonitor());
+			ExpectToExecuteWithMonitor(info, ProcessMonitor.GetProcessMonitorByProject("test"));
 			task.WorkingDirectory = "src";
 			task.Run(result);
 		}
@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[ExpectedException(typeof(BuilderException))]
 		public void TimedOutExecutionShouldCauseBuilderException()
 		{
-			ExpectToExecuteAndReturnWithMonitor(TimedOutProcessResult(), new ProcessMonitor());
+			ExpectToExecuteAndReturnWithMonitor(TimedOutProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
 			task.Run(result);
 		}
 
@@ -109,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			try
 			{
-				ExpectToExecuteAndReturnWithMonitor(TimedOutProcessResult(), new ProcessMonitor());
+				ExpectToExecuteAndReturnWithMonitor(TimedOutProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
 				task.Run(result);
 			}
 			catch (BuilderException)
@@ -122,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldAutomaticallyMergeTheBuildOutputFile()
 		{
 			TempFileUtil.CreateTempXmlFile(logfile, "<output/>");
-			ExpectToExecuteAndReturnWithMonitor(SuccessfulProcessResult(), new ProcessMonitor());
+			ExpectToExecuteAndReturnWithMonitor(SuccessfulProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
 			task.Run(result);
 			Assert.AreEqual(2, result.TaskResults.Count);
 			Assert.AreEqual("<output/>" + ProcessResultOutput, result.TaskOutput);
@@ -133,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldFailOnFailedProcessResult()
 		{
 			TempFileUtil.CreateTempXmlFile(logfile, "<output/>");
-			ExpectToExecuteAndReturnWithMonitor(FailedProcessResult(), new ProcessMonitor());
+			ExpectToExecuteAndReturnWithMonitor(FailedProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
 			task.Run(result);
 			Assert.AreEqual(2, result.TaskResults.Count);
 			Assert.AreEqual("<output/>" + ProcessResultOutput, result.TaskOutput);
@@ -173,7 +173,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		private string DefaultLogger()
 		{
-			return string.Format(@" ""/l:{0};{1}""", MsBuildTask.DefaultLogger, logfile);
+			string defaultLogger;
+			if (MsBuildTask.DefaultLogger == string.Empty)
+				defaultLogger = StringUtil.AutoDoubleQuoteString(string.Format("{0}{1}ThoughtWorks.CruiseControl.MsBuild.dll", Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(MsBuildTask)).Location), Path.DirectorySeparatorChar));
+			else
+				defaultLogger = MsBuildTask.DefaultLogger;
+			return string.Format(@" /l:{0};{1}", StringUtil.AutoDoubleQuoteString(defaultLogger), StringUtil.AutoDoubleQuoteString(logfile));
 		}
 
 		private string IntegrationProperties()
@@ -181,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			// NOTE: Property names are sorted alphabetically when passed as process arguments
 			// Tests that look for the correct arguments will fail if the following properties
 			// are not sorted alphabetically.			
-            return string.Format(@"""/p:CCNetArtifactDirectory={3};CCNetBuildCondition=IfModificationExists;CCNetBuildDate={1};CCNetBuildTime={2};CCNetFailureUsers=System.Collections.ArrayList;CCNetIntegrationStatus=Success;CCNetLabel=1.0;CCNetLastIntegrationStatus=Success;CCNetListenerFile={3}ListenFile.xml;CCNetNumericLabel=0;CCNetProject=test;CCNetRequestSource=foo;CCNetWorkingDirectory={0}""", DefaultWorkingDirectory, testDateString, testTimeString, result.ArtifactDirectory);
+            return string.Format(@"/p:CCNetArtifactDirectory={3};CCNetBuildCondition=IfModificationExists;CCNetBuildDate={1};CCNetBuildTime={2};CCNetFailureUsers=;CCNetIntegrationStatus=Success;CCNetLabel=1.0;CCNetLastIntegrationStatus=Success;CCNetListenerFile={4};CCNetNumericLabel=0;CCNetProject=test;CCNetRequestSource=foo;CCNetWorkingDirectory={0}", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory), testDateString, testTimeString, StringUtil.AutoDoubleQuoteString(result.ArtifactDirectory), StringUtil.AutoDoubleQuoteString(Path.GetTempPath() + "test_ListenFile.xml"));
 		}
 	}
 }

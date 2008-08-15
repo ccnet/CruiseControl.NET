@@ -712,6 +712,7 @@
     <Compile Include="tasks\ProcessTaskResult.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tasks\RakeTask.cs" />
     <Compile Include="Triggers\FilterTrigger.cs">
       <SubType>Code</SubType>
     </Compile>

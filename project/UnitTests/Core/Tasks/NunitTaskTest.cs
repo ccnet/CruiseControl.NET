@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void HandleNUnitTaskFailure()
 		{
 			CreateProcessExecutorMock(NUnitTask.DefaultPath);
-			ExpectToExecuteAndReturnWithMonitor(SuccessfulProcessResult(), new ProcessMonitor());
+			ExpectToExecuteAndReturnWithMonitor(SuccessfulProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
 			IIntegrationResult result = IntegrationResult();
 			result.ArtifactDirectory = Path.GetTempPath();
 

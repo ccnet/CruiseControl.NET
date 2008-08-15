@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldSetSuccessfulStatusAndBuildOutputAsAResultOfASuccessfulBuild()
 		{
-			ExpectToExecuteAndReturnWithMonitor(SuccessfulProcessResult(), new ProcessMonitor());
+			ExpectToExecuteAndReturnWithMonitor(SuccessfulProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
 			
 			builder.Run(result);
 			
@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldSetFailedStatusAndBuildOutputAsAResultOfFailedBuild()
 		{
-			ExpectToExecuteAndReturnWithMonitor(FailedProcessResult(), new ProcessMonitor());
+			ExpectToExecuteAndReturnWithMonitor(FailedProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
 			
 			builder.Run(result);
 			
@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
-			ExpectToExecuteAndReturnWithMonitor(TimedOutProcessResult(), new ProcessMonitor());
+			ExpectToExecuteAndReturnWithMonitor(TimedOutProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
 			builder.Run(result);
 		}
 		
@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs " + IntegrationProperties(@"C:\temp", @"C:\temp") + " target1 target2";
 			ProcessInfo info = NewProcessInfo(args);
 			info.TimeOut = 2000;
-			ExpectToExecuteWithMonitor(info, new ProcessMonitor());
+			ExpectToExecuteWithMonitor(info, ProcessMonitor.GetProcessMonitorByProject("test"));
 			
 			result.Label = "1.0";
 			result.WorkingDirectory = @"C:\temp";
@@ -157,7 +157,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldEncloseDirectoriesInQuotesIfTheyContainSpaces()
 		{
 			DefaultWorkingDirectory = @"c:\dir with spaces";
-            ExpectToExecuteArgumentsWithMonitor(@"-nologo -logger:NAnt.Core.XmlLogger -D:CCNetArtifactDirectory=""c:\dir with spaces"" -D:CCNetBuildCondition=IfModificationExists -D:CCNetBuildDate=2005-06-06 -D:CCNetBuildTime=08:45:00 -D:CCNetFailureUsers=System.Collections.ArrayList -D:CCNetIntegrationStatus=Success -D:CCNetLabel=1.0 -D:CCNetLastIntegrationStatus=Success -D:CCNetListenerFile=""c:\dir with spaces\ListenFile.xml"" -D:CCNetNumericLabel=0 -D:CCNetProject=test -D:CCNetRequestSource=foo -D:CCNetWorkingDirectory=""c:\dir with spaces""");
+			ExpectToExecuteArgumentsWithMonitor(@"-nologo -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"c:\dir with spaces", @"c:\dir with spaces"));
 
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
 			result.ArtifactDirectory = DefaultWorkingDirectory;
@@ -213,7 +213,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			builder.Run(result);
 			ProcessInfo info = (ProcessInfo)constraint.Parameter;
 			Assert.AreEqual(expectedBaseDirectory, info.WorkingDirectory);
-			Verify();
 		}
 		
 		[Test]
@@ -254,7 +253,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			// NOTE: Property names are sorted alphabetically when passed as process arguments
 			// Tests that look for the correct arguments will fail if the following properties
 			// are not sorted alphabetically.
-            return string.Format(@"-D:CCNetArtifactDirectory={1} -D:CCNetBuildCondition=IfModificationExists -D:CCNetBuildDate={2} -D:CCNetBuildTime={3} -D:CCNetFailureUsers=System.Collections.ArrayList -D:CCNetIntegrationStatus=Success -D:CCNetLabel=1.0 -D:CCNetLastIntegrationStatus=Success -D:CCNetListenerFile={1}\ListenFile.xml -D:CCNetNumericLabel=0 -D:CCNetProject=test -D:CCNetRequestSource=foo -D:CCNetWorkingDirectory={0}", workingDirectory, artifactDirectory, testDateString, testTimeString);
+            return string.Format(@"-D:CCNetArtifactDirectory={1} -D:CCNetBuildCondition=IfModificationExists -D:CCNetBuildDate={2} -D:CCNetBuildTime={3} -D:CCNetFailureUsers= -D:CCNetIntegrationStatus=Success -D:CCNetLabel=1.0 -D:CCNetLastIntegrationStatus=Success -D:CCNetListenerFile={4} -D:CCNetNumericLabel=0 -D:CCNetProject=test -D:CCNetRequestSource=foo -D:CCNetWorkingDirectory={0}", StringUtil.AutoDoubleQuoteString(workingDirectory), StringUtil.AutoDoubleQuoteString(artifactDirectory), testDateString, testTimeString, StringUtil.AutoDoubleQuoteString(Path.GetTempPath() + "test_ListenFile.xml"));
         }
 	}
 }
