@@ -85,8 +85,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			Modification mod = new Modification();
 			string line = "foo\r\nUser: Admin        Date:  16/9/02   Time:  22:40\r\n";
-			CheckInParser parser = new CheckInParser(line, new VssLocale(new CultureInfo("en-GB")));
-			parser.ParseUsernameAndDate(mod);
+            CheckInParser myParser = new CheckInParser(line, new VssLocale(new CultureInfo("en-GB")));
+            myParser.ParseUsernameAndDate(mod);
 
 			Assert.AreEqual("Admin", mod.UserName);
 			Assert.AreEqual(new DateTime(2002, 9, 16, 22, 40, 0), mod.ModifiedTime);
@@ -97,8 +97,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			Modification mod = new Modification();
 			string line = "foo\r\nUser: Admin        Date:  16/24/02   Time:  22:40\r\n";
-			CheckInParser parser = new CheckInParser(line, new VssLocale(CultureInfo.InvariantCulture));
-			parser.ParseUsernameAndDate(mod);
+            CheckInParser myParser = new CheckInParser(line, new VssLocale(CultureInfo.InvariantCulture));
+            myParser.ParseUsernameAndDate(mod);
 		}
 
 		[Test]
@@ -106,8 +106,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			Modification mod = new Modification();
 			string line = "foo\r\nUtilisateur: Admin        Date:  2/06/04   Heure: 14:04\r\n";
-			CheckInParser parser = new CheckInParser(line, new VssLocale(new CultureInfo("fr-FR")));
-			parser.ParseUsernameAndDate(mod);
+            CheckInParser myParser = new CheckInParser(line, new VssLocale(new CultureInfo("fr-FR")));
+            myParser.ParseUsernameAndDate(mod);
 
 			Assert.AreEqual("Admin", mod.UserName);
 			Assert.AreEqual(new DateTime(2004,6,2,14,4,0), mod.ModifiedTime);
@@ -169,8 +169,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ParseFileName() 
 		{
 			string fileName = "**** Im a file name.fi     ********\r\n jakfakjfnb  **** ** lkjnbfgakj ****";
-			CheckInParser parser = new CheckInParser(fileName, new VssLocale(new CultureInfo("en-US")));
-			string actual = parser.ParseFileName();
+			CheckInParser myParser = new CheckInParser(fileName, new VssLocale(new CultureInfo("en-US")));
+            string actual = myParser.ParseFileName();
 			Assert.AreEqual("Im a file name.fi", actual);
 		}
 
@@ -304,7 +304,7 @@ happyTheFile.txt deleted";
 			Assert.AreEqual(null, mod.Comment);
 		}
 
-		private string[] makeArray(params string[] entries) 
+		private static string[] makeArray(params string[] entries) 
 		{
 			return entries;
 		}
@@ -327,18 +327,18 @@ happyTheFile.txt deleted";
 		[Test]
 		public void ParseSingleLineComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithSingleLineComment(), new VssLocale(CultureInfo.InvariantCulture));
+			CheckInParser myParser = new CheckInParser(EntryWithSingleLineComment(), new VssLocale(CultureInfo.InvariantCulture));
 			Modification mod = new Modification();
-			parser.ParseComment(mod);
+			myParser.ParseComment(mod);
 			Assert.AreEqual("added subfolder", mod.Comment);
 		}
 
 		[Test]
 		public void ParseMultiLineComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithMultiLineComment(), new VssLocale(CultureInfo.InvariantCulture));
+            CheckInParser myParser = new CheckInParser(EntryWithMultiLineComment(), new VssLocale(CultureInfo.InvariantCulture));
 			Modification mod = new Modification();
-			parser.ParseComment(mod);
+            myParser.ParseComment(mod);
 			Assert.AreEqual(@"added subfolder
 and then added a new line", mod.Comment);
 		}
@@ -346,36 +346,36 @@ and then added a new line", mod.Comment);
 		[Test]
 		public void ParseEmptyComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithEmptyComment(), new VssLocale(CultureInfo.InvariantCulture));
+            CheckInParser myParser = new CheckInParser(EntryWithEmptyComment(), new VssLocale(CultureInfo.InvariantCulture));
 			Modification mod = new Modification();
-			parser.ParseComment(mod);
+            myParser.ParseComment(mod);
 			Assert.AreEqual(String.Empty, mod.Comment);
 		}
 
 		[Test]
 		public void ParseEmptyLineComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithEmptyCommentLine(), new VssLocale(CultureInfo.InvariantCulture));
+            CheckInParser myParser = new CheckInParser(EntryWithEmptyCommentLine(), new VssLocale(CultureInfo.InvariantCulture));
 			Modification mod = new Modification();
-			parser.ParseComment(mod);
+            myParser.ParseComment(mod);
 			Assert.AreEqual(null, mod.Comment);
 		}
 
 		[Test]
 		public void ParseNoComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithNoCommentLine(), new VssLocale(CultureInfo.InvariantCulture));
+            CheckInParser myParser = new CheckInParser(EntryWithNoCommentLine(), new VssLocale(CultureInfo.InvariantCulture));
 			Modification mod = new Modification();
-			parser.ParseComment(mod);
+            myParser.ParseComment(mod);
 			Assert.AreEqual(null, mod.Comment);
 		}
 
 		[Test]
 		public void ParseNonCommentAtCommentLine()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithNonCommentAtCommentLine(), new VssLocale(CultureInfo.InvariantCulture));
+            CheckInParser myParser = new CheckInParser(EntryWithNonCommentAtCommentLine(), new VssLocale(CultureInfo.InvariantCulture));
 			Modification mod = new Modification();
-			parser.ParseComment(mod);
+            myParser.ParseComment(mod);
 			Assert.AreEqual(null, mod.Comment);
 		}
 		
@@ -398,18 +398,34 @@ Comment: added fir to tree file, checked in recursively from project root";
 			Assert.AreEqual("added fir to tree file, checked in recursively from project root",mod.Comment);
 		}
 
-		private string EntryWithSingleLineComment()
+        [Test]
+        public void ShouldBeAbleToCreateAllLocales()
+        {
+            // Extend this list when new translations are added.  Each entry is
+            // "ll" or "ll-CC" where "ll" is the two-character langage code (e.g.,
+            // "en" for English) and "CC" is the two-character country code (e.g.,
+            // "US" for the United States).  There must be a "VssLocale.ll.resx" file
+            // or a "VssLocal.ll-CC.resx" file. Also include "en" for the default
+            // English locale and "" for the invariate locale.
+            string[] localeNames = {"", "de", "en", "es", "fr", "ja"};
+            foreach (string localeName in localeNames)
+            {
+                CultureInfo culture = new CultureInfo(localeName);
+                VssLocale locale = new VssLocale(culture);
+                Assert.IsNotNull(locale, "Locale for \"{0}\"", localeName);
+            }
+        }
+
+		private static string EntryWithSingleLineComment()
 		{
-			string entry = 
-				@"*****  plant  *****
+            return @"*****  plant  *****
 Version 1
 User: Admin        Date:  9/16/02   Time:  2:41p
 Created
 Comment: added subfolder";
-			return entry;
 		}
 
-		private string EntryWithMultiLineComment()
+		private static string EntryWithMultiLineComment()
 		{
 			return @"*****  plant  *****
 Version 1
@@ -419,7 +435,7 @@ Comment: added subfolder
 and then added a new line";
 		}
 
-		private string EntryWithEmptyComment()
+		private static string EntryWithEmptyComment()
 		{
 return @"*****************  Version 1   *****************
 User: Admin        Date:  9/16/02   Time:  2:29p
@@ -429,7 +445,7 @@ Comment:
 ";
 		}
 
-		private string EntryWithEmptyCommentLine()
+		private static string EntryWithEmptyCommentLine()
 		{
 return @"*****************  Version 2   *****************
 User: Admin        Date:  9/16/02   Time:  2:40p
@@ -438,14 +454,14 @@ jam.txt added
 ";
 		}
 
-		private string EntryWithNoCommentLine()
+		private static string EntryWithNoCommentLine()
 		{
 return @"*****************  Version 2   *****************
 User: Admin        Date:  9/16/02   Time:  2:40p
 jam.txt added";
 		}
 			
-		private string EntryWithNonCommentAtCommentLine()
+		private static string EntryWithNonCommentAtCommentLine()
 		{
 return @"*****************  Version 2   *****************
 User: Admin        Date:  9/16/02   Time:  2:40p
