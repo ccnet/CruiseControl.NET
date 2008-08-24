@@ -158,8 +158,10 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			return GetModifications(CreateHistoryProcessInfo(from.StartTime, to.StartTime), from.StartTime, to.StartTime);
-		}
+            Modification[] modifications = GetModifications(CreateHistoryProcessInfo(from.StartTime, to.StartTime), from.StartTime, to.StartTime);
+            base.FillIssueUrl(modifications);
+            return modifications;
+        }
 
 		public override void LabelSourceControl(IIntegrationResult result)
 		{

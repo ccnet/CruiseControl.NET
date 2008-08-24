@@ -71,8 +71,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			StripRepositoryRootFromModificationFolderNames(modifications);
 			UrlBuilder.SetupModification(modifications);
-			return modifications;
-		}
+
+            base.FillIssueUrl(modifications);
+            return modifications;
+        }
 
 		public override void LabelSourceControl(IIntegrationResult result)
 		{

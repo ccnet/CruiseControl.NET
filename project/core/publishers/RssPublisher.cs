@@ -130,6 +130,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                     mods.WriteLine(string.Format("<tr><td>{0}</td><td>{1}</td></tr>",
                                     result.Modifications[i].UserName,
                                     result.Modifications[i].Comment));
+
+                    if (result.Modifications[i].IssueUrl != null &&  result.Modifications[i].IssueUrl.Length > 0)
+                    {
+                        mods.WriteLine(string.Format("<tr><td>IssueLink</td><td><a href=\"{0}\">{0}</a></td></tr>",                                        
+                            result.Modifications[i].IssueUrl));
+                    }
                 }
             }
             mods.WriteLine("</table>");

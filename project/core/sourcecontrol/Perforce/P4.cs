@@ -140,6 +140,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 						mod.Url = string.Format(P4WebURLFormat, mod.ChangeNumber);
 					}
 				}
+                FillIssueUrl(mods);
 				return mods;
 			}
 		}
@@ -286,5 +287,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 				p4Purger.Purge(this, WorkingDirectory);
 			}
 		}
+
+        [ReflectorProperty("issueUrlBuilder", InstanceTypeKey = "type", Required = false)]
+        public IModificationUrlBuilder IssueUrlBuilder;
+
+
+        private void FillIssueUrl(Modification[] modifications)
+        {
+            if (IssueUrlBuilder != null)
+            {
+                IssueUrlBuilder.SetupModification(modifications);
+            }
+        }
 	}
 }

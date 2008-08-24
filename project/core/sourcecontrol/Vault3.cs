@@ -38,8 +38,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			_labelApplied = false;
 			Log.Info(string.Format("Checking for modifications to {0} in Vault Repository \"{1}\" between {2} and {3}", _shim.Folder, _shim.Repository, from.StartTime, to.StartTime));
 			ProcessResult result = ExecuteWithRetries(ForHistoryProcessInfo(from, to));
-			return ParseModifications(result, from.StartTime, to.StartTime);
-		}
+
+            Modification[] modifications = ParseModifications(result, from.StartTime, to.StartTime);
+            base.FillIssueUrl(modifications);
+            return modifications;
+        }
 
 		/// <summary>
 		/// This is called by IntegrationRunner when the build is complete.  To ensure we're building with the labelled code,

@@ -79,7 +79,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			Execute(GoToBranchProcessInfo(from));
 			
 			//Get and parse the modified files.
-			return GetModifications(CreateQueryProcessInfo(from, to), from.StartTime, to.StartTime);
+            Modification[] modifications = GetModifications(CreateQueryProcessInfo(from, to), from.StartTime, to.StartTime);
+            base.FillIssueUrl(modifications);
+            return modifications;
 		}
 
 		public override void LabelSourceControl(IIntegrationResult result)

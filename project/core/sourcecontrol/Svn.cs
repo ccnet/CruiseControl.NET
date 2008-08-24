@@ -65,6 +65,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				UrlBuilder.SetupModification(modifications);
 			}
+            base.FillIssueUrl(modifications);
 			return modifications;
 		}
 

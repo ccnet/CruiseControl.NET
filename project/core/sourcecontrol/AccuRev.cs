@@ -191,8 +191,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				FormatCommandDate(from.StartTime));
 			ProcessInfo histCommand = PrepCommand(args, from);
 
-			return base.GetModifications(histCommand, from.StartTime, to.StartTime);
-		}
+            Modification[] modifications = base.GetModifications(histCommand, from.StartTime, to.StartTime);
+            base.FillIssueUrl(modifications);
+            return modifications;
+        }
 
 		/// <summary>
 		/// Obtain the specified level on the source code. 

@@ -54,6 +54,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			Log.Info(string.Format("Getting Modifications: {0} {1}", info.FileName, info.Arguments));
 			Modification[] modifications = GetModifications(info, from.StartTime, to.StartTime);
 			AddMemberInfoToModifiedOrAddedModifications(modifications);
+            base.FillIssueUrl(modifications);
 			return ValidModifications(modifications, from.StartTime, to.StartTime);
 		}
 

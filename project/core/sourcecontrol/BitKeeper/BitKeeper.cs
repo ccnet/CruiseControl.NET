@@ -56,7 +56,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 		{
 			ProcessResult result = Execute(NewProcessInfo(BuildHistoryProcessArgs(), to));
 			Modification[] modifications = ParseModifications(result, from.StartTime, to.StartTime);
-			return modifications;
+            base.FillIssueUrl(modifications);
+            return modifications;
 		}
 
 		public override void LabelSourceControl(IIntegrationResult result)

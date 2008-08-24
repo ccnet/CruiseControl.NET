@@ -56,8 +56,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			                               (SearchRegExp == 0) ? "-x-" : "-x",
 			                               ServerConnect,
 			                               ServerLogin);
-			return GetModifications(CreateSSCMProcessInfo(command), from.StartTime, to.StartTime);
-		}
+
+            Modification[] modifications = GetModifications(CreateSSCMProcessInfo(command), from.StartTime, to.StartTime);
+            base.FillIssueUrl(modifications);
+            return modifications;
+        }
 
 		private ProcessInfo CreateSSCMProcessInfo(string command)
 		{

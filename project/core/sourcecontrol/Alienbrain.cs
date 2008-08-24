@@ -82,7 +82,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessResult result = executor.Execute(processInfo);
 			if (!result.StandardOutput.TrimEnd().EndsWith(NO_CHANGE))
 			{
-				return ParseModifications(result, from.StartTime, to.StartTime);
+                Modification[] modifications = ParseModifications(result, from.StartTime, to.StartTime);
+                base.FillIssueUrl(modifications);
+                return modifications;
 			}
 			else
 			{

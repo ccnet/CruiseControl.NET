@@ -550,6 +550,7 @@
     <Compile Include="Core\SourceControl\CvsTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\SourceControl\DefaultIssueTrackerUrlBuilderTest.cs" />
     <Compile Include="Core\SourceControl\ExternalSourceControlHistoryParserTest.cs">
       <SubType>Code</SubType>
     </Compile>

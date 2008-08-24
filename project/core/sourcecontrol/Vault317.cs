@@ -63,8 +63,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					modList.Add(mod);
 			}
 
-			return (Modification[]) modList.ToArray(typeof (Modification));
-		}
+            Modification[] modifications = (Modification[]) modList.ToArray(typeof (Modification));
+            base.FillIssueUrl(modifications);
+            return modifications;
+        }
 
 		private bool LookForChangesUsingVersionHistory(IIntegrationResult from, IIntegrationResult to)
 		{

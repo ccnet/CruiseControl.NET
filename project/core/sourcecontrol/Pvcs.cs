@@ -128,6 +128,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				modifications = ParseModifications(reader, from.StartTime, to.StartTime);
 			}
+            base.FillIssueUrl(modifications);
 			return modifications;
 		}
 

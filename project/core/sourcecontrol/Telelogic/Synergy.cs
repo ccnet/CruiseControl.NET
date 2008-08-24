@@ -232,7 +232,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 					}
 				}
 			}
-
+            
+            FillIssueUrl(modifications);
 			return modifications;
 		}
 
@@ -346,5 +347,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 				throw(new CruiseControlException("Failed to read the project's last reconfigure time.", inner));
 			}
 		}
+
+        [ReflectorProperty("issueUrlBuilder", InstanceTypeKey = "type", Required = false)]
+        public IModificationUrlBuilder IssueUrlBuilder;
+
+
+        private void FillIssueUrl(Modification[] modifications)
+        {
+            if (IssueUrlBuilder != null)
+            {
+                IssueUrlBuilder.SetupModification(modifications);
+            }
+        }
+
 	}
 }

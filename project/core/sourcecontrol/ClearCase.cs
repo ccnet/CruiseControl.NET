@@ -46,8 +46,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			return base.GetModifications(CreateHistoryProcessInfo(from.StartTime, to.StartTime), from.StartTime, to.StartTime);
-		}
+            Modification[] modifications = base.GetModifications(CreateHistoryProcessInfo(from.StartTime, to.StartTime), from.StartTime, to.StartTime);
+            base.FillIssueUrl(modifications);
+            return modifications;
+        }
 
 		/// <summary>
 		/// Executes the two processes needed to label the source tree in ClearCase.

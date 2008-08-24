@@ -21,6 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public string Version = "";
 		public string Comment;
 		public string Url;
+        public string IssueUrl;
 		public string EmailAddress;
 
 		public string ToXml()
@@ -42,6 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			writer.WriteElementString("changeNumber", ChangeNumber.ToString());
 			if (! StringUtil.IsBlank(Version)) writer.WriteElementString("version", Version);
 			XmlUtil.WriteNonNullElementString(writer, "url", Url);
+            XmlUtil.WriteNonNullElementString(writer, "issueUrl", IssueUrl);
 			XmlUtil.WriteNonNullElementString(writer, "email", EmailAddress);
 			writer.WriteEndElement();
 		}

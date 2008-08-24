@@ -58,9 +58,15 @@
                 <td class="header-label"><nobr>Last changed:</nobr></td>
                 <td class="header-data"><xsl:value-of select="date"/></td>
             </tr>
-            <tr>
+ 	    <xsl:if test="string-length(issueUrl)!=0">
+              <tr>
+                <td class="header-label" valign="top"><nobr>Link to issue:</nobr></td>
+                <td class="header-data"><A><xsl:attribute name="HREF"><xsl:value-of select="issueUrl"/></xsl:attribute><xsl:value-of select="issueUrl"/></A></td>
+              </tr>
+ 	    </xsl:if>
+ 	    <tr>
                 <td class="header-label" valign="top"><nobr>Last log entry:</nobr></td>
-                <td class="header-data"><pre><xsl:value-of select="comment"/></pre></td>
+                <td class="header-data"><xsl:value-of select="comment"/></td>
             </tr>
         </xsl:if>
     </xsl:template>

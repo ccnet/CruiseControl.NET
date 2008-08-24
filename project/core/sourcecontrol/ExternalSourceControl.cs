@@ -137,7 +137,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 ArgString);
             ProcessInfo command = PrepCommand(Executable, args, from);
 
-			return base.GetModifications(command, from.StartTime, to.StartTime);
+
+            Modification[] modifications = base.GetModifications(command, from.StartTime, to.StartTime);
+            base.FillIssueUrl(modifications);
+            return modifications;
         }
 
         /// <summary>

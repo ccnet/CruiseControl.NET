@@ -107,7 +107,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 TextReader outputReader = new StreamReader(tempOutputFileName, System.Text.Encoding.Default);
                 try
                 {
-                    return ParseModifications(outputReader, from.StartTime, to.StartTime);
+                    // return ParseModifications(outputReader, from.StartTime, to.StartTime);
+                    Modification[] modifications = ParseModifications(outputReader, from.StartTime, to.StartTime);
+                    base.FillIssueUrl(modifications);
+                    return modifications;
                 }
                 finally
                 {
@@ -118,6 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             {
                 File.Delete(tempOutputFileName);
             }
+            
 		}
 
 		public override void LabelSourceControl(IIntegrationResult result)

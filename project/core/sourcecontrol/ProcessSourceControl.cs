@@ -80,5 +80,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public void Purge(IProject project)
 		{
 		}
+
+
+        // rw issue
+        [ReflectorProperty("issueUrlBuilder", InstanceTypeKey = "type", Required = false)]
+        public IModificationUrlBuilder IssueUrlBuilder;
+
+
+        protected void FillIssueUrl(Modification[] modifications)
+        {
+            if (IssueUrlBuilder != null)
+            {
+                IssueUrlBuilder.SetupModification(modifications);
+            }
+        }
+
 	}
 }
