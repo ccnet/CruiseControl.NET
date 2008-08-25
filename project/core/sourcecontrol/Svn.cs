@@ -52,6 +52,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private IFileSystem fileSystem;
 
+        /// <summary>
+        /// Modifications discovered by this instance of the source control interface.
+        /// </summary>
+        internal Modification[] mods = new Modification[0];
+
 		public string FormatCommandDate(DateTime date)
 		{
 			return date.ToUniversalTime().ToString(UtcXmlDateFormat, CultureInfo.InvariantCulture);
@@ -60,13 +65,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			ProcessResult result = Execute(NewHistoryProcessInfo(from, to));
-			Modification[] modifications = ParseModifications(result, from.StartTime, to.StartTime);
+			mods = ParseModifications(result, from.StartTime, to.StartTime);
 			if (UrlBuilder != null)
 			{
-				UrlBuilder.SetupModification(modifications);
+                UrlBuilder.SetupModification(mods);
 			}
-            base.FillIssueUrl(modifications);
-			return modifications;
+            base.FillIssueUrl(mods);
+			return mods;
 		}
 
 		public override void LabelSourceControl(IIntegrationResult result)
@@ -126,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("update");
-			AppendRevision(buffer, result.LastChangeNumber);
+            AppendRevision(buffer, Modification.GetLastChangeNumber(mods));
 			AppendCommonSwitches(buffer);
 			return NewProcessInfo(buffer.ToString(), result);
 		}
@@ -139,7 +144,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AppendArgument(TagMessage(result.Label));
 			buffer.AddArgument(TagSource(result));
 			buffer.AddArgument(TagDestination(result.Label));
-			AppendRevision(buffer, result.LastChangeNumber);
+            AppendRevision(buffer, Modification.GetLastChangeNumber(mods));
 			AppendCommonSwitches(buffer);
 			return NewProcessInfo(buffer.ToString(), result);
 		}
@@ -163,7 +168,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private string TagSource(IIntegrationResult result)
 		{
-			if (result.LastChangeNumber == 0)
+            if (Modification.GetLastChangeNumber(mods) == 0)
 			{
 				return result.BaseFromWorkingDirectory(WorkingDirectory).TrimEnd(Path.DirectorySeparatorChar);
 			}

@@ -102,6 +102,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         #endregion
 
         /// <summary>
+        /// Modifications discovered by this instance of the source control interface.
+        /// </summary>
+        internal Modification[] mods = new Modification[0];
+
+        /// <summary>
 		/// Create an instance of the source control integration with the default history parser and 
 		/// process executor.
 		/// </summary>
@@ -191,10 +196,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				FormatCommandDate(from.StartTime));
 			ProcessInfo histCommand = PrepCommand(args, from);
 
-            Modification[] modifications = base.GetModifications(histCommand, from.StartTime, to.StartTime);
-            base.FillIssueUrl(modifications);
-            return modifications;
-        }
+            Modification[] mods = base.GetModifications(histCommand, from.StartTime, to.StartTime);
+            base.FillIssueUrl(mods);
+            return mods;
+		}
 
 		/// <summary>
 		/// Obtain the specified level on the source code. 
@@ -212,8 +217,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 			    string command = "update";
 				PossiblyLogIn(result);
-                if (result.LastChangeNumber != 0)
-                    command = command + " -t " + result.LastChangeNumber;
+			    int lastChange = Modification.GetLastChangeNumber(mods);
+                if (lastChange != 0)
+                    command = command + " -t " + lastChange;
                 RunCommand(command, result);
 			}
 		}

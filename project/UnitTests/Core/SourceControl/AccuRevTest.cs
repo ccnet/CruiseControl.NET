@@ -98,6 +98,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             result.Modifications[0].ChangeNumber = 5;
             result.Modifications[1] = new Modification();
             result.Modifications[1].ChangeNumber = 10;
+            accurev.mods = result.Modifications;
 
             accurev.GetSource(result);
             executor.Verify();

@@ -68,5 +68,16 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			return ReflectionUtil.ReflectionToString(this);
 		}
+
+        public static int GetLastChangeNumber(Modification[] modifications)
+        {
+            int lastChangeNumber = 0;
+            foreach (Modification modification in modifications)
+            {
+                if (modification.ChangeNumber > lastChangeNumber)
+                    lastChangeNumber = modification.ChangeNumber;
+            }
+            return lastChangeNumber;
+        }
 	}
 }

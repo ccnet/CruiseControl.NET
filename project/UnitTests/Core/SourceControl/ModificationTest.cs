@@ -63,7 +63,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.IsNull(XmlUtil.SelectNode(mod.ToXml(), "/modification/url"));
 		}
 
-		private Modification CreateModification()
+        [Test]
+        public void ShouldReturnTheMaximumChangeNumberFromAllModificationsAsLastChangeNumber()
+        {
+            Modification mod1 = new Modification();
+            mod1.ChangeNumber = 10;
+
+            Modification mod2 = new Modification();
+            mod2.ChangeNumber = 20;
+
+            Modification[] modifications = new Modification[] { mod1 };
+            Assert.AreEqual(10, Modification.GetLastChangeNumber(modifications), "from Modification.GetLastChangeNumber({10})");
+            modifications = new Modification[] { mod1, mod2 };
+            Assert.AreEqual(20, Modification.GetLastChangeNumber(modifications), "from Modification.GetLastChangeNumber({10, 20})");
+            modifications = new Modification[] { mod2, mod1 };
+            Assert.AreEqual(20, Modification.GetLastChangeNumber(modifications), "from Modification.GetLastChangeNumber({20, 10})");
+        }
+
+        [Test]
+        public void ShouldReturnZeroAsLastChangeNumberIfNoModifications()
+        {
+            Modification[] modifications = new Modification[0];
+            Assert.AreEqual(0, Modification.GetLastChangeNumber(modifications), "LastChangeNumer({})");
+        }
+
+		private static Modification CreateModification()
 		{
 			Modification mod = new Modification();
 			mod.FileName = "File\"Name&";

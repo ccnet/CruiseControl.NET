@@ -90,16 +90,17 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { label = value; }
 		}
 
-		//
-		// If you have a label that can be represented in a simple numeric form,
-		// then this returns it.  If you don't, then this returns "0".
-		// NOTE: "0" is better than "-1" since build numbers are non-negative
-		// and "-" is a character frequently used to separate version components
-		// when represented in string form.  Thus "-1" might give someone
-		// "1-0--1", which might cause all sorts of havoc for them.  Best to
-		// avoid the "-" character.
-		//
-		public int NumericLabel
+        /// <summary>
+        /// Obtain the label as an integer if possible, otherwise zero. 
+        /// </summary>
+        /// <remarks>
+        // "0" is better than "-1" since build numbers are non-negative
+        /// and "-" is a character frequently used to separate version components
+        /// when represented in string form.  Thus "-1" might give someone
+        /// "1-0--1", which might cause all sorts of havoc for them.  Best to
+        /// avoid the "-" character.
+        /// </remarks>
+        public int NumericLabel
 		{
 			get
 			{
@@ -145,10 +146,7 @@ namespace ThoughtWorks.CruiseControl.Core
             get { return System.IO.Path.Combine(artifactDirectory, 
                     StringUtil.RemoveInvalidCharactersFromFileName(projectName) + "_ListenFile.xml"); }
         }
-
-   
         
-                                                              
 		public IntegrationStatus Status
 		{
 			get { return status; }
@@ -180,7 +178,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { modifications = value; }
 		}
 
-		public DateTime LastModificationDate
+        public DateTime LastModificationDate
 		{
 			get
 			{
@@ -201,17 +199,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		public int LastChangeNumber
+        public int LastChangeNumber
 		{
 			get
 			{
-				int lastChangeNumber = 0;
-				foreach (Modification modification in modifications)
-				{
-					if (modification.ChangeNumber > lastChangeNumber)
-						lastChangeNumber = modification.ChangeNumber;
-				}
-				return lastChangeNumber;
+			    return Modification.GetLastChangeNumber(modifications);
 			}
 		}
 
@@ -223,7 +215,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// Gets a value indicating the success of this integration.
 		/// </summary>
-		public bool Succeeded
+        public bool Succeeded
 		{
 			get { return Status == IntegrationStatus.Success; }
 		}
@@ -231,7 +223,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// Gets a value indicating whether this integration failed.
 		/// </summary>
-		public bool Failed
+        public bool Failed
 		{
 			get { return Status == IntegrationStatus.Failure; }
 		}
@@ -239,7 +231,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// Gets a value indicating whether this integration fixed a previously broken build.
 		/// </summary>
-		public bool Fixed
+        public bool Fixed
 		{
 			get { return Succeeded && LastIntegrationStatus == IntegrationStatus.Failure; }
 		}
@@ -247,7 +239,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// Gets the time taken to perform the project's integration.
 		/// </summary>
-		public TimeSpan TotalIntegrationTime
+        public TimeSpan TotalIntegrationTime
 		{
 			get { return EndTime - StartTime; }
 		}
@@ -373,6 +365,9 @@ namespace ThoughtWorks.CruiseControl.Core
 //		}
 //
 
+        /// <summary>
+        /// The list of users who have contributed modifications to a sequence of builds that has failed.
+        /// </summary>
         public ArrayList FailureUsers {
             get { return failureUsers; }
             set { failureUsers = value; }
