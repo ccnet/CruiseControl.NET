@@ -1,13 +1,16 @@
+using System;
 using System.Collections;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
@@ -109,7 +112,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			pluginLinkCalculatorMock.ExpectAndReturn("GetServerPluginLinks", links, serverSpecifier);
 
+			ProjectStatus ps = new ProjectStatus("", "myCategory", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null);
+			ProjectStatusOnServer[] psosa = new ProjectStatusOnServer[] { new ProjectStatusOnServer(ps, serverSpecifier) };
+			ProjectStatusListAndExceptions pslae = new ProjectStatusListAndExceptions(psosa, new CruiseServerException[0]);
+			farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", pslae, serverSpecifier);
+
+			IAbsoluteLink link = new GeneralAbsoluteLink("link");
+			IAbsoluteLink[] categoryLinks = new GeneralAbsoluteLink[] { new GeneralAbsoluteLink("myCategory", "?Category=myCategory") };
+			linkFactoryMock.ExpectAndReturn("CreateServerLink", link, serverSpecifier, ServerReportServerPlugin.ACTION_NAME);
+			linkFactoryMock.ExpectAndReturn("CreateServerLink", link, serverSpecifier, ServerReportServerPlugin.ACTION_NAME);
+
 			velocityContext["links"] = links;
+			velocityContext["serverlink"] = link;
+			velocityContext["showCategories"] = true;
+			velocityContext["categorylinks"] = categoryLinks;
 
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", velocityResponse, @"ServerSideBar.vm", new HashtableConstraint(velocityContext));
 

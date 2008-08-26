@@ -4,6 +4,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public interface IProjectGrid
 	{
-		ProjectGridRow[] GenerateProjectGridRows(ProjectStatusOnServer[] statusList, string forceBuildActionName, ProjectGridSortColumn sortColumn, bool sortIsAscending);
+		ProjectGridRow[] GenerateProjectGridRows(ProjectStatusOnServer[] statusList, string forceBuildActionName, ProjectGridSortColumn sortColumn, bool sortIsAscending, string categoryFilter);
 	}
 }

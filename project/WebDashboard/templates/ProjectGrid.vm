@@ -17,6 +17,10 @@
 		<td align="Center">
 			<a href="$serverNameSortLink"><b>Server</b></a>
 		</td>
+		#elseif ($showCategoryColumn)
+		<td>
+			<a href="$projectCategorySortLink"><b>Category</b></a>
+		</td>
 		#end
 		<td>
 			<a href="$projectNameSortLink"><b>Project Name</b></a>
@@ -49,6 +53,10 @@
 		#if ($wholeFarm)
 		<td align="Left">
 			<b>$projectGridRow.ServerName</b>
+		</td>
+		#elseif ($showCategoryColumn)
+		<td align="Left">
+			<b>$projectGridRow.Category</b>
 		</td>
 		#end
 		<td align="Left">

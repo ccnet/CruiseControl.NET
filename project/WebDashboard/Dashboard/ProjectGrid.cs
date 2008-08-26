@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		}
 
 		public ProjectGridRow[] GenerateProjectGridRows(ProjectStatusOnServer[] statusList, string forceBuildActionName,
-		                                                ProjectGridSortColumn sortColumn, bool sortIsAscending)
+		                                                ProjectGridSortColumn sortColumn, bool sortIsAscending, string categoryFilter)
 		{
 			ArrayList rows = new ArrayList();
 			foreach (ProjectStatusOnServer statusOnServer in statusList)
@@ -24,6 +24,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				ProjectStatus status = statusOnServer.ProjectStatus;
 				IServerSpecifier serverSpecifier = statusOnServer.ServerSpecifier;
 				DefaultProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, status.Name);
+				
+				if ((categoryFilter != "") && (categoryFilter != status.Category))
+					continue;
+
 				rows.Add(
 					new ProjectGridRow(status,
 					                   serverSpecifier,
@@ -55,6 +59,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			{
 				ProjectGridRow rowx = x as ProjectGridRow;
 				ProjectGridRow rowy = y as ProjectGridRow;
+
 				if (column == ProjectGridSortColumn.Name)
 				{
 					return rowx.Name.CompareTo(rowy.Name)*(ascending ? 1 : -1);
@@ -71,6 +76,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				{
 					return rowx.ServerName.CompareTo(rowy.ServerName)*(ascending ? 1 : -1);
 				}
+				else if (column == ProjectGridSortColumn.Category)
+                {
+                    return rowx.Category.CompareTo(rowy.Category)*(ascending ? 1 : -1);
+                } 
 				else
 				{
 					return 0;

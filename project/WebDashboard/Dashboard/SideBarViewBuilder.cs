@@ -1,8 +1,7 @@
-using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Web;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
@@ -23,7 +22,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private readonly IFarmService farmService;
 	    private readonly IFingerprintFactory fingerprintFactory;
 
-
 	    public SideBarViewBuilder(ICruiseRequest request, IBuildNameRetriever buildNameRetriever, IRecentBuildsViewBuilder recentBuildsViewBuilder, IPluginLinkCalculator pluginLinkCalculator, IVelocityViewGenerator velocityViewGenerator, ILinkFactory linkFactory, ILinkListFactory linkListFactory, IFarmService farmService, IFingerprintFactory fingerprintFactory)
 		{
 			this.request = request;
@@ -35,6 +33,42 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.linkFactory = linkFactory;
 			this.farmService = farmService;
             this.fingerprintFactory = fingerprintFactory;
+		}
+
+		private IAbsoluteLink[] GetCategoryLinks(IServerSpecifier serverSpecifier)
+		{
+			if (serverSpecifier == null)
+				return null;
+
+			// create list of categories
+			List<string> categories = new List<string>();
+
+			foreach (ProjectStatusOnServer status in farmService
+				.GetProjectStatusListAndCaptureExceptions(serverSpecifier)
+				.StatusAndServerList)
+			{
+				string category = status.ProjectStatus.Category;
+
+				if (!string.IsNullOrEmpty(category) && !categories.Contains(category))
+					categories.Add(category);
+			}
+
+			// sort list if at least one element exists
+			if (categories.Count == 0)
+				return null;
+			else
+				categories.Sort();
+
+			// use just created list to assemble wanted links
+			List<GeneralAbsoluteLink> links = new List<GeneralAbsoluteLink>();
+			string urlTemplate = linkFactory
+				.CreateServerLink(serverSpecifier, "ViewServerReport")
+				.Url + "?Category=";
+
+			foreach (string category in categories)
+				links.Add(new GeneralAbsoluteLink(category, urlTemplate + HttpUtility.UrlEncode(category)));
+
+			return links.ToArray();
 		}
 
 		public HtmlFragmentResponse Execute()
@@ -54,7 +88,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				string projectName = request.ProjectName;
 				if (projectName == "")
 				{
-					velocityContext["links"] = pluginLinkCalculator.GetServerPluginLinks(request.ServerSpecifier);
+					IServerSpecifier serverSpecifier = request.ServerSpecifier;
+					velocityContext["links"] = pluginLinkCalculator.GetServerPluginLinks(serverSpecifier);
+					velocityContext["serverlink"] = linkFactory.CreateServerLink(serverSpecifier, "ViewServerReport");
+					
+					IAbsoluteLink[] categoryLinks = GetCategoryLinks(serverSpecifier);
+					velocityContext["showCategories"] = (categoryLinks != null) ? true : false;
+					velocityContext["categorylinks"] = categoryLinks;
 					velocityTemplateName = @"ServerSideBar.vm";
 				}
 				else

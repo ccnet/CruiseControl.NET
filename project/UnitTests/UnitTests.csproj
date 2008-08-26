@@ -860,6 +860,7 @@
     <Compile Include="Remote\ProjectStatusCompatibilityTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UnitTestUtils\ArrayConstraint.cs" />
     <Compile Include="UnitTestUtils\HashtableConstraint.cs">
       <SubType>Code</SubType>
     </Compile>

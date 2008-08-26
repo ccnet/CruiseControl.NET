@@ -56,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[0];
 
-			Assert.AreEqual(0, projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true).Length);
+			Assert.AreEqual(0, projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "").Length);
 
 			VerifyAll();
 		}
@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Execute
 			SetupProjectLinkExpectation();
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.AreEqual(1, rows.Length);
@@ -93,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Execute
 			SetupProjectLinkExpectation();
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.AreEqual(1, rows.Length);
@@ -112,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			SetupProjectLinkExpectation();
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.AreEqual("Success", rows[0].BuildStatus);
@@ -126,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.AreEqual("Failure", rows[0].BuildStatus);
@@ -140,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.AreEqual("Unknown", rows[0].BuildStatus);
@@ -154,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.AreEqual("Exception", rows[0].BuildStatus);
@@ -175,7 +175,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.AreEqual(DateUtil.FormatDate(date), rows[0].LastBuildDate);
@@ -195,7 +195,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.AreEqual("Running", rows[0].Status);
@@ -212,7 +212,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.AreEqual("Stopped", rows[0].Status);
@@ -232,7 +232,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.AreEqual("Sleeping", rows[0].Activity);
@@ -248,7 +248,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.AreEqual("CheckingModifications", rows[0].Activity);
@@ -269,7 +269,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.AreEqual("my label", rows[0].LastBuildLabel);
@@ -290,7 +290,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.AreEqual("myLinkUrl", rows[0].Url);
@@ -313,7 +313,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.IsNotNull(rows[0].CurrentMessage);
@@ -333,7 +333,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.IsNotNull(rows[0].CurrentMessage);
@@ -356,7 +356,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.AreEqual("category", rows[0].Category);
@@ -374,7 +374,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.AreEqual("category1", rows[0].Category);
@@ -401,7 +401,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectB);
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
 
 			// Verify
 			Assert.AreEqual(2, rows.Length);
@@ -413,7 +413,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectB);
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, false);
+			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, false, "");
 
 			// Verify
 			Assert.AreEqual(2, rows.Length);
@@ -443,7 +443,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectA);
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.LastBuildDate, true);
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.LastBuildDate, true, "");
 
 			// Verify
 			Assert.AreEqual(2, rows.Length);
@@ -455,7 +455,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectA);
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.LastBuildDate, false);
+			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.LastBuildDate, false, "");
 
 			// Verify
 			Assert.AreEqual(2, rows.Length);
@@ -484,7 +484,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectB);
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.BuildStatus, true);
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.BuildStatus, true, "");
 
 			// Verify
 			Assert.AreEqual(2, rows.Length);
@@ -496,7 +496,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectB);
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.BuildStatus, false);
+			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.BuildStatus, false, "");
 
 			// Verify
 			Assert.AreEqual(2, rows.Length);
@@ -528,7 +528,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectB);
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.ServerName, true);
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.ServerName, true, "");
 
 			// Verify
 			Assert.AreEqual(2, rows.Length);
@@ -540,12 +540,60 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectB);
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.ServerName, false);
+			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.ServerName, false, "");
 
 			// Verify
 			Assert.AreEqual(2, rows.Length);
 			Assert.AreEqual("b", rows[0].Name);
 			Assert.AreEqual("a", rows[1].Name);
+
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldReturnProjectsSortedByCategoryIfCategoryColumnSpecifiedAsSortSeed()
+		{
+			// Setup
+			IProjectSpecifier projectA = new DefaultProjectSpecifier(serverSpecifier, "A");
+			IProjectSpecifier projectB = new DefaultProjectSpecifier(serverSpecifier, "B");
+			IProjectSpecifier projectC = new DefaultProjectSpecifier(serverSpecifier, "C");
+
+			ProjectStatus projectStatusA = new ProjectStatus("A", "CategoryX", ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today, "");
+			ProjectStatus projectStatusB = new ProjectStatus("B", "CategoryY", ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today, "");
+			ProjectStatus projectStatusC = new ProjectStatus("C", "CategoryX", ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today, "");
+
+			ProjectStatusOnServer[] status = new ProjectStatusOnServer[]
+				{
+					new ProjectStatusOnServer(projectStatusA, serverSpecifier),
+					new ProjectStatusOnServer(projectStatusB, serverSpecifier),
+					new ProjectStatusOnServer(projectStatusC, serverSpecifier)
+				};
+			SetupProjectLinkExpectation(projectA);
+			SetupProjectLinkExpectation(projectB);
+			SetupProjectLinkExpectation(projectC);
+
+			// Execute
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(status, "myAction", ProjectGridSortColumn.Category, true, "");
+
+			// Verify
+			Assert.AreEqual(3, rows.Length);
+			Assert.AreEqual("C", rows[0].Name);
+			Assert.AreEqual("A", rows[1].Name);
+			Assert.AreEqual("B", rows[2].Name);
+
+			// Setup
+			SetupProjectLinkExpectation(projectA);
+			SetupProjectLinkExpectation(projectB);
+			SetupProjectLinkExpectation(projectC);
+
+			// Execute
+			rows = projectGrid.GenerateProjectGridRows(status, "myAction", ProjectGridSortColumn.Category, false, "");
+
+			// Verify
+			Assert.AreEqual(3, rows.Length);
+			Assert.AreEqual("B", rows[0].Name);
+			Assert.AreEqual("C", rows[1].Name);
+			Assert.AreEqual("A", rows[2].Name);
 
 			VerifyAll();
 		}

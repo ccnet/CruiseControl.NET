@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using NMock.Constraints;
 
@@ -6,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
 	public class HashtableConstraint : IConstraint
 	{
 		private readonly Hashtable expected;
-		string message = "";
+		private string message = "";
 
 		public HashtableConstraint(Hashtable expected)
 		{
@@ -15,38 +16,52 @@ namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
 
 		public bool Eval(object val)
 		{
-			if (! (val is Hashtable))
+			if (!(val is Hashtable))
 			{
 				message = "Expected Hashtable but was " + val.GetType().FullName;
 				return false;
 			}
 
-			Hashtable other = val as Hashtable;
-			if (expected.Keys.Count != other.Keys.Count)
+			Hashtable obtained = val as Hashtable;
+
+			if (expected.Keys.Count != obtained.Keys.Count)
 			{
-				message = string.Format("Expected {0} keys but found {1}", expected.Keys.Count, other.Keys.Count);
+				message = string.Format("Expected {0} keys but found {1}", expected.Keys.Count, obtained.Keys.Count);
 				return false;
 			}
 
 			foreach (object expectedKey in expected.Keys)
 			{
-				if (! other.ContainsKey(expectedKey))
+				if (!obtained.ContainsKey(expectedKey))
 				{
-					message = "Expected to have key " + expectedKey.ToString();
+					message = "Expected to contain key " + expectedKey;
 					return false;
 				}
-				object expectedValue = expected[expectedKey];
-				if (expectedValue is IConstraint)
+
+				if (expected[expectedKey] is IConstraint)
 				{
-					return ((IConstraint)expectedValue).Eval(other[expectedKey]);
+					IConstraint ic = (IConstraint) expected[expectedKey];
+					bool constraint = ic.Eval(obtained[expectedKey]);
+					message = ic.Message;
+					return constraint;
 				}
-				if (! expectedValue.Equals(other[expectedKey]))
+
+				if (expected[expectedKey] is Array)
 				{
-					message = string.Format("Expected {0} to be {1} but was {2}", expectedKey.ToString(), expectedValue.ToString(), other[expectedKey].ToString());
+					ArrayConstraint ac = new ArrayConstraint((object[]) expected[expectedKey]);
+					bool constraint = ac.Eval(obtained[expectedKey]);
+					message = ac.Message;
+					return constraint;
+				}
+
+				if (!expected[expectedKey].Equals(obtained[expectedKey]))
+				{
+					message =
+						string.Format("Expected {0} to be {1} but was {2}", expectedKey, expected[expectedKey], obtained[expectedKey]);
 					return false;
 				}
 			}
-				
+
 			return true;
 		}
 

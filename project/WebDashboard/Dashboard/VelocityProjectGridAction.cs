@@ -45,6 +45,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			velocityContext["wholeFarm"] = serverSpecifier == null ?  true : false;
 
+			string category = request.GetText("Category");
+			velocityContext["showCategoryColumn"] = string.IsNullOrEmpty(category) ? true : false;
+
 			ProjectGridSortColumn sortColumn = GetSortColumn(request);
 			bool sortReverse = SortAscending(request);
 
@@ -52,8 +55,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			velocityContext["buildStatusSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.BuildStatus, sortColumn, sortReverse);
 			velocityContext["lastBuildDateSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.LastBuildDate, sortColumn, sortReverse);
 			velocityContext["serverNameSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.ServerName, sortColumn, sortReverse);
+			velocityContext["projectCategorySortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.Category, sortColumn, sortReverse);
 			velocityContext["projectGrid"] = projectGrid.GenerateProjectGridRows(
-				projectStatusListAndExceptions.StatusAndServerList, actionName, sortColumn, sortReverse);
+				projectStatusListAndExceptions.StatusAndServerList, actionName, sortColumn, sortReverse, category);
 			velocityContext["exceptions"] = projectStatusListAndExceptions.Exceptions;
 
 			return viewGenerator.GenerateView(@"ProjectGrid.vm", velocityContext);

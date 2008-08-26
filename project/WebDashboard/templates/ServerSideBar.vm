@@ -2,4 +2,11 @@
 	#foreach ($link in $links)
 	<tr><td><a href="$link.Url" class="$link.LinkClass">$link.Text</a></td></tr>
 	#end
+	#if ($showCategories)
+		<tr><td>&nbsp;</td></tr>
+		<tr><td><b>Categories</b> (<a href="$serverlink.Url">All</a>)</td></tr>
+		#foreach ($categorylink in $categorylinks)
+			<tr><td><a href="$categorylink.Url">$categorylink.Text</a></td></tr>
+		#end
+	#end
 </table>
