@@ -42,5 +42,60 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			AssertContains(" bar.dll ", argString);
 			AssertContains(" car.dll", argString);
 		}
+
+        [Test]
+        public void ShouldSpecifyCategoriesIfTheRelativePropertiesAreSet()
+        {
+            NUnitArgument nunitArgument = new NUnitArgument(new string[] { "foo.dll" }, "testfile.xml");
+            nunitArgument.ExcludedCategories = new string[] { "ExcludedCategory1", "ExcludedCategory2" };
+            nunitArgument.IncludedCategories = new string[] { "IncludedCategory1", "IncludedCategory2" };
+            string argString = nunitArgument.ToString();
+            AssertContains(@"/exclude=ExcludedCategory1,ExcludedCategory2", argString);
+            AssertContains(@"/include=IncludedCategory1,IncludedCategory2", argString);
+        }
+
+        [Test]
+        public void ShouldNotSpecifyCategoriesIfTheRelativePropertiesAreSetToNull()
+        {
+            NUnitArgument nunitArgument = new NUnitArgument(new string[] { "foo.dll" }, "testfile.xml");
+            nunitArgument.ExcludedCategories = null;
+            nunitArgument.IncludedCategories = null;
+            string argString = nunitArgument.ToString();
+            AssertNotContains(@"/exclude", argString);
+            AssertNotContains(@"/include", argString);
+        }
+
+        [Test]
+        public void ShouldNotSpecifyCategoriesIfTheRelativePropertiesAreSetToAnEmptyArray()
+        {
+            NUnitArgument nunitArgument = new NUnitArgument(new string[] { "foo.dll" }, "testfile.xml");
+            nunitArgument.ExcludedCategories = new string[0];
+            nunitArgument.IncludedCategories = new string[0];
+            string argString = nunitArgument.ToString();
+            AssertNotContains(@"/exclude", argString);
+            AssertNotContains(@"/include", argString);
+        }
+
+        [Test]
+        public void ShouldNotSpecifyCategoriesWhoseNameIsEmptyStringOrWhiteSpace()
+        {
+            NUnitArgument nunitArgument = new NUnitArgument(new string[] { "foo.dll" }, "testfile.xml");
+            nunitArgument.ExcludedCategories = new string[] { "ExcludedCategory1", " ", "ExcludedCategory2" };
+            nunitArgument.IncludedCategories = new string[] { "IncludedCategory1", "", "IncludedCategory2" };
+            string argString = nunitArgument.ToString();
+            AssertContains(@"/exclude=ExcludedCategory1,ExcludedCategory2", argString);
+            AssertContains(@"/include=IncludedCategory1,IncludedCategory2", argString);
+        }
+
+        [Test]
+        public void ShouldDoubleQuoteCategoriesWhoseNameContainsWhiteSpace()
+        {
+            NUnitArgument nunitArgument = new NUnitArgument(new string[] { "foo.dll" }, "testfile.xml");
+            nunitArgument.ExcludedCategories = new string[] { "Excluded Category1" };
+            nunitArgument.IncludedCategories = new string[] { "Included Category1" };
+            string argString = nunitArgument.ToString();
+            AssertContains(@"/exclude=""Excluded Category1""", argString);
+            AssertContains(@"/include=""Included Category1""", argString);
+        }
 	}
 }

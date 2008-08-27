@@ -46,6 +46,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			AssertEqualArrays(new string[] {"foo.dll", "bar.dll"}, task.Assemblies);
 		}
 
+        [Test]
+        public void LoadWithExcludedCategories()
+        {
+            string xml = @"<nunit>
+							 <path>d:\temp\nunit-console.exe</path>
+				             <assemblies>
+			                     <assembly>foo.dll</assembly>
+								 <assembly>bar.dll</assembly>
+							</assemblies>
+                            <excludedCategories>
+				                <excludedCategory>Category1</excludedCategory>
+				                <excludedCategory>Category 2</excludedCategory>				
+				                <excludedCategory> </excludedCategory>				
+			                </excludedCategories>
+						 </nunit>";
+
+            task = NetReflector.Read(xml) as NUnitTask;
+            Assert.AreEqual(3, task.ExcludedCategories.Length);
+        }
+
 		[Test]
 		public void HandleNUnitTaskFailure()
 		{

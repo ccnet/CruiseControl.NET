@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -11,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public const string DefaultPath = @"C:\Program Files\NUnit 2.2\bin\nunit-console.exe";
 		public const int DefaultTimeout = 600;
 		private const string DefaultOutputFile = "nunit-results.xml";
-		private ProcessExecutor processExecutor;
+		private readonly ProcessExecutor processExecutor;
 
 		public NUnitTask() : this(new ProcessExecutor())
 		{}
@@ -33,6 +32,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("timeout", Required=false)]
 		public int Timeout = DefaultTimeout;
 
+        [ReflectorArray("excludedCategories", Required = false)]
+        public string[] ExcludedCategories = new string[0];
+
+        [ReflectorArray("includedCategories", Required = false)]
+        public string[] IncludedCategories = new string[0];
+
 		public virtual void Run(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask("Executing NUnit"); 
@@ -53,7 +58,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private ProcessInfo NewProcessInfo(string outputFile, IIntegrationResult result)
 		{
-			string args = new NUnitArgument(Assemblies, outputFile).ToString();
+            NUnitArgument nunitArgument = new NUnitArgument(Assemblies, outputFile);
+            nunitArgument.ExcludedCategories = ExcludedCategories;
+            nunitArgument.IncludedCategories = IncludedCategories;
+            string args = nunitArgument.ToString();
 			Log.Debug(string.Format("Running unit tests: {0} {1}", NUnitPath, args));
 	
 			ProcessInfo info = new ProcessInfo(NUnitPath, args, result.WorkingDirectory);
