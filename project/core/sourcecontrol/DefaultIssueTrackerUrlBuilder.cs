@@ -4,7 +4,7 @@ using System;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
     [ReflectorType("defaultIssueTracker")]
-    class DefaultIssueTrackerUrlBuilder : IModificationUrlBuilder
+    public class DefaultIssueTrackerUrlBuilder : IModificationUrlBuilder
     {
         private string _url;
 
