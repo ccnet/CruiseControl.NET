@@ -42,6 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
             target.Activity = ProjectActivity.CheckingModifications;
+            to.BuildProgressInformation.SignalStartRunTask("Getting source ... ");
             return quietPeriod.GetModifications(target.SourceControl, from, to);
         }
 
