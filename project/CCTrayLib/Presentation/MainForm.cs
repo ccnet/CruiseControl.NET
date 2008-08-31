@@ -97,6 +97,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             pnlViewQueues.Visible = isQueueViewPanelVisible;
             UpdateViewQueuesButtonLabel();
             splitterQueueView.SplitPosition = (int)e.Key.GetValue("QueueViewSplitterPosition", 80);
+            lvProjects.View = (View)Enum.Parse(typeof(View), (string)e.Key.GetValue("ProjectViewMode", View.Details.ToString()));
         }
 
         private void OnSaveState(object sender, WindowStateEventArgs e)
@@ -110,6 +111,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             e.Key.SetValue("LastBuildTimeColumnWidth", colLastBuildTime.Width);
             e.Key.SetValue("QueueViewPanelVisible", queueTreeView.Visible);
             e.Key.SetValue("QueueViewSplitterPosition", splitterQueueView.SplitPosition);
+            e.Key.SetValue("ProjectViewMode", lvProjects.View.ToString());
         }
 
         private void CreateController()
