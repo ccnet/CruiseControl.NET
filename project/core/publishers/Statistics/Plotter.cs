@@ -8,12 +8,29 @@ using PlotSurface2D = NPlot.Bitmap.PlotSurface2D;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
-	public class Plotter : IPlotter
+    /// A 2-dimensional surface plotter.
+    public class Plotter : IPlotter
 	{
+        /// <summary>
+        /// The directory where the file will be created.
+        /// </summary>
 		private string savePath;
+        /// <summary>
+        /// The disk file extension (should make sense for <see cref="imageFormat"/>.
+        /// </summary>
 	    private readonly string fileExtension;
+        /// <summary>
+        /// The type of image to generate.
+        /// </summary>
 	    private ImageFormat imageFormat;
 
+        /// <summary>
+        /// Create a 2-dimensional surface plotter with the specified disk location and image format.
+        /// </summary>
+        /// <param name="savePath">The directory where the file will be created.</param>
+        /// <param name="fileExtension">The disk file extension (should make sense
+        /// for <paramref name="imageFormat"/>.</param>
+        /// <param name="imageFormat">The type of image to generate.</param>
 	    public Plotter(string savePath, string fileExtension, ImageFormat imageFormat)
 		{
 			this.savePath = savePath;
@@ -21,18 +38,40 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 	        this.imageFormat = imageFormat;
 		}
 
-		public void DrawGraph(IList ordinateData, IList abscissaData, string statisticName)
+        /// <summary>
+        /// Plot a set of statistic data and save it to the configured disk file.
+        /// </summary>
+        /// <param name="ordinateData">The Y-axis data values.</param>
+        /// <param name="abscissaData">The X-axis data values.</param>
+        /// <param name="statisticName">The name of the statistic to plot.</param>
+        /// <remarks>
+        /// The disk file name will be
+        /// <i><see cref="savePath"/></i>.<i><paramref name="statisticName"/></i>.<i><see cref="fileExtension"/></i>. 
+        /// </remarks>
+        public void DrawGraph(IList ordinateData, IList abscissaData, string statisticName)
 		{
 			Bitmap bitmap = Plot(ordinateData, abscissaData);
 			bitmap.Save(Path.Combine(savePath, string.Format("{0}.{1}", statisticName, fileExtension)));
 		}
 
-		public void WriteToStream(IList ordinateData, IList abscissaData, Stream stream)
+		/// <summary>
+        /// Plot a set of statistic data and write the image to a stream.
+		/// </summary>
+        /// <param name="ordinateData">The Y-axis data values.</param>
+        /// <param name="abscissaData">The X-axis data values.</param>
+        /// <param name="stream">The stream to receive the resulting image.</param>
+        public void WriteToStream(IList ordinateData, IList abscissaData, Stream stream)
 		{
 			Bitmap bitmap = Plot(ordinateData, abscissaData);
 			bitmap.Save(stream, imageFormat);
 		}
 
+        /// <summary>
+        /// Create a 2-dimensional surface plot of the specified statistic data.
+        /// </summary>
+        /// <param name="ordinateData">The Y-axis data values.</param>
+        /// <param name="abscissaData">The X-axis data values.</param>
+        /// <returns>The plot image bitmap.</returns>
 		private static Bitmap Plot(IList ordinateData, IList abscissaData)
 		{
 

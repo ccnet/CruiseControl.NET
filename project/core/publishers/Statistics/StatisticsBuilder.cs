@@ -7,8 +7,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
     public class StatisticsBuilder
     {
+        /// <summary>
+        /// The statistics this builder works with.
+        /// </summary>
         private readonly List<Statistic> logStatistics = new List<Statistic>();
 
+        /// <summary>
+        /// Create a StatisticsBuilder with the default set of statistics, all included.
+        /// </summary>
         public StatisticsBuilder()
         {
             Add(new FirstMatch("StartTime", "/cruisecontrol/build/@date"));
@@ -28,11 +34,21 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 
         }
 
+        /// <summary>
+        /// Extract all the statistics from the specified build results.
+        /// </summary>
+        /// <param name="result">The results of the build.</param>
+        /// <returns>The set of statistic values.</returns>
         internal StatisticsResults ProcessBuildResults(IIntegrationResult result)
         {
             return ProcessBuildResults(ToXml(result));
         }
 
+        /// <summary>
+        /// Convert the build results into XML.
+        /// </summary>
+        /// <param name="result">The build results.</param>
+        /// <returns>The XML results.</returns>
         private static string ToXml(IIntegrationResult result)
         {
             StringWriter xmlResultString = new StringWriter();
@@ -41,6 +57,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             return xmlResultString.ToString();
         }
 
+        /// <summary>
+        /// Extract all the statistics from the specified XML build results.
+        /// </summary>
+        /// <param name="xmlString"></param>
+        /// <returns></returns>
         internal StatisticsResults ProcessBuildResults(string xmlString)
         {
             XmlDocument doc = new XmlDocument();
@@ -48,6 +69,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             return ProcessLog(doc);
         }
 
+        /// <summary>
+        /// Add a statistic to the build if its Include property is true.
+        /// </summary>
+        /// <param name="statistic">The name of the statistic.</param>
+        /// <remarks>
+        /// If the statistic's <see cref="Statistic.Include"/> property
+        /// is false, this method may actually remove it from the list!
+        /// </remarks>
         internal void Add(Statistic statistic)
         {
             if (!logStatistics.Contains(statistic))
@@ -65,6 +94,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             }
         }
 
+        /// <summary>
+        /// Extract all the statistics from the specified XML build results document.
+        /// </summary>
+        /// <param name="doc">The build results.</param>
+        /// <returns>The set of statistics.</returns>
         private StatisticsResults ProcessLog(IXPathNavigable doc)
         {
             XPathNavigator nav = doc.CreateNavigator();
@@ -76,6 +110,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             return statisticResults;
         }
 
+        /// <summary>
+        /// The statistics this builder works with.
+        /// </summary>
         public List<Statistic> Statistics
         {
             get { return logStatistics; }
