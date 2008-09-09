@@ -239,7 +239,7 @@
     <!-- Message Row -->
 
     <xsl:variable name="messageId" select="generate-id()"/>
-    <xsl:variable name="rulename" select="TypeName"/>
+    <xsl:variable name="rulename" select="@TypeName"/>
 
         <xsl:apply-templates select="Issue" >
                 <xsl:with-param name="messageId"><xsl:value-of select="$messageId"/></xsl:with-param>
@@ -254,8 +254,10 @@
 
                 <!--- Rule Details  -->
                 <table width="100%" class="RuleBlock">
-                                        <xsl:apply-templates select="Notes" mode="notes"/>
-                    <xsl:apply-templates select="/FxCopReport/Rules/Rule[@TypeName=$rulename]" mode="ruledetails" />
+                    <tbody>
+                        <xsl:apply-templates select="Notes" mode="notes"/>
+                        <xsl:apply-templates select="//FxCopReport/Rules/Rule[@TypeName=$rulename]" mode="ruledetails" />
+                    </tbody>
                 </table>
             </div>
         </td>        
@@ -323,7 +325,7 @@
 <xsl:template match="Note" mode="notes">
     <xsl:param name="username"></xsl:param>
     <xsl:variable name="id" select="@Id"/>
-    <xsl:apply-templates select="/FxCopReport/Notes/User[@Name=$username]/Note[@Id=$id]" mode="notesPointer"/>
+    <xsl:apply-templates select="//FxCopReport/Notes/User[@Name=$username]/Note[@Id=$id]" mode="notesPointer"/>
 </xsl:template>
 
 
@@ -368,11 +370,11 @@
     </tr>    
     <tr>
         <td class="PropertyName">Category:</td>
-        <td class="PropertyContent"><xsl:value-of select="Category" /></td>
+        <td class="PropertyContent"><xsl:value-of select="@Category" /></td>
     </tr>    
     <tr>
         <td class="PropertyName">Check Id:</td>
-        <td class="PropertyContent"><xsl:value-of select="CheckId" /></td>
+        <td class="PropertyContent"><xsl:value-of select="@CheckId" /></td>
     </tr>    
     <xsl:apply-templates select="Description" mode="ruledetails" />
     <xsl:apply-templates select="File" mode="ruledetails" />
