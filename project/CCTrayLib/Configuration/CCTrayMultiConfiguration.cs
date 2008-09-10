@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			return retVal;
 		}
 
-        private IProjectStatusRetriever GetServerMonitorForProject(CCTrayProject project, IEnumerable<ISingleServerMonitor> serverMonitors)
+        private static IProjectStatusRetriever GetServerMonitorForProject(CCTrayProject project, IEnumerable<ISingleServerMonitor> serverMonitors)
 	    {
             foreach (ISingleServerMonitor serverMonitor in serverMonitors)
             {
@@ -106,6 +106,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			get { return persistentConfiguration.BuildTransitionNotification.ShowBalloon; }
 			set { persistentConfiguration.BuildTransitionNotification.ShowBalloon = value; }
 		}
+
+        public NotifyInfoFlags MinimumNotificationLevel 
+        {
+            get { return persistentConfiguration.BuildTransitionNotification.MinimumNotificationLevel; }
+            set { persistentConfiguration.BuildTransitionNotification.MinimumNotificationLevel = value; }
+        }
 
         public bool AlwaysOnTop
         { 

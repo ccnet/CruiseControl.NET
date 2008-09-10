@@ -12,16 +12,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 	public class MainFormController
 	{
 		private IProjectMonitor selectedProject;
-		private ICCTrayMultiConfiguration configuration;
+		private readonly ICCTrayMultiConfiguration configuration;
 		private Poller serverPoller;
 		private Poller projectPoller;
-		private IServerMonitor aggregatedServerMonitor;
-		private IProjectMonitor aggregatedProjectMonitor;
-		private ISingleServerMonitor[] serverMonitors;
-		private IProjectMonitor[] projectMonitors;
-		private ProjectStateIconAdaptor projectStateIconAdaptor;
-		private IProjectStateIconProvider projectStateIconProvider;
-		private IIntegrationQueueIconProvider integrationQueueIconProvider;
+		private readonly IServerMonitor aggregatedServerMonitor;
+		private readonly IProjectMonitor aggregatedProjectMonitor;
+		private readonly ISingleServerMonitor[] serverMonitors;
+		private readonly IProjectMonitor[] projectMonitors;
+		private readonly ProjectStateIconAdaptor projectStateIconAdaptor;
+		private readonly IProjectStateIconProvider projectStateIconProvider;
+		private readonly IIntegrationQueueIconProvider integrationQueueIconProvider;
 		private BuildTransitionSoundPlayer soundPlayer;
         private X10Controller x10Controller;
         private SpeakingProjectMonitor speakerForTheDead;
@@ -73,8 +73,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				return projectMonitors;
 			}
 		}
-		
-
 
 		public bool IsProjectSelected
 		{
@@ -103,7 +101,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				}
 			}
 		}
-		
 		
 		public bool IsProjectRunning
 		{
@@ -142,14 +139,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			{
 				DisplayWebPageForProject(SelectedProject.Detail);
 			}
-		}    
-
-		public void BindToTrayIcon(TrayIcon trayIcon)
-		{
-			trayIcon.IconProvider = ProjectStateIconAdaptor;
-			trayIcon.BalloonMessageProvider = new ConfigurableBalloonMessageProvider(configuration.BalloonMessages);
-			trayIcon.BindToProjectMonitor(aggregatedProjectMonitor, configuration.ShouldShowBalloonOnBuildTransition);
 		}
+
+        public void BindToTrayIcon(TrayIcon trayIcon)
+        {
+            trayIcon.IconProvider = ProjectStateIconAdaptor;
+            trayIcon.BalloonMessageProvider = new ConfigurableBalloonMessageProvider(configuration.BalloonMessages);
+            trayIcon.BindToProjectMonitor(aggregatedProjectMonitor,
+                configuration.ShouldShowBalloonOnBuildTransition,
+                configuration.MinimumNotificationLevel);
+        }
 
 		public void BindToListView(ListView listView)
 		{
@@ -261,7 +260,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			return false;
 		}
 
-		private void DisplayWebPageForProject(ISingleProjectDetail project)
+		private static void DisplayWebPageForProject(ISingleProjectDetail project)
 		{
 			if (project.IsConnected)
 			{

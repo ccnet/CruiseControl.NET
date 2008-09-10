@@ -16,6 +16,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		AudioFiles Audio { get; }
 		TrayIconDoubleClickAction TrayIconDoubleClickAction { get; set; }
 		BalloonMessages BalloonMessages { get; }
+        NotifyInfoFlags MinimumNotificationLevel { get; set; }
 		Icons Icons { get; }
 		X10Configuration X10 { get; }
 		SpeechConfiguration Speech { get; }

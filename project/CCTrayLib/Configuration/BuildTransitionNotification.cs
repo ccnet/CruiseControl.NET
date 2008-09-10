@@ -12,5 +12,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
 		[XmlElement(ElementName = "BalloonMessages")]
 		public BalloonMessages BalloonMessages = new BalloonMessages();
+
+        [XmlAttribute(AttributeName = "minimumNotificationLevel")]
+        public NotifyInfoFlags MinimumNotificationLevel = NotifyInfoFlags.Info;
 	}
 }

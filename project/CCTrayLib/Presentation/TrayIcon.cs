@@ -14,13 +14,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private IIconProvider iconProvider;
 		private IProjectMonitor monitor;
 		private IBalloonMessageProvider balloonMessageProvider;
+        private NotifyInfoFlags minimumNotificationLevel;
 		
 		public IIconProvider IconProvider
 		{
 			set
 			{
 				iconProvider = value;
-				iconProvider.IconChanged += new EventHandler(IconProvider_IconChanged);
+				iconProvider.IconChanged += IconProvider_IconChanged;
 				IconProvider_IconChanged(null, null);
 			}
 		}
@@ -30,15 +31,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			set { balloonMessageProvider = value; }
 		}
 
-		public void BindToProjectMonitor(IProjectMonitor monitor, bool showBalloonMessages)
+        public void BindToProjectMonitor(IProjectMonitor monitor, bool showBalloonMessages, NotifyInfoFlags minimumNotificationLevel)
 		{
 			this.monitor = monitor;
-			monitor.Polled += new MonitorPolledEventHandler(Monitor_Polled);
+			monitor.Polled += Monitor_Polled;
+            this.minimumNotificationLevel = minimumNotificationLevel;
 
 			if (showBalloonMessages)
 			{
-				monitor.BuildOccurred += new MonitorBuildOccurredEventHandler(Monitor_BuildOccurred);
-				monitor.MessageReceived += new MessageEventHandler(Monitor_MessageReceived);
+				monitor.BuildOccurred += Monitor_BuildOccurred;
+				monitor.MessageReceived += Monitor_MessageReceived;
 			}
 		}
 
@@ -52,15 +54,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			Icon = iconProvider.Icon;
 		}
 
-		private void Monitor_BuildOccurred(object sender, MonitorBuildOccurredEventArgs e)
-		{
-			string projectName = e.ProjectMonitor.Detail.ProjectName;
+        private void Monitor_BuildOccurred(object sender, MonitorBuildOccurredEventArgs e)
+        {
+            if (e.BuildTransition.ErrorLevel.NotifyInfo >= minimumNotificationLevel)
+            {
+                string projectName = e.ProjectMonitor.Detail.ProjectName;
 
-			CaptionAndMessage captionAndMessage = balloonMessageProvider.GetCaptionAndMessageForBuildTransition(e.BuildTransition);
-			string caption = string.Format("{0}: {1}", projectName, captionAndMessage.Caption);
+                CaptionAndMessage captionAndMessage = balloonMessageProvider.GetCaptionAndMessageForBuildTransition(e.BuildTransition);
+                string caption = string.Format("{0}: {1}",
+                                               projectName, captionAndMessage.Caption);
 
-			ShowBalloon(caption, captionAndMessage.Message, e.BuildTransition.ErrorLevel.NotifyInfo, 5000);
-		}
+                ShowBalloon(caption, captionAndMessage.Message,
+                            e.BuildTransition.ErrorLevel.NotifyInfo, 5000);
+            }
+        }
 
 		private void Monitor_Polled(object sender, MonitorPolledEventArgs args)
 		{
