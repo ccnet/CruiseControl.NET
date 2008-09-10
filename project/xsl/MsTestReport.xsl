@@ -13,10 +13,16 @@ Author: Roman V. Gavrilov (clavrg@hotmail.com)
 						4 - Inconclusive
             10 - Passed
         -->
-        <xsl:variable name="pass_count" select="count(/cruisecontrol/build/Tests/UnitTestResult[outcome=10])"/>
-        <xsl:variable name="inconclusive_count" select="count(/cruisecontrol/build/Tests/UnitTestResult[outcome=4])"/>
-        <xsl:variable name="failed_count" select="count(/cruisecontrol/build/Tests/UnitTestResult[outcome=1])"/>
-        <xsl:variable name="total_count" select="$failed_count + $pass_count + $inconclusive_count"/>
+        <xsl:variable name="pass_toplevel" select="count(/cruisecontrol/build/Tests/UnitTestResult[outcome=10])"/>
+    	<xsl:variable name="pass_multiples" select="count(/cruisecontrol/build/Tests/UnitTestResult/innerResults/element[outcome=10])"/>
+    	<xsl:variable name="pass_count" select="$pass_toplevel + $pass_multiples"/>
+    	<xsl:variable name="inconclusive_toplevel" select="count(/cruisecontrol/build/Tests/UnitTestResult[outcome=4])"/>
+    	<xsl:variable name="inconclusive_multiples" select="count(/cruisecontrol/build/Tests/UnitTestResult/innerResults/element[outcome=4])"/>
+    	<xsl:variable name="inconclusive_count" select="$inconclusive_toplevel + $inconclusive_multiples"/>
+    	<xsl:variable name="failed_toplevel" select="count(/cruisecontrol/build/Tests/UnitTestResult[outcome=1])"/>
+    	<xsl:variable name="failed_multiples" select="count(/cruisecontrol/build/Tests/UnitTestResult/innerResults/element[outcome=1])"/>
+    	<xsl:variable name="failed_count" select="$failed_toplevel + $failed_multiples"/>
+		<xsl:variable name="total_count" select="$failed_count + $pass_count + $inconclusive_count"/>
 
         <table class="section-table" width="100%">
             <tr>
@@ -121,7 +127,7 @@ Author: Roman V. Gavrilov (clavrg@hotmail.com)
                                     <xsl:value-of select="$UnitTestResult/errorInfo/message"/>
                                 </td>
                                  <td>
-                                    <xsl:value-of select="concat(substring-before($UnitTestResult/duration,'.'),'.',substring(substring-after($UnitTestResult/duration,'.'),1,2))"/>
+                                    <xsl:value-of select="concat(substring-before($UnitTestResult/duration,'.'),'.',substring(substring-after($UnitTestResult/duration,'.'),1,7))"/>
                                 </td>
                            </tr>
                         </xsl:for-each>
