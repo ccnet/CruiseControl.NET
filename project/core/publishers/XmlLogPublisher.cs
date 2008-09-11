@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private string GetFilename(IIntegrationResult result)
         {
-			return new LogFile(result).Filename;
+            return Util.StringUtil.RemoveInvalidCharactersFromFileName(new LogFile(result).Filename);
         }
     }
 }
