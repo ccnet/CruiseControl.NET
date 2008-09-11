@@ -548,6 +548,7 @@
     <Compile Include="Plugins\ServerReport\ServerReportServerPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\Statistics\BuildGraph.cs" />
     <Compile Include="Plugins\Statistics\ProjectStatisticsPlugin.cs">
       <SubType>Code</SubType>
     </Compile>

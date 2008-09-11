@@ -11,178 +11,208 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics;
+using System;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
-	[ReflectorType("projectReportProjectPlugin")]
-	public class ProjectReportProjectPlugin : ICruiseAction, IPlugin
-	{
-		private readonly IFarmService farmService;
-		private readonly IVelocityViewGenerator viewGenerator;
-		private readonly ILinkFactory linkFactory;
-		public static readonly string ACTION_NAME = "ViewProjectReport";
-		private IBuildPlugin[] pluginNames = null;
+    [ReflectorType("projectReportProjectPlugin")]
+    public class ProjectReportProjectPlugin : ICruiseAction, IPlugin
+    {
+        private readonly IFarmService farmService;
+        private readonly IVelocityViewGenerator viewGenerator;
+        private readonly ILinkFactory linkFactory;
+        public static readonly string ACTION_NAME = "ViewProjectReport";
+        private IBuildPlugin[] pluginNames = null;
+        
+        // retrieve at most this amount of builds                             
+        public static readonly Int32 AmountOfBuildsToRetrieve = 100;
 
-		[ReflectorArray("reportPlugins", Required=false)]
-		public IBuildPlugin[] DashPlugins
-		{
-			get { return pluginNames; }
-			set { pluginNames = value; }
-		}
 
-		public ProjectReportProjectPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator, ILinkFactory linkFactory)
-		{
-			this.farmService = farmService;
-			this.viewGenerator = viewGenerator;
-			this.linkFactory = linkFactory;
-		}
 
-		public IResponse Execute(ICruiseRequest cruiseRequest)
-		{
-			Hashtable velocityContext = new Hashtable();
-			IProjectSpecifier projectSpecifier = cruiseRequest.ProjectSpecifier;
 
-			IBuildSpecifier[] buildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 1);
-			if (buildSpecifiers.Length == 1)
-			{
-				velocityContext["mostRecentBuildUrl"] = linkFactory.CreateProjectLink(projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME).Url;
-			}
+        [ReflectorArray("reportPlugins", Required = false)]
+        public IBuildPlugin[] DashPlugins
+        {
+            get { return pluginNames; }
+            set { pluginNames = value; }
+        }
 
-			velocityContext["projectName"] = projectSpecifier.ProjectName;
-			velocityContext["externalLinks"] = farmService.GetExternalLinks(projectSpecifier);
-			velocityContext["noLogsAvailable"] = (buildSpecifiers.Length == 0);
+        public ProjectReportProjectPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator, ILinkFactory linkFactory)
+        {
+            this.farmService = farmService;
+            this.viewGenerator = viewGenerator;
+            this.linkFactory = linkFactory;
+        }
+
+        public IResponse Execute(ICruiseRequest cruiseRequest)
+        {
+            Hashtable velocityContext = new Hashtable();
+            IProjectSpecifier projectSpecifier = cruiseRequest.ProjectSpecifier;
+
+            IBuildSpecifier[] buildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 1);
+            if (buildSpecifiers.Length == 1)
+            {
+                velocityContext["mostRecentBuildUrl"] = linkFactory.CreateProjectLink(projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME).Url;
+            }
+
+            velocityContext["projectName"] = projectSpecifier.ProjectName;
+            velocityContext["externalLinks"] = farmService.GetExternalLinks(projectSpecifier);
+            velocityContext["noLogsAvailable"] = (buildSpecifiers.Length == 0);
 
 
             velocityContext["applicationPath"] = cruiseRequest.Request.ApplicationPath;
             velocityContext["rssDataPresent"] = farmService.GetRSSFeed(projectSpecifier).Length > 0;
-            
-            // I can not figure out why the lone below does not work :-(
+
+            // I (willemsruben) can not figure out why the line below does not work :-(
             // velocityContext["rss"] = linkFactory.CreateProjectLink(projectSpecifier, WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME).Url;
             //
             velocityContext["rss"] = RSSLinkBuilder.CreateRSSLink(linkFactory, projectSpecifier);
-            
-            
-			string subReportData = GetPluginSubReport(cruiseRequest, projectSpecifier, buildSpecifiers);
-			if (subReportData != null && subReportData != String.Empty)
-				velocityContext["pluginInfo"] = subReportData;
 
-			return viewGenerator.GenerateView(@"ProjectReport.vm", velocityContext);
-		}
 
-		public string LinkDescription
-		{
-			get { return "Project Report"; }
-		}
+            string subReportData = GetPluginSubReport(cruiseRequest, projectSpecifier, buildSpecifiers);
+            if (subReportData != null && subReportData != String.Empty)
+                velocityContext["pluginInfo"] = subReportData;
 
-		public INamedAction[] NamedActions
-		{
-			get { return new INamedAction[] {new ImmutableNamedAction(ACTION_NAME, this)}; }
-		}
 
-		private string GetPluginSubReport(ICruiseRequest cruiseRequest,
-		                                  IProjectSpecifier projectSpecifier, IBuildSpecifier[] buildSpecifiers)
-		{
-			if (buildSpecifiers.Length > 0 && pluginNames != null)
-			{
-				string outputResponse = String.Empty;
 
-				ModifiedCruiseRequest req = new ModifiedCruiseRequest(cruiseRequest.Request);
-				req.ReplaceBuildSpecifier(buildSpecifiers[0]);
+            BuildGraph GraphMaker;
+            // if the amount of builds exceed this, foresee extra column(s) for the days                         
+            //   adjusting the Y-axis of the graph                                                               
+            Int32 MaxBuildTreshhold = 15;
+            // Limits the X-axis to this amount of days                                                          
+            Int32 MaxAmountOfDaysToDisplay = 15;
+            // the amount of columns to foresee for 1 day in the graph                                           
+            Int32 DateMultiPlier;
 
-				foreach (IBuildPlugin buildPlugIn in pluginNames)
-				{
-					if (buildPlugIn != null && buildPlugIn.IsDisplayedForProject(projectSpecifier) &&
-					    buildPlugIn.NamedActions != null)
-					{
-						foreach (INamedAction namedAction in buildPlugIn.NamedActions)
-						{
-							IResponse resp = namedAction.Action.Execute(req);
+            GraphMaker = new BuildGraph(
+                farmService.GetMostRecentBuildSpecifiers(projectSpecifier, AmountOfBuildsToRetrieve),
+                this.linkFactory);
 
-							if (resp != null && resp is HtmlFragmentResponse)
-								outputResponse += ((HtmlFragmentResponse) resp).ResponseFragment;
-						}
-					}
-				}
-				return outputResponse;
-			}
-			return null;
-		}
+            velocityContext["graphDayInfo"] = GraphMaker.GetBuildHistory(MaxAmountOfDaysToDisplay);
+            velocityContext["highestAmountPerDay"] = GraphMaker.HighestAmountPerDay;
 
-		private class ModifiedCruiseRequest : ICruiseRequest
-		{
-			private readonly IRequest request;
+            DateMultiPlier = (GraphMaker.HighestAmountPerDay / MaxBuildTreshhold) + 1;
+            velocityContext["dateMultiPlier"] = DateMultiPlier;                                                  
 
-			private IServerSpecifier serverSpecifier = null;
-			private IProjectSpecifier projectSpecifier = null;
-			private IBuildSpecifier buildSpecifier = null;
 
-			public ModifiedCruiseRequest(IRequest request)
-			{
-				this.request = request;
-			}
+            return viewGenerator.GenerateView(@"ProjectReport.vm", velocityContext);
+        }
 
-			public string ServerName
-			{
-				get { return (serverSpecifier != null) ? serverSpecifier.ServerName : FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.ServerRESTSpecifier); }
-			}
+        public string LinkDescription
+        {
+            get { return "Project Report"; }
+        }
 
-			public string ProjectName
-			{
-				get { return (projectSpecifier != null) ? projectSpecifier.ProjectName : FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.ProjectRESTSpecifier); }
-			}
+        public INamedAction[] NamedActions
+        {
+            get { return new INamedAction[] { new ImmutableNamedAction(ACTION_NAME, this) }; }
+        }
 
-			public string BuildName
-			{
-				get { return (buildSpecifier != null) ? buildSpecifier.BuildName : FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.BuildRESTSpecifier); }
-			}
+        private string GetPluginSubReport(ICruiseRequest cruiseRequest,
+                                          IProjectSpecifier projectSpecifier, IBuildSpecifier[] buildSpecifiers)
+        {
+            if (buildSpecifiers.Length > 0 && pluginNames != null)
+            {
+                string outputResponse = String.Empty;
 
-			private string FindRESTSpecifiedResource(string specifier)
-			{
-				string[] subFolders = request.SubFolders;
+                ModifiedCruiseRequest req = new ModifiedCruiseRequest(cruiseRequest.Request);
+                req.ReplaceBuildSpecifier(buildSpecifiers[0]);
 
-				for (int i = 0; i < subFolders.Length; i += 2)
-				{
-					if (subFolders[i] == specifier)
-					{
-						if (i < subFolders.Length)
-						{
-							return HttpUtility.UrlDecode(subFolders[i + 1]);
-						}
-						else
-						{
-							throw new CruiseControlException(
-								string.Format("unexpected URL format - found {0} REST Specifier, but no following value", specifier));
-						}
-					}
-				}
+                foreach (IBuildPlugin buildPlugIn in pluginNames)
+                {
+                    if (buildPlugIn != null && buildPlugIn.IsDisplayedForProject(projectSpecifier) &&
+                        buildPlugIn.NamedActions != null)
+                    {
+                        foreach (INamedAction namedAction in buildPlugIn.NamedActions)
+                        {
+                            IResponse resp = namedAction.Action.Execute(req);
 
-				return "";
-			}
+                            if (resp != null && resp is HtmlFragmentResponse)
+                                outputResponse += ((HtmlFragmentResponse)resp).ResponseFragment;
+                        }
+                    }
+                }
+                return outputResponse;
+            }
+            return null;
+        }
 
-			public IServerSpecifier ServerSpecifier
-			{
-				get { return (serverSpecifier != null) ? serverSpecifier : new DefaultServerSpecifier(ServerName); }
-			}
+        private class ModifiedCruiseRequest : ICruiseRequest
+        {
+            private readonly IRequest request;
 
-			public IProjectSpecifier ProjectSpecifier
-			{
-				get { return (projectSpecifier != null) ? projectSpecifier : new DefaultProjectSpecifier(ServerSpecifier, ProjectName); }
-			}
+            private IServerSpecifier serverSpecifier = null;
+            private IProjectSpecifier projectSpecifier = null;
+            private IBuildSpecifier buildSpecifier = null;
 
-			public IBuildSpecifier BuildSpecifier
-			{
-				get { return (buildSpecifier != null) ? buildSpecifier : new DefaultBuildSpecifier(ProjectSpecifier, BuildName); }
-			}
+            public ModifiedCruiseRequest(IRequest request)
+            {
+                this.request = request;
+            }
 
-			public IRequest Request
-			{
-				get { return request; }
-			}
+            public string ServerName
+            {
+                get { return (serverSpecifier != null) ? serverSpecifier.ServerName : FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.ServerRESTSpecifier); }
+            }
 
-			public void ReplaceBuildSpecifier(IBuildSpecifier buildSpecifier)
-			{
-				this.buildSpecifier = buildSpecifier;
-			}
-		}
-	}
+            public string ProjectName
+            {
+                get { return (projectSpecifier != null) ? projectSpecifier.ProjectName : FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.ProjectRESTSpecifier); }
+            }
+
+            public string BuildName
+            {
+                get { return (buildSpecifier != null) ? buildSpecifier.BuildName : FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.BuildRESTSpecifier); }
+            }
+
+            private string FindRESTSpecifiedResource(string specifier)
+            {
+                string[] subFolders = request.SubFolders;
+
+                for (int i = 0; i < subFolders.Length; i += 2)
+                {
+                    if (subFolders[i] == specifier)
+                    {
+                        if (i < subFolders.Length)
+                        {
+                            return HttpUtility.UrlDecode(subFolders[i + 1]);
+                        }
+                        else
+                        {
+                            throw new CruiseControlException(
+                                string.Format("unexpected URL format - found {0} REST Specifier, but no following value", specifier));
+                        }
+                    }
+                }
+
+                return "";
+            }
+
+            public IServerSpecifier ServerSpecifier
+            {
+                get { return (serverSpecifier != null) ? serverSpecifier : new DefaultServerSpecifier(ServerName); }
+            }
+
+            public IProjectSpecifier ProjectSpecifier
+            {
+                get { return (projectSpecifier != null) ? projectSpecifier : new DefaultProjectSpecifier(ServerSpecifier, ProjectName); }
+            }
+
+            public IBuildSpecifier BuildSpecifier
+            {
+                get { return (buildSpecifier != null) ? buildSpecifier : new DefaultBuildSpecifier(ProjectSpecifier, BuildName); }
+            }
+
+            public IRequest Request
+            {
+                get { return request; }
+            }
+
+            public void ReplaceBuildSpecifier(IBuildSpecifier buildSpecifier)
+            {
+                this.buildSpecifier = buildSpecifier;
+            }
+        }
+    }
 }

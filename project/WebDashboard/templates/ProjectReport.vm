@@ -1,39 +1,91 @@
-<h2>Project Report for $projectName 
+<h2>
+  Project Report for $projectName
   #if ($rssDataPresent)
   <A HREF="$rss.url">
     <IMG SRC="$applicationPath/images/rss.gif" WIDTH="28" HEIGHT="16" BORDER="0" ALT="$rss.text">
-  </A>
+    </A>
   #end
 </h2>
 
 #if ($externalLinks.Length > 0)
 <table class="ExternalLinks">
-	<tr>
-		<th>External Links</th>
-	</tr>
-	#foreach ($externalLink in $externalLinks)
-	<tr bgcolor="Ivory">
-		<td align="Left">
-			<a href="$externalLink.Url">$externalLink.Name</a>
-		</td>
-	</tr>
-	#end
+  <tr>
+    <th>External Links</th>
+  </tr>
+  #foreach ($externalLink in $externalLinks)
+  <tr bgcolor="Ivory">
+    <td align="Left">
+      <a href="$externalLink.Url">$externalLink.Name</a>
+    </td>
+  </tr>
+  #end
 </table>
 #end
 
-<p>
-#if ($noLogsAvailable)
-There are currently no build logs available for this project - make sure your Build Server configuration is correct and that this Project's build is not throwing any exceptions
-#else
-	#if ($pluginInfo)
-	<h3>Most Recent Build Results</h3>
-	$pluginInfo
-	
-	Click <a href="$mostRecentBuildUrl">here</a> for the full build report.
-	#else
-	Click <a href="$mostRecentBuildUrl">here</a> for the most recent build report.
-	#end
+if ($highestAmountPerDay > 0)
+#set($highestViewPerDay= $highestAmountPerDay / $dateMultiPlier)
+<table border="0" align="center"  >
+  <tr>
+    <td>Build Overview</td>
+  </tr>
+</table>
+<table border="2" align="center"  >
+  <tr>
+    <td>
+      <table border="1" cellspacing="0" cellpadding="2" bgcolor="#99CCFF">
+        #foreach ($dayBuildCounter in [1..$highestViewPerDay])
+        <tr align="center">
+          <td></td>
+          #foreach ($currentDayInfo in $graphDayInfo)
+          #foreach ($multi in [1..$dateMultiPlier])
+          #set ($cellIndex =  (($highestViewPerDay - $dayBuildCounter) *  $dateMultiPlier) + $multi)
+          #if ( $cellIndex <= $currentDayInfo.AmountOfBuilds)
+          #set ($buildIndex =  $cellIndex - 1 )
+          #if ($currentDayInfo.Build($buildIndex).IsSuccesFull) #set($color = "#009900")
+          #else #set($color ="#FF9900")
+          #end
+          <TD bgcolor="$color">
+            <A HREF="$currentDayInfo.Build($buildIndex).LinkTobuild"                               
+						title="$currentDayInfo.Build($buildIndex).Description">$cellIndex</A>
+          </TD>
+          #else <td></td>
+          #end
+          #end
+          <td></td>
+          #end
+        </tr>
+        #end
+        <tr>
+          <td></td>
+        </tr>
+        <tr align="center">
+          <td></td>
+          #foreach ($currentDayInfo in $graphDayInfo)
+          <TD bgcolor="#3366FF" colspan="$dateMultiPlier">$currentDayInfo.BuildDateFormatted</TD>
+          <td></td>
+          #end
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
 #end
+
+
+
+<p>
+  #if ($noLogsAvailable)
+  There are currently no build logs available for this project - make sure your Build Server configuration is correct and that this Project's build is not throwing any exceptions
+  #else
+  #if ($pluginInfo)
+  <h3>Most Recent Build Results</h3>
+  $pluginInfo
+
+  Click <a href="$mostRecentBuildUrl">here</a> for the full build report.
+  #else
+  Click <a href="$mostRecentBuildUrl">here</a> for the most recent build report.
+  #end
+  #end
 </p>
 
 

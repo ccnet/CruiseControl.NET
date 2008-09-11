@@ -1010,6 +1010,7 @@
     <Compile Include="WebDashboard\Plugins\ForceBuild\ForceBuildXmlActionTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WebDashboard\Plugins\ProjectReport\BuildGraphTest.cs" />
     <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectReportProjectPluginTest.cs">
       <SubType>Code</SubType>
     </Compile>
