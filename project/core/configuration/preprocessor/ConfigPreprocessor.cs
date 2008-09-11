@@ -80,8 +80,13 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
                     // Get the _remoteStackTraceString of the Exception class
                     FieldInfo remoteStackTraceString = typeof(Exception).GetField("_remoteStackTraceString",
                     BindingFlags.Instance | BindingFlags.NonPublic );
-                    
-                    // Set the InnerException._remoteStackTraceString to the current InnerException.StackTrace
+
+					// TODO: Remove this workaround after Mono Bug 425512 is resolved (CCNET-1244)
+					if (remoteStackTraceString == null)
+						remoteStackTraceString = typeof(Exception).GetField("remote_stack_trace",
+							BindingFlags.Instance | BindingFlags.NonPublic);
+					
+					// Set the InnerException._remoteStackTraceString to the current InnerException.StackTrace
                     remoteStackTraceString.SetValue( ex.InnerException, 
                     ex.InnerException.StackTrace + Environment.NewLine );                    
                     // Throw the new exception
