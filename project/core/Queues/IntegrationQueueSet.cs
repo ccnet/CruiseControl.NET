@@ -1,4 +1,5 @@
 using System.Collections;
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Queues
@@ -21,13 +22,13 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			}
 		}
 
-		public void Add(string queueName)
+		public void Add(string queueName, IQueueConfiguration config)
 		{
 			lock (this)
 			{
 				if (!queueSet.ContainsKey(queueName))
 				{
-					queueSet.Add(queueName, new IntegrationQueue(queueName));
+					queueSet.Add(queueName, new IntegrationQueue(queueName, config));
 				}
 			}
 		}

@@ -34,6 +34,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			ValidateProject(configuration, "test");
 		}
 
+        [Test]
+        public void DeserialiseSingleProjectPlusQueueFromXml()
+        {
+            string projectXml = ConfigurationFixture.GenerateProjectXml("test");
+            string queueXml = "<queue name=\"test\" duplicates=\"ApplyForceBuildsReAdd\"/>";
+            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml+queueXml));
+            ValidateProject(configuration, "test");
+        }
+
+        [Test]
+        [ExpectedException(typeof(ConfigurationException), ExpectedMessage="\nUnknown configuration item found\n<garbage />")]
+        public void DeserialiseSingleProjectPlusUnknownFromXml()
+        {
+            string projectXml = ConfigurationFixture.GenerateProjectXml("test");
+            string queueXml = "<garbage/>";
+            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml));
+            ValidateProject(configuration, "test");
+        }
+
 		[Test]
 		public void DeserialiseTwoProjectsFromXml()
 		{
@@ -102,6 +121,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			if (invalidNodes.Count > 0) 
 				Assert.Fail("The xml contains nodes that are no longer used: {0}.", ((XmlNode)invalidNodes[0]).OuterXml);				
 		}
+        [ReflectorType("garbage")]
+        class Garbage
+        {
+        }
 
 		[ReflectorType("customtestproject")]
 		class CustomTestProject : ProjectBase, IProject

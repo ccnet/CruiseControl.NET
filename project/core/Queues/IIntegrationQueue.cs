@@ -1,4 +1,5 @@
 using System.Collections;
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Queues
@@ -10,6 +11,11 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	public interface IIntegrationQueue : IList
 	{
 		string Name { get; }
+
+        /// <summary>
+        /// The configuration settings for this queue.
+        /// </summary>
+        IQueueConfiguration Configuration { get; }
 
 		/// <summary>
 		/// Add a project integration request be added to the integration queue.

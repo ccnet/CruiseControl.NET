@@ -63,8 +63,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			mockProject = new DynamicMock(typeof(IProject));
 			mockProject.ExpectAndReturn("Name", "Project 3");
-			mockProject.ExpectAndReturn("QueueName", "Project 3");
-			mockProjectInstance = (IProject) mockProject.MockInstance;
+            mockProject.ExpectAndReturn("QueueName", "Project 3");
+            mockProject.ExpectAndReturn("QueueName", "Project 3");
+            mockProjectInstance = (IProject)mockProject.MockInstance;
 			mockProject.ExpectAndReturn("Name", "Project 3");
 			integratorMock3.ExpectAndReturn("Project", mockProjectInstance);
 

@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
@@ -20,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		[Test]
 		public void AddQueueNameCreatesNewQueue()
 		{
-			set.Add("q1");
+			set.Add("q1", new DefaultQueueConfiguration("q1"));
 			IIntegrationQueue q = set["q1"];
 			Assert.IsNotNull(q);
 		}
@@ -28,9 +29,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		[Test]
 		public void AddingSameQueueNameReturnsOriginalQueue()
 		{
-			set.Add("q1");
+            set.Add("q1", new DefaultQueueConfiguration("q1"));
 			IIntegrationQueue q = set["q1"];
-			set.Add("q1");
+            set.Add("q1", new DefaultQueueConfiguration("q1"));
 			Assert.AreSame(q, set["q1"]);
 		}
 
@@ -62,8 +63,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		public void SetUp()
 		{
 			integrationQueues = new IntegrationQueueSet();
-			integrationQueues.Add(TestQueueName);
-			integrationQueues.Add(TestQueueName2);
+            integrationQueues.Add(TestQueueName, new DefaultQueueConfiguration(TestQueueName));
+            integrationQueues.Add(TestQueueName2, new DefaultQueueConfiguration(TestQueueName2));
 			integrationQueue1 = integrationQueues[TestQueueName];
 			integrationQueue2 = integrationQueues[TestQueueName2];
 

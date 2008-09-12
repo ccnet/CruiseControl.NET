@@ -19,5 +19,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			config.AddProject(project1);
 			config.AddProject(project2);
 		}
-	}
+
+        [Test]
+        public void FindQueueFound()
+        {
+            DefaultQueueConfiguration queueConfig = new DefaultQueueConfiguration("Test Queue");
+            Configuration config = new Configuration();
+            config.QueueConfigurations.Add(queueConfig);
+            IQueueConfiguration foundConfig = config.FindQueueConfiguration("Test Queue");
+            Assert.IsNotNull(foundConfig);
+            Assert.AreSame(queueConfig, foundConfig);
+        }
+
+        [Test]
+        public void FindQueueNotFound()
+        {
+            Configuration config = new Configuration();
+            IQueueConfiguration foundConfig = config.FindQueueConfiguration("Test Queue");
+            Assert.IsNotNull(foundConfig);
+            Assert.IsInstanceOfType(typeof(DefaultQueueConfiguration), foundConfig);
+            Assert.AreEqual("Test Queue", foundConfig.Name);
+            Assert.AreEqual(QueueDuplicateHandlingMode.UseFirst, foundConfig.HandlingMode);
+        }
+    }
 }

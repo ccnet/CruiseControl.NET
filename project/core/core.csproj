@@ -146,6 +146,8 @@
     <Compile Include="configuration\CachingConfigurationService.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="configuration\DefaultQueueConfiguration.cs" />
+    <Compile Include="configuration\QueueDuplicateHandling.cs" />
     <Compile Include="configuration\Configuration.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -179,6 +181,7 @@
     <Compile Include="configuration\IConfigurationService.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="configuration\IQueueConfiguration.cs" />
     <Compile Include="configuration\NetReflectorConfigurationReader.cs">
       <SubType>Code</SubType>
     </Compile>

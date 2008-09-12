@@ -1,4 +1,5 @@
 using System.Collections;
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -127,7 +128,8 @@ namespace ThoughtWorks.CruiseControl.Core
 			foreach (IProject project in configuration.Projects)
 			{
 				// Force the queue to be created if it does not exist already.
-				integrationQueues.Add(project.QueueName);
+                IQueueConfiguration config = configuration.FindQueueConfiguration(project.QueueName);
+				integrationQueues.Add(project.QueueName, config);
 			}
 			projectIntegrators = projectIntegratorListFactory.CreateProjectIntegrators(configuration.Projects, integrationQueues);
 

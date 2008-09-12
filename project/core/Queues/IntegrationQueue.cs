@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -11,16 +13,26 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	public class IntegrationQueue : ArrayList, IIntegrationQueue
 	{
 		private readonly string name;
+        private readonly IQueueConfiguration _configuration;
 
-		public IntegrationQueue(string name)
+		public IntegrationQueue(string name, IQueueConfiguration configuration)
 		{
 			this.name = name;
+            this._configuration = configuration;
 		}
 
 		public string Name
 		{
 			get { return name; }
 		}
+
+        /// <summary>
+        /// The configuration settings for this queue.
+        /// </summary>
+        public virtual IQueueConfiguration Configuration
+        {
+            get { return _configuration; }
+        }
 
 		/// <summary>
 		/// Add a project integration request be added to the integration queue.
@@ -43,21 +55,59 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 					// We need to see if we already have a integration request for this project on the queue
 					// If so then we will ignore the latest request.
 					// Note we start at queue position 1 since position 0 is currently integrating.
-					bool isAlreadyQueued = false;
+					int? foundIndex = null;
+                    bool addItem = true;
+                    IIntegrationQueueItem foundItem = null;
 					for (int index = 1; index < Count; index++)
 					{
-						IIntegrationQueueItem queuedIntegrationQueueItem = GetIntegrationQueueItem(index);
-						if (queuedIntegrationQueueItem.Project == integrationQueueItem.Project)
+						IIntegrationQueueItem queuedItem = GetIntegrationQueueItem(index);
+						if (queuedItem.Project == integrationQueueItem.Project)
 						{
-							Log.Info("Project: " + integrationQueueItem.Project.Name + " already on queue: " + Name + " - cancelling new request");
-							isAlreadyQueued = true;
-							break;
+                            foundItem = queuedItem;
+                            foundIndex = index;
+                            break;
 						}
 					}
-					if (!isAlreadyQueued)
-					{
-						AddToQueue(integrationQueueItem);
-					}
+
+					if (foundIndex != null)
+ 					{
+                        switch (_configuration.HandlingMode)
+                        {
+                            case QueueDuplicateHandlingMode.UseFirst:
+                                Log.Info(String.Format("Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
+                                addItem = false;
+                                break;
+                            case QueueDuplicateHandlingMode.ApplyForceBuildsReAdd:
+                                if (foundItem.IntegrationRequest.BuildCondition >= integrationQueueItem.IntegrationRequest.BuildCondition)
+                                {
+                                    Log.Info(String.Format("Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
+                                    addItem = false;
+                                }
+                                else
+                                {
+                                    Log.Info(String.Format("Project: {0} already on queue: {1} with lower prority - cancelling existing request", integrationQueueItem.Project.Name, Name));
+                                    NotifyExitingQueueAndRemoveItem(foundIndex.Value, foundItem, true);
+                                }
+                                break;
+                            case QueueDuplicateHandlingMode.ApplyForceBuildsReplace:
+                                addItem = false;
+                                if (foundItem.IntegrationRequest.BuildCondition >= integrationQueueItem.IntegrationRequest.BuildCondition)
+                                {
+                                    Log.Info(String.Format("Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
+                                }
+                                else
+                                {
+                                    Log.Info(String.Format("Project: {0} already on queue: {1} with lower prority - replacing existing request at position {2}", integrationQueueItem.Project.Name, Name, foundIndex));
+                                    NotifyExitingQueueAndRemoveItem(foundIndex.Value, foundItem, true);
+                                    AddToQueue(integrationQueueItem, foundIndex);
+                                }
+                                break;
+                            default:
+                                throw new ConfigurationException("Unknown handling mode for duplicates: " + _configuration.HandlingMode.ToString());
+                        }
+ 					}
+
+                    if (addItem) AddToQueue(integrationQueueItem);
 				}
 			}
 		}
@@ -157,14 +207,21 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			}
 		}
 
-		private void AddToQueue(IIntegrationQueueItem integrationQueueItem)
-		{
-			int queuePosition = GetPrioritisedQueuePosition(integrationQueueItem.Project.QueuePriority);
+        private void AddToQueue(IIntegrationQueueItem integrationQueueItem)
+        {
+            AddToQueue(integrationQueueItem, null);
+        }
 
-			Log.Info(string.Format("Project: '{0}' is added to queue: '{1}' in position {2}.",
-			                       integrationQueueItem.Project.Name, Name, queuePosition));
+		private void AddToQueue(IIntegrationQueueItem integrationQueueItem, int? queuePosition)
+		{
+            if (!queuePosition.HasValue)
+            {
+                queuePosition = GetPrioritisedQueuePosition(integrationQueueItem.Project.QueuePriority);
+                Log.Info(string.Format("Project: '{0}' is added to queue: '{1}' in position {2}.",
+                                       integrationQueueItem.Project.Name, Name, queuePosition));
+            }
 			integrationQueueItem.IntegrationQueueNotifier.NotifyEnteringIntegrationQueue();
-			Insert(queuePosition, integrationQueueItem);
+			Insert(queuePosition.Value, integrationQueueItem);
 		}
 
 		private int GetPrioritisedQueuePosition(int insertingItemPriority)

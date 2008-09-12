@@ -39,8 +39,21 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 					{
                         ConflictingXMLNode = "Conflicting project data : " + node.OuterXml;
 
-						IProject project = reader.Read(node) as IProject;	// could this be null?  should check
-						configuration.AddProject(project);
+                        object loadedItem = reader.Read(node);
+                        if (loadedItem is IProject)
+                        {
+                            IProject project = loadedItem as IProject;
+                            configuration.AddProject(project);
+                        }
+                        else if (loadedItem is IQueueConfiguration)
+                        {
+                            IQueueConfiguration queueConfig = loadedItem as IQueueConfiguration;
+                            configuration.QueueConfigurations.Add(queueConfig);
+                        }
+                        else
+                        {
+                            throw new ConfigurationException("\nUnknown configuration item found\n" + node.OuterXml);
+                        }
 					}
 				}
 				return configuration;

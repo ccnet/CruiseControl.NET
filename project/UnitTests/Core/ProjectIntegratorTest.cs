@@ -3,6 +3,7 @@ using System.Reflection;
 using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
@@ -38,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             projectMock.SetupResult("ArtifactDirectory", tempArtifactDir1);
 
 			integrationQueues = new IntegrationQueueSet();
-			integrationQueues.Add(TestQueueName);
+            integrationQueues.Add(TestQueueName, new DefaultQueueConfiguration(TestQueueName));
 			integrationQueue = integrationQueues[TestQueueName];
 			integrator = new ProjectIntegrator((IProject) projectMock.MockInstance, integrationQueue);
 		}
