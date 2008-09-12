@@ -184,8 +184,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
             public string BuildDateFormatted
             {
                 get 
-                { 
-                    return myBuildDate.Year.ToString("0000") 
+                {
+                    return myBuildDate.Date.ToString("ddd")
+                           + "<BR>" 
+                           + myBuildDate.Year.ToString("0000") 
                            + "<BR>" 
                            + myBuildDate.Month.ToString("00")
                            + "<BR>"

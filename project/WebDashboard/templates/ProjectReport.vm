@@ -22,57 +22,6 @@
 </table>
 #end
 
-if ($highestAmountPerDay > 0)
-#set($highestViewPerDay= $highestAmountPerDay / $dateMultiPlier)
-<table border="0" align="center"  >
-  <tr>
-    <td>Build Overview</td>
-  </tr>
-</table>
-<table border="2" align="center"  >
-  <tr>
-    <td>
-      <table border="1" cellspacing="0" cellpadding="2" bgcolor="#99CCFF">
-        #foreach ($dayBuildCounter in [1..$highestViewPerDay])
-        <tr align="center">
-          <td></td>
-          #foreach ($currentDayInfo in $graphDayInfo)
-          #foreach ($multi in [1..$dateMultiPlier])
-          #set ($cellIndex =  (($highestViewPerDay - $dayBuildCounter) *  $dateMultiPlier) + $multi)
-          #if ( $cellIndex <= $currentDayInfo.AmountOfBuilds)
-          #set ($buildIndex =  $cellIndex - 1 )
-          #if ($currentDayInfo.Build($buildIndex).IsSuccesFull) #set($color = "#009900")
-          #else #set($color ="#FF9900")
-          #end
-          <TD bgcolor="$color">
-            <A HREF="$currentDayInfo.Build($buildIndex).LinkTobuild"                               
-						title="$currentDayInfo.Build($buildIndex).Description">$cellIndex</A>
-          </TD>
-          #else <td></td>
-          #end
-          #end
-          <td></td>
-          #end
-        </tr>
-        #end
-        <tr>
-          <td></td>
-        </tr>
-        <tr align="center">
-          <td></td>
-          #foreach ($currentDayInfo in $graphDayInfo)
-          <TD bgcolor="#3366FF" colspan="$dateMultiPlier">$currentDayInfo.BuildDateFormatted</TD>
-          <td></td>
-          #end
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-#end
-
-
-
 <p>
   #if ($noLogsAvailable)
   There are currently no build logs available for this project - make sure your Build Server configuration is correct and that this Project's build is not throwing any exceptions
@@ -89,4 +38,46 @@ if ($highestAmountPerDay > 0)
 </p>
 
 
+#if ($highestAmountPerDay > 0) #set($highestViewPerDay= $highestAmountPerDay / $dateMultiPlier)
+<table border="0" align="center" >
+  <tr><th>Build Overview</th></tr>
+</table>
+<table border="2" align="center"  >
+  <tr>
+    <td>
+      <table border="1" cellspacing="0" cellpadding="2" bgcolor="#99CCFF">
+        #foreach ($dayBuildCounter in [1..$highestViewPerDay])
+         <tr align="center">
+           <td></td>
+            #foreach ($currentDayInfo in $graphDayInfo)
+              #foreach ($multi in [1..$dateMultiPlier])
+                #set ($cellIndex =  (($highestViewPerDay - $dayBuildCounter) *  $dateMultiPlier) + $multi)
+                #if ( $cellIndex <= $currentDayInfo.AmountOfBuilds)
+                  #set ($buildIndex =  $cellIndex - 1 )
+                  #if ($currentDayInfo.Build($buildIndex).IsSuccesFull) 
+		     #set($color = "#009900")
+                  #else 
+		     #set($color ="#FF9900")
+                  #end
+                 <TD bgcolor="$color"><A HREF="$currentDayInfo.Build($buildIndex).LinkTobuild" title="$currentDayInfo.Build($buildIndex).Description">$cellIndex</A></TD>
+                #else <td></td>
+                #end
+              #end
+              <td></td>
+            #end
+          </tr>
+        #end
+        <tr><td></td></tr>
+        <tr align="center">
+          <td></td>
+          #foreach ($currentDayInfo in $graphDayInfo)
+              <TD bgcolor="#3366FF" colspan="$dateMultiPlier">$currentDayInfo.BuildDateFormatted</TD>
+              <td></td>
+          #end
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+#end
 
