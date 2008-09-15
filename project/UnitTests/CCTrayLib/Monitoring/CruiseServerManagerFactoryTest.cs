@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 			ICruiseServerManager manager = factory.Create(server);
 			Assert.AreEqual(server.Url, manager.ServerUrl);
-			Assert.AreEqual(typeof (RemotingCruiseServerManager), manager.GetType());
+			Assert.AreEqual(typeof (CachingCruiseServerManager), manager.GetType());
 
 			mockCruiseManagerFactory.Verify();
 		}
