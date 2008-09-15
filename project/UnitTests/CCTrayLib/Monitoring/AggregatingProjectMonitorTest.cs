@@ -232,21 +232,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		}
 
         [Test]
-        [ExpectedException(typeof(NotImplementedException), "The method or operation is not implemented.")]
+        [ExpectedException(typeof(NotImplementedException))]
         public void ForceBuildThrowsAnNotImplementedException()
         {
             aggregator.ForceBuild();
         }
 
         [Test]
-        [ExpectedException(typeof(NotImplementedException), "The method or operation is not implemented.")]
+        [ExpectedException(typeof(NotImplementedException))]
         public void FixBuildThrowsAnNotImplementedException()
         {
             aggregator.FixBuild("JoeSmith");
         }
 
         [Test]
-        [ExpectedException(typeof(NotImplementedException), "The method or operation is not implemented.")]
+        [ExpectedException(typeof(NotImplementedException))]
         public void CancelPendingThrowsAnNotImplementedException()
         {
             aggregator.CancelPending();

@@ -1,3 +1,4 @@
+using System.Globalization;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -134,8 +135,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			builder.AppendArgument(
 				string.Format("find revision where branch = '{0}' "+
 							  "and revno != 'CO' "+
-							  "and date between '{1}' and '{2}'", 
-				Branch, from.StartTime.ToString(DATEFORMAT), to.StartTime.ToString(DATEFORMAT)));
+							  "and date between '{1}' and '{2}'",
+				Branch, from.StartTime.ToString(DATEFORMAT, CultureInfo.InvariantCulture), to.StartTime.ToString(DATEFORMAT, CultureInfo.InvariantCulture)));
         
 			if (Repository != string.Empty) 
 			{

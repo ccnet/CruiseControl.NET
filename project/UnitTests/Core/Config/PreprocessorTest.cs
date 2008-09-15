@@ -273,17 +273,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             return Utils.CreateWriter(OutPath);
         }
 
-        private static string OutPath
-        {
-            get { return GetAssemblyRelativePath("out.xml"); }
-        }
-
-        public static string GetAssemblyRelativePath(string relative_path)
-        {
-            return Path.Combine(
-                Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase.Substring(8)),
-                relative_path);
-        }
+		private static string OutPath
+		{
+			get { return Path.Combine(Path.GetTempPath(), "out.xml"); }
+		}
     }
 
     internal class TestResolver : PreprocessorUrlResolver
