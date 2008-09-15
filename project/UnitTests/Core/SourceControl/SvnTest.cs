@@ -56,6 +56,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	<tagOnSuccess>true</tagOnSuccess>
 	<tagBaseUrl>svn://myserver/mypath/tags</tagBaseUrl>
 	<autoGetSource>true</autoGetSource>
+	<checkExternals>true</checkExternals>
 </svn>";
 
 			svn = (Svn) NetReflector.Read(xml);
@@ -67,6 +68,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("password", svn.Password);
 			Assert.AreEqual(true, svn.TagOnSuccess);
 			Assert.AreEqual(true, svn.AutoGetSource);
+			Assert.AreEqual(true, svn.CheckExternals);
 			Assert.AreEqual("svn://myserver/mypath/tags", svn.TagBaseUrl);
 		}
 

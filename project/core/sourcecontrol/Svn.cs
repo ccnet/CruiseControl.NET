@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -50,7 +51,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = true;
 
-		private IFileSystem fileSystem;
+		[ReflectorProperty("checkExternals", Required = false)]
+		public bool CheckExternals = false;
+
+		private readonly IFileSystem fileSystem;
 
         /// <summary>
         /// Modifications discovered by this instance of the source control interface.
@@ -64,14 +68,34 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			ProcessResult result = Execute(NewHistoryProcessInfo(from, to));
-			mods = ParseModifications(result, from.StartTime, to.StartTime);
+			List<Modification> modifications = new List<Modification>();
+			List<string> directories = new List<string>();
+			directories.Add(TrunkUrl);
+
+			if (CheckExternals)
+			{
+				directories.AddRange(ParseExternalsDirectories(Execute(PropGetProcessInfo(to))));
+			}
+			
+			Modification[] modificationsArray;
+
+			foreach (string directory in directories)
+			{
+				ProcessResult result = Execute(NewHistoryProcessInfo(from, to, directory));
+				modificationsArray = ParseModifications(result, from.StartTime, to.StartTime);
+				if (modificationsArray != null)
+				{
+					modifications.AddRange(modificationsArray);
+				}
+			}
+
+			modificationsArray = modifications.ToArray();
+
 			if (UrlBuilder != null)
 			{
-                UrlBuilder.SetupModification(mods);
+				UrlBuilder.SetupModification(modificationsArray);
 			}
-            base.FillIssueUrl(mods);
-			return mods;
+			return modificationsArray;
 		}
 
 		public override void LabelSourceControl(IIntegrationResult result)
@@ -101,7 +125,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private void CheckoutSource(IIntegrationResult result)
 		{
 			if (StringUtil.IsBlank(TrunkUrl))
-				throw new ConfigurationException("<trunkurl> configuration element must be specified in order to automatically checkout source from SVN.");
+				throw new ConfigurationException(
+					"<trunkurl> configuration element must be specified in order to automatically checkout source from SVN.");
 			Execute(NewCheckoutProcessInfo(result));
 		}
 
@@ -112,6 +137,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AddArgument(TrunkUrl);
 			buffer.AddArgument(result.BaseFromWorkingDirectory(WorkingDirectory));
 			AppendCommonSwitches(buffer);
+			return NewProcessInfo(buffer.ToString(), result);
+		}
+
+		private ProcessInfo PropGetProcessInfo(IIntegrationResult result)
+		{
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+			buffer.AddArgument("propget");
+			buffer.AddArgument("-R");
+			AppendCommonSwitches(buffer);
+			buffer.AddArgument("svn:externals");
+			buffer.AddArgument(TrunkUrl);
 			return NewProcessInfo(buffer.ToString(), result);
 		}
 
@@ -150,12 +186,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 
 //		HISTORY_COMMAND_FORMAT = "log TrunkUrl --revision \"{{{StartDate}}}:{{{EndDate}}}\" --verbose --xml --non-interactive";
-		private ProcessInfo NewHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to)
+		private ProcessInfo NewHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to, string url)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("log");
-			buffer.AddArgument(TrunkUrl);
-			buffer.AppendArgument(string.Format("-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
+			buffer.AddArgument(url);
+			buffer.AppendArgument(
+				string.Format("-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
 			buffer.AppendArgument("--verbose --xml");
 			AppendCommonSwitches(buffer);
 			return NewProcessInfo(buffer.ToString(), to);
@@ -193,14 +230,49 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AppendIf(revision > 0, "--revision {0}", revision.ToString());
 		}
 
+		private static List<string> ParseExternalsDirectories(ProcessResult result)
+		{
+			List<string> externalDirectories = new List<string>();
+
+			using (StringReader reader = new StringReader(result.StandardOutput))
+			{
+				string externalsDefinition;
+
+				while ((externalsDefinition = reader.ReadLine()) != null)
+				{
+					string[] tokens = externalsDefinition.Split(new string[] { " - " }, StringSplitOptions.None);
+					if (tokens.Length > 1)
+					{
+						externalsDefinition = tokens[1];
+					}
+					tokens = externalsDefinition.Split(' ');
+
+					foreach (string url in tokens)
+					{
+						if (IsSvnUrl(url) && !url.Contains("-r") && !externalDirectories.Contains(url))
+						{
+							externalDirectories.Add(url);
+						}
+					}
+				}
+			}
+
+			return externalDirectories;
+		} 
+
+		private static bool IsSvnUrl(string url)
+		{
+			return (url.StartsWith("http") || url.StartsWith("svn") || url.StartsWith("file"));
+		}
+
 		private ProcessInfo NewProcessInfo(string args, IIntegrationResult result)
 		{
-            string workingDirectory = result.BaseFromWorkingDirectory(WorkingDirectory);
-            if (!Directory.Exists(workingDirectory)) Directory.CreateDirectory(workingDirectory);
+			string workingDirectory = result.BaseFromWorkingDirectory(WorkingDirectory);
+			if (!Directory.Exists(workingDirectory)) Directory.CreateDirectory(workingDirectory);
 
-            ProcessInfo processInfo = new ProcessInfo(Executable, args, workingDirectory);
-		    processInfo.StreamEncoding = Encoding.UTF8;
-		    return processInfo;
+			ProcessInfo processInfo = new ProcessInfo(Executable, args, workingDirectory);
+			processInfo.StreamEncoding = Encoding.UTF8;
+			return processInfo;
 		}
 	}
 }
