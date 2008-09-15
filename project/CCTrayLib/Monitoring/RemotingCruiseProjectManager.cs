@@ -102,11 +102,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 		
-		public string ProjectIntegratorState
-		{
-			get { return GetProjectIntegratorStateByProjectName(projectName); }
-		}
-		
 		public void CancelPendingRequest()
 		{
 			try
@@ -125,35 +120,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		public string ProjectName
 		{
 			get { return projectName; }
-		}
-		
-		private string GetProjectIntegratorStateByProjectName(string projectName)
-		{
-			string integratorState = string.Empty;
-			ProjectStatus[] statusList;
-			
-			try
-			{
-				statusList = manager.GetProjectStatus();
-			}
-			// Silently ignore exceptions that occur due to connection problems
-			catch(System.Net.Sockets.SocketException)
-			{
-				statusList = new ProjectStatus[0];
-			}
-			catch (System.Runtime.Remoting.RemotingException)
-			{
-				statusList = new ProjectStatus[0];
-			}
-			
-			foreach(ProjectStatus projectStatus in statusList)
-			{
-				if (projectStatus.Name.Equals(projectName))
-				{
-					integratorState = projectStatus.Status.ToString();
-				}
-			}
-			return integratorState;
 		}
 	}
 }

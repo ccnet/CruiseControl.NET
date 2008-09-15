@@ -15,6 +15,5 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		void StartProject();
 		void CancelPendingRequest();
 		string ProjectName { get; }
-		string ProjectIntegratorState {get; }
 	}
 }

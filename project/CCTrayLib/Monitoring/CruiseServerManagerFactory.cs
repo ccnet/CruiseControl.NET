@@ -5,7 +5,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
 	public class CruiseServerManagerFactory : ICruiseServerManagerFactory
 	{
-		private ICruiseManagerFactory cruiseManagerFactory;
+		private readonly ICruiseManagerFactory cruiseManagerFactory;
 
 		public CruiseServerManagerFactory(ICruiseManagerFactory cruiseManagerFactory)
 		{
@@ -16,7 +16,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{		
 			if (buildServer.Transport == BuildServerTransport.Remoting)
 			{
-				return new RemotingCruiseServerManager(cruiseManagerFactory.GetCruiseManager(buildServer.Url), buildServer);
+                return new CachingCruiseServerManager(
+                    new RemotingCruiseServerManager(cruiseManagerFactory.GetCruiseManager(buildServer.Url), buildServer));
 			}
 			else
 			{

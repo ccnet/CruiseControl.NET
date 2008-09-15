@@ -6,10 +6,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
 	public class ProjectMonitor : IProjectMonitor, ISingleProjectDetail
 	{
-		private ICruiseProjectManager cruiseProjectManager;
+		private readonly ICruiseProjectManager cruiseProjectManager;
 		private ProjectStatus lastProjectStatus;
 		private Exception connectException;
-		private BuildDurationTracker buildDurationTracker;
+		private readonly BuildDurationTracker buildDurationTracker;
         private readonly IProjectStatusRetriever projectStatusRetriever;
 
         public ProjectMonitor(ICruiseProjectManager cruiseProjectManager, IProjectStatusRetriever projectStatusRetriever)
@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				{
 					return lastProjectStatus.LastBuildDate;
 				}
-				return new DateTime(1970, 1, 1);
+				return DateTime.MinValue;
 			}
 		}
 
@@ -79,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				{
 					return lastProjectStatus.NextBuildTime;
 				}
-				return new DateTime(1970, 1, 1);
+				return DateTime.MinValue;
 			}
 		}
 
@@ -161,7 +161,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		
 		public string ProjectIntegratorState
 		{
-			get { return cruiseProjectManager.ProjectIntegratorState; }
+            get
+            {
+                if (lastProjectStatus == null)
+                {
+                    return "Unknown";
+                }
+                else
+                {
+                    return lastProjectStatus.Status.ToString();
+                }
+            }
 		}
 		
 		public bool IsPending

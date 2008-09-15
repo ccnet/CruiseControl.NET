@@ -55,27 +55,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			get { return projectName; }
 		}
 
-		public string ProjectIntegratorState
-		{
-			get
-			{
-				try
-				{
-					ProjectStatus ps = serverManager.GetCruiseServerSnapshot().GetProjectStatus(projectName);
-					if (ps != null)
-					{
-						return ps.Status.ToString();
-					}
-					return string.Empty;
-				}
-				// Silently ignore exceptions that occur due to connection problems
-				catch (System.Net.WebException)
-				{
-					return string.Empty;
-				}
-			}
-		}
-
 		public void PushDashboardButton(string buttonName)
 		{
 			try
