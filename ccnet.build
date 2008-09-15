@@ -88,7 +88,7 @@
 
 	<target name="test.unit" description="runs unit tests">
 		<property name="unittests.fullpath" value="${path::get-full-path(build.dir)}\unittests" />
-		<exec program="${ncover-console.exe}" workingdir="${unittests.fullpath}" commandline="//reg &quot;..\..\${nunit-console.exe}&quot; &quot;${unittests.fullpath}\${unittests.dll}&quot;  /xml:../${unittests.dll}-results.xml /nologo //w ${unittests.fullpath}"/>
+		<exec program="${ncover-console.exe}" workingdir="${unittests.fullpath}" commandline="//reg &quot;..\..\${nunit-console.exe}&quot; &quot;${unittests.fullpath}\${unittests.dll}&quot;  /xml:../${unittests.dll}-results.xml /nologo //w &quot;${unittests.fullpath}&quot;"/>
 
 		<ncoverexplorer program="tools\ncoverexplorer\ncoverexplorer.console.exe" projectName="CCNet" outputDir="${build.dir}" satisfactoryCoverage="80" reportType="4" xmlReportName="CoverageSummary.xml">
 			<fileset>
