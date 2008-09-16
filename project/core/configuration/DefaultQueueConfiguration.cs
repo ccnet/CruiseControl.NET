@@ -1,7 +1,4 @@
 using Exortech.NetReflector;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
@@ -14,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
     {
         private string _name;
         private QueueDuplicateHandlingMode _handlingMode = QueueDuplicateHandlingMode.UseFirst;
+        private string _lockQueueNames;
 
         /// <summary>
         /// Default constructor - needed for NetReflector.
@@ -26,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// <param name="name"></param>
         public DefaultQueueConfiguration(string name)
         {
-            this._name = name;
+            _name = name;
         }
 
         /// <summary>
@@ -47,6 +45,13 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         {
             get { return _handlingMode; }
             set { _handlingMode = value; }
+        }
+
+        [ReflectorProperty("lockqueues", Required = false)]
+        public virtual string LockQueueNames
+        {
+            get { return _lockQueueNames; }
+            set { _lockQueueNames = value; }
         }
     }
 }

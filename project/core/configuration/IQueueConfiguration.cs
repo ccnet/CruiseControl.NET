@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
     /// <summary>
@@ -18,5 +14,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// Defines how duplicates should be handled.
         /// </summary>
         QueueDuplicateHandlingMode HandlingMode { get; set; }
+
+        /// <summary>
+        /// A list of the names of any other queues which should be locked when a project in this queue is building.
+        /// </summary>
+        string LockQueueNames { get; set; }
     }
 }

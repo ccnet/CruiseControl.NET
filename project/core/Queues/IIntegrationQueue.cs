@@ -12,6 +12,8 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	{
 		string Name { get; }
 
+        bool IsLocked { get; }
+
         /// <summary>
         /// The configuration settings for this queue.
         /// </summary>
@@ -55,5 +57,26 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		
 		bool HasItemOnQueue(IProject project);
 		bool HasItemPendingOnQueue(IProject project);
+
+        /// <summary>
+        /// Toggle Locks. This instructs the queue that it should acquire (or release) locks upon the other queues which it is configured 
+        /// to lock when integrating.
+        /// </summary>
+        /// <param name="acquire">Should the queue acquire locks or release them?</param>
+        void ToggleQueueLocks(bool acquire);
+
+        /// <summary>
+        /// Lock this queue, based upon a request from another queue.
+        /// Acquires a fresh lock for the queue making the request (assuming none exists).
+        /// </summary>
+        /// <param name="requestingQueue">Queue requesting that a lock be taken out</param>
+        void LockQueue(IIntegrationQueue requestingQueue);
+
+        /// <summary>
+        /// Unlock this queue, based upon a request from another queue.
+        /// Releases any locks currently held by the queue making the request.
+        /// </summary>
+        /// <param name="requestingQueue">Queue requesting that a lock be released</param>
+        void UnlockQueue(IIntegrationQueue requestingQueue);
 	}
 }

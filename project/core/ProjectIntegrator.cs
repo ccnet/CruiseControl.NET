@@ -71,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			// multiple thread instances cannot be created
 			if (thread == null || thread.ThreadState == ThreadState.Stopped)
 			{
-				thread = new Thread(new ThreadStart(Run));
+				thread = new Thread(Run);
 				thread.Name = project.Name;
 			}
 
@@ -142,10 +142,18 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void Integrate()
 		{
-			IntegrationRequest ir = integrationQueue.GetNextRequest(project);
+            while (integrationQueue.IsLocked)
+            {
+                Thread.Sleep(200);
+            }
+
+            IntegrationRequest ir = integrationQueue.GetNextRequest(project);
 			if (ir != null)
 			{
-				Log.Info(string.Format("Project: '{0}' is first in queue: '{1}' and shall start integration.",
+                // instruct the queue which is performing the integration to acquire locks
+                integrationQueue.ToggleQueueLocks(true);
+
+                Log.Info(string.Format("Project: '{0}' is first in queue: '{1}' and shall start integration.",
 				                       project.Name, project.QueueName));
 				try
 				{
@@ -154,7 +162,10 @@ namespace ThoughtWorks.CruiseControl.Core
 				finally
 				{
 					RemoveCompletedRequestFromQueue();
-				}
+
+                    /// instruct the queue which is performing the integration to release locks
+                    integrationQueue.ToggleQueueLocks(false);
+                }
 			}
 			else
 			{
@@ -163,7 +174,9 @@ namespace ThoughtWorks.CruiseControl.Core
 				// - the build gets started by reaching it's turn on the queue
 				// - the build gets cancelled from the queue
 				// - the thread gets killed
-				while (IsRunning && integrationQueue.HasItemPendingOnQueue(project))
+                // However, if the queue is locked, do not hang around - we need to exit, so that we can come back to the queue
+                // after the lock has been released (otherwise we could get stuck here forever
+				while (IsRunning && integrationQueue.HasItemPendingOnQueue(project) && !integrationQueue.IsLocked)
 				{
 					Thread.Sleep(200);
 				}

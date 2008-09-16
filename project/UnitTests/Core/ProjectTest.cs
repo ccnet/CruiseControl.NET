@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			artifactDirPath = TempFileUtil.CreateTempDir("artifactDir");
 			Assert.IsTrue(Directory.Exists(workingDirPath));
 			Assert.IsTrue(Directory.Exists(artifactDirPath));
-			queue = new IntegrationQueue("foo", new DefaultQueueConfiguration("foo"));
+			queue = new IntegrationQueue("foo", new DefaultQueueConfiguration("foo"), null);
 			mockery = new Mockery();
 			mockSourceControl = mockery.NewStrictMock(typeof (ISourceControl));
 			mockStateManager = mockery.NewStrictMock(typeof (IStateManager));
@@ -470,7 +470,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			secondTask.Verify();
 		}
 
-		private Modification[] CreateModifications()
+		private static Modification[] CreateModifications()
 		{
 			Modification[] modifications = new Modification[3];
 			for (int i = 0; i < modifications.Length; i++)

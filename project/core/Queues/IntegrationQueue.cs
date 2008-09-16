@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -14,11 +15,18 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	{
 		private readonly string name;
         private readonly IQueueConfiguration _configuration;
+        private readonly List<string> _lockingQueueNames;
+        private readonly IntegrationQueueSet _parentQueueSet;
 
-		public IntegrationQueue(string name, IQueueConfiguration configuration)
+        private static readonly object _queueLockSync = new object();
+
+		public IntegrationQueue(string name, IQueueConfiguration configuration, IntegrationQueueSet parentQueueSet)
 		{
 			this.name = name;
-            this._configuration = configuration;
+            _configuration = configuration;
+            _parentQueueSet = parentQueueSet;
+
+            _lockingQueueNames = new List<string>();
 		}
 
 		public string Name
@@ -26,6 +34,20 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			get { return name; }
 		}
 
+        /// <summary>
+        /// Is this Queue locked by another (N) Queue(s)?
+        /// </summary>
+        public virtual bool IsLocked
+        {
+            get
+            {
+                lock (_queueLockSync) 
+                { 
+                    return _lockingQueueNames.Count != 0; 
+                }
+            }
+        }
+        
         /// <summary>
         /// The configuration settings for this queue.
         /// </summary>
@@ -55,9 +77,11 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 					// We need to see if we already have a integration request for this project on the queue
 					// If so then we will ignore the latest request.
 					// Note we start at queue position 1 since position 0 is currently integrating.
+
 					int? foundIndex = null;
                     bool addItem = true;
                     IIntegrationQueueItem foundItem = null;
+
 					for (int index = 1; index < Count; index++)
 					{
 						IIntegrationQueueItem queuedItem = GetIntegrationQueueItem(index);
@@ -66,6 +90,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                             foundItem = queuedItem;
                             foundIndex = index;
                             break;
+
 						}
 					}
 
@@ -103,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                                 }
                                 break;
                             default:
-                                throw new ConfigurationException("Unknown handling mode for duplicates: " + _configuration.HandlingMode.ToString());
+                                throw new ConfigurationException("Unknown handling mode for duplicates: " + _configuration.HandlingMode);
                         }
  					}
 
@@ -173,10 +198,15 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		public IntegrationRequest GetNextRequest(IProject project)
 		{
 			if (Count == 0) return null;
+
+            if (IsLocked) return null;
+
 			IIntegrationQueueItem item = GetIntegrationQueueItem(0);
-			if (item != null && item.Project == project)
+			
+            if (item != null && item.Project == project)
 				return item.IntegrationRequest;
-			return null;
+			
+            return null;
 		}
 	
 		public bool HasItemOnQueue(IProject project)
@@ -199,7 +229,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 					for	(int index = startIndex; index < Count; index++)
 					{
 						IIntegrationQueueItem queuedIntegrationQueueItem = this[index] as IIntegrationQueueItem;
-						if (queuedIntegrationQueueItem.Project == project)
+						if ((queuedIntegrationQueueItem != null) && (queuedIntegrationQueueItem.Project == project))
 							return true;
 					}
 				}
@@ -236,12 +266,15 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 				for (int index = 1; index < Count; index++)
 				{
 					IIntegrationQueueItem queuedIntegrationQueueItem = this[index] as IIntegrationQueueItem;
-					int compareQueuePosition = queuedIntegrationQueueItem.Project.QueuePriority;
-					// If two items have the same priority it will be FIFO order for that priority
-					if (compareQueuePosition == 0 || compareQueuePosition > insertingItemPriority)
+					if (queuedIntegrationQueueItem != null)
 					{
-						targetQueuePosition = index;
-						break;
+						int compareQueuePosition = queuedIntegrationQueueItem.Project.QueuePriority;
+						// If two items have the same priority it will be FIFO order for that priority
+						if (compareQueuePosition == 0 || compareQueuePosition > insertingItemPriority)
+						{
+							targetQueuePosition = index;
+							break;
+						}
 					}
 				}
 			}
@@ -270,5 +303,65 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			integrationQueueItem.IntegrationQueueNotifier.NotifyExitingIntegrationQueue(isPendingItemCancelled);
 			RemoveAt(index);
 		}
-	}
+
+        /// <summary>
+        /// Toggle Locks. This instructs the queue that it should acquire (or release) locks upon the other queues which it is configured 
+        /// to lock when integrating.
+        /// </summary>
+        /// <param name="acquire">Should the queue acquire locks or release them?</param>
+        public void ToggleQueueLocks(bool acquire)
+        {
+            if (!string.IsNullOrEmpty(_configuration.LockQueueNames) && _parentQueueSet != null)
+            {
+                string[] queues = _configuration.LockQueueNames.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                for (int i = 0; i < queues.Length; i++)
+                {
+                    if(acquire)
+                    {
+                        // find queue and lock it
+                        _parentQueueSet[queues[i]].LockQueue(this);
+
+                        Log.Info(string.Format("Queue: '{0}' has acquired a lock against queue '{1}'", Name, queues[i]));
+                    }
+                    else
+                    {
+                        // find queue and lock it
+                        _parentQueueSet[queues[i]].UnlockQueue(this);
+
+                        Log.Info(string.Format("Queue: '{0}' has released a lock against queue '{1}'", Name, queues[i]));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Lock this queue, based upon a request from another queue.
+        /// Acquires a fresh lock for the queue making the request (assuming none exists).
+        /// </summary>
+        /// <param name="requestingQueue">Queue requesting that a lock be taken out</param>
+        public void LockQueue(IIntegrationQueue requestingQueue)
+        {
+            lock (_queueLockSync)
+            {
+                if (!_lockingQueueNames.Contains(requestingQueue.Name))
+                {
+                    _lockingQueueNames.Add(requestingQueue.Name);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Unlock this queue, based upon a request from another queue.
+        /// Releases any locks currently held by the queue making the request.
+        /// </summary>
+        /// <param name="requestingQueue">Queue requesting that a lock be released</param>
+        public void UnlockQueue(IIntegrationQueue requestingQueue)
+        {
+            lock (_queueLockSync)
+            {
+                _lockingQueueNames.Remove(requestingQueue.Name);
+            }
+        }
+    }
 }

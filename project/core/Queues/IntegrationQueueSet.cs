@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	/// </summary>
 	public class IntegrationQueueSet
 	{
-		private SortedList queueSet = new SortedList();
+		private readonly SortedList queueSet = new SortedList();
 
 		public IIntegrationQueue this[string queueName]
 		{
@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			{
 				if (!queueSet.ContainsKey(queueName))
 				{
-					queueSet.Add(queueName, new IntegrationQueue(queueName, config));
+					queueSet.Add(queueName, new IntegrationQueue(queueName, config, this));
 				}
 			}
 		}
@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			return queueSetSnapshot;
 		}
 
-		private QueueSnapshot BuildQueueSnapshot(IIntegrationQueue queue)
+		private static QueueSnapshot BuildQueueSnapshot(IIntegrationQueue queue)
 		{
 			QueueSnapshot queueSnapshot = new QueueSnapshot(queue.Name);
 
