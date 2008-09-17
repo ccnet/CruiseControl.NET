@@ -14,12 +14,12 @@
 					if ( eDiv.style.display == "none" )
 					{
 						eDiv.style.display = "block";
-						eImg.src = "/../images/arrow_minus_small.gif";
+						eImg.src = "/ccnet/images/arrow_minus_small.gif";
 					}
 					else
 					{
 						eDiv.style.display = "none";
-						eImg.src = "/../images/arrow_plus_small.gif";
+						eImg.src = "/ccnet/images/arrow_plus_small.gif";
 					}
 				}
 			</script>
@@ -73,7 +73,7 @@
 						<xsl:with-param name="messages" select=".//Message" />
 					</xsl:call-template>
 					
-					<input type="image" src="/../images/arrow_plus_small.gif">
+					<input type="image" src="/ccnet/images/arrow_plus_small.gif">
 						<xsl:attribute name="id">img<xsl:value-of select="$coverage.module.id"/></xsl:attribute>
 						<xsl:attribute name="onclick">javascript:toggleDiv('img<xsl:value-of select="$coverage.module.id"/>', 'divDetails_<xsl:value-of select="$coverage.module.id"/>');</xsl:attribute>
 					</input>&#160;<xsl:value-of select="$coverage.module.name"/>
@@ -131,7 +131,7 @@
 				<xsl:call-template name="ErrorsAndWarningsIcon">
 					<xsl:with-param name="messages" select="." />
 				</xsl:call-template>
-				<input type="image" src="/../images/arrow_plus_small.gif">
+				<input type="image" src="/ccnet/images/arrow_plus_small.gif">
 					<xsl:attribute name="id">imgMsgDetails_<xsl:value-of select="$fullname"/></xsl:attribute>
 					<xsl:attribute name="onClick">javascript:toggleDiv('imgMsgDetails_<xsl:value-of select="$fullname"/>', 'divMsgDetails_<xsl:value-of select="$fullname"/>');</xsl:attribute>
 				</input>
@@ -181,27 +181,27 @@
 		
 		<xsl:choose>
 		<xsl:when test="$cErrors > 0">
-			<img src="/../images/fxcop-critical-error.gif">
+			<img src="/ccnet/images/fxcop-critical-error.gif">
 				<xsl:attribute name="title">Critical Errors: <xsl:value-of select="$cErrors"/></xsl:attribute>
 			</img>
 		</xsl:when>
 		<xsl:when test="$errors > 0">
-			<img src="/../images/fxcop-error.gif">
+			<img src="/ccnet/images/fxcop-error.gif">
 				<xsl:attribute name="title">Errors: <xsl:value-of select="$errors"/></xsl:attribute>
 			</img>
 		</xsl:when>
 		<xsl:when test="$cWarnings > 0">
-			<img src="/../images/fxcop-critical-warning.gif">
+			<img src="/ccnet/images/fxcop-critical-warning.gif">
 				<xsl:attribute name="title">Critical Warnings: <xsl:value-of select="$cWarnings"/></xsl:attribute>
 			</img>
 		</xsl:when>
 		<xsl:when test="$warnings > 0">
-			<img src="/../images/fxcop-warning.gif">
+			<img src="/ccnet/images/fxcop-warning.gif">
 				<xsl:attribute name="title">Warnings: <xsl:value-of select="$warnings"/></xsl:attribute>
 			</img>
 		</xsl:when>
 		<xsl:otherwise>
-			<img src="/../images/check.jpg" width="16" height="16" title="No errors or warnings"/>
+			<img src="/ccnet/images/check.jpg" width="16" height="16" title="No errors or warnings"/>
 		</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
