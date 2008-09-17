@@ -18,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private EmailGateway emailGateway = new EmailGateway();
         private string fromAddress;
 		private string replytoAddress;
+        private string subjectPrefix;
         private Hashtable users = new Hashtable();
         private Hashtable groups = new Hashtable();
         private IMessageBuilder messageBuilder;
@@ -173,6 +174,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { converters = value; }
         }
 
+
+        [ReflectorProperty("subjectPrefix", Required = false)]
+        public string SubjectPrefix
+        {
+            get { return subjectPrefix; }
+            set { subjectPrefix = value; }
+        }
 
         public void Run(IIntegrationResult result)
         {

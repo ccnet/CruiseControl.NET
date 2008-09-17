@@ -114,35 +114,35 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		public void EmailSubject()
 		{
 			string subject = GetEmailMessage(IntegrationResultMother.CreateStillSuccessful(), true).Subject;
-			Assert.AreEqual("Project#9 Build Successful: Build 0", subject);
+			Assert.AreEqual("CCNET: Project#9 Build Successful: Build 0", subject);
 		}
 
 		[Test]
 		public void EmailSubjectForFailedBuild()
 		{
 			string subject = GetEmailMessage(IntegrationResultMother.CreateFailed(), true).Subject;
-			Assert.AreEqual("Project#9 Build Failed", subject);
+            Assert.AreEqual("CCNET: Project#9 Build Failed", subject);
 		}
 
         [Test]
         public void EmailSubjectForSuccessfulBuild()
         {
             string subject = GetEmailMessage(IntegrationResultMother.CreateSuccessful(), true).Subject;
-            Assert.AreEqual("Project#9 Build Successful: Build 0", subject);
+            Assert.AreEqual("CCNET: Project#9 Build Successful: Build 0", subject);
         }
 
         [Test]
 		public void EmailSubjectForFixedBuild()
 		{
 			string subject = GetEmailMessage(IntegrationResultMother.CreateFixed(), true).Subject;
-			Assert.AreEqual("Project#9 Build Fixed: Build 0", subject);
+            Assert.AreEqual("CCNET: Project#9 Build Fixed: Build 0", subject);
 		}
 
 		[Test]
 		public void EmailSubjectForExceptionedBuild()
 		{
 			string subject = GetEmailMessage(IntegrationResultMother.CreateExceptioned(), true).Subject;
-			Assert.AreEqual("Project#9 Build Failed", subject);
+            Assert.AreEqual("CCNET: Project#9 Build Failed", subject);
 		}
 
 		[Test]

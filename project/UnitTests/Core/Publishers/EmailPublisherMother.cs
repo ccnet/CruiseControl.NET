@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 				return XmlUtil.CreateDocument(
 @"    	<email from=""ccnet@thoughtworks.com"" mailhost=""smtp.telus.net"" mailport=""26""
                 mailhostUsername=""mailuser"" mailhostPassword=""mailpassword""
-                projectUrl=""http://localhost/ccnet"" includeDetails=""false"">
+                projectUrl=""http://localhost/ccnet"" includeDetails=""false"" subjectPrefix=""CCNET:"">
             <modifierNotificationTypes>
                 <NotificationType>failed</NotificationType>
                 <NotificationType>fixed</NotificationType>
