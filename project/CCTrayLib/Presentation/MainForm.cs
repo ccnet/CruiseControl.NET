@@ -57,6 +57,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private MenuItem mnuAbout;
         private ToolTip tltBuildStage;
         private PersistWindowState windowState;
+		private bool _queueViewPanelVisible;
 
         private ColumnHeader[] _columnHeaders = new ColumnHeader[7];
         private const int COLUMN_PROJECT = 0;
@@ -94,9 +95,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             _columnHeaders[COLUMN_DETAIL].Width = (int)e.Key.GetValue("DetailColumnWidth", 250);
             _columnHeaders[COLUMN_LASTBUILDLABEL].Width = (int)e.Key.GetValue("LastBuildLabelColumnWidth", 120);
             _columnHeaders[COLUMN_LASTBUILDTIME].Width = (int)e.Key.GetValue("LastBuildTimeColumnWidth", 130);
-            bool isQueueViewPanelVisible = bool.Parse(e.Key.GetValue("QueueViewPanelVisible", bool.FalseString).ToString());
-            splitterQueueView.Visible = isQueueViewPanelVisible;
-            pnlViewQueues.Visible = isQueueViewPanelVisible;
+			_queueViewPanelVisible = bool.Parse(e.Key.GetValue("QueueViewPanelVisible", bool.FalseString).ToString());
+			splitterQueueView.Visible = _queueViewPanelVisible;
+			pnlViewQueues.Visible = _queueViewPanelVisible;
+			queueTreeView.Visible = _queueViewPanelVisible;
             UpdateViewQueuesButtonLabel();
             splitterQueueView.SplitPosition = (int)e.Key.GetValue("QueueViewSplitterPosition", 80);
             lvProjects.View = (View)Enum.Parse(typeof(View), (string)e.Key.GetValue("ProjectViewMode", View.Details.ToString()));
@@ -111,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             e.Key.SetValue("DetailColumnWidth", _columnHeaders[COLUMN_DETAIL].Width);
             e.Key.SetValue("LastBuildLabelColumnWidth", _columnHeaders[COLUMN_LASTBUILDLABEL].Width);
             e.Key.SetValue("LastBuildTimeColumnWidth", _columnHeaders[COLUMN_LASTBUILDTIME].Width);
-            e.Key.SetValue("QueueViewPanelVisible", queueTreeView.Visible);
+			e.Key.SetValue("QueueViewPanelVisible", _queueViewPanelVisible);
             e.Key.SetValue("QueueViewSplitterPosition", splitterQueueView.SplitPosition);
             e.Key.SetValue("ProjectViewMode", lvProjects.View.ToString());
         }
@@ -130,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             controller.SetFormTopMost(this);
             controller.SetFormShowInTaskbar(this);
 
-            if (queueTreeView.Visible)
+			if (_queueViewPanelVisible)
             {
                 controller.BindToQueueTreeView(queueTreeView);
             }
@@ -858,12 +860,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
         private void btnToggleQueueView_Click(object sender, EventArgs e)
         {
-            bool isQueueViewVisible = !pnlViewQueues.Visible;
-            splitterQueueView.Visible = isQueueViewVisible;
-            pnlViewQueues.Visible = isQueueViewVisible;
+			_queueViewPanelVisible = !_queueViewPanelVisible;
+			splitterQueueView.Visible = _queueViewPanelVisible;
+			pnlViewQueues.Visible = _queueViewPanelVisible;
+			queueTreeView.Visible = _queueViewPanelVisible;
+
             UpdateViewQueuesButtonLabel();
 
-            if (isQueueViewVisible)
+			if (_queueViewPanelVisible)
                 controller.BindToQueueTreeView(queueTreeView);
             else
                 controller.UnbindToQueueTreeView(queueTreeView);
@@ -901,7 +905,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
         private void UpdateViewQueuesButtonLabel()
         {
-            btnToggleQueueView.Text = (pnlViewQueues.Visible) ? "Hide &Queues" : "Show &Queues";
+			btnToggleQueueView.Text = (_queueViewPanelVisible) ? "Hide &Queues" : "Show &Queues";
         }
 
         // Updates the buttons of CCTray, after each poll
