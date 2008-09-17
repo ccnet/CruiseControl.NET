@@ -262,6 +262,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // CCTrayMultiSettingsForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(677, 361);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.btnCancel);

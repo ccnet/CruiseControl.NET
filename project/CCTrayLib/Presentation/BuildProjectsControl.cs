@@ -146,12 +146,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				}
 				lvProjects.EndUpdate();
 			}
-
-//			if (e.KeyCode == Keys.Escape)
-//			{
-//				DialogResult = DialogResult.Cancel;
-//				Close();
-//			}
 		}
 
 		private void chkCheck_CheckedChanged(object sender, EventArgs e)
