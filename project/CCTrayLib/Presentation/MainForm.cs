@@ -17,8 +17,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private MenuItem menuFile;
         private MenuItem menuFileExit;
         private ListView lvProjects;
-        private ColumnHeader colProject;
-        private ColumnHeader colServer;
         private ImageList iconList;
         private MainMenu mainMenu;
         private TrayIcon trayIcon;
@@ -33,12 +31,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private MenuItem mnuViewDetails;
         private ImageList largeIconList;
         private Button btnForceBuild;
-        private ColumnHeader colLastBuildLabel;
-        private ColumnHeader colActivity;
         private IContainer components;
         private MenuItem mnuFilePreferences;
         private MenuItem menuItem3;
-        private ColumnHeader colDetail;
         private MainFormController controller;
         private MenuItem mnuView;
         private ContextMenu mnuTrayContextMenu;
@@ -47,7 +42,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private MenuItem mnuTrayExit;
         private MenuItem menuItem5;
         private ICCTrayMultiConfiguration configuration;
-        private ColumnHeader colLastBuildTime;
         private bool systemShutdownInProgress;
         private MenuItem mnuFixBuild;
         private MenuItem mnuCancelPending;
@@ -60,10 +54,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private ImageList queueIconList;
         private MenuItem mnuQueueCancelPending;
         private Button btnStartStopProject;
-        private ColumnHeader colProjectStatus;
         private MenuItem mnuAbout;
         private ToolTip tltBuildStage;
         private PersistWindowState windowState;
+
+        private ColumnHeader[] _columnHeaders = new ColumnHeader[7];
+        private const int COLUMN_PROJECT = 0;
+        private const int COLUMN_SERVER = 1;
+        private const int COLUMN_ACTIVITY = 2;
+        private const int COLUMN_DETAIL = 3;
+        private const int COLUMN_LASTBUILDLABEL = 4;
+        private const int COLUMN_LASTBUILDTIME = 5;
+        private const int COLUMN_PROJECTSTATUS = 6;
 
         public MainForm(ICCTrayMultiConfiguration configuration)
         {
@@ -86,12 +88,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private void OnLoadState(object sender, WindowStateEventArgs e)
         {
             // get additional state information from registry
-            colProject.Width = (int)e.Key.GetValue("ProjectColumnWidth", 160);
-            colServer.Width = (int)e.Key.GetValue("ServerColumnWidth", 100);
-            colActivity.Width = (int)e.Key.GetValue("ActivityColumnWidth", 132);
-            colDetail.Width = (int)e.Key.GetValue("DetailColumnWidth", 250);
-            colLastBuildLabel.Width = (int)e.Key.GetValue("LastBuildLabelColumnWidth", 120);
-            colLastBuildTime.Width = (int)e.Key.GetValue("LastBuildTimeColumnWidth", 130);
+            _columnHeaders[COLUMN_PROJECT].Width = (int)e.Key.GetValue("ProjectColumnWidth", 160);
+            _columnHeaders[COLUMN_SERVER].Width = (int)e.Key.GetValue("ServerColumnWidth", 100);
+            _columnHeaders[COLUMN_ACTIVITY].Width = (int)e.Key.GetValue("ActivityColumnWidth", 132);
+            _columnHeaders[COLUMN_DETAIL].Width = (int)e.Key.GetValue("DetailColumnWidth", 250);
+            _columnHeaders[COLUMN_LASTBUILDLABEL].Width = (int)e.Key.GetValue("LastBuildLabelColumnWidth", 120);
+            _columnHeaders[COLUMN_LASTBUILDTIME].Width = (int)e.Key.GetValue("LastBuildTimeColumnWidth", 130);
             bool isQueueViewPanelVisible = bool.Parse(e.Key.GetValue("QueueViewPanelVisible", bool.FalseString).ToString());
             splitterQueueView.Visible = isQueueViewPanelVisible;
             pnlViewQueues.Visible = isQueueViewPanelVisible;
@@ -103,12 +105,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private void OnSaveState(object sender, WindowStateEventArgs e)
         {
             // save additional state information to registry
-            e.Key.SetValue("ProjectColumnWidth", colProject.Width);
-            e.Key.SetValue("ServerColumnWidth", colServer.Width);
-            e.Key.SetValue("ActivityColumnWidth", colActivity.Width);
-            e.Key.SetValue("DetailColumnWidth", colDetail.Width);
-            e.Key.SetValue("LastBuildLabelColumnWidth", colLastBuildLabel.Width);
-            e.Key.SetValue("LastBuildTimeColumnWidth", colLastBuildTime.Width);
+            e.Key.SetValue("ProjectColumnWidth", _columnHeaders[COLUMN_PROJECT].Width);
+            e.Key.SetValue("ServerColumnWidth", _columnHeaders[COLUMN_SERVER].Width);
+            e.Key.SetValue("ActivityColumnWidth", _columnHeaders[COLUMN_ACTIVITY].Width);
+            e.Key.SetValue("DetailColumnWidth", _columnHeaders[COLUMN_DETAIL].Width);
+            e.Key.SetValue("LastBuildLabelColumnWidth", _columnHeaders[COLUMN_LASTBUILDLABEL].Width);
+            e.Key.SetValue("LastBuildTimeColumnWidth", _columnHeaders[COLUMN_LASTBUILDTIME].Width);
             e.Key.SetValue("QueueViewPanelVisible", queueTreeView.Visible);
             e.Key.SetValue("QueueViewSplitterPosition", splitterQueueView.SplitPosition);
             e.Key.SetValue("ProjectViewMode", lvProjects.View.ToString());
@@ -185,13 +187,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.lvProjects = new System.Windows.Forms.ListView();
-            this.colProject = new System.Windows.Forms.ColumnHeader();
-            this.colServer = new System.Windows.Forms.ColumnHeader();
-            this.colActivity = new System.Windows.Forms.ColumnHeader();
-            this.colDetail = new System.Windows.Forms.ColumnHeader();
-            this.colLastBuildLabel = new System.Windows.Forms.ColumnHeader();
-            this.colLastBuildTime = new System.Windows.Forms.ColumnHeader();
-            this.colProjectStatus = new System.Windows.Forms.ColumnHeader();
+            this._columnHeaders[COLUMN_PROJECT] = new System.Windows.Forms.ColumnHeader();
+            this._columnHeaders[COLUMN_SERVER] = new System.Windows.Forms.ColumnHeader();
+            this._columnHeaders[COLUMN_ACTIVITY] = new System.Windows.Forms.ColumnHeader();
+            this._columnHeaders[COLUMN_DETAIL] = new System.Windows.Forms.ColumnHeader();
+            this._columnHeaders[COLUMN_LASTBUILDLABEL] = new System.Windows.Forms.ColumnHeader();
+            this._columnHeaders[COLUMN_LASTBUILDTIME] = new System.Windows.Forms.ColumnHeader();
+            this._columnHeaders[COLUMN_PROJECTSTATUS] = new System.Windows.Forms.ColumnHeader();
             this.projectContextMenu = new System.Windows.Forms.ContextMenu();
             this.mnuForce = new System.Windows.Forms.MenuItem();
             this.mnuAbort = new System.Windows.Forms.MenuItem();
@@ -236,13 +238,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // lvProjects
             // 
             this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colProject,
-            this.colServer,
-            this.colActivity,
-            this.colDetail,
-            this.colLastBuildLabel,
-            this.colLastBuildTime,
-            this.colProjectStatus});
+            this._columnHeaders[COLUMN_PROJECT],
+            this._columnHeaders[COLUMN_SERVER],
+            this._columnHeaders[COLUMN_ACTIVITY],
+            this._columnHeaders[COLUMN_DETAIL],
+            this._columnHeaders[COLUMN_LASTBUILDLABEL],
+            this._columnHeaders[COLUMN_LASTBUILDTIME],
+            this._columnHeaders[COLUMN_PROJECTSTATUS]});
             this.lvProjects.ContextMenu = this.projectContextMenu;
             this.lvProjects.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvProjects.FullRowSelect = true;
@@ -260,39 +262,39 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.lvProjects.SelectedIndexChanged += new System.EventHandler(this.lvProjects_SelectedIndexChanged);
             this.lvProjects.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvProjects_ColumnClick);
             // 
-            // colProject
+            // _columnHeaders[COLUMN_PROJECT]
             // 
-            this.colProject.Text = "Project";
-            this.colProject.Width = 160;
+            this._columnHeaders[COLUMN_PROJECT].Text = "Project";
+            this._columnHeaders[COLUMN_PROJECT].Width = 160;
             // 
-            // colServer
+            // _columnHeaders[COLUMN_SERVER]
             // 
-            this.colServer.Text = "Server";
-            this.colServer.Width = 100;
+            this._columnHeaders[COLUMN_SERVER].Text = "Server";
+            this._columnHeaders[COLUMN_SERVER].Width = 100;
             // 
-            // colActivity
+            // _columnHeaders[COLUMN_ACTIVITY]
             // 
-            this.colActivity.Text = "Activity";
-            this.colActivity.Width = 132;
+            this._columnHeaders[COLUMN_ACTIVITY].Text = "Activity";
+            this._columnHeaders[COLUMN_ACTIVITY].Width = 132;
             // 
-            // colDetail
+            // _columnHeaders[COLUMN_DETAIL]
             // 
-            this.colDetail.Text = "Detail";
-            this.colDetail.Width = 282;
+            this._columnHeaders[COLUMN_DETAIL].Text = "Detail";
+            this._columnHeaders[COLUMN_DETAIL].Width = 282;
             // 
-            // colLastBuildLabel
+            // _columnHeaders[COLUMN_LASTBUILDLABEL]
             // 
-            this.colLastBuildLabel.Text = "Last Build Label";
-            this.colLastBuildLabel.Width = 192;
+            this._columnHeaders[COLUMN_LASTBUILDLABEL].Text = "Last Build Label";
+            this._columnHeaders[COLUMN_LASTBUILDLABEL].Width = 192;
             // 
             // colLastBuildTime
             // 
-            this.colLastBuildTime.Text = "Last Build Time";
-            this.colLastBuildTime.Width = 112;
+            this._columnHeaders[COLUMN_LASTBUILDTIME].Text = "Last Build Time";
+            this._columnHeaders[COLUMN_LASTBUILDTIME].Width = 112;
             // 
-            // colProjectStatus
+            // _columnHeaders[COLUMN_PROJECTSTATUS]
             // 
-            this.colProjectStatus.Text = "Project Status";
+            this._columnHeaders[COLUMN_PROJECTSTATUS].Text = "Project Status";
             // 
             // projectContextMenu
             // 
@@ -941,6 +943,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         // Implements the manual sorting of items by columns.
         private class ListViewItemComparer : IComparer
         {
+            private static string[] _columnSortTypes = new string[] { "string", "string", "string", "string", "int", "datetime", "string" };
+
             private int col;
             private bool ascendingOrder;
 
@@ -974,8 +978,47 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
             public int Compare(object x, object y)
             {
-                int compare =
-                    String.Compare(((ListViewItem)x).SubItems[SortColumn].Text, ((ListViewItem)y).SubItems[SortColumn].Text);
+                int compare = 0;
+
+                switch (_columnSortTypes[col])
+                {
+                    case "int":                        
+                        int xValue = 0;
+                        int yValue = 0;
+
+                        if (int.TryParse(((ListViewItem)x).SubItems[SortColumn].Text, out xValue) && int.TryParse(((ListViewItem)y).SubItems[SortColumn].Text, out yValue))
+                        {
+                            if (xValue < yValue)
+                            {
+                                compare = -1;
+                            }
+                            else
+                            {
+                                if (xValue > yValue)
+                                {
+                                    compare = 1;
+                                }
+                                else
+                                {
+                                    compare = 0;
+                                }
+                            }
+                        }
+                        break;
+                    case "datetime":
+                        DateTime xDateTime = DateTime.MinValue;
+                        DateTime yDateTime = DateTime.MinValue;
+
+                        if (DateTime.TryParse(((ListViewItem)x).SubItems[SortColumn].Text, out xDateTime) && DateTime.TryParse(((ListViewItem)y).SubItems[SortColumn].Text, out yDateTime))
+                        {
+                            compare = DateTime.Compare(xDateTime, yDateTime);
+                        }
+                        break;
+                    default: // assume string
+                        compare = string.Compare(((ListViewItem)x).SubItems[SortColumn].Text, ((ListViewItem)y).SubItems[SortColumn].Text);
+                        break;
+                }
+                
                 if (!ascendingOrder)
                 {
                     compare = -compare;
