@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			monitor.ProjectStatus = CreateNewProjectStatus(nextBuildTime);
 			monitor.ProjectState = ProjectState.Success;
 
-			Assert.AreEqual(string.Format("Next build check: {0:T}", nextBuildTime), provider.FormatDetailString(monitor.Detail));
+			Assert.AreEqual(string.Format("Next build check: {0:G}", nextBuildTime), provider.FormatDetailString(monitor.Detail));
 		}
 
 		[Test]

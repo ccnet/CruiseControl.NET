@@ -29,7 +29,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				if (projectStatus.NextBuildTime == DateTime.MaxValue)
 					return "Project is not automatically triggered";
 
-				return string.Format("Next build check: {0:T}", projectStatus.NextBuildTime);
+                if (projectStatus.NextBuildTime.Date != DateTime.Now.Date)
+                {
+                    return string.Format("Next build check: {0:G}", projectStatus.NextBuildTime);
+                }
+                else
+                {
+                    return string.Format("Next build check: {0:T}", projectStatus.NextBuildTime);
+                }
 			}
 
 			TimeSpan durationRemaining = projectStatus.EstimatedTimeRemainingOnCurrentBuild;
