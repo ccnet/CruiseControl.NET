@@ -38,9 +38,17 @@
 </p>
 
 
-#if ($highestAmountPerDay > 0) #set($highestViewPerDay= $highestAmountPerDay / $dateMultiPlier)
-<table border="0" align="center" >
-  <tr><th>Build Overview</th></tr>
+#if ($highestAmountPerDay > 0) 
+ #set($highestViewPerDay= $highestAmountPerDay / $dateMultiPlier)
+
+<table border="0" align="center" cellspacing="0" cellpadding="2">
+  <tr><th colspan=2>Build Overview </th></tr>
+  <tr><td colspan=2  align=center> $OKPercent% </td></tr>
+    <tr height=5> 
+       <td width=$OKPercent bgcolor="#33CC00"> </td>
+       <td width=$NOKPercent bgcolor="#FF0000"> </td>
+  </tr>
+  <tr><td colspan=2> </td></tr>
 </table>
 <table border="2" align="center"  >
   <tr>
@@ -55,7 +63,7 @@
                 #if ( $cellIndex <= $currentDayInfo.AmountOfBuilds)
                   #set ($buildIndex =  $cellIndex - 1 )
                   #if ($currentDayInfo.Build($buildIndex).IsSuccesFull) 
-		     #set($color = "#009900")
+		     #set($color = "#99FF00")
                   #else 
 		     #set($color ="#FF9900")
                   #end

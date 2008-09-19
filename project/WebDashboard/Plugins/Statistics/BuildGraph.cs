@@ -17,7 +17,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
         private IBuildSpecifier[] mybuildSpecifiers;
         private ILinkFactory mylinkFactory;
         private Int32 myHighestAmountPerDay;
-                
+
+        private Int32 myOKBuildAmount;
+        private Int32 myFailedBuildAmount;
+
+            
         public BuildGraph(IBuildSpecifier[] buildSpecifiers, ILinkFactory linkFactory)
         {
             mybuildSpecifiers = buildSpecifiers;
@@ -31,7 +35,26 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
                 return myHighestAmountPerDay;
             }
         }
-    
+
+
+        // the amount of ok builds in this day
+        public Int32 AmountOfOKBuilds
+        {
+            get
+            {
+                return myOKBuildAmount;
+            }
+        }
+
+        // the amount of failed builds in this day
+        public Int32 AmountOfFailedBuilds
+        {
+            get
+            {
+                return myFailedBuildAmount;
+            }
+        }
+
 
         public override bool Equals(object obj)
         {            
@@ -108,6 +131,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
                 {
                     myHighestAmountPerDay = CurrentBuildDayInfo.AmountOfBuilds; 
                 }
+
+                myOKBuildAmount += CurrentBuildDayInfo.AmountOfOKBuilds;
+                myFailedBuildAmount += CurrentBuildDayInfo.AmountOfFailedBuilds;
             }
 
             return Result;
@@ -164,11 +190,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
             private DateTime myBuildDate; 
             private ArrayList myBuilds;
 
+            private Int32 myOKBuildAmount;
+            private Int32 myFailedBuildAmount;
+
+
             public GraphBuildDayInfo(GraphBuildInfo buildInfo)
             {
                 myBuildDate = buildInfo.BuildDate();
                 myBuilds = new ArrayList();
-                myBuilds.Add(buildInfo);
+                //myBuilds.Add(buildInfo);
+                AddBuild(buildInfo);
             }
 
             
@@ -205,6 +236,25 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
                 }
             }
 
+
+            // the amount of ok builds in this day
+            public Int32 AmountOfOKBuilds
+            {
+                get
+                {
+                    return myOKBuildAmount;
+                }
+            }
+
+            // the amount of failed builds in this day
+            public Int32 AmountOfFailedBuilds
+            {
+                get
+                {
+                    return myFailedBuildAmount;
+                }
+            }
+
             //retrieves a specific build in this day
             public GraphBuildInfo Build(Int32 index)
             {
@@ -215,6 +265,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
             public void AddBuild(GraphBuildInfo buildInfo)
             {
                 myBuilds.Insert(0, buildInfo);
+                if (buildInfo.IsSuccesFull())
+                {
+                    myOKBuildAmount++;
+                }
+                else
+                {
+                    myFailedBuildAmount++;
+                }
             }
         }
 	}

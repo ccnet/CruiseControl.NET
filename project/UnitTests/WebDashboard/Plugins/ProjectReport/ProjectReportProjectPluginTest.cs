@@ -95,7 +95,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
             
             expectedContext["highestAmountPerDay"] = 1;
             expectedContext["dateMultiPlier"] = 1;
-            
+
+            expectedContext["OKPercent"] = 100;
+            expectedContext["NOKPercent"] = 0;
                         
 
 
@@ -152,6 +154,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
             expectedContext["highestAmountPerDay"] = 1;
             expectedContext["dateMultiPlier"] = 1;
 
+            expectedContext["OKPercent"] = 100;
+            expectedContext["NOKPercent"] = 0;
 
             viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
 
@@ -211,6 +215,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
             expectedContext["highestAmountPerDay"] = 1;
             expectedContext["dateMultiPlier"] = 1;
 
+            expectedContext["OKPercent"] = 100;
+            expectedContext["NOKPercent"] = 0;
 
 
             viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ProjectReport.vm", new HashtableConstraint(expectedContext));

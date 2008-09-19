@@ -93,9 +93,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             velocityContext["highestAmountPerDay"] = GraphMaker.HighestAmountPerDay;
 
             DateMultiPlier = (GraphMaker.HighestAmountPerDay / MaxBuildTreshhold) + 1;
-            velocityContext["dateMultiPlier"] = DateMultiPlier;                                                  
+            velocityContext["dateMultiPlier"] = DateMultiPlier;
 
 
+            Int32 okpercent = 100;
+            if (GraphMaker.AmountOfOKBuilds + GraphMaker.AmountOfFailedBuilds > 0)
+            {
+                okpercent = 100 * GraphMaker.AmountOfOKBuilds / (GraphMaker.AmountOfOKBuilds + GraphMaker.AmountOfFailedBuilds);
+            }
+            velocityContext["OKPercent"] = okpercent;
+            velocityContext["NOKPercent"] = 100 - okpercent;
+                                           
             return viewGenerator.GenerateView(@"ProjectReport.vm", velocityContext);
         }
 
