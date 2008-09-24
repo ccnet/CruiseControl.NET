@@ -56,6 +56,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private Button btnStartStopProject;
         private MenuItem mnuAbout;
         private ToolTip tltBuildStage;
+        private MenuItem mnuCopyBuildLabel;
         private PersistWindowState windowState;
 		private bool _queueViewPanelVisible;
 
@@ -204,6 +205,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuWebPage = new System.Windows.Forms.MenuItem();
             this.mnuCancelPending = new System.Windows.Forms.MenuItem();
             this.mnuFixBuild = new System.Windows.Forms.MenuItem();
+            this.mnuCopyBuildLabel = new System.Windows.Forms.MenuItem();
             this.largeIconList = new System.Windows.Forms.ImageList(this.components);
             this.iconList = new System.Windows.Forms.ImageList(this.components);
             this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
@@ -227,11 +229,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.btnStartStopProject = new System.Windows.Forms.Button();
             this.splitterQueueView = new System.Windows.Forms.Splitter();
             this.pnlViewQueues = new System.Windows.Forms.Panel();
-            this.queueTreeView = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.QueueTreeView();
             this.queueIconList = new System.Windows.Forms.ImageList(this.components);
             this.queueContextMenu = new System.Windows.Forms.ContextMenu();
             this.mnuQueueCancelPending = new System.Windows.Forms.MenuItem();
             this.tltBuildStage = new System.Windows.Forms.ToolTip(this.components);
+            this.queueTreeView = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.QueueTreeView();
             this.trayIcon = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.TrayIcon();
             this.pnlButtons.SuspendLayout();
             this.pnlViewQueues.SuspendLayout();
@@ -255,7 +257,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.lvProjects.Location = new System.Drawing.Point(203, 0);
             this.lvProjects.MultiSelect = false;
             this.lvProjects.Name = "lvProjects";
-            this.lvProjects.Size = new System.Drawing.Size(689, 93);
+            this.lvProjects.Size = new System.Drawing.Size(689, 33);
             this.lvProjects.SmallImageList = this.iconList;
             this.lvProjects.TabIndex = 0;
             this.lvProjects.UseCompatibleStateImageBehavior = false;
@@ -307,7 +309,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuStop,
             this.mnuWebPage,
             this.mnuCancelPending,
-            this.mnuFixBuild});
+            this.mnuFixBuild,
+            this.mnuCopyBuildLabel});
             this.projectContextMenu.Popup += new System.EventHandler(this.projectContextMenu_Popup);
             // 
             // mnuForce
@@ -351,6 +354,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuFixBuild.Index = 6;
             this.mnuFixBuild.Text = "&Volunteer to Fix Build";
             this.mnuFixBuild.Click += new System.EventHandler(this.mnuFixBuild_Click);
+            // 
+            // mnuCopyBuildLabel
+            // 
+            this.mnuCopyBuildLabel.Index = 7;
+            this.mnuCopyBuildLabel.Text = "Copy Build &Label";
+            this.mnuCopyBuildLabel.Click += new System.EventHandler(this.mnuCopyBuildLabel_Click);
             // 
             // largeIconList
             // 
@@ -470,7 +479,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.pnlButtons.Controls.Add(this.btnForceBuild);
             this.pnlButtons.Controls.Add(this.btnStartStopProject);
             this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlButtons.Location = new System.Drawing.Point(0, 93);
+            this.pnlButtons.Location = new System.Drawing.Point(0, 33);
             this.pnlButtons.Name = "pnlButtons";
             this.pnlButtons.Size = new System.Drawing.Size(892, 45);
             this.pnlButtons.TabIndex = 1;
@@ -512,7 +521,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             this.splitterQueueView.Location = new System.Drawing.Point(200, 0);
             this.splitterQueueView.Name = "splitterQueueView";
-            this.splitterQueueView.Size = new System.Drawing.Size(3, 93);
+            this.splitterQueueView.Size = new System.Drawing.Size(3, 33);
             this.splitterQueueView.TabIndex = 3;
             this.splitterQueueView.TabStop = false;
             this.splitterQueueView.Visible = false;
@@ -523,21 +532,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.pnlViewQueues.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlViewQueues.Location = new System.Drawing.Point(0, 0);
             this.pnlViewQueues.Name = "pnlViewQueues";
-            this.pnlViewQueues.Size = new System.Drawing.Size(200, 93);
+            this.pnlViewQueues.Size = new System.Drawing.Size(200, 33);
             this.pnlViewQueues.TabIndex = 4;
             this.pnlViewQueues.Visible = false;
-            // 
-            // queueTreeView
-            // 
-            this.queueTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.queueTreeView.ImageIndex = 0;
-            this.queueTreeView.ImageList = this.queueIconList;
-            this.queueTreeView.Location = new System.Drawing.Point(0, 0);
-            this.queueTreeView.Name = "queueTreeView";
-            this.queueTreeView.SelectedImageIndex = 0;
-            this.queueTreeView.Size = new System.Drawing.Size(200, 93);
-            this.queueTreeView.TabIndex = 2;
-            this.queueTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.queueTreeView_MouseUp);
             // 
             // queueIconList
             // 
@@ -556,6 +553,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuQueueCancelPending.Text = "&Cancel Pending";
             this.mnuQueueCancelPending.Click += new System.EventHandler(this.mnuQueueCancelPending_Click);
             // 
+            // queueTreeView
+            // 
+            this.queueTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.queueTreeView.ImageIndex = 0;
+            this.queueTreeView.ImageList = this.queueIconList;
+            this.queueTreeView.Location = new System.Drawing.Point(0, 0);
+            this.queueTreeView.Name = "queueTreeView";
+            this.queueTreeView.SelectedImageIndex = 0;
+            this.queueTreeView.Size = new System.Drawing.Size(200, 33);
+            this.queueTreeView.TabIndex = 2;
+            this.queueTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.queueTreeView_MouseUp);
+            // 
             // trayIcon
             // 
             this.trayIcon.ContextMenu = this.mnuTrayContextMenu;
@@ -568,7 +577,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(892, 138);
+            this.ClientSize = new System.Drawing.Size(892, 78);
             this.Controls.Add(this.lvProjects);
             this.Controls.Add(this.splitterQueueView);
             this.Controls.Add(this.pnlViewQueues);
@@ -677,6 +686,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             controller.AbortBuild();
         }
 
+        private void mnuCopyBuildLabel_Click(object sender, EventArgs e)
+        {
+            controller.CopyBuildLabel();
+        }
+
         private void mnuCancelPending_Click(object sender, EventArgs e)
         {
             controller.CancelPending();
@@ -744,6 +758,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             mnuWebPage.Enabled = controller.IsProjectSelected;
             mnuCancelPending.Visible = controller.CanCancelPending();
             mnuFixBuild.Visible = controller.CanFixBuild();
+            mnuCopyBuildLabel.Visible = controller.IsProjectSelected;
         }
 
         private void mnuFilePreferences_Click(object sender, EventArgs e)

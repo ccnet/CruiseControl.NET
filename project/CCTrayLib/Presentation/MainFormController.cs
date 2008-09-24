@@ -117,6 +117,23 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		
 		public event EventHandler IsProjectSelectedChanged;
 
+        public void CopyBuildLabel()
+        {
+            if (IsProjectSelected)
+            {
+                // sometimes you get an error on setting test to the clipboard
+                // only catch these errors
+                try
+                {
+                    Clipboard.SetText(SelectedProject.Detail.LastBuildLabel);
+                }
+                catch (System.Runtime.InteropServices.ExternalException )
+                    {
+                    
+                    }
+            }
+        }
+
 		public void ForceBuild()
 		{
 			if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
