@@ -537,6 +537,9 @@
     <Compile Include="sourcecontrol\Modification.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="sourcecontrol\MultiIssueTrackerUrlBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="sourcecontrol\MultiSourceControl.cs">
       <SubType>Code</SubType>
     </Compile>

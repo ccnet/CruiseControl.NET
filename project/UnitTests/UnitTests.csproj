@@ -578,6 +578,9 @@
     <Compile Include="Core\SourceControl\ModificationTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\SourceControl\MultiIssueTrackerUrlbuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Core\SourceControl\MultiSourceControlTest.cs">
       <SubType>Code</SubType>
     </Compile>
