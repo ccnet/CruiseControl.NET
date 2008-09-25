@@ -622,6 +622,7 @@
     <Compile Include="Core\SourceControl\QuietPeriodTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\SourceControl\RegExIssueTrackerUrlBuilderTest.cs" />
     <Compile Include="Core\SourceControl\StarTeamHistoryParserTest.cs">
       <SubType>Code</SubType>
     </Compile>

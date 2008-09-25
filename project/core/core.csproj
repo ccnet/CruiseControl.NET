@@ -588,6 +588,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="sourcecontrol\DefaultIssueTrackerUrlBuilder.cs" />
+    <Compile Include="sourcecontrol\RegExIssueTrackerUrlBuilder.cs" />
     <Compile Include="sourcecontrol\StarTeam.cs">
       <SubType>Code</SubType>
     </Compile>
