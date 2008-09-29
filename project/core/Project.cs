@@ -193,9 +193,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		
 		private static void RunTasks(IIntegrationResult result, IList tasksToRun)
 		{
-            //lastTimeBuildStageChecked = DateTime.Now.AddSeconds(-buildStageCheckPeriodInSeconds);
-
-			foreach (ITask task in tasksToRun)
+            foreach (ITask task in tasksToRun)
 			{
 				task.Run(result);
 				if (result.Failed) break;
