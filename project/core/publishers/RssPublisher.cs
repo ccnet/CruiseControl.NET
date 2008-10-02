@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             {
                 for (int i = 0; i <= result.Modifications.Length - 1; i++)
                 {
-                    if (result.Modifications[i].Comment.Length > 0 )
+                    if (!(result.Modifications[i].Comment == null) &&  result.Modifications[i].Comment.Length > 0 )
                         return "First Comment : " + result.Modifications[i].Comment;
                 }
                 
