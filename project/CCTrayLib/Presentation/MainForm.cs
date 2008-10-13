@@ -10,6 +10,17 @@ using Message = System.Windows.Forms.Message;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
+    enum CCTrayColumnHeader
+    {
+        Project = 0,
+        Server = 1,
+        Activity = 2,
+        Detail = 3,
+        LastBuildLabel = 4,
+        LastBuildTime = 5,
+        ProjectStatus = 6
+    }
+    
     public class MainForm : Form
     {
         private static int WM_QUERYENDSESSION = 0x0011;
@@ -29,6 +40,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private MenuItem mnuViewIcons;
         private MenuItem mnuViewList;
         private MenuItem mnuViewDetails;
+        private MenuItem mnuCopyBuildLabel;
         private ImageList largeIconList;
         private Button btnForceBuild;
         private IContainer components;
@@ -56,24 +68,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private Button btnStartStopProject;
         private MenuItem mnuAbout;
         private ToolTip tltBuildStage;
-        private MenuItem mnuCopyBuildLabel;
         private PersistWindowState windowState;
-		private bool _queueViewPanelVisible;
-
-        private ColumnHeader[] _columnHeaders = new ColumnHeader[7];
-        private const int COLUMN_PROJECT = 0;
-        private const int COLUMN_SERVER = 1;
-        private const int COLUMN_ACTIVITY = 2;
-        private const int COLUMN_DETAIL = 3;
-        private const int COLUMN_LASTBUILDLABEL = 4;
-        private const int COLUMN_LASTBUILDTIME = 5;
-        private const int COLUMN_PROJECTSTATUS = 6;
+        private bool queueViewPanelVisible;
+        private ColumnHeader[] columnHeaders;
 
         public MainForm(ICCTrayMultiConfiguration configuration)
         {
             this.configuration = configuration;
 
             InitializeComponent();
+
             HookPersistentWindowState();
         }
 
@@ -90,17 +94,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private void OnLoadState(object sender, WindowStateEventArgs e)
         {
             // get additional state information from registry
-            _columnHeaders[COLUMN_PROJECT].Width = (int)e.Key.GetValue("ProjectColumnWidth", 160);
-            _columnHeaders[COLUMN_SERVER].Width = (int)e.Key.GetValue("ServerColumnWidth", 100);
-            _columnHeaders[COLUMN_ACTIVITY].Width = (int)e.Key.GetValue("ActivityColumnWidth", 132);
-            _columnHeaders[COLUMN_DETAIL].Width = (int)e.Key.GetValue("DetailColumnWidth", 250);
-            _columnHeaders[COLUMN_LASTBUILDLABEL].Width = (int)e.Key.GetValue("LastBuildLabelColumnWidth", 120);
-            _columnHeaders[COLUMN_LASTBUILDTIME].Width = (int)e.Key.GetValue("LastBuildTimeColumnWidth", 130);
-			_queueViewPanelVisible = bool.Parse(e.Key.GetValue("QueueViewPanelVisible", bool.FalseString).ToString());
-			splitterQueueView.Visible = _queueViewPanelVisible;
-			pnlViewQueues.Visible = _queueViewPanelVisible;
-			queueTreeView.Visible = _queueViewPanelVisible;
+            //_columnHeaders = new ColumnHeader[7];
+            columnHeaders[(int)CCTrayColumnHeader.Project].Width = (int)e.Key.GetValue("ProjectColumnWidth", 160);
+            columnHeaders[(int)CCTrayColumnHeader.Server].Width = (int)e.Key.GetValue("ServerColumnWidth", 100);
+            columnHeaders[(int)CCTrayColumnHeader.Activity].Width = (int)e.Key.GetValue("ActivityColumnWidth", 132);
+            columnHeaders[(int)CCTrayColumnHeader.Detail].Width = (int)e.Key.GetValue("DetailColumnWidth", 250);
+            columnHeaders[(int)CCTrayColumnHeader.LastBuildLabel].Width = (int)e.Key.GetValue("LastBuildLabelColumnWidth", 120);
+            columnHeaders[(int)CCTrayColumnHeader.LastBuildTime].Width = (int)e.Key.GetValue("LastBuildTimeColumnWidth", 130);
+            queueViewPanelVisible = bool.Parse(e.Key.GetValue("QueueViewPanelVisible", bool.FalseString).ToString());
+            splitterQueueView.Visible = queueViewPanelVisible;
+            pnlViewQueues.Visible = queueViewPanelVisible;
+            queueTreeView.Visible = queueViewPanelVisible;
+
             UpdateViewQueuesButtonLabel();
+
             splitterQueueView.SplitPosition = (int)e.Key.GetValue("QueueViewSplitterPosition", 80);
             lvProjects.View = (View)Enum.Parse(typeof(View), (string)e.Key.GetValue("ProjectViewMode", View.Details.ToString()));
         }
@@ -108,13 +115,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private void OnSaveState(object sender, WindowStateEventArgs e)
         {
             // save additional state information to registry
-            e.Key.SetValue("ProjectColumnWidth", _columnHeaders[COLUMN_PROJECT].Width);
-            e.Key.SetValue("ServerColumnWidth", _columnHeaders[COLUMN_SERVER].Width);
-            e.Key.SetValue("ActivityColumnWidth", _columnHeaders[COLUMN_ACTIVITY].Width);
-            e.Key.SetValue("DetailColumnWidth", _columnHeaders[COLUMN_DETAIL].Width);
-            e.Key.SetValue("LastBuildLabelColumnWidth", _columnHeaders[COLUMN_LASTBUILDLABEL].Width);
-            e.Key.SetValue("LastBuildTimeColumnWidth", _columnHeaders[COLUMN_LASTBUILDTIME].Width);
-			e.Key.SetValue("QueueViewPanelVisible", _queueViewPanelVisible);
+            e.Key.SetValue("ProjectColumnWidth", columnHeaders[(int)CCTrayColumnHeader.Project].Width);
+            e.Key.SetValue("ServerColumnWidth", columnHeaders[(int)CCTrayColumnHeader.Server].Width);
+            e.Key.SetValue("ActivityColumnWidth", columnHeaders[(int)CCTrayColumnHeader.Activity].Width);
+            e.Key.SetValue("DetailColumnWidth", columnHeaders[(int)CCTrayColumnHeader.Detail].Width);
+            e.Key.SetValue("LastBuildLabelColumnWidth", columnHeaders[(int)CCTrayColumnHeader.LastBuildLabel].Width);
+            e.Key.SetValue("LastBuildTimeColumnWidth", columnHeaders[(int)CCTrayColumnHeader.LastBuildTime].Width);
+            e.Key.SetValue("QueueViewPanelVisible", queueViewPanelVisible);
             e.Key.SetValue("QueueViewSplitterPosition", splitterQueueView.SplitPosition);
             e.Key.SetValue("ProjectViewMode", lvProjects.View.ToString());
         }
@@ -133,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             controller.SetFormTopMost(this);
             controller.SetFormShowInTaskbar(this);
 
-			if (_queueViewPanelVisible)
+            if (queueViewPanelVisible)
             {
                 controller.BindToQueueTreeView(queueTreeView);
             }
@@ -190,13 +197,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.lvProjects = new System.Windows.Forms.ListView();
-            this._columnHeaders[COLUMN_PROJECT] = new System.Windows.Forms.ColumnHeader();
-            this._columnHeaders[COLUMN_SERVER] = new System.Windows.Forms.ColumnHeader();
-            this._columnHeaders[COLUMN_ACTIVITY] = new System.Windows.Forms.ColumnHeader();
-            this._columnHeaders[COLUMN_DETAIL] = new System.Windows.Forms.ColumnHeader();
-            this._columnHeaders[COLUMN_LASTBUILDLABEL] = new System.Windows.Forms.ColumnHeader();
-            this._columnHeaders[COLUMN_LASTBUILDTIME] = new System.Windows.Forms.ColumnHeader();
-            this._columnHeaders[COLUMN_PROJECTSTATUS] = new System.Windows.Forms.ColumnHeader();
+
+            this.columnHeaders = new ColumnHeader[7];
+            this.columnHeaders[(int)CCTrayColumnHeader.Project] = new System.Windows.Forms.ColumnHeader();
+            this.columnHeaders[(int)CCTrayColumnHeader.Server] = new System.Windows.Forms.ColumnHeader();
+            this.columnHeaders[(int)CCTrayColumnHeader.Activity] = new System.Windows.Forms.ColumnHeader();
+            this.columnHeaders[(int)CCTrayColumnHeader.Detail] = new System.Windows.Forms.ColumnHeader();
+            this.columnHeaders[(int)CCTrayColumnHeader.LastBuildLabel] = new System.Windows.Forms.ColumnHeader();
+            this.columnHeaders[(int)CCTrayColumnHeader.LastBuildTime] = new System.Windows.Forms.ColumnHeader();
+            this.columnHeaders[(int)CCTrayColumnHeader.ProjectStatus] = new System.Windows.Forms.ColumnHeader();
+            
             this.projectContextMenu = new System.Windows.Forms.ContextMenu();
             this.mnuForce = new System.Windows.Forms.MenuItem();
             this.mnuAbort = new System.Windows.Forms.MenuItem();
@@ -242,13 +252,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // lvProjects
             // 
             this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this._columnHeaders[COLUMN_PROJECT],
-            this._columnHeaders[COLUMN_SERVER],
-            this._columnHeaders[COLUMN_ACTIVITY],
-            this._columnHeaders[COLUMN_DETAIL],
-            this._columnHeaders[COLUMN_LASTBUILDLABEL],
-            this._columnHeaders[COLUMN_LASTBUILDTIME],
-            this._columnHeaders[COLUMN_PROJECTSTATUS]});
+                this.columnHeaders[(int)CCTrayColumnHeader.Project],
+                this.columnHeaders[(int)CCTrayColumnHeader.Server],
+                this.columnHeaders[(int)CCTrayColumnHeader.Activity],
+                this.columnHeaders[(int)CCTrayColumnHeader.Detail],
+                this.columnHeaders[(int)CCTrayColumnHeader.LastBuildLabel],
+                this.columnHeaders[(int)CCTrayColumnHeader.LastBuildTime],
+                this.columnHeaders[(int)CCTrayColumnHeader.ProjectStatus]
+            });
+
             this.lvProjects.ContextMenu = this.projectContextMenu;
             this.lvProjects.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvProjects.FullRowSelect = true;
@@ -266,51 +278,52 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.lvProjects.SelectedIndexChanged += new System.EventHandler(this.lvProjects_SelectedIndexChanged);
             this.lvProjects.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvProjects_ColumnClick);
             // 
-            // _columnHeaders[COLUMN_PROJECT]
+            // columnHeaders[COLUMN_PROJECT]
             // 
-            this._columnHeaders[COLUMN_PROJECT].Text = "Project";
-            this._columnHeaders[COLUMN_PROJECT].Width = 160;
+            this.columnHeaders[(int)CCTrayColumnHeader.Project].Text = "Project";
+            this.columnHeaders[(int)CCTrayColumnHeader.Project].Width = 160;
             // 
-            // _columnHeaders[COLUMN_SERVER]
+            // columnHeaders[COLUMN_SERVER]
             // 
-            this._columnHeaders[COLUMN_SERVER].Text = "Server";
-            this._columnHeaders[COLUMN_SERVER].Width = 100;
+            this.columnHeaders[(int)CCTrayColumnHeader.Server].Text = "Server";
+            this.columnHeaders[(int)CCTrayColumnHeader.Server].Width = 100;
             // 
-            // _columnHeaders[COLUMN_ACTIVITY]
+            // columnHeaders[(int)CCTrayColumnHeader.Activity]
             // 
-            this._columnHeaders[COLUMN_ACTIVITY].Text = "Activity";
-            this._columnHeaders[COLUMN_ACTIVITY].Width = 132;
+            this.columnHeaders[(int)CCTrayColumnHeader.Activity].Text = "Activity";
+            this.columnHeaders[(int)CCTrayColumnHeader.Activity].Width = 132;
             // 
-            // _columnHeaders[COLUMN_DETAIL]
+            // columnHeaders[(int)CCTrayColumnHeader.Detail]
             // 
-            this._columnHeaders[COLUMN_DETAIL].Text = "Detail";
-            this._columnHeaders[COLUMN_DETAIL].Width = 282;
+            this.columnHeaders[(int)CCTrayColumnHeader.Detail].Text = "Detail";
+            this.columnHeaders[(int)CCTrayColumnHeader.Detail].Width = 282;
+            //
+            // columnHeaders[(int)CCTrayColumnHeader.LastBuildLabel]
             // 
-            // _columnHeaders[COLUMN_LASTBUILDLABEL]
-            // 
-            this._columnHeaders[COLUMN_LASTBUILDLABEL].Text = "Last Build Label";
-            this._columnHeaders[COLUMN_LASTBUILDLABEL].Width = 192;
+            this.columnHeaders[(int)CCTrayColumnHeader.LastBuildLabel].Text = "Last Build Label";
+            this.columnHeaders[(int)CCTrayColumnHeader.LastBuildLabel].Width = 192;
             // 
             // colLastBuildTime
             // 
-            this._columnHeaders[COLUMN_LASTBUILDTIME].Text = "Last Build Time";
-            this._columnHeaders[COLUMN_LASTBUILDTIME].Width = 112;
+            this.columnHeaders[(int)CCTrayColumnHeader.LastBuildTime].Text = "Last Build Time";
+            this.columnHeaders[(int)CCTrayColumnHeader.LastBuildTime].Width = 112;
             // 
-            // _columnHeaders[COLUMN_PROJECTSTATUS]
+            // columnHeaders[COLUMN_PROJECTSTATUS]
             // 
-            this._columnHeaders[COLUMN_PROJECTSTATUS].Text = "Project Status";
+            this.columnHeaders[(int)CCTrayColumnHeader.ProjectStatus].Text = "Project Status";
             // 
             // projectContextMenu
             // 
             this.projectContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuForce,
-            this.mnuAbort,
-            this.mnuStart,
-            this.mnuStop,
-            this.mnuWebPage,
-            this.mnuCancelPending,
-            this.mnuFixBuild,
-            this.mnuCopyBuildLabel});
+                this.mnuForce,
+                this.mnuAbort,
+                this.mnuStart,
+                this.mnuStop,
+                this.mnuWebPage,
+                this.mnuCancelPending,
+                this.mnuFixBuild,
+                this.mnuCopyBuildLabel
+            });
             this.projectContextMenu.Popup += new System.EventHandler(this.projectContextMenu_Popup);
             // 
             // mnuForce
@@ -873,16 +886,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             controller.VolunteerToFixBuild();
         }
 
-        private void btnToggleQueueView_Click(object sender, EventArgs e)
+        private void btnToggleQueueView_Click(object sender, EventArgs e)        
         {
-			_queueViewPanelVisible = !_queueViewPanelVisible;
-			splitterQueueView.Visible = _queueViewPanelVisible;
-			pnlViewQueues.Visible = _queueViewPanelVisible;
-			queueTreeView.Visible = _queueViewPanelVisible;
+            queueViewPanelVisible = !queueViewPanelVisible;
+            
+            splitterQueueView.Visible = queueViewPanelVisible;
+            pnlViewQueues.Visible = queueViewPanelVisible;
+            queueTreeView.Visible = queueViewPanelVisible;
 
             UpdateViewQueuesButtonLabel();
 
-			if (_queueViewPanelVisible)
+            if (queueViewPanelVisible)
                 controller.BindToQueueTreeView(queueTreeView);
             else
                 controller.UnbindToQueueTreeView(queueTreeView);
@@ -920,7 +934,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
         private void UpdateViewQueuesButtonLabel()
         {
-			btnToggleQueueView.Text = (_queueViewPanelVisible) ? "Hide &Queues" : "Show &Queues";
+            btnToggleQueueView.Text = (queueViewPanelVisible) ? "Hide &Queues" : "Show &Queues";
         }
 
         // Updates the buttons of CCTray, after each poll
