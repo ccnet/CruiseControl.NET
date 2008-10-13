@@ -45,8 +45,23 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			if (File.Exists(filename))
 			{
-				File.SetAttributes(filename, FileAttributes.Normal);
-				File.Delete(filename);
+                // This try/catch block craziness is to handle symbolic links on Unix based systems.
+                // For Some reason Exists returns true on Symlinks, but SetAttributes throws a 
+                // FileNotFoundException on them (?) as a hack we catch that and still call delete, since
+                // that also actually works. Be great to eliminate setattributes, but we need it for ReadOnly
+                try
+                {
+                    File.SetAttributes(filename, FileAttributes.Normal);
+                    File.Delete(filename);
+                }
+                catch (System.IO.FileNotFoundException)
+                {
+                    File.Delete(filename);
+                }
+                catch (System.Exception)
+                {
+                    throw;
+                }                
 			}
 		}
 	}
