@@ -11,42 +11,118 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
-	[ReflectorType("viewConfigurationProjectPlugin")]	
-	public class ViewConfigurationProjectPlugin : ICruiseAction, IPlugin
-	{
-		private readonly ICruiseManagerWrapper cruiseManager;
+    [ReflectorType("viewConfigurationProjectPlugin")]
+    public class ViewConfigurationProjectPlugin : ICruiseAction, IPlugin
+    {
+        private readonly ICruiseManagerWrapper cruiseManager;
 
-		public ViewConfigurationProjectPlugin(ICruiseManagerWrapper cruiseManager)
-		{
-			this.cruiseManager = cruiseManager;
-		}
+        private bool hidePasswords = true;
 
-		public IResponse Execute(ICruiseRequest cruiseRequest)
-		{
-			IProjectSpecifier projectSpecifier = cruiseRequest.ProjectSpecifier;
-			string projectXml = cruiseManager.GetProject(projectSpecifier);
-			return new HtmlFragmentResponse("<pre>" + HttpUtility.HtmlEncode(FormatXml(projectXml)) + "</pre>");
-		}
+        [ReflectorProperty("hidePasswords", Required = false)]
+        public bool HidePasswords
+        {
+            get { return hidePasswords; }
+            set { hidePasswords = value; }
+        }
 
-		private string FormatXml(string projectXml)
-		{
-			XmlDocument document = new XmlDocument();
-			document.LoadXml(projectXml);
-			StringWriter buffer = new StringWriter();
-			XmlTextWriter writer = new XmlTextWriter(buffer);
-			writer.Formatting = Formatting.Indented;
-			document.WriteTo(writer);
-			return buffer.ToString();
-		}
+        public ViewConfigurationProjectPlugin(ICruiseManagerWrapper cruiseManager)
+        {
+            this.cruiseManager = cruiseManager;
+        }
 
-		public string LinkDescription
-		{
-			get { return "Project Configuration"; }
-		}
+        public IResponse Execute(ICruiseRequest cruiseRequest)
+        {
+            IProjectSpecifier projectSpecifier = cruiseRequest.ProjectSpecifier;
+            string projectXml = cruiseManager.GetProject(projectSpecifier);
+            return new HtmlFragmentResponse("<pre>" + HttpUtility.HtmlEncode(FormatXml(projectXml)) + "</pre>");
+        }
 
-		public INamedAction[] NamedActions
-		{
-			get { return new INamedAction[] {new ImmutableNamedAction("ViewProjectConfiguration", this)}; }
-		}
-	}
+        private string FormatXml(string projectXml)
+        {
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(projectXml);
+            StringWriter buffer = new StringWriter();
+            XmlTextWriter writer = new XmlTextWriter(buffer);
+            writer.Formatting = Formatting.Indented;
+            document.WriteTo(writer);
+
+            string Result;
+            if (hidePasswords)
+            {
+                Result = SecureProjectView(buffer.ToString());
+            }
+            else
+            {
+                Result = buffer.ToString();
+            }
+
+
+            return Result;
+        }
+
+        public string LinkDescription
+        {
+            get { return "Project Configuration"; }
+        }
+
+        public INamedAction[] NamedActions
+        {
+            get { return new INamedAction[] { new ImmutableNamedAction("ViewProjectConfiguration", this) }; }
+        }
+
+
+        private string SecureProjectView(string project)
+        {
+            const string PasswordReplacement = "*****";
+
+            System.IO.StringReader projectReader = new StringReader(project);
+            string projectLine = projectReader.ReadLine();
+
+            System.IO.StringWriter result = new StringWriter();
+            string replacedPassword="";
+
+            int startPos;
+            int endPos;
+
+
+            while (!(projectLine == null))
+            {
+                if (System.Text.RegularExpressions.Regex.IsMatch(projectLine,"password", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                {
+                    endPos = projectLine.IndexOf("</");
+
+                    if (endPos > 0)
+                    {
+                        //structure : <password>somevalue</password>
+
+                        startPos = projectLine.IndexOf(">");
+                        replacedPassword = projectLine.Substring(0,startPos+1);
+                        replacedPassword += PasswordReplacement;
+                        replacedPassword += projectLine.Substring(endPos);
+                    }
+                    else
+                    {
+                        //structure : <password />
+                        replacedPassword = projectLine.Replace(" /","");
+                        string temp = replacedPassword.Trim();
+
+                        replacedPassword += PasswordReplacement;
+                        replacedPassword += temp.Insert(1,"/");
+                    }
+
+                    result.WriteLine(replacedPassword);
+                }
+                else
+                {
+                    result.WriteLine(projectLine);
+                }
+
+                projectLine = projectReader.ReadLine();
+            }
+
+            return result.ToString();
+        }
+
+
+    }
 }
