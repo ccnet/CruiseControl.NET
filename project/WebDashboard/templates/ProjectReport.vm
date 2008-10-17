@@ -53,7 +53,7 @@
 <table border="2" align="center"  >
   <tr>
     <td>
-      <table border="1" cellspacing="0" cellpadding="2" bgcolor="#99CCFF">
+      <table border="0" cellspacing="0" cellpadding="2" bgcolor="#99CCFF">
         #foreach ($dayBuildCounter in [1..$highestViewPerDay])
          <tr align="center">
            <td></td>
