@@ -817,9 +817,6 @@
     <Compile Include="util\ProcessInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="util\ProcessReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="util\ProcessResult.cs">
       <SubType>Code</SubType>
     </Compile>

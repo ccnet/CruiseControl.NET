@@ -794,9 +794,6 @@
     <Compile Include="Core\Util\ProcessInfoTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\Util\ProcessReaderTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Core\Util\ReflectionUtilTest.cs">
       <SubType>Code</SubType>
     </Compile>
