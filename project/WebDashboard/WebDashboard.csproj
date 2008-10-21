@@ -539,6 +539,7 @@
     </Compile>
     <Compile Include="Plugins\ProjectReport\ProjectXmlReport.cs" />
     <Compile Include="Plugins\RSS\RSSFeed.cs" />
+    <Compile Include="Plugins\ServerReport\QueueStatusServerPlugin.cs" />
     <Compile Include="Plugins\ServerReport\ServerInformationServerPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
