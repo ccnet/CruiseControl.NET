@@ -71,7 +71,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			return links.ToArray();
 		}
 
-		public HtmlFragmentResponse Execute()
+
+        
+        public HtmlFragmentResponse Execute()
 		{
 			Hashtable velocityContext = new Hashtable();
 			string velocityTemplateName;
@@ -95,6 +97,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 					IAbsoluteLink[] categoryLinks = GetCategoryLinks(serverSpecifier);
 					velocityContext["showCategories"] = (categoryLinks != null) ? true : false;
 					velocityContext["categorylinks"] = categoryLinks;
+
 					velocityTemplateName = @"ServerSideBar.vm";
 				}
 				else

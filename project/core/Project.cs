@@ -277,7 +277,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				new ProjectStatus(Name, Category, CurrentActivity, LastIntegration.Status, integrator.State, WebURL,
 				                  LastIntegration.StartTime, LastIntegration.Label,
 				                  LastIntegration.LastSuccessfulIntegrationLabel,
-                                  Triggers.NextBuild, CurrentBuildStage());
+                                  Triggers.NextBuild, CurrentBuildStage(),QueueName,QueuePriority);
 			status.Messages = (Message[]) messages.ToArray(typeof (Message));			
             return status;
 		}

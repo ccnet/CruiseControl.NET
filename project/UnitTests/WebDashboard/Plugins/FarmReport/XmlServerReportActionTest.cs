@@ -118,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.FarmReport
 		            new ProjectStatus("HelloWorld", "category", ProjectActivity.Sleeping, IntegrationStatus.Success,
 		                              ProjectIntegratorState.Running,
 		                              "http://blah", LastBuildTime, "build_8", "build_7",
-		                              NextBuildTime,"")
+		                              NextBuildTime,"", "", 0)
 		        };
             QueueSetSnapshot snapshot = new QueueSetSnapshot();
             snapshot.Queues.Add(new QueueSnapshot("Queue1"));

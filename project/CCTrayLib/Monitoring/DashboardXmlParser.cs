@@ -42,7 +42,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		public string category;
 
         [XmlAttribute()]
-        public string buildStage;  
+        public string buildStage;
+
+        [XmlAttribute()]
+        public string queue;
+
+        [XmlAttribute()]
+        public int queuePriority;
 
 	}
 
@@ -154,7 +160,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
                         dashboardProject.lastBuildLabel,
                         dashboardProject.lastBuildLabel,
                         dashboardProject.nextBuildTime,
-                        dashboardProject.buildStage);
+                        dashboardProject.buildStage,
+                        dashboardProject.queue,
+                        dashboardProject.queuePriority);
                 }
             }
             return projectStatuses;

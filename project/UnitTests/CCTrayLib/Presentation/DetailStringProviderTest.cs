@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 				"NAME", "category",
 				ProjectActivity.Sleeping,
 				IntegrationStatus.Unknown,
-				ProjectIntegratorState.Running, "url", DateTime.MinValue, "lastLabel", null, nextBuildTime,"");
+                ProjectIntegratorState.Running, "url", DateTime.MinValue, "lastLabel", null, nextBuildTime, "", "", 0);
 		}
 	}
 }

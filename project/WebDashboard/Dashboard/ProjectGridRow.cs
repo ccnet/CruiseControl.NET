@@ -73,6 +73,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			get { return url; }
 		}
 
+
+        public string Queue
+        {
+            get { return status.Queue; }
+        }
+
+
+        public int QueuePriority
+        {
+            get { return status.QueuePriority; }
+        }
+
+
 		public string StartStopButtonName
 		{
 			get { return (status.Status == ProjectIntegratorState.Running) ? "StopBuild" : "StartBuild"; }

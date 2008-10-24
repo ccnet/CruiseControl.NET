@@ -45,13 +45,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			return category;
 		}
 
+
+
 		public HtmlFragmentResponse Execute()
 		{
 			Hashtable velocityContext = new Hashtable();
 
 			string serverName = request.ServerName;
 			string categoryName = GetCategory();
-			string projectName = request.ProjectName;
+            string projectName = request.ProjectName;
 			string buildName = request.BuildName;
 
 			velocityContext["serverName"] = serverName;
@@ -72,6 +74,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 					.CreateServerLink(request.ServerSpecifier, "ViewServerReport")
 					.Url + "?Category=" + HttpUtility.UrlEncode(categoryName));
 			}
+
 
 			if (projectName != "")
 			{
