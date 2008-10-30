@@ -81,8 +81,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             windowState.Parent = this;
             // set registry path in HKEY_CURRENT_USER
             windowState.RegistryPath = @"Software\ThoughtWorks\CCTray";
-            windowState.LoadState += new WindowStateEventHandler(OnLoadState);
-            windowState.SaveState += new WindowStateEventHandler(OnSaveState);
+            windowState.LoadState += OnLoadState;
+            windowState.SaveState += OnSaveState;
         }
 
         private void OnLoadState(object sender, WindowStateEventArgs e)

@@ -12,8 +12,4 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			Key = key;
 		}
 	}
-
-	// event info that allows form to persist extra window state data
-	public delegate void WindowStateEventHandler(object sender, WindowStateEventArgs e);
-
 }

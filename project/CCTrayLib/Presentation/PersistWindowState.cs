@@ -15,8 +15,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 	/// </summary>
 	public class PersistWindowState : Component
 	{
-		public event WindowStateEventHandler LoadState;
-		public event WindowStateEventHandler SaveState;
+		public event EventHandler<WindowStateEventArgs> LoadState;
+		public event EventHandler<WindowStateEventArgs> SaveState;
 
 		private Form parent;
 		private string regPath;
@@ -33,11 +33,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				parent = value;
 
 				// subscribe to parent form's events
-				parent.Load += new EventHandler(OnLoad);
-				parent.Closing += new CancelEventHandler(OnClosing);
-				parent.Move += new EventHandler(OnMove);
-				parent.Resize += new EventHandler(OnResize);
-				parent.VisibleChanged += new EventHandler(OnVisibleChanged);
+				parent.Load += OnLoad;
+				parent.Closing += OnClosing;
+				parent.Move += OnMove;
+				parent.Resize += OnResize;
+				parent.VisibleChanged += OnVisibleChanged;
 
 				// get initial width and height in case form is never resized
 				normalWidth = parent.Width;
@@ -57,38 +57,44 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			// attempt to read state from registry
 			RegistryKey key = Registry.CurrentUser.OpenSubKey(regPath);
-			if (key != null)
-			{
-				int left = (int) key.GetValue("Left", parent.Left);
-				int top = (int) key.GetValue("Top", parent.Top);
-				int width = (int) key.GetValue("Width", parent.Width);
-				int height = (int) key.GetValue("Height", parent.Height);
+			if (key == null) 
+				return;
 
-                Point requestedLocation = new Point(left, top);
+			int left = (int) key.GetValue("Left", parent.Left);
+			int top = (int) key.GetValue("Top", parent.Top);
+			int width = (int) key.GetValue("Width", parent.Width);
+			int height = (int) key.GetValue("Height", parent.Height);
+
+			Point requestedLocation = new Point(left, top);
  
-                foreach (Screen aScreen in Screen.AllScreens)
-                {                   
-                    // only change the default location if the saved location
-                    // maps to an existing screen
-                    if (aScreen.Bounds.Contains(requestedLocation) )
-                    {
-                        parent.Location = requestedLocation;
-                        break;
-                    }                    
-                }
-				
-                parent.Size = new Size(width, height);
-
-				visible = 1 == (int) key.GetValue("Visible", 1);
-				if (!visible)
+			foreach (Screen aScreen in Screen.AllScreens)
+			{                   
+				// only change the default location if the saved location
+				// maps to an existing screen
+				if (aScreen.Bounds.Contains(requestedLocation) )
 				{
-					parent.BeginInvoke(new MethodInvoker(HideParent));
+					// If we're placing the form on the primary screen, adjust for
+					// placements that would be under a Task Bar docked to the top of the screen
+					Point adjusted = requestedLocation;
+					if (aScreen.Primary && adjusted.Y < SystemInformation.WorkingArea.Top)
+						adjusted = new Point(requestedLocation.X, SystemInformation.WorkingArea.Top);
+
+					parent.Location = adjusted;
+					break;
 				}
-				
-				// fire LoadState event
-				if (LoadState != null)
-					LoadState(this, new WindowStateEventArgs(key));
 			}
+				
+			parent.Size = new Size(width, height);
+
+			visible = 1 == (int) key.GetValue("Visible", 1);
+			if (!visible)
+			{
+				parent.BeginInvoke(new MethodInvoker(HideParent));
+			}
+				
+			// fire LoadState event
+			if (LoadState != null)
+				LoadState(this, new WindowStateEventArgs(key));
 		}
 		
 		private void HideParent()
@@ -100,6 +106,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			// save position, size and state
 			RegistryKey key = Registry.CurrentUser.CreateSubKey(regPath);
+			if (key == null)
+				return;
+
 			key.SetValue("Left", normalLeft);
 			key.SetValue("Top", normalTop);
 			key.SetValue("Width", normalWidth);
