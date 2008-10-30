@@ -2,6 +2,7 @@ using Exortech.NetReflector;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+using System;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
@@ -114,6 +115,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             TwicePartialPathAnyNameTestSet.RunTests();
         }
 
+        [Test]
+        public void CaseSensitivityTest()
+        {
+            Modification m = ModificationMother.CreateModification("x.xml", "/working/sources");
+            PathFilter filter = new PathFilter();            
+            filter.Pattern = "**/*.xml";
+            Assert.IsTrue(filter.Accept(m));
+            m.FileName = "test.Xml";
+            Assert.IsFalse(filter.Accept(m));
+            filter.IsCaseSensitive = false;
+            Assert.IsTrue(filter.Accept(m));
+        }
 		private static Modification[] Modifications = 
 			{
 				ModificationMother.CreateModification("theName.dat", ""),
