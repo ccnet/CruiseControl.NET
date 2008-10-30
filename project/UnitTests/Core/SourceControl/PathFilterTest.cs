@@ -124,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             Assert.IsTrue(filter.Accept(m));
             m.FileName = "test.Xml";
             Assert.IsFalse(filter.Accept(m));
-            filter.IsCaseSensitive = false;
+            filter.CaseSensitive = false;
             Assert.IsTrue(filter.Accept(m));
         }
 		private static Modification[] Modifications = 

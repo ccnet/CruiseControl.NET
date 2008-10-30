@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class PathFilter : IModificationFilter
 	{
 		private string pathPattern;
-        private bool isCaseSensitive = true;
+        private bool caseSensitive = true;
 
 
 		[ReflectorProperty("pattern", Required=true)]
@@ -18,11 +18,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { pathPattern = value; }
 		}
 
-        [ReflectorProperty("isCaseSensitive", Required = false)]
-        public bool IsCaseSensitive
+        [ReflectorProperty("caseSensitive", Required = false)]
+        public bool CaseSensitive
         {
-            get { return isCaseSensitive; }
-            set { isCaseSensitive = value; } 
+            get { return caseSensitive; }
+            set { caseSensitive = value; } 
         }
 		public bool Accept(Modification modification)
 		{
@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				return false;
 			}
 			string path = Path.Combine(modification.FolderName, modification.FileName);
-			return PathUtils.MatchPath(Pattern, path, IsCaseSensitive);
+			return PathUtils.MatchPath(Pattern, path, caseSensitive);
 		}
 
 		public override string ToString()
