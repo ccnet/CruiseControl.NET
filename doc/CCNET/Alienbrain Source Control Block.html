@@ -16,13 +16,12 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 28, 2008 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on Sep 11, 2008 by <font color="#0050B2">williams</font>.
 				    </div>
 
 				    <h3><a name="AlienbrainSourceControlBlock-AlienbrainConfigurationExamples"></a>Alienbrain Configuration Examples</h3>
 
 <p><em>Example using defaults:</em></p>
-
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"alienbrain"</span>&gt;</span>
    <span class="code-tag">&lt;server&gt;</span>MyServer<span class="code-tag">&lt;/server&gt;</span>
@@ -32,9 +31,7 @@
    <span class="code-tag">&lt;project&gt;</span>ab://myprojectpath<span class="code-tag">&lt;/project&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
-
 <p><em>Full example:</em></p>
-
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"alienbrain"</span>&gt;</span>
    <span class="code-tag">&lt;server&gt;</span>MyServer<span class="code-tag">&lt;/server&gt;</span>
@@ -58,70 +55,70 @@
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Required </th>
 <th class='confluenceTh'> Default </th>
 </tr>
 <tr>
-<td class='confluenceTd'>server  	</td>
-<td class='confluenceTd'> Alienbrain server hostname or ip adress. The list of valid server name and ip adresses are listed in the File, Connect to project database, Step 1, list box.  	</td>
-<td class='confluenceTd'> string  	</td>
-<td class='confluenceTd'> true  	</td>
+<td class='confluenceTd'> server </td>
+<td class='confluenceTd'> Alienbrain server hostname or ip adress. The list of valid server name and ip adresses are listed in the File, Connect to project database, Step 1, list box. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
 <td class='confluenceTd'> n.a. </td>
 </tr>
 <tr>
-<td class='confluenceTd'> database 	</td>
-<td class='confluenceTd'> Alienbrain project database name. The list of valid project databases are listed in the File, Connect to project database, Step 2, list box. 	</td>
-<td class='confluenceTd'> string 	</td>
-<td class='confluenceTd'> true 	</td>
+<td class='confluenceTd'> database </td>
+<td class='confluenceTd'> Alienbrain project database name. The list of valid project databases are listed in the File, Connect to project database, Step 2, list box. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
 <td class='confluenceTd'> n.a. </td>
 </tr>
 <tr>
-<td class='confluenceTd'> username 	</td>
-<td class='confluenceTd'> The name of the user you want to use to connect to the server project database 	</td>
-<td class='confluenceTd'> string 	</td>
-<td class='confluenceTd'> true 	</td>
+<td class='confluenceTd'> username </td>
+<td class='confluenceTd'> The name of the user you want to use to connect to the server project database </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
 <td class='confluenceTd'> n.a. </td>
 </tr>
 <tr>
-<td class='confluenceTd'> password 	</td>
-<td class='confluenceTd'> The password of the user you want to use to connect to the server project database 	</td>
-<td class='confluenceTd'> string 	</td>
-<td class='confluenceTd'> true 	</td>
+<td class='confluenceTd'> password </td>
+<td class='confluenceTd'> The password of the user you want to use to connect to the server project database </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
 <td class='confluenceTd'> n.a. </td>
 </tr>
 <tr>
-<td class='confluenceTd'> project 	</td>
-<td class='confluenceTd'> This is the path of to monitor the file changes. Use alienbrain://Code or ab://Code project path format 	</td>
-<td class='confluenceTd'> string 	</td>
-<td class='confluenceTd'> true 	</td>
+<td class='confluenceTd'> project </td>
+<td class='confluenceTd'> This is the path of to monitor the file changes. Use alienbrain://Code or ab://Code project path format </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
 <td class='confluenceTd'> n.a. </td>
 </tr>
 <tr>
-<td class='confluenceTd'> workingDirectory 	</td>
-<td class='confluenceTd'> The path where the get latest will update the files. 	</td>
-<td class='confluenceTd'> string 	</td>
-<td class='confluenceTd'> false 	</td>
-<td class='confluenceTd'> "" (mean default source control defined directory</td>
+<td class='confluenceTd'> workingDirectory </td>
+<td class='confluenceTd'> The path where the get latest will update the files. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> "" (mean default source control defined directory </td>
 </tr>
 <tr>
-<td class='confluenceTd'> branch 	</td>
-<td class='confluenceTd'> The path of the branch specification. to enumarate the name of the branches, use the ab enumbranch command line. 	</td>
-<td class='confluenceTd'> string 	</td>
-<td class='confluenceTd'> false 	</td>
+<td class='confluenceTd'> branch </td>
+<td class='confluenceTd'> The path of the branch specification. to enumarate the name of the branches, use the ab enumbranch command line. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
 <td class='confluenceTd'> "" (mean Root Branch) </td>
 </tr>
 <tr>
-<td class='confluenceTd'> autoGetSource 	</td>
-<td class='confluenceTd'> Specifies whether the current version of the source should be retrieved from Alienbrain. 	</td>
-<td class='confluenceTd'> bool 	</td>
+<td class='confluenceTd'> autoGetSource </td>
+<td class='confluenceTd'> Specifies whether the current version of the source should be retrieved from Alienbrain. </td>
+<td class='confluenceTd'> bool </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> true </td>
 </tr>
 <tr>
-<td class='confluenceTd'> labelOnSuccess 	</td>
-<td class='confluenceTd'> Specifies whether or not the repository should be labelled after a successful build 	</td>
-<td class='confluenceTd'> bool 	</td>
-<td class='confluenceTd'> false 	</td>
+<td class='confluenceTd'> labelOnSuccess </td>
+<td class='confluenceTd'> Specifies whether or not the repository should be labelled after a successful build </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> false </td>
 <td class='confluenceTd'> false </td>
 </tr>
 <tr>
@@ -131,6 +128,14 @@
 <td class='confluenceTd'> no </td>
 <td class='confluenceTd'> 10 minutes </td>
 </tr>
+<tr>
+<td class='confluenceTd'> issueUrlBuilder </td>
+<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. <br clear="all" />
+See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">Issue Builder</a> for more details <br clear="all" /> </td>
+<td class='confluenceTd'> Group </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> false <br clear="all" /> </td>
+</tr>
 </tbody></table>
 
 <h3><a name="AlienbrainSourceControlBlock-AlienbrainNotes"></a>Alienbrain Notes</h3>
@@ -138,24 +143,24 @@
 <p>Current implementation of alienbrain use the following commands:</p>
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Action 	</th>
-<th class='confluenceTh'> command</th>
+<th class='confluenceTh'> Action </th>
+<th class='confluenceTh'> command </th>
 </tr>
 <tr>
-<td class='confluenceTd'> Branch 	</td>
-<td class='confluenceTd'> ab setactivebranch "Root Branch" -s "MyServer" -d "MyProject Database" -u "MyUsername" -p "MyPassword" </td>
+<td class='confluenceTd'> Branch </td>
+<td class='confluenceTd'> ab setactivebranch "Root Branch" &#45;s "MyServer" &#45;d "MyProject Database" &#45;u "MyUsername" &#45;p "MyPassword" </td>
 </tr>
 <tr>
 <td class='confluenceTd'> Modifications </td>
-<td class='confluenceTd'> ab find "ab://MyPath" -s "MyServer" -d "MyProject Database" -u "MyUsername" -p "MyPassword" -regex "SCIT &gt; 127771952139476549 AND SCIT &lt; 127771952139476550" -format "#CheckInComment#&#124;#Name#&#124;#DbPath#&#124;#SCIT#&#124;#Mime Type#&#124;#LocalPath#&#124;#Changed By#&#124;#NxN_VersionNumber#" </td>
+<td class='confluenceTd'> ab find "ab://MyPath" &#45;s "MyServer" &#45;d "MyProject Database" &#45;u "MyUsername" &#45;p "MyPassword" &#45;regex "SCIT &gt; 127771952139476549 AND SCIT &lt; 127771952139476550" &#45;format "#CheckInComment#&#124;#Name#&#124;#DbPath#&#124;#SCIT#&#124;#Mime Type#&#124;#LocalPath#&#124;#Changed By#&#124;#NxN_VersionNumber#" </td>
 </tr>
 <tr>
-<td class='confluenceTd'> Label 	</td>
-<td class='confluenceTd'> ab setlabel "ab://MyPath" -s "MyServer" -d "MyProject Database" -u "MyUsername" -p "MyPassword" -name "LabelnameprovidedbyCCNET" -comment "This label is brought to you by CruiseControl.NET" </td>
+<td class='confluenceTd'> Label </td>
+<td class='confluenceTd'> ab setlabel "ab://MyPath" &#45;s "MyServer" &#45;d "MyProject Database" &#45;u "MyUsername" &#45;p "MyPassword" &#45;name "LabelnameprovidedbyCCNET" &#45;comment "This label is brought to you by CruiseControl.NET" </td>
 </tr>
 <tr>
-<td class='confluenceTd'> Get Latest 	</td>
-<td class='confluenceTd'> ab getlatest "ab://MyPath" -s "MyServer" -d "MyProject Database" -u "MyUsername" -p "MyPassword" -localpath "Workingdir" -overwritewritable replace -overwritecheckedout replace -response:GetLatest.PathInvalid y -response:GetLatest.Writable y -response:GetLatest.CheckedOut y </td>
+<td class='confluenceTd'> Get Latest </td>
+<td class='confluenceTd'> ab getlatest "ab://MyPath" &#45;s "MyServer" &#45;d "MyProject Database" &#45;u "MyUsername" &#45;p "MyPassword" &#45;localpath "Workingdir" &#45;overwritewritable replace &#45;overwritecheckedout replace &#45;response:GetLatest.PathInvalid y &#45;response:GetLatest.Writable y &#45;response:GetLatest.CheckedOut y </td>
 </tr>
 </tbody></table>
 
@@ -175,7 +180,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jul 28, 2008 22:41</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 17, 2008 04:20</font></td>
 		    </tr>
 	    </table>
     </body>

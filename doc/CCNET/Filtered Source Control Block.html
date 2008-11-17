@@ -16,14 +16,14 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 28, 2008 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on Oct 30, 2008 by <font color="#0050B2">williams</font>.
 				    </div>
 
 				    <h3><a name="FilteredSourceControlBlock-WhatisFilteredSourceControl%3F"></a>What is FilteredSourceControl?</h3>
 
 <p>The FilteredSourceControl allows you to filter out modifications that are used to trigger a build.  If for example, you have certain files (such as web pages or document files) under source control that you don't want to have trigger the build, you can use this class to ensure that their changes will keep a new build from launching.</p>
 
-<p>The FilteredSourceControl works together with all of the source controls supported by CCNet (including the <a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a>).  It can also be included under the <a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a> provider so that you could have multiple FilterSourceControls each filtering a different set of modifications from different source control providers.  Essentially, it acts as a decorator (or an example of the <a href="http://www.eaipatterns.com/PipesAndFilters.html">pipes and filters pattern </a>), wrapping around the specific SourceControl provider that you want to use.  </p>
+<p>The FilteredSourceControl works together with all of the source controls supported by CCNet (including the <a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a>).  It can also be included under the <a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a> provider so that you could have multiple FilterSourceControls each filtering a different set of modifications from different source control providers.  Essentially, it acts as a decorator (or an example of the <a href="http://www.eaipatterns.com/PipesAndFilters.html">pipes and filters pattern </a>), wrapping around the specific SourceControl provider that you want to use.</p>
 
 <p>The FilteredSourceControl includes both <b>inclusion</b> and <b>exclusion</b> filters for specifying what modifications should be included/excluded.  Multiple inclusion and exclusion filters can be specified or, alternately, no inclusion or exclusion filter could be specified.  If a modification is matched by both the inclusion and exclusion filter, then the exclusion filter will take preference and the modification will not be included in the modification set.  At this point, CCNet only supports three types of filters: <a href="#FilteredSourceControlBlock-PathFilter">PathFilters</a>, <a href="#FilteredSourceControlBlock-UserFilter">UserFilters</a>, and <a href="#FilteredSourceControlBlock-ActionFilter">ActionFilters</a>.  It is relatively straightforward to build new filters, (such as one to filter modifications based on email address).</p>
 
@@ -62,7 +62,6 @@
     <span class="code-tag">&lt;/exclusionFilters&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
-
 <p>This example filters out any modifications to the <b>AssemblyInfo.cs</b> file that have been checked in to <a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual Source Safe Source Control Block</a>.  Although it shows the use of all four types of filters, you can choose to use only fewer types of filter as well.</p>
 
 <h3><a name="FilteredSourceControlBlock-ConfigurationElements%3A"></a>Configuration Elements:</h3>
@@ -70,13 +69,12 @@
 <p><b>FilteredSourceControl root element</b></p>
 
 <p>This is the root configuration element for the FilteredSourceControl.</p>
-
 <table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Required </th>
 </tr>
 <tr>
 <td class='confluenceTd'> sourceControlProvider </td>
@@ -98,17 +96,15 @@
 </tr>
 </tbody></table>
 <div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Unlike most source control blocks, this one does not support the <b>timeout</b> configuration element</td></tr></table></div>
-
 <p><a name="FilteredSourceControlBlock-PathFilter"></a> <b>PathFilter element</b></p>
 
 <p>The PathFilter can be used to filter modifications on the basis of their file path.</p>
-
 <table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Required </th>
 </tr>
 <tr>
 <td class='confluenceTd'> pattern </td>
@@ -116,18 +112,22 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> true </td>
 </tr>
+<tr>
+<td class='confluenceTd'> caseSensitive </td>
+<td class='confluenceTd'> Sets casesensitive searching on or off. (default = true)<br clear="all" /> </td>
+<td class='confluenceTd'> bool <br clear="all" /> </td>
+<td class='confluenceTd'> true </td>
+</tr>
 </tbody></table>
-
 <p><a name="FilteredSourceControlBlock-UserFilter"></a> <b>UserFilter element</b></p>
 
 <p>The UserFilter can be used to filter modifications on the basis of the username that committed the changes.</p>
-
 <table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Required </th>
 </tr>
 <tr>
 <td class='confluenceTd'> names </td>
@@ -136,17 +136,15 @@
 <td class='confluenceTd'> true </td>
 </tr>
 </tbody></table>
-
 <p><a name="FilteredSourceControlBlock-ActionFilter"></a> <b>ActionFilter element</b></p>
 
 <p>The ActionFilter can be used to filter modifications on the basis of the type of modification that was committed.  Modification types are specific to each source control provider.  Consult each source control provider for the list of actions to filter.</p>
-
 <table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Required </th>
 </tr>
 <tr>
 <td class='confluenceTd'> actions </td>
@@ -155,17 +153,15 @@
 <td class='confluenceTd'> true </td>
 </tr>
 </tbody></table>
-
 <p><a name="FilteredSourceControlBlock-CommentFilter"></a> <b>CommentFilter element</b></p>
 
 <p>The CommentFilter can be used to filter modifications on the basis of the comment that was supplied with the modification.</p>
-
 <table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Required </th>
 </tr>
 <tr>
 <td class='confluenceTd'> pattern </td>
@@ -179,7 +175,6 @@
 <h3><a name="FilteredSourceControlBlock-UsingthePathFilter%3A"></a>Using the PathFilter:</h3>
 
 <p>PathFilter supports following wildcards:</p>
-
 <table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Wildcard </th>
@@ -191,44 +186,44 @@
 <td class='confluenceTd'> &#42;" </td>
 <td class='confluenceTd'> part of the path </td>
 <td class='confluenceTd'> none or exactly one subfolder </td>
-<td class='confluenceTd'> Pattern "/Kunigunda/&#42;/Sources/&#42;.&#42;" matches "/Kunigunda/Sources/&#42;.&#42;", "/Kunigunda/Service/Sources/&#42;.&#42;", and "/Kunigunda/Web/Sources/&#42;.&#42;" </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/<b>/Sources/</b>.<b>" matches "/Kunigunda/Sources/</b>.<b>", "/Kunigunda/Service/Sources/</b>.<b>", and "/Kunigunda/Web/Sources/</b>.*" </td>
 </tr>
 <tr>
-<td class='confluenceTd'> "&#42;" </td>
+<td class='confluenceTd'> "*" </td>
 <td class='confluenceTd'> part of the folder name </td>
 <td class='confluenceTd'> zero or more characters that can appear in the folder name </td>
-<td class='confluenceTd'> Pattern "/Kunigunda/Sources/Test&#42;/&#42;.&#42;" matches "/Kunigunda/Sources/Test/&#42;.&#42;" and "/Kunigunda/Sources/Tests/&#42;.&#42;" </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/Test*/<b>.</b>" matches "/Kunigunda/Sources/Test/<b>.</b>" and "/Kunigunda/Sources/Tests/<b>.</b>" </td>
 </tr>
 <tr>
-<td class='confluenceTd'> "&#42;" </td>
+<td class='confluenceTd'> "*" </td>
 <td class='confluenceTd'> part of the filename </td>
 <td class='confluenceTd'> zero or more characters that can appear in the file name </td>
-<td class='confluenceTd'> Pattern<br/>
-"/Kunigunda/Sources/&#42;.cs" matches all filenames in the "/Kunigunda/Sources" folder ending in ".cs". Pattern "/Kunigunda/Sources/&#42;Test.cs", matches all filenames in the "/Kunigunda/Sources/" folder that end with "Test.cs". </td>
+<td class='confluenceTd'> Pattern<br clear="all" />
+ "/Kunigunda/Sources/*.cs" matches all filenames in the "/Kunigunda/Sources" folder ending in ".cs". Pattern "/Kunigunda/Sources/*Test.cs", matches all filenames in the "/Kunigunda/Sources/" folder that end with "Test.cs". </td>
 </tr>
 <tr>
-<td class='confluenceTd'> "&#42;" </td>
+<td class='confluenceTd'> "*" </td>
 <td class='confluenceTd'> part of the extension </td>
 <td class='confluenceTd'> zero or more characters that can appear in the extension. </td>
-<td class='confluenceTd'> Pattern "/Kunigunda/Sources/Build.&#42;" matches all files in "/Kunigunda/Sources" folder starting with "Build.". </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/Build.*" matches all files in "/Kunigunda/Sources" folder starting with "Build.". </td>
 </tr>
 <tr>
-<td class='confluenceTd'> "&#42;" </td>
+<td class='confluenceTd'> "*" </td>
 <td class='confluenceTd'> filename </td>
 <td class='confluenceTd'> any file name and extension </td>
-<td class='confluenceTd'> Pattern "/Kunigunda/Sources/&#42;" matches all files in "/Kunigunda/Sources" folder. </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/*" matches all files in "/Kunigunda/Sources" folder. </td>
 </tr>
 <tr>
-<td class='confluenceTd'> "&#42;.&#42;" </td>
+<td class='confluenceTd'> "<b>.</b>" </td>
 <td class='confluenceTd'> filename </td>
 <td class='confluenceTd'> any file name and extension </td>
-<td class='confluenceTd'> Pattern "/Kunigunda/Sources/&#42;.&#42;" matches all files in "/Kunigunda/Sources" folder. Note: "&#42;.&#42;" is exactly the same as "&#42;" as a filename. </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/<b>.</b>" matches all files in "/Kunigunda/Sources" folder. Note: "<b>.</b>" is exactly the same as "*" as a filename. </td>
 </tr>
 <tr>
-<td class='confluenceTd'> "&#42;&#42;" </td>
+<td class='confluenceTd'> "**" </td>
 <td class='confluenceTd'> part of the path </td>
 <td class='confluenceTd'> zero or more subfolders. </td>
-<td class='confluenceTd'> Pattern "/Kunigunda/Sources/&#42;&#42;/Test/&#42;.&#42;" matches all files stored in any "Test" subfolder anywhere below the "/Kunigunda/Sources" tree (<em>e.g.</em>, "/Kunigunda/Sources/Test/&#42;.&#42;", "/Kunigunda/Sources/Core/Test/&#42;.&#42;"). </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/*<b>/Test/</b>.<b>" matches all files stored in any "Test" subfolder anywhere below the "/Kunigunda/Sources" tree (<em>e.g.</em>, "/Kunigunda/Sources/Test/</b>.<b>", "/Kunigunda/Sources/Core/Test/</b>.*"). </td>
 </tr>
 <tr>
 <td class='confluenceTd'> ? </td>
@@ -237,20 +232,16 @@
 <td class='confluenceTd'> Pattern "/Kunigunda/Sources/Test?.cs" matches all files in "/Kunigunda/Sources" are named "Test" followed by one more character and that end in ".cs". </td>
 </tr>
 </tbody></table>
-
-<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Paths do not include the roots</b><br />Paths do not include the root server identifiers. For example, if you are using subversion source control on server "myserver" and trying to exclude path "svn://myserver/project1/excludedir/&#42;.&#42;" your node should be "/project1/excludedir/&#42;.&#42;".</td></tr></table></div>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Paths do not include the roots</b><br />Paths do not include the root server identifiers. For example, if you are using subversion source control on server "myserver" and trying to exclude path "svn://myserver/project1/excludedir/<b>.</b>" your node should be "/project1/excludedir/<b>.</b>".</td></tr></table></div>
 <div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Path separators are not characters</b><br />Path separators are not compared as characters, but rather as separations between path elements.  The separators "\", "/" and the .Net System.IO.Path.DirectorySeparatorChar are all treated interchangably.  This means that the patterns "/Kunigunda/Sources/Test.cs" and "\Kunigunda\Sources\Test.cs" both match the file named "Test.cs" in the folder named "Sources" under the folder named "Kunigunda".</td></tr></table></div>
-
 <div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>StarTeam needs the full path</b><br />With StarTeam, use the entire file path as recognized by StarTeam, such<br/>
 as what is displayed when clicking File/Properties/Working File within<br/>
-StarTeam.
-
-<p>Examples:</p>
+StarTeam.<br/>
+Examples:
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">c:\project\module1\**
 c:\project\module2\**\filethatdoesntaffectbuild.txt</pre>
 </div></div></td></tr></table></div>
-
 
 <h3><a name="FilteredSourceControlBlock-Potentialenhancements%3A"></a>Potential enhancements:</h3>
 
@@ -272,7 +263,7 @@ UserFilter and ActionFilter by <b>Perry Ismangil</b>.</p>
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jul 28, 2008 22:41</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 17, 2008 04:20</font></td>
 		    </tr>
 	    </table>
     </body>

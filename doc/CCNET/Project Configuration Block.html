@@ -16,19 +16,19 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Sep 21, 2007 by <font color="#0050B2">williams</font>.
+					    This page last changed on Sep 11, 2008 by <font color="#0050B2">dhommel</font>.
 				    </div>
 
 				    <p>A <tt>&lt;project&gt;</tt> block defines all the configuration for one project running in a CruiseControl.NET server</p>
 
 <h3><a name="ProjectConfigurationBlock-Examples"></a>Examples</h3>
 
-<p>Minimalist example:<br/>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Project 1"</span> /&gt;</span></pre>
-</div></div><br clear="all" /></p>
+<p>Minimalist example:</p>
 
-<p>Full example:<br/>
+<p><div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Project 1"</span> /&gt;</span></pre>
+</div></div><br clear="all" />
+Full example:<br/>
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Project 1"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;</span>
     <span class="code-tag">&lt;workingDirectory&gt;</span>yourWorkingDirectory<span class="code-tag">&lt;/workingDirectory&gt;</span>
@@ -61,7 +61,6 @@
     <span class="code-tag">&lt;/externalLinks&gt;</span>
 <span class="code-tag">&lt;/project&gt;</span></pre>
 </div></div><br clear="all" /></p>
-
 <h3><a name="ProjectConfigurationBlock-ConfigurationElements%3A"></a>Configuration Elements:</h3>
 
 <table class='confluenceTable'><tbody>
@@ -95,14 +94,14 @@
 </tr>
 <tr>
 <td class='confluenceTd'> <a name="ProjectConfigurationBlock-workingDirectory"></a> workingDirectory </td>
-<td class='confluenceTd'> The Working Directory for the project (this is used by other blocks). <b>Relative paths</b> are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Working Directory is meant to contain the checked out version of the project under integration. Make sure this folder us unique per project to prevent problems with the build.<br clear="all" /> </td>
+<td class='confluenceTd'> The Working Directory for the project (this is used by other blocks). <b>Relative paths</b> are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Working Directory is meant to contain the checked out version of the project under integration. Make sure this folder us unique per project to prevent problems with the build. You don't need to quote the Working Directory, even if it contains spaces.<br clear="all" /> </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> no </td>
 <td class='confluenceTd'> <tt>WorkingDirectory</tt> </td>
 </tr>
 <tr>
 <td class='confluenceTd'> <a name="ProjectConfigurationBlock-artifactDirectory"></a> artifactDirectory </td>
-<td class='confluenceTd'> The Artifact Directory for the project (this is used by other blocks). <b>Relative paths</b> are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Artifact Directory is meant to be a persistence location for anything you want saved from the results of the build, e.g. build logs, distributables, etc. Make sure this folder us unique per project to prevent problems with reporting about a build. </td>
+<td class='confluenceTd'> The Artifact Directory for the project (this is used by other blocks). <b>Relative paths</b> are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Artifact Directory is meant to be a persistence location for anything you want saved from the results of the build, e.g. build logs, distributables, etc. Make sure this folder us unique per project to prevent problems with reporting about a build. You don't need to quote the Aftifact Directory, even if it contains spaces.</td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> no </td>
 <td class='confluenceTd'> <tt>Artifacts</tt> </td>
@@ -116,7 +115,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> <a name="ProjectConfigurationBlock-category"></a> category </td>
-<td class='confluenceTd'> A general category for this project. This will be used by CCTray and the dashboard in the future to provide groupings to the project. The groupings can span servers in the farm. </td>
+<td class='confluenceTd'> A general category for this project. This is used by the dashboard to provide groupings to the project. Categories do not span servers. </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> no </td>
 <td class='confluenceTd'> empty string </td>
@@ -190,16 +189,15 @@ This feature is in CruiseControl.NET for Source Control systems, like CVS, that 
 
 <h3><a name="ProjectConfigurationBlock-SettingtheWebURL"></a>Setting the WebURL</h3>
 
-<p>The current format of the url for a project, as specified in the &lt;webURL&gt; element is:<br/>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-java">http:<span class="code-comment">//&lt;dashboardserver&gt;/&lt;vdir&gt;/server/&lt;ccnetserver&gt;/project/&lt;projectname&gt;/ViewLatestBuildReport.aspx</span></pre>
-</div></div><br clear="all" /></p>
+<p>The current format of the url for a project, as specified in the &lt;webURL&gt; element is:</p>
 
-<p>For example, if the dashboard was deployed on the server <b>webserver</b> to virtual directory <b>ccnet</b>, and if the project to monitor is called <b>test</b> on server <b>cruise</b>, the URL would be:<br/>
+<p><div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">http:<span class="code-comment">//&lt;dashboardserver&gt;/&lt;vdir&gt;/server/&lt;ccnetserver&gt;/project/&lt;projectname&gt;/ViewLatestBuildReport.aspx</span></pre>
+</div></div><br clear="all" />
+For example, if the dashboard was deployed on the server <b>webserver</b> to virtual directory <b>ccnet</b>, and if the project to monitor is called <b>test</b> on server <b>cruise</b>, the URL would be:<br/>
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">http:<span class="code-comment">//webserver/ccnet/server/cruise/project/test/ViewLatestBuildReport.aspx</span></pre>
 </div></div><br clear="all" /></p>
-
 <h3><a name="ProjectConfigurationBlock-Subsectiontypes"></a>Sub-section types</h3>
 
 <p><ul><li><a href="ExternalLinks.html" title="ExternalLinks">ExternalLinks</a></li><li><a href="Labeller Blocks.html" title="Labeller Blocks">Labeller Blocks</a></li><li><a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a></li><li><a href="State Manager Blocks.html" title="State Manager Blocks">State Manager Blocks</a></li><li><a href="Task Blocks.html" title="Task Blocks">Task Blocks</a></li><li><a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a></li><li><a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a></li></ul><br clear="all" /></p>
@@ -213,7 +211,7 @@ This feature is in CruiseControl.NET for Source Control systems, like CVS, that 
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jul 28, 2008 22:41</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 17, 2008 04:20</font></td>
 		    </tr>
 	    </table>
     </body>

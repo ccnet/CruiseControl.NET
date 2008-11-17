@@ -1,0 +1,232 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Rake Task</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Rake Task
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Aug 25, 2008 by <font color="#0050B2">dhommel</font>.
+				    </div>
+
+				    <h3><a name="RakeTask-Examples"></a>Examples</h3>
+
+<p>Minimalist Example:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;rake /&gt;</span></pre>
+</div></div>
+<p>Full example:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;rake&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>c:\ruby\bin\rake.bat<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;baseDirectory&gt;</span>c:\fromcvs\myrepo\myproject<span class="code-tag">&lt;/baseDirectory&gt;</span>
+  <span class="code-tag">&lt;buildArgs&gt;</span>additional-argument<span class="code-tag">&lt;/buildArgs&gt;</span>
+  <span class="code-tag">&lt;rakefile&gt;</span>Rakefile<span class="code-tag">&lt;/rakefile&gt;</span>
+  <span class="code-tag">&lt;targetList&gt;</span>
+    <span class="code-tag">&lt;target&gt;</span>build<span class="code-tag">&lt;/target&gt;</span>
+  <span class="code-tag">&lt;/targetList&gt;</span>
+  <span class="code-tag">&lt;buildTimeoutSeconds&gt;</span>1200<span class="code-tag">&lt;/buildTimeoutSeconds&gt;</span>
+  <span class="code-tag">&lt;quiet&gt;</span>false<span class="code-tag">&lt;/quiet&gt;</span>
+  <span class="code-tag">&lt;silent&gt;</span>false&gt;<span class="code-tag">&lt;/silent&gt;</span>
+  <span class="code-tag">&lt;trace&gt;</span>true<span class="code-tag">&lt;/trace&gt;</span>
+<span class="code-tag">&lt;/rake&gt;</span></pre>
+</div></div>
+
+<h3><a name="RakeTask-ConfigurationElements%3A"></a>Configuration Elements:</h3>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The path of the version of Rake you want to run. If this is relative, then must be relative to either (a) the base directory, (b) the CCNet Server application, or (c) if the path doesn't contain any directory details then can be available in the system or application's 'path' environment variable </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> <tt>c:\ruby\bin\rake.bat</tt> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> baseDirectory </td>
+<td class='confluenceTd'> The directory to run the Rake process in. If relative, is a subdirectory of the <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a> </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> rakefile </td>
+<td class='confluenceTd'> The name of the Rakefile to run, relative to the baseDirectory. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> no build file specified (Rake will use the default build file in the working directory) </td>
+</tr>
+<tr>
+<td class='confluenceTd'> buildArgs </td>
+<td class='confluenceTd'> Any arguments to pass through to Rake (e.g to specify build properties) </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> no args specified </td>
+</tr>
+<tr>
+<td class='confluenceTd'> buildTimeoutSeconds </td>
+<td class='confluenceTd'> Number of seconds to wait before assuming that the process has hung and should be killed. </td>
+<td class='confluenceTd'> int </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 600 (10 minutes) </td>
+</tr>
+<tr>
+<td class='confluenceTd'> targetList </td>
+<td class='confluenceTd'> A list of targets to be called. CruiseControl.NET does not call Rake once for each target, it uses the Rake feature of being able to specify multiple targets. </td>
+<td class='confluenceTd'> string list </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> no targets specified (Rake will use the build's default target </td>
+</tr>
+<tr>
+<td class='confluenceTd'> trace </td>
+<td class='confluenceTd'> Turns on invoke/execute tracing and enables full backtrace. </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> quiet </td>
+<td class='confluenceTd'> Do not log messages to standard output. </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> silent </td>
+<td class='confluenceTd'> Like quiet but also suppresses the 'in directory' announcement. </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false </td>
+</tr>
+</tbody></table>
+
+<h3><a name="RakeTask-AccessingCruiseControl.NETbuildlabelsinRake"></a>Accessing CruiseControl.NET build labels in Rake</h3>
+
+<p>CCNet will pass the current build label to Rake via the environment variable <tt>CCNetLabel</tt>.  This means that you can access this variable to, for example, archive the build results in a folder with the same name as the build label (this is what we do on <a href="http://ccnetlive.thoughtworks.com/CCNet-builds/">CCNetLive </a> using NAnt.  Here's some example Rakefile demonstrating how to do this:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml">#!ruby
+require 'rake'
+
+task :default =&gt; [:deploy]
+
+task :deploy do
+	publishdir=<span class="code-quote">"C:/download-area/CCNet-Builds/#{ENV['CCNetLabel']}"</span>
+	mkdir_p publishdir
+	FileList['dist/*'].each do |file|
+		cp file, publishdir
+	end
+end</pre>
+</div></div>
+
+<h3><a name="RakeTask-IntegrationProperties"></a>Integration Properties</h3>
+
+<p>The following parameters are passed to Rake as environment variables:</p>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Label </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Example </th>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetBuildCondition </td>
+<td class='confluenceTd'> The condition used to trigger the build, indicating if the build was triggered by new modifications or if it was forced.  Legal values are: "IfModificationExists" or "ForceBuild" </td>
+<td class='confluenceTd'> ForceBuild </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetIntegrationStatus </td>
+<td class='confluenceTd'> The status of the current integration. Could be Success, Failure, Exception or Unknown </td>
+<td class='confluenceTd'> Success </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetLabel </td>
+<td class='confluenceTd'> The label used to identify the CCNet build.  This label is generated by the CCNet labeller. </td>
+<td class='confluenceTd'> 1.0.2.120 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetLastIntegrationStatus </td>
+<td class='confluenceTd'> The status of the previous integration. Could be Success, Failure, Exception or Unknown </td>
+<td class='confluenceTd'> Success </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetProject </td>
+<td class='confluenceTd'> The name of the CCNet project that is being integrated. </td>
+<td class='confluenceTd'> MyProject </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetBuildDate </td>
+<td class='confluenceTd'> The date of the build (in yyyy-MM-dd format) </td>
+<td class='confluenceTd'> 2005-08-10 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetBuildTime </td>
+<td class='confluenceTd'> The time of the start of the build (in HH:mm:ss format) </td>
+<td class='confluenceTd'> 08:45:12 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetArtifactDirectory </td>
+<td class='confluenceTd'> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-artifactDirectory">project artifact directory</a> (as an absolute path) </td>
+<td class='confluenceTd'> <tt>c:\program files\CruiseControl.NET\Server\MyProject\Artifacts</tt> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetWorkingDirectory </td>
+<td class='confluenceTd'> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">project working directory</a> (as an absolute path) </td>
+<td class='confluenceTd'> <tt>c:\program files\CruiseControl.NET\Server\MyProject\WorkingDirectory</tt> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetRequestSource </td>
+<td class='confluenceTd'> The source of the integration request; this will generally be the name of the trigger that raised the request. (Added in CCNet 1.1) </td>
+<td class='confluenceTd'> IntervalTrigger </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetFailureUsers </td>
+<td class='confluenceTd'> The list of users who have contributed modifications to a sequence of builds that has failed. </td>
+<td class='confluenceTd'> string.Empty </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetListenerFile </td>
+<td class='confluenceTd'> <a href="http://confluence.public.thoughtworks.org/display/CCNETCOMM/Viewing+build+progress+with+Nant+and+MSBuild">Viewing build progress with Nant and MSBuild</a> (Added in CCNet 1.4) </td>
+<td class='confluenceTd'> c:\Project\Artifact\listener.xml </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetProjectUrl </td>
+<td class='confluenceTd'> The URL where the project is located </td>
+<td class='confluenceTd'> <a href="http://myhost/ccnet/server/">http://myhost/ccnet/server/</a> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetNumericLabel </td>
+<td class='confluenceTd'> Contains the label as an integer if conversion is possible, otherwise zero. </td>
+<td class='confluenceTd'> 1 </td>
+</tr>
+</tbody></table>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 17, 2008 04:20</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

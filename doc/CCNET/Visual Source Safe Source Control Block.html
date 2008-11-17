@@ -16,18 +16,21 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 28, 2008 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on Sep 11, 2008 by <font color="#0050B2">williams</font>.
 				    </div>
 
 				    <h3><a name="VisualSourceSafeSourceControlBlock-VSSConfigurationExample"></a>VSS Configuration Example</h3>
-<p>For Visual Source Safe you must specify the executable, project, username and password. You may also specify the SSDIR. If SSDIR is not set the default or the SSDIR environment variable will be used. </p>
+
+<p>For Visual Source Safe you must specify the executable, project, username and password. You may also specify the SSDIR. If SSDIR is not set the default or the SSDIR environment variable will be used.</p>
 
 <h4><a name="VisualSourceSafeSourceControlBlock-Minimalconfigurationexample%3A"></a>Minimal configuration example:</h4>
+
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"vss"</span> /&gt;</span></pre>
 </div></div>
 
 <h4><a name="VisualSourceSafeSourceControlBlock-Fullconfigurationexample%3A"></a>Full configuration example:</h4>
+
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"vss"</span>&gt;</span>
    <span class="code-tag">&lt;executable&gt;</span>C:\Program Files\Microsoft Visual Studio\VSS\win32\SS.EXE<span class="code-tag">&lt;/executable&gt;</span>
@@ -53,7 +56,7 @@
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Default </th>
-<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Required </th>
 </tr>
 <tr>
 <td class='confluenceTd'> project </td>
@@ -63,7 +66,7 @@
 <td class='confluenceTd'> false </td>
 </tr>
 <tr>
-<td class='confluenceTd'> username</td>
+<td class='confluenceTd'> username </td>
 <td class='confluenceTd'> VSS user ID that CCNet should use to authenticate. If the username is unspecified, the VSS client will attempt to authenticate using the NT user. </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> null </td>
@@ -123,7 +126,7 @@
 <td class='confluenceTd'> Sets the timeout period for the source control operation. See <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> for details. </td>
 <td class='confluenceTd'> Timeout </td>
 <td class='confluenceTd'> 10 minutes </td>
-<td class='confluenceTd'> false</td>
+<td class='confluenceTd'> false </td>
 </tr>
 <tr>
 <td class='confluenceTd'> culture </td>
@@ -138,6 +141,14 @@
 <td class='confluenceTd'> bool </td>
 <td class='confluenceTd'> true </td>
 <td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> issueUrlBuilder </td>
+<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. <br clear="all" />
+See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">Issue Builder</a> for more details <br clear="all" /> </td>
+<td class='confluenceTd'> Group </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> false <br clear="all" /> </td>
 </tr>
 </tbody></table>
 
@@ -165,7 +176,7 @@
 </ul>
 
 
-<p><b>If you're using a labeller that returns a label equal to one already applied in the repository, the old label will be <ins>deleted</ins> when the new one is added.</b></p>
+<p><b>If you're using a labeller that returns a label equal to one already applied in the repository, the old label will be</b> <b><ins>deleted</ins></b> <b>when the new one is added.</b></p>
 
 <p>This is because of a quirk in how VSS deals with labels of the same name; it should not be a problem with the default labeller.</p>
 
@@ -177,15 +188,13 @@
 
 <p>There are a number of known issues with SourceSafe 6.0c.  Make sure that you upgrade to the 6.0d version.</p>
 
-
-<p><b>When I try connecting to VSS when using <a href="The Server Service Application.html" title="The Server Service Application">ccservice</a> I get the error: No VSS database (srcsafe.ini) found. Use the SSDIR environment variable or run netsetup.</b></p>
+<p><b>When I try connecting to VSS when using</b> <b><a href="The Server Service Application.html" title="The Server Service Application"><b>ccservice</b></a></b> <b>I get the error: No VSS database (srcsafe.ini) found. Use the SSDIR environment variable or run netsetup.</b></p>
 
 <p>Make sure that you are running <a href="The Server Service Application.html" title="The Server Service Application">ccservice</a> using an account that has the necessary permissions to access the network share where your VSS database is set up.  By default <a href="The Server Service Application.html" title="The Server Service Application">ccservice</a> will run as the LocalSystem account, which does not have the necessary priviledges to access other machines.</p>
 
-<p><b>When using VSS with a <a href="Filtered Source Control Block.html" title="Filtered Source Control Block">Filtered Source Control Block</a>, newly added or removed files don't show up as modifications</b></p>
+<p><b>When using VSS with a</b> <b><a href="Filtered Source Control Block.html" title="Filtered Source Control Block">Filtered Source Control Block</a></b><b>, newly added or removed files don't show up as modifications</b></p>
 
 <p>VSS does not output the paths for added or deleted files.  As a result, the modifications returned by CCNet do not have any specified path information.  If a <a href="Filtered Source Control Block.html" title="Filtered Source Control Block">Filtered Source Control Block</a> is used with a path filter then these modifications are likely to be filtered out.  This is an outstanding issue.</p>
-
 
 <h3><a name="VisualSourceSafeSourceControlBlock-UsefulLinks%3A"></a>Useful Links:</h3>
 
@@ -197,6 +206,7 @@
 
 
 <h3><a name="VisualSourceSafeSourceControlBlock-Reasonswhyyoumightwanttoconsideradifferentversioncontrolsystem%3A"></a>Reasons why you might want to consider a different version control system:</h3>
+
 <ul>
 	<li><a href="http://www.highprogrammer.com/alan/windev/sourcesafe.html">Visual SourceSafe: Microsoft's Source Destruction System</a></li>
 	<li><a href="http://www.michaelbolton.net/testing/VSSDefects.html">Visual SourceSafe Version Control: Unsafe at any Speed?</a></li>
@@ -213,7 +223,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jul 28, 2008 22:41</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 17, 2008 04:20</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Queue Configuration</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Queue Configuration
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Sep 16, 2008 by <font color="#0050B2">dhommel</font>.
+				    </div>
+
+				    <h1><a name="QueueConfiguration-Thequeuetag"></a>The queue tag</h1>
+
+<p>The queue tag allows to configure the behavior of your build queues. It allows to configure how duplicate requests are handled within a queue and it also allows to configure locks that queues can acquire against each other.</p>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Attribute </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> name </td>
+<td class='confluenceTd'> The name of the queue. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> empty </td>
+</tr>
+<tr>
+<td class='confluenceTd'> duplicates </td>
+<td class='confluenceTd'> Specification of how to handle duplicate requests within a queue. Possible values are UseFirst, ApplyForceBuildsReplace and ApplyForceBuildsReAdd. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> UseFirst </td>
+</tr>
+<tr>
+<td class='confluenceTd'> lockqueues </td>
+<td class='confluenceTd'> A comma separated list of queue names that the queue should acquire a lock against. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> empty </td>
+</tr>
+</tbody></table>
+<p>Full example:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;queue name=<span class="code-quote">"Q1"</span> duplicates=<span class="code-quote">"UseFirst"</span> lockqueues=<span class="code-quote">"Q2, Q3"</span> /&gt;</span></pre>
+</div></div>
+
+<h2><a name="QueueConfiguration-DuplicateHandling"></a>Duplicate Handling</h2>
+
+<p>There are three different settings that can be used to specify how force build requests should be handled.</p>
+
+<p>The default behavior is to not allow force build requests to update the queue and use the first request that was added.</p>
+
+<p>The following example shows how to explicitly configure the default behavior.</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;cruisecontrol&gt;</span>
+  <span class="code-tag">&lt;queue name=<span class="code-quote">"Q1"</span> duplicates=<span class="code-quote">"UseFirst"</span>/&gt;</span>
+
+  <span class="code-tag">&lt;project name=<span class="code-quote">"MyFirstProject"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;</span>
+    ...
+  <span class="code-tag">&lt;/project&gt;</span>
+<span class="code-tag">&lt;/cruisecontrol&gt;</span></pre>
+</div></div>
+<p>The following example shows how to configure a queue so that force build requests will replace existing requests of the interval trigger without changing the position of the request in the queue.</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;cruisecontrol&gt;</span>
+  <span class="code-tag">&lt;queue name=<span class="code-quote">"Q1"</span> duplicates=<span class="code-quote">"ApplyForceBuildsReplace"</span>/&gt;</span>
+
+  <span class="code-tag">&lt;project name=<span class="code-quote">"MyFirstProject"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;</span>
+    ...
+  <span class="code-tag">&lt;/project&gt;</span>
+<span class="code-tag">&lt;/cruisecontrol&gt;</span></pre>
+</div></div>
+<p>The following example shows how to configure a queue so that force build requests will remove existing requests of the interval trigger and readd a force build request. This is changing the position of the request in the queue.</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;cruisecontrol&gt;</span>
+  <span class="code-tag">&lt;queue name=<span class="code-quote">"Q1"</span> duplicates=<span class="code-quote">"ApplyForceBuildsReAdd"</span>/&gt;</span>
+
+  <span class="code-tag">&lt;project name=<span class="code-quote">"MyFirstProject"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;</span>
+    ...
+  <span class="code-tag">&lt;/project&gt;</span>
+<span class="code-tag">&lt;/cruisecontrol&gt;</span></pre>
+</div></div>
+
+<h2><a name="QueueConfiguration-Locking"></a>Locking</h2>
+
+<p>The following example shows how to configure two queues, Q1 and Q2, that acquire a lock against each other. That means that while the queue Q1 is building a project the queue Q2 is locked. While Q2 is building Q1 is locked. To specify more than one queue that should be locked use commas to separate the queue names within the lockqueues attribute. Of course the lockqueues attribute can be used together with the duplicates attribute explained above.</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;cruisecontrol&gt;</span>
+  <span class="code-tag">&lt;queue name=<span class="code-quote">"Q1"</span> lockqueues=<span class="code-quote">"Q2"</span>/&gt;</span>
+  <span class="code-tag">&lt;queue name=<span class="code-quote">"Q2"</span> lockqueues=<span class="code-quote">"Q1"</span>/&gt;</span>
+
+  <span class="code-tag">&lt;project name=<span class="code-quote">"MyFirstProject"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;</span>
+    ...
+  <span class="code-tag">&lt;/project&gt;</span>
+  ...
+
+  <span class="code-tag">&lt;project name=<span class="code-quote">"MySecondProject"</span> queue=<span class="code-quote">"Q2"</span> queuePriority=<span class="code-quote">"1"</span>&gt;</span>
+    ...
+  <span class="code-tag">&lt;/project&gt;</span>
+  ...
+<span class="code-tag">&lt;/cruisecontrol&gt;</span></pre>
+</div></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 17, 2008 04:20</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

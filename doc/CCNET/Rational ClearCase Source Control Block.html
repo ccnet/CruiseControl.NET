@@ -16,22 +16,21 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jan 25, 2007 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Sep 11, 2008 by <font color="#0050B2">williams</font>.
 				    </div>
 
 				    <h3><a name="RationalClearCaseSourceControlBlock-RationalClearCaseConfiguration"></a>Rational ClearCase Configuration</h3>
 
+
 <h4><a name="RationalClearCaseSourceControlBlock-Typical%2FMinimalConfiguration"></a>Typical / Minimal Configuration</h4>
 
-<p>For most uses the following is all you'll need in your <a href="Configuring the Server.html" title="Configuring the Server"><tt>ccnet.config</tt> </a>:</p>
-
+<p>For most uses the following is all you'll need in your <a href="Configuring the Server.html" title="Configuring the Server"><tt>ccnet.config</tt></a>:</p>
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"clearCase"</span>&gt;</span>
     <span class="code-tag">&lt;viewPath&gt;</span>C:\PATH\TO\SOURCE<span class="code-tag">&lt;/viewPath&gt;</span>
     <span class="code-tag">&lt;autoGetSource&gt;</span>true<span class="code-tag">&lt;/autoGetSource&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
-
 <p>This will:</p>
 <ul>
 	<li>monitor ClearCase for any changes on the viewPath or below</li>
@@ -40,12 +39,10 @@
 </ul>
 
 
-<p><a name="RationalClearCaseSourceControlBlock-viewPath"></a></p>
-
-<p>The <tt>&lt;viewPath&gt;</tt> specifies a directory on your filesystem that CCNet monitors for changes.  The path must be a versioned object.  CCNet checks the actual VOB for changes, not the local filesystem.</p>
+<p><a name="RationalClearCaseSourceControlBlock-viewPath"></a><br/>
+The <tt>&lt;viewPath&gt;</tt> specifies a directory on your filesystem that CCNet monitors for changes.  The path must be a versioned object.  CCNet checks the actual VOB for changes, not the local filesystem.</p>
 
 <p><tt>&lt;viewPath&gt;</tt> doesn't have to be the root of the local ClearCase view.  It may be any of the root's children or even a single object.</p>
-
 
 <h4><a name="RationalClearCaseSourceControlBlock-FullConfiguration"></a>Full Configuration</h4>
 
@@ -62,7 +59,6 @@
     <span class="code-tag">&lt;timeout&gt;</span>50000<span class="code-tag">&lt;/timeout&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
-
 <table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Element </th>
@@ -89,7 +85,7 @@
 <td class='confluenceTd'> autoGetSource </td>
 <td class='confluenceTd'> Specifies whether the current version of the source should be retrieved from ClearCase </td>
 <td class='confluenceTd'> bool </td>
-<td class='confluenceTd'> no</td>
+<td class='confluenceTd'> no </td>
 <td class='confluenceTd'> true </td>
 </tr>
 <tr>
@@ -132,12 +128,20 @@
 <td class='confluenceTd'> Sets the timeout period for the source control operation. See <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> for details. </td>
 <td class='confluenceTd'> Timeout </td>
 <td class='confluenceTd'> 10 minutes </td>
-<td class='confluenceTd'> false</td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> issueUrlBuilder </td>
+<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. <br clear="all" />
+See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">Issue Builder</a> for more details <br clear="all" /> </td>
+<td class='confluenceTd'> Group </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> false <br clear="all" /> </td>
 </tr>
 </tbody></table>
 
-
 <h4><a name="RationalClearCaseSourceControlBlock-CommonProblems"></a>Common Problems</h4>
+
 
 <h5><a name="RationalClearCaseSourceControlBlock-Thebuildisinitiatedwhenuserscheckinonprivatebranches"></a>The build is initiated when users check in on private branches</h5>
 
@@ -151,13 +155,12 @@
 cleartool: Error: Baseline not found: "CruiseControl.NETTemporaryBaseline_05-06-2004-16-34-15".
 </pre>
 </div></div>
-
 <p>This happens when <tt>&lt;projectVobName&gt;</tt> is not set to the project VOB.  Typically this happens when the user specifies the UCM VOB instead of the project VOB.</p>
 
 <p>To correct the problem, change the value in that element to the name of the project VOB.</p>
 
-
 <h4><a name="RationalClearCaseSourceControlBlock-KnownBugs"></a>Known Bugs</h4>
+
 
 <h5><a name="RationalClearCaseSourceControlBlock-WhenIviewmybaselines%2CIseethatthey%27recalled%7B%7BCruiseControl.NET%5Csomething%5C%7D%7Dinsteadof%7B%7Bv1.0.0.4%7D%7D."></a>When I view my baselines, I see that they're called <tt>CruiseControl.NET[something]</tt> instead of <tt>v1.0.0.4</tt>.</h5>
 
@@ -166,7 +169,6 @@ cleartool: Error: Baseline not found: "CruiseControl.NETTemporaryBaseline_05-06-
 <p>CCNet creates a temporary baseline with the prefix <tt>CruiseControl.NET</tt> before renaming it to the final value, such as <tt>v1.5.2.3</tt>.  Depending on how you view baselines in ClearCase, you may see the temporary or real name.</p>
 
 <p>For example, if you use the admin console, you'll see the old, temporary value.  If use use <tt>cleartool lsbl</tt>, you'll see the correct one:</p>
-
 <div class="preformatted panel" style="border-width: 1px;"><div class="preformattedContent panelContent">
 <pre>M:\gsmith_GS_Project_int\GS_UCM_VOB&gt;cleartool lsbl
 06-May-04.16:28:27  v1.0.0.1  gsmith   "CruiseControlTemporaryBaseline_05-06-200
@@ -182,7 +184,7 @@ cleartool: Error: Baseline not found: "CruiseControl.NETTemporaryBaseline_05-06-
 
 <h5><a name="RationalClearCaseSourceControlBlock-CruiseControl.NETseescheckinsonallbranches%2Cnotjusttheonespecifiedinmyconfigspec"></a>CruiseControl.NET sees checkins on all branches, not just the one specified in my config spec</h5>
 
-<p>This is due to the fact that the ClearCase history command (lshist) returns a complete history for the file, not just the history that can be seen by the config spec. </p>
+<p>This is due to the fact that the ClearCase history command (lshist) returns a complete history for the file, not just the history that can be seen by the config spec.</p>
 
 <p>The workaround is to make sure you include a <tt>&lt;branch&gt;</tt> element in your configuration.  This will force ccnet to just see changes on that branch.</p>
 
@@ -199,7 +201,7 @@ cleartool: Error: Baseline not found: "CruiseControl.NETTemporaryBaseline_05-06-
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jul 28, 2008 22:41</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 17, 2008 04:20</font></td>
 		    </tr>
 	    </table>
     </body>

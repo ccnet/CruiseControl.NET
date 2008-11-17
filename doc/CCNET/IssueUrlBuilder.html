@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : IssueUrlBuilder</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : IssueUrlBuilder
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Sep 29, 2008 by <font color="#0050B2">williams</font>.
+				    </div>
+
+				    <p>This addition to the sourcecontrol provider allows easy linking with an issue tracking system like Jira, Gemini, Bugzilla, ...<br/>
+The issueUrlBuilder will try to convert the comment (or parts from it) into an url pointing to the issue for this build.<br/>
+These are the items that will have the comment transformed into an url linking to the issue :</p>
+<ul>
+	<li>Rss publisher</li>
+	<li>Modification history page</li>
+	<li>Project Build&nbsp; Report</li>
+</ul>
+
+
+<h4><a name="IssueUrlBuilder-%26nbsp%3BConfiguration%3A"></a>&nbsp;Configuration :</h4>
+
+<p>This must be placed inside the sourcecontrol block.&nbsp;
+<br clear="all" /></p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;issueUrlBuilder type=<span class="code-quote">"defaultIssueTracker"</span>&gt;
+   &lt;url&gt;http:<span class="code-comment">//jira.<span class="code-keyword">public</span>.thoughtworks.org/browse/CCNET-{0}&lt;/url&gt;
+</span>&lt;/issueUrlBuilder&gt;</pre>
+</div></div>
+<p>There are 3 types :</p>
+<ul>
+	<li>defaultIssueTracker</li>
+	<li>regexIssueTracker</li>
+	<li>multiIssueTracker
+<br clear="all" /></li>
+</ul>
+
+
+<h4><a name="IssueUrlBuilder-Types"></a>Types</h4>
+
+
+<h5><a name="IssueUrlBuilder-defaultIssueTracker"></a>defaultIssueTracker</h5>
+
+<p>For the defaultIssueTracker there is 1 element needed : url</p>
+
+<p>It contains the url of the involved project, with the issue number as a parameter :{0}</p>
+
+<p>Whenever a checkin is done, the following logic is applied :</p>
+<ul>
+	<li>split the comment into a string array; separator is space</li>
+	<li>from the first part, take all the numeric parts, starting from the end of this part</li>
+	<li>paste this number into the parameter&nbsp;
+<br clear="all" /></li>
+</ul>
+
+
+<p>ex.: with the mentioned configuration the following comments will be converted into&nbsp; <a href="http://jira.public.thoughtworks.org/browse/CCNET-1223">http://jira.public.thoughtworks.org/browse/CCNET-1223</a></p>
+<ul>
+	<li>CCNET-1223: CCnet should foresee a way to transform the comments into hyperlinks for integration with issue tracking systems</li>
+	<li>CCNET-1223 CCnet should foresee a way to transform the comments into hyperlinks for integration with issue tracking systems</li>
+	<li>CCNET-1223</li>
+	<li>1223&nbsp;</li>
+</ul>
+
+
+<p>Example :
+<br clear="all" /></p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;issueUrlBuilder type=<span class="code-quote">"defaultIssueTracker"</span>&gt;
+   &lt;url&gt;http:<span class="code-comment">//jira.<span class="code-keyword">public</span>.thoughtworks.org/browse/CCNET-{0}&lt;/url&gt;
+</span>&lt;/issueUrlBuilder&gt;</pre>
+</div></div>
+
+<h4><a name="IssueUrlBuilder-regexIssueTracker"></a>regexIssueTracker</h4>
+
+<p>For the regexIssueTracker there are 2 elements needed : find&nbsp; and replace<br/>
+This will use regular expressions to convert the comment into an url.<br/>
+<em>find</em>&nbsp; is the string to be sought, and will be replaced by the string in <em>replace</em></p>
+
+<p>Example :
+<br clear="all" /></p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;issueUrlBuilder type=<span class="code-quote">"regexIssueTracker"</span>&gt;
+   &lt;find&gt;^.*(CCNET-\d*).*$&lt;/find&gt;
+   &lt;replace&gt;http:<span class="code-comment">//jira.<span class="code-keyword">public</span>.thoughtworks.org/browse/$1&lt;/replace&gt;
+</span>&lt;/issueUrlBuilder&gt;</pre>
+</div></div>
+<p>For the ones not familiar with regular expressions :</p>
+
+<p> <em><ins>find</ins></em> statement :</p>
+
+<p>Assert position at the beginning of the string <b>«^»</b><br/>
+Match any single character that is not a line break character <b>«.</b>»&#42;<br/>
+&nbsp;&nbsp; Between zero and unlimited times, as many times as possible, giving back as needed (greedy) <b>«</b>»&#42;<br/>
+Match the regular expression below and capture its match into backreference number 1 <b>«(CCNET-\d</b>)»&#42;<br/>
+&nbsp;&nbsp; Match the characters "CCNET-" literally <b>«CCNET-»</b><br/>
+&nbsp;&nbsp; Match a single digit 0..9 <b>«\d</b>»&#42;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Between zero and unlimited times, as many times as possible, giving back as needed (greedy) <b>«</b>»&#42;<br/>
+Match any single character that is not a line break character <b>«.</b>»&#42;<br/>
+&nbsp;&nbsp; Between zero and unlimited times, as many times as possible, giving back as needed (greedy) <b>«</b>»&#42;<br/>
+Assert position at the end of the string (or before the line break at the end of the string, if any) <b>«$»</b></p>
+
+<p><em><ins>replace</ins></em> statement:</p>
+
+<p>replace with&nbsp; <a href="http://jira.public.thoughtworks.org/browse/backreference1">http://jira.public.thoughtworks.org/browse/backreference1</a>; <b>«$1»</b>
+<br clear="all" /></p>
+
+<h4><a name="IssueUrlBuilder-multiIssueTracker"></a>multiIssueTracker</h4>
+
+<p>This issue tracker allows a combination of the other issuetrackers.<br/>
+It has 1 element : <em>issueTrackers</em><br/>
+This is an array of other issuetrackers.
+<br clear="all" /></p>
+
+<p>Example :
+<br clear="all" /></p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;issueUrlBuilder type=<span class="code-quote">"multiIssueTracker"</span>&gt;
+   &lt;issueTrackers&gt;
+     &lt;defaultIssueTracker&gt;
+          &lt;url&gt;http:<span class="code-comment">//jira.<span class="code-keyword">public</span>.thoughtworks.org/browse/CCNET-{0}&lt;/url&gt;
+</span>     &lt;/defaultIssueTracker&gt;
+     &lt;regexIssueTracker&gt;
+        &lt;find&gt;^.*(CCNET-\d*).*$&lt;/find&gt;
+        &lt;replace&gt;http:<span class="code-comment">//jira.<span class="code-keyword">public</span>.thoughtworks.org/browse/$1&lt;/replace&gt;
+</span>     &lt;/regexIssueTracker&gt;
+&lt;/issueUrlBuilder&gt;</pre>
+</div></div>
+<p>This will first apply the default issueTracker on the comment, and afterwards the regexIssueTracker, overwriting a previous result.
+<br clear="all" />
+<br clear="all" />
+<br clear="all" />
+<br clear="all" /></p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 17, 2008 04:20</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

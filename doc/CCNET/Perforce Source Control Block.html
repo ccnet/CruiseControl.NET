@@ -16,21 +16,18 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 28, 2008 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on Sep 11, 2008 by <font color="#0050B2">williams</font>.
 				    </div>
 
 				    <h3><a name="PerforceSourceControlBlock-PerforceConfigurationExamples"></a>Perforce Configuration Examples</h3>
 
 <p>Example using defaults:</p>
-
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"p4"</span>&gt;</span>
    <span class="code-tag">&lt;view&gt;</span>//projects/myproject/...<span class="code-tag">&lt;/view&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
-
 <p>Full example:</p>
-
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"p4"</span>&gt;</span>
    <span class="code-tag">&lt;view&gt;</span>//projects/ccnet/...,//tools/nant/...<span class="code-tag">&lt;/view&gt;</span>
@@ -48,7 +45,6 @@
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
 
-
 <h3><a name="PerforceSourceControlBlock-ConfigurationElements%3A"></a>Configuration Elements:</h3>
 
 <table class='confluenceTable'><tbody>
@@ -61,7 +57,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> view </td>
-<td class='confluenceTd'> The perforce 'view' to check for changes. For 'multi-line' views, use a comma-separated list. 'Exclusionary' view lines starting with <tt>-</tt> cannot be used. Use a <a href="Filtered Source Control Block.html" title="Filtered Source Control Block">Filtered Source Control Block</a> to achieve this behaviour. Note that this view is <b>not</b> used for syncing (see below.) </td>
+<td class='confluenceTd'> The perforce 'view' to check for changes. For 'multi-line' views, use a comma-separated list. 'Exclusionary' view lines starting with <tt>&#45;</tt> cannot be used. Use a <a href="Filtered Source Control Block.html" title="Filtered Source Control Block">Filtered Source Control Block</a> to achieve this behaviour. Note that this view is <b>not</b> used for syncing (see below.) </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> true </td>
 <td class='confluenceTd'> <em>n.a.</em> </td>
@@ -81,7 +77,7 @@
 <td class='confluenceTd'> Perforce environment setting </td>
 </tr>
 <tr>
-<td class='confluenceTd'> user</td>
+<td class='confluenceTd'> user </td>
 <td class='confluenceTd'> The perforce user to use </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
@@ -117,14 +113,14 @@
 </tr>
 <tr>
 <td class='confluenceTd'> autoGetSource </td>
-<td class='confluenceTd'> Whether to automatically 'sync' the latest changes from source control before performing the build. The sync target is the entire view exposed by the specified <tt>client</tt> - the <tt>view</tt> has no effect on sycning. </td>
+<td class='confluenceTd'> Whether to automatically 'sync' the latest changes from source control before performing the build. The sync target is the entire view exposed by the specified <tt>client</tt> &#45; the <tt>view</tt> has no effect on sycning. </td>
 <td class='confluenceTd'> bool </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> true </td>
 </tr>
 <tr>
 <td class='confluenceTd'> forceSync </td>
-<td class='confluenceTd'> If <tt>autoGetSource</tt> is set to true, then whether to use the <tt>-f</tt> option to sync. See <a href="http://www.perforce.com/perforce/doc.042/manuals/cmdref/sync.html">here</a> for more details </td>
+<td class='confluenceTd'> If <tt>autoGetSource</tt> is set to true, then whether to use the <tt>&#45;f</tt> option to sync. See <a href="http://www.perforce.com/perforce/doc.042/manuals/cmdref/sync.html">here</a> for more details </td>
 <td class='confluenceTd'> boolean </td>
 <td class='confluenceTd'> no </td>
 <td class='confluenceTd'> false </td>
@@ -141,6 +137,14 @@
 <td class='confluenceTd'> Timeout </td>
 <td class='confluenceTd'> no </td>
 <td class='confluenceTd'> 10 minutes </td>
+</tr>
+<tr>
+<td class='confluenceTd'> issueUrlBuilder </td>
+<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. <br clear="all" />
+See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">Issue Builder</a> for more details <br clear="all" /> </td>
+<td class='confluenceTd'> Group </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> false <br clear="all" /> </td>
 </tr>
 </tbody></table>
 
@@ -163,7 +167,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jul 28, 2008 22:41</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 17, 2008 04:20</font></td>
 		    </tr>
 	    </table>
     </body>

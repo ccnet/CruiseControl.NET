@@ -16,15 +16,14 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 03, 2007 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Sep 11, 2008 by <font color="#0050B2">williams</font>.
 				    </div>
 
 				    <p>CruiseControl.NET supports integrating with the PVCS Source Control system via the <b>pcli</b> client.</p>
 
 <h3><a name="PVCSSourceControlBlock-PVCSConfigurationExamples"></a>PVCS Configuration Examples</h3>
 
-<p>For the PVCS provider you must specify the executable, project and subproject. Additional optional arguments are defined in the table below. </p>
-
+<p>For the PVCS provider you must specify the executable, project and subproject. Additional optional arguments are defined in the table below.</p>
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"pvcs"</span>&gt;</span>
    <span class="code-tag">&lt;executable&gt;</span>c:\pvcs\pvcs.exe<span class="code-tag">&lt;/executable&gt;</span>
@@ -32,7 +31,6 @@
    <span class="code-tag">&lt;subproject&gt;</span>ccnet1.0<span class="code-tag">&lt;/subproject&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
-
 
 <h3><a name="PVCSSourceControlBlock-ConfigurationElements%3A"></a>Configuration Elements:</h3>
 
@@ -42,7 +40,7 @@
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Default </th>
-<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Required </th>
 </tr>
 <tr>
 <td class='confluenceTd'> executable </td>
@@ -53,7 +51,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> project </td>
-<td class='confluenceTd'>  The location of the PVCS project database  </td>
+<td class='confluenceTd'> The location of the PVCS project database </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> n/a </td>
 <td class='confluenceTd'> true </td>
@@ -98,7 +96,7 @@
 <td class='confluenceTd'> Whether or not to apply a label to the repository after each successful build. </td>
 <td class='confluenceTd'> boolean </td>
 <td class='confluenceTd'> false </td>
-<td class='confluenceTd'> false</td>
+<td class='confluenceTd'> false </td>
 </tr>
 <tr>
 <td class='confluenceTd'> autoGetSource </td>
@@ -109,7 +107,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> labelOrPromotionName </td>
-<td class='confluenceTd'> The label to use as your code-base.  If this is specified, this label will be called to get all code associated with it when a <b>get</b> is done.  When the build is successful, the good code will have this base label associated with it in turn promoting it into the label.<br/>
+<td class='confluenceTd'> The label to use as your code-base.  If this is specified, this label will be called to get all code associated with it when a <b>get</b> is done.  When the build is successful, the good code will have this base label associated with it in turn promoting it into the label.<br clear="all" />
  Label to apply to repository. If a value is specified, <b>labelOnSuccess</b> will automatically be set to true. </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> n/a </td>
@@ -120,14 +118,22 @@
 <td class='confluenceTd'> Sets the timeout period for the source control operation. See <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> for details. </td>
 <td class='confluenceTd'> Timeout </td>
 <td class='confluenceTd'> 10 minutes </td>
-<td class='confluenceTd'> false</td>
+<td class='confluenceTd'> false </td>
 </tr>
 <tr>
 <td class='confluenceTd'> manuallyAdjustForDaylightSavings </td>
 <td class='confluenceTd'> In PVCS 7.5.1, the client does not automatically adjust dates to accommodate daylight savings time. Setting this flag to true will make CCNet compensate for it. This flag is available in CCNet 1.2.2 and later. </td>
 <td class='confluenceTd'> boolean </td>
 <td class='confluenceTd'> false </td>
-<td class='confluenceTd'> false</td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> issueUrlBuilder </td>
+<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. <br clear="all" />
+See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">Issue Builder</a> for more details <br clear="all" /> </td>
+<td class='confluenceTd'> Group </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> false <br clear="all" /> </td>
 </tr>
 </tbody></table>
 
@@ -145,7 +151,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jul 28, 2008 22:41</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 17, 2008 04:20</font></td>
 		    </tr>
 	    </table>
     </body>

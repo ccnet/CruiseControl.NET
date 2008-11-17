@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 1.4.1 Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 1.4.1 Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 15, 2008 by <font color="#0050B2">williams</font>.
+				    </div>
+
+				    <h2><a name="CCNet1.4.1ReleaseNotes-HighlightsoftheCCNet1.4.1release"></a>Highlights of the CCNet 1.4.1 release</h2>
+
+
+<h4><a name="CCNet1.4.1ReleaseNotes-GraphsnowworkwithFirefox3"></a>Graphs now work with Firefox 3</h4>
+
+<p>The version of Dojo used for the graphs and reporting has been updated, and now work correctly in Firefox 3.<br/>
+The category element is now used in the Dashboard. Projects are now grouped per category, if you select the view per buildserver.<br/>
+There is a now also a graphical build history in the project overview.<br/>
+Comments can be transformed into urls pointing to issue tracker webpages if they follow a pattern, this can be done by the using the issueUrlbuilder in a source control block.<br/>
+The ProjectView configuration now masks the passwords by default.</p>
+
+<h2><a name="CCNet1.4.1ReleaseNotes-UpgradingtoCCNet1.4.1"></a>Upgrading to CCNet 1.4.1</h2>
+
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Upgrading from a version before 1.4?</b><br />
+<p>See the release notes for the <a href="CCNet 1.4 Release Notes.html" title="CCNet 1.4 Release Notes">CCNet 1.4 release</a>.</p></td></tr></table></div>
+
+<h2><a name="CCNet1.4.1ReleaseNotes-ReleaseNotesCruiseControl.NETVersionx.y"></a>Release Notes - CruiseControl .NET - Version x.y</h2>
+
+<p>This is a list of Jira Issues resolved by this release :</p>
+
+<p>Release Notes - CruiseControl .NET - Version 1.4.1</p>
+<ul>
+	<li>
+	<ul>
+		<li>Bug</li>
+	</ul>
+	</li>
+	<li>CCNET\-75 &#45; Labels with spaces in them cause Vss labelling to fail</li>
+	<li>CCNET\-122 &#45; Timed out builds repeat indefinitely</li>
+	<li>CCNET\-129 &#45; exception during VSS doesn't show up in log</li>
+	<li>CCNET\-178 &#45; Sorting of checkins is done by date in text</li>
+	<li>CCNET\-247 &#45; "Illegal Characters in Path" error</li>
+	<li>CCNET\-253 &#45; NAnt warnings showing as errors in build report</li>
+	<li>CCNET\-336 &#45; Add posibility to gruop projects in dashboard</li>
+	<li>CCNET\-594 &#45; XmlLogger should handle illegal characters in filename</li>
+	<li>CCNET\-639 &#45; Multiple Subversion Sourcecontrol repositories not supported in single project</li>
+	<li>CCNET\-710 &#45; Compile-MSBuild.xsl bug prevents warnings from being displayed.</li>
+	<li>CCNET\-786 &#45; Regression: Invalid NUnitDetailsBuildReport image URLs</li>
+	<li>CCNET\-860 &#45; CCTray last build date is not sorted correctly</li>
+	<li>CCNET\-894 &#45; Subversion source control block does not pick up changes in svn:externals paths</li>
+	<li>CCNET\-896 &#45; FxCop report is incorrectly nested</li>
+	<li>CCNET\-923 &#45; Save the build report to an xml file</li>
+	<li>CCNET\-930 &#45; Unable to load transform: "..\CruiseControl.NET\webdashboard\xsl\msbuild.xsl" exception</li>
+	<li>CCNET\-974 &#45; Partial formatting of FxCop report</li>
+	<li>CCNET\-1027 &#45; CCNetArtifactDirectory cause error in MSBuild</li>
+	<li>CCNET\-1029 &#45; A ScheduleTrigger with spaces in the name causes MSBuild Task parameters to go missing</li>
+	<li>CCNET\-1073 &#45; Escape does not close Settings window</li>
+	<li>CCNET\-1095 &#45; ForceBuild Publisher does not rebuild a project if it already exists in the Q.</li>
+	<li>CCNET\-1104 &#45; MSTestReport and MSTest summary do not take into account data driven tests and report incorrectly</li>
+	<li>CCNET\-1105 &#45; MSTestReport and MSTestSummary do not work with MSTest 9 (VS2008)</li>
+	<li>CCNET\-1108 &#45; The FxCop report in the dashboard is not working using FxCop 1.36</li>
+	<li>CCNET\-1109 &#45; FileSourceControl should also detect new files as modifications</li>
+	<li>CCNET\-1114 &#45; WebURL is invalid for Internet use: uses machine name instead of public hostname.</li>
+	<li>CCNET\-1115 &#45; MSBuild 3.5 refused if project name has spaces</li>
+	<li>CCNET\-1142 &#45; Spaces in &lt;workingDirectory&gt; or &lt;artifactDirectory&gt; paths cause MSBuild failures MSB1008 and MSB1003 respectively</li>
+	<li>CCNET\-1146 &#45; Some of the tests have localization issues</li>
+	<li>CCNET\-1165 &#45; BuildPublisher task in publishers section is not run on failed builds</li>
+	<li>CCNET\-1166 &#45; Raising exception when refreshing status from dashboard</li>
+	<li>CCNET\-1169 &#45; Exception in settings if poll interval is less than 5.</li>
+	<li>CCNET\-1172 &#45; Standard MSbuild logger does not supply path name, so compiling goes wrong</li>
+	<li>CCNET\-1185 &#45; System.Xml.Xsl.XslTransformException: Execution of the 'document()' function was prohibited</li>
+	<li>CCNET\-1199 &#45; Silently installing ccnet server v1.4 rc1 produces a message box</li>
+	<li>CCNET\-1200 &#45; Project Statistics works not concurrently together with Data Labels from CC.Net Version 1.3 and Version 1.4</li>
+	<li>CCNET\-1205 &#45; SvnHistoryParser throws NullReferenceException</li>
+	<li>CCNET\-1216 &#45; Config filenames should be case-respected in case the OS has case-sensitive filenames.</li>
+	<li>CCNET\-1219 &#45; The tests for the NAnt and MsBuild Task did not check for correct quoting of command line arguments</li>
+	<li>CCNET\-1224 &#45; Email Publisher Documentation bug in converters example</li>
+	<li>CCNET\-1233 &#45; when a project contains a sourcecontrol provider not distributed by CCNet itself, the dashboard crashes iso showing 'Getting source from ... '</li>
+	<li>CCNET\-1241 &#45; A force build can be ignored</li>
+	<li>CCNET\-1244 &#45; Config Preprocessor: System.Exception field name &#95;remoteStackTraceString is remote_stack_trace on Mono</li>
+	<li>CCNET\-1247 &#45; CCTRAY - unresponsive when configured to use remoting with many projects</li>
+	<li>CCNET\-1249 &#45; CCTray does not save the "Show Queues" state when hidden</li>
+	<li>CCNET\-1264 &#45; When first modification has no comment, the rss publisher throws a null reference exception</li>
+	<li>CCNET\-1270 &#45; IOService's DeleteFileEvenIfReadOnly will not delete symbolic links and fail</li>
+	<li>CCNET\-1280 &#45; CCTray 1.4 crashing when executed</li>
+</ul>
+
+
+<ul>
+	<li>
+	<ul>
+		<li>Improvement</li>
+	</ul>
+	</li>
+	<li>CCNET\-54 &#45; CCNetLive to run as service</li>
+	<li>CCNET\-98 &#45; Improved documentation</li>
+	<li>CCNET\-108 &#45; Parse output returned from NAnt to output cause of failure to console</li>
+	<li>CCNET\-180 &#45; Ensure that information on ccnet.config page is kept current</li>
+	<li>CCNET\-220 &#45; Bring Web Service up to date with 0.7 remote interface</li>
+	<li>CCNET\-228 &#45; Webapp (Dashboard) should act as proxy for underlying CCNet servers.</li>
+	<li>CCNET\-300 &#45; Create new FxCopReport.xsl that is compatible with FxCop 1.30 and 1.312</li>
+	<li>CCNET\-320 &#45; Project token for configuration</li>
+	<li>CCNET\-463 &#45; Upgrading to a new version should not delete configuration files and build artifacts</li>
+	<li>CCNET\-553 &#45; Create 'friendly' URLs for dashboard and maintain across versions</li>
+	<li>CCNET\-593 &#45; Successful build should contain summary of code changes since last successful build</li>
+	<li>CCNET\-681 &#45; MSBuild: It should not be necessary to copy ThoughtWorks.CruiseControl.MSBuild.dll to the working directory</li>
+	<li>CCNET\-754 &#45; CCTray should persist the selected view type</li>
+	<li>CCNET\-755 &#45; Allow control over balloon notification verbosity.</li>
+	<li>CCNET\-817 &#45; Pause and Continue should be available from CCTray</li>
+	<li>CCNET\-857 &#45; Move to use of shape-differentiated status icons (avoid confusion for color blind)</li>
+	<li>CCNET\-869 &#45; Add "On Queue" or "Waiting" state</li>
+	<li>CCNET\-1136 &#45; Easy browsing from one build report to next or previous build report</li>
+	<li>CCNET\-1161 &#45; Cleanup publisher should foresee a setting for cleaning up the history data</li>
+	<li>CCNET\-1167 &#45; Expose the messages in the XMLReportAction page</li>
+	<li>CCNET\-1171 &#45; Including MSBuild report in the dashboard.config makes CCNet support MSBuild out of the box</li>
+	<li>CCNET\-1186 &#45; Show the comment in the Modification history overview without having to expand the items</li>
+	<li>CCNET\-1187 &#45; Improve the RSS publisher so it shows a summary in the reader pane</li>
+	<li>CCNET\-1194 &#45;  Making categories a useful feature</li>
+	<li>CCNET\-1206 &#45; Reduce margins in the dashboard arround the force button (projectgrid.vm)</li>
+	<li>CCNET\-1212 &#45; Add option to ArtifactCleanup to delete sub dirs of the artifacts folder</li>
+	<li>CCNET\-1215 &#45; Patch that enables Nunit task support of Nunit categories (both excluded and included ones)</li>
+	<li>CCNET\-1223 &#45; CCnet should foresee a way to transform the comments into hyperlinks for integration with issue tracking systems</li>
+	<li>CCNET\-1227 &#45; VSS HistoryParser in Spanish</li>
+	<li>CCNET\-1235 &#45; make the class of DefaultIssueTrackerUrlModifier public</li>
+	<li>CCNET\-1240 &#45; Integration Queues - ability for one queue to acquire a lock against another</li>
+	<li>CCNET\-1248 &#45; add a postfix in the default labeler</li>
+	<li>CCNET\-1259 &#45; Show build success rate in graph on project report page</li>
+	<li>CCNET\-1262 &#45; Create a Regular Expression IssueTrackUrl Builder</li>
+	<li>CCNET\-1263 &#45; Create a MultiIssueTrackUrl Builder, combining the existing IsueTrackUrl builders</li>
+	<li>CCNET\-1268 &#45; Process Executor does not need ProcessReader</li>
+	<li>CCNET\-1269 &#45; On new installation, the preprocessor directive should already be included in the empty ccnet.config</li>
+	<li>CCNET\-1272 &#45; Patch adding support for making case sensitive path checking in PathFilter configurable</li>
+	<li>CCNET\-1275 &#45; ProjectView configuration must hide passwords</li>
+	<li>CCNET\-1278 &#45; Display the amount of ok builds on farm, buildserver and category page</li>
+	<li>CCNET\-1284 &#45; Make CCTray "Task Bar on the top" friendly.</li>
+</ul>
+
+
+<ul>
+	<li>
+	<ul>
+		<li>New Feature</li>
+	</ul>
+	</li>
+	<li>CCNET\-206 &#45; Group projects by category with collapse/expand in WebDashboard</li>
+	<li>CCNET\-230 &#45; Make build stats available through web service</li>
+	<li>CCNET\-297 &#45; Allow more details in Failed Builds name</li>
+	<li>CCNET\-311 &#45; Add support for VS2005 Unit Testing Framework</li>
+	<li>CCNET\-578 &#45; Create FileTrigger</li>
+	<li>CCNET\-591 &#45; Resurrect CCRunner and get it built on ccnetlive</li>
+	<li>CCNET\-642 &#45; Graphical Build history in project overview</li>
+	<li>CCNET\-855 &#45; In details show full date of "Next build check" if it isn't today.</li>
+	<li>CCNET\-1151 &#45; A task for building with "rake"</li>
+	<li>CCNET\-1195 &#45; Create a modification reader to read back the contents of modifications made by the modificationwritertask</li>
+	<li>CCNET\-1238 &#45; Document using PartCover with CCNET</li>
+	<li>CCNET\-1252 &#45; Add "Copy Build Label" to clipboard context item.</li>
+	<li>CCNET\-1261 &#45; Plugin for viewing queue status on a server.</li>
+	<li>CCNET\-1282 &#45; Foresee a plugin showing category and queue information per project</li>
+</ul>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 17, 2008 04:20</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

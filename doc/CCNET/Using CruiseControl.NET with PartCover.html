@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Using CruiseControl.NET with PartCover</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Using CruiseControl.NET with PartCover
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Sep 09, 2008 by <font color="#0050B2">rosspatterson</font>.
+				    </div>
+
+				    <h2><a name="UsingCruiseControl.NETwithPartCover-WhatisPartCover%3F"></a>What is PartCover?</h2>
+
+<p>PartCover is a tool to calculate unit test code coverage. Sure many people knows NCover, which has been extensively used to calculate code coverage in combination with cruisecontrol.net, PartCover does just the same with the only difference that it keeps being open source as of today.</p>
+
+<p>PartCover is based on the instrumentation of assemblies instead of the instrumentation or modification of the source code itself, this approach having advantages and drawbacks. The main advantage is source code does not need to be modified and compiled (as it was in primitive versions of NCover), thus saving significant time in your builds. Besides that you don't need assembly debug symbols to get your coverage metrics.</p>
+
+<p>Drawbacks are mainly related to the fact that assemblies IL code suffer a lot of smart optimizations at compile time and so it may not reflect all the handwritten branches found in the source code.</p>
+
+<h2><a name="UsingCruiseControl.NETwithPartCover-IntegratingPartCoverinyourNANTbuilds"></a>Integrating PartCover in your NANT builds</h2>
+<p>To sum up, in order to integrate PartCover in your NANT build scripts you will need to perform the following steps:</p>
+<ol>
+	<li>Invoke partcover within your nant script</li>
+	<li>Tell PartCover how to run your unit test framework (in this example we'll tell it how to run nunit-console.exe so the unit tests get executed)</li>
+	<li>Tell PartCover which assembly or assemblies containing unit tests you would want to execute</li>
+	<li>Tell PartCover to generate an XML report file that we will later integrate into ccnet through a couple of XSL files</li>
+</ol>
+
+
+<p><em>Before going on, a simple note on PartCover installation. This tool is not deployed with a simple xcopy, since it needs to register some COM components, so you will need to run the MSI installer before you can invoke the command line PartCover tool.</em></p>
+
+<p>So we assume you've installed PartCover in your build server and we can invoke the command line tool like this "c:\buildtools\partcover\partcover.exe"<br/>
+Let's imagine you have a visual studio solution (not mono or sharp develop specificities are covered here but the approach would be the same), and in this solution we have two class library projects, first one called "PartCoverTest.BusinessLogic" second called "PartCoverTest.UnitTest", that is to say a project containing our project logic and the second one containing the unit tests for that first project.</p>
+
+<p>I will assume we are using nunit framework for this sample but any other framework will apply since what PartCover needs is to run unit tests. It does not rely on the unit test reports or any other unit test framework specifics. Just for comfort we will assume nunit as the unit test framework.</p>
+
+<p>So, now that we have a unit test structure what we want is get our code coverage metrics.<br/>
+We would write a NANT target called PartCover which may look like this one:</p>
+
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;!-- =============================================================================== --&gt;
+&lt;!-- run partcover to calculate code coverage                                      --&gt;
+&lt;!-- =============================================================================== --&gt;  
+&lt;target name=<span class="code-quote">"partcover"</span>&gt;
+  &lt;exec program=<span class="code-quote">"c:\buildtools\partcover\partcover.exe"</span> failonerror=<span class="code-quote">"<span class="code-keyword">false</span>"</span>&gt;
+    &lt;arg value=<span class="code-quote">"--target=c:\buildtools\nunit\nunit-console.exe"</span> /&gt;
+    &lt;arg value=<span class="code-quote">"--target-work-dir="</span>c:\PartCoverTest\PartCoverTest.UnitTest"/&gt;
+    &lt;arg value=<span class="code-quote">"--target-args="</span>PartCoverTest.UnitTest.dll" /&gt;
+    &lt;arg value=<span class="code-quote">"--include=[*]*"</span> /&gt;
+    &lt;arg value=<span class="code-quote">"--exclude=[nunit*]*"</span> /&gt;
+    &lt;arg value=<span class="code-quote">"--exclude=[PartCoverTest.UnitTest*]*"</span> /&gt;
+    &lt;arg value=<span class="code-quote">"--output="</span>c:\PartCoverTest\ccnet-partcover-results.xml" /&gt;
+  &lt;/exec&gt;
+&lt;/target&gt;</pre>
+</div></div>
+
+
+
+<p>We find an exec command which will execute the partcover through the command line, the arguments given to it are the following:</p>
+<ul>
+	<li>"--target", we need to provide here the unit test framework application which will execute the unit tests. In our case we provide the nunit-console utility which is able to execute the unit tests found on the assemblies given through the command line parameters.</li>
+	<li>"—target-work-dir", the working directory for the nunit-console application, normally the place where you have your unit test assembly.</li>
+	<li>"—target-args", arguments for the nunit-console utility, obviously we give here the name of our unit test assembly so it gets executed by nunit-console.</li>
+	<li>"--include", with this parameter we tell to PartCover what should be included in the coverage measurement. This is in fact a regular expression with which you address the qualified names of the types you want to include in the measure. In our case we first say "include everything" through the expression "[*]&#42;", and then we exclude everything concerning the nunit framework assemblies "[nunit&#42;]&#42;" and we also exclude the types within the unit test assembly itself "[PartCoverTest.UnitTest&#42;]&#42;" of course, we don't need to get coverage on the unit testing code itself.</li>
+	<li>"--output", finally we tell PartCover where the output report should be placed. In our case we put the xml report at the source code root. (we will later reference this file in the ccnet merging task so take note of the file).</li>
+</ul>
+
+
+<p>This is enough to get a PartCover coverage report on our projects, let's make sure we generate the XML report before moving to the next step.</p>
+
+<h2><a name="UsingCruiseControl.NETwithPartCover-IntegratingPartCoveroutputintoCC.net"></a>Integrating PartCover output into CC.net</h2>
+
+<p>Well, granted you were able to generate the PartCover report, let's now merge this file with ccnet reports so we can integrate these results in the ccnet dashboard. </p>
+
+<p>First thing is to merge the output into ccnet build results, to do so I'm sure you already have a merging task  in your ccnet configuration file. Something which should look like this:</p>
+
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;publishers&gt;
+  &lt;merge&gt;
+    &lt;files&gt;
+      &lt;file&gt;c:\PartCoverTest\nunit-results.xml&lt;/file&gt;
+      &lt;file&gt;c:\PartCoverTest\simian-results.xml&lt;/file&gt;
+      &lt;file&gt;c:\PartCoverTest\ccnet-partcover-results.xml&lt;/file&gt;
+    &lt;/files&gt;
+  &lt;/merge&gt;
+  &lt;xmllogger/&gt;
+&lt;/publishers&gt;</pre>
+</div></div> 
+
+<p>As an example I have added some nunit and simian files and then the merging of the PartCover output we previously learnt how to generate. This will merge the results of the PartCover report but now we need these results to be displayed on the dashboard.</p>
+
+<p>In order to get PartCover data into the dashboard we will need first to copy two XSL files into ccnet\webdashboard\xsl folder. </p>
+
+<p>We will find these two files in the PartCover directory (v2.2) the files are located at:<br/>
+C:\partcoverinstalldir\xslt and they are "assembly.report.xslt" and "class.report.xslt" which I like to rename to "partcover.assembly.report.xsl" and "partcover.assembly.report.xsl". These two last files are the ones we need to copy to the webdashboard xsl directory.</p>
+
+<p><em>Note: we need to modify these two files because PartCover ships them assuming that PartCover is the root node, so in these files we will find queries beginning like "/PartCoverReport/..." and we need to change all these queries to "//PartCoverReport/...", once done this the xsl files are ready.</em></p>
+
+<p>Now we need to add these options to the build report menu in the dashboard, so we will open ccnet dashboard config file "dashboard.config" and look for the node "xslFileNames", under which we need to add the newly added PartCover files, it will look like this:</p>
+
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;buildPlugins&gt;
+  &lt;buildReportBuildPlugin&gt;
+    &lt;xslFileNames&gt;
+      &lt;!-- you need to add the following two lines --&gt;
+      &lt;xslFile&gt;xsl\PartCover.assembly.report.xsl&lt;/xslFile&gt;
+      &lt;xslFile&gt;xsl\PartCover.class.report.xsl&lt;/xslFile&gt;
+   &lt;/xslFileNames&gt;
+ ...</pre>
+</div></div>
+
+
+<p>Next step is to add the transformation options to the dashboard menu, to do so, you will notice that you have some children nodes for the &lt;buildPlugins&gt; node which are called "xslReportBuildPlugin", we need to add the assembly and class report plugins for PartCover here, so as children of &lt;buildPlugins&gt; you will add the following two options:</p>
+
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;buildPlugins&gt;
+ . . .
+
+    &lt;xslReportBuildPlugin 
+        description=<span class="code-quote">"PartCover <span class="code-object">Class</span> Details"</span>     
+        actionName=<span class="code-quote">"PartCoverDetailsBuildReport"</span> 
+        xslFileName=<span class="code-quote">"xsl\PartCover.class.report.xsl"</span> /&gt;
+
+    &lt;xslReportBuildPlugin 
+        description=<span class="code-quote">"PartCover Assembly Details"</span>
+        actionName=<span class="code-quote">"PartCoverDetailsAssemblyBuildReport"</span>
+        xslFileName=<span class="code-quote">"xsl\PartCover.assembly.report.xsl"</span> /&gt;
+
+ . . .</pre>
+</div></div>
+
+<p>First node transforms the data to present a report at class level, so code coverage percentages at a class level. The second one presents the data summarized at assembly level, percentage of code coverage at assembly level.</p>
+
+<p>Let's have a look at how these reports are presented in the dashboard UI:</p>
+
+<p><img src="download/attachments/22118413/PartCover-Dashboard.jpg" align="absmiddle" border="0"/> </p>
+
+<p>Hope this helps.</p>
+
+<h2><a name="UsingCruiseControl.NETwithPartCover-ReferencesandCredits"></a>References and Credits</h2>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'>Url</th>
+<th class='confluenceTh'>Description</th>
+</tr>
+<tr>
+<td class='confluenceTd'>http://sourceforge.net/projects/partcover/</td>
+<td class='confluenceTd'>PartCover home at sourceforge.net. Here you can get the installer</td>
+</tr>
+<tr>
+<td class='confluenceTd'>http://www.blog.latrompa.com/?p=7</td>
+<td class='confluenceTd'>Blog where I get the xsl configuration for PartCover solved</td>
+</tr>
+<tr>
+<td class='confluenceTd'>http://www.bullseye.com/coverage.html</td>
+<td class='confluenceTd'>Very good paper on code coverage fundamentals</td>
+</tr>
+</tbody></table>
+
+
+
+
+
+
+
+
+				    					    <br/>
+                        <div class="tabletitle">
+                            <a name="attachments">Attachments:</a>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="download/attachments/22118413/PartCover-Dashboard.jpg">PartCover-Dashboard.jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 17, 2008 04:20</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>
