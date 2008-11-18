@@ -303,6 +303,9 @@
     <Compile Include="Presentation\AddProjects.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Presentation\AddProjects.Designer.cs">
+      <DependentUpon>AddProjects.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentation\AudioPlayer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -324,12 +327,16 @@
     <Compile Include="Presentation\CCTrayMultiSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Presentation\CCTrayMultiSettingsForm.Designer.cs">
+      <DependentUpon>CCTrayMultiSettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentation\ConfigurableBalloonMessageProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Presentation\ConfigurableProjectStateIconProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Presentation\KeyUtils.cs" />
     <Compile Include="Presentation\SpeechSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -396,7 +403,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Presentation\PersistWindowState.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Presentation\ProjectConfigurationListViewItemAdaptor.cs">
       <SubType>Code</SubType>

@@ -6,7 +6,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
 	public partial class BuildProjectsControl : UserControl
 	{
-		private ProjectConfigurationListViewItemAdaptor selected = null;
+		private ProjectConfigurationListViewItemAdaptor selected;
 		private int selectedIndex = -1;
 		private ICCTrayMultiConfiguration configuration;
 
@@ -93,15 +93,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			AddProjects addProjectDialog =
 				new AddProjects(configuration.CruiseProjectManagerFactory, BuildProjectListFromListView());
-			CCTrayProject[] projects = addProjectDialog.GetListOfNewProjects(this);
 
-			if (projects != null)
-			{
-				foreach (CCTrayProject newProject in projects)
-				{
-					lvProjects.Items.Add(new ProjectConfigurationListViewItemAdaptor(newProject).Item);
-				}
-			}
+			foreach (CCTrayProject p in addProjectDialog.GetListOfNewProjects(this))
+				lvProjects.Items.Add(new ProjectConfigurationListViewItemAdaptor(p).Item);
 		}
 
 		private CCTrayProject[] BuildProjectListFromListView()
@@ -129,48 +123,34 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void lvProjects_KeyDown(object sender, KeyEventArgs e)
 		{
-			if ((e.Modifiers == Keys.Control) && (e.KeyCode == Keys.A))
+			if(KeyUtils.PressedControlA(e))
 			{
+				// Select all items.
 				foreach (ListViewItem item in lvProjects.Items)
-				{
 					item.Selected = true;
-				}
 			}
-
+			else
 			if (e.KeyCode == Keys.Delete)
 			{
+				// Delete selected items.
 				lvProjects.BeginUpdate();
 				foreach (ListViewItem item in lvProjects.SelectedItems)
-				{
 					lvProjects.Items.Remove(item);
-				}
+
 				lvProjects.EndUpdate();
 			}
 		}
 
 		private void chkCheck_CheckedChanged(object sender, EventArgs e)
 		{
-			if (chkCheckAllProjects.Checked)
-			{
-				foreach (ListViewItem item in lvProjects.Items)
-				{
-					item.Checked = true;
-				}
-			}
-			else
-			{
-				foreach (ListViewItem item in lvProjects.Items)
-				{
-					item.Checked = false;
-				}
-			}
+			bool should_check = chkCheckAllProjects.Checked;
+			foreach (ListViewItem item in lvProjects.Items)
+				item.Checked = should_check;
 		}
 
 		public void PersistProjectTabSettings()
 		{
-			CCTrayProject[] newProjectList = BuildProjectListFromListView();
-			configuration.Projects = newProjectList;
+			configuration.Projects = BuildProjectListFromListView();
 		}
-
 	}
 }

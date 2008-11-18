@@ -12,8 +12,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 	/// http://www.codeproject.com/csharp/restoreformstate.asp
 	/// 
 	/// Adapted for use with ccnet-tray by Grant Drake.
+	/// 
+	/// Todo: Remove empty constructor, remove Parent.setter.
+	/// This class should be used as a class (in a form's constructor), and not
+	/// as a drop-on form component.
 	/// </summary>
-	public class PersistWindowState : Component
+	public class PersistWindowState
 	{
 		public event EventHandler<WindowStateEventArgs> LoadState;
 		public event EventHandler<WindowStateEventArgs> SaveState;
@@ -26,24 +30,37 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private int normalHeight;
 		private bool visible;
 
+		public PersistWindowState() {}
+
+		public PersistWindowState(Form parent)
+		{
+			SetParentForm(parent);
+		}
+
 		public Form Parent
 		{
 			set
 			{
-				parent = value;
-
-				// subscribe to parent form's events
-				parent.Load += OnLoad;
-				parent.Closing += OnClosing;
-				parent.Move += OnMove;
-				parent.Resize += OnResize;
-				parent.VisibleChanged += OnVisibleChanged;
-
-				// get initial width and height in case form is never resized
-				normalWidth = parent.Width;
-				normalHeight = parent.Height;
+				if (value != parent)
+					SetParentForm(value);
 			}
 			get { return parent; }
+		}
+
+		private void SetParentForm(Form value) 
+		{
+			parent = value;
+
+			// subscribe to parent form's events
+			parent.Load += OnLoad;
+			parent.Closing += OnClosing;
+			parent.Move += OnMove;
+			parent.Resize += OnResize;
+			parent.VisibleChanged += OnVisibleChanged;
+
+			// get initial width and height in case form is never resized
+			normalWidth = parent.Width;
+			normalHeight = parent.Height;
 		}
 
 		// registry key should be set in parent form's constructor
