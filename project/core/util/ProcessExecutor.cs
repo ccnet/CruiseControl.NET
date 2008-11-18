@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -51,11 +52,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		
 		private class RunnableProcess : IDisposable
 		{
+            private static string processName = string.Empty;
 			private readonly ProcessInfo processInfo;
 			public readonly Process process;
-
+            private StringBuilder stdOutput = new StringBuilder();
+            private StringBuilder stdError = new StringBuilder();
+            
+                                  
 			public RunnableProcess(ProcessInfo processInfo)
 			{
+                processName = Thread.CurrentThread.Name;
 				this.processInfo = processInfo;
 				process = processInfo.CreateProcess();
 			}
@@ -63,23 +69,30 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			public ProcessResult Run()
 			{
                 bool hasTimedOut = false;
-                bool failed;
+                bool failed = false;
                 bool hasExited = false;
-                int exitcode;
+                int exitcode = 0;
                                               
                 try
                 {
+                    process.OutputDataReceived += new DataReceivedEventHandler(SortOutputHandler);
+                    process.ErrorDataReceived += new DataReceivedEventHandler(SortErrorOutputHandler);
+                    
                     bool isNewProcess = process.Start();
                     if (!isNewProcess) Log.Warning("Reusing existing process...");
 
                     WriteToStandardInput();
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
 
                     try
                     {
                         hasExited = process.WaitForExit(processInfo.TimeOut);
                     }
-                    catch (ThreadAbortException)
+                    catch (ThreadAbortException e)
                     {
+                        process.CancelErrorRead();
+                        process.CancelOutputRead();
                         Thread.ResetAbort();
                     }                    
 
@@ -101,13 +114,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                     throw new IOException(msg, e);
                 }
 
-				string stdOut = process.StandardOutput.ReadToEnd();
-				string stdErr = process.StandardError.ReadToEnd();
                 process.Close();
 
-				WriteToLog(stdOut);
-				WriteToLog(stdErr);
-				return new ProcessResult(stdOut, stdErr, exitcode, hasTimedOut, failed);
+                return new ProcessResult(stdOutput.ToString(), stdError.ToString(), exitcode, hasTimedOut, failed);
 			}
             
             public void Kill()
@@ -133,16 +142,27 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 }
             }
 
-			private static void WriteToLog(string lines)
-			{
-				foreach(string line in lines.Split(Environment.NewLine.ToCharArray()))
-				{
-					if(!String.IsNullOrEmpty(line))
-					{
-						Log.Debug(line);
-					}
-				}
-			}      
+            private void SortOutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
+            {
+                // Collect the sort command output.
+                if (!String.IsNullOrEmpty(outLine.Data))
+                {
+                    if (Thread.CurrentThread.Name == null) Thread.CurrentThread.Name = processName;
+                    stdOutput.AppendLine(outLine.Data);
+                    Log.Debug(outLine.Data);
+                }
+            }
+
+            private void SortErrorOutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
+            {
+                // Collect the sort command output.
+                if (!String.IsNullOrEmpty(outLine.Data))
+                {
+                    if (Thread.CurrentThread.Name == null) Thread.CurrentThread.Name = processName;
+                    stdError.AppendLine(outLine.Data);
+                    Log.Debug(outLine.Data);
+                }
+            }           
 
             void IDisposable.Dispose()
 			{
