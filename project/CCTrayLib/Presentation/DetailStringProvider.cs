@@ -39,6 +39,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 }
 			}
 
+            if (!projectStatus.Activity.IsPending())
+            {
 			TimeSpan durationRemaining = projectStatus.EstimatedTimeRemainingOnCurrentBuild;
 
 			if (durationRemaining != TimeSpan.MaxValue)
@@ -50,6 +52,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 				return string.Format("{0} estimated remaining", new CCTimeFormatter(durationRemaining));
 			}
+            }
+
 			return string.Empty;
 		}
 	}
