@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 {
                     process.OutputDataReceived += new DataReceivedEventHandler(SortOutputHandler);
                     process.ErrorDataReceived += new DataReceivedEventHandler(SortErrorOutputHandler);
-                    
+					
                     bool isNewProcess = process.Start();
                     if (!isNewProcess) Log.Warning("Reusing existing process...");
 
@@ -113,10 +113,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                     string msg = string.Format("Unable to execute file [{0}].  The file may not exist or may not be executable.", filename);
                     throw new IOException(msg, e);
                 }
-
+				
+				process.WaitForExit();
                 process.Close();
-
-                return new ProcessResult(stdOutput.ToString(), stdError.ToString(), exitcode, hasTimedOut, failed);
+				
+				return new ProcessResult(stdOutput.ToString(), stdError.ToString(), exitcode, hasTimedOut, failed);
 			}
             
             public void Kill()
