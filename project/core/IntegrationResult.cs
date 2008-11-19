@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -36,13 +37,14 @@ namespace ThoughtWorks.CruiseControl.Core
 		private DateTime endTime;
 		private Modification[] modifications = new Modification[0];
 		private Exception exception;
-		private ArrayList taskResults = new ArrayList();
 
-        private Util.BuildProgressInformation buildProgressInformation = new BuildProgressInformation("", "");
+		private readonly List<ITaskResult> taskResults = new List<ITaskResult>();
+
+        private readonly BuildProgressInformation buildProgressInformation = new BuildProgressInformation("", "");
 
 
         [XmlIgnore]
-        public Util.BuildProgressInformation BuildProgressInformation
+        public BuildProgressInformation BuildProgressInformation
         {
             get { return buildProgressInformation; }
         }
@@ -61,9 +63,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			this.lastIntegration = lastIntegration;
             if ((lastIntegration.Status == IntegrationStatus.Exception)
                 || (lastIntegration.Status == IntegrationStatus.Failure))
-                this.failureUsers = lastIntegration.FailureUsers;       // Inherit the previous build's failureUser list if it failed.
+                failureUsers = lastIntegration.FailureUsers;       // Inherit the previous build's failureUser list if it failed.
             
-            this.buildProgressInformation = new Util.BuildProgressInformation(artifactDirectory, projectName);
+            buildProgressInformation = new BuildProgressInformation(artifactDirectory, projectName);
 		}
  
 		public string ProjectName
@@ -143,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public string ListenerFile
         {
-            get { return System.IO.Path.Combine(artifactDirectory, 
+            get { return Path.Combine(artifactDirectory, 
                     StringUtil.RemoveInvalidCharactersFromFileName(projectName) + "_ListenFile.xml"); }
         }
         
@@ -253,9 +255,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				exception = value;
 				if (exception != null)
-				{
 					Status = IntegrationStatus.Exception;
-				}
 			}
 		}
 
@@ -273,7 +273,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void AddTaskResult(ITaskResult result)
 		{
 			taskResults.Add(result);
-			if (! (Failed || Status == IntegrationStatus.Exception)) Status = result.Succeeded() ? IntegrationStatus.Success : IntegrationStatus.Failure;
+			if (Failed || Status == IntegrationStatus.Exception)
+				return;
+
+			Status = result.Succeeded() ? IntegrationStatus.Success : IntegrationStatus.Failure;
 		}
 
 		public void MarkStartTime()
@@ -312,14 +315,12 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public string BaseFromArtifactsDirectory(string pathToBase)
 		{
-			if (StringUtil.IsBlank(pathToBase)) return ArtifactDirectory;
-			return Path.Combine(ArtifactDirectory, pathToBase);
+			return string.IsNullOrEmpty(pathToBase) ? ArtifactDirectory : Path.Combine(ArtifactDirectory, pathToBase);
 		}
 
 		public string BaseFromWorkingDirectory(string pathToBase)
 		{
-			if (StringUtil.IsBlank(pathToBase)) return WorkingDirectory;
-			return Path.Combine(WorkingDirectory, pathToBase);
+			return string.IsNullOrEmpty(pathToBase) ? WorkingDirectory : Path.Combine(WorkingDirectory, pathToBase);
 		}
 
 		/// <summary>
@@ -331,12 +332,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get
 			{
-				StringBuilder builder = new StringBuilder();
+				StringBuilder sb = new StringBuilder();
 				foreach (ITaskResult result in taskResults)
-				{
-					builder.Append(result.Data);
-				}
-				return builder.ToString();
+					sb.Append(result.Data);
+
+				return sb.ToString();
 			}
 		}
 
@@ -358,17 +358,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { lastIntegration = new IntegrationSummary(lastIntegration.Status, lastIntegration.Label, value, lastIntegration.StartTime);} // used only for loading IntegrationResult from state file - to be removed
 		}
 
-//		public string LastSuccessfulIntegrationLabel
-//		{
-//			get { return (Succeeded || lastSuccessfulIntegrationLabel == null) ? Label : lastSuccessfulIntegrationLabel; }
-//			set { lastSuccessfulIntegrationLabel = value; }
-//		}
-//
-
         /// <summary>
         /// The list of users who have contributed modifications to a sequence of builds that has failed.
         /// </summary>
-        public ArrayList FailureUsers {
+        public ArrayList FailureUsers 
+		{
             get { return failureUsers; }
             set { failureUsers = value; }
         }
@@ -407,9 +401,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			IntegrationResult other = obj as IntegrationResult;
 			if (other == null)
-			{
 				return false;
-			}
+
 			return ProjectName == other.ProjectName &&
 			       Status == other.Status &&
 			       Label == other.Label &&

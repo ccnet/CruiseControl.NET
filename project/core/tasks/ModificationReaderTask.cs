@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using Exortech.NetReflector;
@@ -11,12 +12,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     [ReflectorType("modificationReader")]
     public class ModificationReaderTask : ITask
     {
-
         private readonly IFileSystem fileSystem;
 
         public ModificationReaderTask()
-            : this(new SystemIoFileSystem())
-        { }
+            : this(new SystemIoFileSystem()){ }
 
         public ModificationReaderTask(IFileSystem fileSystem)
         {
@@ -25,14 +24,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         public void Run(IIntegrationResult result)
         {
-            string[] Files = GetModificationFiles(result);
-            System.Collections.ArrayList AllModifications = new System.Collections.ArrayList();
+			List<object> stuff = new List<object>();
+        	System.Collections.ArrayList AllModifications = new System.Collections.ArrayList();
             
 
-            foreach (string file in Files)
+            foreach (string file in GetModificationFiles(result))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(Modification[]));
-                StringReader reader = new StringReader(this.fileSystem.Load(file).ReadToEnd());
+                StringReader reader = new StringReader(fileSystem.Load(file).ReadToEnd());
                 object dummy = serializer.Deserialize(reader);
                 reader.Close();
                 System.Collections.ArrayList currentModification = new System.Collections.ArrayList((Modification[])dummy);
@@ -54,18 +53,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
 
             result.Modifications = newMods;
-      
         }
-
 
         private string[] GetModificationFiles(IIntegrationResult result)
         {
-            System.IO.FileInfo fi = new FileInfo(Path.Combine(result.BaseFromArtifactsDirectory(OutputPath), Filename));
-            string FileSearchPattern = fi.Name.Remove(fi.Name.Length - fi.Extension.Length) + "*" + fi.Extension;
-
-            return System.IO.Directory.GetFiles(fi.DirectoryName,FileSearchPattern);        
+            FileInfo fi = new FileInfo(Path.Combine(result.BaseFromArtifactsDirectory(OutputPath), Filename));
+            string filespec = fi.Name.Remove(fi.Name.Length - fi.Extension.Length) + "*" + fi.Extension;
+            return Directory.GetFiles(fi.DirectoryName,filespec);        
         }
-
 
         /// <summary>
         /// The fileName to use to store the modifications
@@ -78,7 +73,5 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         [ReflectorProperty("path", Required = false)]
         public string OutputPath;
-
     }
-    
 }

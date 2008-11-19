@@ -674,6 +674,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="tasks\ArtifactCleanUp.cs" />
+    <Compile Include="tasks\BaseExecutableTask.cs" />
     <Compile Include="tasks\BuilderException.cs">
       <SubType>Code</SubType>
     </Compile>

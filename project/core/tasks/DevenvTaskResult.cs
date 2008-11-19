@@ -1,15 +1,13 @@
 using System.IO;
 using System.Xml;
-using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	public class DevenvTaskResult : ProcessTaskResult
 	{
-		public DevenvTaskResult(ProcessResult result) : base(result)
-		{
-		}
+		public DevenvTaskResult(ProcessResult result) : 
+			base(result){}
 
 		public override string Data
 		{
@@ -46,14 +44,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			while (reader.Peek() >= 0)
 			{
 				string line = reader.ReadLine();
-				if (! StringUtil.IsBlank(line))
-				{
-                    writer.WriteStartElement("message");
-                    if (areErrors)
-                        writer.WriteAttributeString("level", "error");
-                    writer.WriteValue(StringUtil.RemoveNulls(line));
-                    writer.WriteEndElement();
-				}
+				if (StringUtil.IsBlank(line)) 
+					continue;
+
+				writer.WriteStartElement("message");
+				if (areErrors)
+					writer.WriteAttributeString("level", "error");
+				writer.WriteValue(StringUtil.RemoveNulls(line));
+				writer.WriteEndElement();
 			}
 		}
 	}

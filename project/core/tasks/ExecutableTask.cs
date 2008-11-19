@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -15,11 +13,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	/// TODO: This is very similar to the NAntBuilder, so refactoring required (can we have subclasses with reflector properties?)
 	/// </summary>
 	[ReflectorType("exec")]
-	public class ExecutableTask : ITask
+	public class ExecutableTask : BaseExecutableTask
 	{
 		public const int DEFAULT_BUILD_TIMEOUT = 600;
-
-		private readonly ProcessExecutor executor;
 
 		public ExecutableTask() : this(new ProcessExecutor())
 		{}
@@ -47,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorArray("environment", Required = false)]
 		public EnvironmentVariable[] EnvironmentVariables = new EnvironmentVariable[0];
 
-		private int[] successExitCodes = null;
+		private int[] successExitCodes;
 
         /// <summary>
         /// The list of exit codes that indicate success, separated by commas.
@@ -70,22 +66,21 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 return result;
             }
 
-			set 
-			{ 
+			set
+			{
 				string[] codes = value.Split(',');
 
-				if (codes.Length != 0)
-				{
-					successExitCodes = new int[codes.Length];
-
-					for (int i = 0; i < codes.Length; ++i)
-					{
-						successExitCodes[i] = Int32.Parse(codes[i]);
-					}
-				}
-				else
+				if (codes.Length == 0)
 				{
 					successExitCodes = null;
+					return;
+				}
+
+				successExitCodes = new int[codes.Length];
+
+				for (int i = 0; i < codes.Length; ++i)
+				{
+					successExitCodes[i] = Int32.Parse(codes[i]);
 				}
 			}
 		}
@@ -101,13 +96,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Run the specified executable and add its output to the build results.
         /// </summary>
         /// <param name="result">the IIntegrationResult object for the build</param>
-		public void Run(IIntegrationResult result)
+		public override void Run(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(string.Format("Executing {0}", Executable));
-            
-			ProcessInfo processInfo = NewProcessInfoFrom(result);
 
-			ProcessResult processResult = AttemptToExecute(processInfo, ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
+			ProcessInfo info = CreateProcessInfo(result);
+			SetConfiguredEnvironmentVariables(info.EnvironmentVariables, EnvironmentVariables);
+
+			ProcessResult processResult = TryToRun(info, ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
             
 			if (!StringUtil.IsWhitespace(processResult.StandardOutput + processResult.StandardError))
             {
@@ -124,41 +120,33 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
             result.AddTaskResult(new ProcessTaskResult(processResult));
 
-			if (processResult.TimedOut)
-			{
-				throw new BuilderException(this, "Command Line Build timed out (after " + BuildTimeoutSeconds + " seconds)");
-			}            
+        	if (processResult.TimedOut)
+        		throw new BuilderException(this, "Command Line Build timed out (after " + BuildTimeoutSeconds + " seconds)");
 		}
 
-		private ProcessInfo NewProcessInfoFrom(IIntegrationResult result)
+		protected override string GetProcessFilename()
 		{
-			ProcessInfo info = new ProcessInfo(Executable, BuildArgs, BaseDirectory(result), successExitCodes);
-			info.TimeOut = BuildTimeoutSeconds*1000;
-            SetConfiguredEnvironmentVariables(info.EnvironmentVariables, EnvironmentVariables);
-            IDictionary properties = result.IntegrationProperties;
-			foreach (string key in properties.Keys)
-			{
-				info.EnvironmentVariables[key] = StringUtil.IntegrationPropertyToString(properties[key]);
-			}
-
-			return info;
+			return Executable;
 		}
 
-		private string BaseDirectory(IIntegrationResult result)
+		protected override string GetProcessArguments(IIntegrationResult result)
+		{
+			return BuildArgs;
+		}
+
+		protected override string GetProcessBaseDirectory(IIntegrationResult result)
 		{
 			return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
 		}
 
-		protected ProcessResult AttemptToExecute(ProcessInfo info, ProcessMonitor processMonitor)
+		protected override int[] GetProcessSuccessCodes()
 		{
-			try
-			{
-				return executor.Execute(info, processMonitor);
-			}
-			catch (IOException e)
-			{
-				throw new BuilderException(this, string.Format("Unable to execute: {0}\n{1}", info, e), e);
-			}
+			return successExitCodes;
+		}
+
+		protected override int GetProcessTimeout()
+		{
+			return BuildTimeoutSeconds*1000;
 		}
 
 		public override string ToString()
@@ -179,6 +167,5 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             foreach (EnvironmentVariable item in varsToSet)
                 variablePool[item.name] = item.value;
         }
-
     }
 }

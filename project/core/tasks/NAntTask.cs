@@ -1,24 +1,19 @@
 using System.Collections;
-using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	[ReflectorType("nant")]
-	public class NAntTask : ITask
+	public class NAntTask : BaseExecutableTask
 	{
 		public const int DefaultBuildTimeout = 600;
 		public const string defaultExecutable = "nant.exe";
 		public const string DefaultLogger = "NAnt.Core.XmlLogger";
 		public const bool DefaultNoLogo = true;
 
-		private readonly ProcessExecutor executor;
-
-		public NAntTask()
-			: this(new ProcessExecutor())
-		{
-		}
+		public NAntTask(): 
+			this(new ProcessExecutor()){}
 
 		public NAntTask(ProcessExecutor executor)
 		{
@@ -59,70 +54,44 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		/// StdOut from nant.exe is redirected and stored.
 		/// </summary>
 		/// <param name="result">For storing build output.</param>
-		public void Run(IIntegrationResult result)
+		public override void Run(IIntegrationResult result)
 		{            
             result.BuildProgressInformation.SignalStartRunTask ( 
                 string.Format("Executing Nant :BuildFile: {0} Targets: {1} ", BuildFile, string.Join(", ", Targets)));
 
-            ProcessResult processResult = AttemptExecute(CreateProcessInfo(result), ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
+            ProcessResult processResult = TryToRun(CreateProcessInfo(result), ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
 
 			result.AddTaskResult(new ProcessTaskResult(processResult));
 			// is this right?? or should this break the build
 			if (processResult.TimedOut)
-			{
 				throw new BuilderException(this, "NAnt process timed out (after " + BuildTimeoutSeconds + " seconds)");
-			}
 		}
 
-		private ProcessInfo CreateProcessInfo(IIntegrationResult result)
+		protected override string GetProcessFilename()
 		{
-			ProcessInfo info = new ProcessInfo(Executable, CreateArgs(result), BaseDirectory(result));
-			info.TimeOut = BuildTimeoutSeconds * 1000;
-			return info;
+			return Executable;
 		}
 
-		private string BaseDirectory(IIntegrationResult result)
+		protected override int GetProcessTimeout()
 		{
-			return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
+			return BuildTimeoutSeconds * 1000;
 		}
 
-		protected ProcessResult AttemptExecute(ProcessInfo info, ProcessMonitor processMonitor)
-		{
-			try
-			{
-				return executor.Execute(info, processMonitor);
-			}
-			catch (IOException e)
-			{
-				throw new BuilderException(this, string.Format("Unable to execute: {0} {1}\n{2}", Executable, BuildArgs, e), e);
-			}
-		}
-
-		private string CreateArgs(IIntegrationResult result)
+		protected override string GetProcessArguments(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			AppendNoLogoArg(buffer);
-			AppendBuildFileArg(buffer);
-			AppendLoggerArg(buffer);
+			buffer.AppendIf(NoLogo, "-nologo");
+			buffer.AppendArgument(@"-buildfile:{0}", StringUtil.AutoDoubleQuoteString(BuildFile));
+			buffer.AppendArgument("-logger:{0}", Logger);
 			buffer.AppendArgument(BuildArgs);
 			AppendIntegrationResultProperties(buffer, result);
 			AppendTargets(buffer);
 			return buffer.ToString();
 		}
 
-		private void AppendNoLogoArg(ProcessArgumentBuilder buffer)
+		protected override string GetProcessBaseDirectory(IIntegrationResult result)
 		{
-			buffer.AppendIf(NoLogo, "-nologo");
-		}
-
-		private void AppendBuildFileArg(ProcessArgumentBuilder buffer)
-		{
-			buffer.AppendArgument(@"-buildfile:{0}", StringUtil.AutoDoubleQuoteString(BuildFile));
-		}
-
-		private void AppendLoggerArg(ProcessArgumentBuilder buffer)
-		{
-			buffer.AppendArgument("-logger:{0}", Logger);
+			return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
 		}
 
 		private static void AppendIntegrationResultProperties(ProcessArgumentBuilder buffer, IIntegrationResult result)
@@ -140,9 +109,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private void AppendTargets(ProcessArgumentBuilder buffer)
 		{
-			for (int i = 0; i < Targets.Length; i++)
+			foreach(string t in Targets)
 			{
-				buffer.AppendArgument(Targets[i]);
+				buffer.AppendArgument(t);
 			}
 		}
 

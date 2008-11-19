@@ -11,22 +11,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 	public class StringUtilTest : CustomAssertion
 	{
 		[Test]
-		public void TestContains()
-		{
-			string input = "abcde";
-
-			Assert.IsTrue(StringUtil.Contains(input, "c"));
-			Assert.IsFalse(StringUtil.Contains(input, "C"));
-			Assert.IsFalse(StringUtil.Contains(input, "x"));
-		}
-
-		[Test]
 		public void TestEqualsIgnoreCase()
 		{
-			string lower = "abcde";
-			string upper = "ABCDE";
-			string mixed = "aBcDe";
-			string mixed2 = "AbCdE";
+			const string lower = "abcde";
+			const string upper = "ABCDE";
+			const string mixed = "aBcDe";
+			const string mixed2 = "AbCdE";
 
 			Assert.IsTrue(StringUtil.EqualsIgnoreCase(lower, upper));
 			Assert.IsTrue(StringUtil.EqualsIgnoreCase(lower, mixed));
@@ -54,28 +44,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		}
 
 		[Test]
-		public void TestJoinUnique()
-		{
-			string[] x = new string[] {"a","b","b"};
-			string[] y = new string[] {"n","m","b"};
-			string actual = StringUtil.JoinUnique(": ", x, y);
-			Assert.AreEqual("a: b: m: n", actual);
-		}
-
-		[Test]
-		public void TestJoin()
-		{
-			string[] input = new string[] { "a", "b", "c" };
-			
-			string actual = StringUtil.JoinUnique(": ", input);
-			Assert.AreEqual("a: b: c", actual);
-		}
-
-		[Test]
 		public void TestGenerateHashCode()
 		{
-			string a = "a";
-			string b = "b";
+			const string a = "a";
+			const string b = "b";
 			Assert.AreEqual(
 				a.GetHashCode() + b.GetHashCode(), StringUtil.GenerateHashCode(a, b));
 
@@ -113,18 +85,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		}
 
 		[Test]
-		public void TestInsert()
-		{
-			string[] original = new String[]{"a","b","c","d"};
-			string[] augmented = StringUtil.Insert(original, "x", 2);
-			Assert.AreEqual("a", augmented[0]);
-			Assert.AreEqual("b", augmented[1]);
-			Assert.AreEqual("x", augmented[2]);
-			Assert.AreEqual("c", augmented[3]);
-			Assert.AreEqual("d", augmented[4]);
-		}
-
-		[Test]
 		public void TestStrip()
 		{
 			string input = "strip the word monkey and chinchilla or there's trouble";
@@ -139,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void TestStripQuotes()
 		{
-			string input = "\"C:\foo\"";
+			const string input = "\"C:\foo\"";
 			string actual = StringUtil.StripQuotes(input);
 
 			Assert.AreEqual("C:\foo", actual);			
@@ -148,7 +108,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
         [Test]
         public void TestRemoveInvalidCharactersFromFileName()
         {
-            string BadFileName = "Go Stand ? in the <*/:*?> corner.txt";
+            const string BadFileName = "Go Stand ? in the <*/:*?> corner.txt";
             string actual = StringUtil.RemoveInvalidCharactersFromFileName(BadFileName);
 
             Assert.AreEqual("Go Stand  in the  corner.txt", actual);
@@ -164,10 +124,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void TestAutoDoubleQuoteString()
 		{
-			string nonQuotedString = "foo";
-			string nonQuotedStringWithSpaces = "f o o";
-			string quotedString = "\"foo\"";
-			string quotedStringWithSpaces = "\"f o o\"";			
+			const string nonQuotedString = "foo";
+			const string nonQuotedStringWithSpaces = "f o o";
+			const string quotedString = "\"foo\"";
+			const string quotedStringWithSpaces = "\"f o o\"";			
 			
 			Assert.AreEqual(StringUtil.AutoDoubleQuoteString(nonQuotedString), nonQuotedString);
 			Assert.AreEqual(StringUtil.AutoDoubleQuoteString(quotedString), quotedString);
@@ -178,7 +138,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void TestRemoveTrailingPathDelimiter()
 		{			
-			string actual = "foo";
+			const string actual = "foo";
 			string trailingSeparator = "foo" + Path.DirectorySeparatorChar;
 			string trailingSeparator2 = "foo" + Path.DirectorySeparatorChar + Path.DirectorySeparatorChar;
 
@@ -189,19 +149,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void TestIntegrationPropertyToString()
 		{
-			int integer = 5;
+			const int integer = 5;
 			string integerString = integer.ToString();			
-			BuildCondition buildCondition = BuildCondition.ForceBuild;			
-			IntegrationStatus integrationStatus = IntegrationStatus.Success;			
+			const BuildCondition buildCondition = BuildCondition.ForceBuild;			
+			const IntegrationStatus integrationStatus = IntegrationStatus.Success;			
 			
 			ArrayList arrayList = new ArrayList();
 			arrayList.Add("foo");
 			arrayList.Add("5");
 			arrayList.Add("bar");			
 			
-			string customDelimiter = "-";
-			string defaultConvertedArrayList = "\"foo" + StringUtil.DEFAULT_DELIMITER + "5" + StringUtil.DEFAULT_DELIMITER + "bar\"";
-			string customConvertedArrayList = "\"foo" + customDelimiter + "5" + customDelimiter + "bar\"";
+			const string customDelimiter = "-";
+			const string defaultConvertedArrayList = "\"foo" + StringUtil.DEFAULT_DELIMITER + "5" + StringUtil.DEFAULT_DELIMITER + "bar\"";
+			const string customConvertedArrayList = "\"foo" + customDelimiter + "5" + customDelimiter + "bar\"";
 			
 			Assert.AreEqual(StringUtil.IntegrationPropertyToString(integer), integerString);
 			Assert.AreEqual(StringUtil.IntegrationPropertyToString(integerString), integerString);
@@ -215,10 +175,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			Assert.AreEqual(StringUtil.IntegrationPropertyToString(integrationStatus, customDelimiter), integrationStatus.ToString());
 			Assert.AreEqual(StringUtil.IntegrationPropertyToString(arrayList, customDelimiter), customConvertedArrayList);
 
-			arrayList = new ArrayList();
-			arrayList.Add("foo");			
-			Assert.AreEqual(StringUtil.IntegrationPropertyToString(arrayList), "foo");
-			Assert.AreEqual(StringUtil.IntegrationPropertyToString(arrayList, customDelimiter), "foo");
+			Assert.AreEqual(StringUtil.IntegrationPropertyToString(null), null);
+
+			ArrayList arrayList2 = new ArrayList();
+			arrayList2.Add("foo");
+			Assert.AreEqual(StringUtil.IntegrationPropertyToString(arrayList2), "foo");
+			Assert.AreEqual(StringUtil.IntegrationPropertyToString(arrayList2, customDelimiter), "foo");
 		}
 
 		[Test]

@@ -5,14 +5,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	public class FileTaskResult : ITaskResult
 	{
-		private string data;
+		private readonly string data;
 
-		public FileTaskResult(string filename) : this(new FileInfo(filename))
-		{}
+		public FileTaskResult(string filename) : 
+			this(new FileInfo(filename)) {}
 
 		public FileTaskResult(FileInfo file)
 		{
-			ReadFileContents(file);
+			data = ReadFileContents(file);
 		}
 
 		public string Data
@@ -30,13 +30,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return false;
 		}
 
-		private void ReadFileContents(FileInfo file)
+		private static string ReadFileContents(FileInfo file)
 		{
 			try
 			{
 				using (StreamReader reader = file.OpenText())
 				{
-					data = reader.ReadToEnd();
+					return reader.ReadToEnd();
 				}
 			}
 			catch (Exception ex)

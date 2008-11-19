@@ -4,7 +4,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class ProcessArgumentBuilder
 	{
-		private StringBuilder builder = new StringBuilder();
+		private readonly StringBuilder builder = new StringBuilder();
 
         /// <summary>
         /// Add the specified argument to the end of the argument list, separating it from the rest of the list

@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		private readonly string standardOutput;
 		private readonly string standardError;
-		private readonly int exitCode;
+		private readonly int errorCode;
 		private readonly bool timedOut;
 		private readonly bool failed;
 
@@ -24,9 +24,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public ProcessResult(string standardOutput, string standardError, int errorCode, bool timedOut, bool failed)
 		{
-			this.standardOutput = (standardOutput == null ? "" : standardOutput);
-			this.standardError = (standardError == null ? "" : standardError);
-			this.exitCode = errorCode;
+			this.standardOutput = (standardOutput ?? "");
+			this.standardError = (standardError ?? "");
+			this.errorCode = errorCode;
 			this.timedOut = timedOut;
 			this.failed = failed;
 		}
@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public int ExitCode
 		{
-			get { return exitCode; }
+			get { return errorCode; }
 		}
 
 		public bool TimedOut

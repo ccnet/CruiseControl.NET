@@ -230,7 +230,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2008_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2005_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2003_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
-			mockRegistry2.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", DEVENV_2002_PATH,
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", DEVENV_2002_PATH,
 										 DevenvTask.VS2002_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
 
 			Assert.AreEqual(DEVENV_2002_PATH + "devenv.com", task2.Executable);

@@ -55,10 +55,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             private static string processName = string.Empty;
 			private readonly ProcessInfo processInfo;
 			public readonly Process process;
-            private StringBuilder stdOutput = new StringBuilder();
-            private StringBuilder stdError = new StringBuilder();
+
+            private readonly StringBuilder stdOutput = new StringBuilder();
+            private readonly StringBuilder stdError = new StringBuilder();
             
-                                  
 			public RunnableProcess(ProcessInfo processInfo)
 			{
                 processName = Thread.CurrentThread.Name;
@@ -75,8 +75,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                                               
                 try
                 {
-                    process.OutputDataReceived += new DataReceivedEventHandler(SortOutputHandler);
-                    process.ErrorDataReceived += new DataReceivedEventHandler(SortErrorOutputHandler);
+                    process.OutputDataReceived += SortOutputHandler;
+                    process.ErrorDataReceived += SortErrorOutputHandler;
 					
                     bool isNewProcess = process.Start();
                     if (!isNewProcess) Log.Warning("Reusing existing process...");
@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                     {
                         hasExited = process.WaitForExit(processInfo.TimeOut);
                     }
-                    catch (ThreadAbortException e)
+                    catch (ThreadAbortException)
                     {
                         process.CancelErrorRead();
                         process.CancelOutputRead();

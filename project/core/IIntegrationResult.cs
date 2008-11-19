@@ -30,11 +30,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		bool IsInitial();
 		IntegrationRequest IntegrationRequest { get; }
         
-
-
-        
-        
-        // Last integration state
 		IntegrationStatus LastIntegrationStatus { get; }
         // Users who contributed modifications to a series of failing builds:
         ArrayList FailureUsers { get; }             // This should really be a Set but sets are not available in .NET 1.1
@@ -56,9 +51,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		bool ShouldRunBuild();
 
 		IDictionary IntegrationProperties { get; }
-
-
         Util.BuildProgressInformation BuildProgressInformation { get; }
-
 	}
 }

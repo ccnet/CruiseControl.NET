@@ -12,9 +12,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public NUnitArgument(string[] assemblies, string outputfile)
 		{
 			if (assemblies == null || assemblies.Length == 0)
-			{
-				throw new CruiseControlException("No unit test assemblies are specified. Please use the <assemblies> element to specify the test assemblies to run.");
-			}
+				throw new CruiseControlException(
+					"No unit test assemblies are specified. Please use the <assemblies> element to specify the test assemblies to run.");
+
 			this.assemblies = assemblies;
 			this.outputfile = outputfile;
 		}

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,37 +14,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		// public for testing only
 		public const string DEFAULT_DELIMITER = ",";
 
-		public static bool Contains(string text, string fragment)
-		{
-			return text.IndexOf(fragment) > -1;
-		}
-
 		public static bool EqualsIgnoreCase(string a, string b)
 		{
 			return CaseInsensitiveComparer.Default.Compare(a, b) == 0;
-		}
-
-		public static string JoinUnique(string delimiter, params string[][] fragmentArrays)
-		{
-			SortedList list = new SortedList();
-			foreach (string[] fragmentArray in fragmentArrays)
-			{
-				foreach (string fragment in fragmentArray)
-				{
-					if (! list.Contains(fragment))
-						list.Add(fragment, fragment);
-				}
-			}
-			StringBuilder buffer = new StringBuilder();
-			foreach (string value in list.Values)
-			{
-				if (buffer.Length > 0)
-				{
-					buffer.Append(delimiter);
-				}
-				buffer.Append(value);
-			}
-			return buffer.ToString();
 		}
 
 		public static int GenerateHashCode(params string[] values)
@@ -52,9 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			foreach (string value in values)
 			{
 				if (value != null)
-				{
 					hashcode += value.GetHashCode();
-				}
 			}
 			return hashcode;
 		}
@@ -67,23 +38,21 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public static string LastWord(string input, string separators)
 		{
 			if (input == null)
-			{
 				return null;
-			}
+
 			string[] tokens = input.Split(separators.ToCharArray());
 			for (int i = tokens.Length - 1; i >= 0; i--)
 			{
 				if (IsWhitespace(tokens[i]) == false)
-				{
 					return tokens[i].Trim();
-				}
 			}
+
 			return String.Empty;
 		}
 
 		public static bool IsBlank(string input)
 		{
-			return (input == null || input.Length == 0);
+			return string.IsNullOrEmpty(input);
 		}
 
 		public static bool IsWhitespace(string input)
@@ -98,30 +67,27 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			{
 				int i;
 				while ((i = revised.IndexOf(removal)) > -1)
-				{
 					revised = revised.Remove(i, removal.Length);
-				}
 			}
-			return revised;
-		}
 
-		public static string[] Insert(string[] input, string insert, int index)
-		{
-			ArrayList list = new ArrayList(input);
-			list.Insert(index, insert);
-			return (string[]) list.ToArray(typeof (string));
+			return revised;
 		}
 
 		public static string Join(string separator, params string[] strings)
 		{
-			StringBuilder builder = new StringBuilder();
+			StringBuilder sb = new StringBuilder();
 			foreach (string s in strings)
 			{
-				if (IsBlank(s)) continue;
-				if (builder.Length > 0) builder.Append(separator);
-				builder.Append(s);
+				if (string.IsNullOrEmpty(s)) 
+					continue;
+
+				if (sb.Length > 0) 
+					sb.Append(separator);
+
+				sb.Append(s);
 			}
-			return builder.ToString();
+
+			return sb.ToString();
 		}
 
 		public static string RemoveNulls(string s)
@@ -141,16 +107,15 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public static string AutoDoubleQuoteString(string value)
 		{
-			if (!IsBlank(value) && (value.IndexOf(' ') > -1) && (value.IndexOf("\"") == -1))
-			{
+			if (!string.IsNullOrEmpty(value) && (value.IndexOf(' ') > -1) && (value.IndexOf("\"") == -1))
 				return string.Format("\"{0}\"", value);
-			}
+
 			return value;
 		}
 
 		public static string RemoveTrailingPathDelimeter(string directory)
 		{
-			return IsBlank(directory) ? string.Empty : directory.TrimEnd(new char[] {Path.DirectorySeparatorChar});
+			return string.IsNullOrEmpty(directory) ? "" : directory.TrimEnd(new char[] {Path.DirectorySeparatorChar});
 		}
 
 		public static string IntegrationPropertyToString(object value)
@@ -160,27 +125,23 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public static string IntegrationPropertyToString(object value, string delimiter)
 		{
+			if (value == null)
+				return null;
+
 			if ((value is string) || (value is int) || (value is Enum))
-			{
 				return value.ToString();
-			}
-			else if (value is ArrayList)
+
+			if (value is ArrayList)
 			{
 				string[] tmp = (string[]) ((ArrayList) value).ToArray(typeof (string));
-				if (tmp.Length > 1)
-				{
-					return string.Format("\"{0}\"", string.Join(delimiter, tmp));
-				}
-				else
-				{
+				if (tmp.Length <= 1)
 					return string.Join(string.Empty, tmp);
-				}
+
+				return string.Format("\"{0}\"", string.Join(delimiter, tmp));
 			}
-			else
-			{
-				throw new ArgumentException(
-					string.Format("The IntegrationProperty type {0} is not supported yet", value.GetType()));
-			}
+
+			throw new ArgumentException(
+				string.Format("The IntegrationProperty type {0} is not supported yet", value.GetType()));
 		}
 
 		/// <summary>
@@ -198,7 +159,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		/// </remarks>
 		public static string MakeBuildResult(string input, string msgLevel)
 		{
-			StringBuilder output = new StringBuilder();
+			StringBuilder sb = new StringBuilder();
 
 			// Pattern for capturing a line of text, exclusive of the line-ending sequence.
 			// A "line" is an non-empty unbounded sequence of characters followed by some 
@@ -209,44 +170,46 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			MatchCollection lines = linePattern.Matches(input);
 			if (lines.Count > 0)
 			{
-				output.Append(Environment.NewLine);
-				output.Append("<buildresults>");
-				output.Append(Environment.NewLine);
+				sb.Append(Environment.NewLine);
+				sb.Append("<buildresults>");
+				sb.Append(Environment.NewLine);
 				foreach (Match line in lines)
 				{
-					output.Append("  <message");
+					sb.Append("  <message");
 					if (msgLevel != "")
-						output.AppendFormat(" level=\"{0}\"", msgLevel);
-					output.Append(">");
-					output.Append(XmlUtil.EncodePCDATA(line.ToString()));
-					output.Append("</message>");
-					output.Append(Environment.NewLine);
+						sb.AppendFormat(" level=\"{0}\"", msgLevel);
+					sb.Append(">");
+					sb.Append(XmlUtil.EncodePCDATA(line.ToString()));
+					sb.Append("</message>");
+					sb.Append(Environment.NewLine);
 				}
-				output.Append("</buildresults>");
-				output.Append(Environment.NewLine);
+				sb.Append("</buildresults>");
+				sb.Append(Environment.NewLine);
 			}
 			else
-				output.Append(input); // All of that stuff failed, just return our input
-			return output.ToString();
+				sb.Append(input); // All of that stuff failed, just return our input
+			return sb.ToString();
 		}
 
 		public static string ArrayToNewLineSeparatedString(string[] input)
 		{
-			StringBuilder combined = new StringBuilder();
+			StringBuilder sb = new StringBuilder();
 			foreach (string file in input)
 			{
-				if (combined.Length > 0) combined.Append(Environment.NewLine);
-				combined.Append(file);
+				if (sb.Length > 0) 
+					sb.Append(Environment.NewLine);
+				sb.Append(file);
 			}
-			return combined.ToString();
+
+			return sb.ToString();
 		}
 
 		public static string[] NewLineSeparatedStringToArray(string input)
 		{
-			string[] array = new string[0];
-			if (IsBlank(input)) return array;
+			if (IsBlank(input))
+				return new string[0];
 
-			ArrayList targets = new ArrayList();
+			List<string> targets = new List<string>();
 			using (StringReader reader = new StringReader(input))
 			{
 				while (reader.Peek() >= 0)
@@ -254,9 +217,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					targets.Add(reader.ReadLine());
 				}
 			}
-			array = (string[])targets.ToArray(typeof(string));
-			return array;
+
+			return targets.ToArray();
 		}
-		
 	}
 }

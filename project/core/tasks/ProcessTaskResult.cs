@@ -15,7 +15,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				Log.Info("Task execution failed");
 				Log.Info("Task output: " + result.StandardOutput);
-				if (! StringUtil.IsBlank(result.StandardError)) Log.Info("Task error: " + result.StandardError);
+				string input = result.StandardError;
+				if (!string.IsNullOrEmpty(input)) 
+					Log.Info("Task error: " + result.StandardError);
 			}
 		}
 
@@ -27,8 +29,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public virtual void WriteTo(XmlWriter writer)
 		{
 			writer.WriteStartElement("task");
-			if (result.Failed) writer.WriteAttributeString("failed", true.ToString());
-			if (result.TimedOut) writer.WriteAttributeString("timedout", true.ToString());
+			if (result.Failed) 
+				writer.WriteAttributeString("failed", true.ToString());
+
+			if (result.TimedOut) 
+				writer.WriteAttributeString("timedout", true.ToString());
+
 			writer.WriteElementString("standardOutput", result.StandardOutput);
 			writer.WriteElementString("standardError", result.StandardError);
 			writer.WriteEndElement();
@@ -36,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		public bool Succeeded()
 		{
-			return ! Failed();
+			return !result.Failed;
 		}
 
 		public bool Failed()

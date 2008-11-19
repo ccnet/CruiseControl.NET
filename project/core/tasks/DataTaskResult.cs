@@ -2,7 +2,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	public class DataTaskResult : ITaskResult
 	{
-		private string data;
+		private readonly string data;
 
 		public DataTaskResult(string data)
 		{
@@ -23,6 +23,5 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			return false;
 		}
-
 	}
 }

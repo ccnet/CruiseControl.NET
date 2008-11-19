@@ -1,9 +1,7 @@
 using System;
 using System.Text;
 using System.IO;
-using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Core.Tasks;
 using Exortech.NetReflector;
 
 /* FinalbuilderTask   
@@ -32,8 +30,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	{
 		#region Fields
 
-		private ProcessExecutor _executor;
-		private IRegistry _registry;	
+		private readonly ProcessExecutor _executor;
+		private readonly IRegistry _registry;
+
 		private FinalBuilderVersion _fbversion;
 		private string _fbcmdpath;
                 	
@@ -59,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public string ProjectFile = string.Empty;
 
 		[ReflectorProperty("ShowBanner", Required = false)]
-		public bool ShowBanner = false;
+		public bool ShowBanner;
 
 		[ReflectorArray("FBVariables", Required= false)] 
 		public FBVariable[] FBVariables;
@@ -67,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("FBVersion", Required = false)]
 		public int FBVersion 
 		{
-			get 
+			get
 			{
 				if (_fbversion == FinalBuilderVersion.FBUnknown) // Try and autodetect FB Version from project file name
 				{
@@ -80,10 +79,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 						throw new BuilderException(this, "Finalbuilder version could not be autodetected from project file name.");
 					}
 				}
-				else
-				{
-					return (int)_fbversion;
-				}				
+
+				return (int)_fbversion;
 			}
 			set
 			{
@@ -99,13 +96,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		}
 
 		[ReflectorProperty("DontWriteToLog", Required = false)]
-		public bool DontWriteToLog = false;
+		public bool DontWriteToLog;
 
         [ReflectorProperty("UseTemporaryLogFile", Required = false)]
-        public bool UseTemporaryLogFile = false;
+        public bool UseTemporaryLogFile;
 
         [ReflectorProperty("Timeout", Required = false)]
-		public int Timeout = 0;
+		public int Timeout;
 
 		public void Run(IIntegrationResult result)
 		{
@@ -143,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			info.TimeOut = Timeout*1000;
             int idx = ProjectFile.LastIndexOf('\\');
             if (idx > -1)
-              info.WorkingDirectory = this.ProjectFile.Remove(idx, ProjectFile.Length - idx); // Trim down proj. file to get working dir.
+              info.WorkingDirectory = ProjectFile.Remove(idx, ProjectFile.Length - idx); // Trim down proj. file to get working dir.
 			// Add IntegrationProperties as environment variables
 			foreach (string varName in result.IntegrationProperties.Keys)
 			{
@@ -208,17 +205,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			string executableDir = _registry.GetLocalMachineSubKeyValue(keyName, "Location");			
 			if (StringUtil.IsBlank((executableDir)))
 			{
-				throw new BuilderException(this, String.Format("Path to Finalbuilder {0} command line executable could not be found.", FBVersion.ToString()));				
+				throw new BuilderException(this, String.Format("Path to Finalbuilder {0} command line executable could not be found.", FBVersion));				
 			}
 
-			if(fbversion == 3) // FinalBuilder 3 has a different executable name to other versions
-			{
+			if (fbversion == 3) // FinalBuilder 3 has a different executable name to other versions
 				return Path.GetDirectoryName(executableDir) + @"\FB3Cmd.exe";
-			}
-			else
-			{
-				return Path.GetDirectoryName(executableDir) + @"\FBCmd.exe";
-			}
+
+			return Path.GetDirectoryName(executableDir) + @"\FBCmd.exe";
 		}
 	
 		#endregion
@@ -263,13 +256,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		#endregion
 
-		private enum FinalBuilderVersion :int
+		private enum FinalBuilderVersion
 		{
 			FBUnknown = -1,
 			FB3 = 3,
 			FB4 = 4,
 			FB5 = 5
 		}
-
 	}
 }

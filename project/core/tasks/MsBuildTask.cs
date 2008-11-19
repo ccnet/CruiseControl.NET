@@ -6,14 +6,12 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	[ReflectorType("msbuild")]
-	public class MsBuildTask : ITask
+	public class MsBuildTask : BaseExecutableTask
 	{
 		public const string defaultExecutable = @"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe";
         public const string DefaultLogger = "";
 		public const string LogFilename = "msbuild-results.xml";
 		public const int DefaultTimeout = 600;
-
-		private readonly ProcessExecutor executor;
 
 		public MsBuildTask() : this(new ProcessExecutor())
 		{}
@@ -44,53 +42,62 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("timeout", Required=false)]
 		public int Timeout = DefaultTimeout;
 
-		public void Run(IIntegrationResult result)
-		{                                   
-            result.BuildProgressInformation.SignalStartRunTask(            
-                    string.Format("Executing MSBuild :BuildFile: {0}", ProjectFile));    
-
-			ProcessResult processResult = executor.Execute(NewProcessInfo(result), ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
-			string buildOutputFile = MsBuildOutputFile(result);
-			if (File.Exists(buildOutputFile))
-			{
-				result.AddTaskResult(new FileTaskResult(buildOutputFile));
-			}
-			result.AddTaskResult(new ProcessTaskResult(processResult));
-			if (processResult.TimedOut)
-			{
-				throw new BuilderException(this, "MSBuild process timed out (after " + Timeout + " seconds)");
-			}
+		protected override string GetProcessFilename()
+		{
+			return Executable;
 		}
 
-		private ProcessInfo NewProcessInfo(IIntegrationResult result)
+		protected override string GetProcessArguments(IIntegrationResult result)
 		{
-			ProcessInfo info = new ProcessInfo(Executable, Args(result), result.BaseFromWorkingDirectory(WorkingDirectory));
-			info.TimeOut = Timeout*1000;
-			return info;
-		}
+			ProcessArgumentBuilder b = new ProcessArgumentBuilder();
 
-		private string Args(IIntegrationResult result)
-		{
-			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-
-			builder.AddArgument("/nologo");
+			b.AddArgument("/nologo");
 			if (!StringUtil.IsBlank(Targets))
 			{
-				builder.AddArgument("/t:");
+				b.AddArgument("/t:");
 				string targets = string.Empty;
 				foreach (string target in Targets.Split(';'))
 				{
-					if (targets != string.Empty) targets = string.Format("{0};{1}", targets, StringUtil.AutoDoubleQuoteString(target));
-					else targets = StringUtil.AutoDoubleQuoteString(target);
+					if (targets != string.Empty) 
+						targets = string.Format("{0};{1}", targets, StringUtil.AutoDoubleQuoteString(target));
+					else 
+						targets = StringUtil.AutoDoubleQuoteString(target);
 				}
-				builder.Append(targets);
+				b.Append(targets);
 			}
-			builder.AppendArgument(GetPropertyArgs(result));
-			builder.AppendArgument(BuildArgs);
-			builder.AddArgument(ProjectFile);
-			builder.AppendArgument(GetLoggerArgs(result));
+			b.AppendArgument(GetPropertyArgs(result));
+			b.AppendArgument(BuildArgs);
+			b.AddArgument(ProjectFile);
+			b.AppendArgument(GetLoggerArgs(result));
 
-			return builder.ToString();
+			return b.ToString();
+		}
+
+		protected override string GetProcessBaseDirectory(IIntegrationResult result)
+		{
+			return result.BaseFromWorkingDirectory(WorkingDirectory);
+		}
+
+		protected override int GetProcessTimeout()
+		{
+			return Timeout * 1000;
+		}
+
+		public override void Run(IIntegrationResult result)
+		{                                   
+            result.BuildProgressInformation.SignalStartRunTask(            
+                    string.Format("Executing MSBuild :BuildFile: {0}", ProjectFile));
+
+			ProcessResult processResult = executor.Execute(CreateProcessInfo(result), ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
+
+			string buildOutputFile = MsBuildOutputFile(result);
+			if (File.Exists(buildOutputFile))
+				result.AddTaskResult(new FileTaskResult(buildOutputFile));
+
+			result.AddTaskResult(new ProcessTaskResult(processResult));
+
+			if (processResult.TimedOut)
+				throw new BuilderException(this, "MSBuild process timed out (after " + Timeout + " seconds)");
 		}
 
 		private static string GetPropertyArgs(IIntegrationResult result)

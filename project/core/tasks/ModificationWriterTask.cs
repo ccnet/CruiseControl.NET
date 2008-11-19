@@ -29,23 +29,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         private string ModificationFile(IIntegrationResult result)
         {
-            if (AppendTimeStamp)
-            {
-                System.IO.FileInfo fi = new FileInfo(Filename);
-                string dummy = Filename.Remove(Filename.Length - fi.Extension.Length , fi.Extension.Length);
-                string newFileName = string.Format("{0}_{1}{2}",dummy,result.StartTime.ToString("yyyyMMddHHmmssfff"),fi.Extension);
+        	if (!AppendTimeStamp)
+        		return Path.Combine(result.BaseFromArtifactsDirectory(OutputPath), Filename);
 
+        	FileInfo fi = new FileInfo(Filename);
+        	string dummy = Filename.Remove(Filename.Length - fi.Extension.Length, fi.Extension.Length);
+        	string newFileName = string.Format("{0}_{1}{2}", dummy, result.StartTime.ToString("yyyyMMddHHmmssfff"),
+        	                                   fi.Extension);
 
-
-                return Path.Combine(result.BaseFromArtifactsDirectory(OutputPath), newFileName);                
-            }
-            else
-            {
-                return Path.Combine(result.BaseFromArtifactsDirectory(OutputPath), Filename);
-            }
+        	return Path.Combine(result.BaseFromArtifactsDirectory(OutputPath), newFileName);
         }
 
-        /// <summary>
+    	/// <summary>
         /// The fileName to use to store the modifications
         /// </summary>
         [ReflectorProperty("filename", Required = false)]
@@ -62,6 +57,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// To be used in conjunction with the ModificationReaderTask <see cref="ModificationReaderTask"/> if set to true
         /// </summary>
         [ReflectorProperty("appendTimeStamp", Required = false)]
-        public bool AppendTimeStamp = false;
+        public bool AppendTimeStamp;
     }
 }

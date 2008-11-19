@@ -10,14 +10,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public const string DefaultPath = @"C:\Program Files\NUnit 2.2\bin\nunit-console.exe";
 		public const int DefaultTimeout = 600;
 		private const string DefaultOutputFile = "nunit-results.xml";
-		private readonly ProcessExecutor processExecutor;
+		private readonly ProcessExecutor executor;
 
 		public NUnitTask() : this(new ProcessExecutor())
 		{}
 
 		public NUnitTask(ProcessExecutor exec)
 		{
-			processExecutor = exec;
+			executor = exec;
 		}
 
 		[ReflectorArray("assemblies")]
@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 			string outputFile = result.BaseFromArtifactsDirectory(OutputFile);
 
-			ProcessResult nunitResult = processExecutor.Execute(NewProcessInfo(outputFile, result), ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
+			ProcessResult nunitResult = executor.Execute(NewProcessInfo(outputFile, result), ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
 			result.AddTaskResult(new ProcessTaskResult(nunitResult));
 			if (File.Exists(outputFile))
 			{
@@ -62,6 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             nunitArgument.ExcludedCategories = ExcludedCategories;
             nunitArgument.IncludedCategories = IncludedCategories;
             string args = nunitArgument.ToString();
+
 			Log.Debug(string.Format("Running unit tests: {0} {1}", NUnitPath, args));
 	
 			ProcessInfo info = new ProcessInfo(NUnitPath, args, result.WorkingDirectory);

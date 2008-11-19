@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
@@ -10,20 +11,20 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public const int DefaultTimeout = 120000;
 		public const int InfiniteTimeout = 0;
 
-		private ProcessStartInfo startInfo = new ProcessStartInfo();
-		private string standardInputContent = null;
+		private readonly ProcessStartInfo startInfo = new ProcessStartInfo();
+		private string standardInputContent;
 		private int timeout = DefaultTimeout;
 
-        private int[] successExitCodes = new int[1] { 0 };
+        private readonly int[] successExitCodes;
 
-	    public ProcessInfo(string filename) : this(filename, null)
-		{}
+	    public ProcessInfo(string filename) : 
+			this(filename, null){}
 
-		public ProcessInfo(string filename, string arguments) : this(filename, arguments, null)
-		{}
+		public ProcessInfo(string filename, string arguments) : 
+			this(filename, arguments, null){}
 
-		public ProcessInfo(string filename, string arguments, string workingDirectory) : this(filename, arguments, workingDirectory, null)
-		{}
+		public ProcessInfo(string filename, string arguments, string workingDirectory) : 
+			this(filename, arguments, workingDirectory, null){}
 
 		public ProcessInfo(string filename, string arguments, string workingDirectory, int[] successExitCodes)
 		{
@@ -36,22 +37,17 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			startInfo.RedirectStandardError = true;
 			startInfo.RedirectStandardInput = false;
 			RepathExecutableIfItIsInWorkingDirectory();
-            if (successExitCodes != null)
-                this.successExitCodes = successExitCodes;
-            else
-                this.successExitCodes = new int[1] { 0 };
+            this.successExitCodes = successExitCodes ?? new int[] { 0 };
 		}
 
 		private void RepathExecutableIfItIsInWorkingDirectory()
 		{
-			if (WorkingDirectory != null)
-			{
-				string executableInWorkingDirectory = Path.Combine(WorkingDirectory, FileName);
-				if (File.Exists(executableInWorkingDirectory))
-				{
-					startInfo.FileName = executableInWorkingDirectory;
-				}
-			}
+			if (WorkingDirectory == null) 
+				return;
+
+			string executableInWorkingDirectory = Path.Combine(WorkingDirectory, FileName);
+			if (File.Exists(executableInWorkingDirectory))
+				startInfo.FileName = executableInWorkingDirectory;
 		}
 
 		public StringDictionary EnvironmentVariables
@@ -61,14 +57,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public bool ProcessSuccessful(int exitCode)
 		{
-            foreach (int successCode in successExitCodes)
-            {
-                if (successCode == exitCode)
-                {
-                    return true;
-                }
-            }
-            return false;
+			return Array.IndexOf(successExitCodes, exitCode) > -1;
 		}
 
 		public string FileName
@@ -119,7 +108,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 	    public Process CreateProcess()
 		{
-			if (! StringUtil.IsBlank(WorkingDirectory) && ! Directory.Exists(WorkingDirectory)) throw new DirectoryNotFoundException("Directory does not exist: " + WorkingDirectory);
+			if (!string.IsNullOrEmpty(WorkingDirectory) && !Directory.Exists(WorkingDirectory)) 
+				throw new DirectoryNotFoundException("Directory does not exist: " + WorkingDirectory);
 
 			Process process = new Process();
 			process.StartInfo = startInfo;
@@ -130,9 +120,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			ProcessInfo otherProcessInfo = obj as ProcessInfo;
 			if (otherProcessInfo == null)
-			{
 				return false;
-			}
 
 			return (FileName == otherProcessInfo.FileName
 				&& Arguments == otherProcessInfo.Arguments
@@ -148,8 +136,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public override string ToString()
 		{
-			return string.Format("FileName: [{0}] -- Arguments: [{1}] -- WorkingDirectory: [{2}] -- StandardInputContent: [{3}] -- Timeout: [{4}]",
-			                     FileName, Arguments, WorkingDirectory, StandardInputContent, TimeOut);
+			return string.Format(
+				"FileName: [{0}] -- Arguments: [{1}] -- WorkingDirectory: [{2}] -- StandardInputContent: [{3}] -- Timeout: [{4}]",
+			    FileName, Arguments, WorkingDirectory, StandardInputContent, TimeOut);
 		}
 	}
 }

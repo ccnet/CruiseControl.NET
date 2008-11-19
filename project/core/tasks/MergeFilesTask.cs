@@ -16,12 +16,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				string fullMergeFile = mergeFile;
 				if (!Path.IsPathRooted(mergeFile))
-				{
 					fullMergeFile = Path.Combine(result.WorkingDirectory, mergeFile);
-				}
+
 				WildCardPath path = new WildCardPath(fullMergeFile);
-				FileInfo[] files = path.GetFiles();
-				foreach (FileInfo fileInfo in files)
+				foreach (FileInfo fileInfo in path.GetFiles())
 				{
 					Log.Info("Merging file: " + fileInfo);
 					if (fileInfo.Exists)

@@ -4,7 +4,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	public class BuilderException : CruiseControlException
 	{
-		private ITask _runner;
+		private readonly ITask _runner;
 
 		public BuilderException(ITask runner, string message) 
 			: base(message) 
@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		public override string ToString()
 		{
-			return base.ToString() + _runner.ToString();
+			return base.ToString() + _runner;
 		}
 	}
 }

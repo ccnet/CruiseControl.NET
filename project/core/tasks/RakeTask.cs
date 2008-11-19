@@ -1,16 +1,13 @@
-using System.Collections;
-using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	[ReflectorType("rake")]
-	public class RakeTask : ITask
+	public class RakeTask : BaseExecutableTask
 	{
 		public const int DefaultBuildTimeout = 600;
 		public const string DefaultExecutable = @"C:\ruby\bin\rake.bat";
-		private readonly ProcessExecutor executor;
 
 		[ReflectorProperty("buildArgs", Required = false)]
 		public string BuildArgs = "";
@@ -47,12 +44,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			this.executor = executor;
 		}
 
-		#region ITask Members
-		public void Run(IIntegrationResult result)
+		public override void Run(IIntegrationResult result)
 		{
-			ProcessInfo processInfo = NewProcessInfo(result);
+			ProcessInfo processInfo = CreateProcessInfo(result);
 			result.BuildProgressInformation.SignalStartRunTask(string.Format("Executing Rake: {0}", processInfo.Arguments));
-			ProcessResult processResult = AttemptToExecute(processInfo, ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
+			ProcessResult processResult = TryToRun(processInfo, ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
 
 			if (!StringUtil.IsWhitespace(processResult.StandardOutput + processResult.StandardError))
 			{
@@ -67,43 +63,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 				processResult = newResult;
 			}
+
 			result.AddTaskResult(new ProcessTaskResult(processResult));
 
 			if (processResult.TimedOut)
-			{
 				throw new BuilderException(this, "Command Line Build timed out (after " + BuildTimeoutSeconds + " seconds)");
-			}
-		}
-		#endregion
-
-		private ProcessResult AttemptToExecute(ProcessInfo info, ProcessMonitor processMonitor)
-		{
-			try
-			{
-				return executor.Execute(info, processMonitor);
-			}
-			catch (IOException e)
-			{
-				throw new BuilderException(this, string.Format("Unable to execute: {0}\n{1}", info, e), e);
-			}
 		}
 
-		private ProcessInfo NewProcessInfo(IIntegrationResult result)
-		{
-			ProcessInfo info = new ProcessInfo(Executable,
-				CreateProcessArgs(),
-				result.BaseFromWorkingDirectory(BaseDirectory));
-			info.TimeOut = BuildTimeoutSeconds*1000;
-
-			IDictionary properties = result.IntegrationProperties;
-			foreach (string key in properties.Keys)
-			{
-				info.EnvironmentVariables[key] = StringUtil.IntegrationPropertyToString(properties[key]);
-			}
-			return info;
-		}
-
-		private string CreateProcessArgs()
+		protected override string GetProcessArguments(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder args = new ProcessArgumentBuilder();
 			args.AddArgument("--rakefile", Rakefile);
@@ -117,17 +84,26 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				args.AddArgument("--trace");
 
 			args.AddArgument(BuildArgs);
-			AppendTargets(args);
+
+			foreach (string t in Targets)
+				args.AppendArgument(t);
 
 			return args.ToString();
 		}
 
-		private void AppendTargets(ProcessArgumentBuilder buffer)
+		protected override string GetProcessBaseDirectory(IIntegrationResult result)
 		{
-			for (int i = 0; i < Targets.Length; i++)
-			{
-				buffer.AppendArgument(Targets[i]);
-			}
+			return result.BaseFromWorkingDirectory(BaseDirectory);
+		}
+
+		protected override int GetProcessTimeout()
+		{
+			return BuildTimeoutSeconds*1000;
+		}
+
+		protected override string GetProcessFilename()
+		{
+			return Executable;
 		}
 
 		public string TargetsForPresentation
