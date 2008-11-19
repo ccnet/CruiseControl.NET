@@ -1,5 +1,6 @@
 using System.Collections;
 using System.IO;
+using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -132,9 +133,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
             else
             {
-                builder.Append(StringUtil.AutoDoubleQuoteString(Logger));
+                builder.Append(CheckAndQuoteLoggerSetting(Logger));
             }
-            			
+
             builder.Append(";");
 			builder.Append(StringUtil.AutoDoubleQuoteString(MsBuildOutputFile(result)));
 			return builder.ToString();
@@ -143,6 +144,40 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		private static string MsBuildOutputFile(IIntegrationResult result)
 		{
 			return Path.Combine(result.ArtifactDirectory, LogFilename);
+		}
+
+		private static string CheckAndQuoteLoggerSetting(string logger)
+		{
+			if (logger.IndexOf(';') > -1)
+			{
+				Log.Error("The <logger> setting contains semicolons. Only commas are allowed.");
+				throw new CruiseControlException("The <logger> setting contains semicolons. Only commas are allowed.");
+			}
+
+			bool spaceFound = false;
+			StringBuilder b = new StringBuilder();			
+			foreach (string part in logger.Split(','))
+			{
+				if (part.IndexOf(' ') > -1)
+				{
+					if (spaceFound)
+					{
+						Log.Error("The <logger> setting contains multiple spaces. Only the assembly name is allowed to contain spaces.");
+						throw new CruiseControlException("The <logger> setting contains multiple spaces. Only the assembly name is allowed to contain spaces.");
+					}
+					else
+					{
+						b.Append(StringUtil.AutoDoubleQuoteString(part));
+						spaceFound = true;
+					}
+				}
+				else
+				{
+					b.Append(part);
+				}
+				b.Append(",");
+			}
+			return b.ToString().TrimEnd(',');
 		}
 	}
 }
