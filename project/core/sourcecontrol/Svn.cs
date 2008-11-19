@@ -56,9 +56,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("checkExternals", Required = false)]
         public bool CheckExternals = false;
 
+		[ReflectorProperty("checkExternalsRecursive", Required = false)]
+		public bool CheckExternalsRecursive = true;
+
         [ReflectorProperty("cleanCopy", Required = false)]
         public bool CleanCopy = false;
-
+		
         private readonly IFileSystem fileSystem;       
 
         public string FormatCommandDate(DateTime date)
@@ -113,7 +116,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("propget");
-            buffer.AddArgument("-R");
+            if(CheckExternalsRecursive)
+			{
+				buffer.AddArgument("-R");
+			}
             AppendCommonSwitches(buffer);
             buffer.AddArgument("svn:externals");
             buffer.AddArgument(TrunkUrl);
