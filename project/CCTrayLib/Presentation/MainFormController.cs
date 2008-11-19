@@ -257,6 +257,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			selectedProject.StartProject();
 		}
+
+		public IProjectStateIconProvider ProjectStateIconProvider
+		{
+			get { return projectStateIconProvider; }
+		}
 		
 		public ProjectStateIconAdaptor ProjectStateIconAdaptor
 		{

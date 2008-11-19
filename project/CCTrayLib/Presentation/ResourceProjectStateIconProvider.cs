@@ -13,6 +13,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private static readonly Hashtable map = new Hashtable();
 
+		public void Dispose()
+		{
+		}
+
 		static ResourceProjectStateIconProvider()
 		{
 			map.Add(ProjectState.Broken, RED);

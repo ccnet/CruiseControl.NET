@@ -705,10 +705,31 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             }
         }
 
+        Icon greenIcon;
+        Bitmap greenIconBitmap;
+        Icon redIcon;
+        Bitmap redIconBitmap;
+
+        private Bitmap CacheFromIcon(Icon icon, ref Icon cacheIcon, ref Bitmap cacheBitmap)
+        {
+          if (!ReferenceEquals(icon, cacheIcon))
+          {
+            if (cacheBitmap != null)
+              cacheBitmap.Dispose();
+
+            cacheIcon = icon;
+            cacheBitmap = cacheIcon.ToBitmap();
+          }
+
+          return cacheBitmap;
+        }
+
         private void UpdateForceAbortBuildButtonLabel()
         {
             btnForceBuild.Text = controller.IsProjectBuilding ? "Abort &Build" : "Force &Build";
-            btnForceBuild.Image = controller.IsProjectBuilding ? new ConfigurableProjectStateIconProvider(configuration.Icons).GetStatusIconForState(ProjectState.Broken).Icon.ToBitmap() : new ConfigurableProjectStateIconProvider(configuration.Icons).GetStatusIconForState(ProjectState.Success).Icon.ToBitmap();
+            btnForceBuild.Image = controller.IsProjectBuilding
+							? CacheFromIcon(controller.ProjectStateIconProvider.GetStatusIconForState(ProjectState.Broken).Icon, ref redIcon, ref redIconBitmap)
+							: CacheFromIcon(controller.ProjectStateIconProvider.GetStatusIconForState(ProjectState.Success).Icon, ref greenIcon, ref greenIconBitmap);
             btnForceBuild.Enabled = ((controller.SelectedProject != null) && controller.SelectedProject.IsConnected);
         }
 
@@ -772,7 +793,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                     btnForceBuild.DataBindings.Clear();
                     btnStartStopProject.DataBindings.Clear();
                     controller.UnbindToQueueTreeView(queueTreeView);
+
+                    MainFormController oldController = controller;
+
                     CreateController();
+
+                    oldController.ProjectStateIconProvider.Dispose();
                 }
             }
             finally

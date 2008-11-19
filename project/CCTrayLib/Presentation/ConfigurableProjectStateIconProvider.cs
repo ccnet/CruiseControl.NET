@@ -3,14 +3,21 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Windows.Forms;
+
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
-	public class ConfigurableProjectStateIconProvider : IProjectStateIconProvider
+	public class ConfigurableProjectStateIconProvider : IProjectStateIconProvider, IDisposable
 	{
 		private readonly IDictionary map = new HybridDictionary();
+
+		public void Dispose()
+		{
+			foreach (StatusIcon icon in map.Values)
+				icon.Dispose();
+		}
 
 		public ConfigurableProjectStateIconProvider(Icons icons)
 		{
