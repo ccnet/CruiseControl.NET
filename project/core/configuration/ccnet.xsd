@@ -44,7 +44,7 @@
             <xs:attribute name="logDir" type="xs:string" use="optional" />
           </xs:complexType>
         </xs:element>
-        <xs:element name="queue">
+        <xs:element name="queue" minOccurs="0">
           <xs:complexType>
             <xs:sequence />
             <xs:attribute name="name" type="xs:string" use="required" />
