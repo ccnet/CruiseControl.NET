@@ -164,7 +164,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("checkout");
             buffer.AddArgument(TrunkUrl);
-            buffer.AddArgument(result.BaseFromWorkingDirectory(WorkingDirectory));
+			buffer.AddArgument(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)));
             AppendCommonSwitches(buffer);
             return NewProcessInfo(buffer.ToString(), result);
         }
@@ -185,6 +185,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("update");
+			buffer.AddArgument(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)));
             AppendRevision(buffer, result.LastChangeNumber);
             AppendCommonSwitches(buffer);
             return NewProcessInfo(buffer.ToString(), result);
@@ -265,7 +266,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             if (result.LastChangeNumber == 0)
             {
-                return result.BaseFromWorkingDirectory(WorkingDirectory).TrimEnd(Path.DirectorySeparatorChar);
+				return Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)).TrimEnd(Path.DirectorySeparatorChar);
             }
             return TrunkUrl;
         }
@@ -290,7 +291,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private ProcessInfo NewProcessInfo(string args, IIntegrationResult result)
         {
-            string workingDirectory = result.BaseFromWorkingDirectory(WorkingDirectory);
+        	string workingDirectory = Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory));
             if (!Directory.Exists(workingDirectory)) Directory.CreateDirectory(workingDirectory);
 
             ProcessInfo processInfo = new ProcessInfo(Executable, args, workingDirectory);

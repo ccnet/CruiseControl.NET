@@ -192,7 +192,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldGetSourceWithAppropriateRevisionNumberIfTagOnSuccessTrueAndModificationsFound()
 		{
 			ExpectSvnDirectoryExists(true);
-			ExpectToExecuteArguments("update --revision 10 --non-interactive --no-auth-cache");
+			ExpectToExecuteArguments("update c:\\source\\ --revision 10 --non-interactive --no-auth-cache");
 
 			IIntegrationResult result = IntegrationResult();
 			Modification mod = new Modification();
@@ -208,7 +208,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldGetSourceWithoutRevisionNumberIfTagOnSuccessTrueAndModificationsNotFound()
 		{
 			ExpectSvnDirectoryExists(true);
-			ExpectToExecuteArguments("update --non-interactive --no-auth-cache");
+			ExpectToExecuteArguments("update c:\\source\\ --non-interactive --no-auth-cache");
 			svn.AutoGetSource = true;
 			svn.GetSource(IntegrationResult());
 		}
@@ -217,7 +217,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldGetSourceWithCredentialsIfSpecifiedIfAutoGetSourceTrue()
 		{
 			ExpectSvnDirectoryExists(true);
-			ExpectToExecuteArguments(@"update --username ""Buck Rogers"" --password ""My Password"" --non-interactive --no-auth-cache");
+			ExpectToExecuteArguments(@"update c:\source\ --username ""Buck Rogers"" --password ""My Password"" --non-interactive --no-auth-cache");
 			svn.Username = "Buck Rogers";
 			svn.Password = "My Password";
 			svn.AutoGetSource = true;
@@ -262,7 +262,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			ExpectSvnDirectoryExists(false);
 			ExpectUnderscoreSvnDirectoryExists(true);
-			ExpectToExecuteArguments(@"update --non-interactive --no-auth-cache");
+			ExpectToExecuteArguments(@"update c:\source\ --non-interactive --no-auth-cache");
 
 			svn.AutoGetSource = true;
 			svn.WorkingDirectory = DefaultWorkingDirectory;
