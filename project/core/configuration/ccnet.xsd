@@ -1,51 +1,58 @@
-<?xml version="1.0" ?>
-<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns="http://www.w3.org/2001/XMLSchema">
-	<xs:element name="cruisecontrol">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="project">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:choice maxOccurs="unbounded">
-								<xs:element name="sourcecontrol">
-									<xs:complexType>
-										<xs:sequence minOccurs="0">
-											<xs:element name="executable" type="xs:string" />
-											<xs:element name="workingDirectory" type="xs:string" />
-										</xs:sequence>
-										<xs:attribute name="type" type="xs:string" use="required" />
-									</xs:complexType>
-								</xs:element>
-								<xs:element name="publishers">
-									<xs:complexType>
-										<xs:sequence>
-											<xs:element name="nullTask" />
-										</xs:sequence>
-									</xs:complexType>
-								</xs:element>
-								<xs:element name="state">
-									<xs:complexType>
-										<xs:attribute name="type" type="xs:string" use="required" />
-										<xs:attribute name="directory" type="xs:string" use="optional" />
-										<xs:attribute name="filename" type="xs:string" use="optional" />
-									</xs:complexType>
-								</xs:element>
-								<xs:element name="modificationDelaySeconds" type="xs:unsignedShort" />
-								<xs:element name="tasks">
-									<xs:complexType>
-										<xs:sequence>
-											<xs:element name="nullTask" />
-										</xs:sequence>
-									</xs:complexType>
-								</xs:element>
-							</xs:choice>
-						</xs:sequence>
-						<xs:attribute name="name" type="xs:string" use="required" />
-						<xs:attribute name="logDir" type="xs:string" use="optional" />
-					</xs:complexType>
-				</xs:element>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
+<?xml version="1.0"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="cruisecontrol">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="project">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:choice maxOccurs="unbounded">
+                <xs:element name="sourcecontrol">
+                  <xs:complexType>
+                    <xs:sequence minOccurs="0">
+                      <xs:element name="executable" type="xs:string" />
+                      <xs:element name="workingDirectory" type="xs:string" />
+                    </xs:sequence>
+                    <xs:attribute name="type" type="xs:string" use="required" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="publishers">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="nullTask" />
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="state">
+                  <xs:complexType>
+                    <xs:attribute name="type" type="xs:string" use="required" />
+                    <xs:attribute name="directory" type="xs:string" use="optional" />
+                    <xs:attribute name="filename" type="xs:string" use="optional" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="modificationDelaySeconds" type="xs:unsignedShort" />
+                <xs:element name="tasks">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="nullTask" />
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+              </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="logDir" type="xs:string" use="optional" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="queue">
+          <xs:complexType>
+            <xs:sequence />
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="duplicates" type="xs:string" use="optional" />
+            <xs:attribute name="lockqueues" type="xs:string" use="optional" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
