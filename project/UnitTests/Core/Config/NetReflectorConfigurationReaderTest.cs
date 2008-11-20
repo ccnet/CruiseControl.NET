@@ -109,6 +109,34 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		{
 			reader.Read(XmlUtil.CreateDocument("<loader/>"));
 		}
+
+        [Test]
+        public void QueueValidationForQueueWithProjectName()
+        {
+            string projectXml = ConfigurationFixture.GenerateProjectXml("test");
+            string queueXml = "<queue name=\"test\" duplicates=\"ApplyForceBuildsReAdd\"/>";
+            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml));
+            ValidateProject(configuration, "test");
+        }
+
+        [Test]
+        public void QueueValidationForQueueWithQueueNameInProject()
+        {
+            string projectXml = ConfigurationFixture.GenerateProjectXml("test", "testQueue");
+            string queueXml = "<queue name=\"testQueue\" duplicates=\"ApplyForceBuildsReAdd\"/>";
+            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml));
+            ValidateProject(configuration, "test");
+        }
+
+        [Test]
+        [ExpectedException(typeof(ConfigurationException), ExpectedMessage="An unused queue definition has been found: name 'testQueue'")]
+        public void QueueValidationForUnreferencedQueue()
+        {
+            string projectXml = ConfigurationFixture.GenerateProjectXml("test");
+            string queueXml = "<queue name=\"testQueue\" duplicates=\"ApplyForceBuildsReAdd\"/>";
+            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml));
+            ValidateProject(configuration, "test");
+        }
         
 		private void ValidateProject(IConfiguration configuration, string projectName)
 		{

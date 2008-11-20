@@ -56,6 +56,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config
                         }
 					}
 				}
+
+                // Do a validation check to ensure internal configuration consistency
+                ValidateConfiguration(configuration);
+
 				return configuration;
 			}
 			catch (NetReflectorException ex)
@@ -74,6 +78,42 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 				throw new ConfigurationException("The configuration document has an invalid root element.  Expected <cruisecontrol>.");
 			}
 		}
+
+        /// <summary>
+        /// Validate the internal consistency of the configuration.
+        /// </summary>
+        /// <param name="value">The configuration to check.</param>
+        /// <remarks>
+        /// <para>
+        /// This will add the following internal consistency checks:
+        /// </para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>Each queue definitition is used by at least one project.</description>
+        /// </item>
+        /// </list>
+        /// </remarks>
+        private void ValidateConfiguration(Configuration value)
+        {
+            // Ensure that there are no orphaned queues
+            foreach (IQueueConfiguration queueDef in value.QueueConfigurations)
+            {
+                bool queueFound = false;
+                foreach (IProject projectDef in value.Projects)
+                {
+                    if (string.Equals(queueDef.Name, projectDef.QueueName, StringComparison.InvariantCulture))
+                    {
+                        queueFound = true;
+                        break;
+                    }
+                }
+                if (!queueFound)
+                {
+                    throw new ConfigurationException(
+                        string.Format("An unused queue definition has been found: name '{0}'", queueDef.Name));
+                }
+            }
+        }
 
 		private void HandleUnusedNode(InvalidNodeEventArgs args)
 		{

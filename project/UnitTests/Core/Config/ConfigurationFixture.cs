@@ -22,11 +22,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			return string.Format("<cruisecontrol>{0}</cruisecontrol>", projectXml);
 		}
 
-		public static string GenerateProjectXml(string name, string buildXml, string sourceControlXml, string publishersXml, string historyXml)
+        public static string GenerateProjectXml(string name, string queueName, string buildXml, string sourceControlXml, string publishersXml, string historyXml)
 		{
-			return string.Format(@"<project name=""{0}"">{1}{2}{3}{4}</project>", 
-				name, buildXml, sourceControlXml, publishersXml, historyXml);
+            return string.Format(@"<project name=""{0}"" queue=""{5}"">{1}{2}{3}{4}</project>", 
+				name, buildXml, sourceControlXml, publishersXml, historyXml, queueName);
 		}
+
+        public static string GenerateProjectXml(string name, string buildXml, string sourceControlXml, string publishersXml, string historyXml)
+        {
+            return string.Format(@"<project name=""{0}"">{1}{2}{3}{4}</project>",
+                name, buildXml, sourceControlXml, publishersXml, historyXml);
+        }
+
+        public static string GenerateProjectXml(string name, string queueName)
+        {
+            if (string.IsNullOrEmpty(queueName))
+            {
+                return GenerateProjectXml(name, GenerateNullTasksXml(), GenerateNullSourceControlXml(), GenerateNullPublishersXml(), GenerateStateManagerXml());
+            }
+            else
+            {
+                return GenerateProjectXml(name, queueName, GenerateNullTasksXml(), GenerateNullSourceControlXml(), GenerateNullPublishersXml(), GenerateStateManagerXml());
+            }
+        }
 
 		public static string GenerateProjectXml(string name)
 		{
