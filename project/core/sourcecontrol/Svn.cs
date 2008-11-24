@@ -62,7 +62,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("cleanCopy", Required = false)]
         public bool CleanCopy = false;
 		
-        private readonly IFileSystem fileSystem;       
+        private readonly IFileSystem fileSystem;
+
+		/// <summary>
+		/// Modifications discovered by this instance of the source control interface.
+		/// This is needed for the Multi Source Control block. (See CCNET-639/CCNET-1307)
+		/// </summary>
+		internal Modification[] mods = new Modification[0];
 
         public string FormatCommandDate(DateTime date)
         {
@@ -77,30 +83,34 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
             if (CheckExternals)
             {
-                directories.AddRange(ParseExternalsDirectories(Execute(PropGetProcessInfo(to))));
+            	List<string> externals = ParseExternalsDirectories(Execute(PropGetProcessInfo(to)));
+            	foreach(string external in externals)
+            	{
+					if (!directories.Contains(external))
+						directories.Add(external);
+            	}
             }
-
-            Modification[] modificationsArray;
 
             foreach (string directory in directories)
             {
                 Log.Debug(directory);
                 ProcessResult result = Execute(NewHistoryProcessInfo(from, to, directory));
-                modificationsArray = ParseModifications(result, from.StartTime, to.StartTime);
-                if (modificationsArray != null)
+                mods = ParseModifications(result, from.StartTime, to.StartTime);
+                if (mods != null)
                 {
-                    modifications.AddRange(modificationsArray);
+                    modifications.AddRange(mods);
                 }
             }
 
-            modificationsArray = modifications.ToArray();
+            mods = modifications.ToArray();
 
             if (UrlBuilder != null)
             {
-                UrlBuilder.SetupModification(modificationsArray);
+                UrlBuilder.SetupModification(mods);
             }
+			FillIssueUrl(mods);
 
-            return modificationsArray;
+            return mods;
 
         }
 
@@ -186,7 +196,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("update");
 			buffer.AddArgument(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)));
-            AppendRevision(buffer, result.LastChangeNumber);
+			AppendRevision(buffer, Modification.GetLastChangeNumber(mods));
             AppendCommonSwitches(buffer);
             return NewProcessInfo(buffer.ToString(), result);
         }
@@ -199,7 +209,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.AppendArgument(TagMessage(result.Label));
             buffer.AddArgument(TagSource(result));
             buffer.AddArgument(TagDestination(result.Label));
-            AppendRevision(buffer, result.LastChangeNumber);
+			AppendRevision(buffer, Modification.GetLastChangeNumber(mods));
             AppendCommonSwitches(buffer);
             return NewProcessInfo(buffer.ToString(), result);
         }
@@ -264,7 +274,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private string TagSource(IIntegrationResult result)
         {
-            if (result.LastChangeNumber == 0)
+			if (Modification.GetLastChangeNumber(mods) == 0)
             {
 				return Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)).TrimEnd(Path.DirectorySeparatorChar);
             }

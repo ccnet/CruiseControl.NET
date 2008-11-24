@@ -149,6 +149,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Modification mod = new Modification();
 			mod.ChangeNumber = 5;
 			result.Modifications = new Modification[] { mod };
+			svn.mods = result.Modifications;
 		    ExpectToExecuteArguments(@"copy -m ""CCNET build foo"" svn://myserver/mypath svn://someserver/tags/foo --revision 5 --non-interactive --no-auth-cache");
 
 			svn.TagOnSuccess = true;
@@ -198,7 +199,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Modification mod = new Modification();
 			mod.ChangeNumber = 10;
 			result.Modifications = new Modification[] {mod};
-		    
+			svn.mods = result.Modifications;
+
 			svn.AutoGetSource = true;
 			svn.GetSource(result);
 		}
