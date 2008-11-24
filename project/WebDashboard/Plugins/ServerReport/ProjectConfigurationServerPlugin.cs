@@ -12,19 +12,21 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
+
     [ReflectorType("projectConfigurationServerPlugin")]
     public class ProjectConfigurationServerPlugin : ICruiseAction, IPlugin
     {
+
         private readonly IFarmService farmService;
-		private readonly IVelocityViewGenerator viewGenerator;
+        private readonly IVelocityViewGenerator viewGenerator;
 
         public ProjectConfigurationServerPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator)
-		{
-			this.farmService = farmService;
-			this.viewGenerator = viewGenerator;
-		}
+        {
+            this.farmService = farmService;
+            this.viewGenerator = viewGenerator;
+        }
 
-		public IResponse Execute(ICruiseRequest request)
+        public IResponse Execute(ICruiseRequest request)
 		{
 			Hashtable velocityContext = new Hashtable();
 
@@ -37,23 +39,33 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
                 projects.Add(projectStatus);
             
             }
+
+            projects.Sort(CompareProjectStatusByQueueAndQueuePriority); 
+
             velocityContext["projects"] = projects.ToArray();
 
             return viewGenerator.GenerateView(@"ProjectServerConfiguration.vm", velocityContext);
 		}
 
-		public string LinkDescription
-		{
-			get { return "View Project Configuration"; }
-		}
+        public string LinkDescription
+        {
+            get { return "View Project Configuration"; }
+        }
 
-		public INamedAction[] NamedActions
-		{
+        public INamedAction[] NamedActions
+        {
             get { return new INamedAction[] { new ImmutableNamedAction("ProjectConfigurationServer", this) }; }
-		}
+        }
 
+        private int CompareProjectStatusByQueueAndQueuePriority(ProjectStatus x, ProjectStatus y)
+        {
+            if (x.Queue == y.Queue)
+            {
+                return x.QueuePriority.CompareTo(y.QueuePriority);
+            }
 
-
+            return x.Queue.CompareTo(y.Queue);
+        }
 
     }
 }
