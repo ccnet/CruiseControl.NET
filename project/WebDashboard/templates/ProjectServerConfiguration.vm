@@ -1,16 +1,16 @@
 <table cellspacing="0" cellpadding="3" rules="rows" bordercolor="#333399" border="1" id="StatusGrid" bgcolor="White" width="100%">
   <tr bgcolor="#333399" class="ProjectGridHeader">
     <td >
-      <b>Project</b>
-    </td>
-    <td >
-      <b>Category</b>
-    </td>
-    <td >
       <b>Queue</b>
     </td>
     <td >
       <b>QueuePriority</b>
+    </td>
+    <td >
+      <b>Project</b>
+    </td>
+    <td >
+      <b>Category</b>
     </td>
     <td >
       <b>Web Url</b>
@@ -19,10 +19,10 @@
 
   #foreach ($project in $projects)
   <tr>
-    <td>$project.Name</td>
-    <td>$project.Category</td>
     <td>$project.Queue</td>
     <td>$project.QueuePriority</td>
+    <td>$project.Name</td>
+    <td>$project.Category</td>
     <td>$project.WebURL</td>
   </tr>
   #end
