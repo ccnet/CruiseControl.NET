@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			public ProcessResult Run()
 			{
                 bool hasTimedOut = false;
-                bool failed = false;
+                bool failed = true;
                 bool hasExited = false;
                 int exitcode = 0;
                                               
