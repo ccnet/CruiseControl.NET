@@ -40,6 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			Verify();
 			mockParser.Verify();
+			mockFileSystem.Verify();
 		}
 
 		[Test]
