@@ -56,10 +56,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private readonly IFileSystem fileSystem;
 
-        /// <summary>
-        /// Modifications discovered by this instance of the source control interface.
-        /// </summary>
-        internal Modification[] mods = new Modification[0];
+		/// <summary>
+		/// Modifications discovered by this instance of the source control interface.
+		/// This is needed for the Multi Source Control block. (See CCNET-639/CCNET-1307)
+		/// </summary>
+		internal Modification[] mods = new Modification[0];
 
 		public string FormatCommandDate(DateTime date)
 		{
@@ -74,28 +75,33 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			if (CheckExternals)
 			{
-				directories.AddRange(ParseExternalsDirectories(Execute(PropGetProcessInfo(to))));
+				List<string> externals = ParseExternalsDirectories(Execute(PropGetProcessInfo(to)));
+				foreach (string external in externals)
+				{
+					if (!directories.Contains(external)) directories.Add(external);
+				}
 			}
 			
-			Modification[] modificationsArray;
-
 			foreach (string directory in directories)
 			{
+				Log.Debug(directory);
 				ProcessResult result = Execute(NewHistoryProcessInfo(from, to, directory));
-				modificationsArray = ParseModifications(result, from.StartTime, to.StartTime);
-				if (modificationsArray != null)
+				mods = ParseModifications(result, from.StartTime, to.StartTime);
+				if (mods != null)
 				{
-					modifications.AddRange(modificationsArray);
+					modifications.AddRange(mods);
 				}
 			}
 
-			modificationsArray = modifications.ToArray();
+			mods = modifications.ToArray();
 
 			if (UrlBuilder != null)
 			{
-				UrlBuilder.SetupModification(modificationsArray);
+				UrlBuilder.SetupModification(mods);
 			}
-			return modificationsArray;
+			FillIssueUrl(mods);
+
+			return mods;
 		}
 
 		public override void LabelSourceControl(IIntegrationResult result)
