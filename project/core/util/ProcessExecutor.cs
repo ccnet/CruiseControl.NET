@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 {
                     process.OutputDataReceived += new DataReceivedEventHandler(SortOutputHandler);
                     process.ErrorDataReceived += new DataReceivedEventHandler(SortErrorOutputHandler);
-					
+                    Log.Debug(string.Format("Starting process [{0}] in working directory [{1}] with arguments [{2}]", process.StartInfo.FileName, process.StartInfo.WorkingDirectory, process.StartInfo.Arguments));
                     bool isNewProcess = process.Start();
                     if (!isNewProcess) Log.Warning("Reusing existing process...");
 
