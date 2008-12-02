@@ -57,8 +57,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			private readonly string projectName;
 			private readonly ProcessInfo processInfo;
 			private readonly Process process;
+			// TODO: Move towards injecting WaitHandles.
 			private readonly StringBuilder stdOutput = new StringBuilder();
+			private readonly EventWaitHandle outputStreamClosed = new ManualResetEvent(false);
 			private readonly StringBuilder stdError = new StringBuilder();
+			private readonly EventWaitHandle errorStreamClosed = new ManualResetEvent(false);
 
 
 			public RunnableProcess(ProcessInfo processInfo, string projectName)
@@ -75,41 +78,50 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				bool hasExited = false;
 				int exitcode = 0;
 
+				StartProcess();
+
 				try
 				{
-					process.OutputDataReceived += StandardOutputHandler;
-					process.ErrorDataReceived += ErrorOutputHandler;
-					Log.Debug(string.Format("Starting process [{0}] in working directory [{1}] with arguments [{2}]", process.StartInfo.FileName, process.StartInfo.WorkingDirectory, process.StartInfo.Arguments));
+					hasExited = process.WaitForExit(processInfo.TimeOut);
+					hasTimedOut = !hasExited;
+					if (hasTimedOut) Log.Warning(string.Format(
+						"Process timed out: {0} {1}.  Process id: {2}.  This process will now be killed.", processInfo.FileName, processInfo.Arguments, process.Id));												
+				}
+				catch (ThreadAbortException)
+				{
+					// Thread aborted. Likely, integration should now be stopped.
+					// Will still do best to kill process and record output.
+					// TODO: If we cancel, will we receive a null and Set() the WaitHandles. Do we need to Set() them manually?
+					process.CancelErrorRead();
+					process.CancelOutputRead();
+					Thread.ResetAbort();
+				}
+
+				if (!hasExited)
+				{
+					Kill();
+				}
+
+				exitcode = process.ExitCode;
+				failed = !processInfo.ProcessSuccessful(exitcode);
+				// TODO: Needs a time out? If process has gone rogue, this code should be skipped by exception thrown from Kill() anyway.
+				WaitHandle.WaitAll(new WaitHandle[] { errorStreamClosed, outputStreamClosed });
+				process.Close();
+
+				return new ProcessResult(stdOutput.ToString(), stdError.ToString(), exitcode, hasTimedOut, failed);
+			}
+
+			private void StartProcess()
+			{
+				Log.Debug(string.Format(
+							"Starting process [{0}] in working directory [{1}] with arguments [{2}]", process.StartInfo.FileName, process.StartInfo.WorkingDirectory, process.StartInfo.Arguments));
+				process.OutputDataReceived += StandardOutputHandler;
+				process.ErrorDataReceived += ErrorOutputHandler;
+
+				try
+				{
 					bool isNewProcess = process.Start();
 					if (!isNewProcess) Log.Warning("Reusing existing process...");
-
-					WriteToStandardInput();
-					process.BeginOutputReadLine();
-					process.BeginErrorReadLine();
-
-					try
-					{
-						hasExited = process.WaitForExit(processInfo.TimeOut);
-					}
-					catch (ThreadAbortException)
-					{
-						// Why are we catching ThreadAbortException. This is not a known throw from WaitForExit(int).
-						// If the ProjectIntegrator's thread is aborted we *will* end up here, but should we be calling ResetAbort()?
-						process.CancelErrorRead();
-						process.CancelOutputRead();
-						Thread.ResetAbort();
-					}
-
-					if (!hasExited)
-					{
-						hasTimedOut = true;
-						Kill();
-					}
-
-					exitcode = process.ExitCode;
-
-					failed = !processInfo.ProcessSuccessful(exitcode);
-
 				}
 				catch (Win32Exception e)
 				{
@@ -118,18 +130,24 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					throw new IOException(msg, e);
 				}
 
-				// TODO: This WaitForExit() should really have a timeout. Otherwise, what if the process doesn't exit?
-				process.WaitForExit();
-				process.Close();
-
-				return new ProcessResult(stdOutput.ToString(), stdError.ToString(), exitcode, hasTimedOut, failed);
+				WriteToStandardInput();
+				process.BeginOutputReadLine();
+				process.BeginErrorReadLine();
 			}
 
 			public void Kill()
 			{
+				const int WAIT_FOR_KILLED_PROCESS_TIMEOUT = 10000;
+
 				try
 				{
+					Log.Debug(string.Format("Sending kill to process {0} and waiting {1} seconds for it to exit.", process.Id, WAIT_FOR_KILLED_PROCESS_TIMEOUT / 1000));
 					KillUtil.KillPid(process.Id);
+					if (!process.WaitForExit(WAIT_FOR_KILLED_PROCESS_TIMEOUT))
+						throw new CruiseControlException(
+							string.Format(@"The killed process {0} did not terminate within the allotted timeout period {1}.  The process or one of its child processes may not have died.  This may create problems when trying to re-execute the process.  It may be necessary to reboot the server to recover.",
+								process.Id,
+								WAIT_FOR_KILLED_PROCESS_TIMEOUT));
 					Log.Warning(string.Format("The process has been killed: {0}", process.Id));
 				}
 				catch (InvalidOperationException)
@@ -150,26 +168,47 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 			private void StandardOutputHandler(object sender, DataReceivedEventArgs outLine)
 			{
-				CollectOutput(sender, outLine, stdOutput);
+				try
+				{
+					CollectOutput(outLine.Data, stdOutput, outputStreamClosed);
+				}
+				catch (Exception e)
+				{
+					Log.Error(e);
+					Log.Error(string.Format("[{0} {1}] Exception while collecting standard output", projectName, processInfo.FileName));
+				}
 			}
 
 			private void ErrorOutputHandler(object sender, DataReceivedEventArgs outLine)
 			{
-				CollectOutput(sender, outLine, stdError);
+				try
+				{
+					CollectOutput(outLine.Data, stdError, errorStreamClosed);
+				}
+				catch (Exception e)
+				{
+					Log.Error(e);
+					Log.Error(string.Format("[{0} {1}] Exception while collecting error output", projectName, processInfo.FileName));
+				}
 			}
 
-			private void CollectOutput(object sender, DataReceivedEventArgs outLine, StringBuilder collector)
+			private void CollectOutput(string output, StringBuilder collector, EventWaitHandle streamReadComplete)
 			{
-				Process sendingProcess = (Process)sender;
-				if (!String.IsNullOrEmpty(outLine.Data))
+				if (output == null)
 				{
-					collector.AppendLine(outLine.Data);
-					Log.Debug(string.Format("[{0} {1}] {2}", projectName, sendingProcess.ProcessName, outLine.Data));
+					// Null indicates the process has closed the stream
+					streamReadComplete.Set();
+					return;
 				}
+
+				collector.AppendLine(output);
+				Log.Debug(string.Format("[{0} {1}] {2}", projectName, processInfo.FileName, output));
 			}
 
 			void IDisposable.Dispose()
 			{
+				outputStreamClosed.Close();
+				errorStreamClosed.Close();
 				process.Dispose();
 			}
 
