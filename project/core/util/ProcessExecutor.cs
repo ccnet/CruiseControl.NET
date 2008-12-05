@@ -62,6 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			private readonly EventWaitHandle outputStreamClosed = new ManualResetEvent(false);
 			private readonly StringBuilder stdError = new StringBuilder();
 			private readonly EventWaitHandle errorStreamClosed = new ManualResetEvent(false);
+			private readonly EventWaitHandle processExited = new ManualResetEvent(false);
 
 
 			public RunnableProcess(ProcessInfo processInfo, string projectName)
@@ -74,27 +75,25 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			public ProcessResult Run()
 			{
 				bool hasTimedOut = false;
-				bool failed = true;
 				bool hasExited = false;
-				int exitcode = 0;
 
 				StartProcess();
 
 				try
 				{
-					hasExited = process.WaitForExit(processInfo.TimeOut);
+					hasExited = WaitHandle.WaitAll(new WaitHandle[] {errorStreamClosed, outputStreamClosed, processExited}, processInfo.TimeOut, true);
 					hasTimedOut = !hasExited;
 					if (hasTimedOut) Log.Warning(string.Format(
 						"Process timed out: {0} {1}.  Process id: {2}.  This process will now be killed.", processInfo.FileName, processInfo.Arguments, process.Id));												
 				}
 				catch (ThreadAbortException)
 				{
-					// Thread aborted. Likely, integration should now be stopped.
-					// Will still do best to kill process and record output.
-					// TODO: If we cancel, will we receive a null and Set() the WaitHandles. Do we need to Set() them manually?
-					process.CancelErrorRead();
-					process.CancelOutputRead();
-					Thread.ResetAbort();
+					// Thread aborted. Integration should now be stopped, so allow exception to propagate.
+					Log.Info(string.Format(
+						"Thread aborted while waiting for '{0} {1}' to exit. Process id: {2}", processInfo.FileName, processInfo.Arguments, process.Id));
+
+					// Will still do best to record output.
+					CancelOutputAndWait();
 				}
 
 				if (!hasExited)
@@ -102,13 +101,19 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					Kill();
 				}
 
-				exitcode = process.ExitCode;
-				failed = !processInfo.ProcessSuccessful(exitcode);
-				// TODO: Needs a time out? If process has gone rogue, this code should be skipped by exception thrown from Kill() anyway.
-				WaitHandle.WaitAll(new WaitHandle[] { errorStreamClosed, outputStreamClosed });
+				int exitcode = process.ExitCode;
+				bool failed = !processInfo.ProcessSuccessful(exitcode);
 				process.Close();
 
+				// TODO: If the process is aborted, we probably report that the process was successful?
 				return new ProcessResult(stdOutput.ToString(), stdError.ToString(), exitcode, hasTimedOut, failed);
+			}
+
+			private void CancelOutputAndWait()
+			{
+				process.CancelErrorRead();
+				process.CancelOutputRead();
+				WaitHandle.WaitAll(new WaitHandle[] { errorStreamClosed, outputStreamClosed }, 1000, true);
 			}
 
 			private void StartProcess()
@@ -117,6 +122,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 							"Starting process [{0}] in working directory [{1}] with arguments [{2}]", process.StartInfo.FileName, process.StartInfo.WorkingDirectory, process.StartInfo.Arguments));
 				process.OutputDataReceived += StandardOutputHandler;
 				process.ErrorDataReceived += ErrorOutputHandler;
+				process.Exited += ExitedHandler;
+				process.EnableRaisingEvents = true;
 
 				try
 				{
@@ -135,13 +142,19 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				process.BeginErrorReadLine();
 			}
 
+			private void ExitedHandler(object sender, EventArgs e)
+			{
+				processExited.Set();
+			}
+
 			public void Kill()
 			{
 				const int WAIT_FOR_KILLED_PROCESS_TIMEOUT = 10000;
 
+				Log.Debug(string.Format("Sending kill to process {0} and waiting {1} seconds for it to exit.", process.Id, WAIT_FOR_KILLED_PROCESS_TIMEOUT / 1000));
+				CancelOutputAndWait();
 				try
 				{
-					Log.Debug(string.Format("Sending kill to process {0} and waiting {1} seconds for it to exit.", process.Id, WAIT_FOR_KILLED_PROCESS_TIMEOUT / 1000));
 					KillUtil.KillPid(process.Id);
 					if (!process.WaitForExit(WAIT_FOR_KILLED_PROCESS_TIMEOUT))
 						throw new CruiseControlException(
