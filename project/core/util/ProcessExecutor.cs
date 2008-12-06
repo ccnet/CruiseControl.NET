@@ -63,6 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			private readonly StringBuilder stdError = new StringBuilder();
 			private readonly EventWaitHandle errorStreamClosed = new ManualResetEvent(false);
 			private readonly EventWaitHandle processExited = new ManualResetEvent(false);
+			private Thread supervisingThread;
 
 
 			public RunnableProcess(ProcessInfo processInfo, string projectName)
@@ -88,12 +89,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				}
 				catch (ThreadAbortException)
 				{
-					// Thread aborted. Integration should now be stopped, so allow exception to propagate.
+					// Thread aborted.
 					Log.Info(string.Format(
 						"Thread aborted while waiting for '{0} {1}' to exit. Process id: {2}", processInfo.FileName, processInfo.Arguments, process.Id));
-
 					// Will still do best to record output.
 					CancelOutputAndWait();
+					// Integration should now be stopped, so rethrow exception.
+					throw;
 				}
 
 				if (!hasExited)
@@ -105,7 +107,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				bool failed = !processInfo.ProcessSuccessful(exitcode);
 				process.Close();
 
-				// TODO: If the process is aborted, we probably report that the process was successful?
 				return new ProcessResult(stdOutput.ToString(), stdError.ToString(), exitcode, hasTimedOut, failed);
 			}
 
@@ -124,6 +125,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				process.ErrorDataReceived += ErrorOutputHandler;
 				process.Exited += ExitedHandler;
 				process.EnableRaisingEvents = true;
+				supervisingThread = Thread.CurrentThread;
 
 				try
 				{
@@ -189,6 +191,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				{
 					Log.Error(e);
 					Log.Error(string.Format("[{0} {1}] Exception while collecting standard output", projectName, processInfo.FileName));
+					supervisingThread.Abort();
 				}
 			}
 
@@ -202,6 +205,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				{
 					Log.Error(e);
 					Log.Error(string.Format("[{0} {1}] Exception while collecting error output", projectName, processInfo.FileName));
+					supervisingThread.Abort();
 				}
 			}
 
