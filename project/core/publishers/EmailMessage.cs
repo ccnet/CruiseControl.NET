@@ -175,7 +175,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 {
                     email = converter.Convert(email);
                 }
-                user = new EmailUser(username, null, email);
+
+                if (email != null)
+                {
+                    user = new EmailUser(username, null, email);
+                }
             }
             return user;
         }

@@ -116,6 +116,7 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
@@ -340,6 +341,7 @@
     <Compile Include="publishers\BuildPublisher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="publishers\EmailLDAPConverter.cs" />
     <Compile Include="publishers\EmailRegexConverter.cs" />
     <Compile Include="publishers\EmailGateway.cs">
       <SubType>Code</SubType>
