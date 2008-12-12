@@ -218,8 +218,54 @@ namespace ThoughtWorks.CruiseControl.Core
 					Log.Error("Publisher threw exception: " + e);
 				}
 			}
-			if (result.Succeeded) messages.Clear();
+            if (result.Succeeded)
+            {
+                messages.Clear();
+            }
+            else
+            {
+                AddBreakersToMessages(result);
+            }                                  
 		}
+
+
+        private void AddBreakersToMessages(IIntegrationResult result)
+        {
+            System.Collections.Generic.List<string> breakers = new System.Collections.Generic.List<string>();
+            string breakingusers = "";
+
+            foreach (Modification mod in result.Modifications)
+            {
+                if (! breakers.Contains(mod.UserName))
+                {
+                    breakers.Add(mod.UserName);
+                }
+            }
+
+
+            foreach (string UserName in result.FailureUsers)
+            {
+                if (!breakers.Contains(UserName))
+                {
+                    breakers.Add(UserName);
+                }
+            }
+
+
+            if (breakers.Count > 0)
+            {
+                breakingusers = "Breakers : ";
+
+                foreach (string user in breakers)
+                {
+                    breakingusers += user + ", "; 
+                }
+
+                breakingusers = breakingusers.Remove(breakingusers.Length - 2, 2); // remove the last comma and space
+            }
+
+            AddMessage(new Message(breakingusers));
+        }
 
 		public void Initialize()
 		{
