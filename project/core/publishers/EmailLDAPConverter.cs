@@ -3,7 +3,7 @@ using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
-    [ReflectorType("LDAPConverter")]
+    [ReflectorType("ldapConverter")]
     public class EmailLDAPConverter : IEmailConverter
     {
         private string domainName = "";
