@@ -18,6 +18,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service", "service\service.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "objection", "objection\objection.csproj", "{1C0B8046-FE79-4845-84B9-369A76F817A3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9CC052DF-2AFB-4A27-BB68-F8C27C5BA0C8}"
+	ProjectSection(SolutionItems) = preProject
+		..\b.bat = ..\b.bat
+		..\ccnet.build = ..\ccnet.build
+		..\ccnet.nsi = ..\ccnet.nsi
+		..\cctray.nsi = ..\cctray.nsi
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Build|Any CPU = Build|Any CPU
