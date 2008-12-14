@@ -553,7 +553,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.AddMessage(new Message("foo"));
 			project.PublishResults(IntegrationResultMother.CreateFailed());
 			ProjectStatus status = project.CreateProjectStatus(new ProjectIntegrator(project, queue));			
-			Assert.AreEqual(1, status.Messages.Length);
+			Assert.AreEqual(2, status.Messages.Length);
+
+
 		}
 		
 		[Test]
