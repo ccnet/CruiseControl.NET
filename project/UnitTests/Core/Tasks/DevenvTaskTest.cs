@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldLoadAllValuesFromConfiguration()
 		{
-			string xml = @"
+			const string xml = @"
 <devenv>
 	<executable>c:\vs.net\devenv.com</executable>
 	<version>9.0</version>
@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldLoadMinimalValuesFromConfiguration()
 		{
-			string xml = @"<devenv solutionfile=""mySolution.sln"" configuration=""Release"" />";
+			const string xml = @"<devenv solutionfile=""mySolution.sln"" configuration=""Release"" />";
 			DevenvTask task2 = (DevenvTask) NetReflector.Read(xml);
 			Assert.AreEqual(@"mySolution.sln", task2.SolutionFile);
 			Assert.AreEqual(@"Release", task2.Configuration);
@@ -79,11 +79,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test, ExpectedException(typeof (NetReflectorException))]
 		public void ShouldFailToLoadInvalidVersionFromConfiguration()
 		{
-			string xml = @"<devenv solutionfile=""mySolution.sln"" configuration=""Release"" version=""VSBAD""/>";
+			const string xml = @"<devenv solutionfile=""mySolution.sln"" configuration=""Release"" version=""VSBAD""/>";
 			NetReflector.Read(xml);
 		}
 
-        [Test]
+		[Test]
         public void DefaultVisualStudioShouldBe2008IfInstalled()
         {
             IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
@@ -275,7 +275,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
 			ProcessResult processResult = new ProcessResult("output", "error", 0, false);
-			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] { constraint, new IsAnything() });
+			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] { constraint });
 			task.Executable = DEVENV_PATH;
 			task.SolutionFile = "\"mySolution.sln\"";
 			task.Configuration = "Debug";
@@ -285,7 +285,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(DEVENV_PATH, info.FileName);
 			Assert.AreEqual(DevenvTask.DEFAULT_BUILD_TIMEOUT*1000, info.TimeOut);
-            CustomAssertion.AssertStartsWith("\"mySolution.sln\" /rebuild \"Debug\"", info.Arguments);
+            AssertStartsWith("\"mySolution.sln\" /rebuild \"Debug\"", info.Arguments);
 		}
 
 		[Test]
@@ -293,7 +293,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
 			ProcessResult processResult = new ProcessResult("output", "error", 0, false);
-			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] {constraint, new IsAnything()});
+			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] {constraint});
 			task.Executable = DEVENV_PATH;
 			task.SolutionFile = "mySolution.sln";
 			task.Configuration = "\"Debug\"";
@@ -304,14 +304,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(DEVENV_PATH, info.FileName);
 			Assert.AreEqual(DevenvTask.DEFAULT_BUILD_TIMEOUT*1000, info.TimeOut);
-            CustomAssertion.AssertStartsWith("\"mySolution.sln\" /rebuild \"Debug\" /project \"myProject\"", info.Arguments);
+            AssertStartsWith("\"mySolution.sln\" /rebuild \"Debug\" /project \"myProject\"", info.Arguments);
 		}
 
 		[Test]
 		public void ShouldSetOutputAndIntegrationStatusToSuccessOnSuccessfulBuild()
 		{
 			ProcessResult processResult = new ProcessResult(@"Rebuild All: 10 succeeded, 0 failed, 0 skipped", string.Empty, ProcessResult.SUCCESSFUL_EXIT_CODE, false);
-			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] { new IsAnything(), new IsAnything() });
+			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] { new IsAnything() });
 			task.Executable = DEVENV_PATH;
 			task.SolutionFile = SOLUTION_FILE;
 			task.Configuration = CONFIGURATION;
@@ -320,7 +320,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.Run(result);
 
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
-			CustomAssertion.AssertMatches(@"Rebuild All: \d+ succeeded, \d+ failed, \d+ skipped", result.TaskOutput);
+			AssertMatches(@"Rebuild All: \d+ succeeded, \d+ failed, \d+ skipped", result.TaskOutput);
 		}
 
 		[Test]
@@ -328,7 +328,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			ProcessResult processResult = new ProcessResult(@"D:\dev\ccnet\ccnet\project\nosolution.sln could not be found and will not be loaded", string.Empty, 1, false);
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] {constraint, new IsAnything()});
+			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] {constraint});
 
 			task.Executable = DEVENV_PATH;
 			task.SolutionFile = @"D:\dev\ccnet\ccnet\project\nosolution.sln";
@@ -341,13 +341,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual("myWorkingDirectory", info.WorkingDirectory);
 
 			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
-			CustomAssertion.AssertMatches(@"(\.|\n)*could not be found and will not be loaded", result.TaskOutput);
+			AssertMatches(@"(\.|\n)*could not be found and will not be loaded", result.TaskOutput);
 		}
 
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessExecutorThrowsAnException()
 		{
-			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[] {new IsAnything(), new IsAnything()});
+			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[] {new IsAnything()});
 			task.Executable = DEVENV_PATH + ".some.extra.ext.exe"; // file should not exist
 			task.SolutionFile = @"D:\dev\ccnet\ccnet\project\nosolution.sln";
 			task.Configuration = "Debug";
@@ -358,7 +358,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessExecutorThrowsAnExceptionUsingUnkownProject()
 		{
-			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[] {new IsAnything(), new IsAnything()});
+			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[] {new IsAnything()});
 			task.Executable = DEVENV_PATH;
 			task.SolutionFile = SOLUTION_FILE;
 			task.Configuration = CONFIGURATION;
@@ -371,7 +371,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
 			ProcessResult processResult = new ProcessResult(string.Empty, string.Empty, ProcessResult.TIMED_OUT_EXIT_CODE, true);
-			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] {new IsAnything(), new IsAnything()});
+			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] {new IsAnything()});
 			task.BuildTimeoutSeconds = 2;
 			task.Executable = DEVENV_PATH;
 			task.SolutionFile = SOLUTION_FILE;

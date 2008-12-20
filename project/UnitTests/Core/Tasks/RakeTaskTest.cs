@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void PopulateFromReflector()
 		{
-			string xml = @"
+			const string xml = @"
     <rake>
     	<executable>C:\ruby\bin\rake.bat</executable>
     	<baseDirectory>C:\</baseDirectory>
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void PopulateFromConfigurationUsingOnlyRequiredElementsAndCheckDefaultValues()
 		{
-			string xml = @"<rake />";
+			const string xml = @"<rake />";
 
 			NetReflector.Read(xml, builder);
 			Assert.AreEqual("", builder.BaseDirectory);
@@ -78,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldSetSuccessfulStatusAndBuildOutputAsAResultOfASuccessfulBuild()
 		{
-			ExpectToExecuteAndReturnWithProjectName(SuccessfulProcessResult(), "test");
+			ExpectToExecuteAndReturn(SuccessfulProcessResult());
 			
 			builder.Run(result);
 			
@@ -90,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldSetFailedStatusAndBuildOutputAsAResultOfFailedBuild()
 		{
-			ExpectToExecuteAndReturnWithProjectName(FailedProcessResult(), "test");
+			ExpectToExecuteAndReturn(FailedProcessResult());
 			
 			builder.Run(result);
 			
@@ -102,14 +102,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
-			ExpectToExecuteAndReturnWithProjectName(TimedOutProcessResult(), "test");
+			ExpectToExecuteAndReturn(TimedOutProcessResult());
 			builder.Run(result);
 		}
 		
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessThrowsException()
 		{
-			ExpectToExecuteAndThrowWithProjectName();
+			ExpectToExecuteAndThrow();
 			builder.Run(result);
 		}
 
@@ -117,19 +117,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
 
-			IntegrationResult result = (IntegrationResult)IntegrationResult();
-			result.ProjectName = "test";
-			result.Label = "1.0";
-			result.BuildCondition = BuildCondition.ForceBuild;
-			result.WorkingDirectory = @"c:\workingdir\";
-			result.ArtifactDirectory = @"c:\artifactdir\";
+			IntegrationResult integrationResult = (IntegrationResult)IntegrationResult();
+			integrationResult.ProjectName = "test";
+			integrationResult.Label = "1.0";
+			integrationResult.BuildCondition = BuildCondition.ForceBuild;
+			integrationResult.WorkingDirectory = @"c:\workingdir\";
+			integrationResult.ArtifactDirectory = @"c:\artifactdir\";
 
 			builder.Executable = "rake";
 			builder.BuildArgs = "myargs";
 			builder.BuildTimeoutSeconds = 222;
-			builder.Run(result);
+			builder.Run(integrationResult);
 
 			ProcessInfo info = (ProcessInfo)constraint.Parameter;
 			Assert.AreEqual("rake", info.FileName);
@@ -144,7 +144,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPassAppropriateDefaultPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			ExpectToExecuteArgumentsWithMonitor("");
+			ExpectToExecuteArguments("");
 
 			builder.Rakefile = "";
 			builder.BuildArgs = "";
@@ -157,7 +157,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPutQuotesAroundBuildFileIfItContainsASpace()
 		{
-			ExpectToExecuteArgumentsWithMonitor(@"--rakefile ""my project.rake""");
+			ExpectToExecuteArguments(@"--rakefile ""my project.rake""");
 
 			builder.Rakefile = "my project.rake";
 			builder.BuildArgs = "";
@@ -171,7 +171,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldEncloseDirectoriesInQuotesIfTheyContainSpaces()
 		{
 			DefaultWorkingDirectory = @"c:\dir with spaces";
-			ExpectToExecuteArgumentsWithMonitor("");
+			ExpectToExecuteArguments("");
 
 			builder.Rakefile = "";
 			builder.BuildArgs = "";
@@ -185,9 +185,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldRunWithMultipleTargetsSpecified()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
 			
-			builder.Targets = new string[3] { "targeta", "targetb", "targetc" };
+			builder.Targets = new string[] { "targeta", "targetb", "targetc" };
 			builder.Run(result);
 			
 			ProcessInfo info = (ProcessInfo)constraint.Parameter;
@@ -232,14 +232,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			CheckBaseDirectory(IntegrationResultForWorkingDirectoryTest(), @"c:\my\base\directory");
 		}
 
-		private void CheckBaseDirectory(IntegrationResult result, string expectedBaseDirectory)
+		private void CheckBaseDirectory(IIntegrationResult integrationResult, string expectedBaseDirectory)
 		{
 			ProcessResult returnVal = SuccessfulProcessResult();
 			CollectingConstraint constraint = new CollectingConstraint();
-			object[] arr = new object[2];
+			object[] arr = new object[1];
 			arr[0] = constraint;
 			mockProcessExecutor.ExpectAndReturn("Execute", returnVal, arr);
-			builder.Run(result);
+			builder.Run(integrationResult);
 			ProcessInfo info = (ProcessInfo)constraint.Parameter;
 			Assert.AreEqual(expectedBaseDirectory, info.WorkingDirectory);
 		}
@@ -281,7 +281,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void SilentOptionShouldAddSilentArgument()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
 			builder.Silent = true;
 			builder.Run(result);
 			ProcessInfo info = (ProcessInfo)constraint.Parameter;
@@ -292,7 +292,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void SilentAndTraceOptionShouldAddSilentAndTraceArgument()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
 			builder.Silent = true;
 			builder.Trace = true;
 			builder.Run(result);
@@ -304,7 +304,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void QuietOptionShouldAddQuietArgument()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
 			builder.Quiet = true;
 			builder.Run(result);
 			ProcessInfo info = (ProcessInfo)constraint.Parameter;
@@ -315,7 +315,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void QuietAndTraceOptionShouldAddQuietAndTraceArgument()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
 			builder.Quiet = true;
 			builder.Trace = true;
 			builder.Run(result);
@@ -327,7 +327,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void TraceOptionShouldAddTraceArgument()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
 			builder.Trace = true;
 			builder.Run(result);
 			ProcessInfo info = (ProcessInfo)constraint.Parameter;
@@ -338,7 +338,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void SilentAndQuietOptionShouldOnlyAddSilentArgument()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
 			builder.Silent = true;
 			builder.Quiet = true;
 			builder.Run(result);

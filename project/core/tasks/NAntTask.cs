@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             result.BuildProgressInformation.SignalStartRunTask ( 
                 string.Format("Executing Nant :BuildFile: {0} Targets: {1} ", BuildFile, string.Join(", ", Targets)));
 
-            ProcessResult processResult = TryToRun(CreateProcessInfo(result), result.ProjectName);
+            ProcessResult processResult = TryToRun(CreateProcessInfo(result));
 
 			result.AddTaskResult(new ProcessTaskResult(processResult));
 			// is this right?? or should this break the build

@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	public class MsBuildTask : BaseExecutableTask
 	{
 		public const string defaultExecutable = @"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe";
-        public const string DefaultLogger = "";
+		public const string DefaultLogger = "";
 		public const string LogFilename = "msbuild-results.xml";
 		public const int DefaultTimeout = 600;
 
@@ -85,11 +85,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		}
 
 		public override void Run(IIntegrationResult result)
-		{                                   
-            result.BuildProgressInformation.SignalStartRunTask(            
-                    string.Format("Executing MSBuild :BuildFile: {0}", ProjectFile));
+		{
+			result.BuildProgressInformation.SignalStartRunTask(
+				string.Format("Executing MSBuild :BuildFile: {0}", ProjectFile));
 
-			ProcessResult processResult = executor.Execute(CreateProcessInfo(result), result.ProjectName);
+			ProcessResult processResult = executor.Execute(CreateProcessInfo(result));
 
 			string buildOutputFile = MsBuildOutputFile(result);
 			if (File.Exists(buildOutputFile))
@@ -124,19 +124,19 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.Append("/l:");
-            if (Logger == DefaultLogger)
-            {                
-                builder.Append(StringUtil.AutoDoubleQuoteString(
-                               string.Format("{0}{1}ThoughtWorks.CruiseControl.MsBuild.dll",
-                                   Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                                   Path.DirectorySeparatorChar)));
-            }
-            else
-            {
-                builder.Append(CheckAndQuoteLoggerSetting(Logger));
-            }
+			if (Logger == DefaultLogger)
+			{
+				builder.Append(StringUtil.AutoDoubleQuoteString(
+								string.Format("{0}{1}ThoughtWorks.CruiseControl.MsBuild.dll",
+									Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+									Path.DirectorySeparatorChar)));
+			}
+			else
+			{
+				builder.Append(CheckAndQuoteLoggerSetting(Logger));
+			}
 
-            builder.Append(";");
+			builder.Append(";");
 			builder.Append(StringUtil.AutoDoubleQuoteString(MsBuildOutputFile(result)));
 			return builder.ToString();
 		}
@@ -165,11 +165,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 						Log.Error("The <logger> setting contains multiple spaces. Only the assembly name is allowed to contain spaces.");
 						throw new CruiseControlException("The <logger> setting contains multiple spaces. Only the assembly name is allowed to contain spaces.");
 					}
-					else
-					{
-						b.Append(StringUtil.AutoDoubleQuoteString(part));
-						spaceFound = true;
-					}
+					
+					b.Append(StringUtil.AutoDoubleQuoteString(part));
+					spaceFound = true;
 				}
 				else
 				{

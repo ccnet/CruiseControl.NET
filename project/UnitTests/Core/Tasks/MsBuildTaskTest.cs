@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ExecuteSpecifiedProject()
 		{
 			string args = "/nologo /t:target1;target2 " + IntegrationProperties() + " /p:Configuration=Release myproject.sln" + DefaultLogger();
-			ExpectToExecuteArgumentsWithMonitor(args);
+			ExpectToExecuteArguments(args);
 
 			task.ProjectFile = "myproject.sln";
 			task.Targets = "target1;target2";
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void AddQuotesAroundProjectsWithSpacesAndHandleNoSpecifiedTargets()
 		{
-			ExpectToExecuteArgumentsWithMonitor(@"/nologo " + IntegrationProperties() + @" ""my project.proj""" + DefaultLogger());
+			ExpectToExecuteArguments(@"/nologo " + IntegrationProperties() + @" ""my project.proj""" + DefaultLogger());
 			task.ProjectFile = "my project.proj";
 			task.Run(result);
 		}
@@ -61,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void AddQuotesAroundTargetsWithSpaces()
 		{
-			ExpectToExecuteArgumentsWithMonitor(@"/nologo /t:first;""next task"" " + IntegrationProperties() + DefaultLogger());
+			ExpectToExecuteArguments(@"/nologo /t:first;""next task"" " + IntegrationProperties() + DefaultLogger());
 			task.Targets = "first;next task";
 			task.Run(result);
 		}
@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			// Tests that look for the correct arguments will fail if the following properties
 			// are not sorted alphabetically.
             string expectedProperties = string.Format(@"/p:CCNetArtifactDirectory={2};CCNetBuildCondition=IfModificationExists;CCNetBuildDate={0};CCNetBuildTime={1};CCNetFailureUsers=;CCNetIntegrationStatus=Success;CCNetLabel=""My Label"";CCNetLastIntegrationStatus=Success;CCNetListenerFile={3};CCNetNumericLabel=0;CCNetProject=test;CCNetRequestSource=foo;CCNetWorkingDirectory=c:\source\", testDateString, testTimeString, StringUtil.AutoDoubleQuoteString(result.ArtifactDirectory), StringUtil.AutoDoubleQuoteString(Path.GetTempPath() + "test_ListenFile.xml"));
-            ExpectToExecuteArgumentsWithMonitor(@"/nologo " + expectedProperties + DefaultLogger());
+            ExpectToExecuteArguments(@"/nologo " + expectedProperties + DefaultLogger());
 			result.Label = @"My Label";
 			task.Run(result);
 		}
@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void DoNotAddQuotesAroundBuildArgs()
 		{
-			ExpectToExecuteArgumentsWithMonitor(@"/nologo " + IntegrationProperties() + @" /noconsolelogger /p:Configuration=Debug" + DefaultLogger());
+			ExpectToExecuteArguments(@"/nologo " + IntegrationProperties() + @" /noconsolelogger /p:Configuration=Debug" + DefaultLogger());
 			task.BuildArgs = "/noconsolelogger /p:Configuration=Debug";
 			task.Run(result);			
 		}
@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			ProcessInfo info = NewProcessInfo("/nologo " + IntegrationProperties() + DefaultLogger());
 			info.WorkingDirectory = Path.Combine(DefaultWorkingDirectory, "src");
-			ExpectToExecuteWithProjectName(info, "test");
+			ExpectToExecute(info);
 			task.WorkingDirectory = "src";
 			task.Run(result);
 		}
@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[ExpectedException(typeof(BuilderException))]
 		public void TimedOutExecutionShouldCauseBuilderException()
 		{
-			ExpectToExecuteAndReturnWithProjectName(TimedOutProcessResult(), "test");
+			ExpectToExecuteAndReturn(TimedOutProcessResult());
 			task.Run(result);
 		}
 
@@ -109,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			try
 			{
-				ExpectToExecuteAndReturnWithProjectName(TimedOutProcessResult(), "test");
+				ExpectToExecuteAndReturn(TimedOutProcessResult());
 				task.Run(result);
 			}
 			catch (BuilderException)
@@ -122,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldAutomaticallyMergeTheBuildOutputFile()
 		{
 			TempFileUtil.CreateTempXmlFile(logfile, "<output/>");
-			ExpectToExecuteAndReturnWithProjectName(SuccessfulProcessResult(), "test");
+			ExpectToExecuteAndReturn(SuccessfulProcessResult());
 			task.Run(result);
 			Assert.AreEqual(2, result.TaskResults.Count);
 			Assert.AreEqual("<output/>" + ProcessResultOutput, result.TaskOutput);
@@ -133,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldFailOnFailedProcessResult()
 		{
 			TempFileUtil.CreateTempXmlFile(logfile, "<output/>");
-			ExpectToExecuteAndReturnWithProjectName(FailedProcessResult(), "test");
+			ExpectToExecuteAndReturn(FailedProcessResult());
 			task.Run(result);
 			Assert.AreEqual(2, result.TaskResults.Count);
 			Assert.AreEqual("<output/>" + ProcessResultOutput, result.TaskOutput);
@@ -143,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void PopulateFromConfiguration()
 		{
-			string xml = @"<msbuild>
+			const string xml = @"<msbuild>
 	<executable>C:\WINDOWS\Microsoft.NET\Framework\v2.0.50215\MSBuild.exe</executable>
 	<workingDirectory>C:\dev\ccnet</workingDirectory>
 	<projectFile>CCNet.sln</projectFile>

@@ -10,9 +10,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	[ReflectorType("devenv")]
 	public class DevenvTask : ITask
 	{
-        public const string VS2008_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\9.0";
-        public const string VS2005_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\8.0";
-        public const string VS2003_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\7.1";
+		public const string VS2008_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\9.0";
+		public const string VS2005_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\8.0";
+		public const string VS2003_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\7.1";
 		public const string VS2002_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\7.0";
 		public const string VS_REGISTRY_KEY = @"InstallDir";
 		public const string DEVENV_EXE = "devenv.com";
@@ -75,41 +75,41 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			set { executable = value; }
 		}
 
-        /// <summary>
-        /// Get the name of the Visual Studio executable for the highest version installed on this machine.
-        /// </summary>
-        /// <returns>The fully-qualified pathname of the executable.</returns>
+		/// <summary>
+		/// Get the name of the Visual Studio executable for the highest version installed on this machine.
+		/// </summary>
+		/// <returns>The fully-qualified pathname of the executable.</returns>
 		private string ReadDevenvExecutableFromRegistry()
 		{
 			// If null, scan for any version.
-        	if (Version == null)
-        		return Path.Combine(ScanForRegistryForVersion(), DEVENV_EXE);
+			if (Version == null)
+				return Path.Combine(ScanForRegistryForVersion(), DEVENV_EXE);
 
 			string path;
 
 			switch (Version)
-        	{
-        		case "VS2008":
-        		case "9.0":
-        			path = registry.GetExpectedLocalMachineSubKeyValue(VS2008_REGISTRY_PATH, VS_REGISTRY_KEY);
-        			break;
-        		case "VS2005":
-        		case "8.0":
-        			path = registry.GetExpectedLocalMachineSubKeyValue(VS2005_REGISTRY_PATH, VS_REGISTRY_KEY);
-        			break;
-        		case "VS2003":
-        		case "7.1":
-        			path = registry.GetExpectedLocalMachineSubKeyValue(VS2003_REGISTRY_PATH, VS_REGISTRY_KEY);
-        			break;
-        		case "VS2002":
-        		case "7.0":
-        			path = registry.GetExpectedLocalMachineSubKeyValue(VS2002_REGISTRY_PATH, VS_REGISTRY_KEY);
-        			break;
-        		default:
-        			throw new Exception("Unknown version of Visual Studio.");
-        	}
+			{
+				case "VS2008":
+				case "9.0":
+					path = registry.GetExpectedLocalMachineSubKeyValue(VS2008_REGISTRY_PATH, VS_REGISTRY_KEY);
+					break;
+				case "VS2005":
+				case "8.0":
+					path = registry.GetExpectedLocalMachineSubKeyValue(VS2005_REGISTRY_PATH, VS_REGISTRY_KEY);
+					break;
+				case "VS2003":
+				case "7.1":
+					path = registry.GetExpectedLocalMachineSubKeyValue(VS2003_REGISTRY_PATH, VS_REGISTRY_KEY);
+					break;
+				case "VS2002":
+				case "7.0":
+					path = registry.GetExpectedLocalMachineSubKeyValue(VS2002_REGISTRY_PATH, VS_REGISTRY_KEY);
+					break;
+				default:
+					throw new Exception("Unknown version of Visual Studio.");
+			}
 
-        	return Path.Combine(path, DEVENV_EXE);
+			return Path.Combine(path, DEVENV_EXE);
 		}
 
 		private string ScanForRegistryForVersion()
@@ -141,9 +141,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		public virtual void Run(IIntegrationResult result)
 		{
-            result.BuildProgressInformation.SignalStartRunTask(string.Format("Executing Devenv :{0}", GetArguments()));
-                                                                  
-			ProcessResult processResult = TryToRun(result, result.ProjectName);
+			result.BuildProgressInformation.SignalStartRunTask(string.Format("Executing Devenv :{0}", GetArguments()));
+			ProcessResult processResult = TryToRun(result);
 			result.AddTaskResult(new DevenvTaskResult(processResult));
 			Log.Info("Devenv build complete.  Status: " + result.Status);
 
@@ -151,22 +150,22 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				throw new BuilderException(this, string.Format("Devenv process timed out after {0} seconds.", BuildTimeoutSeconds));
 		}
 
-        private ProcessResult TryToRun(IIntegrationResult result, string projectName)
+		private ProcessResult TryToRun(IIntegrationResult result)
 		{
-        	ProcessInfo processInfo = new ProcessInfo(Executable, GetArguments(), result.WorkingDirectory);
+			ProcessInfo processInfo = new ProcessInfo(Executable, GetArguments(), result.WorkingDirectory);
 			processInfo.TimeOut = BuildTimeoutSeconds * 1000;
-            IDictionary properties = result.IntegrationProperties;
+			IDictionary properties = result.IntegrationProperties;
 
-            // Pass the integration environment variables to devenv.
-            foreach (string key in properties.Keys)
-            {
+			// Pass the integration environment variables to devenv.
+			foreach (string key in properties.Keys)
+			{
 				processInfo.EnvironmentVariables[key] = StringUtil.IntegrationPropertyToString(properties[key]);
-            }
+			}
 
 			Log.Info(string.Format("Starting build: {0} {1}", processInfo.FileName, processInfo.Arguments));
 			try
 			{
-				return executor.Execute(processInfo, projectName);
+				return executor.Execute(processInfo);
 			}
 			catch (IOException ex)
 			{

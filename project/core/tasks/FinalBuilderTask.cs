@@ -126,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			try
 			{
-				return _executor.Execute(info, projectName);
+				return _executor.Execute(info);
 			}
 			catch (Exception e)
 			{

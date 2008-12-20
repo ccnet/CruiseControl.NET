@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void PopulateFromReflector()
 		{
-			string xml = @"
+			const string xml = @"
     <nant>
     	<executable>NAnt.exe</executable>
     	<baseDirectory>C:\</baseDirectory>
@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void PopulateFromConfigurationUsingOnlyRequiredElementsAndCheckDefaultValues()
 		{
-			string xml = @"<nant />";
+			const string xml = @"<nant />";
 
 			NetReflector.Read(xml, builder);
 			Assert.AreEqual("", builder.ConfiguredBaseDirectory);
@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldSetSuccessfulStatusAndBuildOutputAsAResultOfASuccessfulBuild()
 		{
-			ExpectToExecuteAndReturnWithProjectName(SuccessfulProcessResult(), "test");
+			ExpectToExecuteAndReturn(SuccessfulProcessResult());
 			
 			builder.Run(result);
 			
@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldSetFailedStatusAndBuildOutputAsAResultOfFailedBuild()
 		{
-			ExpectToExecuteAndReturnWithProjectName(FailedProcessResult(), "test");
+			ExpectToExecuteAndReturn(FailedProcessResult());
 			
 			builder.Run(result);
 			
@@ -100,14 +100,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
-			ExpectToExecuteAndReturnWithProjectName(TimedOutProcessResult(), "test");
+			ExpectToExecuteAndReturn(TimedOutProcessResult());
 			builder.Run(result);
 		}
 		
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessThrowsException()
 		{
-			ExpectToExecuteAndThrowWithProjectName();
+			ExpectToExecuteAndThrow();
 			builder.Run(result);
 		}
 
@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs " + IntegrationProperties(@"C:\temp", @"C:\temp") + " target1 target2";
 			ProcessInfo info = NewProcessInfo(args);
 			info.TimeOut = 2000;
-			ExpectToExecuteWithProjectName(info, "test");
+			ExpectToExecute(info);
 			
 			result.Label = "1.0";
 			result.WorkingDirectory = @"C:\temp";
@@ -134,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPassAppropriateDefaultPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			ExpectToExecuteArgumentsWithMonitor(@"-nologo -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"c:\source", @"c:\source"));
+			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"c:\source", @"c:\source"));
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
 			result.ArtifactDirectory = DefaultWorkingDirectory;
 			result.WorkingDirectory = DefaultWorkingDirectory;
@@ -144,7 +144,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPutQuotesAroundBuildFileIfItContainsASpace()
 		{
-			ExpectToExecuteArgumentsWithMonitor(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"c:\source", @"c:\source"));
+			ExpectToExecuteArguments(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"c:\source", @"c:\source"));
 
 			builder.BuildFile = "my project.build";
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
@@ -157,7 +157,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldEncloseDirectoriesInQuotesIfTheyContainSpaces()
 		{
 			DefaultWorkingDirectory = @"c:\dir with spaces";
-			ExpectToExecuteArgumentsWithMonitor(@"-nologo -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"c:\dir with spaces", @"c:\dir with spaces"));
+			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"c:\dir with spaces", @"c:\dir with spaces"));
 
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
 			result.ArtifactDirectory = DefaultWorkingDirectory;
@@ -203,14 +203,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			CheckBaseDirectory(IntegrationResultForWorkingDirectoryTest(), @"c:\my\base\directory");
 		}
 		
-		private void CheckBaseDirectory(IntegrationResult result, string expectedBaseDirectory)
+		private void CheckBaseDirectory(IIntegrationResult integrationResult, string expectedBaseDirectory)
 		{
 			ProcessResult returnVal = SuccessfulProcessResult();
 			CollectingConstraint constraint = new CollectingConstraint();
-			object[] arr = new object[2];
-			arr[0] = constraint;
-			mockProcessExecutor.ExpectAndReturn("Execute", returnVal, arr);
-			builder.Run(result);
+			mockProcessExecutor.ExpectAndReturn("Execute", returnVal, new object[] { constraint });
+			builder.Run(integrationResult);
 			ProcessInfo info = (ProcessInfo)constraint.Parameter;
 			Assert.AreEqual(expectedBaseDirectory, info.WorkingDirectory);
 		}

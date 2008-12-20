@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.IO;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -35,11 +34,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return info;
 		}
 
-		protected ProcessResult TryToRun(ProcessInfo info, string projectName)
+		protected ProcessResult TryToRun(ProcessInfo info)
 		{
 			try
 			{
-				return executor.Execute(info, projectName);
+				return executor.Execute(info);
 			}
 			catch (IOException e)
 			{

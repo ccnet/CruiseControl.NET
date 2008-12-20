@@ -19,15 +19,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public virtual ProcessResult Execute(ProcessInfo processInfo)
 		{
 			string projectName = Thread.CurrentThread.Name;
-			using (p = new RunnableProcess(processInfo, projectName))
-			{
-				return p.Run();
-			}
-		}
-
-		// BuildTasks receive a ProcessMonitor to monitor their build process
-		public virtual ProcessResult Execute(ProcessInfo processInfo, string projectName)
-		{
 			ProcessMonitor processMonitor = ProcessMonitor.ForProject(projectName);
 			using (p = new RunnableProcess(processInfo, projectName))
 			{

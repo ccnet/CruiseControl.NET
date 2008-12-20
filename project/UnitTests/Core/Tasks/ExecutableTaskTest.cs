@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void PopulateFromReflector()
 		{
-			string xml = @"
+			const string xml = @"
     <exec>
     	<executable>mybatchfile.bat</executable>
     	<baseDirectory>C:\</baseDirectory>
@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void PopulateFromConfigurationUsingOnlyRequiredElementsAndCheckDefaultValues()
 		{
-			string xml = @"
+			const string xml = @"
     <exec>
     	<executable>mybatchfile.bat</executable>
     </exec>";
@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldSetSuccessfulStatusAndBuildOutputAsAResultOfASuccessfulBuild()
 		{
-			ExpectToExecuteArgumentsWithMonitor(DefaultArgs);
+			ExpectToExecuteArguments(DefaultArgs);
 
 			IIntegrationResult result = IntegrationResult();
 			task.Run(result);
@@ -97,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldSetFailedStatusAndBuildOutputAsAResultOfFailedBuild()
 		{
-			ExpectToExecuteAndReturnWithProjectName(FailedProcessResult(), "test");
+			ExpectToExecuteAndReturn(FailedProcessResult());
 
 			IIntegrationResult result = IntegrationResult();
 			task.Run(result);
@@ -115,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessThrowsException()
 		{
-			ExpectToExecuteAndThrowWithProjectName();
+			ExpectToExecuteAndThrow();
 
 			task.Run(IntegrationResult());
 			Verify();
@@ -125,7 +125,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] {constraint, "test" });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] {constraint });
 
 			IntegrationResult result = (IntegrationResult) IntegrationResult();
 			result.Label = "1.0";
@@ -190,7 +190,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		private void CheckBaseDirectory(IIntegrationResult result, string expectedBaseDirectory)
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] {constraint, "test" });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] {constraint });
 
 			task.Run(result);
 
@@ -205,7 +205,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             ExecutableTask xmlTestTask = new ExecutableTask((ProcessExecutor)mockProcessExecutor.MockInstance);
             xmlTestTask.Executable = DefaultExecutable;
             xmlTestTask.BuildArgs = DefaultArgs;
-            ExpectToExecuteArgumentsWithMonitor(DefaultArgs);
+            ExpectToExecuteArguments(DefaultArgs);
 
             IIntegrationResult result = IntegrationResult();
             xmlTestTask.Run(result);
@@ -241,7 +241,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldPassSuccessExitCodesToProcessExecutor()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint });
 
 			IntegrationResult result = (IntegrationResult)IntegrationResult();
 			result.Label = "1.0";

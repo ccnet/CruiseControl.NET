@@ -58,26 +58,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new IsAnything());
 		}
 
-		protected void ExpectToExecuteWithProjectName(ProcessInfo processInfo, string projectName)
-		{
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { processInfo, projectName });
-		}
-
-		protected void ExpectToExecuteAndThrowWithProjectName()
-		{
-			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[] { new IsAnything(), "test" });
-		}
-
-		protected void ExpectToExecuteAndReturnWithProjectName(ProcessResult result, string projectName)
-		{
-			mockProcessExecutor.ExpectAndReturn("Execute", result, new object[] { new IsAnything(), projectName });
-		}
-
-		protected void ExpectToExecuteArgumentsWithMonitor(string args)
-		{
-			ExpectToExecuteWithProjectName(NewProcessInfo(args), "test");
-		}
-
 		protected virtual IIntegrationResult IntegrationResult()
 		{
 			return IntegrationResult(testDate);

@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void LoadWithSingleAssemblyNunitPath()
 		{
-			string xml = @"<nunit>
+			const string xml = @"<nunit>
 	<path>d:\temp\nunit-console.exe</path>
 	<assemblies>
 		<assembly>foo.dll</assembly>
@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 	<outputfile>c:\testfile.xml</outputfile>
 	<timeout>50</timeout>
 </nunit>";
-			task = NetReflector.Read(xml) as NUnitTask;
+			task = (NUnitTask) NetReflector.Read(xml);
 			Assert.AreEqual(@"d:\temp\nunit-console.exe", task.NUnitPath);
 			Assert.AreEqual(1, task.Assemblies.Length);
 			Assert.AreEqual("foo.dll", task.Assemblies[0]);
@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void LoadWithMultipleAssemblies()
 		{
-			string xml = @"<nunit>
+			const string xml = @"<nunit>
 							 <path>d:\temp\nunit-console.exe</path>
 				             <assemblies>
 			                     <assembly>foo.dll</assembly>
@@ -42,14 +42,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 							</assemblies>
 						 </nunit>";
 
-			task = NetReflector.Read(xml) as NUnitTask;
+			task = (NUnitTask) NetReflector.Read(xml);
 			AssertEqualArrays(new string[] {"foo.dll", "bar.dll"}, task.Assemblies);
 		}
 
         [Test]
         public void LoadWithExcludedCategories()
         {
-            string xml = @"<nunit>
+            const string xml = @"<nunit>
 							 <path>d:\temp\nunit-console.exe</path>
 				             <assemblies>
 			                     <assembly>foo.dll</assembly>
@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			                </excludedCategories>
 						 </nunit>";
 
-            task = NetReflector.Read(xml) as NUnitTask;
+            task = (NUnitTask) NetReflector.Read(xml);
             Assert.AreEqual(3, task.ExcludedCategories.Length);
         }
 
@@ -70,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void HandleNUnitTaskFailure()
 		{
 			CreateProcessExecutorMock(NUnitTask.DefaultPath);
-			ExpectToExecuteAndReturnWithProjectName(SuccessfulProcessResult(), "test");
+			ExpectToExecuteAndReturn(SuccessfulProcessResult());
 			IIntegrationResult result = IntegrationResult();
 			result.ArtifactDirectory = Path.GetTempPath();
 

@@ -4,7 +4,6 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
@@ -95,7 +94,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void StartNonTerminatingProcessAndAbortThreadShouldKillProcess()
 		{
-			Thread thread = new Thread(new ThreadStart(StartProcess));
+			Thread thread = new Thread(StartProcess);
+			thread.Name = "runner thread";
 			thread.Start();
 			WaitForProcessToStart();
 			thread.Abort();
@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
             SystemPath tempDirectory = SystemPath.UniqueTempPath().CreateDirectory();
             try
             {
-                string content = "yooo ез";
+                const string content = "yooo ез";
                 SystemPath tempFile = tempDirectory.CreateTextFile("test.txt", content);
                 ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C type \"" + tempFile + "\"");
                 processInfo.StreamEncoding = Encoding.UTF8;
