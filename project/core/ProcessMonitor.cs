@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
-using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core
@@ -13,26 +14,21 @@ namespace ThoughtWorks.CruiseControl.Core
 	
 	public class ProcessMonitor
 	{
-		private static readonly IDictionary processMonitors = Hashtable.Synchronized(new Hashtable());
-		private Process actProcess;
+		private static readonly IDictionary<string, ProcessMonitor> processMonitors = new Dictionary<string,ProcessMonitor>();
 		
 		// Return an existing Processmonitor or create a new one
+		[MethodImpl(MethodImplOptions.Synchronized)]
 		public static ProcessMonitor GetProcessMonitorByProject(string projectName)
 		{
-			ProcessMonitor pc = (ProcessMonitor)processMonitors[projectName];
-			
-			// Double-checked locking pattern (better performance)
-			if(null == pc)
+			if (!processMonitors.ContainsKey(projectName))
 			{
-				lock (typeof(ProcessMonitor))
-				{
-					if (null == pc) pc = new ProcessMonitor();
-				}
-				processMonitors.Add(projectName, pc);
+				processMonitors.Add(projectName, new ProcessMonitor());
 			}
-			return  pc;
+			return processMonitors[projectName];
 		}
-		
+
+		private Process actProcess;
+
 		public void MonitorNewProcess(Process p)
 		{
 			actProcess = p;
