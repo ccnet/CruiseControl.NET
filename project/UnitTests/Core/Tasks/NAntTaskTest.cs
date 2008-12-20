@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldSetSuccessfulStatusAndBuildOutputAsAResultOfASuccessfulBuild()
 		{
-			ExpectToExecuteAndReturnWithMonitor(SuccessfulProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
+			ExpectToExecuteAndReturnWithProjectName(SuccessfulProcessResult(), "test");
 			
 			builder.Run(result);
 			
@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldSetFailedStatusAndBuildOutputAsAResultOfFailedBuild()
 		{
-			ExpectToExecuteAndReturnWithMonitor(FailedProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
+			ExpectToExecuteAndReturnWithProjectName(FailedProcessResult(), "test");
 			
 			builder.Run(result);
 			
@@ -100,14 +100,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
-			ExpectToExecuteAndReturnWithMonitor(TimedOutProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
+			ExpectToExecuteAndReturnWithProjectName(TimedOutProcessResult(), "test");
 			builder.Run(result);
 		}
 		
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessThrowsException()
 		{
-			ExpectToExecuteAndThrowWithMonitor();
+			ExpectToExecuteAndThrowWithProjectName();
 			builder.Run(result);
 		}
 
@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs " + IntegrationProperties(@"C:\temp", @"C:\temp") + " target1 target2";
 			ProcessInfo info = NewProcessInfo(args);
 			info.TimeOut = 2000;
-			ExpectToExecuteWithMonitor(info, ProcessMonitor.GetProcessMonitorByProject("test"));
+			ExpectToExecuteWithProjectName(info, "test");
 			
 			result.Label = "1.0";
 			result.WorkingDirectory = @"C:\temp";

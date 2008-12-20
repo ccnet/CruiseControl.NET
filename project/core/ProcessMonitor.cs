@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		
 		// Return an existing Processmonitor or create a new one
 		[MethodImpl(MethodImplOptions.Synchronized)]
-		public static ProcessMonitor GetProcessMonitorByProject(string projectName)
+		public static ProcessMonitor ForProject(string projectName)
 		{
 			if (!processMonitors.ContainsKey(projectName))
 			{

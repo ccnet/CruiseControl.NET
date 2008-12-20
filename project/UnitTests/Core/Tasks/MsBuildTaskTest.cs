@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			ProcessInfo info = NewProcessInfo("/nologo " + IntegrationProperties() + DefaultLogger());
 			info.WorkingDirectory = Path.Combine(DefaultWorkingDirectory, "src");
-			ExpectToExecuteWithMonitor(info, ProcessMonitor.GetProcessMonitorByProject("test"));
+			ExpectToExecuteWithProjectName(info, "test");
 			task.WorkingDirectory = "src";
 			task.Run(result);
 		}
@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[ExpectedException(typeof(BuilderException))]
 		public void TimedOutExecutionShouldCauseBuilderException()
 		{
-			ExpectToExecuteAndReturnWithMonitor(TimedOutProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
+			ExpectToExecuteAndReturnWithProjectName(TimedOutProcessResult(), "test");
 			task.Run(result);
 		}
 
@@ -109,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			try
 			{
-				ExpectToExecuteAndReturnWithMonitor(TimedOutProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
+				ExpectToExecuteAndReturnWithProjectName(TimedOutProcessResult(), "test");
 				task.Run(result);
 			}
 			catch (BuilderException)
@@ -122,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldAutomaticallyMergeTheBuildOutputFile()
 		{
 			TempFileUtil.CreateTempXmlFile(logfile, "<output/>");
-			ExpectToExecuteAndReturnWithMonitor(SuccessfulProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
+			ExpectToExecuteAndReturnWithProjectName(SuccessfulProcessResult(), "test");
 			task.Run(result);
 			Assert.AreEqual(2, result.TaskResults.Count);
 			Assert.AreEqual("<output/>" + ProcessResultOutput, result.TaskOutput);
@@ -133,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldFailOnFailedProcessResult()
 		{
 			TempFileUtil.CreateTempXmlFile(logfile, "<output/>");
-			ExpectToExecuteAndReturnWithMonitor(FailedProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
+			ExpectToExecuteAndReturnWithProjectName(FailedProcessResult(), "test");
 			task.Run(result);
 			Assert.AreEqual(2, result.TaskResults.Count);
 			Assert.AreEqual("<output/>" + ProcessResultOutput, result.TaskOutput);

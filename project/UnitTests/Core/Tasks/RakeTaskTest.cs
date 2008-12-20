@@ -78,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldSetSuccessfulStatusAndBuildOutputAsAResultOfASuccessfulBuild()
 		{
-			ExpectToExecuteAndReturnWithMonitor(SuccessfulProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
+			ExpectToExecuteAndReturnWithProjectName(SuccessfulProcessResult(), "test");
 			
 			builder.Run(result);
 			
@@ -90,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldSetFailedStatusAndBuildOutputAsAResultOfFailedBuild()
 		{
-			ExpectToExecuteAndReturnWithMonitor(FailedProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
+			ExpectToExecuteAndReturnWithProjectName(FailedProcessResult(), "test");
 			
 			builder.Run(result);
 			
@@ -102,14 +102,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
-			ExpectToExecuteAndReturnWithMonitor(TimedOutProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
+			ExpectToExecuteAndReturnWithProjectName(TimedOutProcessResult(), "test");
 			builder.Run(result);
 		}
 		
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessThrowsException()
 		{
-			ExpectToExecuteAndThrowWithMonitor();
+			ExpectToExecuteAndThrowWithProjectName();
 			builder.Run(result);
 		}
 
@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
 
 			IntegrationResult result = (IntegrationResult)IntegrationResult();
 			result.ProjectName = "test";
@@ -185,7 +185,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldRunWithMultipleTargetsSpecified()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
 			
 			builder.Targets = new string[3] { "targeta", "targetb", "targetc" };
 			builder.Run(result);
@@ -281,7 +281,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void SilentOptionShouldAddSilentArgument()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
 			builder.Silent = true;
 			builder.Run(result);
 			ProcessInfo info = (ProcessInfo)constraint.Parameter;
@@ -292,7 +292,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void SilentAndTraceOptionShouldAddSilentAndTraceArgument()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
 			builder.Silent = true;
 			builder.Trace = true;
 			builder.Run(result);
@@ -304,7 +304,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void QuietOptionShouldAddQuietArgument()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
 			builder.Quiet = true;
 			builder.Run(result);
 			ProcessInfo info = (ProcessInfo)constraint.Parameter;
@@ -315,7 +315,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void QuietAndTraceOptionShouldAddQuietAndTraceArgument()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
 			builder.Quiet = true;
 			builder.Trace = true;
 			builder.Run(result);
@@ -327,7 +327,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void TraceOptionShouldAddTraceArgument()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
 			builder.Trace = true;
 			builder.Run(result);
 			ProcessInfo info = (ProcessInfo)constraint.Parameter;
@@ -338,7 +338,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void SilentAndQuietOptionShouldOnlyAddSilentArgument()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
 			builder.Silent = true;
 			builder.Quiet = true;
 			builder.Run(result);

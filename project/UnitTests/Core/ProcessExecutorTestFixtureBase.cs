@@ -58,24 +58,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new IsAnything());
 		}
 
-		protected void ExpectToExecuteWithMonitor(ProcessInfo processInfo, ProcessMonitor monitor)
+		protected void ExpectToExecuteWithProjectName(ProcessInfo processInfo, string projectName)
 		{
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[2] { processInfo, monitor });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { processInfo, projectName });
 		}
 
-		protected void ExpectToExecuteAndThrowWithMonitor()
+		protected void ExpectToExecuteAndThrowWithProjectName()
 		{
-			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[2] { new IsAnything(), ProcessMonitor.GetProcessMonitorByProject("test") });
+			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[] { new IsAnything(), "test" });
 		}
 
-		protected void ExpectToExecuteAndReturnWithMonitor(ProcessResult result, ProcessMonitor monitor)
+		protected void ExpectToExecuteAndReturnWithProjectName(ProcessResult result, string projectName)
 		{
-			mockProcessExecutor.ExpectAndReturn("Execute", result, new object[2] { new IsAnything(), monitor });
+			mockProcessExecutor.ExpectAndReturn("Execute", result, new object[] { new IsAnything(), projectName });
 		}
 
 		protected void ExpectToExecuteArgumentsWithMonitor(string args)
 		{
-			ExpectToExecuteWithMonitor(NewProcessInfo(args), ProcessMonitor.GetProcessMonitorByProject("test"));
+			ExpectToExecuteWithProjectName(NewProcessInfo(args), "test");
 		}
 
 		protected virtual IIntegrationResult IntegrationResult()

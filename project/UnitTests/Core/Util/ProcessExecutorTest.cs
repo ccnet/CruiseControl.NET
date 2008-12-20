@@ -134,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void KillDisposedProcessShouldNotThrowException()
 		{
-			executor.Execute(new ProcessInfo("cmd.exe", "/C echo hello"), new ProcessMonitor());
+			executor.Execute(new ProcessInfo("cmd.exe", "/C echo hello"));
 			executor.Kill();
 		}
 

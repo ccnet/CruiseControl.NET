@@ -35,16 +35,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return info;
 		}
 
-		protected ProcessResult TryToRun(ProcessInfo info, ProcessMonitor processMonitor)
+		protected ProcessResult TryToRun(ProcessInfo info, string projectName)
 		{
 			try
 			{
-				return executor.Execute(info, processMonitor);
+				return executor.Execute(info, projectName);
 			}
 			catch (IOException e)
 			{
 				throw new BuilderException(this, string.Format("Unable to execute: {0} {1}\n{2}", info.FileName, info.Arguments, e), e);
 			}
-		}
+		}		
 	}
 }

@@ -143,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
             result.BuildProgressInformation.SignalStartRunTask(string.Format("Executing Devenv :{0}", GetArguments()));
                                                                   
-			ProcessResult processResult = TryToRun(result, ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
+			ProcessResult processResult = TryToRun(result, result.ProjectName);
 			result.AddTaskResult(new DevenvTaskResult(processResult));
 			Log.Info("Devenv build complete.  Status: " + result.Status);
 
@@ -151,7 +151,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				throw new BuilderException(this, string.Format("Devenv process timed out after {0} seconds.", BuildTimeoutSeconds));
 		}
 
-        private ProcessResult TryToRun(IIntegrationResult result, ProcessMonitor processMonitor)
+        private ProcessResult TryToRun(IIntegrationResult result, string projectName)
 		{
         	ProcessInfo processInfo = new ProcessInfo(Executable, GetArguments(), result.WorkingDirectory);
 			processInfo.TimeOut = BuildTimeoutSeconds * 1000;
@@ -166,7 +166,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			Log.Info(string.Format("Starting build: {0} {1}", processInfo.FileName, processInfo.Arguments));
 			try
 			{
-				return executor.Execute(processInfo, processMonitor);
+				return executor.Execute(processInfo, projectName);
 			}
 			catch (IOException ex)
 			{

@@ -157,7 +157,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		
 		public ProcessMonitor ProcessMonitor
 		{
-			get { return ProcessMonitor.GetProcessMonitorByProject(this.Name); }
+			get { return ProcessMonitor.ForProject(this.Name); }
 		}
 		
 		public IIntegrationResult CurrentResult

@@ -97,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldSetFailedStatusAndBuildOutputAsAResultOfFailedBuild()
 		{
-			ExpectToExecuteAndReturnWithMonitor(FailedProcessResult(), ProcessMonitor.GetProcessMonitorByProject("test"));
+			ExpectToExecuteAndReturnWithProjectName(FailedProcessResult(), "test");
 
 			IIntegrationResult result = IntegrationResult();
 			task.Run(result);
@@ -115,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessThrowsException()
 		{
-			ExpectToExecuteAndThrowWithMonitor();
+			ExpectToExecuteAndThrowWithProjectName();
 
 			task.Run(IntegrationResult());
 			Verify();
@@ -125,7 +125,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] {constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] {constraint, "test" });
 
 			IntegrationResult result = (IntegrationResult) IntegrationResult();
 			result.Label = "1.0";
@@ -190,7 +190,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		private void CheckBaseDirectory(IIntegrationResult result, string expectedBaseDirectory)
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] {constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] {constraint, "test" });
 
 			task.Run(result);
 
@@ -241,7 +241,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldPassSuccessExitCodesToProcessExecutor()
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, ProcessMonitor.GetProcessMonitorByProject("test") });
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, "test" });
 
 			IntegrationResult result = (IntegrationResult)IntegrationResult();
 			result.Label = "1.0";
