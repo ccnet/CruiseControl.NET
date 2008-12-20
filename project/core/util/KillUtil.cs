@@ -11,6 +11,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// </summary>
         public const string WIN2K_SUPPORT_TOOLS_DIR = @"C:\\Program Files\\Support Tools";
 
+		// TODO: Come back here some day when MS fixed the Process.Kill() bug (see CCNET-815)
+		// process.Kill();
         public static void KillPid(int pid)
         {
             Process process = new Process();

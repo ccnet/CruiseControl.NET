@@ -81,16 +81,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             List<string> directories = new List<string>();
             directories.Add(TrunkUrl);
 
-            if (CheckExternals)
-            {
-            	List<string> externals = ParseExternalsDirectories(Execute(PropGetProcessInfo(to)));
-            	foreach(string external in externals)
-            	{
-					if (!directories.Contains(external))
-						directories.Add(external);
-            	}
-            }
-
+			if (CheckExternals)
+			{
+				List<string> externals = ParseExternalsDirectories(Execute(PropGetProcessInfo(to)));
+				foreach (string external in externals)
+				{
+					if (!directories.Contains(external)) directories.Add(external);
+				}
+			}
+			
             foreach (string directory in directories)
             {
                 Log.Debug(directory);
@@ -102,19 +101,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 }
             }
 
-            mods = modifications.ToArray();
-
-            if (UrlBuilder != null)
-            {
-                UrlBuilder.SetupModification(mods);
-            }
+			mods = modifications.ToArray();
+			if (UrlBuilder != null)
+			{
+				UrlBuilder.SetupModification(mods);
+			}
 			FillIssueUrl(mods);
 
-            return mods;
+			return mods;
+		}
 
-        }
-
-        public override void LabelSourceControl(IIntegrationResult result)
+		public override void LabelSourceControl(IIntegrationResult result)
         {
             if (TagOnSuccess && result.Succeeded)
             {
