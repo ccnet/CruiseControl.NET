@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : SourceAnywhere Standalone Source Control Block</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : SourceAnywhere Standalone Source Control Block
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 24, 2008 by <font color="#0050B2">dcameron</font>.
+				    </div>
+
+				    <p>Because the plugin is developed using SourceAnywhere Standalone SDK, it is available as a standalone plugin at the <a href="http://www.dynamsoft.com/Downloads/SAWStandalone_Download.aspx">Dynamsoft SourceAnywhere Standalone Download Site</a>.</p>
+
+<h3><a name="SourceAnywhereStandaloneSourceControlBlock-SourceAnywhereStandalone%28SAWS%29ConfigurationExamples"></a>SourceAnywhere Standalone (SAWS) Configuration Examples</h3>
+
+<p>Minimal example:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"saws"</span>&gt;</span>
+	<span class="code-tag">&lt;server&gt;</span>my_sourceanywhere_standalone_server<span class="code-tag">&lt;/server&gt;</span>
+	<span class="code-tag">&lt;project&gt;</span>$/test<span class="code-tag">&lt;/project&gt;</span>
+	<span class="code-tag">&lt;workingDirectory&gt;</span>D:\TestFolder\ccnet<span class="code-tag">&lt;/workingDirectory&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+<p>Full example:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"saws"</span> autoGetSource=<span class="code-quote">"true"</span> applyLabel=<span class="code-quote">"true"</span>&gt;</span>
+	<span class="code-tag">&lt;server&gt;</span>demo.dynamsoft.com<span class="code-tag">&lt;/server&gt;</span>
+	<span class="code-tag">&lt;port&gt;</span>7777<span class="code-tag">&lt;/port&gt;</span>
+	<span class="code-tag">&lt;repository&gt;</span>default<span class="code-tag">&lt;/repository&gt;</span>
+	<span class="code-tag">&lt;project&gt;</span>$/test<span class="code-tag">&lt;/project&gt;</span>
+	<span class="code-tag">&lt;username&gt;</span>dynamsoft1<span class="code-tag">&lt;/username&gt;</span>
+	<span class="code-tag">&lt;password&gt;</span>saw<span class="code-tag">&lt;/password&gt;</span>
+	<span class="code-tag">&lt;workingDirectory&gt;</span>D:\TestFolder\ccnet<span class="code-tag">&lt;/workingDirectory&gt;</span>
+	<span class="code-tag">&lt;cleanCopy&gt;</span>false<span class="code-tag">&lt;/cleanCopy&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+
+<h3><a name="SourceAnywhereStandaloneSourceControlBlock-ConfigurationElements%3A"></a>Configuration Elements:</h3>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> server </td>
+<td class='confluenceTd'> The domain name or IP address of a running SourceAnywhere Standalone server or cache server. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> null </td>
+</tr>
+<tr>
+<td class='confluenceTd'> port </td>
+<td class='confluenceTd'> The  port of a running SourceAnywhere Standalone server or cache  server. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> null </td>
+</tr>
+<tr>
+<td class='confluenceTd'> repository </td>
+<td class='confluenceTd'> The  repository you want to log into. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> null </td>
+</tr>
+<tr>
+<td class='confluenceTd'> project </td>
+<td class='confluenceTd'> A  valid project in the current SourceAnywhere Standalone repository. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> null </td>
+</tr>
+<tr>
+<td class='confluenceTd'> username </td>
+<td class='confluenceTd'> Username  that CCNet should use to authenticate with SourceAnywhere  Standalone Server. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> null </td>
+</tr>
+<tr>
+<td class='confluenceTd'> password </td>
+<td class='confluenceTd'> Password  for the SourceAnywhere Standalone user. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> null </td>
+</tr>
+<tr>
+<td class='confluenceTd'> autoGetSource </td>
+<td class='confluenceTd'> Specifies  if CCNet should automatically retrieve the latest version of the  source from the repository. </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> applyLabel </td>
+<td class='confluenceTd'> Specifies  if CCNet should apply the build label to the repository. </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> workingDirectory </td>
+<td class='confluenceTd'> The  root folder where the latest source will be retrieved from the  Source Server. This path can either be absolute or it can be  relative to the CCNet project working directory. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> CCNet  project working directory </td>
+</tr>
+<tr>
+<td class='confluenceTd'> cleanCopy </td>
+<td class='confluenceTd'> Determines  if the working directory and all its contents should be deleted  before the latest version of the source is downloaded. </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false </td>
+</tr>
+</tbody></table>
+
+<h3><a name="SourceAnywhereStandaloneSourceControlBlock-InstallingthePlugin"></a>Installing the Plug-in</h3>
+
+<p>To install the plug-in, please follow these steps:</p>
+<ol>
+	<li>Install SourceAnywhere Standalone COM SDK. Click <a href="http://www.dynamsoft.com/Downloads/SAWStandalone_Download.aspx">here</a> to download it.</li>
+	<li>Click <a href="http://www.dynamsoft.com/Downloads/DownloadLog.aspx?server=1&amp;path=sourceanywhere/SAWSPlugin&amp;product=ccnet.saws.plugin2.2.zip">here</a> to download the CruiseControl.NET SourceAnywhere Standalone Plug-in.</li>
+	<li>Unzip the plug-in into the CruiseControl.NET server directory.</li>
+	<li>Edit the <a href="Configuring the Server.html" title="Configuring the Server">ccnet.config</a> file in the CruiseControl.NET server directory appropriately.</li>
+</ol>
+
+
+<h3><a name="SourceAnywhereStandaloneSourceControlBlock-Getsupported"></a>Get supported</h3>
+
+<p>If you have any questions or comments during using the CruiseControl.NET SourceAnywhere Standalone Plug-in, Please feel free to contact us:</p>
+
+<p><a href="http://www.dynamsoft.com/Support/SAWStandalone_Support.aspx">http://www.dynamsoft.com/Support/SAWStandalone_Support.aspx</a></p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Dec 13, 2008 00:16</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>
