@@ -15,117 +15,165 @@ using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	public class CruiseObjectSourceInitializer
-	{
-		private readonly ObjectionManager objectionManager;
+    public class CruiseObjectSourceInitializer
+    {
+        private readonly ObjectionManager objectionManager;
 
-		public CruiseObjectSourceInitializer(ObjectionManager objectionManager)
-		{
-			this.objectionManager = objectionManager;
-		}
+        public CruiseObjectSourceInitializer(ObjectionManager objectionManager)
+        {
+            this.objectionManager = objectionManager;
+        }
 
-		// This all needs breaking up a bit (to make it testable, apart from anything else)
-		public ObjectSource SetupObjectSourceForRequest(HttpContext context)
-		{
-			ObjectSource objectSource = (ObjectSource) objectionManager; // Yuch - put this in Object Wizard somewhere
-			objectionManager.AddInstanceForType(typeof (ObjectSource), objectionManager);
+        // This all needs breaking up a bit (to make it testable, apart from anything else)
+        public ObjectSource SetupObjectSourceForRequest(HttpContext context)
+        {
+            ObjectSource objectSource = (ObjectSource)objectionManager; // Yuch - put this in Object Wizard somewhere
+            objectionManager.AddInstanceForType(typeof(ObjectSource), objectionManager);
 
-			objectionManager.AddInstanceForType(typeof (HttpContext), context);
-			HttpRequest request = context.Request;
-			objectionManager.AddInstanceForType(typeof (HttpRequest), request);
+            objectionManager.AddInstanceForType(typeof(HttpContext), context);
+            HttpRequest request = context.Request;
+            objectionManager.AddInstanceForType(typeof(HttpRequest), request);
 
             NameValueCollection parametersCollection = new NameValueCollection();
             parametersCollection.Add(request.QueryString);
             parametersCollection.Add(request.Form);
-		    objectionManager.AddInstanceForType(typeof (IRequest),
+            objectionManager.AddInstanceForType(typeof(IRequest),
                                                 new NameValueCollectionRequest(parametersCollection, request.Headers, request.Path,
-		                                                                       request.RawUrl, request.ApplicationPath));
+                                                                               request.RawUrl, request.ApplicationPath));
 
-			objectionManager.AddInstanceForType(typeof (IUrlBuilder),
-			                                    new AbsolutePathUrlBuilderDecorator(
-			                                    	new DefaultUrlBuilder(),
-			                                    	request.ApplicationPath));
+            objectionManager.AddInstanceForType(typeof(IUrlBuilder),
+                                                new AbsolutePathUrlBuilderDecorator(
+                                                    new DefaultUrlBuilder(),
+                                                    request.ApplicationPath));
 
-			objectionManager.SetImplementationType(typeof (ICruiseRequest), typeof (RequestWrappingCruiseRequest));
+            objectionManager.SetImplementationType(typeof(ICruiseRequest), typeof(RequestWrappingCruiseRequest));
 
-			objectionManager.SetImplementationType(typeof (IMultiTransformer), typeof (PathMappingMultiTransformer));
+            objectionManager.SetImplementationType(typeof(IMultiTransformer), typeof(PathMappingMultiTransformer));
 
-			objectionManager.SetDependencyImplementationForType(typeof (PathMappingMultiTransformer), typeof (IMultiTransformer), typeof (HtmlAwareMultiTransformer));
+            objectionManager.SetDependencyImplementationForType(typeof(PathMappingMultiTransformer), typeof(IMultiTransformer), typeof(HtmlAwareMultiTransformer));
 
-			IDashboardConfiguration config = GetDashboardConfiguration(objectSource, context);
-			objectionManager.AddInstanceForType(typeof (IDashboardConfiguration), config);
+            IDashboardConfiguration config = GetDashboardConfiguration(objectSource, context);
+            objectionManager.AddInstanceForType(typeof(IDashboardConfiguration), config);
 
-			IRemoteServicesConfiguration remoteServicesConfig = config.RemoteServices;
-			objectionManager.AddInstanceForType(typeof (IRemoteServicesConfiguration), remoteServicesConfig);
+            IRemoteServicesConfiguration remoteServicesConfig = config.RemoteServices;
+            objectionManager.AddInstanceForType(typeof(IRemoteServicesConfiguration), remoteServicesConfig);
 
-			IPluginConfiguration pluginConfig = config.PluginConfiguration;
-			objectionManager.AddInstanceForType(typeof (IPluginConfiguration), pluginConfig);
+            IPluginConfiguration pluginConfig = config.PluginConfiguration;
+            objectionManager.AddInstanceForType(typeof(IPluginConfiguration), pluginConfig);
 
-			foreach (IPlugin plugin in pluginConfig.FarmPlugins)
-			{
-				foreach (INamedAction action in plugin.NamedActions)
-				{
-					objectionManager.AddInstanceForName(action.ActionName, action.Action)
-						.Decorate(typeof (CruiseActionProxyAction)).Decorate(typeof (ExceptionCatchingActionProxy)).Decorate(typeof (SiteTemplateActionDecorator)).Decorate(typeof (NoCacheabilityActionProxy));
-				}
-			}
+            System.Collections.Generic.List<string> LoadedPlugins = new System.Collections.Generic.List<string>();
+            bool UnknownPluginDetected = false;
 
-			foreach (IPlugin plugin in pluginConfig.ServerPlugins)
-			{
-				foreach (INamedAction action in plugin.NamedActions)
-				{
-					objectionManager.AddInstanceForName(action.ActionName, action.Action)
-						.Decorate(typeof (ServerCheckingProxyAction)).Decorate(typeof (CruiseActionProxyAction)).Decorate(typeof (ExceptionCatchingActionProxy)).Decorate(typeof (SiteTemplateActionDecorator)).Decorate(typeof (NoCacheabilityActionProxy));
-				}
-			}
+            foreach (IPlugin plugin in pluginConfig.FarmPlugins)
+            {
+                if (plugin == null)
+                {
+                    UnknownPluginDetected = true;
+                }
+                else
+                {
+                    foreach (INamedAction action in plugin.NamedActions)
+                    {
+                        objectionManager.AddInstanceForName(action.ActionName, action.Action)
+                            .Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(NoCacheabilityActionProxy));
+                    }
+                }
+            }
 
-			foreach (IPlugin plugin in pluginConfig.ProjectPlugins)
-			{
-				foreach (INamedAction action in plugin.NamedActions)
-				{
-					objectionManager.AddInstanceForName(action.ActionName, action.Action)
-						.Decorate(typeof (ServerCheckingProxyAction)).Decorate(typeof (ProjectCheckingProxyAction)).Decorate(typeof (CruiseActionProxyAction)).Decorate(typeof (ExceptionCatchingActionProxy)).Decorate(typeof (SiteTemplateActionDecorator));
-				}
-			}
+            if (UnknownPluginDetected) ThrowExceptionShouwingLoadedPlugins(LoadedPlugins, "FarmPlugins");
+            LoadedPlugins = new System.Collections.Generic.List<string>();
 
-			// Even if the user hasn't specified to use this plugin, we still need it registered since there are links to it elsewhere
-			try
-			{
-				objectSource.GetByName(LatestBuildReportProjectPlugin.ACTION_NAME);
-			}
-			catch (ApplicationException)
-			{
-				IPlugin latestBuildPlugin = (IPlugin) objectSource.GetByType(typeof (LatestBuildReportProjectPlugin));
-				objectionManager.AddInstanceForName(latestBuildPlugin.NamedActions[0].ActionName, latestBuildPlugin.NamedActions[0].Action)
-					.Decorate(typeof (ServerCheckingProxyAction)).Decorate(typeof (ProjectCheckingProxyAction)).Decorate(typeof (CruiseActionProxyAction)).Decorate(typeof (ExceptionCatchingActionProxy)).Decorate(typeof (SiteTemplateActionDecorator));
-			}
+            foreach (IPlugin plugin in pluginConfig.ServerPlugins)
+            {
+                if (plugin == null)
+                {
+                    UnknownPluginDetected = true;
+                }
+                else
+                {
+                    foreach (INamedAction action in plugin.NamedActions)
+                    {
+                        objectionManager.AddInstanceForName(action.ActionName, action.Action)
+                            .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(NoCacheabilityActionProxy));
+                    }
+                }
+            }
 
-			foreach (IBuildPlugin plugin in pluginConfig.BuildPlugins)
-			{
-				foreach (INamedAction action in plugin.NamedActions)
-				{
-				    objectionManager.AddInstanceForName(action.ActionName + "_CONDITIONAL_GET_FINGERPRINT_CHAIN", action.Action)
-				        .Decorate(typeof (CruiseActionProxyAction)).Decorate(typeof (SiteTemplateActionDecorator));
-					objectionManager.AddInstanceForName(action.ActionName, action.Action)
-						.Decorate(typeof (ServerCheckingProxyAction)).Decorate(typeof (BuildCheckingProxyAction)).Decorate(typeof (ProjectCheckingProxyAction)).Decorate(typeof (CruiseActionProxyAction))
-						.Decorate(typeof (CachingActionProxy)).Decorate(typeof (ExceptionCatchingActionProxy)).Decorate(typeof (SiteTemplateActionDecorator));
-				}
-			}
+            if (UnknownPluginDetected) ThrowExceptionShouwingLoadedPlugins(LoadedPlugins, "ServerPlugins");
+            LoadedPlugins = new System.Collections.Generic.List<string>();
 
-			// ToDo - make this kind of thing specifiable by Plugins (note that this action is not wrapped with a SiteTemplateActionDecorator
-			// See BuildLogBuildPlugin for linked todo
-			objectionManager.AddTypeForName(XmlBuildLogAction.ACTION_NAME, typeof (XmlBuildLogAction))
-				.Decorate(typeof (ServerCheckingProxyAction)).Decorate(typeof (BuildCheckingProxyAction)).Decorate(typeof (ProjectCheckingProxyAction)).Decorate(typeof (CruiseActionProxyAction));
 
-			// TODO - Xml Exceptions?
-			objectionManager.AddTypeForName(ForceBuildXmlAction.ACTION_NAME, typeof (ForceBuildXmlAction))
-				.Decorate(typeof (ServerCheckingProxyAction)).Decorate(typeof (ProjectCheckingProxyAction)).Decorate(typeof (CruiseActionProxyAction));
+            foreach (IPlugin plugin in pluginConfig.ProjectPlugins)
+            {
+                if (plugin == null)
+                {
+                    UnknownPluginDetected = true;
+                }
+                else
+                {
+                    foreach (INamedAction action in plugin.NamedActions)
+                    {
+                        objectionManager.AddInstanceForName(action.ActionName, action.Action)
+                            .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
+                    }
+                }
+            }
+
+            if (UnknownPluginDetected) ThrowExceptionShouwingLoadedPlugins(LoadedPlugins, "ProjectPlugins");
+
+
+            // Even if the user hasn't specified to use this plugin, we still need it registered since there are links to it elsewhere
+            try
+            {
+                objectSource.GetByName(LatestBuildReportProjectPlugin.ACTION_NAME);
+            }
+            catch (ApplicationException)
+            {
+                IPlugin latestBuildPlugin = (IPlugin)objectSource.GetByType(typeof(LatestBuildReportProjectPlugin));
+                objectionManager.AddInstanceForName(latestBuildPlugin.NamedActions[0].ActionName, latestBuildPlugin.NamedActions[0].Action)
+                    .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
+            }
+
+
+            LoadedPlugins = new System.Collections.Generic.List<string>();
+
+            foreach (IBuildPlugin plugin in pluginConfig.BuildPlugins)
+            {
+                if (plugin == null)
+                {
+                    UnknownPluginDetected = true;
+                }
+                else
+                {
+                    foreach (INamedAction action in plugin.NamedActions)
+                    {
+                        objectionManager.AddInstanceForName(action.ActionName + "_CONDITIONAL_GET_FINGERPRINT_CHAIN", action.Action)
+                            .Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(SiteTemplateActionDecorator));
+                        objectionManager.AddInstanceForName(action.ActionName, action.Action)
+                            .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction))
+                            .Decorate(typeof(CachingActionProxy)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
+                    }
+                }
+            }
+
+            if (UnknownPluginDetected) ThrowExceptionShouwingLoadedPlugins(LoadedPlugins, "BuildPlugins");
+            LoadedPlugins = new System.Collections.Generic.List<string>();
+
+
+            // ToDo - make this kind of thing specifiable by Plugins (note that this action is not wrapped with a SiteTemplateActionDecorator
+            // See BuildLogBuildPlugin for linked todo
+            objectionManager.AddTypeForName(XmlBuildLogAction.ACTION_NAME, typeof(XmlBuildLogAction))
+                .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
+
+            // TODO - Xml Exceptions?
+            objectionManager.AddTypeForName(ForceBuildXmlAction.ACTION_NAME, typeof(ForceBuildXmlAction))
+                .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
 
             // Supporting xml project status queries from CCTray or clients earlier than version 1.3
             // Also still used by the web dashboard for displaying farm/server reports
-			objectionManager.AddTypeForName(XmlReportAction.ACTION_NAME, typeof (XmlReportAction));
-			objectionManager.AddTypeForName(ProjectXmlReport.ActionName, typeof (ProjectXmlReport)).Decorate(typeof(CruiseActionProxyAction));
-            
+            objectionManager.AddTypeForName(XmlReportAction.ACTION_NAME, typeof(XmlReportAction));
+            objectionManager.AddTypeForName(ProjectXmlReport.ActionName, typeof(ProjectXmlReport)).Decorate(typeof(CruiseActionProxyAction));
+
             // Supporting cruise server project and queue status queries from CCTray or clients 1.3 or later
             objectionManager.AddTypeForName(XmlServerReportAction.ACTION_NAME, typeof(XmlServerReportAction));
 
@@ -134,12 +182,30 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             objectionManager.AddTypeForName(Plugins.RSS.RSSFeed.ACTION_NAME, typeof(Plugins.RSS.RSSFeed)).Decorate(typeof(CruiseActionProxyAction));
 
             return objectSource;
-		}
+        }
 
-		private static IDashboardConfiguration GetDashboardConfiguration(ObjectSource objectSource, HttpContext context)
-		{
-			return new CachingDashboardConfigurationLoader(objectSource, context);
-//			return (IDashboardConfiguration) objectSource.GetByType(typeof(IDashboardConfiguration));
-		}
-	}
+        private static IDashboardConfiguration GetDashboardConfiguration(ObjectSource objectSource, HttpContext context)
+        {
+            return new CachingDashboardConfigurationLoader(objectSource, context);
+            //			return (IDashboardConfiguration) objectSource.GetByType(typeof(IDashboardConfiguration));
+        }
+
+        private void ThrowExceptionShouwingLoadedPlugins(System.Collections.Generic.List<string> loadedPlugins, string pluginTypeName)
+        {
+            System.Text.StringBuilder ErrorDescription = new System.Text.StringBuilder();
+
+            ErrorDescription.AppendLine(string.Format("Error loading {0} ", pluginTypeName));
+            ErrorDescription.AppendLine("Unknown pluginnames detected");
+            ErrorDescription.AppendLine("Check your config");
+            ErrorDescription.AppendLine("The following plugins were loaded successfully : ");
+
+            foreach (string item in loadedPlugins)
+            {
+                ErrorDescription.AppendLine(string.Format(" * {0}", item));
+            }
+
+            throw new Exception(ErrorDescription.ToString());
+        }
+
+    }
 }
