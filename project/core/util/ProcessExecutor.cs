@@ -85,8 +85,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					// Thread aborted.
 					Log.Info(string.Format(
 						"Thread aborted while waiting for '{0} {1}' to exit. Process id: {2}", processInfo.FileName, processInfo.Arguments, process.Id));
-					// Will still do best to record output.
-					CancelOutputAndWait();
 					// Integration should now be stopped. We can continue here as the task will report a failure and the current build will stop.
 					Thread.ResetAbort();
 				}
