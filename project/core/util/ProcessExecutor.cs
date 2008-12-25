@@ -21,28 +21,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public virtual ProcessResult Execute(ProcessInfo processInfo)
 		{
 			string projectName = Thread.CurrentThread.Name;
-			ProcessMonitor processMonitor = ProcessMonitor.ForProject(projectName);
 			using (p = new RunnableProcess(processInfo, projectName))
 			{
-				processMonitor.MonitorNewProcess(p.Process);
+				ProcessMonitor.MonitorProcessForProject(p.Process, projectName);
 				return p.Run();
 			}
 		}
 
-		public void Kill()
+		public static string AbortProcessForProject(string name)
 		{
-			Log.Info(string.Format("The process will be killed: {0}", p));
-			try
-			{
-				using (p)
-				{
-					p.Kill();
-				}
-			}
-			catch (InvalidOperationException)
-			{
-				Log.Info(string.Format("The process can't be killed because it got disposed already: {0}", p));
-			}
+			return ProcessMonitor.ForProject(name).KillProcess();
 		}
 
 		private class RunnableProcess : IDisposable
@@ -101,13 +89,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				return new ProcessResult(stdOutput.ToString(), stdError.ToString(), exitcode, hasTimedOut, failed);
 			}
 
-			private void CancelOutputAndWait()
-			{
-				process.CancelErrorRead();
-				process.CancelOutputRead();
-				WaitHandle.WaitAll(new WaitHandle[] { errorStreamClosed, outputStreamClosed }, 1000, true);
-			}
-
 			private void StartProcess()
 			{
 				Log.Debug(string.Format(
@@ -135,12 +116,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				process.BeginErrorReadLine();
 			}
 
-			private void ExitedHandler(object sender, EventArgs e)
-			{
-				processExited.Set();
-			}
-
-			public void Kill()
+			private void Kill()
 			{
 				const int WAIT_FOR_KILLED_PROCESS_TIMEOUT = 10000;
 
@@ -162,6 +138,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				}
 			}
 
+			private void CancelOutputAndWait()
+			{
+				process.CancelErrorRead();
+				process.CancelOutputRead();
+				WaitHandle.WaitAll(new WaitHandle[] { errorStreamClosed, outputStreamClosed }, 1000, true);
+			}
+
 			private void WriteToStandardInput()
 			{
 				if (process.StartInfo.RedirectStandardInput)
@@ -170,6 +153,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					process.StandardInput.Flush();
 					process.StandardInput.Close();
 				}
+			}
+
+			private void ExitedHandler(object sender, EventArgs e)
+			{
+				processExited.Set();
 			}
 
 			private void StandardOutputHandler(object sender, DataReceivedEventArgs outLine)
@@ -217,6 +205,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			{
 				outputStreamClosed.Close();
 				errorStreamClosed.Close();
+				processExited.Close();
 				process.Dispose();
 			}
 
@@ -225,11 +214,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			{
 				get { return process; }
 			}
-		}
-
-		public static string AbortProcessForProject(string name)
-		{
-			return ProcessMonitor.ForProject(name).KillProcess();
 		}
 
 		/// <summary>
@@ -241,25 +225,28 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			private static readonly IDictionary<string, ProcessMonitor> processMonitors = new Dictionary<string, ProcessMonitor>();
 
-			// Return an existing Processmonitor or create a new one
+			// Return an existing Processmonitor
 			[MethodImpl(MethodImplOptions.Synchronized)]
 			public static ProcessMonitor ForProject(string projectName)
 			{
-				if (!processMonitors.ContainsKey(projectName))
-				{
-					processMonitors.Add(projectName, new ProcessMonitor());
-				}
-				return processMonitors[projectName];
+				return processMonitors.ContainsKey(projectName) ? processMonitors[projectName] : null;
 			}
 
-			private Process activeProcess;
-
-			public void MonitorNewProcess(Process p)
+			[MethodImpl(MethodImplOptions.Synchronized)]
+			public static void MonitorProcessForProject(Process process, string projectName)
 			{
-				activeProcess = p;
+				processMonitors[projectName] = new ProcessMonitor(process);				
+			}
+
+			private readonly Process activeProcess;
+
+			private ProcessMonitor(Process process)
+			{
+				activeProcess = process;
 			}
 
 			// Kill the process
+
 			public string KillProcess()
 			{
 				try
@@ -269,18 +256,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					Log.Info("---------The Build Process was successfully aborted---------------");
 					Log.Info("------------------------------------------------------------------");
 					return "success";
-				}
-				catch (NullReferenceException e)
-				{
-					Log.Info(string.Format("System.NullReferenceException: {0}", e));
-					Log.Info("The process can't be terminated because it hasn't started yet.");
-					return "The process can't be terminated because it hasn't started yet.";
-				}
-				catch (InvalidOperationException e)
-				{
-					Log.Info(string.Format("System.InvalidOperationException: {0}", e));
-					Log.Info("The process can't be terminated because it has already ended.");
-					return "The process can't be terminated because it has already ended.";
 				}
 				catch (Exception e)
 				{
