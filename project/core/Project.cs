@@ -154,12 +154,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return currentActivity; }
 		}
-		
-		public ProcessMonitor ProcessMonitor
-		{
-			get { return ProcessMonitor.ForProject(this.Name); }
-		}
-		
+
 		public IIntegrationResult CurrentResult
 		{
 			get { return integrationResultManager.CurrentIntegration; }
@@ -202,7 +197,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		
 		public string AbortRunningBuild()
 		{
-			return this.ProcessMonitor.KillProcess();
+			return ProcessExecutor.AbortProcessForProject(Name);
 		}
 		
 		public void PublishResults(IIntegrationResult result)

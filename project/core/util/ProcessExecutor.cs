@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -224,6 +226,70 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			public Process Process
 			{
 				get { return process; }
+			}
+		}
+
+		public static string AbortProcessForProject(string name)
+		{
+			return ProcessMonitor.ForProject(name).KillProcess();
+		}
+
+		/// <summary>
+		/// A Process-Monitor receives the currently active process of a specific project
+		/// and stores a reference to it.
+		/// It can be used to abort a running build.
+		/// </summary>
+		private class ProcessMonitor
+		{
+			private static readonly IDictionary<string, ProcessMonitor> processMonitors = new Dictionary<string, ProcessMonitor>();
+
+			// Return an existing Processmonitor or create a new one
+			[MethodImpl(MethodImplOptions.Synchronized)]
+			public static ProcessMonitor ForProject(string projectName)
+			{
+				if (!processMonitors.ContainsKey(projectName))
+				{
+					processMonitors.Add(projectName, new ProcessMonitor());
+				}
+				return processMonitors[projectName];
+			}
+
+			private Process activeProcess;
+
+			public void MonitorNewProcess(Process p)
+			{
+				activeProcess = p;
+			}
+
+			// Kill the process
+			public string KillProcess()
+			{
+				try
+				{
+					KillUtil.KillPid(activeProcess.Id);
+					Log.Info("------------------------------------------------------------------");
+					Log.Info("---------The Build Process was successfully aborted---------------");
+					Log.Info("------------------------------------------------------------------");
+					return "success";
+				}
+				catch (NullReferenceException e)
+				{
+					Log.Info(string.Format("System.NullReferenceException: {0}", e));
+					Log.Info("The process can't be terminated because it hasn't started yet.");
+					return "The process can't be terminated because it hasn't started yet.";
+				}
+				catch (InvalidOperationException e)
+				{
+					Log.Info(string.Format("System.InvalidOperationException: {0}", e));
+					Log.Info("The process can't be terminated because it has already ended.");
+					return "The process can't be terminated because it has already ended.";
+				}
+				catch (Exception e)
+				{
+					Log.Info(string.Format("unknown exception: {0}", e));
+					Log.Info("!!!!!!!!!!!!!!!!unknown exception!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+					return "failure";
+				}
 			}
 		}
 	}
