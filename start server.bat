@@ -1,3 +1,4 @@
 @echo off
-cd build\server
+pushd build\server
 ccnet.exe
+popd

@@ -1,3 +1,4 @@
 @echo off
-cd build\cctray
+pushd build\cctray
 start /b cctray.exe
+popd
