@@ -17,6 +17,41 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         {
             this.result = result;
             this.emailPublisher = emailPublisher;
+
+
+            // add missing defaults for each notificationtype
+            foreach (BuildResult item in System.Enum.GetValues(typeof(BuildResult)))
+            {
+                if (!emailPublisher.SubjectSettings.ContainsKey(item))
+                {
+                    switch (item)
+                    {
+                        case BuildResult.Broken:
+                            emailPublisher.SubjectSettings.Add(BuildResult.Broken, "${ProjectName} Build Failed");
+                            break;
+
+                        case BuildResult.Exception:
+                            emailPublisher.SubjectSettings.Add(BuildResult.Exception, "${ProjectName} Exception in Build !");
+                            break;
+
+                        case BuildResult.Fixed:
+                            emailPublisher.SubjectSettings.Add(BuildResult.Fixed, "${ProjectName} Build Fixed: Build ${Label}");
+                            break;
+
+                        case BuildResult.StillBroken:
+                            emailPublisher.SubjectSettings.Add(BuildResult.StillBroken, "${ProjectName} is still broken");
+                            break;
+
+                        case BuildResult.Success:
+                            emailPublisher.SubjectSettings.Add(BuildResult.Success, "${ProjectName} Build Successful: Build ${Label}");
+                            break;
+
+                        default:
+                            throw new CruiseControlException("Unknown BuildResult : " + item);
+                    }
+                }
+            }
+
         }
 
         /// <summary>
@@ -129,37 +164,85 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
         }
 
+
+        public enum BuildResult
+        {
+            Success, Broken, StillBroken, Fixed, Exception
+        }
+
+
         public string Subject
         {
             get
             {
                 string prefix = "";
                 string message = "";
-                string label = "";
+                string subject = "";
 
                 if (emailPublisher.SubjectPrefix != null)
                     prefix = emailPublisher.SubjectPrefix + " ";
 
+
+                if (result.Status == IntegrationStatus.Exception)
+                {
+                    message = emailPublisher.SubjectSettings[BuildResult.Exception].ToString();
+                }
+
                 if (result.Status == IntegrationStatus.Success)
                 {
-                    label = " " + result.Label;
                     if (BuildStateChanged())
                     {
-                        message = "Build Fixed: Build";
+                        message = emailPublisher.SubjectSettings[BuildResult.Fixed].ToString();
                     }
                     else
                     {
-                        message = "Build Successful: Build";
+                        message = emailPublisher.SubjectSettings[BuildResult.Success].ToString();
                     }
                 }
-                else
+
+                if (result.Status == IntegrationStatus.Failure)
                 {
-                    message = "Build Failed";
+                    if (BuildStateChanged())
+                    {
+                        message = emailPublisher.SubjectSettings[BuildResult.Broken].ToString();
+                    }
+                    else
+                    {
+                        message = emailPublisher.SubjectSettings[BuildResult.StillBroken].ToString();
+                    }
                 }
 
-                return string.Format("{0}{1} {2}{3}", prefix, result.ProjectName, message, label);
+
+                
+                subject = message.Replace("${Label}", result.Label);
+                subject = subject.Replace("${ProjectName}", result.ProjectName);
+                subject = subject.Replace("${BuildCondition}", result.BuildCondition.ToString());
+                if (result.IntegrationRequest != null) subject = subject.Replace("${RequestSource}", result.IntegrationRequest.Source);
+                subject = subject.Replace("${FailureUsers}", FailureUsersToString(result.FailureUsers));
+                                
+                return string.Format("{0}{1}", prefix,subject);
             }
         }
+
+        private string FailureUsersToString(ArrayList failureUsers)
+        {
+
+            if (failureUsers.Count == 0) return "";
+
+            System.Text.StringBuilder result = new StringBuilder();
+
+            for (int i = 0; i <= failureUsers.Count - 2; i++)
+            {
+                result.AppendFormat("{0},", failureUsers[i]);                
+            }
+
+            result.Append(failureUsers[failureUsers.Count - 1]);
+
+            return result.ToString();        
+        }
+
+
+
 
         private EmailUser GetEmailUser(string username)
         {

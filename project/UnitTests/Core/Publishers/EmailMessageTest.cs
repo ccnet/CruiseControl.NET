@@ -142,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		public void EmailSubjectForExceptionedBuild()
 		{
 			string subject = GetEmailMessage(IntegrationResultMother.CreateExceptioned(), true).Subject;
-            Assert.AreEqual("CCNET: Project#9 Build Failed", subject);
+            Assert.AreEqual("CCNET: Project#9 Exception in Build !", subject);
 		}
 
 		[Test]
@@ -164,6 +164,38 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
 			Assert.AreEqual(ExpectedRecipients(modifier), new EmailMessage(result, publisher).Recipients);
 		}
+
+
+        [Test]
+        public void AddMissingSubjectSettings()
+        {
+            publisher = new EmailPublisher();
+            IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
+
+            EmailMessage msg = new EmailMessage(result, publisher);
+            
+            Assert.AreEqual(5, publisher.SubjectSettings.Count);
+        }
+
+
+        [Test]
+        public void AddMissingSubjectSettings_WithDefinedItemsFromConfig()
+        {
+            const string ExceptionMessage = "Exception !!!!!!!!!! check the system !!!!!!!";
+
+            publisher = new EmailPublisher();
+            IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
+
+            publisher.SubjectSettings.Add(EmailMessage.BuildResult.Exception, ExceptionMessage);
+            EmailMessage msg = new EmailMessage(result, publisher);
+
+            Assert.AreEqual(5, publisher.SubjectSettings.Count);
+            
+            Assert.AreEqual(ExceptionMessage,publisher.SubjectSettings[EmailMessage.BuildResult.Exception]);
+
+        }
+
+
 
 		private static EmailMessage GetEmailMessage(IntegrationResult result, bool includeDetails)
 		{

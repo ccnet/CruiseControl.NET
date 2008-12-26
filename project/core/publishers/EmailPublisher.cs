@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     {
         private EmailGateway emailGateway = new EmailGateway();
         private string fromAddress;
-		private string replytoAddress;
+        private string replytoAddress;
         private string subjectPrefix;
         private Hashtable users = new Hashtable();
         private Hashtable groups = new Hashtable();
@@ -25,16 +25,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private EmailGroup.NotificationType[] modifierNotificationTypes = { EmailGroup.NotificationType.Always };
         private IEmailConverter[] converters = new IEmailConverter[0];
 
+        private Hashtable subjectSettings = new Hashtable();
 
-    	public EmailPublisher() : this(new HtmlLinkMessageBuilder(false))
-    	{}
+        public EmailPublisher()
+            : this(new HtmlLinkMessageBuilder(false))
+        { }
 
-    	public EmailPublisher(IMessageBuilder messageBuilder)
-    	{
-    		this.messageBuilder = messageBuilder;
-    	}
+        public EmailPublisher(IMessageBuilder messageBuilder)
+        {
+            this.messageBuilder = messageBuilder;
+        }
 
-    	public EmailGateway EmailGateway
+        public EmailGateway EmailGateway
         {
             get { return emailGateway; }
             set { emailGateway = value; }
@@ -49,8 +51,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <summary>
         /// The host name of the mail server.  This field is required to send email notifications.
         /// </summary>
-        [ReflectorProperty("mailhost")] 
-		public string MailHost
+        [ReflectorProperty("mailhost")]
+        public string MailHost
         {
             get { return EmailGateway.MailHost; }
             set { EmailGateway.MailHost = value; }
@@ -70,25 +72,25 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
         [ReflectorProperty("mailhostUsername", Required = false)]
-		public string MailhostUsername
-		{
-			get { return EmailGateway.MailHostUsername; }
-			set { EmailGateway.MailHostUsername = value; }
-		}
+        public string MailhostUsername
+        {
+            get { return EmailGateway.MailHostUsername; }
+            set { EmailGateway.MailHostUsername = value; }
+        }
 
-		[ReflectorProperty("mailhostPassword", Required = false)]
-		public string MailhostPassword
-		{
-			get { return EmailGateway.MailHostPassword; }
-			set { EmailGateway.MailHostPassword = value; }
-		}
+        [ReflectorProperty("mailhostPassword", Required = false)]
+        public string MailhostPassword
+        {
+            get { return EmailGateway.MailHostPassword; }
+            set { EmailGateway.MailHostPassword = value; }
+        }
 
-		/// <summary>
+        /// <summary>
         /// The email address from which build results appear to have originated from.  This
         /// value seems to be required for most mail servers.
         /// </summary>
-        [ReflectorProperty("from")] 
-		public string FromAddress
+        [ReflectorProperty("from")]
+        public string FromAddress
         {
             get { return fromAddress; }
             set { fromAddress = value; }
@@ -102,35 +104,35 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         {
             get { return EmailGateway.UseSSL; }
             set { EmailGateway.UseSSL = value; }
-        }                                                                                        
+        }
 
-		[ReflectorProperty("replyto", Required = false)] 
-		public string ReplyToAddress
-		{
-			get { return replytoAddress; }
-			set { replytoAddress = value; }
-		}
+        [ReflectorProperty("replyto", Required = false)]
+        public string ReplyToAddress
+        {
+            get { return replytoAddress; }
+            set { replytoAddress = value; }
+        }
 
         /// <summary>
         /// Set this property (in configuration) to enable HTML emails containing build details.
         /// This property is deprecated and should be removed.  It should be replaced by the MessageBuilder property.
         /// </summary>
-        [ReflectorProperty("includeDetails", Required = false)] 
-		public bool IncludeDetails
-        { 
-            get 
-			{
-				return messageBuilder is HtmlDetailsMessageBuilder; 
-			}
+        [ReflectorProperty("includeDetails", Required = false)]
+        public bool IncludeDetails
+        {
+            get
+            {
+                return messageBuilder is HtmlDetailsMessageBuilder;
+            }
             set
             {
                 if (value)
                 {
-                	messageBuilder = new HtmlDetailsMessageBuilder();
+                    messageBuilder = new HtmlDetailsMessageBuilder();
                 }
                 else
                 {
-                	messageBuilder = new HtmlLinkMessageBuilder(false);
+                    messageBuilder = new HtmlLinkMessageBuilder(false);
                 }
             }
         }
@@ -140,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// This allows for example to send a mail to the modifiers only when the build breaks
         /// notification type = Failed
         /// </summary>
-        [ReflectorProperty("modifierNotificationTypes", Required = false)] 
+        [ReflectorProperty("modifierNotificationTypes", Required = false)]
         public EmailGroup.NotificationType[] ModifierNotificationTypes
         {
             get { return modifierNotificationTypes; }
@@ -148,20 +150,27 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
 
-        [ReflectorHash("users", "name")] 
-		public Hashtable EmailUsers
+        [ReflectorHash("users", "name")]
+        public Hashtable EmailUsers
         {
             get { return users; }
             set { users = value; }
         }
 
-        [ReflectorHash("groups", "name")] 
-		public Hashtable EmailGroups
+        [ReflectorHash("groups", "name")]
+        public Hashtable EmailGroups
         {
             get { return groups; }
             set { groups = value; }
         }
 
+
+        [ReflectorHash("subjectSettings", Key="notificationType", Required = false)]
+        public Hashtable SubjectSettings
+        {
+            get { return subjectSettings; }
+            set { subjectSettings = value; }
+        }
 
         /// <summary>
         /// Allows transformations to be performed on the names of the modifiers for making an email address.
@@ -187,16 +196,16 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             if (result.Status == IntegrationStatus.Unknown)
                 return;
 
-        	EmailMessage  emailMessage = new EmailMessage(result, this); 
+            EmailMessage emailMessage = new EmailMessage(result, this);
             string to = emailMessage.Recipients;
-			string subject = emailMessage.Subject;
+            string subject = emailMessage.Subject;
             string message = CreateMessage(result);
             if (IsRecipientSpecified(to))
             {
                 Log.Info(string.Format("Emailing \"{0}\" to {1}", subject, to));
                 SendMessage(fromAddress, to, replytoAddress, subject, message);
             }
-	    }
+        }
 
         private static bool IsRecipientSpecified(string to)
         {
@@ -207,7 +216,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         {
             try
             {
-            	emailGateway.Send(GetMailMessage(from, to, replyto, subject, message));
+                emailGateway.Send(GetMailMessage(from, to, replyto, subject, message));
             }
             catch (Exception e)
             {
@@ -220,7 +229,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             MailMessage mailMessage = new MailMessage();
             mailMessage.To.Add(to);
             mailMessage.From = new MailAddress(from);
-            if (! String.IsNullOrEmpty(replyto)) mailMessage.ReplyTo = new MailAddress(replyto);
+            if (!String.IsNullOrEmpty(replyto)) mailMessage.ReplyTo = new MailAddress(replyto);
             mailMessage.Subject = subject;
             mailMessage.IsBodyHtml = true;
             mailMessage.Body = messageText;
@@ -231,16 +240,16 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         {
             // TODO Add culprit to message text -- especially if modifier is not an email user
             //      This information is included, when using Html email (all mods are shown)
-        	try
-        	{
-        		return messageBuilder.BuildMessage(result);
-        	}
-        	catch (Exception e)
-        	{
-        		string message = "Unable to build email message: " + e;
-        		Log.Error(message);
-				return message;
-        	}
+            try
+            {
+                return messageBuilder.BuildMessage(result);
+            }
+            catch (Exception e)
+            {
+                string message = "Unable to build email message: " + e;
+                Log.Error(message);
+                return message;
+            }
         }
     }
 }
