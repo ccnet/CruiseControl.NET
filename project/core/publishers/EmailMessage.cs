@@ -27,23 +27,23 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                     switch (item)
                     {
                         case BuildResult.Broken:
-                            emailPublisher.SubjectSettings.Add(BuildResult.Broken, "${ProjectName} Build Failed");
+                            emailPublisher.SubjectSettings.Add(BuildResult.Broken, "${CCNetProject} Build Failed");
                             break;
 
                         case BuildResult.Exception:
-                            emailPublisher.SubjectSettings.Add(BuildResult.Exception, "${ProjectName} Exception in Build !");
+                            emailPublisher.SubjectSettings.Add(BuildResult.Exception, "${CCNetProject} Exception in Build !");
                             break;
 
                         case BuildResult.Fixed:
-                            emailPublisher.SubjectSettings.Add(BuildResult.Fixed, "${ProjectName} Build Fixed: Build ${Label}");
+                            emailPublisher.SubjectSettings.Add(BuildResult.Fixed, "${CCNetProject} Build Fixed: Build ${CCNetLabel}");
                             break;
 
                         case BuildResult.StillBroken:
-                            emailPublisher.SubjectSettings.Add(BuildResult.StillBroken, "${ProjectName} is still broken");
+                            emailPublisher.SubjectSettings.Add(BuildResult.StillBroken, "${CCNetProject} is still broken");
                             break;
 
                         case BuildResult.Success:
-                            emailPublisher.SubjectSettings.Add(BuildResult.Success, "${ProjectName} Build Successful: Build ${Label}");
+                            emailPublisher.SubjectSettings.Add(BuildResult.Success, "${CCNetProject} Build Successful: Build ${CCNetLabel}");
                             break;
 
                         default:
@@ -212,14 +212,15 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                     }
                 }
 
+                subject = message;
 
-                
-                subject = message.Replace("${Label}", result.Label);
-                subject = subject.Replace("${ProjectName}", result.ProjectName);
-                subject = subject.Replace("${BuildCondition}", result.BuildCondition.ToString());
-                if (result.IntegrationRequest != null) subject = subject.Replace("${RequestSource}", result.IntegrationRequest.Source);
-                subject = subject.Replace("${FailureUsers}", FailureUsersToString(result.FailureUsers));
-                                
+                IDictionary properties = result.IntegrationProperties;
+                foreach (string key in properties.Keys)
+                {
+                    string search = "${" + key + "}";
+                    subject = subject.Replace(search, Util.StringUtil.IntegrationPropertyToString(properties[key]));
+                }
+                                               
                 return string.Format("{0}{1}", prefix,subject);
             }
         }
