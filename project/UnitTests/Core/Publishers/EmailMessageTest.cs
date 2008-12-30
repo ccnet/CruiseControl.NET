@@ -145,6 +145,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             Assert.AreEqual("CCNET: Project#9 Exception in Build !", subject);
 		}
 
+
+        [Test]
+        public void EmailSubjectForStillBrokenBuild_DefaultMessage()
+        {
+
+            EmailPublisher publisher = EmailPublisherMother.Create();
+            publisher.SubjectSettings = new System.Collections.Hashtable();
+
+            IntegrationResult result = IntegrationResultMother.CreateFailed(ThoughtWorks.CruiseControl.Remote.IntegrationStatus.Failure);
+
+            string subject = new EmailMessage(DecorateIntegrationResult(result), publisher).Subject;
+            Assert.AreEqual("CCNET: Project#9 is still broken", subject);
+        }
+
+
+        [Test]
+        public void EmailSubjectForStillBrokenBuild()
+        {
+            IntegrationResult result = IntegrationResultMother.CreateFailed(ThoughtWorks.CruiseControl.Remote.IntegrationStatus.Failure);
+            string subject = GetEmailMessage(result, true).Subject;
+            Assert.AreEqual("CCNET: Nice try but no cigare on fixing Project#9", subject);
+        }
+
+
 		[Test]
 		public void OnlyEmailModifierRecipientsOnBuildFailure()
 		{
@@ -164,38 +188,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
 			Assert.AreEqual(ExpectedRecipients(modifier), new EmailMessage(result, publisher).Recipients);
 		}
-
-
-        [Test]
-        public void AddMissingSubjectSettings()
-        {
-            publisher = new EmailPublisher();
-            IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
-
-            EmailMessage msg = new EmailMessage(result, publisher);
-            
-            Assert.AreEqual(5, publisher.SubjectSettings.Count);
-        }
-
-
-        [Test]
-        public void AddMissingSubjectSettings_WithDefinedItemsFromConfig()
-        {
-            const string ExceptionMessage = "Exception !!!!!!!!!! check the system !!!!!!!";
-
-            publisher = new EmailPublisher();
-            IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
-
-            publisher.SubjectSettings.Add(EmailMessage.BuildResult.Exception, ExceptionMessage);
-            EmailMessage msg = new EmailMessage(result, publisher);
-
-            Assert.AreEqual(5, publisher.SubjectSettings.Count);
-            
-            Assert.AreEqual(ExceptionMessage,publisher.SubjectSettings[EmailMessage.BuildResult.Exception]);
-
-        }
-
-
 
 		private static EmailMessage GetEmailMessage(IntegrationResult result, bool includeDetails)
 		{

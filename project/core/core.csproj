@@ -354,6 +354,7 @@
     <Compile Include="publishers\EmailPublisher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="publishers\EmailSubject.cs" />
     <Compile Include="publishers\EmailUser.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -13,42 +13,57 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private readonly IIntegrationResult result;
         private readonly EmailPublisher emailPublisher;
 
+
+        private Hashtable SetSubjects;
+
         public EmailMessage(IIntegrationResult result, EmailPublisher emailPublisher)
         {
             this.result = result;
             this.emailPublisher = emailPublisher;
 
 
-            // add missing defaults for each notificationtype
-            foreach (BuildResult item in System.Enum.GetValues(typeof(BuildResult)))
+            // copy into own lookuptable for easier processing
+            SetSubjects = new Hashtable();
+            string mySubject;
+
+            foreach (EmailSubject setValue in emailPublisher.SubjectSettings.Values)
             {
-                if (!emailPublisher.SubjectSettings.ContainsKey(item))
+                SetSubjects.Add(setValue.BuildResult, setValue.Value);
+            }
+
+
+            //add missing defaults for each notificationtype
+            foreach (EmailSubject.BuildResultType item in System.Enum.GetValues(typeof(EmailSubject.BuildResultType)))
+            {
+                if (!SetSubjects.ContainsKey(item))
                 {
                     switch (item)
                     {
-                        case BuildResult.Broken:
-                            emailPublisher.SubjectSettings.Add(BuildResult.Broken, "${CCNetProject} Build Failed");
+                        case EmailSubject.BuildResultType.Broken:
+                            mySubject =  "${CCNetProject} Build Failed";
                             break;
 
-                        case BuildResult.Exception:
-                            emailPublisher.SubjectSettings.Add(BuildResult.Exception, "${CCNetProject} Exception in Build !");
+                        case EmailSubject.BuildResultType.Exception:
+                            mySubject = "${CCNetProject} Exception in Build !";
                             break;
 
-                        case BuildResult.Fixed:
-                            emailPublisher.SubjectSettings.Add(BuildResult.Fixed, "${CCNetProject} Build Fixed: Build ${CCNetLabel}");
+                        case EmailSubject.BuildResultType.Fixed:
+                            mySubject = "${CCNetProject} Build Fixed: Build ${CCNetLabel}";
                             break;
 
-                        case BuildResult.StillBroken:
-                            emailPublisher.SubjectSettings.Add(BuildResult.StillBroken, "${CCNetProject} is still broken");
+                        case EmailSubject.BuildResultType.StillBroken:
+                            mySubject = "${CCNetProject} is still broken";
                             break;
 
-                        case BuildResult.Success:
-                            emailPublisher.SubjectSettings.Add(BuildResult.Success, "${CCNetProject} Build Successful: Build ${CCNetLabel}");
+                        case EmailSubject.BuildResultType.Success:
+                            mySubject = "${CCNetProject} Build Successful: Build ${CCNetLabel}";
                             break;
 
                         default:
                             throw new CruiseControlException("Unknown BuildResult : " + item);
                     }
+
+                    SetSubjects.Add(item, mySubject);
                 }
             }
 
@@ -165,10 +180,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
 
-        public enum BuildResult
-        {
-            Success, Broken, StillBroken, Fixed, Exception
-        }
 
 
         public string Subject
@@ -185,18 +196,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
                 if (result.Status == IntegrationStatus.Exception)
                 {
-                    message = emailPublisher.SubjectSettings[BuildResult.Exception].ToString();
+                    message = SetSubjects[EmailSubject.BuildResultType.Exception].ToString();
                 }
 
                 if (result.Status == IntegrationStatus.Success)
                 {
                     if (BuildStateChanged())
                     {
-                        message = emailPublisher.SubjectSettings[BuildResult.Fixed].ToString();
+                        message = SetSubjects[EmailSubject.BuildResultType.Fixed].ToString();
                     }
                     else
                     {
-                        message = emailPublisher.SubjectSettings[BuildResult.Success].ToString();
+                        message = SetSubjects[EmailSubject.BuildResultType.Success].ToString();
                     }
                 }
 
@@ -204,11 +215,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 {
                     if (BuildStateChanged())
                     {
-                        message = emailPublisher.SubjectSettings[BuildResult.Broken].ToString();
+                        message = SetSubjects[EmailSubject.BuildResultType.Broken].ToString();
                     }
                     else
                     {
-                        message = emailPublisher.SubjectSettings[BuildResult.StillBroken].ToString();
+                        message = SetSubjects[EmailSubject.BuildResultType.StillBroken].ToString();
                     }
                 }
 
@@ -220,8 +231,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                     string search = "${" + key + "}";
                     subject = subject.Replace(search, Util.StringUtil.IntegrationPropertyToString(properties[key]));
                 }
-                                               
-                return string.Format("{0}{1}", prefix,subject);
+
+                return string.Format("{0}{1}", prefix, subject);
             }
         }
 
@@ -234,12 +245,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             for (int i = 0; i <= failureUsers.Count - 2; i++)
             {
-                result.AppendFormat("{0},", failureUsers[i]);                
+                result.AppendFormat("{0},", failureUsers[i]);
             }
 
             result.Append(failureUsers[failureUsers.Count - 1]);
 
-            return result.ToString();        
+            return result.ToString();
         }
 
 

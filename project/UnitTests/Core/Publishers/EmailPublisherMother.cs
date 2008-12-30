@@ -35,6 +35,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			<converters>
 				<regexConverter find=""$"" replace=""@TheCompany.com""/>
 			</converters>
+
+            <subjectSettings>
+                <subject buildResult=""StillBroken"" value=""Nice try but no cigare on fixing ${CCNetProject}"" />
+            </subjectSettings>
     	</email>");
 			}
 		}

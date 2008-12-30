@@ -165,7 +165,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
 
-        [ReflectorHash("subjectSettings", Key="notificationType", Required = false)]
+        [ReflectorHash("subjectSettings", "buildResult", Required = false)]
         public Hashtable SubjectSettings
         {
             get { return subjectSettings; }
