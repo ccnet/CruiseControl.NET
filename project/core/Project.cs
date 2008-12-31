@@ -195,9 +195,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 		
-		public string AbortRunningBuild()
+		public void AbortRunningBuild()
 		{
-			return ProcessExecutor.AbortProcessForProject(Name);
+			ProcessExecutor.AbortProcessCurrentlyRunningForProject(Name);
 		}
 		
 		public void PublishResults(IIntegrationResult result)

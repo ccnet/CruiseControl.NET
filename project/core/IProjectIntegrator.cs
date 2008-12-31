@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// Aborts the build of the selected project.
 		/// </summary>
-		string AbortBuild(string enforcerName);
+		void AbortBuild(string enforcerName);
 
 		/// <summary>
 		/// For "Force" requests such as by CCTray or the Web GUI.

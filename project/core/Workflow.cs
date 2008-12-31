@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return _currentIntegrationResult.Status; }
 		}
 		
-		public string AbortRunningBuild()
+		public void AbortRunningBuild()
 		{
 			throw new NotImplementedException();
 		}

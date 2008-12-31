@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// <summary>
 		/// Aborts the build of the selected project.
 		/// </summary>
-		string AbortBuild(string projectName, string enforcerName);
+		void AbortBuild(string projectName, string enforcerName);
 		
 		void Request(string projectName, IntegrationRequest request);
 

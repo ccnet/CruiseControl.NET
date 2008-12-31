@@ -24,13 +24,23 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			using (p = new RunnableProcess(processInfo, projectName))
 			{
 				ProcessMonitor.MonitorProcessForProject(p.Process, projectName);
-				return p.Run();
+				ProcessResult run = p.Run();
+				ProcessMonitor.RemoveMonitorForProject(projectName);
+				return run;
 			}
 		}
 
-		public static string AbortProcessForProject(string name)
+		public static void AbortProcessCurrentlyRunningForProject(string name)
 		{
-			return ProcessMonitor.ForProject(name).KillProcess();
+			ProcessMonitor monitor = ProcessMonitor.ForProject(name);
+			if (monitor == null)
+			{
+				Log.Debug(string.Format("Request to abort process currently running for project {0}, but no process is currently running.", name));
+			}
+			else
+			{
+				monitor.KillProcess();				
+			}
 		}
 
 		private class RunnableProcess : IDisposable
@@ -70,7 +80,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				}
 				catch (ThreadAbortException)
 				{
-					// Thread aborted.
+					// Thread aborted. We treat this as an error that requires the *current* build to exit. It might actually be the *server* trying to exit?!
+					// This will leave threads running and prevent ccnet from exiting properly.
+					// TODO: handle the case where this is caused by the server trying to exit.
 					Log.Info(string.Format(
 						"Thread aborted while waiting for '{0} {1}' to exit. Process id: {2}", processInfo.FileName, processInfo.Arguments, process.Id));
 					// Integration should now be stopped. We can continue here as the task will report a failure and the current build will stop.
@@ -235,34 +247,31 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			[MethodImpl(MethodImplOptions.Synchronized)]
 			public static void MonitorProcessForProject(Process process, string projectName)
 			{
-				processMonitors[projectName] = new ProcessMonitor(process);				
+				processMonitors[projectName] = new ProcessMonitor(process, projectName);				
 			}
 
-			private readonly Process activeProcess;
-
-			private ProcessMonitor(Process process)
+			[MethodImpl(MethodImplOptions.Synchronized)]
+			public static void RemoveMonitorForProject(string projectName)
 			{
-				activeProcess = process;
+				processMonitors.Remove(projectName);
+			}
+
+			private readonly Process process;
+			private readonly string projectName;
+
+			private ProcessMonitor(Process process, string projectName)
+			{
+				this.process = process;
+				this.projectName = projectName;
 			}
 
 			// Kill the process
-
-			public string KillProcess()
+			public void KillProcess()
 			{
-				try
-				{
-					KillUtil.KillPid(activeProcess.Id);
-					Log.Info("------------------------------------------------------------------");
-					Log.Info("---------The Build Process was successfully aborted---------------");
-					Log.Info("------------------------------------------------------------------");
-					return "success";
-				}
-				catch (Exception e)
-				{
-					Log.Info(string.Format("unknown exception: {0}", e));
-					Log.Info("!!!!!!!!!!!!!!!!unknown exception!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-					return "failure";
-				}
+				KillUtil.KillPid(process.Id);
+				Log.Info(string.Format("{0}: ------------------------------------------------------------------", projectName));
+				Log.Info(string.Format("{0}: ---------The Build Process was successfully aborted---------------", projectName));
+				Log.Info(string.Format("{0}: ------------------------------------------------------------------", projectName));
 			}
 		}
 	}

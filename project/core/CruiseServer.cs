@@ -13,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private readonly IProjectSerializer projectSerializer;
 		private readonly IConfigurationService configurationService;
 		private readonly ICruiseManager manager;
+		// TODO: Why the monitor? What reentrancy do we have? davcamer, dec 24 2008
 		private readonly ManualResetEvent monitor = new ManualResetEvent(true);
 
 		private bool disposed;
@@ -127,9 +128,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			integrationQueueManager.ForceBuild(projectName, enforcerName);
 		}
 
-		public string AbortBuild(string projectName, string enforcerName)
+		public void AbortBuild(string projectName, string enforcerName)
 		{
-			return GetIntegrator(projectName).AbortBuild(enforcerName);
+			GetIntegrator(projectName).AbortBuild(enforcerName);
 		}
 		
 		public void WaitForExit(string projectName)
