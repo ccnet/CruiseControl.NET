@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 		}
 
-		public static void AbortProcessCurrentlyRunningForProject(string name)
+		public static void KillProcessCurrentlyRunningForProject(string name)
 		{
 			ProcessMonitor monitor = ProcessMonitor.ForProject(name);
 			if (monitor == null)
@@ -73,30 +73,35 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 				try
 				{
-					hasExited = WaitHandle.WaitAll(new WaitHandle[] {errorStreamClosed, outputStreamClosed, processExited}, processInfo.TimeOut, true);
+					hasExited = WaitHandle.WaitAll(new WaitHandle[] { errorStreamClosed, outputStreamClosed, processExited }, processInfo.TimeOut, true);
 					hasTimedOut = !hasExited;
 					if (hasTimedOut) Log.Warning(string.Format(
-						"Process timed out: {0} {1}.  Process id: {2}.  This process will now be killed.", processInfo.FileName, processInfo.Arguments, process.Id));												
+						"Process timed out: {0} {1}.  Process id: {2}. This process will now be killed.", processInfo.FileName, processInfo.Arguments, process.Id));
 				}
 				catch (ThreadAbortException)
 				{
-					// Thread aborted. We treat this as an error that requires the *current* build to exit. It might actually be the *server* trying to exit?!
-					// This will leave threads running and prevent ccnet from exiting properly.
-					// TODO: handle the case where this is caused by the server trying to exit.
+					// Thread aborted. This is the server trying to exit. Abort needs to continue.
 					Log.Info(string.Format(
-						"Thread aborted while waiting for '{0} {1}' to exit. Process id: {2}", processInfo.FileName, processInfo.Arguments, process.Id));
-					// Integration should now be stopped. We can continue here as the task will report a failure and the current build will stop.
-					Thread.ResetAbort();
-				}
-
-				if (!hasExited)
+						"Thread aborted while waiting for '{0} {1}' to exit. Process id: {2}. This process will now be killed.", processInfo.FileName, processInfo.Arguments, process.Id));
+					throw;
+				} 
+				catch (ThreadInterruptedException)
 				{
-					Kill();
+					// If one of the output handlers catches an exception, it will interrupt this thread to wake it.
+					// The finally block handles clean-up.
+					Log.Debug(string.Format(
+						"Process interrupted: {0} {1}.  Process id: {2}. This process will now be killed.", processInfo.FileName, processInfo.Arguments, process.Id));
+				}
+				finally
+				{
+					if (!hasExited)
+					{
+						Kill();
+					}
 				}
 
 				int exitcode = process.ExitCode;
 				bool failed = !processInfo.ProcessSuccessful(exitcode);
-				process.Close();
 
 				return new ProcessResult(stdOutput.ToString(), stdError.ToString(), exitcode, hasTimedOut, failed);
 			}
@@ -133,7 +138,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				const int WAIT_FOR_KILLED_PROCESS_TIMEOUT = 10000;
 
 				Log.Debug(string.Format("Sending kill to process {0} and waiting {1} seconds for it to exit.", process.Id, WAIT_FOR_KILLED_PROCESS_TIMEOUT / 1000));
-				CancelOutputAndWait();
+				CancelEventsAndWait();
 				try
 				{
 					KillUtil.KillPid(process.Id);
@@ -150,8 +155,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				}
 			}
 
-			private void CancelOutputAndWait()
+			private void CancelEventsAndWait()
 			{
+				process.EnableRaisingEvents = false;
+				process.Exited -= ExitedHandler;
+
 				process.CancelErrorRead();
 				process.CancelOutputRead();
 				WaitHandle.WaitAll(new WaitHandle[] { errorStreamClosed, outputStreamClosed }, 1000, true);
@@ -182,7 +190,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				{
 					Log.Error(e);
 					Log.Error(string.Format("[{0} {1}] Exception while collecting standard output", projectName, processInfo.FileName));
-					supervisingThread.Abort();
+					supervisingThread.Interrupt();
 				}
 			}
 
@@ -196,7 +204,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				{
 					Log.Error(e);
 					Log.Error(string.Format("[{0} {1}] Exception while collecting error output", projectName, processInfo.FileName));
-					supervisingThread.Abort();
+					supervisingThread.Interrupt();
 				}
 			}
 

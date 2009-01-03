@@ -12,11 +12,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 	public class ProcessExecutorTest : CustomAssertion
 	{
 		private ProcessExecutor executor;
+		private volatile bool runnerThreadCompletedNormally;
+		private volatile bool runnerThreadWasAborted;
+		private const string PROJECT_NAME = "testing";
 
 		[SetUp]
 		protected void CreateExecutor()
 		{
 			executor = new ProcessExecutor();
+			if (Thread.CurrentThread.Name == null)
+			{
+				Thread.CurrentThread.Name = PROJECT_NAME;
+			}
+			runnerThreadCompletedNormally = false;
+			runnerThreadWasAborted = false;
 		}
 
 		[Test]
@@ -36,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		}
 
 		[Test]
-		public void ShouldNotUseATimeoutIfTimeoutSetToZeroOnProcessInfo()
+		public void ShouldNotUseATimeoutIfTimeoutSetToInfiniteOnProcessInfo()
 		{
 			ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C @echo Hello World");
 			processInfo.TimeOut = ProcessInfo.InfiniteTimeout;
@@ -50,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		{
 			ProcessResult result = executor.Execute(new ProcessInfo("cmd.exe", "/C @zerk.exe foo"));
 
-            AssertProcessExitsWithFailure(result);
+			AssertProcessExitsWithFailure(result);
 			AssertContains("zerk.exe", result.StandardError);
 			Assert.AreEqual(string.Empty, result.StandardOutput);
 			Assert.IsTrue(! result.TimedOut);
@@ -76,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 
 			Assert.IsTrue(result.TimedOut, "process did not time out, but it should have.");
 			Assert.IsNotNull(result.StandardOutput, "some output should have been produced");
-            AssertProcessExitsWithFailure(result);
+			AssertProcessExitsWithFailure(result);
 		}
 
 		[Test, ExpectedException(typeof (IOException))]
@@ -92,14 +101,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		}
 
 		[Test]
-		public void StartNonTerminatingProcessAndAbortThreadShouldKillProcess()
+		public void StartNonTerminatingProcessAndAbortThreadShouldKillProcessAndAbortThread()
 		{
-			Thread thread = new Thread(StartProcess);
-			thread.Name = "runner thread";
+			// ARRANGE
+			Thread thread = new Thread(StartSleeperProcess);
+			thread.Name = "sleeper thread";
 			thread.Start();
 			WaitForProcessToStart();
+
+			// ACT
 			thread.Abort();
+
+			// ASSERT
 			thread.Join();
+			Assert.IsTrue(runnerThreadWasAborted, "Runner thread should be aborted.");
+			// Ensure the external process was killed
 			try
 			{
 				Assert.AreEqual(0, Process.GetProcessesByName("sleeper").Length);
@@ -111,25 +127,55 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			}
 		}
 
-        [Test]
-        public void ReadUnicodeFile()
-        {
-            SystemPath tempDirectory = SystemPath.UniqueTempPath().CreateDirectory();
-            try
-            {
-                const string content = "yooo ез";
-                SystemPath tempFile = tempDirectory.CreateTextFile("test.txt", content);
-                ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C type \"" + tempFile + "\"");
-                processInfo.StreamEncoding = Encoding.UTF8;
-                ProcessResult result = executor.Execute(processInfo);
-                Assert.IsTrue(!result.Failed);
-                Assert.AreEqual(content + Environment.NewLine, result.StandardOutput);
-            }
-            finally
-            {
-                tempDirectory.DeleteDirectory();
-            }
-        }
+		[Test]
+		public void StartNonTerminatingProcessAndInterruptCurrentProcessShouldKillProcessButLeaveThreadRunning()
+		{
+			// ARRANGE
+			Thread thread = new Thread(StartSleeperProcess);
+			thread.Name = "sleeper thread";
+			thread.Start();
+			WaitForProcessToStart();
+
+			// ACT
+			ProcessExecutor.KillProcessCurrentlyRunningForProject("sleeper thread");
+
+			// ASSERT
+			// Sleeper runs for 60 seconds. We need to give up early and fail the test if it takes longer than 50.
+			// If it runs for the full 60 seconds it will look the same as being interrupted, and the test will pass
+			// incorrectly.
+			Assert.IsTrue(thread.Join(TimeSpan.FromSeconds(50)), "Thread did not exit in reasonable time."); 
+			Assert.IsTrue(runnerThreadCompletedNormally, "Runner thread should have exited through normally.");
+			// Ensure the external process was killed
+			try
+			{
+				Assert.AreEqual(0, Process.GetProcessesByName("sleeper").Length);
+			}
+			catch (Exception)
+			{
+				Process.GetProcessesByName("sleeper")[0].Kill();
+				Assert.Fail("Process was not killed.");
+			}
+		}
+
+		[Test]
+		public void ReadUnicodeFile()
+		{
+			SystemPath tempDirectory = SystemPath.UniqueTempPath().CreateDirectory();
+			try
+			{
+				const string content = "yooo ез";
+				SystemPath tempFile = tempDirectory.CreateTextFile("test.txt", content);
+				ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C type \"" + tempFile + "\"");
+				processInfo.StreamEncoding = Encoding.UTF8;
+				ProcessResult result = executor.Execute(processInfo);
+				Assert.IsTrue(!result.Failed);
+				Assert.AreEqual(content + Environment.NewLine, result.StandardOutput);
+			}
+			finally
+			{
+				tempDirectory.DeleteDirectory();
+			}
+		}
 
 		[Test]
 		public void ProcessInfoDeterminesSuccessOfProcess()
@@ -171,9 +217,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			AssertFalse("process should not return an error", result.Failed);
 		}
 
-        private static void AssertProcessExitsWithFailure(ProcessResult result)
+		private static void AssertProcessExitsWithFailure(ProcessResult result)
 		{
-            Assert.AreNotEqual(ProcessResult.SUCCESSFUL_EXIT_CODE, result.ExitCode);
+			Assert.AreNotEqual(ProcessResult.SUCCESSFUL_EXIT_CODE, result.ExitCode);
 			Assert.IsTrue(result.Failed, "process should return an error");
 		}
 
@@ -185,21 +231,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 				Thread.Sleep(50);
 				count++;
 			}
-            Thread.Sleep(2000);
+			Thread.Sleep(2000);
 			if (count == 1000) Assert.Fail("sleeper process did not start.");
 		}
 
-        private void StartProcess()
-        {
-            try
-            {
-                ProcessInfo processInfo = new ProcessInfo("sleeper.exe");
-                executor.Execute(processInfo);
-            }
-            catch (ThreadAbortException)
-            {
-                Thread.ResetAbort();
-            }
-        }
-    }
+		private void StartSleeperProcess()
+		{
+			try
+			{
+				ProcessInfo processInfo = new ProcessInfo("sleeper.exe");
+				executor.Execute(processInfo);
+				runnerThreadCompletedNormally = true;
+			}
+			catch (ThreadAbortException)
+			{
+				runnerThreadWasAborted = true;
+				Thread.ResetAbort();
+			}
+		}
+	}
 }

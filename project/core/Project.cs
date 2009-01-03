@@ -197,7 +197,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		
 		public void AbortRunningBuild()
 		{
-			ProcessExecutor.AbortProcessCurrentlyRunningForProject(Name);
+			ProcessExecutor.KillProcessCurrentlyRunningForProject(Name);
 		}
 		
 		public void PublishResults(IIntegrationResult result)
