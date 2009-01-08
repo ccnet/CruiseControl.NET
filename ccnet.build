@@ -124,7 +124,18 @@
 			</fileset>
 		</copy>
 
-		<!-- deliberately copied into same folder as server -->
+    <!-- deliberately copied into same folder as server -->
+    <copy todir="deployed\server" verbose="${verbosity}">
+      <fileset basedir="${build.dir}\validator">
+        <include name="**\*" />
+
+        <exclude name="**\*.pdb" />
+        <exclude name="**\*.incr" />
+        <exclude name="**\PostBuildEvent.bat" />
+      </fileset>
+    </copy>
+
+    <!-- deliberately copied into same folder as server -->
 		<copy file="${lib.dir}\${MSBuildLogger.dll}" todir="deployed\server" verbose="${verbosity}" />
 		
 		<copy todir="deployed\server\xsl" verbose="${verbosity}">
