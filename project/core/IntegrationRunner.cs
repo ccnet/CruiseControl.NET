@@ -26,15 +26,61 @@ namespace ThoughtWorks.CruiseControl.Core
 
             CreateDirectoryIfItDoesntExist(result.WorkingDirectory);
             CreateDirectoryIfItDoesntExist(result.ArtifactDirectory);
+
             result.MarkStartTime();
-            result.Modifications = GetModifications(lastResult, result);
-            if (result.ShouldRunBuild())
+            
+            bool SourceControlErrorOccured=true; 
+            bool RunBuild = false;
+
+            try
             {
-                Log.Info("Building: " + request);
-                Build(result);
-                PostBuild(result);
-                Log.Info(string.Format("Integration complete: {0} - {1}", result.Status, result.EndTime));
+                result.Modifications = GetModifications(lastResult, result);
+                SourceControlErrorOccured = false;
+
+                RunBuild = result.ShouldRunBuild();
+
+                if (RunBuild)
+                {
+                    Log.Info("Building: " + request);
+
+                    // hack : otherwise all labellers(CCnet and custom) should be altered, better do this in 1 place
+                    // labelers only increase version if PREVIOUS result was ok
+                    // they should also increase version if previous was exception, and the new
+                    // build got past the getmodifications
+                    
+                    if (result.LastIntegrationStatus == IntegrationStatus.Exception)
+                    {
+                        IntegrationSummary isExceptionFix = new IntegrationSummary(IntegrationStatus.Success, result.LastIntegration.Label, result.LastIntegration.LastSuccessfulIntegrationLabel , result.LastIntegration.StartTime);
+                        IIntegrationResult irExceptionFix = new IntegrationResult(result.ProjectName, result.WorkingDirectory, result.ArtifactDirectory, result.IntegrationRequest, isExceptionFix);
+
+                        target.CreateLabel(irExceptionFix);
+                        result.Label = irExceptionFix.Label;
+                    }
+                    else
+                    {                        
+                        target.CreateLabel(result);
+                    }
+
+                    
+                    Build(result);
+                }
+
             }
+            catch (Exception ex)
+            {                
+                result.ExceptionResult = ex;
+                result.SourceControlErrorOccured = SourceControlErrorOccured;
+            }
+            finally
+            {
+                if (RunBuild || SourceControlErrorOccured)
+                {
+                    result.MarkEndTime();
+                    PostBuild(result);
+                    Log.Info(string.Format("Integration complete: {0} - {1}", result.Status, result.EndTime));
+                }
+            }
+
             target.Activity = ProjectActivity.Sleeping;
             return result;
         }
@@ -49,32 +95,24 @@ namespace ThoughtWorks.CruiseControl.Core
         private void Build(IIntegrationResult result)
         {
             target.Activity = ProjectActivity.Building;
-            try
+            target.Prebuild(result);
+            if (!result.Failed)
             {
-                target.Prebuild(result);
-                if (!result.Failed) 
-                {                                    
-                    target.SourceControl.GetSource(result);
-                    target.Run(result);
-                    target.SourceControl.LabelSourceControl(result);
-                }
+                target.SourceControl.GetSource(result);
+                target.Run(result);
+                target.SourceControl.LabelSourceControl(result);
             }
-            catch (Exception ex)
-            {
-                result.ExceptionResult = ex;
-            }
-            result.MarkEndTime();
         }
 
-		private void PostBuild(IIntegrationResult result)
-		{
-			resultManager.FinishIntegration();
-			target.PublishResults(result);
-		}
+        private void PostBuild(IIntegrationResult result)
+        {
+            resultManager.FinishIntegration();
+            target.PublishResults(result);
+        }
 
         private static void CreateDirectoryIfItDoesntExist(string directory)
         {
-            if (! Directory.Exists(directory))
+            if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
         }
     }

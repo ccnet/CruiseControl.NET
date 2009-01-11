@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual("project", result.ProjectName);
 			Assert.AreEqual(@"c:\temp", result.WorkingDirectory);
 			Assert.AreEqual(BuildCondition.ForceBuild, result.BuildCondition);
-			Assert.AreEqual(IntegrationResult.InitialLabel, result.Label);
+			Assert.AreEqual("success", result.Label);
 			Assert.AreEqual(project.ArtifactDirectory, result.ArtifactDirectory);
 			Assert.AreEqual(project.WebURL, result.ProjectUrl);
 			Assert.AreEqual("success", result.LastSuccessfulIntegrationLabel);
@@ -135,7 +135,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Name = "project";
 			project.ConfiguredWorkingDirectory = @"c:\temp";
 			project.StateManager = (IStateManager) mockStateManager.MockInstance;
-			project.ConfiguredArtifactDirectory = project.ConfiguredWorkingDirectory;
+			project.ConfiguredArtifactDirectory = project.ConfiguredWorkingDirectory;            
 			return project;
 		}
 	}

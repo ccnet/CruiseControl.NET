@@ -24,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private readonly IIntegrationQueue integrationQueue;
 		private Thread thread;
 		private ProjectIntegratorState state = ProjectIntegratorState.Stopped;
+        private int AmountOfSourceControlExceptions = 0;
 
 		public ProjectIntegrator(IProject project, IIntegrationQueue integrationQueue)
 		{
@@ -142,6 +143,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void Integrate()
 		{
+            
+
             while (integrationQueue.IsLocked)
             {
                 Thread.Sleep(200);
@@ -155,9 +158,12 @@ namespace ThoughtWorks.CruiseControl.Core
 
                 Log.Info(string.Format("Project: '{0}' is first in queue: '{1}' and shall start integration.",
 				                       project.Name, project.QueueName));
+                
+                IIntegrationResult result = new IntegrationResult();
+
 				try
 				{
-					project.Integrate(ir);
+					result = project.Integrate(ir);
 				}
 				finally
 				{
@@ -165,6 +171,17 @@ namespace ThoughtWorks.CruiseControl.Core
 
                     /// instruct the queue which is performing the integration to release locks
                     integrationQueue.ToggleQueueLocks(false);
+
+                    if (result.SourceControlErrorOccured)
+                    { AmountOfSourceControlExceptions++; }
+                    else
+                    { AmountOfSourceControlExceptions = 0; }
+
+                    
+                    if (AmountOfSourceControlExceptions > project.MaxAmountOfSourceControlExceptions)
+                    {
+                        Stopped();
+                    }                
                 }
 			}
 			else

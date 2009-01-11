@@ -10,6 +10,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		void PublishResults(IIntegrationResult result);
 
 		// Would like to have this somewhere else really
-		ProjectActivity Activity { set; }
+        ProjectActivity Activity { set; get;}
+
+        void CreateLabel(IIntegrationResult result);
+
 	}
 }

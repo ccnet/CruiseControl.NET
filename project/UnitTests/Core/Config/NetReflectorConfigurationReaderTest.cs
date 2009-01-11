@@ -218,6 +218,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			}
 
 			public string WebURL { get {return ""; } }
+
+            public int MaxAmountOfSourceControlExceptions { get { return 0; } }
 		}
 
 		private void CheckInvalidNode(InvalidNodeEventArgs args)

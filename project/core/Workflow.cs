@@ -148,5 +148,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		{ 
 			get { return ""; }
 		}
+
+
+        public int MaxAmountOfSourceControlExceptions
+        {
+            get { throw new NotImplementedException(); }
+        }
 	}
 }

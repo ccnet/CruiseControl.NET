@@ -43,8 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		/// <summary>
-		/// Gets the p
-		///roject's working directory, where the primary build and checkout happens
+		/// Gets the project's working directory, where the primary build and checkout happens
 		/// </summary>
 		string WorkingDirectory
 		{
@@ -106,5 +105,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// Notification of last project exiting the integration queue and hence can return to sleeping state.
 		/// </summary>
 		void NotifySleepingState();
-	}
+
+
+        /// <summary>
+        /// Maximum amount of sourcecontrol exceptions allowed, before stopping the project.
+        /// This equals to the amount of errors in GetModifications. 
+        /// </summary>
+        int MaxAmountOfSourceControlExceptions { get; }
+    
+    }
 }

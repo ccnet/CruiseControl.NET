@@ -49,6 +49,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		void AddTaskResult(ITaskResult result);
 		bool HasModifications();
 		bool ShouldRunBuild();
+        bool SourceControlErrorOccured { get; set; }
+
 
 		IDictionary IntegrationProperties { get; }
         Util.BuildProgressInformation BuildProgressInformation { get; }

@@ -23,5 +23,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
 				mock.Verify();
 			}
 		}
+
+        public IMock NewDynamicMock(Type type)
+        {
+            DynamicMock mock = new DynamicMock(type);
+            mock.Strict = false;
+            mocks.Add(mock);
+            return mock;
+        }
+
+
+
 	}
 }

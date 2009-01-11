@@ -34,9 +34,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         public void Setup()
         {
             mockery = new Mockery();
-            targetMock = mockery.NewStrictMock(typeof(IIntegrationRunnerTarget));
-            resultManagerMock = mockery.NewStrictMock(typeof(IIntegrationResultManager));
-            quietPeriodMock = mockery.NewStrictMock(typeof(IQuietPeriod));
+            targetMock = mockery.NewDynamicMock(typeof(IIntegrationRunnerTarget));
+            resultManagerMock = mockery.NewDynamicMock(typeof(IIntegrationResultManager));
+            quietPeriodMock = mockery.NewDynamicMock(typeof(IQuietPeriod));
 
             runner = new IntegrationRunner((IIntegrationResultManager)resultManagerMock.MockInstance,
                                            (IIntegrationRunnerTarget)targetMock.MockInstance,
@@ -47,13 +47,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             endTime = new DateTime(2005, 2, 1);
             modifications = new Modification[] { new Modification() };
 
-            resultMock = mockery.NewStrictMock(typeof(IIntegrationResult));
+            resultMock = mockery.NewDynamicMock(typeof(IIntegrationResult));
             resultMock.SetupResult("WorkingDirectory", TempFileUtil.GetTempPath("workingDir"));
             resultMock.SetupResult("ArtifactDirectory", TempFileUtil.GetTempPath("artifactDir"));
             resultMock.SetupResult("BuildProgressInformation", new ThoughtWorks.CruiseControl.Core.Util.BuildProgressInformation("", ""));
             result = (IIntegrationResult)resultMock.MockInstance;
 
-            lastResultMock = mockery.NewStrictMock(typeof(IIntegrationResult));
+            lastResultMock = mockery.NewDynamicMock(typeof(IIntegrationResult));
             lastResult = (IIntegrationResult)lastResultMock.MockInstance;
         }
 
@@ -99,6 +99,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             SetupPreambleExpections();
 
             resultMock.ExpectAndReturn("ShouldRunBuild", true);
+            resultMock.ExpectAndReturn("LastIntegrationStatus", IntegrationStatus.Success);
+
             targetMock.Expect("Activity", ProjectActivity.Building);
             sourceControlMock.Expect("GetSource", result);
             targetMock.ExpectAndThrow("Prebuild", new CruiseControlException("expected exception"), result);
@@ -130,6 +132,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         private void SetupShouldBuildExpectations()
         {
             resultMock.ExpectAndReturn("ShouldRunBuild", true);
+            resultMock.ExpectAndReturn("LastIntegrationStatus",IntegrationStatus.Success);
             targetMock.Expect("Activity", ProjectActivity.Building);
             sourceControlMock.Expect("GetSource", result);
             targetMock.Expect("Prebuild", result);
@@ -145,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             resultMock.ExpectAndReturn("Status", IntegrationStatus.Success);
             sourceControlMock.Expect("LabelSourceControl", result);
             targetMock.Expect("PublishResults", result);
-            resultManagerMock.Expect("FinishIntegration");
+            resultManagerMock.Expect("FinishIntegration");           
         }
     }
 }
