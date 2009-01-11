@@ -16,7 +16,8 @@ using ThoughtWorks.CruiseControl.Core;
 
 namespace Validator
 {
-    public partial class MainForm : Form
+    public partial class MainForm 
+        : Form, INetReflectorConfigurationReader
     {
         private string myFileName;
         private Stopwatch myStopwatch = new Stopwatch();
@@ -37,14 +38,17 @@ namespace Validator
 
         private void InitialiseDocuments()
         {
-            validationResults.AllowNavigation = false;
-            validationResults.AllowWebBrowserDrop = false;
-            Stream templateStream = this.GetType().Assembly.GetManifestResourceStream("Validator.Template.htm");
-            validationResults.DocumentStream = templateStream;
-            xmlDisplay.AllowNavigation = false;
-            xmlDisplay.AllowWebBrowserDrop = false;
-            Stream xmlStream = this.GetType().Assembly.GetManifestResourceStream("Validator.Configuration.htm");
-            xmlDisplay.DocumentStream = xmlStream;
+            InitialiseBrowser(validationResults, "Validator.Template.htm");
+            InitialiseBrowser(xmlDisplay, "Validator.Configuration.htm");
+            InitialiseBrowser(processedDisplay, "Validator.Configuration.htm");
+        }
+
+        private void InitialiseBrowser(WebBrowser browser, string template)
+        {
+            browser.AllowNavigation = false;
+            browser.AllowWebBrowserDrop = false;
+            Stream xmlStream = this.GetType().Assembly.GetManifestResourceStream(template);
+            browser.DocumentStream = xmlStream;
         }
 
         private void InitialiseConfigReader()
@@ -79,7 +83,7 @@ namespace Validator
             SetConfigView((ConfigViewMode)Enum.Parse(typeof(ConfigViewMode), 
                 (string)e.Key.GetValue("ConfigViewMode", ConfigViewMode.Vertical.ToString())));
 
-            for (int loop = 0; loop < 5; loop++)
+            for (int loop = 4; loop >= 0; loop--)
             {
                 string file = e.Key.GetValue("History" + loop.ToString(), null) as string;
                 if (file != null) AddFileToHistory(file);
@@ -117,7 +121,7 @@ namespace Validator
                     ToolStripButton button = sender as ToolStripButton;
                     myFileName = button.ToolTipText;
                     AddFileToHistory(myFileName);
-                    LoadConfiguration();
+                    StartConfigurationLoad();
                 };
                 item.AutoSize = true;
                 historyMenu.DropDownItems.Add(item);
@@ -159,7 +163,8 @@ namespace Validator
             DisplayProgressMessage("Loading configuration, please wait...", 0);
             myStopwatch.Reset();
             myStopwatch.Start();
-            LoadConfiguration();
+            DefaultConfigurationFileLoader loader = new DefaultConfigurationFileLoader(this);
+            loader.Load(new FileInfo(myFileName));
         }
         private void DisplayFileName()
         {
@@ -194,7 +199,7 @@ namespace Validator
             return element;
         }
 
-        private void LoadConfiguration()
+        public IConfiguration Read(XmlDocument document)
         {
             myBodyEl = validationResults.Document.Body;
             myBodyEl.InnerHtml = string.Empty;
@@ -204,8 +209,6 @@ namespace Validator
             try
             {
                 DisplayProgressMessage("Validating configuration, please wait...", 10);
-                XmlDocument document = new XmlDocument();
-                document.Load(myFileName);
                 ValidateData(document);
             }
             catch (XmlException error)
@@ -217,6 +220,7 @@ namespace Validator
             }
 
             LoadCompleted();
+            return null;
         }
 
         private void DisplayConfig()
@@ -257,22 +261,47 @@ namespace Validator
                 XmlNodeList nodes = rootElement.SelectNodes("*");
                 int row = 0;
                 int increment = 90 / nodes.Count;
+                List<ConfigurationItem> items = new List<ConfigurationItem>();
                 foreach (XmlNode childElement in nodes)
                 {
                     DisplayProgressMessage("Validating elements, please wait...", 10 + row * increment);
-                    ValidateElement(tableEl, childElement, row++, configuration);
+                    object config = ValidateElement(tableEl, childElement, row++, configuration);
+                    if (config != null) items.Add(new ConfigurationItem(childElement.Name, config));
                 }
 
                 myBodyEl.AppendChild(tableEl);
+
+                DisplayProcessedConfiguration(items);
             }
         }
 
-        private void ValidateElement(HtmlElement tableEl, XmlNode node, int row, Configuration configuration)
+        private void DisplayProcessedConfiguration(List<ConfigurationItem> config)
+        {
+            StringWriter buffer = new StringWriter();
+            XmlTextWriter writer = new XmlTextWriter(buffer);
+            writer.Formatting = Formatting.Indented;
+            writer.WriteStartElement("cruisecontrol");
+            foreach (ConfigurationItem item in config)
+            {
+                new ReflectorTypeAttribute(item.Name).Write(writer, item.Configuration);
+            }
+            writer.WriteEndElement();
+
+            HtmlFormat formatter = new HtmlFormat();
+            formatter.LineNumbers = true;
+            using (MemoryStream stream = new MemoryStream(UTF8Encoding.UTF8.GetBytes(buffer.ToString())))
+            {
+                processedDisplay.Document.Body.InnerHtml = formatter.FormatCode(stream);
+            }
+        }
+
+        private object ValidateElement(HtmlElement tableEl, XmlNode node, int row, Configuration configuration)
         {
             HtmlAttribute rowClass = new HtmlAttribute("class", (row % 2) == 1 ? "even" : "odd");
+            object loadedItem = null;
             try
             {
-                object loadedItem = myConfigReader.Read(node);
+                loadedItem = myConfigReader.Read(node);
                 if (loadedItem is IProject)
                 {
                     IProject project = loadedItem as IProject;
@@ -333,6 +362,8 @@ namespace Validator
                                 new HtmlAttribute("class", "error"),
                                 errorMsg))));
             }
+
+            return loadedItem;
         }
 
         private HtmlElement GenerateHeader()
@@ -391,6 +422,20 @@ namespace Validator
         {
             AboutForm about = new AboutForm();
             about.ShowDialog(this);
+        }
+
+        public event InvalidNodeEventHandler InvalidNodeEventHandler;
+
+        private struct ConfigurationItem
+        {
+            public string Name;
+            public object Configuration;
+
+            public ConfigurationItem(string name, object config)
+            {
+                Name = name;
+                Configuration = config;
+            }
         }
     }
 }

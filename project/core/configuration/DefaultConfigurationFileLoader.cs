@@ -16,13 +16,13 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         public const string PreprocessorXsltResourceName = "ThoughtWorks.CruiseControl.Core.configuration.preprocessor.xslt";
 
 		private ValidationEventHandler handler;
-		private NetReflectorConfigurationReader reader;
+        private INetReflectorConfigurationReader reader;
 	    private ConfigPreprocessor preprocessor = new ConfigPreprocessor();
 
 	    public DefaultConfigurationFileLoader() : this(new NetReflectorConfigurationReader())
 		{}
 
-		public DefaultConfigurationFileLoader(NetReflectorConfigurationReader reader)
+        public DefaultConfigurationFileLoader(INetReflectorConfigurationReader reader)
 		{
 			this.reader = reader;
 			reader.InvalidNodeEventHandler += new InvalidNodeEventHandler(WarnOnInvalidNode);

@@ -6,6 +6,7 @@ using Exortech.NetReflector;
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
 	public class NetReflectorConfigurationReader
+        : INetReflectorConfigurationReader
 	{
 		private const string ROOT_ELEMENT = "cruisecontrol";
 		private const string CONFIG_ASSEMBLY_PATTERN = "ccnet.*.plugin.dll";
