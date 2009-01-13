@@ -170,7 +170,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			result.ProjectUrl = "http://localhost/ccnet2";
             result.FailureUsers.Add("user");
 
-			Assert.AreEqual(14, result.IntegrationProperties.Count);
+            Modification mods = new Modification();
+            mods.UserName = "John";
+
+            result.Modifications = new Modification[] { mods };            
+
+			Assert.AreEqual(15, result.IntegrationProperties.Count);
 			Assert.AreEqual("project", result.IntegrationProperties["CCNetProject"]);
 			Assert.AreEqual("http://localhost/ccnet2", result.IntegrationProperties["CCNetProjectUrl"]);
 			Assert.AreEqual("label23", result.IntegrationProperties["CCNetLabel"]);
@@ -188,7 +193,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             ArrayList failureUsers = result.IntegrationProperties["CCNetFailureUsers"] as ArrayList;
             Assert.IsNotNull(failureUsers);
             Assert.AreEqual(1, failureUsers.Count);
-            Assert.AreEqual("user", failureUsers[0]);
+            Assert.AreEqual("user", failureUsers[0]);            
+            ArrayList Modifiers = result.IntegrationProperties["CCNetModifyingUsers"] as ArrayList;
+            Assert.IsNotNull(Modifiers);
+            Assert.AreEqual(1, Modifiers.Count);
+            Assert.AreEqual("John", Modifiers[0]);
+
 		}
 
 		[Test]

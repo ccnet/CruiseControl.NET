@@ -401,6 +401,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 fullProps["CCNetLastIntegrationStatus"] = LastIntegrationStatus;
                 fullProps["CCNetListenerFile"] = BuildProgressInformation.ListenerFile;
                 fullProps["CCNetFailureUsers"] = FailureUsers;
+                fullProps["CCNetModifyingUsers"] = GetModifiers();
                 if (IntegrationRequest != null) fullProps["CCNetRequestSource"] = IntegrationRequest.Source;
                 return fullProps;
             }
@@ -439,6 +440,21 @@ namespace ThoughtWorks.CruiseControl.Core
                 sourceControlErrorOccured = value;
             }
         }
+
+        private ArrayList GetModifiers()
+        {
+            ArrayList Result = new ArrayList();
+
+            foreach (Modification mod in Modifications)
+            {
+                if (!Result.Contains(mod.UserName))
+                {
+                    Result.Add(mod.UserName);
+                }
+            }
+            return Result;
+        }
+
 
     }
 }
