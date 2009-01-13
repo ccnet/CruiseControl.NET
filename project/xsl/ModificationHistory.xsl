@@ -129,7 +129,7 @@
 		                         <td class="section-data"><xsl:attribute name="NOWRAP"/><xsl:value-of select="@type"/></td>                                                                           
 		                         <td class="section-data"><xsl:attribute name="NOWRAP"/><xsl:value-of select="user"/></td>                                                                                   
 		                         <td class="section-data"><xsl:value-of select="comment"/></td>
-		                         <td class="section-data"><xsl:value-of select="project"/></td>
+		                         <td class="section-data"><xsl:value-of select="project"/>/<xsl:value-of select="filename"/></td>
 		                    </tr>
 		                  </xsl:for-each>
 		              </table>
