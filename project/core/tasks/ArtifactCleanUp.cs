@@ -116,11 +116,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private void DeleteFolder(string folderName)
 		{
-			SetFilesToNormalAttribute(folderName);
+			SetFilesToNormalAttributeAndDelete(folderName);
 			Directory.Delete(folderName);
 		}
 
-		private void SetFilesToNormalAttribute(string folderName)
+		private void SetFilesToNormalAttributeAndDelete(string folderName)
 		{
 			foreach (string file in Directory.GetFiles(folderName))
 			{
@@ -134,7 +134,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}
 		}
 
-		private static bool BuildLogFolderSet(IIntegrationResult result)
+        private void SetFilesToNormalAttribute(string folderName)
+        {
+            foreach (string file in Directory.GetFiles(folderName))
+            {
+                File.SetAttributes(file, FileAttributes.Normal);                
+            }
+        }
+
+		private bool BuildLogFolderSet(IIntegrationResult result)
 		{
 			string BuildLogFolder = result.BuildLogDirectory;
 
@@ -148,8 +156,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return true;
 		}
 
-		private static void DeleteBuildsOlderThanXDays(string buildLogFolder, int daysToKeep)
+		private  void DeleteBuildsOlderThanXDays(string buildLogFolder, int daysToKeep)
 		{
+            SetFilesToNormalAttribute(buildLogFolder);
+
 			foreach (string filename in Directory.GetFiles(buildLogFolder))
 			{
 				if (File.GetCreationTime(filename).Date < DateTime.Now.Date.AddDays(-daysToKeep))
@@ -157,8 +167,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}
 		}
 
-		private static void KeepLastXBuilds(string buildLogFolder, int buildToKeep)
+		private  void KeepLastXBuilds(string buildLogFolder, int buildToKeep)
 		{
+
+            SetFilesToNormalAttribute(buildLogFolder);
+
 			List<string> buildLogs = new List<string>(Directory.GetFiles(buildLogFolder));
 			buildLogs.Sort();
 
@@ -169,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}
 		}
 
-		private static void KeepMaximumXHistoryDataEntries(IIntegrationResult result, int entriesToKeep)
+		private void KeepMaximumXHistoryDataEntries(IIntegrationResult result, int entriesToKeep)
 		{
 			string historyXml = ModificationHistoryPublisher.LoadHistory(result.ArtifactDirectory);
 
