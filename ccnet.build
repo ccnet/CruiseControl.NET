@@ -70,6 +70,21 @@
 		<mkdir dir="${build.dir}" verbose="${verbosity}"/>
 	</target>
 
+  <target name="compress" depends="deploy.webdashboard" description="Compresses the JavaScript files">
+    <loadtasks assembly="${lib.dir}\Ra.Build.Tasks.dll" />
+    <jsmin verbose="false" todir="${webdashboard.dir}\Javascript-compressed">
+      <fileset basedir="${webdashboard.dir}\Javascript">
+        <include name="\**\*.js" />
+      </fileset>
+    </jsmin>
+    <move todir="${webdashboard.dir}\Javascript" overwrite="true">
+      <fileset basedir="${webdashboard.dir}\Javascript-compressed">
+        <include name="\**\*.js"/>
+      </fileset>
+    </move>
+    <delete dir="${webdashboard.dir}\Javascript-compressed"/>
+  </target>
+
 	<!-- COMPILE -->
 	<target name="compile" depends="init" description="compiles everything to be released">
 		<loadtasks assembly="${nantcontrib.assembly}" />
@@ -99,7 +114,7 @@
 
 	<!-- DEPLOY -->
 
-	<target name="deploy" depends="compile, deploy.server, deploy.cctray, deploy.webdashboard" />
+	<target name="deploy" depends="compile, deploy.server, deploy.cctray, deploy.webdashboard, compress" />
 	
 	<target name="deploy.server" depends="compile">
 		<mkdir dir="deployed\server"/>
@@ -124,18 +139,7 @@
 			</fileset>
 		</copy>
 
-    <!-- deliberately copied into same folder as server -->
-    <copy todir="deployed\server" verbose="${verbosity}">
-      <fileset basedir="${build.dir}\validator">
-        <include name="**\*" />
-
-        <exclude name="**\*.pdb" />
-        <exclude name="**\*.incr" />
-        <exclude name="**\PostBuildEvent.bat" />
-      </fileset>
-    </copy>
-
-    <!-- deliberately copied into same folder as server -->
+		<!-- deliberately copied into same folder as server -->
 		<copy file="${lib.dir}\${MSBuildLogger.dll}" todir="deployed\server" verbose="${verbosity}" />
 		
 		<copy todir="deployed\server\xsl" verbose="${verbosity}">
