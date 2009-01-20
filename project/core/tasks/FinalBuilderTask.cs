@@ -104,9 +104,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("Timeout", Required = false)]
 		public int Timeout;
 
+        /// <summary>
+        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
+        /// </summary>
+        [ReflectorProperty("description", Required = false)]
+        public string Description = string.Empty;
+
+
+
+
 		public void Run(IIntegrationResult result)
 		{
-            result.BuildProgressInformation.SignalStartRunTask(
+            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : 
                             string.Format("Executing FinalBuilder : BuildFile: {0} ", ProjectFile));
 
             ProcessResult processResult = AttemptToExecute(NewProcessInfoFrom(result), result.ProjectName);

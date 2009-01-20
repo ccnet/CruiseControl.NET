@@ -48,6 +48,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("buildTimeoutSeconds", Required = false)]
 		public int BuildTimeoutSeconds = DefaultBuildTimeout;
 
+        /// <summary>
+        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
+        /// </summary>
+        [ReflectorProperty("description", Required = false)]
+        public string Description = string.Empty;
+
+
+
 		/// <summary>
 		/// Runs the integration using NAnt.  The build number is provided for labelling, build
 		/// timeouts are enforced.  The specified targets are used for the specified NAnt build file.
@@ -55,8 +63,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		/// </summary>
 		/// <param name="result">For storing build output.</param>
 		public override void Run(IIntegrationResult result)
-		{            
-            result.BuildProgressInformation.SignalStartRunTask ( 
+		{
+            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : 
                 string.Format("Executing Nant :BuildFile: {0} Targets: {1} ", BuildFile, string.Join(", ", Targets)));
 
             ProcessResult processResult = TryToRun(CreateProcessInfo(result));

@@ -139,9 +139,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("project", Required = false)]
 		public string Project  = DEFAULT_PROJECT;
 
+        /// <summary>
+        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
+        /// </summary>
+        [ReflectorProperty("description", Required = false)]
+        public string Description = string.Empty;
+
+
+
 		public virtual void Run(IIntegrationResult result)
 		{
-			result.BuildProgressInformation.SignalStartRunTask(string.Format("Executing Devenv :{0}", GetArguments()));
+			result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : string.Format("Executing Devenv :{0}", GetArguments()));
 			ProcessResult processResult = TryToRun(result);
 			result.AddTaskResult(new DevenvTaskResult(processResult));
 			Log.Info("Devenv build complete.  Status: " + result.Status);
