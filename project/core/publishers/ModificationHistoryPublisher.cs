@@ -29,10 +29,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { onlyLogWhenChangesFound = value; }
         }
 
+        /// <summary>
+        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
+        /// </summary>
+        [ReflectorProperty("description", Required = false)]
+        public string Description = string.Empty;
 
         public void Run(IIntegrationResult result)
         {
             if ((OnlyLogWhenChangesFound) & (result.Modifications.Length == 0)) return;
+
+            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Saving modification history");                
+
 
             string DataHistoryFile = System.IO.Path.Combine(result.ArtifactDirectory, DataHistoryFileName);
 

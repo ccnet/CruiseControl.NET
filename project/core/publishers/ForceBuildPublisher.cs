@@ -34,9 +34,20 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		[ReflectorProperty("integrationStatus", Required=false)]
 		public IntegrationStatus IntegrationStatus = IntegrationStatus.Success;
 
+
+        /// <summary>
+        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
+        /// </summary>
+        [ReflectorProperty("description", Required = false)]
+        public string Description = string.Empty;
+
+
 		public void Run(IIntegrationResult result)
 		{
 			if (IntegrationStatus != result.Status) return;
+
+            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Running for build publisher");                
+
 
             factory.GetCruiseManager(ServerUri).ForceBuild(Project, BuildForcerName);
 		}

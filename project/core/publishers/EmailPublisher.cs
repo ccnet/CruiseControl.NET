@@ -191,10 +191,19 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { subjectPrefix = value; }
         }
 
+        /// <summary>
+        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
+        /// </summary>
+        [ReflectorProperty("description", Required = false)]
+        public string Description = string.Empty;
+
+
         public void Run(IIntegrationResult result)
         {
             if (result.Status == IntegrationStatus.Unknown)
                 return;
+
+            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Emailing ...");                
 
             EmailMessage emailMessage = new EmailMessage(result, this);
             string to = emailMessage.Recipients;
