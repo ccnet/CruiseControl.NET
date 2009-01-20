@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         public virtual string Name
         {
             get { return _name; }
-            set { _name = value; }
+            set { _name = value.Trim(); }
         }
 
         /// <summary>

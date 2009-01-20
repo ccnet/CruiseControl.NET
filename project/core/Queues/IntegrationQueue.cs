@@ -314,22 +314,25 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
             if (!string.IsNullOrEmpty(_configuration.LockQueueNames) && _parentQueueSet != null)
             {
                 string[] queues = _configuration.LockQueueNames.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                string queue;
 
                 for (int i = 0; i < queues.Length; i++)
                 {
+                    queue = queues[i].Trim();
+
                     if(acquire)
                     {
                         // find queue and lock it
-                        _parentQueueSet[queues[i]].LockQueue(this);
+                        _parentQueueSet[queue].LockQueue(this);
 
-                        Log.Info(string.Format("Queue: '{0}' has acquired a lock against queue '{1}'", Name, queues[i]));
+                        Log.Info(string.Format("Queue: '{0}' has acquired a lock against queue '{1}'", Name, queue));
                     }
                     else
                     {
                         // find queue and lock it
-                        _parentQueueSet[queues[i]].UnlockQueue(this);
+                        _parentQueueSet[queue].UnlockQueue(this);
 
-                        Log.Info(string.Format("Queue: '{0}' has released a lock against queue '{1}'", Name, queues[i]));
+                        Log.Info(string.Format("Queue: '{0}' has released a lock against queue '{1}'", Name, queue));
                     }
                 }
             }

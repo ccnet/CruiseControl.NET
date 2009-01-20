@@ -105,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 }
                 return queueName;
             }
-            set { queueName = value; }
+            set { queueName = value.Trim(); }
         }
 
         [ReflectorProperty("queuePriority", Required = false)]
