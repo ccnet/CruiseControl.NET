@@ -51,11 +51,12 @@
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.resultsDisplay = new System.Windows.Forms.SplitContainer();
             this.validationResults = new System.Windows.Forms.WebBrowser();
-            this.xmlDisplay = new System.Windows.Forms.WebBrowser();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.xmlDisplay = new System.Windows.Forms.WebBrowser();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.processedDisplay = new System.Windows.Forms.WebBrowser();
+            this.codeFormatter = new System.ComponentModel.BackgroundWorker();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.resultsDisplay.Panel1.SuspendLayout();
@@ -223,6 +224,7 @@
             // 
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(100, 16);
+            this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             // 
             // resultsDisplay
             // 
@@ -254,18 +256,6 @@
             this.validationResults.TabIndex = 3;
             this.validationResults.WebBrowserShortcutsEnabled = false;
             // 
-            // xmlDisplay
-            // 
-            this.xmlDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xmlDisplay.IsWebBrowserContextMenuEnabled = false;
-            this.xmlDisplay.Location = new System.Drawing.Point(3, 3);
-            this.xmlDisplay.MinimumSize = new System.Drawing.Size(20, 20);
-            this.xmlDisplay.Name = "xmlDisplay";
-            this.xmlDisplay.ScriptErrorsSuppressed = true;
-            this.xmlDisplay.Size = new System.Drawing.Size(346, 298);
-            this.xmlDisplay.TabIndex = 4;
-            this.xmlDisplay.WebBrowserShortcutsEnabled = false;
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -287,6 +277,18 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Original";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // xmlDisplay
+            // 
+            this.xmlDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.xmlDisplay.IsWebBrowserContextMenuEnabled = false;
+            this.xmlDisplay.Location = new System.Drawing.Point(3, 3);
+            this.xmlDisplay.MinimumSize = new System.Drawing.Size(20, 20);
+            this.xmlDisplay.Name = "xmlDisplay";
+            this.xmlDisplay.ScriptErrorsSuppressed = true;
+            this.xmlDisplay.Size = new System.Drawing.Size(346, 298);
+            this.xmlDisplay.TabIndex = 4;
+            this.xmlDisplay.WebBrowserShortcutsEnabled = false;
             // 
             // tabPage2
             // 
@@ -310,6 +312,11 @@
             this.processedDisplay.Size = new System.Drawing.Size(346, 298);
             this.processedDisplay.TabIndex = 5;
             this.processedDisplay.WebBrowserShortcutsEnabled = false;
+            // 
+            // codeFormatter
+            // 
+            this.codeFormatter.DoWork += new System.ComponentModel.DoWorkEventHandler(this.codeFormatter_DoWork);
+            this.codeFormatter.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.codeFormatter_RunWorkerCompleted);
             // 
             // MainForm
             // 
@@ -368,6 +375,7 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.WebBrowser processedDisplay;
+        private System.ComponentModel.BackgroundWorker codeFormatter;
     }
 }
 

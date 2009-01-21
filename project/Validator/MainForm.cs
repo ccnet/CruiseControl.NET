@@ -27,6 +27,7 @@ namespace Validator
         private NetReflectorReader myConfigReader;
         private PersistWindowState myWindowState;
         private List<string> myFileHistory = new List<string>();
+        private string myProcessedXml;
 
         public MainForm()
         {
@@ -83,7 +84,7 @@ namespace Validator
             SetConfigView((ConfigViewMode)Enum.Parse(typeof(ConfigViewMode), 
                 (string)e.Key.GetValue("ConfigViewMode", ConfigViewMode.Vertical.ToString())));
 
-            for (int loop = 4; loop >= 0; loop--)
+            for (int loop = 0; loop < 5; loop++)
             {
                 string file = e.Key.GetValue("History" + loop.ToString(), null) as string;
                 if (file != null) AddFileToHistory(file);
@@ -111,10 +112,10 @@ namespace Validator
             if (myFileHistory.Count >= 5) myFileHistory.RemoveAt(0);
             myFileHistory.Add(fileName);
             historyMenu.DropDownItems.Clear();
-            int position = 1;
+            int position = 0;
             foreach (string file in myFileHistory)
             {
-                ToolStripItem item = new ToolStripButton(string.Format("&{0} {1}", position++, file));
+                ToolStripItem item = new ToolStripButton(string.Format("&{0} {1}", myFileHistory.Count - position++, file));
                 item.ToolTipText = file;
                 item.Click += delegate(object sender, EventArgs e)
                 {
@@ -124,7 +125,7 @@ namespace Validator
                     StartConfigurationLoad();
                 };
                 item.AutoSize = true;
-                historyMenu.DropDownItems.Add(item);
+                historyMenu.DropDownItems.Insert(0, item);
             }
 
             // The following forces the menu items to be wide enough to display the entire file name
@@ -164,7 +165,19 @@ namespace Validator
             myStopwatch.Reset();
             myStopwatch.Start();
             DefaultConfigurationFileLoader loader = new DefaultConfigurationFileLoader(this);
-            loader.Load(new FileInfo(myFileName));
+            myBodyEl = validationResults.Document.Body;
+            myBodyEl.InnerHtml = string.Empty;
+            try
+            {
+                loader.Load(new FileInfo(myFileName));
+            }
+            catch (ConfigurationException error)
+            {
+                myBodyEl.AppendChild(
+                    GenerateElement("div",
+                    new HtmlAttribute("class", "error"),
+                    GenerateElement("div", "Configuration contains invalid XML: " + error.Message)));
+            }
         }
         private void DisplayFileName()
         {
@@ -201,23 +214,11 @@ namespace Validator
 
         public IConfiguration Read(XmlDocument document)
         {
-            myBodyEl = validationResults.Document.Body;
-            myBodyEl.InnerHtml = string.Empty;
             DisplayFileName();
             DisplayConfig();
 
-            try
-            {
-                DisplayProgressMessage("Validating configuration, please wait...", 10);
-                ValidateData(document);
-            }
-            catch (XmlException error)
-            {
-                myBodyEl.AppendChild(
-                    GenerateElement("div",
-                    new HtmlAttribute("class", "error"),
-                    GenerateElement("div", "Configuration contains invalid XML: " + error.Message)));
-            }
+            DisplayProgressMessage("Validating configuration, please wait...", 10);
+            ValidateData(document);
 
             LoadCompleted();
             return null;
@@ -260,11 +261,11 @@ namespace Validator
 
                 XmlNodeList nodes = rootElement.SelectNodes("*");
                 int row = 0;
-                int increment = 90 / nodes.Count;
+                double increment = (double)80 / nodes.Count;
                 List<ConfigurationItem> items = new List<ConfigurationItem>();
                 foreach (XmlNode childElement in nodes)
                 {
-                    DisplayProgressMessage("Validating elements, please wait...", 10 + row * increment);
+                    DisplayProgressMessage("Validating elements, please wait...", Convert.ToInt32(10 + row * increment));
                     object config = ValidateElement(tableEl, childElement, row++, configuration);
                     if (config != null) items.Add(new ConfigurationItem(childElement.Name, config));
                 }
@@ -287,13 +288,11 @@ namespace Validator
             }
             writer.WriteEndElement();
 
-            HtmlFormat formatter = new HtmlFormat();
-            formatter.LineNumbers = true;
-            using (MemoryStream stream = new MemoryStream(UTF8Encoding.UTF8.GetBytes(buffer.ToString())))
-            {
-                processedDisplay.Document.Body.InnerHtml = formatter.FormatCode(stream);
-            }
+            myProcessedXml = buffer.ToString();
+            processedDisplay.Document.Body.InnerHtml = "Formatting XML, please wait...";
+            codeFormatter.RunWorkerAsync();
         }
+
 
         private object ValidateElement(HtmlElement tableEl, XmlNode node, int row, Configuration configuration)
         {
@@ -386,7 +385,15 @@ namespace Validator
 
         private void reloadMenuButton_Click(object sender, EventArgs e)
         {
-            StartConfigurationLoad();
+            if (string.IsNullOrEmpty(myFileName))
+            {
+                MessageBox.Show(this, "Reload can only be used after a file has loaded",
+                    "Functionality not available", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                StartConfigurationLoad();
+            }
         }
 
         private void printMenuButton_Click(object sender, EventArgs e)
@@ -436,6 +443,21 @@ namespace Validator
                 Name = name;
                 Configuration = config;
             }
+        }
+
+        private void codeFormatter_DoWork(object sender, DoWorkEventArgs e)
+        {
+            HtmlFormat formatter = new HtmlFormat();
+            formatter.LineNumbers = true;
+            using (MemoryStream stream = new MemoryStream(UTF8Encoding.UTF8.GetBytes(myProcessedXml)))
+            {
+                myProcessedXml = formatter.FormatCode(stream);
+            }
+        }
+
+        private void codeFormatter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            processedDisplay.Document.Body.InnerHtml = myProcessedXml;
         }
     }
 }
