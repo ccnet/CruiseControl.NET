@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private IIntegratable integratable;
         private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
         private ArrayList messages = new ArrayList();
-        private int maxAmountOfSourceControlExceptions = int.MaxValue;
+        private int maxAmountOfSourceControlExceptions = 5;
 
         [ReflectorProperty("prebuild", Required = false)]
         public ITask[] PrebuildTasks = new ITask[0];
