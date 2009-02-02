@@ -89,6 +89,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                     AddRecipients(recipients, EmailGroup.NotificationType.Success);
                 if (result.Fixed)
                     AddRecipients(recipients, EmailGroup.NotificationType.Fixed);
+                if (result.Status == IntegrationStatus.Exception)
+                    AddRecipients(recipients, EmailGroup.NotificationType.Exception);
+
 
                 // Add users who contributed modifications to this or possibly previous builds.
                 foreach (EmailGroup.NotificationType notificationType in emailPublisher.ModifierNotificationTypes)
