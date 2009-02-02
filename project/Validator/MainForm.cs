@@ -27,8 +27,7 @@ namespace Validator
         private NetReflectorReader myConfigReader;
         private PersistWindowState myWindowState;
         private List<string> myFileHistory = new List<string>();
-        private string myProcessedXml;
-
+        
         public MainForm()
         {
             InitializeComponent();
@@ -39,9 +38,7 @@ namespace Validator
 
         private void InitialiseDocuments()
         {
-            InitialiseBrowser(validationResults, "Validator.Template.htm");
-            InitialiseBrowser(xmlDisplay, "Validator.Configuration.htm");
-            InitialiseBrowser(processedDisplay, "Validator.Configuration.htm");
+            InitialiseBrowser(validationResults, "Validator.Template.htm");            
         }
 
         private void InitialiseBrowser(WebBrowser browser, string template)
@@ -226,12 +223,11 @@ namespace Validator
 
         private void DisplayConfig()
         {
-            HtmlFormat formatter = new HtmlFormat();
-            formatter.LineNumbers = true;
-
-            using (Stream dataStream = File.Open(myFileName, FileMode.Open))
+            using (StreamReader sr = new StreamReader(myFileName))
             {
-                xmlDisplay.Document.Body.InnerHtml = formatter.FormatCode(dataStream);
+                xmlDisplay.IsReadOnly = false;
+                xmlDisplay.Text = sr.ReadToEnd();
+                xmlDisplay.IsReadOnly = true;
             }
         }
 
@@ -288,9 +284,9 @@ namespace Validator
             }
             writer.WriteEndElement();
 
-            myProcessedXml = buffer.ToString();
-            processedDisplay.Document.Body.InnerHtml = "Formatting XML, please wait...";
-            codeFormatter.RunWorkerAsync();
+            processedDisplay.IsReadOnly = false;
+            processedDisplay.Text = buffer.ToString();
+            processedDisplay.IsReadOnly = true;
         }
 
 
@@ -443,21 +439,6 @@ namespace Validator
                 Name = name;
                 Configuration = config;
             }
-        }
-
-        private void codeFormatter_DoWork(object sender, DoWorkEventArgs e)
-        {
-            HtmlFormat formatter = new HtmlFormat();
-            formatter.LineNumbers = true;
-            using (MemoryStream stream = new MemoryStream(UTF8Encoding.UTF8.GetBytes(myProcessedXml)))
-            {
-                myProcessedXml = formatter.FormatCode(stream);
-            }
-        }
-
-        private void codeFormatter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            processedDisplay.Document.Body.InnerHtml = myProcessedXml;
         }
     }
 }

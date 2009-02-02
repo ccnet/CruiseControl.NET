@@ -45,6 +45,10 @@
       <Name>NetReflector</Name>
       <HintPath>..\..\lib\NetReflector.dll</HintPath>
     </Reference>
+    <Reference Include="ScintillaNet, Version=2.0.3138.25704, Culture=neutral, PublicKeyToken=948d6c9751444115, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\ScintillaNet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -104,12 +108,15 @@
     <EmbeddedResource Include="AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Configuration.htm" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\dialog.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\lib\SciLexer.dll">
+      <Link>SciLexer.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="AppIcon.ico" />
   </ItemGroup>
   <ItemGroup>
