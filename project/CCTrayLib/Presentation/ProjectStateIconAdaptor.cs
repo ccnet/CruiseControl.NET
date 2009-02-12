@@ -6,8 +6,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
 	public class ProjectStateIconAdaptor : IIconProvider
 	{
-		private IProjectMonitor monitor;
-		private IProjectStateIconProvider iconProvider;
+		private readonly IProjectMonitor monitor;
+		private readonly IProjectStateIconProvider iconProvider;
 
 		private StatusIcon currentIcon;
 
@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			UpdateIcon();
 
-			monitor.Polled += new MonitorPolledEventHandler( Monitor_Polled );
+			monitor.Polled += Monitor_Polled;
 		}
 
 		public Icon Icon
@@ -31,11 +31,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			get { return currentIcon; }
 			set
 			{
-				StatusIcon oldValue = currentIcon;
-				currentIcon = value;
-
-				if (oldValue != currentIcon)
-					OnIconChanged(EventArgs.Empty);
+                if (currentIcon != value)
+                {
+                    currentIcon = value;
+                    OnIconChanged();
+                }
 			}
 		}
 
@@ -51,10 +51,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public event EventHandler IconChanged;
 
-		private void OnIconChanged( EventArgs args )
+		private void OnIconChanged()
 		{
 			if (IconChanged != null)
-				IconChanged(this, args);
+                IconChanged(this, EventArgs.Empty);
 		}
 	}
 }

@@ -69,9 +69,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
         public MainForm(ICCTrayMultiConfiguration configuration)
         {
-            this.configuration = configuration;
-
             InitializeComponent();
+
+            this.configuration = configuration;
             HookPersistentWindowState();
         }
 
@@ -132,20 +132,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             controller.SetFormShowInTaskbar(this);
 
             if (queueViewPanelVisible)
-            {
                 controller.BindToQueueTreeView(queueTreeView);
-            }
-            CreateDataBindings();
+
+            foreach (IProjectMonitor mon in controller.Monitors)
+                mon.Polled += mon_Polled;
+
             btnForceBuild.DataBindings.Add("Enabled", controller, "IsProjectSelected");
             btnStartStopProject.DataBindings.Add("Enabled", controller, "IsProjectSelected");
-        }
-
-        private void CreateDataBindings()
-        {
-            foreach (IProjectMonitor mon in controller.Monitors)
-            {
-                mon.Polled += new MonitorPolledEventHandler(mon_Polled);
-            }
         }
 
         protected override void OnLoad(EventArgs e)
@@ -727,10 +720,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private void UpdateForceAbortBuildButtonLabel()
         {
             btnForceBuild.Text = controller.IsProjectBuilding ? "Abort &Build" : "Force &Build";
-            btnForceBuild.Image = controller.IsProjectBuilding
-							? CacheFromIcon(controller.ProjectStateIconProvider.GetStatusIconForState(ProjectState.Broken).Icon, ref redIcon, ref redIconBitmap)
-							: CacheFromIcon(controller.ProjectStateIconProvider.GetStatusIconForState(ProjectState.Success).Icon, ref greenIcon, ref greenIconBitmap);
+            //btnForceBuild.Image = GetForceBuildButtonIcon();
             btnForceBuild.Enabled = ((controller.SelectedProject != null) && controller.SelectedProject.IsConnected);
+        }
+
+        private Bitmap GetForceBuildButtonIcon()
+        {
+            if (controller.IsProjectBuilding)
+                return CacheFromIcon(
+                    controller.ProjectStateIconProvider.GetStatusIconForState(ProjectState.Broken).Icon, ref redIcon,
+                    ref redIconBitmap);
+            else
+                return
+                    CacheFromIcon(controller.ProjectStateIconProvider.GetStatusIconForState(ProjectState.Success).Icon,
+                                  ref greenIcon, ref greenIconBitmap);
         }
 
         private void mnuWebPage_Click(object sender, EventArgs e)
@@ -781,25 +784,27 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
         private void mnuFilePreferences_Click(object sender, EventArgs e)
         {
-            controller.StopServerMonitoring();
+            ShowPreferencesForm();
+        }
 
+        private void ShowPreferencesForm()
+        {
+            controller.StopServerMonitoring();
             try
             {
-                if (new CCTrayMultiSettingsForm(configuration).ShowDialog() == DialogResult.OK)
-                {
-                    configuration.Reload();
-                    lvProjects.Items.Clear();
-                    DataBindings.Clear();
-                    btnForceBuild.DataBindings.Clear();
-                    btnStartStopProject.DataBindings.Clear();
-                    controller.UnbindToQueueTreeView(queueTreeView);
+                if (new CCTrayMultiSettingsForm(configuration).ShowDialog() != DialogResult.OK)
+                    return;
 
-                    MainFormController oldController = controller;
+                configuration.Reload();
+                lvProjects.Items.Clear();
+                DataBindings.Clear();
+                btnForceBuild.DataBindings.Clear();
+                btnStartStopProject.DataBindings.Clear();
+                controller.UnbindToQueueTreeView(queueTreeView);
 
-                    CreateController();
-
-                    oldController.ProjectStateIconProvider.Dispose();
-                }
+                MainFormController oldController = controller;
+                CreateController();
+                oldController.ProjectStateIconProvider.Dispose();
             }
             finally
             {

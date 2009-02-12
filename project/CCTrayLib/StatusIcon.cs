@@ -1,11 +1,10 @@
 using System;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib
 {
-	[Serializable]
+    [Serializable]
 	public class StatusIcon : IDisposable
 	{
 		private Icon icon;
@@ -13,30 +12,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		[NonSerialized]
 		private bool ownIcon = true;
 
-		public StatusIcon()
-		{
-		}
+		public StatusIcon(){}
 
 		public StatusIcon(String resourceName)
 		{
-			Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
-			icon = LoadIconFromStreamPreservingColourDepth(stream);
+		    icon = IconUtil.LoadFromResource(resourceName);
 		}
 
-		private static Icon LoadIconFromStreamPreservingColourDepth(Stream stream)
-		{
-			// If you just do new Icon(Stream) it downgrades any 24-bit icons to 8bit colour.  
-			// This magic incantation preserves the colur depth of 24bpp icons.
-			using (Bitmap bmp = (Bitmap)Image.FromStream(stream))
-				return Icon.FromHandle(bmp.GetHicon());
-		}
-
-		public StatusIcon(Icon i)
-			: this(i, false)
-		{
-		}
-
-		public StatusIcon(Icon i, bool ownIcon)
+        public StatusIcon(Icon i, bool ownIcon)
 		{
 			icon = i;
 			this.ownIcon = ownIcon;
@@ -59,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 			{
 				using (FileStream stream = File.Open(file, FileMode.Open, FileAccess.Read))
 				{
-					return new StatusIcon(LoadIconFromStreamPreservingColourDepth(stream), true);
+					return new StatusIcon(IconUtil.LoadFromStream(stream), true);
 				}
 			}
 			catch (SystemException ex)

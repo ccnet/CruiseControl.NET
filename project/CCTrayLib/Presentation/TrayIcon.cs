@@ -56,17 +56,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
         private void Monitor_BuildOccurred(object sender, MonitorBuildOccurredEventArgs e)
         {
-            if (e.BuildTransition.ErrorLevel.NotifyInfo >= minimumNotificationLevel)
-            {
-                string projectName = e.ProjectMonitor.Detail.ProjectName;
+            if (e.BuildTransition.ErrorLevel.NotifyInfo < minimumNotificationLevel) 
+                return;
 
-                CaptionAndMessage captionAndMessage = balloonMessageProvider.GetCaptionAndMessageForBuildTransition(e.BuildTransition);
-                string caption = string.Format("{0}: {1}",
-                                               projectName, captionAndMessage.Caption);
+            string projectName = e.ProjectMonitor.Detail.ProjectName;
 
-                ShowBalloon(caption, captionAndMessage.Message,
-                            e.BuildTransition.ErrorLevel.NotifyInfo, 5000);
-            }
+            CaptionAndMessage captionAndMessage = balloonMessageProvider.GetCaptionAndMessageForBuildTransition(e.BuildTransition);
+            string caption = string.Format("{0}: {1}",
+                                           projectName, captionAndMessage.Caption);
+
+            ShowBalloon(caption, captionAndMessage.Message,
+                        e.BuildTransition.ErrorLevel.NotifyInfo, 5000);
         }
 
 		private void Monitor_Polled(object sender, MonitorPolledEventArgs args)

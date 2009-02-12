@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		/// <summary>
 		///  A relative rating of how "important" this state is, higher == more important
 		/// </summary>
-		private int importance;
+		private readonly int importance;
 
 		private ProjectState(string name, int imageIndex, int importance)
 		{

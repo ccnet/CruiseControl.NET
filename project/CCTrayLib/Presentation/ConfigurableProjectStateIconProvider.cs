@@ -1,6 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
 
@@ -9,14 +8,16 @@ using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
-	public class ConfigurableProjectStateIconProvider : IProjectStateIconProvider, IDisposable
+	public class ConfigurableProjectStateIconProvider : IProjectStateIconProvider
 	{
-		private readonly IDictionary map = new HybridDictionary();
+		private readonly IDictionary<ProjectState, StatusIcon> map = new Dictionary<ProjectState, StatusIcon>();
 
 		public void Dispose()
 		{
 			foreach (StatusIcon icon in map.Values)
 				icon.Dispose();
+
+            map.Clear();
 		}
 
 		public ConfigurableProjectStateIconProvider(Icons icons)
@@ -30,29 +31,30 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void LoadIcon(ProjectState projectState, string iconFilename, StatusIcon defaultIcon)
 		{
-			if (iconFilename != null && iconFilename.Length > 0)
-			{
-				try
-				{
-					StatusIcon icon = StatusIcon.LoadFromFile(iconFilename);
-					
-					Debug.WriteLine("Using custom icon " + iconFilename + " for state " + projectState);
-					map.Add(projectState, icon);
-					return;
-				}
-				catch (Exception ex)
-				{
-					MessageBox.Show("Failed to load icon " + iconFilename + " for state " + projectState + ": " + ex);
-				}
-			}
-			
-			Debug.WriteLine("Using default icon for state " + projectState);
-			map.Add(projectState, defaultIcon);	
+		    if (string.IsNullOrEmpty(iconFilename))
+		    {
+		        Debug.WriteLine("Using default icon for state " + projectState);
+		        map.Add(projectState, defaultIcon);
+		        return;
+		    }
+
+		    try
+		    {
+		        StatusIcon icon = StatusIcon.LoadFromFile(iconFilename);
+
+		        Debug.WriteLine("Using custom icon " + iconFilename + " for state " + projectState);
+		        map.Add(projectState, icon);
+		        return;
+		    }
+		    catch (Exception ex)
+		    {
+		        MessageBox.Show("Failed to load icon " + iconFilename + " for state " + projectState + ": " + ex);
+		    }
 		}
 
-		public StatusIcon GetStatusIconForState(ProjectState state)
+	    public StatusIcon GetStatusIconForState(ProjectState state)
 		{
-			return (StatusIcon) map[state];
+			return map[state];
 		}
 	}
 }

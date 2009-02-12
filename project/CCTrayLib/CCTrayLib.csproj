@@ -182,12 +182,23 @@
     <Compile Include="DateTimeProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DefaultProjectIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DefaultProjectIcons.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DefaultQueueIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DefaultQueueIcons.resx</DependentUpon>
+    </Compile>
     <Compile Include="ErrorLevel.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IconNotFoundException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IconUtil.cs" />
     <Compile Include="Monitoring\AggregatingProjectMonitor.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -457,9 +468,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="X10\X10Definitions.cs" />
-    <EmbeddedResource Include="Gray.ico" />
-    <EmbeddedResource Include="Green.ico" />
-    <EmbeddedResource Include="Orange.ico" />
+    <None Include="ResourceIcons\Gray.ico" />
+    <None Include="ResourceIcons\Green.ico" />
+    <None Include="ResourceIcons\Orange.ico" />
     <EmbeddedResource Include="Presentation\AddBuildServer.resx">
       <DependentUpon>AddBuildServer.cs</DependentUpon>
     </EmbeddedResource>
@@ -484,19 +495,28 @@
     <EmbeddedResource Include="Presentation\TrayIcon.resx">
       <DependentUpon>TrayIcon.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Red.ico" />
-    <EmbeddedResource Include="ServerHttp.ico" />
-    <EmbeddedResource Include="ServerRemoting.ico" />
-    <EmbeddedResource Include="Stopwatch.ico" />
-    <EmbeddedResource Include="Yellow.ico" />
+    <None Include="ResourceIcons\Red.ico" />
+    <None Include="ResourceIcons\ServerHttp.ico" />
+    <None Include="ResourceIcons\ServerRemoting.ico" />
+    <None Include="ResourceIcons\Yellow.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="BuildPending.ico" />
-    <EmbeddedResource Include="QueueEmpty.ico" />
-    <EmbeddedResource Include="QueuePopulated.ico" />
+    <None Include="ResourceIcons\BuildPending.ico" />
+    <None Include="ResourceIcons\QueueEmpty.ico" />
+    <None Include="ResourceIcons\QueuePopulated.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="BuildCheckingModifications.ico" />
+    <None Include="ResourceIcons\BuildCheckingModifications.ico" />
+    <EmbeddedResource Include="DefaultProjectIcons.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DefaultProjectIcons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DefaultQueueIcons.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DefaultQueueIcons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Presentation\AudioSettingsControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AudioSettingsControl.cs</DependentUpon>

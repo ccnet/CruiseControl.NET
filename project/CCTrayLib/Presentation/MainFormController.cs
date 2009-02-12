@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private readonly IProjectMonitor[] projectMonitors;
 		private readonly ProjectStateIconAdaptor projectStateIconAdaptor;
 		private readonly IProjectStateIconProvider projectStateIconProvider;
-		private readonly IIntegrationQueueIconProvider integrationQueueIconProvider;
+		private readonly IIntegrationQueueIconProvider queueIconProvider;
 		private BuildTransitionSoundPlayer soundPlayer;
         private X10Controller x10Controller;
         private SpeakingProjectMonitor speakerForTheDead;
@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				serverMonitors[i] = new SynchronizedServerMonitor(serverMonitors[i], owner);
 			}
 			aggregatedServerMonitor = new AggregatingServerMonitor(serverMonitors);
-			integrationQueueIconProvider = new ResourceIntegrationQueueIconProvider();
+			queueIconProvider = new ResourceIntegrationQueueIconProvider();
 
 			projectMonitors = configuration.GetProjectStatusMonitors(serverMonitors);
 			for (int i = 0; i < projectMonitors.Length; i++)
@@ -53,7 +53,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			IBalloonMessageProvider balloonMessageProvider = new ConfigurableBalloonMessageProvider(configuration.BalloonMessages);
 			speakerForTheDead = new SpeakingProjectMonitor(aggregatedProjectMonitor, balloonMessageProvider, configuration.Speech);
 		}
-
 
 		public IProjectMonitor SelectedProject
 		{
@@ -83,22 +82,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			get
 			{
-				if (SelectedProject != null)
-				{
-					if ((SelectedProject.ProjectState == ProjectState.Building) ||
-						(SelectedProject.ProjectState == ProjectState.BrokenAndBuilding))
-					{
-						return true;
-					}
-					else
-					{
-						return false;
-					}
-				}
-				else
-				{
-					return false;
-				}
+			    if (SelectedProject == null)
+			        return false;
+			    return (SelectedProject.ProjectState == ProjectState.Building) ||
+			           (SelectedProject.ProjectState == ProjectState.BrokenAndBuilding);
 			}
 		}
 		
@@ -107,11 +94,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			get {
 				if (!IsProjectSelected) return false;
 				if (!selectedProject.IsConnected) return false;
-				else
-				{
-					bool isProjectRunning = selectedProject.ProjectIntegratorState.Equals(Remote.ProjectIntegratorState.Running.ToString());
-					return isProjectRunning;
-				}
+
+			    bool isProjectRunning = selectedProject.ProjectIntegratorState.Equals(Remote.ProjectIntegratorState.Running.ToString());
+			    return isProjectRunning;
 			}
 		}
 		
@@ -127,35 +112,26 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 {
                     Clipboard.SetText(SelectedProject.Detail.LastBuildLabel);
                 }
-                catch (System.Runtime.InteropServices.ExternalException )
-                    {
-                    
-                    }
+                catch (System.Runtime.InteropServices.ExternalException){}
             }
         }
 
 		public void ForceBuild()
 		{
-			if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
-			{
-				SelectedProject.ForceBuild();
-			}
+		    if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
+		        SelectedProject.ForceBuild();
 		}
 		
 		public void AbortBuild()
 		{
-			if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
-			{
-				SelectedProject.AbortBuild();
-			}
+		    if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
+		        SelectedProject.AbortBuild();
 		}
 		
 		public void DisplayWebPage()
 		{
-			if (IsProjectSelected)
-			{
-				DisplayWebPageForProject(SelectedProject.Detail);
-			}
+		    if (IsProjectSelected)
+		        DisplayWebPageForProject(SelectedProject.Detail);
 		}
 
         public void BindToTrayIcon(TrayIcon trayIcon)
@@ -176,7 +152,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				item.Tag = monitor;
 				listView.Items.Add(item);
 			}
-			if (listView.Items.Count > 0) listView.Items[0].Selected = true;
+
+			if (listView.Items.Count > 0) 
+                listView.Items[0].Selected = true;
 		}
 
 		public void BindToQueueTreeView(QueueTreeView treeView)
@@ -270,19 +248,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public bool OnDoubleClick()
 		{
-			if (configuration.TrayIconDoubleClickAction == TrayIconDoubleClickAction.NavigateToWebPageOfFirstProject)
-			{
-				if (projectMonitors.Length != 0)
-				{
-					DisplayWebPageForProject(projectMonitors[0].Detail);
-					return true;
-				}
-			}
+		    if (configuration.TrayIconDoubleClickAction != TrayIconDoubleClickAction.NavigateToWebPageOfFirstProject)
+		        return false;
 
-			return false;
+		    if (projectMonitors.Length == 0)
+		        return false;
+
+		    DisplayWebPageForProject(projectMonitors[0].Detail);
+		    return true;
 		}
 
-		private static void DisplayWebPageForProject(ISingleProjectDetail project)
+	    private static void DisplayWebPageForProject(ISingleProjectDetail project)
 		{
 			if (project.IsConnected)
 			{
@@ -291,26 +267,38 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 		}
 
-		public void PopulateImageList(ImageList imageList)
+	    private readonly ProjectState[] stateIconOrder = new ProjectState[]
+	                                                         {
+	                                                             ProjectState.NotConnected, 
+                                                                 ProjectState.Success,
+	                                                             ProjectState.Broken, 
+                                                                 ProjectState.Building,
+	                                                             ProjectState.BrokenAndBuilding,
+	                                                         };
+
+	    private readonly IntegrationQueueNodeType[] queueIconOrder = new IntegrationQueueNodeType[]
+	                                                                     {
+	                                                                         IntegrationQueueNodeType.RemotingServer,
+	                                                                         IntegrationQueueNodeType.HttpServer,
+	                                                                         IntegrationQueueNodeType.QueueEmpty,
+	                                                                         IntegrationQueueNodeType.QueuePopulated,
+	                                                                         IntegrationQueueNodeType.CheckingModifications,
+                                                                             IntegrationQueueNodeType.Building,
+                                                                             IntegrationQueueNodeType.PendingInQueue,
+	                                                                     };
+
+        public void PopulateImageList(ImageList imageList)
 		{
 			imageList.Images.Clear();
-			imageList.Images.Add(projectStateIconProvider.GetStatusIconForState(ProjectState.NotConnected).Icon);
-			imageList.Images.Add(projectStateIconProvider.GetStatusIconForState(ProjectState.Success).Icon);
-			imageList.Images.Add(projectStateIconProvider.GetStatusIconForState(ProjectState.Broken).Icon);
-			imageList.Images.Add(projectStateIconProvider.GetStatusIconForState(ProjectState.Building).Icon);
-			imageList.Images.Add(projectStateIconProvider.GetStatusIconForState(ProjectState.BrokenAndBuilding).Icon);
+            foreach (ProjectState x in stateIconOrder)
+                imageList.Images.Add(projectStateIconProvider.GetStatusIconForState(x).Icon);
 		}
 
 		public void PopulateQueueImageList(ImageList imageList)
 		{
 			imageList.Images.Clear();
-			imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.RemotingServer).Icon);
-			imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.HttpServer).Icon);
-            imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.QueueEmpty).Icon);
-            imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.QueuePopulated).Icon);
-            imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.CheckingModifications).Icon);
-            imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.Building).Icon);
-			imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.PendingInQueue).Icon);
+		    foreach (IntegrationQueueNodeType x in queueIconOrder)
+		        imageList.Images.Add(queueIconProvider.GetStatusIconForNodeType(x).Icon);
 		}
 
         public void SetFormTopMost(Form form)

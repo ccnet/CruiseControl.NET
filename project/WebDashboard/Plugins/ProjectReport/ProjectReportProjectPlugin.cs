@@ -12,7 +12,6 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics;
-using System;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {

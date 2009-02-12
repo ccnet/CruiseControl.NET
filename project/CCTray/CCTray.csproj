@@ -6,7 +6,7 @@
     <ProjectGuid>{D9040862-D7E0-4232-BBD0-CF088706E009}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>..\CCTrayLib\Green.ico</ApplicationIcon>
+    <ApplicationIcon>cctray.ico</ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>cctray</AssemblyName>
@@ -134,6 +134,9 @@
     <Compile Include="Bootstrap.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="cctray.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
