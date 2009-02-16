@@ -14,19 +14,19 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	public class IntegrationQueue : ArrayList, IIntegrationQueue
 	{
 		private readonly string name;
-        private readonly IQueueConfiguration _configuration;
-        private readonly List<string> _lockingQueueNames;
-        private readonly IntegrationQueueSet _parentQueueSet;
+        private readonly IQueueConfiguration configuration;
+        private readonly List<string> lockingQueueNames;
+        private readonly IntegrationQueueSet parentQueueSet;
 
-        private static readonly object _queueLockSync = new object();
+        private static readonly object queueLockSync = new object();
 
 		public IntegrationQueue(string name, IQueueConfiguration configuration, IntegrationQueueSet parentQueueSet)
 		{
 			this.name = name;
-            _configuration = configuration;
-            _parentQueueSet = parentQueueSet;
+            this.configuration = configuration;
+            this.parentQueueSet = parentQueueSet;
 
-            _lockingQueueNames = new List<string>();
+            this.lockingQueueNames = new List<string>();
 		}
 
 		public string Name
@@ -41,9 +41,9 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
         {
             get
             {
-                lock (_queueLockSync) 
+                lock (queueLockSync) 
                 { 
-                    return _lockingQueueNames.Count != 0; 
+                    return lockingQueueNames.Count != 0; 
                 }
             }
         }
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
         /// </summary>
         public virtual IQueueConfiguration Configuration
         {
-            get { return _configuration; }
+            get { return configuration; }
         }
 
 		/// <summary>
@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 
 					if (foundIndex != null)
  					{
-                        switch (_configuration.HandlingMode)
+                        switch (configuration.HandlingMode)
                         {
                             case QueueDuplicateHandlingMode.UseFirst:
                                 Log.Info(String.Format("Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
@@ -128,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                                 }
                                 break;
                             default:
-                                throw new ConfigurationException("Unknown handling mode for duplicates: " + _configuration.HandlingMode);
+                                throw new ConfigurationException("Unknown handling mode for duplicates: " + configuration.HandlingMode);
                         }
  					}
 
@@ -311,28 +311,32 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
         /// <param name="acquire">Should the queue acquire locks or release them?</param>
         public void ToggleQueueLocks(bool acquire)
         {
-            if (!string.IsNullOrEmpty(_configuration.LockQueueNames) && _parentQueueSet != null)
+            if (!string.IsNullOrEmpty(configuration.LockQueueNames) && parentQueueSet != null)
             {
-                string[] queues = _configuration.LockQueueNames.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                string queue;
+                string[] queues = configuration.LockQueueNames.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                List<string> actualQueues = new List<string>(parentQueueSet.GetQueueNames());
 
                 for (int i = 0; i < queues.Length; i++)
                 {
-                    queue = queues[i].Trim();
-
-                    if(acquire)
+                    string queueToLock = queues[i].Trim();
+                    if (actualQueues.Contains(queueToLock))
                     {
-                        // find queue and lock it
-                        _parentQueueSet[queue].LockQueue(this);
-
-                        Log.Info(string.Format("Queue: '{0}' has acquired a lock against queue '{1}'", Name, queue));
-                    }
+                        if (acquire)
+                        {
+                            // find queue and lock it
+                            parentQueueSet[queueToLock].LockQueue(this);
+	                        Log.Info(string.Format("Queue: '{0}' has acquired a lock against queue '{1}'", Name, queueToLock));
+						}
+                        else
+                        {
+                            // find queue and lock it
+                            parentQueueSet[queueToLock].UnlockQueue(this);
+	                        Log.Info(string.Format("Queue: '{0}' has released a lock against queue '{1}'", Name, queueToLock));
+						}
+					}
                     else
                     {
-                        // find queue and lock it
-                        _parentQueueSet[queue].UnlockQueue(this);
-
-                        Log.Info(string.Format("Queue: '{0}' has released a lock against queue '{1}'", Name, queue));
+                        Log.Warning(string.Format("Unknown queue found: '{0}'", queueToLock));
                     }
                 }
             }
@@ -345,11 +349,11 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
         /// <param name="requestingQueue">Queue requesting that a lock be taken out</param>
         public void LockQueue(IIntegrationQueue requestingQueue)
         {
-            lock (_queueLockSync)
+            lock (queueLockSync)
             {
-                if (!_lockingQueueNames.Contains(requestingQueue.Name))
+                if (!lockingQueueNames.Contains(requestingQueue.Name))
                 {
-                    _lockingQueueNames.Add(requestingQueue.Name);
+                    lockingQueueNames.Add(requestingQueue.Name);
                 }
             }
         }
@@ -361,9 +365,9 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
         /// <param name="requestingQueue">Queue requesting that a lock be released</param>
         public void UnlockQueue(IIntegrationQueue requestingQueue)
         {
-            lock (_queueLockSync)
+            lock (queueLockSync)
             {
-                _lockingQueueNames.Remove(requestingQueue.Name);
+                lockingQueueNames.Remove(requestingQueue.Name);
             }
         }
     }
