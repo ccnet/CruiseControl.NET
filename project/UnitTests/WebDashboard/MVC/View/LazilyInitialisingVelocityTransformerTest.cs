@@ -19,15 +19,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.View
 			contextContents["foo"] = "bar";
 
 			DynamicMock pathMapperMock = new DynamicMock(typeof(IPhysicalApplicationPathProvider));
-            pathMapperMock.ExpectAndReturn("GetFullPathFor", @".\templates", "customtemplates");
-            pathMapperMock.ExpectAndReturn("GetFullPathFor", @".\templates", "customtemplates");
-            pathMapperMock.ExpectAndReturn("GetFullPathFor", @".\templates", "templates");
+            pathMapperMock.SetupResult("GetFullPathFor", @".\templates", typeof(string));
 
             DynamicMock pluginsMock = new DynamicMock(typeof(IPluginConfiguration));
             pluginsMock.SetupResult("TemplateLocation", null);
 
             DynamicMock configurationMock = new DynamicMock(typeof(IDashboardConfiguration));
-            configurationMock.SetupResult("PluginConfiguration", pluginsMock);
+            configurationMock.SetupResult("PluginConfiguration", pluginsMock.MockInstance);
 
             viewTransformer = new LazilyInitialisingVelocityTransformer((IPhysicalApplicationPathProvider)pathMapperMock.MockInstance,
                 (IDashboardConfiguration)configurationMock.MockInstance);
