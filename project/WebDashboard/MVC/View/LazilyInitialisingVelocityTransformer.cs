@@ -7,6 +7,7 @@ using NVelocity.App;
 using NVelocity.Runtime;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 {
@@ -17,6 +18,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
         private VelocityEngine lazilyInitialisedEngine = null;
         private VelocityEngine lazilyCustomInitialisedEngine = null;
         private System.Collections.Generic.Dictionary<string, TemplateLocation> FoundTemplates = new System.Collections.Generic.Dictionary<string, TemplateLocation>();
+        private IDashboardConfiguration configuration;
+        private string customTemplateLocation;
 
         public enum TemplateLocation
         {
@@ -25,9 +28,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 
 
 
-        public LazilyInitialisingVelocityTransformer(IPhysicalApplicationPathProvider physicalApplicationPathProvider)
+        public LazilyInitialisingVelocityTransformer(IPhysicalApplicationPathProvider physicalApplicationPathProvider, IDashboardConfiguration configuration)
         {
             this.physicalApplicationPathProvider = physicalApplicationPathProvider;
+            this.configuration = configuration;
         }
 
         public string Transform(string transformerFileName, Hashtable transformable)
@@ -89,7 +93,7 @@ Template path is {1}", transformerFileName, physicalApplicationPathProvider.GetF
                     {
                         lazilyCustomInitialisedEngine = new VelocityEngine();
                         lazilyCustomInitialisedEngine.SetProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, "NVelocity.Runtime.Log.NullLogSystem");
-                        lazilyCustomInitialisedEngine.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, physicalApplicationPathProvider.GetFullPathFor("customtemplates"));
+                        lazilyCustomInitialisedEngine.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, CustomTemplateLocation);
                         lazilyCustomInitialisedEngine.SetProperty(RuntimeConstants.RESOURCE_MANAGER_CLASS, "NVelocity.Runtime.Resource.ResourceManagerImpl");
                         lazilyCustomInitialisedEngine.Init();
                     }
@@ -103,7 +107,7 @@ Template path is {1}", transformerFileName, physicalApplicationPathProvider.GetF
         {
             if (!FoundTemplates.ContainsKey(transformerFileName))
             {
-                string filelocation = System.IO.Path.Combine(physicalApplicationPathProvider.GetFullPathFor("customtemplates"),transformerFileName);
+                string filelocation = System.IO.Path.Combine(CustomTemplateLocation,transformerFileName);
                 if (System.IO.File.Exists(filelocation))
                 {
                     FoundTemplates.Add(transformerFileName, TemplateLocation.CustomTemplates);
@@ -117,6 +121,28 @@ Template path is {1}", transformerFileName, physicalApplicationPathProvider.GetF
             return FoundTemplates[transformerFileName];
         }
 
-
+        private string CustomTemplateLocation
+        {
+            get
+            {
+                if (customTemplateLocation == null)
+                {
+                    customTemplateLocation = "customtemplates";
+                    if (!string.IsNullOrEmpty(configuration.PluginConfiguration.TemplateLocation))
+                    {
+                        if (Path.IsPathRooted(configuration.PluginConfiguration.TemplateLocation))
+                        {
+                            customTemplateLocation = configuration.PluginConfiguration.TemplateLocation;
+                        }
+                        else
+                        {
+                            customTemplateLocation = physicalApplicationPathProvider.GetFullPathFor(
+                                configuration.PluginConfiguration.TemplateLocation);
+                        }
+                    }
+                }
+                return customTemplateLocation;
+            }
+        }
     }
 }

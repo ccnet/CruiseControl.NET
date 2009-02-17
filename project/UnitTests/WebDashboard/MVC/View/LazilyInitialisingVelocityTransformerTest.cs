@@ -3,6 +3,7 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.View
 {
@@ -22,7 +23,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.View
             pathMapperMock.ExpectAndReturn("GetFullPathFor", @".\templates", "customtemplates");
             pathMapperMock.ExpectAndReturn("GetFullPathFor", @".\templates", "templates");
 
-			viewTransformer = new LazilyInitialisingVelocityTransformer((IPhysicalApplicationPathProvider) pathMapperMock.MockInstance);
+            DynamicMock pluginsMock = new DynamicMock(typeof(IPluginConfiguration));
+            pluginsMock.SetupResult("TemplateLocation", null);
+
+            DynamicMock configurationMock = new DynamicMock(typeof(IDashboardConfiguration));
+            configurationMock.SetupResult("PluginConfiguration", pluginsMock);
+
+            viewTransformer = new LazilyInitialisingVelocityTransformer((IPhysicalApplicationPathProvider)pathMapperMock.MockInstance,
+                (IDashboardConfiguration)configurationMock.MockInstance);
 
 			Assert.AreEqual("foo is bar", viewTransformer.Transform("testTransform.vm", contextContents));
 		}
