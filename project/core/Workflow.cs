@@ -25,6 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		private IList _tasks = new ArrayList();
 		private WorkflowResult _currentIntegrationResult;
+        private ProjectInitialState startupState = ProjectInitialState.Started;
 
 		[ReflectorCollection("tasks", InstanceType = typeof(ArrayList))]
 		public IList Tasks
@@ -154,5 +155,15 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             get { throw new NotImplementedException(); }
         }
-	}
+
+        /// <summary>
+        /// The start-up mode for this project.
+        /// </summary>
+        [ReflectorProperty("startupState", Required = false)]
+        public ProjectInitialState StartupState
+        {
+            get { return startupState; }
+            set { startupState = value; }
+        }
+    }
 }

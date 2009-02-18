@@ -57,9 +57,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			configuration = new Configuration();
 			project1 = new Project();
 			project1.Name = "Project 1";
+            integratorMock1.SetupResult("Project", project1);
 			
 			project2 = new Project();
 			project2.Name = "Project 2";
+            integratorMock2.SetupResult("Project", project1);
 
 			mockProject = new DynamicMock(typeof(IProject));
 			mockProject.ExpectAndReturn("Name", "Project 3");
@@ -67,7 +69,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             mockProject.ExpectAndReturn("QueueName", "Project 3");
             mockProjectInstance = (IProject)mockProject.MockInstance;
 			mockProject.ExpectAndReturn("Name", "Project 3");
-			integratorMock3.ExpectAndReturn("Project", mockProjectInstance);
+            mockProject.SetupResult("StartupState", ProjectInitialState.Started);
+            integratorMock3.SetupResult("Project", mockProjectInstance);
 
 			configuration.AddProject(project1);
 			configuration.AddProject(project2);

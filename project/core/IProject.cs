@@ -112,6 +112,10 @@ namespace ThoughtWorks.CruiseControl.Core
         /// This equals to the amount of errors in GetModifications. 
         /// </summary>
         int MaxAmountOfSourceControlExceptions { get; }
-    
+
+        /// <summary>
+        /// The start-up mode for this project.
+        /// </summary>
+        ProjectInitialState StartupState { get; }
     }
 }

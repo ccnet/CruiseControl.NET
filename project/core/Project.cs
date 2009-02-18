@@ -49,6 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
         private ArrayList messages = new ArrayList();
         private int maxAmountOfSourceControlExceptions = 5;
+        private ProjectInitialState startupState = ProjectInitialState.Started;
 
         [ReflectorProperty("prebuild", Required = false)]
         public ITask[] PrebuildTasks = new ITask[0];
@@ -433,5 +434,14 @@ namespace ThoughtWorks.CruiseControl.Core
             result.Label = Labeller.Generate(result);
         }
 
+        /// <summary>
+        /// The start-up mode for this project.
+        /// </summary>
+        [ReflectorProperty("startupState", Required = false)]
+        public ProjectInitialState StartupState
+        {
+            get { return startupState; }
+            set { startupState = value; }
+        }
     }
 }

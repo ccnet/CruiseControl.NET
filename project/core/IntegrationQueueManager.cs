@@ -34,7 +34,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			foreach (IProjectIntegrator integrator in projectIntegrators)
 			{
-				integrator.Start();
+                bool canStart = (integrator.Project == null) ||
+                    (integrator.Project.StartupState == ProjectInitialState.Started);
+                if (canStart) integrator.Start();
 			}
 		}
 

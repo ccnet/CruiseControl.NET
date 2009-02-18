@@ -335,6 +335,7 @@
     <Compile Include="ProjectList.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ProjectInitialState.cs" />
     <Compile Include="publishers\BuildLogTransformer.cs">
       <SubType>Code</SubType>
     </Compile>
