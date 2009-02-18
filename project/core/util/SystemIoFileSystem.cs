@@ -169,5 +169,15 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 fileInfo.Delete();
             }
         }
+
+        /// <summary>
+        /// Ensures that the folder for the specified file exists.
+        /// </summary>
+        /// <param name="fileName">The name of the file, including the folder path.</param>
+        public void EnsureFolderExists(string fileName)
+        {
+            string directory = Path.GetDirectoryName(fileName);
+            if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+        }
     }
 }

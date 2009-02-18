@@ -34,7 +34,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             XmlSerializer serializer = new XmlSerializer(typeof(Modification[]));
             StringWriter writer = new Utf8StringWriter();
             serializer.Serialize(writer, result.Modifications);
-            fileSystem.Save(ModificationFile(result), writer.ToString());
+            string filename = ModificationFile(result);
+            fileSystem.EnsureFolderExists(filename);
+            fileSystem.Save(filename, writer.ToString());
         }
 
         private string ModificationFile(IIntegrationResult result)
