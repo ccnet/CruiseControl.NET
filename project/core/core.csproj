@@ -238,6 +238,7 @@
     <Compile Include="IIntegrationRunnerTarget.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IntegrationPropertyNames.cs" />
     <Compile Include="IntegrationQueueManager.cs">
       <SubType>Code</SubType>
     </Compile>

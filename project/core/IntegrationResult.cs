@@ -388,21 +388,21 @@ namespace ThoughtWorks.CruiseControl.Core
             get
             {
                 IDictionary fullProps = new SortedList();
-                fullProps["CCNetProject"] = projectName;
-                if (projectUrl != null) fullProps["CCNetProjectUrl"] = projectUrl;
-                fullProps["CCNetWorkingDirectory"] = workingDirectory;
-                fullProps["CCNetArtifactDirectory"] = artifactDirectory;
-                fullProps["CCNetIntegrationStatus"] = Status;
-                fullProps["CCNetLabel"] = Label;
-                fullProps["CCNetBuildCondition"] = BuildCondition;
-                fullProps["CCNetNumericLabel"] = NumericLabel;
-                fullProps["CCNetBuildDate"] = StartTime.ToString("yyyy-MM-dd", null);
-                fullProps["CCNetBuildTime"] = StartTime.ToString("HH:mm:ss", null);
-                fullProps["CCNetLastIntegrationStatus"] = LastIntegrationStatus;
-                fullProps["CCNetListenerFile"] = BuildProgressInformation.ListenerFile;
-                fullProps["CCNetFailureUsers"] = FailureUsers;
-                fullProps["CCNetModifyingUsers"] = GetModifiers();
-                if (IntegrationRequest != null) fullProps["CCNetRequestSource"] = IntegrationRequest.Source;
+                fullProps[IntegrationPropertyNames.CCNetProject] = projectName;
+                if (projectUrl != null) fullProps[IntegrationPropertyNames.CCNetProjectUrl] = projectUrl;
+                fullProps[IntegrationPropertyNames.CCNetWorkingDirectory] = workingDirectory;
+                fullProps[IntegrationPropertyNames.CCNetArtifactDirectory] = artifactDirectory;
+                fullProps[IntegrationPropertyNames.CCNetIntegrationStatus] = Status;
+                fullProps[IntegrationPropertyNames.CCNetLabel] = Label;
+                fullProps[IntegrationPropertyNames.CCNetBuildCondition] = BuildCondition;
+                fullProps[IntegrationPropertyNames.CCNetNumericLabel] = NumericLabel;
+                fullProps[IntegrationPropertyNames.CCNetBuildDate] = StartTime.ToString("yyyy-MM-dd", null);
+                fullProps[IntegrationPropertyNames.CCNetBuildTime] = StartTime.ToString("HH:mm:ss", null);
+                fullProps[IntegrationPropertyNames.CCNetLastIntegrationStatus] = LastIntegrationStatus;
+                fullProps[IntegrationPropertyNames.CCNetListenerFile] = BuildProgressInformation.ListenerFile;
+                fullProps[IntegrationPropertyNames.CCNetFailureUsers] = FailureUsers;
+                fullProps[IntegrationPropertyNames.CCNetModifyingUsers] = GetModifiers();
+                if (IntegrationRequest != null) fullProps[IntegrationPropertyNames.CCNetRequestSource] = IntegrationRequest.Source;
                 return fullProps;
             }
         }

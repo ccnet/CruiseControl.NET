@@ -48,9 +48,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		{
 			writer.Write(result);
 			string xml = buffer.ToString();
-			AssertXPathExists(buffer.ToString(), string.Format("//request[@source='{0}' and @buildCondition='{1}']", 
+			AssertXPathExists(xml, string.Format("//request[@source='{0}' and @buildCondition='{1}']", 
 			                                                   result.IntegrationRequest.Source, result.IntegrationRequest.BuildCondition));
-			AssertXPathNodeValue(result.IntegrationRequest.ToString(), xml, "//request");
+
+            Assert.AreEqual("foo triggered a build (IfModificationExists)", result.IntegrationRequest.ToString(), "request section is wrong");
+            
+            AssertXPathExists(xml, "cruisecontrol/integrationProperties");
+
+
 		}
 
 		[Test]
