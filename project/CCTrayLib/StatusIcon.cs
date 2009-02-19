@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib
 {
@@ -16,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 		public StatusIcon(String resourceName)
 		{
-		    icon = IconUtil.LoadFromResource(resourceName);
+			icon = new Icon(Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName));
 		}
 
         public StatusIcon(Icon i, bool ownIcon)
@@ -42,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 			{
 				using (FileStream stream = File.Open(file, FileMode.Open, FileAccess.Read))
 				{
-					return new StatusIcon(IconUtil.LoadFromStream(stream), true);
+					return new StatusIcon(new Icon(stream), true);
 				}
 			}
 			catch (SystemException ex)
