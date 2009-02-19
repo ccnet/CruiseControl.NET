@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     {
         public const string DefaultExecutable = "svn.exe";
         public static readonly string UtcXmlDateFormat = "yyyy-MM-ddTHH:mm:ssZ";
-
+		
         public Svn(ProcessExecutor executor, IHistoryParser parser, IFileSystem fileSystem)
             : base(parser, executor)
         {
@@ -70,6 +70,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		internal Modification[] mods = new Modification[0];
 
+		// Non-private for testing only.
+		internal int latestRevision;
+
         public string FormatCommandDate(DateTime date)
         {
             return date.ToUniversalTime().ToString(UtcXmlDateFormat, CultureInfo.InvariantCulture);
@@ -95,8 +98,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 Log.Debug(directory);
                 ProcessResult result = Execute(NewHistoryProcessInfo(from, to, directory));
                 mods = ParseModifications(result, from.StartTime, to.StartTime);
-                if (mods != null)
+				if (mods != null)
                 {
+					// If there are modifications in the repository track the revision number.
+					// Do not just get the latest revision from all modifications because they
+					// will also contain the changes in the external paths.
+					if (directory.Equals(TrunkUrl))
+					{
+						latestRevision = Modification.GetLastChangeNumber(mods);
+					}
                     modifications.AddRange(mods);
                 }
             }
@@ -203,7 +213,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("update");
 			buffer.AddArgument(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)));
-			AppendRevision(buffer, Modification.GetLastChangeNumber(mods));
+			// Do not use Modification.GetLastChangeNumber() here directly.
+			AppendRevision(buffer, latestRevision);
             AppendCommonSwitches(buffer);
             return NewProcessInfo(buffer.ToString(), result);
         }
@@ -216,7 +227,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.AppendArgument(TagMessage(result.Label));
             buffer.AddArgument(TagSource(result));
             buffer.AddArgument(TagDestination(result.Label));
-			AppendRevision(buffer, Modification.GetLastChangeNumber(mods));
+			// Do not use Modification.GetLastChangeNumber() here directly.
+			AppendRevision(buffer, latestRevision);
             AppendCommonSwitches(buffer);
             return NewProcessInfo(buffer.ToString(), result);
         }
@@ -243,36 +255,46 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
                 while ((externalsDefinition = reader.ReadLine()) != null)
                 {
-                    //If this external is not a specific revision
-                    if (!externalsDefinition.Contains("-r"))
-                    {
+					// If this external is not a specific revision and is not an empty string
+					if (!externalsDefinition.Contains("-r") && !externalsDefinition.Equals(string.Empty))
+					{
+						int Pos = GetSubstringPosition(externalsDefinition);
+						
+						if (Pos > 0)
+						{
+							externalsDefinition = externalsDefinition.Substring(Pos);
+						}
+						
+						Pos = externalsDefinition.IndexOf(" ");
+						
+						if (Pos > 0)
+						{
+							externalsDefinition = externalsDefinition.Substring(0, Pos);
+						}
+						
+						if (!externalDirectories.Contains(externalsDefinition))
+						{
+							externalDirectories.Add(externalsDefinition);
+						}
+					}
+				}
+			}
+			return externalDirectories;
+		}
 
-                       int Pos = externalsDefinition.LastIndexOf("http:/");
+		private static int GetSubstringPosition(string externalsDefinition)
+		{
+			int pos = 0;
+			string[] urlTypes = { "file:/", "http:/", "https:/", "svn:/", "svn+ssh:/" };
+			
+			foreach(string type in urlTypes)
+			{
+				int tmp = externalsDefinition.LastIndexOf(type);
+				if (tmp > pos) pos = tmp;
+			}
 
-                       if (Pos > 0)
-                       {
-                           externalsDefinition = externalsDefinition.Substring(Pos); 
-                       }                       
-
-                       Pos = externalsDefinition.IndexOf(" ");
-
-                       if (Pos > 0)
-                       {
-                           externalsDefinition = externalsDefinition.Substring(0, Pos);  
-                       }                        
-
-                       if (!externalDirectories.Contains(externalsDefinition))
-                       {
-                           externalDirectories.Add(externalsDefinition);
-                       }
-
-                                              
-                    }                  
-                }
-            }          
-
-            return externalDirectories;
-        }
+			return pos;
+		}
 
         private static string TagMessage(string label)
         {
