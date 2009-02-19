@@ -124,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			}
 			else if (integrationStatus == IntegrationStatus.Unknown)
 			{
-				return Color.Yellow.Name;
+				return Color.Blue.Name;
 			}
 			else
 			{

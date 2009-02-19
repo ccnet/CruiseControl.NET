@@ -144,7 +144,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Verify
 			Assert.AreEqual("Unknown", rows[0].BuildStatus);
-			Assert.AreEqual(Color.Yellow.Name, rows[0].BuildStatusHtmlColor);
+			Assert.AreEqual(Color.Blue.Name, rows[0].BuildStatusHtmlColor);
 
 			// Setup
 			statusses = new ProjectStatusOnServer[]
