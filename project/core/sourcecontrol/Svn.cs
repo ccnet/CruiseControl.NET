@@ -145,17 +145,27 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             }
             else
             {
-                if (CleanCopy) DeleteSource();
+				if (CleanCopy)
+				{
+					if (WorkingDirectory == null)
+					{
+						DeleteSource(result.WorkingDirectory);
+					}
+					else
+					{
+						DeleteSource(WorkingDirectory);
+					}
+				}
 
                 CheckoutSource(result);
             }
         }
 
-        private void DeleteSource()
+        private void DeleteSource(string workingDirectory)
         {
-            if (fileSystem.DirectoryExists(WorkingDirectory))
+            if (fileSystem.DirectoryExists(workingDirectory))
             {
-                new IoService().DeleteIncludingReadOnlyObjects(WorkingDirectory);
+                new IoService().DeleteIncludingReadOnlyObjects(workingDirectory);
             }            
         }
 
