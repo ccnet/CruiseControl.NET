@@ -80,6 +80,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.FarmReport
             XPathAssert.Matches(doc, "/CruiseControl/Projects/Project/@nextBuildTime", NextBuildTime);
             XPathAssert.Matches(doc, "/CruiseControl/Projects/Project/@webUrl", "http://blah");
             XPathAssert.Matches(doc, "/CruiseControl/Projects/Project/@category", "category");
+            XPathAssert.Matches(doc, "/CruiseControl/Projects/Project/@serverName", Environment.MachineName);
 
             XPathAssert.Matches(doc, "/CruiseControl/Queues/Queue/@name", "Queue1");
             XPathAssert.Matches(doc, "/CruiseControl/Queues/Queue/Request/@projectName", "HelloWorld");

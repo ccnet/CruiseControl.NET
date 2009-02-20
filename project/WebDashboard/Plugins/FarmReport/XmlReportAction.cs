@@ -53,6 +53,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 	        xmlWriter.WriteAttributeString("webUrl", status.WebURL);
             xmlWriter.WriteAttributeString("CurrentMessage", status.CurrentMessage);
             xmlWriter.WriteAttributeString("BuildStage", status.BuildStage);
+            xmlWriter.WriteAttributeString("serverName", status.ServerName);
 	        xmlWriter.WriteEndElement();
 	    }
 	}
