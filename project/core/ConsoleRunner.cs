@@ -41,6 +41,12 @@ namespace ThoughtWorks.CruiseControl.Core
 				return;
 			}
 
+            if (parser.NoLogging)
+            {
+                Log.Warning("Logging has been disabled - no information (except errors) will be written to the log");
+                Log.DisableLogging();
+            }
+
             if (parser.ValidateConfigOnly)
             {
                 serverFactory.Create(false, parser.ConfigFile);

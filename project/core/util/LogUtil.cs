@@ -9,16 +9,10 @@ using log4net.Config;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
-	public class Log
+	public static class Log
 	{
 		private static ILog logger = LogManager.GetLogger("CruiseControl.NET");
-
-		/// <summary>
-		/// Utility type, not intended for instantiation.
-		/// </summary>
-		private Log()
-		{
-		}
+        private static bool loggingEnabled = true;
 
 		static Log()
 		{
@@ -30,35 +24,45 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
 			}
 		}
+
+        public static void DisableLogging()
+        {
+            loggingEnabled = false;
+        }
+
+        public static void EnableLogging()
+        {
+            loggingEnabled = true;
+        }
 		
 		public static void Info(string message)
 		{
-			logger.Info(message);
+			if (loggingEnabled) logger.Info(message);
 		}
 
 		public static void Debug(string message)
 		{
-			logger.Debug(message);
+            if (loggingEnabled) logger.Debug(message);
 		}
 
 		public static void Warning(string message)
 		{
-			logger.Warn(message);
+            if (loggingEnabled) logger.Warn(message);
 		}
 
 		public static void Warning(Exception ex)
 		{
-			logger.Warn(CreateExceptionMessage(ex));
+            if (loggingEnabled) logger.Warn(CreateExceptionMessage(ex));
 		}
 
 		public static void Error(string message)
 		{
-			logger.Error(message);
+            logger.Error(message);
 		}
 
 		public static void Error(Exception ex)
 		{
-			logger.Error(CreateExceptionMessage(ex));
+            logger.Error(CreateExceptionMessage(ex));
 		}
 
 		private static string CreateExceptionMessage(Exception ex)

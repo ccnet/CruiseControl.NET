@@ -15,9 +15,10 @@ Options:
   -project:[projectName]
   -validate
   -noerrorpause
+  -nologging
   -help";
 
-		private string[] validOptions = new string[] {"config", "remoting", "project", "validate", "noerrorpause", "help"};
+        private string[] validOptions = new string[] { "config", "remoting", "project", "validate", "nologging", "noerrorpause", "help" };
 		private Hashtable options = new Hashtable();
 		private Regex regex = new Regex("-(?<option>[^:]*)(:(?<value>.*))?");
 
@@ -88,6 +89,11 @@ Options:
 	    {
             get { return GetOption("debugger") != null; }
 	    }
+
+        public bool NoLogging
+        {
+            get { return GetOption("nologging") != null; }
+        }
 
         public bool NoPauseOnError
         {
