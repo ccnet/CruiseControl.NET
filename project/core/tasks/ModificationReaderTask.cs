@@ -13,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     public class ModificationReaderTask : ITask
     {
         private readonly IFileSystem fileSystem;
+        private bool deleteAfterRead = false;
 
         public ModificationReaderTask()
             : this(new SystemIoFileSystem()){ }
@@ -20,6 +21,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         public ModificationReaderTask(IFileSystem fileSystem)
         {
             this.fileSystem = fileSystem;
+        }
+
+        [ReflectorProperty("deleteAfterRead", Required = false)]
+        public bool DeleteAfterRead
+        {
+            get { return deleteAfterRead; }
+            set { deleteAfterRead = value; }
         }
 
         /// <summary>
@@ -31,6 +39,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         public void Run(IIntegrationResult result)
         {
+            List<string> filesToDelete = new List<string>();
             result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Reading Modifications");                
 
 
@@ -47,6 +56,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 System.Collections.ArrayList currentModification = new System.Collections.ArrayList((Modification[])dummy);
 
                 AllModifications.AddRange(currentModification);
+
+                if (deleteAfterRead) filesToDelete.Add(file);
             }
             
             Modification[] newMods = new Modification[result.Modifications.Length + AllModifications.Count];
@@ -63,6 +74,23 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
 
             result.Modifications = newMods;
+
+            // Delete all the files
+            foreach (string file in filesToDelete)
+            {
+                try
+                {
+                    File.Delete(file);
+                }
+                catch (IOException error)
+                {
+                    Log.Warning(
+                        string.Format(
+                            "Unable to delete file '{0}' - {1}",
+                            file,
+                            error.Message));
+                }
+            }
         }
 
         private string[] GetModificationFiles(IIntegrationResult result)
