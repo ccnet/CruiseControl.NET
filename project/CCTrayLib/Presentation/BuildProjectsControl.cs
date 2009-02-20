@@ -112,13 +112,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void lvProjects_ItemChecked(object sender, ItemCheckedEventArgs e)
 		{
-			foreach (CCTrayProject project in configuration.Projects)
-			{
-				if (e.Item.SubItems[2].Text == project.ProjectName)
-				{
-					project.ShowProject = e.Item.Checked;
-				}
-			}
+            (e.Item.Tag as ProjectConfigurationListViewItemAdaptor).Project.ShowProject = e.Item.Checked;
 		}
 
 		private void lvProjects_KeyDown(object sender, KeyEventArgs e)
