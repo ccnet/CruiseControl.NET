@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private string category = "";
 		private string configuredWorkingDirectory = "";
 		private string configuredArtifactDirectory = "";
-		private ITrigger triggers = new MultipleTrigger(new ITrigger[] {new IntervalTrigger() } );
+        private ITrigger triggers = new MultipleTrigger(new ITrigger[] { });
 		private ExternalLink[] externalLinks = new ExternalLink[0];
 
 		[ReflectorProperty("name")]
