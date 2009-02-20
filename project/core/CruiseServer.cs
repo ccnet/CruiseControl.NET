@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Logging;
+using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -20,7 +21,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		private IntegrationQueueManager integrationQueueManager;
 
 		public CruiseServer(IConfigurationService configurationService,
-		                    IProjectIntegratorListFactory projectIntegratorListFactory, IProjectSerializer projectSerializer)
+		                    IProjectIntegratorListFactory projectIntegratorListFactory, 
+                            IProjectSerializer projectSerializer,
+                            IProjectStateManager stateManager)
 		{
 			this.configurationService = configurationService;
 			this.configurationService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(Restart));
@@ -32,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 			IConfiguration configuration = configurationService.Load();
 			// TODO - does this need to go through a factory? GD
-			integrationQueueManager = new IntegrationQueueManager(projectIntegratorListFactory, configuration);
+			integrationQueueManager = new IntegrationQueueManager(projectIntegratorListFactory, configuration, stateManager);
 		}
 
 		public void Start()

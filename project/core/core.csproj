@@ -675,9 +675,11 @@
     <Compile Include="state\FileStateManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="state\IProjectStateManager.cs" />
     <Compile Include="state\IStateManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="state\XmlProjectStateManager.cs" />
     <Compile Include="tasks\ArtifactCleanUp.cs" />
     <Compile Include="tasks\BaseExecutableTask.cs" />
     <Compile Include="tasks\BuilderException.cs">

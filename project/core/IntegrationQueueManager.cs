@@ -1,6 +1,7 @@
 using System.Collections;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Queues;
+using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -12,12 +13,15 @@ namespace ThoughtWorks.CruiseControl.Core
 		private IProjectIntegratorList projectIntegrators;
 
 		private readonly IntegrationQueueSet integrationQueues = new IntegrationQueueSet();
+        private readonly IProjectStateManager stateManager;
 
 		public IntegrationQueueManager(IProjectIntegratorListFactory projectIntegratorListFactory,
-		                               IConfiguration configuration)
+		                               IConfiguration configuration,
+                                       IProjectStateManager stateManager)
 		{
 			this.projectIntegratorListFactory = projectIntegratorListFactory;
 			Initialize(configuration);
+            this.stateManager = stateManager;
 		}
 
 		/// <summary>
@@ -35,7 +39,8 @@ namespace ThoughtWorks.CruiseControl.Core
 			foreach (IProjectIntegrator integrator in projectIntegrators)
 			{
                 bool canStart = (integrator.Project == null) ||
-                    (integrator.Project.StartupState == ProjectInitialState.Started);
+                    ((integrator.Project.StartupState == ProjectInitialState.Started) &&
+                    stateManager.CheckIfProjectCanStart(integrator.Name));
                 if (canStart) integrator.Start();
 			}
 		}
@@ -102,11 +107,13 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public void Stop(string project)
 		{
+            stateManager.RecordProjectAsStopped(project);
 			GetIntegrator(project).Stop();
 		}
 
 		public void Start(string project)
 		{
+            stateManager.RecordProjectAsStartable(project);
 			GetIntegrator(project).Start();
 		}
 

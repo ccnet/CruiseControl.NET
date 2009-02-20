@@ -4,6 +4,7 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -18,6 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private DynamicMock integratorMock1;
 		private DynamicMock integratorMock2;
 		private DynamicMock integratorMock3;
+        private DynamicMock stateManagerMock;
 
 		private CruiseServer server;
 
@@ -87,9 +89,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectIntegratorListFactoryMock = new DynamicMock(typeof (IProjectIntegratorListFactory));
 			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
 
+            stateManagerMock = new DynamicMock(typeof(IProjectStateManager));
+            stateManagerMock.SetupResult("CheckIfProjectCanStart", true, typeof(string));
+
 			server = new CruiseServer((IConfigurationService) configServiceMock.MockInstance,
 			                          (IProjectIntegratorListFactory) projectIntegratorListFactoryMock.MockInstance,
-			                          (IProjectSerializer) projectSerializerMock.MockInstance);
+			                          (IProjectSerializer) projectSerializerMock.MockInstance,
+                                      (IProjectStateManager)stateManagerMock.MockInstance);
 		}
 
 		private void VerifyAll()
@@ -290,10 +296,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void StopSpecificProject()
 		{
-			integratorMock1.Expect("Stop");
+            stateManagerMock.Expect("RecordProjectAsStopped", "Project 1");
+            integratorMock1.Expect("Stop");
 			server.Stop("Project 1");
 			integratorMock1.Verify();
-		}
+            stateManagerMock.Verify();
+        }
 
 		[Test, ExpectedException(typeof(NoSuchProjectException))]
 		public void ThrowExceptionIfProjectNotFound()
@@ -304,9 +312,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void StartSpecificProject()
 		{
+            stateManagerMock.Expect("RecordProjectAsStartable", "Project 2");
 			integratorMock2.Expect("Start");
 			server.Start("Project 2");
-			integratorMock2.Verify();			
+			integratorMock2.Verify();
+            stateManagerMock.Verify();
 		}
 
 		[Test]

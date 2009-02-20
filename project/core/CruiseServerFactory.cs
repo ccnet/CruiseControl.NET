@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.IO;
 using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -21,10 +22,12 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private static ICruiseServer CreateLocal(string configFile)
 		{
+            IProjectStateManager stateManager = new XmlProjectStateManager();
 			return new CruiseServer(
 				NewConfigurationService(configFile),
 				new ProjectIntegratorListFactory(),
-				new NetReflectorProjectSerializer());
+				new NetReflectorProjectSerializer(),
+                stateManager);
 		}
 
 		private static IConfigurationService NewConfigurationService(string configFile)
