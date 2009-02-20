@@ -1,4 +1,5 @@
 using System;
+using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -11,6 +12,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private IntegrationStatus integrationStatus = IntegrationStatus.Unknown;
 		private string projectName;
 		private Exception connectException;
+        private CCTrayProject _configuration;
 
 		public StubProjectMonitor(string projectName)
 		{
@@ -21,6 +23,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			get { return projectName; }
 		}
+
+        public string ServerName
+        {
+            get { return string.Empty; }
+        }
+
+        public CCTrayProject Configuration
+        {
+            get { return _configuration; }
+            set { _configuration = value; }
+        }
 
 		public ProjectStatus ProjectStatus
 		{

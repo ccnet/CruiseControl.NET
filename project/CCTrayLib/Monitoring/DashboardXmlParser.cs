@@ -48,6 +48,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         public string queue;
 
         [XmlAttribute()]
+        public string serverName;
+
+        [XmlAttribute()]
         public int queuePriority;
 
 	}
@@ -163,6 +166,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
                         dashboardProject.buildStage,
                         dashboardProject.queue,
                         dashboardProject.queuePriority);
+                    projectStatuses[index].ServerName = dashboardProject.serverName;
                 }
             }
             return projectStatuses;

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
@@ -11,17 +12,22 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		private Exception connectException;
 		private readonly BuildDurationTracker buildDurationTracker;
         private readonly IProjectStatusRetriever projectStatusRetriever;
+        // CCNET-1179: Store the project configuration.
+        private readonly CCTrayProject _configuration;
 
-        public ProjectMonitor(ICruiseProjectManager cruiseProjectManager, IProjectStatusRetriever projectStatusRetriever)
-			: this(cruiseProjectManager, projectStatusRetriever, new DateTimeProvider())
+        // CCNET-1179: Include the configuration in the arguments.
+        public ProjectMonitor(CCTrayProject configuration, ICruiseProjectManager cruiseProjectManager, IProjectStatusRetriever projectStatusRetriever)
+			: this(configuration, cruiseProjectManager, projectStatusRetriever, new DateTimeProvider())
 		{
 		}
 
-        public ProjectMonitor(ICruiseProjectManager cruiseProjectManager, IProjectStatusRetriever projectStatusRetriever, DateTimeProvider dateTimeProvider)
+        // CCNET-1179: Include the configuration in the arguments.
+        public ProjectMonitor(CCTrayProject configuration, ICruiseProjectManager cruiseProjectManager, IProjectStatusRetriever projectStatusRetriever, DateTimeProvider dateTimeProvider)
 		{
 			buildDurationTracker = new BuildDurationTracker(dateTimeProvider);
 			this.cruiseProjectManager = cruiseProjectManager;
             this.projectStatusRetriever = projectStatusRetriever;
+            this._configuration = configuration;
         }
 
 		// public for testing only
@@ -58,6 +64,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				return string.Empty;
 			}
 		}
+
+        public string ServerName
+        {
+            get
+            {
+                if (IsConnected)
+                {
+                    return lastProjectStatus.ServerName;
+                }
+                return string.Empty;
+            }
+        }
 
 		public DateTime LastBuildTime
 		{
@@ -123,6 +141,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			get { return cruiseProjectManager.ProjectName; }
 		}
+
+        /// <summary>
+        /// Retrieve the configuration for this project.
+        /// </summary>
+        /// <remarks>
+        /// This is part of the fix for CCNET-1179.
+        /// </remarks>
+        public CCTrayProject Configuration
+        {
+            get { return this._configuration; }
+        }
 
 		public Exception ConnectException
 		{

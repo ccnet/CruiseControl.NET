@@ -24,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		private string lastSuccessfulBuildLabel;
 		private readonly SerializableDateTime nextBuildTime = SerializableDateTime.Default;
         private string currentBuildStage;
+        private string _serverName = Environment.MachineName;       // Store the machine name that this project is running on
 
         private string queue;
         private int queuePriority;
@@ -59,9 +60,16 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             get { return currentBuildStage; }
             set { currentBuildStage = value; }
-        }                                         
-                                             
+        }
 
+        /// <summary>
+        /// The name of the server this status is from.
+        /// </summary>
+        public string ServerName
+        {
+            get { return _serverName; }
+            set { _serverName = value; }
+        }
 
 		public ProjectIntegratorState Status
 		{

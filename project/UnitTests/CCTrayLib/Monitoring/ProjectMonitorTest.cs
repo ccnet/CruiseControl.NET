@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
             mockProjectManager = new DynamicMock(typeof(ICruiseProjectManager));
 			mockProjectManager.Strict = true;
 			dateTimeProvider = new StubCurrentTimeProvider();
-            monitor = new ProjectMonitor((ICruiseProjectManager)mockProjectManager.MockInstance, (IProjectStatusRetriever)mockProjectStatusRetriever.MockInstance, dateTimeProvider);
+            monitor = new ProjectMonitor(null, (ICruiseProjectManager)mockProjectManager.MockInstance, (IProjectStatusRetriever)mockProjectStatusRetriever.MockInstance, dateTimeProvider);
 			monitor.Polled += new MonitorPolledEventHandler(Monitor_Polled);
 			monitor.BuildOccurred += new MonitorBuildOccurredEventHandler(Monitor_BuildOccurred);
 		}

@@ -57,6 +57,7 @@ namespace ThoughtWorks.CruiseControl.Core
             xmlWriter.WriteAttributeString("nextBuildTime", XmlConvert.ToString(projectStatus.NextBuildTime, XmlDateTimeSerializationMode.Local));
             xmlWriter.WriteAttributeString("webUrl", projectStatus.WebURL);
             xmlWriter.WriteAttributeString("buildStage", projectStatus.BuildStage);
+            xmlWriter.WriteAttributeString("serverName", projectStatus.ServerName);
             xmlWriter.WriteEndElement();
         }
 

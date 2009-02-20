@@ -59,31 +59,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			item.ImageIndex = monitor.ProjectState.ImageIndex;
 
-			if (monitor.Detail.IsConnected)
-			{
-				if (config != null)
-				{
-					foreach(CCTrayProject project in config.Projects)
-					{
-						if(project.ProjectName == monitor.Detail.ProjectName)
-						{
-							serverName.Text = project.BuildServer.DisplayName;
-						}
-					}
-				}
-				else
-				{
-					serverName.Text = new Uri(monitor.Detail.WebURL).Host;
-				}
-				lastBuildLabel.Text = monitor.Detail.LastBuildLabel;
-				lastBuildTime.Text = monitor.Detail.LastBuildTime.ToString();
-				projectStatus.Text = monitor.ProjectIntegratorState;
-				activity.Text = monitor.Detail.Activity.ToString();
-			}
-			else
-			{
-				activity.Text = lastBuildLabel.Text = "";
-			}
+            if (monitor.Detail.IsConnected)
+            {
+                serverName.Text = monitor.Detail.ServerName;
+                if (string.IsNullOrEmpty(serverName.Text)) serverName.Text = monitor.Detail.Configuration.ServerUrl;
+                lastBuildLabel.Text = monitor.Detail.LastBuildLabel;
+                lastBuildTime.Text = monitor.Detail.LastBuildTime.ToString();
+                projectStatus.Text = monitor.ProjectIntegratorState;
+                activity.Text = monitor.Detail.Activity.ToString();
+            }
+            else
+            {
+                activity.Text = lastBuildLabel.Text = "";
+            }
 
 			detail.Text = detailStringProvider.FormatDetailString(monitor.Detail);
 		}

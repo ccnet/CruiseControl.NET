@@ -39,17 +39,35 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 		public static StatusIcon LoadFromFile(string file)
 		{
-			try
-			{
-				using (FileStream stream = File.Open(file, FileMode.Open, FileAccess.Read))
-				{
-					return new StatusIcon(new Icon(stream), true);
-				}
-			}
-			catch (SystemException ex)
-			{
-				throw new IconNotFoundException(file, ex);
-			}
+            try
+            {
+                using (FileStream stream = File.Open(file, FileMode.Open, FileAccess.Read))
+                {
+                    return new StatusIcon(new Icon(stream), true);
+                }
+            }
+            catch (ArgumentException)
+            {
+                try
+                {
+                    // Attempt to load the icon from an image file instead
+                    using (FileStream stream = File.Open(file, FileMode.Open, FileAccess.Read))
+                    {
+                        using (Bitmap image = new Bitmap(stream))
+                        {
+                            return new StatusIcon(Icon.FromHandle(image.GetHicon()), true);
+                        }
+                    }
+                }
+                catch (SystemException ex)
+                {
+                    throw new IconNotFoundException(file, ex);
+                }
+            }
+            catch (SystemException ex)
+            {
+                throw new IconNotFoundException(file, ex);
+            }
 		}
 
 		public Icon Icon

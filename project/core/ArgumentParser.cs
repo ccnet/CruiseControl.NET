@@ -14,9 +14,10 @@ Options:
   -remoting:[on/off] default:on
   -project:[projectName]
   -validate
+  -noerrorpause
   -help";
 
-		private string[] validOptions = new string[] {"config", "remoting", "project", "validate", "help"};
+		private string[] validOptions = new string[] {"config", "remoting", "project", "validate", "noerrorpause", "help"};
 		private Hashtable options = new Hashtable();
 		private Regex regex = new Regex("-(?<option>[^:]*)(:(?<value>.*))?");
 
@@ -87,6 +88,11 @@ Options:
 	    {
             get { return GetOption("debugger") != null; }
 	    }
+
+        public bool NoPauseOnError
+        {
+            get { return GetOption("noerrorpause") != null; }
+        }
 
 		private string GetOption(string optionRequired)
 		{

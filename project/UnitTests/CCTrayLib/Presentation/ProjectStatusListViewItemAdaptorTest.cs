@@ -1,6 +1,7 @@
 using System.Windows.Forms;
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
 using ThoughtWorks.CruiseControl.Remote;
@@ -58,6 +59,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			StubProjectMonitor projectMonitor = new StubProjectMonitor("projectName");
 			projectMonitor.ProjectState = ProjectState.Building;
 			projectMonitor.ProjectStatus = null;
+            projectMonitor.Configuration = new CCTrayProject("http://somewhere", "projectName");
 
 			ProjectStatusListViewItemAdaptor adaptor = new ProjectStatusListViewItemAdaptor(detailStringFormatter);
 			ListViewItem item = adaptor.Create(projectMonitor);

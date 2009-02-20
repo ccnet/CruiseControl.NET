@@ -56,5 +56,64 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			get { return buildServer; }
 			set { buildServer = value; }
 		}
+
+        /// <summary>
+        /// Check to see if two sets of configuration are the same.
+        /// </summary>
+        /// <param name="obj">The other configuration set to check.</param>
+        /// <returns>True if they are both the same, false otherwise.</returns>
+        /// <remarks>
+        /// This is part of the fix for CCNET-1179.
+        /// </remarks>
+        public override bool Equals(object obj)
+        {
+            CCTrayProject objToCompare = obj as CCTrayProject;
+            if (objToCompare != null)
+            {
+                bool isSame = string.Equals(projectName, objToCompare.projectName);
+
+                if (isSame)
+                {
+                    if ((buildServer != null) && (objToCompare.buildServer != null))
+                    {
+                        // If both instances have a build server then compare the build server settings
+                        isSame = string.Equals(buildServer.Url, objToCompare.buildServer.Url);
+                    }
+                    else if ((buildServer != null) && (objToCompare.buildServer != null))
+                    {
+                        // If neither instance has a build server then they are the same
+                        isSame = true;
+                    }
+                    else
+                    {
+                        // Otherwise we know we have a difference
+                        isSame = false;
+                    }
+                }
+                return isSame;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Retrieve the hashcode for this configuration.
+        /// </summary>
+        /// <returns>The hashcode of the project name plus build server URL.</returns>
+        /// <remarks>
+        /// This is part of the fix for CCNET-1179.
+        /// </remarks>
+        public override int GetHashCode()
+        {
+            string hashCode = string.Empty;
+            if (projectName != null) hashCode = projectName;
+            if (buildServer != null)
+            {
+                hashCode += buildServer.Url;
+            }
+            return hashCode.GetHashCode();
+        }
 	}
 }

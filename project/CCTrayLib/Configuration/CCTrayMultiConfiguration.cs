@@ -44,7 +44,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 				{
 					ICruiseProjectManager projectManager = cruiseProjectManagerFactory.Create(Projects[i], serverManagersList);
 					IProjectStatusRetriever projectStatusRetriever = GetServerMonitorForProject(Projects[i], serverMonitors);
-					retVal[indexRetval++] = new ProjectMonitor(projectManager, projectStatusRetriever);
+					retVal[indexRetval++] = new ProjectMonitor(Projects[i], projectManager, projectStatusRetriever);
+
 				}
 			}
 			
