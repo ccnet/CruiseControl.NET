@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
 					return constraint;
 				}
 
-				if (!expected[expectedKey].Equals(obtained[expectedKey]))
+				if (!object.Equals(expected[expectedKey], obtained[expectedKey]))
 				{
 					message =
 						string.Format("Expected {0} to be {1} but was {2}", expectedKey, expected[expectedKey], obtained[expectedKey]);

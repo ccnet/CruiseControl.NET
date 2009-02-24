@@ -8,6 +8,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -68,12 +69,31 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				velocityContext["serverLink"] = linkFactory.CreateServerLink(request.ServerSpecifier, ServerReportServerPlugin.ACTION_NAME);
 			}
 
-			if (categoryName != "" && request.ServerSpecifier != null)
-			{
-				velocityContext["categoryLink"] = new GeneralAbsoluteLink(categoryName, linkFactory
-					.CreateServerLink(request.ServerSpecifier, "ViewServerReport")
-					.Url + "?Category=" + HttpUtility.UrlEncode(categoryName));
-			}
+            if (categoryName != "")
+            {
+                IServerSpecifier serverSpecifier;
+                try
+                {
+                    serverSpecifier = request.ServerSpecifier;
+                }
+                catch (ThoughtWorks.CruiseControl.Core.CruiseControlException)
+                {
+                    serverSpecifier = null;
+                }
+
+                if (serverSpecifier != null)
+                {
+                    velocityContext["categoryLink"] = new GeneralAbsoluteLink(categoryName, linkFactory
+                        .CreateServerLink(serverSpecifier, "ViewServerReport")
+                        .Url + "?Category=" + HttpUtility.UrlEncode(categoryName));
+                }
+                else
+                {
+                    velocityContext["categoryLink"] = new GeneralAbsoluteLink(categoryName, linkFactory
+                        .CreateFarmLink( "Dashboard", FarmReportFarmPlugin.ACTION_NAME )
+                        .Url + "?Category=" + HttpUtility.UrlEncode(categoryName));
+                }
+            }
 
 
 			if (projectName != "")

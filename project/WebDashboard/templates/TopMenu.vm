@@ -3,7 +3,11 @@
 		<td>
 			<div>
 				<a href="$farmLink.Url">Dashboard</a>
-				#if ( ! ($serverName == "" ) )
+				#if ( $serverName == "" )
+					#if ($categoryName != "")
+					&gt; <a href="$categoryLink.Url">$categoryLink.Text</a>
+					#end
+				#else
 					&gt; <a href="$serverLink.Url">$serverLink.Text</a>
 					#if ($categoryName != "")
 						&gt; <a href="$categoryLink.Url">$categoryLink.Text</a>

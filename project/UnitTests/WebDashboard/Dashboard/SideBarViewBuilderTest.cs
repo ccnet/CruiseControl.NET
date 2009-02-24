@@ -12,6 +12,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
@@ -85,11 +86,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			// Setup
 			cruiseRequestWrapperMock.ExpectAndReturn("ServerName", "");
 			pluginLinkCalculatorMock.ExpectAndReturn("GetFarmPluginLinks", links);
-			farmServiceMock.ExpectAndReturn("GetServerSpecifiers", serverSpecifiers);
+			farmServiceMock.ExpectAndReturn("GetServerSpecifiers", serverSpecifiers);            
 			linkListFactoryMock.ExpectAndReturn("CreateServerLinkList", serverLinks, serverSpecifiers, "ViewServerReport");
+
+            ProjectStatus ps = new ProjectStatus("", "", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "", 0);
+            ProjectStatusOnServer[] psosa = new ProjectStatusOnServer[] { new ProjectStatusOnServer(ps, serverSpecifiers[0]) };
+            ProjectStatusListAndExceptions pslae = new ProjectStatusListAndExceptions(psosa, new CruiseServerException[0]);
+            farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", pslae, serverSpecifiers[0]);
 
 			velocityContext["links"] = links;
 			velocityContext["serverlinks"] = serverLinks;
+
+            velocityContext["showCategories"] = false;
+            velocityContext["categorylinks"] = null;
+            CruiseControl.WebDashboard.Dashboard.DefaultLinkFactory x = new DefaultLinkFactory(new DefaultUrlBuilder(),null,null);
+
+            IAbsoluteLink farmLink = x.CreateFarmLink("Dashboard", FarmReportFarmPlugin.ACTION_NAME);
+            linkFactoryMock.ExpectAndReturn("CreateFarmLink", farmLink, "Dashboard", FarmReportFarmPlugin.ACTION_NAME);
+            velocityContext["farmLink"] = farmLink;
+
+            System.Diagnostics.Debug.WriteLine("starting");
 
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", velocityResponse, @"FarmSideBar.vm", new HashtableConstraint(velocityContext));
 
