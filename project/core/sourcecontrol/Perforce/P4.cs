@@ -241,19 +241,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 			if (AutoGetSource)
 			{
-				ProcessInfo info = processInfoCreator.CreateProcessInfo(this, CreateSyncCommandLine());
+                ProcessInfo info = processInfoCreator.CreateProcessInfo(this, CreateSyncCommandLine(result.StartTime));
 				Log.Info(string.Format("Getting source from Perforce: {0} {1}", info.FileName, info.Arguments));
 				Execute(info);
 			}
 		}
 
-		private string CreateSyncCommandLine()
+        private string CreateSyncCommandLine(DateTime modificationsToDate)
 		{
 			string commandline = "sync";
 			if (ForceSync)
 			{
 				commandline += " -f";
 			}
+
+            commandline += " @" + FormatDate(modificationsToDate);
+
 			return commandline;
 		}
 
