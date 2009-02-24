@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	[ReflectorType("nunit")]
 	public class NUnitTask : ITask
 	{
-		public const string DefaultPath = @"C:\Program Files\NUnit 2.2\bin\nunit-console.exe";
+		public const string DefaultPath = @"nunit-console";
 		public const int DefaultTimeout = 600;
 		private const string DefaultOutputFile = "nunit-results.xml";
 		private readonly ProcessExecutor executor;

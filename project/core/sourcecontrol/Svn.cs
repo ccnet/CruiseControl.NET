@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     [ReflectorType("svn")]
     public class Svn : ProcessSourceControl
     {
-        public const string DefaultExecutable = "svn.exe";
+        public const string DefaultExecutable = "svn";
         public static readonly string UtcXmlDateFormat = "yyyy-MM-ddTHH:mm:ssZ";
 		
         public Svn(ProcessExecutor executor, IHistoryParser parser, IFileSystem fileSystem)

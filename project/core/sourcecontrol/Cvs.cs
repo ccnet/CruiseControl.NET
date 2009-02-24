@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("cvs")]
 	public class Cvs : ProcessSourceControl
 	{
-		public const string DefaultCvsExecutable = "cvs.exe";
+		public const string DefaultCvsExecutable = "cvs";
 		public const string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
 		private readonly IFileSystem fileSystem;
 

@@ -78,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			string xml = @"<svn/>";
 			svn = (Svn) NetReflector.Read(xml);
-			Assert.AreEqual("svn.exe", svn.Executable);			
+			Assert.AreEqual("svn", svn.Executable);			
 		}
 
 		[Test]

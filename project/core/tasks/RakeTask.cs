@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	public class RakeTask : BaseExecutableTask
 	{
 		public const int DefaultBuildTimeout = 600;
-		public const string DefaultExecutable = @"C:\ruby\bin\rake.bat";
+		public const string DefaultExecutable = @"rake";
 
 		[ReflectorProperty("buildArgs", Required = false)]
 		public string BuildArgs = "";

@@ -133,9 +133,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
-		public void CvsExeShouldBeDefaultExecutable()
+		public void CvsShouldBeDefaultExecutable()
 		{
-			Assert.AreEqual("cvs.exe", cvs.Executable);
+			Assert.AreEqual("cvs", cvs.Executable);
 		}
 
 		[Test]

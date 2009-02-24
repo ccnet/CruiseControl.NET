@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	public class NAntTask : BaseExecutableTask
 	{
 		public const int DefaultBuildTimeout = 600;
-		public const string defaultExecutable = "nant.exe";
+		public const string defaultExecutable = "nant";
 		public const string DefaultLogger = "NAnt.Core.XmlLogger";
 		public const bool DefaultNoLogo = true;
 
