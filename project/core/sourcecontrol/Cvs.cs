@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			this.fileSystem = fileSystem;
 		}
 
-		[ReflectorProperty("executable")]
+        [ReflectorProperty("executable", Required = false)]
 		public string Executable = DefaultCvsExecutable;
 
 		[ReflectorProperty("cvsroot")]
