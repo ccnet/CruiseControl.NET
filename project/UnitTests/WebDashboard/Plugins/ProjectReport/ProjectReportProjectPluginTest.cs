@@ -33,7 +33,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 		[SetUp]
 		public void Setup()
 		{
+            ProjectStatusOnServer server = new ProjectStatusOnServer(new ProjectStatus("myProject", IntegrationStatus.Success, DateTime.Now),
+                new DefaultServerSpecifier("myServer"));
+            ProjectStatusListAndExceptions statusList = new ProjectStatusListAndExceptions(
+                new ProjectStatusOnServer[] {
+                    server
+                }, new CruiseServerException[] {
+                });
+
 			farmServiceMock = new DynamicMock(typeof(IFarmService));
+            farmServiceMock.SetupResult("GetProjectStatusListAndCaptureExceptions", statusList, typeof(IServerSpecifier));
 			viewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
 			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
             ServerLocation serverConfig = new ServerLocation();
@@ -90,13 +99,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 
 			IResponse response = new HtmlFragmentResponse("myView");
 
-			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
+            cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
+            cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
 			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, 1);
 			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier);
 			linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("foo", "buildUrl"), projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME);
 
             linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("RSS", @"myServer"), projectSpecifier, ThoughtWorks.CruiseControl.WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME);
-
 
             
             farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, ProjectReportProjectPlugin.AmountOfBuildsToRetrieve);            
@@ -107,9 +116,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 
             expectedContext["OKPercent"] = 100;
             expectedContext["NOKPercent"] = 0;
-                        
 
-
+            expectedContext["server"] = new DefaultServerSpecifier("myServer");
+            expectedContext["StatusMessage"] = string.Empty;
+            expectedContext["status"] = null;
+            expectedContext["StartStopButtonName"] = "StartBuild";
+            expectedContext["StartStopButtonValue"] = "Start";
+            expectedContext["ForceAbortBuildButtonName"] = "ForceBuild";
+            expectedContext["ForceAbortBuildButtonValue"] = "Force";
 
 			viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
 
@@ -146,10 +160,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 
             IResponse response = new HtmlFragmentResponse("myView");
 
-
             
             IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
-			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
+            cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
+            cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
 			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[0], projectSpecifier, 1);
 			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier);
 
@@ -165,6 +179,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 
             expectedContext["OKPercent"] = 100;
             expectedContext["NOKPercent"] = 0;
+
+            expectedContext["server"] = new DefaultServerSpecifier("myServer");
+            expectedContext["StatusMessage"] = string.Empty;
+            expectedContext["status"] = null;
+            expectedContext["StartStopButtonName"] = "StartBuild";
+            expectedContext["StartStopButtonValue"] = "Start";
+            expectedContext["ForceAbortBuildButtonName"] = "ForceBuild";
+            expectedContext["ForceAbortBuildButtonValue"] = "Force";
 
             viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
 
@@ -209,14 +231,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 
 			IResponse response = new HtmlFragmentResponse("myView");
 
-			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
+            cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
+            cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
 			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, 1);
 			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier);
 			linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("foo", "buildUrl"), projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME);
 
             farmServiceMock.ExpectAndReturn("GetRSSFeed", "", projectSpecifier);
             linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("RSS", @"myServer"), projectSpecifier, ThoughtWorks.CruiseControl.WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME);
-
 
             farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, ProjectReportProjectPlugin.AmountOfBuildsToRetrieve);
             expectedContext["graphDayInfo"] = new NMock.Constraints.IsTypeOf(typeof(ArrayList));
@@ -227,6 +249,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
             expectedContext["OKPercent"] = 100;
             expectedContext["NOKPercent"] = 0;
 
+            expectedContext["server"] = new DefaultServerSpecifier("myServer");
+            expectedContext["StatusMessage"] = string.Empty;
+            expectedContext["status"] = null;
+            expectedContext["StartStopButtonName"] = "StartBuild";
+            expectedContext["StartStopButtonValue"] = "Start";
+            expectedContext["ForceAbortBuildButtonName"] = "ForceBuild";
+            expectedContext["ForceAbortBuildButtonValue"] = "Force";
 
             viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
                        

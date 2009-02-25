@@ -147,22 +147,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 
         private string ForceBuildIfNecessary(IProjectSpecifier projectSpecifier, IRequest request)
         {
-            if (request.FindParameterStartingWith("StopBuild") != string.Empty)
+            if (!string.IsNullOrEmpty(request.FindParameterStartingWith("StopBuild")))
             {
                 farmService.Stop(projectSpecifier);
                 return string.Format("Stopping project {0}", projectSpecifier.ProjectName);
             }
-            else if (request.FindParameterStartingWith("StartBuild") != string.Empty)
+            else if (!string.IsNullOrEmpty(request.FindParameterStartingWith("StartBuild")))
             {
                 farmService.Start(projectSpecifier);
                 return string.Format("Starting project {0}", projectSpecifier.ProjectName);
             }
-            else if (request.FindParameterStartingWith("ForceBuild") != string.Empty)
+            else if (!string.IsNullOrEmpty(request.FindParameterStartingWith("ForceBuild")))
             {
                 farmService.ForceBuild(projectSpecifier, "Dashboard");
                 return string.Format("Build successfully forced for {0}", projectSpecifier.ProjectName);
             }
-            else if (request.FindParameterStartingWith("AbortBuild") != string.Empty)
+            else if (!string.IsNullOrEmpty(request.FindParameterStartingWith("AbortBuild")))
             {
                 farmService.AbortBuild(projectSpecifier, "Dashboard");
                 return string.Format("Abort successfully forced for {0}", projectSpecifier.ProjectName);
