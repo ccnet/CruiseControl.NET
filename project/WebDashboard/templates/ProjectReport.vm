@@ -1,3 +1,40 @@
+<h2>Project Status for $projectName</h2>
+#if ($StatusMessage.Length > 0)
+<div>
+  <span id="StatusLabel">$StatusMessage</span>
+</div>
+#end
+
+<div class="commands">
+  <form methd="POST">
+    #if ($server.AllowForceBuild)
+    <input type="submit" name="$ForceAbortBuildButtonName" value="$ForceAbortBuildButtonValue"/>
+    #end
+    #if ($server.AllowStartStopBuild)
+    <input type="submit" name="$StartStopButtonName" value="$StartStopButtonValue"/>
+    #end
+  </form>
+</div>
+
+<table>
+  <tr>
+    <th>Last Build Status:</th>
+    <td>$status.BuildStatus</td>
+  </tr>
+  <tr>
+    <th>Last Build Label:</th>
+    <td>$status.LastBuildLabel</td>
+  </tr>
+  <tr>
+    <th>CCNet Status:</th>
+    <td>$status.Status</td>
+  </tr>
+  <tr>
+    <th>Activity:</th>
+    <td>$status.Activity</td>
+  </tr>
+</table>
+
 <h2>
   Project Report for $projectName
   #if ($rssDataPresent)

@@ -12,6 +12,8 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
@@ -23,6 +25,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         private readonly ILinkFactory linkFactory;
         public static readonly string ACTION_NAME = "ViewProjectReport";
         private IBuildPlugin[] pluginNames = null;
+        private readonly IRemoteServicesConfiguration configuration;
         
         // retrieve at most this amount of builds                             
         public static readonly Int32 AmountOfBuildsToRetrieve = 100;
@@ -37,17 +40,20 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             set { pluginNames = value; }
         }
 
-        public ProjectReportProjectPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator, ILinkFactory linkFactory)
+        public ProjectReportProjectPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator, ILinkFactory linkFactory,
+            IRemoteServicesConfiguration configuration)
         {
             this.farmService = farmService;
             this.viewGenerator = viewGenerator;
             this.linkFactory = linkFactory;
+            this.configuration = configuration;
         }
 
         public IResponse Execute(ICruiseRequest cruiseRequest)
         {
             Hashtable velocityContext = new Hashtable();
             IProjectSpecifier projectSpecifier = cruiseRequest.ProjectSpecifier;
+            IServerSpecifier serverSpecifier = FindServer(projectSpecifier);
 
             IBuildSpecifier[] buildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 1);
             if (buildSpecifiers.Length == 1)
@@ -56,9 +62,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             }
 
             velocityContext["projectName"] = projectSpecifier.ProjectName;
+            velocityContext["server"] = serverSpecifier;
             velocityContext["externalLinks"] = farmService.GetExternalLinks(projectSpecifier);
             velocityContext["noLogsAvailable"] = (buildSpecifiers.Length == 0);
 
+            velocityContext["StatusMessage"] = ForceBuildIfNecessary(projectSpecifier, cruiseRequest.Request);
+            ProjectStatus status = FindProjectStatus(projectSpecifier);
+            velocityContext["status"] = status;
+            velocityContext["StartStopButtonName"] = (status.Status == ProjectIntegratorState.Running) ? "StopBuild" : "StartBuild"; 
+            velocityContext["StartStopButtonValue"] = (status.Status == ProjectIntegratorState.Running) ? "Stop" : "Start";
+            velocityContext["ForceAbortBuildButtonName"] = (status.Activity != ProjectActivity.Building) ? "ForceBuild" : "AbortBuild";
+		    velocityContext["ForceAbortBuildButtonValue"] = (status.Activity != ProjectActivity.Building) ? "Force" : "Abort";
 
             velocityContext["applicationPath"] = cruiseRequest.Request.ApplicationPath;
             velocityContext["rssDataPresent"] = farmService.GetRSSFeed(projectSpecifier).Length > 0;
@@ -104,6 +118,59 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             velocityContext["NOKPercent"] = 100 - okpercent;
                                            
             return viewGenerator.GenerateView(@"ProjectReport.vm", velocityContext);
+        }
+
+        private IServerSpecifier FindServer(IProjectSpecifier projectSpecifier)
+        {
+            foreach (ServerLocation server in configuration.Servers)
+            {
+                if (string.Equals(projectSpecifier.ServerSpecifier.ServerName, server.Name))
+                {
+                    return new DefaultServerSpecifier(server.Name, server.AllowForceBuild, server.AllowStartStopBuild);
+                }
+            }
+            throw new Exception("Unable to find specified server");
+        }
+
+        private ProjectStatus FindProjectStatus(IProjectSpecifier projectSpecifier)
+        {
+            ProjectStatusListAndExceptions list = farmService.GetProjectStatusListAndCaptureExceptions(projectSpecifier.ServerSpecifier);
+            foreach (ProjectStatusOnServer status in list.StatusAndServerList)
+            {
+                if (string.Equals(status.ProjectStatus.Name, projectSpecifier.ProjectName, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return status.ProjectStatus;
+                }
+            }
+            throw new Exception("Unable to retrieve project status");
+        }
+
+        private string ForceBuildIfNecessary(IProjectSpecifier projectSpecifier, IRequest request)
+        {
+            if (request.FindParameterStartingWith("StopBuild") != string.Empty)
+            {
+                farmService.Stop(projectSpecifier);
+                return string.Format("Stopping project {0}", projectSpecifier.ProjectName);
+            }
+            else if (request.FindParameterStartingWith("StartBuild") != string.Empty)
+            {
+                farmService.Start(projectSpecifier);
+                return string.Format("Starting project {0}", projectSpecifier.ProjectName);
+            }
+            else if (request.FindParameterStartingWith("ForceBuild") != string.Empty)
+            {
+                farmService.ForceBuild(projectSpecifier, "Dashboard");
+                return string.Format("Build successfully forced for {0}", projectSpecifier.ProjectName);
+            }
+            else if (request.FindParameterStartingWith("AbortBuild") != string.Empty)
+            {
+                farmService.AbortBuild(projectSpecifier, "Dashboard");
+                return string.Format("Abort successfully forced for {0}", projectSpecifier.ProjectName);
+            }
+            else
+            {
+                return "";
+            }
         }
 
         public string LinkDescription

@@ -113,3 +113,12 @@ td>a.selected:hover { color:#006; }
 {
 	color: darkgrey;
 }
+.commands
+{
+	float:right;
+}
+.commands input
+{
+	width: 100px;
+	display:block;
+}
