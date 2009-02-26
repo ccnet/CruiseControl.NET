@@ -162,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			public void NotifySleepingState() {}
 			public void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment) { }
 
-			public XmlDocument Statistics
+			public string Statistics
 			{
 				get { throw new NotImplementedException(); }
 			}

@@ -65,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		ExternalLink[] ExternalLinks { get; }
 
-		XmlDocument Statistics { get; }
+		string Statistics { get; }
 
         string ModificationHistory { get; }
 

@@ -286,7 +286,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public string GetStatisticsDocument(string projectName)
 		{
-			return GetIntegrator(projectName).Project.Statistics.OuterXml;
+			return GetIntegrator(projectName).Project.Statistics;
 		}
 
 

@@ -47,8 +47,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             }
             StatisticsResults stats = builder.ProcessBuildResults(integrationResult);
 
-            XmlDocument xmlDocument = UpdateXmlFile(stats, integrationResult);
-            ChartGenerator(builder.Statistics).Process(xmlDocument, integrationResult.ArtifactDirectory);
+            UpdateXmlFile(stats, integrationResult);
+            
+            //commented out because this does not work
+            //ChartGenerator(builder.Statistics).Process(xmlDocument, integrationResult.ArtifactDirectory);
+            
             UpdateCsvFile(stats, builder.Statistics, integrationResult);
         }
 
@@ -77,13 +80,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 
         /// <summary>
         /// Write the specified collection of statistics to the XML
-        /// statistics file, creating it if it does not already exist,
-        /// and returning the full set.
+        /// statistics file, creating it if it does not already exist
         /// </summary>
         /// <param name="stats">The collection of statistics.</param>
         /// <param name="integrationResult">The build for which the
         /// statistics were collected.</param>
-        /// <returns>The full XML statistics document.</returns>
         /// <remarks>
         /// The XML document takes the following form:
         ///     &lt;statistics&gt;
@@ -95,42 +96,43 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         ///         &lt;/integration&gt;
         ///     &lt;/statistics&gt;
         /// </remarks>
-        private static XmlDocument UpdateXmlFile(IEnumerable<StatisticResult> stats,
+        private static void UpdateXmlFile(IEnumerable<StatisticResult> stats,
                                                  IIntegrationResult integrationResult)
         {
-            XmlDocument doc = new XmlDocument();
-
-            string lastFile = XmlStatisticsFile(integrationResult);
-            if (File.Exists(lastFile))
-            {
-                doc.Load(lastFile);
-            }
-            else
-            {
-                doc.AppendChild(doc.CreateElement("statistics"));
-            }
-            XmlElement root = doc.DocumentElement;
-
-            XmlElement xml = ToXml(doc, stats);
-            xml.SetAttribute("build-label", integrationResult.Label);
-            IntegrationStatus status = integrationResult.Status;
-            xml.SetAttribute("status", status.ToString());
-            DateTime now = DateTime.Now;
-            xml.SetAttribute("day", now.Day.ToString());
-            xml.SetAttribute("month", now.ToString("MMM"));
-            xml.SetAttribute("year", now.Year.ToString());
-            root.AppendChild(xml);
-
             Directory.CreateDirectory(integrationResult.ArtifactDirectory);
 
-            doc.Save(XmlStatisticsFile(integrationResult));
-            return doc;
+            // make an xml element of the current integration
+            System.Text.StringBuilder integration = new System.Text.StringBuilder();
+            DateTime now = DateTime.Now;
+
+            integration.AppendFormat("<integration build-label=\"{0}\" status=\"{1}\" day=\"{2}\" month=\"{3}\" year=\"{4}\">",
+                                        integrationResult.Label, 
+                                        integrationResult.Status.ToString(),
+                                        now.Day.ToString(), now.ToString("MMM"), now.Year.ToString());
+
+            integration.AppendLine(ToXml(stats));
+
+            integration.Append("</integration>");
+
+            // append to the statistics file
+            string lastFile = XmlStatisticsFile(integrationResult);
+            System.IO.FileStream fs = new System.IO.FileStream(lastFile, System.IO.FileMode.Append);
+            fs.Seek(0, System.IO.SeekOrigin.End);
+
+            System.IO.StreamWriter sw = new System.IO.StreamWriter(fs);
+            sw.WriteLine(integration.ToString());
+
+            sw.Flush();
+            fs.Flush();
+
+            sw.Close();
+            fs.Close();
+
         }
 
         /// <summary>
         /// Add the specified collection of statistics to the root of the specified XML document.
         /// </summary>
-        /// <param name="doc">the document to add the data to.</param>
         /// <param name="stats">The statistics to add.</param>
         /// <returns>The added child element.</returns>
         /// <remarks>
@@ -141,19 +143,29 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         ///         &lt;/statistic&gt;
         ///     &lt;/integration&gt;
         /// </remarks>
-        private static XmlElement ToXml(XmlDocument doc, IEnumerable<StatisticResult> stats)
+        private static string ToXml(IEnumerable<StatisticResult> stats)
         {
-            XmlElement el = doc.CreateElement("integration");
+            System.Text.StringBuilder el = new System.Text.StringBuilder();
+
+            string result;
 
             foreach (StatisticResult statisticResult in stats)
             {
-                XmlElement stat = doc.CreateElement("statistic");
-                stat.SetAttribute("name", statisticResult.StatName);
-                stat.InnerText = Convert.ToString(statisticResult.Value);
-                el.AppendChild(stat);
+
+                if (statisticResult.Value == null)
+                    result = "";
+                else
+                    result = statisticResult.Value.ToString();
+
+                el.AppendLine();
+                el.AppendFormat("  <statistic name=\"{0}\">{1}</statistic>",
+                                    statisticResult.StatName,
+                                    result);
             }
-            return el;
+
+            return el.ToString();
         }
+
 
         /// <summary>
         /// Obtain the location of the XML statistics file, relative to the project artifacts directory.
@@ -198,26 +210,33 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             return Path.Combine(integrationResult.ArtifactDirectory, CsvFileName);
         }
 
-        public static XmlDocument LoadStatistics(string artifactDirectory)
-        {
-            XmlDocument xmlDocument = new XmlDocument();
+        public static string LoadStatistics(string artifactDirectory)
+        {            
             string documentLocation = Path.Combine(artifactDirectory, XmlFileName);
+            System.Text.StringBuilder Result = new System.Text.StringBuilder();
+
             if (File.Exists(documentLocation))
             {
-                xmlDocument.Load(documentLocation);
-                AppendCurrentDateElement(xmlDocument);
+                System.IO.StreamReader sr = new StreamReader(documentLocation);
+                
+                Result.AppendLine("<statistics>");
+                Result.AppendLine(sr.ReadToEnd());
+                sr.Close();
+                               
+                Result.AppendLine(AppendCurrentDateElement());
+               
+                Result.AppendLine("</statistics>");
+
             }
-            return xmlDocument;
+            return Result.ToString();
         }
 
-        private static void AppendCurrentDateElement(XmlDocument xmlDocument)
+        private static string AppendCurrentDateElement()
         {
-            XmlElement timeStamp = xmlDocument.CreateElement("timestamp");
             DateTime now = DateTime.Now;
-            timeStamp.SetAttribute("day", now.Day.ToString());
-            timeStamp.SetAttribute("month", now.ToString("MMM"));
-            timeStamp.SetAttribute("year", now.Year.ToString());
-            xmlDocument.DocumentElement.AppendChild(timeStamp);
+
+            return string.Format("<timestamp day=\"{0}\" month=\"{1}\" year=\"{2}\" />",
+                now.Day.ToString(), now.ToString("MMM"), now.Year.ToString());
         }
     }
 }

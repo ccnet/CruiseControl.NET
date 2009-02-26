@@ -304,7 +304,7 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
-        public XmlDocument Statistics
+        public string Statistics
         {
             get { return StatisticsPublisher.LoadStatistics(ArtifactDirectory); }
         }

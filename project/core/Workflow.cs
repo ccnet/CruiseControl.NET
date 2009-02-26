@@ -87,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			return;
 		}
 
-		public XmlDocument Statistics
+		public string Statistics
 		{
 			get { throw new NotImplementedException(); }
 		}

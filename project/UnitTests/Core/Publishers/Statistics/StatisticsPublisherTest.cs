@@ -34,14 +34,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			string statsFile = Path.Combine(result1.ArtifactDirectory, StatisticsPublisher.XmlFileName);
 			Assert.IsTrue(File.Exists(statsFile));
 
-			CountNodes(statsFile, "//statistics/integration", 1);
+            CountNodes(result1.ArtifactDirectory, "//statistics/integration", 1);
 
 			IntegrationResult result2 = SimulateBuild(2);
 
 			string statsFile2 = Path.Combine(result2.ArtifactDirectory, StatisticsPublisher.XmlFileName);
 			Assert.IsTrue(File.Exists(statsFile2));
 
-			CountNodes(statsFile2, "//statistics/integration", 2);
+            CountNodes(result2.ArtifactDirectory, "//statistics/integration", 2);
 		}
 
 		[Test]
@@ -52,21 +52,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			string statsFile = Path.Combine(result1.ArtifactDirectory, StatisticsPublisher.CsvFileName);
 			Assert.IsTrue(File.Exists(statsFile));
 
-			CountLines(statsFile, 2);
+            CountLines(statsFile, 2);
 
 			IntegrationResult result2 = SimulateBuild(2);
 
 			string statsFile2 = Path.Combine(result2.ArtifactDirectory, StatisticsPublisher.CsvFileName);
 			Assert.IsTrue(File.Exists(statsFile2));
 
-			CountLines(statsFile2, 3);
+            CountLines(statsFile2, 3);
 		}
 
 		[Test]
 		public void LoadStatistics()
 		{
 			testDir.CreateDirectory().CreateTextFile(StatisticsPublisher.XmlFileName, "<statistics />");
-			XmlDocument statisticsDoc = StatisticsPublisher.LoadStatistics(testDir.ToString());
+			XmlDocument statisticsDoc =  new XmlDocument();
+             statisticsDoc.LoadXml(StatisticsPublisher.LoadStatistics(testDir.ToString()));
 
 			XPathNavigator navigator = statisticsDoc.CreateNavigator();
 			XPathNodeIterator nodeIterator = navigator.Select("//timestamp/@day");
@@ -112,10 +113,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			text.Close();
 		}
 
-		private static void CountNodes(string statsFile2, string xpath, int count)
+		private static void CountNodes(string artifactFolder, string xpath, int count)
 		{
 			XmlDocument doc = new XmlDocument();
-			doc.Load(statsFile2);
+			//doc.Load(statsFile2);
+            doc.LoadXml( StatisticsPublisher.LoadStatistics(artifactFolder)); 
 			XmlNodeList node = doc.SelectNodes(xpath);
 			Assert.AreEqual(count, node.Count);
 		}
