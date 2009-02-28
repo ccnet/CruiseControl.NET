@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod1.Type = "modified";
 			mod1.FileName = "log4j.properties";
 			mod1.FolderName = "/cvsroot/cruisecontrol/cruisecontrol/main";
-			mod1.ModifiedTime = CreateDate("2002/03/13 12:45:50 -6");
+			mod1.ModifiedTime = CreateDate("2002/03/13 13:45:50 -6");
 			mod1.UserName = "alden";
 			mod1.Comment = "Shortening ConversionPattern so we don't use up all of the available screen space.";
 			mod1.Version = "1.2";
@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod2.Type = "modified";
 			mod2.FileName = "build.xml";
 			mod2.FolderName = "/cvsroot/cruisecontrol/cruisecontrol/main";
-			mod2.ModifiedTime = CreateDate("2002/03/13 18:56:34 -6");
+			mod2.ModifiedTime = CreateDate("2002/03/13 19:56:34 -6");
 			mod2.UserName = "alden";
 			mod2.Comment = "Added target to clean up test results.";
 			mod2.Version = "1.41";
@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod3.Type = "modified";
 			mod3.FileName = "build.xml";
 			mod3.FolderName = "/cvsroot/cruisecontrol/cruisecontrol/main";
-			mod3.ModifiedTime = CreateDate("2002/03/15 12:20:28 -6");
+			mod3.ModifiedTime = CreateDate("2002/03/15 13:20:28 -6");
 			mod3.UserName = "alden";
 			mod3.Comment = "enabled debug info when compiling tests.";
 			mod3.Version = "1.42";
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod4.Type = "deleted";
 			mod4.FileName = "kungfu.xml";
 			mod4.FolderName = "/cvsroot/cruisecontrol/cruisecontrol/main";
-			mod4.ModifiedTime = CreateDate("2002/03/13 12:45:42 -6");
+			mod4.ModifiedTime = CreateDate("2002/03/13 13:45:42 -6");
 			mod4.UserName = "alden";
 			mod4.Comment = "Hey, look, a deleted file.";
 			mod4.Version = "1.2";
@@ -61,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod5.Type = "deleted";
 			mod5.FileName = "stuff.xml";
 			mod5.FolderName = "/cvsroot/cruisecontrol/cruisecontrol/main";
-			mod5.ModifiedTime = CreateDate("2002/03/13 12:38:42 -6");
+			mod5.ModifiedTime = CreateDate("2002/03/13 13:38:42 -6");
 			mod5.UserName = "alden";
 			mod5.Comment = "Hey, look, another deleted file.";
 			mod5.Version = "1.4";

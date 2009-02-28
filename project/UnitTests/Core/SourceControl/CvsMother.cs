@@ -4,8 +4,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	public class CvsMother
 	{
-		public static DateTime OLDEST_ENTRY = DateTime.Parse("2002/03/13 19:38:42");
-		public static DateTime NEWEST_ENTRY = DateTime.Parse("2002/03/15 19:20:28");
+		public static DateTime OLDEST_ENTRY = DateTime.Parse("2002/03/13 19:38:42 +0");
+		public static DateTime NEWEST_ENTRY = DateTime.Parse("2002/03/15 19:20:28 +0");
 
 		public static string CVS_LOGFILE_CONTENT
 		{
@@ -49,11 +49,11 @@ total revisions: 42;	selected revisions: 2
 description:
 ----------------------------
 revision 1.42
-date: 2002/03/15 19:20:28;  author: alden;  state: Exp;  lines: +1 -1
+date: 2002/03/15 19:20:28 +0;  author: alden;  state: Exp;  lines: +1 -1
 enabled debug info when compiling tests.
 ----------------------------
 revision 1.41
-date: 2002/03/14 01:56:34;  author: alden;  state: Exp;  lines: +63 -49
+date: 2002/03/14 01:56:34 +0;  author: alden;  state: Exp;  lines: +63 -49
 Added target to clean up test results.
 =============================================================================
 
@@ -137,7 +137,7 @@ total revisions: 2;	selected revisions: 1
 description:
 ----------------------------
 revision 1.2
-date: 2002/03/13 19:45:50;  author: alden;  state: Exp;  lines: +1 -1
+date: 2002/03/13 19:45:50 +0;  author: alden;  state: Exp;  lines: +1 -1
 Shortening ConversionPattern so we don't use up all of the available screen space.
 =============================================================================
 
@@ -161,7 +161,7 @@ total revisions: 2;     selected revisions: 1
 description:
 ----------------------------
 revision 1.2
-date: 2002/03/13 19:45:42;  author: alden;  state: dead;  lines: +0 -0
+date: 2002/03/13 19:45:42 +0;  author: alden;  state: dead;  lines: +0 -0
 Hey, look, a deleted file.
 =============================================================================
 
@@ -175,7 +175,7 @@ total revisions: 4;     selected revisions: 1
 description:
 ----------------------------
 revision 1.4
-date: 2002/03/13 19:38:42;  author: alden;  state: dead;  lines: +0 -0
+date: 2002/03/13 19:38:42 +0;  author: alden;  state: dead;  lines: +0 -0
 Hey, look, another deleted file.
 =============================================================================
 
@@ -189,7 +189,7 @@ total revisions: 12; selected revisions: 1
 description:
 ----------------------------
 revision 1.11
-date: 2005-09-12 15:01:10 +0000;  author: szko;  state: Exp;  lines: +68 -132
+date: 2005-09-12 15:01:10 +0;  author: szko;  state: Exp;  lines: +68 -132
 Fixed some bugs.
 ============================================================================= "; }
 		}
@@ -251,7 +251,7 @@ total revisions: 52; selected revisions: 1
 description:
 ----------------------------
 revision 1.49
-date: 2005/05/21 14:05:46; author: abc; state: Exp; kopt: kv; commitid: 3586428f402fbe6a; filename: abc.cs;
+date: 2005/05/21 14:05:46 +0; author: abc; state: Exp; kopt: kv; commitid: 3586428f402fbe6a; filename: abc.cs;
 Test commit
 =============================================================================
 
@@ -271,7 +271,7 @@ total revisions: 52; selected revisions: 1
 description:
 ----------------------------
 revision 1.49
-date: 2005/05/21 14:05:46; author: abc; state: Exp; lines: +2 -0; kopt: kv; commitid: 3586428f402fbe6a; filename: abcd.cs;
+date: 2005/05/21 14:05:46 +0; author: abc; state: Exp; lines: +2 -0; kopt: kv; commitid: 3586428f402fbe6a; filename: abcd.cs;
 Test commit
 ";
 		}
@@ -307,7 +307,7 @@ total revisions: 3;	selected revisions: 3
 description:
 ----------------------------
 revision 1.1
-date: 2005/09/30 17:46:06;  author: exortech;  state: dead;
+date: 2005/09/30 17:46:06 +0;  author: exortech;  state: dead;
 branches:  1.1.2;
 file DateLabeller.cs was initially added on branch RB_1_0.
 =============================================================================";
@@ -331,7 +331,7 @@ total revisions: 52; selected revisions: 1
 description:
 ----------------------------
 revision 1.49
-date: 2005/11/19 18:15:09;  author: abc;  state: Exp;  lines: +2 -1;  kopt: kv;  commitid: 1b3d437f6bac72b4;  filename: abc.c;
+date: 2005/11/19 18:15:09 +0;  author: abc;  state: Exp;  lines: +2 -1;  kopt: kv;  commitid: 1b3d437f6bac72b4;  filename: abc.c;
 Test commit
 =============================================================================";
 		}
