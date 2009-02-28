@@ -51,6 +51,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("cleanCopy", Required = false)]
 		public bool CleanCopy = true;
 
+        [ReflectorProperty("forceCheckout", Required = false)]
+        public bool ForceCheckout = false;
+
 		[ReflectorProperty("branch", Required=false)]
 		public string Branch = string.Empty;
 
@@ -90,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			if (!AutoGetSource) return;
 
-			if (DoesCvsDirectoryExist(result))
+			if (!ForceCheckout && DoesCvsDirectoryExist(result))
 			{
 				UpdateSource(result);
 			}
