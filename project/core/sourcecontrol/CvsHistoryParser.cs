@@ -176,7 +176,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			Match match = dateLineRegex.Match(dateLine);
 			try
 			{
-				modification.ModifiedTime = ParseModifiedTime(match.Groups["date"].Value, match.Groups["time"].Value);
+				modification.ModifiedTime = ParseModifiedTime(match.Groups["date"].Value, match.Groups["time"].Value, match.Groups["timezone"].Value);
 				modification.UserName = match.Groups["author"].Value;
 				modification.Type = ParseType(match.Groups["state"].Value, match.Groups["line1"].Value);
 			}
@@ -186,9 +186,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		private DateTime ParseModifiedTime(string dateStamp, string timeStamp)
+		private DateTime ParseModifiedTime(string dateStamp, string timeStamp, string timezone)
 		{
-			string dateTimeString = string.Format("{0} {1} GMT", dateStamp, timeStamp);
+			string dateTimeString = string.Format("{0} {1} {2}", dateStamp, timeStamp, timezone);
 			return DateTime.Parse(dateTimeString, DateTimeFormatInfo.GetInstance(CultureInfo.InvariantCulture));
 		}
 
