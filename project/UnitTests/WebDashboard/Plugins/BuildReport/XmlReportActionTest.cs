@@ -9,6 +9,8 @@ using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 {
@@ -60,8 +62,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		public void WhenOneProjectStatusIsReturnedThisIsContainedInTheReturnedXml()
 		{
 			ProjectStatus projectStatus = CreateProjectStatus();
+            ServerLocation ServerSpecifier = new ServerLocation();
+            ServerSpecifier.ServerName = "localhost";
 
-			ProjectStatusOnServer projectStatusOnServer = new ProjectStatusOnServer(projectStatus, null);
+            ProjectStatusOnServer projectStatusOnServer = new ProjectStatusOnServer(projectStatus, ServerSpecifier);
 			mockFarmService.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions",
 			                                new ProjectStatusListAndExceptions(
 			                                	new ProjectStatusOnServer[] {projectStatusOnServer}, new CruiseServerException[0]));
@@ -86,8 +90,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		public void ReturnedXmlValidatesAgainstSchema()
 		{
 			ProjectStatus projectStatus = CreateProjectStatus();
+            ServerLocation ServerSpecifier = new ServerLocation();
+            ServerSpecifier.ServerName = "localhost";
 
-			ProjectStatusOnServer projectStatusOnServer = new ProjectStatusOnServer(projectStatus, null);
+
+            ProjectStatusOnServer projectStatusOnServer = new ProjectStatusOnServer(projectStatus, ServerSpecifier);
 			mockFarmService.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions",
 			                                new ProjectStatusListAndExceptions(
 			                                	new ProjectStatusOnServer[] {projectStatusOnServer}, new CruiseServerException[0]));

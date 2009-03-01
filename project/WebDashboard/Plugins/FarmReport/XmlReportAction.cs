@@ -3,6 +3,7 @@ using System.Xml;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 {
@@ -30,9 +31,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
             //todo xmlWriter.WriteAttributeString("CCVersion", farmService.GetServerVersion( )); // to identify the version of the server
 
 
+            
+
 			foreach (ProjectStatusOnServer projectStatusOnServer in allProjectStatus.StatusAndServerList)
 			{
-			    WriteProjectStatus(xmlWriter, projectStatusOnServer.ProjectStatus);
+			    WriteProjectStatus(xmlWriter, projectStatusOnServer.ProjectStatus, projectStatusOnServer.ServerSpecifier);
             }
 
 			xmlWriter.WriteEndElement();
@@ -40,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 			return new XmlFragmentResponse(stringWriter.ToString());
 		}
 
-	    private static void WriteProjectStatus(XmlWriter xmlWriter, ProjectStatus status)
+	    private static void WriteProjectStatus(XmlWriter xmlWriter, ProjectStatus status, IServerSpecifier serverSpecifier)
 	    {
 	        xmlWriter.WriteStartElement("Project");
 	        xmlWriter.WriteAttributeString("name", status.Name);
@@ -53,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 	        xmlWriter.WriteAttributeString("webUrl", status.WebURL);
             xmlWriter.WriteAttributeString("CurrentMessage", status.CurrentMessage);
             xmlWriter.WriteAttributeString("BuildStage", status.BuildStage);
-            xmlWriter.WriteAttributeString("serverName", status.ServerName);
+            xmlWriter.WriteAttributeString("serverName", serverSpecifier.ServerName);
 	        xmlWriter.WriteEndElement();
 	    }
 	}
