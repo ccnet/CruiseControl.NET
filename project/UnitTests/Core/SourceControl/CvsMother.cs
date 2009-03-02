@@ -137,7 +137,7 @@ total revisions: 2;	selected revisions: 1
 description:
 ----------------------------
 revision 1.2
-date: 2002/03/13 19:45:50 +0;  author: alden;  state: Exp;  lines: +1 -1
+date: 2002/03/13 19:45:50;  author: alden;  state: Exp;  lines: +1 -1
 Shortening ConversionPattern so we don't use up all of the available screen space.
 =============================================================================
 

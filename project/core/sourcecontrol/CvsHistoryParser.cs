@@ -188,6 +188,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private DateTime ParseModifiedTime(string dateStamp, string timeStamp, string timezone)
 		{
+            if(String.IsNullOrEmpty(timezone))
+                timezone = "+0";
 			string dateTimeString = string.Format("{0} {1} {2}", dateStamp, timeStamp, timezone);
 			return DateTime.Parse(dateTimeString, DateTimeFormatInfo.GetInstance(CultureInfo.InvariantCulture));
 		}
