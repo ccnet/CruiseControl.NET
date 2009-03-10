@@ -5,22 +5,39 @@ using System.Net;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
-    public class WebRetriever : IWebRetriever
-    {
-        public string Get(Uri uri)
-        {
-            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-            WebRequest request = WebRequest.Create(uri);
-            using (WebResponse response = request.GetResponse())
-            {
-                using (Stream responseStream = response.GetResponseStream())
-                {
-                    StreamReader streamReader = new StreamReader(responseStream);
-                    return streamReader.ReadToEnd();
-                }
-            }
-        }
-		
+	public class WebRetriever : IWebRetriever
+	{
+		public string Get(Uri uri)
+		{
+			ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+
+			WebRequest request = WebRequest.Create(uri);
+			if (uri.UserInfo != string.Empty)
+			{
+				request.Credentials = BasicAuthentication(uri);
+			}
+			using (WebResponse response = request.GetResponse())
+			{
+				using (Stream responseStream = response.GetResponseStream())
+				{
+					StreamReader streamReader = new StreamReader(responseStream);
+					return streamReader.ReadToEnd();
+				}
+			}
+		}
+
+		private ICredentials BasicAuthentication(Uri uri)
+		{
+			string username = uri.UserInfo.Split(':')[0];
+			string password = uri.UserInfo.Split(':')[1];
+
+			NetworkCredential myCred = new NetworkCredential(username, password);
+			CredentialCache myCache = new CredentialCache();
+			myCache.Add(uri, "Basic", myCred);
+
+			return myCache;
+		}
+
 		public void Post(Uri uri, NameValueCollection input)
 		{
 			ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
