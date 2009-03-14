@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Dec 12, 2008 by <font color="#0050B2">williams</font>.
+					    This page last changed on Mar 14, 2009 by <font color="#0050B2">dcameron</font>.
 				    </div>
 
 				    <p>The email publisher can be used to send email to any number of users. It is common to include one user who gets an email for every build and then also send email to every developer who checked code in for this build.</p>
@@ -48,6 +48,10 @@ So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never
        <span class="code-tag">&lt;NotificationType&gt;</span>Failed<span class="code-tag">&lt;/NotificationType&gt;</span>
        <span class="code-tag">&lt;NotificationType&gt;</span>Fixed<span class="code-tag">&lt;/NotificationType&gt;</span>
     <span class="code-tag">&lt;/modifierNotificationTypes&gt;</span>
+
+    <span class="code-tag">&lt;subjectSettings&gt;</span>
+       <span class="code-tag">&lt;subject buildResult=<span class="code-quote">"StillBroken"</span> value="Build is still broken for {CCNetProject} /&gt;</span>
+    <span class="code-tag">&lt;/subjectSettings&gt;</span>
 
 <span class="code-tag">&lt;/email&gt;</span></pre>
 </div></div>
@@ -148,6 +152,20 @@ The converters will be used when the name of the modifier is not set in the user
 <td class='confluenceTd'> false <br clear="all" /> </td>
 <td class='confluenceTd'> "" </td>
 </tr>
+<tr>
+<td class='confluenceTd'> subjectSettings </td>
+<td class='confluenceTd'> a set of &lt;subject&gt; elements that define the subject of the email, according to the state of the build (broken, fixed, ...) <br clear="all" /> </td>
+<td class='confluenceTd'> complex <br clear="all" /> </td>
+<td class='confluenceTd'> false <br clear="all" /> </td>
+<td class='confluenceTd'> n/a <br clear="all" /> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> If filled in, this will be shown in the buildstage as the process name <br clear="all" /> </td>
+<td class='confluenceTd'> string <br clear="all" /> </td>
+<td class='confluenceTd'> false <br clear="all" /> </td>
+<td class='confluenceTd'> n/a </td>
+</tr>
 </tbody></table>
 <div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>When includedDetails = True, the message body will contain more information. This detailed information is constructed from xsl transformations on the build log.<br/>
 These xls files are defined in the ccnet.exe.config in the xslFiles section. (see also : <a href="Server Application Config File.html" title="Server Application Config File">Server Application Config File</a>). when adjustig this, restart the console/service.</td></tr></table></div>
@@ -217,6 +235,7 @@ useSSL="TRUE"</p></td></tr></table></div>
 	<li>"Failed" - send email when the build fails</li>
 	<li>"Success" - send email when the build succeeds</li>
 	<li>"Fixed" - send mail when the status of the build changes from "Failed" to "Success". (available from version <font color="black">1.3.0.2966)</font></li>
+	<li><font color="black">"Exception" - send a mail when the build has state Exception, (e.g. error during getting the modifications)</font></li>
 </ul>
 </td>
 <td class='confluenceTd'> string </td>
@@ -265,10 +284,10 @@ useSSL="TRUE"</p></td></tr></table></div>
 &lt;/converters&gt;</pre>
 </div></div>
 
+<p><a name="EmailPublisher-LdapConverter"></a></p>
 <h5><a name="EmailPublisher-LdapConverterElement"></a>Ldap Converter Element</h5>
 
 <p>The &lt;ldapConverter&gt; element looks up the email address via LDAP. (available from 1.4.1.3843)</p>
-
 <table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
@@ -356,6 +375,156 @@ against a field from the LDAP service <br clear="all" /> </td>
 </tbody></table>
 <div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Users who contribute modifications to a failed build are "sticky".  As long as the builds continue to fail, CruiseControl.Net remembers each user who contributed a change to any of the builds.  When a build finally succeeds, this list of "failure modifiers" is cleared.</td></tr></table></div>
 
+<p><a name="EmailPublisher-SubjectSettings"></a> </p>
+<h4><a name="EmailPublisher-SubjectSettingsConfigurationElement"></a>SubjectSettings Configuration Element</h4>
+
+<p>This element&nbsp; allows to set specific subject messages according to the state of the build. When a certain state is not specified, a default will be entered.</p>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+</tr>
+<tr>
+<td class='confluenceTd'> buildresult </td>
+<td class='confluenceTd'> A build result state, see below for the possible values <br clear="all" /> </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
+</tr>
+<tr>
+<td class='confluenceTd'> value </td>
+<td class='confluenceTd'> The value of the subject line, the text to be used for the subject. This may contain variables, see below. <br clear="all" /> </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
+</tr>
+</tbody></table>
+<p>Buildresult states :&nbsp;</p>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Name </th>
+<th class='confluenceTh'> Description </th>
+</tr>
+<tr>
+<td class='confluenceTd'> Success </td>
+<td class='confluenceTd'> The build is yet again successfull. </td>
+</tr>
+<tr>
+<td class='confluenceTd'> Broken </td>
+<td class='confluenceTd'> The build is now broken, it was successfull last time. </td>
+</tr>
+<tr>
+<td class='confluenceTd'> StillBroken </td>
+<td class='confluenceTd'> The build is broken, it was also broken last time. <br clear="all" /> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> Fixed </td>
+<td class='confluenceTd'> The build is ok now, it was broken/exceptioned last time <br clear="all" /> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> Exception </td>
+<td class='confluenceTd'> An error occured during GetModifications, mostly a network / sourcecontrol problem </td>
+</tr>
+</tbody></table>
+<p>It is also possible to use variables in this section, these variables are the integration properties :</p>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Label </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Example </th>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetBuildCondition </td>
+<td class='confluenceTd'> The condition used to trigger the build, indicating if the build was triggered by new modifications or if it was forced.  Legal values are: "IfModificationExists" or "ForceBuild" </td>
+<td class='confluenceTd'> ForceBuild </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetIntegrationStatus </td>
+<td class='confluenceTd'> The status of the current integration. Could be Success, Failure, Exception or Unknown </td>
+<td class='confluenceTd'> Success </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetLabel </td>
+<td class='confluenceTd'> The label used to identify the CCNet build.  This label is generated by the CCNet labeller. </td>
+<td class='confluenceTd'> 1.0.2.120 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetLastIntegrationStatus </td>
+<td class='confluenceTd'> The status of the previous integration. Could be Success, Failure, Exception or Unknown </td>
+<td class='confluenceTd'> Success </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetProject </td>
+<td class='confluenceTd'> The name of the CCNet project that is being integrated. </td>
+<td class='confluenceTd'> MyProject </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetBuildDate </td>
+<td class='confluenceTd'> The date of the build (in yyyy-MM-dd format) </td>
+<td class='confluenceTd'> 2005-08-10 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetBuildTime </td>
+<td class='confluenceTd'> The time of the start of the build (in HH:mm:ss format) </td>
+<td class='confluenceTd'> 08:45:12 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetArtifactDirectory </td>
+<td class='confluenceTd'> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-artifactDirectory">project artifact directory</a> (as an absolute path) </td>
+<td class='confluenceTd'> <tt>c:\program files\CruiseControl.NET\Server\MyProject\Artifacts</tt> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetWorkingDirectory </td>
+<td class='confluenceTd'> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">project working directory</a> (as an absolute path) </td>
+<td class='confluenceTd'> <tt>c:\program files\CruiseControl.NET\Server\MyProject\WorkingDirectory</tt> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetRequestSource </td>
+<td class='confluenceTd'> The source of the integration request; this will generally be the name of the trigger that raised the request. (Added in CCNet 1.1) </td>
+<td class='confluenceTd'> IntervalTrigger </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetFailureUsers </td>
+<td class='confluenceTd'> The list of users who have contributed modifications to a sequence of builds that has failed. </td>
+<td class='confluenceTd'> John, Smith<br clear="all" /> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetListenerFile </td>
+<td class='confluenceTd'> <a href="http://confluence.public.thoughtworks.org/display/CCNETCOMM/Viewing+build+progress+with+Nant+and+MSBuild">Viewing build progress with Nant and MSBuild</a> (Added in CCNet 1.4) </td>
+<td class='confluenceTd'> c:\Project\Artifact\listener.xml </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetProjectUrl </td>
+<td class='confluenceTd'> The URL where the project is located </td>
+<td class='confluenceTd'> <a href="http://myhost/ccnet/server/">http://myhost/ccnet/server/</a> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetNumericLabel </td>
+<td class='confluenceTd'> Contains the label as an integer if conversion is possible, otherwise zero. </td>
+<td class='confluenceTd'> 1 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetModifyingUsers <br clear="all" /> </td>
+<td class='confluenceTd'> The list of users who have contributed to the current build only <br clear="all" /> </td>
+<td class='confluenceTd'> Smith </td>
+</tr>
+</tbody></table>
+<p>This makes it possible to set up subjects like following :</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;subjectSettings&gt;
+   &lt;subject buildResult=<span class="code-quote">"StillBroken"</span> value="Build is still broken <span class="code-keyword">for</span> ${CCNetProject}, please check again  /&gt;
+&lt;/subjectSettings&gt;</pre>
+</div></div>
+<p>or
+<br clear="all" /></p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;subjectSettings&gt;
+   &lt;subject buildResult=<span class="code-quote">"StillBroken"</span> value="Build is still broken <span class="code-keyword">for</span> ${CCNetProject}, the fix failed. /&gt;
+   &lt;subject buildResult=<span class="code-quote">"Broken"</span> value="{CCNetProject} broke at ${CCNetBuildDate} ${CCNetBuildTime } , last checkin(s) by ${CCNetFailureUsers}  /&gt;
+   &lt;subject buildResult=<span class="code-quote">"Exception"</span> value="Serious problem <span class="code-keyword">for</span> ${CCNetProject}, it is now in Exception! Check status of network / sourcecontrol /&gt;
+&lt;/subjectSettings&gt;</pre>
+</div></div>
+
 <h3><a name="EmailPublisher-Troubleshooting"></a>Troubleshooting</h3>
 
 <p>You can find further troubleshooting hints on the <a href="http://www.systemwebmail.com/faq/4.3.9.aspx">System.Web.Mail faq site</a></p>
@@ -369,7 +538,7 @@ against a field from the LDAP service <br clear="all" /> </td>
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Dec 13, 2008 00:16</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Mar 14, 2009 02:55</font></td>
 		    </tr>
 	    </table>
     </body>

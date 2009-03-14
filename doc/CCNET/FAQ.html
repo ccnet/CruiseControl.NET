@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Nov 12, 2008 by <font color="#0050B2">williams</font>.
+					    This page last changed on Feb 21, 2009 by <font color="#0050B2">williams</font>.
 				    </div>
 
 				    <p>This is the CruiseControl.NET <em>Frequently Asked Questions</em> (FAQ)</p>
@@ -98,10 +98,10 @@ Echo %ErrorLevel%</pre>
 </ol>
 
 
-
 <h4><a name="FAQ-Newconfigurationinccnet.configisnotused"></a>New configuration in ccnet.config is not used</h4>
 
-<p>If you have introduced errors to your config file CruiseControl.NET will fail to load, and keep using the already loaded old configuration. So check the log, or stop the service and run the commandline tool to fix the configuration problem.</p>
+<p>If you have introduced errors to your config file CruiseControl.NET will fail to load, and keep using the already loaded old configuration. So check the log, or stop the service and run the commandline tool to fix the configuration problem.<br/>
+From version 1.4.3 onwards there is a visual validator program, that parses the config file like CCNet does, so this makes it easy to spot configuration issues.</p>
 
 <h2><a name="FAQ-OperationflowofCCNet"></a>Operation flow of CCNet</h2>
 
@@ -134,7 +134,8 @@ Echo %ErrorLevel%</pre>
 
 <h4><a name="FAQ-Arethereprojectpropertiesavailabletoreduceduplicationintheconfiguration%3F"></a>Are there project properties available to reduce duplication in the configuration ?</h4>
 
-<p>Properties as in Nant or MSBuild (<em>e.g.</em>, "$(workingDirectory)") are supported from CCNet version 1.4RC1 and upwards. See the <a href="Configuration Preprocessor.html" title="Configuration Preprocessor">Configuration Preprocessor</a> documentation for more details.  Previous versions can reduce some duplication in the configuration with the use of XML DTD entities (<em>e.g.</em>, "&amp;workingDirectory;").</p>
+<p>Properties as in Nant or MSBuild (<em>e.g.</em>, "$(workingDirectory)") are supported from CCNet version 1.4RC1 and upwards. See the <a href="Configuration Preprocessor.html" title="Configuration Preprocessor">Configuration Preprocessor</a> documentation for more details.<br/>
+Previous versions can reduce some duplication in the configuration with the use of XML DTD entities (<em>e.g.</em>, "&amp;workingDirectory;").</p>
 
 <h2><a name="FAQ-UsingtheCCNetService"></a>Using the CCNet Service</h2>
 
@@ -142,6 +143,8 @@ Echo %ErrorLevel%</pre>
 <h4><a name="FAQ-Mybuildcan%27tfindenvironmentvariableswhenrunfromtheservice%2Cbutitworksfinemanuallyorfromtheccnetcommandlineserver"></a><em>My build can't find environment variables when run from the service, but it works fine manually or from the ccnet command line server</em></h4>
 
 <p>You may be running the CCNet Service under the <tt>SYSTEM</tt> account, or some different account other than your own. Many environment variables under MS Windows are set on a per-user basis, which means that the <tt>SYSTEM</tt> account won't have the same variables as you. Depending on the circumstances, you might want to move those environment variable definitions to be system-wide. Another alternative is to run the service under your account, or create a separate <tt>build</tt> account for use by CC.Net. Finally, some tasks such as NAnt can explictly create environment variables for themselves (but these won't be passed on to other CruiseControl.Net tasks).</p>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>It turns out the path (and all environment variables) are read only once, at system start-up. So if the path is changed while the system is running the services will not detect any changes to it (at least in Win2003 see <a href="http://support.microsoft.com/kb/887693">http://support.microsoft.com/kb/887693</a>).</p></td></tr></table></div>
 
 <h4><a name="FAQ-MybuildisfailingandI%27mnotsurewhy"></a><em>My build is failing and I'm not sure why</em></h4>
 
@@ -215,11 +218,19 @@ Echo %ErrorLevel%</pre>
 
 <h4><a name="FAQ-HowdoIchangethelookandfeeloftheWebDashboard%3F"></a><em>How do I change the look and feel of the Web Dashboard?</em></h4>
 
-<p>The look and feel of the Dashboard is defined by the velocity templates and xsl files in the <tt>templates</tt> and <tt>xsl</tt> sub-folders of your Web Dashboard folder (which by default is at <tt>C:\Windows\Program Files\CruiseControl.NET\webdashboard</tt> .)</p>
+<p>The look and feel of the Dashboard is defined by the velocity templates and xsl files in the <tt>templates</tt> and <tt>xsl</tt> sub-folders of your Web Dashboard folder (which by default is at <tt>C:\Windows\Program Files\CruiseControl.NET\webdashboard</tt> .)<br/>
+From version 1.4.3 and onwards CCNet supports theming take a look at <a href="Plugins Configuration Block.html" title="Plugins Configuration Block">Dashboard Plugins</a>for more information.</p>
 
 <h4><a name="FAQ-HowdoIusemyownXSLstylesheetsforreports%3F"></a><em>How do I use my own XSL stylesheets for reports?</em></h4>
 
-<p>Both the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> and <a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">XSL Report Build Plugin</a> can be configured to use custom stylesheets. Change the configuration of the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> if you want to add a stylesheet to the main Build Report, or add a new <a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">XSL Report Build Plugin</a> instance if you want a totally new page for the report.</p>
+<p>Both the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> and <a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">XSL Report Build Plugin</a> can be configured to use custom stylesheets. Change the configuration of the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> if you want to add a stylesheet to the main Build Report, or add a new <a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">XSL Report Build Plugin</a> instance if you want a totally new page for the report.
+<br clear="all" /></p>
+
+<h4><a name="FAQ-HowcanIgettheoutputofToolX%2Fmycustomprograminthedashboard%3F"></a>How can I get the output of Tool X / my custom program in the dashboard ?</h4>
+
+<p>If the tool creates an result file, use the <a href="File Merge Task.html" title="File Merge Task">merge file</a>task to get it into the build result. (mostly done in the publisher section). If the result file is XML, the handling goes a lot easier.<br/>
+Next you must create a xsl file that will parse the resultfile that is now part of the buildlog to visualise the outcome. See the section above.
+<br clear="all" /></p>
 
 <h4><a name="FAQ-HowdoIpreventalltheseunwantedmessagesfromshowingupinthewarning%2FerrorsectionsoftheWebDashboard%3F"></a><em>How do I prevent all these unwanted messages from showing up in the warning/error sections of the WebDashboard?</em></h4>
 
@@ -289,7 +300,7 @@ Executing task X</p>
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Dec 13, 2008 00:16</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Mar 14, 2009 02:55</font></td>
 		    </tr>
 	    </table>
     </body>

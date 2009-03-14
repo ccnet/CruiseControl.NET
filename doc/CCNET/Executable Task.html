@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 11, 2008 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on Mar 14, 2009 by <font color="#0050B2">dcameron</font>.
 				    </div>
 
 				    <p>The Executable Task lets you invoke any command line executable. It doesn't offer as much specific integration as (for example) the <a href="NAnt Task.html" title="NAnt Task">NAnt Task</a>, but does allow you to hook almost anything up as a build process to CCNet.  CCNet will examine the exit code when the executable ends and act accordingly.</p>
@@ -24,13 +24,10 @@
 <h4><a name="ExecutableTask-Examples"></a>Examples</h4>
 
 <p>Minimalist example:</p>
-
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;exec executable=<span class="code-quote">"c:\projects\myproject\build.bat"</span>/&gt;</span></pre>
 </div></div>
-
 <p>Full example:</p>
-
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;exec&gt;</span>
     <span class="code-tag">&lt;executable&gt;</span>make<span class="code-tag">&lt;/executable&gt;</span>
@@ -71,7 +68,7 @@
 <td class='confluenceTd'> The directory to run the process in. If relative, is a subdirectory of the <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a> </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
-<td class='confluenceTd'> <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a></td>
+<td class='confluenceTd'> <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a> </td>
 </tr>
 <tr>
 <td class='confluenceTd'> buildArgs </td>
@@ -98,15 +95,21 @@
 <td class='confluenceTd'> environment </td>
 <td class='confluenceTd'> Specifies any environment variables to set for the executable. </td>
 <td class='confluenceTd'> complex </td>
-<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> false <br clear="all" /> </td>
 <td class='confluenceTd'> (none) </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> If filled in, this will be shown in the buildstage as the process name<br clear="all" /> </td>
+<td class='confluenceTd'> string <br clear="all" /> </td>
+<td class='confluenceTd'> false <br clear="all" /> </td>
+<td class='confluenceTd'> n/a </td>
 </tr>
 </tbody></table>
 
 <h3><a name="ExecutableTask-IntegrationProperties"></a>Integration Properties</h3>
 
 <p>The following parameters are passed to the external program using environment variables, in addition to those you specify in the &lt;environment&gt; element.:</p>
-
 <table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Label </th>
@@ -166,7 +169,7 @@
 <tr>
 <td class='confluenceTd'> CCNetFailureUsers </td>
 <td class='confluenceTd'> The list of users who have contributed modifications to a sequence of builds that has failed. </td>
-<td class='confluenceTd'> string.Empty </td>
+<td class='confluenceTd'> John, Smith<br clear="all" /> </td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetListenerFile </td>
@@ -183,11 +186,16 @@
 <td class='confluenceTd'> Contains the label as an integer if conversion is possible, otherwise zero. </td>
 <td class='confluenceTd'> 1 </td>
 </tr>
+<tr>
+<td class='confluenceTd'> CCNetModifyingUsers <br clear="all" /> </td>
+<td class='confluenceTd'> The list of users who have contributed to the current build only <br clear="all" /> </td>
+<td class='confluenceTd'> Smith </td>
+</tr>
 </tbody></table>
-
 <div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Windows seems to change the case of environment variables occasionally. If your task target doesn't find one of these properties, try using all upper case or all lower case versions of these properties.</td></tr></table></div>
 
 <h3><a name="ExecutableTask-Exitcodes"></a>Exit codes</h3>
+
 <table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Code </th>
@@ -200,7 +208,7 @@
 <td class='confluenceTd'> The build continues </td>
 </tr>
 <tr>
-<td class='confluenceTd'> -1 </td>
+<td class='confluenceTd'> &#45;1 </td>
 <td class='confluenceTd'> Timed out </td>
 <td class='confluenceTd'> The operation timed out and the build fails </td>
 </tr>
@@ -210,6 +218,7 @@
 <td class='confluenceTd'> The build fails </td>
 </tr>
 </tbody></table>
+
 <h3><a name="ExecutableTask-FrequentlyAskedQuestions"></a>Frequently Asked Questions</h3>
 
 <p><b>Does the exec task pass the integration properties via the command line?</b></p>
@@ -225,7 +234,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Dec 13, 2008 00:16</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Mar 14, 2009 02:55</font></td>
 		    </tr>
 	    </table>
     </body>
