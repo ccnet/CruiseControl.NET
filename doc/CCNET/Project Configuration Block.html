@@ -16,19 +16,19 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Sep 11, 2008 by <font color="#0050B2">dhommel</font>.
+					    This page last changed on Mar 14, 2009 by <font color="#0050B2">dcameron</font>.
 				    </div>
 
 				    <p>A <tt>&lt;project&gt;</tt> block defines all the configuration for one project running in a CruiseControl.NET server</p>
 
 <h3><a name="ProjectConfigurationBlock-Examples"></a>Examples</h3>
 
-<p>Minimalist example:</p>
-
-<p><div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<p>Minimalist example:
+<br clear="all" /></p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Project 1"</span> /&gt;</span></pre>
-</div></div><br clear="all" />
-Full example:<br/>
+</div></div>
+<p>Full example:</p>
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Project 1"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;</span>
     <span class="code-tag">&lt;workingDirectory&gt;</span>yourWorkingDirectory<span class="code-tag">&lt;/workingDirectory&gt;</span>
@@ -36,6 +36,8 @@ Full example:<br/>
     <span class="code-tag">&lt;category&gt;</span>Category 1<span class="code-tag">&lt;/category&gt;</span>
     <span class="code-tag">&lt;webURL&gt;</span>http://server1/ccnet/server/local/project/testProject/ViewLatestBuildReport.aspx<span class="code-tag">&lt;/webURL&gt;</span>
     <span class="code-tag">&lt;modificationDelaySeconds&gt;</span>2<span class="code-tag">&lt;/modificationDelaySeconds&gt;</span>
+    <span class="code-tag">&lt;maxSourceControlRetries&gt;</span>5<span class="code-tag">&lt;/maxSourceControlRetries&gt;</span>
+    <span class="code-tag">&lt;startupState&gt;</span>Stopped<span class="code-tag">&lt;/startupState&gt;</span>
     <span class="code-tag">&lt;triggers&gt;</span>
         <span class="code-tag">&lt;yourFirstTriggerType ../&gt;</span>
         <span class="code-tag">&lt;yourOtherTriggerType ../&gt;</span>
@@ -60,7 +62,8 @@ Full example:<br/>
         <span class="code-tag">&lt;externalLink name=<span class="code-quote">"My Other Link"</span> url=<span class="code-quote">"http://somewhere.else/"</span> /&gt;</span>
     <span class="code-tag">&lt;/externalLinks&gt;</span>
 <span class="code-tag">&lt;/project&gt;</span></pre>
-</div></div><br clear="all" /></p>
+</div></div>
+
 <h3><a name="ProjectConfigurationBlock-ConfigurationElements%3A"></a>Configuration Elements:</h3>
 
 <table class='confluenceTable'><tbody>
@@ -94,14 +97,14 @@ Full example:<br/>
 </tr>
 <tr>
 <td class='confluenceTd'> <a name="ProjectConfigurationBlock-workingDirectory"></a> workingDirectory </td>
-<td class='confluenceTd'> The Working Directory for the project (this is used by other blocks). <b>Relative paths</b> are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Working Directory is meant to contain the checked out version of the project under integration. Make sure this folder us unique per project to prevent problems with the build. You don't need to quote the Working Directory, even if it contains spaces.<br clear="all" /> </td>
+<td class='confluenceTd'> The Working Directory for the project (this is used by other blocks). <b>Relative paths</b> are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Working Directory is meant to contain the checked out version of the project under integration. Make sure this folder us unique per project to prevent problems with the build. You don't need to quote the Working Directory, even if it contains spaces. <br clear="all" /> </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> no </td>
 <td class='confluenceTd'> <tt>WorkingDirectory</tt> </td>
 </tr>
 <tr>
 <td class='confluenceTd'> <a name="ProjectConfigurationBlock-artifactDirectory"></a> artifactDirectory </td>
-<td class='confluenceTd'> The Artifact Directory for the project (this is used by other blocks). <b>Relative paths</b> are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Artifact Directory is meant to be a persistence location for anything you want saved from the results of the build, e.g. build logs, distributables, etc. Make sure this folder us unique per project to prevent problems with reporting about a build. You don't need to quote the Aftifact Directory, even if it contains spaces.</td>
+<td class='confluenceTd'> The Artifact Directory for the project (this is used by other blocks). <b>Relative paths</b> are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Artifact Directory is meant to be a persistence location for anything you want saved from the results of the build, e.g. build logs, distributables, etc. Make sure this folder us unique per project to prevent problems with reporting about a build. You don't need to quote the Aftifact Directory, even if it contains spaces. </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> no </td>
 <td class='confluenceTd'> <tt>Artifacts</tt> </td>
@@ -141,7 +144,7 @@ This feature is in CruiseControl.NET for Source Control systems, like CVS, that 
 <td class='confluenceTd'> See <a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a> </td>
 <td class='confluenceTd'> List of <a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a> </td>
 <td class='confluenceTd'> no </td>
-<td class='confluenceTd'> Specifying an empty element (&lt;triggers /&gt;) means integrations are only ever forced manually (for example using <a href="CCTray.html" title="CCTray">CCTray</a> or the <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a>.) Not including a <tt>&lt;triggers&gt;</tt> element at all means the project has a single <a href="Interval Trigger.html" title="Interval Trigger">Interval Trigger</a> with default configuration. </td>
+<td class='confluenceTd'> Specifying an empty element (&lt;triggers /&gt;) means integrations are only ever forced manually (for example using <a href="CCTray.html" title="CCTray">CCTray</a> or the <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a>.) Not including a <tt>&lt;triggers&gt;</tt> element at all means the project will behave like a &lt;triggers /&gt; element (before 1.4.3 the default when not inclufing a &lt;triggers&gt; was a single <a href="Interval Trigger.html" title="Interval Trigger">Interval Trigger</a> with default configuration). </td>
 </tr>
 <tr>
 <td class='confluenceTd'> <a name="ProjectConfigurationBlock-state"></a> state </td>
@@ -185,22 +188,39 @@ This feature is in CruiseControl.NET for Source Control systems, like CVS, that 
 <td class='confluenceTd'> no </td>
 <td class='confluenceTd'> empty list </td>
 </tr>
+<tr>
+<td class='confluenceTd'> <a name="ProjectConfigurationBlock-maxSourceControlRetries"></a> maxSourceControlRetries <br clear="all" /> </td>
+<td class='confluenceTd'> The maximum amount of source control exceptions in a row that may occur, before the project goes to the stopped state. <br clear="all" /> </td>
+<td class='confluenceTd'> int </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> 5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <a name="ProjectConfigurationBlock-startupState"></a> startupState <br clear="all" /> </td>
+<td class='confluenceTd'> Sets the state of the project when CCNet service/Console starts. Stopped can be handy when you are adding a lot of projects which are depending on other projects (via the project trigger) and these may not be build right away. <br clear="all" /> </td>
+<td class='confluenceTd'> enum </td>
+<td class='confluenceTd'> no <br clear="all" /> </td>
+<td class='confluenceTd'> Started. <br clear="all" />
+Possible values are : <br clear="all" />
+&nbsp; Stopped <br clear="all" />
+&nbsp; Started <br clear="all" /> </td>
+</tr>
 </tbody></table>
 
 <h3><a name="ProjectConfigurationBlock-SettingtheWebURL"></a>Setting the WebURL</h3>
 
-<p>The current format of the url for a project, as specified in the &lt;webURL&gt; element is:</p>
-
-<p><div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<p>The current format of the url for a project, as specified in the &lt;webURL&gt; element is:<br/>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">http:<span class="code-comment">//&lt;dashboardserver&gt;/&lt;vdir&gt;/server/&lt;ccnetserver&gt;/project/&lt;projectname&gt;/ViewLatestBuildReport.aspx</span></pre>
 </div></div><br clear="all" />
-For example, if the dashboard was deployed on the server <b>webserver</b> to virtual directory <b>ccnet</b>, and if the project to monitor is called <b>test</b> on server <b>cruise</b>, the URL would be:<br/>
+For example, if the dashboard was deployed on the server <b>webserver</b> to virtual directory <b>ccnet</b>, and if the project to monitor is called <b>test</b> on server <b>cruise</b>, the URL would be:</p>
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">http:<span class="code-comment">//webserver/ccnet/server/cruise/project/test/ViewLatestBuildReport.aspx</span></pre>
-</div></div><br clear="all" /></p>
+</div></div>
+
 <h3><a name="ProjectConfigurationBlock-Subsectiontypes"></a>Sub-section types</h3>
 
-<p><ul><li><a href="ExternalLinks.html" title="ExternalLinks">ExternalLinks</a></li><li><a href="Labeller Blocks.html" title="Labeller Blocks">Labeller Blocks</a></li><li><a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a></li><li><a href="State Manager Blocks.html" title="State Manager Blocks">State Manager Blocks</a></li><li><a href="Task Blocks.html" title="Task Blocks">Task Blocks</a></li><li><a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a></li><li><a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a></li></ul><br clear="all" /></p>
+<ul><li><a href="ExternalLinks.html" title="ExternalLinks">ExternalLinks</a></li><li><a href="Labeller Blocks.html" title="Labeller Blocks">Labeller Blocks</a></li><li><a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a></li><li><a href="State Manager Blocks.html" title="State Manager Blocks">State Manager Blocks</a></li><li><a href="Task Blocks.html" title="Task Blocks">Task Blocks</a></li><li><a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a></li><li><a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a></li></ul>
 
 				    
                     			    </td>
@@ -211,7 +231,7 @@ For example, if the dashboard was deployed on the server <b>webserver</b> to vir
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Dec 13, 2008 00:16</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Mar 14, 2009 02:55</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 23, 2008 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on Mar 14, 2009 by <font color="#0050B2">dcameron</font>.
 				    </div>
 
 				    <h3><a name="NAntTask-Examples"></a>Examples</h3>
@@ -25,7 +25,6 @@
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;nant /&gt;</span></pre>
 </div></div>
-
 <p>Full example:</p>
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;nant&gt;</span>
@@ -64,7 +63,7 @@
 <td class='confluenceTd'> The directory to run the NAnt process in. If relative, is a subdirectory of the <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a> </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
-<td class='confluenceTd'> <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a></td>
+<td class='confluenceTd'> <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a> </td>
 </tr>
 <tr>
 <td class='confluenceTd'> buildFile </td>
@@ -82,7 +81,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> nologo </td>
-<td class='confluenceTd'> Whether to use the <tt>-nologo</tt> argument when calling NAnt </td>
+<td class='confluenceTd'> Whether to use the <tt>&#45;nologo</tt> argument when calling NAnt </td>
 <td class='confluenceTd'> boolean </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> true </td>
@@ -108,17 +107,24 @@
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> no targets specified (NAnt will use the build's default target </td>
 </tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> If filled in, this will be shown in the buildstage as the process name<br clear="all" /> </td>
+<td class='confluenceTd'> string <br clear="all" /> </td>
+<td class='confluenceTd'> false <br clear="all" /> </td>
+<td class='confluenceTd'> n/a </td>
+</tr>
 </tbody></table>
 
 <h3><a name="NAntTask-NAntoutputinXml"></a>NAnt output in Xml</h3>
 
-<p>CruiseControl.NET expects NAnt to generate its output as Xml so that the build results can be parsed and rendered appropriately.  To accomplish this, CruiseControl.NET will, by default, launch NAnt using the "<b>-logger:NAnt.Core.XmlLogger</b>" argument.  If you want to override this behaviour, specify the <b>logger</b> property in the NAntBuilder configuration in the <b>ccnet.config</b> file.  If this element is specified but is empty then NAnt will be started with the default logger (though this may cause some problems for CCNet).  It is also possible to instruct NAnt to log its output to an Xml file and then merge the file into the build using the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>.</p>
+<p>CruiseControl.NET expects NAnt to generate its output as Xml so that the build results can be parsed and rendered appropriately.  To accomplish this, CruiseControl.NET will, by default, launch NAnt using the "<b>&#45;logger:NAnt.Core.XmlLogger</b>" argument.  If you want to override this behaviour, specify the <b>logger</b> property in the NAntBuilder configuration in the <b>ccnet.config</b> file.  If this element is specified but is empty then NAnt will be started with the default logger (though this may cause some problems for CCNet).  It is also possible to instruct NAnt to log its output to an Xml file and then merge the file into the build using the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>.</p>
 
 <p><img class="emoticon" src="images/icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: the configuration of which NAnt logger to use was orginally specified in the <b>ccnet.exe.config</b> file.  This has now been deprecated, and the "NAnt.Logger" element in the &lt;appSettings&gt; section can now be removed.</p>
 
 <h3><a name="NAntTask-NUnitandNAnt"></a>NUnit and NAnt</h3>
-<p>CruiseControl.NET uses xsl to process the build log and produce html for display on the web page. Since xml is so easy to parse the nunit2 task in NAnt can produce xml output. The tasks must be configured to do that in order for test results to show up on the web page. Typically this is done by adding a formatter element to the nunit2 task and setting the type to be "Xml". Additionally the usefile flag of the formatter element must be set to "false". If it isn't the nunit2 task will try and save the output to a file and not write it out to the build log.</p>
 
+<p>CruiseControl.NET uses xsl to process the build log and produce html for display on the web page. Since xml is so easy to parse the nunit2 task in NAnt can produce xml output. The tasks must be configured to do that in order for test results to show up on the web page. Typically this is done by adding a formatter element to the nunit2 task and setting the type to be "Xml". Additionally the usefile flag of the formatter element must be set to "false". If it isn't the nunit2 task will try and save the output to a file and not write it out to the build log.</p>
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;target name=<span class="code-quote">"test.unit"</span> depends=<span class="code-quote">"compile"</span> description=<span class="code-quote">"runs unit tests"</span>&gt;</span>
 	<span class="code-tag">&lt;nunit2&gt;</span>
@@ -127,19 +133,15 @@
 		<span class="code-tag">&lt;test assemblyname=<span class="code-quote">"${build.dir}\${console.exe}"</span> fork=<span class="code-quote">"true"</span>/&gt;</span>
 	<span class="code-tag">&lt;/nunit2&gt;</span>
 <span class="code-tag">&lt;/target&gt;</span></pre>
-</div></div> 
-
+</div></div>
 <p>It would be pretty tedious for developers to read the xml output when they run the build locally. Define a property for the build output type and set it to "Plain" and use the property in the formatter element..</p>
-
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;property name=<span class="code-quote">"outputType"</span> value=<span class="code-quote">"Plain"</span>/&gt;</span>
 	...
 	<span class="code-tag">&lt;formatter type=<span class="code-quote">"${outputType}"</span> usefile=<span class="code-quote">"false"</span>/&gt;</span>
 	...</pre>
 </div></div>
-
 <p>Then in the ccnet.config file pass in a different value for outputType.</p>
-
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;nant&gt;</span>
 	...
@@ -151,12 +153,11 @@
 <h3><a name="NAntTask-AccessingCruiseControl.NETbuildlabelsinNAnt"></a>Accessing CruiseControl.NET build labels in NAnt</h3>
 
 <p>CCNet will pass the current build label to NAnt via the NAnt property <tt>CCNetLabel</tt>.  This means that you can access use this property to, for example, archive the newly built assemblies in a folder with the same name as the build label (this is what we do on <a href="http://ccnetlive.thoughtworks.com/CCNet-builds/">CCNetLive </a>.  Here's some example NAnt script demonstrating how to do this:</p>
-
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;target name=<span class="code-quote">"dist.publish"</span> depends=<span class="code-quote">"dist"</span>&gt;</span>
 	<span class="code-tag">&lt;ifnot propertyexists=<span class="code-quote">"CCNetLabel"</span>&gt;</span>
 		<span class="code-tag">&lt;fail message=<span class="code-quote">"CCNetLabel property not set, so can't create labelled distribution files"</span> /&gt;</span>
-	<span class="code-tag">&lt;/ifnot&gt;</span>	
+	<span class="code-tag">&lt;/ifnot&gt;</span>
 	<span class="code-tag">&lt;property name=<span class="code-quote">"publish.dir"</span> value=<span class="code-quote">"D:\download-area\CCNet-Builds\${CCNetLabel}"</span> /&gt;</span>
 
 	<span class="code-tag">&lt;mkdir dir=<span class="code-quote">"${publish.dir}"</span> /&gt;</span>
@@ -164,14 +165,13 @@
 		<span class="code-tag">&lt;fileset basedir=<span class="code-quote">"dist"</span>&gt;</span>
 			<span class="code-tag">&lt;includes name=<span class="code-quote">"*"</span>/&gt;</span>
 		<span class="code-tag">&lt;/fileset&gt;</span>
-	<span class="code-tag">&lt;/copy&gt;</span>			
+	<span class="code-tag">&lt;/copy&gt;</span>
 <span class="code-tag">&lt;/target&gt;</span></pre>
 </div></div>
 
 <h3><a name="NAntTask-IntegrationProperties"></a>Integration Properties</h3>
 
 <p>The following parameters are passed to NAnt as command-line arguments:</p>
-
 <table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Label </th>
@@ -231,7 +231,7 @@
 <tr>
 <td class='confluenceTd'> CCNetFailureUsers </td>
 <td class='confluenceTd'> The list of users who have contributed modifications to a sequence of builds that has failed. </td>
-<td class='confluenceTd'> string.Empty </td>
+<td class='confluenceTd'> John, Smith<br clear="all" /> </td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetListenerFile </td>
@@ -248,8 +248,12 @@
 <td class='confluenceTd'> Contains the label as an integer if conversion is possible, otherwise zero. </td>
 <td class='confluenceTd'> 1 </td>
 </tr>
+<tr>
+<td class='confluenceTd'> CCNetModifyingUsers <br clear="all" /> </td>
+<td class='confluenceTd'> The list of users who have contributed to the current build only <br clear="all" /> </td>
+<td class='confluenceTd'> Smith </td>
+</tr>
 </tbody></table>
-
 
 <h3><a name="NAntTask-Additionalinformation"></a>Additional information</h3>
 
@@ -264,7 +268,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Dec 13, 2008 00:16</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Mar 14, 2009 02:55</font></td>
 		    </tr>
 	    </table>
     </body>
