@@ -219,7 +219,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
 			public string WebURL { get {return ""; } }
 
-            public int MaxAmountOfSourceControlExceptions { get { return 0; } }
+            public int MaxSourceControlRetries { get { return 0; } }
 
             public ProjectInitialState StartupState { get { return ProjectInitialState.Started; } }
         }

@@ -161,7 +161,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectMock.Expect("NotifyPendingState");
 			projectMock.ExpectAndThrow("Integrate", new CruiseControlException(exceptionMessage), new HasForceBuildCondition());
 			projectMock.ExpectAndSignal("NotifySleepingState");
-            projectMock.ExpectAndReturn("MaxAmountOfSourceControlExceptions", 5);
+            projectMock.ExpectAndReturn("MaxSourceControlRetries", 5);
             integrationTriggerMock.Expect("IntegrationCompleted");
 
 			integrator.Start();

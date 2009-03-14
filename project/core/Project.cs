@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private IIntegratable integratable;
         private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
         private ArrayList messages = new ArrayList();
-        private int maxAmountOfSourceControlExceptions = 5;
+        private int maxSourceControlRetries = 5;
         private ProjectInitialState startupState = ProjectInitialState.Started;
 
         [ReflectorProperty("prebuild", Required = false)]
@@ -81,17 +81,11 @@ namespace ThoughtWorks.CruiseControl.Core
         }
 
 
-        [ReflectorProperty("maxAmountOfSourceControlExceptions", Required = false)]
-        public int MaxAmountOfSourceControlExceptions
+        [ReflectorProperty("maxSourceControlRetries", Required = false)]
+        public int MaxSourceControlRetries
         {
-            get { return maxAmountOfSourceControlExceptions; }
-            set
-            {
-                if (value < 0)
-                { maxAmountOfSourceControlExceptions = 0; }
-                else
-                { maxAmountOfSourceControlExceptions = value; }
-            }
+            get { return maxSourceControlRetries; }
+            set { maxSourceControlRetries = value < 0 ? 0 : value; }
         }
 
 

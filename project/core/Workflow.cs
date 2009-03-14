@@ -151,7 +151,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 
-        public int MaxAmountOfSourceControlExceptions
+        public int MaxSourceControlRetries
         {
             get { throw new NotImplementedException(); }
         }

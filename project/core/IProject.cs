@@ -111,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// Maximum amount of sourcecontrol exceptions allowed, before stopping the project.
         /// This equals to the amount of errors in GetModifications. 
         /// </summary>
-        int MaxAmountOfSourceControlExceptions { get; }
+        int MaxSourceControlRetries { get; }
 
         /// <summary>
         /// The start-up mode for this project.
