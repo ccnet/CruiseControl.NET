@@ -100,13 +100,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 mods = ParseModifications(result, from.StartTime, to.StartTime);
 				if (mods != null)
                 {
-					// If there are modifications in the repository track the revision number.
-					// Do not just get the latest revision from all modifications because they
-					// will also contain the changes in the external paths.
-					if (directory.Equals(TrunkUrl))
-					{
-						latestRevision = Modification.GetLastChangeNumber(mods);
-					}
+
+
+                    if (TrunkUrl != null)
+                    {
+                        // If there are modifications in the repository track the revision number.
+                        // Do not just get the latest revision from all modifications because they
+                        // will also contain the changes in the external paths.
+                        if (directory.Equals(TrunkUrl))
+                        {
+                            latestRevision = Modification.GetLastChangeNumber(mods);
+                        }
+                    }
                     modifications.AddRange(mods);
                 }
             }
