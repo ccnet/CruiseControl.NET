@@ -154,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			foreach (string varName in result.IntegrationProperties.Keys)
 			{
 				object obj1 = result.IntegrationProperties[varName];
-				if (obj1 != null)
+				if ((obj1 != null) && !info.EnvironmentVariables.ContainsKey(varName))
 				{
 				  info.EnvironmentVariables.Add(varName, StringUtil.AutoDoubleQuoteString(StringUtil.RemoveTrailingPathDelimeter(StringUtil.IntegrationPropertyToString(obj1))));
 				}
