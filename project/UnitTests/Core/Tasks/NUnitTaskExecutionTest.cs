@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ExecuteNUnitConsoleAndRetrieveResultsFromFile()
 		{
-		    string args = string.Format(@"/xml=""{0}"" /nologo foo.dll", task.OutputFile);
+		    string args = string.Format(@"/xml={0} /nologo foo.dll", GeneratePath("{0}", task.OutputFile));
 		    ProcessInfo info = new ProcessInfo(NUnitConsolePath, args, WORKING_DIRECTORY);
 			info.TimeOut = NUnitTask.DefaultTimeout * 1000;
 			executorMock.ExpectAndReturn("Execute", new ProcessResult("", String.Empty, 0, false), new object[] { info });
@@ -62,5 +62,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task = new NUnitTask((ProcessExecutor) executorMock.MockInstance);
 			task.Run(result);
 		}
-	}
+
+        /// <summary>
+        /// Path generation hack to text whether the desired path contains spaces.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// This is required because some environments contain spaces for their temp paths (e.g. WinXP), 
+        /// other don't (e.g. WinVista). Previously the unit tests would fail between the different
+        /// environments just because of this.
+        /// </remarks>
+        private string GeneratePath(string path, params string[] args)
+        {
+            string basePath = string.Format(path, args);
+            if (basePath.Contains(" ")) basePath = "\"" + basePath + "\"";
+            return basePath;
+        }
+    }
 }
