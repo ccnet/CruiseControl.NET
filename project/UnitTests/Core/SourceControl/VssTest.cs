@@ -118,7 +118,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void VerifyHistoryProcessInfoArguments()
 		{
             string tempOutputFileName = Path.GetTempFileName();
-            ExpectToExecuteArguments(string.Format("history $/fooProject -R -Vd{0}~{1} \"-YJoe Admin,admin\" -I-Y \"-O@{2}\"", CommandDate(today), CommandDate(yesterday), tempOutputFileName));
+            ExpectToExecuteArguments(string.Format("history $/fooProject -R -Vd{0}~{1} \"-YJoe Admin,admin\" -I-Y {2}", 
+                CommandDate(today), 
+                CommandDate(yesterday), 
+                GeneratePath("-O@{0}", tempOutputFileName)));
             vss.GetModifications(IntegrationResultMother.CreateSuccessful(yesterday), IntegrationResultMother.CreateSuccessful(today), tempOutputFileName);
 		}
 
@@ -126,7 +129,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         public void VerifyHistoryProcessInfoArgumentsWithSpaceInProjectName()
 		{
             string tempOutputFileName = Path.GetTempFileName();
-            ExpectToExecuteArguments(string.Format("history \"$/My Project\" -R -Vd{0}~{1} \"-YJoe Admin,admin\" -I-Y \"-O@{2}\"", CommandDate(today), CommandDate(yesterday), tempOutputFileName));
+            ExpectToExecuteArguments(string.Format("history \"$/My Project\" -R -Vd{0}~{1} \"-YJoe Admin,admin\" -I-Y {2}", 
+                CommandDate(today), 
+                CommandDate(yesterday), 
+                GeneratePath("-O@{0}", tempOutputFileName)));
 			vss.Project = "$/My Project";
             vss.GetModifications(IntegrationResultMother.CreateSuccessful(yesterday), IntegrationResultMother.CreateSuccessful(today), tempOutputFileName);
 		}
@@ -135,7 +141,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         public void VerifyHistoryProcessInfoArgumentsWhenUsernameIsNotSpecified()
 		{
             string tempOutputFileName = Path.GetTempFileName();
-            ExpectToExecuteArguments(string.Format("history $/fooProject -R -Vd{0}~{1} -I-Y \"-O@{2}\"", CommandDate(today), CommandDate(yesterday), tempOutputFileName));
+            ExpectToExecuteArguments(string.Format("history $/fooProject -R -Vd{0}~{1} -I-Y {2}", 
+                CommandDate(today), 
+                CommandDate(yesterday), 
+                GeneratePath("-O@{0}", tempOutputFileName)));
 			vss.Username = null;
             vss.GetModifications(IntegrationResultMother.CreateSuccessful(yesterday), IntegrationResultMother.CreateSuccessful(today), tempOutputFileName);
 		}
@@ -337,5 +346,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			return string.Format("get $/fooProject -R -Vd{0} \"-YJoe Admin,admin\" -I-N -W -GF- -GTM -GWR", CommandDate(today));
 		}
-	}
+
+        /// <summary>
+        /// Path generation hack to text whether the desired path contains spaces.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// This is required because some environments contain spaces for their temp paths (e.g. WinXP), 
+        /// other don't (e.g. WinVista). Previously the unit tests would fail between the different
+        /// environments just because of this.
+        /// </remarks>
+        private string GeneratePath(string path, params string[] args)
+        {
+            string basePath = string.Format(path, args);
+            if (basePath.Contains(" ")) basePath = "\"" + basePath + "\"";
+            return basePath;
+        }
+    }
 }

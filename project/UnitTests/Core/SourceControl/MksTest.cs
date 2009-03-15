@@ -101,9 +101,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void GetSource()
 		{
-			string expectedResyncCommand = string.Format(@"resync --overwriteChanged --restoreTimestamp -R -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot);
+			string expectedResyncCommand = string.Format(@"resync --overwriteChanged --restoreTimestamp -R -S {0} --user=CCNetUser --password=CCNetPassword --quiet", 
+                GeneratePath(@"{0}\myproject.pj", sandboxRoot));
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), ExpectedProcessInfo(expectedResyncCommand));
-			string expectedAttribCommand = string.Format(@"-R /s ""{0}\*""", sandboxRoot);
+			string expectedAttribCommand = string.Format(@"-R /s {0}", 
+                GeneratePath(@"{0}\*", sandboxRoot));
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), ExpectedProcessInfo("attrib", expectedAttribCommand));
 
 			mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
@@ -126,7 +128,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CheckpointSourceOnSuccessfulBuild()
 		{
-			string expectedCommand = string.Format(@"checkpoint -d ""Cruise Control.Net Build - 20"" -L ""Build - 20"" -R -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot);
+            string path = GeneratePath(@"{0}\myproject.pj", sandboxRoot);
+			string expectedCommand = string.Format(@"checkpoint -d ""Cruise Control.Net Build - 20"" -L ""Build - 20"" -R -S {0} --user=CCNetUser --password=CCNetPassword --quiet", path);
 			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
 			mockIntegrationResult.ExpectAndReturn("Succeeded", true);
@@ -152,7 +155,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			mksHistoryParserWrapper.ExpectAndReturn("Parse", new Modification[0], new IsTypeOf(typeof (TextReader)), FROM, TO);
 			mksHistoryParserWrapper.ExpectNoCall("ParseMemberInfoAndAddToModification", new Type[] {(typeof (Modification)), typeof (StringReader)});
-			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(string.Format(@"mods -R -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot));
+			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(string.Format(@"mods -R -S {0} --user=CCNetUser --password=CCNetPassword --quiet", 
+                GeneratePath(@"{0}\myproject.pj", sandboxRoot)));
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
 
 			mks = CreateMks(CreateSourceControlXml(), mksHistoryParser, mockProcessExecutor);
@@ -170,7 +174,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mksHistoryParserWrapper.ExpectAndReturn("ParseMemberInfoAndAddToModification", new Modification[] {addedModification}, new IsTypeOf(typeof (Modification)), new IsTypeOf(typeof (StringReader)));
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult("", null, 0, false), new IsTypeOf(typeof (ProcessInfo)));
 
-			string expectedCommand = string.Format(@"memberinfo -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet ""{0}\MyFolder\myFile.file""", sandboxRoot);
+			string expectedCommand = string.Format(@"memberinfo -S {0} --user=CCNetUser --password=CCNetPassword --quiet {1}", 
+                GeneratePath(@"{0}\myproject.pj", sandboxRoot),
+                GeneratePath(@"{0}\MyFolder\myFile.file", sandboxRoot));
 			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
 
@@ -226,7 +232,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mksHistoryParserWrapper.ExpectAndReturn("ParseMemberInfoAndAddToModification", new Modification[] {addedModification}, new IsTypeOf(typeof (Modification)), new IsTypeOf(typeof (StringReader)));
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult("", null, 0, false), new IsTypeOf(typeof (ProcessInfo)));
 
-			string expectedCommand = string.Format(@"memberinfo -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet ""{0}\myFile.file""", sandboxRoot);
+			string expectedCommand = string.Format(@"memberinfo -S {0} --user=CCNetUser --password=CCNetPassword --quiet {1}", 
+                GeneratePath(@"{0}\myproject.pj", sandboxRoot),
+                GeneratePath(@"{0}\myFile.file", sandboxRoot));
 			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
 
@@ -295,5 +303,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			expectedProcessInfo.TimeOut = Timeout.DefaultTimeout.Millis;
 			return expectedProcessInfo;
 		}
+
+        /// <summary>
+        /// Path generation hack to text whether the desired path contains spaces.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// This is required because some environments contain spaces for their temp paths (e.g. WinXP), 
+        /// other don't (e.g. WinVista). Previously the unit tests would fail between the different
+        /// environments just because of this.
+        /// </remarks>
+        private string GeneratePath(string path, params string[] args)
+        {
+            string basePath = string.Format(path, args);
+            if (basePath.Contains(" ")) basePath = "\"" + basePath + "\"";
+            return basePath;
+        }
 	}
 }
