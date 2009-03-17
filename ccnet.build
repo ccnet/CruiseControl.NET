@@ -24,8 +24,9 @@
     <property name="ncover-console.exe" value="tools\ncover\NCover.Console.exe" />
     <property name="nantcontrib.assembly" value="tools\nant\contrib\NAnt.Contrib.Tasks.dll" />
     <property name="vil.executable" value="tools\vil\vil.exe" />
-    <property name="vil.assemblies" value="comma,separated,list,of,assemblies,to,analyze (full path)" />    
-    <property name="simian.executable" value="tools\simian\simian-2.2.17.exe" />
+    <property name="vil.assemblies" value="comma,separated,list,of,assemblies,to,analyze (full path)" />
+  <property name="simian.executable" value="tools\simian\simian-2.2.17.exe" />
+  <property name="Gendarme.executable" value="tools\Gendarme\gendarme.exe" />
     <property name="CCNetLabel" value="0" overwrite="false" />    
     <property name="CCNetArtifactDirectory" value="${build.dir}" overwrite="false" />
 
@@ -285,7 +286,7 @@
 		<netreflector assembly="${build.dir}\core\${core.dll}" />
 	</target>
 	
-	<target name="reporting" depends="compile, fxcop, vil, simian" />
+	<target name="reporting" depends="compile, fxcop, vil, simian, Gendarme" />
 	
 	<target name="fxcop">
 		<mkdir dir="build\fxcop" />
@@ -309,8 +310,25 @@
 	<tstamp/>
 	<echo message="Simian run complete"/>
     </target>
-    
-    <target name="msbuild">
+
+  <target name="Gendarme" description="runs Gendarme">
+    <exec program="${Gendarme.executable}">
+      <arg value="--xml"/>
+      <arg value="gendarme.xml"/>
+      <arg value="build\cctray\cctray.exe"/>
+      <arg value="build\cctray\ThoughtWorks.CruiseControl.CCTrayLib.dll"/>
+      <arg value="build\core\ThoughtWorks.CruiseControl.Core.dll"/>
+      <arg value="build\core\ThoughtWorks.CruiseControl.Remote.dll"/>
+      <arg value="build\server\ccnet.exe"/>
+      <arg value="build\server\CCValidator.exe"/>
+      <arg value="build\service\ccservice.exe"/>
+      <arg value="build\webdashboard\ThoughtWorks.CruiseControl.WebDashboard.dll"/>
+    </exec>
+    <tstamp/>
+    <echo message="Gendarme run complete"/>
+  </target>
+
+  <target name="msbuild">
     	<property name="nant.settings.currentframework" value="net-2.0"/>
     	
 	<csc target="library" output="${build.dir}/ThoughtWorks.CruiseControl.MsBuild.XmlLogger.dll" debug="${debug}">
