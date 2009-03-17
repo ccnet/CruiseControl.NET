@@ -112,7 +112,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\dialog.bmp" />
+    <None Include="Resources/dialog.bmp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\lib\SciLexer.dll">
