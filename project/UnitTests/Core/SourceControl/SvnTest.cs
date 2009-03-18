@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	public class SvnTest : ProcessExecutorTestFixtureBase
 	{
 		private Svn svn;
-		private IMock mockParser;
+		private IMock mockHistoryParser;
 		private DateTime from;
 		private DateTime to;
 		private DynamicMock mockFileSystem;
@@ -27,9 +27,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			from = DateTime.Parse("2001-01-21 20:00:00Z");
 			to = DateTime.Parse("2001-01-21 20:30:50Z");
 			CreateProcessExecutorMock(Svn.DefaultExecutable);
-			mockParser = new DynamicMock(typeof(IHistoryParser));
+			mockHistoryParser = new DynamicMock(typeof(IHistoryParser));
 			mockFileSystem = new DynamicMock(typeof (IFileSystem));
-			svn = new Svn((ProcessExecutor) mockProcessExecutor.MockInstance, (IHistoryParser) mockParser.MockInstance, (IFileSystem) mockFileSystem.MockInstance);
+			svn = new Svn((ProcessExecutor) mockProcessExecutor.MockInstance, (IHistoryParser) mockHistoryParser.MockInstance, (IFileSystem) mockFileSystem.MockInstance);
 			svn.TrunkUrl = "svn://myserver/mypath";
 			svn.TagBaseUrl = "svn://someserver/tags/foo";
 			svn.WorkingDirectory = DefaultWorkingDirectory;
@@ -39,8 +39,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		protected void TearDown()
 		{
 			Verify();
-			mockParser.Verify();
+			mockHistoryParser.Verify();
 			mockFileSystem.Verify();
+		}
+
+		[Test]
+		public void ShouldGetModificationsEvenWhenTrunkUrlIsNull()
+		{
+			svn.TrunkUrl = null;
+			mockHistoryParser.ExpectAndReturn("Parse", new Modification[0], new IsAnything(), new IsAnything(), new IsAnything());
+			ExpectToExecuteArguments("log -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --non-interactive --no-auth-cache");
+
+			Modification[] modifications = svn.GetModifications(IntegrationResult(from), IntegrationResult(to));
+
+			Assert.AreEqual(new Modification[0], modifications);
 		}
 
 		[Test]

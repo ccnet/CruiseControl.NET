@@ -81,38 +81,33 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
             List<Modification> modifications = new List<Modification>();
-            List<string> directories = new List<string>();
-            directories.Add(TrunkUrl);
+            List<string> repositoryUrls = new List<string>();
+            repositoryUrls.Add(TrunkUrl);
 
 			if (CheckExternals)
 			{
-				List<string> externals = ParseExternalsDirectories(Execute(PropGetProcessInfo(to)));
+				ProcessResult resultOfSvnPropget = Execute(PropGetProcessInfo(to));
+				List<string> externals = ParseExternalsDirectories(resultOfSvnPropget);
 				foreach (string external in externals)
 				{
-					if (!directories.Contains(external)) directories.Add(external);
+					if (!repositoryUrls.Contains(external)) repositoryUrls.Add(external);
 				}
 			}
 			
-            foreach (string directory in directories)
+            foreach (string repositoryUrl in repositoryUrls)
             {
-                Log.Debug(directory);
-                ProcessResult result = Execute(NewHistoryProcessInfo(from, to, directory));
-                mods = ParseModifications(result, from.StartTime, to.StartTime);
-				if (mods != null)
+                ProcessResult result = Execute(NewHistoryProcessInfo(from, to, repositoryUrl));
+                Modification[] modsInRepository = ParseModifications(result, from.StartTime, to.StartTime);
+				if (modsInRepository != null)
                 {
-
-
-                    if (TrunkUrl != null)
-                    {
-                        // If there are modifications in the repository track the revision number.
-                        // Do not just get the latest revision from all modifications because they
-                        // will also contain the changes in the external paths.
-                        if (directory.Equals(TrunkUrl))
-                        {
-                            latestRevision = Modification.GetLastChangeNumber(mods);
-                        }
-                    }
-                    modifications.AddRange(mods);
+					// If there are modifications in the repository track the revision number.
+					// Do not just get the latest revision from all modifications because they
+					// will also contain the changes in the external paths.
+					if (repositoryUrl == TrunkUrl)
+					{
+						latestRevision = Modification.GetLastChangeNumber(modsInRepository);
+					}
+                    modifications.AddRange(modsInRepository);
                 }
             }
 
@@ -238,7 +233,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return NewProcessInfo(buffer.ToString(), result);
         }
 
-        //		HISTORY_COMMAND_FORMAT = "log TrunkUrl --revision \"{{{StartDate}}}:{{{EndDate}}}\" --verbose --xml --non-interactive";
+        //		HISTORY_COMMAND_FORMAT = "log url --revision \"{{{StartDate}}}:{{{EndDate}}}\" --verbose --xml --non-interactive";
     	private ProcessInfo NewHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to, string url)
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
