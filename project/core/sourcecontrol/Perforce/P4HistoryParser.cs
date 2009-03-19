@@ -19,11 +19,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		/// <returns></returns>
 		public string ParseChanges(String changes)
 		{
-			if (!changes.TrimEnd().EndsWith("exit: 0"))
-			{
-				// TODO think about adding remainder of 'changes' text to this exception
-				throw new CruiseControlException("Perforce exit status 1");
-			}
 			StringBuilder result = new StringBuilder();
 			Regex regex = new Regex(@"info: Change (?<num>\d+) ");
 			foreach(Match match in regex.Matches(changes))

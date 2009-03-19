@@ -85,15 +85,14 @@ exit: 0
 			Assert.AreEqual("", new P4HistoryParser().ParseChanges("exit: 0"));
 		}
 
-		[Test, ExpectedException(typeof (CruiseControlException))]
+		[Test]
 		public void ParseChangeListWithExitOne()
 		{
 			string changes =
 				@"
 info: blah
 exit: 1
-";
-			new P4HistoryParser().ParseChanges(changes);
+";			Assert.AreEqual("", new P4HistoryParser().ParseChanges(changes));
 		}
 	}
 }

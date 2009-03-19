@@ -3,6 +3,7 @@ using System.Collections;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -13,6 +14,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 	{
 		private readonly IP4Purger p4Purger;
 		internal static readonly string COMMAND_DATE_FORMAT = "yyyy/MM/dd:HH:mm:ss";
+        internal static readonly string EXIT_CODE_PATTERN = @"^exit: (?<ExitCode>\d+)";
+        internal static readonly string DEFAULT_ERROR_PATTERN = @"^error: .*";
+        internal static readonly string FILES_UP_TO_DATE_PATTERN = @"file\(s\) up-to-date\.";
+        internal static readonly RegexOptions DEFAULT_REGEX_OPTIONS = RegexOptions.IgnoreCase | RegexOptions.Multiline;
 
 		private readonly ProcessExecutor processExecutor;
 		private readonly IP4Initializer p4Initializer;
@@ -70,6 +75,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		[ReflectorProperty("timeZoneOffset", Required=false)]
 		public double TimeZoneOffset = 0;
 
+        [ReflectorProperty("errorPattern", Required = false)]
+        public string ErrorPattern = DEFAULT_ERROR_PATTERN;
+
+        [ReflectorProperty("useExitCode", Required = false)]
+        public bool UseExitCode = false;
+
+        [ReflectorArray("acceptableErrors", Required = false)]
+        public string[] AcceptableErrors = new string[1] { FILES_UP_TO_DATE_PATTERN };
+
+
 		private string BuildModificationsCommandArguments(DateTime from, DateTime to)
 		{
 			return string.Format("changes -s submitted {0}", GenerateRevisionsForView(from, to));
@@ -123,7 +138,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		{
 			P4HistoryParser parser = new P4HistoryParser();
 			ProcessInfo process = CreateChangeListProcess(from.StartTime, to.StartTime);
-			string processResult = Execute(process);
+			string processResult = Execute(process, "GetModifications");
 			String changes = parser.ParseChanges(processResult);
 			if (changes.Length == 0)
 			{
@@ -132,7 +147,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			else
 			{
 				process = CreateDescribeProcess(changes);
-				Modification[] mods = parser.Parse(new StringReader(Execute(process)), from.StartTime, to.StartTime);
+				Modification[] mods = parser.Parse(new StringReader(Execute(process, "GetModifications")), from.StartTime, to.StartTime);
 				if (! StringUtil.IsBlank(P4WebURLFormat))
 				{
 					foreach (Modification mod in mods)
@@ -167,27 +182,74 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 				catch (FormatException)
 				{}
 				ProcessInfo process = CreateLabelSpecificationProcess(result.Label);
+				Execute(process, "LabelSourceControl");
 
-				string processOutput = Execute(process);
-				if (containsErrors(processOutput))
-				{
-					Log.Error(string.Format("Perforce labelling failed:\r\n\t process was : {0} \r\n\t output from process was: {1}", process.ToString(), processOutput));
-					return;
-				}
-
-				process = CreateLabelSyncProcess(result.Label);
-				processOutput = Execute(process);
-				if (containsErrors(processOutput))
-				{
-					Log.Error(string.Format("Perforce labelling failed:\r\n\t process was : {0} \r\n\t output from process was: {1}", process.ToString(), processOutput));
-					return;
-				}
+                process = CreateLabelSyncProcess(result.Label);
+                Execute(process, "LabelSourceControl");
 			}
 		}
 
-		private bool containsErrors(string processOutput)
+		private string ParseErrors(string processOutput, string proccessError)
 		{
-			return processOutput.IndexOf("error:") > -1;
+            Match exitCodeMatch = Regex.Match(processOutput, EXIT_CODE_PATTERN, DEFAULT_REGEX_OPTIONS);
+            StringBuilder errorSummary = new StringBuilder();
+
+            if (UseExitCode) 
+            {
+                // "exit: 0" indicates success
+                if (exitCodeMatch.Success && Equals(exitCodeMatch.Groups["ExitCode"].Value, "0"))
+                {
+                    return null;
+                }
+                errorSummary.Append("Failed since 'exit: 0' string was not found in UseExitCode mode.\r\n");
+            }
+
+            // append all standard error data
+            if (!StringUtil.IsWhitespace(proccessError))
+            {
+                errorSummary.Append(proccessError);
+                errorSummary.Append("\r\n");
+            }
+
+            // append standard output error lines
+            if (!StringUtil.IsWhitespace(ErrorPattern))
+            {
+                foreach (Match errorMatch in Regex.Matches(processOutput, ErrorPattern, DEFAULT_REGEX_OPTIONS))
+                {
+                    if (!IsAcceptableError(errorMatch.Groups[0].Value))
+                    {
+                        errorSummary.Append(errorMatch.Groups[0].Value);
+                        errorSummary.Append("\n");
+                    }
+                }
+            }
+
+            // no errors indicates sucess
+            if (errorSummary.Length == 0)
+            {
+                return null;
+            }
+
+            // append the exit code line last after all other errors
+            if (exitCodeMatch.Success)
+            {
+                errorSummary.AppendLine(exitCodeMatch.Groups[0].Value);
+            }
+
+            return errorSummary.ToString();
+        }
+
+        private bool IsAcceptableError(string errorLine)
+        {
+            foreach (string acceptableError in AcceptableErrors)
+            {
+                if (!StringUtil.IsWhitespace(acceptableError) && Regex.IsMatch(errorLine, acceptableError, DEFAULT_REGEX_OPTIONS))
+                {
+                    Log.Debug(String.Format("Perforce ignored an acceptable error: {0}", errorLine));
+                    return true;
+                }
+            }
+            return false;
 		}
 
 		private ProcessInfo CreateLabelSpecificationProcess(string label)
@@ -241,9 +303,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 			if (AutoGetSource)
 			{
-                ProcessInfo info = processInfoCreator.CreateProcessInfo(this, CreateSyncCommandLine(result.StartTime));
-				Log.Info(string.Format("Getting source from Perforce: {0} {1}", info.FileName, info.Arguments));
-				Execute(info);
+                ProcessInfo process = processInfoCreator.CreateProcessInfo(this, CreateSyncCommandLine(result.StartTime));
+                Execute(process, "GetSource");
 			}
 		}
 
@@ -260,11 +321,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			return commandline;
 		}
 
-		protected virtual string Execute(ProcessInfo p)
+		protected virtual string Execute(ProcessInfo process, string description)
 		{
-			Log.Debug("Perforce plugin - running:" + p.ToString());
-			ProcessResult result = processExecutor.Execute(p);
-			return result.StandardOutput.Trim() + Environment.NewLine + result.StandardError.Trim();
+            Log.Info(String.Format("Perforce {0}: {1} {2}", description, process.FileName, process.Arguments));
+			ProcessResult result = processExecutor.Execute(process);
+            string errorSummary = ParseErrors(result.StandardOutput, result.StandardError);
+            if (errorSummary != null)
+            {
+                string errorMessage =
+                    string.Format(
+                        "Perforce {0} failed: {1} {2}\r\nError output from process was: \r\n{3}",
+                        description, process.FileName, process.Arguments, errorSummary);
+                Log.Error(errorMessage);
+                throw new CruiseControlException(errorMessage);
+            }
+            return result.StandardOutput.Trim() + Environment.NewLine + result.StandardError.Trim();
 		}
 
 		public void Initialize(IProject project)

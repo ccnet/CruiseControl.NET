@@ -59,6 +59,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
   <workingDirectory>myWorkingDirectory</workingDirectory>
   <p4WebURLFormat>http://perforceWebServer:8080/@md=d&amp;cd=//&amp;c=3IB@/{0}?ac=10</p4WebURLFormat>
   <timeZoneOffset>-5.5</timeZoneOffset>
+  <useExitCode>true</useExitCode>
+  <errorPattern>Error: (.*)</errorPattern>
+  <acceptableErrors>
+    <acceptableError>(.*)\.accept1</acceptableError>
+    <acceptableError>(.*)\.accept2</acceptableError>
+  </acceptableErrors>
 </sourceControl>
 ";
 			P4 p4 = CreateP4WithNoArgContructor(xml);
@@ -71,7 +77,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			Assert.AreEqual("myWorkingDirectory", p4.WorkingDirectory);
 			Assert.AreEqual("http://perforceWebServer:8080/@md=d&cd=//&c=3IB@/{0}?ac=10", p4.P4WebURLFormat);
 			Assert.AreEqual(-5.5, p4.TimeZoneOffset);
+            Assert.AreEqual(true, p4.UseExitCode);
+            Assert.AreEqual("Error: (.*)", p4.ErrorPattern);
+            Assert.AreEqual(@"(.*)\.accept1", p4.AcceptableErrors[0]);
+            Assert.AreEqual(@"(.*)\.accept2", p4.AcceptableErrors[1]);
 		}
+
+        [Test]
+        public void ReadConfigWithEmptyErrorsArguments()
+        {
+            string xml = @"
+<sourceControl type=""p4"">
+  <executable>c:\bin\p4.exe</executable>
+  <view>//depot/myproject/...</view>
+  <errorPattern/>
+  <acceptableErrors/>
+</sourceControl>
+";
+            P4 p4 = CreateP4WithNoArgContructor(xml);
+            Assert.AreEqual("", p4.ErrorPattern);
+            Assert.AreEqual(0, p4.AcceptableErrors.Length);
+        }
 
 		private P4 CreateP4WithNoArgContructor(string p4root)
 		{
@@ -103,6 +129,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			Assert.AreEqual("", p4.User);
 			Assert.AreEqual("", p4.Password);
 			Assert.AreEqual("", p4.Port);
+            Assert.AreEqual(false, p4.UseExitCode);
+            Assert.AreEqual(@"^error: .*", p4.ErrorPattern);
+            Assert.AreEqual(@"file\(s\) up-to-date\.", p4.AcceptableErrors[0]);
 		}
 
 		[Test, ExpectedException(typeof (NetReflectorException))]
