@@ -16,6 +16,8 @@ namespace ThoughtWorks.CruiseControl.Core.Label
     [ReflectorType("lastChangeLabeller")]
     public class LastChangeLabeller : ILabeller
     {
+        private const int INITIAL_SUFFIX_NUMBER = 1;
+
         /// <summary>
         /// The string to be prepended onto the last change number.
         /// </summary>
@@ -41,23 +43,30 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// <returns>the new label</returns>
         public virtual string Generate(IIntegrationResult resultFromThisBuild)
         {
+
             int changeNumber = resultFromThisBuild.LastChangeNumber;
+
             IntegrationSummary lastIntegration = resultFromThisBuild.LastIntegration;
-            string changeLabel;
+
+            string firstSuffix = AllowDuplicateSubsequentLabels ? "" : "." + INITIAL_SUFFIX_NUMBER.ToString();
 
             Log.Debug(string.Format("Last change number is \"{0}\"", changeNumber));
-            if (changeNumber != 0)
-                changeLabel = LabelPrefix + changeNumber;
-            else if (!lastIntegration.IsInitial() && lastIntegration.Label != null)
-                changeLabel = lastIntegration.Label;
-            else
-                changeLabel = LabelPrefix + "unknown";
 
-            if (!AllowDuplicateSubsequentLabels)
-            {
-                return IncrementLabel(changeLabel);
-            }
-            return changeLabel;
+            if (changeNumber != 0)
+
+                return LabelPrefix + changeNumber + firstSuffix;
+
+            else if (lastIntegration.IsInitial() || lastIntegration.Label == null)
+
+                return LabelPrefix + "unknown" + firstSuffix;
+
+            else if (!AllowDuplicateSubsequentLabels)
+
+                return IncrementLabel(lastIntegration.Label);
+
+            else
+
+                return lastIntegration.Label;
         }
 
         // Nothing seems to use this, but ILabellers are ITasks, and ITasks need a Run().  All the other

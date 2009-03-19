@@ -66,6 +66,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
             Assert.AreEqual("R3SX30", labeller.Generate(result));
         }
 
+
+        [Test]
+        public void GeneratePrefixedLabelWhenPrefixIsVersionLikePrefix()
+        {
+            IntegrationResult result = CreateIntegrationResult();
+            AddModifications(result);
+            labeller.LabelPrefix = "1.2.";
+            Assert.AreEqual("1.2.30", labeller.Generate(result));
+        }
+
+
         [Test]
         public void PopulateFromConfiguration()
         {
