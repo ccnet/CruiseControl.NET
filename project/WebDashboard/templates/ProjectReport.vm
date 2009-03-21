@@ -2,7 +2,7 @@
   Project Report for $projectName
   #if ($rssDataPresent)
   <A HREF="$rss.url">
-    <IMG SRC="$applicationPath/images/rss.gif" WIDTH="28" HEIGHT="16" BORDER="0" ALT="$rss.text">
+    <IMG SRC="$applicationPath/images/rss.png" WIDTH="16" HEIGHT="16" BORDER="0" ALT="$rss.text">
     </A>
   #end
 </h2>
