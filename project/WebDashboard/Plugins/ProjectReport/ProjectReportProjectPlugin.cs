@@ -74,7 +74,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             velocityContext["ForceAbortBuildButtonName"] = (status.Activity != ProjectActivity.Building) ? "ForceBuild" : "AbortBuild";
 		    velocityContext["ForceAbortBuildButtonValue"] = (status.Activity != ProjectActivity.Building) ? "Force" : "Abort";
 
-            velocityContext["applicationPath"] = cruiseRequest.Request.ApplicationPath;
+            if (cruiseRequest.Request.ApplicationPath == "/")
+                velocityContext["applicationPath"] = string.Empty;
+            else
+                velocityContext["applicationPath"] = cruiseRequest.Request.ApplicationPath;
+
             velocityContext["rssDataPresent"] = farmService.GetRSSFeed(projectSpecifier).Length > 0;
 
             // I (willemsruben) can not figure out why the line below does not work :-(
