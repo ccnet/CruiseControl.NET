@@ -1,18 +1,39 @@
 using System.Collections;
 using System.IO;
-using System.Xml.Serialization;
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
+using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    /// <summary>
+    /// Publishes the results in an RSS feed.
+    /// </summary>
     [ReflectorType("rss")]
-    // This publisher generates a rss file reporting the latest results for a Project.
-    // We use .NET's XMLSerialization to generate the XML
-    // ToDo - more on this, or delete it!
     public class RssPublisher : ITask
     {
         private const string RSSFilename = "RSSData.xml";
+        private const string contentNamespace = "http://purl.org/rss/1.0/modules/content/";
+        private int numberOfItems = 20;
+
+        /// <summary>
+        /// The number of items to be displayed.
+        /// </summary>
+        [ReflectorProperty("items", Required = false)]
+        public int NumberOfItems
+        {
+            get { return numberOfItems; }
+            set
+            {
+                if (value > 255)
+                {
+                    numberOfItems = 255;
+                }
+                else
+                {
+                    numberOfItems = value;
+                }
+            }
+        }
 
         private static string RSSDataFileLocation(string artifactDirectory)
         {
@@ -37,46 +58,118 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         [ReflectorProperty("description", Required = false)]
         public string Description = string.Empty;
 
-
         public void Run(IIntegrationResult result)
         {
-            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Making RSS feed");                
+            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Making RSS feed");
 
-            using (StreamWriter stream = File.CreateText(RSSDataFileLocation(result.ArtifactDirectory)))
+            string feedFile = RSSDataFileLocation(result.ArtifactDirectory);
+            XmlDocument rssFeed = new XmlDocument();
+            XmlElement channelElement = null;
+
+            // Attempt to load the file and the channel element
+            if (File.Exists(feedFile))
             {
-                stream.Write(GenerateDocument(result));
+                try
+                {
+                    rssFeed.Load(feedFile);
+                }
+                catch (XmlException)
+                {
+                    rssFeed = new XmlDocument();
+                }
+                channelElement = rssFeed.SelectSingleNode("/rss/channel") as XmlElement;
+                if (channelElement == null) rssFeed = new XmlDocument();
             }
+            
+            // If the channel element isn't loaded, then this is a new document (or an invalid document that is being overwritten)
+            if (channelElement == null)
+            {
+                channelElement = InitialiseFeed(rssFeed, result.ProjectName, result.ProjectUrl);
+            }
+            GenerateDocument(result, channelElement);
+            rssFeed.Save(feedFile);
         }
 
-        public string GenerateDocument(IIntegrationResult result)
+        private XmlElement InitialiseFeed(XmlDocument rssFeed, string projectName, string projectUrl)
         {
+            XmlElement rootElement = CreateElement(rssFeed, "rss");
+            rootElement.SetAttribute("version", "2.0");
+            rssFeed.AppendChild(rootElement);
 
-            System.IO.StringWriter RSSInfo = new StringWriter();
+            XmlElement channelElement = CreateElement(rssFeed, "channel");
+            rootElement.AppendChild(channelElement);
+            channelElement.AppendChild(CreateTextElement(rssFeed, "title", "CruiseControl.Net - {0}", projectName));
+            channelElement.AppendChild(CreateTextElement(rssFeed, "link", projectUrl));
+            channelElement.AppendChild(CreateTextElement(rssFeed, "description", "Latest build results for '{0}'", projectName));
+            channelElement.AppendChild(CreateTextElement(rssFeed, "language", "en"));
+            channelElement.AppendChild(CreateTextElement(rssFeed, "ttl", "5"));
+            channelElement.AppendChild(CreateTextElement(rssFeed, "generator", "CruiseControl.Net"));
 
-            RSSInfo.WriteLine("<?xml version=\"1.0\"?>");
-            RSSInfo.WriteLine("<rss version=\"2.0\" ");
-            RSSInfo.WriteLine("     xmlns:content=\"http://purl.org/rss/1.0/modules/content/\" ");
-            RSSInfo.WriteLine(">");
-            RSSInfo.WriteLine("  <channel> ");
-            RSSInfo.WriteLine("    <title>CruiseControl.NET - {0}</title>", result.ProjectName);
-            RSSInfo.WriteLine("    <link>{0}</link>", result.ProjectUrl);
-            RSSInfo.WriteLine("    <description>The latest build results for {0}</description>", result.ProjectName);
-            RSSInfo.WriteLine("    <language>en</language>");
-            RSSInfo.WriteLine("    <ttl>5</ttl>");
-            RSSInfo.WriteLine("    <item>");
-            RSSInfo.WriteLine("        <title>Build {0} : {1}  {2}  {3}</title>", result.Label, result.Status.ToString(), GetAmountOfModifiedfiles(result), GetFirstCommentedModification(result));
-            RSSInfo.WriteLine("        <description>{0}</description>", GetAmountOfModifiedfiles(result));
+            return channelElement;
+        }
+
+        private XmlElement CreateElement(XmlDocument document, string name)
+        {
+            XmlElement element = document.CreateElement(name);
+            return element;
+        }
+
+        private XmlElement CreateContentElement(XmlDocument document, string name)
+        {
+            XmlElement element = document.CreateElement(name, contentNamespace);
+            return element;
+        }
+
+        private XmlElement CreateTextElement(XmlDocument document, string name, string text, params object[] values)
+        {
+            XmlElement element = CreateElement(document, name);
+            if (values == null)
+            {
+                element.InnerText = text;
+            }
+            else
+            {
+                element.InnerText = string.Format(text, values);
+            }
+            return element;
+        }
+
+        private void GenerateDocument(IIntegrationResult result, XmlElement channelElement)
+        {
+            // Esnure there is space for the new item
+            XmlNodeList existingElements = channelElement.SelectNodes("item");
+            int count = existingElements.Count + 1;
+            int position = 0;
+            while (count > numberOfItems)
+            {
+                existingElements[position].ParentNode.RemoveChild(existingElements[position]);
+                position++;
+                count--;
+            }
+
+            XmlElement itemElement = CreateElement(channelElement.OwnerDocument, "item");
+            itemElement.AppendChild(CreateTextElement(channelElement.OwnerDocument,
+                "title",
+                "Build {0} : {1}  {2}  {3}", 
+                result.Label, 
+                result.Status, 
+                GetAmountOfModifiedfiles(result), 
+                GetFirstCommentedModification(result)));
+            itemElement.AppendChild(CreateTextElement(channelElement.OwnerDocument, "description", GetAmountOfModifiedfiles(result)));
+            itemElement.AppendChild(CreateTextElement(itemElement.OwnerDocument, "guid", System.Guid.NewGuid().ToString()));
+            itemElement.AppendChild(CreateTextElement(itemElement.OwnerDocument, "pubDate", System.DateTime.Now.ToString("r")));
+            channelElement.AppendChild(itemElement);
 
             if (result.HasModifications())
             {
-                RSSInfo.WriteLine("        <content:encoded>{0}</content:encoded>", GetBuildModifications(result));
+                XmlElement dataElement = CreateContentElement(
+                    itemElement.OwnerDocument,
+                    "encoded");
+                XmlCDataSection cdata = itemElement.OwnerDocument.CreateCDataSection(
+                    GetBuildModifications(result));
+                dataElement.AppendChild(cdata);
+                itemElement.AppendChild(dataElement);
             }
-
-            RSSInfo.WriteLine("    </item>");
-            RSSInfo.WriteLine("  </channel> ");
-            RSSInfo.WriteLine("</rss>");
-
-            return RSSInfo.ToString();
         }
 
         private string GetAmountOfModifiedfiles(IIntegrationResult result)
@@ -110,7 +203,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
         }
 
-
         private string GetBuildModifications(IIntegrationResult result)
         {
 
@@ -120,11 +212,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             ArrayList LoggedModifications = new ArrayList();
 
-            mods.WriteLine("<![CDATA[");
-
             mods.WriteLine("<h4>Modifications in build :</h4>");
-
-
 
             mods.WriteLine("<table cellpadding=\"5\">");
 
@@ -184,8 +272,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 }
             }
             mods.WriteLine("</table>");
-
-            mods.WriteLine("]]>");
 
             return mods.ToString();
         }
