@@ -6409,3 +6409,5 @@ dojo.lang.mixin(dojo.lfx,dojo.lfx.html);
 dojo.kwCompoundRequire({browser:["dojo.lfx.html"],dashboard:["dojo.lfx.html"]});
 dojo.provide("dojo.lfx.*");
 
+if(navigator.appName == "Netscape")
+                       dojo.render.svg.capable = true; 
