@@ -30,19 +30,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             Assert.AreEqual("@Example.com", regexConverter.Replace);
         }
 
-        [Test, ExpectedException(typeof(NetReflectorException), "Missing Xml node (find) for required member (ThoughtWorks.CruiseControl.Core.Publishers.EmailRegexConverter.Find).")]
+        [Test, ExpectedException(typeof(NetReflectorException), "Missing Xml node (find) for required member (ThoughtWorks.CruiseControl.Core.Publishers.EmailRegexConverter.Find).\r\n" +
+            "Xml: <regexConverter />")]
 		public void ShouldFailToReadEmptyConverter()
 		{
             NetReflector.Read(@"<regexConverter/>");
 		}
 
-        [Test, ExpectedException(typeof(NetReflectorException), "Missing Xml node (find) for required member (ThoughtWorks.CruiseControl.Core.Publishers.EmailRegexConverter.Find).")]
+        [Test, ExpectedException(typeof(NetReflectorException), "Missing Xml node (find) for required member (ThoughtWorks.CruiseControl.Core.Publishers.EmailRegexConverter.Find).\r\n" +
+            "Xml: <regexConverter replace=\"asdf\" />")]
         public void ShouldFailToReadOmittedFindAttribute()
 		{
-            NetReflector.Read(@"<regexConverter replace=""asdf""/>");
+            NetReflector.Read(@"<regexConverter replace=""asdf"" />");
 		}
 
-        [Test, ExpectedException(typeof(NetReflectorException), "Missing Xml node (replace) for required member (ThoughtWorks.CruiseControl.Core.Publishers.EmailRegexConverter.Replace).")]
+        [Test, ExpectedException(typeof(NetReflectorException), "Missing Xml node (replace) for required member (ThoughtWorks.CruiseControl.Core.Publishers.EmailRegexConverter.Replace).\r\n" +
+            "Xml: <regexConverter find=\"asdf\" />")]
 		public void ShouldFailToReadOmittedReplaceAttribute()
 		{
             NetReflector.Read(@"<regexConverter find=""asdf""/>");

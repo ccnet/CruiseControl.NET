@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 	[TestFixture]
 	public class EmailGroupTest
 	{
-		[Test, ExpectedException(typeof (NetReflectorException))]
+		[Test, ExpectedException(typeof (NetReflectorConverterException))]
 		public void ReadEmailGroupFromXmlUsingInvalidNotificationType()
 		{
 			NetReflector.Read(@"<group name=""foo"" notification=""bar"" />");

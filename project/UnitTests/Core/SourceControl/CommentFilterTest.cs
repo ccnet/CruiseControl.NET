@@ -9,7 +9,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	public class CommentFilterTest
 	{
         [Test]
-        [ExpectedException(typeof(NetReflectorException), "Missing Xml node (pattern) for required member (ThoughtWorks.CruiseControl.Core.Sourcecontrol.CommentFilter.Pattern).")]
+        [ExpectedException(typeof(NetReflectorException), "Missing Xml node (pattern) for required member (ThoughtWorks.CruiseControl.Core.Sourcecontrol.CommentFilter.Pattern).\r\n" +
+            "Xml: <commentFilter />")]
         public void ShouldNotPopulateWithoutPattern()
         {
             NetReflector.Read(@"<commentFilter/>");

@@ -71,7 +71,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
         [Test, ExpectedException(
                     typeof(NetReflectorException),
-                    "Missing Xml node (executable) for required member (ThoughtWorks.CruiseControl.Core.Sourcecontrol.ExternalSourceControl.Executable).")
+                    "Missing Xml node (executable) for required member (ThoughtWorks.CruiseControl.Core.Sourcecontrol.ExternalSourceControl.Executable).\r\n" + 
+                    "Xml: <sourceControl type=\"external\"></sourceControl>")
         ]
         public void ShouldFailToPopulateFromConfigurationMissingRequiredFields()
         {
@@ -82,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         }
 
 
-        [Test, ExpectedException(typeof(NetReflectorException), @"Cannot convert from type System.String to System.Boolean for object with value: ""NOT_A_BOOLEAN""")]
+        [Test, ExpectedException(typeof(NetReflectorConverterException), @"Cannot convert from type System.String to System.Boolean for object with value: ""NOT_A_BOOLEAN""")]
         public void ShouldFailToPopulateWithInvalidAutoGetSource()
 		{
             ExternalSourceControl externalSC = new ExternalSourceControl();
@@ -94,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             NetReflector.Read(invalidXml, externalSC);
 		}
 
-        [Test, ExpectedException(typeof(NetReflectorException), @"Cannot convert from type System.String to System.Boolean for object with value: ""NOT_A_BOOLEAN""")]
+        [Test, ExpectedException(typeof(NetReflectorConverterException), @"Cannot convert from type System.String to System.Boolean for object with value: ""NOT_A_BOOLEAN""")]
         public void ShouldFailToPopulateWithInvalidLabelOnSuccess()
 		{
             ExternalSourceControl externalSC = new ExternalSourceControl();

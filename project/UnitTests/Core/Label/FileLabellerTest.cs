@@ -43,7 +43,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 
         [Test, ExpectedException(
                     typeof(NetReflectorException),
-                   "Missing Xml node (labelFilePath) for required member (ThoughtWorks.CruiseControl.Core.Label.FileLabeller.LabelFilePath)."
+                   "Missing Xml node (labelFilePath) for required member (ThoughtWorks.CruiseControl.Core.Label.FileLabeller.LabelFilePath).\r\n" + 
+                   "Xml: <fileLabeller prefix=\"foo\" allowDuplicateSubsequentLabels=\"false\" />"
                 )
         ]
         public void ShouldFailToPopulateFromConfigurationMissingRequiredFields()

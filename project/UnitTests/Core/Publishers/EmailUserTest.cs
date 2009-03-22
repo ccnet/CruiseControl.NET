@@ -7,13 +7,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
     [TestFixture]
     public class EmailUserTest
 	{
-        [Test, ExpectedException(typeof(NetReflectorException), @"Missing Xml node (address) for required member (ThoughtWorks.CruiseControl.Core.Publishers.EmailUser.Address).")]
+        [Test, ExpectedException(typeof(NetReflectorException), "Missing Xml node (address) for required member (ThoughtWorks.CruiseControl.Core.Publishers.EmailUser.Address).\r\n" + 
+            "Xml: <user name=\"username\" />")]
         public void ShouldFailToReadWithoutAddress()
         {
             NetReflector.Read(@"<user name=""username""/>");
         }
 
-        [Test, ExpectedException(typeof(NetReflectorException), @"Missing Xml node (name) for required member (ThoughtWorks.CruiseControl.Core.Publishers.EmailUser.Name).")]
+        [Test, ExpectedException(typeof(NetReflectorException), "Missing Xml node (name) for required member (ThoughtWorks.CruiseControl.Core.Publishers.EmailUser.Name).\r\n" +
+            "Xml: <user address=\"UserName@example.com\" />")]
         public void ShouldFailToReadWithoutName()
         {
             NetReflector.Read(@"<user address=""UserName@example.com""/>");   

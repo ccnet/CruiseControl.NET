@@ -97,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(BRANCH, clearCase.Branch);
 		}
 
-		[Test, ExpectedException(typeof (NetReflectorException))]
+		[Test, ExpectedException(typeof (NetReflectorConverterException))]
 		public void CanCatchInvalidBaselineConfiguration()
 		{
 			ClearCase clearCase = new ClearCase();
@@ -105,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			NetReflector.Read(invalidXml, clearCase);
 		}
 
-		[Test, ExpectedException(typeof (NetReflectorException))]
+        [Test, ExpectedException(typeof(NetReflectorConverterException))]
 		public void CanCatchInvalidLabelConfiguration()
 		{
 			ClearCase clearCase = new ClearCase();

@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(@"C:\DOES NOT\EXIST", accurev.Workspace);
 		}
 
-		[Test, ExpectedException(typeof (NetReflectorException), @"Cannot convert from type System.String to System.Boolean for object with value: ""NOT_A_BOOLEAN""")]
+		[Test, ExpectedException(typeof (NetReflectorConverterException), @"Cannot convert from type System.String to System.Boolean for object with value: ""NOT_A_BOOLEAN""")]
 		public void CanCatchConfigInvalidAutoGetSource()
 		{
 			AccuRev accurev = new AccuRev();
@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			NetReflector.Read(invalidXml, accurev);
 		}
 
-        [Test, ExpectedException(typeof(NetReflectorException), @"Cannot convert from type System.String to System.Boolean for object with value: ""NOT_A_BOOLEAN""")]
+        [Test, ExpectedException(typeof(NetReflectorConverterException), @"Cannot convert from type System.String to System.Boolean for object with value: ""NOT_A_BOOLEAN""")]
 		public void CanCatchConfigInvalidLabelOnSuccess()
 		{
 			AccuRev accurev = new AccuRev();
