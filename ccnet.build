@@ -189,7 +189,8 @@
 				<include name="**\*.asax"/>
 				<include name="**\*.config"/>
 				<include name="**\*.css"/>
-				<include name="**\*.gif"/>
+        <include name="**\*.gif"/>
+        <include name="**\*.png"/>
 				<include name="**\*.html"/>
 				<include name="**\*.jpg"/>
 				<include name="**\*.jpeg"/>
