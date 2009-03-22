@@ -28,6 +28,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
             mylinkFactory = linkFactory;
         }
 
+
+        /// <summary>
+        /// highest amount of builds found in 1 day for the entire graph
+        /// used for calculating the height of the graph
+        /// </summary>
         public Int32 HighestAmountPerDay
         {
             get
@@ -37,7 +42,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
         }
 
 
-        // the amount of ok builds in this day
+        /// <summary>
+        /// Total amount of OK builds
+        /// </summary>
         public Int32 AmountOfOKBuilds
         {
             get
@@ -46,13 +53,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
             }
         }
 
-        // the amount of failed builds in this day
+        /// <summary>
+        /// Total amount of failed builds
+        /// </summary>
         public Int32 AmountOfFailedBuilds
         {
             get
             {
                 return myFailedBuildAmount;
             }
+        }
+
+
+        public override int GetHashCode()
+        {
+            return (myHighestAmountPerDay + myFailedBuildAmount + myOKBuildAmount).GetHashCode();
         }
 
 
