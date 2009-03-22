@@ -95,7 +95,8 @@ td>a.selected:hover { color:#006; }
 
 .log
 {
-	overflow: auto;
+	overflow: visible;
+	height:auto;
 }
 
 .wholepage
