@@ -10,6 +10,19 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 	{
 		private readonly DateTimeProvider dateTimeProvider;
 
+        [ReflectorProperty("yearFormat", Required = false)]
+        public string YearFormat = "0000";
+
+        [ReflectorProperty("monthFormat", Required = false)]
+        public string MonthFormat = "00";
+
+        [ReflectorProperty("dayFormat", Required = false)]
+        public string DayFormat = "00";
+
+        [ReflectorProperty("revisionFormat", Required = false)]
+        public string RevisionFormat = "000";
+
+
 		public DateLabeller() : this(new DateTimeProvider())
 		{}
 
@@ -34,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 				revision = 1;
 			}
             return string.Format("{0}.{1}.{2}.{3}",
-                   now.Year.ToString("0000"), now.Month.ToString("00"), now.Day.ToString("00"), revision.ToString("000"));
+                   now.Year.ToString(YearFormat), now.Month.ToString(MonthFormat), now.Day.ToString(DayFormat), revision.ToString(RevisionFormat));
 		}
 
 		private Version ParseVersion(DateTime date, IntegrationSummary lastIntegrationSummary)

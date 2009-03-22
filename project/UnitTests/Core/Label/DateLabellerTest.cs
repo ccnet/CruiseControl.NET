@@ -43,5 +43,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		{
 			Assert.AreEqual("2005.01.01.001", labeller.Generate(SuccessfulResult("13")));
 		}
+
+        [Test]
+        public void GenerateInitialLabel_CustomLayout01()
+        {
+            labeller.DayFormat = "0";
+            labeller.MonthFormat = "0";
+            labeller.RevisionFormat = "0";
+            Assert.AreEqual("2005.1.1.1", labeller.Generate(IntegrationResult.CreateInitialIntegrationResult("foo", @"c:\", @"c:\")));
+        }
+
+
+        [Test]
+        public void GenerateInitialLabel_CustomLayout02()
+        {
+            labeller.DayFormat = "00000";
+            labeller.MonthFormat = "00000";
+            labeller.RevisionFormat = "00000";
+
+            Assert.AreEqual("2005.00001.00001.00001", labeller.Generate(IntegrationResult.CreateInitialIntegrationResult("foo", @"c:\", @"c:\")));
+        }
+
 	}
 }
