@@ -8,14 +8,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 	[TestFixture]
 	public class RSSPublisherTest : IntegrationFixture
 	{
-		IIntegrationResult result;
-		RssPublisher publisher;
 
-		[SetUp]
-		public void Setup()
-		{
-			publisher = new RssPublisher();
-		}
+        //todo test rss publisher
+        
+        //IIntegrationResult result;
+        //RssPublisher publisher;
+
+        //[SetUp]
+        //public void Setup()
+        //{
+        //    publisher = new RssPublisher();
+        //}
 
 
         //[Test]
@@ -272,7 +275,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         //    /// Execute
         //    System.Xml.XmlDocument document = new System.Xml.XmlDocument();
         //    System.Xml.XmlNode SelectedNode = null;
-        //    document.LoadXml(publisher.GenerateDocument(result));
+        //    document.LoadXml(publisher.Run);
 
         //    /// Verify
         //    SelectedNode = document.SelectSingleNode("//rss/channel/item");
@@ -283,18 +286,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
 
 
-        private static Modification[] OneModification()
-        {
-            Modification[] mods = new Modification[1];
-            mods[0] = new Modification();
-            mods[0].Comment = "some comment";
-            mods[0].FileName = "thecode.cs";
-            mods[0].FolderName = "$/SomeMainFolder/TheFolder";
-            mods[0].Type = "Modified";
-            mods[0].UserName = "Coder";
+        //private static Modification[] OneModification()
+        //{
+        //    Modification[] mods = new Modification[1];
+        //    mods[0] = new Modification();
+        //    mods[0].Comment = "some comment";
+        //    mods[0].FileName = "thecode.cs";
+        //    mods[0].FolderName = "$/SomeMainFolder/TheFolder";
+        //    mods[0].Type = "Modified";
+        //    mods[0].UserName = "Coder";
 
-            return mods;
-        }
+        //    return mods;
+        //}
 
 
     }
