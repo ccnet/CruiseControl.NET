@@ -111,7 +111,10 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                                 else
                                 {
                                     Log.Info(String.Format("Project: {0} already on queue: {1} with lower prority - cancelling existing request", integrationQueueItem.Project.Name, Name));
-                                    NotifyExitingQueueAndRemoveItem(foundIndex.Value, foundItem, true);
+                                    lock (this)
+                                    {
+                                        NotifyExitingQueueAndRemoveItem(foundIndex.Value, foundItem, true);
+                                    }
                                 }
                                 break;
                             case QueueDuplicateHandlingMode.ApplyForceBuildsReplace:
@@ -123,8 +126,11 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                                 else
                                 {
                                     Log.Info(String.Format("Project: {0} already on queue: {1} with lower prority - replacing existing request at position {2}", integrationQueueItem.Project.Name, Name, foundIndex));
-                                    NotifyExitingQueueAndRemoveItem(foundIndex.Value, foundItem, true);
-                                    AddToQueue(integrationQueueItem, foundIndex);
+                                    lock (this)
+                                    {
+                                        NotifyExitingQueueAndRemoveItem(foundIndex.Value, foundItem, true);
+                                        AddToQueue(integrationQueueItem, foundIndex);
+                                    }
                                 }
                                 break;
                             default:
@@ -132,7 +138,13 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                         }
  					}
 
-                    if (addItem) AddToQueue(integrationQueueItem);
+                    if (addItem)
+                    {
+                        lock (this)
+                        {
+                            AddToQueue(integrationQueueItem);
+                        }
+                    }
 				}
 			}
 		}
@@ -197,16 +209,19 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 
 		public IntegrationRequest GetNextRequest(IProject project)
 		{
-			if (Count == 0) return null;
+            lock (this)
+            {
+                if (Count == 0) return null;
 
-            if (IsLocked) return null;
+                if (IsLocked) return null;
 
-			IIntegrationQueueItem item = GetIntegrationQueueItem(0);
-			
-            if (item != null && item.Project == project)
-				return item.IntegrationRequest;
-			
-            return null;
+                IIntegrationQueueItem item = GetIntegrationQueueItem(0);
+
+                if (item != null && item.Project == project)
+                    return item.IntegrationRequest;
+
+                return null;
+            }
 		}
 	
 		public bool HasItemOnQueue(IProject project)
@@ -301,7 +316,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		private void NotifyExitingQueueAndRemoveItem(int index, IIntegrationQueueItem integrationQueueItem, bool isPendingItemCancelled)
 		{
 			integrationQueueItem.IntegrationQueueNotifier.NotifyExitingIntegrationQueue(isPendingItemCancelled);
-			RemoveAt(index);
+            RemoveAt(index);
 		}
 
         /// <summary>
