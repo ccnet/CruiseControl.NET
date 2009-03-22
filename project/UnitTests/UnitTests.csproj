@@ -137,7 +137,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
-    <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
@@ -850,16 +850,16 @@
     <Compile Include="CustomAssertion.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Objection\AcceptanceTests\CachingImplementationResolverTest.cs">
+    <Compile Include="objection\AcceptanceTests\CachingImplementationResolverTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Objection\AcceptanceTests\TypicalUsageClasses.cs">
+    <Compile Include="objection\AcceptanceTests\TypicalUsageClasses.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Objection\AcceptanceTests\TypicalUsageTests.cs">
+    <Compile Include="objection\AcceptanceTests\TypicalUsageTests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Objection\NetReflectorPlugin\NetReflectorPluginTest.cs">
+    <Compile Include="objection\NetReflectorPlugin\NetReflectorPluginTest.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Remote\CruiseServerSnapshotTest.cs" />
