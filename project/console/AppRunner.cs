@@ -16,15 +16,21 @@ namespace ThoughtWorks.CruiseControl.Console
 
         public int Run(string[] args)
         {
+            ArgumentParser parsedArgs = new ArgumentParser(args);
             try
             {
-                runner = new ConsoleRunner(new ArgumentParser(args), new CruiseServerFactory());
+                runner = new ConsoleRunner(parsedArgs, new CruiseServerFactory());
                 runner.Run();
                 return 0;
             }
             catch (Exception ex)
             {
                 Log.Error(ex);
+                if (!parsedArgs.NoPauseOnError)
+                {
+                    System.Console.WriteLine("An unexpected error has caused the console to crash, please press any key to continue...");
+                    System.Console.ReadKey();
+                }
                 return 1;
             }
             finally
