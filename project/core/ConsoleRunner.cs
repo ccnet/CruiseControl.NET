@@ -55,6 +55,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			LaunchServer();
 		}
 
+        public void Stop()
+        {
+            server.Stop();
+            server.WaitForExit();
+        }
+
 		private string GetRuntime()
 		{
 			if (Type.GetType ("Mono.Runtime") != null)

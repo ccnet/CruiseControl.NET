@@ -1,6 +1,6 @@
 using System;
-using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Util;
+using System.IO;
+using System.Reflection;
 
 namespace ThoughtWorks.CruiseControl.Console
 {
@@ -9,22 +9,31 @@ namespace ThoughtWorks.CruiseControl.Console
 		[STAThread]
 		internal static int Main(string[] args)
 		{
-            ArgumentParser parsedArgs = new ArgumentParser(args);
-			try
-			{
-				new ConsoleRunner(parsedArgs, new CruiseServerFactory()).Run();
-			    return 0;
-			}
-			catch (Exception ex)
-			{
-                Log.Error(ex);
-                if (!parsedArgs.NoPauseOnError)
+            bool restart = true;
+            int result = 0;
+            while (restart)
+            {
+                using (FileSystemWatcher watcher = new FileSystemWatcher(AppDomain.CurrentDomain.BaseDirectory, "ThoughtWorks.CruiseControl.Core.dll"))
                 {
-                    System.Console.WriteLine("An unexpected error has caused the console to crash, please press any key to continue...");
-                    System.Console.ReadKey();
+                    restart = false;
+
+                    AppDomain newDomain = AppDomain.CreateDomain("CC.Net",
+                        null,
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        AppDomain.CurrentDomain.RelativeSearchPath,
+                        true);
+                    AppRunner runner = newDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().Location,
+                        "ThoughtWorks.CruiseControl.Console.AppRunner") as AppRunner;
+
+                    watcher.Changed += delegate(object sender, FileSystemEventArgs e) { restart = true; runner.Stop(e.Name + " has changed"); };
+                    watcher.EnableRaisingEvents = true;
+                    watcher.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.Size;
+
+                    result = runner.Run(args);
+                    AppDomain.Unload(newDomain);
                 }
-			    return 1;
-			}
-		}
+            }
+            return result;
+        }
 	}
 }
