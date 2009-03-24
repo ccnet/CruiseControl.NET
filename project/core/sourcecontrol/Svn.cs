@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     {
         public const string DefaultExecutable = "svn";
         public static readonly string UtcXmlDateFormat = "yyyy-MM-ddTHH:mm:ssZ";
-		
+
         public Svn(ProcessExecutor executor, IHistoryParser parser, IFileSystem fileSystem)
             : base(parser, executor)
         {
@@ -56,22 +56,30 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("checkExternals", Required = false)]
         public bool CheckExternals = false;
 
-		[ReflectorProperty("checkExternalsRecursive", Required = false)]
-		public bool CheckExternalsRecursive = true;
+        [ReflectorProperty("checkExternalsRecursive", Required = false)]
+        public bool CheckExternalsRecursive = true;
 
         [ReflectorProperty("cleanCopy", Required = false)]
         public bool CleanCopy = false;
-		
+
+        [ReflectorProperty("revert", Required = false)]
+        public bool Revert = false;
+
+        [ReflectorProperty("cleanUp", Required = false)]
+        public bool CleanUp = false;
+
+
+
         private readonly IFileSystem fileSystem;
 
-		/// <summary>
-		/// Modifications discovered by this instance of the source control interface.
-		/// This is needed for the Multi Source Control block. (See CCNET-639/CCNET-1307)
-		/// </summary>
-		internal Modification[] mods = new Modification[0];
+        /// <summary>
+        /// Modifications discovered by this instance of the source control interface.
+        /// This is needed for the Multi Source Control block. (See CCNET-639/CCNET-1307)
+        /// </summary>
+        internal Modification[] mods = new Modification[0];
 
-		// Non-private for testing only.
-		internal int latestRevision;
+        // Non-private for testing only.
+        internal int latestRevision;
 
         public string FormatCommandDate(DateTime date)
         {
@@ -80,48 +88,62 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
+
+            if (System.IO.Directory.GetDirectories(to.WorkingDirectory, ".svn").Length != 0)
+            {
+                if (Revert)
+                {
+                    ProcessResult revertWorkingCopy = Execute(RevertWorkingCopy(to));
+                }
+
+                if (CleanUp)
+                {
+                    ProcessResult cleanUpWorkingCopy = Execute(CleanupWorkingCopy(to));
+                }
+            }
+
             List<Modification> modifications = new List<Modification>();
             List<string> repositoryUrls = new List<string>();
             repositoryUrls.Add(TrunkUrl);
 
-			if (CheckExternals)
-			{
-				ProcessResult resultOfSvnPropget = Execute(PropGetProcessInfo(to));
-				List<string> externals = ParseExternalsDirectories(resultOfSvnPropget);
-				foreach (string external in externals)
-				{
-					if (!repositoryUrls.Contains(external)) repositoryUrls.Add(external);
-				}
-			}
-			
+            if (CheckExternals)
+            {
+                ProcessResult resultOfSvnPropget = Execute(PropGetProcessInfo(to));
+                List<string> externals = ParseExternalsDirectories(resultOfSvnPropget);
+                foreach (string external in externals)
+                {
+                    if (!repositoryUrls.Contains(external)) repositoryUrls.Add(external);
+                }
+            }
+
             foreach (string repositoryUrl in repositoryUrls)
             {
                 ProcessResult result = Execute(NewHistoryProcessInfo(from, to, repositoryUrl));
                 Modification[] modsInRepository = ParseModifications(result, from.StartTime, to.StartTime);
-				if (modsInRepository != null)
+                if (modsInRepository != null)
                 {
-					// If there are modifications in the repository track the revision number.
-					// Do not just get the latest revision from all modifications because they
-					// will also contain the changes in the external paths.
-					if (repositoryUrl == TrunkUrl)
-					{
-						latestRevision = Modification.GetLastChangeNumber(modsInRepository);
-					}
+                    // If there are modifications in the repository track the revision number.
+                    // Do not just get the latest revision from all modifications because they
+                    // will also contain the changes in the external paths.
+                    if (repositoryUrl == TrunkUrl)
+                    {
+                        latestRevision = Modification.GetLastChangeNumber(modsInRepository);
+                    }
                     modifications.AddRange(modsInRepository);
                 }
             }
 
-			mods = modifications.ToArray();
-			if (UrlBuilder != null)
-			{
-				UrlBuilder.SetupModification(mods);
-			}
-			FillIssueUrl(mods);
+            mods = modifications.ToArray();
+            if (UrlBuilder != null)
+            {
+                UrlBuilder.SetupModification(mods);
+            }
+            FillIssueUrl(mods);
 
-			return mods;
-		}
+            return mods;
+        }
 
-		public override void LabelSourceControl(IIntegrationResult result)
+        public override void LabelSourceControl(IIntegrationResult result)
         {
             if (TagOnSuccess && result.Succeeded)
             {
@@ -133,15 +155,36 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("propget");
-            if(CheckExternalsRecursive)
-			{
-				buffer.AddArgument("-R");
-			}
+            if (CheckExternalsRecursive)
+            {
+                buffer.AddArgument("-R");
+            }
             AppendCommonSwitches(buffer);
             buffer.AddArgument("svn:externals");
             buffer.AddArgument(TrunkUrl);
             return NewProcessInfo(buffer.ToString(), result);
         }
+
+        private ProcessInfo RevertWorkingCopy(IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("revert");
+            buffer.AddArgument("--recursive");
+            buffer.AddArgument(".");
+
+            return NewProcessInfo(buffer.ToString(), result);
+        }
+
+
+        private ProcessInfo CleanupWorkingCopy(IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("cleanup");
+            //buffer.AddArgument("-R");
+
+            return NewProcessInfo(buffer.ToString(), result);
+        }
+
 
         public override void GetSource(IIntegrationResult result)
         {
@@ -151,21 +194,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
             if (DoesSvnDirectoryExist(result) && !CleanCopy)
             {
-                UpdateSource(result);                
+                UpdateSource(result);
             }
             else
             {
-				if (CleanCopy)
-				{
-					if (WorkingDirectory == null)
-					{
-						DeleteSource(result.WorkingDirectory);
-					}
-					else
-					{
-						DeleteSource(WorkingDirectory);
-					}
-				}
+                if (CleanCopy)
+                {
+                    if (WorkingDirectory == null)
+                    {
+                        DeleteSource(result.WorkingDirectory);
+                    }
+                    else
+                    {
+                        DeleteSource(WorkingDirectory);
+                    }
+                }
 
                 CheckoutSource(result);
             }
@@ -176,7 +219,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             if (fileSystem.DirectoryExists(workingDirectory))
             {
                 new IoService().DeleteIncludingReadOnlyObjects(workingDirectory);
-            }            
+            }
         }
 
         private void CheckoutSource(IIntegrationResult result)
@@ -191,7 +234,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("checkout");
             buffer.AddArgument(TrunkUrl);
-			buffer.AddArgument(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)));
+            buffer.AddArgument(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)));
             AppendCommonSwitches(buffer);
             return NewProcessInfo(buffer.ToString(), result);
         }
@@ -212,9 +255,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("update");
-			buffer.AddArgument(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)));
-			// Do not use Modification.GetLastChangeNumber() here directly.
-			AppendRevision(buffer, latestRevision);
+            buffer.AddArgument(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)));
+            // Do not use Modification.GetLastChangeNumber() here directly.
+            AppendRevision(buffer, latestRevision);
             AppendCommonSwitches(buffer);
             return NewProcessInfo(buffer.ToString(), result);
         }
@@ -227,14 +270,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.AppendArgument(TagMessage(result.Label));
             buffer.AddArgument(TagSource(result));
             buffer.AddArgument(TagDestination(result.Label));
-			// Do not use Modification.GetLastChangeNumber() here directly.
-			AppendRevision(buffer, latestRevision);
+            // Do not use Modification.GetLastChangeNumber() here directly.
+            AppendRevision(buffer, latestRevision);
             AppendCommonSwitches(buffer);
             return NewProcessInfo(buffer.ToString(), result);
         }
 
         //		HISTORY_COMMAND_FORMAT = "log url --revision \"{{{StartDate}}}:{{{EndDate}}}\" --verbose --xml --non-interactive";
-    	private ProcessInfo NewHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to, string url)
+        private ProcessInfo NewHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to, string url)
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("log");
@@ -255,46 +298,46 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
                 while ((externalsDefinition = reader.ReadLine()) != null)
                 {
-					// If this external is not a specific revision and is not an empty string
-					if (!externalsDefinition.Contains("-r") && !externalsDefinition.Equals(string.Empty))
-					{
-						int Pos = GetSubstringPosition(externalsDefinition);
-						
-						if (Pos > 0)
-						{
-							externalsDefinition = externalsDefinition.Substring(Pos);
-						}
-						
-						Pos = externalsDefinition.IndexOf(" ");
-						
-						if (Pos > 0)
-						{
-							externalsDefinition = externalsDefinition.Substring(0, Pos);
-						}
-						
-						if (!externalDirectories.Contains(externalsDefinition))
-						{
-							externalDirectories.Add(externalsDefinition);
-						}
-					}
-				}
-			}
-			return externalDirectories;
-		}
+                    // If this external is not a specific revision and is not an empty string
+                    if (!externalsDefinition.Contains("-r") && !externalsDefinition.Equals(string.Empty))
+                    {
+                        int Pos = GetSubstringPosition(externalsDefinition);
 
-		private static int GetSubstringPosition(string externalsDefinition)
-		{
-			int pos = 0;
-			string[] urlTypes = { "file:/", "http:/", "https:/", "svn:/", "svn+ssh:/" };
-			
-			foreach(string type in urlTypes)
-			{
-				int tmp = externalsDefinition.LastIndexOf(type);
-				if (tmp > pos) pos = tmp;
-			}
+                        if (Pos > 0)
+                        {
+                            externalsDefinition = externalsDefinition.Substring(Pos);
+                        }
 
-			return pos;
-		}
+                        Pos = externalsDefinition.IndexOf(" ");
+
+                        if (Pos > 0)
+                        {
+                            externalsDefinition = externalsDefinition.Substring(0, Pos);
+                        }
+
+                        if (!externalDirectories.Contains(externalsDefinition))
+                        {
+                            externalDirectories.Add(externalsDefinition);
+                        }
+                    }
+                }
+            }
+            return externalDirectories;
+        }
+
+        private static int GetSubstringPosition(string externalsDefinition)
+        {
+            int pos = 0;
+            string[] urlTypes = { "file:/", "http:/", "https:/", "svn:/", "svn+ssh:/" };
+
+            foreach (string type in urlTypes)
+            {
+                int tmp = externalsDefinition.LastIndexOf(type);
+                if (tmp > pos) pos = tmp;
+            }
+
+            return pos;
+        }
 
         private static string TagMessage(string label)
         {
@@ -303,9 +346,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private string TagSource(IIntegrationResult result)
         {
-			if (Modification.GetLastChangeNumber(mods) == 0)
+            if (Modification.GetLastChangeNumber(mods) == 0)
             {
-				return Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)).TrimEnd(Path.DirectorySeparatorChar);
+                return Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)).TrimEnd(Path.DirectorySeparatorChar);
             }
             return TrunkUrl;
         }
@@ -330,7 +373,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private ProcessInfo NewProcessInfo(string args, IIntegrationResult result)
         {
-        	string workingDirectory = Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory));
+            string workingDirectory = Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory));
             if (!Directory.Exists(workingDirectory)) Directory.CreateDirectory(workingDirectory);
 
             ProcessInfo processInfo = new ProcessInfo(Executable, args, workingDirectory);
