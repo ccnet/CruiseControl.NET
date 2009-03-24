@@ -70,6 +70,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 		}
 
 		private string CalculateDashboardConfigPath()
+        {
+            return CalculateDashboardConfigPath(physicalApplicationPathProvider);
+        }
+
+		public static string CalculateDashboardConfigPath(IPhysicalApplicationPathProvider physicalApplicationPathProvider)
 		{
 			string path = ConfigurationManager.AppSettings[DashboardConfigAppSettingKey];
 			if (path == null || path == string.Empty)

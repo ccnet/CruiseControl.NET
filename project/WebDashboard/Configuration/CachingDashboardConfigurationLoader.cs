@@ -32,5 +32,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 		{
 			get { return dashboardConfiguration.PluginConfiguration; }
 		}
+
+        /// <summary>
+        /// Clears the cached configuration.
+        /// </summary>
+        public static void ClearCache()
+        {
+            IDashboardConfiguration config = HttpContext.Current.Cache[DashboardConfigurationKey] as IDashboardConfiguration;
+            if (config != null)
+            {
+                HttpContext.Current.Cache.Remove(DashboardConfigurationKey);
+            }
+        }
 	}
 }
