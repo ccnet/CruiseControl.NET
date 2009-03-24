@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
@@ -27,6 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		public IConfiguration Read(XmlDocument document)
 		{
             string ConflictingXMLNode = string.Empty;
+            List<string> projectNames = new List<string>();
 
 			VerifyDocumentHasValidRootElement(document);
 			try
@@ -44,6 +46,21 @@ namespace ThoughtWorks.CruiseControl.Core.Config
                         if (loadedItem is IProject)
                         {
                             IProject project = loadedItem as IProject;
+
+                            // Validate that the project name is unique
+                            string projectName = project.Name.ToLowerInvariant();
+                            if (projectNames.Contains(projectName))
+                            {
+                                throw new CruiseControlException(
+                                    string.Format(
+                                        "A duplicate project name ({0})has been found - projects must be unique per server",
+                                        projectName));
+                            }
+                            else
+                            {
+                                projectNames.Add(projectName);
+                            }
+
                             configuration.AddProject(project);
                         }
                         else if (loadedItem is IQueueConfiguration)
