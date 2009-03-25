@@ -89,7 +89,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
 
-            if (System.IO.Directory.GetDirectories(to.WorkingDirectory, ".svn").Length != 0)
+            if (System.IO.Directory.GetDirectories(to.WorkingDirectory, ".svn").Length != 0 ||
+                System.IO.Directory.GetDirectories(to.WorkingDirectory, "_svn").Length != 0 )
             {
                 if (Revert)
                 {
