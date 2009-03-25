@@ -176,5 +176,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			trigger.IntegrationCompleted();
 			Assert.AreEqual(new DateTime(2005, 2, 4, 10, 0, 0), trigger.NextBuild);			
 		}
+
+
+        [Test, ExpectedException(typeof(ThoughtWorks.CruiseControl.Core.Config.ConfigurationException))]
+        public void RandomOffSetInMinutesFromTimeShouldBePositive()
+        {
+            trigger.RandomOffSetInMinutesFromTime = -10;
+
+        }
+
+        [Test, ExpectedException(typeof(ThoughtWorks.CruiseControl.Core.Config.ConfigurationException))]
+        public void RandomOffSetInMinutesFromTimeMayNotExceedMidnight()
+        {
+            mockDateTime.SetupResult("Now", new DateTime(2005, 2, 4, 9, 0, 1));
+         //whatever random time is choosen, the resulted time will still be after midnight
+            trigger.Time = "23:59";
+            trigger.RandomOffSetInMinutesFromTime = 1;
+            DateTime x = trigger.NextBuild;
+
+        }
+
 	}
 }
