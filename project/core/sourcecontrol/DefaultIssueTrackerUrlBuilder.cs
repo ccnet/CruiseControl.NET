@@ -17,16 +17,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         public void SetupModification(Modification[] modifications)
         {
+            if (modifications == null) throw new ArgumentNullException("modifications");
+
             foreach (Modification mod in modifications)
             {
                 //split the comment on a space, take the first part
                 //this must be the issue ID
                 //from the last position of this part, go back while the characters are numeric                
 
-                if (mod.Comment.Length > 0)
+                if ((mod != null) && !string.IsNullOrEmpty(mod.Comment))
                 {
                     string SearchingComment = mod.Comment.Split(' ')[0];
-                    Int32 EndPosition = SearchingComment.Length - 1;
+                    int EndPosition = SearchingComment.Length - 1;
                     char CurrentChar = SearchingComment[EndPosition];
                     string Result = string.Empty;
                     bool NumericPartFound = false;

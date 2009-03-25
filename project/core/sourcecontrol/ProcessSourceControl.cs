@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         protected void FillIssueUrl(Modification[] modifications)
         {
-            if (IssueUrlBuilder != null)
+            if ((IssueUrlBuilder != null) && (modifications != null))
             {
                 IssueUrlBuilder.SetupModification(modifications);
             }
