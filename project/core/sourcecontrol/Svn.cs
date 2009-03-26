@@ -86,11 +86,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return date.ToUniversalTime().ToString(UtcXmlDateFormat, CultureInfo.InvariantCulture);
         }
 
+
+        private bool WorkingFolderIsKnownAsSvnWorkingFolder(string workingDirectory)
+        {
+            return System.IO.Directory.GetDirectories(workingDirectory, ".svn").Length != 0 ||
+                   System.IO.Directory.GetDirectories(workingDirectory, "_svn").Length != 0;
+        }
+
+
+
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
 
-            if (System.IO.Directory.GetDirectories(to.WorkingDirectory, ".svn").Length != 0 ||
-                System.IO.Directory.GetDirectories(to.WorkingDirectory, "_svn").Length != 0 )
+            if (WorkingFolderIsKnownAsSvnWorkingFolder(to.WorkingDirectory))
             {
                 if (Revert)
                 {
