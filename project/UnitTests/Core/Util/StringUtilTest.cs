@@ -114,6 +114,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
             Assert.AreEqual("Go Stand  in the  corner.txt", actual);
         }
 
+
+        [Test]
+        public void TestReplaceInvalidCharsWithUnderScore()
+        {
+            const string BadFileName = "Go Stand ? ]in the <*/:*?> corner.txt";
+            string actual = StringUtil.ReplaceInvalidCharsWithUnderScore(BadFileName);
+
+            Assert.AreEqual("Go_Stand_in_the_corner.txt", actual);
+        }
+
+
 		[Test]
 		public void TestRemoveNulls()
 		{

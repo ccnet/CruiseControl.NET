@@ -55,5 +55,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			// Execute & Verify
 			Assert.AreEqual(new DirectoryInfo(@"myProject\Artifacts").FullName, project.ArtifactDirectory);
 		}
+
+
+        [Test]
+        public void ShouldReturnCorrectedProjectName()
+        {
+            // Setup
+            project.Name = "some||invalid#Name@some{freaking+setting2";
+
+            // Execute & Verify
+            Assert.AreEqual("some_invalid_Name_some_freaking_setting2", project.Name);
+        }
+
+
 	}
 }

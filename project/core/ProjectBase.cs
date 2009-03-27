@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public virtual string Name
 		{
 			get { return name; }
-			set { name = value; }
+			set { name = Util.StringUtil.ReplaceInvalidCharsWithUnderScore(value); }
 		}
 
 		[ReflectorProperty("category", Required=false)]
