@@ -107,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return Strip(fileName, "\\", "/", ":", "*", "?", "\"", "<", ">", "|");
         }
 
-        public static string ReplaceInvalidCharsWithUnderScore(string item)
+        public static string ReplaceInvalidCharsWithSpace(string item)
         {
             string result = item;
 
@@ -115,15 +115,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             {
                 if (!char.IsLetterOrDigit(result, i) &&
                     result[i] != '.' &&
+                    result[i] != ' ' &&
                     result[i] != '_')
                 {
 
                     result = result.Remove(i, 1);
-                    result = result.Insert(i, "_");
+                    result = result.Insert(i, " ");
                 }
             }
 
-            result = Regex.Replace(result, "_{2,}", "_");
+            result = Regex.Replace(result, " {2,}", " ");
 
             return result;
         }
