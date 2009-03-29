@@ -230,6 +230,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectMock.Expect("NotifyPendingState");
 			projectMock.ExpectAndSignal("NotifySleepingState");
 			projectMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
+            projectMock.SetupResult("MaxSourceControlRetries", 5);
 			integrationTriggerMock.ExpectAndSignal("IntegrationCompleted");
             integrator.ForceBuild("BuildForcer");
 			integrationTriggerMock.WaitForSignal();
@@ -244,7 +245,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectMock.Expect("NotifyPendingState");
 			projectMock.Expect("Integrate", request);
 			projectMock.ExpectAndSignal("NotifySleepingState");
-			integrationTriggerMock.ExpectAndSignal("IntegrationCompleted");
+            projectMock.SetupResult("MaxSourceControlRetries", 5);
+            integrationTriggerMock.ExpectAndSignal("IntegrationCompleted");
 			integrator.Request(request);
 			integrationTriggerMock.WaitForSignal();
 			projectMock.WaitForSignal();
@@ -259,7 +261,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectMock.Expect("NotifyPendingState");
 			projectMock.Expect("Integrate", request);
 			projectMock.ExpectAndSignal("NotifySleepingState");
-			integrationTriggerMock.Expect("IntegrationCompleted");
+            projectMock.SetupResult("MaxSourceControlRetries", 5);
+            integrationTriggerMock.Expect("IntegrationCompleted");
 			integrationTriggerMock.ExpectAndReturnAndSignal("Fire", null);
 
 			integrator.Request(request);

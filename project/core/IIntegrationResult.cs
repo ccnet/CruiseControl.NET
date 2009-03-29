@@ -49,7 +49,14 @@ namespace ThoughtWorks.CruiseControl.Core
 		void AddTaskResult(ITaskResult result);
 		bool HasModifications();
 		bool ShouldRunBuild();
-        bool SourceControlErrorOccured { get; set; }
+
+        /// <summary>
+        /// Any error that occurred during the get modifications stage of source control.
+        /// </summary>
+        /// <remarks>
+        /// If there is no error then this property will be null.
+        /// </remarks>
+        Exception SourceControlError { get; set; }
 
 
 		IDictionary IntegrationProperties { get; }

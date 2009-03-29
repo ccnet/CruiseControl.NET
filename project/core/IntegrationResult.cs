@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
         private readonly BuildProgressInformation buildProgressInformation = new BuildProgressInformation("", "");
 
-        private bool sourceControlErrorOccured = false;
+        private Exception sourceControlError;
 
 
         [XmlIgnore]
@@ -429,16 +429,17 @@ namespace ThoughtWorks.CruiseControl.Core
             return string.Format("Project: {0}, Status: {1}, Label: {2}, StartTime: {3}", ProjectName, Status, Label, StartTime);
         }
 
-        public bool SourceControlErrorOccured
+        /// <summary>
+        /// Any error that occurred during the get modifications stage of source control.
+        /// </summary>
+        /// <remarks>
+        /// If there is no error then this property will be null.
+        /// </remarks>
+        [XmlIgnore]
+        public Exception SourceControlError
         {
-            get
-            {
-                return sourceControlErrorOccured;
-            }
-            set
-            {
-                sourceControlErrorOccured = value;
-            }
+            get { return sourceControlError; }
+            set { sourceControlError = value; }
         }
 
         private ArrayList GetModifiers()

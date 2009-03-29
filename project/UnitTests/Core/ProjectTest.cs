@@ -333,7 +333,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project = new Project((IIntegratable) integratableMock.MockInstance);
 			SetupProject();
 
-			IIntegrationResult result = (IIntegrationResult) new DynamicMock(typeof (IIntegrationResult)).MockInstance;
+            DynamicMock resultMock = new DynamicMock(typeof(IIntegrationResult));
+            resultMock.SetupResult("Status", IntegrationStatus.Unknown);
+			IIntegrationResult result = (IIntegrationResult)resultMock.MockInstance;
 			IntegrationRequest request = ForceBuildRequest();
 			integratableMock.ExpectAndReturn("Integrate", result, request);
 			Assert.AreEqual(result, project.Integrate(request));

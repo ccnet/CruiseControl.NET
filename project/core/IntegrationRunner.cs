@@ -29,15 +29,27 @@ namespace ThoughtWorks.CruiseControl.Core
 
             result.MarkStartTime();
             
-            bool SourceControlErrorOccured=true; 
             bool RunBuild = false;
 
             try
             {
                 result.Modifications = GetModifications(lastResult, result);
-                SourceControlErrorOccured = false;
+            }
+            catch (Exception error)
+            {
+                result.SourceControlError = error;
+                Log.Warning(string.Format("Source control failure (GetModifications): {0}", error.Message));
+                if (request.PublishOnSourceControlException)
+                {
+                    result.ExceptionResult = error;
+                    CompleteIntegration(result);
+                }
+            }
 
-                RunBuild = result.ShouldRunBuild();
+            try
+            {
+
+                RunBuild = (result.SourceControlError == null) && result.ShouldRunBuild();
 
                 if (RunBuild)
                 {
@@ -69,20 +81,28 @@ namespace ThoughtWorks.CruiseControl.Core
             catch (Exception ex)
             {                
                 result.ExceptionResult = ex;
-                result.SourceControlErrorOccured = SourceControlErrorOccured;
             }
             finally
             {
-                if (RunBuild || SourceControlErrorOccured)
+                if (RunBuild)
                 {
-                    result.MarkEndTime();
-                    PostBuild(result);
-                    Log.Info(string.Format("Integration complete: {0} - {1}", result.Status, result.EndTime));
+                    CompleteIntegration(result);
                 }
             }
 
             target.Activity = ProjectActivity.Sleeping;
             return result;
+        }
+
+        /// <summary>
+        /// Completes an integration.
+        /// </summary>
+        /// <param name="result">The integration result.</param>
+        private void CompleteIntegration(IIntegrationResult result)
+        {
+            result.MarkEndTime();
+            PostBuild(result);
+            Log.Info(string.Format("Integration complete: {0} - {1}", result.Status, result.EndTime));
         }
 
         private Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)

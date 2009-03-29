@@ -9,6 +9,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		public static readonly IntegrationRequest NullRequest = new IntegrationRequest(BuildCondition.NoBuild, "NullRequest");
 		private readonly BuildCondition buildCondition;
 		private readonly string source;
+        private bool publishOnSourceControlException;
 
 		public IntegrationRequest(BuildCondition buildCondition, string source)
 		{
@@ -41,5 +42,14 @@ namespace ThoughtWorks.CruiseControl.Remote
 		{
 			return string.Format("{0} triggered a build ({1})", Source, BuildCondition);
 		}
+
+        /// <summary>
+        /// Should the results of a failed source control exception be published?
+        /// </summary>
+        public bool PublishOnSourceControlException
+        {
+            get { return publishOnSourceControlException; }
+            set { publishOnSourceControlException = value; }
+        }
 	}
 }

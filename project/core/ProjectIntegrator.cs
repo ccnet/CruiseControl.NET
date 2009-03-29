@@ -163,6 +163,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 				try
 				{
+                    ir.PublishOnSourceControlException = (AmountOfSourceControlExceptions >= project.MaxSourceControlRetries);
 					result = project.Integrate(ir);
 				}
 				finally
@@ -172,11 +173,14 @@ namespace ThoughtWorks.CruiseControl.Core
                     /// instruct the queue which is performing the integration to release locks
                     integrationQueue.ToggleQueueLocks(false);
 
-                    if (result.SourceControlErrorOccured)
-                    { AmountOfSourceControlExceptions++; }
+                    if (result.SourceControlError != null)
+                    {
+                        AmountOfSourceControlExceptions++;
+                    }
                     else
-                    { AmountOfSourceControlExceptions = 0; }
-
+                    {
+                        AmountOfSourceControlExceptions = 0;
+                    }
                     
                     if (AmountOfSourceControlExceptions > project.MaxSourceControlRetries)
                     {
