@@ -256,7 +256,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
 		internal static Stream GetManifestResourceStream(string filename)
 		{
-			var result = Assembly.GetExecutingAssembly().
+			System.IO.Stream result = Assembly.GetExecutingAssembly().
 				GetManifestResourceStream(
 				"ThoughtWorks.CruiseControl.UnitTests.Core.Config.TestAssets." +
 				filename);
