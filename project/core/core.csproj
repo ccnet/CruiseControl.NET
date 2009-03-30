@@ -97,6 +97,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <Name>log4net</Name>
       <HintPath>..\..\lib\log4net.dll</HintPath>
@@ -371,10 +375,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="publishers\IEmailConverter.cs" />
+    <Compile Include="publishers\IManifestGenerator.cs" />
     <Compile Include="publishers\IMessageBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="publishers\ManifestGenerator.cs" />
+    <Compile Include="publishers\ManifestImporter.cs" />
     <Compile Include="publishers\ModificationHistoryPublisher.cs" />
+    <Compile Include="publishers\PackagePublisher.cs" />
     <Compile Include="publishers\RssPublisher.cs">
       <SubType>Code</SubType>
     </Compile>
