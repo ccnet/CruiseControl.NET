@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
     [TestFixture]
     public class PreprocessorTest
     {
-        private const string FAKE_ROOT = @"c:\temp folder\";
+    	private static readonly string FAKE_ROOT = Path.DirectorySeparatorChar == '\\' ? "c:\\temp folder\\" : "/tmp/";
 
         private readonly PreprocessorUrlResolver _resolver =
             new PreprocessorUrlResolver();
@@ -96,7 +96,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
                 Assert.AreEqual( env.Fileset.Length, 3 );
                 Assert.AreEqual(GetTestPath("TestIncluder.xml"), env.Fileset[0]);
-                Assert.AreEqual(GetTestPath(@"Subfolder\TestIncluded.xml"), env.Fileset[1]);
+                Assert.AreEqual(GetTestPath(String.Format(
+					"Subfolder{0}TestIncluded.xml", Path.DirectorySeparatorChar)), env.Fileset[1]);
                 Assert.AreEqual(GetTestPath("TestIncluded2.xml"), env.Fileset[2]);
             }
         }
@@ -120,7 +121,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                 Assert.AreEqual(env.Fileset.Length, 4);
 
                 Assert.AreEqual(GetTestPath("TestIncludeStack1.xml"), env.Fileset[0]);
-                Assert.AreEqual(GetTestPath(@"Subfolder\TestIncludeStack2.xml"), env.Fileset[1]);
+                Assert.AreEqual(GetTestPath(String.Format(
+					"Subfolder{0}TestIncludeStack2.xml", Path.DirectorySeparatorChar)), env.Fileset[1]);
                 Assert.AreEqual(GetTestPath("TestIncludeStack3.xml"), env.Fileset[2]);
                 Assert.AreEqual(GetTestPath("TestIncludeStack4.xml"), env.Fileset[3]);
             }
@@ -252,13 +254,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                 XmlReader.Create( GetManifestResourceStream( filename ) );            
         }
 
-        internal static Stream GetManifestResourceStream (string filename)
-        {
-            return Assembly.GetExecutingAssembly().
-                GetManifestResourceStream(
-                "ThoughtWorks.CruiseControl.UnitTests.Core.Config.TestAssets." +
-                filename );
-        }
+		internal static Stream GetManifestResourceStream(string filename)
+		{
+			var result = Assembly.GetExecutingAssembly().
+				GetManifestResourceStream(
+				"ThoughtWorks.CruiseControl.UnitTests.Core.Config.TestAssets." +
+				filename);
+			Assert.IsNotNull(result, "Unable to load data from assembly : " + filename);
+			return result;
+		}
 
         private static XmlDocument ReadOutputDoc()
         {
@@ -320,7 +324,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         /// <returns></returns>
         private string Resolve( Uri absoluteUri )
         {
-            return absoluteUri.LocalPath.Substring(_original_base_path.Length).Replace('\\', '.');
+            return absoluteUri.LocalPath.Substring(_original_base_path.Length).Replace(Path.DirectorySeparatorChar, '.');
         }
     }
 }
