@@ -162,6 +162,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectMock.ExpectAndThrow("Integrate", new CruiseControlException(exceptionMessage), new HasForceBuildCondition());
 			projectMock.ExpectAndSignal("NotifySleepingState");
             projectMock.ExpectAndReturn("MaxSourceControlRetries", 5);
+            projectMock.SetupResult("SourceControlErrorHandling", ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
             integrationTriggerMock.Expect("IntegrationCompleted");
 
 			integrator.Start();
@@ -231,6 +232,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectMock.ExpectAndSignal("NotifySleepingState");
 			projectMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
             projectMock.SetupResult("MaxSourceControlRetries", 5);
+            projectMock.SetupResult("SourceControlErrorHandling", ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
 			integrationTriggerMock.ExpectAndSignal("IntegrationCompleted");
             integrator.ForceBuild("BuildForcer");
 			integrationTriggerMock.WaitForSignal();
@@ -246,6 +248,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectMock.Expect("Integrate", request);
 			projectMock.ExpectAndSignal("NotifySleepingState");
             projectMock.SetupResult("MaxSourceControlRetries", 5);
+            projectMock.SetupResult("SourceControlErrorHandling", ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
             integrationTriggerMock.ExpectAndSignal("IntegrationCompleted");
 			integrator.Request(request);
 			integrationTriggerMock.WaitForSignal();
@@ -262,6 +265,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectMock.Expect("Integrate", request);
 			projectMock.ExpectAndSignal("NotifySleepingState");
             projectMock.SetupResult("MaxSourceControlRetries", 5);
+            projectMock.SetupResult("SourceControlErrorHandling", ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
             integrationTriggerMock.Expect("IntegrationCompleted");
 			integrationTriggerMock.ExpectAndReturnAndSignal("Fire", null);
 
