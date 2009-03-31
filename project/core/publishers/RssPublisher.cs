@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private static string RSSDataFileLocation(string artifactDirectory)
         {
-            return System.IO.Path.Combine(artifactDirectory, RSSFilename);
+            return Path.Combine(artifactDirectory, RSSFilename);
         }
 
         public static string LoadRSSDataDocument(string artifactDirectory)
@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             XmlElement channelElement = CreateElement(rssFeed, "channel");
             rootElement.AppendChild(channelElement);
             channelElement.AppendChild(CreateTextElement(rssFeed, "title", "CruiseControl.Net - {0}", projectName));
-            channelElement.AppendChild(CreateTextElement(rssFeed, "link", projectUrl));
+            if (!string.IsNullOrEmpty(projectUrl)) channelElement.AppendChild(CreateTextElement(rssFeed, "link", projectUrl));
             channelElement.AppendChild(CreateTextElement(rssFeed, "description", "Latest build results for '{0}'", projectName));
             channelElement.AppendChild(CreateTextElement(rssFeed, "language", "en"));
             channelElement.AppendChild(CreateTextElement(rssFeed, "ttl", "5"));

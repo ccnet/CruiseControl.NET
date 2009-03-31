@@ -1124,6 +1124,9 @@
     <EmbeddedResource Include="Core\Config\TestAssets\TestCycle2.xml" />
     <EmbeddedResource Include="Core\Config\TestAssets\Test Include File With Spaces.xml" />
     <EmbeddedResource Include="Core\Config\TestAssets\TestIncludeVariable.xml" />
+    <EmbeddedResource Include="Core\Publishers\Rss.BeyondLimits.xml" />
+    <EmbeddedResource Include="Core\Publishers\Rss.NewFeed.xml" />
+    <EmbeddedResource Include="Core\Publishers\Rss.WithinLimits.xml" />
     <Content Include="resources\buildlog.xml" />
     <Content Include="resources\failedbuildlog.xml" />
     <Content Include="resources\statistics.xml" />

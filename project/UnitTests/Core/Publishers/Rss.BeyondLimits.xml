@@ -1,0 +1,27 @@
+﻿<rss version="2.0">
+  <channel>
+    <title>CruiseControl.Net - Test project</title>
+    <link>http://viewproject</link>
+    <description>Latest build results for 'Test project'</description>
+    <language>en</language>
+    <ttl>5</ttl>
+    <generator>CruiseControl.Net</generator>
+    <item>
+      <title>Build A Label : Unknown  2 changed files found in build  First Comment : A comment</title>
+      <description>2 changed files found in build</description>
+      <guid>792b287f-4143-46fd-a39d-abde2bee19a3</guid>
+      <pubDate>Tue, 31 Mar 2009 16:54:00 GMT</pubDate>
+      <encoded xmlns="http://purl.org/rss/1.0/modules/content/"><![CDATA[<h4>Modifications in build :</h4>
+<table cellpadding="5">
+<tr><td>johnDoe</td><td>A comment</td></tr>
+</table>
+<h4>Detailed information of the modifications in the build :</h4>
+<table cellpadding="5">
+<tr><td><b>johnDoe</b></td><td>A comment</td></tr>
+<tr><td><font size=2>Add</font></td><td><font size=2>/modification #1</font></td></tr>
+<tr><td><font size=2>Add</font></td><td><font size=2>/modification #2</font></td></tr>
+</table>
+]]></encoded>
+    </item>
+  </channel>
+</rss>
