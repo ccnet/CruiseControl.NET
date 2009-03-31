@@ -165,5 +165,18 @@ namespace ThoughtWorks.CruiseControl.Core
             get { return startupState; }
             set { startupState = value; }
         }
+
+
+
+        public bool stopProjectOnReachingMaxSourceControlRetries
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy SourceControlErrorHandling
+        {
+            get { throw new NotImplementedException(); }
+        }
+
     }
 }

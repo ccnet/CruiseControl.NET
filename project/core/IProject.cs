@@ -108,10 +108,24 @@ namespace ThoughtWorks.CruiseControl.Core
 
 
         /// <summary>
-        /// Maximum amount of sourcecontrol exceptions allowed, before stopping the project.
+        /// Maximum amount of sourcecontrol exceptions allowed, before stopping the project (if specified to do so).
         /// This equals to the amount of errors in GetModifications. 
         /// </summary>
         int MaxSourceControlRetries { get; }
+
+
+        /// <summary>
+        /// Stop the project when the MaxSourceControlRetries limit has been reached
+        /// </summary>
+        bool stopProjectOnReachingMaxSourceControlRetries { get; }
+
+
+
+        /// <summary>
+        /// What do do when an error occurs in the getmodifications stage of the source control 
+        /// </summary>
+        Sourcecontrol.Common.SourceControlErrorHandlingPolicy SourceControlErrorHandling { get; }
+
 
         /// <summary>
         /// The start-up mode for this project.

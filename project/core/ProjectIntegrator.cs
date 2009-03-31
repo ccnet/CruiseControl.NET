@@ -162,8 +162,9 @@ namespace ThoughtWorks.CruiseControl.Core
                 IIntegrationResult result = new IntegrationResult();
 
 				try
-				{
-                    ir.PublishOnSourceControlException = (AmountOfSourceControlExceptions >= project.MaxSourceControlRetries);
+				{                    
+                    ir.PublishOnSourceControlException = (AmountOfSourceControlExceptions == project.MaxSourceControlRetries) 
+                                                          || (project.SourceControlErrorHandling == ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure) ;
 					result = project.Integrate(ir);
 				}
 				finally
@@ -173,6 +174,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     /// instruct the queue which is performing the integration to release locks
                     integrationQueue.ToggleQueueLocks(false);
 
+                    // handle post build : check what to do if source control errors occured
                     if (result.SourceControlError != null)
                     {
                         AmountOfSourceControlExceptions++;
@@ -182,10 +184,19 @@ namespace ThoughtWorks.CruiseControl.Core
                         AmountOfSourceControlExceptions = 0;
                     }
                     
-                    if (AmountOfSourceControlExceptions > project.MaxSourceControlRetries)
+
+                    if ( (AmountOfSourceControlExceptions == project.MaxSourceControlRetries )
+                        && (project.SourceControlErrorHandling == ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportOnEveryRetryAmount))
+                    {
+                        AmountOfSourceControlExceptions = 0;
+                    }
+
+
+                    if ((AmountOfSourceControlExceptions > project.MaxSourceControlRetries)
+                        && project.stopProjectOnReachingMaxSourceControlRetries) 
                     {
                         Stopped();
-                    }                
+                    }               
                 }
 			}
 			else

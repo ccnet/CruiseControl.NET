@@ -50,6 +50,10 @@ namespace ThoughtWorks.CruiseControl.Core
         private ArrayList messages = new ArrayList();
         private int maxSourceControlRetries = 5;
         private ProjectInitialState startupState = ProjectInitialState.Started;
+        
+        private bool StopProjectOnReachingMaxSourceControlRetries = false;
+        private Sourcecontrol.Common.SourceControlErrorHandlingPolicy sourceControlErrorHandling = Common.SourceControlErrorHandlingPolicy.ReportEveryFailure;
+
 
         [ReflectorProperty("prebuild", Required = false)]
         public ITask[] PrebuildTasks = new ITask[0];
@@ -86,6 +90,22 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             get { return maxSourceControlRetries; }
             set { maxSourceControlRetries = value < 0 ? 0 : value; }
+        }
+
+
+        [ReflectorProperty("stopProjectOnReachingMaxSourceControlRetries", Required = false)]
+        public bool stopProjectOnReachingMaxSourceControlRetries
+        {
+            get { return StopProjectOnReachingMaxSourceControlRetries; }
+            set { StopProjectOnReachingMaxSourceControlRetries = value; }
+        }
+
+
+        [ReflectorProperty("sourceControlErrorHandling", Required = false)]
+        public Sourcecontrol.Common.SourceControlErrorHandlingPolicy SourceControlErrorHandling
+        {
+            get { return sourceControlErrorHandling; }
+            set { sourceControlErrorHandling = value; }
         }
 
 

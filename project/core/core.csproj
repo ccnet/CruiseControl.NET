@@ -505,6 +505,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="sourcecontrol\CommentFilter.cs" />
+    <Compile Include="sourcecontrol\Common.cs" />
     <Compile Include="sourcecontrol\Cvs.cs">
       <SubType>Code</SubType>
     </Compile>

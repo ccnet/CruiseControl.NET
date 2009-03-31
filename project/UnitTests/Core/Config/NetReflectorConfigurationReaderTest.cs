@@ -222,6 +222,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             public int MaxSourceControlRetries { get { return 0; } }
 
             public ProjectInitialState StartupState { get { return ProjectInitialState.Started; } }
+
+            #region IProject Members
+
+
+            public bool stopProjectOnReachingMaxSourceControlRetries
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public Common.SourceControlErrorHandlingPolicy SourceControlErrorHandling
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            #endregion
         }
 
 		private void CheckInvalidNode(InvalidNodeEventArgs args)
