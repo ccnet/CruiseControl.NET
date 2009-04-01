@@ -343,6 +343,7 @@
     <Compile Include="Core\Publishers\ManifestGeneratorTests.cs" />
     <Compile Include="Core\Publishers\ManifestImporterTests.cs" />
     <Compile Include="Core\Publishers\PackagePublisherTests.cs" />
+    <Compile Include="Core\Label\AssemblyVersionLabellerTest.cs" />
     <Compile Include="Core\State\XmlProjectStateManagerTest.cs" />
     <Compile Include="Core\Config\ValidatingLoaderTest.cs">
       <SubType>Code</SubType>
