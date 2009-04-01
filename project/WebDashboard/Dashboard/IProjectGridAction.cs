@@ -4,8 +4,17 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public interface IProjectGridAction
-	{
-		IResponse Execute(string actionName, IRequest request);
+    {
+        #region Properties
+        #region DefaultSortColumn
+        /// <summary>
+        /// The default column to sort by.
+        /// </summary>
+        ProjectGridSortColumn DefaultSortColumn { get; set; }
+        #endregion
+        #endregion
+
+        IResponse Execute(string actionName, IRequest request);
 		IResponse Execute(string actionName, IServerSpecifier serverSpecifer, IRequest request);
 	}
 }

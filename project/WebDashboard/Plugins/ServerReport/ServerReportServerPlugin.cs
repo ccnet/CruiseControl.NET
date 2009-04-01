@@ -3,6 +3,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using System;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
@@ -13,6 +14,31 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 		public static readonly string ACTION_NAME = "ViewServerReport";
 
 		private readonly IProjectGridAction projectGridAction;
+        private ProjectGridSortColumn? sortColumn;
+
+        #region Public properties
+        #region DefaultSortColumn
+        /// <summary>
+        /// The default column to sort by.
+        /// </summary>
+        [ReflectorProperty("defaultSort", Required = false)]
+        public string DefaultSortColumn
+        {
+            get { return sortColumn.GetValueOrDefault(ProjectGridSortColumn.Name).ToString(); }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    sortColumn = null;
+                }
+                else
+                {
+                    sortColumn = (ProjectGridSortColumn)Enum.Parse(typeof(ProjectGridSortColumn), value);
+                }
+            }
+        }
+        #endregion
+        #endregion
 
 		public ServerReportServerPlugin(IProjectGridAction projectGridAction)
 		{
@@ -21,7 +47,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 
 		public IResponse Execute(ICruiseRequest request)
 		{
-			return projectGridAction.Execute(ACTION_NAME, request.ServerSpecifier, request.Request);
+            if (sortColumn.HasValue) projectGridAction.DefaultSortColumn = sortColumn.Value;
+            return projectGridAction.Execute(ACTION_NAME, request.ServerSpecifier, request.Request);
 		}
 
 		public string LinkDescription

@@ -16,6 +16,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private readonly ICruiseUrlBuilder cruiseUrlBuilder;
 		private readonly IVelocityViewGenerator viewGenerator;
 		private readonly IProjectGrid projectGrid;
+        private ProjectGridSortColumn sortColumn = ProjectGridSortColumn.Name;
 
 		public VelocityProjectGridAction(IFarmService farmService, IUrlBuilder urlBuilder, ICruiseUrlBuilder cruiseUrlBuilder, IVelocityViewGenerator viewGenerator, IProjectGrid projectGrid)
 		{
@@ -26,7 +27,20 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.projectGrid = projectGrid;
 		}
 
-		public IResponse Execute(string actionName, IRequest request)
+        #region Properties
+        #region DefaultSortColumn
+        /// <summary>
+        /// The default column to sort by.
+        /// </summary>
+        public ProjectGridSortColumn DefaultSortColumn
+        {
+            get { return sortColumn; }
+            set { sortColumn = value; }
+        }
+        #endregion
+        #endregion
+
+        public IResponse Execute(string actionName, IRequest request)
 		{
 			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(), actionName, request, null);
 		}
@@ -71,18 +85,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private ProjectGridSortColumn GetSortColumn(IRequest request)
 		{
 			string columnName = request.GetText("SortColumn");
-			if (columnName == string.Empty)
-			{
-				columnName = "Name";
-			}
-			try
-			{
-				return (ProjectGridSortColumn) Enum.Parse(typeof(ProjectGridSortColumn), columnName);	
-			}
-			catch (Exception)
-			{
-				throw new CruiseControlException(string.Format("Error attempting to calculate column to sort. Specified column name was [{0}]", columnName));
-			}
+            if (string.IsNullOrEmpty(columnName))
+            {
+                return sortColumn;
+            }
+            else
+            {
+                try
+                {
+                    return (ProjectGridSortColumn)Enum.Parse(typeof(ProjectGridSortColumn), columnName);
+                }
+                catch (Exception)
+                {
+                    throw new CruiseControlException(string.Format("Error attempting to calculate column to sort. Specified column name was [{0}]", columnName));
+                }
+            }
 		}
 
 		private object GenerateSortLink(IServerSpecifier serverSpecifier, string action, ProjectGridSortColumn column, ProjectGridSortColumn currentColumn, bool currentReverse)
