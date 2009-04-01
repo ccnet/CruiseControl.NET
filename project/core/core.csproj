@@ -97,6 +97,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="agsXMPP, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ff839b81f1debe86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\agsXMPP.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -421,6 +425,7 @@
     <Compile Include="publishers\XmlLogPublisher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="publishers\XmppPublisher.cs" />
     <Compile Include="Queues\IIntegrationQueue.cs">
       <SubType>Code</SubType>
     </Compile>
