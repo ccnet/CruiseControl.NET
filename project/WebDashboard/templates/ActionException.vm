@@ -1,5 +1,11 @@
-<p>There was an exception trying to carry out your request. Details of the Exception are:</p>
+﻿<div class="ui-widget">
+	<div class="ui-state-error ui-corner-all"> 
+		<p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>
+		There was an exception trying to carry out your request.</p>
+	</div>
+</div>
+
 <h2>Exception Message</h2>
 <p>$exception.Message</p>
 <h2>Exception Full Details</h2>
-<p>$exception.ToString()</p>
+<div style="white-space:pre-wrap;">$exception.ToString()</div>

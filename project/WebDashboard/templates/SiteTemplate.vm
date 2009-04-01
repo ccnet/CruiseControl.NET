@@ -3,6 +3,9 @@
 	<HEAD>
 		<title>CruiseControl.NET</title>
 		<link type="text/css" rel="stylesheet" href="$applicationPath/cruisecontrol.css" />
+		<link type="text/css" rel="stylesheet" href="$applicationPath/javascript/theme/ui.all.css" />
+		<script src="$applicationPath/javascript/jquery.js" type="text/javascript"></script>
+		<script src="$applicationPath/javascript/jquery-ui.js" type="text/javascript"></script>
 	</HEAD>
 	<body class="wholepage" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 		<table class="main-panel" border="0" width="100%">
