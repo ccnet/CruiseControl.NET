@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Service
                         AppDomain.CurrentDomain.RelativeSearchPath,
                         true);
                     runner = newDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().Location,
-                        "ThoughtWorks.CruiseControl.Console.AppRunner") as AppRunner;
+                        typeof(AppRunner).FullName) as AppRunner;
 
                     watcher.Changed += delegate(object sender, FileSystemEventArgs e) { restart = true; runner.Stop(e.Name + " has changed"); };
                     watcher.EnableRaisingEvents = true;

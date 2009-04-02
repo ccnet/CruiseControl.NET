@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.Console
                         AppDomain.CurrentDomain.RelativeSearchPath,
                         true);
                     runner = newDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().Location,
-                        "ThoughtWorks.CruiseControl.Console.AppRunner") as AppRunner;
+                        typeof(AppRunner).FullName) as AppRunner;
                     result = runner.Run(args);
                     AppDomain.Unload(newDomain);
 
