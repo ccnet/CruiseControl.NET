@@ -3,6 +3,7 @@ using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
 using System.Collections.Generic;
+using System.Configuration;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
@@ -20,6 +21,18 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		{
 			typeTable = new NetReflectorTypeTable();
 			typeTable.Add(AppDomain.CurrentDomain);
+            string pluginLocation = ConfigurationManager.AppSettings["PluginLocation"];
+            if (!string.IsNullOrEmpty(pluginLocation))
+            {
+                if (Directory.Exists(pluginLocation))
+                {
+                    typeTable.Add(pluginLocation, CONFIG_ASSEMBLY_PATTERN);
+                }
+                else
+                {
+                    throw new CruiseControlException("Unable to find plugin directory: " + pluginLocation);
+                }
+            }
 			typeTable.Add(Directory.GetCurrentDirectory(), CONFIG_ASSEMBLY_PATTERN);
 			typeTable.InvalidNode += new InvalidNodeEventHandler(HandleUnusedNode);
 			reader = new NetReflectorReader(typeTable);
