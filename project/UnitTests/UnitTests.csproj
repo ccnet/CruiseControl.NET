@@ -705,6 +705,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\Tasks\ArtifactCleanupTest.cs" />
+    <Compile Include="Core\Tasks\GendarmeTaskTest.cs" />
     <Compile Include="Core\Tasks\RakeTaskTest.cs" />
     <Compile Include="Core\Tasks\DataTaskResultTest.cs">
       <SubType>Code</SubType>

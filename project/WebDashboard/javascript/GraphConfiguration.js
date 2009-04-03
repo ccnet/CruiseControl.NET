@@ -62,6 +62,16 @@ var _recentGraphConfigurations =
                         { name: "Coverage", attributeName: "Coverage", color: "blue" }
                     ]
         },
+
+        //Gendarme
+        {
+        graphName: "Gendarme",
+        dataSource: _recentStatistics,
+        numXTicks: _numberRecentGraphXTicks,
+        series: [
+                        { name: "Gendarme Defects", attributeName: "GendarmeDefects", color: "red" }
+                    ]
+       },
         
         //FxCop
         {
@@ -118,6 +128,9 @@ var _summaryConfiguration =
         testsPassed: function(successfulBuilds, failedBuilds) { return average(successfulBuilds, "TestsPassed") },
         testFailures: function(successfulBuilds, failedBuilds) { return average(successfulBuilds, "TestFailures") },
         testsIgnored: function(successfulBuilds, failedBuilds) { return average(successfulBuilds, "TestIgnored") },
+
+        //Gendarme
+        gendarmeDefects: function(successfulBuilds, failedBuilds) { return average(successfulBuilds, "GendarmeDefects") },
         
         //FxCop
         fxCopWarnings: function(successfulBuilds, failedBuilds) { return average(successfulBuilds, "FxCop Warnings") },
@@ -179,7 +192,17 @@ var _historicGraphConfigurations =
                         { name: "Coverage", attributeName: "averageCoverage", color: "blue" }
                     ]
         },
-        
+
+        //Gendarme
+        {
+        graphName: "Gendarme",
+        dataSource: _summarisedStatistics,
+        numXTicks: _numberHistoricGraphXTicks,
+        series: [
+                        { name: "Average Defects", attributeName: "gendarmeDefects", color: "red" }
+                    ]
+        },
+       
         //FxCop Errors/Warnings
         {
             graphName: "FxCop Errors/Warnings",

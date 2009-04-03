@@ -598,6 +598,12 @@
     <Content Include="..\xsl\FxCopReport.xsl">
       <Link>xsl\FxCopReport.xsl</Link>
     </Content>
+    <Content Include="..\xsl\gendarme-report-ccnet.xsl">
+      <Link>xsl\gendarme-report-ccnet.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\gendarme-summary-ccnet.xsl">
+      <Link>xsl\gendarme-summary-ccnet.xsl</Link>
+    </Content>
     <Content Include="..\xsl\header.xsl">
       <Link>xsl\header.xsl</Link>
     </Content>

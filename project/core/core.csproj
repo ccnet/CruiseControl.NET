@@ -718,6 +718,7 @@
     <Compile Include="tasks\FinalBuilderTask.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tasks\GendarmeTask.cs" />
     <Compile Include="tasks\MergeFilesTask.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -765,6 +766,7 @@
     <Compile Include="util\AccurateTimer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="util\AssemblyMatch.cs" />
     <Compile Include="util\BuildProgressInformation.cs" />
     <Compile Include="util\ConsoleTraceListener.cs">
       <SubType>Code</SubType>

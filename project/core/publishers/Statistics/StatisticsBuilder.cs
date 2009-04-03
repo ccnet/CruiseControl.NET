@@ -24,6 +24,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             Add(new Statistic("TestFailures", "sum(//test-results/@failures)"));
             Add(new Statistic("TestIgnored", "sum(//test-results/@not-run)"));
 
+			Add(new Statistic("GendarmeDefects", "count(//gendarme-output//rule/target/defect)"));
+
             Add(
                 new Statistic("FxCop Warnings",
                               "count(//FxCopReport/Namespaces/Namespace/Messages/Message/Issue[@Level='Warning'])"));
