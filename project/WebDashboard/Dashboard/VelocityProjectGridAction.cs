@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -70,12 +71,40 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			velocityContext["lastBuildDateSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.LastBuildDate, sortColumn, sortReverse);
 			velocityContext["serverNameSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.ServerName, sortColumn, sortReverse);
 			velocityContext["projectCategorySortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.Category, sortColumn, sortReverse);
-			velocityContext["projectGrid"] = projectGrid.GenerateProjectGridRows(
-				projectStatusListAndExceptions.StatusAndServerList, actionName, sortColumn, sortReverse, category);
+            
+            ProjectGridRow[] projectGridRows = projectGrid.GenerateProjectGridRows(projectStatusListAndExceptions.StatusAndServerList, actionName, sortColumn, sortReverse, category);
+
+            velocityContext["projectGrid"] = projectGridRows;
 			velocityContext["exceptions"] = projectStatusListAndExceptions.Exceptions;
+
+            Array categoryList = this.GenerateCategoryList(projectGridRows);
+            velocityContext["categoryList"] = categoryList;
 
 			return viewGenerator.GenerateView(@"ProjectGrid.vm", velocityContext);
 		}
+
+        private Array GenerateCategoryList(ProjectGridRow[] projectGridRows)
+        {
+            if (projectGridRows == null) return null;
+
+            List<string> categories = new List<string>();
+
+            foreach (ProjectGridRow projectGridRow in projectGridRows)
+            {
+                string category = projectGridRow.Category;
+                System.Diagnostics.Debug.WriteLine(category);
+
+                if (!string.IsNullOrEmpty(category) && !categories.Contains(category))
+                    categories.Add(category);
+            }
+
+            // sort list if at least one element exists
+            if (categories.Count == 0) return null;
+
+            categories.Sort();
+
+            return categories.ToArray();
+        }
 
 		private bool SortAscending(IRequest request)
 		{
