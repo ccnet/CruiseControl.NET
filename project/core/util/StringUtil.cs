@@ -116,7 +116,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 if (!char.IsLetterOrDigit(result, i) &&
                     result[i] != '.' &&
                     result[i] != ' ' &&
-                    result[i] != '_')
+                    result[i] != '-' &&
+					result[i] != '_')
                 {
 
                     result = result.Remove(i, 1);
