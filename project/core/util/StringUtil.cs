@@ -127,7 +127,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
             result = Regex.Replace(result, " {2,}", " ");
 
-            return result;
+            return result.Trim();
         }
 
         public static string AutoDoubleQuoteString(string value)
