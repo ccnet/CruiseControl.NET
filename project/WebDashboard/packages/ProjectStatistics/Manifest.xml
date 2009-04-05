@@ -1,0 +1,22 @@
+﻿<package>
+  <name>Project Statistics</name>
+  <description>Statistics for a project.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>StatisticsGraphs.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/projectPlugins</path>
+      <name>projectStatisticsPlugin</name>
+      <attributes>
+        <attribute name="xslFileName" value="xsl\StatisticsGraphs.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>

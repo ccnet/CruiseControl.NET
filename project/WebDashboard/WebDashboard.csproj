@@ -101,6 +101,10 @@
       <Name>Commons</Name>
       <HintPath>..\..\lib\Commons.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <Name>log4net</Name>
       <HintPath>..\..\lib\log4net.dll</HintPath>
@@ -175,6 +179,16 @@
     <Compile Include="Configuration\ServerLocation.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\Administration\AdministerAction.cs" />
+    <Compile Include="Plugins\Administration\AdministerPlugin.cs" />
+    <Compile Include="Plugins\Administration\ConfigurationAttribute.cs" />
+    <Compile Include="Plugins\Administration\ConfigurationSetting.cs" />
+    <Compile Include="Plugins\Administration\FileLocation.cs" />
+    <Compile Include="Plugins\Administration\Package.cs" />
+    <Compile Include="Plugins\Administration\PackageImportEventArgs.cs" />
+    <Compile Include="Plugins\Administration\PackageManager.cs" />
+    <Compile Include="Plugins\Administration\PackageManifest.cs" />
+    <Compile Include="Plugins\Administration\PackageType.cs" />
     <Compile Include="Dashboard\RSSLinkBuilder.cs" />
     <Compile Include="IO\IConditionalGetFingerprintProvider.cs" />
     <Compile Include="IO\AssemblyVersionProvider.cs" />
@@ -661,11 +675,14 @@
     <Content Include="images\fxcop-critical-warning.gif" />
     <Content Include="images\fxcop-error.gif" />
     <Content Include="images\fxcop-warning.gif" />
+    <Content Include="images\rss.png" />
     <Content Include="images\shim.gif" />
     <Content Include="images\tw_dev_logo.gif" />
     <None Include="dashboard.config" />
     <None Include="templates\ActionException.vm" />
     <None Include="templates\AddProject.vm" />
+    <None Include="templates\AdministerDashboard.vm" />
+    <None Include="templates\AdminLogin.vm" />
     <None Include="templates\AllBuilds.vm" />
     <None Include="templates\BuildLog.vm" />
     <None Include="templates\BuildRows.vm" />

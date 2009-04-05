@@ -1,0 +1,19 @@
+﻿<package>
+  <name>Server Information Display</name>
+  <description>Display the information on the server.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Templates</location>
+      <files>
+        <file>ServerInfo.vm</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/serverPlugins</path>
+      <name>serverInformationServerPlugin</name>
+    </setting>
+  </configuration>
+</package>
