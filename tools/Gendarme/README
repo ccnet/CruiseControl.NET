@@ -22,6 +22,7 @@ IMPORTANT NOTES
 and tested on monobuild. See mono-tools on http://mono.ximian.com/monobuild/
 (checking out gendarme without its parent dir 'mono-tools' is not supported)
 
-* MonoDevelop and Visual Studio project files are NOT always up to date
-with Makefiles. This depends on the developer making changes and his 
-personal access to the developing environments.
+* Visual Studio solutions and projects files (usable by both MonoDevelop
+and Visual Studio .NET 2008) are NOT always up to date with Makefiles. 
+This depends on the developer making changes and his personal access to 
+the developing environments.

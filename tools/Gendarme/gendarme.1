@@ -11,7 +11,7 @@
 .if t .sp .5v
 .if n .sp
 ..
-.TH Gendarme "Gendarme 2.2.0.0"
+.TH Gendarme "Gendarme 2.4.0.0"
 .SH NAME
 Gendarme \- Rule-based code analysis for Mono::
 .SH SYNOPSIS
@@ -75,6 +75,11 @@ line.
 This files contains a list of all the rulesets available to Gendarme. Each 
 ruleset includes a list of assemblies in which some, or all, rules can be
 verified (include) or not (exclude).
++.TP
++.I gendarme.exe.config
++Used by debug versions of Gendarme to enable logging for rules. A config
++file will be generated automatically by the make file. To enable logging
++for a rule add a switch using the rule's name and set the value to 1.
 .SH ENVIRONMENT VARIABLES
 .TP
 .I GENDARME_COLOR
