@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -76,10 +76,11 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			else
 			{
 				currentRevision = integrationResult.LastChangeNumber;
+				Log.Debug(string.Concat("LastChangeNumber is: ", currentRevision.ToString()));
 
 				// use the revision from last build,
-				// because LastChangeNumber is 0 on ForceBuild
-				if (currentRevision == 0 && integrationResult.BuildCondition == BuildCondition.ForceBuild)
+				// because LastChangeNumber is 0 on ForceBuild or other failures
+				if (currentRevision <= 0)
 					currentRevision = oldVersion.Revision;
 			}
 
