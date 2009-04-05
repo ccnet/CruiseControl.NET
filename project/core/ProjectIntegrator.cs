@@ -185,7 +185,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     }
                     
 
-                    if ( (AmountOfSourceControlExceptions == project.MaxSourceControlRetries )
+                    if ( (AmountOfSourceControlExceptions > project.MaxSourceControlRetries )
                         && (project.SourceControlErrorHandling == ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportOnEveryRetryAmount))
                     {
                         AmountOfSourceControlExceptions = 0;
