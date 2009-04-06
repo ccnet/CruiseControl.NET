@@ -20,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.Service
 
         private ICruiseServer server;
         private bool isStopping = false;
+        private object lockObject = new object();
 
         private string ConfigFilename
         {
@@ -57,12 +58,23 @@ namespace ThoughtWorks.CruiseControl.Service
 
         public void Stop(string reason)
         {
-            if (!isStopping)
+            // Since there may be a race condition around stopping the runner, check if it should be stopped
+            // within a lock statement
+            bool stopRunner = false;
+            lock (lockObject)
             {
-                isStopping = true;
-                Log.Info("Stopping service: " + reason);
-                server.Stop();
-                server.WaitForExit();
+                if (!isStopping)
+                {
+                    stopRunner = true;
+                    isStopping = true;
+                }
+            }
+            if (stopRunner)
+            {
+                // Perform the actual stop
+                Log.Info("Stopping console: " + reason);
+                    server.Stop();
+                    server.WaitForExit();
             }
         }
 
