@@ -1,4 +1,4 @@
-﻿<h3>Dashboard Administration</h3>
+<h3>Dashboard Administration</h3>
 #if ($Error != "")
 <div class="ui-widget">
 	<div class="ui-state-error ui-corner-all"> 
