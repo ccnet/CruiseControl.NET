@@ -201,13 +201,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			XmlDocument doc = new XmlDocument();
 			doc.LoadXml(historyXml);
 
-			if (doc.FirstChild.ChildNodes.Count == 0)
+			//if (doc.FirstChild.ChildNodes.Count == 0)
+            int nodeCount = doc.FirstChild.ChildNodes.Count;
+            if (nodeCount <= entriesToKeep)
 				return;
 
-			int nodeCount = doc.FirstChild.ChildNodes.Count;
+			
 			StringWriter cleanedHistory = new StringWriter();
 
-			for (int i = nodeCount - entriesToKeep; i <= nodeCount - 1; i++)
+			for (int i = nodeCount - entriesToKeep; i < nodeCount ; i++)
 			{
 				cleanedHistory.WriteLine(doc.FirstChild.ChildNodes[i].OuterXml);
 			}

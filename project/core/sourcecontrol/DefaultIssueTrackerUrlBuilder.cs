@@ -25,40 +25,40 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 //this must be the issue ID
                 //from the last position of this part, go back while the characters are numeric                
 
-                if ((mod != null) && !string.IsNullOrEmpty(mod.Comment))
+                if ((mod != null) && !string.IsNullOrEmpty(mod.Comment) && mod.Comment.Length > 0)
                 {
-                    string SearchingComment = mod.Comment.Split(' ')[0];
-                    int EndPosition = SearchingComment.Length - 1;
-                    char CurrentChar = SearchingComment[EndPosition];
-                    string Result = string.Empty;
-                    bool NumericPartFound = false;
-
-                    //eliminate non numeric characters at the end (ex type  [ccnet-1500])
-                    while (EndPosition > 0 && !char.IsNumber(CurrentChar))
+                    if (mod.Comment.IndexOf(' ') != 0)
                     {
-                        EndPosition--;
-                        CurrentChar = SearchingComment[EndPosition];
+                        string SearchingComment = mod.Comment.Split(' ')[0];
+                        int EndPosition = SearchingComment.Length - 1;
+                        char CurrentChar = SearchingComment[EndPosition];
+                        string Result = string.Empty;
+                        bool NumericPartFound = false;
+
+                        //eliminate non numeric characters at the end (ex type  [ccnet-1500])
+                        while (EndPosition > 0 && !char.IsNumber(CurrentChar))
+                        {
+                            EndPosition--;
+                            CurrentChar = SearchingComment[EndPosition];
+                        }
+
+
+                        //while last position is numeric add to result
+                        while (EndPosition >= 0 && char.IsNumber(CurrentChar))
+                        {
+                            Result = Result.Insert(0, CurrentChar.ToString());
+                            EndPosition--;
+                            if (EndPosition >= 0) CurrentChar = SearchingComment[EndPosition];
+
+                            NumericPartFound = true;
+                        }
+
+                        if (NumericPartFound)
+                        {
+                            mod.IssueUrl = string.Format(_url, Result);
+                        }
                     }
-
-
-                    //while last position is numeric add to result
-                    while (EndPosition >= 0 && char.IsNumber(CurrentChar))
-                    {
-                        Result = Result.Insert(0, CurrentChar.ToString());
-                        EndPosition--;
-                        if (EndPosition >= 0 ) CurrentChar = SearchingComment[EndPosition];
-                        
-                        NumericPartFound = true;
-                    }
-
-
-
-
-                    if (NumericPartFound)
-                    {
-                        mod.IssueUrl = string.Format(_url, Result);    
-                    }
-                }                
+                }
             }
         }
 
