@@ -139,5 +139,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
             Assert.IsNull(mods[0].IssueUrl);
         }
 
+
+        [Test]
+        public void JustASpace()
+        {
+            Modification[] mods = new Modification[1];
+            mods[0] = new Modification();
+            mods[0].FolderName = "/trunk";
+            mods[0].FileName = "nant.bat";
+            mods[0].ChangeNumber = 3;
+            mods[0].Comment = " ";
+
+            DefaultIssueTrackerUrlBuilder defaultIssue = CreateBuilder();
+            defaultIssue.SetupModification(mods);
+
+            Assert.IsNull(mods[0].IssueUrl);
+        }
+
     }
 }
