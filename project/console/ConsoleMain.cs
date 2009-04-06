@@ -2,11 +2,14 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.Runtime.Remoting;
 
 namespace ThoughtWorks.CruiseControl.Console
 {
 	public class ConsoleMain
 	{
+        private static object lockObject = new object();
+
 		[STAThread]
 		internal static int Main(string[] args)
 		{
@@ -20,7 +23,20 @@ namespace ThoughtWorks.CruiseControl.Console
                 // Start monitoring file changes
                 watcher.Changed += delegate(object sender, FileSystemEventArgs e)
                 {
-                    if (!restart) runner.Stop(e.Name + " has changed");
+                    if (!restart)
+                    {
+                        lock (lockObject)
+                        {
+                            try
+                            {
+                                runner.Stop("One or more DLLs have changed");
+                            }
+                            catch (RemotingException)
+                            {
+                                // Sometimes this exception occurs - the lock statement should catch it, but...
+                            }
+                        }
+                    }
                     restart = true;
                     restartTime = DateTime.Now.AddSeconds(10);
                 };
