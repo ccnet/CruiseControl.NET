@@ -130,5 +130,11 @@ namespace ThoughtWorks.CruiseControl.Remote
         string GetModificationHistoryDocument(string projectName);
 
         string GetRSSFeed(string projectName);
-	}
+
+        /// <summary>
+        /// Retrieve the amount of free disk space.
+        /// </summary>
+        /// <returns></returns>
+        long GetFreeDiskSpace();
+    }
 }

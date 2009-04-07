@@ -262,5 +262,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
                 (CruiseServerSnapshotOnServer[])cruiseServerSnapshotsOnServers.ToArray(typeof(CruiseServerSnapshotOnServer)),
                 (CruiseServerException[])exceptions.ToArray(typeof(CruiseServerException)));
         }
+
+        /// <summary>
+        /// Retrieve the amount of free disk space.
+        /// </summary>
+        /// <returns></returns>
+        public long GetFreeDiskSpace(IServerSpecifier serverSpecifier)
+        {
+            long space = GetCruiseManager(serverSpecifier).GetFreeDiskSpace();
+            return space;
+        }
     }
 }

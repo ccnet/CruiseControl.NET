@@ -26,5 +26,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions(IServerSpecifier serverSpecifier);
         string GetModificationHistoryDocument(IProjectSpecifier projectSpecifier);
         string GetRSSFeed(IProjectSpecifier projectSpecifier);
-	}
+
+        /// <summary>
+        /// Retrieve the amount of free disk space.
+        /// </summary>
+        /// <returns></returns>
+        long GetFreeDiskSpace(IServerSpecifier serverSpecifier);
+    }
 }

@@ -6,6 +6,7 @@ using ThoughtWorks.CruiseControl.Core.Logging;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Configuration;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -328,5 +329,18 @@ namespace ThoughtWorks.CruiseControl.Core
 				// Thread name has already been set.  This only happens during unit tests.
 			}
 		}
+
+        /// <summary>
+        /// Retrieves the amount of free disk space.
+        /// </summary>
+        /// <returns></returns>
+        public long GetFreeDiskSpace()
+        {
+            string drive = ConfigurationManager.AppSettings["DataDrive"];
+            if (string.IsNullOrEmpty(drive)) drive = "C:";
+            IFileSystem fileSystem = new SystemIoFileSystem();
+            long diskSpace = fileSystem.GetFreeDiskSpace(drive);
+            return diskSpace;
+        }
 	}
 }
