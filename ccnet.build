@@ -171,7 +171,7 @@
 		</copy>
 	</target>
 
-	<target name="deploy.webdashboard" description="deploys the web dashboard application">
+	<target name="deploy.webdashboard" description="deploys the web dashboard application" depends="compile,build.packages">
 		<mkdir dir="${webdashboard.dir}" verbose="${verbosity}"/>
 		<copy todir="${webdashboard.dir}\bin">
 			<fileset basedir="${build.dir}\webdashboard">
@@ -350,5 +350,119 @@
     		</fileset>
     	</delete>
     </target>
-    
+
+  <target name="build.packages" description="Generates the dashboard packages"
+          depends="build.admin.package,build.queueStatus.package,build.serverLog.package,build.serverInfo.package,build.serverConfig.package,build.projectStats.package,build.projectConfig.package,build.modificationHistory.package,build.nunit.package">
+    <copy file="${src.dir}\webdashboard\Packages\packages.xml" tofile="deployed\webdashboard\Packages\packages.xml" verbose="${verbosity}"/>
+    <copy todir="deployed\webdashboard\Packages" verbose="${verbosity}">
+      <fileset basedir="${build.dir}\webdashboard\Packages">
+        <include name="*.zip" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="build.admin.package" description="Generates the web dashboard admin package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\DashboardAdmin.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\DashboardAdmin">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\WebDashboard\Templates">
+        <include name="AdminLogin.vm"/>
+        <include name="AdministerDashboard.vm"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.queueStatus.package" description="Generates the queue status package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\QueueStatus.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\QueueStatus">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\WebDashboard\Templates">
+        <include name="ServerQueueStatus.vm"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.serverLog.package" description="Generates the server log package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\ServerLog.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\ServerLog">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\WebDashboard\Templates">
+        <include name="ServerLog.vm"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.serverInfo.package" description="Generates the server information package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\ServerInfo.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\ServerInformation">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\WebDashboard\Templates">
+        <include name="ServerInfo.vm"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.serverConfig.package" description="Generates the server configuration package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\ServerConfig.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\ServerConfig">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\WebDashboard\Templates">
+        <include name="ProjectServerConfiguration.vm"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.projectStats.package" description="Generates the project statistics package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\ProjectStats.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\ProjectStatistics">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\WebDashboard\Xsl">
+        <include name="StatisticsGraphs.xsl"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.projectConfig.package" description="Generates the project configuration package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\ProjectConfig.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\ProjectConfig">
+        <include name="*.*"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.modificationHistory.package" description="Generates the modification history package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\ModificationHistory.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\ModificationHistory">
+        <include name="*.*"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.nunit.package" description="Generates the NUnit package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\NUnit.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\NUnit">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\WebDashboard\Xsl">
+        <include name="unittests.xsl"/>
+        <include name="tests.xsl"/>
+        <include name="timing.xsl"/>
+      </fileset>
+    </zip>
+  </target>
 </project>

@@ -1,25 +1,37 @@
 using System;
 using System.Configuration;
-using System.Globalization;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
-using System.Threading;
-using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Config;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Service
 {
     public class CCService : ServiceBase
     {
-        AppRunner runner;
+        private AppRunner runner;
         public const string DefaultServiceName = "CCService";
+        private object lockObject = new object();
+        private FileSystemWatcher watcher;
+        private AppDomain runnerDomain;
+        private System.Timers.Timer waitTimer = new System.Timers.Timer(15000);
 
         public CCService()
         {
+            if (string.Equals(ConfigurationManager.AppSettings["DebugCCService"], "yes", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Debugger.Launch();
+            }
+            // Initialise the wait timer
+            waitTimer.AutoReset = false;
+            waitTimer.Elapsed += delegate(object sender, System.Timers.ElapsedEventArgs e)
+            {
+                lock (lockObject)
+                {
+                    if (runner == null) RunApplication();
+                }
+            };
             ServiceName = LookupServiceName();
         }
 
@@ -30,40 +42,51 @@ namespace ThoughtWorks.CruiseControl.Service
 
         private void RunApplication()
         {
-            bool restart = true;
-            while (restart)
+            if (watcher == null)
             {
-                using (FileSystemWatcher watcher = new FileSystemWatcher(AppDomain.CurrentDomain.BaseDirectory, "ThoughtWorks.CruiseControl.Core.dll"))
+                watcher = new FileSystemWatcher(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+                watcher.Changed += delegate(object sender, FileSystemEventArgs e)
                 {
-                    restart = false;
-
-                    AppDomain newDomain = AppDomain.CreateDomain("CC.Net",
-                        null,
-                        AppDomain.CurrentDomain.BaseDirectory,
-                        AppDomain.CurrentDomain.RelativeSearchPath,
-                        true);
-                    runner = newDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().Location,
-                        typeof(AppRunner).FullName) as AppRunner;
-
-                    watcher.Changed += delegate(object sender, FileSystemEventArgs e) { restart = true; runner.Stop(e.Name + " has changed"); };
-                    watcher.EnableRaisingEvents = true;
-                    watcher.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.Size;
-
-                    runner.Run();
-                    AppDomain.Unload(newDomain);
-                }
+                    StopRunner("One or more DLLs have changed");
+                    waitTimer.Stop();
+                    waitTimer.Start();
+                };
+                watcher.EnableRaisingEvents = true;
+                watcher.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.Size;
             }
+
+            runnerDomain = AppDomain.CreateDomain("CC.Net",
+                null,
+                AppDomain.CurrentDomain.BaseDirectory,
+                AppDomain.CurrentDomain.RelativeSearchPath,
+                true);
+            runner = runnerDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().Location,
+                typeof(AppRunner).FullName) as AppRunner;
+            runner.Run();
         }
 
         // Should this be stop or abort?
         protected override void OnStop()
         {
-            runner.Stop("Service is stopped");
+            StopRunner("Service is stopped");
         }
 
         protected override void OnPause()
         {
-            runner.Stop("Service is paused");
+            StopRunner("Service is paused");
+        }
+
+        private void StopRunner(string reason)
+        {
+            lock (lockObject)
+            {
+                if (runner != null)
+                {
+                    runner.Stop(reason);
+                    AppDomain.Unload(runnerDomain);
+                    runner = null;
+                }
+            }
         }
 
         protected override void OnContinue()
@@ -74,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.Service
         private static string LookupServiceName()
         {
             string serviceName = ConfigurationManager.AppSettings["service.name"];
-            return StringUtil.IsBlank(serviceName) ? DefaultServiceName : serviceName;
+            return string.IsNullOrEmpty(serviceName) ? DefaultServiceName : serviceName;
         }
 
         private static void Main()
@@ -89,11 +112,21 @@ namespace ThoughtWorks.CruiseControl.Service
         // process supplies them with a console.
         private static void AllocateWin32Console()
         {
-            if (new ExecutionEnvironment().IsRunningOnWindows)
-                AllocConsole();
+            if (IsRunningOnWindows) AllocConsole();
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool AllocConsole();
+
+        private static bool IsRunningOnWindows
+        {
+            get
+            {
+                // mono returns 128 when running on linux, .NET 2.0 returns 4
+                // see http://www.mono-project.com/FAQ:_Technical
+                int platform = (int)Environment.OSVersion.Platform;
+                return ((platform != 4) && (platform != 128));
+            }
+        }
     }
 }

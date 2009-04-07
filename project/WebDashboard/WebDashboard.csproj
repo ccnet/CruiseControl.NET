@@ -679,6 +679,16 @@
     <Content Include="images\rss.png" />
     <Content Include="images\shim.gif" />
     <Content Include="images\tw_dev_logo.gif" />
+    <Content Include="packages\DashboardAdmin\Manifest.xml" />
+    <Content Include="packages\ModificationHistory\Manifest.xml" />
+    <Content Include="packages\NUnit\Manifest.xml" />
+    <Content Include="packages\packages.xml" />
+    <Content Include="packages\ProjectConfig\Manifest.xml" />
+    <Content Include="packages\ProjectStatistics\Manifest.xml" />
+    <Content Include="packages\QueueStatus\Manifest.xml" />
+    <Content Include="packages\ServerConfig\Manifest.xml" />
+    <Content Include="packages\ServerInformation\Manifest.xml" />
+    <Content Include="packages\ServerLog\Manifest.xml" />
     <None Include="dashboard.config" />
     <None Include="templates\ActionException.vm" />
     <None Include="templates\AddProject.vm" />
