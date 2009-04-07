@@ -11,17 +11,24 @@ using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using System.Runtime.Remoting;
+using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.Service
 {
     public class CCService : ServiceBase
     {
-        AppRunner runner;
+        private AppRunner runner;
         public const string DefaultServiceName = "CCService";
         private object lockObject = new object();
+        private FileSystemWatcher watcher;
+        private AppDomain runnerDomain;
 
         public CCService()
         {
+            if (string.Equals(ConfigurationManager.AppSettings["DebugCCService"], "yes", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Debugger.Launch();
+            }
             ServiceName = LookupServiceName();
         }
 
@@ -32,33 +39,26 @@ namespace ThoughtWorks.CruiseControl.Service
 
         private void RunApplication()
         {
-            bool restart = true;
-            while (restart)
+            if (watcher == null)
             {
-                using (FileSystemWatcher watcher = new FileSystemWatcher(AppDomain.CurrentDomain.BaseDirectory, "ThoughtWorks.CruiseControl.Core.dll"))
+                watcher = new FileSystemWatcher(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+                watcher.Changed += delegate(object sender, FileSystemEventArgs e)
                 {
-                    restart = false;
-
-                    AppDomain newDomain = AppDomain.CreateDomain("CC.Net",
-                        null,
-                        AppDomain.CurrentDomain.BaseDirectory,
-                        AppDomain.CurrentDomain.RelativeSearchPath,
-                        true);
-                    runner = newDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().Location,
-                        typeof(AppRunner).FullName) as AppRunner;
-
-                    watcher.Changed += delegate(object sender, FileSystemEventArgs e)
-                    {
-                        restart = true;
-                        StopRunner("One or more DLLs have changed");
-                    };
-                    watcher.EnableRaisingEvents = true;
-                    watcher.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.Size;
-
-                    runner.Run();
-                    AppDomain.Unload(newDomain);
-                }
+                    StopRunner("One or more DLLs have changed");
+                    RunApplication();
+                };
+                watcher.EnableRaisingEvents = true;
+                watcher.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.Size;
             }
+
+            runnerDomain = AppDomain.CreateDomain("CC.Net",
+                null,
+                AppDomain.CurrentDomain.BaseDirectory,
+                AppDomain.CurrentDomain.RelativeSearchPath,
+                true);
+            runner = runnerDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().Location,
+                typeof(AppRunner).FullName) as AppRunner;
+            runner.Run();
         }
 
         // Should this be stop or abort?
@@ -74,18 +74,13 @@ namespace ThoughtWorks.CruiseControl.Service
 
         private void StopRunner(string reason)
         {
-            if (runner != null)
+            lock (lockObject)
             {
-                lock (lockObject)
+                if (runner != null)
                 {
-                    try
-                    {
-                        runner.Stop(reason);
-                    }
-                    catch (RemotingException)
-                    {
-                        // Sometimes this exception occurs - the lock statement should catch it, but...
-                    }
+                    runner.Stop(reason);
+                    AppDomain.Unload(runnerDomain);
+                    runner = null;
                 }
             }
         }

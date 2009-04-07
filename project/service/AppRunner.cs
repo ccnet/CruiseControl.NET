@@ -73,8 +73,8 @@ namespace ThoughtWorks.CruiseControl.Service
             {
                 // Perform the actual stop
                 Log.Info("Stopping console: " + reason);
-                    server.Stop();
-                    server.WaitForExit();
+                server.Stop();
+                server.WaitForExit();
             }
         }
 
