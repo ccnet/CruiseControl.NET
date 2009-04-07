@@ -10,6 +10,7 @@ using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Runtime.Remoting;
 
 namespace ThoughtWorks.CruiseControl.Service
 {
@@ -17,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.Service
     {
         AppRunner runner;
         public const string DefaultServiceName = "CCService";
+        private object lockObject = new object();
 
         public CCService()
         {
@@ -45,7 +47,11 @@ namespace ThoughtWorks.CruiseControl.Service
                     runner = newDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().Location,
                         typeof(AppRunner).FullName) as AppRunner;
 
-                    watcher.Changed += delegate(object sender, FileSystemEventArgs e) { restart = true; runner.Stop(e.Name + " has changed"); };
+                    watcher.Changed += delegate(object sender, FileSystemEventArgs e)
+                    {
+                        restart = true;
+                        StopRunner("One or more DLLs have changed");
+                    };
                     watcher.EnableRaisingEvents = true;
                     watcher.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.Size;
 
@@ -58,12 +64,30 @@ namespace ThoughtWorks.CruiseControl.Service
         // Should this be stop or abort?
         protected override void OnStop()
         {
-            runner.Stop("Service is stopped");
+            StopRunner("Service is stopped");
         }
 
         protected override void OnPause()
         {
-            runner.Stop("Service is paused");
+            StopRunner("Service is paused");
+        }
+
+        private void StopRunner(string reason)
+        {
+            if (runner != null)
+            {
+                lock (lockObject)
+                {
+                    try
+                    {
+                        runner.Stop(reason);
+                    }
+                    catch (RemotingException)
+                    {
+                        // Sometimes this exception occurs - the lock statement should catch it, but...
+                    }
+                }
+            }
         }
 
         protected override void OnContinue()
