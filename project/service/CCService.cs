@@ -1,17 +1,10 @@
 using System;
 using System.Configuration;
-using System.Globalization;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
-using System.Threading;
-using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Config;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
-using System.Runtime.Remoting;
-using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.Service
 {
@@ -22,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.Service
         private object lockObject = new object();
         private FileSystemWatcher watcher;
         private AppDomain runnerDomain;
+        private System.Timers.Timer waitTimer = new System.Timers.Timer(15000);
 
         public CCService()
         {
@@ -29,6 +23,15 @@ namespace ThoughtWorks.CruiseControl.Service
             {
                 Debugger.Launch();
             }
+            // Initialise the wait timer
+            waitTimer.AutoReset = false;
+            waitTimer.Elapsed += delegate(object sender, System.Timers.ElapsedEventArgs e)
+            {
+                lock (lockObject)
+                {
+                    if (runner == null) RunApplication();
+                }
+            };
             ServiceName = LookupServiceName();
         }
 
@@ -45,7 +48,8 @@ namespace ThoughtWorks.CruiseControl.Service
                 watcher.Changed += delegate(object sender, FileSystemEventArgs e)
                 {
                     StopRunner("One or more DLLs have changed");
-                    RunApplication();
+                    waitTimer.Stop();
+                    waitTimer.Start();
                 };
                 watcher.EnableRaisingEvents = true;
                 watcher.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.Size;
@@ -93,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.Service
         private static string LookupServiceName()
         {
             string serviceName = ConfigurationManager.AppSettings["service.name"];
-            return StringUtil.IsBlank(serviceName) ? DefaultServiceName : serviceName;
+            return string.IsNullOrEmpty(serviceName) ? DefaultServiceName : serviceName;
         }
 
         private static void Main()
@@ -108,11 +112,21 @@ namespace ThoughtWorks.CruiseControl.Service
         // process supplies them with a console.
         private static void AllocateWin32Console()
         {
-            if (new ExecutionEnvironment().IsRunningOnWindows)
-                AllocConsole();
+            if (IsRunningOnWindows) AllocConsole();
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool AllocConsole();
+
+        private static bool IsRunningOnWindows
+        {
+            get
+            {
+                // mono returns 128 when running on linux, .NET 2.0 returns 4
+                // see http://www.mono-project.com/FAQ:_Technical
+                int platform = (int)Environment.OSVersion.Platform;
+                return ((platform != 4) && (platform != 128));
+            }
+        }
     }
 }
