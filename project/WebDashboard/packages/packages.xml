@@ -1,11 +1,11 @@
 ﻿<packages>
-  <package name="Server Information Display" description="Display the information on the server." type="Plugin" file="ServerInfo.zip" installed="no" />
-  <package name="Server Log Display" description="Display the server log." type="Plugin" file="ServerLog.zip" installed="no" />
-  <package name="Server Configuration Display" description="Display the configuration for all the projects on a server." type="Plugin" file="ServerConfig.zip" installed="no" />
-  <package name="Queue Status Display" description="Display the status of the queues." type="Plugin" file="QueueStatus.zip" installed="no" />
-  <package name="Web Dashboard Administration" description="An administration console for the web dashboard." type="Plugin" file="DashboardAdmin.zip" installed="no" />
-  <package name="Project Configuration Display" description="Show the project configuration." type="Plugin" file="ProjectConfig.zip" installed="no" />
-  <package name="Modification History" description="Modification history for a project." type="Plugin" file="ModificationHistory.zip" installed="no" />
-  <package name="Project Statistics" description="Statistics for a project." type="Plugin" file="ProjectStats.zip" installed="no" />
-  <package name="NUnit Results" description="Display the results of a NUnit run." type="Plugin" file="NUnit.zip" installed="no" />
+  <package name="Server Information Display" description="Display the information on the server." type="Plugin" file="ServerInfo.zip" installed="yes" />
+  <package name="Server Log Display" description="Display the server log." type="Plugin" file="ServerLog.zip" installed="yes" />
+  <package name="Server Configuration Display" description="Display the configuration for all the projects on a server." type="Plugin" file="ServerConfig.zip" installed="yes" />
+  <package name="Queue Status Display" description="Display the status of the queues." type="Plugin" file="QueueStatus.zip" installed="yes" />
+  <package name="Web Dashboard Administration" description="An administration console for the web dashboard." type="Plugin" file="DashboardAdmin.zip" installed="yes" />
+  <package name="Project Configuration Display" description="Show the project configuration." type="Plugin" file="ProjectConfig.zip" installed="yes" />
+  <package name="Modification History" description="Modification history for a project." type="Plugin" file="ModificationHistory.zip" installed="yes" />
+  <package name="Project Statistics" description="Statistics for a project." type="Plugin" file="ProjectStats.zip" installed="yes" />
+  <package name="NUnit Results" description="Display the results of a NUnit run." type="Plugin" file="NUnit.zip" installed="yes" />
 </packages>
