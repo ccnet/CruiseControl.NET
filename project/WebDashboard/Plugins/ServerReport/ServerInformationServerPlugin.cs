@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 	{
 		private readonly IFarmService farmService;
 		private readonly IVelocityViewGenerator viewGenerator;
-        private long errorLevel = 1048576;
+		private long minFreeSpace = 1048576;
 
 		public ServerInformationServerPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator)
 		{
@@ -26,10 +26,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 		}
 
         [ReflectorProperty("minFreeSpace", Required = false)]
-        public long ErrorLevel
+		public long MinFreeSpace
         {
-            get { return errorLevel; }
-            set { errorLevel = value; }
+			get { return minFreeSpace; }
+			set { minFreeSpace = value; }
         }
 
 		public IResponse Execute(ICruiseRequest request)
@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 			velocityContext["servername"] = request.ServerSpecifier.ServerName;
             long freeSpace = farmService.GetFreeDiskSpace(request.ServerSpecifier);
             velocityContext["serverSpace"] = FormatSpace(freeSpace);
-            velocityContext["spaceMessage"] = errorLevel > freeSpace ?
+			velocityContext["spaceMessage"] = minFreeSpace > freeSpace ?
                 "WARNING: Disk space is running low!" :
                 string.Empty;
 			
