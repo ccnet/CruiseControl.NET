@@ -156,6 +156,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="configuration\DefaultQueueConfiguration.cs" />
+    <Compile Include="configuration\IConfigurationValidation.cs" />
     <Compile Include="configuration\INetReflectorConfigurationReader.cs" />
     <Compile Include="configuration\QueueDuplicateHandling.cs" />
     <Compile Include="configuration\Configuration.cs">

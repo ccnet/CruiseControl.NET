@@ -4,6 +4,7 @@ using System.Net.Mail;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Config;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -13,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// are configurable.
     /// </summary>
     [ReflectorType("email")]
-    public class EmailPublisher : ITask
+    public class EmailPublisher : ITask, IConfigurationValidation
     {
         private EmailGateway emailGateway = new EmailGateway();
         private string fromAddress;
@@ -260,5 +261,41 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 return message;
             }
         }
+
+        #region Validate()
+        /// <summary>
+        /// Checks the internal validation of the item.
+        /// </summary>
+        /// <param name="configuration">The entire configuration.</param>
+        /// <param name="parent">The parent item for the item being validated.</param>
+        public virtual void Validate(IConfiguration configuration, object parent)
+        {
+            if (parent is Project)
+            {
+                Project parentProject = parent as Project;
+
+                // Attempt to find this publisher in the publishers section
+                bool isPublisher = false;
+                foreach (ITask task in parentProject.Publishers)
+                {
+                    if (task == this)
+                    {
+                        isPublisher = true;
+                        break;
+                    }
+                }
+
+                // If not found then throw a validation exception
+                if (!isPublisher)
+                {
+                    throw new CruiseControlException("Email publishers are only allowed in the publishers section of the configuration");
+                }
+            }
+            else
+            {
+                throw new CruiseControlException("This publisher can only belong to a project");
+            }
+        }
+        #endregion
     }
 }

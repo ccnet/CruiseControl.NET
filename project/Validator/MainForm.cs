@@ -267,6 +267,7 @@ namespace Validator
                 }
 
                 myBodyEl.AppendChild(tableEl);
+                InternalValidation(configuration);
 
                 DisplayProcessedConfiguration(items);
             }
@@ -439,6 +440,66 @@ namespace Validator
                 Name = name;
                 Configuration = config;
             }
+        }
+
+        private void InternalValidation(Configuration configuration)
+        {
+            DisplayProgressMessage("Validating internal integrity, please wait...", 90);
+
+            HtmlElement nameEl = GenerateElement("div",
+                new HtmlAttribute("class", "titleLine"),
+                GenerateElement("b", "Internal validation"));
+            myBodyEl.AppendChild(nameEl);
+            bool isValid = true;
+            int row = 0;
+
+            foreach (IProject project in configuration.Projects)
+            {
+                if (project is IConfigurationValidation)
+                {
+                    isValid &= RunValidationCheck(configuration, project as IConfigurationValidation, "project '" + project.Name + "'", ref row);
+                }
+            }
+
+            foreach (IQueueConfiguration queue in configuration.QueueConfigurations)
+            {
+                if (queue is IConfigurationValidation)
+                {
+                    isValid &= RunValidationCheck(configuration, queue as IConfigurationValidation, "queue '" + queue.Name + "'", ref row);
+                }
+            }
+
+            if (isValid)
+            {
+                myBodyEl.AppendChild(
+                    GenerateElement("div",
+                    "Internal validation passed"));
+            }
+        }
+
+        private bool RunValidationCheck(Configuration configuration, IConfigurationValidation validator, string name, ref int row)
+        {
+            bool isValid = true;
+
+            try
+            {
+                validator.Validate(configuration, null);
+            }
+            catch (Exception error)
+            {
+                HtmlAttribute rowClass = new HtmlAttribute("class", (row % 2) == 1 ? "even" : "odd");
+                myBodyEl.AppendChild(
+                    GenerateElement("div",
+                        rowClass,
+                        GenerateElement("div",
+                        new HtmlAttribute("class", "error"),
+                        string.Format("Internal validation failed for {0}: {1}",
+                            name,
+                            error.Message))));
+                isValid = false;
+                row++;
+            }
+            return isValid;
         }
     }
 }

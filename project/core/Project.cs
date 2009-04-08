@@ -12,6 +12,7 @@ using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Config;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -33,7 +34,8 @@ namespace ThoughtWorks.CruiseControl.Core
     /// </code>
     /// </remarks>
     [ReflectorType("project")]
-    public class Project : ProjectBase, IProject, IIntegrationRunnerTarget, IIntegrationRepository
+    public class Project : ProjectBase, IProject, IIntegrationRunnerTarget, IIntegrationRepository, 
+        IConfigurationValidation
     {
         private string webUrl = DefaultUrl();
         private string queueName = string.Empty;
@@ -456,6 +458,48 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             get { return startupState; }
             set { startupState = value; }
+        }
+
+        /// <summary>
+        /// Checks the internal validation of the item.
+        /// </summary>
+        /// <param name="configuration">The entire configuration.</param>
+        /// <param name="parent">The parent item for the item being validated.</param>
+        public virtual void Validate(IConfiguration configuration, object parent)
+        {
+            ValidateItem(sourceControl, configuration);
+            ValidateItem(labeller, configuration);
+            ValidateItems(PrebuildTasks, configuration);
+            ValidateItems(tasks, configuration);
+            ValidateItems(publishers, configuration);
+            ValidateItem(state, configuration);
+        }
+
+        /// <summary>
+        /// Validates the configuration of an item.
+        /// </summary>
+        /// <param name="item"></param>
+        private void ValidateItem(object item, IConfiguration configuration)
+        {
+            if ((item != null) && (item is IConfigurationValidation))
+            {
+                (item as IConfigurationValidation).Validate(configuration, this);
+            }
+        }
+
+        /// <summary>
+        /// Validates the configuration of an enumerable.
+        /// </summary>
+        /// <param name="item"></param>
+        private void ValidateItems(IEnumerable items, IConfiguration configuration)
+        {
+            if (items != null)
+            {
+                foreach (object item in items)
+                {
+                    ValidateItem(item, configuration);
+                }
+            }
         }
     }
 }

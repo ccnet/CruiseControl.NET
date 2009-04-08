@@ -126,22 +126,21 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// </remarks>
         private void ValidateConfiguration(Configuration value)
         {
-            // Ensure that there are no orphaned queues
-            foreach (IQueueConfiguration queueDef in value.QueueConfigurations)
+            // Validate all the projects
+            foreach (IProject project in value.Projects)
             {
-                bool queueFound = false;
-                foreach (IProject projectDef in value.Projects)
+                if (project is IConfigurationValidation)
                 {
-                    if (string.Equals(queueDef.Name, projectDef.QueueName, StringComparison.InvariantCulture))
-                    {
-                        queueFound = true;
-                        break;
-                    }
+                    (project as IConfigurationValidation).Validate(value, null);
                 }
-                if (!queueFound)
+            }
+
+            // Validate all the queues
+            foreach (IQueueConfiguration queue in value.QueueConfigurations)
+            {
+                if (queue is IConfigurationValidation)
                 {
-                    throw new ConfigurationException(
-                        string.Format("An unused queue definition has been found: name '{0}'", queueDef.Name));
+                    (queue as IConfigurationValidation).Validate(value, null);
                 }
             }
         }
