@@ -333,14 +333,26 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Retrieves the amount of free disk space.
         /// </summary>
-        /// <returns></returns>
-        public long GetFreeDiskSpace()
+		/// <returns>The amount of free space in bytes.</returns>
+		public long GetFreeDiskSpace()
         {
-            string drive = ConfigurationManager.AppSettings["DataDrive"];
-            if (string.IsNullOrEmpty(drive)) drive = "C:";
-            IFileSystem fileSystem = new SystemIoFileSystem();
-            long diskSpace = fileSystem.GetFreeDiskSpace(drive);
-            return diskSpace;
+			//TODO: this is currently a hack
+			// this method sould return a collection of drives used by ccnet
+			// since each project can be hostet on a different drive.
+			// We should determine the drives used by a project
+			// (working, artefacs, SCM checkout, build publisher, etc)
+			// of each project and return a list of free disc space for every used drive.
+        	string drive = ConfigurationManager.AppSettings["DataDrive"];
+        	if (string.IsNullOrEmpty(drive))
+        	{
+        		if (System.IO.Path.DirectorySeparatorChar == '/')
+        			drive = "/";
+        		else
+        			drive = "C:";
+        	}
+
+        	IFileSystem fileSystem = new SystemIoFileSystem();
+			return fileSystem.GetFreeDiskSpace(drive);
         }
 	}
 }
