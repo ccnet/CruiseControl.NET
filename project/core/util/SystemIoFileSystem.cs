@@ -1,5 +1,7 @@
 using System.IO;
 using System.Text;
+using System.Runtime.InteropServices;
+using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -170,6 +172,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             }
         }
 
+        #region EnsureFolderExists()
         /// <summary>
         /// Ensures that the folder for the specified file exists.
         /// </summary>
@@ -179,5 +182,20 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             string directory = Path.GetDirectoryName(fileName);
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
         }
+        #endregion
+
+        #region GetFreeDiskSpace()
+        /// <summary>
+        /// Retrieves the free disk space for a drive.
+        /// </summary>
+		/// <param name="driveName">The name of the drive (e.g. c:).</param>
+        /// <returns>The amount of free space in bytes.</returns>
+        public long GetFreeDiskSpace(string driveName)
+        {
+			DriveInfo drive = new DriveInfo(driveName);
+
+        	return drive.AvailableFreeSpace;
+        }
+        #endregion
     }
 }

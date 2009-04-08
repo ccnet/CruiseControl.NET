@@ -6,6 +6,9 @@
 		<td align="Center">
 			<b>Server Version</b>
 		</td>
+		<td align="Center">
+			<b>Free Disk Space</b>
+		</td>
 	</tr>
 	<tr bgcolor="Ivory">
 		<td align="Center">
@@ -18,7 +21,21 @@
 				$serverversion
 			</font>
 		</td>
+		<td align="Center">
+			<font color="Black">
+				$serverSpace
+			</font>
+		</td>
 	</tr>
+	#if ($spaceMessage != "")
+	<tr>
+	    <td colspan="3" align="center">
+	        <font color="red">
+	            $spaceMessage
+	        </font>
+	    </td>
+	</tr>
+	#end
 </table>
 
 

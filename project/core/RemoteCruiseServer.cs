@@ -216,5 +216,14 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 			server.Dispose();
 		}
-	}
+
+        /// <summary>
+        /// Retrieves the amount of free disk space.
+        /// </summary>
+        /// <returns></returns>
+        public long GetFreeDiskSpace()
+        {
+            return server.GetFreeDiskSpace();
+        }
+    }
 }

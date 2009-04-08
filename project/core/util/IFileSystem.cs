@@ -19,5 +19,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="fileName">The name of the file, including the folder path.</param>
         /// <returns>The fileName.</returns>
         void EnsureFolderExists(string fileName);
+
+        /// <summary>
+        /// Retrieves the free disk space for a drive.
+        /// </summary>
+		/// <param name="driveName">The name of the drive (e.g. c:).</param>
+        /// <returns>The amount of free space in bytes.</returns>
+        long GetFreeDiskSpace(string driveName);
 	}
 }

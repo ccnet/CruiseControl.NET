@@ -163,5 +163,14 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			return cruiseServer.GetVersion();
 		}
+
+        /// <summary>
+        /// Retrieves the amount of free disk space.
+        /// </summary>
+        /// <returns></returns>
+        public long GetFreeDiskSpace()
+        {
+            return cruiseServer.GetFreeDiskSpace();
+        }
 	}
 }
