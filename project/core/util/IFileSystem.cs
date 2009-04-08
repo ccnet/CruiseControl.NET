@@ -23,8 +23,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <summary>
         /// Retrieves the free disk space for a drive.
         /// </summary>
-        /// <param name="drive">The name of the drive (e.g. c:).</param>
+		/// <param name="driveName">The name of the drive (e.g. c:).</param>
         /// <returns>The amount of free space in bytes.</returns>
-        long GetFreeDiskSpace(string drive);
+        long GetFreeDiskSpace(string driveName);
 	}
 }

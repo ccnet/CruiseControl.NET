@@ -188,36 +188,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <summary>
         /// Retrieves the free disk space for a drive.
         /// </summary>
-        /// <param name="drive">The name of the drive (e.g. c:).</param>
+		/// <param name="driveName">The name of the drive (e.g. c:).</param>
         /// <returns>The amount of free space in bytes.</returns>
-        public long GetFreeDiskSpace(string drive)
+        public long GetFreeDiskSpace(string driveName)
         {
-            long totalBytes;
-            long freeBytes;
-            long freeBytesAvail;
+			DriveInfo drive = new DriveInfo(driveName);
 
-            if (!Directory.Exists(drive))
-            {
-                throw new ArgumentException(string.Format("Invalid Drive {0}", drive));
-            }
-
-            GetDiskFreeSpaceEx(drive,
-                out freeBytesAvail,
-                out totalBytes,
-                out freeBytes);
-
-            return freeBytesAvail;
+        	return drive.AvailableFreeSpace;
         }
-        #endregion
-
-        #region Interop methods
-        #region GetDiskFreeSpaceEx()
-        [DllImport("kernel32.dll", EntryPoint = "GetDiskFreeSpaceExA")]
-        private static extern long GetDiskFreeSpaceEx(string lpDirectoryName,
-          out long lpFreeBytesAvailableToCaller,
-          out long lpTotalNumberOfBytes,
-          out long lpTotalNumberOfFreeBytes);
-        #endregion
         #endregion
     }
 }
