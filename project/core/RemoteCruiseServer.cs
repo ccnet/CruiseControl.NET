@@ -6,7 +6,7 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
-	public class RemoteCruiseServer : ICruiseServer
+	public class RemoteCruiseServer : CruiseServerEventsBase, ICruiseServer
 	{
 		public const string URI = "CruiseManager.rem";
 		public const string DefaultUri = "tcp://localhost:21234/" + URI;

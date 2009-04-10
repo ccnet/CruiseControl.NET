@@ -7,16 +7,20 @@ using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using System.Configuration;
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Events;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
-	public class CruiseServer : ICruiseServer
+	public class CruiseServer
+        : CruiseServerEventsBase, ICruiseServer
 	{
 		private readonly IProjectSerializer projectSerializer;
 		private readonly IConfigurationService configurationService;
 		private readonly ICruiseManager manager;
 		// TODO: Why the monitor? What reentrancy do we have? davcamer, dec 24 2008
 		private readonly ManualResetEvent monitor = new ManualResetEvent(true);
+        private readonly List<ICruiseServerExtension> extensions = new List<ICruiseServerExtension>();
 
 		private bool disposed;
 		private IntegrationQueueManager integrationQueueManager;
@@ -24,7 +28,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		public CruiseServer(IConfigurationService configurationService,
 		                    IProjectIntegratorListFactory projectIntegratorListFactory, 
                             IProjectSerializer projectSerializer,
-                            IProjectStateManager stateManager)
+                            IProjectStateManager stateManager,
+                            List<ExtensionConfiguration> extensionList)
 		{
 			this.configurationService = configurationService;
 			this.configurationService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(Restart));
@@ -37,21 +42,61 @@ namespace ThoughtWorks.CruiseControl.Core
 			IConfiguration configuration = configurationService.Load();
 			// TODO - does this need to go through a factory? GD
 			integrationQueueManager = new IntegrationQueueManager(projectIntegratorListFactory, configuration, stateManager);
-		}
+            integrationQueueManager.AssociateIntegrationEvents(OnIntegrationStarted, OnIntegrationCompleted);
 
-		public void Start()
+            // Load the extensions
+            if (extensionList != null)
+            {
+                InitialiseExtensions(extensionList);
+            }
+        }
+
+        #region Integration pass-through events
+        /// <summary>
+        /// Pass this event onto any listeners.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnIntegrationStarted(object sender, IntegrationStartedEventArgs args)
+        {
+            FireIntegrationStarted(args.Request, args.ProjectName);
+        }
+
+        /// <summary>
+        /// Pass this event onto any listeners.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnIntegrationCompleted(object sender, IntegrationCompletedEventArgs args)
+        {
+            FireIntegrationCompleted(args.Request, args.ProjectName, args.Status);
+        }
+        #endregion
+
+        public void Start()
 		{
 			Log.Info("Starting CruiseControl.NET Server");
 			monitor.Reset();
 			integrationQueueManager.StartAllProjects();
-		}
+
+            // Start the extensions
+            Log.Info("Starting extensions");
+            foreach (ICruiseServerExtension extension in extensions)
+            {
+                extension.Start();
+            }
+        }
 
 		/// <summary>
 		/// Start integrator for specified project. 
 		/// </summary>
 		public void Start(string project)
 		{
-			integrationQueueManager.Start(project);
+            if (!FireProjectStarting(project))
+            {
+                integrationQueueManager.Start(project);
+                FireProjectStarted(project);
+            }
 		}
 
 		/// <summary>
@@ -59,7 +104,14 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public void Stop()
 		{
-			Log.Info("Stopping CruiseControl.NET Server");
+            // Stop the extensions
+            Log.Info("Stopping extensions");
+            foreach (ICruiseServerExtension extension in extensions)
+            {
+                extension.Stop();
+            }
+            
+            Log.Info("Stopping CruiseControl.NET Server");
 			integrationQueueManager.StopAllProjects();
 			monitor.Set();
 		}
@@ -69,7 +121,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public void Stop(string project)
 		{
-			integrationQueueManager.Stop(project);
+            if (!FireProjectStopping(project))
+            {
+                integrationQueueManager.Stop(project);
+                FireProjectStopped(project);
+            }
 		}
 
 		/// <summary>
@@ -77,7 +133,14 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public void Abort()
 		{
-			Log.Info("Aborting CruiseControl.NET Server");
+            // Abort the extensions
+            Log.Info("Aborting extensions");
+            foreach (ICruiseServerExtension extension in extensions)
+            {
+                extension.Abort();
+            }
+            
+            Log.Info("Aborting CruiseControl.NET Server");
 			integrationQueueManager.Abort();
 			monitor.Set();
 		}
@@ -129,23 +192,35 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public void ForceBuild(string projectName, string enforcerName)
 		{
-			integrationQueueManager.ForceBuild(projectName, enforcerName);
+            if (!FireForceBuildReceived(projectName, enforcerName))
+            {
+                integrationQueueManager.ForceBuild(projectName, enforcerName);
+                FireForceBuildProcessed(projectName, enforcerName);
+            }
 		}
 
 		public void AbortBuild(string projectName, string enforcerName)
 		{
-			GetIntegrator(projectName).AbortBuild(enforcerName);
-		}
+            if (!FireAbortBuildReceived(projectName, enforcerName))
+            {
+                GetIntegrator(projectName).AbortBuild(enforcerName);
+                FireAbortBuildProcessed(projectName, enforcerName);
+            }
+        }
 		
 		public void WaitForExit(string projectName)
 		{
 			integrationQueueManager.WaitForExit(projectName);
 		}
 
-		public void Request(string project, IntegrationRequest request)
-		{
-			integrationQueueManager.Request(project, request);
-		}
+        public void Request(string project, IntegrationRequest request)
+        {
+            if (!FireForceBuildReceived(project, request.Source))
+            {
+                integrationQueueManager.Request(project, request);
+                FireForceBuildProcessed(project, request.Source);
+            }
+        }
 
 		public string GetLatestBuildName(string projectName)
 		{
@@ -276,8 +351,12 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public void SendMessage(string projectName, Message message)
 		{
-			Log.Info("New message received: " + message);
-			LookupProject(projectName).AddMessage(message);
+            if (!FireSendMessageReceived(projectName, message))
+            {
+                Log.Info("New message received: " + message);
+                LookupProject(projectName).AddMessage(message);
+                FireSendMessageProcessed(projectName, message);
+            }
 		}
 
 		public string GetArtifactDirectory(string projectName)
@@ -306,7 +385,31 @@ namespace ThoughtWorks.CruiseControl.Core
 		private IProjectIntegrator GetIntegrator(string projectName)
 		{
 			return integrationQueueManager.GetIntegrator(projectName);
-		}
+        }
+
+        #region InitialiseExtensions()
+        /// <summary>
+        /// Initialise all the extensions for the server.
+        /// </summary>
+        /// <param name="extensionList">The extensions to load.</param>
+        private void InitialiseExtensions(List<ExtensionConfiguration> extensionList)
+        {
+            foreach (ExtensionConfiguration extensionConfig in extensionList)
+            {
+                // See if we can find the type
+                Type extensionType = Type.GetType(extensionConfig.Type);
+                if (extensionType == null) throw new NullReferenceException(string.Format("Unable to find extension '{0}'", extensionConfig.Type));
+
+                // Load and initialise the extension
+                ICruiseServerExtension extension = Activator.CreateInstance(extensionType) as ICruiseServerExtension;
+                if (extension == null) throw new NullReferenceException(string.Format("Unable to create an instance of '{0}'", extensionType.FullName));
+                extension.Initialise(this, extensionConfig);
+
+                // Add to the list of extensions
+                extensions.Add(extension);
+            }
+        }
+        #endregion
 
 		void IDisposable.Dispose()
 		{

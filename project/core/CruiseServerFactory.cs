@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using ThoughtWorks.CruiseControl.Core.Config;
@@ -23,11 +24,17 @@ namespace ThoughtWorks.CruiseControl.Core
 		private static ICruiseServer CreateLocal(string configFile)
 		{
             IProjectStateManager stateManager = new XmlProjectStateManager();
+            // Load the extensions configuration
+            ServerConfiguration configuration = ConfigurationManager.GetSection("cruiseServer") as ServerConfiguration;
+            List<ExtensionConfiguration> extensionList = null;
+            if (configuration != null) extensionList = configuration.Extensions;
+
 			return new CruiseServer(
 				NewConfigurationService(configFile),
 				new ProjectIntegratorListFactory(),
 				new NetReflectorProjectSerializer(),
-                stateManager);
+                stateManager,
+                extensionList);
 		}
 
 		private static IConfigurationService NewConfigurationService(string configFile)

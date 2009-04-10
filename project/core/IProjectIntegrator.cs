@@ -1,4 +1,6 @@
 using ThoughtWorks.CruiseControl.Remote;
+using System;
+using ThoughtWorks.CruiseControl.Remote.Events;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -64,5 +66,17 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// Cancel a pending project integration request from the integration queue.
 		/// </summary>
 		void CancelPendingRequest();
-	}
+
+        #region Integration events
+        /// <summary>
+        /// A project integrator is starting an integration.
+        /// </summary>
+        event EventHandler<IntegrationStartedEventArgs> IntegrationStarted;
+
+        /// <summary>
+        /// A project integrator has completed an integration.
+        /// </summary>
+        event EventHandler<IntegrationCompletedEventArgs> IntegrationCompleted;
+        #endregion
+    }
 }

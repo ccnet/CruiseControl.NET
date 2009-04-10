@@ -1,4 +1,5 @@
 using System;
+using ThoughtWorks.CruiseControl.Remote.Events;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -130,6 +131,68 @@ namespace ThoughtWorks.CruiseControl.Remote
         string GetModificationHistoryDocument(string projectName);
 
         string GetRSSFeed(string projectName);
+
+        #region Events
+        /// <summary>
+        /// A project is starting.
+        /// </summary>
+        event EventHandler<CancelProjectEventArgs> ProjectStarting;
+
+        /// <summary>
+        /// A project has started.
+        /// </summary>
+        event EventHandler<ProjectEventArgs> ProjectStarted;
+
+        /// <summary>
+        /// A project is stopping.
+        /// </summary>
+        event EventHandler<CancelProjectEventArgs> ProjectStopping;
+
+        /// <summary>
+        /// A project has stopped.
+        /// </summary>
+        event EventHandler<ProjectEventArgs> ProjectStopped;
+
+        /// <summary>
+        /// A force build has been received.
+        /// </summary>
+        event EventHandler<CancelProjectEventArgs<string>> ForceBuildReceived;
+
+        /// <summary>
+        /// A force build has been processed.
+        /// </summary>
+        event EventHandler<ProjectEventArgs<string>> ForceBuildProcessed;
+
+        /// <summary>
+        /// An abort build has been received.
+        /// </summary>
+        event EventHandler<CancelProjectEventArgs<string>> AbortBuildReceived;
+
+        /// <summary>
+        /// An abort build has been processed.
+        /// </summary>
+        event EventHandler<ProjectEventArgs<string>> AbortBuildProcessed;
+
+        /// <summary>
+        /// A send message has been received.
+        /// </summary>
+        event EventHandler<CancelProjectEventArgs<Message>> SendMessageReceived;
+
+        /// <summary>
+        /// A send message has been processed.
+        /// </summary>
+        event EventHandler<ProjectEventArgs<Message>> SendMessageProcessed;
+
+        /// <summary>
+        /// A project integrator is starting an integration.
+        /// </summary>
+        event EventHandler<IntegrationStartedEventArgs> IntegrationStarted;
+
+        /// <summary>
+        /// A project integrator has completed an integration.
+        /// </summary>
+        event EventHandler<IntegrationCompletedEventArgs> IntegrationCompleted;
+        #endregion
 
         /// <summary>
         /// Retrieve the amount of free disk space.

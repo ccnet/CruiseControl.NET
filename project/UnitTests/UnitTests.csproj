@@ -340,11 +340,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\Config\PreprocessorTest.cs" />
+    <Compile Include="Core\Config\ServerConfigurationHandlerTest.cs" />
     <Compile Include="Core\Publishers\ManifestGeneratorTests.cs" />
     <Compile Include="Core\Publishers\ManifestImporterTests.cs" />
     <Compile Include="Core\Publishers\PackagePublisherTests.cs" />
     <Compile Include="Core\Label\AssemblyVersionLabellerTest.cs" />
     <Compile Include="Core\State\XmlProjectStateManagerTest.cs" />
+    <Compile Include="Remote\ExtensionConfigurationTests.cs" />
     <Compile Include="Core\Config\ValidatingLoaderTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -872,6 +874,7 @@
     <Compile Include="Remote\ProjectStatusCompatibilityTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Remote\ServerExtensionStub.cs" />
     <Compile Include="UnitTestUtils\ArrayConstraint.cs" />
     <Compile Include="UnitTestUtils\HashtableConstraint.cs">
       <SubType>Code</SubType>

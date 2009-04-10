@@ -4,6 +4,8 @@ using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System;
+using ThoughtWorks.CruiseControl.Remote.Events;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -156,5 +158,20 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			return integrationQueues.GetQueueNames();
 		}
+
+        /// <summary>
+        /// Associates the integration events.
+        /// </summary>
+        /// <param name="integrationStarted"></param>
+        /// <param name="integrationCompleted"></param>
+        public void AssociateIntegrationEvents(EventHandler<IntegrationStartedEventArgs> integrationStarted,
+            EventHandler<IntegrationCompletedEventArgs> integrationCompleted)
+        {
+            foreach (IProjectIntegrator integrator in projectIntegrators)
+            {
+                integrator.IntegrationStarted += integrationStarted;
+                integrator.IntegrationCompleted += integrationCompleted;
+            }
+        }
 	}
 }

@@ -201,6 +201,8 @@
     <Compile Include="configuration\preprocessor\Constant.cs" />
     <Compile Include="configuration\preprocessor\PreprocessorUrlResolver.cs" />
     <Compile Include="configuration\preprocessor\Utils.cs" />
+    <Compile Include="configuration\ServerConfiguration.cs" />
+    <Compile Include="configuration\ServerConfigurationHandler.cs" />
     <Compile Include="configuration\XmlValidatingLoader.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -222,6 +224,7 @@
     <Compile Include="CruiseServer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CruiseServerEventsBase.cs" />
     <Compile Include="CruiseServerFactory.cs">
       <SubType>Code</SubType>
     </Compile>

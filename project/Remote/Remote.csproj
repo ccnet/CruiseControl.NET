@@ -129,6 +129,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CruiseServerSnapshot.cs" />
+    <Compile Include="Events\CancelProjectEventArgs.cs" />
+    <Compile Include="Events\CancelProjectEventArgs.Generic.cs" />
+    <Compile Include="Events\IntegrationCompletedEventArgs.cs" />
+    <Compile Include="Events\IntegrationStartedEventArgs.cs" />
+    <Compile Include="Events\ProjectEventArgs.Generic.cs" />
+    <Compile Include="Events\ProjectEventArgs.cs" />
+    <Compile Include="ExtensionConfiguration.cs" />
     <Compile Include="ExternalLink.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -141,6 +148,7 @@
     <Compile Include="ICruiseServer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ICruiseServerExtension.cs" />
     <Compile Include="IntegrationRequest.cs">
       <SubType>Code</SubType>
     </Compile>

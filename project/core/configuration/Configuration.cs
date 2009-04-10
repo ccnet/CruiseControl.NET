@@ -6,14 +6,14 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 	public class Configuration : IConfiguration
 	{
 		private ProjectList projects = new ProjectList();
-        private List<IQueueConfiguration> _queueConfigurations = new List<IQueueConfiguration>();
+        private List<IQueueConfiguration> queueConfigurations = new List<IQueueConfiguration>();
 
         /// <summary>
         /// Store any custom queue configurations.
         /// </summary>
         public virtual List<IQueueConfiguration> QueueConfigurations
         {
-            get { return _queueConfigurations; }
+            get { return queueConfigurations; }
         }
 
 		public void AddProject(IProject project)
@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             IQueueConfiguration actualConfig = null;
 
             // Attempt to find the configuration
-            foreach (IQueueConfiguration config in _queueConfigurations)
+            foreach (IQueueConfiguration config in queueConfigurations)
             {
                 if (string.Equals(config.Name, name, StringComparison.InvariantCultureIgnoreCase))
                 {

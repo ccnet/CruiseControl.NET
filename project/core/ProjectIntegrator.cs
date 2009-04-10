@@ -4,6 +4,7 @@ using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Events;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -143,76 +144,111 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void Integrate()
 		{
-            
-
             while (integrationQueue.IsLocked)
             {
                 Thread.Sleep(200);
             }
 
             IntegrationRequest ir = integrationQueue.GetNextRequest(project);
-			if (ir != null)
-			{
-                // instruct the queue which is performing the integration to acquire locks
-                integrationQueue.ToggleQueueLocks(true);
+            if (ir != null)
+            {
+                // Check to see if this integration request should proceed - Extension point
+                IntegrationStartedEventArgs.EventResult eventResult = FireIntegrationStarted(ir);
+                switch (eventResult)
+                {
+                    case IntegrationStartedEventArgs.EventResult.Continue:
+                        // instruct the queue which is performing the integration to acquire locks
+                        integrationQueue.ToggleQueueLocks(true);
 
-                Log.Info(string.Format("Project: '{0}' is first in queue: '{1}' and shall start integration.",
-				                       project.Name, project.QueueName));
-                
-                IIntegrationResult result = new IntegrationResult();
+                        Log.Info(string.Format("Project: '{0}' is first in queue: '{1}' and shall start integration.",
+                                               project.Name, project.QueueName));
 
-				try
-				{                    
-                    ir.PublishOnSourceControlException = (AmountOfSourceControlExceptions == project.MaxSourceControlRetries) 
-                                                          || (project.SourceControlErrorHandling == ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure) ;
-					result = project.Integrate(ir);
-				}
-				finally
-				{
-					RemoveCompletedRequestFromQueue();
+                        IntegrationStatus status = IntegrationStatus.Unknown;
+                        IIntegrationResult result = new IntegrationResult();
 
-                    /// instruct the queue which is performing the integration to release locks
-                    integrationQueue.ToggleQueueLocks(false);
+                        try
+                        {
+                            ir.PublishOnSourceControlException = (AmountOfSourceControlExceptions == project.MaxSourceControlRetries)
+                                                                  || (project.SourceControlErrorHandling == ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
+                            result = project.Integrate(ir);
+                            if (result != null) status = result.Status;
+                        }
+                        catch
+                        {
+                            status = IntegrationStatus.Exception;
+                            throw;
+                        }
+                        finally
+                        {
+                            RemoveCompletedRequestFromQueue();
 
-                    // handle post build : check what to do if source control errors occured
-                    if (result.SourceControlError != null)
-                    {
-                        AmountOfSourceControlExceptions++;
-                    }
-                    else
-                    {
-                        AmountOfSourceControlExceptions = 0;
-                    }
-                    
+                            /// instruct the queue which is performing the integration to release locks
+                            integrationQueue.ToggleQueueLocks(false);
 
-                    if ( (AmountOfSourceControlExceptions > project.MaxSourceControlRetries )
-                        && (project.SourceControlErrorHandling == ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportOnEveryRetryAmount))
-                    {
-                        AmountOfSourceControlExceptions = 0;
-                    }
+                            // Tell any extensions that an integration has completed
+                            FireIntegrationCompleted(ir, status);
+
+                            // handle post build : check what to do if source control errors occured
+                            if (result != null)
+                            {
+                                if (result.SourceControlError != null)
+                                {
+                                    AmountOfSourceControlExceptions++;
+                                }
+                                else
+                                {
+                                    AmountOfSourceControlExceptions = 0;
+                                }
+                            }
+
+                            if ((AmountOfSourceControlExceptions > project.MaxSourceControlRetries)
+                                && (project.SourceControlErrorHandling == ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportOnEveryRetryAmount))
+                            {
+                                AmountOfSourceControlExceptions = 0;
+                            }
 
 
-                    if ((AmountOfSourceControlExceptions > project.MaxSourceControlRetries)
-                        && project.stopProjectOnReachingMaxSourceControlRetries) 
-                    {
-                        Stopped();
-                    }               
+                            if ((AmountOfSourceControlExceptions > project.MaxSourceControlRetries)
+                                && project.stopProjectOnReachingMaxSourceControlRetries)
+                            {
+                                Stopped();
+                            }
+                        }
+                        break;
+                    case IntegrationStartedEventArgs.EventResult.Delay:
+                        // Log that the request has been cancelled and delay until the request is cleared - otherwise 
+                        // stuck in an endless loop until the extensions allow the request through
+                        Log.Info(string.Format("An external extension has delayed an integration - project '{0}' on queue '{1}'",
+                            project.Name,
+                            project.QueueName));
+                        while (FireIntegrationStarted(ir) == IntegrationStartedEventArgs.EventResult.Delay)
+                        {
+                            Thread.Sleep(1000);
+                        }
+                        break;
+                    case IntegrationStartedEventArgs.EventResult.Cancel:
+                        Log.Info(string.Format("An external extension has cancelled an integration - project '{0}' on queue '{1}'",
+                            project.Name,
+                            project.QueueName));
+                        RemoveCompletedRequestFromQueue();
+                        FireIntegrationCompleted(ir, IntegrationStatus.Cancelled);
+                        break;
                 }
-			}
-			else
-			{
-				PollTriggers();
-				// If a build is queued for this project we need to hang around until either:
-				// - the build gets started by reaching it's turn on the queue
-				// - the build gets cancelled from the queue
-				// - the thread gets killed
+            }
+            else
+            {
+                PollTriggers();
+                // If a build is queued for this project we need to hang around until either:
+                // - the build gets started by reaching it's turn on the queue
+                // - the build gets cancelled from the queue
+                // - the thread gets killed
                 // However, if the queue is locked, do not hang around - we need to exit, so that we can come back to the queue
                 // after the lock has been released (otherwise we could get stuck here forever
-				while (IsRunning && integrationQueue.HasItemPendingOnQueue(project) && !integrationQueue.IsLocked)
-				{
-					Thread.Sleep(200);
-				}
-			}
+                while (IsRunning && integrationQueue.HasItemPendingOnQueue(project) && !integrationQueue.IsLocked)
+                {
+                    Thread.Sleep(200);
+                }
+            }
 		}
 
 		private void PollTriggers()
@@ -344,5 +380,52 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 			trigger.IntegrationCompleted();
 		}
-	}
+
+        #region Integration events
+        /// <summary>
+        /// A project integrator is starting an integration.
+        /// </summary>
+        public event EventHandler<IntegrationStartedEventArgs> IntegrationStarted;
+
+        /// <summary>
+        /// A project integrator has completed an integration.
+        /// </summary>
+        public event EventHandler<IntegrationCompletedEventArgs> IntegrationCompleted;
+        #endregion
+
+        #region Integration event firers
+        /// <summary>
+        /// Fires the IntegrationStarted event.
+        /// </summary>
+        /// <param name="request">The integration request.</param>
+        protected virtual IntegrationStartedEventArgs.EventResult FireIntegrationStarted(IntegrationRequest request)
+        {
+            IntegrationStartedEventArgs.EventResult result = IntegrationStartedEventArgs.EventResult.Continue;
+            if (IntegrationStarted != null)
+            {
+                IntegrationStartedEventArgs args = new IntegrationStartedEventArgs(request, 
+                    project.Name);
+                IntegrationStarted(this, args);
+                result = args.Result;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Fires the IntegrationCompleted event.
+        /// </summary>
+        /// <param name="request">The integration request.</param>
+        /// <param name="status">The outcome of the integration.</param>
+        protected virtual void FireIntegrationCompleted(IntegrationRequest request, IntegrationStatus status)
+        {
+            if (IntegrationCompleted != null)
+            {
+                IntegrationCompletedEventArgs args = new IntegrationCompletedEventArgs(request, 
+                    project.Name, 
+                    status);
+                IntegrationCompleted(this, args);
+            }
+        }
+        #endregion
+    }
 }
