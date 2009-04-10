@@ -109,8 +109,8 @@
       <Name>log4net</Name>
       <HintPath>..\..\lib\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NetReflector">
-      <Name>NetReflector</Name>
+    <Reference Include="NetReflector, Version=1.1.2009.1004, Culture=neutral, PublicKeyToken=dbcd6104b72f39b2, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\NetReflector.dll</HintPath>
     </Reference>
     <Reference Include="NPlot">
