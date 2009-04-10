@@ -352,7 +352,7 @@
     </target>
 
   <target name="build.packages" description="Generates the dashboard packages"
-          depends="build.admin.package,build.queueStatus.package,build.serverLog.package,build.serverInfo.package,build.serverConfig.package,build.projectStats.package,build.projectConfig.package,build.modificationHistory.package,build.nunit.package">
+          depends="build.admin.package,build.queueStatus.package,build.serverLog.package,build.serverInfo.package,build.serverConfig.package,build.projectStats.package,build.projectConfig.package,build.modificationHistory.package,build.nunit.package,build.ndepend.package">
     <copy file="${src.dir}\webdashboard\Packages\packages.xml" tofile="deployed\webdashboard\Packages\packages.xml" verbose="${verbosity}"/>
     <copy todir="deployed\webdashboard\Packages" verbose="${verbosity}">
       <fileset basedir="${build.dir}\webdashboard\Packages">
@@ -462,6 +462,18 @@
         <include name="unittests.xsl"/>
         <include name="tests.xsl"/>
         <include name="timing.xsl"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.ndepend.package" description="Generates the NDepend package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\NDepend.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\NDepend">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\WebDashboard\Xsl">
+        <include name="ndependreport-ccnet.v2.xsl"/>
       </fileset>
     </zip>
   </target>
