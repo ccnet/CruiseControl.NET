@@ -9,6 +9,7 @@ using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.Remote.Events;
 using System.Threading;
+using System;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -501,7 +502,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             projectMock.WaitForSignal();
             VerifyAll();
 
-            latch.WaitOne(2000);
+            latch.WaitOne(new TimeSpan(0, 0, 2));
             Assert.IsTrue(eventIntegrationStartedFired);
             Assert.IsTrue(eventIntegrationCompletedFired);
             Assert.AreEqual(IntegrationStatus.Success, status);
@@ -552,7 +553,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             projectMock.WaitForSignal();
             VerifyAll();
 
-            latch.WaitOne(2000);
+            latch.WaitOne(new TimeSpan(0, 0, 2));
             Assert.IsTrue(eventIntegrationStartedFired);
             Assert.IsTrue(eventIntegrationCompletedFired);
             Assert.AreEqual(IntegrationStatus.Success, status);
@@ -598,7 +599,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             projectMock.WaitForSignal();
             VerifyAll();
 
-            latch.WaitOne(2000);
+            latch.WaitOne(new TimeSpan(0, 0, 2));
             Assert.IsTrue(eventIntegrationStartedFired);
             Assert.IsTrue(eventIntegrationCompletedFired);
             Assert.AreEqual(IntegrationStatus.Cancelled, status);
