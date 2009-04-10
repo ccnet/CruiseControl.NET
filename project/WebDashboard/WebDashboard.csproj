@@ -375,6 +375,7 @@
     <Compile Include="MVC\BinaryResponse.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MVC\FileTransferResponse.cs" />
     <Compile Include="MVC\Cruise\BuildCheckingProxyAction.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -542,6 +543,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Plugins\ProjectReport\ModificationHistoryProjectPlugin.cs" />
+    <Compile Include="Plugins\ProjectReport\ProjectFileDownload.cs" />
     <Compile Include="Plugins\ProjectReport\ProjectReportProjectPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -678,6 +680,7 @@
     <Content Include="images\rss.png" />
     <Content Include="images\shim.gif" />
     <Content Include="images\tw_dev_logo.gif" />
+    <Content Include="packages\NDepend\Manifest.xml" />
     <Content Include="packages\DashboardAdmin\Manifest.xml" />
     <Content Include="packages\ModificationHistory\Manifest.xml" />
     <Content Include="packages\NUnit\Manifest.xml" />
@@ -688,6 +691,7 @@
     <Content Include="packages\ServerConfig\Manifest.xml" />
     <Content Include="packages\ServerInformation\Manifest.xml" />
     <Content Include="packages\ServerLog\Manifest.xml" />
+    <Content Include="xsl\ndependreport-ccnet.v2.xsl" />
     <None Include="dashboard.config" />
     <None Include="templates\ActionException.vm" />
     <None Include="templates\AddProject.vm" />

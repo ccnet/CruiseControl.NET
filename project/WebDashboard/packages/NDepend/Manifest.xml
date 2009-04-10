@@ -1,0 +1,31 @@
+﻿<package>
+  <name>NDepend Results</name>
+  <description>Display the results of a NDepend run.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>ndependreport-ccnet.v2.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\ndependreport-ccnet.v2.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\ndependreport-ccnet.v2.xsl</value>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\ndependreport-ccnet.v2.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="NDepend Details"/>
+        <attribute name="actionName" value="NDependDetailsBuildReport"/>
+        <attribute name="xslFileName" value="xsl\ndependreport-ccnet.v2.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>

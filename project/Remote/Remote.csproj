@@ -139,6 +139,7 @@
     <Compile Include="ExternalLink.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FileTransferSource.cs" />
     <Compile Include="ICruiseManager.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -149,6 +150,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ICruiseServerExtension.cs" />
+    <Compile Include="IFileTransfer.cs" />
     <Compile Include="IntegrationRequest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -187,6 +189,7 @@
     <Compile Include="RemoteCruiseManagerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="RemotingFileTransfer.cs" />
     <Compile Include="RemotingServiceAdapter.cs">
       <SubType>Code</SubType>
     </Compile>

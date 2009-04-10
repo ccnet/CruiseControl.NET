@@ -736,6 +736,7 @@
     <Compile Include="tasks\NAntTask.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tasks\NDependTask.cs" />
     <Compile Include="tasks\NullTask.cs">
       <SubType>Code</SubType>
     </Compile>

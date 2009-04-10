@@ -272,5 +272,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
             long space = GetCruiseManager(serverSpecifier).GetFreeDiskSpace();
             return space;
         }
+
+        #region RetrieveFileTransfer()
+        public RemotingFileTransfer RetrieveFileTransfer(IProjectSpecifier projectSpecifier, string fileName, FileTransferSource source)
+        {
+            RemotingFileTransfer fileTransfer = GetCruiseManager(projectSpecifier)
+                .RetrieveFileTransfer(projectSpecifier.ProjectName, fileName, source);
+            return fileTransfer;
+        }
+        #endregion
     }
 }

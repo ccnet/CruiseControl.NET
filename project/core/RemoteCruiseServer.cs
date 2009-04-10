@@ -225,5 +225,18 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             return server.GetFreeDiskSpace();
         }
+
+        #region RetrieveFileTransfer()
+        /// <summary>
+        /// Retrieve a file transfer object.
+        /// </summary>
+        /// <param name="project">The project to retrieve the file for.</param>
+        /// <param name="fileName">The name of the file.</param>
+        /// <param name="source">Where to retrieve the file from.</param>
+        public virtual RemotingFileTransfer RetrieveFileTransfer(string project, string fileName, FileTransferSource source)
+        {
+            return server.RetrieveFileTransfer(project, fileName, source);
+        }
+        #endregion
     }
 }

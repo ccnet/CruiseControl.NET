@@ -9,6 +9,7 @@ using ThoughtWorks.CruiseControl.Remote;
 using System.Configuration;
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Events;
+using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -457,5 +458,41 @@ namespace ThoughtWorks.CruiseControl.Core
         	IFileSystem fileSystem = new SystemIoFileSystem();
 			return fileSystem.GetFreeDiskSpace(drive);
         }
+
+        #region RetrieveFileTransfer()
+        /// <summary>
+        /// Retrieve a file transfer object.
+        /// </summary>
+        /// <param name="project">The project to retrieve the file for.</param>
+        /// <param name="fileName">The name of the file.</param>
+        /// <param name="source">Where to retrieve the file from.</param>
+        public virtual RemotingFileTransfer RetrieveFileTransfer(string project, string fileName, FileTransferSource source)
+        {
+            if (Path.IsPathRooted(fileName))
+            {
+                Log.Warning(string.Format("Absolute path requested ('{0}') - request denied", fileName));
+                throw new CruiseControlException("Unable to retrieve absolute files - must be relative to the project");
+            }
+            Log.Debug(
+                string.Format("Retrieving file '{0}' from '{1}' ({2})", fileName, project, source));
+            IProject sourceProject = GetIntegrator(project).Project;
+            string filePath = null;
+            switch (source)
+            {
+                case FileTransferSource.Artefact:
+                    filePath = Path.Combine(sourceProject.ArtifactDirectory ?? string.Empty, fileName);
+                    break;
+                case FileTransferSource.Working:
+                    filePath = Path.Combine(sourceProject.WorkingDirectory ?? string.Empty, fileName);
+                    break;
+            }
+            RemotingFileTransfer fileTransfer = null;
+            if (File.Exists(filePath))
+            {
+                fileTransfer = new RemotingFileTransfer(File.OpenRead(filePath));
+            }
+            return fileTransfer;
+        }
+        #endregion
 	}
 }
