@@ -1,7 +1,7 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3F93AC24-DF56-469E-91C3-43A2A179C7E1}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -26,6 +26,7 @@
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -1074,7 +1075,8 @@
       <DependentUpon>XmlServerReportActionSchema.xsd</DependentUpon>
     </None>
     <EmbeddedResource Include="WebDashboard\Plugins\FarmReport\XmlServerReportActionSchema.xsd">
-      <SubType>Designer</SubType>
+      <SubType>
+      </SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="..\examples\ccnet.config">
       <Link>Config\ccnet.config</Link>
@@ -1096,7 +1098,8 @@
     <EmbeddedResource Include="Remote\ProjectStatus.1.2.1.bin" />
     <EmbeddedResource Include="Remote\ProjectStatus.1.2.bin" />
     <EmbeddedResource Include="WebDashboard\Plugins\BuildReport\XmlReportActionSchema.xsd">
-      <SubType>Designer</SubType>
+      <SubType>
+      </SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Core\Config\TestAssets\TestCycle.xml">
     </EmbeddedResource>

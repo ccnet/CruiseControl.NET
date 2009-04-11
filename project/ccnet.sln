@@ -1,5 +1,13 @@
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9CC052DF-2AFB-4A27-BB68-F8C27C5BA0C8}"
+	ProjectSection(SolutionItems) = preProject
+		..\b.bat = ..\b.bat
+		..\ccnet.build = ..\ccnet.build
+		..\ccnet.nsi = ..\ccnet.nsi
+		..\cctray.nsi = ..\cctray.nsi
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDashboard", "WebDashboard\WebDashboard.csproj", "{482EF049-EC0C-4819-B568-75B5F74BDD5B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Remote", "Remote\Remote.csproj", "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
@@ -20,19 +28,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "objection", "objection\obje
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validator", "Validator\Validator.csproj", "{CBB2F759-46EB-42DB-BCAD-D7E596A4BC41}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9CC052DF-2AFB-4A27-BB68-F8C27C5BA0C8}"
-	ProjectSection(SolutionItems) = preProject
-		..\b.bat = ..\b.bat
-		..\ccnet.build = ..\ccnet.build
-		..\ccnet.nsi = ..\ccnet.nsi
-		..\cctray.nsi = ..\cctray.nsi
-	EndProjectSection
-EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Build|Any CPU = Build|Any CPU
 		Debug|Any CPU = Debug|Any CPU
@@ -102,5 +98,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
