@@ -288,7 +288,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 // If not found then throw a validation exception
                 if (!isPublisher)
                 {
-                    throw new CruiseControlException("Email publishers are only allowed in the publishers section of the configuration");
+                    Log.Warning("Email publishers are best placed in the publishers section of the configuration");
                 }
             }
             else
