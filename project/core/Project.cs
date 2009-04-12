@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.Core
     /// </code>
     /// </remarks>
     [ReflectorType("project")]
-    public class Project : ProjectBase, IProject, IIntegrationRunnerTarget, IIntegrationRepository, 
+    public class Project : ProjectBase, IProject, IIntegrationRunnerTarget, IIntegrationRepository,
         IConfigurationValidation
     {
         private string webUrl = DefaultUrl();
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private ArrayList messages = new ArrayList();
         private int maxSourceControlRetries = 5;
         private ProjectInitialState startupState = ProjectInitialState.Started;
-        
+
         private bool StopProjectOnReachingMaxSourceControlRetries = false;
         private Sourcecontrol.Common.SourceControlErrorHandlingPolicy sourceControlErrorHandling = Common.SourceControlErrorHandlingPolicy.ReportEveryFailure;
 
@@ -232,7 +232,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public void AbortRunningBuild()
         {
-			ProcessExecutor.KillProcessCurrentlyRunningForProject(Name);
+            ProcessExecutor.KillProcessCurrentlyRunningForProject(Name);
         }
 
         public void PublishResults(IIntegrationResult result)
@@ -467,6 +467,8 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <param name="parent">The parent item for the item being validated.</param>
         public virtual void Validate(IConfiguration configuration, object parent)
         {
+
+            ValidateProject();
             ValidateItem(sourceControl, configuration);
             ValidateItem(labeller, configuration);
             ValidateItems(PrebuildTasks, configuration);
@@ -474,6 +476,40 @@ namespace ThoughtWorks.CruiseControl.Core
             ValidateItems(publishers, configuration);
             ValidateItem(state, configuration);
         }
+
+
+
+        private void ValidateProject()
+        {
+            if (ContainsInvalidChars(this.Name))
+            {
+                Log.Warning("Project Name contains some chars that could cause problems, better use only numbers and letters");
+            }
+        }
+
+
+        private bool ContainsInvalidChars(string item)
+        {
+            bool result = true;
+
+            for (Int32 i = 0; i < item.Length; i++)
+            {
+                if (!char.IsLetterOrDigit(item, i) &&
+                    item[i] != '.' &&
+                    item[i] != ' ' &&
+                    item[i] != '-' &&
+                    item[i] != '_')
+                {
+                    result = false;
+
+
+                }
+            }
+
+            return result;
+        }
+
+
 
         /// <summary>
         /// Validates the configuration of an item.
