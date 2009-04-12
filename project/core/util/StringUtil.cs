@@ -107,28 +107,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return Strip(fileName, "\\", "/", ":", "*", "?", "\"", "<", ">", "|");
         }
 
-        public static string ReplaceInvalidCharsWithSpace(string item)
-        {
-            string result = item;
-
-            for (Int32 i = 0; i < result.Length; i++)
-            {
-                if (!char.IsLetterOrDigit(result, i) &&
-                    result[i] != '.' &&
-                    result[i] != ' ' &&
-                    result[i] != '-' &&
-					result[i] != '_')
-                {
-
-                    result = result.Remove(i, 1);
-                    result = result.Insert(i, " ");
-                }
-            }
-
-            result = Regex.Replace(result, " {2,}", " ");
-
-            return result.Trim();
-        }
+ 
 
         public static string AutoDoubleQuoteString(string value)
         {
