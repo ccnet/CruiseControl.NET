@@ -115,7 +115,7 @@
 
 	<!-- DEPLOY -->
 
-	<target name="deploy" depends="compile, deploy.server, deploy.cctray, deploy.webdashboard, compress" />
+	<target name="deploy" depends="compile, deploy.server, deploy.cctray, deploy.webdashboard, compress, deploy.validator" />
 	
 	<target name="deploy.server" depends="compile">
 		<mkdir dir="deployed\server"/>
@@ -150,8 +150,18 @@
 			</fileset>
 		</copy>
 	</target>
-	
-	<target name="deploy.cctray">
+
+  <target name="deploy.validator" description="Generate the deployment files for CCValidator." depends="compile">
+    <copy todir="deployed\ccvalidator">
+      <fileset basedir="${build.dir}\server">
+        <include name="CCValidator.exe"/>
+        <include name="CCValidator.exe.config"/>
+        <include name="*.dll"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="deploy.cctray">
 		<mkdir dir="deployed\cctray" />
 
 		<copy todir="deployed\cctray">
@@ -207,8 +217,9 @@
 	</target>
 
 	<!-- CREATE DISTRIBUTABLES -->
-	<target name="dist" depends="deploy">	
-		<copy todir="deployed" file="license.txt" />
+  <target name="dist" depends="deploy">
+    <copy todir="deployed" file="license.txt" />
+    <mkdir dir="dist"/>
 		<copy todir="${webdashboard.dir}\doc">
 			<fileset basedir="doc">
 				<include name="**\*" />
@@ -219,8 +230,6 @@
 				<include name="**\*" />
 			</fileset>
 		</copy>
-
-		<mkdir dir="dist"/>
 
 		<exec program="tools\NSIS\makensis.exe" commandline="cctray.nsi" />		
 		<copy todir="${webdashboard.dir}\cctray">
@@ -248,8 +257,9 @@
 				<exclude name="**\_Resharper*\**" />
 			</fileset>
 		</zip>
-		<exec program="tools\NSIS\makensis.exe" commandline="ccnet.nsi" />
-	</target>
+    <exec program="tools\NSIS\makensis.exe" commandline="ccvalidator.nsi" />
+    <exec program="tools\NSIS\makensis.exe" commandline="ccnet.nsi" />
+  </target>
 		
 	<!-- FOR RUNNING CCNET AGAINST ITSELF -->
 	<target name="dist.publish" depends="dist">
