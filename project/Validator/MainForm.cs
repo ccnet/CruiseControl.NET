@@ -13,6 +13,7 @@ using Exortech.NetReflector;
 using Manoli.Utils.CSharpFormat;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Config.Preprocessor;
 
 namespace Validator
 {
