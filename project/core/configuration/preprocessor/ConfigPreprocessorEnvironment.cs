@@ -406,7 +406,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         }
     }
 
-    public class EvaluationException : ApplicationException
+    public class EvaluationException : PreprocessorException
     {
         internal EvaluationException( string msg ) : base( msg )
         {            
@@ -418,7 +418,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         }
     }
 
-    public class DefinitionException : ApplicationException
+    public class DefinitionException : PreprocessorException
     {
         internal DefinitionException( string msg ) : base( msg )
         {            
@@ -430,7 +430,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         }
     }
 
-    public abstract class PreprocessorException : ApplicationException
+    public class PreprocessorException : ApplicationException
     {
         internal PreprocessorException( string msg ) : base( msg )
         {            

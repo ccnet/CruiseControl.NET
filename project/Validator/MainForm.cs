@@ -156,6 +156,9 @@ namespace Validator
             }
         }
 
+        /// <summary>
+        /// Begin loading the configuration.
+        /// </summary>
         private void StartConfigurationLoad()
         {
             DisplayProgressMessage("Loading configuration, please wait...", 0);
@@ -166,14 +169,44 @@ namespace Validator
             myBodyEl.InnerHtml = string.Empty;
             try
             {
+                // Attempt to load the configuration
                 loader.Load(new FileInfo(myFileName));
             }
             catch (ConfigurationException error)
             {
+                // There is an error with the configuration
                 myBodyEl.AppendChild(
                     GenerateElement("div",
                     new HtmlAttribute("class", "error"),
                     GenerateElement("div", "Configuration contains invalid XML: " + error.Message)));
+            }
+            catch (PreprocessorException error)
+            {
+                // There was an error with pre-processing
+                myBodyEl.AppendChild(
+                    GenerateElement("div",
+                    new HtmlAttribute("class", "error"),
+                    GenerateElement("div", "Preprocessing failed loading the XML: " + error.Message)));
+            }
+            catch (Exception error)
+            {
+                // Catch-all exception block
+                StringBuilder message = new StringBuilder();
+                message.Append("An unexpected error has occurred while loading the configuration!" +
+                    Environment.NewLine + 
+                    "Please report this error to the CCNet user group (http://groups.google.com/group/ccnet-user). This will help us to improve this application.");
+                Exception currentError = error;
+                while (currentError != null)
+                {
+                    message.AppendFormat("{0}{1} [{2}]", Environment.NewLine, error.Message, error.GetType().Name);
+                    message.AppendFormat("{0}{1}", Environment.NewLine, error.StackTrace);
+                    currentError = currentError.InnerException;
+                    if (currentError != null)
+                    {
+                        message.AppendFormat("{0}{1} Inner Exception {1}", Environment.NewLine, new string('=', 10));
+                    }
+                }
+                MessageBox.Show(this, message.ToString(), "Unexpected error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void DisplayFileName()
