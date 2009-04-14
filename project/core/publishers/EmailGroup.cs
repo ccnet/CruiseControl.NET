@@ -7,6 +7,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	[ReflectorType("group")]
 	public class EmailGroup
 	{
+
+        private NotificationType[] notifications = { EmailGroup.NotificationType.Always };
+
 		public enum NotificationType
 		{
 			Always,
@@ -21,17 +24,23 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		{
 		}
 
-		public EmailGroup(string name, NotificationType notification)
+		public EmailGroup(string name, NotificationType[] notifications)
 		{
 			Name = name;
-			Notification = notification;
+			Notifications = notifications;
 		}
 
 		[ReflectorProperty("name")]
 		public string Name;
 
-		[ReflectorProperty("notification")]
-		public NotificationType Notification;
+
+        [ReflectorProperty("notifications", Required = false)]
+        public NotificationType[] Notifications
+        {
+            get { return notifications; }
+            set { notifications = value; }
+        }
+
 
 		public override bool Equals(Object o)
 		{
@@ -40,17 +49,34 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				return false;
 			}
 			EmailGroup g = (EmailGroup) o;
-			return Name == g.Name && Notification == g.Notification;
+			return Name == g.Name && Notifications.Equals(g.Notifications);
 		}
 
 		public override int GetHashCode()
 		{
-			return StringUtil.GenerateHashCode(Name, Notification.ToString());
+            return Name.GetHashCode() & StringUtil.GetArrayContents(Notifications).GetHashCode() ; 
 		}
 
 		public override string ToString()
 		{
-			return string.Format("EmailGroup: [name: {0}, notification: {1}]", Name, Notification);
+			return string.Format("EmailGroup: [name: {0}, notifications: {1}]", Name, StringUtil.GetArrayContents( Notifications) );
 		}
+
+
+        public bool HasNotification(NotificationType toSearch)
+        {
+            bool found = false;
+
+            foreach (NotificationType nt in Notifications)
+            {
+                if (nt == toSearch)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            return found;
+        }
+
 	}
 }
