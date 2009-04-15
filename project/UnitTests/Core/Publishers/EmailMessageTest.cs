@@ -113,7 +113,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void EmailSubject()
 		{
-			string subject = GetEmailMessage(IntegrationResultMother.CreateStillSuccessful(), true).Subject;
+            IntegrationResult ir = IntegrationResultMother.CreateStillSuccessful();
+            EmailMessage em = GetEmailMessage(ir, true);
+
+
+			string subject = em.Subject;
 			Assert.AreEqual("CCNET: Project#9 Build Successful: Build 0", subject);
 		}
 

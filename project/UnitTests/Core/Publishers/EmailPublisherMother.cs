@@ -28,11 +28,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
                 <user name=""owjones"" group=""successdudes"" address=""oliver.wendell.jones@example.com""/>
     		</users>
     		<groups>
-    			<group> name=""developers"" <notifications><NotificationType>Change</NotificationType></notifications> </group>
-    			<group> name=""buildmaster"" <notifications><NotificationType>Always</NotificationType></notifications> </group>
-                <group> name=""successdudes"" <notifications><NotificationType>Success</NotificationType></notifications> </group>
+    			<group name=""developers""> 
+                    <notifications>
+                       <NotificationType>Change</NotificationType>
+                     </notifications> 
+                </group>
+    			
+                <group name=""buildmaster""> 
+                    <notifications>
+                       <NotificationType>Always</NotificationType>
+                    </notifications> 
+                </group>
+                
+                <group name=""successdudes""> 
+                   <notifications>
+                     <NotificationType>Success</NotificationType>
+                   </notifications> 
+                </group>
     		</groups>
-			<converters>
+			
+            <converters>
 				<regexConverter find=""$"" replace=""@TheCompany.com""/>
 			</converters>
 
