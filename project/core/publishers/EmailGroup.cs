@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				return false;
 			}
 			EmailGroup g = (EmailGroup) o;
-			return Name == g.Name && Notifications.Equals(g.Notifications);
+			return Name == g.Name ;
 		}
 
 		public override int GetHashCode()
