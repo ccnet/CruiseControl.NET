@@ -28,9 +28,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
                 <user name=""owjones"" group=""successdudes"" address=""oliver.wendell.jones@example.com""/>
     		</users>
     		<groups>
-    			<group name=""developers"" notification=""change""/>
-    			<group name=""buildmaster"" notification=""always""/>
-                <group name=""successdudes"" notification=""success""/>
+    			<group> name=""developers"" <notifications><NotificationType>Change</NotificationType></notifications> </group>
+    			<group> name=""buildmaster"" <notifications><NotificationType>Always</NotificationType></notifications> </group>
+                <group> name=""successdudes"" <notifications><NotificationType>Success</NotificationType></notifications> </group>
     		</groups>
 			<converters>
 				<regexConverter find=""$"" replace=""@TheCompany.com""/>
