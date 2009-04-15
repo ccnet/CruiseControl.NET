@@ -226,6 +226,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CruiseXmlWriter.cs" />
+    <Compile Include="Extensions\IntegrationRequestThrottleExtension.cs" />
     <Compile Include="IArgumentParser.cs">
       <SubType>Code</SubType>
     </Compile>
