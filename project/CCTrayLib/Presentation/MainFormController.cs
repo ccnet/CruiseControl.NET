@@ -132,17 +132,24 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public void ForceBuild()
 		{
-		    if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
-		        SelectedProject.ForceBuild();
+            if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
+            {
+                RunSecureMethod(b => {
+                    SelectedProject.ForceBuild();
+                }, "ForceBuild");
+            }
 		}
-		
-		public void AbortBuild()
-		{
-		    if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
-			{
-		        SelectedProject.AbortBuild();
-		}
-		}
+
+        public void AbortBuild()
+        {
+            if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
+            {
+                RunSecureMethod(b =>
+                {
+                    SelectedProject.AbortBuild();
+                }, "AbortBuild");
+            }
+        }
 		
 		public void DisplayWebPage()
 		{
@@ -245,12 +252,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		
 		public void StopProject()
 		{
-			selectedProject.StopProject();
+            RunSecureMethod(b =>
+            {
+                selectedProject.StopProject();
+            }, "StopProject");
 		}
 		
 		public void StartProject()
 		{
-			selectedProject.StartProject();
+            RunSecureMethod(b =>
+            {
+                selectedProject.StartProject();
+            }, "StartProject");
 		}
 
 		public IProjectStateIconProvider ProjectStateIconProvider
@@ -336,7 +349,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public void VolunteerToFixBuild()
 		{
-			if (IsProjectSelected) selectedProject.FixBuild(configuration.FixUserName);
+            if (IsProjectSelected)
+            {
+                RunSecureMethod(b =>
+                {
+                    selectedProject.FixBuild(configuration.FixUserName);
+                }, "FixBuild");
+            }
 		}
 
 		public bool CanCancelPending()
@@ -346,7 +365,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public void CancelPending()
 		{
-			if (IsProjectSelected) selectedProject.CancelPending();
+            if (IsProjectSelected)
+            {
+                RunSecureMethod(b =>
+                {
+                    selectedProject.CancelPending();
+                }, "CancelPending");
+            }
 		}
 
 		public void CancelPendingProjectByName(string projectName)
@@ -356,10 +381,31 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				if (projectMonitor.Detail.ProjectName == projectName)
 				{
 					SelectedProject = projectMonitor;
-					CancelPending();
+                    RunSecureMethod(b =>
+                    {
+                        CancelPending();
+                    }, "CancelPending");
 					break;
 				}
 			}
 		}
+
+        private void RunSecureMethod(Action<bool> methodToRun, string methodName)
+        {
+            try
+            {
+                methodToRun(true);
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(string.Format("Unable to {0}, the following error occurred:{1}{2}",
+                    methodName,
+                    Environment.NewLine,
+                    error.Message),
+                    "Error",
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+            }
+        }
 	}
 }

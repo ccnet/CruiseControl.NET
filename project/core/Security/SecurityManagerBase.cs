@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             get { return defaultRight; }
             set
             {
-                if (value == SecurityRight.Inherit) throw new ArgumentOutOfRangeException("DefaultRight", "ERROR_InvalidDefaultRight");
+                if (value == SecurityRight.Inherit) throw new ArgumentOutOfRangeException("DefaultRight", "DefaultRight must be either Allow or Deny");
                 defaultRight = value;
             }
         }
@@ -140,12 +140,12 @@ namespace ThoughtWorks.CruiseControl.Core.Security
 
             if (sessionToken != null)
             {
-                Log.Debug(string.Format("UserLoggedIn {0} {1}", displayName, userName));
+                Log.Debug(string.Format("{0} [{1}] has logged in", displayName, userName));
                 LogEvent(null, userName, SecurityEvent.Login, SecurityRight.Allow, null);
             }
             else
             {
-                Log.Warning(string.Format("LoginFailure {0}", userName));
+                Log.Warning(string.Format("Login failure: {0} has failed to login", userName));
                 LogEvent(null, userName, SecurityEvent.Login, SecurityRight.Deny, null);
             }
 
@@ -164,12 +164,12 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             if (!string.IsNullOrEmpty(userName))
             {
                 sessionCache.RemoveFromCache(sessionToken);
-                Log.Debug(string.Format("UserLoggedOut {0}", userName));
+                Log.Debug(string.Format("{0} has logged out", userName));
                 LogEvent(null, userName, SecurityEvent.Logout, SecurityRight.Allow, null);
             }
             else
             {
-                LogEvent(null, null, SecurityEvent.Logout, SecurityRight.Deny, "EVENT_SessionAlreadyLoggedOut");
+                LogEvent(null, null, SecurityEvent.Logout, SecurityRight.Deny, "Session has already been logged out");
             }
         }
         #endregion
