@@ -31,7 +31,7 @@
     <!-- Unwind the stack used for cycle detection 
          (variable names are pushed onto the stack inside the extension methods)
     -->
-    <xsl:for-each select="env:unwind_eval_stack()"/>
+    <xsl:value-of select="env:unwind_eval_stack()"/>
     <xsl:value-of select="normalize-space($text)"/>    
   </xsl:template>
   
@@ -62,25 +62,25 @@
     </xsl:variable>
     <!-- Recurse into the included doc -->
     <xsl:apply-templates select="env:push_include($docName)"/>
-    <xsl:for-each select="env:pop_include()"/>
+    <xsl:value-of select="env:pop_include()"/>
   </xsl:template>
 
   <!-- Text constant definition, value is text node -->
   <xsl:template match="cb:define[not(*) and @name]">
-    <xsl:for-each select="env:define_text_constant(@name,.)"/>
+    <xsl:value-of select="env:define_text_constant(@name,.)"/>
   </xsl:template>
 
   <!-- Text constant definition(s).
     Names are attribute names, values are attribute values -->
   <xsl:template match="cb:define[count(*)=0 and @* and not(@name)]">
     <xsl:for-each select="@*">
-      <xsl:for-each select="env:define_text_constant(local-name(),.)"/>
+      <xsl:value-of select="env:define_text_constant(local-name(),.)"/>
     </xsl:for-each>
   </xsl:template>
 
   <!-- Nodeset constant definition -->
   <xsl:template match="cb:define[@name and *]">
-    <xsl:for-each select="env:define_nodeset_constant(@name,*)"/>
+    <xsl:value-of select="env:define_nodeset_constant(@name,*)"/>
   </xsl:template>
 
   <!-- Fallthrough template for invalid definiton syntax-->
@@ -92,14 +92,14 @@
 
   <!-- Introduction of a new scope (stack frame )-->
   <xsl:template match="cb:scope">
-    <xsl:for-each select="env:push_stack()"/>
+    <xsl:value-of select="env:push_stack()"/>
     <!-- Define text scope's attributes as text constants -->
     <xsl:for-each select="@*">
-      <xsl:for-each select="env:define_text_constant(local-name(),.)"/>
+      <xsl:value-of select="env:define_text_constant(local-name(),.)"/>
     </xsl:for-each>
     <!-- Recurse -->
     <xsl:apply-templates select="node()"/>
-    <xsl:for-each select="env:pop_stack()"/>
+    <xsl:value-of select="env:pop_stack()"/>
   </xsl:template>
 
   <!-- Eat and recurse -->
@@ -113,14 +113,14 @@
 
   <!-- Constant expansion (nodeset) -->
   <xsl:template match="cb:*" priority="-2">
-    <xsl:for-each select="env:push_stack()"/>
+    <xsl:value-of select="env:push_stack()"/>
     <!-- Define macro call attributes as text constants -->
     <xsl:for-each select="@*">
-      <xsl:for-each select="env:define_text_constant(local-name(),.)"/>
+      <xsl:value-of select="env:define_text_constant(local-name(),.)"/>
     </xsl:for-each>
     <xsl:apply-templates select="cb:*"/>
     <xsl:apply-templates select="env:eval_constant(local-name())"/>
-    <xsl:for-each select="env:pop_stack()"/>
+    <xsl:value-of select="env:pop_stack()"/>
   </xsl:template>  
 
 </xsl:stylesheet>
