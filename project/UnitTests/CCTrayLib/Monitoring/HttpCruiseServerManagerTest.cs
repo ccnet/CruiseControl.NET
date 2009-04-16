@@ -32,9 +32,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void InitialisingReturnsCorrectServerProperties()
 		{
-			Assert.AreEqual(SERVER_URL, manager.ServerUrl);
+			Assert.AreEqual(SERVER_URL, manager.Configuration.Url);
 			Assert.AreEqual(@"localhost", manager.DisplayName);
-			Assert.AreEqual(BuildServerTransport.HTTP, manager.Transport);
+			Assert.AreEqual(BuildServerTransport.HTTP, manager.Configuration.Transport);
 		}
 
 		[Test]

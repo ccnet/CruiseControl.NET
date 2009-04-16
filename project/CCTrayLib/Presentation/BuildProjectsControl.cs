@@ -93,9 +93,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			AddProjects addProjectDialog =
 				new AddProjects(configuration.CruiseProjectManagerFactory, BuildProjectListFromListView());
+			CCTrayProject[] projects = addProjectDialog.GetListOfNewProjects(this);
 
-			foreach (CCTrayProject p in addProjectDialog.GetListOfNewProjects(this))
-				lvProjects.Items.Add(new ProjectConfigurationListViewItemAdaptor(p).Item);
+			if (projects != null)
+			{
+				foreach (CCTrayProject newProject in projects)
+				{
+					lvProjects.Items.Add(new ProjectConfigurationListViewItemAdaptor(newProject).Item);
+				}
+			}
 		}
 
 		private CCTrayProject[] BuildProjectListFromListView()
@@ -112,7 +118,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void lvProjects_ItemChecked(object sender, ItemCheckedEventArgs e)
 		{
-            (e.Item.Tag as ProjectConfigurationListViewItemAdaptor).Project.ShowProject = e.Item.Checked;
+			foreach (CCTrayProject project in configuration.Projects)
+			{
+				if (e.Item.SubItems[2].Text == project.ProjectName)
+				{
+					project.ShowProject = e.Item.Checked;
+				}
+			}
 		}
 
 		private void lvProjects_KeyDown(object sender, KeyEventArgs e)
@@ -137,14 +149,26 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void chkCheck_CheckedChanged(object sender, EventArgs e)
 		{
-			bool should_check = chkCheckAllProjects.Checked;
+			if (chkCheckAllProjects.Checked)
+			{
+				foreach (ListViewItem item in lvProjects.Items)
+				{
+					item.Checked = true;
+				}
+			}
+			else
+			{
 			foreach (ListViewItem item in lvProjects.Items)
-				item.Checked = should_check;
+				{
+					item.Checked = false;
+				}
+			}
 		}
 
 		public void PersistProjectTabSettings()
 		{
-			configuration.Projects = BuildProjectListFromListView();
+			CCTrayProject[] newProjectList = BuildProjectListFromListView();
+			configuration.Projects = newProjectList;
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3F93AC24-DF56-469E-91C3-43A2A179C7E1}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -215,6 +215,7 @@
     <Compile Include="CCTrayLib\Monitoring\DashboardXmlParserTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CCTrayLib\Monitoring\ExtensionProtocolStub.cs" />
     <Compile Include="CCTrayLib\Monitoring\HttpCruiseProjectManagerTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -348,6 +349,24 @@
     <Compile Include="Core\Label\AssemblyVersionLabellerTest.cs" />
     <Compile Include="Core\State\XmlProjectStateManagerTest.cs" />
     <Compile Include="Remote\ExtensionConfigurationTests.cs" />
+    <Compile Include="Core\Queues\IntegrationQueueManagerFactoryTests.cs" />
+    <Compile Include="Core\Security\ActiveDirectoryAuthenticationTests.cs" />
+    <Compile Include="Core\Security\ExternalFileSecurityManagerTests.cs" />
+    <Compile Include="Core\Security\PermissionBaseTests.cs" />
+    <Compile Include="Core\Security\Auditing\FileXmlReaderTests.cs" />
+    <Compile Include="Core\Security\FileBasedSessionCacheTests.cs" />
+    <Compile Include="Core\Security\Auditing\FileXmlLoggerTests.cs" />
+    <Compile Include="Core\Security\RolePermissionTests.cs" />
+    <Compile Include="Core\Security\UserNameTests.cs" />
+    <Compile Include="Remote\BadReferenceExceptionTests.cs" />
+    <Compile Include="Remote\NoSuchProjectExceptionTests.cs" />
+    <Compile Include="Remote\Security\AuditFiltersTests.cs" />
+    <Compile Include="Remote\Security\AuditRecordTests.cs" />
+    <Compile Include="Remote\UserNameCredentialsTests.cs" />
+    <Compile Include="Remote\CruiseControlExceptionTests.cs" />
+    <Compile Include="Remote\PermissionDeniedExceptionTests.cs" />
+    <Compile Include="Remote\SecurityExceptionTests.cs" />
+    <Compile Include="Remote\SessionInvalidExceptionTests.cs" />
     <Compile Include="Core\Config\ValidatingLoaderTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -516,6 +535,13 @@
     <Compile Include="Core\Reporting\Dashboard\Navigation\AbsolutePathUrlBuilderDecoratorTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\Security\UserPermissionTests.cs" />
+    <Compile Include="Core\Security\DefaultProjectAuthorisationTest.cs" />
+    <Compile Include="Core\Security\InMemorySessionCacheTest.cs" />
+    <Compile Include="Core\Security\InternalSecurityManagerTest.cs" />
+    <Compile Include="Core\Security\UserPasswordAuthenticationTest.cs" />
+    <Compile Include="Core\Security\NullSecurityManagerTest.cs" />
+    <Compile Include="Core\Security\UserNameAuthenticationTest.cs" />
     <Compile Include="Core\SimpleBuildFile.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -707,6 +733,7 @@
     <Compile Include="Core\State\FileStateManagerTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\StubSecurityManager.cs" />
     <Compile Include="Core\Tasks\ArtifactCleanupTest.cs" />
     <Compile Include="Core\Tasks\GendarmeTaskTest.cs" />
     <Compile Include="Core\Tasks\RakeTaskTest.cs" />
@@ -875,6 +902,7 @@
     <Compile Include="Remote\ProjectStatusCompatibilityTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestHelpers.cs" />
     <Compile Include="Remote\ServerExtensionStub.cs" />
     <Compile Include="UnitTestUtils\ArrayConstraint.cs" />
     <Compile Include="UnitTestUtils\HashtableConstraint.cs">

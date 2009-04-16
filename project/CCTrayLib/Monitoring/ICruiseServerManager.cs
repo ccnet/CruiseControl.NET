@@ -8,9 +8,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	/// </summary>
 	public interface ICruiseServerManager
 	{
-		string ServerUrl { get; }
 		string DisplayName { get; }
-		BuildServerTransport Transport { get; }
+        BuildServer Configuration { get; }
+        string SessionToken { get; }
 
 		/// <summary>
 		/// Cancel the pending request on the integration queue for the specified project on this server.
@@ -21,5 +21,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		/// Gets the projects and integration queues snapshot from this server.
 		/// </summary>
         CruiseServerSnapshot GetCruiseServerSnapshot();
+
+        bool Login();
+        void Logout();
      }
 }

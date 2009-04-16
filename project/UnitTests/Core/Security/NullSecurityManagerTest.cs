@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
 {
@@ -14,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         public void LoginReturnsUserName()
         {
             UserNameCredentials credentials = new UserNameCredentials("johndoe");
-            ISecurityManager manager = new NullSecurityManager();
+            NullSecurityManager manager = new NullSecurityManager();
             manager.Initialise();
             string sessionToken = manager.Login(credentials);
             Assert.AreEqual(credentials.UserName, sessionToken);
@@ -23,14 +24,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void LogoutDoesNothing()
         {
-            ISecurityManager manager = new NullSecurityManager();
+            NullSecurityManager manager = new NullSecurityManager();
             manager.Logout("anydetailsinhere");
         }
 
         [Test]
         public void ValidateSessionReturnsTrue()
         {
-            ISecurityManager manager = new NullSecurityManager();
+            NullSecurityManager manager = new NullSecurityManager();
             bool result = manager.ValidateSession("anydetailsinhere");
             Assert.IsTrue(result);
         }
@@ -39,9 +40,51 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         public void GetUserNameReturnsSessionToken()
         {
             string sessionToken = "anydetailsinhere";
-            ISecurityManager manager = new NullSecurityManager();
+            NullSecurityManager manager = new NullSecurityManager();
             string userName = manager.GetUserName(sessionToken);
             Assert.AreEqual(sessionToken, userName);
+        }
+
+        [Test]
+        public void GetDisplayNameReturnsSessionToken()
+        {
+            string sessionToken = "anydetailsinhere";
+            NullSecurityManager manager = new NullSecurityManager();
+            string userName = manager.GetDisplayName(sessionToken);
+            Assert.AreEqual(sessionToken, userName);
+        }
+
+        [Test]
+        public void RetrieveSettingReturnsNull()
+        {
+            NullSecurityManager manager = new NullSecurityManager();
+            ISecuritySetting setting = manager.RetrievePermission("anything");
+            Assert.IsNull(setting);
+        }
+
+        [Test]
+        public void LogEventDoesNothing()
+        {
+            NullSecurityManager manager = new NullSecurityManager();
+            manager.LogEvent("A project", "A user", SecurityEvent.ForceBuild, SecurityRight.Allow, "A message");
+        }
+
+        [Test]
+        [ExpectedException(typeof(NotImplementedException),
+            ExpectedMessage = "Password management is not allowed for this security manager")]
+        public void ChangePasswordThrowsAnException()
+        {
+            NullSecurityManager manager = new NullSecurityManager();
+            manager.ChangePassword("session", "oldPassword", "newPassword");
+        }
+
+        [Test]
+        [ExpectedException(typeof(NotImplementedException),
+            ExpectedMessage = "Password management is not allowed for this security manager")]
+        public void ResetPasswordThrowsAnException()
+        {
+            NullSecurityManager manager = new NullSecurityManager();
+            manager.ResetPassword("session", "user", "newPassword");
         }
     }
 }

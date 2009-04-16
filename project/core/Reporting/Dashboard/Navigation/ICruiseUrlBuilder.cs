@@ -8,5 +8,6 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 		string BuildProjectUrl(string action, IProjectSpecifier projectSpecifier);
 		string BuildBuildUrl(string action, IBuildSpecifier buildSpecifier);
 		string Extension { set; get; }
+        IUrlBuilder InnerBuilder { get; }
 	}
 }

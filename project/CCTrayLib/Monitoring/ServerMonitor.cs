@@ -39,6 +39,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             get { return lastCruiseServerSnapshot; }
 		}
 
+        public string SessionToken
+        {
+            get { return cruiseServerManager.SessionToken; }
+        }
+
         /// <summary>
         /// Lookup the last project status retrieved for this project.
         /// </summary>
@@ -91,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public string ServerUrl
 		{
-			get { return cruiseServerManager.ServerUrl; }
+			get { return cruiseServerManager.Configuration.Url; }
 		}
 
 		public string DisplayName
@@ -101,7 +106,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public BuildServerTransport Transport
 		{
-			get { return cruiseServerManager.Transport; }
+			get { return cruiseServerManager.Configuration.Transport; }
 		}
 
 		public bool IsConnected
@@ -123,5 +128,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			if (QueueChanged != null) QueueChanged(this, args);
 		}
+
+        public void Start()
+        {
+            cruiseServerManager.Login();
+        }
+
+        public void Stop()
+        {
+            cruiseServerManager.Logout();
+        }
+
+        public bool RefreshSession()
+        {
+            cruiseServerManager.Logout();
+            return cruiseServerManager.Login();
+        }
 	}
 }

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Core.Security;
+
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
@@ -7,6 +9,16 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 	{
 		private ProjectList projects = new ProjectList();
         private List<IQueueConfiguration> queueConfigurations = new List<IQueueConfiguration>();
+        private ISecurityManager securityManager = new NullSecurityManager();
+
+        /// <summary>
+        /// Store the security manager that is being used.
+        /// </summary>
+        public ISecurityManager SecurityManager
+        {
+            get { return securityManager; }
+            set { securityManager = value; }
+        }
 
         /// <summary>
         /// Store any custom queue configurations.

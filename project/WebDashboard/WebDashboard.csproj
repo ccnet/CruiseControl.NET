@@ -102,6 +102,10 @@
       <Name>Commons</Name>
       <HintPath>..\..\lib\Commons.dll</HintPath>
     </Reference>
+    <Reference Include="CSharpFormat, Version=2.5.3274.32716, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\CSharpFormat.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -180,6 +184,17 @@
     <Compile Include="Configuration\ServerLocation.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\StylesheetConfiguration.cs" />
+    <Compile Include="Dashboard\ActionDecorators\QuerySessionActionDecorator.cs" />
+    <Compile Include="Dashboard\ImmutableNamedActionWithoutSiteTemplate.cs" />
+    <Compile Include="Dashboard\INoSiteTemplateAction.cs" />
+    <Compile Include="Dashboard\ISecurityPlugin.cs" />
+    <Compile Include="Dashboard\ISessionRetriever.cs" />
+    <Compile Include="Dashboard\ISessionStore.cs" />
+    <Compile Include="Dashboard\LoginViewBuilder.cs" />
+    <Compile Include="Dashboard\QuerySessionRetriever.cs" />
+    <Compile Include="Dashboard\QuerySessionStore.cs" />
+    <Compile Include="Dashboard\QuerySessionStorer.cs" />
     <Compile Include="Plugins\Administration\AdministerAction.cs" />
     <Compile Include="Plugins\Administration\AdministerPlugin.cs" />
     <Compile Include="Plugins\Administration\ConfigurationAttribute.cs" />
@@ -540,6 +555,7 @@
     <Compile Include="Plugins\FarmReport\XmlReportAction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\FarmReport\XmlServerSecurityAction.cs" />
     <Compile Include="Plugins\ForceBuild\ForceBuildXmlAction.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -548,16 +564,24 @@
     <Compile Include="Plugins\ProjectReport\ProjectReportProjectPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\ProjectReport\ServerAuditHistoryProjectPlugin.cs" />
     <Compile Include="Plugins\ProjectReport\ServerLogProjectPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\ProjectReport\ServerSecurityConfigurationProjectPlugin.cs" />
+    <Compile Include="Plugins\ProjectReport\ServerUserListProjectPlugin.cs" />
     <Compile Include="Plugins\ProjectReport\ViewConfigurationProjectPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Plugins\ProjectReport\ProjectXmlReport.cs" />
     <Compile Include="Plugins\RSS\RSSFeed.cs" />
+    <Compile Include="Plugins\Security\ChangePasswordSecurityAction.cs" />
+    <Compile Include="Plugins\Security\LogoutSecurityAction.cs" />
+    <Compile Include="Plugins\Security\UserNameSecurityAction.cs" />
+    <Compile Include="Plugins\Security\UserNameSecurityPlugin.cs" />
     <Compile Include="Plugins\ServerReport\QueueStatusServerPlugin.cs" />
     <Compile Include="Plugins\ServerReport\ProjectConfigurationServerPlugin.cs" />
+    <Compile Include="Plugins\ServerReport\ServerAuditHistoryServerPlugin.cs" />
     <Compile Include="Plugins\ServerReport\ServerInformationServerPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -567,6 +591,8 @@
     <Compile Include="Plugins\ServerReport\ServerReportServerPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\ServerReport\ServerSecurityConfigurationServerPlugin.cs" />
+    <Compile Include="Plugins\ServerReport\ServerUserListServerPlugin.cs" />
     <Compile Include="Plugins\Statistics\BuildGraph.cs" />
     <Compile Include="Plugins\Statistics\ProjectStatisticsPlugin.cs">
       <SubType>Code</SubType>
@@ -699,24 +725,35 @@
     <None Include="templates\AdministerDashboard.vm" />
     <None Include="templates\AdminLogin.vm" />
     <None Include="templates\AllBuilds.vm" />
+    <None Include="templates\AuditHistory.vm" />
     <None Include="templates\BuildLog.vm" />
     <None Include="templates\BuildRows.vm" />
     <None Include="templates\BuildSideBar.vm" />
+    <None Include="templates\ChangePasswordAction.vm" />
     <None Include="templates\EditProjectCommandLineBuilder.vm" />
     <None Include="templates\EditProjectCVS.vm" />
     <None Include="templates\EditProjectFileSourceControl.vm" />
     <None Include="templates\EditProjectNantBuilder.vm" />
     <None Include="templates\EditProjectP4.vm" />
     <None Include="templates\FarmSideBar.vm" />
+    <None Include="templates\LoggedIn.vm" />
+    <None Include="templates\LoggedOut.vm" />
+    <None Include="templates\LoginAction.vm" />
     <None Include="templates\ProjectGrid.vm" />
     <None Include="templates\ProjectReport.vm" />
+    <None Include="templates\ProjectServerConfiguration.vm" />
     <None Include="templates\ProjectSideBar.vm" />
     <None Include="templates\RecentBuilds.vm" />
+    <None Include="templates\SecurityConfiguration.vm" />
     <None Include="templates\ServerInfo.vm" />
     <None Include="templates\ServerLog.vm" />
+    <None Include="templates\ServerQueueStatus.vm" />
     <None Include="templates\ServerSideBar.vm" />
     <None Include="templates\SiteTemplate.vm" />
     <None Include="templates\TopMenu.vm" />
+    <None Include="templates\UserDiagnostics.vm" />
+    <None Include="templates\UserList.vm" />
+    <None Include="templates\UserNameLogin.vm" />
     <None Include="Web.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			return myCache;
 		}
 
-		public void Post(Uri uri, NameValueCollection input)
+		public string Post(Uri uri, NameValueCollection input)
 		{
 			ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 			WebRequest request = WebRequest.Create(uri);
@@ -53,6 +53,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			byte[] bytes = encoding.GetBytes(strInput);
 			writeStream.Write(bytes, 0, bytes.Length);
 			writeStream.Close();
+
+            using (WebResponse response = request.GetResponse())
+            {
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    StreamReader streamReader = new StreamReader(responseStream);
+                    return streamReader.ReadToEnd();
+                }
+            }
 		}
 		
 		private static string GetInputString(NameValueCollection input)

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Security;
 using System.Collections.Generic;
 using System.Configuration;
 
@@ -81,6 +82,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config
                             IQueueConfiguration queueConfig = loadedItem as IQueueConfiguration;
                             configuration.QueueConfigurations.Add(queueConfig);
                         }
+                        else if (loadedItem is ISecurityManager)
+                        {
+                            ISecurityManager securityManager = loadedItem as ISecurityManager;
+                            configuration.SecurityManager = securityManager as ISecurityManager;
+                        }
                         else
                         {
                             throw new ConfigurationException("\nUnknown configuration item found\n" + node.OuterXml);
@@ -126,6 +132,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// </remarks>
         private void ValidateConfiguration(Configuration value)
         {
+            // Validate the security manager - need to do this first
+            if (value.SecurityManager is IConfigurationValidation)
+            {
+                (value.SecurityManager as IConfigurationValidation).Validate(value, null);
+            }
+
             // Validate all the projects
             foreach (IProject project in value.Projects)
             {

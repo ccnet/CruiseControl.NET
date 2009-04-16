@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.Remote.Events;
 
 namespace ThoughtWorks.CruiseControl.Remote
@@ -25,13 +27,13 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// </summary>
 		void WaitForExit();
 
-		void Start(string project);
-		void Stop(string project);
+        void Start(string sessionToken, string project);
+        void Stop(string sessionToken, string project);
 
 		/// <summary>
 		/// Cancel a pending project integration request from the integration queue.
 		/// </summary>
-		void CancelPendingRequest(string projectName);
+        void CancelPendingRequest(string sessionToken, string projectName);
 		
 		/// <summary>
 		/// Gets the projects and integration queues snapshot from this server.
@@ -54,15 +56,20 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// </summary>
 		/// <param name="projectName">name of the project to force a build</param>
         /// <param name="enforcerName">name or id of the person, program that forces the build</param>
-		void ForceBuild(string projectName, string enforcerName);
+        void ForceBuild(string sessionToken, string projectName, string enforcerName);
+
 
 		
 		/// <summary>
 		/// Aborts the build of the selected project.
 		/// </summary>
-		void AbortBuild(string projectName, string enforcerName);
+        /// <param name="sessionToken"></param>
+        /// <param name="projectName"></param>
+        /// <param name="enforcerName"></param>
+		void AbortBuild(string sessionToken,string projectName, string enforcerName);
 		
-		void Request(string projectName, IntegrationRequest request);
+
+        void Request(string sessionToken, string projectName, IntegrationRequest request);
 
 		void WaitForExit(string projectName);
 		
@@ -122,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		void UpdateProject(string projectName, string serializedProject);
 
 		ExternalLink[] GetExternalLinks(string projectName);
-		void SendMessage(string projectName, Message message);
+        void SendMessage(string sessionToken, string projectName, Message message);
 
 		string GetArtifactDirectory(string projectName);
 
@@ -209,5 +216,73 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="source">Where to retrieve the file from.</param>
         RemotingFileTransfer RetrieveFileTransfer(string project, string fileName, FileTransferSource source);
         #endregion
+
+        /// <summary>
+        /// Logs a user into the session and generates a session.
+        /// </summary>
+        /// <param name="credentials"></param>
+        /// <returns></returns>
+        string Login(ISecurityCredentials credentials);
+
+        /// <summary>
+        /// Logs a user out of the system and removes their session.
+        /// </summary>
+        /// <param name="sesionToken"></param>
+        void Logout(string sesionToken);
+        
+        /// <summary>
+        /// Retrieves the security configuration for the server.
+        /// </summary>
+        string GetSecurityConfiguration(string sessionToken);
+
+        /// <summary>
+        /// Lists all the users who have been defined in the system.
+        /// </summary>
+        /// <returns>
+        /// A list of <see cref="UserDetails"/> containing the details on all the users
+        /// who have been defined.
+        /// </returns>
+        List<UserDetails> ListAllUsers(string sessionToken);
+
+        /// <summary>
+        /// Checks the security permissions for a user against one or more projects.
+        /// </summary>
+        /// <param name="userName">The name of the user.</param>
+        /// <param name="projectNames">The names of the projects to check.</param>
+        /// <returns>A set of diagnostics information.</returns>
+        List<SecurityCheckDiagnostics> DiagnoseSecurityPermissions(string sessionToken, string userName, params string[] projectNames);
+
+        /// <summary>
+        /// Reads all the specified number of audit events.
+        /// </summary>
+        /// <param name="startPosition">The starting position.</param>
+        /// <param name="numberOfRecords">The number of records to read.</param>
+        /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details.</returns>
+        List<AuditRecord> ReadAuditRecords(string sessionToken, int startPosition, int numberOfRecords);
+
+        /// <summary>
+        /// Reads all the specified number of filtered audit events.
+        /// </summary>
+        /// <param name="startPosition">The starting position.</param>
+        /// <param name="numberOfRecords">The number of records to read.</param>
+        /// <param name="filter">The filter to use.</param>
+        /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
+        List<AuditRecord> ReadAuditRecords(string sessionToken, int startPosition, int numberOfRecords, IAuditFilter filter);
+
+        /// <summary>
+        /// Changes the password of the user.
+        /// </summary>
+        /// <param name="sessionToken">The session token for the current user.</param>
+        /// <param name="oldPassword">The person's old password.</param>
+        /// <param name="newPassword">The person's new password.</param>
+        void ChangePassword(string sessionToken, string oldPassword, string newPassword);
+
+        /// <summary>
+        /// Resets the password for a user.
+        /// </summary>
+        /// <param name="sessionToken">The session token for the current user.</param>
+        /// <param name="userName">The user name to reset the password for.</param>
+        /// <param name="newPassword">The person's new password.</param>
+        void ResetPassword(string sessionToken, string userName, string newPassword);
     }
 }

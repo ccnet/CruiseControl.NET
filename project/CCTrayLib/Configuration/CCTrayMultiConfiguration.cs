@@ -43,16 +43,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 				if (Projects[i].ShowProject)
 				{
 					ICruiseProjectManager projectManager = cruiseProjectManagerFactory.Create(Projects[i], serverManagersList);
-					IProjectStatusRetriever projectStatusRetriever = GetServerMonitorForProject(Projects[i], serverMonitors);
-					retVal[indexRetval++] = new ProjectMonitor(Projects[i], projectManager, projectStatusRetriever);
-
+					ISingleServerMonitor serverMonitor = GetServerMonitorForProject(Projects[i], serverMonitors);
+                    retVal[indexRetval++] = new ProjectMonitor(Projects[i], projectManager, serverMonitor);
 				}
 			}
 			
 			return retVal;
 		}
 
-        private static IProjectStatusRetriever GetServerMonitorForProject(CCTrayProject project, IEnumerable<ISingleServerMonitor> serverMonitors)
+        private static ISingleServerMonitor GetServerMonitorForProject(CCTrayProject project, IEnumerable<ISingleServerMonitor> serverMonitors)
 	    {
             foreach (ISingleServerMonitor serverMonitor in serverMonitors)
             {

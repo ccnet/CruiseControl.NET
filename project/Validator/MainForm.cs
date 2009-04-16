@@ -13,6 +13,7 @@ using Exortech.NetReflector;
 using Manoli.Utils.CSharpFormat;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Core.Config.Preprocessor;
 
 namespace Validator
@@ -353,6 +354,11 @@ namespace Validator
                             GenerateElement("td", queueConfig.Name),
                             GenerateElement("td", "Queue"),
                             GenerateElement("td", "Yes")));
+                }
+                else if (loadedItem is ISecurityManager)
+                {
+                    ISecurityManager securityManager = loadedItem as ISecurityManager;
+                    configuration.SecurityManager = securityManager as ISecurityManager;
                 }
                 else
                 {

@@ -14,6 +14,7 @@
 					<a href="http://ccnet.thoughtworks.com"><img src="$applicationPath/images/ccnet_logo.gif" border="0" /></a>
 				</td>
 				<td align="right" valign="bottom">
+					$loginView
 					<a href="$applicationPath/doc/index.html">Documentation</a>
 				</td>
 			</tr>

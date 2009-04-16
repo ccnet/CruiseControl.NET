@@ -4,15 +4,16 @@ using System.ComponentModel;
 using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Publishers.Statistics;
+using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Core.Config;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -51,11 +52,10 @@ namespace ThoughtWorks.CruiseControl.Core
         private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
         private ArrayList messages = new ArrayList();
         private int maxSourceControlRetries = 5;
+        private IProjectAuthorisation security = new NullProjectAuthorisation();
         private ProjectInitialState startupState = ProjectInitialState.Started;
-
         private bool StopProjectOnReachingMaxSourceControlRetries = false;
         private Sourcecontrol.Common.SourceControlErrorHandlingPolicy sourceControlErrorHandling = Common.SourceControlErrorHandlingPolicy.ReportEveryFailure;
-
 
         [ReflectorProperty("prebuild", Required = false)]
         public ITask[] PrebuildTasks = new ITask[0];
@@ -71,6 +71,14 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             this.integratable = integratable;
         }
+
+        [ReflectorProperty("security", InstanceTypeKey = "type", Required = false)]
+        public IProjectAuthorisation Security
+        {
+            get { return security; }
+            set { security = value; }
+        }
+
 
         [ReflectorProperty("state", InstanceTypeKey = "type", Required = false), Description("State")]
         public IStateManager StateManager
@@ -467,6 +475,13 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <param name="parent">The parent item for the item being validated.</param>
         public virtual void Validate(IConfiguration configuration, object parent)
         {
+            if (!(security is NullProjectAuthorisation) &&
+                (configuration.SecurityManager is NullSecurityManager))
+            {
+                throw new ConfigurationException(
+                    string.Format("Security is defined for project '{0}', but not defined at the server", this.Name));
+            }
+
 
             ValidateProject();
             ValidateItem(sourceControl, configuration);
@@ -475,6 +490,7 @@ namespace ThoughtWorks.CruiseControl.Core
             ValidateItems(tasks, configuration);
             ValidateItems(publishers, configuration);
             ValidateItem(state, configuration);
+            ValidateItem(security, configuration);
         }
 
 

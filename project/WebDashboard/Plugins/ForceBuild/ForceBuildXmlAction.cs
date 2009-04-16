@@ -4,6 +4,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 {
@@ -21,7 +22,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 		public IResponse Execute(ICruiseRequest request)
 		{
             string EnforcerName = "BuildForcer";
-            farmService.ForceBuild(request.ProjectSpecifier, EnforcerName);
+            string sessionToken = null;
+            if ((request != null) && (request.Request != null)) request.Request.GetText("sessionToken");
+            farmService.ForceBuild(request.ProjectSpecifier, sessionToken, EnforcerName);
 
 			StringWriter stringWriter = new StringWriter();
 			XmlTextWriter xmlWriter = new XmlTextWriter(stringWriter);

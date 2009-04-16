@@ -9,6 +9,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		string ServerUrl { get; }
 		string DisplayName { get; }
 		BuildServerTransport Transport { get; }
+        string SessionToken { get; }
 
 		/// <summary>
 		/// Cancel the pending request on the integration queue for the specified project on this server.
@@ -24,5 +25,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		bool IsConnected { get; }
 		
 		Exception ConnectException { get; }
+
+        void Start();
+        void Stop();
+        bool RefreshSession();
 	}
 }

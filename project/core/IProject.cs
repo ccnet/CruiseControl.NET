@@ -1,4 +1,5 @@
 using System.Xml;
+using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
@@ -106,6 +107,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		void NotifySleepingState();
 
+        /// <summary>
+        /// The associated security configuration.
+        /// </summary>
+        IProjectAuthorisation Security { get; }
 
         /// <summary>
         /// Maximum amount of sourcecontrol exceptions allowed, before stopping the project (if specified to do so).

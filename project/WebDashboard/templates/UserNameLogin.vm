@@ -1,0 +1,31 @@
+﻿<form method="post">
+  #if ($errorMessage.length > 0)
+<div class="ui-widget">
+  <div class="ui-state-error ui-corner-all" style="padding: 0pt 0.7em; margin-top: 20px;">
+    <p>
+      <span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span>
+      $errorMessage
+    </p>
+  </div>
+</div>
+  #end
+  <table>
+    <tr>
+      <td>User name:</td>
+      <td>
+        <input type="text" name="userName"/>
+      </td>
+      <td>
+        <input type="submit" value="Login"/>
+      </td>
+    </tr>
+    #if (!$hidePassword)
+    <tr>
+      <td>Password:</td>
+      <td>
+        <input type="password" name="password"/>
+      </td>
+    </tr>
+    #end
+  </table>
+</form>

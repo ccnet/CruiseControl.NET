@@ -312,9 +312,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 
 			configurationMock.ExpectAndReturn("Servers", servers);
 			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.Expect("ForceBuild", "myproject","BuildForcer");
+			cruiseManagerMock.Expect("ForceBuild", (string)null, "myproject","BuildForcer");
 
-            managerWrapper.ForceBuild(projectSpecifier, "BuildForcer");
+            managerWrapper.ForceBuild(projectSpecifier, null, "BuildForcer");
 
 			VerifyAll();
 		}
@@ -358,5 +358,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 
 			VerifyAll();
 		}
+
+        [Test]
+        public void ReturnsServerSecurityFromCorrectServer()
+        {
+            ServerLocation[] servers = new ServerLocation[] { serverLocation, otherServerLocation };
+
+            configurationMock.ExpectAndReturn("Servers", servers);
+            cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
+            string expected = "security configuration";
+            cruiseManagerMock.ExpectAndReturn("GetSecurityConfiguration", expected, string.Empty);
+            string actual = managerWrapper.GetServerSecurity(serverSpecifier, string.Empty);
+            Assert.AreEqual(expected, actual);
+
+            VerifyAll();
+        }
 	}
 }

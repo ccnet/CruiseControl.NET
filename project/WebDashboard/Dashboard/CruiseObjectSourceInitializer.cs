@@ -5,6 +5,7 @@ using Objection;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -12,6 +13,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -41,9 +43,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                                                 new NameValueCollectionRequest(parametersCollection, request.Headers, request.Path,
                                                                                request.RawUrl, request.ApplicationPath));
 
+            DefaultUrlBuilder urlBuilder = new DefaultUrlBuilder();
             objectionManager.AddInstanceForType(typeof(IUrlBuilder),
                                                 new AbsolutePathUrlBuilderDecorator(
-                                                    new DefaultUrlBuilder(),
+                                                    urlBuilder,
                                                     request.ApplicationPath));
 
             objectionManager.SetImplementationType(typeof(ICruiseRequest), typeof(RequestWrappingCruiseRequest));
@@ -61,6 +64,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             IPluginConfiguration pluginConfig = config.PluginConfiguration;
             objectionManager.AddInstanceForType(typeof(IPluginConfiguration), pluginConfig);
 
+            ISessionRetriever sessionRetriever = pluginConfig.SessionStore.RetrieveRetriever();
+            objectionManager.AddInstanceForType(typeof(ISessionRetriever), sessionRetriever);
+
+            ISessionStorer sessionStorer = pluginConfig.SessionStore.RetrieveStorer();
+            objectionManager.AddInstanceForType(typeof(ISessionStorer), sessionStorer);
+            urlBuilder.SessionStorer = sessionStorer;
+
+
             System.Collections.Generic.List<string> LoadedPlugins = new System.Collections.Generic.List<string>();
             bool UnknownPluginDetected = false;
 
@@ -72,13 +83,24 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 }
                 else
                 {
+                    LoadedPlugins.Add(plugin.LinkDescription);
+
                     foreach (INamedAction action in plugin.NamedActions)
                     {
+                        if ((action as INoSiteTemplateAction) == null)
+                        {
                         objectionManager.AddInstanceForName(action.ActionName, action.Action)
-                            .Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(NoCacheabilityActionProxy));
+                                .Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(QuerySessionActionDecorator)).Decorate(typeof(NoCacheabilityActionProxy));
+                    }
+                        else
+                        {
+                        objectionManager.AddInstanceForName(action.ActionName, action.Action)
+                                .Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(QuerySessionActionDecorator)).Decorate(typeof(NoCacheabilityActionProxy));
                     }
                 }
             }
+            }
+
 
             if (UnknownPluginDetected) ThrowExceptionShouwingLoadedPlugins(LoadedPlugins, "FarmPlugins");
             LoadedPlugins = new System.Collections.Generic.List<string>();
@@ -91,10 +113,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 }
                 else
                 {
+                    LoadedPlugins.Add(plugin.LinkDescription);
                     foreach (INamedAction action in plugin.NamedActions)
                     {
+                        if ((action as INoSiteTemplateAction) == null)
+                        {
                         objectionManager.AddInstanceForName(action.ActionName, action.Action)
-                            .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(NoCacheabilityActionProxy));
+                                .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(QuerySessionActionDecorator)).Decorate(typeof(NoCacheabilityActionProxy));
+                        }
+                        else
+                        {
+                        objectionManager.AddInstanceForName(action.ActionName, action.Action)
+                                .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(QuerySessionActionDecorator)).Decorate(typeof(NoCacheabilityActionProxy));
+                        }
                     }
                 }
             }
@@ -111,10 +142,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 }
                 else
                 {
+                    LoadedPlugins.Add(plugin.LinkDescription);
                     foreach (INamedAction action in plugin.NamedActions)
                     {
+                        if ((action as INoSiteTemplateAction) == null)
+                        {
                         objectionManager.AddInstanceForName(action.ActionName, action.Action)
-                            .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
+                                .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(QuerySessionActionDecorator));
+                        }
+                        else
+                        {
+                            objectionManager.AddInstanceForName(action.ActionName, action.Action)
+                                .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(QuerySessionActionDecorator));
+                        }
                     }
                 }
             }
@@ -131,7 +171,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             {
                 IPlugin latestBuildPlugin = (IPlugin)objectSource.GetByType(typeof(LatestBuildReportProjectPlugin));
                 objectionManager.AddInstanceForName(latestBuildPlugin.NamedActions[0].ActionName, latestBuildPlugin.NamedActions[0].Action)
-                    .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
+                    .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(QuerySessionActionDecorator));
             }
 
 
@@ -145,13 +185,29 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 }
                 else
                 {
+                    LoadedPlugins.Add(plugin.LinkDescription);
                     foreach (INamedAction action in plugin.NamedActions)
                     {
+                        if ((action as INoSiteTemplateAction) == null)
+                        {
                         objectionManager.AddInstanceForName(action.ActionName + "_CONDITIONAL_GET_FINGERPRINT_CHAIN", action.Action)
-                            .Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(SiteTemplateActionDecorator));
+                                .Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(SiteTemplateActionDecorator))
+                                .Decorate(typeof(QuerySessionActionDecorator));
+                            objectionManager.AddInstanceForName(action.ActionName, action.Action)
+                                .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction))
+                                .Decorate(typeof(CachingActionProxy)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator))
+                                .Decorate(typeof(QuerySessionActionDecorator));
+                        }
+                        else
+                        {
+                        objectionManager.AddInstanceForName(action.ActionName + "_CONDITIONAL_GET_FINGERPRINT_CHAIN", action.Action)
+                                .Decorate(typeof(CruiseActionProxyAction))
+                                .Decorate(typeof(QuerySessionActionDecorator));
                         objectionManager.AddInstanceForName(action.ActionName, action.Action)
                             .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction))
-                            .Decorate(typeof(CachingActionProxy)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
+                                .Decorate(typeof(CachingActionProxy)).Decorate(typeof(ExceptionCatchingActionProxy))
+                                .Decorate(typeof(QuerySessionActionDecorator));
+                        }
                     }
                 }
             }
@@ -159,6 +215,38 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             if (UnknownPluginDetected) ThrowExceptionShouwingLoadedPlugins(LoadedPlugins, "BuildPlugins");
             LoadedPlugins = new System.Collections.Generic.List<string>();
 
+            // Security plugins (for handling authentication)
+            foreach (ISecurityPlugin plugin in pluginConfig.SecurityPlugins)
+            {
+                plugin.SessionStorer = sessionStorer;
+                foreach (INamedAction action in plugin.NamedActions)
+                {
+                    if ((action as INoSiteTemplateAction) == null)
+                    {
+                        objectionManager.AddInstanceForName(action.ActionName, action.Action)
+                            .Decorate(typeof(ServerCheckingProxyAction))
+                            .Decorate(typeof(CruiseActionProxyAction))
+                            .Decorate(typeof(ExceptionCatchingActionProxy))
+                            .Decorate(typeof(SiteTemplateActionDecorator))
+                            .Decorate(typeof(QuerySessionActionDecorator))
+                            .Decorate(typeof(NoCacheabilityActionProxy));
+                    }
+                    else
+                    {
+                        objectionManager.AddInstanceForName(action.ActionName, action.Action)
+                            .Decorate(typeof(ServerCheckingProxyAction))
+                            .Decorate(typeof(CruiseActionProxyAction))
+                            .Decorate(typeof(ExceptionCatchingActionProxy))
+                            .Decorate(typeof(QuerySessionActionDecorator))
+                            .Decorate(typeof(NoCacheabilityActionProxy));
+                    }
+                }
+            }
+
+            if (UnknownPluginDetected) ThrowExceptionShouwingLoadedPlugins(LoadedPlugins, "SecurityPlugins");
+
+            AddRequiredSecurityAction(LogoutSecurityAction.ActionName, typeof(LogoutSecurityAction));
+            AddRequiredSecurityAction(ChangePasswordSecurityAction.ActionName, typeof(ChangePasswordSecurityAction));
 
             // ToDo - make this kind of thing specifiable by Plugins (note that this action is not wrapped with a SiteTemplateActionDecorator
             // See BuildLogBuildPlugin for linked todo
@@ -185,6 +273,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             objectionManager.AddTypeForName(ProjectFileDownload.ActionName, typeof(ProjectFileDownload)).Decorate(typeof(CruiseActionProxyAction));
 
             return objectSource;
+        }
+
+        private void AddRequiredSecurityAction(string actionName, Type actionType)
+        {
+            objectionManager.AddTypeForName(actionName, actionType)
+                .Decorate(typeof(ServerCheckingProxyAction))
+                .Decorate(typeof(CruiseActionProxyAction))
+                .Decorate(typeof(ExceptionCatchingActionProxy))
+                .Decorate(typeof(SiteTemplateActionDecorator))
+                .Decorate(typeof(QuerySessionActionDecorator))
+                .Decorate(typeof(NoCacheabilityActionProxy));
         }
 
         private static IDashboardConfiguration GetDashboardConfiguration(ObjectSource objectSource, HttpContext context)

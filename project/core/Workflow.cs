@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Xml;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
@@ -149,7 +150,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		{ 
 			get { return ""; }
 		}
-
+        public IProjectAuthorisation Security
+        {
+            get { return null; }
+        }
 
         public int MaxSourceControlRetries
         {

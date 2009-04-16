@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Specialized;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
@@ -20,32 +21,32 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			this.serverManager = serverManager;
 		}
 
-		public void ForceBuild()
+        public void ForceBuild(string sessionToken)
 		{
-			PushDashboardButton("ForceBuild");
+			PushDashboardButton(sessionToken, "ForceBuild");
 		}
 
-		public void AbortBuild()
+        public void AbortBuild(string sessionToken)
 		{
-			PushDashboardButton("AbortBuild");
+			PushDashboardButton(sessionToken, "AbortBuild");
 		}
 
-		public void FixBuild(string fixingUserName)
+		public void FixBuild(string sessionToken, string fixingUserName)
 		{
 			throw new NotImplementedException("Fix build not currently supported on projects monitored via HTTP");
 		}
 
-		public void StopProject()
+        public void StopProject(string sessionToken)
 		{
-			PushDashboardButton("StopBuild");
+			PushDashboardButton(sessionToken, "StopBuild");
 		}
 
-		public void StartProject()
+        public void StartProject(string sessionToken)
 		{
-			PushDashboardButton("StartBuild");
+			PushDashboardButton(sessionToken, "StartBuild");
 		}
 
-		public void CancelPendingRequest()
+        public void CancelPendingRequest(string sessionToken)
 		{
 			throw new NotImplementedException("Cancel pending not currently supported on projects monitored via HTTP");
 		}
@@ -55,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			get { return projectName; }
 		}
 
-		public void PushDashboardButton(string buttonName)
+		public void PushDashboardButton(string sessionToken, string buttonName)
 		{
 			try
 			{
@@ -64,12 +65,44 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				input.Add(buttonName, "true");
 				input.Add("projectName", projectName);
 				input.Add("serverName", serverAlias);
-				webRetriever.Post(dashboardUri, input);
+                input.Add("sessionToken", sessionToken);
+                string response = webRetriever.Post(dashboardUri, input);
+
+                // The dashboard catches and handles all exceptions, these exceptions need to be passed on
+                HandleResponseAndThrowExceptions(response);
 			}
 			// Silently ignore exceptions that occur due to connection problems
 			catch (System.Net.WebException)
 			{
 			}
+            // Catch any permission denied exceptions and pass in the correct permission
+            catch (PermissionDeniedException)
+            {
+                throw new PermissionDeniedException(buttonName);
+            }
+		}
+
+        private void HandleResponseAndThrowExceptions(string response)
+        {
+            if (!string.IsNullOrEmpty(response))
+            {
+                if (response.Contains("ThoughtWorks.CruiseControl.Core.SessionInvalidException"))
+                {
+                    throw new SessionInvalidException();
+                }
+                else if (response.Contains("ThoughtWorks.CruiseControl.Core.PermissionDeniedException"))
+                {
+                    throw new PermissionDeniedException("Unknown");
+                }
+                else if (response.Contains("ThoughtWorks.CruiseControl.Core.SecurityException"))
+                {
+                    throw new SecurityException();
+                }
+                else if (response.Contains("ThoughtWorks.CruiseControl.Core.NoSuchProjectException"))
+                {
+                    throw new NoSuchProjectException();
+                }
+            }
 		}
 
 		private void InitConnection()
@@ -80,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				webUrl = new Uri(ps.WebURL);
 				ExtractServerAlias();
 			}
-			dashboardUri = new Uri(new WebDashboardUrl(serverManager.ServerUrl, serverAlias).ViewFarmReport);
+            dashboardUri = new Uri(new WebDashboardUrl(serverManager.Configuration.Url, serverAlias).ViewFarmReport);
 		}
 
 		private void ExtractServerAlias()

@@ -5,6 +5,7 @@ using Exortech.NetReflector;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -44,7 +45,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         }
 
         [Test]
-        [ExpectedException(typeof(ConfigurationException), ExpectedMessage="\nUnknown configuration item found\n<garbage />")]
+        public void DeserialiseSecurityFromXml()
+        {
+            string projectXml = ConfigurationFixture.GenerateProjectXml("test");
+            string queueXml = "<nullSecurity/>";
+            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml));
+            Assert.IsInstanceOfType(typeof(NullSecurityManager), configuration.SecurityManager);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ConfigurationException))]
         public void DeserialiseSingleProjectPlusUnknownFromXml()
         {
             string projectXml = ConfigurationFixture.GenerateProjectXml("test");
@@ -218,6 +228,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			}
 
 			public string WebURL { get {return ""; } }
+            public IProjectAuthorisation Security
+            {
+                get { return null; }
+            }
 
             public int MaxSourceControlRetries { get { return 0; } }
 

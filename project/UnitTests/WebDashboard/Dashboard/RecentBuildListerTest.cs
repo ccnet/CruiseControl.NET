@@ -23,6 +23,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private DynamicMock linkFactoryMock;
 		private DynamicMock linkListFactoryMock;
         private DynamicMock fingerprintFactoryMock;
+        private DynamicMock urlBuilderMock;
 
 		private RecentBuildLister lister;
 		private IProjectSpecifier projectSpecifier;
@@ -38,6 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
 			linkListFactoryMock = new DynamicMock(typeof(ILinkListFactory));
 		    fingerprintFactoryMock = new DynamicMock(typeof (IFingerprintFactory));
+            urlBuilderMock = new DynamicMock(typeof(ICruiseUrlBuilder));
 
 			lister = new RecentBuildLister(
 				(IFarmService) farmServiceMock.MockInstance,
@@ -45,7 +47,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance,
 				(ILinkFactory) linkFactoryMock.MockInstance,
 				(ILinkListFactory) linkListFactoryMock.MockInstance,
-                (IFingerprintFactory) fingerprintFactoryMock.MockInstance);
+                (IFingerprintFactory) fingerprintFactoryMock.MockInstance,
+                (ICruiseUrlBuilder)urlBuilderMock.MockInstance);
 
 			projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
             build2Specifier = new DefaultBuildSpecifier(projectSpecifier, "log20070401013456.xml");

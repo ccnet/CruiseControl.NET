@@ -10,6 +10,7 @@ using ThoughtWorks.CruiseControl.Remote.Events;
 namespace ThoughtWorks.CruiseControl.Core
 {
 	public class IntegrationQueueManager
+        : IQueueManager
 	{
 		private readonly IProjectIntegratorListFactory projectIntegratorListFactory;
 		private IProjectIntegratorList projectIntegrators;

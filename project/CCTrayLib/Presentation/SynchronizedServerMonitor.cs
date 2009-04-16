@@ -38,6 +38,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			get { return serverMonitor.DisplayName; }
 		}
 
+        public string SessionToken
+        {
+            get { return serverMonitor.SessionToken; }
+        }
+
 		public BuildServerTransport Transport
 		{
 			get { return serverMonitor.Transport; }
@@ -87,5 +92,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			if (QueueChanged != null) synchronizeInvoke.BeginInvoke(QueueChanged, new object[] {sender, args});
 		}
+
+        public void Start()
+        {
+            serverMonitor.Start();
+        }
+
+        public void Stop()
+        {
+            serverMonitor.Stop();
+        }
+
+        public bool RefreshSession()
+        {
+            return serverMonitor.RefreshSession();
+        }
 	}
 }

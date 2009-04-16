@@ -34,6 +34,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			get { return displayName; }
 		}
 
+        public string SessionToken
+        {
+            get { return null; }
+        }
+
 		public void CancelPendingRequest(string projectName)
 		{
 			// No implementation
@@ -94,5 +99,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			get { return connectException; }
 			set { connectException = value; }
 		}
+
+        public void Start()
+        {
+        }
+
+        public void Stop()
+        {
+        }
+
+        public bool RefreshSession()
+        {
+            return true;
+        }
 	}
 }

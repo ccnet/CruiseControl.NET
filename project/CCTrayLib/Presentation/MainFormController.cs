@@ -82,10 +82,22 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			get
 			{
-			    if (SelectedProject == null)
+				if (SelectedProject != null)
+				{
+					if ((SelectedProject.ProjectState == ProjectState.Building) ||
+						(SelectedProject.ProjectState == ProjectState.BrokenAndBuilding))
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+				}
+				else
+				{
 			        return false;
-			    return (SelectedProject.ProjectState == ProjectState.Building) ||
-			           (SelectedProject.ProjectState == ProjectState.BrokenAndBuilding);
+				}
 			}
 		}
 		
@@ -94,10 +106,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			get {
 				if (!IsProjectSelected) return false;
 				if (!selectedProject.IsConnected) return false;
-
+				else
+				{
 			    bool isProjectRunning = selectedProject.ProjectIntegratorState.Equals(Remote.ProjectIntegratorState.Running.ToString());
 			    return isProjectRunning;
 			}
+		}
 		}
 		
 		public event EventHandler IsProjectSelectedChanged;
@@ -125,13 +139,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public void AbortBuild()
 		{
 		    if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
+			{
 		        SelectedProject.AbortBuild();
+		}
 		}
 		
 		public void DisplayWebPage()
 		{
 		    if (IsProjectSelected)
+			{
 		        DisplayWebPageForProject(SelectedProject.Detail);
+		}
 		}
 
         public void BindToTrayIcon(TrayIcon trayIcon)
@@ -152,9 +170,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				item.Tag = monitor;
 				listView.Items.Add(item);
 			}
-
-			if (listView.Items.Count > 0) 
-                listView.Items[0].Selected = true;
+			if (listView.Items.Count > 0) listView.Items[0].Selected = true;
 		}
 
 		public void BindToQueueTreeView(QueueTreeView treeView)
@@ -193,6 +209,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public void StartServerMonitoring()
 		{
 			StopServerMonitoring();
+
 			serverPoller = new Poller(configuration.PollPeriodSeconds, aggregatedServerMonitor);
 			serverPoller.Start();
 

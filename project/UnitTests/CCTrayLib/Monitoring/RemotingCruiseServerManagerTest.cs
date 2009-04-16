@@ -28,9 +28,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void InitialisingReturnsCorrectServerProperties()
 		{
-			Assert.AreEqual(ServerUrl, manager.ServerUrl);
+			Assert.AreEqual(ServerUrl, manager.Configuration.Url);
 			Assert.AreEqual(@"blah:1000", manager.DisplayName);
-			Assert.AreEqual(BuildServerTransport.Remoting, manager.Transport);
+			Assert.AreEqual(BuildServerTransport.Remoting, manager.Configuration.Transport);
 		}
 
 		[Test]

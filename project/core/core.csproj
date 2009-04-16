@@ -442,9 +442,12 @@
     <Compile Include="Queues\IntegrationQueueItem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Queues\IntegrationQueueManagerFactory.cs" />
     <Compile Include="Queues\IntegrationQueueSet.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Queues\IQueueManager.cs" />
+    <Compile Include="Queues\IQueueManagerFactory.cs" />
     <Compile Include="RemoteCruiseServer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -481,9 +484,42 @@
     <Compile Include="Reporting\Dashboard\Navigation\IServerSpecifier.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Reporting\Dashboard\Navigation\ISessionStorer.cs" />
     <Compile Include="Reporting\Dashboard\Navigation\IUrlBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Security\ActiveDirectoryAuthentication.cs" />
+    <Compile Include="Security\Auditing\AuditLoggerBase.cs" />
+    <Compile Include="Security\Auditing\FileXmlLogger.cs" />
+    <Compile Include="Security\Auditing\FileXmlReader.cs" />
+    <Compile Include="Security\Auditing\IAuditLogger.cs" />
+    <Compile Include="Security\Auditing\IAuditReader.cs" />
+    <Compile Include="Security\DefaultProjectAuthorisation.cs" />
+    <Compile Include="Security\ExternalFileSecurityManager.cs" />
+    <Compile Include="Security\FileBasedSessionCache.cs" />
+    <Compile Include="Security\IAuthentication.cs" />
+    <Compile Include="Security\InMemorySessionCache.cs" />
+    <Compile Include="Security\InternalSecurityManager.cs" />
+    <Compile Include="Security\IPermission.cs" />
+    <Compile Include="Security\IProjectAuthorisation.cs" />
+    <Compile Include="Security\ISecurityManager.cs" />
+    <Compile Include="Security\ISecuritySetting.cs" />
+    <Compile Include="Security\ISessionCache.cs" />
+    <Compile Include="Security\NullProjectAuthorisation.cs" />
+    <Compile Include="Security\NullSecurityManager.cs" />
+    <Compile Include="Security\PermissionBase.cs" />
+    <Compile Include="Security\ProjectSecurityConfigurationInformation.cs" />
+    <Compile Include="Security\RolePermission.cs" />
+    <Compile Include="Security\SecurityHelpers.cs" />
+    <Compile Include="Security\SecurityManagerBase.cs" />
+    <Compile Include="Security\SecurityPermission.cs" />
+    <Compile Include="Security\ServerSecurityConfigurationInformation.cs" />
+    <Compile Include="Security\SessionCacheBase.cs" />
+    <Compile Include="Security\SessionExpiryMode.cs" />
+    <Compile Include="Security\UserName.cs" />
+    <Compile Include="Security\UserNameAuthentication.cs" />
+    <Compile Include="Security\UserPasswordAuthentication.cs" />
+    <Compile Include="Security\UserPermission.cs" />
     <Compile Include="sourcecontrol\AccuRev.cs">
       <SubType>Code</SubType>
     </Compile>

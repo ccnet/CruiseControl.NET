@@ -1,5 +1,6 @@
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 {
@@ -14,5 +15,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
         IBuildSpecifier BuildSpecifier { get; }
 
         IRequest Request { get; }
+        ICruiseUrlBuilder UrlBuilder { get; }
+
+        /// <summary>
+        /// Attempt to retrieve a session token
+        /// </summary>
+        /// <returns></returns>
+        string RetrieveSessionToken(ISessionRetriever sessionRetriever);
     }
 }

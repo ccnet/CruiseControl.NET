@@ -1,47 +1,54 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
-	public partial class AddProjects: Form
+	public partial class AddProjects : Form
 	{
-		private readonly ICruiseProjectManagerFactory cruiseProjectManagerFactory;
-		private readonly IEnumerable<CCTrayProject> currentProjectList;
-
 		private BuildServer selectedServer;
 
-		public AddProjects(ICruiseProjectManagerFactory cruiseProjectManagerFactory, IEnumerable<CCTrayProject> currentProjectList)
+		private readonly ICruiseProjectManagerFactory cruiseProjectManagerFactory;
+        private Button butConfigure;
+        private ColumnHeader columnHeader1;
+        private ImageList imlSmall;
+		private readonly CCTrayProject[] currentProjectList;
+
+		public AddProjects(ICruiseProjectManagerFactory cruiseProjectManagerFactory, CCTrayProject[] currentProjectList)
 		{
 			this.cruiseProjectManagerFactory = cruiseProjectManagerFactory;
 			this.currentProjectList = currentProjectList;
 
 			InitializeComponent();
-			PopulateServerListFromProjects();
-		}
 
-		private void PopulateServerListFromProjects()
-		{
+            List<BuildServer> serverList = new List<BuildServer>();
 			foreach (CCTrayProject project in currentProjectList)
 			{
-				if (!lbServer.Items.Contains(project.BuildServer))
-					lbServer.Items.Add(project.BuildServer);
+                if (!serverList.Contains(project.BuildServer)) serverList.Add(project.BuildServer);
+		}
+
+            foreach (BuildServer server in serverList)
+		{
+                AddServer(server);
 			}
 		}
 
-		public IEnumerable<CCTrayProject> GetListOfNewProjects(IWin32Window owner)
+		public CCTrayProject[] GetListOfNewProjects(IWin32Window owner)
 		{
-			if (ShowDialog(owner) != DialogResult.OK)
-				return new CCTrayProject[] {};
-
-			List<CCTrayProject> newProjects = new List<CCTrayProject>();
-
+			if (ShowDialog(owner) == DialogResult.OK)
+			{
+				ArrayList newProjects = new ArrayList();
 			foreach (string projectName in lbProject.SelectedItems)
+				{
 				newProjects.Add(new CCTrayProject(selectedServer, projectName));
-
-			return newProjects;
+				}
+				return (CCTrayProject[]) newProjects.ToArray(typeof (CCTrayProject));
+			}
+			return null;
 		}
 
 		private void btnAddServer_Click(object sender, EventArgs e)
@@ -50,14 +57,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			BuildServer buildServer = addBuildServer.ChooseNewBuildServer(this);
 			if (buildServer != null)
-				lbServer.SelectedIndex = lbServer.Items.Add(buildServer);
+			{
+                AddServer(buildServer).Selected = true;
 		}
-
-		private void lbServer_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			selectedServer = (BuildServer) lbServer.SelectedItem;
-			if (selectedServer != null)
-				RetrieveListOfProjects(selectedServer);
 		}
 
 		private void RetrieveListOfProjects(BuildServer server)
@@ -67,9 +69,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			{
 				lbProject.Items.Clear();
 
-				foreach (CCTrayProject project in cruiseProjectManagerFactory.GetProjectList(server))
+				CCTrayProject[] projectList = cruiseProjectManagerFactory.GetProjectList(server);
+
+				foreach (CCTrayProject project in projectList)
 				{
-					if (!IsProjectAlreadyAdded(project))
+					if (! IsProjectAlreadyAdded(project))
 						lbProject.Items.Add(project.ProjectName);
 				}
 			}
@@ -93,13 +97,90 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			return false;
 		}
 
+		private void KeyEventHelper(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				this.DialogResult = System.Windows.Forms.DialogResult.OK;
+				this.Close();
+			}
+			
+			if (e.KeyCode == Keys.Escape)
+			{
+				this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+				this.Close();
+			}
+		}
+		
 		private void lbProject_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (KeyUtils.PressedControlA(e))
+			if ((e.Modifiers == Keys.Control) && (e.KeyCode == Keys.A))
 			{
 				for (int i = 0; i < lbProject.Items.Count; i++)
+				{
 					lbProject.SetSelected(i, true);
 			}
 		}
+			
+			KeyEventHelper(sender, e);
+		}
+		
+		private void lbServer_KeyDown(object sender, KeyEventArgs e)
+		{
+			KeyEventHelper(sender, e);
+		}
+		
+		private void AddProjects_KeyDown(object sender, KeyEventArgs e)
+		{
+			KeyEventHelper(sender, e);
+		}
+
+        private void lbServer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lbServer.SelectedItems.Count > 0)
+            {
+                selectedServer = (BuildServer)lbServer.SelectedItems[0].Tag;
+            }
+            else
+            {
+                selectedServer = null;
+            }
+            if (selectedServer != null) RetrieveListOfProjects(selectedServer);
+        }
+
+        private ListViewItem AddServer(BuildServer server)
+        {
+            ListViewItem newServerItem = lbServer.Items.Add(server.DisplayName, "NonSecure");
+            newServerItem.Tag = server;
+            SetSecurityIcon(newServerItem, server);
+            return newServerItem;
+        }
+
+        private void SetSecurityIcon(ListViewItem item, BuildServer server)
+        {
+            if (server.SecurityType != null)
+            {
+                item.ImageKey = "Secure";
+            }
+            else
+            {
+                item.ImageKey = "NonSecure";
+            }
+        }
+
+        private void butConfigure_Click(object sender, EventArgs e)
+        {
+            if (selectedServer == null)
+            {
+                MessageBox.Show(this, "Please select a server first", "Unable to configure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            else
+            {
+                if (ConfigureServer.Configure(this, selectedServer))
+                {
+                    SetSecurityIcon(lbServer.SelectedItems[0], selectedServer);
+                }
+            }
+        }
 	}
 }

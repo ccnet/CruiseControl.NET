@@ -194,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             {
                 string outputResponse = String.Empty;
 
-                ModifiedCruiseRequest req = new ModifiedCruiseRequest(cruiseRequest.Request);
+                ModifiedCruiseRequest req = new ModifiedCruiseRequest(cruiseRequest.Request, cruiseRequest.UrlBuilder);
                 req.ReplaceBuildSpecifier(buildSpecifiers[0]);
 
                 foreach (IBuildPlugin buildPlugIn in pluginNames)
@@ -223,10 +223,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             private IServerSpecifier serverSpecifier = null;
             private IProjectSpecifier projectSpecifier = null;
             private IBuildSpecifier buildSpecifier = null;
+            private ICruiseUrlBuilder urlBuilder;
 
-            public ModifiedCruiseRequest(IRequest request)
+            public ModifiedCruiseRequest(IRequest request, ICruiseUrlBuilder urlBuilder)
             {
                 this.request = request;
+                this.urlBuilder = urlBuilder;
+            }
+
+            public ICruiseUrlBuilder UrlBuilder
+            {
+                get { return this.UrlBuilder; }
             }
 
             public string ServerName
@@ -290,6 +297,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             public void ReplaceBuildSpecifier(IBuildSpecifier buildSpecifier)
             {
                 this.buildSpecifier = buildSpecifier;
+            }
+
+            /// <summary>
+            /// Attempt to retrieve a session token
+            /// </summary>
+            /// <returns></returns>
+            public virtual string RetrieveSessionToken(ISessionRetriever sessionRetriever)
+            {
+                // Attempt to find a session token
+                string sessionToken = request.GetText("sessionToken");
+                if (string.IsNullOrEmpty(sessionToken) && (sessionRetriever != null))
+                {
+                    sessionToken = sessionRetriever.RetrieveSessionToken(request);
+                }
+                return sessionToken;
             }
         }
     }

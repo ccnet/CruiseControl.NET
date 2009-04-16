@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using NMock;
 using NUnit.Framework;
+using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -15,8 +16,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	[TestFixture]
 	public class ProjectGridTest
 	{
+        private MockRepository mocks = new MockRepository();
 		private ProjectGrid projectGrid;
-		private DynamicMock urlBuilderMock;
+		private ICruiseUrlBuilder urlBuilderMock;
 		private DynamicMock linkFactoryMock;
 		private IAbsoluteLink projectLink;
 		private IServerSpecifier serverSpecifier;
@@ -25,9 +27,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[SetUp]
 		public void Setup()
 		{
-			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
+            urlBuilderMock = mocks.DynamicMock<ICruiseUrlBuilder>();
+            SetupResult.For(urlBuilderMock.BuildProjectUrl(null, null))
+                .IgnoreArguments()
+                .Return("myLinkUrl");
 			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
-			projectGrid = new ProjectGrid((ILinkFactory) linkFactoryMock.MockInstance);
+			projectGrid = new ProjectGrid();
 
 			serverSpecifier = new DefaultServerSpecifier("server");
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "my project");
@@ -37,7 +42,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 		private void VerifyAll()
 		{
-			urlBuilderMock.Verify();
 			linkFactoryMock.Verify();
 		}
 
@@ -48,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 		private void SetupProjectLinkExpectation(IProjectSpecifier projectSpecifierForLink)
 		{
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", projectLink, projectSpecifierForLink, ProjectReportProjectPlugin.ACTION_NAME);
+            linkFactoryMock.SetupResult("CreateProjectLink", projectLink, typeof(IProjectSpecifier), typeof(string));
 		}
 
 		[Test]
@@ -56,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[0];
 
-			Assert.AreEqual(0, projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "").Length);
+            Assert.AreEqual(0, projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock).Length);
 
 			VerifyAll();
 		}
@@ -73,7 +77,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Execute
 			SetupProjectLinkExpectation();
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            mocks.ReplayAll();
+            ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual(1, rows.Length);
@@ -93,7 +98,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Execute
 			SetupProjectLinkExpectation();
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            mocks.ReplayAll();
+            ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual(1, rows.Length);
@@ -111,8 +117,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 				};
 
 			SetupProjectLinkExpectation();
+            mocks.ReplayAll();
+            
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual("Success", rows[0].BuildStatus);
@@ -126,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual("Failure", rows[0].BuildStatus);
@@ -140,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual("Unknown", rows[0].BuildStatus);
@@ -154,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual("Exception", rows[0].BuildStatus);
@@ -175,7 +183,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            mocks.ReplayAll();
+            ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual(DateUtil.FormatDate(date), rows[0].LastBuildDate);
@@ -187,7 +196,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
-                                                             ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "my label", null, DateTime.Today, "building", "", 0);
+			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, 
+                                                             ProjectIntegratorState.Running, "url", 
+                                                             DateTime.Today, "my label", null, 
+                                                             DateTime.Today,"building","",0);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
 					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
@@ -195,7 +207,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            mocks.ReplayAll();
+            ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual("Running", rows[0].Status);
@@ -204,7 +217,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Setup
 			projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
-                                               ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Stopped, "url", DateTime.Today, "my label", null, DateTime.Today, "", "", 0);
+			                                   ProjectActivity.Sleeping, IntegrationStatus.Success, 
+                                               ProjectIntegratorState.Stopped, "url", 
+                                               DateTime.Today, "my label", null, DateTime.Today,"","",0);
 			statusses = new ProjectStatusOnServer[]
 				{
 					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
@@ -212,7 +227,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual("Stopped", rows[0].Status);
@@ -224,7 +239,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
-                                                             ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "my label", null, DateTime.Today, "", "", 0);
+			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, 
+                                                             ProjectIntegratorState.Running, "url", 
+                                                             DateTime.Today, "my label", null, DateTime.Today,"","",0);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
 					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
@@ -232,7 +249,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            mocks.ReplayAll();
+            ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual("Sleeping", rows[0].Activity);
@@ -240,7 +258,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Setup
 			projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
-                                               ProjectActivity.CheckingModifications, IntegrationStatus.Success, ProjectIntegratorState.Stopped, "url", DateTime.Today, "my label", null, DateTime.Today, "", "", 0);
+			                                   ProjectActivity.CheckingModifications, IntegrationStatus.Success, 
+                                               ProjectIntegratorState.Stopped, "url", DateTime.Today, "my label", 
+                                               null, DateTime.Today,"","",0);
 			statusses = new ProjectStatusOnServer[]
 				{
 					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server"))
@@ -248,7 +268,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual("CheckingModifications", rows[0].Activity);
@@ -261,7 +281,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			// Setup
 			DateTime date = DateTime.Today;
 			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
-                                                             ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", date, "my label", null, DateTime.Today, "", "", 0);
+			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success,
+                                                             ProjectIntegratorState.Running, "url", date, 
+                                                             "my label", null, DateTime.Today,"","",0);
+
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
 					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
@@ -269,7 +292,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            mocks.ReplayAll();
+            ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual("my label", rows[0].LastBuildLabel);
@@ -281,7 +305,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
-                                                             ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today, "", "", 0);
+			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, 
+                                                             ProjectIntegratorState.Running, "url", DateTime.Today, 
+                                                             "1", null, DateTime.Today,"","",0);
 			
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
@@ -290,7 +316,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            mocks.ReplayAll();
+            ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual("myLinkUrl", rows[0].Url);
@@ -302,7 +329,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
-                ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "my label", null, DateTime.Today, "", "", 0);
+				                                            ProjectActivity.Sleeping, IntegrationStatus.Success, 
+                                                            ProjectIntegratorState.Running, "url", DateTime.Today, 
+                                                            "my label", null, DateTime.Today,"","",0);
 
 			projectStatus1.Messages = new Message[1] {new Message("Test Message")};
 
@@ -313,7 +342,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            mocks.ReplayAll();
+            ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.IsNotNull(rows[0].CurrentMessage);
@@ -322,7 +352,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Setup
 			projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
-                ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Stopped, "url", DateTime.Today, "my label", null, DateTime.Today, "", "", 0);
+				                                ProjectActivity.Sleeping, IntegrationStatus.Success, 
+                                                ProjectIntegratorState.Stopped, "url", DateTime.Today, 
+                                                "my label", null, DateTime.Today,"","",0);
 
 			projectStatus1.Messages = new Message[2] {new Message(string.Empty), new Message("Second Message")};
             
@@ -333,7 +365,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.IsNotNull(rows[0].CurrentMessage);
@@ -346,7 +378,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
-                ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "my label", null, DateTime.Today, "", "", 0);
+				                                                ProjectActivity.Sleeping, IntegrationStatus.Success, 
+                                                                ProjectIntegratorState.Running, "url", DateTime.Today, 
+                                                                "my label", null, DateTime.Today,"","",0);
 
 
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
@@ -356,7 +390,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            mocks.ReplayAll();
+            ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual("category", rows[0].Category);
@@ -364,7 +399,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Setup
 			projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category1",
-                ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Stopped, "url", DateTime.Today, "my label", null, DateTime.Today, "", "", 0);
+				                                ProjectActivity.Sleeping, IntegrationStatus.Success, 
+                                                ProjectIntegratorState.Stopped, "url", DateTime.Today, 
+                                                "my label", null, DateTime.Today,"","",0);
 
 
 			statusses = new ProjectStatusOnServer[]
@@ -374,7 +411,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual("category1", rows[0].Category);
@@ -389,9 +426,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			IProjectSpecifier projectB = new DefaultProjectSpecifier(serverSpecifier, "b");
 
 			ProjectStatus projectStatus1 = new ProjectStatus("a", "category",
-                                                             ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today, "", "", 0);
+			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, 
+                                                             ProjectIntegratorState.Running, "url", 
+                                                             DateTime.Today, "1", null, DateTime.Today,"","",0);
 			ProjectStatus projectStatus2 = new ProjectStatus("b", "category",
-                                                             ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today, "", "", 0);
+			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, 
+                                                             ProjectIntegratorState.Running, "url", 
+                                                             DateTime.Today, "1", null, DateTime.Today,"","",0);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
 					new ProjectStatusOnServer(projectStatus1, serverSpecifier),
@@ -401,7 +442,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectB);
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "");
+            mocks.ReplayAll();
+            ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual(2, rows.Length);
@@ -413,7 +455,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectB);
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, false, "");
+            rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, false, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual(2, rows.Length);
@@ -431,9 +473,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			IProjectSpecifier projectB = new DefaultProjectSpecifier(serverSpecifier, "b");
 
 			ProjectStatus projectStatus1 = new ProjectStatus("b", "category",
-                                                             ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today, "", "", 0);
+			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, 
+                                                             ProjectIntegratorState.Running, "url", DateTime.Today, 
+                                                             "1", null, DateTime.Today,"","",0);
 			ProjectStatus projectStatus2 = new ProjectStatus("a", "category",
-                                                             ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today.AddHours(1), "1", null, DateTime.Today, "", "", 0);
+			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, 
+                                                             ProjectIntegratorState.Running, "url", 
+                                                             DateTime.Today.AddHours(1), "1", null, 
+                                                             DateTime.Today,"","",0);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
 					new ProjectStatusOnServer(projectStatus1, serverSpecifier),
@@ -443,7 +490,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectA);
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.LastBuildDate, true, "");
+            mocks.ReplayAll();
+            ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.LastBuildDate, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual(2, rows.Length);
@@ -455,7 +503,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectA);
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.LastBuildDate, false, "");
+            rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.LastBuildDate, false, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual(2, rows.Length);
@@ -472,9 +520,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			IProjectSpecifier projectA = new DefaultProjectSpecifier(serverSpecifier, "a");
 			IProjectSpecifier projectB = new DefaultProjectSpecifier(serverSpecifier, "b");
 			ProjectStatus projectStatus1 = new ProjectStatus("a", "category",
-                                                             ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today, "", "", 0);
+			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, 
+                                                             ProjectIntegratorState.Running, "url", DateTime.Today, 
+                                                             "1", null, DateTime.Today,"","",0);
 			ProjectStatus projectStatus2 = new ProjectStatus("b", "category",
-                                                             ProjectActivity.Sleeping, IntegrationStatus.Failure, ProjectIntegratorState.Running, "url", DateTime.Today.AddHours(1), "1", null, DateTime.Today, "", "", 0);
+			                                                 ProjectActivity.Sleeping, IntegrationStatus.Failure, 
+                                                             ProjectIntegratorState.Running, "url", 
+                                                             DateTime.Today.AddHours(1), "1", null, DateTime.Today,"","",0);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
 					new ProjectStatusOnServer(projectStatus1, serverSpecifier),
@@ -484,7 +536,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectB);
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.BuildStatus, true, "");
+            mocks.ReplayAll();
+            ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.BuildStatus, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual(2, rows.Length);
@@ -496,7 +549,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectB);
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.BuildStatus, false, "");
+            rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.BuildStatus, false, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual(2, rows.Length);
@@ -516,9 +569,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			IProjectSpecifier projectB = new DefaultProjectSpecifier(serverSpecifierB, "b");
 
 			ProjectStatus projectStatus1 = new ProjectStatus("a", "category",
-                ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today, "", "", 0);
+				ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", 
+                DateTime.Today, "1", null, DateTime.Today,"","",0);
 			ProjectStatus projectStatus2 = new ProjectStatus("b", "category",
-                ProjectActivity.Sleeping, IntegrationStatus.Failure, ProjectIntegratorState.Running, "url", DateTime.Today.AddHours(1), "1", null, DateTime.Today, "", "", 0);
+				ProjectActivity.Sleeping, IntegrationStatus.Failure, ProjectIntegratorState.Running, "url", 
+                DateTime.Today.AddHours(1), "1", null, DateTime.Today,"","",0);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
 					new ProjectStatusOnServer(projectStatus1, serverSpecifierA),
@@ -528,7 +583,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectB);
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.ServerName, true, "");
+            mocks.ReplayAll();
+            ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.ServerName, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual(2, rows.Length);
@@ -540,7 +596,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectB);
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.ServerName, false, "");
+            rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.ServerName, false, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual(2, rows.Length);
@@ -558,9 +614,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			IProjectSpecifier projectB = new DefaultProjectSpecifier(serverSpecifier, "B");
 			IProjectSpecifier projectC = new DefaultProjectSpecifier(serverSpecifier, "C");
 
-            ProjectStatus projectStatusA = new ProjectStatus("A", "CategoryX", ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today, "", "", 0);
-            ProjectStatus projectStatusB = new ProjectStatus("B", "CategoryY", ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today, "", "", 0);
-            ProjectStatus projectStatusC = new ProjectStatus("C", "CategoryX", ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today, "", "", 0);
+			ProjectStatus projectStatusA = new ProjectStatus("A", "CategoryX", ProjectActivity.Sleeping, 
+                                                    IntegrationStatus.Success, ProjectIntegratorState.Running, "url", 
+                                                    DateTime.Today, "1", null, DateTime.Today, "","",0);
+			ProjectStatus projectStatusB = new ProjectStatus("B", "CategoryY", ProjectActivity.Sleeping, 
+                                                    IntegrationStatus.Success, ProjectIntegratorState.Running, "url", 
+                                                    DateTime.Today, "1", null, DateTime.Today, "","",0);
+			ProjectStatus projectStatusC = new ProjectStatus("C", "CategoryX", ProjectActivity.Sleeping, 
+                                                    IntegrationStatus.Success, ProjectIntegratorState.Running, "url", 
+                                                    DateTime.Today, "1", null, DateTime.Today, "","",0);
 
 			ProjectStatusOnServer[] status = new ProjectStatusOnServer[]
 				{
@@ -573,7 +635,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectC);
 
 			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(status, "myAction", ProjectGridSortColumn.Category, true, "");
+            mocks.ReplayAll();
+            mocks.ReplayAll();
+            ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(status, "myAction", ProjectGridSortColumn.Category, true, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual(3, rows.Length);
@@ -587,7 +651,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation(projectC);
 
 			// Execute
-			rows = projectGrid.GenerateProjectGridRows(status, "myAction", ProjectGridSortColumn.Category, false, "");
+            rows = projectGrid.GenerateProjectGridRows(status, "myAction", ProjectGridSortColumn.Category, false, "", urlBuilderMock);
 
 			// Verify
 			Assert.AreEqual(3, rows.Length);

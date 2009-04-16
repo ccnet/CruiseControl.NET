@@ -8,15 +8,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class ProjectGrid : IProjectGrid
 	{
-		private readonly ILinkFactory linkFactory;
-
-		public ProjectGrid(ILinkFactory linkFactory)
-		{
-			this.linkFactory = linkFactory;
-		}
-
 		public ProjectGridRow[] GenerateProjectGridRows(ProjectStatusOnServer[] statusList, string forceBuildActionName,
-		                                                ProjectGridSortColumn sortColumn, bool sortIsAscending, string categoryFilter)
+		                                                ProjectGridSortColumn sortColumn, bool sortIsAscending, string categoryFilter,
+                                                        ICruiseUrlBuilder urlBuilder)
 		{
 			ArrayList rows = new ArrayList();
 			foreach (ProjectStatusOnServer statusOnServer in statusList)
@@ -31,7 +25,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				rows.Add(
 					new ProjectGridRow(status,
 					                   serverSpecifier,
-					                   linkFactory.CreateProjectLink(projectSpecifier, ProjectReportProjectPlugin.ACTION_NAME).Url));
+                                       urlBuilder.BuildProjectUrl(ProjectReportProjectPlugin.ACTION_NAME, projectSpecifier)
+                                       ));
 			}
 
 			rows.Sort(GetComparer(sortColumn, sortIsAscending));

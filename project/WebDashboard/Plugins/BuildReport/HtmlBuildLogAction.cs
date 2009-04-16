@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 	    public ConditionalGetFingerprint GetFingerprint(IRequest request)
 	    {
 	        // TODO - Maybe should get date from Build type rather than LogFile?
-	        ICruiseRequest cruiseRequest = new NameValueCruiseRequestFactory().CreateCruiseRequest(request);
+	        ICruiseRequest cruiseRequest = new NameValueCruiseRequestFactory().CreateCruiseRequest(request, urlBuilder);
             LogFile logFile = new LogFile(cruiseRequest.BuildSpecifier.BuildName);
 	        DateTime buildDate = logFile.Date;
 	        ConditionalGetFingerprint logFingerprint = fingerprintFactory.BuildFromDate(buildDate);

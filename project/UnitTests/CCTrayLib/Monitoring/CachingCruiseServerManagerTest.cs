@@ -22,15 +22,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void ShouldDelegateMostMethodsToWrappedInstance()
 		{
-			wrappedManagerMock.ExpectAndReturn("ServerUrl", "testUrl");
+            wrappedManagerMock.ExpectAndReturn("Configuration", new BuildServer("tcp://testUrl"));
+            wrappedManagerMock.ExpectAndReturn("Configuration", new BuildServer("tcp://testUrl"));
 			wrappedManagerMock.ExpectAndReturn("DisplayName", "testDisplayName");
-			wrappedManagerMock.ExpectAndReturn("Transport", BuildServerTransport.HTTP);
 			wrappedManagerMock.Expect("CancelPendingRequest", "testProjectName");
 
 
-			Assert.AreEqual("testUrl", cachingManager.ServerUrl);
+			Assert.AreEqual("tcp://testUrl", cachingManager.Configuration.Url);
 			Assert.AreEqual("testDisplayName", cachingManager.DisplayName);
-			Assert.AreEqual(BuildServerTransport.HTTP, cachingManager.Transport);
+			Assert.AreEqual(BuildServerTransport.Remoting, cachingManager.Configuration.Transport);
 			cachingManager.CancelPendingRequest("testProjectName");
 
 		

@@ -2,9 +2,12 @@ using System;
 using System.Collections;
 using Objection;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
 {
@@ -18,18 +21,24 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
         private readonly ObjectSource objectSource;
         private readonly IVersionProvider versionProvider;
         private readonly IFingerprintFactory fingerprintFactory;
+        private readonly IUrlBuilder urlBuilder;
+        private readonly IPluginConfiguration configuration;
         private TopControlsViewBuilder topControlsViewBuilder;
         private SideBarViewBuilder sideBarViewBuilder;
+        private LoginViewBuilder loginViewBuilder;
 
         public SiteTemplateActionDecorator(IAction decoratedAction, IVelocityViewGenerator velocityViewGenerator,
                                            ObjectSource objectSource, IVersionProvider versionProvider,
-                                           IFingerprintFactory fingerprintFactory)
+                                           IFingerprintFactory fingerprintFactory, IUrlBuilder urlBuilder,
+                                            IPluginConfiguration configuration)
         {
             this.decoratedAction = decoratedAction;
             this.velocityViewGenerator = velocityViewGenerator;
             this.objectSource = objectSource;
             this.versionProvider = versionProvider;
             this.fingerprintFactory = fingerprintFactory;
+            this.urlBuilder = urlBuilder;
+            this.configuration = configuration;
         }
 
         private TopControlsViewBuilder TopControlsViewBuilder
@@ -58,6 +67,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
             }
         }
 
+        private LoginViewBuilder LoginViewBuilder
+        {
+            get
+            {
+                if (loginViewBuilder == null)
+                {
+                    loginViewBuilder =
+                        (LoginViewBuilder)objectSource.GetByType(typeof(LoginViewBuilder));
+                }
+                return loginViewBuilder;
+            }
+        }
+
         public IResponse Execute(IRequest request)
         {
             Hashtable velocityContext = new Hashtable();
@@ -73,6 +95,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
                 else
                     velocityContext["applicationPath"] = request.ApplicationPath;
             	velocityContext["renderedAt"] = DateUtil.FormatDate(DateTime.Now);
+                velocityContext["loginView"] = LoginViewBuilder.Execute().ResponseFragment;
+
+                GeneratejQueryLinks(velocityContext);
 
                 return velocityViewGenerator.GenerateView(TEMPLATE_NAME, velocityContext);
             }
@@ -86,6 +111,35 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
         {
             ConditionalGetFingerprint fingerprint = CalculateLocalFingerprint(request);
             return fingerprint.Combine(((IConditionalGetFingerprintProvider) decoratedAction).GetFingerprint(request));
+        }
+
+        private void GeneratejQueryLinks(Hashtable velocityContext)
+        {
+            string extension = urlBuilder.Extension;
+            urlBuilder.Extension = "js";
+            velocityContext["jquery"] = urlBuilder.BuildUrl("javascript/jquery");
+            velocityContext["jqueryui"] = urlBuilder.BuildUrl("javascript/jquery-ui");
+
+            urlBuilder.Extension = "css";
+            List<StylesheetConfiguration> stylesheets = new List<StylesheetConfiguration>();
+            foreach (StylesheetConfiguration stylesheet in configuration.Stylesheets)
+            {
+                StylesheetConfiguration newStyle = new StylesheetConfiguration();
+                newStyle.Name = stylesheet.Name;
+                newStyle.IsDefault = stylesheet.IsDefault;
+
+                // Need to rebase the stylesheets so they are rooted in the site
+                string location = stylesheet.Location;
+                if (location.EndsWith(".css", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    // Strip the extension as the builder will add it again
+                    location = location.Substring(0, location.Length - 4);
+                }
+                newStyle.Location = urlBuilder.BuildUrl(location);
+                stylesheets.Add(newStyle);
+            }
+            velocityContext["styles"] = stylesheets.ToArray();
+            urlBuilder.Extension = extension;
         }
 
         private ConditionalGetFingerprint CalculateLocalFingerprint(IRequest request)

@@ -252,7 +252,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
             integratorMock1.Expect("ForceBuild", "BuildForcer");
 
-			server.ForceBuild("Project 1","BuildForcer");
+			server.ForceBuild(null,"Project 1","BuildForcer");
 
 			VerifyAll();
 		}
@@ -260,7 +260,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test, ExpectedException(typeof (NoSuchProjectException))]
 		public void AttemptToForceBuildOnProjectThatDoesNotExist()
 		{
-            server.ForceBuild("foo", "BuildForcer");
+            server.ForceBuild(null,"foo", "BuildForcer");
 		}
 
 		[Test]
@@ -305,7 +305,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
             stateManagerMock.Expect("RecordProjectAsStopped", "Project 1");
             integratorMock1.Expect("Stop");
-			server.Stop("Project 1");
+			server.Stop(null,"Project 1");
 			integratorMock1.Verify();
             stateManagerMock.Verify();
         }
@@ -313,7 +313,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test, ExpectedException(typeof(NoSuchProjectException))]
 		public void ThrowExceptionIfProjectNotFound()
 		{
-			server.Stop("Project unknown");			
+			server.Stop(null, "Project unknown");			
 		}
 
 		[Test]
@@ -321,7 +321,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
             stateManagerMock.Expect("RecordProjectAsStartable", "Project 2");
 			integratorMock2.Expect("Start");
-			server.Start("Project 2");
+			server.Start(null,"Project 2");
 			integratorMock2.Verify();
             stateManagerMock.Verify();
 		}
@@ -331,7 +331,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			IntegrationRequest request = Request(BuildCondition.IfModificationExists);
 			integratorMock2.Expect("Request", request);
-			server.Request("Project 2", request);
+			server.Request(null,"Project 2", request);
 			integratorMock1.Verify();
 			integratorMock2.Verify();
 		}
@@ -354,7 +354,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.AreEqual(projectName, e.ProjectName);
             };
 
-            server.Start(projectName);
+            server.Start(null, projectName);
             Assert.IsTrue(projectStartingFired, "ProjectStarting not fired");
             Assert.IsTrue(projectStartedFired, "ProjectStarted not fired");
         }
@@ -376,7 +376,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.Fail("ProjectStarted has been fired");
             };
 
-            server.Start(projectName);
+            server.Start(null, projectName);
             Assert.IsTrue(projectStartingFired, "ProjectStarting not fired");
         }
 
@@ -398,7 +398,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.AreEqual(projectName, e.ProjectName);
             };
 
-            server.Stop(projectName);
+            server.Stop(null, projectName);
             Assert.IsTrue(projectStoppingFired, "ProjectStopping not fired");
             Assert.IsTrue(projectStoppedFired, "ProjectStopped not fired");
         }
@@ -420,7 +420,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.Fail("ProjectStopped has been fired");
             };
 
-            server.Stop(projectName);
+            server.Stop(null, projectName);
             Assert.IsTrue(projectStoppingFired, "ProjectStopping not fired");
         }
 
@@ -445,7 +445,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.AreEqual(enforcer, e.Data);
             };
 
-            server.ForceBuild(projectName, enforcer);
+            server.ForceBuild(null, projectName, enforcer);
             Assert.IsTrue(forceBuildReceived, "ForceBuildReceived not fired");
             Assert.IsTrue(forceBuildProcessed, "ForceBuildProcessed not fired");
         }
@@ -469,7 +469,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.Fail("ForceBuildProcessed has been fired");
             };
 
-            server.ForceBuild(projectName, enforcer);
+            server.ForceBuild(null, projectName, enforcer);
             Assert.IsTrue(forceBuildReceived, "ForceBuildReceived not fired");
         }
 
@@ -495,7 +495,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.AreEqual(enforcer, e.Data);
             };
 
-            server.Request(projectName, request);
+            server.Request(null, projectName, request);
             Assert.IsTrue(forceBuildReceived, "ForceBuildReceived not fired");
             Assert.IsTrue(forceBuildProcessed, "ForceBuildProcessed not fired");
         }
@@ -520,7 +520,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.Fail("ForceBuildProcessed has been fired");
             };
 
-            server.Request(projectName, request);
+            server.Request(null, projectName, request);
             Assert.IsTrue(forceBuildReceived, "ForceBuildReceived not fired");
         }
 
@@ -545,7 +545,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.AreEqual(enforcer, e.Data);
             };
 
-            server.AbortBuild(projectName, enforcer);
+            server.AbortBuild(null, projectName, enforcer);
             Assert.IsTrue(abortBuildReceived, "AbortBuildReceived not fired");
             Assert.IsTrue(abortBuildProcessed, "AbortBuildProcessed not fired");
         }
@@ -569,7 +569,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.Fail("AbortBuildProcessed has been fired");
             };
 
-            server.AbortBuild(projectName, enforcer);
+            server.AbortBuild(null, projectName, enforcer);
             Assert.IsTrue(abortBuildReceived, "AbortBuildReceived not fired");
         }
 
@@ -594,7 +594,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.AreEqual(message.Text, e.Data.Text);
             };
 
-            server.SendMessage(projectName, message);
+            server.SendMessage(null, projectName, message);
             Assert.IsTrue(sendMessageReceived, "SendMessageReceived not fired");
             Assert.IsTrue(sendMessageProcessed, "SendMessageProcessed not fired");
         }
@@ -618,7 +618,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.Fail("SendMessageProcessed has been fired");
             };
 
-            server.SendMessage(projectName, message);
+            server.SendMessage(null, projectName, message);
             Assert.IsTrue(sendMessageReceived, "SendMessageReceived not fired");
         }
 

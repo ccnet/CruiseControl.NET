@@ -14,14 +14,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public ICruiseServerManager Create(BuildServer buildServer)
 		{		
-			if (buildServer.Transport == BuildServerTransport.Remoting)
+            switch (buildServer.Transport)
 			{
+                case BuildServerTransport.Remoting:
                 return new CachingCruiseServerManager(
                     new RemotingCruiseServerManager(cruiseManagerFactory.GetCruiseManager(buildServer.Url), buildServer));
-			}
-			else
-			{
-
+                case BuildServerTransport.Extension:
+                    ITransportExtension extensionInstance = ExtensionHelpers.RetrieveExtension(buildServer.ExtensionName);
+                    extensionInstance.Settings = buildServer.ExtensionSettings;
+                    extensionInstance.Configuration = buildServer;
+                    return extensionInstance.RetrieveServerManager();
+                default:
 				return new CachingCruiseServerManager(
 					new HttpCruiseServerManager(new WebRetriever(), new DashboardXmlParser(), buildServer));
 			}

@@ -1,7 +1,9 @@
 using System;
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 {
@@ -40,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 			serverManagerMock = new DynamicMock(typeof(ICruiseServerManager));
 			serverManagerMock.ExpectAndReturn("GetCruiseServerSnapshot", new DashboardXmlParser().ExtractAsCruiseServerSnapshot(CRUISE_SERVER_XML), null);
-			serverManagerMock.ExpectAndReturn("ServerUrl", serverUrl);
+            serverManagerMock.ExpectAndReturn("Configuration", new BuildServer(serverUrl));
 			serverManagerMock.Strict = true;
 			ICruiseServerManager serverManager = (ICruiseServerManager) serverManagerMock.MockInstance;
 
@@ -70,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void ForceBuild()
 		{
-			manager.ForceBuild();
+			manager.ForceBuild(null);
 			serverManagerMock.Verify();
 			webRetrieverMock.Verify();
 		}
@@ -78,7 +80,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void AbortBuild()
 		{
-			manager.AbortBuild();
+            manager.AbortBuild(null);
 			serverManagerMock.Verify();
 			webRetrieverMock.Verify();
 		}
@@ -86,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void StartProject()
 		{
-			manager.StartProject();
+            manager.StartProject(null);
 			serverManagerMock.Verify();
 			webRetrieverMock.Verify();
 		}
@@ -94,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void StopProject()
 		{
-			manager.StopProject();
+            manager.StopProject(null);
 			serverManagerMock.Verify();
 			webRetrieverMock.Verify();
 		}
@@ -103,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         [ExpectedException(typeof(NotImplementedException), "Fix build not currently supported on projects monitored via HTTP")]
         public void FixBuildThrowsAnNotImplementedException()
         {
-            manager.FixBuild("John Do");
+            manager.FixBuild(null, "John Do");
 			serverManagerMock.Verify();
 			webRetrieverMock.Verify();
         }
@@ -113,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         [ExpectedException(typeof(NotImplementedException), "Cancel pending not currently supported on projects monitored via HTTP")]
         public void CancelPendingRequestThrowsAnNotImplementedException()
         {
-            manager.CancelPendingRequest();
+            manager.CancelPendingRequest(null);
 			serverManagerMock.Verify();
 			webRetrieverMock.Verify();
         }
