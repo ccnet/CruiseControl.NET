@@ -760,8 +760,12 @@ namespace ThoughtWorks.CruiseControl.Core
             ValidateItem(security, configuration);
         }
 
-
-
+        /// <summary>
+        /// Validate the project details.
+        /// </summary>
+        /// <remarks>
+        /// Currently the only check is the project name does not contain any invalid characters.
+        /// </remarks>
         private void ValidateProject()
         {
             if (ContainsInvalidChars(this.Name))
@@ -772,10 +776,14 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
-
+        /// <summary>
+        /// Check each character to make sure it is valid.
+        /// </summary>
+        /// <param name="item">The item to check.</param>
+        /// <returns>False if the item contains no invalid characters, true otherwise.</returns>
         private bool ContainsInvalidChars(string item)
         {
-            bool result = true;
+            bool result = false;
 
             for (Int32 i = 0; i < item.Length; i++)
             {
@@ -785,9 +793,8 @@ namespace ThoughtWorks.CruiseControl.Core
                     item[i] != '-' &&
                     item[i] != '_')
                 {
-                    result = false;
-
-
+                    result = true;
+                    break;
                 }
             }
 
