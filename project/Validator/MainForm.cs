@@ -468,7 +468,11 @@ namespace Validator
             about.ShowDialog(this);
         }
 
+        // The following event is only required for the INetReflectorConfigurationReader
+        // interface, so this warning can be ignored
+#pragma warning disable 0067
         public event InvalidNodeEventHandler InvalidNodeEventHandler;
+#pragma warning restore 0067
 
         private struct ConfigurationItem
         {

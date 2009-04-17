@@ -3,7 +3,7 @@
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "CruiseControl.NET Validator"
 !define PRODUCT_NAME_NOSPACE "CruiseControl.NET-Validator"
-!define PRODUCT_VERSION "1.4.4"
+!define PRODUCT_VERSION "1.5.0"
 !define PRODUCT_PUBLISHER "ThoughtWorks"
 !define PRODUCT_WEB_SITE "http://ccnet.thoughtworks.com/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\ccvalidator.exe"

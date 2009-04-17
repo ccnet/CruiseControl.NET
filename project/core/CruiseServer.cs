@@ -1,19 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Reflection;
 using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Logging;
-using ThoughtWorks.CruiseControl.Core.State;
+using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Core.Security;
+using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Remote.Security;
-using System.Configuration;
-using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Events;
-using System.IO;
-using ThoughtWorks.CruiseControl.Core.Queues;
+using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -22,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		private readonly IProjectSerializer projectSerializer;
 		private readonly IConfigurationService configurationService;
-        private readonly IConfiguration configuration;
+        private IConfiguration configuration;
 		private readonly ICruiseManager manager;
 		// TODO: Why the monitor? What reentrancy do we have? davcamer, dec 24 2008
 		private readonly ManualResetEvent monitor = new ManualResetEvent(true);
@@ -46,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			manager = new CruiseManager(this);
 			InitializeServerThread();
 
-			IConfiguration configuration = configurationService.Load();
+			configuration = configurationService.Load();
 			integrationQueueManager = IntegrationQueueManagerFactory.CreateManager(projectIntegratorListFactory, configuration, stateManager);
             integrationQueueManager.AssociateIntegrationEvents(OnIntegrationStarted, OnIntegrationCompleted);
 
@@ -164,7 +163,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			Log.Info("Configuration changed: Restarting CruiseControl.NET Server ");
 
-			IConfiguration configuration = configurationService.Load();
+			configuration = configurationService.Load();
 			integrationQueueManager.Restart(configuration);
             securityManager = configuration.SecurityManager;
             securityManager.Initialise();
