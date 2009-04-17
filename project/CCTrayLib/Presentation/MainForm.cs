@@ -182,7 +182,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.MenuItem menuItem1;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.lvProjects = new System.Windows.Forms.ListView();
             this.colProject = new System.Windows.Forms.ColumnHeader();
@@ -233,7 +232,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuQueueCancelPending = new System.Windows.Forms.MenuItem();
             this.tltBuildStage = new System.Windows.Forms.ToolTip(this.components);
             this.trayIcon = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.TrayIcon();
-            menuItem1 = new System.Windows.Forms.MenuItem();
             this.pnlButtons.SuspendLayout();
             this.pnlViewQueues.SuspendLayout();
             this.SuspendLayout();
