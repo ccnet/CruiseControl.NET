@@ -87,22 +87,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
                 SecurityRight.Deny,
                 SecurityRight.Deny,
                 SecurityRight.Allow,
-                SecurityRight.Deny,
                 SecurityRight.Deny);
             SecurityRight right = assertion.CheckPermission(null, SecurityPermission.ForceBuild);
-            Assert.AreEqual(SecurityRight.Allow, right);
-        }
-
-        [Test]
-        public void CorrectPermissionsReturnedStopProject()
-        {
-            UserPermission assertion = new UserPermission("johnDoe",
-                SecurityRight.Deny,
-                SecurityRight.Deny,
-                SecurityRight.Deny,
-                SecurityRight.Deny,
-                SecurityRight.Allow);
-            SecurityRight right = assertion.CheckPermission(null, SecurityPermission.StopProject);
             Assert.AreEqual(SecurityRight.Allow, right);
         }
 
@@ -112,7 +98,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             UserPermission assertion = new UserPermission("johnDoe",
                 SecurityRight.Deny,
                 SecurityRight.Allow,
-                SecurityRight.Deny,
                 SecurityRight.Deny,
                 SecurityRight.Deny);
             SecurityRight right = assertion.CheckPermission(null, SecurityPermission.SendMessage);
@@ -126,8 +111,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
                 SecurityRight.Deny,
                 SecurityRight.Deny,
                 SecurityRight.Deny,
-                SecurityRight.Allow,
-                SecurityRight.Deny);
+                SecurityRight.Allow);
             SecurityRight right = assertion.CheckPermission(null, SecurityPermission.StartProject);
             Assert.AreEqual(SecurityRight.Allow, right);
         }

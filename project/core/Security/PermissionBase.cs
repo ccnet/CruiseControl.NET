@@ -17,7 +17,6 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         private SecurityRight sendMessage = SecurityRight.Inherit;
         private SecurityRight forceBuild = SecurityRight.Inherit;
         private SecurityRight startProject = SecurityRight.Inherit;
-        private SecurityRight stopProject = SecurityRight.Inherit;
         private SecurityRight viewSecurity = SecurityRight.Inherit;
         private ISecurityManager manager;
         #endregion
@@ -84,19 +83,6 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         {
             get { return startProject; }
             set { startProject = value; }
-        }
-        #endregion
-
-        #region StopProjectRight
-        /// <summary>
-        /// The right.
-        /// </summary>
-        [ReflectorProperty("stopProject", Required = false)]
-        [DefaultValue(SecurityRight.Inherit)]
-        public SecurityRight StopProjectRight
-        {
-            get { return stopProject; }
-            set { stopProject = value; }
         }
         #endregion
 
@@ -213,21 +199,24 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <returns>The security right.</returns>
         protected virtual SecurityRight CheckPermissionActual(ISecurityManager manager, SecurityPermission permission)
         {
+            var result = SecurityRight.Inherit;
             switch (permission)
             {
                 case SecurityPermission.ForceBuild:
-                    return forceBuild;
+                    result = forceBuild;
+                    break;
                 case SecurityPermission.SendMessage:
-                    return sendMessage;
-                case SecurityPermission.StopProject:
-                    return stopProject;
+                    result = sendMessage;
+                    break;
                 case SecurityPermission.StartProject:
-                    return startProject;
+                    result = startProject;
+                    break;
                 case SecurityPermission.ViewSecurity:
-                    return viewSecurity;
-                default:
-                    return defaultRight;
+                    result = viewSecurity;
+                    break;
             }
+            if (result == SecurityRight.Inherit) result = defaultRight;
+            return result;
         }
         #endregion
         #endregion

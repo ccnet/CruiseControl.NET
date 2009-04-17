@@ -133,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
             if (!FireProjectStopping(project))
             {
-            	CheckSecurity(sessionToken, project, SecurityPermission.StopProject, SecurityEvent.StopProject);
+            	CheckSecurity(sessionToken, project, SecurityPermission.StartProject, SecurityEvent.StopProject);
                 integrationQueueManager.Stop(project);
                 FireProjectStopped(project);
             }

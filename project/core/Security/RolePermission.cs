@@ -27,16 +27,14 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <param name="sendMessage">Their send message right.</param>
         /// <param name="forceBuild">Their force build right.</param>
         /// <param name="startProject">Their start project right.</param>
-        /// <param name="stopProject">Their stop project right.</param>
         /// <param name="users">The users in this role.</param>
-        public RolePermission(string roleName, SecurityRight defaultRight, SecurityRight sendMessage, SecurityRight forceBuild, SecurityRight startProject, SecurityRight stopProject, params UserName[] users)
+        public RolePermission(string roleName, SecurityRight defaultRight, SecurityRight sendMessage, SecurityRight forceBuild, SecurityRight startProject, params UserName[] users)
         {
             this.roleName = roleName;
             base.DefaultRight = defaultRight;
             base.SendMessageRight = sendMessage;
             base.ForceBuildRight = forceBuild;
             base.StartProjectRight = startProject;
-            base.StopProjectRight = stopProject;
             this.users = users;
         }
         #endregion
