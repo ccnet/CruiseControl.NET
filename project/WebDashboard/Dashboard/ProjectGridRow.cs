@@ -48,6 +48,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			get { return DateUtil.FormatDate(status.LastBuildDate); }
 		}
 
+        public string NextBuildTime
+        {
+            get
+            {
+                if (status.NextBuildTime == System.DateTime.MaxValue)
+                {
+                    return "Force Build Only";
+                }
+                else
+                {
+                    return DateUtil.FormatDate(status.NextBuildTime);
+                }
+            }
+        }
+
 		public string LastBuildLabel
 		{
 			get { return (status.LastBuildLabel != null ? status.LastBuildLabel : "no build available"); }

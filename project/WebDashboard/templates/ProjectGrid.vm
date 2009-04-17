@@ -27,7 +27,11 @@
         <td align="Center">
             <a href="$lastBuildDateSortLink"><b>Last Build Time</b></a>
         </td>
-        <td align="Center">
+        <td align="Center">          
+            <b>Next Build Time</b>          
+        </td>
+
+      <td align="Center">
             <b>Last Build Label</b>
         </td>
         <td align="Center">
@@ -74,6 +78,10 @@
             <font color="Black">$projectGridRow.LastBuildDate</font>
         </td>
         <td align="Center">
+          <font color="Black">$projectGridRow.NextBuildDate</font>
+        </td>
+
+      <td align="Center">
             <font color="Black">$projectGridRow.LastBuildLabel</font>
         </td>
         <td align="Center">
