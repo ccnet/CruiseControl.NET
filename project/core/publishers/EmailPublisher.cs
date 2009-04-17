@@ -28,6 +28,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private Hashtable subjectSettings = new Hashtable();
 
+        private string[] xslFiles;
+
         public EmailPublisher()
             : this(new HtmlLinkMessageBuilder(false))
         { }
@@ -113,6 +115,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             get { return replytoAddress; }
             set { replytoAddress = value; }
         }
+
+
+        [ReflectorProperty("xslFiles", Required = false)]
+        public string[] XslFiles
+        {
+            get { return xslFiles; }
+            set { xslFiles = value; }
+        }
+
+
+
 
         /// <summary>
         /// Set this property (in configuration) to enable HTML emails containing build details.
@@ -204,7 +217,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             if (result.Status == IntegrationStatus.Unknown)
                 return;
 
-            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Emailing ...");                
+            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Emailing ...");
 
             EmailMessage emailMessage = new EmailMessage(result, this);
             string to = emailMessage.Recipients;
@@ -252,6 +265,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             //      This information is included, when using Html email (all mods are shown)
             try
             {
+                messageBuilder.xslFiles = this.XslFiles;
                 return messageBuilder.BuildMessage(result);
             }
             catch (Exception e)

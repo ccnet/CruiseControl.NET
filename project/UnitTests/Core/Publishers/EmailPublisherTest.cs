@@ -360,6 +360,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             Assert.AreEqual(0, publisher.EmailGroups.Count);
         }
 
+
+
+        [Test]
+        public void ShouldPopulateXslFiles()
+        {
+            string configXml = @"<email from=""ccnet@example.com"" mailhost=""smtp.example.com""> <users/> <groups/>
+					  <xslFiles> 
+                        <file>xsl\NCover.xsl</file>
+					   <file>xsl\NCoverExplorer.xsl</file>
+					</xslFiles>
+                </email>";
+            XmlDocument configXmlDocument = XmlUtil.CreateDocument(configXml);
+            publisher = EmailPublisherMother.Create(configXmlDocument.DocumentElement);
+
+            Assert.AreEqual(2, publisher.XslFiles.Length);
+            Assert.AreEqual(@"xsl\NCover.xsl", publisher.XslFiles[0]);
+            Assert.AreEqual(@"xsl\NCoverExplorer.xsl", publisher.XslFiles[1]);
+        }
+
+
+
         [Test]
 		public void SerializeToXml()
 		{
@@ -374,7 +395,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Exception, IntegrationStatus.Unknown);
 			result.ExceptionResult = new CruiseControlException("test exception");
 
-			Assert.IsTrue(publisher.CreateMessage(result).StartsWith("CruiseControl.NET Build Results for project Project#9"));
+			string message = publisher.CreateMessage(result);
+            
+            Assert.IsTrue(message.StartsWith("CruiseControl.NET Build Results for project Project#9"));
 
 			publisher.IncludeDetails = true;
 			string actual = publisher.CreateMessage(result);

@@ -10,6 +10,28 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		private static readonly SystemPath HtmlCSSFile = new SystemPath(@"xsl\cruisecontrol.css");
 		private string htmlCss;
 
+        private System.Collections.IList myXslFiles;
+
+
+
+        public HtmlDetailsMessageBuilder()
+        {
+        }
+
+
+        public System.Collections.IList xslFiles
+        {
+            get
+            {
+                return myXslFiles;
+            }
+            set
+            {
+                myXslFiles = value;
+            }
+        }
+
+
 		public string BuildMessage(IIntegrationResult result)
 		{
 			StringBuilder message = new StringBuilder(10000);
@@ -49,7 +71,16 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			}
 
 			XPathDocument xml = new XPathDocument(new StringReader(buffer.ToString()));
-			message.Append(new BuildLogTransformer().TransformResultsWithAllStyleSheets(xml));
+
+            if (xslFiles == null)
+            {
+                message.Append(new BuildLogTransformer().TransformResultsWithAllStyleSheets(xml));
+            }
+            else
+            {
+                message.Append(new BuildLogTransformer().TransformResults(xslFiles,xml ));
+            }
+
 		}
 
 		private void AppendHtmlFooter(StringBuilder message)

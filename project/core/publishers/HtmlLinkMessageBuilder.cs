@@ -16,5 +16,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			if (includeAnchorTag) link = string.Format(@"<a href=""{0}"">web page</a>", link);
 			return string.Format("CruiseControl.NET Build Results for project {0} ({1})", result.ProjectName, link);
 		}
-	}
+
+
+        public System.Collections.IList xslFiles
+        {
+            get
+            {
+                return null;
+            }
+            set
+            {
+                return;
+            }
+        }
+    }
 }
