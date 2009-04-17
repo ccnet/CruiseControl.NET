@@ -510,7 +510,9 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             if (ContainsInvalidChars(this.Name))
             {
-                Log.Warning("Project Name contains some chars that could cause problems, better use only numbers and letters");
+                Log.Warning(
+                    string.Format("Project name '{0}' contains some chars that could cause problems, better use only numbers and letters",
+                        Name));
             }
         }
 
