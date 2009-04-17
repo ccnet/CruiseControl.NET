@@ -3,15 +3,17 @@ using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Triggers;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System.ComponentModel;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
-	public abstract class ProjectBase
+	public abstract class ProjectBase: INotifyPropertyChanged
 	{
 		public static readonly string DefaultWorkingSubDirectory = "WorkingDirectory";
 		public static readonly string DefaultArtifactSubDirectory = "Artifacts";
 
 		private string name;
+        private string description;
 		private string category = "";
 		private string configuredWorkingDirectory = "";
 		private string configuredArtifactDirectory = "";
@@ -22,7 +24,25 @@ namespace ThoughtWorks.CruiseControl.Core
 		public virtual string Name
 		{
 			get { return name; }
-			set { name = value; }
+            set
+            {
+                name = value;
+                FirePropertyChanged("Name");
+            }
+        }
+
+        /// <summary>
+        /// An optional description of the project.
+        /// </summary>
+        [ReflectorProperty("description", Required = false)]
+        public virtual string Description
+        {
+            get { return description; }
+            set
+            {
+                description = value;
+                FirePropertyChanged("Description");
+            }
 		}
 
 		[ReflectorProperty("category", Required=false)]
@@ -83,5 +103,28 @@ namespace ThoughtWorks.CruiseControl.Core
 				return new DirectoryInfo(configuredArtifactDirectory).FullName;
 			}
 		}
+
+        #region Public events
+        /// <summary>
+        /// A property has been changed.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
+
+        #region Protected methods
+        #region FirePropertyChanged()
+        /// <summary>
+        /// Fires the <see cref="PropertyChanged"/> event.
+        /// </summary>
+        /// <param name="property"></param>
+        protected virtual void FirePropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
+        }
+        #endregion
+        #endregion
 	}
 }

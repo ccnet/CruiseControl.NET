@@ -285,6 +285,7 @@
     <Compile Include="IProjectSerializer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IStatusSnapshotGenerator.cs" />
     <Compile Include="ITask.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -489,6 +490,7 @@
     <Compile Include="Reporting\Dashboard\Navigation\IUrlBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SourceControlOperation.cs" />
     <Compile Include="Security\ActiveDirectoryAuthentication.cs" />
     <Compile Include="Security\Auditing\AuditLoggerBase.cs" />
     <Compile Include="Security\Auditing\FileXmlLogger.cs" />

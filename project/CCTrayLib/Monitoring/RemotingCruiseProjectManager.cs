@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			try
 			{
-				manager.Request(ProjectName, new IntegrationRequest(BuildCondition.ForceBuild, Environment.UserName));
+				manager.Request(sessionToken, ProjectName, new IntegrationRequest(BuildCondition.ForceBuild, Environment.UserName));
 			}
 			// Silently ignore exceptions that occur due to connection problems
 			catch (System.Net.Sockets.SocketException)
@@ -121,5 +121,43 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			get { return projectName; }
 		}
+
+        #region RetrieveSnapshot()
+        /// <summary>
+        /// Retrieves a snapshot of the current build status.
+        /// </summary>
+        /// <returns>The current build status of the project.</returns>
+        public virtual ProjectStatusSnapshot RetrieveSnapshot()
+        {
+            ProjectStatusSnapshot snapshot = manager.TakeStatusSnapshot(projectName);
+            return snapshot;
+        }
+        #endregion
+
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the current list of available packages.
+        /// </summary>
+        /// <returns></returns>
+        public virtual PackageDetails[] RetrievePackageList()
+        {
+            PackageDetails[] list = manager.RetrievePackageList(projectName);
+            return list;
+        }
+        #endregion
+
+        #region RetrieveFileTransfer()
+        /// <summary>
+        /// Retrieve a file transfer object.
+        /// </summary>
+        /// <param name="project">The project to retrieve the file for.</param>
+        /// <param name="fileName">The name of the file.</param>
+        /// <param name="source">Where to retrieve the file from.</param>
+        public virtual IFileTransfer RetrieveFileTransfer(string fileName, FileTransferSource source)
+        {
+            RemotingFileTransfer fileTransfer = manager.RetrieveFileTransfer(projectName, fileName, source);
+            return fileTransfer;
+        }
+        #endregion
 	}
 }

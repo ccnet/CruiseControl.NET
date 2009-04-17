@@ -448,6 +448,7 @@
     <Compile Include="MVC\IResponse.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MVC\JsonFragmentResponse.cs" />
     <Compile Include="MVC\MimeType.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -559,6 +560,7 @@
     <Compile Include="Plugins\ForceBuild\ForceBuildXmlAction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\ProjectReport\ProjectStatusPlugin.cs" />
     <Compile Include="Plugins\ProjectReport\ModificationHistoryProjectPlugin.cs" />
     <Compile Include="Plugins\ProjectReport\ProjectFileDownload.cs" />
     <Compile Include="Plugins\ProjectReport\ProjectReportProjectPlugin.cs">
@@ -574,6 +576,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Plugins\ProjectReport\ProjectXmlReport.cs" />
+    <Compile Include="Plugins\ProjectReport\ProjectStatusAction.cs" />
     <Compile Include="Plugins\RSS\RSSFeed.cs" />
     <Compile Include="Plugins\Security\ChangePasswordSecurityAction.cs" />
     <Compile Include="Plugins\Security\LogoutSecurityAction.cs" />
@@ -707,6 +710,30 @@
     <Content Include="images\rss.png" />
     <Content Include="images\shim.gif" />
     <Content Include="images\tw_dev_logo.gif" />
+    <Content Include="javascript\jquery-ui.js" />
+    <Content Include="javascript\jquery.js" />
+    <Content Include="javascript\jQuery.timers.js" />
+    <Content Include="javascript\theme\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="javascript\theme\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="javascript\theme\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="javascript\theme\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="javascript\theme\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="javascript\theme\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="javascript\theme\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="javascript\theme\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="javascript\theme\images\ui-icons_222222_256x240.png" />
+    <Content Include="javascript\theme\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="javascript\theme\images\ui-icons_454545_256x240.png" />
+    <Content Include="javascript\theme\images\ui-icons_888888_256x240.png" />
+    <Content Include="javascript\theme\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="javascript\theme\ui.accordion.css" />
+    <Content Include="javascript\theme\ui.all.css" />
+    <Content Include="javascript\theme\ui.base.css" />
+    <Content Include="javascript\theme\ui.core.css" />
+    <Content Include="javascript\theme\ui.dialog.css" />
+    <Content Include="javascript\theme\ui.progressbar.css" />
+    <Content Include="javascript\theme\ui.resizable.css" />
+    <Content Include="javascript\theme\ui.theme.css" />
     <Content Include="packages\NDepend\Manifest.xml" />
     <Content Include="packages\DashboardAdmin\Manifest.xml" />
     <Content Include="packages\ModificationHistory\Manifest.xml" />
@@ -743,6 +770,7 @@
     <None Include="templates\ProjectReport.vm" />
     <None Include="templates\ProjectServerConfiguration.vm" />
     <None Include="templates\ProjectSideBar.vm" />
+    <None Include="templates\ProjectStatusReport.vm" />
     <None Include="templates\RecentBuilds.vm" />
     <None Include="templates\SecurityConfiguration.vm" />
     <None Include="templates\ServerInfo.vm" />

@@ -119,26 +119,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
             urlBuilder.Extension = "js";
             velocityContext["jquery"] = urlBuilder.BuildUrl("javascript/jquery");
             velocityContext["jqueryui"] = urlBuilder.BuildUrl("javascript/jquery-ui");
-
-            urlBuilder.Extension = "css";
-            List<StylesheetConfiguration> stylesheets = new List<StylesheetConfiguration>();
-            foreach (StylesheetConfiguration stylesheet in configuration.Stylesheets)
-            {
-                StylesheetConfiguration newStyle = new StylesheetConfiguration();
-                newStyle.Name = stylesheet.Name;
-                newStyle.IsDefault = stylesheet.IsDefault;
-
-                // Need to rebase the stylesheets so they are rooted in the site
-                string location = stylesheet.Location;
-                if (location.EndsWith(".css", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    // Strip the extension as the builder will add it again
-                    location = location.Substring(0, location.Length - 4);
-                }
-                newStyle.Location = urlBuilder.BuildUrl(location);
-                stylesheets.Add(newStyle);
-            }
-            velocityContext["styles"] = stylesheets.ToArray();
             urlBuilder.Extension = extension;
         }
 

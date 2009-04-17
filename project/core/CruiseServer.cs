@@ -482,6 +482,88 @@ namespace ThoughtWorks.CruiseControl.Core
 			return fileSystem.GetFreeDiskSpace(drive);
         }
 
+        #region TakeStatusSnapshot()
+        /// <summary>
+        /// Takes a status snapshot of a project.
+        /// </summary>
+        /// <param name="projectName">The name of the project.</param>
+        /// <returns>The snapshot of the current status.</returns>
+        public virtual ProjectStatusSnapshot TakeStatusSnapshot(string projectName)
+        {
+            ProjectStatusSnapshot snapshot = null;
+
+            IProjectIntegrator integrator = GetIntegrator(projectName);
+            if (integrator != null)
+            {
+                // First see if the project has its own associated generator
+                if (integrator.Project is IStatusSnapshotGenerator)
+                {
+                    snapshot = (integrator.Project as IStatusSnapshotGenerator).GenerateSnapshot() 
+                        as ProjectStatusSnapshot;
+                }
+                else
+                {
+                    // Otherwise generate an overview snapshot (details will not be available)
+                    ProjectStatus status = integrator.Project.CreateProjectStatus(integrator);
+                    snapshot = new ProjectStatusSnapshot();
+                    snapshot.Name = integrator.Project.Name;
+                    if (status.Activity.IsBuilding())
+                    {
+                        snapshot.Status = ItemBuildStatus.Running;
+                    }
+                    else if (status.Activity.IsPending())
+                    {
+                        snapshot.Status = ItemBuildStatus.Pending;
+                    }
+                    else if (status.Activity.IsSleeping())
+                    {
+                        switch (status.BuildStatus)
+                        {
+                            case IntegrationStatus.Success:
+                                snapshot.Status = ItemBuildStatus.CompletedSuccess;
+                                break;
+                            case IntegrationStatus.Exception:
+                            case IntegrationStatus.Failure:
+                                snapshot.Status = ItemBuildStatus.CompletedSuccess;
+                                break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                throw new NoSuchProjectException(projectName);
+            }
+
+            return snapshot;
+        }
+        #endregion
+
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the latest list of packages for a project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
+        public virtual PackageDetails[] RetrievePackageList(string projectName)
+        {
+            List<PackageDetails> packages = GetIntegrator(projectName).Project.RetrievePackageList();
+            return packages.ToArray();
+        }
+
+        /// <summary>
+        /// Retrieves the list of packages for a build for a project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="buildLabel"></param>
+        /// <returns></returns>
+        public virtual PackageDetails[] RetrievePackageList(string projectName, string buildLabel)
+        {
+            List<PackageDetails> packages = GetIntegrator(projectName).Project.RetrievePackageList(buildLabel);
+            return packages.ToArray();
+        }
+        #endregion
+
         #region RetrieveFileTransfer()
         /// <summary>
         /// Retrieve a file transfer object.

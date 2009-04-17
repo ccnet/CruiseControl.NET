@@ -15,9 +15,6 @@
       <td>
         <input type="text" name="userName"/>
       </td>
-      <td>
-        <input type="submit" value="Login"/>
-      </td>
     </tr>
     #if (!$hidePassword)
     <tr>
@@ -27,5 +24,10 @@
       </td>
     </tr>
     #end
+    <tr>
+        <td colspan="2" align="right">
+            <input type="submit" value="Login"/>
+        </td>
+    </tr>
   </table>
 </form>

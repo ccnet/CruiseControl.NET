@@ -155,5 +155,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <param name="filter">The filter to use.</param>
         /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
         List<AuditRecord> ReadAuditRecords(IServerSpecifier serverSpecifier, string sessionToken, int startPosition, int numberOfRecords, IAuditFilter filter);
+
+        /// <summary>
+        /// Takes a status snapshot of a project.
+        /// </summary>
+        /// <param name="projectName">The name of the project.</param>
+        /// <returns>The snapshot of the current status.</returns>
+        ProjectStatusSnapshot TakeStatusSnapshot(IProjectSpecifier projectSpecifier);
     }
 }

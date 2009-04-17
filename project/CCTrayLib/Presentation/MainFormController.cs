@@ -6,6 +6,7 @@ using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.X10;
 using ThoughtWorks.CruiseControl.CCTrayLib.Speech;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -406,6 +407,24 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                     MessageBoxButtons.OK, 
                     MessageBoxIcon.Error);
             }
+		}
+
+        /// <summary>
+        /// Display the current status of a build.
+        /// </summary>
+        public void ShowCurrentStatus()
+        {
+            CurrentStatusWindow window = new CurrentStatusWindow(SelectedProject);
+            window.Show();
+        }
+
+        /// <summary>
+        /// Display the packages for a project.
+        /// </summary>
+        public void ShowPackages()
+        {
+            PackagesListForm window = new PackagesListForm(SelectedProject);
+            window.Show();
         }
 	}
 }

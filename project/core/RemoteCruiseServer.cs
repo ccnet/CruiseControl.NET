@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Security;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -227,6 +227,41 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             return server.GetFreeDiskSpace();
         }
+
+        #region TakeStatusSnapshot()
+        /// <summary>
+        /// Takes a status snapshot of a project.
+        /// </summary>
+        /// <param name="projectName">The name of the project.</param>
+        /// <returns>The snapshot of the current status.</returns>
+        public virtual ProjectStatusSnapshot TakeStatusSnapshot(string projectName)
+        {
+            return server.TakeStatusSnapshot(projectName);
+        }
+        #endregion
+
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the latest list of packages for a project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
+        public virtual PackageDetails[] RetrievePackageList(string projectName)
+        {
+            return server.RetrievePackageList(projectName);
+        }
+
+        /// <summary>
+        /// Retrieves the list of packages for a build for a project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="buildLabel"></param>
+        /// <returns></returns>
+        public virtual PackageDetails[] RetrievePackageList(string projectName, string buildLabel)
+        {
+            return server.RetrievePackageList(projectName, buildLabel);
+        }
+        #endregion
 
         #region RetrieveFileTransfer()
         /// <summary>

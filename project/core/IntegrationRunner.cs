@@ -110,7 +110,19 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             target.Activity = ProjectActivity.CheckingModifications;
             to.BuildProgressInformation.SignalStartRunTask("Getting source ... ");
-            return quietPeriod.GetModifications(target.SourceControl, from, to);
+            target.RecordSourceControlOperation(SourceControlOperation.CheckForModifications, ItemBuildStatus.Running);
+            bool success=false;
+            try
+            {
+                Modification[] modifications = quietPeriod.GetModifications(target.SourceControl, from, to);
+                success = true;
+                return modifications;
+            }
+            finally
+            {
+                target.RecordSourceControlOperation(SourceControlOperation.CheckForModifications,
+                    success ? ItemBuildStatus.CompletedSuccess : ItemBuildStatus.CompletedFailed);
+            }
         }
 
         private void Build(IIntegrationResult result)
@@ -119,13 +131,24 @@ namespace ThoughtWorks.CruiseControl.Core
             target.Prebuild(result);
             if (!result.Failed)
             {
+                bool success=false;
+                target.RecordSourceControlOperation(SourceControlOperation.GetSource, ItemBuildStatus.Running);
+                try
+                {
                 target.SourceControl.GetSource(result);
+                    success=true;
+                }
+                finally
+                {
+                    target.RecordSourceControlOperation(SourceControlOperation.GetSource,
+                        success ? ItemBuildStatus.CompletedSuccess : ItemBuildStatus.CompletedFailed);
+                }
                 target.Run(result);
                 target.SourceControl.LabelSourceControl(result);
             }
         }
 
-        private void PostBuild(IIntegrationResult result)
+        public virtual void PostBuild(IIntegrationResult result)
         {
             resultManager.FinishIntegration();
             target.PublishResults(result);

@@ -28,5 +28,31 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		void StopProject();
 		void StartProject();
 		void CancelPending();
+
+        #region RetrieveSnapshot()
+        /// <summary>
+        /// Retrieves a snapshot of the current build status.
+        /// </summary>
+        /// <returns>The current build status of the project.</returns>
+        ProjectStatusSnapshot RetrieveSnapshot();
+        #endregion
+
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the current list of available packages.
+        /// </summary>
+        /// <returns></returns>
+        PackageDetails[] RetrievePackageList();
+        #endregion
+
+        #region RetrieveFileTransfer()
+        /// <summary>
+        /// Retrieve a file transfer object.
+        /// </summary>
+        /// <param name="project">The project to retrieve the file for.</param>
+        /// <param name="fileName">The name of the file.</param>
+        /// <param name="source">Where to retrieve the file from.</param>
+        IFileTransfer RetrieveFileTransfer(string fileName, FileTransferSource source);
+        #endregion
 	}
 }

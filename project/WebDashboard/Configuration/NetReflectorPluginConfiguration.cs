@@ -6,7 +6,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 	[ReflectorType("plugins")]
 	public class NetReflectorPluginConfiguration : IPluginConfiguration
 	{
-        private StylesheetConfiguration[] styleSheets = new StylesheetConfiguration[0];
 		private IPlugin[] farmPlugins = new IPlugin[0];
 		private IPlugin[] serverPlugins = new IPlugin[0];
 		private IPlugin[] projectPlugins = new IPlugin[0];
@@ -14,13 +13,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
         private string templateLocation;
         private ISecurityPlugin[] securityPlugins = new ISecurityPlugin[0];
         private ISessionStore sessionStore = new QuerySessionStore();
-
-        [ReflectorArray("stylesheets", Required = false)]
-        public StylesheetConfiguration[] Stylesheets
-        {
-            get { return styleSheets; }
-            set { styleSheets = value; }
-        }
 
         [ReflectorProperty("customTemplates", Required=false)]
         public string TemplateLocation

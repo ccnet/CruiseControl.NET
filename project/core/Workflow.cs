@@ -4,6 +4,7 @@ using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -191,5 +192,27 @@ namespace ThoughtWorks.CruiseControl.Core
             get { throw new NotImplementedException(); }
         }
 
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the latest list of packages.
+        /// </summary>
+        /// <returns></returns>
+        public virtual List<PackageDetails> RetrievePackageList()
+        {
+            List<PackageDetails> packages = new List<PackageDetails>();
+            return packages;
+        }
+
+        /// <summary>
+        /// Retrieves the list of packages for a build.
+        /// </summary>
+        /// <param name="buildLabel"></param>
+        /// <returns></returns>
+        public virtual List<PackageDetails> RetrievePackageList(string buildLabel)
+        {
+            List<PackageDetails> packages = new List<PackageDetails>();
+            return packages;
+        }
+        #endregion
     }
 }

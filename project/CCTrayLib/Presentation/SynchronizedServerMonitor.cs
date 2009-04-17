@@ -3,6 +3,7 @@ using System.ComponentModel;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Windows.Forms;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -85,12 +86,24 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void ServerMonitor_Polled(object sender, MonitorServerPolledEventArgs args)
 		{
-			if (Polled != null) synchronizeInvoke.BeginInvoke(Polled, new object[] {sender, args});
+            if (Polled != null)
+            {
+                var canInvoke = true;
+                if (synchronizeInvoke is Control) canInvoke = !(synchronizeInvoke as Control).IsDisposed;
+
+                if (canInvoke) synchronizeInvoke.BeginInvoke(Polled, new object[] { sender, args });
+            }
 		}
 
 		private void ServerMonitor_QueueChanged(object sender, MonitorServerQueueChangedEventArgs args)
 		{
-			if (QueueChanged != null) synchronizeInvoke.BeginInvoke(QueueChanged, new object[] {sender, args});
+            if (QueueChanged != null)
+            {
+                var canInvoke = true;
+                if (synchronizeInvoke is Control) canInvoke = !(synchronizeInvoke as Control).IsDisposed;
+
+                if (canInvoke) synchronizeInvoke.BeginInvoke(QueueChanged, new object[] { sender, args });
+            }
 		}
 
         public void Start()

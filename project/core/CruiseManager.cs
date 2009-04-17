@@ -217,6 +217,41 @@ namespace ThoughtWorks.CruiseControl.Core
             return cruiseServer.GetFreeDiskSpace();
         }
 
+        #region TakeStatusSnapshot()
+        /// <summary>
+        /// Takes a status snapshot of a project.
+        /// </summary>
+        /// <param name="projectName">The name of the project.</param>
+        /// <returns>The snapshot of the current status.</returns>
+        public virtual ProjectStatusSnapshot TakeStatusSnapshot(string projectName)
+        {
+            return cruiseServer.TakeStatusSnapshot(projectName);
+        }
+        #endregion
+ 
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the latest list of packages for a project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
+        public virtual PackageDetails[] RetrievePackageList(string projectName)
+        {
+            return cruiseServer.RetrievePackageList(projectName);
+        }
+
+        /// <summary>
+        /// Retrieves the list of packages for a build for a project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="buildLabel"></param>
+        /// <returns></returns>
+        public virtual PackageDetails[] RetrievePackageList(string projectName, string buildLabel)
+        {
+            return cruiseServer.RetrievePackageList(projectName, buildLabel);
+        }
+        #endregion
+
         #region RetrieveFileTransfer()
         /// <summary>
         /// Retrieve a file transfer object.

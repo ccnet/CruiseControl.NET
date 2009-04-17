@@ -123,3 +123,7 @@ td>a.selected:hover { color:#006; }
 	width: 100px;
 	display:block;
 }
+.hidden
+{
+	display:none;
+}

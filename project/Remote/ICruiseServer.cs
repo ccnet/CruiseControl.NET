@@ -207,6 +207,32 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         long GetFreeDiskSpace();
 
+        #region TakeStatusSnapshot()
+        /// <summary>
+        /// Takes a status snapshot of a project.
+        /// </summary>
+        /// <param name="projectName">The name of the project.</param>
+        /// <returns>The snapshot of the current status.</returns>
+        ProjectStatusSnapshot TakeStatusSnapshot(string projectName);
+        #endregion
+
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the latest list of packages for a project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
+        PackageDetails[] RetrievePackageList(string projectName);
+
+        /// <summary>
+        /// Retrieves the list of packages for a build for a project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="buildLabel"></param>
+        /// <returns></returns>
+        PackageDetails[] RetrievePackageList(string projectName, string buildLabel);
+        #endregion
+
         #region RetrieveFileTransfer()
         /// <summary>
         /// Retrieve a file transfer object.

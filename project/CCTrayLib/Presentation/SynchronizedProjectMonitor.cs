@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Windows.Forms;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -93,17 +94,35 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void ProjectMonitor_Polled(object sender, MonitorPolledEventArgs args)
 		{
-			if (Polled != null) synchronizeInvoke.BeginInvoke(Polled, new object[] {sender, args});
+            if (Polled != null)
+            {
+                var canInvoke = true;
+                if (synchronizeInvoke is Control) canInvoke = !(synchronizeInvoke as Control).IsDisposed;
+
+                if (canInvoke) synchronizeInvoke.BeginInvoke(Polled, new object[] { sender, args });
+            }
 		}
 
 		private void ProjectMonitor_BuildOccurred(object sender, MonitorBuildOccurredEventArgs args)
 		{
-			if (BuildOccurred != null) synchronizeInvoke.BeginInvoke(BuildOccurred, new object[] {sender, args});
+            if (BuildOccurred != null)
+            {
+                var canInvoke = true;
+                if (synchronizeInvoke is Control) canInvoke = !(synchronizeInvoke as Control).IsDisposed;
+
+                if (canInvoke) synchronizeInvoke.BeginInvoke(BuildOccurred, new object[] { sender, args });
+            }
 		}
 
-		private void ProjectMonitor_MessageReceived(Message message)
+		private void ProjectMonitor_MessageReceived(ThoughtWorks.CruiseControl.Remote.Message message)
 		{
-			if (MessageReceived != null) synchronizeInvoke.BeginInvoke(MessageReceived, new object[] {message});
+            if (MessageReceived != null)
+            {
+                var canInvoke = true;
+                if (synchronizeInvoke is Control) canInvoke = !(synchronizeInvoke as Control).IsDisposed;
+
+                if (canInvoke) synchronizeInvoke.BeginInvoke(MessageReceived, new object[] { message });
+            }
 		}
 
 		public IntegrationStatus IntegrationStatus
@@ -120,5 +139,40 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			get { return projectMonitor.IsConnected; }
 		}
+
+        #region RetrieveSnapshot()
+        /// <summary>
+        /// Retrieves a snapshot of the current build status.
+        /// </summary>
+        /// <returns>The current build status of the project.</returns>
+        public virtual ProjectStatusSnapshot RetrieveSnapshot()
+        {
+            return projectMonitor.RetrieveSnapshot();
+        }
+        #endregion
+
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the current list of available packages.
+        /// </summary>
+        /// <returns></returns>
+        public virtual PackageDetails[] RetrievePackageList()
+        {
+            return projectMonitor.RetrievePackageList();
+        }
+        #endregion
+
+        #region RetrieveFileTransfer()
+        /// <summary>
+        /// Retrieve a file transfer object.
+        /// </summary>
+        /// <param name="project">The project to retrieve the file for.</param>
+        /// <param name="fileName">The name of the file.</param>
+        /// <param name="source">Where to retrieve the file from.</param>
+        public virtual IFileTransfer RetrieveFileTransfer(string fileName, FileTransferSource source)
+        {
+            return projectMonitor.RetrieveFileTransfer(fileName, source);
+        }
+        #endregion
 	}
 }

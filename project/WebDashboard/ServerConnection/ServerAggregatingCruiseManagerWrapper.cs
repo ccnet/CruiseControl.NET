@@ -419,5 +419,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
             throw new UnknownServerException(serverSpecifier.ServerName);
         }
 
+        /// <summary>
+        /// Takes a status snapshot of a project.
+        /// </summary>
+        /// <param name="projectName">The name of the project.</param>
+        /// <returns>The snapshot of the current status.</returns>
+        public ProjectStatusSnapshot TakeStatusSnapshot(IProjectSpecifier projectSpecifier)
+        {
+            return GetCruiseManager(projectSpecifier).TakeStatusSnapshot(projectSpecifier.ProjectName);
+        }
     }
 }

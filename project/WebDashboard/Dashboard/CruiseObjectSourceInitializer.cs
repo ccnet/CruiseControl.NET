@@ -269,6 +269,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             // RSS publisher
             objectionManager.AddTypeForName(Plugins.RSS.RSSFeed.ACTION_NAME, typeof(Plugins.RSS.RSSFeed)).Decorate(typeof(CruiseActionProxyAction));
 
+            // Status data
+            objectionManager.AddTypeForName(ProjectStatusAction.ActionName, typeof(ProjectStatusAction))
+                .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
+
             // File download
             objectionManager.AddTypeForName(ProjectFileDownload.ActionName, typeof(ProjectFileDownload)).Decorate(typeof(CruiseActionProxyAction));
 

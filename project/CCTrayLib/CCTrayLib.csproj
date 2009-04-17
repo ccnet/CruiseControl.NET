@@ -364,13 +364,26 @@
     <Compile Include="Presentation\ConfigureServer.Designer.cs">
       <DependentUpon>ConfigureServer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presentation\CurrentStatusWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\CurrentStatusWindow.Designer.cs">
+      <DependentUpon>CurrentStatusWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentation\KeyUtils.cs" />
+    <Compile Include="Presentation\PackagesListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\PackagesListForm.Designer.cs">
+      <DependentUpon>PackagesListForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentation\SpeechSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Presentation\SpeechSettingsControl.Designer.cs">
       <DependentUpon>SpeechSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presentation\StatusItemDisplay.cs" />
     <Compile Include="Presentation\StubProjectMonitor.cs" />
     <Compile Include="Presentation\X10SettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -572,6 +585,12 @@
     <EmbeddedResource Include="Presentation\ConfigureServer.resx">
       <DependentUpon>ConfigureServer.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\CurrentStatusWindow.resx">
+      <DependentUpon>CurrentStatusWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\PackagesListForm.resx">
+      <DependentUpon>PackagesListForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\x10SettingsControl.resx">
       <DependentUpon>X10SettingsControl.cs</DependentUpon>

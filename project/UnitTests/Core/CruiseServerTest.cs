@@ -769,5 +769,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             server.Abort();
             Assert.IsTrue(ServerExtensionStub.HasAborted);
         }
+
+        [Test]
+        [ExpectedException(typeof(NoSuchProjectException))]
+        public void TakeSnapshotThrowsExceptionForUnknownProject()
+        {
+            server.TakeStatusSnapshot("garbage project");
+        }
+
+        [Test]
+        public void TakeSnapshotReturnsAValidSnapshot()
+        {
+            ProjectStatusSnapshot snapshot = server.TakeStatusSnapshot("Project 1");
+            Assert.IsNotNull(snapshot, "Snapshot not taken");
+            Assert.AreEqual("Project 1", snapshot.Name, "Name not set");
+        }
     }
 }

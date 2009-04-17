@@ -66,6 +66,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private ToolTip tltBuildStage;
         private PersistWindowState windowState;
         private MenuItem menuItem1;
+        private MenuItem currentStatusMenu;
+        private MenuItem packagesMenu;
         private bool queueViewPanelVisible;
 
         public MainForm(ICCTrayMultiConfiguration configuration)
@@ -180,6 +182,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.MenuItem menuItem1;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.lvProjects = new System.Windows.Forms.ListView();
             this.colProject = new System.Windows.Forms.ColumnHeader();
@@ -198,6 +201,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuCancelPending = new System.Windows.Forms.MenuItem();
             this.mnuFixBuild = new System.Windows.Forms.MenuItem();
             this.mnuCopyBuildLabel = new System.Windows.Forms.MenuItem();
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.currentStatusMenu = new System.Windows.Forms.MenuItem();
+            this.packagesMenu = new System.Windows.Forms.MenuItem();
             this.largeIconList = new System.Windows.Forms.ImageList(this.components);
             this.iconList = new System.Windows.Forms.ImageList(this.components);
             this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
@@ -227,7 +233,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuQueueCancelPending = new System.Windows.Forms.MenuItem();
             this.tltBuildStage = new System.Windows.Forms.ToolTip(this.components);
             this.trayIcon = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.TrayIcon();
-            this.menuItem1 = new System.Windows.Forms.MenuItem();
+            menuItem1 = new System.Windows.Forms.MenuItem();
             this.pnlButtons.SuspendLayout();
             this.pnlViewQueues.SuspendLayout();
             this.SuspendLayout();
@@ -303,7 +309,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuWebPage,
             this.mnuCancelPending,
             this.mnuFixBuild,
-            this.mnuCopyBuildLabel});
+            this.mnuCopyBuildLabel,
+            this.menuItem1,
+            this.currentStatusMenu,
+            this.packagesMenu});
             this.projectContextMenu.Popup += new System.EventHandler(this.projectContextMenu_Popup);
             // 
             // mnuForce
@@ -354,6 +363,25 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuCopyBuildLabel.Text = "Copy Build &Label";
             this.mnuCopyBuildLabel.Click += new System.EventHandler(this.mnuCopyBuildLabel_Click);
             // 
+            // menuItem1
+            // 
+            this.menuItem1.Index = 8;
+            this.menuItem1.Text = "-";
+            // 
+            // currentStatusMenu
+            // 
+            this.currentStatusMenu.Index = 9;
+            this.currentStatusMenu.Shortcut = System.Windows.Forms.Shortcut.F4;
+            this.currentStatusMenu.Text = "C&urrent Status";
+            this.currentStatusMenu.Click += new System.EventHandler(this.currentStatusMenu_Click);
+            // 
+            // packagesMenu
+            // 
+            this.packagesMenu.Index = 10;
+            this.packagesMenu.Shortcut = System.Windows.Forms.Shortcut.CtrlP;
+            this.packagesMenu.Text = "&Packages";
+            this.packagesMenu.Click += new System.EventHandler(this.packagesMenu_Click);
+            // 
             // largeIconList
             // 
             this.largeIconList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
@@ -371,7 +399,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuFile,
             this.mnuView,
-            this.menuItem1});
+            menuItem1});
             // 
             // menuFile
             // 
@@ -426,6 +454,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuViewDetails.Index = 2;
             this.mnuViewDetails.Text = "&Details";
             this.mnuViewDetails.Click += new System.EventHandler(this.mnuViewDetails_Click);
+            // 
+            // menuItem1
+            // 
+            menuItem1.Index = 2;
+            menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuAbout});
+            menuItem1.Text = "&Help";
             // 
             // mnuAbout
             // 
@@ -563,13 +598,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.trayIcon.Visible = true;
             this.trayIcon.DoubleClick += new System.EventHandler(this.trayIcon_DoubleClick);
             this.trayIcon.Click += new System.EventHandler(this.trayIcon_Click);
-            // 
-            // menuItem1
-            // 
-            this.menuItem1.Index = 2;
-            this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuAbout});
-            this.menuItem1.Text = "&Help";
             // 
             // MainForm
             // 
@@ -751,6 +779,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             mnuCancelPending.Visible = controller.CanCancelPending();
             mnuFixBuild.Visible = controller.CanFixBuild();
             mnuCopyBuildLabel.Visible = controller.IsProjectSelected;
+            currentStatusMenu.Visible = controller.IsProjectSelected;
+            packagesMenu.Visible = controller.IsProjectSelected;
         }
 
         private void mnuFilePreferences_Click(object sender, EventArgs e)
@@ -1042,6 +1072,22 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 }
 
                 return compare;
+            }
+        }
+
+        private void currentStatusMenu_Click(object sender, EventArgs e)
+        {
+            if (controller.IsProjectSelected)
+            {
+                controller.ShowCurrentStatus();
+            }
+        }
+
+        private void packagesMenu_Click(object sender, EventArgs e)
+        {
+            if (controller.IsProjectSelected)
+            {
+                controller.ShowPackages();
             }
         }
     }

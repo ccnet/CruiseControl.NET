@@ -14,6 +14,7 @@ using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -36,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core
     /// </remarks>
     [ReflectorType("project")]
     public class Project : ProjectBase, IProject, IIntegrationRunnerTarget, IIntegrationRepository,
-        IConfigurationValidation
+        IConfigurationValidation, IStatusSnapshotGenerator
     {
         private string webUrl = DefaultUrl();
         private string queueName = string.Empty;
@@ -57,6 +58,9 @@ namespace ThoughtWorks.CruiseControl.Core
         private ProjectStartupMode startupMode = ProjectStartupMode.UseLastState;
         private bool StopProjectOnReachingMaxSourceControlRetries = false;
         private Sourcecontrol.Common.SourceControlErrorHandlingPolicy sourceControlErrorHandling = Common.SourceControlErrorHandlingPolicy.ReportEveryFailure;
+        private ProjectStatusSnapshot currentProjectStatus;
+        private Dictionary<ITask, ItemStatus> currentProjectItems = new Dictionary<ITask, ItemStatus>();
+        private Dictionary<SourceControlOperation, ItemStatus> sourceControlOperations = new Dictionary<SourceControlOperation, ItemStatus>();
 
         [ReflectorProperty("prebuild", Required = false)]
         public ITask[] PrebuildTasks = new ITask[0];
@@ -65,6 +69,27 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             integrationResultManager = new IntegrationResultManager(this);
             integratable = new IntegrationRunner(integrationResultManager, this, quietPeriod);
+
+            // Generates the initial snapshot
+            currentProjectStatus = new ProjectStatusSnapshot();
+            PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            {
+                switch (e.PropertyName)
+                {
+                    case "Name":
+                        lock (currentProjectStatus)
+                        {
+                            currentProjectStatus.Name = Name;
+                        }
+                        break;
+                    case "Description":
+                        lock (currentProjectStatus)
+                        {
+                            currentProjectStatus.Description = Description;
+                        }
+                        break;
+                }
+            };
         }
 
         public Project(IIntegratable integratable)
@@ -206,7 +231,138 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public IIntegrationResult Integrate(IntegrationRequest request)
         {
-            return integratable.Integrate(request);
+            // Initialise the status
+            lock (currentProjectStatus)
+            {
+                currentProjectItems.Clear();
+                sourceControlOperations.Clear();
+                currentProjectStatus.Status = ItemBuildStatus.Running;
+                currentProjectStatus.ChildItems.Clear();
+                currentProjectStatus.TimeCompleted = null;
+                currentProjectStatus.TimeOfEstimatedCompletion = null;
+                currentProjectStatus.TimeStarted = DateTime.Now;
+                GenerateSourceControlOperation(SourceControlOperation.CheckForModifications);
+                GenerateTaskStatuses("Pre-build tasks", PrebuildTasks);
+                GenerateSourceControlOperation(SourceControlOperation.GetSource);
+                GenerateTaskStatuses("Build tasks", Tasks);
+                GenerateTaskStatuses("Publisher tasks", Publishers);
+            }
+
+            // Start the integration
+            IIntegrationResult result = null;
+            try 
+            {
+                result = integratable.Integrate(request);
+            }
+            finally
+            {
+                // Tidy up the status
+                lock (currentProjectStatus)
+                {
+                    CancelAllOutstandingItems(currentProjectStatus);
+                    currentProjectStatus.TimeCompleted = DateTime.Now;
+                    IntegrationStatus resultStatus = result == null ? IntegrationStatus.Unknown : result.Status;
+                    switch (resultStatus)
+                    {
+                        case IntegrationStatus.Success:
+                            currentProjectStatus.Status = ItemBuildStatus.CompletedSuccess;
+                            break;
+                        case IntegrationStatus.Unknown:
+                            // This probably means the build was cancelled (i.e. no changes detected)
+                            currentProjectStatus.Status = ItemBuildStatus.Cancelled;
+                            break;
+                        default:
+                            currentProjectStatus.Status = ItemBuildStatus.CompletedFailed;
+                            break;
+                    }
+                }
+            }
+
+            // Finally, return the actual result
+            return result;
+        }
+
+        /// <summary>
+        /// Cancels all outstanding items on a status item.
+        /// </summary>
+        private void CancelAllOutstandingItems(ItemStatus value)
+        {
+            if ((value.Status == ItemBuildStatus.Running) ||
+                (value.Status == ItemBuildStatus.Pending))
+            {
+                ItemBuildStatus status = ItemBuildStatus.Cancelled;
+                foreach (ItemStatus item in value.ChildItems)
+                {
+                    CancelAllOutstandingItems(item);
+                    if (item.Status == ItemBuildStatus.CompletedFailed)
+                    {
+                        status = ItemBuildStatus.CompletedFailed;
+                    }
+                    else if ((item.Status == ItemBuildStatus.CompletedSuccess) &&
+                        (status == ItemBuildStatus.Cancelled))
+                    {
+                        status = ItemBuildStatus.CompletedSuccess;
+                    }
+                }
+                value.Status = status;
+            }
+        }
+
+        private void GenerateSourceControlOperation(SourceControlOperation operation)
+        {
+            ItemStatus sourceControlStatus = null;
+
+            if (SourceControl is IStatusSnapshotGenerator)
+            {
+                sourceControlStatus = (SourceControl as IStatusSnapshotGenerator).GenerateSnapshot();
+            }
+            else
+            {
+                sourceControlStatus = new ItemStatus(
+                    string.Format("{0}: {1}", 
+                        SourceControl.GetType().Name,
+                        operation));
+                sourceControlStatus.Status = ItemBuildStatus.Pending;
+            }
+
+            // Only add the item if it has been initialised
+            if (sourceControlStatus != null)
+            {
+                currentProjectStatus.AddChild(sourceControlStatus);
+                sourceControlOperations.Add(operation, sourceControlStatus);
+            }
+        }
+
+        private void GenerateTaskStatuses(string name, IList tasks)
+        {
+            // Generate the group status
+            ItemStatus groupItem = new ItemStatus(name);
+            groupItem.Status = ItemBuildStatus.Pending;
+
+            // Add each status
+            foreach (ITask task in tasks)
+            {
+                ItemStatus taskItem = null;
+                if (task is IStatusSnapshotGenerator)
+                {
+                    taskItem = (task as IStatusSnapshotGenerator).GenerateSnapshot();
+                }
+                else
+                {
+                    taskItem = new ItemStatus(task.GetType().Name);
+                    taskItem.Status = ItemBuildStatus.Pending;
+                }
+
+                // Only add the item if it has been initialised
+                if (taskItem != null)
+                {
+                    groupItem.AddChild(taskItem);
+                    currentProjectItems.Add(task, taskItem);
+                }
+            }
+
+            // Only add the group item if it contains children
+            if (groupItem.ChildItems.Count > 0) currentProjectStatus.AddChild(groupItem);
         }
 
         public void NotifyPendingState()
@@ -230,13 +386,14 @@ namespace ThoughtWorks.CruiseControl.Core
             RunTasks(result, tasks);
         }
 
-        private static void RunTasks(IIntegrationResult result, IList tasksToRun)
+        private void RunTasks(IIntegrationResult result, IList tasksToRun)
         {
             foreach (ITask task in tasksToRun)
             {
-                task.Run(result);
+                RunTask(task, result);
                 if (result.Failed) break;
             }
+            CancelTasks(tasksToRun);
         }
 
         public void AbortRunningBuild()
@@ -246,11 +403,15 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public void PublishResults(IIntegrationResult result)
         {
+            // Make sure all the tasks have been cancelled
+            CancelTasks(PrebuildTasks);
+            CancelTasks(Tasks);
+
             foreach (ITask publisher in publishers)
             {
                 try
                 {
-                    publisher.Run(result);
+                    RunTask(publisher, result);
                 }
                 catch (Exception e)
                 {
@@ -267,6 +428,101 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Runs a specific task and updates the status for the task.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <param name="result"></param>
+        private void RunTask(ITask task, IIntegrationResult result)
+        {
+            // Load the status details
+            ItemStatus status = null;
+            if (currentProjectItems.ContainsKey(task)) status = currentProjectItems[task];
+
+            // If there is a status, update it
+            if (status != null)
+            {
+                status.TimeStarted = DateTime.Now;
+                status.Status = ItemBuildStatus.Running;
+                if ((status.Parent != null) && (status.Parent.Status == ItemBuildStatus.Pending))
+                {
+                    status.Parent.TimeStarted = status.TimeStarted;
+                    status.Parent.Status = ItemBuildStatus.Running;
+                }
+            }
+
+            try
+            {
+                // Run the actual task
+                task.Run(result);
+                if (status != null)
+                {
+                    if (result.Failed)
+                    {
+                        status.Status = ItemBuildStatus.CompletedFailed;
+                    }
+                    else
+                    {
+                        status.Status = ItemBuildStatus.CompletedSuccess;
+                    }
+                }
+            }
+            catch
+            {
+                if (status != null) status.Status = ItemBuildStatus.CompletedFailed;
+                throw;
+            }
+            finally
+            {
+                if (status != null) status.TimeCompleted = DateTime.Now;
+            }
+        }
+
+        /// <summary>
+        /// Cancels any tasks that have not been run.
+        /// </summary>
+        /// <param name="tasks"></param>
+        private void CancelTasks(IList tasks)
+        {
+            ItemBuildStatus overallStatus = ItemBuildStatus.Cancelled;
+            List<ItemStatus> statuses = new List<ItemStatus>();
+            foreach (ITask task in tasks)
+            {
+                if (currentProjectItems.ContainsKey(task))
+                {
+                    ItemStatus status = currentProjectItems[task];
+                    if ((status.Parent != null) && !statuses.Contains(status.Parent))
+                    {
+                        statuses.Add(status.Parent);
+                    }
+
+                    // Check the status and change it if it is still pending
+                    if (status.Status == ItemBuildStatus.Pending) status.Status = ItemBuildStatus.Cancelled;
+
+                    // Next, check for the overall status - by default it is cancelled, but completed statuses
+                    // will override it
+                    if (status.Status == ItemBuildStatus.CompletedFailed)
+                    {
+                        overallStatus = ItemBuildStatus.CompletedFailed;
+                    }
+                    else if ((status.Status == ItemBuildStatus.CompletedSuccess) && (overallStatus == ItemBuildStatus.Cancelled))
+                    {
+                        overallStatus = ItemBuildStatus.CompletedSuccess;
+                    }
+                }
+            }
+
+            // Update any parent items
+            foreach (ItemStatus status in statuses)
+            {
+                status.Status = overallStatus;
+                if ((overallStatus == ItemBuildStatus.CompletedFailed) ||
+                    (overallStatus == ItemBuildStatus.CompletedSuccess))
+                {
+                    status.TimeCompleted = DateTime.Now;
+                }
+            }
+        }
 
         private void AddBreakersToMessages(IIntegrationResult result)
         {
@@ -566,5 +822,131 @@ namespace ThoughtWorks.CruiseControl.Core
                 }
             }
         }
+
+        #region GenerateSnapshot()
+        /// <summary>
+        /// Generates a snapshot of the current status.
+        /// </summary>
+        /// <returns></returns>
+        public virtual ItemStatus GenerateSnapshot()
+        {
+            lock (currentProjectStatus)
+            {
+                // Update the status of the snapshot
+                if (currentProjectStatus.Status == ItemBuildStatus.Unknown)
+                {
+                    switch (LastIntegration.Status)
+                    {
+                        case IntegrationStatus.Success:
+                            currentProjectStatus.Status = ItemBuildStatus.CompletedSuccess;
+                            break;
+                        case IntegrationStatus.Failure:
+                        case IntegrationStatus.Exception:
+                            currentProjectStatus.Status = ItemBuildStatus.CompletedFailed;
+                            break;
+                    }
+                }
+
+                return currentProjectStatus.Clone();
+            }
+        }
+        #endregion
+
+        #region RecordSourceControlOperation()
+        /// <summary>
+        /// Records a source control operation.
+        /// </summary>
+        /// <param name="operation">The operation to record.</param>
+        /// <param name="status">The status of the operation.</param>
+        public virtual void RecordSourceControlOperation(SourceControlOperation operation, ItemBuildStatus status)
+        {
+            if (sourceControlOperations.ContainsKey(operation))
+            {
+                sourceControlOperations[operation].Status = status;
+                switch (status)
+                {
+                    case ItemBuildStatus.Running:
+                        sourceControlOperations[operation].TimeStarted = DateTime.Now;
+                        break;
+                    case ItemBuildStatus.CompletedFailed:
+                    case ItemBuildStatus.CompletedSuccess:
+                        sourceControlOperations[operation].TimeCompleted = DateTime.Now;
+                        break;
+                }
+            }
+        }
+        #endregion
+
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the latest list of packages.
+        /// </summary>
+        /// <returns></returns>
+        public virtual List<PackageDetails> RetrievePackageList()
+        {
+            string listFile = Name + "-packages.xml";
+            listFile = Path.Combine(ArtifactDirectory, listFile);
+            List<PackageDetails> packages = LoadPackageList(listFile);
+            return packages;
+        }
+
+        /// <summary>
+        /// Retrieves the list of packages for a build.
+        /// </summary>
+        /// <param name="buildLabel"></param>
+        /// <returns></returns>
+        public virtual List<PackageDetails> RetrievePackageList(string buildLabel)
+        {
+            string listFile = Path.Combine(buildLabel, Name + "-packages.xml");
+            listFile = Path.Combine(ArtifactDirectory, listFile);
+            if (File.Exists(listFile))
+            {
+                List<PackageDetails> packages = LoadPackageList(listFile);
+                return packages;
+            }
+            else
+            {
+                List<PackageDetails> packages = RetrievePackageList();
+                for (int loop = 0; loop < packages.Count; )
+                {
+                    if (!string.Equals(packages[loop].BuildLabel, buildLabel, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        packages.RemoveAt(loop);
+                    }
+                    else
+                    {
+                        loop++;
+                    }
+                }
+                return packages;
+            }
+        }
+        #endregion
+
+        #region LoadPackageList()
+        private List<PackageDetails> LoadPackageList(string fileName)
+        {
+            List<PackageDetails> packages = new List<PackageDetails>();
+            if (File.Exists(fileName))
+            {
+                XmlDocument packageList = new XmlDocument();
+                packageList.Load(fileName);
+                foreach (XmlElement packageElement in packageList.SelectNodes("/packages/package"))
+                {
+                    string packageFileName = packageElement.GetAttribute("file");
+                    packageFileName = packageFileName.Replace(ArtifactDirectory, string.Empty);
+                    if (packageFileName.StartsWith("\\")) packageFileName = packageFileName.Substring(1);
+                    PackageDetails details = new PackageDetails(packageFileName);
+                    details.Name = packageElement.GetAttribute("name");
+                    details.BuildLabel = packageElement.GetAttribute("label");
+                    details.DateTime = DateTime.Parse(packageElement.GetAttribute("time"));
+                    details.NumberOfFiles = Convert.ToInt32(packageElement.GetAttribute("files"));
+                    details.Size = Convert.ToInt64(packageElement.GetAttribute("size"));
+                    packages.Add(details);
+                }
+            }
+            return packages;
+        }
+        #endregion
     }
 }

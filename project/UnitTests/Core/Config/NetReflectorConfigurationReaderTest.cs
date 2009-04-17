@@ -10,6 +10,7 @@ using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {
@@ -251,6 +252,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                 get { throw new NotImplementedException(); }
             }
 
+            #endregion
+
+            #region RetrievePackageList()
+            /// <summary>
+            /// Retrieves the latest list of packages.
+            /// </summary>
+            /// <returns></returns>
+            public virtual List<PackageDetails> RetrievePackageList()
+            {
+                List<PackageDetails> packages = new List<PackageDetails>();
+                return packages;
+            }
+
+            /// <summary>
+            /// Retrieves the list of packages for a build.
+            /// </summary>
+            /// <param name="buildLabel"></param>
+            /// <returns></returns>
+            public virtual List<PackageDetails> RetrievePackageList(string buildLabel)
+            {
+                List<PackageDetails> packages = new List<PackageDetails>();
+                return packages;
+            }
             #endregion
         }
 

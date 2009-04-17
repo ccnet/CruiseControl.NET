@@ -350,6 +350,44 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			get { return buildDurationTracker.EstimatedTimeRemainingOnCurrentBuild; }
 		}
+
+        #region RetrieveSnapshot()
+        /// <summary>
+        /// Retrieves a snapshot of the current build status.
+        /// </summary>
+        /// <returns>The current build status of the project.</returns>
+        public virtual ProjectStatusSnapshot RetrieveSnapshot()
+        {
+            ProjectStatusSnapshot snapshot = cruiseProjectManager.RetrieveSnapshot();
+            return snapshot;
+        }
+        #endregion
+
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the current list of available packages.
+        /// </summary>
+        /// <returns></returns>
+        public virtual PackageDetails[] RetrievePackageList()
+        {
+            PackageDetails[] list = cruiseProjectManager.RetrievePackageList();
+            return list;
+        }
+        #endregion
+
+        #region RetrieveFileTransfer()
+        /// <summary>
+        /// Retrieve a file transfer object.
+        /// </summary>
+        /// <param name="project">The project to retrieve the file for.</param>
+        /// <param name="fileName">The name of the file.</param>
+        /// <param name="source">Where to retrieve the file from.</param>
+        public virtual IFileTransfer RetrieveFileTransfer(string fileName, FileTransferSource source)
+        {
+            IFileTransfer fileTransfer = cruiseProjectManager.RetrieveFileTransfer(fileName, source);
+            return fileTransfer;
+        }
+        #endregion
 	}
 
 	public delegate void MessageEventHandler(Message message);

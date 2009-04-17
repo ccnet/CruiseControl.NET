@@ -162,6 +162,8 @@
     <Compile Include="IRemotingService.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ItemBuildStatus.cs" />
+    <Compile Include="ItemStatus.cs" />
     <Compile Include="NameValuePair.cs" />
     <Compile Include="PermissionDeniedException.cs" />
     <Compile Include="SecurityException.cs" />
@@ -175,6 +177,7 @@
     <Compile Include="NoSuchProjectException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PackageDetails.cs" />
     <Compile Include="ProjectActivity.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -187,6 +190,7 @@
     <Compile Include="ProjectStatus.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ProjectStatusSnapshot.cs" />
     <Compile Include="QueuedRequestSnapshot.cs" />
     <Compile Include="QueuedRequestSnapshotList.cs" />
     <Compile Include="QueueSetSnapshot.cs" />
