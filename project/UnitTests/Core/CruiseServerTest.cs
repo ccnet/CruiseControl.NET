@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             mockProject.SetupResult("QueueName", "Project 3");
             mockProjectInstance = (IProject)mockProject.MockInstance;
 			mockProject.SetupResult("Name", "Project 3");
-            mockProject.SetupResult("StartupState", ProjectInitialState.Started);
+            mockProject.SetupResult("StartupMode", ProjectStartupMode.UseLastState);
             integratorMock3.SetupResult("Project", mockProjectInstance);
 
 			configuration.AddProject(project1);
