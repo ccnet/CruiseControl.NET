@@ -221,7 +221,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
             public int MaxSourceControlRetries { get { return 0; } }
 
-            public ProjectInitialState StartupState { get { return ProjectInitialState.Started; } }
+            public ProjectInitialState InitialState { get { return ProjectInitialState.Started; } }
+            public ProjectStartupMode StartupMode { get { return ProjectStartupMode.UseInitialState; } }
 
             #region IProject Members
 

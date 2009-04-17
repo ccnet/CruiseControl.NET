@@ -126,10 +126,14 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         Sourcecontrol.Common.SourceControlErrorHandlingPolicy SourceControlErrorHandling { get; }
 
+        /// <summary>
+        /// The initial start-up state to set.
+        /// </summary>
+        ProjectInitialState InitialState { get; }
 
         /// <summary>
         /// The start-up mode for this project.
         /// </summary>
-        ProjectInitialState StartupState { get; }
+        ProjectStartupMode StartupMode { get; }
     }
 }

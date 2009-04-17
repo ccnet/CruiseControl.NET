@@ -25,7 +25,8 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		private IList _tasks = new ArrayList();
 		private WorkflowResult _currentIntegrationResult;
-        private ProjectInitialState startupState = ProjectInitialState.Started;
+        private ProjectInitialState initialState = ProjectInitialState.Started;
+        private ProjectStartupMode startupMode = ProjectStartupMode.UseLastState;
 
 		[ReflectorCollection("tasks", InstanceType = typeof(ArrayList))]
 		public IList Tasks
@@ -157,16 +158,24 @@ namespace ThoughtWorks.CruiseControl.Core
         }
 
         /// <summary>
-        /// The start-up mode for this project.
+        /// The initial start-up state to set.
         /// </summary>
-        [ReflectorProperty("startupState", Required = false)]
-        public ProjectInitialState StartupState
+        [ReflectorProperty("startupMode", Required = false)]
+        public ProjectInitialState InitialState
         {
-            get { return startupState; }
-            set { startupState = value; }
+            get { return initialState; }
+            set { initialState = value; }
         }
 
-
+        /// <summary>
+        /// The start-up mode for this project.
+        /// </summary>
+        [ReflectorProperty("startupMode", Required = false)]
+        public ProjectStartupMode StartupMode
+        {
+            get { return startupMode; }
+            set { startupMode = value; }
+        }
 
         public bool stopProjectOnReachingMaxSourceControlRetries
         {

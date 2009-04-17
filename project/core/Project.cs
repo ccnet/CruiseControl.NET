@@ -51,11 +51,10 @@ namespace ThoughtWorks.CruiseControl.Core
         private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
         private ArrayList messages = new ArrayList();
         private int maxSourceControlRetries = 5;
-        private ProjectInitialState startupState = ProjectInitialState.Started;
-
+        private ProjectInitialState initialState = ProjectInitialState.Started;
+        private ProjectStartupMode startupMode = ProjectStartupMode.UseLastState;
         private bool StopProjectOnReachingMaxSourceControlRetries = false;
         private Sourcecontrol.Common.SourceControlErrorHandlingPolicy sourceControlErrorHandling = Common.SourceControlErrorHandlingPolicy.ReportEveryFailure;
-
 
         [ReflectorProperty("prebuild", Required = false)]
         public ITask[] PrebuildTasks = new ITask[0];
@@ -451,13 +450,23 @@ namespace ThoughtWorks.CruiseControl.Core
         }
 
         /// <summary>
+        /// The initial start-up state to set.
+        /// </summary>
+        [ReflectorProperty("initialState", Required = false)]
+        public ProjectInitialState InitialState
+        {
+            get { return initialState; }
+            set { initialState = value; }
+        }
+
+        /// <summary>
         /// The start-up mode for this project.
         /// </summary>
-        [ReflectorProperty("startupState", Required = false)]
-        public ProjectInitialState StartupState
+        [ReflectorProperty("startupMode", Required = false)]
+        public ProjectStartupMode StartupMode
         {
-            get { return startupState; }
-            set { startupState = value; }
+            get { return startupMode; }
+            set { startupMode = value; }
         }
 
         /// <summary>
