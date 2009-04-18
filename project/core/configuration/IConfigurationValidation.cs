@@ -12,6 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// </summary>
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
-        void Validate(IConfiguration configuration, object parent);
+        /// <param name="errorProcesser">The error processer to use.</param>
+        void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser);
     }
 }

@@ -46,7 +46,6 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         }
         #endregion
 
-
         #region DefaultRight
         /// <summary>
         /// The default right to use.
@@ -107,13 +106,13 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// </summary>
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
-        public virtual void Validate(IConfiguration configuration, object parent)
+        public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
         {
             foreach (IPermission permission in permissions)
             {
                 if (permission is IConfigurationValidation)
                 {
-                    (permission as IConfigurationValidation).Validate(configuration, parent);
+                    (permission as IConfigurationValidation).Validate(configuration, parent, errorProcesser);
                 }
             }
         }

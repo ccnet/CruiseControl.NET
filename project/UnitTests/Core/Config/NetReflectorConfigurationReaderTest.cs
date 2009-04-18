@@ -18,21 +18,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 	public class NetReflectorConfigurationReaderTest
 	{
 		private NetReflectorConfigurationReader reader;
-		private IList invalidNodes;
 
 		[SetUp]
 		protected void CreateReader()
 		{
 			reader = new NetReflectorConfigurationReader();
-			reader.InvalidNodeEventHandler += new InvalidNodeEventHandler(CheckInvalidNode);
-			invalidNodes = new ArrayList();
 		}
 
 		[Test]
 		public void DeserialiseSingleProjectFromXml()
 		{
 			string projectXml = ConfigurationFixture.GenerateProjectXml("test");
-			IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml));
+			IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml), null);
 			ValidateProject(configuration, "test");
 		}
 
@@ -41,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         {
             string projectXml = ConfigurationFixture.GenerateProjectXml("test");
             string queueXml = "<queue name=\"test\" duplicates=\"ApplyForceBuildsReAdd\"/>";
-            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml+queueXml));
+            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml+queueXml), null);
             ValidateProject(configuration, "test");
         }
 
@@ -50,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         {
             string projectXml = ConfigurationFixture.GenerateProjectXml("test");
             string queueXml = "<nullSecurity/>";
-            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml));
+            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml), null);
             Assert.IsInstanceOfType(typeof(NullSecurityManager), configuration.SecurityManager);
         }
 
@@ -60,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         {
             string projectXml = ConfigurationFixture.GenerateProjectXml("test");
             string queueXml = "<garbage/>";
-            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml));
+            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml), null);
             ValidateProject(configuration, "test");
         }
 
@@ -69,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		{
 			string projectXml = ConfigurationFixture.GenerateProjectXml("test");
 			string project2Xml = ConfigurationFixture.GenerateProjectXml("test2");
-			IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + project2Xml));
+			IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + project2Xml), null);
 			ValidateProject(configuration, "test");
 			ValidateProject(configuration, "test2");
 		}
@@ -78,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		public void DeserialiseSingleProjectFromXmlWithComments()
 		{
 			string projectXml = @"<!-- A Comment -->" + ConfigurationFixture.GenerateProjectXml("test");
-			IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml));
+			IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml), null);
 			ValidateProject(configuration, "test");
 		}
 
@@ -86,39 +83,37 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		public void DeserialiseCustomProjectFromXml()
 		{
 			string xml = @"<customtestproject name=""foo"" />";
-			IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(xml));
+			IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(xml), null);
 			Assert.IsNotNull(configuration.Projects["foo"]);
 			Assert.IsTrue(configuration.Projects["foo"] is CustomTestProject);
 			Assert.AreEqual("foo", ((CustomTestProject) configuration.Projects["foo"]).Name);
 		}
 
 		[Test]
+        [ExpectedException(typeof(ConfigurationException))]
 		public void DeserialiseProjectFromXmlWithUnusedNodesShouldGenerateEvent()
 		{
 			string xml = @"<customtestproject name=""foo"" bar=""baz"" />";
-			IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(xml));
-			Assert.IsNotNull(configuration.Projects["foo"]);
-			Assert.AreEqual(1, invalidNodes.Count);
-			Assert.AreEqual("bar", ((InvalidNodeEventArgs)invalidNodes[0]).Node.Name);
+			IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(xml), null);
 		}
 
 		[Test, ExpectedException(typeof(ConfigurationException))]
 		public void AttemptToDeserialiseProjectWithMissingXmlForRequiredProperties()
 		{
 			string projectXml = @"<project />";
-			reader.Read(ConfigurationFixture.GenerateConfig(projectXml));
+			reader.Read(ConfigurationFixture.GenerateConfig(projectXml), null);
 		}
 
 		[Test, ExpectedException(typeof(ConfigurationException))]
 		public void AttemptToDeserialiseProjectFromEmptyDocument()
 		{
-			reader.Read(new XmlDocument());
+			reader.Read(new XmlDocument(), null);
 		}
 
 		[Test, ExpectedException(typeof(ConfigurationException))]
 		public void AttemptToDeserialiseProjectFromXmlWithInvalidRootElement()
 		{
-			reader.Read(XmlUtil.CreateDocument("<loader/>"));
+			reader.Read(XmlUtil.CreateDocument("<loader/>"), null);
 		}
 
         [Test]
@@ -126,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         {
             string projectXml = ConfigurationFixture.GenerateProjectXml("test");
             string queueXml = "<queue name=\"test\" duplicates=\"ApplyForceBuildsReAdd\"/>";
-            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml));
+            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml), null);
             ValidateProject(configuration, "test");
         }
 
@@ -135,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         {
             string projectXml = ConfigurationFixture.GenerateProjectXml("test", "testQueue");
             string queueXml = "<queue name=\"testQueue\" duplicates=\"ApplyForceBuildsReAdd\"/>";
-            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml));
+            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml), null);
             ValidateProject(configuration, "test");
         }
 
@@ -145,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         {
             string projectXml = ConfigurationFixture.GenerateProjectXml("test");
             string queueXml = "<queue name=\"testQueue\" duplicates=\"ApplyForceBuildsReAdd\"/>";
-            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml));
+            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml), null);
             ValidateProject(configuration, "test");
         }
         
@@ -157,9 +152,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			Assert.IsTrue(project.SourceControl is NullSourceControl);
 			Assert.AreEqual(1, project.Publishers.Length);
 			Assert.IsTrue(project.Publishers[0] is NullTask);
-			if (invalidNodes.Count > 0) 
-				Assert.Fail("The xml contains nodes that are no longer used: {0}.", ((XmlNode)invalidNodes[0]).OuterXml);				
 		}
+
         [ReflectorType("garbage")]
         class Garbage
         {
@@ -277,10 +271,5 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             }
             #endregion
         }
-
-		private void CheckInvalidNode(InvalidNodeEventArgs args)
-		{
-			invalidNodes.Add(args);
-		}
 	}
 }

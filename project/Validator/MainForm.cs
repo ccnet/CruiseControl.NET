@@ -244,7 +244,7 @@ namespace Validator
             return element;
         }
 
-        public IConfiguration Read(XmlDocument document)
+        public IConfiguration Read(XmlDocument document, IConfigurationErrorProcesser errorProcesser)
         {
             DisplayFileName();
             DisplayConfig();
@@ -468,12 +468,6 @@ namespace Validator
             about.ShowDialog(this);
         }
 
-        // The following event is only required for the INetReflectorConfigurationReader
-        // interface, so this warning can be ignored
-#pragma warning disable 0067
-        public event InvalidNodeEventHandler InvalidNodeEventHandler;
-#pragma warning restore 0067
-
         private struct ConfigurationItem
         {
             public string Name;
@@ -488,6 +482,7 @@ namespace Validator
 
         private void InternalValidation(Configuration configuration)
         {
+            var errorProcesser = new ValidationErrorProcesser(validationResults);
             DisplayProgressMessage("Validating internal integrity, please wait...", 90);
 
             HtmlElement nameEl = GenerateElement("div",
@@ -501,7 +496,8 @@ namespace Validator
             {
                 if (project is IConfigurationValidation)
                 {
-                    isValid &= RunValidationCheck(configuration, project as IConfigurationValidation, "project '" + project.Name + "'", ref row);
+                    errorProcesser.ItemName = string.Format("project '{0}'", project.Name);
+                    isValid &= RunValidationCheck(configuration, project as IConfigurationValidation, errorProcesser.ItemName, ref row, errorProcesser);
                 }
             }
 
@@ -509,11 +505,18 @@ namespace Validator
             {
                 if (queue is IConfigurationValidation)
                 {
-                    isValid &= RunValidationCheck(configuration, queue as IConfigurationValidation, "queue '" + queue.Name + "'", ref row);
+                    errorProcesser.ItemName = string.Format("queue '{0}'", queue.Name);
+                    isValid &= RunValidationCheck(configuration, queue as IConfigurationValidation, errorProcesser.ItemName, ref row, errorProcesser);
                 }
             }
 
-            if (isValid)
+            if (configuration.SecurityManager is IConfigurationValidation)
+            {
+                errorProcesser.ItemName = "security manager";
+                isValid &= RunValidationCheck(configuration, configuration.SecurityManager as IConfigurationValidation, errorProcesser.ItemName, ref row, errorProcesser);
+            }
+
+            if (isValid && errorProcesser.Passed)
             {
                 myBodyEl.AppendChild(
                     GenerateElement("div",
@@ -521,13 +524,13 @@ namespace Validator
             }
         }
 
-        private bool RunValidationCheck(Configuration configuration, IConfigurationValidation validator, string name, ref int row)
+        private bool RunValidationCheck(Configuration configuration, IConfigurationValidation validator, string name, ref int row, IConfigurationErrorProcesser errorProcesser)
         {
             bool isValid = true;
 
             try
             {
-                validator.Validate(configuration, null);
+                validator.Validate(configuration, null, errorProcesser);
             }
             catch (Exception error)
             {

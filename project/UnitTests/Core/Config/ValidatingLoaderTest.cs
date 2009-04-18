@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			XmlValidatingLoader loader = new XmlValidatingLoader(xr);
 			XmlDocument doc = loader.Load();
 			Assert.IsNotNull(doc, "Unable to load document because it is not valid according to reader");
-			IConfiguration config = new NetReflectorConfigurationReader().Read(doc);
+			IConfiguration config = new NetReflectorConfigurationReader().Read(doc, null);
 			Assert.IsNotNull(config.Projects["p1"]);
 		}
 

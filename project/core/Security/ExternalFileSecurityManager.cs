@@ -208,7 +208,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// </summary>
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
-        public virtual void Validate(IConfiguration configuration, object parent)
+        public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
         {
             List<string> settings = new List<string>();
             List<string> duplicates = new List<string>();

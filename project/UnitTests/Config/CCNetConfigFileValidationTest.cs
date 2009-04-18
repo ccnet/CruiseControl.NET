@@ -18,7 +18,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Config
 		public void ExampleConfigFilesShouldNotContainAnyInvalidElements()
 		{
 			NetReflectorConfigurationReader reader = new NetReflectorConfigurationReader();
-			reader.InvalidNodeEventHandler += new InvalidNodeEventHandler(reader_InvalidNodeEventHandler);
 
 			string[] configFiles = new string[]
 				{
@@ -28,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Config
 			{
 				filename = f;
 				XmlDocument xml = LoadConfigXml();
-				Assert.IsNotNull(reader.Read(xml));
+				Assert.IsNotNull(reader.Read(xml, null));
 			}
 		}
 		
@@ -49,12 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Config
        </project>
 </cruisecontrol>
 ");
-			reader.Read(xml);
-		}
-
-		private void reader_InvalidNodeEventHandler(InvalidNodeEventArgs args)
-		{
-			throw new Exception(string.Format("configuration file {0} contains invalid xml: {1}", filename, args.Message));
+			reader.Read(xml, null);
 		}
 
 		private XmlDocument LoadConfigXml()

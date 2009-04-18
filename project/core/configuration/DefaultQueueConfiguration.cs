@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// </summary>
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
-        public virtual void Validate(IConfiguration configuration, object parent)
+        public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
         {
             // Ensure that the queue has at least one project in it
             bool queueFound = false;
@@ -74,8 +74,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             }
             if (!queueFound)
             {
-                throw new ConfigurationException(
-                    string.Format("An unused queue definition has been found: name '{0}'", this.Name));
+                errorProcesser.ProcessError(new ConfigurationException(
+                    string.Format("An unused queue definition has been found: name '{0}'", this.Name)));
             }
         }
     }

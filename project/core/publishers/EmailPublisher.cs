@@ -282,7 +282,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </summary>
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
-        public virtual void Validate(IConfiguration configuration, object parent)
+        public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
         {
             if (parent is Project)
             {
@@ -302,12 +302,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 // If not found then throw a validation exception
                 if (!isPublisher)
                 {
-                    Log.Warning("Email publishers are best placed in the publishers section of the configuration");
+                    errorProcesser.ProcessWarning("Email publishers are best placed in the publishers section of the configuration");
                 }
             }
             else
             {
-                throw new CruiseControlException("This publisher can only belong to a project");
+                errorProcesser.ProcessError(
+                    new CruiseControlException("This publisher can only belong to a project"));
             }
         }
         #endregion

@@ -107,6 +107,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ValidationErrorProcesser.cs" />
     <Compile Include="WindowStateEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>

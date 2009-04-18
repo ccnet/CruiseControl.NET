@@ -5,9 +5,13 @@ using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Security;
 using System.Collections.Generic;
 using System.Configuration;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
+    /// <summary>
+    /// Load a configuration file using NetReflector.
+    /// </summary>
 	public class NetReflectorConfigurationReader
         : INetReflectorConfigurationReader
 	{
@@ -15,8 +19,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		private const string CONFIG_ASSEMBLY_PATTERN = "ccnet.*.plugin.dll";
 		private readonly NetReflectorTypeTable typeTable;
 		private NetReflectorReader reader;
-
-		public event InvalidNodeEventHandler InvalidNodeEventHandler;
 
 		public NetReflectorConfigurationReader()
 		{
@@ -35,80 +37,119 @@ namespace ThoughtWorks.CruiseControl.Core.Config
                 }
             }
 			typeTable.Add(Directory.GetCurrentDirectory(), CONFIG_ASSEMBLY_PATTERN);
-			typeTable.InvalidNode += new InvalidNodeEventHandler(HandleUnusedNode);
 			reader = new NetReflectorReader(typeTable);
 		}
 
-		public IConfiguration Read(XmlDocument document)
+        /// <summary>
+        /// Reads an XML config document.
+        /// </summary>
+        /// <param name="document">The document to read.</param>
+        /// <param name="errorProcesser">The error processer to use (can be null).</param>
+        /// <returns>The loaded configuration.</returns>
+        public IConfiguration Read(XmlDocument document, 
+            IConfigurationErrorProcesser errorProcesser)
 		{
+            Configuration configuration = new Configuration();
             string ConflictingXMLNode = string.Empty;
             List<string> projectNames = new List<string>();
+            VerifyDocumentHasValidRootElement(document);
 
-			VerifyDocumentHasValidRootElement(document);
-			try
-			{
-				Configuration configuration = new Configuration();
-				foreach (XmlNode node in document.DocumentElement)
-				{
+            var actualErrorProcesser = errorProcesser ?? new DefaultErrorProcesser();
+
+            InvalidNodeEventHandler invalidNodeHandler = (args) =>
+            {
+                if (!actualErrorProcesser.ProcessUnhandledNode(args.Node))
+                {
+                    actualErrorProcesser.ProcessError(args.Message);
+                }
+            };
+            typeTable.InvalidNode += invalidNodeHandler;
+            try
+            {
+                foreach (XmlNode node in document.DocumentElement)
+                {
                     ConflictingXMLNode = string.Empty;
 
-					if (!(node is XmlComment))
-					{
+                    if (!(node is XmlComment))
+                    {
                         ConflictingXMLNode = "Conflicting project data : " + node.OuterXml;
 
                         object loadedItem = reader.Read(node);
                         if (loadedItem is IProject)
                         {
-                            IProject project = loadedItem as IProject;
-
-                            // Validate that the project name is unique
-                            string projectName = project.Name.ToLowerInvariant();
-                            if (projectNames.Contains(projectName))
-                            {
-                                throw new CruiseControlException(
-                                    string.Format(
-                                        "A duplicate project name ({0})has been found - projects must be unique per server",
-                                        projectName));
-                            }
-                            else
-                            {
-                                projectNames.Add(projectName);
-                            }
-
-                            configuration.AddProject(project);
+                            LoadAndValidateProject(actualErrorProcesser, projectNames, configuration, loadedItem);
                         }
                         else if (loadedItem is IQueueConfiguration)
                         {
-                            IQueueConfiguration queueConfig = loadedItem as IQueueConfiguration;
-                            configuration.QueueConfigurations.Add(queueConfig);
+                            LoadAndValidateQueue(configuration, loadedItem);
                         }
                         else if (loadedItem is ISecurityManager)
                         {
-                            ISecurityManager securityManager = loadedItem as ISecurityManager;
-                            configuration.SecurityManager = securityManager as ISecurityManager;
+                            LoadAndValidateSecurityManager(configuration, loadedItem);
                         }
                         else
                         {
-                            throw new ConfigurationException("\nUnknown configuration item found\n" + node.OuterXml);
+                            actualErrorProcesser.ProcessError(
+                                new ConfigurationException(
+                                    "\nUnknown configuration item found\n" + node.OuterXml));
                         }
-					}
-				}
+                    }
+                }
 
                 // Do a validation check to ensure internal configuration consistency
-                ValidateConfiguration(configuration);
+                ValidateConfiguration(configuration, actualErrorProcesser);
+            }
+            catch (NetReflectorException ex)
+            {
+                actualErrorProcesser.ProcessError(new ConfigurationException("\nUnable to instantiate CruiseControl projects from configuration document." +
+                    "\nConfiguration document is likely missing Xml nodes required for properly populating CruiseControl configuration.\n"
+                    + ex.Message +
+                    "\n " + ConflictingXMLNode, ex));
+            }
+            finally
+            {
+                typeTable.InvalidNode -= invalidNodeHandler;
+            }
 
-				return configuration;
-			}
-			catch (NetReflectorException ex)
-			{
-				throw new ConfigurationException("\nUnable to instantiate CruiseControl projects from configuration document." +
-                    "\nConfiguration document is likely missing Xml nodes required for properly populating CruiseControl configuration.\n" 
-                    + ex.Message + 
-                    "\n " + ConflictingXMLNode  , ex);
-			}
-		}
+            return configuration;
+        }
 
-		private static void VerifyDocumentHasValidRootElement(XmlDocument configXml)
+        private void LoadAndValidateSecurityManager(Configuration configuration, object loadedItem)
+        {
+            ISecurityManager securityManager = loadedItem as ISecurityManager;
+            configuration.SecurityManager = securityManager as ISecurityManager;
+        }
+
+        private void LoadAndValidateQueue(Configuration configuration, object loadedItem)
+        {
+            IQueueConfiguration queueConfig = loadedItem as IQueueConfiguration;
+            configuration.QueueConfigurations.Add(queueConfig);
+        }
+
+        private void LoadAndValidateProject(IConfigurationErrorProcesser errorProcesser, 
+            List<string> projectNames, Configuration configuration, object loadedItem)
+        {
+            IProject project = loadedItem as IProject;
+
+            // Validate that the project name is unique
+            string projectName = project.Name.ToLowerInvariant();
+            if (projectNames.Contains(projectName))
+            {
+                errorProcesser.ProcessError(
+                    new CruiseControlException(
+                        string.Format(
+                            "A duplicate project name ({0})has been found - projects must be unique per server",
+                            projectName)));
+            }
+            else
+            {
+                projectNames.Add(projectName);
+            }
+
+            configuration.AddProject(project);
+        }
+
+		private void VerifyDocumentHasValidRootElement(XmlDocument configXml)
 		{
 			if (configXml.DocumentElement == null || configXml.DocumentElement.Name != ROOT_ELEMENT)
 			{
@@ -120,6 +161,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// Validate the internal consistency of the configuration.
         /// </summary>
         /// <param name="value">The configuration to check.</param>
+        /// <param name="errorProcesser">The error processer to use.</param>
         /// <remarks>
         /// <para>
         /// This will add the following internal consistency checks:
@@ -130,12 +172,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// </item>
         /// </list>
         /// </remarks>
-        private void ValidateConfiguration(Configuration value)
+        private void ValidateConfiguration(Configuration value, IConfigurationErrorProcesser errorProcesser)
         {
             // Validate the security manager - need to do this first
             if (value.SecurityManager is IConfigurationValidation)
             {
-                (value.SecurityManager as IConfigurationValidation).Validate(value, null);
+                (value.SecurityManager as IConfigurationValidation).Validate(value, null, errorProcesser);
             }
 
             // Validate all the projects
@@ -143,7 +185,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             {
                 if (project is IConfigurationValidation)
                 {
-                    (project as IConfigurationValidation).Validate(value, null);
+                    (project as IConfigurationValidation).Validate(value, null, errorProcesser);
                 }
             }
 
@@ -152,15 +194,33 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             {
                 if (queue is IConfigurationValidation)
                 {
-                    (queue as IConfigurationValidation).Validate(value, null);
+                    (queue as IConfigurationValidation).Validate(value, null, errorProcesser);
                 }
             }
         }
 
-		private void HandleUnusedNode(InvalidNodeEventArgs args)
-		{
-			if (InvalidNodeEventHandler != null)
-				InvalidNodeEventHandler(args);
-		}
+        private class DefaultErrorProcesser
+            : IConfigurationErrorProcesser
+        {
+            public void ProcessError(string message)
+            {
+                throw new ConfigurationException(message);
+            }
+
+            public void ProcessError(Exception error)
+            {
+                throw error;
+            }
+
+            public void ProcessWarning(string message)
+            {
+                Log.Warning(message);
+            }
+
+            public bool ProcessUnhandledNode(XmlNode node)
+            {
+                return false;
+            }
+        }
 	}
 }

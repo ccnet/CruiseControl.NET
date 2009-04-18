@@ -740,24 +740,25 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
-        public virtual void Validate(IConfiguration configuration, object parent)
+        public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
         {
             if (!(security is NullProjectAuthorisation) &&
                 (configuration.SecurityManager is NullSecurityManager))
             {
-                throw new ConfigurationException(
-                    string.Format("Security is defined for project '{0}', but not defined at the server", this.Name));
+                errorProcesser.ProcessError(
+                    new ConfigurationException(
+                        string.Format("Security is defined for project '{0}', but not defined at the server", this.Name)));
             }
 
 
-            ValidateProject();
-            ValidateItem(sourceControl, configuration);
-            ValidateItem(labeller, configuration);
-            ValidateItems(PrebuildTasks, configuration);
-            ValidateItems(tasks, configuration);
-            ValidateItems(publishers, configuration);
-            ValidateItem(state, configuration);
-            ValidateItem(security, configuration);
+            ValidateProject(errorProcesser);
+            ValidateItem(sourceControl, configuration, errorProcesser);
+            ValidateItem(labeller, configuration, errorProcesser);
+            ValidateItems(PrebuildTasks, configuration, errorProcesser);
+            ValidateItems(tasks, configuration, errorProcesser);
+            ValidateItems(publishers, configuration, errorProcesser);
+            ValidateItem(state, configuration, errorProcesser);
+            ValidateItem(security, configuration, errorProcesser);
         }
 
         /// <summary>
@@ -766,11 +767,11 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <remarks>
         /// Currently the only check is the project name does not contain any invalid characters.
         /// </remarks>
-        private void ValidateProject()
+        private void ValidateProject(IConfigurationErrorProcesser errorProcesser)
         {
             if (ContainsInvalidChars(this.Name))
             {
-                Log.Warning(
+                errorProcesser.ProcessWarning(
                     string.Format("Project name '{0}' contains some chars that could cause problems, better use only numbers and letters",
                         Name));
             }
@@ -801,17 +802,15 @@ namespace ThoughtWorks.CruiseControl.Core
             return result;
         }
 
-
-
         /// <summary>
         /// Validates the configuration of an item.
         /// </summary>
         /// <param name="item"></param>
-        private void ValidateItem(object item, IConfiguration configuration)
+        private void ValidateItem(object item, IConfiguration configuration, IConfigurationErrorProcesser errorProcesser)
         {
             if ((item != null) && (item is IConfigurationValidation))
             {
-                (item as IConfigurationValidation).Validate(configuration, this);
+                (item as IConfigurationValidation).Validate(configuration, this, errorProcesser);
             }
         }
 
@@ -819,13 +818,13 @@ namespace ThoughtWorks.CruiseControl.Core
         /// Validates the configuration of an enumerable.
         /// </summary>
         /// <param name="item"></param>
-        private void ValidateItems(IEnumerable items, IConfiguration configuration)
+        private void ValidateItems(IEnumerable items, IConfiguration configuration, IConfigurationErrorProcesser errorProcesser)
         {
             if (items != null)
             {
                 foreach (object item in items)
                 {
-                    ValidateItem(item, configuration);
+                    ValidateItem(item, configuration, errorProcesser);
                 }
             }
         }

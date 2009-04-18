@@ -11,13 +11,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// <summary>
         /// Reads an XML config document.
         /// </summary>
-        /// <param name="document">The document to read,</param>
+        /// <param name="document">The document to read.</param>
+        /// <param name="errorProcesser">The error processer to use (can be null).</param>
         /// <returns>The loaded configuration.</returns>
-        IConfiguration Read(XmlDocument document);
-
-        /// <summary>
-        /// Handles an invalid node.
-        /// </summary>
-        event InvalidNodeEventHandler InvalidNodeEventHandler;
+        IConfiguration Read(XmlDocument document, IConfigurationErrorProcesser errorProcesser);
     }
 }
