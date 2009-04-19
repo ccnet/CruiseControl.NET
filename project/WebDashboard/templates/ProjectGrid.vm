@@ -117,7 +117,7 @@
 
     #if ($projectGridRow.BuildStage.Length > 0)
     <tr  bgcolor="lavender">
-      <td align="Left" COLSPAN="9">
+      <td align="Left" COLSPAN="10">
         <font color="Black">
           $projectGridRow.BuildStage
         </font>
@@ -137,7 +137,7 @@
   #end
   #set ($OKPercentToolTip = $OKPercent * 2)
    <tr>
-     <td COLSPAN="9">
+     <td COLSPAN="10">
       <table  cellspacing="0" cellpadding="0"  border="0" width="100%" >
         <tr height=5 title="Percentage of successfull builds : $OKPercentToolTip%">
             <td width=$OKPercent% bgcolor="#33CC00"> </td>
