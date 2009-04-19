@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Dashboard Administration Plugin</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Dashboard Administration Plugin
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Apr 11, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h3><a name="DashboardAdministrationPlugin-DashboardAdministrationPlugin"></a>Dashboard Administration Plugin</h3>
+
+<p>The Dashboard Administration Plugin (DAP) provides an alternate way to administer the dashboard. The DAP allows the maintenance of remote servers and "packages".</p>
+
+<p>The remote server administration allows an administrator to add, modify and delete remote servers. These are the servers that the dashboard can monitor, i.e. the servers displayed in the project grid.</p>
+
+<p>The DAP also allows loading and installing "packages". A package is a predefined set of information and files that provide one or more plugins to the dashboard. By packaging all the files and configuration information into one, it allows an easy way to add or remove features from the dashboard.</p>
+
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>New feature</b><br />
+<p>This plugin is available from release 1.4.4 onwards.</p></td></tr></table></div>
+
+<h3><a name="DashboardAdministrationPlugin-Example"></a>Example</h3>
+<p>Minimal example:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;administrationPlugin /&gt;</span></pre>
+</div></div>
+
+<p>Full example:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;administrationPlugin password=<span class="code-quote">"ccnetrocks"</span> /&gt;</span></pre>
+</div></div>
+
+<h3><a name="DashboardAdministrationPlugin-ConfigurationElements"></a>Configuration Elements</h3>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> password </td>
+<td class='confluenceTd'> An optional password to secure the DAP. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+</tr>
+</tbody></table>
+
+<h3><a name="DashboardAdministrationPlugin-Packages"></a>Packages</h3>
+
+<p>The following packages are currently available:</p>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Name </th>
+<th class='confluenceTh'> Description </th>
+</tr>
+<tr>
+<td class='confluenceTd'> Modification History </td>
+<td class='confluenceTd'> Modification history for a project. </td>
+</tr>
+<tr>
+<td class='confluenceTd'> NDepend Results </td>
+<td class='confluenceTd'> Display the results of an NDepend analysis. </td>
+</tr>
+<tr>
+<td class='confluenceTd'> NUnit Results </td>
+<td class='confluenceTd'> Display the results of a NUnit run. </td>
+</tr>
+<tr>
+<td class='confluenceTd'> Project Configuration Display </td>
+<td class='confluenceTd'> Show the project configuration. </td>
+</tr>
+<tr>
+<td class='confluenceTd'> Project Statistics </td>
+<td class='confluenceTd'> Statistics for a project. </td>
+</tr>
+<tr>
+<td class='confluenceTd'> Queue Status Display </td>
+<td class='confluenceTd'> Display the status of the queues on a server. </td>
+</tr>
+<tr>
+<td class='confluenceTd'> Server Configuration Display </td>
+<td class='confluenceTd'> Display the configuration for all the projects on a server. </td>
+</tr>
+<tr>
+<td class='confluenceTd'> Server Information Display </td>
+<td class='confluenceTd'> Displays the server information (version and free disk space). </td>
+</tr>
+<tr>
+<td class='confluenceTd'> Server Log Display </td>
+<td class='confluenceTd'> Displays the server logs. </td>
+</tr>
+<tr>
+<td class='confluenceTd'> Web Dashboard Administration </td>
+<td class='confluenceTd'> An administration console for the web dashboard. </td>
+</tr>
+</tbody></table>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Apr 19, 2009 22:03</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

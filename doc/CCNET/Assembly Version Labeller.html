@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Assembly Version Labeller</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Assembly Version Labeller
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Apr 01, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h3><a name="AssemblyVersionLabeller-AssemblyVersionLabeller"></a>Assembly Version Labeller</h3>
+
+<p>Uses the CruiseControl.NET change number, provided by source control systems like Subversion, to build a valid Assembly Version label.</p>
+
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>New feature</b><br />
+<p>This labeller is only available from release 1.4.4 onwards.</p></td></tr></table></div>
+
+<h3><a name="AssemblyVersionLabeller-Examples%3A"></a>Examples:</h3>
+<p>Minimalist Example:<br/>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;project&gt;</span>
+   <span class="code-tag">&lt;labeller type=<span class="code-quote">"assemblyVersionLabeller"</span> /&gt;</span>
+   <span class="code-tag"><span class="code-comment">&lt;!-- Other project configuration to go here --&gt;</span></span>
+<span class="code-tag">&lt;/project&gt;</span></pre>
+</div></div><br clear="all" />
+Full Example:<br/>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;project&gt;</span>
+   <span class="code-tag">&lt;labeller type=<span class="code-quote">"assemblyVersionLabeller"</span>&gt;</span>
+      <span class="code-tag">&lt;major&gt;</span>$(majorVersion)<span class="code-tag">&lt;/major&gt;</span>
+      <span class="code-tag">&lt;minor&gt;</span>$(minorVersion)<span class="code-tag">&lt;/minor&gt;</span>
+      <span class="code-tag">&lt;build&gt;</span>$(buildVersion)<span class="code-tag">&lt;/build&gt;</span>
+      <span class="code-tag">&lt;revision&gt;</span>$(revisionVersion)<span class="code-tag">&lt;/revision&gt;</span>
+      <span class="code-tag">&lt;incrementOnFailure&gt;</span>false<span class="code-tag">&lt;/incrementOnFailure&gt;</span>
+   <span class="code-tag">&lt;/labeller&gt;</span>
+   <span class="code-tag"><span class="code-comment">&lt;!-- Other project configuration to go here --&gt;</span></span>
+<span class="code-tag">&lt;/project&gt;</span></pre>
+</div></div><br clear="all" /></p>
+
+<h3><a name="AssemblyVersionLabeller-ConfigurationElements%3A"></a>Configuration Elements:</h3>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> major </td>
+<td class='confluenceTd'> Major number component of the version. </td>
+<td class='confluenceTd'> int </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> minor </td>
+<td class='confluenceTd'> Minor number component of the version. </td>
+<td class='confluenceTd'> int </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> build </td>
+<td class='confluenceTd'> Build number component of the version. </td>
+<td class='confluenceTd'> int </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> -1 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> revision </td>
+<td class='confluenceTd'> Revision number component of the version. </td>
+<td class='confluenceTd'> int </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> -1 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> incrementOnFailure </td>
+<td class='confluenceTd'> Whether to increase the label if the build fails. By default the label will only increase if the build is successful. </td>
+<td class='confluenceTd'> boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+</tr>
+</tbody></table>
+
+<p>Labeller provided by Daniel Nauck.</p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Apr 19, 2009 22:03</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

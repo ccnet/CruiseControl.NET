@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Building Packages</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Building Packages
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Apr 13, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="BuildingPackages-BuildingPackages"></a>Building Packages</h1>
+
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Work in Progress</b><br />
+<p>This documentation is still in the process of being developed. As such, the information contained on this page may be incomplete or out of date.</p></td></tr></table></div>
+
+<h2><a name="BuildingPackages-Introduction"></a>Introduction</h2>
+
+<p>As part of the 1.4.4 release the concept of packages was introduced to the web dashboard. A package is a ZIP file that contains all the necessary files for a plug-in, plus instructions on installing the files.</p>
+
+<p>Examples of files that can be in a package are:</p>
+<ul>
+	<li>NVelocity templates</li>
+	<li>XSL-T definitions</li>
+	<li>Images</li>
+	<li>Javascript</li>
+	<li>Binaries</li>
+</ul>
+
+
+<p>As well as the content files, every package must contain a manifest file. This file contains the instructions for how to install the package. Generally a manifest will contain two sections: where to copy the files and the configuration changes to make.</p>
+
+<h2><a name="BuildingPackages-WritingaManifest"></a>Writing a Manifest</h2>
+
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>To-do</b><br />
+<p>This section needs to be written.</p></td></tr></table></div>
+
+<h2><a name="BuildingPackages-TestingaPackage"></a>Testing a Package</h2>
+
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>To-do</b><br />
+<p>This section needs to be written.</p></td></tr></table></div>
+
+<h2><a name="BuildingPackages-IncludingaPackageintheBuild"></a>Including a Package in the Build</h2>
+
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>To-do</b><br />
+<p>This section needs to be written.</p></td></tr></table></div>
+
+<h2><a name="BuildingPackages-Examples"></a>Examples</h2>
+
+<p>The following are examples of manifest that have already been written:</p>
+
+<h3><a name="BuildingPackages-QueueStatusDisplay"></a>Queue Status Display</h3>
+
+<p>This is a very simple package. It contains a single template (ServerQueueStatus.vm) and a single configuration change (adds the plug-in to the server plug-in list).</p>
+
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;package&gt;</span>
+  <span class="code-tag">&lt;name&gt;</span>Queue Status Display<span class="code-tag">&lt;/name&gt;</span>
+  <span class="code-tag">&lt;description&gt;</span>Display the status of the queues.<span class="code-tag">&lt;/description&gt;</span>
+  <span class="code-tag">&lt;type&gt;</span>Plugin<span class="code-tag">&lt;/type&gt;</span>
+  <span class="code-tag">&lt;folders&gt;</span>
+    <span class="code-tag">&lt;folder&gt;</span>
+      <span class="code-tag">&lt;location&gt;</span>Templates<span class="code-tag">&lt;/location&gt;</span>
+      <span class="code-tag">&lt;files&gt;</span>
+        <span class="code-tag">&lt;file&gt;</span>ServerQueueStatus.vm<span class="code-tag">&lt;/file&gt;</span>
+      <span class="code-tag">&lt;/files&gt;</span>
+    <span class="code-tag">&lt;/folder&gt;</span>
+  <span class="code-tag">&lt;/folders&gt;</span>
+  <span class="code-tag">&lt;configuration&gt;</span>
+    <span class="code-tag">&lt;setting&gt;</span>
+      <span class="code-tag">&lt;path&gt;</span>/dashboard/plugins/serverPlugins<span class="code-tag">&lt;/path&gt;</span>
+      <span class="code-tag">&lt;name&gt;</span>queueStatusServerPlugin<span class="code-tag">&lt;/name&gt;</span>
+    <span class="code-tag">&lt;/setting&gt;</span>
+  <span class="code-tag">&lt;/configuration&gt;</span>
+<span class="code-tag">&lt;/package&gt;</span></pre>
+</div></div>
+
+<h3><a name="BuildingPackages-ModificationHistory"></a>Modification History</h3>
+
+<p>This example shows that a package does not always need to include files. Instead the package can just define configuration changes. In this example the manifest defines a single new plug-in.</p>
+
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;package&gt;</span>
+  <span class="code-tag">&lt;name&gt;</span>Modification History<span class="code-tag">&lt;/name&gt;</span>
+  <span class="code-tag">&lt;description&gt;</span>Modification history for a project.<span class="code-tag">&lt;/description&gt;</span>
+  <span class="code-tag">&lt;type&gt;</span>Plugin<span class="code-tag">&lt;/type&gt;</span>
+  <span class="code-tag">&lt;folders /&gt;</span>
+  <span class="code-tag">&lt;configuration&gt;</span>
+    <span class="code-tag">&lt;setting&gt;</span>
+      <span class="code-tag">&lt;path&gt;</span>/dashboard/plugins/projectPlugins<span class="code-tag">&lt;/path&gt;</span>
+      <span class="code-tag">&lt;name&gt;</span>modificationHistoryProjectPlugin<span class="code-tag">&lt;/name&gt;</span>
+    <span class="code-tag">&lt;/setting&gt;</span>
+  <span class="code-tag">&lt;/configuration&gt;</span>
+<span class="code-tag">&lt;/package&gt;</span></pre>
+</div></div>
+
+<h3><a name="BuildingPackages-NDependResults"></a>NDepend Results</h3>
+
+<p>In this example, the package contains a single file that is used in multiple places. Additionally, the configuration changes involve both a filter and multiple attributes. The filter condition on each setting allows the installer to identify which element to modify out of several possibilities.</p>
+
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;package&gt;</span>
+  <span class="code-tag">&lt;name&gt;</span>NDepend Results<span class="code-tag">&lt;/name&gt;</span>
+  <span class="code-tag">&lt;description&gt;</span>Display the results of a NDepend run.<span class="code-tag">&lt;/description&gt;</span>
+  <span class="code-tag">&lt;type&gt;</span>Plugin<span class="code-tag">&lt;/type&gt;</span>
+  <span class="code-tag">&lt;folders&gt;</span>
+    <span class="code-tag">&lt;folder&gt;</span>
+      <span class="code-tag">&lt;location&gt;</span>Xsl<span class="code-tag">&lt;/location&gt;</span>
+      <span class="code-tag">&lt;files&gt;</span>
+        <span class="code-tag">&lt;file&gt;</span>ndependreport-ccnet.v2.xsl<span class="code-tag">&lt;/file&gt;</span>
+      <span class="code-tag">&lt;/files&gt;</span>
+    <span class="code-tag">&lt;/folder&gt;</span>
+  <span class="code-tag">&lt;/folders&gt;</span>
+  <span class="code-tag">&lt;configuration&gt;</span>
+    <span class="code-tag">&lt;setting&gt;</span>
+      <span class="code-tag">&lt;path&gt;</span>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames<span class="code-tag">&lt;/path&gt;</span>
+      <span class="code-tag">&lt;filter&gt;</span>.='xsl\ndependreport-ccnet.v2.xsl'<span class="code-tag">&lt;/filter&gt;</span>
+      <span class="code-tag">&lt;name&gt;</span>xslFile<span class="code-tag">&lt;/name&gt;</span>
+      <span class="code-tag">&lt;value&gt;</span>xsl\ndependreport-ccnet.v2.xsl<span class="code-tag">&lt;/value&gt;</span>
+    <span class="code-tag">&lt;/setting&gt;</span>
+    <span class="code-tag">&lt;setting&gt;</span>
+      <span class="code-tag">&lt;path&gt;</span>/dashboard/plugins/buildPlugins<span class="code-tag">&lt;/path&gt;</span>
+      <span class="code-tag">&lt;filter&gt;</span>@xslFileName='xsl\ndependreport-ccnet.v2.xsl'<span class="code-tag">&lt;/filter&gt;</span>
+      <span class="code-tag">&lt;name&gt;</span>xslReportBuildPlugin<span class="code-tag">&lt;/name&gt;</span>
+      <span class="code-tag">&lt;attributes&gt;</span>
+        <span class="code-tag">&lt;attribute name=<span class="code-quote">"description"</span> value=<span class="code-quote">"NDepend Details"</span>/&gt;</span>
+        <span class="code-tag">&lt;attribute name=<span class="code-quote">"actionName"</span> value=<span class="code-quote">"NDependDetailsBuildReport"</span>/&gt;</span>
+        <span class="code-tag">&lt;attribute name=<span class="code-quote">"xslFileName"</span> value=<span class="code-quote">"xsl\ndependreport-ccnet.v2.xsl"</span>/&gt;</span>
+      <span class="code-tag">&lt;/attributes&gt;</span>
+    <span class="code-tag">&lt;/setting&gt;</span>
+  <span class="code-tag">&lt;/configuration&gt;</span>
+<span class="code-tag">&lt;/package&gt;</span></pre>
+</div></div>
+
+<h3><a name="BuildingPackages-NUnitResults"></a>NUnit Results</h3>
+
+<p>This is a fairly complex example. Not only does it make multiple configuration changes, it also installs multiple files (although all to the same place). Again, the settings use filters to correctly identify the right element to modify and some of the settings have multiple attributes.</p>
+
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;package&gt;</span>
+  <span class="code-tag">&lt;name&gt;</span>NUnit Results<span class="code-tag">&lt;/name&gt;</span>
+  <span class="code-tag">&lt;description&gt;</span>Display the results of a NUnit run.<span class="code-tag">&lt;/description&gt;</span>
+  <span class="code-tag">&lt;type&gt;</span>Plugin<span class="code-tag">&lt;/type&gt;</span>
+  <span class="code-tag">&lt;folders&gt;</span>
+    <span class="code-tag">&lt;folder&gt;</span>
+      <span class="code-tag">&lt;location&gt;</span>Xsl<span class="code-tag">&lt;/location&gt;</span>
+      <span class="code-tag">&lt;files&gt;</span>
+        <span class="code-tag">&lt;file&gt;</span>unittests.xsl<span class="code-tag">&lt;/file&gt;</span>
+        <span class="code-tag">&lt;file&gt;</span>tests.xsl<span class="code-tag">&lt;/file&gt;</span>
+        <span class="code-tag">&lt;file&gt;</span>timing.xsl<span class="code-tag">&lt;/file&gt;</span>
+      <span class="code-tag">&lt;/files&gt;</span>
+    <span class="code-tag">&lt;/folder&gt;</span>
+  <span class="code-tag">&lt;/folders&gt;</span>
+  <span class="code-tag">&lt;configuration&gt;</span>
+    <span class="code-tag">&lt;setting&gt;</span>
+      <span class="code-tag">&lt;path&gt;</span>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames<span class="code-tag">&lt;/path&gt;</span>
+      <span class="code-tag">&lt;filter&gt;</span>.='xsl\unittests.xsl'<span class="code-tag">&lt;/filter&gt;</span>
+      <span class="code-tag">&lt;name&gt;</span>xslFile<span class="code-tag">&lt;/name&gt;</span>
+      <span class="code-tag">&lt;value&gt;</span>xsl\unittests.xsl<span class="code-tag">&lt;/value&gt;</span>
+    <span class="code-tag">&lt;/setting&gt;</span>
+    <span class="code-tag">&lt;setting&gt;</span>
+      <span class="code-tag">&lt;path&gt;</span>/dashboard/plugins/buildPlugins<span class="code-tag">&lt;/path&gt;</span>
+      <span class="code-tag">&lt;filter&gt;</span>@xslFileName='xsl\tests.xsl'<span class="code-tag">&lt;/filter&gt;</span>
+      <span class="code-tag">&lt;name&gt;</span>xslReportBuildPlugin<span class="code-tag">&lt;/name&gt;</span>
+      <span class="code-tag">&lt;attributes&gt;</span>
+        <span class="code-tag">&lt;attribute name=<span class="code-quote">"description"</span> value=<span class="code-quote">"NUnit Details"</span>/&gt;</span>
+        <span class="code-tag">&lt;attribute name=<span class="code-quote">"actionName"</span> value=<span class="code-quote">"NUnitDetailsBuildReport"</span>/&gt;</span>
+        <span class="code-tag">&lt;attribute name=<span class="code-quote">"xslFileName"</span> value=<span class="code-quote">"xsl\tests.xsl"</span>/&gt;</span>
+      <span class="code-tag">&lt;/attributes&gt;</span>
+    <span class="code-tag">&lt;/setting&gt;</span>
+    <span class="code-tag">&lt;setting&gt;</span>
+      <span class="code-tag">&lt;path&gt;</span>/dashboard/plugins/buildPlugins<span class="code-tag">&lt;/path&gt;</span>
+      <span class="code-tag">&lt;filter&gt;</span>@xslFileName='xsl\timing.xsl'<span class="code-tag">&lt;/filter&gt;</span>
+      <span class="code-tag">&lt;name&gt;</span>xslReportBuildPlugin<span class="code-tag">&lt;/name&gt;</span>
+      <span class="code-tag">&lt;attributes&gt;</span>
+        <span class="code-tag">&lt;attribute name=<span class="code-quote">"description"</span> value=<span class="code-quote">"NUnit Timings"</span>/&gt;</span>
+        <span class="code-tag">&lt;attribute name=<span class="code-quote">"actionName"</span> value=<span class="code-quote">"NUnitTimingsBuildReport"</span>/&gt;</span>
+        <span class="code-tag">&lt;attribute name=<span class="code-quote">"xslFileName"</span> value=<span class="code-quote">"xsl\timing.xsl"</span>/&gt;</span>
+      <span class="code-tag">&lt;/attributes&gt;</span>
+    <span class="code-tag">&lt;/setting&gt;</span>
+  <span class="code-tag">&lt;/configuration&gt;</span>
+<span class="code-tag">&lt;/package&gt;</span></pre>
+</div></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Apr 19, 2009 22:03</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

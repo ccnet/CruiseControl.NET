@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Roadmap</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Roadmap
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Mar 19, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    
+
+<h1><a name="Roadmap-What%27sComing%3F"></a>What's Coming?</h1>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>This page is currently a work in progress. We are still in the process of looking at what to add in future releases.</td></tr></table></div>
+<p>Here are some of the things that we are planning for up-coming releases of CruiseControl.Net.</p>
+
+<h2><a name="Roadmap-Release1.5"></a>Release 1.5</h2>
+
+<p>Most of these have been developed, although some of these features need more work to complete.</p>
+<div class="panel" style="border-width: 1px;"><div class="panelContent">
+<h3><a name="Roadmap-NewFeatures"></a>New Features</h3>
+
+<ul>
+	<li>Communications client <em>(in-progress)</em></li>
+	<li>Dynamic build parameters <b>(completed)</b></li>
+	<li>Messaging interfaces <b>(completed)</b></li>
+	<li>Security <em>(in-progress)</em></li>
+	<li>Server extension points <b>(completed)</b></li>
+	<li>Service/console "hot swapping" <b>(completed)</b></li>
+	<li>Task status display <em>(in-progress)</em></li>
+	<li>ZIP package publisher <em>(in-progress)</em></li>
+	<li>Mercurial source control <b><em>(patch available)</em></b></li>
+	<li>Git source control <em>(in-progress)</em></li>
+	<li>Robocopy source control <b><em>(patch available)</em></b></li>
+	<li>Simplified web administration <em>(in-progress)</em></li>
+	<li>Web dashboard plugin packages <em>(in-progress)</em></li>
+	<li>Add Gendarme Task <b><em>(patch available)</em></b></li>
+	<li>Add Assembly Version Labeller <b><em>(patch available)</em></b></li>
+	<li>Add PowerShell task <b><em>(patch available)</em></b></li>
+	<li>Add RemoteResults task <b><em>(patch available)</em></b></li>
+</ul>
+</div></div>
+<div class="panel" style="border-width: 1px;"><div class="panelContent">
+<h3><a name="Roadmap-Code%2FdevelopmentProcessImprovements"></a>Code/development Process Improvements</h3>
+
+<ul>
+	<li>Move documentation to MediaWiki &#8211; this will resolve the reliability problems that Confluence has given us</li>
+	<li>Move development toolset to VisualStudio 2008 (but continue to target .net 2.0) <b>(completed)</b></li>
+	<li>Upgrade other tools: NAnt, ...</li>
+	<li>Change mocking framework to Rhino.Mock <em>(in-progress)</em></li>
+	<li>Spaces instead of tabs &#8211; using tabs along with object initalizers and lambdas and other C#3.0 features makes patches less and less readable. A bad thing when our process partly depends on patches.</li>
+	<li>Implement Gendarme static analysis <b>(completed)</b></li>
+	<li>Improve unit test coverage in the areas where it has diminished and where we are seeing bugs. The SVN source control block comes to mind. <em>(in-progress)</em></li>
+	<li>Automate more of the deployment process. 1.4.3 took somewhere between 6 and 10 hours to do. A lot of that time is waiting, but it is still painful.</li>
+	<li>More managers for the ccnet-devel google group.</li>
+	<li>A clear explanation somewhere in the google groups that messages will need to be approved before they are posted to the group.</li>
+	<li>An automated build against mono?</li>
+	<li>Configure the bug URL builder on ccnetlive.</li>
+	<li>Make NAnt build script platform idenpendent (no hardcoded paths anymore, new msbuild task for xbuild compability, exclude some targets on linux (like the NIS installer, etc)</li>
+</ul>
+</div></div>
+<p>There is currently no planned release date for 1.5, but hopefully it will be during 2009.</p>
+
+<h2><a name="Roadmap-Release1.6"></a>Release 1.6</h2>
+
+<p>These are ideas of what we'd like to add in future. Little or no work has been done on these features yet.</p>
+<div class="panel" style="border-width: 1px;"><div class="panelContent">
+<h3><a name="Roadmap-NewFeatures"></a>New Features</h3>
+
+<ul>
+	<li>Build agents</li>
+	<li>Configuration tools (CCNetConfig?)</li>
+	<li>Distributed build</li>
+	<li>Store build artifacts as separate files. And separate them from the build logs.</li>
+	<li>Store build history in a database of some kind: CouchDB, Rhino.Prevalence, the build-in Windows Jet Engine backed database facility.</li>
+	<li>Create a plugin system for CCTray. Voice, X10, build lights could be done as plugins. This would allow people to more easily support their own lights and other notification mechanisms.</li>
+	<li>Contact the CIFactory guys and find out if they are still interested in merging back any of their features to CCNet. Could be quite complex as they forked at 1.0. Could also be quite rewarding.</li>
+</ul>
+</div></div>
+<div class="panel" style="border-width: 1px;"><div class="panelContent">
+<h3><a name="Roadmap-Code%2FdevelopmentProcessImprovements"></a>Code/development Process Improvements</h3>
+
+<ul>
+	<li>Change Source Code Management to Mercurial and BitBucket. Operations against sourceforge's SVN repository are painfully slow. And, I find logs and past diffs to be very important in understanding the code. Having a disincentive to actually use them is a bad combo.</li>
+	<li>Provide more developer documentation to understand the code. I was thinking "///" class headers to describe the intended responsibility of each class. This would also provide a guide for reviewing other's work, as the reviewer could compare the new code to the class's declared responsibility. Some overall architectural explanation on the wiki would probably be good. Some of the suggested diagrams from Domain Driven Design sound like a good start. How to share these sorts of artifacts effectively over the internet though.</li>
+</ul>
+</div></div>
+<p>There is currently no planned release date for 1.6.</p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Apr 19, 2009 22:03</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>
