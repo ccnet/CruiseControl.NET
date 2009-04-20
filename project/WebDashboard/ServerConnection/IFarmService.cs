@@ -99,6 +99,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 
         #region RetrieveFileTransfer()
         RemotingFileTransfer RetrieveFileTransfer(IProjectSpecifier projectSpecifier, string fileName, FileTransferSource source);
+
+        RemotingFileTransfer RetrieveFileTransfer(IBuildSpecifier buildSpecifier, string fileName, FileTransferSource source);
         #endregion
 
         string Login(string server, ISecurityCredentials credentials);

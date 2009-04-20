@@ -273,8 +273,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             objectionManager.AddTypeForName(ProjectStatusAction.ActionName, typeof(ProjectStatusAction))
                 .Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
 
-            // File download
+            // File downloads
             objectionManager.AddTypeForName(ProjectFileDownload.ActionName, typeof(ProjectFileDownload)).Decorate(typeof(CruiseActionProxyAction));
+            objectionManager.AddTypeForName(BuildFileDownload.ActionName, typeof(BuildFileDownload)).Decorate(typeof(CruiseActionProxyAction));
 
             return objectSource;
         }

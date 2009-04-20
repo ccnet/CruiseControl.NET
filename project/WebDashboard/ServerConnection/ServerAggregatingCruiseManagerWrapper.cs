@@ -208,6 +208,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
                 .RetrieveFileTransfer(projectSpecifier.ProjectName, fileName, source);
             return fileTransfer;
         }
+
+        public RemotingFileTransfer RetrieveFileTransfer(IBuildSpecifier buildSpecifier, string fileName, FileTransferSource source)
+        {
+            var logFile = new LogFile(buildSpecifier.BuildName);
+            var fullName = string.Format("{0}\\{1}", logFile.Label, fileName);
+            RemotingFileTransfer fileTransfer = GetCruiseManager(buildSpecifier)
+                .RetrieveFileTransfer(buildSpecifier.ProjectSpecifier.ProjectName, fullName, source);
+            return fileTransfer;
+        }
         #endregion
 
         public string Login(string server, ISecurityCredentials credentials)
