@@ -1,6 +1,8 @@
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
+using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 {
@@ -16,6 +18,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 		{
 			this.actionInstantiator = actionInstantiator;
 		}
+
+        /// <summary>
+        /// Optional parameters to pass into the XSL-T.
+        /// </summary>
+        [ReflectorProperty("parameters", Required = false)]
+        public List<XsltParameter> Parameters { get; set; }
 
 		// These 2 are separate due to inheritence / property monkey-ness
 		[ReflectorProperty("description")]
@@ -72,6 +80,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 			{
 				XslReportBuildAction action = (XslReportBuildAction) actionInstantiator.InstantiateAction(typeof(XslReportBuildAction));
 				action.XslFileName = XslFileName;
+                action.Parameters = Parameters;
 				return new INamedAction[] { new ImmutableNamedAction(actionName, action) } ;
 			}
 		}

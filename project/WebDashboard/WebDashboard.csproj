@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{482EF049-EC0C-4819-B568-75B5F74BDD5B}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -186,6 +186,7 @@
     </Compile>
     <Compile Include="Configuration\StylesheetConfiguration.cs" />
     <Compile Include="Dashboard\ActionDecorators\QuerySessionActionDecorator.cs" />
+    <Compile Include="Dashboard\Actions\XsltParameter.cs" />
     <Compile Include="Dashboard\ImmutableNamedActionWithoutSiteTemplate.cs" />
     <Compile Include="Dashboard\INoSiteTemplateAction.cs" />
     <Compile Include="Dashboard\ISecurityPlugin.cs" />
