@@ -9,21 +9,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
     public class CookieSessionRetriever
         : ISessionRetriever
     {
-        #region Private fields
-        private readonly string cookieName;
-        #endregion
-
-        #region Constructors
-        /// <summary>
-        /// Initialise a new <see cref="CookieSessionRetriever"/>.
-        /// </summary>
-        /// <param name="cookieName"></param>
-        public CookieSessionRetriever(string cookieName)
-        {
-            this.cookieName = cookieName;
-        }
-        #endregion
-
         #region Public properties
         #region SessionToken
         /// <summary>
@@ -42,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         /// <returns></returns>
         public string RetrieveSessionToken(IRequest request)
         {
-            var cookie = HttpContext.Current.Request.Cookies[cookieName];
+            var cookie = HttpContext.Current.Request.Cookies["CCNetSessionToken"];
             if (cookie != null)
             {
                 SessionToken = cookie.Value;

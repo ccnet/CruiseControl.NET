@@ -10,21 +10,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
     public class CookieSessionStorer
         : ISessionStorer
     {
-        #region Private fields
-        private readonly string cookieName;
-        #endregion
-
-        #region Constructors
-        /// <summary>
-        /// Initialise a new <see cref="CookieSessionStorer"/>.
-        /// </summary>
-        /// <param name="cookieName"></param>
-        public CookieSessionStorer(string cookieName)
-        {
-            this.cookieName = cookieName;
-        }
-        #endregion
-
         #region Public properties
         #region SessionToken
         /// <summary>
@@ -42,14 +27,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         /// <returns></returns>
         public string GenerateQueryToken()
         {
-            if (!string.IsNullOrEmpty(SessionToken))
-            {
-                var newCookie = new HttpCookie(cookieName);
-                newCookie.Value = SessionToken;
-                newCookie.HttpOnly = true;
-                newCookie.Expires = DateTime.Now.AddMinutes(15);
-                HttpContext.Current.Response.Cookies.Add(newCookie);
-            }
             return string.Empty;
         }
         #endregion

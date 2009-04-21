@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 		private IBuildPlugin[] buildPlugins = new IBuildPlugin[0];
         private string templateLocation;
         private ISecurityPlugin[] securityPlugins = new ISecurityPlugin[0];
-        private ISessionStore sessionStore = new QuerySessionStore();
+        private ISessionStore sessionStore = new CookieSessionStore();
 
         [ReflectorProperty("customTemplates", Required=false)]
         public string TemplateLocation

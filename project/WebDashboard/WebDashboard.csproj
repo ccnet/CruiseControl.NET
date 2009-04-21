@@ -188,6 +188,9 @@
     <Compile Include="Dashboard\ActionDecorators\QuerySessionActionDecorator.cs" />
     <Compile Include="Dashboard\Actions\HtmlReportAction.cs" />
     <Compile Include="Dashboard\Actions\XsltParameter.cs" />
+    <Compile Include="Dashboard\CookieSessionRetriever.cs" />
+    <Compile Include="Dashboard\CookieSessionStore.cs" />
+    <Compile Include="Dashboard\CookieSessionStorer.cs" />
     <Compile Include="Dashboard\GenericPlugins\HtmlReportPlugin.cs" />
     <Compile Include="Dashboard\ImmutableNamedActionWithoutSiteTemplate.cs" />
     <Compile Include="Dashboard\INoSiteTemplateAction.cs" />
@@ -195,9 +198,6 @@
     <Compile Include="Dashboard\ISessionRetriever.cs" />
     <Compile Include="Dashboard\ISessionStore.cs" />
     <Compile Include="Dashboard\LoginViewBuilder.cs" />
-    <Compile Include="Dashboard\QuerySessionRetriever.cs" />
-    <Compile Include="Dashboard\QuerySessionStore.cs" />
-    <Compile Include="Dashboard\QuerySessionStorer.cs" />
     <Compile Include="Plugins\Administration\AdministerAction.cs" />
     <Compile Include="Plugins\Administration\AdministerPlugin.cs" />
     <Compile Include="Plugins\Administration\ConfigurationAttribute.cs" />

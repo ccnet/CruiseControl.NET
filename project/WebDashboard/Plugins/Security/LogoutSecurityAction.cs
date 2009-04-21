@@ -10,6 +10,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using System.Web;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
 {
@@ -42,6 +43,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
             Hashtable velocityContext = new Hashtable();
             if (!string.IsNullOrEmpty(storer.SessionToken)) farmService.Logout(cruiseRequest.ServerName, storer.SessionToken);
             storer.SessionToken = null;
+            var newCookie = new HttpCookie("CCNetSessionToken");
+            newCookie.HttpOnly = true;
+            newCookie.Expires = DateTime.Now.AddDays(-1);
+            HttpContext.Current.Response.Cookies.Add(newCookie);
             return viewGenerator.GenerateView("LoggedOut.vm", velocityContext);
         }
         #endregion

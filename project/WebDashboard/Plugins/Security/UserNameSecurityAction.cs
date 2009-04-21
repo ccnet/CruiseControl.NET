@@ -11,6 +11,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using System.Web;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
 {
@@ -51,6 +52,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
                     string sessionToken = farmService.Login(cruiseRequest.ServerName, credentials);
                     if (string.IsNullOrEmpty(sessionToken)) throw new Exception("Login failed!");
                     storer.SessionToken = sessionToken;
+                    AddSessionCookie(sessionToken);
                     template = "LoggedIn.vm";
                 }
                 catch (Exception error)
@@ -61,6 +63,23 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
             velocityContext["hidePassword"] = hidePassword;
             return viewGenerator.GenerateView(template, velocityContext);
         }
+        #endregion
+
+        #region Private methods
+        #region AddSessionCookie()
+        /// <summary>
+        /// Adds the session cookie.
+        /// </summary>
+        /// <param name="sessionToken"></param>
+        private void AddSessionCookie(string sessionToken)
+        {
+            var newCookie = new HttpCookie("CCNetSessionToken");
+            newCookie.Value = sessionToken;
+            newCookie.HttpOnly = true;
+            newCookie.Expires = DateTime.Now.AddMinutes(15);
+            HttpContext.Current.Response.Cookies.Add(newCookie);
+        }
+        #endregion
         #endregion
     }
 }

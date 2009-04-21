@@ -10,26 +10,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
     public class CookieSessionStore
         : ISessionStore
     {
-        #region Constructors
-        /// <summary>
-        /// Initialise a new <see cref="CookieSessionStore"/>.
-        /// </summary>
-        public CookieSessionStore()
-        {
-            CookieName = "CCNetSessionToken";
-        }
-        #endregion
-
-        #region Public properties
-        #region CookieName
-        /// <summary>
-        /// The name of the cookie.
-        /// </summary>
-        [ReflectorProperty("name", Required = false)]
-        public string CookieName { get; set; }
-        #endregion
-        #endregion
-
         #region Public methods
         #region RetrieveStorer()
         /// <summary>
@@ -38,7 +18,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         /// <returns>Returns an object that will store a session token.</returns>
         public ISessionStorer RetrieveStorer()
         {
-            return new CookieSessionStorer(CookieName);
+            var storer = new CookieSessionStorer();
+            return storer;
         }
         #endregion
 
@@ -49,7 +30,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         /// <returns>Returns an object that will retrieve a session token.</returns>
         public ISessionRetriever RetrieveRetriever()
         {
-            return new CookieSessionRetriever(CookieName);
+            var retriever = new CookieSessionRetriever();
+            return retriever;
         }
         #endregion
         #endregion
