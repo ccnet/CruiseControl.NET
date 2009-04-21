@@ -15,7 +15,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
         #region Private fields
 	    private readonly IFingerprintFactory fingerprintFactory;
         private readonly IFarmService farmService;
-        private static Regex linkFinder = new Regex("(src|href)=\"[^\"]*\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         #endregion
 
         #region Constructors
@@ -48,19 +47,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
         /// <returns></returns>
         public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
-            var htmlData = LoadHtmlFile(cruiseRequest);
-            var prefixPos = HtmlFileName.LastIndexOf("\\");
-            var prefix = prefixPos >= 0 ? HtmlFileName.Substring(0, prefixPos + 1) : string.Empty;
-            MatchEvaluator evaluator = (match) =>
-            {
-                var splitPos = match.Value.IndexOf("=\"");
-                var newValue = match.Value.Substring(0, splitPos + 2) +
-                    "RetrieveBuildFile.aspx?file=" +
-                    prefix +
-                    match.Value.Substring(splitPos + 2);
-                return newValue;
-            };
-            htmlData = linkFinder.Replace(htmlData, evaluator);
+            var htmlData = string.Format("<iframe width=\"100%\" height=\"600\" frameborder=\"1\" src=\"RetrieveBuildFile.aspx?file={0}\"></iframe>", HtmlFileName);
 			return new HtmlFragmentResponse(htmlData);
         }
         #endregion
@@ -75,39 +62,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
 	    {
             return fingerprintFactory.BuildFromFileNames(HtmlFileName);
 	    }
-        #endregion
-        #endregion
-
-        #region Private methods
-        #region LoadHtmlFile()
-        /// <summary>
-        /// Loads the HTML file.
-        /// </summary>
-        /// <returns></returns>
-        private string LoadHtmlFile(ICruiseRequest cruiseRequest)
-        {
-            if (string.IsNullOrEmpty(HtmlFileName))
-            {
-                throw new ApplicationException("HTML File Name has not been set for HTML Report Action");
-            }
-
-            // Retrieve the file transfer object
-            var fileTransfer = farmService.RetrieveFileTransfer(cruiseRequest.BuildSpecifier, HtmlFileName, FileTransferSource.Artefact);
-            if (fileTransfer != null)
-            {
-                // Transfer the file across and load it into a string
-                var stream = new MemoryStream();
-                fileTransfer.Download(stream);
-                stream.Seek(0, SeekOrigin.Begin);
-                var reader = new StreamReader(stream);
-                string htmlData = reader.ReadToEnd();
-                return htmlData;
-            }
-            else
-            {
-                return "<div>Unable to find file</div>";
-            }
-        }
         #endregion
         #endregion
     }

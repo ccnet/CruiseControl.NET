@@ -1,6 +1,8 @@
 using System.Web;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.Remote;
+using System.IO;
+using Microsoft.Win32;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 {
@@ -12,8 +14,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
         private string type;
 
         public FileTransferResponse(IFileTransfer fileTransfer, string fileName)
+            : this(fileTransfer, fileName, null)
         {
-            this.fileTransfer = fileTransfer;
         }
 
         public FileTransferResponse(IFileTransfer fileTransfer, string fileName, string type)
@@ -33,7 +35,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
                 response.AppendHeader("fileTransfer-Disposition",
                     string.Format("filename=\"{0}\"", fileName));
             }
-            if (!string.IsNullOrEmpty(type)) response.ContentType = type;
+            if (!string.IsNullOrEmpty(type))
+            {
+                response.ContentType = type;
+            }
+            else if (!string.IsNullOrEmpty(fileName))
+            {
+                var mimeType = GetMimeType(fileName);
+                response.ContentType = type;
+            }
             fileTransfer.Download(response.OutputStream);
         }
 
@@ -42,5 +52,24 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
             get { return serverFingerprint; }
             set { serverFingerprint = value; }
         }
+
+        #region GetMimeType()
+        /// <summary>
+        /// Retrieves the mime type for a file.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        private string GetMimeType(string filename)
+        {
+            var mimeType = "application/octetstream";
+            var fileExtension = Path.GetExtension(filename).ToLower();
+            var regkey = Registry.ClassesRoot.OpenSubKey(fileExtension);
+            if ((regkey != null) && (regkey.GetValue("Content Type") != null))
+            {
+                mimeType = regkey.GetValue("Content Type").ToString();
+            }
+            return mimeType;
+        }
+        #endregion
     }
 }
