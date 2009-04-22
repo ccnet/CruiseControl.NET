@@ -26,10 +26,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 
 			Add(new Statistic("GendarmeDefects", "count(//gendarme-output//rule/target/defect)"));
 
-            Add(
-                new Statistic("FxCop Warnings",
-                              "count(//FxCopReport/Namespaces/Namespace/Messages/Message/Issue[@Level='Warning'])"));
-            Add(new Statistic("FxCop Errors", "count(//FxCopReport//Issue[@Level='Error'])"));
+			Add(new Statistic("FxCop Warnings", "count(//FxCopReport//Message[Issue/@Level='Warning' or 'CriticalWarning'])"));
+			Add(new Statistic("FxCop Errors", "count(//FxCopReport//Message[Issue/@Level='Error' or 'CriticalError'])"));
 
             Add(new FirstMatch("BuildErrorType", "//failure/builderror/type"));
             Add(new FirstMatch("BuildErrorMessage", "//failure/builderror/message"));
