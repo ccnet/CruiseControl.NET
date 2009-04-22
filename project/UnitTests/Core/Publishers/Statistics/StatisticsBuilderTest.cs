@@ -52,8 +52,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
         {
             results = builder.ProcessBuildResults(successfulBuildLog);
 
-            AssertHasStatistic("FxCop Warnings", 1, results);
-            AssertHasStatistic("FxCop Errors", 205, results);
+            AssertHasStatistic("FxCop Warnings", 9, results);
+            AssertHasStatistic("FxCop Errors", 206, results);
         }
 
         [Test]
