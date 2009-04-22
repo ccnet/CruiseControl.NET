@@ -767,6 +767,7 @@
     <None Include="templates\EditProjectNantBuilder.vm" />
     <None Include="templates\EditProjectP4.vm" />
     <None Include="templates\FarmSideBar.vm" />
+    <None Include="templates\HtmlReport.vm" />
     <None Include="templates\LoggedIn.vm" />
     <None Include="templates\LoggedOut.vm" />
     <None Include="templates\LoginAction.vm" />

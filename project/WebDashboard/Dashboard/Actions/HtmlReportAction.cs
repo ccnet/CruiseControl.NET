@@ -6,6 +6,8 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 using ThoughtWorks.CruiseControl.Remote;
 using System.Text.RegularExpressions;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+using System.Collections;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
 {
@@ -15,6 +17,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
         #region Private fields
 	    private readonly IFingerprintFactory fingerprintFactory;
         private readonly IFarmService farmService;
+        private readonly IVelocityViewGenerator viewGenerator;
         #endregion
 
         #region Constructors
@@ -22,10 +25,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
         /// Initialise a new <see cref="HtmlReportAction"/>.
         /// </summary>
         /// <param name="fingerprintFactory"></param>
-        public HtmlReportAction(IFingerprintFactory fingerprintFactory, IFarmService farmService)
+        public HtmlReportAction(IFingerprintFactory fingerprintFactory, IFarmService farmService,
+            IVelocityViewGenerator viewGenerator)
         {
             this.fingerprintFactory = fingerprintFactory;
             this.farmService = farmService;
+            this.viewGenerator = viewGenerator;
         }
         #endregion
 
@@ -47,8 +52,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
         /// <returns></returns>
         public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
-            var htmlData = string.Format("<iframe width=\"100%\" height=\"600\" frameborder=\"1\" src=\"RetrieveBuildFile.aspx?file={0}\"></iframe>", HtmlFileName);
-			return new HtmlFragmentResponse(htmlData);
+            var velocityContext = new Hashtable();
+            velocityContext["url"] = string.Format("RetrieveBuildFile.aspx?file={0}", HtmlFileName);
+            return viewGenerator.GenerateView("HtmlReport.vm", velocityContext);
         }
         #endregion
 

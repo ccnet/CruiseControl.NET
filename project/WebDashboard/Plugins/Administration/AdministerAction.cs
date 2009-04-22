@@ -66,6 +66,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         #endregion
 
         #endregion
+        
         #region Public methods
         #region Execute()
         /// <summary>
