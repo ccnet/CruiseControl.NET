@@ -54,7 +54,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 			plugin = new ProjectReportProjectPlugin((IFarmService) farmServiceMock.MockInstance,
 				(IVelocityViewGenerator) viewGeneratorMock.MockInstance,
 				(ILinkFactory) linkFactoryMock.MockInstance,
-                configuration);
+                configuration,
+                null);
 
 			cruiseRequestMock = new DynamicMock(typeof(ICruiseRequest));
 			cruiseRequest = (ICruiseRequest ) cruiseRequestMock.MockInstance;
