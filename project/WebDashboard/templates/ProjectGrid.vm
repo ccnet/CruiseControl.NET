@@ -78,7 +78,7 @@
             <font color="Black">$projectGridRow.LastBuildDate</font>
         </td>
         <td align="Center">
-          <font color="Black">$projectGridRow.NextBuildDate</font>
+          <font color="Black">$projectGridRow.NextBuildTime</font>
         </td>
 
       <td align="Center">
