@@ -741,6 +741,7 @@
     <Compile Include="tasks\BuilderException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tasks\NCoverTask.cs" />
     <Compile Include="tasks\DataTaskResult.cs">
       <SubType>Code</SubType>
     </Compile>
