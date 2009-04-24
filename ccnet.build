@@ -25,10 +25,26 @@
     <property name="nantcontrib.assembly" value="tools\nant\contrib\NAnt.Contrib.Tasks.dll" />
     <property name="vil.executable" value="tools\vil\vil.exe" />
     <property name="vil.assemblies" value="comma,separated,list,of,assemblies,to,analyze (full path)" />
-  <property name="simian.executable" value="tools\simian\simian-2.2.17.exe" />
-  <property name="Gendarme.executable" value="tools\Gendarme\gendarme.exe" />
+    <property name="simian.executable" value="tools\simian\simian-2.2.17.exe" />
+    <property name="Gendarme.executable" value="tools\Gendarme\gendarme.exe" />
     <property name="CCNetLabel" value="0" overwrite="false" />    
     <property name="CCNetArtifactDirectory" value="${build.dir}" overwrite="false" />
+
+
+	<target name="PrepareForRelease" description="to be used by the person when doing a release on sourceforge, confluence, ...">
+		<echo message="Clearing doc folder of all existing files " />
+		<delete includeemptydirs="false" >
+            <fileset>
+                <patternset >
+                    <include name="doc/**"  />
+                    <exclude name="**/.svn/**"  />
+					<exclude name="**/_svn/**"  />
+				</patternset>
+            </fileset>
+        </delete>
+
+	</target>
+
 
 	<target name="all" depends="clean, compile, test, deploy, dist"/>
 
