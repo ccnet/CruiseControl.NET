@@ -15,14 +15,10 @@
                     try
                     {
                         System.IO.StreamReader versionFile = new System.IO.StreamReader(inputFile, System.Text.Encoding.ASCII);
-
                         string line = "";
-
                         System.Text.StringBuilder result = new StringBuilder();
 
-
                         string searchPattern = @"\d+\.\d+\.\d+";
-
 
                         while (!versionFile.EndOfStream)
                         {
@@ -54,8 +50,6 @@
           </code>
      </script>
     <!-- end custom scripts -->
-
-
 
 
     <!-- PROPERTIES -->
@@ -380,7 +374,7 @@
 		</imports>
 		<attributes>
 		    <attribute type="AssemblyVersionAttribute" value="${CCNetLabel}" />
-		    <attribute type="AssemblyCopyrightAttribute" value="Copyright © 2009 ThoughtWorks Inc." />
+		    <attribute type="AssemblyCopyrightAttribute" value="Copyright © ${datetime::get-year(datetime::now())} ThoughtWorks Inc." />
 		    <attribute type="AssemblyCompanyAttribute" value="ThoughtWorks" />
 		    <attribute type="AssemblyProductAttribute" value="CruiseControl.NET" />
 		</attributes>
