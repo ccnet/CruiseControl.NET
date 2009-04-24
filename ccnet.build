@@ -2,6 +2,62 @@
 
 <project name="ccnet" default="test">
 
+
+    <!-- custom scripts -->
+    <script language="C#" prefix="RuWi">
+          <code>
+            <![CDATA[
+                [Function("UpdateNsiVersion")]
+                public static bool UpdateNsiVersion(string inputFile, string newVersion)
+                {
+                    bool ok = true;
+
+                    try
+                    {
+                        System.IO.StreamReader versionFile = new System.IO.StreamReader(inputFile, System.Text.Encoding.ASCII);
+
+                        string line = "";
+
+                        System.Text.StringBuilder result = new StringBuilder();
+
+
+                        string searchPattern = @"\d+\.\d+\.\d+";
+
+
+                        while (!versionFile.EndOfStream)
+                        {
+                            line = versionFile.ReadLine();
+
+			                if (System.Text.RegularExpressions.Regex.IsMatch(line, searchPattern) && (line.StartsWith("!define PRODUCT_VERSION")))
+                            {
+                                line = System.Text.RegularExpressions.Regex.Replace(line, searchPattern, newVersion);
+                            }
+
+                            result.AppendLine(line);
+                        }
+
+                        versionFile.Close();
+
+                        System.IO.StreamWriter updatedVersionfile = new System.IO.StreamWriter(inputFile);
+                        updatedVersionfile.Write(result.ToString());
+                        updatedVersionfile.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        ok = false;
+                        Console.WriteLine(ex.ToString());
+                    }
+
+                    return ok;
+                }
+                ]]>
+          </code>
+     </script>
+    <!-- end custom scripts -->
+
+
+
+
     <!-- PROPERTIES -->
     <property name="debug" value="true"/>
     <property name="verbosity" value="true"/>
@@ -29,11 +85,14 @@
     <property name="Gendarme.executable" value="tools\Gendarme\gendarme.exe" />
     <property name="CCNetLabel" value="0" overwrite="false" />    
     <property name="CCNetArtifactDirectory" value="${build.dir}" overwrite="false" />
-
+	<property name="ReleaseVersion" value="0.0.0" />    
 
 
 	<target name="PrepareForRelease" description="to be used by the person when doing a release on sourceforge, confluence, ...">
-		<echo message="Clearing doc folder of all existing files " />
+
+		<fail message="Pass the ReleaseVersion property when calling this target with a correct value, eg.: 1.4.4.4" if="${ReleaseVersion=='0.0.0'}"   />
+		
+		<echo message="Clearing doc folder of all existing files ... " />
 		<delete includeemptydirs="false" >
             <fileset>
                 <patternset >
@@ -43,6 +102,29 @@
 				</patternset>
             </fileset>
         </delete>
+
+
+		<echo message="Updating Nsi files ..." />
+		<property name="nsiFile" value = "ccnet.nsi" />
+
+        <if test="${not RuWi::UpdateNsiVersion(nsiFile,ReleaseVersion)}">
+            <fail message="updating file: ${nsiFile} failed" />
+        </if>
+
+
+		<property name="nsiFile" value = "ccvalidator.nsi" />
+
+        <if test="${not RuWi::UpdateNsiVersion(nsiFile,ReleaseVersion)}">
+            <fail message="updating file: ${nsiFile} failed" />
+        </if>
+
+		<property name="nsiFile" value = "cctray.nsi" />
+
+        <if test="${not RuWi::UpdateNsiVersion(nsiFile,ReleaseVersion)}">
+            <fail message="updating file: ${nsiFile} failed" />
+        </if>
+
+
 
 	</target>
 
