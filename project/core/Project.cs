@@ -496,10 +496,14 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
-
+        /// <summary>
+        /// Check each character to make sure it is valid.
+        /// </summary>
+        /// <param name="item">The item to check.</param>
+        /// <returns>False if the item contains no invalid characters, true otherwise.</returns>
         private bool ContainsInvalidChars(string item)
         {
-            bool result = true;
+            bool result = false;
 
             for (Int32 i = 0; i < item.Length; i++)
             {
@@ -509,15 +513,13 @@ namespace ThoughtWorks.CruiseControl.Core
                     item[i] != '-' &&
                     item[i] != '_')
                 {
-                    result = false;
-
-
+                    result = true;
+                    break;
                 }
             }
 
             return result;
         }
-
 
 
         /// <summary>
