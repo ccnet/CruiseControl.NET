@@ -268,8 +268,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             if (newFiles.Length > 0)
             {
                 // Copy all the new files over
-                var publishDir = result.BaseFromArtifactsDirectory(result.Label);
-                publishDir = Path.Combine(publishDir, string.IsNullOrEmpty(OutputDir) ? "NCover" : OutputDir);
+                var publishDir = Path.Combine(result.BaseFromArtifactsDirectory(result.Label), "NCover");
                 Log.Debug(string.Format("Copying {0} files to {1}", newFiles.Length, publishDir));
 
                 var index = outputDirectory.FullName.Length + 1;

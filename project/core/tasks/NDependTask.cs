@@ -216,7 +216,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 if (newFiles.Length > 0)
                 {
                     // Copy all the new files over
-                    string publishDir = result.BaseFromArtifactsDirectory(result.Label);
+                    string publishDir = Path.Combine(result.BaseFromArtifactsDirectory(result.Label), "NDepend");
                     if (!Directory.Exists(publishDir)) Directory.CreateDirectory(publishDir);
                     foreach (FileInfo newFile in newFiles)
                     {
