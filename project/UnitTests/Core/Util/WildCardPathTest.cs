@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void InvalidWildCardPathReturnsNoFiles()
 		{
-			WildCardPath wildCard = new WildCardPath(@"\nonexistantfolder\*");
+			WildCardPath wildCard = new WildCardPath(Path.Combine("nonexistantfolder", "*"));
 			IList files = wildCard.GetFiles();
 			Assert.AreEqual(0, files.Count);
 		}
@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		{
 			string tempFile1Path = TempFileUtil.CreateTempFile(TEMP_FOLDER, "foo.txt", "foofoo");
 			string tempFile2Path = TempFileUtil.CreateTempFile(TEMP_FOLDER, "bar.txt", "barbar");
-			WildCardPath wildCard = new WildCardPath(tempFolderFullPath + @"\" + "*.txt");
+			WildCardPath wildCard = new WildCardPath(Path.Combine(tempFolderFullPath, "*.txt"));
 			IList files = wildCard.GetFiles();
 			Assert.AreEqual(2, files.Count);
 			AssertListContainsPath(files, tempFile2Path);
@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		{
 			string tempFile1Path = TempFileUtil.CreateTempFile(TEMP_FOLDER, "prefix-foo.txt", "foofoo");
 			string tempFile2Path = TempFileUtil.CreateTempFile(TEMP_FOLDER, "prefix-bar.txt", "barbar");
-			WildCardPath wildCard = new WildCardPath(tempFolderFullPath + @"\" + "prefix-*.txt");
+			WildCardPath wildCard = new WildCardPath(Path.Combine(tempFolderFullPath, "prefix-*.txt"));
 			IList files = wildCard.GetFiles();
 			Assert.AreEqual(2, files.Count);
 			AssertListContainsPath(files, tempFile2Path);
