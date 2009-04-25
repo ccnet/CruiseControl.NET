@@ -1,4 +1,5 @@
 using System.Collections;
+using System.IO;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
@@ -19,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.View
 			contextContents["foo"] = "bar";
 
 			DynamicMock pathMapperMock = new DynamicMock(typeof(IPhysicalApplicationPathProvider));
-            pathMapperMock.SetupResult("GetFullPathFor", @".\templates", typeof(string));
+			pathMapperMock.SetupResult("GetFullPathFor", Path.Combine(".", "templates"), typeof (string));
 
             DynamicMock pluginsMock = new DynamicMock(typeof(IPluginConfiguration));
             pluginsMock.SetupResult("TemplateLocation", null);
