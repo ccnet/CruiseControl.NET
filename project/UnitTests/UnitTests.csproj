@@ -98,6 +98,9 @@
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
+  <PropertyGroup Condition="$(DISABLE_COM) == true">
+    <DefineConstants>DISABLE_COM</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Commons">
       <Name>Commons</Name>

@@ -5,8 +5,9 @@ using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.X10;
+#if !DISABLE_COM
 using ThoughtWorks.CruiseControl.CCTrayLib.Speech;
-using ThoughtWorks.CruiseControl.Remote;
+#endif
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -25,7 +26,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private readonly IIntegrationQueueIconProvider queueIconProvider;
 		private BuildTransitionSoundPlayer soundPlayer;
         private X10Controller x10Controller;
+#if !DISABLE_COM
         private SpeakingProjectMonitor speakerForTheDead;
+#endif
 
 		public MainFormController(ICCTrayMultiConfiguration configuration, ISynchronizeInvoke owner)
 		{
@@ -52,7 +55,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			x10Controller = new X10Controller(aggregatedProjectMonitor,new DateTimeProvider(),configuration.X10,lampController);
 
 			IBalloonMessageProvider balloonMessageProvider = new ConfigurableBalloonMessageProvider(configuration.BalloonMessages);
+#if !DISABLE_COM
 			speakerForTheDead = new SpeakingProjectMonitor(aggregatedProjectMonitor, balloonMessageProvider, configuration.Speech);
+#endif
 		}
 
 		public IProjectMonitor SelectedProject
