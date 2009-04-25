@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">    
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+	<xsl:param name="applicationPath" />
+
 	<!--
 	    format a number in to display its value in percent
 	    @param value the number to format
@@ -149,25 +152,29 @@
 
 	<xsl:template name="assembly-icon">
 		<xsl:call-template name="icon">
-			<xsl:with-param name="src">Populator.png</xsl:with-param>
+			<xsl:with-param name="src">
+				<xsl:value-of select="$applicationPath" />/images/Populator.png</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 
 	<xsl:template name="fixture-icon">
 		<xsl:call-template name="icon">
-			<xsl:with-param name="src">Fixture.png</xsl:with-param>
+			<xsl:with-param name="src">
+				<xsl:value-of select="$applicationPath" />/images/Fixture.png</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 
 	<xsl:template name="namespace-icon">
 		<xsl:call-template name="icon">
-			<xsl:with-param name="src">Category.png</xsl:with-param>
+			<xsl:with-param name="src">
+				<xsl:value-of select="$applicationPath" />/images/Category.png</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 
 	<xsl:template name="run-icon">
 		<xsl:call-template name="icon">
-			<xsl:with-param name="src">Test.png</xsl:with-param>
+			<xsl:with-param name="src">
+				<xsl:value-of select="$applicationPath" />/images/Test.png</xsl:with-param>
 		</xsl:call-template>
 	</xsl:template>
 
