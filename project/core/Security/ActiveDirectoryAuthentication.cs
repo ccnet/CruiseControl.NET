@@ -1,11 +1,6 @@
-﻿using Exortech.NetReflector;
-using System;
-using System.Collections.Generic;
-using System.DirectoryServices;
-using System.DirectoryServices.ActiveDirectory;
-using System.Text;
-using ThoughtWorks.CruiseControl.Remote;
+﻿using System.DirectoryServices;
 using System.Runtime.InteropServices;
+using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
