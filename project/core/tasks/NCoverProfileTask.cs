@@ -10,8 +10,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// <summary>
     /// Perform an analysis using NCover 3.0.
     /// </summary>
-    [ReflectorType("ncover")]
-    public class NCoverTask
+    [ReflectorType("ncoverProfile")]
+    public class NCoverProfileTask
         : BaseExecutableTask
     {
         #region Private consts
@@ -24,18 +24,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         #region Constructors
         /// <summary>
-        /// Initialise a new <see cref="NCoverTask"/>.
+        /// Initialise a new <see cref="NCoverProfileTask"/>.
         /// </summary>
-        public NCoverTask()
+        public NCoverProfileTask()
             : this(new ProcessExecutor())
         {
         }
 
         /// <summary>
-        /// Initialise a new <see cref="NCoverTask"/> with a <see cref="ProcessExecutor"/>.
+        /// Initialise a new <see cref="NCoverProfileTask"/> with a <see cref="ProcessExecutor"/>.
         /// </summary>
         /// <param name="executor"></param>
-        public NCoverTask(ProcessExecutor executor)
+        public NCoverProfileTask(ProcessExecutor executor)
         {
             this.executor = executor;
             this.Publish = true;
@@ -115,14 +115,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         [ReflectorProperty("publish", Required = false)]
         public bool Publish { get; set; }
-        #endregion
-
-        #region HtmlDir
-        /// <summary>
-        /// The location to write the HTML report to.
-        /// </summary>
-        [ReflectorProperty("htmlDir", Required = false)]
-        public string HtmlDir { get; set; }
         #endregion
 
         #region LogFile
@@ -334,19 +326,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="result"></param>
         public override void Run(IIntegrationResult result)
         {
-            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Executing NCover");
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Running NCover profile");
 
             // Make sure there is a root directory
             rootPath = BaseDirectory;
             if (string.IsNullOrEmpty(rootPath)) rootPath = result.WorkingDirectory;
-
-            // Take a before snapshot of all the files
-            Dictionary<string, DateTime> oldFiles = null;
-            if (!string.IsNullOrEmpty(HtmlDir))
-            {
-                var outputDirectory = new DirectoryInfo(RootPath(HtmlDir, false));
-                oldFiles = GenerateOriginalFileList(outputDirectory);
-            }
 
             // Run the executable
             var processResult = TryToRun(CreateProcessInfo(result));
@@ -356,27 +340,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             {
                 var coverageFile = string.IsNullOrEmpty(CoverageFile) ? "coverage.xml" : CoverageFile;
                 result.AddTaskResult(new FileTaskResult(RootPath(coverageFile, false)));
-
-                if (!string.IsNullOrEmpty(HtmlDir))
-                {
-                    // Check for any new files
-                    var outputDirectory = new DirectoryInfo(RootPath(HtmlDir, false));
-                    if (outputDirectory.Exists)
-                    {
-                        var newFiles = ListFileDifferences(oldFiles, outputDirectory.GetFiles());
-
-                        if (newFiles.Length > 0)
-                        {
-                            // Copy all the new files over
-                            var publishDir = result.BaseFromArtifactsDirectory(result.Label);
-                            if (!Directory.Exists(publishDir)) Directory.CreateDirectory(publishDir);
-                            foreach (var newFile in newFiles)
-                            {
-                                newFile.CopyTo(Path.Combine(publishDir, newFile.Name));
-                            }
-                        }
-                    }
-                }
             }
         }
         #endregion
@@ -454,7 +417,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             buffer.AppendArgument(ProgramParameters);
 
             // Add all the NCover arguments
-            buffer.AppendIf(!string.IsNullOrEmpty(HtmlDir), "//h \"{0}\"", RootPath(HtmlDir, false));
             buffer.AppendIf(!string.IsNullOrEmpty(LogFile), "//l \"{0}\"", RootPath(LogFile, false));
             buffer.AppendIf(LogLevel != NCoverLogLevel.Default, "//ll {0}", LogLevel.ToString());
             buffer.AppendIf(!string.IsNullOrEmpty(ProjectName), "//p \"{0}\"", ProjectName);
@@ -515,60 +477,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
             if (doubleQuote) actualPath = StringUtil.AutoDoubleQuoteString(actualPath);
             return actualPath;
-        }
-        #endregion
-
-        #region ListFileDifferences()
-        /// <summary>
-        /// Generate a list of differences in files.
-        /// </summary>
-        /// <param name="originalList"></param>
-        /// <param name="newList"></param>
-        /// <returns></returns>
-        private FileInfo[] ListFileDifferences(Dictionary<string, DateTime> originalList, FileInfo[] newList)
-        {
-            List<FileInfo> differenceList = new List<FileInfo>();
-
-            // For each new file, see if it is in the old file list
-            foreach (FileInfo newFile in newList)
-            {
-                if (originalList.ContainsKey(newFile.Name))
-                {
-                    // Check if the times are different
-                    if (originalList[newFile.Name] != newFile.LastWriteTime)
-                    {
-                        differenceList.Add(newFile);
-                    }
-                }
-                else
-                {
-                    // Not in the old file, therefore it's new
-                    differenceList.Add(newFile);
-                }
-            }
-
-            return differenceList.ToArray();
-        }
-        #endregion
-
-        #region GenerateOriginalFileList()
-        /// <summary>
-        /// Generate a list of the original files.
-        /// </summary>
-        /// <param name="outputDirectory"></param>
-        /// <returns></returns>
-        private Dictionary<string, DateTime> GenerateOriginalFileList(DirectoryInfo outputDirectory)
-        {
-            var originalFiles = new Dictionary<string, DateTime>();
-            if (outputDirectory.Exists)
-            {
-                FileInfo[] oldFiles = outputDirectory.GetFiles();
-                foreach (FileInfo oldFile in oldFiles)
-                {
-                    originalFiles.Add(oldFile.Name, oldFile.LastWriteTime);
-                }
-            }
-            return originalFiles;
         }
         #endregion
         #endregion

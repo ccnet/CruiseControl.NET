@@ -211,7 +211,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             if (publish)
             {
                 // Check for any new files
-                FileInfo[] newFiles = ListFileDifferences(oldFiles, outputDirectory.GetFiles());
+                FileInfo[] newFiles = ListFileDifferences(oldFiles, outputDirectory);
 
                 if (newFiles.Length > 0)
                 {
@@ -347,8 +347,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="originalList"></param>
         /// <param name="newList"></param>
         /// <returns></returns>
-        private FileInfo[] ListFileDifferences(Dictionary<string, DateTime> originalList, FileInfo[] newList)
+        private FileInfo[] ListFileDifferences(Dictionary<string, DateTime> originalList, DirectoryInfo outputDirectory)
         {
+            FileInfo[] newList = {};
+            if (outputDirectory.Exists) newList = outputDirectory.GetFiles();
+
             List<FileInfo> differenceList = new List<FileInfo>();
 
             // For each new file, see if it is in the old file list
@@ -381,11 +384,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <returns></returns>
         private Dictionary<string, DateTime> GenerateOriginalFileList(DirectoryInfo outputDirectory)
         {
-            FileInfo[] oldFiles = outputDirectory.GetFiles();
             Dictionary<string, DateTime> originalFiles = new Dictionary<string, DateTime>();
-            foreach (FileInfo oldFile in oldFiles)
+            if (outputDirectory.Exists)
             {
-                originalFiles.Add(oldFile.Name, oldFile.LastWriteTime);
+                FileInfo[] oldFiles = outputDirectory.GetFiles();
+                foreach (FileInfo oldFile in oldFiles)
+                {
+                    originalFiles.Add(oldFile.Name, oldFile.LastWriteTime);
+                }
             }
             return originalFiles;
         }
