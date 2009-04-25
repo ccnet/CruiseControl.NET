@@ -5,7 +5,11 @@
 
     <!-- custom scripts -->
     <script language="C#" prefix="RuWi">
-          <code>
+          <references>
+              <include name="System.dll" />
+		  </references>
+
+		  <code>
             <![CDATA[
                 [Function("UpdateNsiVersion")]
                 public static bool UpdateNsiVersion(string inputFile, string newVersion)
