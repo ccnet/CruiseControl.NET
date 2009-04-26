@@ -738,6 +738,16 @@
     <Content Include="javascript\theme\ui.progressbar.css" />
     <Content Include="javascript\theme\ui.resizable.css" />
     <Content Include="javascript\theme\ui.theme.css" />
+    <Content Include="packages\MSTest\Manifest.xml" />
+    <Content Include="packages\UserList\Manifest.xml" />
+    <Content Include="packages\SecurityConfig\Manifest.xml" />
+    <Content Include="packages\NCover\Manifest.xml" />
+    <Content Include="packages\Simian\Manifest.xml" />
+    <Content Include="packages\Fitnesse\Manifest.xml" />
+    <Content Include="packages\Gendarme\Manifest.xml" />
+    <Content Include="packages\FxCop\Manifest.xml" />
+    <Content Include="packages\MSBuild\Manifest.xml" />
+    <Content Include="packages\NAnt\Manifest.xml" />
     <Content Include="packages\NDepend\Manifest.xml" />
     <Content Include="packages\DashboardAdmin\Manifest.xml" />
     <Content Include="packages\ModificationHistory\Manifest.xml" />

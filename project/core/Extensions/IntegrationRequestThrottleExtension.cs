@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Remote.Events;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Events;
 
 namespace ThoughtWorks.CruiseControl.Core.Extensions
 {
