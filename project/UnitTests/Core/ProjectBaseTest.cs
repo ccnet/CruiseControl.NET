@@ -19,11 +19,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ShouldReturnConfiguredWorkingDirectoryIfOneIsSet()
 		{
+			string workingDir = Path.GetFullPath(Path.Combine(".", "workingdir"));
+
 			// Setup
-			project.ConfiguredWorkingDirectory = @"C:\my\working\directory";
+			project.ConfiguredWorkingDirectory = workingDir;
 
 			// Execute & Verify
-			Assert.AreEqual(@"C:\my\working\directory", project.WorkingDirectory);
+			Assert.AreEqual(workingDir, project.WorkingDirectory);
 		}
 
 		[Test]
@@ -33,17 +35,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Name = "myProject";
 
 			// Execute & Verify
-			Assert.AreEqual(new DirectoryInfo(@"myProject\WorkingDirectory").FullName, project.WorkingDirectory);
+			Assert.AreEqual(new DirectoryInfo(Path.Combine("myProject", "WorkingDirectory")).FullName, project.WorkingDirectory);
 		}
 
 		[Test]
 		public void ShouldReturnConfiguredArtifactDirectoryIfOneIsSet()
 		{
+			string artifactDir = Path.GetFullPath(Path.Combine(".", "artifacts"));
+
 			// Setup
-			project.ConfiguredArtifactDirectory = @"C:\my\artifacts";
+			project.ConfiguredArtifactDirectory = artifactDir;
 
 			// Execute & Verify
-			Assert.AreEqual(@"C:\my\artifacts", project.ArtifactDirectory);
+			Assert.AreEqual(artifactDir, project.ArtifactDirectory);
 		}
 
 		[Test]
@@ -53,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Name = "myProject";
 
 			// Execute & Verify
-			Assert.AreEqual(new DirectoryInfo(@"myProject\Artifacts").FullName, project.ArtifactDirectory);
+			Assert.AreEqual(new DirectoryInfo(Path.Combine("myProject", "Artifacts")).FullName, project.ArtifactDirectory);
 		}
 
 
