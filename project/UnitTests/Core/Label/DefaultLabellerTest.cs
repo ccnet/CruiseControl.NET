@@ -28,6 +28,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		}
 
 		[Test]
+		public void GenerateInitialLabelWithInitialBuildLabelSet()
+		{
+			labeller.InitialBuildLabel = 10;
+			Assert.AreEqual("10", labeller.Generate(InitialIntegrationResult()));
+		}
+
+		[Test]
 		public void GenerateLabelWhenLastBuildFailed()
 		{
 			Assert.AreEqual("23", labeller.Generate(FailedResult("23")));
@@ -209,8 +216,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		[Test]
 		public void PopulateFromConfiguration()
 		{
-            string xml = @"<defaultLabeller prefix=""foo"" incrementOnFailure=""true"" postfix=""bar"" />";
+			string xml = @"<defaultLabeller initialBuildLabel=""35"" prefix=""foo"" incrementOnFailure=""true"" postfix=""bar"" />";
 			NetReflector.Read(xml, labeller);
+			Assert.AreEqual(35, labeller.InitialBuildLabel);
 			Assert.AreEqual("foo", labeller.LabelPrefix);
 			Assert.AreEqual(true, labeller.IncrementOnFailed);
             Assert.AreEqual("bar", labeller.LabelPostfix);
@@ -219,6 +227,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		[Test]
 		public void DefaultValues()
 		{
+			Assert.AreEqual(DefaultLabeller.INITIAL_LABEL, labeller.InitialBuildLabel);
 			Assert.AreEqual(string.Empty, labeller.LabelPrefix);
 			Assert.AreEqual(false, labeller.IncrementOnFailed);
             Assert.AreEqual(string.Empty, labeller.LabelPostfix);
