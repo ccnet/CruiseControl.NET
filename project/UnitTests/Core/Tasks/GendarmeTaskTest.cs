@@ -112,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldEncloseDirectoriesInQuotesIfTheyContainSpaces()
 		{
-			DefaultWorkingDirectory = @"c:\dir with spaces";
+			DefaultWorkingDirectory = Path.GetFullPath(Path.Combine(".", "working dir with spaces"));
 			result.ArtifactDirectory = DefaultWorkingDirectory;
 			result.WorkingDirectory = DefaultWorkingDirectory;
 
