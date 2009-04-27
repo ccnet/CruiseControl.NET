@@ -88,8 +88,8 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
                     var stopwatch = stopwatches[e.ProjectName];
                     stopwatch.Stop();
                     stopwatches.Remove(e.ProjectName);
-                    integrationElapsedTimeCounter.IncrementBy(stopwatch.ElapsedTicks);
                     averageIntegrationsCounter.Increment();
+                    integrationElapsedTimeCounter.IncrementBy(stopwatch.ElapsedTicks);
                 }
 
                 // Record the result
