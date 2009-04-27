@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
             {
                 newTypeTable.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, searchPathDir), CONFIG_ASSEMBLY_PATTERN);
             }
-			newTypeTable.Add(Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath), CONFIG_ASSEMBLY_PATTERN);
+			newTypeTable.Add(Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath), CONFIG_ASSEMBLY_PATTERN);
 			return newTypeTable;
 		}
 
