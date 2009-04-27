@@ -61,7 +61,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 		private NetReflectorTypeTable GetTypeTable()
 		{
 			NetReflectorTypeTable newTypeTable = NetReflectorTypeTable.CreateDefault(instantiator);
-            foreach (string searchPathDir in AppDomain.CurrentDomain.RelativeSearchPath.Split(Path.PathSeparator))
+
+			// split the relative search path only by ';', thats also valid with Mono on Unix
+            foreach (string searchPathDir in AppDomain.CurrentDomain.RelativeSearchPath.Split(';'))
             {
                 newTypeTable.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, searchPathDir), CONFIG_ASSEMBLY_PATTERN);
             }
