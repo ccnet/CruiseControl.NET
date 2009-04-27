@@ -33,7 +33,6 @@ namespace ThoughtWorks.CruiseControl.Core
                             List<ExtensionConfiguration> extensionList)
 		{
 			this.configurationService = configurationService;
-			this.configurationService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(Restart));
 			this.projectSerializer = projectSerializer;
 
 			// ToDo - get rid of manager, maybe
@@ -50,6 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 InitialiseExtensions(extensionList);
             }
+            this.configurationService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(Restart));
         }
 
         #region Integration pass-through events
@@ -149,13 +149,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// Restart server by stopping all integrators, creating a new set of integrators from Configuration and then starting them.
 		/// </summary>
-		public void Restart()
-		{
-			Log.Info("Configuration changed: Restarting CruiseControl.NET Server ");
+        public void Restart()
+        {
+            Log.Info("Configuration changed: Restarting CruiseControl.NET Server ");
 
-			IConfiguration configuration = configurationService.Load();
-			integrationQueueManager.Restart(configuration);
-		}
+            IConfiguration configuration = configurationService.Load();
+            integrationQueueManager.Restart(configuration);
+        }
 
 		/// <summary>
 		/// Block thread until all integrators to have been stopped or aborted.
