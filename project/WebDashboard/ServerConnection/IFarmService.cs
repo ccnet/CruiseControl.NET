@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         long GetFreeDiskSpace(IServerSpecifier serverSpecifier);
 
         #region RetrieveFileTransfer()
-        RemotingFileTransfer RetrieveFileTransfer(IProjectSpecifier projectSpecifier, string fileName, FileTransferSource source);
+        RemotingFileTransfer RetrieveFileTransfer(IProjectSpecifier projectSpecifier, string fileName);
         #endregion
     }
 }

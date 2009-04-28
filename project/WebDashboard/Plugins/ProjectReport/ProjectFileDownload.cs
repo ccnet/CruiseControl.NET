@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             string label = cruiseRequest.Request.GetText("label");
             string path = fileName;
             if (!string.IsNullOrEmpty(label)) path = Path.Combine(label, fileName);
-            RemotingFileTransfer fileTransfer = farmService.RetrieveFileTransfer(cruiseRequest.ProjectSpecifier, path, FileTransferSource.Artefact);
+            RemotingFileTransfer fileTransfer = farmService.RetrieveFileTransfer(cruiseRequest.ProjectSpecifier, path);
             FileTransferResponse response = new FileTransferResponse(fileTransfer, fileName);
             return response;
         }

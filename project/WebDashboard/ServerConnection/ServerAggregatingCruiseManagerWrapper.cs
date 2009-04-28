@@ -274,10 +274,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         }
 
         #region RetrieveFileTransfer()
-        public RemotingFileTransfer RetrieveFileTransfer(IProjectSpecifier projectSpecifier, string fileName, FileTransferSource source)
+        public RemotingFileTransfer RetrieveFileTransfer(IProjectSpecifier projectSpecifier, string fileName)
         {
             RemotingFileTransfer fileTransfer = GetCruiseManager(projectSpecifier)
-                .RetrieveFileTransfer(projectSpecifier.ProjectName, fileName, source);
+                .RetrieveFileTransfer(projectSpecifier.ProjectName, fileName);
             return fileTransfer;
         }
         #endregion
