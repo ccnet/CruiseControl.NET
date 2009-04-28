@@ -239,8 +239,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="project">The project to retrieve the file for.</param>
         /// <param name="fileName">The name of the file.</param>
-        /// <param name="source">Where to retrieve the file from.</param>
-        RemotingFileTransfer RetrieveFileTransfer(string project, string fileName, FileTransferSource source);
+        RemotingFileTransfer RetrieveFileTransfer(string project, string fileName);
         #endregion
 
         /// <summary>

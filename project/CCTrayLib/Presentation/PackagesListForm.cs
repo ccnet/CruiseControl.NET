@@ -186,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 Stream outputStream = File.Create(Path.Combine(downloadLocation, package.Name + ".zip"));
                 try
                 {
-                    IFileTransfer fileTransfer = project.RetrieveFileTransfer(package.FileName, FileTransferSource.Artefact);
+                    IFileTransfer fileTransfer = project.RetrieveFileTransfer(package.FileName);
                     fileTransfer.Download(outputStream);
                 }
                 finally

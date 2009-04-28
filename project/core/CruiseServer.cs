@@ -570,31 +570,34 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <param name="project">The project to retrieve the file for.</param>
         /// <param name="fileName">The name of the file.</param>
-        /// <param name="source">Where to retrieve the file from.</param>
-        public virtual RemotingFileTransfer RetrieveFileTransfer(string project, string fileName, FileTransferSource source)
+        public virtual RemotingFileTransfer RetrieveFileTransfer(string project, string fileName)
         {
-            if (Path.IsPathRooted(fileName))
+            // Validate that the path is valid
+            var sourceProject = GetIntegrator(project).Project;
+            var filePath = Path.Combine(sourceProject.ArtifactDirectory, fileName);
+            var fileInfo = new FileInfo(filePath);
+            if (!fileInfo.FullName.StartsWith(sourceProject.ArtifactDirectory, StringComparison.InvariantCultureIgnoreCase))
             {
-                Log.Warning(string.Format("Absolute path requested ('{0}') - request denied", fileName));
-                throw new CruiseControlException("Unable to retrieve absolute files - must be relative to the project");
+                var message = string.Format("Files can only be retrieved from the artefact folder - unable to retrieve {0}", fileName);
+                Log.Warning(message);
+                throw new CruiseControlException(message);
             }
-            Log.Debug(
-                string.Format("Retrieving file '{0}' from '{1}' ({2})", fileName, project, source));
-            IProject sourceProject = GetIntegrator(project).Project;
-            string filePath = null;
-            switch (source)
+            else if (fileInfo.FullName.StartsWith(Path.Combine(sourceProject.ArtifactDirectory, "buildlogs"), StringComparison.InvariantCultureIgnoreCase))
             {
-                case FileTransferSource.Artefact:
-                    filePath = Path.Combine(sourceProject.ArtifactDirectory ?? string.Empty, fileName);
-                    break;
-                case FileTransferSource.Working:
-                    filePath = Path.Combine(sourceProject.WorkingDirectory ?? string.Empty, fileName);
-                    break;
+                var message = string.Format("Unable to retrieve files from the build logs folder - unable to retrieve {0}", fileName);
+                Log.Warning(message);
+                throw new CruiseControlException(message);
             }
+
             RemotingFileTransfer fileTransfer = null;
-            if (File.Exists(filePath))
+            if (fileInfo.Exists)
             {
+                Log.Debug(string.Format("Retrieving file '{0}' from '{1}'", fileName, project));
                 fileTransfer = new RemotingFileTransfer(File.OpenRead(filePath));
+            }
+            else
+            {
+                Log.Warning(string.Format("Unable to find file '{0}' in '{1}'", fileName, project));
             }
             return fileTransfer;
         }

@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
             else
             {
                 // Retrieve the file transfer object
-                var fileTransfer = farmService.RetrieveFileTransfer(cruiseRequest.BuildSpecifier, fileName, FileTransferSource.Artefact);
+                var fileTransfer = farmService.RetrieveFileTransfer(cruiseRequest.BuildSpecifier, fileName);
                 if (fileTransfer != null)
                 {
                     return new FileTransferResponse(fileTransfer, fileName);
@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
         private string LoadHtmlFile(ICruiseRequest cruiseRequest, string fileName)
         {
             // Retrieve the file transfer object
-            var fileTransfer = farmService.RetrieveFileTransfer(cruiseRequest.BuildSpecifier, fileName, FileTransferSource.Artefact);
+            var fileTransfer = farmService.RetrieveFileTransfer(cruiseRequest.BuildSpecifier, fileName);
             if (fileTransfer != null)
             {
                 // Transfer the file across and load it into a string

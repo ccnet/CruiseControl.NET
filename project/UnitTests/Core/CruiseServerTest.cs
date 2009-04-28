@@ -12,6 +12,7 @@ using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Events;
 using Rhino.Mocks.Interfaces;
 using ThoughtWorks.CruiseControl.UnitTests.Remote;
+using System.IO;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -783,6 +784,44 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             ProjectStatusSnapshot snapshot = server.TakeStatusSnapshot("Project 1");
             Assert.IsNotNull(snapshot, "Snapshot not taken");
             Assert.AreEqual("Project 1", snapshot.Name, "Name not set");
+        }
+
+        [Test]
+        [ExpectedException(typeof(CruiseControlException))]
+        public void RetrieveFileTransferOnlyWorksForFilesInArtefactFolder()
+        {
+            server.RetrieveFileTransfer("Project 1", @"..\testfile.txt");
+        }
+
+        [Test]
+        [ExpectedException(typeof(CruiseControlException))]
+        public void RetrieveFileTransferFailsForBuildLogsFolder()
+        {
+            server.RetrieveFileTransfer("Project 1", @"BuildLogs\testfile.txt");
+        }
+
+        [Test]
+        [ExpectedException(typeof(CruiseControlException))]
+        public void RetrieveFileTransferFailsForAbsolutePaths()
+        {
+            server.RetrieveFileTransfer("Project 1", @"C:\MyFile.txt");
+        }
+
+        [Test]
+        public void RetrieveFileTransferGeneratesTransferForValidFile()
+        {
+            var tempFile = Path.GetTempFileName();
+            if (!File.Exists(tempFile)) File.WriteAllText(tempFile, "This is a test");
+            project1.ConfiguredArtifactDirectory = Path.GetDirectoryName(tempFile);
+            var transfer = server.RetrieveFileTransfer("Project 1", Path.GetFileName(tempFile));
+            Assert.IsNotNull(transfer);
+        }
+
+        [Test]
+        public void RetrieveFileTransferGeneratesNullForInvalidFile()
+        {
+            var transfer = server.RetrieveFileTransfer("Project 1", "GarbageFileNameThatShouldNotExist.NotHere");
+            Assert.IsNull(transfer);
         }
     }
 }

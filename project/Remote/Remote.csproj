@@ -141,7 +141,6 @@
     <Compile Include="ExternalLink.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FileTransferSource.cs" />
     <Compile Include="ICruiseManager.cs">
       <SubType>Code</SubType>
     </Compile>

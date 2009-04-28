@@ -152,10 +152,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         /// </summary>
         /// <param name="project">The project to retrieve the file for.</param>
         /// <param name="fileName">The name of the file.</param>
-        /// <param name="source">Where to retrieve the file from.</param>
-        public virtual IFileTransfer RetrieveFileTransfer(string fileName, FileTransferSource source)
+        public virtual IFileTransfer RetrieveFileTransfer(string fileName)
         {
-            RemotingFileTransfer fileTransfer = manager.RetrieveFileTransfer(projectName, fileName, source);
+            RemotingFileTransfer fileTransfer = manager.RetrieveFileTransfer(projectName, fileName);
             return fileTransfer;
         }
         #endregion
