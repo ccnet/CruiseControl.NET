@@ -38,7 +38,6 @@ namespace ThoughtWorks.CruiseControl.Core
                             List<ExtensionConfiguration> extensionList)
 		{
 			this.configurationService = configurationService;
-			this.configurationService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(Restart));
 			this.projectSerializer = projectSerializer;
 
 			// ToDo - get rid of manager, maybe
@@ -56,6 +55,8 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 InitialiseExtensions(extensionList);
             }
+
+            this.configurationService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(Restart));
         }
 
         #region Integration pass-through events
