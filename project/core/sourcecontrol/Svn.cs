@@ -188,6 +188,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("cleanup");
+			buffer.AddArgument(StringUtil.AutoDoubleQuoteString(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory))));
 
             return NewProcessInfo(buffer.ToString(), result);
         }
