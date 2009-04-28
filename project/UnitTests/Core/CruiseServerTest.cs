@@ -790,21 +790,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         [ExpectedException(typeof(CruiseControlException))]
         public void RetrieveFileTransferOnlyWorksForFilesInArtefactFolder()
         {
-            server.RetrieveFileTransfer("Project 1", @"..\testfile.txt");
+        	server.RetrieveFileTransfer("Project 1", Path.Combine("..", "testfile.txt"));
         }
 
         [Test]
         [ExpectedException(typeof(CruiseControlException))]
         public void RetrieveFileTransferFailsForBuildLogsFolder()
         {
-            server.RetrieveFileTransfer("Project 1", @"BuildLogs\testfile.txt");
+        	server.RetrieveFileTransfer("Project 1", Path.Combine("buildlogs", "testfile.txt"));
         }
 
         [Test]
         [ExpectedException(typeof(CruiseControlException))]
         public void RetrieveFileTransferFailsForAbsolutePaths()
         {
-            server.RetrieveFileTransfer("Project 1", @"C:\MyFile.txt");
+        	server.RetrieveFileTransfer("Project 1", Path.GetFullPath(Path.Combine(".", "MyFile.txt")));
         }
 
         [Test]
