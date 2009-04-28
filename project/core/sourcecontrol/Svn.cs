@@ -89,6 +89,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private bool WorkingFolderIsKnownAsSvnWorkingFolder(string workingDirectory)
         {
+			if (!Directory.Exists(workingDirectory))
+				return false;
+
             return System.IO.Directory.GetDirectories(workingDirectory, ".svn").Length != 0 ||
                    System.IO.Directory.GetDirectories(workingDirectory, "_svn").Length != 0;
         }
