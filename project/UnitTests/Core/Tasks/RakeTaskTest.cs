@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[SetUp]
 		public void SetUp()
 		{
-			DefaultWorkingDirectory = @"c:\source";
+			//DefaultWorkingDirectory = @"c:\source";
 			CreateProcessExecutorMock(RakeTask.DefaultExecutable);
 			builder = new RakeTask((ProcessExecutor) mockProcessExecutor.MockInstance);
 			result = IntegrationResult();
