@@ -127,3 +127,27 @@ td>a.selected:hover { color:#006; }
 {
 	display:none;
 }
+
+.userList-table
+{
+	width:100%;
+	border-collapse:collapse;
+}
+.userList-table th
+{
+	text-align:left;
+	border-bottom: solid 1px black;
+}
+.userList-table td
+{
+	padding: 2px;
+	cursor:pointer;
+}
+.userList-table .odd td
+{
+	background-color:#f0f0f0;
+}
+.userList-table .even td
+{
+	background-color:#ffffff;
+}

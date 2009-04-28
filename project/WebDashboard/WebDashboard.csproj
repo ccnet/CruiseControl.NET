@@ -564,6 +564,8 @@
     <Compile Include="Plugins\ForceBuild\ForceBuildXmlAction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\ProjectReport\PackageListAction.cs" />
+    <Compile Include="Plugins\ProjectReport\PackageListPlugin.cs" />
     <Compile Include="Plugins\ProjectReport\ProjectStatusPlugin.cs" />
     <Compile Include="Plugins\ProjectReport\ModificationHistoryProjectPlugin.cs" />
     <Compile Include="Plugins\ProjectReport\ProjectFileDownload.cs" />
@@ -739,6 +741,7 @@
     <Content Include="javascript\theme\ui.resizable.css" />
     <Content Include="javascript\theme\ui.theme.css" />
     <Content Include="packages\MSTest\Manifest.xml" />
+    <Content Include="packages\PackageList\Manifest.xml" />
     <Content Include="packages\UserList\Manifest.xml" />
     <Content Include="packages\SecurityConfig\Manifest.xml" />
     <Content Include="packages\NCover\Manifest.xml" />
@@ -781,6 +784,7 @@
     <None Include="templates\LoggedIn.vm" />
     <None Include="templates\LoggedOut.vm" />
     <None Include="templates\LoginAction.vm" />
+    <None Include="templates\PackageList.vm" />
     <None Include="templates\ProjectGrid.vm" />
     <None Include="templates\ProjectReport.vm" />
     <None Include="templates\ProjectServerConfiguration.vm" />

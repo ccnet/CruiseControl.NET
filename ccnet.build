@@ -563,7 +563,7 @@
   </target>
 
   <target name="project.level.packages" description="Generate the project level packages"
-          depends="build.projectStats.package,build.projectConfig.package,build.modificationHistory.package">
+          depends="build.projectStats.package,build.projectConfig.package,build.modificationHistory.package,build.packageList.package">
   </target>
 
   <target name="build.projectStats.package" description="Generates the project statistics package">
@@ -592,6 +592,18 @@
     <zip zipfile="${build.dir}\WebDashboard\Packages\ModificationHistory.zip">
       <fileset basedir="${src.dir}\WebDashboard\Packages\ModificationHistory">
         <include name="*.*"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.packageList.package" description="Generates the package list package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\PackageList.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\PackageList">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\WebDashboard\Templates">
+        <include name="PackageList.vm"/>
       </fileset>
     </zip>
   </target>

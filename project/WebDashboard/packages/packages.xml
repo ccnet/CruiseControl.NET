@@ -19,4 +19,5 @@
   <package name="Security Configuration Display" description="Display the security configuration a server." type="Plugin" file="SecurityConfig.zip" installed="no" />
   <package name="User List" description="Display the users defined on a server." type="Plugin" file="UserList.zip" installed="no" />
   <package name="MSTest Results" description="Display the results of a MSTest report." type="Plugin" file="MSTest.zip" installed="no" />
+  <package name="Package List" description="Display the list of packages that were generated." type="Plugin" file="PackageList.zip" installed="yes" />
 </packages>

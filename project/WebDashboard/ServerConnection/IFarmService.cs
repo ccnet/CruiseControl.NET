@@ -103,6 +103,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         RemotingFileTransfer RetrieveFileTransfer(IBuildSpecifier buildSpecifier, string fileName, FileTransferSource source);
         #endregion
 
+        #region RetrievePackageList()
+        /// <summary>
+        /// List the available packages for a project.
+        /// </summary>
+        /// <param name="projectSpecifier"></param>
+        /// <returns></returns>
+        PackageDetails[] RetrievePackageList(IProjectSpecifier projectSpecifier);
+
+        /// <summary>
+        /// List the available packages for a build.
+        /// </summary>
+        /// <param name="projectSpecifier"></param>
+        /// <returns></returns>
+        PackageDetails[] RetrievePackageList(IBuildSpecifier buildSpecifier);
+        #endregion
+
         string Login(string server, ISecurityCredentials credentials);
         void Logout(string server, string sessionToken);
         void ChangePassword(string server, string sessionToken, string oldPassword, string newPassword);

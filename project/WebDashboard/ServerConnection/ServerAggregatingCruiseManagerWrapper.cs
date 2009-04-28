@@ -219,6 +219,32 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         }
         #endregion
 
+        #region RetrievePackageList()
+        /// <summary>
+        /// List the available packages for a project.
+        /// </summary>
+        /// <param name="projectSpecifier"></param>
+        /// <returns></returns>
+        public PackageDetails[] RetrievePackageList(IProjectSpecifier projectSpecifier)
+        {
+            var packages = GetCruiseManager(projectSpecifier).RetrievePackageList(projectSpecifier.ProjectName);
+            return packages;
+        }
+
+        /// <summary>
+        /// List the available packages for a build.
+        /// </summary>
+        /// <param name="projectSpecifier"></param>
+        /// <returns></returns>
+        public PackageDetails[] RetrievePackageList(IBuildSpecifier buildSpecifier)
+        {
+            var logFile = new LogFile(buildSpecifier.BuildName);
+            var packages = GetCruiseManager(buildSpecifier)
+                .RetrievePackageList(buildSpecifier.ProjectSpecifier.ProjectName, logFile.Label);
+            return packages;
+        }
+        #endregion
+
         public string Login(string server, ISecurityCredentials credentials)
 		{
             return GetCruiseManager(GetServerConfiguration(server)).Login(credentials);

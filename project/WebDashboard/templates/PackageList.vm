@@ -1,0 +1,32 @@
+﻿<script type="text/javascript">
+    function downloadPackage(packageName) {
+        window.open('RetrieveFile.aspx?file=' + packageName);
+    }
+</script>
+<h2>Available Packages for $projectName</h2>
+<div>
+<table class="userList-table">
+  <tr>
+    <th>Package Name</th>
+    <th>Build Label</th>
+    <th>Number of Files</th>
+    <th>Package Size</th>
+  </tr>
+  #foreach ($package in $packages)
+  #odd
+  <tr onclick="downloadPackage('$package.FileName')" class="odd">
+    <td>$package.Name</td>
+    <td>$package.BuildLabel</td>
+    <td>$package.NumberOfFiles</td>
+    <td>$package.Size</td>
+  </tr>
+  #even
+  <tr onclick="downloadPackage('$package.FileName')" class="even">
+    <td>$package.Name</td>
+    <td>$package.BuildLabel</td>
+    <td>$package.NumberOfFiles</td>
+    <td>$package.Size</td>
+  </tr>
+  #end
+</table>
+</div>
