@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vss.Culture = string.Empty; // invariant culture
 			vss.Username = "Joe Admin";
 			vss.Password = "admin";
-			vss.WorkingDirectory = @"c:\source\";
+			vss.WorkingDirectory = DefaultWorkingDirectory;
 
 			today = DateTime.Now;
 			yesterday = today.AddDays(-1);
@@ -318,7 +318,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			vss.ApplyLabel = true;
 			vss.AutoGetSource = false;
-			vss.WorkingDirectory = @"c:\source\";
+			vss.WorkingDirectory = DefaultWorkingDirectory;
 			vss.GetSource(result);
 		}
 

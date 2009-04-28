@@ -125,7 +125,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			builder.AddArgument("-R");
 			builder.AddArgument("-P");
 			builder.AddArgument("-r", Branch);
-			builder.AddArgument("-d", result.BaseFromWorkingDirectory(WorkingDirectory));
+			builder.AddArgument("-d", StringUtil.AutoDoubleQuoteString(result.BaseFromWorkingDirectory(WorkingDirectory)));
 			builder.AddArgument(Module);
 			return NewProcessInfoWithArgs(result, builder.ToString());
 		}
