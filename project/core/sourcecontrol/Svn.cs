@@ -100,15 +100,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
             if (WorkingFolderIsKnownAsSvnWorkingFolder(to.WorkingDirectory))
             {
-                if (Revert)
-                {
-                    ProcessResult revertWorkingCopy = Execute(RevertWorkingCopy(to));
-                }
-
                 if (CleanUp)
-                {
-                    ProcessResult cleanUpWorkingCopy = Execute(CleanupWorkingCopy(to));
-                }
+					Execute(CleanupWorkingCopy(to));
+
+				if (Revert)
+					Execute(RevertWorkingCopy(to));
             }
 
             List<Modification> modifications = new List<Modification>();
