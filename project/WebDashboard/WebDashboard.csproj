@@ -644,12 +644,6 @@
     <Content Include="..\xsl\fitnesse.xsl">
       <Link>xsl\fitnesse.xsl</Link>
     </Content>
-    <Content Include="..\xsl\fxcop-summary.xsl">
-      <Link>xsl\fxcop-summary.xsl</Link>
-    </Content>
-    <Content Include="..\xsl\FxCopReport.xsl">
-      <Link>xsl\FxCopReport.xsl</Link>
-    </Content>
     <Content Include="..\xsl\gendarme-report-ccnet.xsl">
       <Link>xsl\gendarme-report-ccnet.xsl</Link>
     </Content>
