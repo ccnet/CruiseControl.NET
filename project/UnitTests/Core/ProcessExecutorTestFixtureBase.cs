@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	{
 		protected const int SuccessfulExitCode = 0;
 		protected const int FailedExitCode = -1;
-		protected string DefaultWorkingDirectory = @"c:\source\";
+		protected string DefaultWorkingDirectory = Path.GetFullPath(Path.Combine(".", "source"));
 		protected int DefaultTimeout = Timeout.DefaultTimeout.Millis;
 		protected string ProcessResultOutput = "output";
 		protected DateTime testDate = new DateTime(2005, 06, 06, 08, 45, 00);

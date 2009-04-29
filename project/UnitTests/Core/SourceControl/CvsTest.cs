@@ -173,7 +173,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldCheckoutInsteadOfUpdateIfCVSFoldersDoNotExist()
 		{
-			ExpectToExecuteArguments(@"-d :pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet -q checkout -R -P -d c:\source\ ccnet");
+			ExpectToExecuteArguments(string.Format(@"-d :pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet -q checkout -R -P -d {0} ccnet", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
 			ExpectCvsDirectoryExists(false);
 
 			cvs.CvsRoot = ":pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet";
@@ -186,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldCheckoutFromBranchInsteadOfUpdateIfCVSFoldersDoNotExist()
 		{
-			ExpectToExecuteArguments(@"-d :pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet -q checkout -R -P -r branch -d c:\source\ ccnet");
+			ExpectToExecuteArguments(string.Format(@"-d :pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet -q checkout -R -P -r branch -d {0} ccnet", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
 			ExpectCvsDirectoryExists(false);
 
 			cvs.CvsRoot = ":pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet";

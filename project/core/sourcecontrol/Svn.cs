@@ -89,6 +89,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private bool WorkingFolderIsKnownAsSvnWorkingFolder(string workingDirectory)
         {
+			if (!Directory.Exists(workingDirectory))
+				return false;
+
             return System.IO.Directory.GetDirectories(workingDirectory, ".svn").Length != 0 ||
                    System.IO.Directory.GetDirectories(workingDirectory, "_svn").Length != 0;
         }
@@ -175,7 +178,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("revert");
             buffer.AddArgument("--recursive");
-            buffer.AddArgument(".");
+			buffer.AddArgument(StringUtil.AutoDoubleQuoteString(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory))));
 
             return NewProcessInfo(buffer.ToString(), result);
         }
@@ -185,7 +188,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("cleanup");
-            //buffer.AddArgument("-R");
+			buffer.AddArgument(StringUtil.AutoDoubleQuoteString(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory))));
 
             return NewProcessInfo(buffer.ToString(), result);
         }
@@ -239,7 +242,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("checkout");
             buffer.AddArgument(TrunkUrl);
-            buffer.AddArgument(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)));
+            buffer.AddArgument(StringUtil.AutoDoubleQuoteString(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory))));
             AppendCommonSwitches(buffer);
             return NewProcessInfo(buffer.ToString(), result);
         }
@@ -260,7 +263,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("update");
-            buffer.AddArgument(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)));
+            buffer.AddArgument(StringUtil.AutoDoubleQuoteString(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory))));
             // Do not use Modification.GetLastChangeNumber() here directly.
             AppendRevision(buffer, latestRevision);
             AppendCommonSwitches(buffer);
