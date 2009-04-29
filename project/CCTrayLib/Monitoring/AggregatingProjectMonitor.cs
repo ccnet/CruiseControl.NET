@@ -1,6 +1,8 @@
 using System;
 using System.Text;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -20,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 
-		public void ForceBuild()
+        public void ForceBuild(Dictionary<string, string> parameters)
 		{
 			throw new NotImplementedException();
 		}
@@ -223,5 +225,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             throw new InvalidOperationException();
         }
         #endregion
+
+        public List<ParameterBase> ListBuildParameters()
+        {
+            throw new NotImplementedException();
+        }
 	}
 }

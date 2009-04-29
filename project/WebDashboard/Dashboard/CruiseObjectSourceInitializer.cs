@@ -14,6 +14,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -265,7 +266,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             // Supporting cruise server project and queue status queries from CCTray or clients 1.3 or later
             objectionManager.AddTypeForName(XmlServerReportAction.ACTION_NAME, typeof(XmlServerReportAction));
 
-
             // RSS publisher
             objectionManager.AddTypeForName(Plugins.RSS.RSSFeed.ACTION_NAME, typeof(Plugins.RSS.RSSFeed)).Decorate(typeof(CruiseActionProxyAction));
 
@@ -276,6 +276,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             // File downloads
             objectionManager.AddTypeForName(ProjectFileDownload.ActionName, typeof(ProjectFileDownload)).Decorate(typeof(CruiseActionProxyAction));
             objectionManager.AddTypeForName(BuildFileDownload.ActionName, typeof(BuildFileDownload)).Decorate(typeof(CruiseActionProxyAction));
+
+            // Parameters handler for CCTray or client 1.5 or later
+            objectionManager.AddInstanceForName(XmlProjectParametersReportAction.ACTION_NAME, 
+                objectSource.GetByType(typeof(XmlProjectParametersReportAction)));
 
             return objectSource;
         }

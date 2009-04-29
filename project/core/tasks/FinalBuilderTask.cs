@@ -26,7 +26,8 @@ using Exortech.NetReflector;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	[ReflectorType("FinalBuilder")]
-	public class FinalBuilderTask : ITask
+	public class FinalBuilderTask
+        : TaskBase, ITask
 	{
 		#region Fields
 

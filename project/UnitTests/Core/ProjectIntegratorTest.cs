@@ -10,6 +10,7 @@ using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.Remote.Events;
 using System.Threading;
 using System;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -237,7 +238,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             projectMock.SetupResult("MaxSourceControlRetries", 5);
             projectMock.SetupResult("SourceControlErrorHandling", ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
 			integrationTriggerMock.ExpectAndSignal("IntegrationCompleted");
-            integrator.ForceBuild("BuildForcer");
+            var parameters = new Dictionary<string, string>();
+            integrator.ForceBuild("BuildForcer", parameters);
 			integrationTriggerMock.WaitForSignal();
 			projectMock.WaitForSignal();
 			VerifyAll();
@@ -497,7 +499,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             projectMock.SetupResult("MaxSourceControlRetries", 5);
             projectMock.SetupResult("SourceControlErrorHandling", ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
             integrationTriggerMock.ExpectAndSignal("IntegrationCompleted");
-            integrator.ForceBuild(enforcer);
+            var parameters = new Dictionary<string, string>();
+            integrator.ForceBuild(enforcer, parameters);
             integrationTriggerMock.WaitForSignal();
             projectMock.WaitForSignal();
             VerifyAll();
@@ -548,7 +551,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             projectMock.SetupResult("MaxSourceControlRetries", 5);
             projectMock.SetupResult("SourceControlErrorHandling", ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
             integrationTriggerMock.ExpectAndSignal("IntegrationCompleted");
-            integrator.ForceBuild(enforcer);
+            var parameters = new Dictionary<string, string>();
+            integrator.ForceBuild(enforcer, parameters);
             integrationTriggerMock.WaitForSignal();
             projectMock.WaitForSignal();
             VerifyAll();
@@ -594,7 +598,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             projectMock.SetupResult("MaxSourceControlRetries", 5);
             projectMock.SetupResult("SourceControlErrorHandling", ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
             integrationTriggerMock.ExpectAndSignal("IntegrationCompleted");
-            integrator.ForceBuild(enforcer);
+            var parameters = new Dictionary<string, string>();
+            integrator.ForceBuild(enforcer, parameters);
             integrationTriggerMock.WaitForSignal();
             projectMock.WaitForSignal();
             VerifyAll();

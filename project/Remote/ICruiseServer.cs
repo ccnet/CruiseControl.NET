@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.Remote.Events;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -56,9 +57,8 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// </summary>
 		/// <param name="projectName">name of the project to force a build</param>
         /// <param name="enforcerName">name or id of the person, program that forces the build</param>
-        void ForceBuild(string sessionToken, string projectName, string enforcerName);
-
-
+        /// <param name="parameters">The parameters to use.</param>
+        void ForceBuild(string sessionToken, string projectName, string enforcerName, Dictionary<string, string> parameters);
 		
 		/// <summary>
 		/// Aborts the build of the selected project.
@@ -309,5 +309,12 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="userName">The user name to reset the password for.</param>
         /// <param name="newPassword">The person's new password.</param>
         void ResetPassword(string sessionToken, string userName, string newPassword);
+
+        /// <summary>
+        /// Lists all the parameters for a project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
+        List<ParameterBase> ListBuildParameters(string projectName);
     }
 }

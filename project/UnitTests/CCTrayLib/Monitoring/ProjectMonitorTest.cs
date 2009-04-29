@@ -288,8 +288,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void ForceBuildIsForwardedOn()
 		{
             mockServerMonitor.ExpectAndReturn("SessionToken", null);
-            mockProjectManager.Expect("ForceBuild", (string)null);
-			monitor.ForceBuild();
+            var parameters = new Dictionary<string, string>();
+            mockProjectManager.Expect("ForceBuild", (string)null, parameters);
+            monitor.ForceBuild(parameters);
 		}
 
 		[Test]

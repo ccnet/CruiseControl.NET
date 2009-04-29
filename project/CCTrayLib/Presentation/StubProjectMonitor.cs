@@ -2,6 +2,8 @@ using System;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -150,7 +152,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// No implementation.
 		}
 
-		public void ForceBuild()
+        public void ForceBuild(Dictionary<string, string> parameters)
 		{
 			throw new NotImplementedException();
 		}
@@ -226,5 +228,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             throw new InvalidOperationException();
         }
         #endregion
+
+        public List<ParameterBase> ListBuildParameters()
+        {
+            return null;
+        }
 	}
 }

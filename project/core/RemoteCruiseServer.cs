@@ -5,6 +5,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -64,9 +65,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			return server.GetProjectStatus();
 		}
 
-        public void ForceBuild(string sessionToken, string projectName, string enforcerName)
+        public void ForceBuild(string sessionToken, string projectName, string enforcerName, Dictionary<string, string> buildValues)
 		{
-            server.ForceBuild(sessionToken, projectName, enforcerName);
+            server.ForceBuild(sessionToken, projectName, enforcerName, buildValues);
 		}
 
 		public void AbortBuild(string sessionToken, string projectName, string enforcerName)
@@ -373,5 +374,15 @@ namespace ThoughtWorks.CruiseControl.Core
             server.ResetPassword(sessionToken, userName, newPassword);
         }
         #endregion
+
+        /// <summary>
+        /// Lists all the parameters for a project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
+        public virtual List<ParameterBase> ListBuildParameters(string projectName)
+        {
+            return server.ListBuildParameters(projectName);
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
@@ -14,6 +15,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		string BaseFromArtifactsDirectory(string pathToBase);
 		string BaseFromWorkingDirectory(string pathToBase);
         string BuildLogDirectory { get; set;}   
+
+        /// <summary>
+        ///  The parameters used.
+        /// </summary>
+        List<NameValuePair> Parameters { get; set; }
 
 		// Current integration state
 		BuildCondition BuildCondition { get; }

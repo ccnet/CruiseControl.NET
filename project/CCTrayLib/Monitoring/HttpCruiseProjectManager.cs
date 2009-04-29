@@ -2,6 +2,9 @@ using System;
 using System.Collections.Specialized;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
+using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -11,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		private readonly IWebRetriever webRetriever;
 		private readonly ICruiseServerManager serverManager;
 		private Uri dashboardUri;
+        private Uri parametersUri;
 		private Uri webUrl;
 		private string serverAlias = "local";
 
@@ -21,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			this.serverManager = serverManager;
 		}
 
-        public void ForceBuild(string sessionToken)
+        public void ForceBuild(string sessionToken, Dictionary<string, string> parameters)
 		{
 			PushDashboardButton(sessionToken, "ForceBuild");
 		}
@@ -58,6 +62,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public void PushDashboardButton(string sessionToken, string buttonName)
 		{
+            PushDashboardButton(sessionToken, buttonName, null);
+        }
+
+		public void PushDashboardButton(string sessionToken, string buttonName, Dictionary<string, string> parameters)
+		{
 			try
 			{
 				InitConnection();
@@ -66,6 +75,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				input.Add("projectName", projectName);
 				input.Add("serverName", serverAlias);
                 input.Add("sessionToken", sessionToken);
+                if (parameters != null)
+                {
+                    foreach (string key in parameters.Keys)
+                    {
+                        input.Add("param_" + key, parameters[key]);
+                    }
+                }
                 string response = webRetriever.Post(dashboardUri, input);
 
                 // The dashboard catches and handles all exceptions, these exceptions need to be passed on
@@ -114,6 +130,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				ExtractServerAlias();
 			}
             dashboardUri = new Uri(new WebDashboardUrl(serverManager.Configuration.Url, serverAlias).ViewFarmReport);
+            parametersUri = new Uri(new WebDashboardUrl(serverManager.Configuration.Url, serverAlias).ViewParametersReport(projectName));
 		}
 
 		private void ExtractServerAlias()
@@ -170,5 +187,49 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             throw new InvalidOperationException();
         }
         #endregion
+
+        /// <summary>
+        /// Retrieves any build parameters.
+        /// </summary>
+        /// <returns></returns>
+        public virtual List<ParameterBase> ListBuildParameters()
+        {
+            InitConnection();
+
+            string response = webRetriever.Post(parametersUri, new NameValueCollection());
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(response);
+            List<ParameterBase> results = new List<ParameterBase>();
+            foreach (XmlElement paramNode in document.SelectNodes("//parameter"))
+            {
+                XmlNodeList values = paramNode.SelectNodes("value");
+                if (values.Count > 0)
+                {
+                    RangeParameter parameter = new RangeParameter();
+                    List<string> allowedValues = new List<string>();
+                    foreach (XmlElement value in values)
+                    {
+                        allowedValues.Add(value.InnerText);
+                    }
+                    parameter.DataValues = allowedValues.ToArray();
+                    parameter.Name = paramNode.GetAttribute("name");
+                    parameter.DisplayName = paramNode.GetAttribute("displayName");
+                    parameter.Description = paramNode.GetAttribute("description");
+                    parameter.DefaultValue = paramNode.GetAttribute("defaultValue");
+                    results.Add(parameter);
+                }
+                else
+                {
+                    TextParameter parameter = new TextParameter();
+                    parameter.Name = paramNode.GetAttribute("name");
+                    parameter.DisplayName = paramNode.GetAttribute("displayName");
+                    parameter.Description = paramNode.GetAttribute("description");
+                    parameter.DefaultValue = paramNode.GetAttribute("defaultValue");
+                    results.Add(parameter);
+                }
+            }
+
+            return results;
+        }
 	}
 }

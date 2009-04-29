@@ -3,6 +3,7 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 {
@@ -37,8 +38,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void CanForceABuild()
 		{
+            var parameters = new Dictionary<string, string>();
 			mockCruiseManager.Expect("Request", null, PROJECT_NAME, new IntegrationRequest(BuildCondition.ForceBuild, Environment.UserName));
-			manager.ForceBuild(null);
+			manager.ForceBuild(null, parameters);
 		}
 	}
 }

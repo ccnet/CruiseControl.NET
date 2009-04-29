@@ -1,5 +1,6 @@
 using System;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -9,12 +10,14 @@ namespace ThoughtWorks.CruiseControl.Remote
 		public static readonly IntegrationRequest NullRequest = new IntegrationRequest(BuildCondition.NoBuild, "NullRequest");
 		private readonly BuildCondition buildCondition;
 		private readonly string source;
-        private bool publishOnSourceControlException;
+        private readonly DateTime requestTime;
+        private Dictionary<string, string> parameterValues = new Dictionary<string,string>();
 
 		public IntegrationRequest(BuildCondition buildCondition, string source)
 		{
 			this.buildCondition = buildCondition;
 			this.source = source;
+            this.requestTime = DateTime.Now;
 		}
 
 		public BuildCondition BuildCondition
@@ -26,6 +29,17 @@ namespace ThoughtWorks.CruiseControl.Remote
 		{
 			get { return source; }
 		}
+
+        public Dictionary<string, string> BuildValues
+        {
+            get { return parameterValues; }
+            set { parameterValues = value; }
+        }
+
+        public DateTime RequestTime
+        {
+            get { return requestTime; }
+        }
 
 		public override bool Equals(object obj)
 		{
@@ -46,10 +60,6 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Should the results of a failed source control exception be published?
         /// </summary>
-        public bool PublishOnSourceControlException
-        {
-            get { return publishOnSourceControlException; }
-            set { publishOnSourceControlException = value; }
-        }
+        public bool PublishOnSourceControlException { get; set; }
 	}
 }

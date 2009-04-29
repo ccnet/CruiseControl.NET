@@ -6,6 +6,7 @@ using ThoughtWorks.CruiseControl.CCTrayLib;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 {
@@ -235,7 +236,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         [ExpectedException(typeof(NotImplementedException))]
         public void ForceBuildThrowsAnNotImplementedException()
         {
-            aggregator.ForceBuild();
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            aggregator.ForceBuild(parameters);
         }
 
         [Test]

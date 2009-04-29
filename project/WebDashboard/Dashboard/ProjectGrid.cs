@@ -25,8 +25,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				rows.Add(
 					new ProjectGridRow(status,
 					                   serverSpecifier,
-                                       urlBuilder.BuildProjectUrl(ProjectReportProjectPlugin.ACTION_NAME, projectSpecifier)
-                                       ));
+                                       urlBuilder.BuildProjectUrl(ProjectReportProjectPlugin.ACTION_NAME, projectSpecifier),
+                                       urlBuilder.BuildProjectUrl(ProjectParametersAction.ActionName, projectSpecifier)));
 			}
 
 			rows.Sort(GetComparer(sortColumn, sortIsAscending));

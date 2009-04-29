@@ -5,6 +5,7 @@ using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Events;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -84,10 +85,13 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		public void ForceBuild(string enforcerName)
+		public void ForceBuild(string enforcerName, Dictionary<string, string> buildValues)
 		{
 			Log.Info(string.Format("{0} forced Build for project: {1}", enforcerName, project.Name));
-			AddToQueue(new IntegrationRequest(BuildCondition.ForceBuild, enforcerName));
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, enforcerName);
+            request.BuildValues = buildValues;
+			AddToQueue(request);
+
 			Start();
 		}
 

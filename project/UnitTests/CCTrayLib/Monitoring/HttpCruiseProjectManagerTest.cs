@@ -72,7 +72,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void ForceBuild()
 		{
-			manager.ForceBuild(null);
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            serverManagerMock.ExpectAndReturn("Configuration", new BuildServer(serverUrl));
+            manager.ForceBuild(null, parameters);
 			serverManagerMock.Verify();
 			webRetrieverMock.Verify();
 		}
@@ -80,6 +82,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void AbortBuild()
 		{
+            serverManagerMock.ExpectAndReturn("Configuration", new BuildServer(serverUrl));
             manager.AbortBuild(null);
 			serverManagerMock.Verify();
 			webRetrieverMock.Verify();
@@ -88,6 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void StartProject()
 		{
+            serverManagerMock.ExpectAndReturn("Configuration", new BuildServer(serverUrl));
             manager.StartProject(null);
 			serverManagerMock.Verify();
 			webRetrieverMock.Verify();
@@ -96,6 +100,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void StopProject()
 		{
+            serverManagerMock.ExpectAndReturn("Configuration", new BuildServer(serverUrl));
             manager.StopProject(null);
 			serverManagerMock.Verify();
 			webRetrieverMock.Verify();

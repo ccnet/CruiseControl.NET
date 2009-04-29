@@ -340,6 +340,12 @@
     <Compile Include="Presentation\AudioSettingsControl.Designer.cs">
       <DependentUpon>AudioSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presentation\BuildParameters.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\BuildParameters.Designer.cs">
+      <DependentUpon>BuildParameters.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentation\BuildProjectsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -580,6 +586,9 @@
     <EmbeddedResource Include="Presentation\AudioSettingsControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AudioSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\BuildParameters.resx">
+      <DependentUpon>BuildParameters.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\BuildProjectsControl.resx">
       <SubType>Designer</SubType>

@@ -1,5 +1,7 @@
 using System;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -17,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			this.projectName = projectName;
 		}
 
-        public void ForceBuild(string sessionToken)
+        public void ForceBuild(string sessionToken, Dictionary<string, string> parameters)
 		{
 			try
 			{
@@ -158,5 +160,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             return fileTransfer;
         }
         #endregion
+
+        /// <summary>
+        /// Retrieves any build parameters.
+        /// </summary>
+        /// <returns></returns>
+        public virtual List<ParameterBase> ListBuildParameters()
+        {
+            return manager.ListBuildParameters(projectName);
+        }
 	}
 }

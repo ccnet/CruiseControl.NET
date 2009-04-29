@@ -2,6 +2,8 @@ using System.ComponentModel;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -47,9 +49,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			get { return projectMonitor.ProjectIntegratorState; }
 		}
 		
-		public void ForceBuild()
+        public void ForceBuild(Dictionary<string, string> parameters)
 		{
-			projectMonitor.ForceBuild();
+			projectMonitor.ForceBuild(parameters);
 		}
 		
 		public void AbortBuild()
@@ -173,5 +175,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             return projectMonitor.RetrieveFileTransfer(fileName);
         }
         #endregion
-	}
+
+        public List<ParameterBase> ListBuildParameters()
+        {
+            return projectMonitor.ListBuildParameters();
+        }
+    }
 }

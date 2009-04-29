@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Security;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -25,12 +26,17 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
         #region Unsecured Build Methods
-		public void ForceBuild(string project, string enforcerName)
-		{
-            cruiseServer.ForceBuild(null, project, enforcerName);
-		}
+        public void ForceBuild(string project, string enforcerName)
+        {
+            cruiseServer.ForceBuild(null, project, enforcerName, new Dictionary<string,string>());
+        }
 
-		public void AbortBuild(string project, string enforcerName)
+        public void ForceBuild(string project, string enforcerName, Dictionary<string, string> parameters)
+        {
+            cruiseServer.ForceBuild(null, project, enforcerName, parameters);
+        }
+
+        public void AbortBuild(string project, string enforcerName)
 		{
             cruiseServer.AbortBuild(null, project, enforcerName);
 		}
@@ -56,12 +62,15 @@ namespace ThoughtWorks.CruiseControl.Core
         }
         #endregion
 
-
-
         #region Secured Build Methods
         public void ForceBuild(string sessionToken, string projectName, string enforcerName)
         {
-            cruiseServer.ForceBuild(sessionToken, projectName, enforcerName);
+            cruiseServer.ForceBuild(sessionToken, projectName, enforcerName, new Dictionary<string,string>());
+        }
+
+        public void ForceBuild(string sessionToken, string projectName, string enforcerName, Dictionary<string, string> parameters)
+        {
+            cruiseServer.ForceBuild(sessionToken, projectName, enforcerName, parameters);
         }
 
         public void AbortBuild(string sessionToken, string projectName, string enforcerName)
@@ -94,7 +103,6 @@ namespace ThoughtWorks.CruiseControl.Core
             cruiseServer.CancelPendingRequest(sessionToken, projectName);
         }
         #endregion
-
 
 		public void WaitForExit(string project)
 		{
@@ -373,5 +381,15 @@ namespace ThoughtWorks.CruiseControl.Core
         }
 
         #endregion
-	}
+
+        /// <summary>
+        /// Lists all the parameters for a project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
+        public virtual List<ParameterBase> ListBuildParameters(string projectName)
+        {
+            return cruiseServer.ListBuildParameters(projectName);
+        }
+    }
 }

@@ -251,9 +251,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			server.Start();
 
-            integratorMock1.Expect("ForceBuild", "BuildForcer");
+            var parameters = new Dictionary<string, string>();
+            integratorMock1.Expect("ForceBuild", "BuildForcer", parameters);
 
-			server.ForceBuild(null,"Project 1","BuildForcer");
+            server.ForceBuild(null, "Project 1", "BuildForcer", parameters);
 
 			VerifyAll();
 		}
@@ -261,7 +262,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test, ExpectedException(typeof (NoSuchProjectException))]
 		public void AttemptToForceBuildOnProjectThatDoesNotExist()
 		{
-            server.ForceBuild(null,"foo", "BuildForcer");
+            var parameters = new Dictionary<string, string>();
+            server.ForceBuild(null, "foo", "BuildForcer", parameters);
 		}
 
 		[Test]
@@ -446,7 +448,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.AreEqual(enforcer, e.Data);
             };
 
-            server.ForceBuild(null, projectName, enforcer);
+            var parameters = new Dictionary<string, string>();
+            server.ForceBuild(null, projectName, enforcer, parameters);
             Assert.IsTrue(forceBuildReceived, "ForceBuildReceived not fired");
             Assert.IsTrue(forceBuildProcessed, "ForceBuildProcessed not fired");
         }
@@ -470,7 +473,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.Fail("ForceBuildProcessed has been fired");
             };
 
-            server.ForceBuild(null, projectName, enforcer);
+            var parameters = new Dictionary<string, string>();
+            server.ForceBuild(null, projectName, enforcer, parameters);
             Assert.IsTrue(forceBuildReceived, "ForceBuildReceived not fired");
         }
 

@@ -88,7 +88,8 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                 }
 				QueuedRequestSnapshot queuedRequestSnapshot = new QueuedRequestSnapshot(
 					integrationQueueItem.Project.Name,
-                    projectActivity);
+                    projectActivity,
+                    integrationQueueItem.IntegrationRequest.RequestTime);
 				queueSnapshot.Requests.Add(queuedRequestSnapshot);
 			}
 			return queueSnapshot;

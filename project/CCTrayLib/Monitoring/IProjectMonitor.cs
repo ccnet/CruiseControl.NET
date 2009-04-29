@@ -1,4 +1,6 @@
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -22,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		event MonitorPolledEventHandler Polled;
 		event MessageEventHandler MessageReceived;
 
-		void ForceBuild();
+		void ForceBuild(Dictionary<string, string> parameters);
 		void AbortBuild();
 		void FixBuild(string fixingUserName);
 		void StopProject();
@@ -53,5 +55,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         /// <param name="fileName">The name of the file.</param>
         IFileTransfer RetrieveFileTransfer(string fileName);
         #endregion
+
+        List<ParameterBase> ListBuildParameters();
 	}
 }

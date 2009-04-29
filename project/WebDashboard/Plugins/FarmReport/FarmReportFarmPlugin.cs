@@ -15,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 		public static readonly string ACTION_NAME = "ViewFarmReport";
 
 		private readonly IProjectGridAction projectGridAction;
+        private readonly ProjectParametersAction parametersAction;
         private ProjectGridSortColumn? sortColumn;
 
         #region Public properties
@@ -41,9 +42,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
         #endregion
         #endregion
 
-        public FarmReportFarmPlugin(IProjectGridAction projectGridAction)
+        public FarmReportFarmPlugin(IProjectGridAction projectGridAction, ProjectParametersAction parametersAction)
 		{
 			this.projectGridAction = projectGridAction;
+            this.parametersAction = parametersAction;
 		}
 
 		public IResponse Execute(ICruiseRequest request)
@@ -59,7 +61,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 
 		public INamedAction[] NamedActions
 		{
-			get {  return new INamedAction[] { new ImmutableNamedAction(ACTION_NAME, this) }; }
+            get
+            {
+                return new INamedAction[] { new ImmutableNamedAction(ACTION_NAME, this),
+                        new ImmutableNamedActionWithoutSiteTemplate(ProjectParametersAction.ActionName, parametersAction)
+                    };
+            }
 		}
 	}
 }

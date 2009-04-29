@@ -6,7 +6,8 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     [ReflectorType("modificationWriter")]
-    public class ModificationWriterTask : ITask
+    public class ModificationWriterTask 
+        : TaskBase, ITask
     {
         private readonly IFileSystem fileSystem;
 

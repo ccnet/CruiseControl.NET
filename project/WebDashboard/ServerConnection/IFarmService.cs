@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
-
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
@@ -13,7 +13,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		void DeleteProject(IProjectSpecifier projectSpecifier, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment);
 		string GetServerLog(IServerSpecifier serverSpecifier);
 		string GetServerLog(IProjectSpecifier specifier);
-
 
         #region Unsecure Project Methods
         /// <summary>
@@ -33,7 +32,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// </summary>
         /// <param name="projectSpecifier"></param>
         /// <param name="enforcerName"></param>
-		void ForceBuild(IProjectSpecifier projectSpecifier, string enforcerName);
+        void ForceBuild(IProjectSpecifier projectSpecifier, string enforcerName);
+        void ForceBuild(IProjectSpecifier projectSpecifier, string enforcerName, Dictionary<string, string> parameters);
 
         /// <summary>
         /// Unsecure abort build project, use for projects without security setup
@@ -66,6 +66,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <param name="sessionToken"></param>
         /// <param name="enforcerName"></param>
         void ForceBuild(IProjectSpecifier projectSpecifier, string sessionToken, string enforcerName);
+        void ForceBuild(IProjectSpecifier projectSpecifier, string sessionToken, string enforcerName, Dictionary<string, string> parameters);
 
         /// <summary>
         /// Secure abort build  project,  use for projects with security setup
@@ -180,5 +181,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <param name="projectName">The name of the project.</param>
         /// <returns>The snapshot of the current status.</returns>
         ProjectStatusSnapshot TakeStatusSnapshot(IProjectSpecifier projectSpecifier);
+
+        /// <summary>
+        /// Lists all the parameters for a project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
+        List<ParameterBase> ListBuildParameters(IProjectSpecifier projectSpecifier);
     }
 }

@@ -1,3 +1,35 @@
+    <script type="text/javascript">
+  $(document).ready(function(){
+      $('#parameterCheck').dialog({
+        autoOpen:false,
+        modal:true,
+        title:'Project Parameters',
+        width:400,
+        height:300,
+        overlay:{
+          opacity:0.5,
+          background:'black'
+        }
+      });
+  });
+  function checkForParams(buttonEl, checkUrl){
+    $('#parameterEditor').replaceWith('<div id="parameterEditor">Loading parameters, please wait...</div>');
+    $('#parameterCheck').dialog('open');
+    jQuery.get(checkUrl, function(data){
+      if(data=='NONE'){
+        $('#parameterCheck').dialog('close');
+        var button = $(buttonEl);
+        button.after('<input type="hidden" name="ForceBuild" value="Force" />');
+        buttonEl.parentNode.parentNode.submit();
+      }else{
+        $('#parameterEditor').replaceWith('<div id="parameterEditor">' + data + '</div>');
+      }
+    });
+  }
+</script>
+<div id="parameterCheck">
+  <div id="parameterEditor">Loading parameters, please wait...</div>
+</div>
 <form ID="RefreshForm" method="post">
 <table width="100%">
 <tr>
@@ -105,8 +137,12 @@
                 <input type="hidden" name="serverName" value="$projectGridRow.ServerName" />
                     <font color="Black">
                     #if ($projectGridRow.allowForceBuild)
+          #if($projectGridRow.ForceAbortBuildButtonValue == "Force")
+          <input type="button" name="$projectGridRow.ForceAbortBuildButtonName" value="$projectGridRow.ForceAbortBuildButtonValue" onclick="checkForParams(this, '$projectGridRow.ParametersUrl')"/>
+          #else
                         <input type="submit" name="$projectGridRow.ForceAbortBuildButtonName" value="$projectGridRow.ForceAbortBuildButtonValue"/>
                     #end
+          #end
                     #if ($projectGridRow.AllowStartStopBuild)               
                         <input type="submit" name="$projectGridRow.StartStopButtonName" value="$projectGridRow.StartStopButtonValue"/>
                     #end

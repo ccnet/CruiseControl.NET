@@ -7,6 +7,7 @@ using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
@@ -59,9 +60,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		}
 
         public void ForceBuild(IProjectSpecifier projectSpecifier, string sessionToken, string enforcerName)
-		{
-            GetCruiseManager(projectSpecifier.ServerSpecifier).ForceBuild(sessionToken, projectSpecifier.ProjectName, enforcerName);
-		}
+        {
+            ForceBuild(projectSpecifier, sessionToken, enforcerName, new Dictionary<string, string>());
+        }
+
+        public void ForceBuild(IProjectSpecifier projectSpecifier, string sessionToken, string enforcerName, Dictionary<string, string> parameters)
+        {
+            GetCruiseManager(projectSpecifier.ServerSpecifier).ForceBuild(sessionToken, projectSpecifier.ProjectName, enforcerName, parameters);
+        }
 
         public void AbortBuild(IProjectSpecifier projectSpecifier, string sessionToken, string enforcerName)
 		{
@@ -82,8 +88,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         }
 
         public void ForceBuild(IProjectSpecifier projectSpecifier, string enforcerName)
-			{
-            ForceBuild(projectSpecifier, null, enforcerName);
+        {
+            ForceBuild(projectSpecifier, null, enforcerName, new Dictionary<string, string>());
+        }
+
+        public void ForceBuild(IProjectSpecifier projectSpecifier, string enforcerName, Dictionary<string, string> parameters)
+        {
+            ForceBuild(projectSpecifier, null, enforcerName, parameters);
         }
 
         public void AbortBuild(IProjectSpecifier projectSpecifier, string enforcerName)
@@ -375,9 +386,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
             return GetCruiseManager(serverSpecifier).ReadAuditRecords(sessionToken, startPosition, numberOfRecords, filter);
         }
 
-
-
-
         private ICruiseManager GetCruiseManager(IBuildSpecifier buildSpecifier)
         {
             return GetCruiseManager(buildSpecifier.ProjectSpecifier);
@@ -440,15 +448,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
             }
             return (IBuildSpecifier[])buildSpecifiers.ToArray(typeof(IBuildSpecifier));
         }
-        
+
         private string GetServerUrl(IServerSpecifier serverSpecifier)
         {
             foreach (ServerLocation serverLocation in ServerLocations)
             {
                 if (StringUtil.EqualsIgnoreCase(serverLocation.Name, serverSpecifier.ServerName))
-        {
+                {
                     return serverLocation.Url;
-        }
+                }
             }
 
             throw new UnknownServerException(serverSpecifier.ServerName);
@@ -462,6 +470,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         public ProjectStatusSnapshot TakeStatusSnapshot(IProjectSpecifier projectSpecifier)
         {
             return GetCruiseManager(projectSpecifier).TakeStatusSnapshot(projectSpecifier.ProjectName);
+        }
+
+        /// <summary>
+        /// Lists all the parameters for a project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
+        public List<ParameterBase> ListBuildParameters(IProjectSpecifier projectSpecifier)
+        {
+            var parameters = GetCruiseManager(projectSpecifier).ListBuildParameters(projectSpecifier.ProjectName);
+            return parameters;
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Security;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -16,14 +17,21 @@ namespace ThoughtWorks.CruiseControl.Remote
 
 
         #region Unsecured Build Methods
-
-
 		/// <summary>
 		/// Forces a build for the named project.
 		/// </summary>
 		/// <param name="projectName">project to force</param>
         /// <param name="enforcerName">ID of trigger/action forcing the build</param>
         void ForceBuild(string projectName, string enforcerName);
+
+        /// <summary>
+        /// Forces a build for the named project.
+        /// </summary>
+        /// <param name="projectName">project to force</param>
+        /// <param name="enforcerName">ID of trigger/action forcing the build</param>
+        /// <param name="parameters">The parameters to use.</param>
+        void ForceBuild(string projectName, string enforcerName, Dictionary<string, string> parameters);
+        
         /// <summary>
         /// Aborts the build for the named project
         /// </summary>
@@ -59,6 +67,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 
         #region Secured Build Methods
         void ForceBuild(string sessionToken, string projectName, string enforcerName);
+        void ForceBuild(string sessionToken, string projectName, string enforcerName, Dictionary<string, string> parameters);
         void AbortBuild(string sessionToken, string projectName, string enforcerName);
         void Request(string sessionToken, string projectName, IntegrationRequest integrationRequest);
 
@@ -266,5 +275,12 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="newPassword">The person's new password.</param>
         void ResetPassword(string sessionToken, string userName, string newPassword);
         #endregion
+
+        /// <summary>
+        /// Lists all the parameters for a project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
+        List<ParameterBase> ListBuildParameters(string projectName);
     }
 }

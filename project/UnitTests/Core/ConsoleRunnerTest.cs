@@ -3,6 +3,8 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
+using NMock.Constraints;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -46,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			ArgumentParser parser = new ArgumentParser(new string[] { "-project:test" });
 			Mock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
-            mockCruiseServer.Expect("ForceBuild", (string)null, "test", "Forcing build on start");
+            mockCruiseServer.Expect("ForceBuild", (string)null, "test", "Forcing build on start", new ParametersConstraint());
             mockCruiseServer.Expect("WaitForExit", "test");
 			Mock mockCruiseServerFactory = new DynamicMock(typeof(ICruiseServerFactory));
 			mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, parser.UseRemoting, parser.ConfigFile);
@@ -82,6 +84,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             new ConsoleRunner(parser, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance).Run();
 
             mockCruiseServer.Verify();
+        }
+    }
+
+    public class ParametersConstraint : BaseConstraint
+    {
+        public override bool Eval(object val)
+        {
+            return val is Dictionary<string, string>;
+        }
+
+        public override string Message
+        {
+            get { return "Expected a Dictionary<string, string>."; }
         }
     }
 }

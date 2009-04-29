@@ -13,7 +13,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	/// This allows to clean up the artifacts by ccnet itself, which is more neat. 
 	/// </summary>
 	[ReflectorType("artifactcleanup")]
-	internal class ArtifactCleanUpTask: ITask
+    internal class ArtifactCleanUpTask
+        : TaskBase, ITask
 	{
 		/// <summary>
 		/// Supported cleaning up methods

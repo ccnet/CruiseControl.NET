@@ -5,6 +5,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 {
@@ -22,8 +23,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			mockProjectMonitor.ExpectAndReturn("ProjectState", null);
 			Assert.IsNull(monitor.ProjectState);
 
-			mockProjectMonitor.Expect("ForceBuild");
-			monitor.ForceBuild();
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+			mockProjectMonitor.Expect("ForceBuild", parameters);
+			monitor.ForceBuild(parameters);
 
 			mockProjectMonitor.Expect("Poll");
 			monitor.Poll();

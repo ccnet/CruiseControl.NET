@@ -3,6 +3,8 @@ using System.Diagnostics;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -233,11 +235,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
         private delegate void ActionHandler();
 
-		public void ForceBuild()
+        public void ForceBuild(Dictionary<string, string> parameters)
 		{
             AttemptActionWithRetry(delegate()
             {
-                cruiseProjectManager.ForceBuild(serverMonitor.SessionToken);
+                cruiseProjectManager.ForceBuild(serverMonitor.SessionToken, parameters);
             });
 		}
 		
@@ -387,6 +389,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             return fileTransfer;
         }
         #endregion
+
+        public List<ParameterBase> ListBuildParameters()
+        {
+            return cruiseProjectManager.ListBuildParameters();
+        }
 	}
 
 	public delegate void MessageEventHandler(Message message);

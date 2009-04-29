@@ -176,6 +176,10 @@
     <Compile Include="NoSuchProjectException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Parameters\ParameterBase.cs" />
+    <Compile Include="Parameters\RangeParameter.cs" />
+    <Compile Include="Parameters\TextParameter.cs" />
+    <Compile Include="Parameters\NumericParameter.cs" />
     <Compile Include="PackageDetails.cs" />
     <Compile Include="ProjectActivity.cs">
       <SubType>Code</SubType>

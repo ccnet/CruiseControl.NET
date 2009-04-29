@@ -1,3 +1,5 @@
+using ThoughtWorks.CruiseControl.Remote.Parameters;
+using System.Collections.Generic;
 
 using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
@@ -9,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	/// </summary>
 	public interface ICruiseProjectManager
 	{
-        void ForceBuild(string sessionToken);
+        void ForceBuild(string sessionToken, Dictionary<string, string> parameters);
 		void FixBuild(string sessionToken, string fixingUserName);
         void AbortBuild(string sessionToken);
         void StopProject(string sessionToken);
@@ -41,5 +43,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         /// <param name="fileName">The name of the file.</param>
         IFileTransfer RetrieveFileTransfer(string fileName);
         #endregion
+
+        /// <summary>
+        /// Retrieves any build parameters.
+        /// </summary>
+        /// <returns></returns>
+        List<ParameterBase> ListBuildParameters();
 	}
 }

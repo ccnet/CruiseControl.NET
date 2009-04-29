@@ -1,6 +1,7 @@
 using ThoughtWorks.CruiseControl.Remote;
 using System;
 using ThoughtWorks.CruiseControl.Remote.Events;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -49,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// when CC.Net first starts.
 		/// </summary>
         /// <param name="enforcerName">ID of program/person forcing the build</param>
-        void ForceBuild(string enforcerName);
+        void ForceBuild(string enforcerName, Dictionary<string, string> buildValues);
 		
 		/// <summary>
 		/// Aborts the build of the selected project.

@@ -10,11 +10,16 @@ namespace ThoughtWorks.CruiseControl.Remote
 	{
 		private string projectName;
 	    private ProjectActivity activity;
+        private DateTime requestTime;
 
 		public QueuedRequestSnapshot(string projectName, ProjectActivity activity)
+            : this(projectName, activity, DateTime.MinValue) { }
+
+        public QueuedRequestSnapshot(string projectName, ProjectActivity activity, DateTime requestTime)
 		{
 			this.projectName = projectName;
             this.activity = activity;
+            this.requestTime = requestTime;
 		}
 
 		public string ProjectName
@@ -26,5 +31,11 @@ namespace ThoughtWorks.CruiseControl.Remote
 	    {
 	        get { return activity; }
 	    }
+
+        public DateTime RequestTime
+        {
+            get { return requestTime; }
+            set { requestTime = value; }
+        }
 	}
 }

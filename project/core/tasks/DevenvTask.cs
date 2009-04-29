@@ -8,7 +8,8 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	[ReflectorType("devenv")]
-	public class DevenvTask : ITask
+	public class DevenvTask
+        : TaskBase, ITask
 	{
 		public const string VS2008_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\9.0";
 		public const string VS2005_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\8.0";

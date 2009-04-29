@@ -7,6 +7,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using System.Web;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -64,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             urlBuilder = request.UrlBuilder.InnerBuilder;
 			Hashtable velocityContext = new Hashtable();
             velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(request.Request);
-            
+            velocityContext["parametersCall"] = new ServerLink(cruiseUrlBuilder, new DefaultServerSpecifier("null"), string.Empty, ProjectParametersAction.ActionName).Url;
 
 			velocityContext["wholeFarm"] = serverSpecifier == null ?  true : false;
 
@@ -164,6 +165,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             {
                 sessionToken = sessionRetriever.RetrieveSessionToken(request);
             }
+
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            foreach (string parameterName in HttpContext.Current.Request.Form.AllKeys)
+            {
+                if (parameterName.StartsWith("param_"))
+                {
+                    parameters.Add(parameterName.Substring(6), HttpContext.Current.Request.Form[parameterName]);
+                }
+            }
+
+            // Make the actual call
 			if (request.FindParameterStartingWith("StopBuild") != string.Empty)
 			{
 				farmService.Stop(ProjectSpecifier(request), sessionToken);
@@ -176,7 +188,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			}
 			else if (request.FindParameterStartingWith("ForceBuild") != string.Empty)
 			{
-				farmService.ForceBuild(ProjectSpecifier(request), sessionToken, "Dashboard");
+				farmService.ForceBuild(ProjectSpecifier(request), sessionToken, "Dashboard", parameters);
 				return string.Format("Build successfully forced for {0}", SelectedProject(request));
 			}
 			else if (request.FindParameterStartingWith("AbortBuild") != string.Empty)

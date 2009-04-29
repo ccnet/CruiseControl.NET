@@ -13,6 +13,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Events;
 using ThoughtWorks.CruiseControl.Remote.Security;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -31,6 +32,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private bool disposed;
 		private IQueueManager integrationQueueManager;
 
+        #region Constructors
 		public CruiseServer(IConfigurationService configurationService,
 		                    IProjectIntegratorListFactory projectIntegratorListFactory, 
                             IProjectSerializer projectSerializer,
@@ -58,6 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
             this.configurationService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(Restart));
         }
+		#endregion
 
         #region Integration pass-through events
         /// <summary>
@@ -205,13 +208,13 @@ namespace ThoughtWorks.CruiseControl.Core
 			return integrationQueueManager.GetProjectStatuses();
 		}
 
-		public void ForceBuild(string sessionToken, string projectName, string enforcerName)
+        public void ForceBuild(string sessionToken, string projectName, string enforcerName, Dictionary<string, string> buildValues)
 		{
             if (!FireForceBuildReceived(projectName, enforcerName))
             {
             	string displayName = CheckSecurity(sessionToken, projectName, SecurityPermission.ForceBuild, SecurityEvent.ForceBuild);
             	if (!string.IsNullOrEmpty(displayName)) enforcerName = displayName;
-                integrationQueueManager.ForceBuild(projectName, enforcerName);
+                integrationQueueManager.ForceBuild(projectName, enforcerName, buildValues);
                 FireForceBuildProcessed(projectName, enforcerName);
             }
 		}
@@ -868,5 +871,25 @@ namespace ThoughtWorks.CruiseControl.Core
             }
             return config.ToString();
         }
-	}
+
+        #region ListBuildParameters()
+        /// <summary>
+        /// Lists all the parameters for a project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
+        public virtual List<ParameterBase> ListBuildParameters(string projectName)
+        {
+            List<ParameterBase> parameters = new List<ParameterBase>();
+            IProjectIntegrator projectIntegrator = GetIntegrator(projectName);
+            if (projectIntegrator == null) throw new NoSuchProjectException(projectName);
+            IProject project = projectIntegrator.Project;
+            if (project is IParamatisedProject)
+            {
+                parameters = (project as IParamatisedProject).ListBuildParameters();
+            }
+            return parameters;
+        }
+        #endregion
+    }
 }

@@ -5,7 +5,8 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	[ReflectorType("merge")]
-	public class MergeFilesTask : ITask
+	public class MergeFilesTask
+        : TaskBase, ITask
 	{
 		[ReflectorArray("files")]
 		public string[] MergeFiles = new string[0];

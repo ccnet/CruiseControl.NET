@@ -361,8 +361,14 @@
     <Compile Include="Core\Security\Auditing\FileXmlLoggerTests.cs" />
     <Compile Include="Core\Security\RolePermissionTests.cs" />
     <Compile Include="Core\Security\UserNameTests.cs" />
+    <Compile Include="Core\Tasks\ReplacementDynamicValueTests.cs" />
+    <Compile Include="Core\Tasks\DirectDynamicValueTests.cs" />
+    <Compile Include="Core\Tasks\DynamicValueUtilityTests.cs" />
     <Compile Include="Remote\BadReferenceExceptionTests.cs" />
     <Compile Include="Remote\NoSuchProjectExceptionTests.cs" />
+    <Compile Include="Remote\Parameters\RangeParameterTests.cs" />
+    <Compile Include="Remote\Parameters\TextParameterTests.cs" />
+    <Compile Include="Remote\Parameters\NumericParameterTests.cs" />
     <Compile Include="Remote\Security\AuditFiltersTests.cs" />
     <Compile Include="Remote\Security\AuditRecordTests.cs" />
     <Compile Include="Remote\UserNameCredentialsTests.cs" />

@@ -6,6 +6,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using System;
 using ThoughtWorks.CruiseControl.Remote.Events;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -90,9 +91,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			return integrator;
 		}
 
-		public void ForceBuild(string projectName, string enforcerName)
+        public void ForceBuild(string projectName, string enforcerName, Dictionary<string, string> buildValues)
 		{
-            GetIntegrator(projectName).ForceBuild(enforcerName);
+            GetIntegrator(projectName).ForceBuild(enforcerName, buildValues);
 		}
 
 		public void WaitForExit(string projectName)

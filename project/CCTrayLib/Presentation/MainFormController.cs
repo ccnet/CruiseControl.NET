@@ -8,6 +8,8 @@ using ThoughtWorks.CruiseControl.CCTrayLib.X10;
 #if !DISABLE_COM
 using ThoughtWorks.CruiseControl.CCTrayLib.Speech;
 #endif
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -136,13 +138,52 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             }
         }
 
-		public void ForceBuild()
+        public List<ParameterBase> ListBuildParameters()
+        {
+            IProjectMonitor project = SelectedProject;
+            if (project != null)
+            {
+                return SelectedProject.ListBuildParameters();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void ForceBuild()
+        {
+            List<ParameterBase> buildParameters = ListBuildParameters();
+            if ((buildParameters == null) || (buildParameters.Count == 0))
+            {
+                ForceBuild(null);
+            }
+            else
+            {
+                BuildParameters display = new BuildParameters(this, buildParameters);
+                display.ShowDialog();
+            }
+        }
+
+		public void ForceBuild(Dictionary<string, string> parameters)
 		{
             if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
             {
-                RunSecureMethod(b => {
-                    SelectedProject.ForceBuild();
-                }, "ForceBuild");
+                try
+                {
+                	RunSecureMethod(b => {
+                    	SelectedProject.ForceBuild(parameters);
+                	}, "ForceBuild");
+                }
+                catch (Exception error)
+                {
+                    MessageBox.Show("An unexpected error has occurred while trying to force build" +
+                            Environment.NewLine +
+                            error.Message, 
+                        "Unknown error", 
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Error);
+                }
             }
 		}
 

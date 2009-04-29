@@ -35,6 +35,20 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             writer.WriteAttributeString("buildCondition", request.BuildCondition.ToString());
             writer.WriteString(request.ToString());
             writer.WriteEndElement();
+
+            // Output the parameters
+            if ((request.BuildValues != null) && (request.BuildValues.Count > 0))
+            {
+                writer.WriteStartElement(Elements.Parameters);
+                foreach (string key in request.BuildValues.Keys)
+                {
+                    writer.WriteStartElement(Elements.Parameter);
+                    writer.WriteAttributeString("name", key);
+                    writer.WriteAttributeString("value", request.BuildValues[key]);
+                    writer.WriteEndElement();
+                }
+                writer.WriteEndElement();
+            }
         }
 
         private void WriteTaskResults(IIntegrationResult result)
@@ -184,6 +198,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             public const string MODIFICATIONS = "modifications";
             public const string EXCEPTION = "exception";
             public const string Request = "request";
+            public const string Parameters = "parameters";
+            public const string Parameter = "parameter";
             public const string IntegrationProps = "integrationProperties";
         }
 

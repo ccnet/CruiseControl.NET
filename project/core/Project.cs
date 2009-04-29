@@ -15,6 +15,8 @@ using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
+using System.Text;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -37,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.Core
     /// </remarks>
     [ReflectorType("project")]
     public class Project : ProjectBase, IProject, IIntegrationRunnerTarget, IIntegrationRepository,
-        IConfigurationValidation, IStatusSnapshotGenerator
+        IConfigurationValidation, IStatusSnapshotGenerator, IParamatisedProject
     {
         private string webUrl = DefaultUrl();
         private string queueName = string.Empty;
@@ -54,6 +56,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private ArrayList messages = new ArrayList();
         private int maxSourceControlRetries = 5;
         private IProjectAuthorisation security = new NullProjectAuthorisation();
+        private ParameterBase[] parameters = new ParameterBase[0];
         private ProjectInitialState initialState = ProjectInitialState.Started;
         private ProjectStartupMode startupMode = ProjectStartupMode.UseLastState;
         private bool StopProjectOnReachingMaxSourceControlRetries = false;
@@ -105,6 +108,12 @@ namespace ThoughtWorks.CruiseControl.Core
             set { security = value; }
         }
 
+        [ReflectorProperty("parameters", Required=false)]
+        public ParameterBase[] Parameters
+        {
+            get { return parameters; }
+            set { parameters = value; }
+        }
 
         [ReflectorProperty("state", InstanceTypeKey = "type", Required = false), Description("State")]
         public IStateManager StateManager
@@ -377,19 +386,60 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public void Prebuild(IIntegrationResult result)
         {
+            Prebuild(result, new Dictionary<string, string>());
+        }
 
-            RunTasks(result, PrebuildTasks);
+        public void Prebuild(IIntegrationResult result, Dictionary<string, string> parameterValues)
+		{
+            RunTasks(result, PrebuildTasks, parameterValues);
+        }
+
+        public virtual void ValidateParameters(Dictionary<string, string> parameterValues)
+        {
+            Log.Debug("Validating parameters");
+            if (parameters != null)
+            {
+                List<Exception> results = new List<Exception>();
+                foreach (ParameterBase parameter in parameters)
+                {
+                    string value = null;
+                    if (parameterValues.ContainsKey(parameter.Name)) value = parameterValues[parameter.Name];
+                    results.AddRange(parameter.Validate(value));
+                }
+                if (results.Count > 0)
+                {
+                    var error = new StringBuilder();
+                    error.Append("The following errors were found in the parameters:");
+                    foreach (Exception err in results)
+                    {
+                        error.Append(Environment.NewLine + err.Message);
+                    }
+                    Exception exception = new Exception(error.ToString());
+                    Log.Warning(exception);
+                    throw exception;
+                }
+            }
         }
 
         public void Run(IIntegrationResult result)
         {
-            RunTasks(result, tasks);
+            Run(result, new Dictionary<string, string>());
         }
 
-        private void RunTasks(IIntegrationResult result, IList tasksToRun)
+        public void Run(IIntegrationResult result, Dictionary<string, string> parameterValues)
+		{
+            RunTasks(result, tasks, parameterValues);
+        }
+
+        private void RunTasks(IIntegrationResult result, IList tasksToRun, Dictionary<string, string> parameterValues)
         {
             foreach (ITask task in tasksToRun)
             {
+                if (task is IParamatisedTask)
+                {
+                    (task as IParamatisedTask).ApplyParameters(parameterValues);
+                }
+
                 RunTask(task, result);
                 if (result.Failed) break;
             }
@@ -403,6 +453,11 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public void PublishResults(IIntegrationResult result)
         {
+            PublishResults(result, new Dictionary<string, string>());
+        }
+
+		public void PublishResults(IIntegrationResult result, Dictionary<string, string> parameterValues)
+		{
             // Make sure all the tasks have been cancelled
             CancelTasks(PrebuildTasks);
             CancelTasks(Tasks);
@@ -411,6 +466,11 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 try
                 {
+                    if (publisher is IParamatisedTask)
+                    {
+                        (publisher as IParamatisedTask).ApplyParameters(parameterValues);
+                    }
+
                     RunTask(publisher, result);
                 }
                 catch (Exception e)
@@ -954,5 +1014,21 @@ namespace ThoughtWorks.CruiseControl.Core
             return packages;
         }
         #endregion
+
+        /// <summary>
+        /// Lists the parameters for the project.
+        /// </summary>
+        /// <returns></returns>
+        public virtual List<ParameterBase> ListBuildParameters()
+        {
+            if (parameters == null)
+            {
+                return new List<ParameterBase>();
+            }
+            else
+            {
+                return new List<ParameterBase>(parameters);
+            }
+        }
     }
 }

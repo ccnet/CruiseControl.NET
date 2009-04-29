@@ -198,6 +198,7 @@
     <Compile Include="Dashboard\ISessionRetriever.cs" />
     <Compile Include="Dashboard\ISessionStore.cs" />
     <Compile Include="Dashboard\LoginViewBuilder.cs" />
+    <Compile Include="Dashboard\ProjectParametersAction.cs" />
     <Compile Include="Plugins\Administration\AdministerAction.cs" />
     <Compile Include="Plugins\Administration\AdministerPlugin.cs" />
     <Compile Include="Plugins\Administration\ConfigurationAttribute.cs" />
@@ -553,6 +554,7 @@
     <Compile Include="Plugins\EditProject\SaveEditProjectAction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\FarmReport\XmlProjectParametersReportAction.cs" />
     <Compile Include="Plugins\FarmReport\XmlServerReportAction.cs" />
     <Compile Include="Plugins\FarmReport\FarmReportFarmPlugin.cs">
       <SubType>Code</SubType>
