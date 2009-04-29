@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             ExtractAllFiles(packageStream);
 
             // Attempt to load the manifest
-            string manifestFile = Path.Combine(tempFolder, "manifest.xml");
+            string manifestFile = Path.Combine(tempFolder, "Manifest.xml");
             if (File.Exists(manifestFile))
             {
                 XmlSerializer serialiser = new XmlSerializer(typeof(PackageManifest));
