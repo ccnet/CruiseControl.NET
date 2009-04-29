@@ -19,7 +19,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[SetUp]
 		public void SetUp()
 		{
-			DefaultWorkingDirectory = @"c:\source";
 			CreateProcessExecutorMock(NAntTask.defaultExecutable);
 			builder = new NAntTask((ProcessExecutor) mockProcessExecutor.MockInstance);
 			result = IntegrationResult();
@@ -114,14 +113,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs " + IntegrationProperties(@"C:\temp", @"C:\temp") + " target1 target2";
-			ProcessInfo info = NewProcessInfo(args);
+			string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory) + " target1 target2";
+			ProcessInfo info = NewProcessInfo(args, DefaultWorkingDirectory);
 			info.TimeOut = 2000;
 			ExpectToExecute(info);
 			
 			result.Label = "1.0";
-			result.WorkingDirectory = @"C:\temp";
-			result.ArtifactDirectory = @"C:\temp";
+			result.WorkingDirectory = DefaultWorkingDirectory;
+			result.ArtifactDirectory = DefaultWorkingDirectory;
 
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
 			builder.BuildFile = "mybuild.build";
@@ -134,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPassAppropriateDefaultPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"c:\source", @"c:\source"));
+			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory));
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
 			result.ArtifactDirectory = DefaultWorkingDirectory;
 			result.WorkingDirectory = DefaultWorkingDirectory;
@@ -144,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPutQuotesAroundBuildFileIfItContainsASpace()
 		{
-			ExpectToExecuteArguments(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"c:\source", @"c:\source"));
+			ExpectToExecuteArguments(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory));
 
 			builder.BuildFile = "my project.build";
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
@@ -156,12 +155,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldEncloseDirectoriesInQuotesIfTheyContainSpaces()
 		{
-			DefaultWorkingDirectory = @"c:\dir with spaces";
-			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"c:\dir with spaces", @"c:\dir with spaces"));
+			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger " + IntegrationProperties(DefaultWorkingDirectoryWithSpaces, DefaultWorkingDirectoryWithSpaces), DefaultWorkingDirectoryWithSpaces);
 
-			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
-			result.ArtifactDirectory = DefaultWorkingDirectory;
-			result.WorkingDirectory = DefaultWorkingDirectory;
+			builder.ConfiguredBaseDirectory = DefaultWorkingDirectoryWithSpaces;
+			result.ArtifactDirectory = DefaultWorkingDirectoryWithSpaces;
+			result.WorkingDirectory = DefaultWorkingDirectoryWithSpaces;
 			builder.Run(result);
 		}
 
@@ -199,8 +197,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void IfConfiguredBaseDirectoryIsAbsoluteUseItAtBaseDirectory()
 		{
-			builder.ConfiguredBaseDirectory = @"c:\my\base\directory";
-			CheckBaseDirectory(IntegrationResultForWorkingDirectoryTest(), @"c:\my\base\directory");
+			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
+			CheckBaseDirectory(IntegrationResultForWorkingDirectoryTest(), DefaultWorkingDirectory);
 		}
 		
 		private void CheckBaseDirectory(IIntegrationResult integrationResult, string expectedBaseDirectory)

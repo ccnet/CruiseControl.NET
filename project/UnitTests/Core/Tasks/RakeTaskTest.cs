@@ -19,7 +19,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[SetUp]
 		public void SetUp()
 		{
-			//DefaultWorkingDirectory = @"c:\source";
 			CreateProcessExecutorMock(RakeTask.DefaultExecutable);
 			builder = new RakeTask((ProcessExecutor) mockProcessExecutor.MockInstance);
 			result = IntegrationResult();
@@ -123,8 +122,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			integrationResult.ProjectName = "test";
 			integrationResult.Label = "1.0";
 			integrationResult.BuildCondition = BuildCondition.ForceBuild;
-			integrationResult.WorkingDirectory = @"c:\workingdir\";
-			integrationResult.ArtifactDirectory = @"c:\artifactdir\";
+			integrationResult.WorkingDirectory = DefaultWorkingDirectory;
+			integrationResult.ArtifactDirectory = DefaultWorkingDirectory;
 
 			builder.Executable = "rake";
 			builder.BuildArgs = "myargs";
@@ -137,8 +136,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual("myargs", info.Arguments);
 			Assert.AreEqual("1.0", info.EnvironmentVariables["CCNetLabel"]);
 			Assert.AreEqual("ForceBuild", info.EnvironmentVariables["CCNetBuildCondition"]);
-			Assert.AreEqual(@"c:\workingdir\", info.EnvironmentVariables["CCNetWorkingDirectory"]);
-			Assert.AreEqual(@"c:\artifactdir\", info.EnvironmentVariables["CCNetArtifactDirectory"]);
+			Assert.AreEqual(DefaultWorkingDirectory, info.EnvironmentVariables["CCNetWorkingDirectory"]);
+			Assert.AreEqual(DefaultWorkingDirectory, info.EnvironmentVariables["CCNetArtifactDirectory"]);
 		}
 
 		[Test]
@@ -170,14 +169,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldEncloseDirectoriesInQuotesIfTheyContainSpaces()
 		{
-			DefaultWorkingDirectory = @"c:\dir with spaces";
-			ExpectToExecuteArguments("");
+			ExpectToExecuteArguments("", DefaultWorkingDirectoryWithSpaces);
 
 			builder.Rakefile = "";
 			builder.BuildArgs = "";
-			builder.BaseDirectory = DefaultWorkingDirectory;
-			result.ArtifactDirectory = DefaultWorkingDirectory;
-			result.WorkingDirectory = DefaultWorkingDirectory;
+			builder.BaseDirectory = DefaultWorkingDirectoryWithSpaces;
+			result.ArtifactDirectory = DefaultWorkingDirectoryWithSpaces;
+			result.WorkingDirectory = DefaultWorkingDirectoryWithSpaces;
 			builder.Run(result);
 		}
 		
@@ -228,8 +226,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void IfConfiguredBaseDirectoryIsAbsoluteUseItAtBaseDirectory()
 		{
-			builder.BaseDirectory = @"c:\my\base\directory";
-			CheckBaseDirectory(IntegrationResultForWorkingDirectoryTest(), @"c:\my\base\directory");
+			builder.BaseDirectory = DefaultWorkingDirectory;
+			CheckBaseDirectory(IntegrationResultForWorkingDirectoryTest(), DefaultWorkingDirectory);
 		}
 
 		private void CheckBaseDirectory(IIntegrationResult integrationResult, string expectedBaseDirectory)

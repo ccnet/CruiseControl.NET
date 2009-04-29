@@ -242,6 +242,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
+		public void ShouldGetSourceWithSpacesInPath()
+		{
+			mockFileSystem.ExpectAndReturn("DirectoryExists", true, Path.Combine(DefaultWorkingDirectoryWithSpaces, ".svn"));
+
+			ExpectToExecuteArguments(string.Format(@"update {0} --non-interactive --no-auth-cache", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectoryWithSpaces)), DefaultWorkingDirectoryWithSpaces);
+			svn.AutoGetSource = true;
+			svn.WorkingDirectory = DefaultWorkingDirectoryWithSpaces;
+			svn.GetSource(IntegrationResult());
+		}
+
+		[Test]
 		public void ShouldNotGetSourceIfAutoGetSourceFalse()
 		{
 			ExpectThatExecuteWillNotBeCalled();

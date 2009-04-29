@@ -197,6 +197,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			cvs.GetSource(IntegrationResult());
 		}
 
+		[Test]
+		public void ShouldCheckoutOnWorkingDictionaryWithSpaces()
+		{
+			ExpectToExecuteArguments(string.Format(@"-d :pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet -q checkout -R -P -r branch -d {0} ccnet", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectoryWithSpaces)), DefaultWorkingDirectoryWithSpaces);
+			mockFileSystem.ExpectAndReturn("DirectoryExists", false, Path.Combine(DefaultWorkingDirectoryWithSpaces, "CVS"));
+
+			cvs.CvsRoot = ":pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet";
+			cvs.Module = "ccnet";
+			cvs.AutoGetSource = true;
+			cvs.Branch = "branch";
+			cvs.WorkingDirectory = DefaultWorkingDirectoryWithSpaces;
+			cvs.GetSource(IntegrationResult());
+		}
+
 		[Test, ExpectedException(typeof(ConfigurationException))]
 		public void ShouldThrowExceptionIfCVSRootIsNotSpecifiedAndCVSFoldersDoNotExist()
 		{
@@ -229,15 +243,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldRebaseWorkingDirectoryForGetSource()
 		{
-			DefaultWorkingDirectory = @"c:\devl\myproject";
-			ExpectToExecuteArguments(@"-q update -d -P -C");
-			ExpectCvsDirectoryExists(true);
+			ExpectToExecuteArguments(@"-q update -d -P -C", Path.Combine(DefaultWorkingDirectory, "myproject"));
+			mockFileSystem.ExpectAndReturn("DirectoryExists", true, Path.Combine(Path.Combine(DefaultWorkingDirectory, "myproject"), "CVS"));
 
 			cvs.AutoGetSource = true;
 			cvs.CleanCopy = true; // set as default
 			cvs.WorkingDirectory = "myproject";
 			IntegrationResult result = new IntegrationResult();
-			result.WorkingDirectory = @"c:\devl";
+			result.WorkingDirectory = DefaultWorkingDirectory;
 			cvs.GetSource(result);
 		}
 

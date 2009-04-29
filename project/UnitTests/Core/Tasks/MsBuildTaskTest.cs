@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ExecuteSpecifiedProject()
 		{
 			string args = "/nologo /t:target1;target2 " + IntegrationProperties() + " /p:Configuration=Release myproject.sln" + DefaultLogger();
-			ExpectToExecuteArguments(args);
+			ExpectToExecuteArguments(args, DefaultWorkingDirectory);
 
 			task.ProjectFile = "myproject.sln";
 			task.Targets = "target1;target2";
@@ -72,9 +72,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			// NOTE: Property names are sorted alphabetically when passed as process arguments
 			// Tests that look for the correct arguments will fail if the following properties
 			// are not sorted alphabetically.
-			string expectedProperties = string.Format(@"/p:CCNetArtifactDirectory={2};CCNetBuildCondition=IfModificationExists;CCNetBuildDate={0};CCNetBuildTime={1};CCNetFailureUsers=;CCNetIntegrationStatus=Success;CCNetLabel=""My Label"";CCNetLastIntegrationStatus=Success;CCNetListenerFile={3};CCNetModifyingUsers=;CCNetNumericLabel=0;CCNetProject=test;CCNetRequestSource=foo;CCNetWorkingDirectory={4}", testDateString, testTimeString, StringUtil.AutoDoubleQuoteString(result.ArtifactDirectory), StringUtil.AutoDoubleQuoteString(Path.GetTempPath() + "test_ListenFile.xml"), StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory));
-            ExpectToExecuteArguments(@"/nologo " + expectedProperties + DefaultLogger());
+			string expectedProperties = string.Format(@"/p:CCNetArtifactDirectory={2};CCNetBuildCondition=IfModificationExists;CCNetBuildDate={0};CCNetBuildTime={1};CCNetFailureUsers=;CCNetIntegrationStatus=Success;CCNetLabel=""My Label"";CCNetLastIntegrationStatus=Success;CCNetListenerFile={3};CCNetModifyingUsers=;CCNetNumericLabel=0;CCNetProject=test;CCNetRequestSource=foo;CCNetWorkingDirectory={4}", testDateString, testTimeString, StringUtil.AutoDoubleQuoteString(result.ArtifactDirectory), StringUtil.AutoDoubleQuoteString(Path.GetTempPath() + "test_ListenFile.xml"), StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectoryWithSpaces));
+			ExpectToExecuteArguments(@"/nologo " + expectedProperties + DefaultLogger(), DefaultWorkingDirectoryWithSpaces);
 			result.Label = @"My Label";
+			result.WorkingDirectory = DefaultWorkingDirectoryWithSpaces;
 			task.Run(result);
 		}
 
@@ -89,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void RebaseFromWorkingDirectory()
 		{
-			ProcessInfo info = NewProcessInfo("/nologo " + IntegrationProperties() + DefaultLogger());
+			ProcessInfo info = NewProcessInfo("/nologo " + IntegrationProperties() + DefaultLogger(), Path.Combine(DefaultWorkingDirectory, "src"));
 			info.WorkingDirectory = Path.Combine(DefaultWorkingDirectory, "src");
 			ExpectToExecute(info);
 			task.WorkingDirectory = "src";
