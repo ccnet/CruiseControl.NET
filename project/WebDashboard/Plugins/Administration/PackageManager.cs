@@ -268,7 +268,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// <returns></returns>
         private XmlDocument LoadPackageList()
         {
-            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("packages"),
+            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("Packages"),
                 "packages.xml");
             FileInfo listDetails = new FileInfo(packagePath);
             XmlDocument document = new XmlDocument();
@@ -332,7 +332,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// </summary>
         private void SavePackageList(XmlDocument packageList)
         {
-            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("packages"),
+            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("Packages"),
                 "packages.xml");
 
             // Configure the document options
