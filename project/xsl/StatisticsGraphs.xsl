@@ -192,7 +192,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       </style>
       <![endif]]]></xsl:comment>
     
-      <script type="text/javascript" src="../../../../javascript/dojo/dojo.js"></script>
+      <script type="text/javascript" src="../../../../javascript/Dojo/dojo.js"></script>
       <script type="text/javascript" src="../../../../javascript/QueryFunctions.js"></script>
       <script type="text/javascript" src="../../../../javascript/StatisticsTables.js"></script>
       <script type="text/javascript" src="../../../../javascript/GraphWrapper.js"></script>
