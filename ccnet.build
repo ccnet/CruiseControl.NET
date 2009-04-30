@@ -88,13 +88,13 @@
 
 	<target name="PrepareForRelease" description="to be used by the person when doing a release on sourceforge, confluence, ...">
 
-		<fail message="Pass the ReleaseVersion property when calling this target with a correct value, eg.: 1.4.4.4" if="${ReleaseVersion=='0.0.0'}"   />
+		<fail message="Pass the ReleaseVersion property when calling this target with a correct value, eg.: 1.4.4" if="${ReleaseVersion=='0.0.0'}"   />
 		
 		<echo message="Clearing doc folder of all existing files ... " />
 		<delete includeemptydirs="false" >
             <fileset>
                 <patternset >
-                    <include name="doc/**"  />
+                    <include name="doc/CCNET/**"  />
                     <exclude name="**/.svn/**"  />
 					<exclude name="**/_svn/**"  />
 				</patternset>
