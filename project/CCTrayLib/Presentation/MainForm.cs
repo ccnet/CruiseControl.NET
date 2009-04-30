@@ -135,8 +135,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 controller.BindToQueueTreeView(queueTreeView);
 
             foreach (IProjectMonitor mon in controller.Monitors)
+            {
                 mon.Polled += mon_Polled;
-
+            }
             btnForceBuild.DataBindings.Add("Enabled", controller, "IsProjectSelected");
             btnStartStopProject.DataBindings.Add("Enabled", controller, "IsProjectSelected");
         }

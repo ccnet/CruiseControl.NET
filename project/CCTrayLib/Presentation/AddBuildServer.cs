@@ -20,8 +20,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private RadioButton rdoHttp;
 		private TextBox txtDashboard;
 		private TextBox txtRemoting;
-		private TextBox txtHttp;
-		private Label lblFeedback;
+        private TextBox txtHttp;
 
 		/// <summary>
 		/// Required designer variable.
@@ -29,6 +28,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private Container components = null;
 
 		private BuildServer buildServer;
+        private TextBox txtFeedback;
 		private ICruiseProjectManagerFactory cruiseProjectManagerFactory;
 
 		public AddBuildServer(ICruiseProjectManagerFactory cruiseProjectManagerFactory)
@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.txtHttp = new System.Windows.Forms.TextBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.lblFeedback = new System.Windows.Forms.Label();
+            this.txtFeedback = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -203,15 +203,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.btnOK.Text = "OK";
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
-            // lblFeedback
+            // txtFeedback
             // 
-            this.lblFeedback.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblFeedback.Location = new System.Drawing.Point(30, 400);
-            this.lblFeedback.Name = "lblFeedback";
-            this.lblFeedback.Size = new System.Drawing.Size(455, 40);
-            this.lblFeedback.TabIndex = 13;
-            this.lblFeedback.Text = "lblFeedback";
-            this.lblFeedback.Visible = false;
+            this.txtFeedback.Location = new System.Drawing.Point(32, 396);
+            this.txtFeedback.Multiline = true;
+            this.txtFeedback.Name = "txtFeedback";
+            this.txtFeedback.ReadOnly = true;
+            this.txtFeedback.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtFeedback.Size = new System.Drawing.Size(448, 48);
+            this.txtFeedback.TabIndex = 13;
             // 
             // AddBuildServer
             // 
@@ -219,7 +219,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(502, 483);
-            this.Controls.Add(this.lblFeedback);
+            this.Controls.Add(this.txtFeedback);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.txtHttp);
@@ -289,8 +289,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			buildServer = null;
 
-			lblFeedback.Visible = true;
-			lblFeedback.Text = "Validating...";
+			txtFeedback.Visible = true;
+			txtFeedback.Text = "Validating...";
 			Refresh();
 
 			try
@@ -302,7 +302,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 			catch (Exception ex)
 			{
-				lblFeedback.Text = "Failed to connect to server: " + ex.Message;
+				txtFeedback.Text = "Failed to connect to server: " + ex.Message;
 			}
 		}
 
