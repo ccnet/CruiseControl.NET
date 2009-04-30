@@ -22,8 +22,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private RadioButton rdoHttp;
 		private TextBox txtDashboard;
 		private TextBox txtRemoting;
-		private TextBox txtHttp;
-		private Label lblFeedback;
+        private TextBox txtHttp;
 
 		/// <summary>
 		/// Required designer variable.
@@ -37,6 +36,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private Button btnConfigureExtension;
         private Label lblExtensionSettings;
 		private ICruiseProjectManagerFactory cruiseProjectManagerFactory;
+        private TextBox txtFeedback;
         private ITransportExtension transportExtension;
 
 		public AddBuildServer(ICruiseProjectManagerFactory cruiseProjectManagerFactory)
@@ -90,12 +90,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.txtHttp = new System.Windows.Forms.TextBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.lblFeedback = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.rdoExtension = new System.Windows.Forms.RadioButton();
             this.cmbExtension = new System.Windows.Forms.ComboBox();
             this.btnConfigureExtension = new System.Windows.Forms.Button();
             this.lblExtensionSettings = new System.Windows.Forms.Label();
+            this.txtFeedback = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -144,7 +144,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(554, 45);
             this.label2.TabIndex = 2;
-            this.label2.Text = resources.GetString("label2.Text");
             // 
             // txtDashboard
             // 
@@ -170,11 +169,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(554, 45);
             this.label4.TabIndex = 6;
-            this.label4.Text = resources.GetString("label4.Text");
             // 
             // txtRemoting
             // 
-            this.txtRemoting.Location = new System.Drawing.Point(25, 210);
+            this.txtRemoting.Location = new System.Drawing.Point(25, 207);
             this.txtRemoting.Name = "txtRemoting";
             this.txtRemoting.Size = new System.Drawing.Size(532, 20);
             this.txtRemoting.TabIndex = 7;
@@ -186,11 +184,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(554, 45);
             this.label5.TabIndex = 9;
-            this.label5.Text = resources.GetString("label5.Text");
             // 
             // txtHttp
             // 
-            this.txtHttp.Location = new System.Drawing.Point(25, 310);
+            this.txtHttp.Location = new System.Drawing.Point(25, 271);
             this.txtHttp.Name = "txtHttp";
             this.txtHttp.Size = new System.Drawing.Size(532, 20);
             this.txtHttp.TabIndex = 10;
@@ -217,19 +214,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.btnOK.Text = "OK";
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
-            // lblFeedback
-            // 
-            this.lblFeedback.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblFeedback.Location = new System.Drawing.Point(30, 450);
-            this.lblFeedback.Name = "lblFeedback";
-            this.lblFeedback.Size = new System.Drawing.Size(527, 46);
-            this.lblFeedback.TabIndex = 17;
-            this.lblFeedback.Text = "lblFeedback";
-            this.lblFeedback.Visible = false;
-            // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(22, 363);
+            this.label6.Location = new System.Drawing.Point(22, 339);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(554, 31);
             this.label6.TabIndex = 12;
@@ -239,7 +226,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // rdoExtension
             // 
             this.rdoExtension.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rdoExtension.Location = new System.Drawing.Point(12, 336);
+            this.rdoExtension.Location = new System.Drawing.Point(12, 307);
             this.rdoExtension.Name = "rdoExtension";
             this.rdoExtension.Size = new System.Drawing.Size(345, 24);
             this.rdoExtension.TabIndex = 11;
@@ -250,7 +237,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             this.cmbExtension.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.cmbExtension.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cmbExtension.Location = new System.Drawing.Point(25, 397);
+            this.cmbExtension.Location = new System.Drawing.Point(25, 377);
             this.cmbExtension.Name = "cmbExtension";
             this.cmbExtension.Size = new System.Drawing.Size(532, 21);
             this.cmbExtension.Sorted = true;
@@ -260,7 +247,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             // btnConfigureExtension
             // 
-            this.btnConfigureExtension.Location = new System.Drawing.Point(379, 424);
+            this.btnConfigureExtension.Location = new System.Drawing.Point(379, 408);
             this.btnConfigureExtension.Name = "btnConfigureExtension";
             this.btnConfigureExtension.Size = new System.Drawing.Size(178, 23);
             this.btnConfigureExtension.TabIndex = 14;
@@ -271,22 +258,32 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // lblExtensionSettings
             // 
             this.lblExtensionSettings.AutoSize = true;
-            this.lblExtensionSettings.Location = new System.Drawing.Point(22, 429);
+            this.lblExtensionSettings.Location = new System.Drawing.Point(22, 411);
             this.lblExtensionSettings.Name = "lblExtensionSettings";
             this.lblExtensionSettings.Size = new System.Drawing.Size(153, 13);
             this.lblExtensionSettings.TabIndex = 18;
             this.lblExtensionSettings.Text = "Please configure this extension";
             // 
+            // txtFeedback
+            // 
+            this.txtFeedback.Location = new System.Drawing.Point(24, 437);
+            this.txtFeedback.Multiline = true;
+            this.txtFeedback.Name = "txtFeedback";
+            this.txtFeedback.ReadOnly = true;
+            this.txtFeedback.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtFeedback.Size = new System.Drawing.Size(532, 56);
+            this.txtFeedback.TabIndex = 19;
+            // 
             // AddBuildServer
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(581, 530);
+            this.Controls.Add(this.txtFeedback);
             this.Controls.Add(this.lblExtensionSettings);
             this.Controls.Add(this.btnConfigureExtension);
             this.Controls.Add(this.cmbExtension);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.rdoExtension);
-            this.Controls.Add(this.lblFeedback);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.txtHttp);
@@ -366,8 +363,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			buildServer = null;
 
-			lblFeedback.Visible = true;
-			lblFeedback.Text = "Validating...";
+			txtFeedback.Visible = true;
+			txtFeedback.Text = "Validating...";
 			Refresh();
 
 			try
@@ -379,7 +376,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 			catch (Exception ex)
 			{
-				lblFeedback.Text = "Failed to connect to server: " + ex.Message;
+				txtFeedback.Text = "Failed to connect to server: " + ex.Message;
 			}
 		}
 
