@@ -19,13 +19,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.CCTray
 
 		public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
-			DirectoryInfo cctrayPath = new DirectoryInfo(physicalApplicationPathProvider.GetFullPathFor("CCTray"));
+			DirectoryInfo cctrayPath = new DirectoryInfo(physicalApplicationPathProvider.GetFullPathFor("cctray"));
 			if (cctrayPath.Exists)
 			{
 				FileInfo[] files = cctrayPath.GetFiles("*CCTray*.*");
 				if (files.Length == 1)
 				{
-					return new RedirectResponse("CCTray/" + files[0].Name);
+					return new RedirectResponse("cctray/" + files[0].Name);
 				}
                 else if (files.Length > 1)
                 {
@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.CCTray
                     for (int i = 0; i < files.Length; i++)
                     {
                         installerList.Append(@"<li>");
-                        installerList.Append(@"<a href=""CCTray/");
+						installerList.Append(@"<a href=""cctray/");
                         installerList.Append(files[i].Name);
                         installerList.Append(@""">");
                         installerList.Append(files[i].Name);

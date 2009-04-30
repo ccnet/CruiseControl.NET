@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         {
             // Initialise the path and make sure the folder is there
             FileInfo packageDetails = new FileInfo(fileName);
-            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("packages"),
+            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("Packages"),
                 packageDetails.Name);
             packageDetails = new FileInfo(packagePath);
             if (!packageDetails.Directory.Exists) packageDetails.Directory.Create();
@@ -93,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         public List<PackageImportEventArgs> InstallPackage(string fileName)
         {
             // Validate that the package is still valid, just in case somebody else deleted it
-            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("packages"),
+            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("Packages"),
                 fileName);
             FileInfo packageDetails = new FileInfo(packagePath);
             List<PackageImportEventArgs> events = null;
@@ -133,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         {
             // Initialise the path and make sure the folder is there
             FileInfo packageDetails = new FileInfo(fileName);
-            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("packages"),
+            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("Packages"),
                 packageDetails.Name);
             packageDetails = new FileInfo(packagePath);
             string packageName = null;
@@ -179,7 +179,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         public List<PackageImportEventArgs> UninstallPackage(string fileName)
         {
             // Validate that the package is still valid, just in case somebody else deleted it
-            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("packages"),
+            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("Packages"),
                 fileName);
             FileInfo packageDetails = new FileInfo(packagePath);
             List<PackageImportEventArgs> events = null;
@@ -268,7 +268,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// <returns></returns>
         private XmlDocument LoadPackageList()
         {
-            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("packages"),
+            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("Packages"),
                 "packages.xml");
             FileInfo listDetails = new FileInfo(packagePath);
             XmlDocument document = new XmlDocument();
@@ -332,7 +332,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// </summary>
         private void SavePackageList(XmlDocument packageList)
         {
-            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("packages"),
+            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("Packages"),
                 "packages.xml");
 
             // Configure the document options
