@@ -4,7 +4,8 @@
     xmlns:cb="urn:ccnet.config.builder"    
     xmlns:env="environment"
     xmlns:exsl="http://exslt.org/common"
-    exclude-result-prefixes="msxsl cb env exsl"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    exclude-result-prefixes="msxsl cb env exsl xsi"
 >
   <xsl:output method="xml" standalone="yes" omit-xml-declaration="no" indent="yes"/>
   <xsl:strip-space elements="*"/>
