@@ -26,6 +26,11 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// Indicates the state of the most recent integration is unknown.  Perhaps no integration
 		/// has yet occurred.
 		/// </summary>
-		Unknown
+		Unknown,
+
+        /// <summary>
+        /// Indicates that the most recent integration was cancelled.
+        /// </summary>
+        Cancelled,
 	}
 }

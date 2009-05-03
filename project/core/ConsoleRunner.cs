@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Reflection;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -83,7 +84,8 @@ namespace ThoughtWorks.CruiseControl.Core
 					}
 					else
 					{
-						server.ForceBuild(parser.Project,"Forcing build on start");
+						server.ForceBuild(null, parser.Project,"Forcing build on start",
+                            new Dictionary<string, string>());
 						server.WaitForExit(parser.Project);
 					}
 				}

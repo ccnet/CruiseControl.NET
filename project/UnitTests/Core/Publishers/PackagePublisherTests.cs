@@ -241,12 +241,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             result.Status = IntegrationStatus.Success;
             result.ArtifactDirectory = Path.GetTempPath();
 
+            string tempPath = Path.Combine(Path.GetTempPath(), "CCNetTest");
+            if (Directory.Exists(tempPath)) Directory.Delete(tempPath, true);
+            Directory.CreateDirectory(tempPath);
+            File.WriteAllText(Path.Combine(tempPath, "test.txt"), "Some text data");
+            File.WriteAllText(Path.Combine(tempPath, "test.tst"), "Some text data");
+            File.WriteAllText(Path.Combine(tempPath, "test2.txt"), "Some text data");
+            File.WriteAllText(Path.Combine(tempPath, "test2.tst"), "Some text data");
+
             string packageLocation = Path.Combine(Path.GetTempPath(), "Test Package-1");
             string packageName = packageLocation + ".zip";
             if (File.Exists(packageName)) File.Delete(packageName);
             PackagePublisher publisher = new PackagePublisher();
             publisher.Name = packageLocation;
-            publisher.Files = new string[] { Path.Combine(Path.GetTempPath(), "*.txt") };
+            publisher.Files = new string[] { Path.Combine(tempPath, "*.txt") };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
             Assert.IsTrue(File.Exists(Path.Combine(Path.GetTempPath(), "Test project-packages.xml")), "Project package list not generated");

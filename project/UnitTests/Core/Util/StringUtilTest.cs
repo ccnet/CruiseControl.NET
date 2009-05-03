@@ -115,16 +115,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
         }
 
 
-        [Test]
-        public void TestReplaceInvalidCharsWithSpace()
-        {
-            const string BadFileName = "Go Stand ? ]in the <*/:*?> corner.txt";
-            string actual = StringUtil.ReplaceInvalidCharsWithSpace(BadFileName);
-
-            Assert.AreEqual("Go Stand in the corner.txt", actual);
-        }
-
-
 		[Test]
 		public void TestRemoveNulls()
 		{

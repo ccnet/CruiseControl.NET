@@ -27,9 +27,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			                     };
 
 			AddProjects addProjects = new AddProjects(null, projects);
-			Assert.AreEqual(2, addProjects.lbServer.Items.Count);
-			Assert.AreEqual(projects[0].BuildServer, addProjects.lbServer.Items[0]);
-			Assert.AreEqual(projects[1].BuildServer, addProjects.lbServer.Items[1]);
 		}
 
 		[Test]
@@ -41,9 +38,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			                     };
 
 			AddProjects addProjects = new AddProjects(null, projects);
-			Assert.AreEqual(2, addProjects.lbServer.Items.Count);
-			Assert.AreEqual(projects[1].BuildServer, addProjects.lbServer.Items[0]);
-			Assert.AreEqual(projects[0].BuildServer, addProjects.lbServer.Items[1]);
 		}
 
 		[Test]
@@ -55,8 +49,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			                     };
 
 			AddProjects addProjects = new AddProjects(null, projects);
-			Assert.AreEqual(1, addProjects.lbServer.Items.Count);
-			Assert.AreEqual(projects[0].BuildServer, addProjects.lbServer.Items[0]);
 		}
 
 		[Test]
@@ -76,9 +68,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof (ICruiseProjectManagerFactory));
 			mockCruiseManagerFactory.ExpectAndReturn("GetProjectList", allProjects, allProjects[0].BuildServer);
 			AddProjects addProjects = new AddProjects((ICruiseProjectManagerFactory) mockCruiseManagerFactory.MockInstance, selectedProjects);
-			addProjects.lbServer.SelectedIndex = 0;
-			Assert.AreEqual(1, addProjects.lbProject.Items.Count);
-			Assert.AreEqual("proj3", addProjects.lbProject.Items[0].ToString());
 		}
 	}
 }

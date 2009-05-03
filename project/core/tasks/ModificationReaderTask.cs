@@ -10,7 +10,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// Reads modifications from file back into the current integration result
     /// </summary>
     [ReflectorType("modificationReader")]
-    public class ModificationReaderTask : ITask
+    public class ModificationReaderTask
+        : TaskBase, ITask
     {
         private readonly IFileSystem fileSystem;
         private bool deleteAfterRead = false;

@@ -2,16 +2,24 @@ using System.Web;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 {
 	public class RequestWrappingCruiseRequest : ICruiseRequest
 	{
 		private readonly IRequest request;
+        private readonly ICruiseUrlBuilder urlBuilder;
 
-		public RequestWrappingCruiseRequest(IRequest request)
+        public RequestWrappingCruiseRequest(IRequest request, ICruiseUrlBuilder urlBuilder)
 		{
 			this.request = request;
+            this.urlBuilder = urlBuilder;
+		}
+
+        public ICruiseUrlBuilder UrlBuilder
+        {
+            get { return this.urlBuilder; }
 		}
 
 		public string ServerName
@@ -71,5 +79,20 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 		{
 			get { return request; }
 		}
+
+        /// <summary>
+        /// Attempt to retrieve a session token
+        /// </summary>
+        /// <returns></returns>
+        public virtual string RetrieveSessionToken(ISessionRetriever sessionRetriever)
+        {
+            // Attempt to find a session token
+            string sessionToken = request.GetText("sessionToken");
+            if (string.IsNullOrEmpty(sessionToken) && (sessionRetriever != null))
+            {
+                sessionToken = sessionRetriever.RetrieveSessionToken(request);
+	}
+            return sessionToken;
+        }
 	}
 }

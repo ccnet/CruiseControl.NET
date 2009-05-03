@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CBB2F759-46EB-42DB-BCAD-D7E596A4BC41}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -46,8 +46,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\CSharpFormat.dll</HintPath>
     </Reference>
-    <Reference Include="NetReflector">
-      <Name>NetReflector</Name>
+    <Reference Include="NetReflector, Version=1.1.2009.1004, Culture=neutral, PublicKeyToken=dbcd6104b72f39b2, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\NetReflector.dll</HintPath>
     </Reference>
     <Reference Include="ScintillaNet, Version=2.0.3138.25704, Culture=neutral, PublicKeyToken=948d6c9751444115, processorArchitecture=MSIL">
@@ -61,6 +61,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,6 +107,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ValidationErrorProcesser.cs" />
     <Compile Include="WindowStateEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>

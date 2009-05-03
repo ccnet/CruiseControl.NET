@@ -13,6 +13,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void InitialiseDoesNothing()
         {
+            InMemorySessionCache cache = new InMemorySessionCache();
+            cache.Initialise();
         }
 
         [Test]
@@ -74,6 +76,41 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             InMemorySessionCache cache = result as InMemorySessionCache;
             Assert.AreEqual(5, cache.Duration);
             Assert.AreEqual(SessionExpiryMode.Fixed, cache.ExpiryMode);
+        }
+
+        [Test]
+        public void StoreSessionValueIsStored()
+        {
+            InMemorySessionCache cache = new InMemorySessionCache();
+            string sessionToken = cache.AddToCache("johndoe");
+            string key = "An item";
+            object value = Guid.NewGuid();
+
+            cache.StoreSessionValue(sessionToken, key, value);
+            object result = cache.RetrieveSessionValue(sessionToken, key);
+            Assert.AreEqual(value, result);
+        }
+
+        [Test]
+        public void NonStoredValueReturnsNull()
+        {
+            InMemorySessionCache cache = new InMemorySessionCache();
+            string sessionToken = cache.AddToCache("johndoe");
+            string key = "An item";
+
+            object result = cache.RetrieveSessionValue(sessionToken, key);
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void InvalidSessionValueReturnsNull()
+        {
+            InMemorySessionCache cache = new InMemorySessionCache();
+            string sessionToken = "Non-existant";
+            string key = "An item";
+
+            object result = cache.RetrieveSessionValue(sessionToken, key);
+            Assert.IsNull(result);
         }
     }
 }

@@ -1,0 +1,32 @@
+﻿<package>
+  <name>MSBuild Results</name>
+  <description>Display the results of a MSBuild build.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>compile-msbuild.xsl</file>
+        <file>msbuild.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\compile-msbuild.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\compile-msbuild.xsl</value>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\msbuild.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="MSBuild Report"/>
+        <attribute name="actionName" value="MSBuildBuildReport"/>
+        <attribute name="xslFileName" value="xsl\msbuild.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>

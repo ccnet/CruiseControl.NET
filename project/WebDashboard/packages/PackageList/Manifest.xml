@@ -1,0 +1,19 @@
+﻿<package>
+  <name>Package List</name>
+  <description>Display the list of packages that were generated.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Templates</location>
+      <files>
+        <file>PackageList.vm</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/projectPlugins</path>
+      <name>packageListPlugin</name>
+    </setting>
+  </configuration>
+</package>

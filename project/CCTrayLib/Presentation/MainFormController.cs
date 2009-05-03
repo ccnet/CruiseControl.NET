@@ -5,7 +5,11 @@ using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.X10;
+#if !DISABLE_COM
 using ThoughtWorks.CruiseControl.CCTrayLib.Speech;
+#endif
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -24,7 +28,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private readonly IIntegrationQueueIconProvider queueIconProvider;
 		private BuildTransitionSoundPlayer soundPlayer;
         private X10Controller x10Controller;
+#if !DISABLE_COM
         private SpeakingProjectMonitor speakerForTheDead;
+#endif
 
 		public MainFormController(ICCTrayMultiConfiguration configuration, ISynchronizeInvoke owner)
 		{
@@ -51,7 +57,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			x10Controller = new X10Controller(aggregatedProjectMonitor,new DateTimeProvider(),configuration.X10,lampController);
 
 			IBalloonMessageProvider balloonMessageProvider = new ConfigurableBalloonMessageProvider(configuration.BalloonMessages);
+#if !DISABLE_COM
 			speakerForTheDead = new SpeakingProjectMonitor(aggregatedProjectMonitor, balloonMessageProvider, configuration.Speech);
+#endif
 		}
 
 		public IProjectMonitor SelectedProject
@@ -82,10 +90,22 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			get
 			{
-			    if (SelectedProject == null)
+				if (SelectedProject != null)
+				{
+					if ((SelectedProject.ProjectState == ProjectState.Building) ||
+						(SelectedProject.ProjectState == ProjectState.BrokenAndBuilding))
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+				}
+				else
+				{
 			        return false;
-			    return (SelectedProject.ProjectState == ProjectState.Building) ||
-			           (SelectedProject.ProjectState == ProjectState.BrokenAndBuilding);
+				}
 			}
 		}
 		
@@ -94,10 +114,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			get {
 				if (!IsProjectSelected) return false;
 				if (!selectedProject.IsConnected) return false;
-
+				else
+				{
 			    bool isProjectRunning = selectedProject.ProjectIntegratorState.Equals(Remote.ProjectIntegratorState.Running.ToString());
 			    return isProjectRunning;
 			}
+		}
 		}
 		
 		public event EventHandler IsProjectSelectedChanged;
@@ -116,22 +138,72 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             }
         }
 
-		public void ForceBuild()
+        public List<ParameterBase> ListBuildParameters()
+        {
+            IProjectMonitor project = SelectedProject;
+            if (project != null)
+            {
+                return SelectedProject.ListBuildParameters();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void ForceBuild()
+        {
+            List<ParameterBase> buildParameters = ListBuildParameters();
+            if ((buildParameters == null) || (buildParameters.Count == 0))
+            {
+                ForceBuild(null);
+            }
+            else
+            {
+                BuildParameters display = new BuildParameters(this, buildParameters);
+                display.ShowDialog();
+            }
+        }
+
+		public void ForceBuild(Dictionary<string, string> parameters)
 		{
-		    if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
-		        SelectedProject.ForceBuild();
+            if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
+            {
+                try
+                {
+                	RunSecureMethod(b => {
+                    	SelectedProject.ForceBuild(parameters);
+                	}, "ForceBuild");
+                }
+                catch (Exception error)
+                {
+                    MessageBox.Show("An unexpected error has occurred while trying to force build" +
+                            Environment.NewLine +
+                            error.Message, 
+                        "Unknown error", 
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Error);
+                }
+            }
 		}
-		
-		public void AbortBuild()
-		{
-		    if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
-		        SelectedProject.AbortBuild();
-		}
+
+        public void AbortBuild()
+        {
+            if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
+            {
+                RunSecureMethod(b =>
+                {
+                    SelectedProject.AbortBuild();
+                }, "AbortBuild");
+            }
+        }
 		
 		public void DisplayWebPage()
 		{
 		    if (IsProjectSelected)
+			{
 		        DisplayWebPageForProject(SelectedProject.Detail);
+		}
 		}
 
         public void BindToTrayIcon(TrayIcon trayIcon)
@@ -152,9 +224,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				item.Tag = monitor;
 				listView.Items.Add(item);
 			}
-
-			if (listView.Items.Count > 0) 
-                listView.Items[0].Selected = true;
+			if (listView.Items.Count > 0) listView.Items[0].Selected = true;
 		}
 
 		public void BindToQueueTreeView(QueueTreeView treeView)
@@ -193,6 +263,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public void StartServerMonitoring()
 		{
 			StopServerMonitoring();
+
 			serverPoller = new Poller(configuration.PollPeriodSeconds, aggregatedServerMonitor);
 			serverPoller.Start();
 
@@ -228,12 +299,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		
 		public void StopProject()
 		{
-			selectedProject.StopProject();
+            RunSecureMethod(b =>
+            {
+                selectedProject.StopProject();
+            }, "StopProject");
 		}
 		
 		public void StartProject()
 		{
-			selectedProject.StartProject();
+            RunSecureMethod(b =>
+            {
+                selectedProject.StartProject();
+            }, "StartProject");
 		}
 
 		public IProjectStateIconProvider ProjectStateIconProvider
@@ -319,7 +396,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public void VolunteerToFixBuild()
 		{
-			if (IsProjectSelected) selectedProject.FixBuild(configuration.FixUserName);
+            if (IsProjectSelected)
+            {
+                RunSecureMethod(b =>
+                {
+                    selectedProject.FixBuild(configuration.FixUserName);
+                }, "FixBuild");
+            }
 		}
 
 		public bool CanCancelPending()
@@ -329,7 +412,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public void CancelPending()
 		{
-			if (IsProjectSelected) selectedProject.CancelPending();
+            if (IsProjectSelected)
+            {
+                RunSecureMethod(b =>
+                {
+                    selectedProject.CancelPending();
+                }, "CancelPending");
+            }
 		}
 
 		public void CancelPendingProjectByName(string projectName)
@@ -339,10 +428,49 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				if (projectMonitor.Detail.ProjectName == projectName)
 				{
 					SelectedProject = projectMonitor;
-					CancelPending();
+                    RunSecureMethod(b =>
+                    {
+                        CancelPending();
+                    }, "CancelPending");
 					break;
 				}
 			}
 		}
+
+        private void RunSecureMethod(Action<bool> methodToRun, string methodName)
+        {
+            try
+            {
+                methodToRun(true);
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(string.Format("Unable to {0}, the following error occurred:{1}{2}",
+                    methodName,
+                    Environment.NewLine,
+                    error.Message),
+                    "Error",
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+            }
+		}
+
+        /// <summary>
+        /// Display the current status of a build.
+        /// </summary>
+        public void ShowCurrentStatus()
+        {
+            CurrentStatusWindow window = new CurrentStatusWindow(SelectedProject);
+            window.Show();
+        }
+
+        /// <summary>
+        /// Display the packages for a project.
+        /// </summary>
+        public void ShowPackages()
+        {
+            PackagesListForm window = new PackagesListForm(SelectedProject);
+            window.Show();
+        }
 	}
 }

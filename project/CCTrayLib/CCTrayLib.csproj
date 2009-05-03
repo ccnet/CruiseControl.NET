@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -98,6 +98,9 @@
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
+  <PropertyGroup Condition="$(DISABLE_COM) == true">
+    <DefineConstants>DISABLE_COM</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System">
       <Name>System</Name>
@@ -164,6 +167,7 @@
     <Compile Include="Configuration\CCTrayProject.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\ExtensionAttribute.cs" />
     <Compile Include="Configuration\ICCTrayMultiConfiguration.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -218,6 +222,8 @@
     <Compile Include="Monitoring\DashboardXmlParser.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Monitoring\ExtensionHelpers.cs" />
+    <Compile Include="Monitoring\ExtensionTransportProjectListRetriever.cs" />
     <Compile Include="Monitoring\HttpCruiseProjectManager.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -227,6 +233,7 @@
     <Compile Include="Monitoring\HttpProjectListRetriever.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Monitoring\IAuthenticationMode.cs" />
     <Compile Include="Monitoring\ICache.cs" />
     <Compile Include="Monitoring\ICruiseProjectManager.cs">
       <SubType>Code</SubType>
@@ -262,6 +269,7 @@
     <Compile Include="Monitoring\ISingleServerMonitor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Monitoring\ITransportExtension.cs" />
     <Compile Include="Monitoring\IWebRetriever.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -308,6 +316,12 @@
     <Compile Include="NotifyInfoFlags.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Presentation\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentation\AddBuildServer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -325,6 +339,12 @@
     </Compile>
     <Compile Include="Presentation\AudioSettingsControl.Designer.cs">
       <DependentUpon>AudioSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\BuildParameters.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\BuildParameters.Designer.cs">
+      <DependentUpon>BuildParameters.cs</DependentUpon>
     </Compile>
     <Compile Include="Presentation\BuildProjectsControl.cs">
       <SubType>UserControl</SubType>
@@ -347,13 +367,32 @@
     <Compile Include="Presentation\ConfigurableProjectStateIconProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Presentation\ConfigureServer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\ConfigureServer.Designer.cs">
+      <DependentUpon>ConfigureServer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\CurrentStatusWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\CurrentStatusWindow.Designer.cs">
+      <DependentUpon>CurrentStatusWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentation\KeyUtils.cs" />
+    <Compile Include="Presentation\PackagesListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\PackagesListForm.Designer.cs">
+      <DependentUpon>PackagesListForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentation\SpeechSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Presentation\SpeechSettingsControl.Designer.cs">
       <DependentUpon>SpeechSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presentation\StatusItemDisplay.cs" />
     <Compile Include="Presentation\StubProjectMonitor.cs" />
     <Compile Include="Presentation\X10SettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -448,6 +487,21 @@
     <Compile Include="Presentation\WindowStateEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Security\ConfigureUserName.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Security\ConfigureUserName.Designer.cs">
+      <DependentUpon>ConfigureUserName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Security\ConfigureUserPassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Security\ConfigureUserPassword.Designer.cs">
+      <DependentUpon>ConfigureUserPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Security\WinLoginAuthentication.cs" />
+    <Compile Include="Security\UserPasswordAuthentication.cs" />
+    <Compile Include="Security\UserNameAuthentication.cs" />
     <Compile Include="Speech\SpeakingProjectMonitor.cs" />
     <Compile Include="StatusIcon.cs">
       <SubType>Code</SubType>
@@ -473,27 +527,35 @@
     <None Include="ResourceIcons\Orange.ico" />
     <EmbeddedResource Include="Presentation\AddBuildServer.resx">
       <DependentUpon>AddBuildServer.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\AddProjects.resx">
       <DependentUpon>AddProjects.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\CCTrayMultiSettingsForm.resx">
       <DependentUpon>CCTrayMultiSettingsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\NotifyIconEx.resx">
       <DependentUpon>NotifyIconEx.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\PersistWindowState.resx">
       <DependentUpon>PersistWindowState.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\SpeechSettingsControl.resx">
       <DependentUpon>SpeechSettingsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\TrayIcon.resx">
       <DependentUpon>TrayIcon.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="ResourceIcons\Red.ico" />
     <None Include="ResourceIcons\ServerHttp.ico" />
@@ -507,6 +569,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ResourceIcons\BuildCheckingModifications.ico" />
+    <EmbeddedResource Include="Presentation\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="DefaultProjectIcons.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -521,9 +587,22 @@
       <SubType>Designer</SubType>
       <DependentUpon>AudioSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\BuildParameters.resx">
+      <DependentUpon>BuildParameters.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Presentation\BuildProjectsControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>BuildProjectsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\ConfigureServer.resx">
+      <DependentUpon>ConfigureServer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\CurrentStatusWindow.resx">
+      <DependentUpon>CurrentStatusWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\PackagesListForm.resx">
+      <DependentUpon>PackagesListForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\x10SettingsControl.resx">
       <DependentUpon>X10SettingsControl.cs</DependentUpon>
@@ -536,6 +615,14 @@
     <EmbeddedResource Include="Presentation\IconSettingsControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>IconSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Security\ConfigureUserName.resx">
+      <DependentUpon>ConfigureUserName.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Security\ConfigureUserPassword.resx">
+      <DependentUpon>ConfigureUserPassword.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

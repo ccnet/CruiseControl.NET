@@ -1,5 +1,7 @@
 using System.Xml;
+using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -106,6 +108,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		void NotifySleepingState();
 
+        /// <summary>
+        /// The associated security configuration.
+        /// </summary>
+        IProjectAuthorisation Security { get; }
 
         /// <summary>
         /// Maximum amount of sourcecontrol exceptions allowed, before stopping the project (if specified to do so).
@@ -126,10 +132,29 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         Sourcecontrol.Common.SourceControlErrorHandlingPolicy SourceControlErrorHandling { get; }
 
+        /// <summary>
+        /// The initial start-up state to set.
+        /// </summary>
+        ProjectInitialState InitialState { get; }
 
         /// <summary>
         /// The start-up mode for this project.
         /// </summary>
-        ProjectInitialState StartupState { get; }
+        ProjectStartupMode StartupMode { get; }
+
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the latest list of packages.
+        /// </summary>
+        /// <returns></returns>
+        List<PackageDetails> RetrievePackageList();
+
+        /// <summary>
+        /// Retrieves the list of packages for a build.
+        /// </summary>
+        /// <param name="buildName"></param>
+        /// <returns></returns>
+        List<PackageDetails> RetrievePackageList(string buildName);
+        #endregion
     }
 }

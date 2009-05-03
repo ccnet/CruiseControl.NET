@@ -11,6 +11,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 		private IPlugin[] projectPlugins = new IPlugin[0];
 		private IBuildPlugin[] buildPlugins = new IBuildPlugin[0];
         private string templateLocation;
+        private ISecurityPlugin[] securityPlugins = new ISecurityPlugin[0];
+        private ISessionStore sessionStore = new CookieSessionStore();
 
         [ReflectorProperty("customTemplates", Required=false)]
         public string TemplateLocation
@@ -70,5 +72,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 				buildPlugins = value;
 			}
 		}
+
+        [ReflectorArray("securityPlugins", Required = false)]
+        public ISecurityPlugin[] SecurityPlugins
+        {
+            get { return securityPlugins; }
+            set { securityPlugins = value; }
+        }
+
+        [ReflectorProperty("sessionStore", InstanceTypeKey="type", Required=false)]
+        public ISessionStore SessionStore
+        {
+            get { return sessionStore; }
+            set { sessionStore = value; }
+        }
 	}
 }

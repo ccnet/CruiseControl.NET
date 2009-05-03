@@ -16,24 +16,29 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		public ICruiseProjectManager Create(CCTrayProject project, IDictionary<BuildServer, ICruiseServerManager> serverManagers)
 		{
 			BuildServer server = project.BuildServer;
-			if (server.Transport == BuildServerTransport.Remoting)
+            switch (server.Transport)
 			{
+                case BuildServerTransport.Remoting:
 				return new RemotingCruiseProjectManager(cruiseManagerFactory.GetCruiseManager(server.Url), project.ProjectName);
-			}
-			else
-			{
+                case BuildServerTransport.Extension:
+                    ITransportExtension extensionInstance = ExtensionHelpers.RetrieveExtension(server.ExtensionName);
+                    extensionInstance.Settings = server.ExtensionSettings;
+                    extensionInstance.Configuration = server;
+                    return extensionInstance.RetrieveProjectManager(project.ProjectName);
+                default:
                 return new HttpCruiseProjectManager(new WebRetriever(), project.ProjectName, serverManagers[server]);
 			}
 		}
 
 		public CCTrayProject[] GetProjectList(BuildServer server)
 		{
-			if (server.Transport == BuildServerTransport.Remoting)
+            switch (server.Transport)
 			{
+                case BuildServerTransport.Remoting:
 				return new RemotingProjectListRetriever(cruiseManagerFactory).GetProjectList(server);
-			}
-			else
-			{
+                case BuildServerTransport.Extension:
+                    return new ExtensionTransportProjectListRetriever(server.ExtensionName).GetProjectList(server);
+                default:
                 return new HttpProjectListRetriever(new WebRetriever(), new DashboardXmlParser()).GetProjectList(server);
 			}
 		}

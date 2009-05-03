@@ -4,7 +4,8 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	[ReflectorType("rake")]
-	public class RakeTask : BaseExecutableTask
+	public class RakeTask
+        : BaseExecutableTask, ITask
 	{
 		public const int DefaultBuildTimeout = 600;
 		public const string DefaultExecutable = @"rake";

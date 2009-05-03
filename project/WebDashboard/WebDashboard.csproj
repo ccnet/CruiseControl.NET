@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{482EF049-EC0C-4819-B568-75B5F74BDD5B}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -102,6 +102,10 @@
       <Name>Commons</Name>
       <HintPath>..\..\lib\Commons.dll</HintPath>
     </Reference>
+    <Reference Include="CSharpFormat, Version=2.5.3274.32716, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\CSharpFormat.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -110,8 +114,8 @@
       <Name>log4net</Name>
       <HintPath>..\..\lib\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NetReflector">
-      <Name>NetReflector</Name>
+    <Reference Include="NetReflector, Version=1.1.2009.1004, Culture=neutral, PublicKeyToken=dbcd6104b72f39b2, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\NetReflector.dll</HintPath>
     </Reference>
     <Reference Include="NVelocity">
@@ -180,6 +184,21 @@
     <Compile Include="Configuration\ServerLocation.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\StylesheetConfiguration.cs" />
+    <Compile Include="Dashboard\ActionDecorators\QuerySessionActionDecorator.cs" />
+    <Compile Include="Dashboard\Actions\HtmlReportAction.cs" />
+    <Compile Include="Dashboard\Actions\XsltParameter.cs" />
+    <Compile Include="Dashboard\CookieSessionRetriever.cs" />
+    <Compile Include="Dashboard\CookieSessionStore.cs" />
+    <Compile Include="Dashboard\CookieSessionStorer.cs" />
+    <Compile Include="Dashboard\GenericPlugins\HtmlReportPlugin.cs" />
+    <Compile Include="Dashboard\ImmutableNamedActionWithoutSiteTemplate.cs" />
+    <Compile Include="Dashboard\INoSiteTemplateAction.cs" />
+    <Compile Include="Dashboard\ISecurityPlugin.cs" />
+    <Compile Include="Dashboard\ISessionRetriever.cs" />
+    <Compile Include="Dashboard\ISessionStore.cs" />
+    <Compile Include="Dashboard\LoginViewBuilder.cs" />
+    <Compile Include="Dashboard\ProjectParametersAction.cs" />
     <Compile Include="Plugins\Administration\AdministerAction.cs" />
     <Compile Include="Plugins\Administration\AdministerPlugin.cs" />
     <Compile Include="Plugins\Administration\ConfigurationAttribute.cs" />
@@ -376,6 +395,7 @@
     <Compile Include="MVC\BinaryResponse.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MVC\FileTransferResponse.cs" />
     <Compile Include="MVC\Cruise\BuildCheckingProxyAction.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -432,6 +452,7 @@
     <Compile Include="MVC\IResponse.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MVC\JsonFragmentResponse.cs" />
     <Compile Include="MVC\MimeType.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -496,6 +517,7 @@
     <Compile Include="Plugins\BuildReport\LatestBuildReportProjectPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\BuildReport\BuildFileDownload.cs" />
     <Compile Include="Plugins\BuildReport\XmlBuildLogAction.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -532,6 +554,7 @@
     <Compile Include="Plugins\EditProject\SaveEditProjectAction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\FarmReport\XmlProjectParametersReportAction.cs" />
     <Compile Include="Plugins\FarmReport\XmlServerReportAction.cs" />
     <Compile Include="Plugins\FarmReport\FarmReportFarmPlugin.cs">
       <SubType>Code</SubType>
@@ -539,23 +562,37 @@
     <Compile Include="Plugins\FarmReport\XmlReportAction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\FarmReport\XmlServerSecurityAction.cs" />
     <Compile Include="Plugins\ForceBuild\ForceBuildXmlAction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\ProjectReport\PackageListAction.cs" />
+    <Compile Include="Plugins\ProjectReport\PackageListPlugin.cs" />
+    <Compile Include="Plugins\ProjectReport\ProjectStatusPlugin.cs" />
     <Compile Include="Plugins\ProjectReport\ModificationHistoryProjectPlugin.cs" />
+    <Compile Include="Plugins\ProjectReport\ProjectFileDownload.cs" />
     <Compile Include="Plugins\ProjectReport\ProjectReportProjectPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\ProjectReport\ServerAuditHistoryProjectPlugin.cs" />
     <Compile Include="Plugins\ProjectReport\ServerLogProjectPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\ProjectReport\ServerSecurityConfigurationProjectPlugin.cs" />
+    <Compile Include="Plugins\ProjectReport\ServerUserListProjectPlugin.cs" />
     <Compile Include="Plugins\ProjectReport\ViewConfigurationProjectPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Plugins\ProjectReport\ProjectXmlReport.cs" />
+    <Compile Include="Plugins\ProjectReport\ProjectStatusAction.cs" />
     <Compile Include="Plugins\RSS\RSSFeed.cs" />
+    <Compile Include="Plugins\Security\ChangePasswordSecurityAction.cs" />
+    <Compile Include="Plugins\Security\LogoutSecurityAction.cs" />
+    <Compile Include="Plugins\Security\UserNameSecurityAction.cs" />
+    <Compile Include="Plugins\Security\UserNameSecurityPlugin.cs" />
     <Compile Include="Plugins\ServerReport\QueueStatusServerPlugin.cs" />
     <Compile Include="Plugins\ServerReport\ProjectConfigurationServerPlugin.cs" />
+    <Compile Include="Plugins\ServerReport\ServerAuditHistoryServerPlugin.cs" />
     <Compile Include="Plugins\ServerReport\ServerInformationServerPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -565,6 +602,8 @@
     <Compile Include="Plugins\ServerReport\ServerReportServerPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\ServerReport\ServerSecurityConfigurationServerPlugin.cs" />
+    <Compile Include="Plugins\ServerReport\ServerUserListServerPlugin.cs" />
     <Compile Include="Plugins\Statistics\BuildGraph.cs" />
     <Compile Include="Plugins\Statistics\ProjectStatisticsPlugin.cs">
       <SubType>Code</SubType>
@@ -606,12 +645,6 @@
     </Content>
     <Content Include="..\xsl\fitnesse.xsl">
       <Link>xsl\fitnesse.xsl</Link>
-    </Content>
-    <Content Include="..\xsl\fxcop-summary.xsl">
-      <Link>xsl\fxcop-summary.xsl</Link>
-    </Content>
-    <Content Include="..\xsl\FxCopReport.xsl">
-      <Link>xsl\FxCopReport.xsl</Link>
     </Content>
     <Content Include="..\xsl\gendarme-report-ccnet.xsl">
       <Link>xsl\gendarme-report-ccnet.xsl</Link>
@@ -679,6 +712,42 @@
     <Content Include="images\rss.png" />
     <Content Include="images\shim.gif" />
     <Content Include="images\tw_dev_logo.gif" />
+    <Content Include="javascript\jquery-ui.js" />
+    <Content Include="javascript\jquery.js" />
+    <Content Include="javascript\jQuery.timers.js" />
+    <Content Include="javascript\theme\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="javascript\theme\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="javascript\theme\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="javascript\theme\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="javascript\theme\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="javascript\theme\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="javascript\theme\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="javascript\theme\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="javascript\theme\images\ui-icons_222222_256x240.png" />
+    <Content Include="javascript\theme\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="javascript\theme\images\ui-icons_454545_256x240.png" />
+    <Content Include="javascript\theme\images\ui-icons_888888_256x240.png" />
+    <Content Include="javascript\theme\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="javascript\theme\ui.accordion.css" />
+    <Content Include="javascript\theme\ui.all.css" />
+    <Content Include="javascript\theme\ui.base.css" />
+    <Content Include="javascript\theme\ui.core.css" />
+    <Content Include="javascript\theme\ui.dialog.css" />
+    <Content Include="javascript\theme\ui.progressbar.css" />
+    <Content Include="javascript\theme\ui.resizable.css" />
+    <Content Include="javascript\theme\ui.theme.css" />
+    <Content Include="packages\MSTest\Manifest.xml" />
+    <Content Include="packages\PackageList\Manifest.xml" />
+    <Content Include="packages\UserList\Manifest.xml" />
+    <Content Include="packages\SecurityConfig\Manifest.xml" />
+    <Content Include="packages\NCover\Manifest.xml" />
+    <Content Include="packages\Simian\Manifest.xml" />
+    <Content Include="packages\Fitnesse\Manifest.xml" />
+    <Content Include="packages\Gendarme\Manifest.xml" />
+    <Content Include="packages\FxCop\Manifest.xml" />
+    <Content Include="packages\MSBuild\Manifest.xml" />
+    <Content Include="packages\NAnt\Manifest.xml" />
+    <Content Include="packages\NDepend\Manifest.xml" />
     <Content Include="packages\DashboardAdmin\Manifest.xml" />
     <Content Include="packages\ModificationHistory\Manifest.xml" />
     <Content Include="packages\NUnit\Manifest.xml" />
@@ -689,30 +758,45 @@
     <Content Include="packages\ServerConfig\Manifest.xml" />
     <Content Include="packages\ServerInformation\Manifest.xml" />
     <Content Include="packages\ServerLog\Manifest.xml" />
+    <Content Include="xsl\ndependreport-ccnet.v2.xsl" />
     <None Include="dashboard.config" />
     <None Include="templates\ActionException.vm" />
     <None Include="templates\AddProject.vm" />
     <None Include="templates\AdministerDashboard.vm" />
     <None Include="templates\AdminLogin.vm" />
     <None Include="templates\AllBuilds.vm" />
+    <None Include="templates\AuditHistory.vm" />
     <None Include="templates\BuildLog.vm" />
     <None Include="templates\BuildRows.vm" />
     <None Include="templates\BuildSideBar.vm" />
+    <None Include="templates\ChangePasswordAction.vm" />
     <None Include="templates\EditProjectCommandLineBuilder.vm" />
     <None Include="templates\EditProjectCVS.vm" />
     <None Include="templates\EditProjectFileSourceControl.vm" />
     <None Include="templates\EditProjectNantBuilder.vm" />
     <None Include="templates\EditProjectP4.vm" />
     <None Include="templates\FarmSideBar.vm" />
+    <None Include="templates\HtmlReport.vm" />
+    <None Include="templates\LoggedIn.vm" />
+    <None Include="templates\LoggedOut.vm" />
+    <None Include="templates\LoginAction.vm" />
+    <None Include="templates\PackageList.vm" />
     <None Include="templates\ProjectGrid.vm" />
     <None Include="templates\ProjectReport.vm" />
+    <None Include="templates\ProjectServerConfiguration.vm" />
     <None Include="templates\ProjectSideBar.vm" />
+    <None Include="templates\ProjectStatusReport.vm" />
     <None Include="templates\RecentBuilds.vm" />
+    <None Include="templates\SecurityConfiguration.vm" />
     <None Include="templates\ServerInfo.vm" />
     <None Include="templates\ServerLog.vm" />
+    <None Include="templates\ServerQueueStatus.vm" />
     <None Include="templates\ServerSideBar.vm" />
     <None Include="templates\SiteTemplate.vm" />
     <None Include="templates\TopMenu.vm" />
+    <None Include="templates\UserDiagnostics.vm" />
+    <None Include="templates\UserList.vm" />
+    <None Include="templates\UserNameLogin.vm" />
     <None Include="Web.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

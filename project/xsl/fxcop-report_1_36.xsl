@@ -182,10 +182,10 @@
 			<div class="legend">
 				<div>
 					Assemblies checked: <xsl:value-of select="count(Targets/Target/Modules/Module)" /><br />
-					Warnings: <xsl:value-of select="count(//Message[Issue/@Level='Warning'])" /><br />
-					Critical Warnings: <xsl:value-of select="count(//Message[Issue/@Level='CriticalWarning'])" /><br />
-					Errors: <xsl:value-of select="count(//Message[Issue/@Level='Error'])"/><br />
-					Critical Errors: <xsl:value-of select="count(//Message[Issue/@Level='CriticalError'])"/><br />
+					Warnings: <xsl:value-of select="count(//Message/Issue[@Level='Warning'])" /><br />
+					Critical Warnings: <xsl:value-of select="count(//Message/Issue[@Level='CriticalWarning'])" /><br />
+					Errors: <xsl:value-of select="count(//Message/Issue[@Level='Error'])"/><br />
+					Critical Errors: <xsl:value-of select="count(//Message/Issue[@Level='CriticalError'])"/><br />
 					Total Messages: <xsl:value-of select="count(//Message)"/><br />
 				</div>
 			</div>
@@ -219,10 +219,10 @@
 			</td>
 			<td style="width: 16px">
 				<xsl:choose>
-					<xsl:when test="count(.//Message[Issue/@Level='Error' or 'CriticalError']) > 0">
+					<xsl:when test="count(.//Message/Issue[@Level='Error' or @Level='CriticalError']) > 0">
 						<img src="{$applicationPath}/images/error.png" />
 					</xsl:when>
-					<xsl:when test="count(.//Message[Issue/@Level='Warning' or 'CriticalWarning']) > 0">
+					<xsl:when test="count(.//Message/Issue[@Level='Warning' or @Level='CriticalWarning']) > 0">
 						<img src="{$applicationPath}/images/warning.png" />
 					</xsl:when>
 					<xsl:otherwise>
@@ -237,10 +237,10 @@
 				<xsl:value-of select="count(.//Types/Type)" />
 			</td>
 			<td>
-				<xsl:value-of select="count(.//Message[Issue/@Level='Warning' or 'CriticalWarning'])" />
+				<xsl:value-of select="count(.//Message/Issue[@Level='Warning' or @Level='CriticalWarning'])" />
 			</td>
 			<td>
-				<xsl:value-of select="count(.//Message[Issue/@Level='Error' or 'CriticalError'])"/>
+				<xsl:value-of select="count(.//Message/Issue[@Level='Error' or @Level='CriticalError'])"/>
 			</td>
 			<td>
 				<xsl:value-of select="count(.//Message)"/>

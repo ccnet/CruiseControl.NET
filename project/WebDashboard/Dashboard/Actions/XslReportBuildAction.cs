@@ -4,6 +4,8 @@ using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
 {
@@ -35,8 +37,23 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
             {
                 xsltArgs["applicationPath"] = cruiseRequest.Request.ApplicationPath;
             }
+
+            // Add the input parameters
+            if (Parameters != null)
+            {
+                foreach (var parameter in Parameters)
+                {
+                    xsltArgs.Add(parameter.Name, parameter.Value);
+                }
+            }
+
 			return new HtmlFragmentResponse(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, new string[] {xslFileName}, xsltArgs));
 		}
+
+        /// <summary>
+        /// Optional parameters to pass into the XSL-T.
+        /// </summary>
+        public List<XsltParameter> Parameters { get; set; }
 
 		[ReflectorProperty("xslFileName")]
 		public string XslFileName

@@ -4,5 +4,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 	{
 		Remoting,
 		HTTP,
+        /// <summary>
+        /// The transport will use an extension module.
+        /// </summary>
+        Extension,
 	}
 }

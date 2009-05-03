@@ -1,18 +1,25 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using NMock;
 using NUnit.Framework;
+using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Events;
+using Rhino.Mocks.Interfaces;
+using ThoughtWorks.CruiseControl.UnitTests.Remote;
+using System.IO;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	[TestFixture]
 	public class CruiseServerTest : IntegrationFixture
 	{
+        private MockRepository mocks = new MockRepository();
 		private DynamicMock configServiceMock;
 		private DynamicMock projectIntegratorListFactoryMock;
 		private DynamicMock projectSerializerMock;
@@ -50,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integrator1 = (IProjectIntegrator) integratorMock1.MockInstance;
 			integrator2 = (IProjectIntegrator) integratorMock2.MockInstance;
 			integrator3 = (IProjectIntegrator) integratorMock3.MockInstance;
-			integratorMock1.SetupResult("Name", "Project 1");
+            integratorMock1.SetupResult("Name", "Project 1");
 			integratorMock2.SetupResult("Name", "Project 2");
 			integratorMock3.SetupResult("Name", "Project 3");
 
@@ -66,12 +73,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             integratorMock2.SetupResult("Project", project1);
 
 			mockProject = new DynamicMock(typeof(IProject));
-			mockProject.ExpectAndReturn("Name", "Project 3");
-            mockProject.ExpectAndReturn("QueueName", "Project 3");
-            mockProject.ExpectAndReturn("QueueName", "Project 3");
+			mockProject.SetupResult("Name", "Project 3");
+            mockProject.SetupResult("QueueName", "Project 3");
+            mockProject.SetupResult("QueueName", "Project 3");
             mockProjectInstance = (IProject)mockProject.MockInstance;
-			mockProject.ExpectAndReturn("Name", "Project 3");
-            mockProject.SetupResult("StartupState", ProjectInitialState.Started);
+			mockProject.SetupResult("Name", "Project 3");
+            mockProject.SetupResult("StartupMode", ProjectStartupMode.UseLastState);
             integratorMock3.SetupResult("Project", mockProjectInstance);
 
 			configuration.AddProject(project1);
@@ -82,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratorList.Add(integrator1);
 			integratorList.Add(integrator2);
 			integratorList.Add(integrator3);
-
+            
 			configServiceMock = new DynamicMock(typeof (IConfigurationService));
 			configServiceMock.ExpectAndReturn("Load", configuration);
 
@@ -95,7 +102,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			server = new CruiseServer((IConfigurationService) configServiceMock.MockInstance,
 			                          (IProjectIntegratorListFactory) projectIntegratorListFactoryMock.MockInstance,
 			                          (IProjectSerializer) projectSerializerMock.MockInstance,
-                                      (IProjectStateManager)stateManagerMock.MockInstance);
+                                      (IProjectStateManager)stateManagerMock.MockInstance,
+                                      null);
 		}
 
 		private void VerifyAll()
@@ -243,9 +251,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			server.Start();
 
-            integratorMock1.Expect("ForceBuild", "BuildForcer");
+            var parameters = new Dictionary<string, string>();
+            integratorMock1.Expect("ForceBuild", "BuildForcer", parameters);
 
-			server.ForceBuild("Project 1","BuildForcer");
+            server.ForceBuild(null, "Project 1", "BuildForcer", parameters);
 
 			VerifyAll();
 		}
@@ -253,7 +262,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test, ExpectedException(typeof (NoSuchProjectException))]
 		public void AttemptToForceBuildOnProjectThatDoesNotExist()
 		{
-            server.ForceBuild("foo", "BuildForcer");
+            var parameters = new Dictionary<string, string>();
+            server.ForceBuild(null, "foo", "BuildForcer", parameters);
 		}
 
 		[Test]
@@ -298,7 +308,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
             stateManagerMock.Expect("RecordProjectAsStopped", "Project 1");
             integratorMock1.Expect("Stop");
-			server.Stop("Project 1");
+			server.Stop(null,"Project 1");
 			integratorMock1.Verify();
             stateManagerMock.Verify();
         }
@@ -306,7 +316,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test, ExpectedException(typeof(NoSuchProjectException))]
 		public void ThrowExceptionIfProjectNotFound()
 		{
-			server.Stop("Project unknown");			
+			server.Stop(null, "Project unknown");			
 		}
 
 		[Test]
@@ -314,7 +324,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
             stateManagerMock.Expect("RecordProjectAsStartable", "Project 2");
 			integratorMock2.Expect("Start");
-			server.Start("Project 2");
+			server.Start(null,"Project 2");
 			integratorMock2.Verify();
             stateManagerMock.Verify();
 		}
@@ -324,9 +334,498 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			IntegrationRequest request = Request(BuildCondition.IfModificationExists);
 			integratorMock2.Expect("Request", request);
-			server.Request("Project 2", request);
+			server.Request(null,"Project 2", request);
 			integratorMock1.Verify();
 			integratorMock2.Verify();
 		}
-	}
+
+        [Test]
+        public void ProjectStartFiresEvents()
+        {
+            string projectName = "Project 1";
+            bool projectStartingFired = false;
+            server.ProjectStarting += delegate(object o, CancelProjectEventArgs e)
+            {
+                projectStartingFired = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+            };
+
+            bool projectStartedFired = false;
+            server.ProjectStarted += delegate(object o, ProjectEventArgs e)
+            {
+                projectStartedFired = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+            };
+
+            server.Start(null, projectName);
+            Assert.IsTrue(projectStartingFired, "ProjectStarting not fired");
+            Assert.IsTrue(projectStartedFired, "ProjectStarted not fired");
+        }
+
+        [Test]
+        public void ProjectStartCanBeCancelled()
+        {
+            string projectName = "Project 1";
+            bool projectStartingFired = false;
+            server.ProjectStarting += delegate(object o, CancelProjectEventArgs e)
+            {
+                projectStartingFired = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+                e.Cancel = true;
+            };
+
+            server.ProjectStarted += delegate(object o, ProjectEventArgs e)
+            {
+                Assert.Fail("ProjectStarted has been fired");
+            };
+
+            server.Start(null, projectName);
+            Assert.IsTrue(projectStartingFired, "ProjectStarting not fired");
+        }
+
+        [Test]
+        public void ProjectStopFiresEvents()
+        {
+            string projectName = "Project 1";
+            bool projectStoppingFired = false;
+            server.ProjectStopping += delegate(object o, CancelProjectEventArgs e)
+            {
+                projectStoppingFired = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+            };
+
+            bool projectStoppedFired = false;
+            server.ProjectStopped += delegate(object o, ProjectEventArgs e)
+            {
+                projectStoppedFired = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+            };
+
+            server.Stop(null, projectName);
+            Assert.IsTrue(projectStoppingFired, "ProjectStopping not fired");
+            Assert.IsTrue(projectStoppedFired, "ProjectStopped not fired");
+        }
+
+        [Test]
+        public void ProjectStopCanBeCancelled()
+        {
+            string projectName = "Project 1";
+            bool projectStoppingFired = false;
+            server.ProjectStopping += delegate(object o, CancelProjectEventArgs e)
+            {
+                projectStoppingFired = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+                e.Cancel = true;
+            };
+
+            server.ProjectStopped += delegate(object o, ProjectEventArgs e)
+            {
+                Assert.Fail("ProjectStopped has been fired");
+            };
+
+            server.Stop(null, projectName);
+            Assert.IsTrue(projectStoppingFired, "ProjectStopping not fired");
+        }
+
+        [Test]
+        public void ForceBuildFiresEvents()
+        {
+            string projectName = "Project 1";
+            string enforcer = "JohnDoe";
+            bool forceBuildReceived = false;
+            server.ForceBuildReceived += delegate(object o, CancelProjectEventArgs<string> e)
+            {
+                forceBuildReceived = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+                Assert.AreEqual(enforcer, e.Data);
+            };
+
+            bool forceBuildProcessed = false;
+            server.ForceBuildProcessed += delegate(object o, ProjectEventArgs<string> e)
+            {
+                forceBuildProcessed = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+                Assert.AreEqual(enforcer, e.Data);
+            };
+
+            var parameters = new Dictionary<string, string>();
+            server.ForceBuild(null, projectName, enforcer, parameters);
+            Assert.IsTrue(forceBuildReceived, "ForceBuildReceived not fired");
+            Assert.IsTrue(forceBuildProcessed, "ForceBuildProcessed not fired");
+        }
+
+        [Test]
+        public void ForceBuildCanBeCancelled()
+        {
+            string projectName = "Project 1";
+            string enforcer = "JohnDoe";
+            bool forceBuildReceived = false;
+            server.ForceBuildReceived += delegate(object o, CancelProjectEventArgs<string> e)
+            {
+                forceBuildReceived = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+                Assert.AreEqual(enforcer, e.Data);
+                e.Cancel = true;
+            };
+
+            server.ForceBuildProcessed += delegate(object o, ProjectEventArgs<string> e)
+            {
+                Assert.Fail("ForceBuildProcessed has been fired");
+            };
+
+            var parameters = new Dictionary<string, string>();
+            server.ForceBuild(null, projectName, enforcer, parameters);
+            Assert.IsTrue(forceBuildReceived, "ForceBuildReceived not fired");
+        }
+
+        [Test]
+        public void RequestFiresEvents()
+        {
+            string projectName = "Project 1";
+            string enforcer = "JohnDoe";
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, enforcer);
+            bool forceBuildReceived = false;
+            server.ForceBuildReceived += delegate(object o, CancelProjectEventArgs<string> e)
+            {
+                forceBuildReceived = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+                Assert.AreEqual(enforcer, e.Data);
+            };
+
+            bool forceBuildProcessed = false;
+            server.ForceBuildProcessed += delegate(object o, ProjectEventArgs<string> e)
+            {
+                forceBuildProcessed = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+                Assert.AreEqual(enforcer, e.Data);
+            };
+
+            server.Request(null, projectName, request);
+            Assert.IsTrue(forceBuildReceived, "ForceBuildReceived not fired");
+            Assert.IsTrue(forceBuildProcessed, "ForceBuildProcessed not fired");
+        }
+
+        [Test]
+        public void RequestCanBeCancelled()
+        {
+            string projectName = "Project 1";
+            string enforcer = "JohnDoe";
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, enforcer);
+            bool forceBuildReceived = false;
+            server.ForceBuildReceived += delegate(object o, CancelProjectEventArgs<string> e)
+            {
+                forceBuildReceived = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+                Assert.AreEqual(enforcer, e.Data);
+                e.Cancel = true;
+            };
+
+            server.ForceBuildProcessed += delegate(object o, ProjectEventArgs<string> e)
+            {
+                Assert.Fail("ForceBuildProcessed has been fired");
+            };
+
+            server.Request(null, projectName, request);
+            Assert.IsTrue(forceBuildReceived, "ForceBuildReceived not fired");
+        }
+
+        [Test]
+        public void AbortBuildFiresEvents()
+        {
+            string projectName = "Project 1";
+            string enforcer = "JohnDoe";
+            bool abortBuildReceived = false;
+            server.AbortBuildReceived += delegate(object o, CancelProjectEventArgs<string> e)
+            {
+                abortBuildReceived = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+                Assert.AreEqual(enforcer, e.Data);
+            };
+
+            bool abortBuildProcessed = false;
+            server.AbortBuildProcessed += delegate(object o, ProjectEventArgs<string> e)
+            {
+                abortBuildProcessed = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+                Assert.AreEqual(enforcer, e.Data);
+            };
+
+            server.AbortBuild(null, projectName, enforcer);
+            Assert.IsTrue(abortBuildReceived, "AbortBuildReceived not fired");
+            Assert.IsTrue(abortBuildProcessed, "AbortBuildProcessed not fired");
+        }
+
+        [Test]
+        public void AbortBuildCanBeCancelled()
+        {
+            string projectName = "Project 1";
+            string enforcer = "JohnDoe";
+            bool abortBuildReceived = false;
+            server.AbortBuildReceived += delegate(object o, CancelProjectEventArgs<string> e)
+            {
+                abortBuildReceived = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+                Assert.AreEqual(enforcer, e.Data);
+                e.Cancel = true;
+            };
+
+            server.AbortBuildProcessed += delegate(object o, ProjectEventArgs<string> e)
+            {
+                Assert.Fail("AbortBuildProcessed has been fired");
+            };
+
+            server.AbortBuild(null, projectName, enforcer);
+            Assert.IsTrue(abortBuildReceived, "AbortBuildReceived not fired");
+        }
+
+        [Test]
+        public void SendMessageFiresEvents()
+        {
+            string projectName = "Project 1";
+            Message message = new Message("This is a test message");
+            bool sendMessageReceived = false;
+            server.SendMessageReceived += delegate(object o, CancelProjectEventArgs<Message> e)
+            {
+                sendMessageReceived = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+                Assert.AreEqual(message.Text, e.Data.Text);
+            };
+
+            bool sendMessageProcessed = false;
+            server.SendMessageProcessed += delegate(object o, ProjectEventArgs<Message> e)
+            {
+                sendMessageProcessed = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+                Assert.AreEqual(message.Text, e.Data.Text);
+            };
+
+            server.SendMessage(null, projectName, message);
+            Assert.IsTrue(sendMessageReceived, "SendMessageReceived not fired");
+            Assert.IsTrue(sendMessageProcessed, "SendMessageProcessed not fired");
+        }
+
+        [Test]
+        public void SendMessageCanBeCancelled()
+        {
+            string projectName = "Project 1";
+            Message message = new Message("This is a test message");
+            bool sendMessageReceived = false;
+            server.SendMessageReceived += delegate(object o, CancelProjectEventArgs<Message> e)
+            {
+                sendMessageReceived = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+                Assert.AreEqual(message.Text, e.Data.Text);
+                e.Cancel = true;
+            };
+
+            server.SendMessageProcessed += delegate(object o, ProjectEventArgs<Message> e)
+            {
+                Assert.Fail("SendMessageProcessed has been fired");
+            };
+
+            server.SendMessage(null, projectName, message);
+            Assert.IsTrue(sendMessageReceived, "SendMessageReceived not fired");
+        }
+
+        [Test]
+        public void IntegrationStartedIsFired()
+        {
+            string enforcer = "JohnDoe";
+            string projectName = "Project 4";
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, enforcer);
+
+            // Need to set up a new integrator that can return an event
+            IProjectIntegrator integrator4;
+            integrator4 = mocks.DynamicMock<IProjectIntegrator>();
+            SetupResult.For(integrator4.Name).Return("Project 4");
+            integrator4.IntegrationStarted += null;
+            IEventRaiser startEventRaiser = LastCall.IgnoreArguments()
+                .GetEventRaiser();
+
+            // Initialise a new cruise server with the new integrator
+            mocks.ReplayAll();
+            integratorList.Add(integrator4);
+            configServiceMock.ExpectAndReturn("Load", configuration);
+            projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
+            server = new CruiseServer((IConfigurationService)configServiceMock.MockInstance,
+                                      (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.MockInstance,
+                                      (IProjectSerializer)projectSerializerMock.MockInstance,
+                                      (IProjectStateManager)stateManagerMock.MockInstance,
+                                      null);
+
+            bool eventFired = false;
+            server.IntegrationStarted += delegate(object o, IntegrationStartedEventArgs e)
+            {
+                eventFired = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+                Assert.AreSame(request, e.Request);
+            };
+
+
+            startEventRaiser.Raise(integrator4, 
+                new IntegrationStartedEventArgs(request, projectName));
+            Assert.IsTrue(eventFired, "IntegrationStarted not fired");
+        }
+
+        [Test]
+        public void IntegrationCompletedIsFired()
+        {
+            string enforcer = "JohnDoe";
+            string projectName = "Project 4";
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, enforcer);
+
+            // Need to set up a new integrator that can return an event
+            IProjectIntegrator integrator4;
+            integrator4 = mocks.DynamicMock<IProjectIntegrator>();
+            SetupResult.For(integrator4.Name).Return("Project 4");
+            integrator4.IntegrationCompleted += null;
+            IEventRaiser startEventRaiser = LastCall.IgnoreArguments()
+                .GetEventRaiser();
+
+            // Initialise a new cruise server with the new integrator
+            mocks.ReplayAll();
+            integratorList.Add(integrator4);
+            configServiceMock.ExpectAndReturn("Load", configuration);
+            projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
+            server = new CruiseServer((IConfigurationService)configServiceMock.MockInstance,
+                                      (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.MockInstance,
+                                      (IProjectSerializer)projectSerializerMock.MockInstance,
+                                      (IProjectStateManager)stateManagerMock.MockInstance,
+                                      null);
+
+            bool eventFired = false;
+            server.IntegrationCompleted += delegate(object o, IntegrationCompletedEventArgs e)
+            {
+                eventFired = true;
+                Assert.AreEqual(projectName, e.ProjectName);
+                Assert.AreEqual(IntegrationStatus.Success, e.Status);
+                Assert.AreSame(request, e.Request);
+            };
+
+
+            startEventRaiser.Raise(integrator4, 
+                new IntegrationCompletedEventArgs(request, projectName, IntegrationStatus.Success));
+            Assert.IsTrue(eventFired, "IntegrationCompleted not fired");
+        }
+
+        [Test]
+        public void StartAndStopExtensions()
+        {
+            List<ExtensionConfiguration> extensions = new List<ExtensionConfiguration>();
+            ExtensionConfiguration extensionStub = new ExtensionConfiguration();
+            extensionStub.Type = "ThoughtWorks.CruiseControl.UnitTests.Remote.ServerExtensionStub,ThoughtWorks.CruiseControl.UnitTests";
+            extensions.Add(extensionStub);
+
+            configServiceMock.ExpectAndReturn("Load", configuration);
+            projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
+            server = new CruiseServer((IConfigurationService)configServiceMock.MockInstance,
+                                      (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.MockInstance,
+                                      (IProjectSerializer)projectSerializerMock.MockInstance,
+                                      (IProjectStateManager)stateManagerMock.MockInstance,
+                                      extensions);
+            Assert.IsTrue(ServerExtensionStub.HasInitialised);
+
+            server.Start();
+            Assert.IsTrue(ServerExtensionStub.HasStarted);
+
+            server.Stop();
+            Assert.IsTrue(ServerExtensionStub.HasStopped);
+        }
+
+        [Test]
+        [ExpectedException(typeof(NullReferenceException),
+            ExpectedMessage = "Unable to find extension 'ThoughtWorks.CruiseControl.UnitTests.Remote.Garbage,ThoughtWorks.CruiseControl.UnitTests'")]
+        public void InitialiseingANonExistantExtensionThrowsAnException()
+        {
+            List<ExtensionConfiguration> extensions = new List<ExtensionConfiguration>();
+            ExtensionConfiguration extensionStub = new ExtensionConfiguration();
+            extensionStub.Type = "ThoughtWorks.CruiseControl.UnitTests.Remote.Garbage,ThoughtWorks.CruiseControl.UnitTests";
+            extensions.Add(extensionStub);
+
+            configServiceMock.ExpectAndReturn("Load", configuration);
+            projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
+            server = new CruiseServer((IConfigurationService)configServiceMock.MockInstance,
+                                      (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.MockInstance,
+                                      (IProjectSerializer)projectSerializerMock.MockInstance,
+                                      (IProjectStateManager)stateManagerMock.MockInstance,
+                                      extensions);
+        }
+
+        [Test]
+        public void StartAndAbortExtensions()
+        {
+            List<ExtensionConfiguration> extensions = new List<ExtensionConfiguration>();
+            ExtensionConfiguration extensionStub = new ExtensionConfiguration();
+            extensionStub.Type = "ThoughtWorks.CruiseControl.UnitTests.Remote.ServerExtensionStub,ThoughtWorks.CruiseControl.UnitTests";
+            extensions.Add(extensionStub);
+
+            configServiceMock.ExpectAndReturn("Load", configuration);
+            projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
+            server = new CruiseServer((IConfigurationService)configServiceMock.MockInstance,
+                                      (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.MockInstance,
+                                      (IProjectSerializer)projectSerializerMock.MockInstance,
+                                      (IProjectStateManager)stateManagerMock.MockInstance,
+                                      extensions);
+            Assert.IsTrue(ServerExtensionStub.HasInitialised);
+
+            server.Start();
+            Assert.IsTrue(ServerExtensionStub.HasStarted);
+
+            server.Abort();
+            Assert.IsTrue(ServerExtensionStub.HasAborted);
+        }
+
+        [Test]
+        [ExpectedException(typeof(NoSuchProjectException))]
+        public void TakeSnapshotThrowsExceptionForUnknownProject()
+        {
+            server.TakeStatusSnapshot("garbage project");
+        }
+
+        [Test]
+        public void TakeSnapshotReturnsAValidSnapshot()
+        {
+            ProjectStatusSnapshot snapshot = server.TakeStatusSnapshot("Project 1");
+            Assert.IsNotNull(snapshot, "Snapshot not taken");
+            Assert.AreEqual("Project 1", snapshot.Name, "Name not set");
+        }
+
+        [Test]
+        [ExpectedException(typeof(CruiseControlException))]
+        public void RetrieveFileTransferOnlyWorksForFilesInArtefactFolder()
+        {
+        	server.RetrieveFileTransfer("Project 1", Path.Combine("..", "testfile.txt"));
+        }
+
+        [Test]
+        [ExpectedException(typeof(CruiseControlException))]
+        public void RetrieveFileTransferFailsForBuildLogsFolder()
+        {
+        	server.RetrieveFileTransfer("Project 1", Path.Combine("buildlogs", "testfile.txt"));
+        }
+
+        [Test]
+        [ExpectedException(typeof(CruiseControlException))]
+        public void RetrieveFileTransferFailsForAbsolutePaths()
+        {
+        	server.RetrieveFileTransfer("Project 1", Path.GetFullPath(Path.Combine(".", "MyFile.txt")));
+        }
+
+        [Test]
+        public void RetrieveFileTransferGeneratesTransferForValidFile()
+        {
+            var tempFile = Path.GetTempFileName();
+            if (!File.Exists(tempFile)) File.WriteAllText(tempFile, "This is a test");
+            project1.ConfiguredArtifactDirectory = Path.GetDirectoryName(tempFile);
+            var transfer = server.RetrieveFileTransfer("Project 1", Path.GetFileName(tempFile));
+            Assert.IsNotNull(transfer);
+        }
+
+        [Test]
+        public void RetrieveFileTransferGeneratesNullForInvalidFile()
+        {
+            var transfer = server.RetrieveFileTransfer("Project 1", "GarbageFileNameThatShouldNotExist.NotHere");
+            Assert.IsNull(transfer);
+        }
+    }
 }

@@ -4,10 +4,14 @@ using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System;
+using ThoughtWorks.CruiseControl.Remote.Events;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
 	public class IntegrationQueueManager
+        : IQueueManager
 	{
 		private readonly IProjectIntegratorListFactory projectIntegratorListFactory;
 		private IProjectIntegratorList projectIntegrators;
@@ -39,8 +43,10 @@ namespace ThoughtWorks.CruiseControl.Core
 			foreach (IProjectIntegrator integrator in projectIntegrators)
 			{
                 bool canStart = (integrator.Project == null) ||
-                    ((integrator.Project.StartupState == ProjectInitialState.Started) &&
-                    stateManager.CheckIfProjectCanStart(integrator.Name));
+                    ((integrator.Project.StartupMode == ProjectStartupMode.UseLastState) &&
+                    stateManager.CheckIfProjectCanStart(integrator.Name)) ||
+                    ((integrator.Project.StartupMode == ProjectStartupMode.UseInitialState) &&
+                    (integrator.Project.InitialState == ProjectInitialState.Started));
                 if (canStart) integrator.Start();
 			}
 		}
@@ -85,9 +91,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			return integrator;
 		}
 
-		public void ForceBuild(string projectName, string enforcerName)
+        public void ForceBuild(string projectName, string enforcerName, Dictionary<string, string> buildValues)
 		{
-            GetIntegrator(projectName).ForceBuild(enforcerName);
+            GetIntegrator(projectName).ForceBuild(enforcerName, buildValues);
 		}
 
 		public void WaitForExit(string projectName)
@@ -156,5 +162,20 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			return integrationQueues.GetQueueNames();
 		}
+
+        /// <summary>
+        /// Associates the integration events.
+        /// </summary>
+        /// <param name="integrationStarted"></param>
+        /// <param name="integrationCompleted"></param>
+        public void AssociateIntegrationEvents(EventHandler<IntegrationStartedEventArgs> integrationStarted,
+            EventHandler<IntegrationCompletedEventArgs> integrationCompleted)
+        {
+            foreach (IProjectIntegrator integrator in projectIntegrators)
+            {
+                integrator.IntegrationStarted += integrationStarted;
+                integrator.IntegrationCompleted += integrationCompleted;
+            }
+        }
 	}
 }

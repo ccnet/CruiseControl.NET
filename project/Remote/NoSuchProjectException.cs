@@ -7,6 +7,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 	[Serializable]
 	public class NoSuchProjectException : CruiseControlException
 	{
+        private const string requestedProjectData = "REQUESTEDPROJECT_NAME";
 		private readonly string requestedProject;
 
 		public NoSuchProjectException() : base(ExceptionMessage(string.Empty)) {}
@@ -21,7 +22,10 @@ namespace ThoughtWorks.CruiseControl.Remote
 			this.requestedProject = requestedProject;			
 		}
 		
-		public NoSuchProjectException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+		public NoSuchProjectException(SerializationInfo info, StreamingContext context) : base(info, context) 
+        {
+            this.requestedProject = info.GetString(requestedProjectData);
+        }
 
 		public string RequestedProject
 		{
@@ -30,7 +34,13 @@ namespace ThoughtWorks.CruiseControl.Remote
 
 		private static string ExceptionMessage(string project)
 		{
-			return string.Format("The project: {0} does not exist on the CCNet server.", project);
+			return string.Format("The project '{0}' does not exist on the CCNet server.", project);
 		}
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            info.AddValue(requestedProjectData, requestedProject);
+        }
 	}
 }

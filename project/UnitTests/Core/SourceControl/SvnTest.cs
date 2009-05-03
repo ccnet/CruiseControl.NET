@@ -130,16 +130,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldRebaseWorkingDirectoryForHistory()
 		{
 			ExpectToExecuteArguments("log svn://myserver/mypath -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --non-interactive --no-auth-cache");
-			svn.WorkingDirectory = @"source\";
+			svn.WorkingDirectory = DefaultWorkingDirectory;
 			IIntegrationResult result = IntegrationResult(to);
-			result.WorkingDirectory = @"c:\";
+			result.WorkingDirectory = DefaultWorkingDirectory;
 			svn.GetModifications(IntegrationResult(from), result);
 		}
 
 		[Test]
 		public void ShouldApplyLabelIfTagOnSuccessTrue()
 		{
-			ExpectToExecuteArguments(@"copy -m ""CCNET build foo"" c:\source svn://someserver/tags/foo/foo --non-interactive --no-auth-cache");
+			ExpectToExecuteArguments(string.Format(@"copy -m ""CCNET build foo"" {0} svn://someserver/tags/foo/foo --non-interactive --no-auth-cache", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
 			svn.TagOnSuccess = true;
 			svn.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
 		}
@@ -147,7 +147,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldApplyLabelUsingRebasedWorkingDirectory()
 		{
-			ExpectToExecuteArguments(@"copy -m ""CCNET build foo"" c:\source svn://someserver/tags/foo/foo --non-interactive --no-auth-cache");
+			ExpectToExecuteArguments(string.Format(@"copy -m ""CCNET build foo"" {0} svn://someserver/tags/foo/foo --non-interactive --no-auth-cache", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
 			svn.TagOnSuccess = true;
 			svn.WorkingDirectory = null;
 			IIntegrationResult result = IntegrationResult(from);
@@ -190,7 +190,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CreatingLabelProcessIncludesCorrectlyFormattedArgumentsForUsernameAndPassword()
 		{
-			string args = @"copy -m ""CCNET build foo"" c:\source svn://someserver/tags/foo --username user --password password --non-interactive --no-auth-cache";
+			string args = string.Format(@"copy -m ""CCNET build foo"" {0} svn://someserver/tags/foo --username user --password password --non-interactive --no-auth-cache", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory));
 			ExpectToExecuteArguments(args);
 
 			IIntegrationResult result = IntegrationResult();
@@ -207,7 +207,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldGetSourceWithAppropriateRevisionNumberIfTagOnSuccessTrueAndModificationsFound()
 		{
 			ExpectSvnDirectoryExists(true);
-			ExpectToExecuteArguments("update c:\\source\\ --revision 10 --non-interactive --no-auth-cache");
+			ExpectToExecuteArguments(string.Format(@"update {0} --revision 10 --non-interactive --no-auth-cache", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
 
 			IIntegrationResult result = IntegrationResult();
 			Modification mod = new Modification();
@@ -225,7 +225,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldGetSourceWithoutRevisionNumberIfTagOnSuccessTrueAndModificationsNotFound()
 		{
 			ExpectSvnDirectoryExists(true);
-			ExpectToExecuteArguments("update c:\\source\\ --non-interactive --no-auth-cache");
+			ExpectToExecuteArguments(string.Format(@"update {0} --non-interactive --no-auth-cache", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
 			svn.AutoGetSource = true;
 			svn.GetSource(IntegrationResult());
 		}
@@ -234,10 +234,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldGetSourceWithCredentialsIfSpecifiedIfAutoGetSourceTrue()
 		{
 			ExpectSvnDirectoryExists(true);
-			ExpectToExecuteArguments(@"update c:\source\ --username ""Buck Rogers"" --password ""My Password"" --non-interactive --no-auth-cache");
+			ExpectToExecuteArguments(string.Format(@"update {0} --username ""Buck Rogers"" --password ""My Password"" --non-interactive --no-auth-cache", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
 			svn.Username = "Buck Rogers";
 			svn.Password = "My Password";
 			svn.AutoGetSource = true;
+			svn.GetSource(IntegrationResult());
+		}
+
+		[Test]
+		public void ShouldGetSourceWithSpacesInPath()
+		{
+			mockFileSystem.ExpectAndReturn("DirectoryExists", true, Path.Combine(DefaultWorkingDirectoryWithSpaces, ".svn"));
+
+			ExpectToExecuteArguments(string.Format(@"update {0} --non-interactive --no-auth-cache", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectoryWithSpaces)), DefaultWorkingDirectoryWithSpaces);
+			svn.AutoGetSource = true;
+			svn.WorkingDirectory = DefaultWorkingDirectoryWithSpaces;
 			svn.GetSource(IntegrationResult());
 		}
 
@@ -252,7 +263,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldCheckoutInsteadOfUpdateIfSVNFoldersDoNotExist()
 		{
-			ExpectToExecuteArguments(string.Format(@"checkout svn://myserver/mypath {0} --non-interactive --no-auth-cache", DefaultWorkingDirectory));
+			ExpectToExecuteArguments(string.Format(@"checkout svn://myserver/mypath {0} --non-interactive --no-auth-cache", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
 			ExpectSvnDirectoryExists(false);
 			ExpectUnderscoreSvnDirectoryExists(false);
 
@@ -264,7 +275,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldCheckoutWrappingTrunkUrlInDoubleQuotes()
 		{
-			ExpectToExecuteArguments(string.Format(@"checkout ""svn://myserver/my path"" {0} --non-interactive --no-auth-cache", DefaultWorkingDirectory));
+			ExpectToExecuteArguments(string.Format(@"checkout ""svn://myserver/my path"" {0} --non-interactive --no-auth-cache", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
 			ExpectSvnDirectoryExists(false);
 			ExpectUnderscoreSvnDirectoryExists(false);
 
@@ -279,7 +290,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			ExpectSvnDirectoryExists(false);
 			ExpectUnderscoreSvnDirectoryExists(true);
-			ExpectToExecuteArguments(@"update c:\source\ --non-interactive --no-auth-cache");
+			ExpectToExecuteArguments(string.Format(@"update {0} --non-interactive --no-auth-cache", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
 
 			svn.AutoGetSource = true;
 			svn.WorkingDirectory = DefaultWorkingDirectory;

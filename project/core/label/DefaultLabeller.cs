@@ -15,6 +15,8 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         [ReflectorProperty("postfix", Required = false)]
         public string LabelPostfix = string.Empty;
 
+		[ReflectorProperty("initialBuildLabel", Required = false)]
+		public int InitialBuildLabel = INITIAL_LABEL;
 
         [ReflectorProperty("incrementOnFailure", Required = false)]
         public bool IncrementOnFailed = false;
@@ -27,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
             IntegrationSummary lastIntegration = integrationResult.LastIntegration;
             if (integrationResult == null || lastIntegration.IsInitial())
             {
-                return LabelPrefix + INITIAL_LABEL.ToString(LabelFormat) + LabelPostfix;
+				return LabelPrefix + InitialBuildLabel.ToString(LabelFormat) + LabelPostfix;
             }
             else if (ShouldIncrementLabel(lastIntegration))
             {

@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Xml;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -25,7 +27,8 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		private IList _tasks = new ArrayList();
 		private WorkflowResult _currentIntegrationResult;
-        private ProjectInitialState startupState = ProjectInitialState.Started;
+        private ProjectInitialState initialState = ProjectInitialState.Started;
+        private ProjectStartupMode startupMode = ProjectStartupMode.UseLastState;
 
 		[ReflectorCollection("tasks", InstanceType = typeof(ArrayList))]
 		public IList Tasks
@@ -149,7 +152,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		{ 
 			get { return ""; }
 		}
-
+        public IProjectAuthorisation Security
+        {
+            get { return null; }
+        }
 
         public int MaxSourceControlRetries
         {
@@ -157,16 +163,24 @@ namespace ThoughtWorks.CruiseControl.Core
         }
 
         /// <summary>
-        /// The start-up mode for this project.
+        /// The initial start-up state to set.
         /// </summary>
-        [ReflectorProperty("startupState", Required = false)]
-        public ProjectInitialState StartupState
+        [ReflectorProperty("initialState", Required = false)]
+        public ProjectInitialState InitialState
         {
-            get { return startupState; }
-            set { startupState = value; }
+            get { return initialState; }
+            set { initialState = value; }
         }
 
-
+        /// <summary>
+        /// The start-up mode for this project.
+        /// </summary>
+        [ReflectorProperty("startupMode", Required = false)]
+        public ProjectStartupMode StartupMode
+        {
+            get { return startupMode; }
+            set { startupMode = value; }
+        }
 
         public bool stopProjectOnReachingMaxSourceControlRetries
         {
@@ -178,5 +192,27 @@ namespace ThoughtWorks.CruiseControl.Core
             get { throw new NotImplementedException(); }
         }
 
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the latest list of packages.
+        /// </summary>
+        /// <returns></returns>
+        public virtual List<PackageDetails> RetrievePackageList()
+        {
+            List<PackageDetails> packages = new List<PackageDetails>();
+            return packages;
+        }
+
+        /// <summary>
+        /// Retrieves the list of packages for a build.
+        /// </summary>
+        /// <param name="buildLabel"></param>
+        /// <returns></returns>
+        public virtual List<PackageDetails> RetrievePackageList(string buildLabel)
+        {
+            List<PackageDetails> packages = new List<PackageDetails>();
+            return packages;
+        }
+        #endregion
     }
 }

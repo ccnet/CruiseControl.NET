@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private IntegrationRequest request = IntegrationRequest.NullRequest;
         private IntegrationSummary lastIntegration = IntegrationSummary.Initial;
         private string buildLogDirectory;
-
+        private List<NameValuePair> parameters = new List<NameValuePair>();
 
         // mutable properties
         private IntegrationStatus status = IntegrationStatus.Unknown;
@@ -96,6 +96,15 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             get { return label; }
             set { label = value; }
+        }
+
+        /// <summary>
+        ///  The parameters used.
+        /// </summary>
+        public List<NameValuePair> Parameters
+        {
+            get { return parameters; }
+            set { parameters = value; }
         }
 
         /// <summary>

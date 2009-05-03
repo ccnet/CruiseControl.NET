@@ -5,6 +5,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 {
@@ -13,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 	{
 		private DynamicMock cruiseRequestFactoryMock;
 		private DynamicMock proxiedActionMock;
+        private DynamicMock urlBuilderMock;
 		private CruiseActionProxyAction proxy;
 
 		private ICruiseRequest cruiseRequest;
@@ -23,11 +25,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		{
 			cruiseRequestFactoryMock = new DynamicMock(typeof(ICruiseRequestFactory));
 			proxiedActionMock = new DynamicMock(typeof(ICruiseAction));
+            urlBuilderMock = new DynamicMock(typeof(ICruiseUrlBuilder));
+
 			proxy = new CruiseActionProxyAction(
 				(ICruiseAction) proxiedActionMock.MockInstance,
-				(ICruiseRequestFactory) cruiseRequestFactoryMock.MockInstance);
+				(ICruiseRequestFactory) cruiseRequestFactoryMock.MockInstance,
+                (ICruiseUrlBuilder)urlBuilderMock.MockInstance);
 
-			cruiseRequest = new RequestWrappingCruiseRequest(null);
+            cruiseRequest = new RequestWrappingCruiseRequest(null, (ICruiseUrlBuilder)urlBuilderMock.MockInstance);
             request = new NameValueCollectionRequest(new NameValueCollection(), null, null, null, null);
 		}
 
@@ -42,7 +47,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		{
 			IResponse response = new HtmlFragmentResponse("foo");
 			// Setup
-			cruiseRequestFactoryMock.ExpectAndReturn("CreateCruiseRequest", cruiseRequest, request);
+			cruiseRequestFactoryMock.ExpectAndReturn("CreateCruiseRequest", cruiseRequest, request,
+                (ICruiseUrlBuilder)urlBuilderMock.MockInstance);
 			proxiedActionMock.ExpectAndReturn("Execute", response, cruiseRequest);
 
 			// Execute

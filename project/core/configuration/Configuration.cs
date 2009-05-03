@@ -1,19 +1,31 @@
 using System;
 using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Core.Security;
+
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
 	public class Configuration : IConfiguration
 	{
 		private ProjectList projects = new ProjectList();
-        private List<IQueueConfiguration> _queueConfigurations = new List<IQueueConfiguration>();
+        private List<IQueueConfiguration> queueConfigurations = new List<IQueueConfiguration>();
+        private ISecurityManager securityManager = new NullSecurityManager();
+
+        /// <summary>
+        /// Store the security manager that is being used.
+        /// </summary>
+        public ISecurityManager SecurityManager
+        {
+            get { return securityManager; }
+            set { securityManager = value; }
+        }
 
         /// <summary>
         /// Store any custom queue configurations.
         /// </summary>
         public virtual List<IQueueConfiguration> QueueConfigurations
         {
-            get { return _queueConfigurations; }
+            get { return queueConfigurations; }
         }
 
 		public void AddProject(IProject project)
@@ -31,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             IQueueConfiguration actualConfig = null;
 
             // Attempt to find the configuration
-            foreach (IQueueConfiguration config in _queueConfigurations)
+            foreach (IQueueConfiguration config in queueConfigurations)
             {
                 if (string.Equals(config.Name, name, StringComparison.InvariantCultureIgnoreCase))
                 {

@@ -4,6 +4,8 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 {
@@ -59,9 +61,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		public void ForceBuildInvokesForceBuildOnTheSelectedProject()
 		{
 			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.Success);
+            mockProjectMonitor.ExpectAndReturn("ListBuildParameters", null);
 			controller.SelectedProject = projectMonitor;
 
-			mockProjectMonitor.Expect("ForceBuild");
+			mockProjectMonitor.Expect("ForceBuild", (Dictionary<string, string>)null);
 			controller.ForceBuild();
 
 			mockProjectMonitor.Verify();
@@ -71,9 +74,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		public void ForceBuildDoesNothingIfProjectIsNotConnected()
 		{
 			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.NotConnected);
+            mockProjectMonitor.ExpectAndReturn("ListBuildParameters", null);
 			controller.SelectedProject = projectMonitor;
 
-			mockProjectMonitor.ExpectNoCall("ForceBuild");
+            mockProjectMonitor.ExpectNoCall("ForceBuild", typeof(Dictionary<string, string>));
 			controller.ForceBuild();
 
 			mockProjectMonitor.Verify();

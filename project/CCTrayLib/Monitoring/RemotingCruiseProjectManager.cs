@@ -1,5 +1,7 @@
 using System;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -17,11 +19,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			this.projectName = projectName;
 		}
 
-		public void ForceBuild()
+        public void ForceBuild(string sessionToken, Dictionary<string, string> parameters)
 		{
 			try
 			{
-				manager.Request(ProjectName, new IntegrationRequest(BuildCondition.ForceBuild, Environment.UserName));
+				manager.Request(sessionToken, ProjectName, new IntegrationRequest(BuildCondition.ForceBuild, Environment.UserName));
 			}
 			// Silently ignore exceptions that occur due to connection problems
 			catch (System.Net.Sockets.SocketException)
@@ -32,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 
-		public void FixBuild(string fixingUserName)
+		public void FixBuild(string sessionToken, string fixingUserName)
 		{
 			string Fixer;
 			if (fixingUserName.Trim().Length == 0)
@@ -46,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 			try
 			{
-				manager.SendMessage(ProjectName, new Message(string.Format("{0} is fixing the build.", Fixer)));
+                manager.SendMessage(sessionToken, ProjectName, new Message(string.Format("{0} is fixing the build.", Fixer)));
 			}
 			// Silently ignore exceptions that occur due to connection problems
 			catch (System.Net.Sockets.SocketException)
@@ -57,11 +59,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 		
-		public void AbortBuild()
+        public void AbortBuild(string sessionToken)
 		{
 			try
 			{
-				manager.AbortBuild(ProjectName, Environment.UserName);
+				manager.AbortBuild(sessionToken, ProjectName, Environment.UserName);
 			}
 			// Silently ignore exceptions that occur due to connection problems
 			catch (System.Net.Sockets.SocketException)
@@ -72,11 +74,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 		
-		public void StopProject()
+        public void StopProject(string sessionToken)
 		{
 			try
 			{
-				manager.Stop(projectName);
+                manager.Stop(sessionToken, projectName);
 			}
 			// Silently ignore exceptions that occur due to connection problems
 			catch (System.Net.Sockets.SocketException)
@@ -87,11 +89,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 		
-		public void StartProject()
+        public void StartProject(string sessionToken)
 		{
 			try
 			{
-				manager.Start(projectName);
+                manager.Start(sessionToken, projectName);
 			}
 			// Silently ignore exceptions that occur due to connection problems
 			catch (System.Net.Sockets.SocketException)
@@ -102,11 +104,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 		
-		public void CancelPendingRequest()
+        public void CancelPendingRequest(string sessionToken)
 		{
 			try
 			{
-				manager.CancelPendingRequest(ProjectName);
+                manager.CancelPendingRequest(sessionToken, ProjectName);
 			}
 			// Silently ignore exceptions that occur due to connection problems
 			catch (System.Net.Sockets.SocketException)
@@ -121,5 +123,51 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			get { return projectName; }
 		}
+
+        #region RetrieveSnapshot()
+        /// <summary>
+        /// Retrieves a snapshot of the current build status.
+        /// </summary>
+        /// <returns>The current build status of the project.</returns>
+        public virtual ProjectStatusSnapshot RetrieveSnapshot()
+        {
+            ProjectStatusSnapshot snapshot = manager.TakeStatusSnapshot(projectName);
+            return snapshot;
+        }
+        #endregion
+
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the current list of available packages.
+        /// </summary>
+        /// <returns></returns>
+        public virtual PackageDetails[] RetrievePackageList()
+        {
+            PackageDetails[] list = manager.RetrievePackageList(projectName);
+            return list;
+        }
+        #endregion
+
+        #region RetrieveFileTransfer()
+        /// <summary>
+        /// Retrieve a file transfer object.
+        /// </summary>
+        /// <param name="project">The project to retrieve the file for.</param>
+        /// <param name="fileName">The name of the file.</param>
+        public virtual IFileTransfer RetrieveFileTransfer(string fileName)
+        {
+            RemotingFileTransfer fileTransfer = manager.RetrieveFileTransfer(projectName, fileName);
+            return fileTransfer;
+        }
+        #endregion
+
+        /// <summary>
+        /// Retrieves any build parameters.
+        /// </summary>
+        /// <returns></returns>
+        public virtual List<ParameterBase> ListBuildParameters()
+        {
+            return manager.ListBuildParameters(projectName);
+        }
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
@@ -55,6 +56,37 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 		{
 			BuildServer.BuildFromRemotingDisplayName("server:xxx");
 		}
+		
+		[Test]
+        [ExpectedException(typeof(CruiseControlException), "Extension transport must always define an extension name")]
+        public void ThrowsWhenMissingExtension()
+        {
+            BuildServer newServer = new BuildServer("http://test", BuildServerTransport.Extension, null, null);
+        }
+
+        [Test]
+        public void SetExtensionName()
+        {
+            BuildServer newServer = new BuildServer();
+            newServer.ExtensionName = "new extension";
+            Assert.AreEqual("new extension", newServer.ExtensionName);
+        }
+
+        [Test]
+        public void SetExtensionSettings()
+        {
+            BuildServer newServer = new BuildServer();
+            newServer.ExtensionSettings = "new extension";
+            Assert.AreEqual("new extension", newServer.ExtensionSettings);
+        }
+
+        [Test]
+        public void SetTransport()
+        {
+            BuildServer newServer = new BuildServer();
+            newServer.Transport = BuildServerTransport.Extension;
+            Assert.AreEqual(BuildServerTransport.Extension, newServer.Transport);
+        }
 		
 		[Test]
 		public void TwoBuildServersAreEqualIfTheirUrlsAreTheSame()

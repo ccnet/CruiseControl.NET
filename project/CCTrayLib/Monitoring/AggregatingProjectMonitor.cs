@@ -1,6 +1,8 @@
 using System;
 using System.Text;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -20,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 
-		public void ForceBuild()
+        public void ForceBuild(Dictionary<string, string> parameters)
 		{
 			throw new NotImplementedException();
 		}
@@ -189,5 +191,44 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			get { throw new InvalidOperationException(); }
 		}
+
+        #region RetrieveSnapshot()
+        /// <summary>
+        /// Retrieves a snapshot of the current build status.
+        /// </summary>
+        /// <returns>The current build status of the project.</returns>
+        public virtual ProjectStatusSnapshot RetrieveSnapshot()
+        {
+            throw new InvalidOperationException();
+        }
+        #endregion
+
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the current list of available packages.
+        /// </summary>
+        /// <returns></returns>
+        public virtual PackageDetails[] RetrievePackageList()
+        {
+            throw new InvalidOperationException();
+        }
+        #endregion
+
+        #region RetrieveFileTransfer()
+        /// <summary>
+        /// Retrieve a file transfer object.
+        /// </summary>
+        /// <param name="project">The project to retrieve the file for.</param>
+        /// <param name="fileName">The name of the file.</param>
+        public virtual IFileTransfer RetrieveFileTransfer(string fileName)
+        {
+            throw new InvalidOperationException();
+        }
+        #endregion
+
+        public List<ParameterBase> ListBuildParameters()
+        {
+            throw new NotImplementedException();
+        }
 	}
 }

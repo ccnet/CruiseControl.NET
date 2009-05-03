@@ -21,15 +21,18 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private readonly ILinkListFactory linkListFactory;
 	    private readonly IFingerprintFactory fingerprintFactory;
 	    private readonly IFarmService farmService;
+        private readonly ICruiseUrlBuilder urlBuilder;
 
 		public RecentBuildLister(IFarmService farmService, IVelocityTransformer velocityTransformer, 
-			IVelocityViewGenerator viewGenerator, ILinkFactory linkFactory, ILinkListFactory linkListFactory, IFingerprintFactory fingerprintFactory)
+			IVelocityViewGenerator viewGenerator, ILinkFactory linkFactory, ILinkListFactory linkListFactory, IFingerprintFactory fingerprintFactory,
+            ICruiseUrlBuilder urlBuilder)
 		{
 			this.farmService = farmService;
 			this.velocityTransformer = velocityTransformer;
 			this.velocityViewGenerator = viewGenerator;
 			this.linkFactory = linkFactory;
 			this.linkListFactory = linkListFactory;
+            this.urlBuilder = urlBuilder;
 		    this.fingerprintFactory = fingerprintFactory;
 		}
 
@@ -80,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 	    public ConditionalGetFingerprint GetFingerprint(IRequest request)
 	    {
-	        ICruiseRequest cruiseRequest = new NameValueCruiseRequestFactory().CreateCruiseRequest(request);
+	        ICruiseRequest cruiseRequest = new NameValueCruiseRequestFactory().CreateCruiseRequest(request, urlBuilder);
 	        IBuildSpecifier mostRecentBuildSpecifier =
 	            farmService.GetMostRecentBuildSpecifiers(cruiseRequest.ProjectSpecifier, 1)[0];
 	        DateTime mostRecentBuildDate = new LogFile(mostRecentBuildSpecifier.BuildName).Date;

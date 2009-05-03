@@ -11,7 +11,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	{
 		protected const int SuccessfulExitCode = 0;
 		protected const int FailedExitCode = -1;
-		protected string DefaultWorkingDirectory = @"c:\source\";
+		protected readonly string DefaultWorkingDirectory = Path.GetFullPath(Path.Combine(".", "source"));
+		protected readonly string DefaultWorkingDirectoryWithSpaces = Path.GetFullPath(Path.Combine(".", "source code"));
 		protected int DefaultTimeout = Timeout.DefaultTimeout.Millis;
 		protected string ProcessResultOutput = "output";
 		protected DateTime testDate = new DateTime(2005, 06, 06, 08, 45, 00);
@@ -40,7 +41,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		protected void ExpectToExecuteArguments(string args)
 		{
-			ExpectToExecute(NewProcessInfo(args));
+			ExpectToExecute(NewProcessInfo(args, DefaultWorkingDirectory));
+		}
+
+		protected void ExpectToExecuteArguments(string args, string workingDirectory)
+		{
+			ExpectToExecute(NewProcessInfo(args, workingDirectory));
 		}
 
 		protected void ExpectToExecute(ProcessInfo processInfo)
@@ -85,9 +91,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			return ProcessResultFixture.CreateTimedOutResult();
 		}
 
-		protected ProcessInfo NewProcessInfo(string args)
+		protected ProcessInfo NewProcessInfo(string args, string workingDirectory)
 		{
-			ProcessInfo info = new ProcessInfo(defaultExecutable, args, DefaultWorkingDirectory);
+			ProcessInfo info = new ProcessInfo(defaultExecutable, args, workingDirectory);
 			info.TimeOut = DefaultTimeout;
 			return info;
 		}

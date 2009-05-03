@@ -1,0 +1,146 @@
+﻿<script src="$applicationPath/javascript/jquery.timers.js" type="text/javascript"></script>
+<style type="text/css">
+.dataGroup
+{
+	margin-left: 5px;
+	padding: 5px;
+}
+.dataGroup label
+{
+	font-weight: bold;
+	float:left;
+	width:150px;
+}
+.dataGroup h3
+{
+	border-bottom: solid 1px #bbbbbb;
+	margin: 5px 0;
+	cursor: pointer;
+}
+.dataGroup h3 img
+{
+	float: left;
+	margin-right: 5px;
+}
+</style>
+<script type="text/javascript">
+var dataUrl='$dataUrl';
+var imagesUrl='$applicationPath/images/';
+var lastStart;
+var refreshDelay=10000;
+
+jQuery(function(){
+    jQuery.getJSON(dataUrl, function(json){
+        initialBuild(json);
+        jQuery("#loadingDialog").hide();
+        jQuery(this).oneTime(refreshDelay,function(){
+            refreshDisplay();
+        });
+    });
+});
+function initialBuild(json){
+    lastStart = json.started;
+    jQuery("#statusDisplay").empty();
+    generateStatusItem(json, jQuery("#statusDisplay"));
+}
+function refreshDisplay(){
+    jQuery("#loadingDialog").show();
+    jQuery.getJSON(dataUrl, function(json){
+        if (json.started > lastStart){
+            initialBuild(json);
+        } else{
+            refreshData(json);
+        }
+        jQuery("#loadingDialog").hide();
+        jQuery(this).oneTime(refreshDelay,function(){
+            refreshDisplay();
+        });
+    });
+}
+function refreshData(item){
+    var id = item.id.replace(/-/g, '');
+    var title = jQuery('#h' + id);
+    title.text(item.name);
+    title.prepend('<img src="' + imagesUrl + item.status + '.png"/>');
+    var details = jQuery('#c' + id);
+    generateDetails(details, item);
+        
+    if (item.children !== undefined){
+        for (var loop=0; loop<item.children.length;loop++){
+            refreshData(item.children[loop]);
+        }
+    }
+}
+function generateStatusItem(item, parent){
+    var group = jQuery('<div></div>');
+    parent.append(group);
+    group.addClass('dataGroup');
+    
+    var id = item.id.replace(/-/g, '');
+    var title = jQuery('<h3>' + item.name + '</h3>');
+    title.prepend('<img src="' + imagesUrl + item.status + '.png"/>');
+    title.attr('id', 'h' + id);
+    group.append(title);
+    
+    var content = jQuery('<div></div>');
+    group.append(content);
+
+    var details = jQuery('<div></div>');
+    details.attr('id', 'c' + id);
+    details.addClass('hidden');
+    content.append(details);
+    generateDetails(details, item);
+    
+    title.bind('click', function(e){
+        details.toggleClass('hidden');
+    });
+        
+    if (item.children !== undefined){
+        for (var loop=0; loop<item.children.length;loop++){
+            generateStatusItem(item.children[loop],content);
+        }
+    }
+}
+function generateDetails(details, item){
+    details.empty();
+    details.append('<div><label>Name:</label><span>' + item.name + '</span></div>');
+    details.append('<div><label>Status:</label><span>' + item.status + '</span></div>');
+    if (item.description!==undefined){
+        details.append('<div><label>Description:</label><span>' + item.description + '</span></div>');
+    }
+    if (item.started!==undefined){
+        details.append('<div><label>Time Started:</label><span>' + item.started.toLocaleString() + '</span></div>');
+    }
+    if (item.completed!==undefined){
+        details.append('<div><label>Time Completed:</label><span>' + item.completed.toLocaleString() + '</span></div>');
+    }
+}
+function formatTime(time){
+    var seconds = (time % 60);
+    var output = seconds + 's';
+    if (output > 60){
+        time = (time - seconds) / 60;
+        var minutes = (time % 60);
+        output = minutes + 'm ' + output;
+        if (time > 60){
+            time = (time - minutes) / 60;
+            var hours = (time % 24);
+            output = hours + 'h ' + output;
+            if (time > 24){
+                time = (time - hours) / 24;
+                output = time + 'd ' + output;
+            }
+        }
+    }
+    return output;
+}
+</script>
+<h2>Current Status for $projectName</h2>
+<div style="position:relative;">
+    <div id="statusDisplay"></div>
+    <div id="loadingDialog" class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" style="position:absolute;top:0;">
+        <span class="ui-dialog-title" unselectable="on" style="-moz-user-select: none;">
+            Loading status data, please wait...
+        </span>
+    </div>
+</div>

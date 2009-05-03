@@ -1,0 +1,43 @@
+﻿<package>
+  <name>NAnt Results</name>
+  <description>Display the results of a NAnt build.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>compile.xsl</file>
+        <file>NAnt.xsl</file>
+        <file>NAntTiming.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\compile.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\compile.xsl</value>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\NAnt.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="NAnt Output"/>
+        <attribute name="actionName" value="NAntOutputBuildReport"/>
+        <attribute name="xslFileName" value="xsl\NAnt.xsl"/>
+      </attributes>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\NAntTiming.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="NAnt Timings"/>
+        <attribute name="actionName" value="NAntTimingsBuildReport"/>
+        <attribute name="xslFileName" value="xsl\NAntTiming.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>

@@ -4,6 +4,7 @@ using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 {
@@ -312,9 +313,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 
 			configurationMock.ExpectAndReturn("Servers", servers);
 			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.Expect("ForceBuild", "myproject","BuildForcer");
+            var parameters = new Dictionary<string, string>();
+			cruiseManagerMock.Expect("ForceBuild", (string)null, "myproject","BuildForcer", parameters);
 
-            managerWrapper.ForceBuild(projectSpecifier, "BuildForcer");
+            managerWrapper.ForceBuild(projectSpecifier, null, "BuildForcer", parameters);
 
 			VerifyAll();
 		}
@@ -358,5 +360,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 
 			VerifyAll();
 		}
+
+        [Test]
+        public void ReturnsServerSecurityFromCorrectServer()
+        {
+            ServerLocation[] servers = new ServerLocation[] { serverLocation, otherServerLocation };
+
+            configurationMock.ExpectAndReturn("Servers", servers);
+            cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
+            string expected = "security configuration";
+            cruiseManagerMock.ExpectAndReturn("GetSecurityConfiguration", expected, string.Empty);
+            string actual = managerWrapper.GetServerSecurity(serverSpecifier, string.Empty);
+            Assert.AreEqual(expected, actual);
+
+            VerifyAll();
+        }
 	}
 }

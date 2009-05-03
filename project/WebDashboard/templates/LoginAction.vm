@@ -1,0 +1,6 @@
+﻿#if ($action != "")
+	<a href="$action.Url">$action.Text</a>
+#end
+#if ($changePassword != "")
+	<a href="$changePassword.Url">$changePassword.Text</a>
+#end

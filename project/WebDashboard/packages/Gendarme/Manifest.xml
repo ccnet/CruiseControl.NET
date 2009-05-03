@@ -1,0 +1,32 @@
+﻿<package>
+  <name>Gendarme Results</name>
+  <description>Display the results of a Gendarme report.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>gendarme-summary-ccnet.xsl</file>
+        <file>gendarme-report-ccnet.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\gendarme-summary-ccnet.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\gendarme-summary-ccnet.xsl</value>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\gendarme-report-ccnet.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="Gendarme Report"/>
+        <attribute name="actionName" value="GendarmeBuildReport"/>
+        <attribute name="xslFileName" value="xsl\gendarme-report-ccnet.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>

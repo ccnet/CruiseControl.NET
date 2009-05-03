@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ForceBuild
 			cruiseRequestMock.SetupResult("ProjectSpecifier", projectSpecifier);
 			cruiseRequestMock.SetupResult("ProjectName", "myProject");
 
-            mockFarmService.Expect("ForceBuild", projectSpecifier, "BuildForcer");
+            mockFarmService.Expect("ForceBuild", projectSpecifier, (string)null, "BuildForcer");
 
 			IResponse response = reportAction.Execute(cruiseRequest);
 			Assert.IsTrue(response is XmlFragmentResponse);

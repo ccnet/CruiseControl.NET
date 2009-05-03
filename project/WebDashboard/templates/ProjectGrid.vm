@@ -1,3 +1,35 @@
+    <script type="text/javascript">
+  $(document).ready(function(){
+      $('#parameterCheck').dialog({
+        autoOpen:false,
+        modal:true,
+        title:'Project Parameters',
+        width:400,
+        height:300,
+        overlay:{
+          opacity:0.5,
+          background:'black'
+        }
+      });
+  });
+  function checkForParams(buttonEl, checkUrl){
+    $('#parameterEditor').replaceWith('<div id="parameterEditor">Loading parameters, please wait...</div>');
+    $('#parameterCheck').dialog('open');
+    jQuery.get(checkUrl, function(data){
+      if(data=='NONE'){
+        $('#parameterCheck').dialog('close');
+        var button = $(buttonEl);
+        button.after('<input type="hidden" name="ForceBuild" value="Force" />');
+        buttonEl.parentNode.parentNode.submit();
+      }else{
+        $('#parameterEditor').replaceWith('<div id="parameterEditor">' + data + '</div>');
+      }
+    });
+  }
+</script>
+<div id="parameterCheck">
+  <div id="parameterEditor">Loading parameters, please wait...</div>
+</div>
 <form ID="RefreshForm" method="post">
 <table width="100%">
 <tr>
@@ -27,7 +59,11 @@
         <td align="Center">
             <a href="$lastBuildDateSortLink"><b>Last Build Time</b></a>
         </td>
-        <td align="Center">
+        <td align="Center">          
+            <b>Next Build Time</b>          
+        </td>
+
+      <td align="Center">
             <b>Last Build Label</b>
         </td>
         <td align="Center">
@@ -74,6 +110,10 @@
             <font color="Black">$projectGridRow.LastBuildDate</font>
         </td>
         <td align="Center">
+          <font color="Black">$projectGridRow.NextBuildTime</font>
+        </td>
+
+      <td align="Center">
             <font color="Black">$projectGridRow.LastBuildLabel</font>
         </td>
         <td align="Center">
@@ -97,8 +137,12 @@
                 <input type="hidden" name="serverName" value="$projectGridRow.ServerName" />
                     <font color="Black">
                     #if ($projectGridRow.allowForceBuild)
+          #if($projectGridRow.ForceAbortBuildButtonValue == "Force")
+          <input type="button" name="$projectGridRow.ForceAbortBuildButtonName" value="$projectGridRow.ForceAbortBuildButtonValue" onclick="checkForParams(this, '$projectGridRow.ParametersUrl')"/>
+          #else
                         <input type="submit" name="$projectGridRow.ForceAbortBuildButtonName" value="$projectGridRow.ForceAbortBuildButtonValue"/>
                     #end
+          #end
                     #if ($projectGridRow.AllowStartStopBuild)               
                         <input type="submit" name="$projectGridRow.StartStopButtonName" value="$projectGridRow.StartStopButtonValue"/>
                     #end
@@ -109,7 +153,7 @@
 
     #if ($projectGridRow.BuildStage.Length > 0)
     <tr  bgcolor="lavender">
-      <td align="Left" COLSPAN="9">
+      <td align="Left" COLSPAN="10">
         <font color="Black">
           $projectGridRow.BuildStage
         </font>
@@ -129,7 +173,7 @@
   #end
   #set ($OKPercentToolTip = $OKPercent * 2)
    <tr>
-     <td COLSPAN="9">
+     <td COLSPAN="10">
       <table  cellspacing="0" cellpadding="0"  border="0" width="100%" >
         <tr height=5 title="Percentage of successfull builds : $OKPercentToolTip%">
             <td width=$OKPercent% bgcolor="#33CC00"> </td>

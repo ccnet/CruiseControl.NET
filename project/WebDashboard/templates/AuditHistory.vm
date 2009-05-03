@@ -1,0 +1,105 @@
+<style type="text/css">
+.auditHistory-table
+{
+  width:100%;
+  border-collapse:collapse;
+}
+.auditHistory-table th
+{
+  text-align:left;
+  border-bottom: solid 1px black;
+}
+.auditHistory-table td
+{
+  padding: 2px;
+}
+.auditHistory-table .odd td
+{
+  background-color:#f0f0f0;
+}
+.auditHistory-table .even td
+{
+  background-color:#ffffff;
+}
+.message
+{
+  margin-left: 20px;
+  font-style:italic;  
+}
+</style>
+<div id="serverLogProjects">
+	#foreach ($projectLink in $projectLinks)
+	<a href="$projectLink.Url" style="padding: 10px">$projectLink.Text</a>
+	#end
+</div>
+#if ($currentProject.Length > 0)
+<h2>Audit History for Project: $currentProject</h2>
+#else
+<h2>Server Audit History</h2>
+#end
+<table class="auditHistory-table">
+  <tr>
+    <th>Event Date/Time</th>
+    #if ($currentProject.Length > 0)
+    #else
+    <th>Project</th>
+    #end
+    <th>User</th>
+    <th>Event</th>
+    <th>Outcome</th>
+  </tr>
+  #foreach ($auditRecord in $auditHistory)
+  #odd
+  <tr class="odd">
+    <td>$auditRecord.TimeOfEvent</td>
+    #if ($currentProject.Length > 0)
+    #else
+    <td>
+      #if ($auditRecord.ProjectName.Length > 0)
+      $auditRecord.ProjectName
+      #end
+    </td>
+    #end
+    <td>
+      #if ($auditRecord.UserName.Length > 0)
+      $auditRecord.UserName
+      #end
+    </td>
+    <td>$auditRecord.EventType</td>
+    <td>$auditRecord.SecurityRight</td>
+  </tr>
+  #if ($auditRecord.Message.Length > 0)
+  <tr class="odd">
+    <td colspan="5">
+      <span class="message">$auditRecord.Message</span>
+    </td>
+  </tr>
+  #end
+  #even
+  <tr class="even">
+    <td>$auditRecord.TimeOfEvent</td>
+    #if ($currentProject.Length > 0)
+    #else
+    <td>
+      #if ($auditRecord.ProjectName.Length > 0)
+      $auditRecord.ProjectName
+      #end
+    </td>
+    #end
+    <td>
+      #if ($auditRecord.UserName.Length > 0)
+      $auditRecord.UserName
+      #end
+    </td>
+    <td>$auditRecord.EventType</td>
+    <td>$auditRecord.SecurityRight</td>
+  </tr>
+  #if ($auditRecord.Message.Length > 0)
+  <tr class="even">
+    <td colspan="5">
+      <span class="message">$auditRecord.Message</span>
+    </td>
+  </tr>
+  #end
+  #end
+</table>

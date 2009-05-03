@@ -175,14 +175,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             foreach (EmailUser user in emailPublisher.EmailUsers.Values)
             {
                 EmailGroup group = GetEmailGroup(user.Group);
-                if (group != null && group.Notification == notificationType)
+                if (group != null && group.HasNotification(notificationType))
                 {
                     recipients[user.Address] = user;
                 }
             }
         }
-
-
 
 
         public string Subject

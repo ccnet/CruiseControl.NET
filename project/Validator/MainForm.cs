@@ -13,6 +13,8 @@ using Exortech.NetReflector;
 using Manoli.Utils.CSharpFormat;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Security;
+using ThoughtWorks.CruiseControl.Core.Config.Preprocessor;
 
 namespace Validator
 {
@@ -156,6 +158,9 @@ namespace Validator
             }
         }
 
+        /// <summary>
+        /// Begin loading the configuration.
+        /// </summary>
         private void StartConfigurationLoad()
         {
             DisplayProgressMessage("Loading configuration, please wait...", 0);
@@ -166,14 +171,44 @@ namespace Validator
             myBodyEl.InnerHtml = string.Empty;
             try
             {
+                // Attempt to load the configuration
                 loader.Load(new FileInfo(myFileName));
             }
             catch (ConfigurationException error)
             {
+                // There is an error with the configuration
                 myBodyEl.AppendChild(
                     GenerateElement("div",
                     new HtmlAttribute("class", "error"),
                     GenerateElement("div", "Configuration contains invalid XML: " + error.Message)));
+            }
+            catch (PreprocessorException error)
+            {
+                // There was an error with pre-processing
+                myBodyEl.AppendChild(
+                    GenerateElement("div",
+                    new HtmlAttribute("class", "error"),
+                    GenerateElement("div", "Preprocessing failed loading the XML: " + error.Message)));
+            }
+            catch (Exception error)
+            {
+                // Catch-all exception block
+                StringBuilder message = new StringBuilder();
+                message.Append("An unexpected error has occurred while loading the configuration!" +
+                    Environment.NewLine + 
+                    "Please report this error to the CCNet user group (http://groups.google.com/group/ccnet-user). This will help us to improve this application.");
+                Exception currentError = error;
+                while (currentError != null)
+                {
+                    message.AppendFormat("{0}{1} [{2}]", Environment.NewLine, error.Message, error.GetType().Name);
+                    message.AppendFormat("{0}{1}", Environment.NewLine, error.StackTrace);
+                    currentError = currentError.InnerException;
+                    if (currentError != null)
+                    {
+                        message.AppendFormat("{0}{1} Inner Exception {1}", Environment.NewLine, new string('=', 10));
+                    }
+                }
+                MessageBox.Show(this, message.ToString(), "Unexpected error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void DisplayFileName()
@@ -209,7 +244,7 @@ namespace Validator
             return element;
         }
 
-        public IConfiguration Read(XmlDocument document)
+        public IConfiguration Read(XmlDocument document, IConfigurationErrorProcesser errorProcesser)
         {
             DisplayFileName();
             DisplayConfig();
@@ -267,6 +302,7 @@ namespace Validator
                 }
 
                 myBodyEl.AppendChild(tableEl);
+                InternalValidation(configuration);
 
                 DisplayProcessedConfiguration(items);
             }
@@ -318,6 +354,11 @@ namespace Validator
                             GenerateElement("td", queueConfig.Name),
                             GenerateElement("td", "Queue"),
                             GenerateElement("td", "Yes")));
+                }
+                else if (loadedItem is ISecurityManager)
+                {
+                    ISecurityManager securityManager = loadedItem as ISecurityManager;
+                    configuration.SecurityManager = securityManager as ISecurityManager;
                 }
                 else
                 {
@@ -427,8 +468,6 @@ namespace Validator
             about.ShowDialog(this);
         }
 
-        public event InvalidNodeEventHandler InvalidNodeEventHandler;
-
         private struct ConfigurationItem
         {
             public string Name;
@@ -439,6 +478,75 @@ namespace Validator
                 Name = name;
                 Configuration = config;
             }
+        }
+
+        private void InternalValidation(Configuration configuration)
+        {
+            var errorProcesser = new ValidationErrorProcesser(validationResults);
+            DisplayProgressMessage("Validating internal integrity, please wait...", 90);
+
+            HtmlElement nameEl = GenerateElement("div",
+                new HtmlAttribute("class", "titleLine"),
+                GenerateElement("b", "Internal validation"));
+            myBodyEl.AppendChild(nameEl);
+            bool isValid = true;
+            int row = 0;
+
+            foreach (IProject project in configuration.Projects)
+            {
+                if (project is IConfigurationValidation)
+                {
+                    errorProcesser.ItemName = string.Format("project '{0}'", project.Name);
+                    isValid &= RunValidationCheck(configuration, project as IConfigurationValidation, errorProcesser.ItemName, ref row, errorProcesser);
+                }
+            }
+
+            foreach (IQueueConfiguration queue in configuration.QueueConfigurations)
+            {
+                if (queue is IConfigurationValidation)
+                {
+                    errorProcesser.ItemName = string.Format("queue '{0}'", queue.Name);
+                    isValid &= RunValidationCheck(configuration, queue as IConfigurationValidation, errorProcesser.ItemName, ref row, errorProcesser);
+                }
+            }
+
+            if (configuration.SecurityManager is IConfigurationValidation)
+            {
+                errorProcesser.ItemName = "security manager";
+                isValid &= RunValidationCheck(configuration, configuration.SecurityManager as IConfigurationValidation, errorProcesser.ItemName, ref row, errorProcesser);
+            }
+
+            if (isValid && errorProcesser.Passed)
+            {
+                myBodyEl.AppendChild(
+                    GenerateElement("div",
+                    "Internal validation passed"));
+            }
+        }
+
+        private bool RunValidationCheck(Configuration configuration, IConfigurationValidation validator, string name, ref int row, IConfigurationErrorProcesser errorProcesser)
+        {
+            bool isValid = true;
+
+            try
+            {
+                validator.Validate(configuration, null, errorProcesser);
+            }
+            catch (Exception error)
+            {
+                HtmlAttribute rowClass = new HtmlAttribute("class", (row % 2) == 1 ? "even" : "odd");
+                myBodyEl.AppendChild(
+                    GenerateElement("div",
+                        rowClass,
+                        GenerateElement("div",
+                        new HtmlAttribute("class", "error"),
+                        string.Format("Internal validation failed for {0}: {1}",
+                            name,
+                            error.Message))));
+                isValid = false;
+                row++;
+            }
+            return isValid;
         }
     }
 }

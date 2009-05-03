@@ -1,4 +1,5 @@
 using Exortech.NetReflector;
+using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
@@ -7,11 +8,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config
     /// </summary>
     [ReflectorType("queue")]
     public class DefaultQueueConfiguration
-        : IQueueConfiguration
+        : IQueueConfiguration, IConfigurationValidation
     {
-        private string _name;
-        private QueueDuplicateHandlingMode _handlingMode = QueueDuplicateHandlingMode.UseFirst;
-        private string _lockQueueNames;
+        private string name;
+        private QueueDuplicateHandlingMode handlingMode = QueueDuplicateHandlingMode.UseFirst;
+        private string lockQueueNames;
 
         /// <summary>
         /// Default constructor - needed for NetReflector.
@@ -24,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// <param name="name"></param>
         public DefaultQueueConfiguration(string name)
         {
-            _name = name;
+            this.name = name;
         }
 
         /// <summary>
@@ -33,8 +34,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         [ReflectorProperty("name", Required = true)]
         public virtual string Name
         {
-            get { return _name; }
-            set { _name = value.Trim(); }
+            get { return name; }
+            set { name = value; }
         }
 
         /// <summary>
@@ -43,15 +44,39 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         [ReflectorProperty("duplicates", Required = false)]
         public virtual QueueDuplicateHandlingMode HandlingMode
         {
-            get { return _handlingMode; }
-            set { _handlingMode = value; }
+            get { return handlingMode; }
+            set { handlingMode = value; }
         }
 
         [ReflectorProperty("lockqueues", Required = false)]
         public virtual string LockQueueNames
         {
-            get { return _lockQueueNames; }
-            set { _lockQueueNames = value; }
+            get { return lockQueueNames; }
+            set { lockQueueNames = value; }
+        }
+
+        /// <summary>
+        /// Checks the internal validation of the item.
+        /// </summary>
+        /// <param name="configuration">The entire configuration.</param>
+        /// <param name="parent">The parent item for the item being validated.</param>
+        public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
+        {
+            // Ensure that the queue has at least one project in it
+            bool queueFound = false;
+            foreach (IProject projectDef in configuration.Projects)
+            {
+                if (string.Equals(this.Name, projectDef.QueueName, StringComparison.InvariantCulture))
+                {
+                    queueFound = true;
+                    break;
+                }
+            }
+            if (!queueFound)
+            {
+                errorProcesser.ProcessError(new ConfigurationException(
+                    string.Format("An unused queue definition has been found: name '{0}'", this.Name)));
+            }
         }
     }
 }

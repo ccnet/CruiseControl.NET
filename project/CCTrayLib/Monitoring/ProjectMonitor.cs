@@ -1,32 +1,35 @@
 using System;
 using System.Diagnostics;
-using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
 	public class ProjectMonitor : IProjectMonitor, ISingleProjectDetail
 	{
 		private readonly ICruiseProjectManager cruiseProjectManager;
+        private readonly ISingleServerMonitor serverMonitor;
 		private ProjectStatus lastProjectStatus;
 		private Exception connectException;
 		private readonly BuildDurationTracker buildDurationTracker;
-        private readonly IProjectStatusRetriever projectStatusRetriever;
         // CCNET-1179: Store the project configuration.
         private readonly CCTrayProject _configuration;
 
         // CCNET-1179: Include the configuration in the arguments.
-        public ProjectMonitor(CCTrayProject configuration, ICruiseProjectManager cruiseProjectManager, IProjectStatusRetriever projectStatusRetriever)
-			: this(configuration, cruiseProjectManager, projectStatusRetriever, new DateTimeProvider())
+        public ProjectMonitor(CCTrayProject configuration, ICruiseProjectManager cruiseProjectManager, ISingleServerMonitor serverMonitor)
+            : this(configuration, cruiseProjectManager, serverMonitor, new DateTimeProvider())
 		{
 		}
 
         // CCNET-1179: Include the configuration in the arguments.
-        public ProjectMonitor(CCTrayProject configuration, ICruiseProjectManager cruiseProjectManager, IProjectStatusRetriever projectStatusRetriever, DateTimeProvider dateTimeProvider)
+        public ProjectMonitor(CCTrayProject configuration, ICruiseProjectManager cruiseProjectManager, ISingleServerMonitor serverMonitor, DateTimeProvider dateTimeProvider)
 		{
 			buildDurationTracker = new BuildDurationTracker(dateTimeProvider);
 			this.cruiseProjectManager = cruiseProjectManager;
-            this.projectStatusRetriever = projectStatusRetriever;
+            this.serverMonitor = serverMonitor;
             this._configuration = configuration;
         }
 
@@ -213,35 +216,71 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			get { return this; }
 		}
 
-		public void ForceBuild()
+        private void AttemptActionWithRetry(ActionHandler actionToTry)
+        {
+            try
+            {
+                actionToTry();
+            }
+            catch (SessionInvalidException)
+            {
+                // Let's assume the session has expired, so login again
+                if (this.serverMonitor.RefreshSession())
+                {
+                    // Now retry the action again
+                    actionToTry();
+                }
+            }
+        }
+
+        private delegate void ActionHandler();
+
+        public void ForceBuild(Dictionary<string, string> parameters)
 		{
-			cruiseProjectManager.ForceBuild();
+            AttemptActionWithRetry(delegate()
+            {
+                cruiseProjectManager.ForceBuild(serverMonitor.SessionToken, parameters);
+            });
 		}
 		
 		public void AbortBuild()
 		{
-			cruiseProjectManager.AbortBuild();
+            AttemptActionWithRetry(delegate()
+            {
+                cruiseProjectManager.AbortBuild(serverMonitor.SessionToken);
+            });
 		}
 		
 		public void FixBuild(string fixingUserName)
 		{
-            cruiseProjectManager.FixBuild(fixingUserName);
+            AttemptActionWithRetry(delegate()
+            {
+                cruiseProjectManager.FixBuild(serverMonitor.SessionToken, fixingUserName);
+            });
 		}
 
-		
 		public void StopProject()
 		{
-			cruiseProjectManager.StopProject();
+            AttemptActionWithRetry(delegate()
+            {
+                cruiseProjectManager.StopProject(serverMonitor.SessionToken);
+            });
 		}
 		
 		public void StartProject()
 		{
-			cruiseProjectManager.StartProject();
+            AttemptActionWithRetry(delegate()
+            {
+                cruiseProjectManager.StartProject(serverMonitor.SessionToken);
+            });
 		}
 		
 		public void CancelPending()
 		{
-			cruiseProjectManager.CancelPendingRequest();
+            AttemptActionWithRetry(delegate()
+            {
+                cruiseProjectManager.CancelPendingRequest(serverMonitor.SessionToken);
+            });
 		}
 
 		public void OnPollStarting()
@@ -253,7 +292,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			try
 			{
-				ProjectStatus newProjectStatus = projectStatusRetriever.GetProjectStatus(ProjectName);
+                ProjectStatus newProjectStatus = serverMonitor.GetProjectStatus(ProjectName);
 				if (lastProjectStatus != null && newProjectStatus != null)
 				{
 					PollIntervalReporter duringInterval = new PollIntervalReporter(lastProjectStatus, newProjectStatus);
@@ -313,6 +352,48 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			get { return buildDurationTracker.EstimatedTimeRemainingOnCurrentBuild; }
 		}
+
+        #region RetrieveSnapshot()
+        /// <summary>
+        /// Retrieves a snapshot of the current build status.
+        /// </summary>
+        /// <returns>The current build status of the project.</returns>
+        public virtual ProjectStatusSnapshot RetrieveSnapshot()
+        {
+            ProjectStatusSnapshot snapshot = cruiseProjectManager.RetrieveSnapshot();
+            return snapshot;
+        }
+        #endregion
+
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the current list of available packages.
+        /// </summary>
+        /// <returns></returns>
+        public virtual PackageDetails[] RetrievePackageList()
+        {
+            PackageDetails[] list = cruiseProjectManager.RetrievePackageList();
+            return list;
+        }
+        #endregion
+
+        #region RetrieveFileTransfer()
+        /// <summary>
+        /// Retrieve a file transfer object.
+        /// </summary>
+        /// <param name="project">The project to retrieve the file for.</param>
+        /// <param name="fileName">The name of the file.</param>
+        public virtual IFileTransfer RetrieveFileTransfer(string fileName)
+        {
+            IFileTransfer fileTransfer = cruiseProjectManager.RetrieveFileTransfer(fileName);
+            return fileTransfer;
+        }
+        #endregion
+
+        public List<ParameterBase> ListBuildParameters()
+        {
+            return cruiseProjectManager.ListBuildParameters();
+        }
 	}
 
 	public delegate void MessageEventHandler(Message message);

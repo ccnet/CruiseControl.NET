@@ -1,3 +1,4 @@
+#if !DISABLE_COM
 using System;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
@@ -20,3 +21,4 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
         }
 	}
 }
+#endif

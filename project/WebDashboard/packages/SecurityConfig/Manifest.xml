@@ -1,0 +1,23 @@
+﻿<package>
+  <name>Security Configuration Display</name>
+  <description>Display the security configuration a server.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Templates</location>
+      <files>
+        <file>SecurityConfiguration.vm</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/serverPlugins</path>
+      <name>serverSecurityConfigurationServerPlugin</name>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/projectPlugins</path>
+      <name>serverSecurityConfigurationProjectPlugin</name>
+    </setting>
+  </configuration>
+</package>

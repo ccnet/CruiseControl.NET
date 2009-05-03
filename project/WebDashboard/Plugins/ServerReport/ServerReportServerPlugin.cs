@@ -3,6 +3,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using System;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
@@ -48,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 		public IResponse Execute(ICruiseRequest request)
 		{
             if (sortColumn.HasValue) projectGridAction.DefaultSortColumn = sortColumn.Value;
-            return projectGridAction.Execute(ACTION_NAME, request.ServerSpecifier, request.Request);
+            return projectGridAction.Execute(ACTION_NAME, request.ServerSpecifier, request);
 		}
 
 		public string LinkDescription

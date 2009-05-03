@@ -7,7 +7,8 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	[ReflectorType("msbuild")]
-	public class MsBuildTask : BaseExecutableTask
+    public class MsBuildTask
+        : BaseExecutableTask, ITask
 	{
 		public const string defaultExecutable = @"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe";
 		public const string DefaultLogger = "";

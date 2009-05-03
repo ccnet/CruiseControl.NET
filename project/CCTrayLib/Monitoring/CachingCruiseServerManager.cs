@@ -1,3 +1,4 @@
+using System;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -13,14 +14,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			this.wrappedManager = wrappedManager;
 		}
 
-		public string ServerUrl
+        public BuildServer Configuration
 		{
-			get { return wrappedManager.ServerUrl; }
+            get { return wrappedManager.Configuration; }
 		}
 
-		public BuildServerTransport Transport
+        public string SessionToken
 		{
-			get { return wrappedManager.Transport; }
+            get { return wrappedManager.SessionToken; }
 		}
 
 		public string DisplayName
@@ -46,5 +47,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			cachedSnapshot = null;
 		}
+
+        public bool Login()
+        {
+            return wrappedManager.Login();
+        }
+
+        public void Logout()
+        {
+            wrappedManager.Logout();
+        }
 	}
 }

@@ -11,10 +11,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 	[TestFixture]
 	public class EmailMessageTest : CustomAssertion
 	{
-		private static readonly EmailGroup alwaysGroup = new EmailGroup("alwaysGroup", EmailGroup.NotificationType.Always);
-		private static readonly EmailGroup failedGroup = new EmailGroup("failedGroup", EmailGroup.NotificationType.Failed);
-		private static readonly EmailGroup changedGroup = new EmailGroup("changedGroup", EmailGroup.NotificationType.Change);
-        private static readonly EmailGroup successGroup = new EmailGroup("successGroup", EmailGroup.NotificationType.Success);
+		private static readonly EmailGroup alwaysGroup = new EmailGroup("alwaysGroup", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Always} );
+		private static readonly EmailGroup failedGroup = new EmailGroup("failedGroup", new EmailGroup.NotificationType[] {EmailGroup.NotificationType.Failed } );
+		private static readonly EmailGroup changedGroup = new EmailGroup("changedGroup", new EmailGroup.NotificationType[] {EmailGroup.NotificationType.Change} );
+        private static readonly EmailGroup successGroup = new EmailGroup("successGroup", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Success } );
         private static readonly EmailUser always = new EmailUser("always", alwaysGroup.Name, "always@thoughtworks.com");
 		private static readonly EmailUser failed = new EmailUser("failed", failedGroup.Name, "failed@thoughtworks.com");
 		private static readonly EmailUser changed = new EmailUser("changed", changedGroup.Name, "changed@thoughtworks.com");
@@ -113,7 +113,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void EmailSubject()
 		{
-			string subject = GetEmailMessage(IntegrationResultMother.CreateStillSuccessful(), true).Subject;
+            IntegrationResult ir = IntegrationResultMother.CreateStillSuccessful();
+            EmailMessage em = GetEmailMessage(ir, true);
+
+
+			string subject = em.Subject;
 			Assert.AreEqual("CCNET: Project#9 Build Successful: Build 0", subject);
 		}
 

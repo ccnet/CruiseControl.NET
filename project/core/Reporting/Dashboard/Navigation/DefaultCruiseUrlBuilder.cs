@@ -54,6 +54,11 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 			get { return urlBuilder.Extension; }
 		}
 
+        public IUrlBuilder InnerBuilder
+        {
+            get { return urlBuilder; }
+        }
+
 		private string GeneratePath(string serverName, string projectName, string buildName)
 		{
 			StringBuilder path = new StringBuilder();

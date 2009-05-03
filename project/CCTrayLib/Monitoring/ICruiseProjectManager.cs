@@ -1,4 +1,7 @@
+using ThoughtWorks.CruiseControl.Remote.Parameters;
+using System.Collections.Generic;
 
+using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
 	/// <summary>
@@ -8,12 +11,43 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	/// </summary>
 	public interface ICruiseProjectManager
 	{
-		void ForceBuild();
-		void FixBuild(string fixingUserName);
-		void AbortBuild();
-		void StopProject();
-		void StartProject();
-		void CancelPendingRequest();
+        void ForceBuild(string sessionToken, Dictionary<string, string> parameters);
+		void FixBuild(string sessionToken, string fixingUserName);
+        void AbortBuild(string sessionToken);
+        void StopProject(string sessionToken);
+        void StartProject(string sessionToken);
+        void CancelPendingRequest(string sessionToken);
 		string ProjectName { get; }
+
+        #region RetrieveSnapshot()
+        /// <summary>
+        /// Retrieves a snapshot of the current build status.
+        /// </summary>
+        /// <returns>The current build status of the project.</returns>
+        ProjectStatusSnapshot RetrieveSnapshot();
+        #endregion
+
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the current list of available packages.
+        /// </summary>
+        /// <returns></returns>
+        PackageDetails[] RetrievePackageList();
+        #endregion
+
+        #region RetrieveFileTransfer()
+        /// <summary>
+        /// Retrieve a file transfer object.
+        /// </summary>
+        /// <param name="project">The project to retrieve the file for.</param>
+        /// <param name="fileName">The name of the file.</param>
+        IFileTransfer RetrieveFileTransfer(string fileName);
+        #endregion
+
+        /// <summary>
+        /// Retrieves any build parameters.
+        /// </summary>
+        /// <returns></returns>
+        List<ParameterBase> ListBuildParameters();
 	}
 }

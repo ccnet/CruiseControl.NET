@@ -72,6 +72,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             return links.ToArray();
         }
 
+        
         private IAbsoluteLink[] GetCategoryLinks(IServerSpecifier[] serverSpecifiers)
         {
             if (serverSpecifiers == null) return null;

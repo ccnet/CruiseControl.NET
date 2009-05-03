@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using Exortech.NetReflector;
 using System.Xml;
@@ -11,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     [ReflectorType("rss")]
     public class RssPublisher : ITask
     {
-        private const string RSSFilename = "RSSData.xml";
+        private const string RssFilename = "RSSData.xml";
         private const string contentNamespace = "http://purl.org/rss/1.0/modules/content/";
         private int numberOfItems = 20;
 
@@ -22,22 +23,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         public int NumberOfItems
         {
             get { return numberOfItems; }
-            set
-            {
-                if (value > 255)
-                {
-                    numberOfItems = 255;
-                }
-                else
-                {
-                    numberOfItems = value;
-                }
-            }
+            set { numberOfItems = value > 255 ? 255 : value; }
         }
 
         private static string RSSDataFileLocation(string artifactDirectory)
         {
-            return Path.Combine(artifactDirectory, RSSFilename);
+            return Path.Combine(artifactDirectory, RssFilename);
         }
 
         public static string LoadRSSDataDocument(string artifactDirectory)
@@ -63,6 +54,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Making RSS feed");
 
             string feedFile = RSSDataFileLocation(result.ArtifactDirectory);
+            XmlElement channelElement = LoadOrInitialiseChannelElement(result, feedFile);
+            GenerateDocument(result, channelElement);
+            channelElement.OwnerDocument.Save(feedFile);
+        }
+
+        private XmlElement LoadOrInitialiseChannelElement(IIntegrationResult result, string feedFile)
+        {
             XmlDocument rssFeed = new XmlDocument();
             XmlElement channelElement = null;
 
@@ -81,13 +79,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 if (channelElement == null) rssFeed = new XmlDocument();
             }
             
-            // If the channel element isn't loaded, then this is a new document (or an invalid document that is being overwritten)
+            // If the channel element isn't loaded, then this is a new document,
+            // or an invalid document that is being overwritten
             if (channelElement == null)
             {
                 channelElement = InitialiseFeed(rssFeed, result.ProjectName, result.ProjectUrl);
             }
-            GenerateDocument(result, channelElement);
-            rssFeed.Save(feedFile);
+            return channelElement;
         }
 
         private XmlElement InitialiseFeed(XmlDocument rssFeed, string projectName, string projectUrl)
@@ -123,20 +121,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private XmlElement CreateTextElement(XmlDocument document, string name, string text, params object[] values)
         {
             XmlElement element = CreateElement(document, name);
-            if (values == null)
-            {
-                element.InnerText = text;
-            }
-            else
-            {
-                element.InnerText = string.Format(text, values);
-            }
+            element.InnerText = string.Format(text, values);
             return element;
         }
 
-        private void GenerateDocument(IIntegrationResult result, XmlElement channelElement)
+        private void GenerateDocument(IIntegrationResult result, XmlNode channelElement)
         {
-            // Esnure there is space for the new item
+            // Ensure there is space for the new item
             XmlNodeList existingElements = channelElement.SelectNodes("item");
             int count = existingElements.Count + 1;
             int position = 0;
@@ -147,32 +138,42 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 count--;
             }
 
-            XmlElement itemElement = CreateElement(channelElement.OwnerDocument, "item");
-            itemElement.AppendChild(CreateTextElement(channelElement.OwnerDocument,
+            XmlDocument ownerDocument = channelElement.OwnerDocument;
+            XmlElement integrationElement = BuildIntegrationElement(ownerDocument, result);
+            channelElement.AppendChild(integrationElement);
+        }
+
+        private XmlElement BuildIntegrationElement(XmlDocument ownerDocument, IIntegrationResult result)
+        {
+            XmlElement integrationElement = CreateElement(ownerDocument, "item");
+            integrationElement.AppendChild(CreateTextElement(integrationElement.OwnerDocument,
                 "title",
-                "Build {0} : {1}  {2}  {3}", 
-                result.Label, 
-                result.Status, 
-                GetAmountOfModifiedfiles(result), 
+                "Build {0} : {1}  {2}  {3}",
+                result.Label,
+                result.Status,
+                GetAmountOfModifiedFiles(result),
                 GetFirstCommentedModification(result)));
-            itemElement.AppendChild(CreateTextElement(channelElement.OwnerDocument, "description", GetAmountOfModifiedfiles(result)));
-            itemElement.AppendChild(CreateTextElement(itemElement.OwnerDocument, "guid", System.Guid.NewGuid().ToString()));
-            itemElement.AppendChild(CreateTextElement(itemElement.OwnerDocument, "pubDate", System.DateTime.Now.ToString("r")));
-            channelElement.AppendChild(itemElement);
+            integrationElement.AppendChild(CreateTextElement(
+                integrationElement.OwnerDocument, "description", GetAmountOfModifiedFiles(result)));
+            integrationElement.AppendChild(CreateTextElement(
+                integrationElement.OwnerDocument, "guid", System.Guid.NewGuid().ToString()));
+            integrationElement.AppendChild(CreateTextElement(
+                integrationElement.OwnerDocument, "pubDate", System.DateTime.Now.ToString("r")));
 
             if (result.HasModifications())
             {
-                XmlElement dataElement = CreateContentElement(
-                    itemElement.OwnerDocument,
+                XmlElement modsElement = CreateContentElement(
+                    integrationElement.OwnerDocument,
                     "encoded");
-                XmlCDataSection cdata = itemElement.OwnerDocument.CreateCDataSection(
+                XmlCDataSection cdata = integrationElement.OwnerDocument.CreateCDataSection(
                     GetBuildModifications(result));
-                dataElement.AppendChild(cdata);
-                itemElement.AppendChild(dataElement);
+                modsElement.AppendChild(cdata);
+                integrationElement.AppendChild(modsElement);
             }
+            return integrationElement;
         }
 
-        private string GetAmountOfModifiedfiles(IIntegrationResult result)
+        private string GetAmountOfModifiedFiles(IIntegrationResult result)
         {
             switch (result.Modifications.Length)
             {
@@ -187,89 +188,86 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private string GetFirstCommentedModification(IIntegrationResult result)
         {
-            if (result.HasModifications() )
+            if (result.HasModifications())
             {
-                for (int i = 0; i <= result.Modifications.Length - 1; i++)
+                foreach (Modification modification in result.Modifications)
                 {
-                    if (!(result.Modifications[i].Comment == null) &&  result.Modifications[i].Comment.Length > 0 )
-                        return "First Comment : " + result.Modifications[i].Comment;
+                    if (!string.IsNullOrEmpty(modification.Comment) )
+                        return "First Comment : " + modification.Comment;
                 }
-                
-                return "";
             }
-            else
-            {
-                return "";
-            }
+
+            return "";
         }
 
         private string GetBuildModifications(IIntegrationResult result)
         {
+            Modification[] modifications = result.Modifications;
 
-            System.IO.StringWriter mods = new StringWriter();
-            string ModificationCheck = "";
-            string PreviousModificationCheck = "";
+            return WriteModificationsSummary(modifications) + WriteModificationsDetails(modifications);
+        }
 
-            ArrayList LoggedModifications = new ArrayList();
+        private string WriteModificationsSummary(IEnumerable<Modification> modifications)
+        {
+            const string modificationHeaderFormat = "<tr><td>{0}</td><td>{1}</td></tr>";
+            const string issueLinkFormat = "<tr><td>IssueLink</td><td><a href=\"{0}\">{0}</a></td></tr>";
+            StringWriter mods = new StringWriter();
 
             mods.WriteLine("<h4>Modifications in build :</h4>");
-
             mods.WriteLine("<table cellpadding=\"5\">");
-
-            for (int i = 0; i < result.Modifications.Length; i++)
+            ArrayList alreadyAdded = new ArrayList();
+            foreach (Modification modification in modifications)
             {
-                ModificationCheck = result.Modifications[i].UserName + "__CCNET__" + result.Modifications[i].Comment;
+                string modificationChecksum = modification.UserName + "__CCNET__" + modification.Comment;
 
-                if (!LoggedModifications.Contains(ModificationCheck))
+                if (!alreadyAdded.Contains(modificationChecksum))
                 {
-                    LoggedModifications.Add(ModificationCheck);
+                    alreadyAdded.Add(modificationChecksum);
 
-                    mods.WriteLine(string.Format("<tr><td>{0}</td><td>{1}</td></tr>",
-                                    result.Modifications[i].UserName,
-                                    result.Modifications[i].Comment));
+                    mods.WriteLine(string.Format(modificationHeaderFormat,
+                                                 modification.UserName,
+                                                 modification.Comment));
 
-                    if (result.Modifications[i].IssueUrl != null &&  result.Modifications[i].IssueUrl.Length > 0)
+                    if (!string.IsNullOrEmpty(modification.IssueUrl))
                     {
-                        mods.WriteLine(string.Format("<tr><td>IssueLink</td><td><a href=\"{0}\">{0}</a></td></tr>",                                        
-                            result.Modifications[i].IssueUrl));
+                        mods.WriteLine(string.Format(issueLinkFormat,
+                                                     modification.IssueUrl));
                     }
                 }
             }
             mods.WriteLine("</table>");
 
+            return mods.ToString();
+        }
+
+        private string WriteModificationsDetails(IEnumerable<Modification> modifications)
+        {
+            const string modificationLine = "<tr><td><font size=2>{0}</font></td><td><font size=2>{1}/{2}</font></td></tr>";
+            const string changesetHeader = "<tr><td><b>{0}</b></td><td>{1}</td></tr>";
+            StringWriter mods = new StringWriter();
 
             mods.WriteLine("<h4>Detailed information of the modifications in the build :</h4>");
-
             mods.WriteLine("<table cellpadding=\"5\">");
-
-            PreviousModificationCheck = "";
-            LoggedModifications = new ArrayList();
-
-            for (int i = 0; i < result.Modifications.Length; i++)
+            string previousModificationChecksum = "";
+            foreach (Modification modification in modifications)
             {
-                ModificationCheck = result.Modifications[i].UserName + "__CCNET__" + result.Modifications[i].Comment;
+                string modificationChecksum = modification.UserName + "__CCNET__" + modification.Comment;
 
-                if (PreviousModificationCheck != ModificationCheck)
+                if (previousModificationChecksum != modificationChecksum)
                 {
-                    mods.WriteLine(string.Format("<tr><td><b>{0}</b></td><td>{1}</td></tr>",
-                                    result.Modifications[i].UserName,
-                                    result.Modifications[i].Comment));
-
-                    mods.WriteLine(string.Format("<tr><td><font size=2>{2}</font></td><td><font size=2>{0}/{1}</font></td></tr>",
-                                    result.Modifications[i].FolderName,
-                                    result.Modifications[i].FileName,
-                                    result.Modifications[i].Type));
-
-                    PreviousModificationCheck = ModificationCheck;
+                    mods.WriteLine(string.Format(changesetHeader,
+                                                 modification.UserName,
+                                                 modification.Comment));
                 }
-                else
-                {
 
-                    mods.WriteLine(string.Format("<tr><td><font size=2>{2}</font></td><td><font size=2>{0}/{1}</font></td></tr>",
-                                    result.Modifications[i].FolderName,
-                                    result.Modifications[i].FileName,
-                                    result.Modifications[i].Type));
-                }
+                mods.WriteLine(
+                    string.Format(modificationLine,
+                                  modification.Type,
+                                  modification.FolderName,
+                                  modification.FileName
+                        ));
+
+                previousModificationChecksum = modificationChecksum;
             }
             mods.WriteLine("</table>");
 

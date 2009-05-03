@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.IO;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -43,14 +44,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void VerifyInitialIntegrationResult()
 		{
-            IntegrationResult initial = IntegrationResult.CreateInitialIntegrationResult("project", @"c:\temp", @"c:\temp");
+			string workingDir = Path.GetFullPath(Path.Combine(".", "workingdir"));
+			string artifactDir = Path.GetFullPath(Path.Combine(".", "artifacts"));
+
+			IntegrationResult initial = IntegrationResult.CreateInitialIntegrationResult("project", workingDir, artifactDir);
 
 			Assert.AreEqual("project", initial.ProjectName);
 			Assert.AreEqual(IntegrationStatus.Unknown, initial.LastIntegrationStatus, "last integration status is unknown because no previous integrations exist.");
 			Assert.AreEqual(IntegrationStatus.Unknown, initial.Status, "status should be unknown as integration has not run yet.");
 			Assert.AreEqual(DateTime.Now.AddDays(-1).Day, initial.StartTime.Day, "assume start date is yesterday in order to detect some modifications.");
 			Assert.AreEqual(DateTime.Now.Day, initial.EndTime.Day, "assume end date is today in order to detect some modifications.");
-			Assert.AreEqual(@"c:\temp", initial.WorkingDirectory);
+			Assert.AreEqual(workingDir, initial.WorkingDirectory);
+			Assert.AreEqual(artifactDir, initial.ArtifactDirectory);
 			Assert.AreEqual(IntegrationResult.InitialLabel, initial.Label);
 
 			Assert.IsTrue(initial.IsInitial());
@@ -112,29 +117,37 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ShouldBaseRelativePathFromArtifactsDirectory()
 		{
-			result.ArtifactDirectory = @"c:\";
-			Assert.AreEqual(@"c:\hello.bat", result.BaseFromArtifactsDirectory("hello.bat"));
+			string artifactDir = Path.GetFullPath(Path.Combine(".", "artifacts"));
+
+			result.ArtifactDirectory = artifactDir;
+			Assert.AreEqual(Path.Combine(artifactDir, "hello.bat"), result.BaseFromArtifactsDirectory("hello.bat"));
 		}
 
 		[Test]
 		public void ShouldNotReBaseRelativeToArtifactsDirectoryForAbsolutePath()
 		{
-			result.ArtifactDirectory = @"c:\";
-			Assert.AreEqual(@"d:\hello.bat", result.BaseFromArtifactsDirectory(@"d:\hello.bat"));
+			string artifactDir = Path.GetFullPath(Path.Combine(".", "artifacts"));
+
+			result.ArtifactDirectory = artifactDir;
+			Assert.AreEqual(Path.Combine(artifactDir, "hello.bat"), result.BaseFromArtifactsDirectory(Path.Combine(artifactDir, "hello.bat")));
 		}
 
 		[Test]
 		public void ShouldBaseRelativePathFromWorkingDirectory()
 		{
-			result.WorkingDirectory = @"c:\";
-			Assert.AreEqual(@"c:\hello.bat", result.BaseFromWorkingDirectory("hello.bat"));
+			string workingDir = Path.GetFullPath(Path.Combine(".", "workingdir"));
+
+			result.WorkingDirectory = workingDir;
+			Assert.AreEqual(Path.Combine(workingDir, "hello.bat"), result.BaseFromWorkingDirectory("hello.bat"));
 		}
 
 		[Test]
 		public void ShouldNotReBaseRelativeToWorkingDirectoryForAbsolutePath()
 		{
-			result.WorkingDirectory = @"c:\";
-			Assert.AreEqual(@"d:\hello.bat", result.BaseFromWorkingDirectory(@"d:\hello.bat"));
+			string workingDir = Path.GetFullPath(Path.Combine(".", "workingdir"));
+
+			result.WorkingDirectory = workingDir;
+			Assert.AreEqual(Path.Combine(workingDir, "hello.bat"), result.BaseFromWorkingDirectory(Path.Combine(workingDir, "hello.bat")));
 		}
 
 		[Test]
@@ -163,9 +176,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void MapIntegrationProperties()
 		{
-            result = new IntegrationResult("project", @"c:\workingdir\", @"c:\artifactdir\", new IntegrationRequest(BuildCondition.IfModificationExists, "myTrigger"), new IntegrationSummary(IntegrationStatus.Unknown, "foo", "foo", DateTime.MinValue));
-			result.Label = "label23";
-			result.ArtifactDirectory = @"c:\artifactdir\";
+			string workingDir = Path.GetFullPath(Path.Combine(".", "workingdir"));
+			string artifactDir = Path.GetFullPath(Path.Combine(".", "artifacts"));
+
+			result = new IntegrationResult("project", workingDir, artifactDir,
+			                               new IntegrationRequest(BuildCondition.IfModificationExists, "myTrigger"),
+			                               new IntegrationSummary(IntegrationStatus.Unknown, "label23", "label22",
+			                                                      new DateTime(2005, 06, 06, 08, 45, 00)));
 			result.StartTime = new DateTime(2005,06,06,08,45,00);
 			result.ProjectUrl = "http://localhost/ccnet2";
             result.FailureUsers.Add("user");
@@ -180,8 +197,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual("http://localhost/ccnet2", result.IntegrationProperties[IntegrationPropertyNames.CCNetProjectUrl]);
             Assert.AreEqual("label23", result.IntegrationProperties[IntegrationPropertyNames.CCNetLabel]);
             Assert.AreEqual(23, result.IntegrationProperties[IntegrationPropertyNames.CCNetNumericLabel]);
-            Assert.AreEqual(@"c:\artifactdir\", result.IntegrationProperties[IntegrationPropertyNames.CCNetArtifactDirectory]);
-            Assert.AreEqual(@"c:\workingdir\", result.IntegrationProperties[IntegrationPropertyNames.CCNetWorkingDirectory]);
+			Assert.AreEqual(artifactDir, result.IntegrationProperties[IntegrationPropertyNames.CCNetArtifactDirectory]);
+			Assert.AreEqual(workingDir, result.IntegrationProperties[IntegrationPropertyNames.CCNetWorkingDirectory]);
 			// We purposefully use culture-independent string formats
             Assert.AreEqual("2005-06-06", result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildDate]);
             Assert.AreEqual("08:45:00", result.IntegrationProperties[IntegrationPropertyNames.CCNetBuildTime]);
@@ -189,7 +206,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             Assert.AreEqual(IntegrationStatus.Unknown, result.IntegrationProperties[IntegrationPropertyNames.CCNetIntegrationStatus]);
             Assert.AreEqual(IntegrationStatus.Unknown, result.IntegrationProperties[IntegrationPropertyNames.CCNetLastIntegrationStatus]);
             Assert.AreEqual("myTrigger", result.IntegrationProperties[IntegrationPropertyNames.CCNetRequestSource]);
-            Assert.AreEqual(@"c:\artifactdir\project_ListenFile.xml", result.IntegrationProperties[IntegrationPropertyNames.CCNetListenerFile]);
+			Assert.AreEqual(Path.Combine(artifactDir, "project_ListenFile.xml"), result.IntegrationProperties[IntegrationPropertyNames.CCNetListenerFile]);
             ArrayList failureUsers = result.IntegrationProperties[IntegrationPropertyNames.CCNetFailureUsers] as ArrayList;
             Assert.IsNotNull(failureUsers);
             Assert.AreEqual(1, failureUsers.Count);
@@ -198,16 +215,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             Assert.IsNotNull(Modifiers);
             Assert.AreEqual(1, Modifiers.Count);
             Assert.AreEqual("John", Modifiers[0]);
-
 		}
 
 		[Test]
 		public void VerifyIntegrationArtifactDir()
 		{
+			string artifactDir = Path.GetFullPath(Path.Combine(".", "artifacts"));
+
 			result = new IntegrationResult();
-			result.ArtifactDirectory = @"c:\artifacts";
+			result.ArtifactDirectory = artifactDir;
 			result.Label = "1.2.3.4";
-			Assert.AreEqual(@"c:\artifacts\1.2.3.4", result.IntegrationArtifactDirectory);
+			Assert.AreEqual(Path.Combine(artifactDir, "1.2.3.4"), result.IntegrationArtifactDirectory);
 		}
 
 		[Test]
@@ -246,8 +264,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void CanGetPreviousState()
 		{
+			string workingDir = Path.GetFullPath(Path.Combine(".", "workingdir"));
+			string artifactDir = Path.GetFullPath(Path.Combine(".", "artifacts"));
+
 			IntegrationSummary expectedSummary = new IntegrationSummary(IntegrationStatus.Exception, "foo", "foo", DateTime.MinValue);
-            result = new IntegrationResult("project", "c:\\workingDir", @"c:\artifactdir\", IntegrationRequest.NullRequest, expectedSummary);
+			result = new IntegrationResult("project", workingDir, artifactDir, IntegrationRequest.NullRequest, expectedSummary);
 			Assert.AreEqual(new IntegrationSummary(IntegrationStatus.Exception, "foo", "foo", DateTime.MinValue), result.LastIntegration);
 		}
 

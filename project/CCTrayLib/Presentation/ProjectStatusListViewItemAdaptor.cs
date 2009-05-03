@@ -61,8 +61,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
             if (monitor.Detail.IsConnected)
             {
-                serverName.Text = monitor.Detail.ServerName;
-                if (string.IsNullOrEmpty(serverName.Text)) serverName.Text = monitor.Detail.Configuration.ServerUrl;
+				if (config != null)
+				{
+					foreach(CCTrayProject project in config.Projects)
+					{
+						if(project.ProjectName == monitor.Detail.ProjectName)
+						{
+							serverName.Text = project.BuildServer.DisplayName;
+						}
+					}
+				}
+				else
+				{
+					serverName.Text = new Uri(monitor.Detail.WebURL).Host;
+				}
                 lastBuildLabel.Text = monitor.Detail.LastBuildLabel;
                 lastBuildTime.Text = monitor.Detail.LastBuildTime.ToString();
                 projectStatus.Text = monitor.ProjectIntegratorState;

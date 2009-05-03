@@ -25,7 +25,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         public DefaultConfigurationFileLoader(INetReflectorConfigurationReader reader)
 		{
 			this.reader = reader;
-			reader.InvalidNodeEventHandler += new InvalidNodeEventHandler(WarnOnInvalidNode);
 			handler = new ValidationEventHandler(HandleSchemaEvent);
 		}
 
@@ -96,18 +95,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 
 		private IConfiguration PopulateProjectsFromXml(XmlDocument configXml)
 		{
-			return reader.Read(configXml);
+			return reader.Read(configXml, null);
 		}
 
 		private static void HandleSchemaEvent(object sender, ValidationEventArgs args)
 		{
 			Log.Info("Loading config schema: " + args.Message);
-		}
-
-		private static void WarnOnInvalidNode(InvalidNodeEventArgs args)
-		{
-			throw new ConfigurationException(args.Message);			// collate warnings into a single object
-//			Log.Warning(args.Message);		
 		}
 	}    
 }

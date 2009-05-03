@@ -26,12 +26,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         public static readonly string ACTION_NAME = "ViewProjectReport";
         private IBuildPlugin[] pluginNames = null;
         private readonly IRemoteServicesConfiguration configuration;
+        private readonly ISessionRetriever sessionRetriever;
         
         // retrieve at most this amount of builds                             
         public static readonly Int32 AmountOfBuildsToRetrieve = 100;
-
-
-
 
         [ReflectorArray("reportPlugins", Required = false)]
         public IBuildPlugin[] DashPlugins
@@ -41,12 +39,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         }
 
         public ProjectReportProjectPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator, ILinkFactory linkFactory,
-            IRemoteServicesConfiguration configuration)
+            IRemoteServicesConfiguration configuration, ISessionRetriever sessionRetriever)
         {
             this.farmService = farmService;
             this.viewGenerator = viewGenerator;
             this.linkFactory = linkFactory;
             this.configuration = configuration;
+            this.sessionRetriever = sessionRetriever;
         }
 
         public IResponse Execute(ICruiseRequest cruiseRequest)
@@ -66,7 +65,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             velocityContext["externalLinks"] = farmService.GetExternalLinks(projectSpecifier);
             velocityContext["noLogsAvailable"] = (buildSpecifiers.Length == 0);
 
-            velocityContext["StatusMessage"] = ForceBuildIfNecessary(projectSpecifier, cruiseRequest.Request);
+            var sessionToken = cruiseRequest.RetrieveSessionToken(sessionRetriever);
+            velocityContext["StatusMessage"] = ForceBuildIfNecessary(projectSpecifier, cruiseRequest.Request, sessionToken);
             ProjectStatus status = FindProjectStatus(projectSpecifier);
             velocityContext["status"] = status;
             velocityContext["StartStopButtonName"] = (status.Status == ProjectIntegratorState.Running) ? "StopBuild" : "StartBuild"; 
@@ -149,26 +149,26 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             throw new Exception("Unable to retrieve project status");
         }
 
-        private string ForceBuildIfNecessary(IProjectSpecifier projectSpecifier, IRequest request)
+        private string ForceBuildIfNecessary(IProjectSpecifier projectSpecifier, IRequest request, string sessionToken)
         {
             if (!string.IsNullOrEmpty(request.FindParameterStartingWith("StopBuild")))
             {
-                farmService.Stop(projectSpecifier);
+                farmService.Stop(projectSpecifier, sessionToken);
                 return string.Format("Stopping project {0}", projectSpecifier.ProjectName);
             }
             else if (!string.IsNullOrEmpty(request.FindParameterStartingWith("StartBuild")))
             {
-                farmService.Start(projectSpecifier);
+                farmService.Start(projectSpecifier, sessionToken);
                 return string.Format("Starting project {0}", projectSpecifier.ProjectName);
             }
             else if (!string.IsNullOrEmpty(request.FindParameterStartingWith("ForceBuild")))
             {
-                farmService.ForceBuild(projectSpecifier, "Dashboard");
+                farmService.ForceBuild(projectSpecifier, sessionToken, "Dashboard");
                 return string.Format("Build successfully forced for {0}", projectSpecifier.ProjectName);
             }
             else if (!string.IsNullOrEmpty(request.FindParameterStartingWith("AbortBuild")))
             {
-                farmService.AbortBuild(projectSpecifier, "Dashboard");
+                farmService.AbortBuild(projectSpecifier, sessionToken, "Dashboard");
                 return string.Format("Abort successfully forced for {0}", projectSpecifier.ProjectName);
             }
             else
@@ -194,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             {
                 string outputResponse = String.Empty;
 
-                ModifiedCruiseRequest req = new ModifiedCruiseRequest(cruiseRequest.Request);
+                ModifiedCruiseRequest req = new ModifiedCruiseRequest(cruiseRequest.Request, cruiseRequest.UrlBuilder);
                 req.ReplaceBuildSpecifier(buildSpecifiers[0]);
 
                 foreach (IBuildPlugin buildPlugIn in pluginNames)
@@ -223,10 +223,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             private IServerSpecifier serverSpecifier = null;
             private IProjectSpecifier projectSpecifier = null;
             private IBuildSpecifier buildSpecifier = null;
+            private ICruiseUrlBuilder urlBuilder;
 
-            public ModifiedCruiseRequest(IRequest request)
+            public ModifiedCruiseRequest(IRequest request, ICruiseUrlBuilder urlBuilder)
             {
                 this.request = request;
+                this.urlBuilder = urlBuilder;
+            }
+
+            public ICruiseUrlBuilder UrlBuilder
+            {
+                get { return this.UrlBuilder; }
             }
 
             public string ServerName
@@ -290,6 +297,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             public void ReplaceBuildSpecifier(IBuildSpecifier buildSpecifier)
             {
                 this.buildSpecifier = buildSpecifier;
+            }
+
+            /// <summary>
+            /// Attempt to retrieve a session token
+            /// </summary>
+            /// <returns></returns>
+            public virtual string RetrieveSessionToken(ISessionRetriever sessionRetriever)
+            {
+                // Attempt to find a session token
+                string sessionToken = request.GetText("sessionToken");
+                if (string.IsNullOrEmpty(sessionToken) && (sessionRetriever != null))
+                {
+                    sessionToken = sessionRetriever.RetrieveSessionToken(request);
+                }
+                return sessionToken;
             }
         }
     }

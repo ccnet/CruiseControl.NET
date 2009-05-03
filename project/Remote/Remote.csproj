@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -98,8 +98,8 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NetReflector">
-      <Name>NetReflector</Name>
+    <Reference Include="NetReflector, Version=1.1.2009.1004, Culture=neutral, PublicKeyToken=dbcd6104b72f39b2, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\NetReflector.dll</HintPath>
     </Reference>
     <Reference Include="System">
@@ -120,6 +120,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BadReferenceException.cs" />
     <Compile Include="BuildCondition.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -130,6 +131,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CruiseServerSnapshot.cs" />
+    <Compile Include="Events\CancelProjectEventArgs.cs" />
+    <Compile Include="Events\CancelProjectEventArgs.Generic.cs" />
+    <Compile Include="Events\IntegrationCompletedEventArgs.cs" />
+    <Compile Include="Events\IntegrationStartedEventArgs.cs" />
+    <Compile Include="Events\ProjectEventArgs.Generic.cs" />
+    <Compile Include="Events\ProjectEventArgs.cs" />
+    <Compile Include="ExtensionConfiguration.cs" />
     <Compile Include="ExternalLink.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -142,6 +150,8 @@
     <Compile Include="ICruiseServer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ICruiseServerExtension.cs" />
+    <Compile Include="IFileTransfer.cs" />
     <Compile Include="IntegrationRequest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -151,6 +161,12 @@
     <Compile Include="IRemotingService.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ItemBuildStatus.cs" />
+    <Compile Include="ItemStatus.cs" />
+    <Compile Include="NameValuePair.cs" />
+    <Compile Include="PermissionDeniedException.cs" />
+    <Compile Include="SecurityException.cs" />
+    <Compile Include="Security\ISecurityCredentials.cs" />
     <Compile Include="ITrigger.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -160,6 +176,11 @@
     <Compile Include="NoSuchProjectException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Parameters\ParameterBase.cs" />
+    <Compile Include="Parameters\RangeParameter.cs" />
+    <Compile Include="Parameters\TextParameter.cs" />
+    <Compile Include="Parameters\NumericParameter.cs" />
+    <Compile Include="PackageDetails.cs" />
     <Compile Include="ProjectActivity.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -172,6 +193,7 @@
     <Compile Include="ProjectStatus.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ProjectStatusSnapshot.cs" />
     <Compile Include="QueuedRequestSnapshot.cs" />
     <Compile Include="QueuedRequestSnapshotList.cs" />
     <Compile Include="QueueSetSnapshot.cs" />
@@ -180,12 +202,29 @@
     <Compile Include="RemoteCruiseManagerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="RemotingFileTransfer.cs" />
     <Compile Include="RemotingServiceAdapter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Security\AuditFilterBase.cs" />
+    <Compile Include="Security\AuditFilters.cs" />
+    <Compile Include="Security\AuditRecord.cs" />
+    <Compile Include="Security\CombinationAuditFilter.cs" />
+    <Compile Include="Security\DateRangeAuditFilter.cs" />
+    <Compile Include="Security\EventTypeAuditFilter.cs" />
+    <Compile Include="Security\IAuditFilter.cs" />
+    <Compile Include="Security\ProjectAuditFilter.cs" />
+    <Compile Include="Security\SecurityCheckDiagnostics.cs" />
+    <Compile Include="Security\SecurityEvent.cs" />
+    <Compile Include="Security\SecurityRight.cs" />
+    <Compile Include="Security\SecurityRightFilter.cs" />
+    <Compile Include="Security\UserAuditFilter.cs" />
+    <Compile Include="Security\UserDetails.cs" />
+    <Compile Include="Security\UserNameCredentials.cs" />
     <Compile Include="SerializableDateTime.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SessionInvalidException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

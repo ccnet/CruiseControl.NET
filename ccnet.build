@@ -2,6 +2,60 @@
 
 <project name="ccnet" default="test">
 
+
+    <!-- custom scripts -->
+    <script language="C#" prefix="RuWi">
+          <references>
+              <include name="System.dll" />
+		  </references>
+
+		  <code>
+            <![CDATA[
+                [Function("UpdateNsiVersion")]
+                public static bool UpdateNsiVersion(string inputFile, string newVersion)
+                {
+                    bool ok = true;
+
+                    try
+                    {
+                        System.IO.StreamReader versionFile = new System.IO.StreamReader(inputFile, System.Text.Encoding.ASCII);
+                        string line = "";
+                        System.Text.StringBuilder result = new StringBuilder();
+
+                        string searchPattern = @"\d+\.\d+\.\d+";
+
+                        while (!versionFile.EndOfStream)
+                        {
+                            line = versionFile.ReadLine();
+
+			                if (System.Text.RegularExpressions.Regex.IsMatch(line, searchPattern) && (line.StartsWith("!define PRODUCT_VERSION")))
+                            {
+                                line = System.Text.RegularExpressions.Regex.Replace(line, searchPattern, newVersion);
+                            }
+
+                            result.AppendLine(line);
+                        }
+
+                        versionFile.Close();
+
+                        System.IO.StreamWriter updatedVersionfile = new System.IO.StreamWriter(inputFile);
+                        updatedVersionfile.Write(result.ToString());
+                        updatedVersionfile.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        ok = false;
+                        Console.WriteLine(ex.ToString());
+                    }
+
+                    return ok;
+                }
+                ]]>
+          </code>
+     </script>
+    <!-- end custom scripts -->
+
+
     <!-- PROPERTIES -->
     <property name="debug" value="true"/>
     <property name="verbosity" value="true"/>
@@ -25,10 +79,53 @@
     <property name="nantcontrib.assembly" value="tools\nant\contrib\NAnt.Contrib.Tasks.dll" />
     <property name="vil.executable" value="tools\vil\vil.exe" />
     <property name="vil.assemblies" value="comma,separated,list,of,assemblies,to,analyze (full path)" />
-  <property name="simian.executable" value="tools\simian\simian-2.2.17.exe" />
-  <property name="Gendarme.executable" value="tools\Gendarme\gendarme.exe" />
+    <property name="simian.executable" value="tools\simian\simian-2.2.17.exe" />
+    <property name="Gendarme.executable" value="tools\Gendarme\gendarme.exe" />
     <property name="CCNetLabel" value="0" overwrite="false" />    
     <property name="CCNetArtifactDirectory" value="${build.dir}" overwrite="false" />
+	<property name="ReleaseVersion" value="0.0.0" />    
+
+
+	<target name="PrepareForRelease" description="to be used by the person when doing a release on sourceforge, confluence, ...">
+
+		<fail message="Pass the ReleaseVersion property when calling this target with a correct value, eg.: 1.4.4" if="${ReleaseVersion=='0.0.0'}"   />
+		
+		<echo message="Clearing doc folder of all existing files ... " />
+		<delete includeemptydirs="false" >
+            <fileset>
+                <patternset >
+                    <include name="doc/CCNET/**"  />
+                    <exclude name="**/.svn/**"  />
+					<exclude name="**/_svn/**"  />
+				</patternset>
+            </fileset>
+        </delete>
+
+
+		<echo message="Updating Nsi files ..." />
+		<property name="nsiFile" value = "ccnet.nsi" />
+
+        <if test="${not RuWi::UpdateNsiVersion(nsiFile,ReleaseVersion)}">
+            <fail message="updating file: ${nsiFile} failed" />
+        </if>
+
+
+		<property name="nsiFile" value = "ccvalidator.nsi" />
+
+        <if test="${not RuWi::UpdateNsiVersion(nsiFile,ReleaseVersion)}">
+            <fail message="updating file: ${nsiFile} failed" />
+        </if>
+
+		<property name="nsiFile" value = "cctray.nsi" />
+
+        <if test="${not RuWi::UpdateNsiVersion(nsiFile,ReleaseVersion)}">
+            <fail message="updating file: ${nsiFile} failed" />
+        </if>
+
+
+
+	</target>
+
 
 	<target name="all" depends="clean, compile, test, deploy, dist"/>
 
@@ -115,7 +212,7 @@
 
 	<!-- DEPLOY -->
 
-	<target name="deploy" depends="compile, deploy.server, deploy.cctray, deploy.webdashboard, compress" />
+	<target name="deploy" depends="compile, deploy.server, deploy.cctray, deploy.webdashboard, compress, deploy.validator" />
 	
 	<target name="deploy.server" depends="compile">
 		<mkdir dir="deployed\server"/>
@@ -150,8 +247,18 @@
 			</fileset>
 		</copy>
 	</target>
-	
-	<target name="deploy.cctray">
+
+  <target name="deploy.validator" description="Generate the deployment files for CCValidator." depends="compile">
+    <copy todir="deployed\ccvalidator">
+      <fileset basedir="${build.dir}\server">
+        <include name="CCValidator.exe"/>
+        <include name="CCValidator.exe.config"/>
+        <include name="*.dll"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="deploy.cctray">
 		<mkdir dir="deployed\cctray" />
 
 		<copy todir="deployed\cctray">
@@ -207,8 +314,9 @@
 	</target>
 
 	<!-- CREATE DISTRIBUTABLES -->
-	<target name="dist" depends="deploy">	
-		<copy todir="deployed" file="license.txt" />
+  <target name="dist" depends="deploy">
+    <copy todir="deployed" file="license.txt" />
+    <mkdir dir="dist"/>
 		<copy todir="${webdashboard.dir}\doc">
 			<fileset basedir="doc">
 				<include name="**\*" />
@@ -219,8 +327,6 @@
 				<include name="**\*" />
 			</fileset>
 		</copy>
-
-		<mkdir dir="dist"/>
 
 		<exec program="tools\NSIS\makensis.exe" commandline="cctray.nsi" />		
 		<copy todir="${webdashboard.dir}\cctray">
@@ -248,8 +354,9 @@
 				<exclude name="**\_Resharper*\**" />
 			</fileset>
 		</zip>
-		<exec program="tools\NSIS\makensis.exe" commandline="ccnet.nsi" />
-	</target>
+    <exec program="tools\NSIS\makensis.exe" commandline="ccvalidator.nsi" />
+    <exec program="tools\NSIS\makensis.exe" commandline="ccnet.nsi" />
+  </target>
 		
 	<!-- FOR RUNNING CCNET AGAINST ITSELF -->
 	<target name="dist.publish" depends="dist">
@@ -271,7 +378,7 @@
 		</imports>
 		<attributes>
 		    <attribute type="AssemblyVersionAttribute" value="${CCNetLabel}" />
-		    <attribute type="AssemblyCopyrightAttribute" value="Copyright © 2009 ThoughtWorks Inc." />
+		    <attribute type="AssemblyCopyrightAttribute" value="Copyright © ${datetime::get-year(datetime::now())} ThoughtWorks Inc." />
 		    <attribute type="AssemblyCompanyAttribute" value="ThoughtWorks" />
 		    <attribute type="AssemblyProductAttribute" value="CruiseControl.NET" />
 		</attributes>
@@ -352,7 +459,7 @@
     </target>
 
   <target name="build.packages" description="Generates the dashboard packages"
-          depends="build.admin.package,build.queueStatus.package,build.serverLog.package,build.serverInfo.package,build.serverConfig.package,build.projectStats.package,build.projectConfig.package,build.modificationHistory.package,build.nunit.package">
+          depends="farm.level.packages,server.level.packages,project.level.packages,build.level.packages">
     <copy file="${src.dir}\webdashboard\Packages\packages.xml" tofile="deployed\webdashboard\Packages\packages.xml" verbose="${verbosity}"/>
     <copy todir="deployed\webdashboard\Packages" verbose="${verbosity}">
       <fileset basedir="${build.dir}\webdashboard\Packages">
@@ -361,6 +468,10 @@
     </copy>
   </target>
 
+  <target name="farm.level.packages" description="Generate the farm level packages"
+          depends="build.admin.package">
+  </target>
+  
   <target name="build.admin.package" description="Generates the web dashboard admin package">
     <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
     <zip zipfile="${build.dir}\WebDashboard\Packages\DashboardAdmin.zip">
@@ -372,6 +483,10 @@
         <include name="AdministerDashboard.vm"/>
       </fileset>
     </zip>
+  </target>
+
+  <target name="server.level.packages" description="Generate the server level packages"
+          depends="build.queueStatus.package,build.serverLog.package,build.serverInfo.package,build.serverConfig.package,build.securityConfig.package,build.userList.package">
   </target>
 
   <target name="build.queueStatus.package" description="Generates the queue status package">
@@ -422,13 +537,42 @@
     </zip>
   </target>
 
+  <target name="build.securityConfig.package" description="Generates the security configuration package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\SecurityConfig.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\SecurityConfig">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\WebDashboard\Templates">
+        <include name="SecurityConfiguration.vm"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.userList.package" description="Generates the user list package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\UserList.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\UserList">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\WebDashboard\Templates">
+        <include name="UserList.vm"/>
+        <include name="UserDiagnostics.vm"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="project.level.packages" description="Generate the project level packages"
+          depends="build.projectStats.package,build.projectConfig.package,build.modificationHistory.package,build.packageList.package">
+  </target>
+
   <target name="build.projectStats.package" description="Generates the project statistics package">
     <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
     <zip zipfile="${build.dir}\WebDashboard\Packages\ProjectStats.zip">
       <fileset basedir="${src.dir}\WebDashboard\Packages\ProjectStatistics">
         <include name="*.*"/>
       </fileset>
-      <fileset basedir="${src.dir}\WebDashboard\Xsl">
+      <fileset basedir="${src.dir}\Xsl">
         <include name="StatisticsGraphs.xsl"/>
       </fileset>
     </zip>
@@ -452,16 +596,147 @@
     </zip>
   </target>
 
+  <target name="build.packageList.package" description="Generates the package list package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\PackageList.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\PackageList">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\WebDashboard\Templates">
+        <include name="PackageList.vm"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.level.packages" description="Generate the build level packages"
+          depends="build.nunit.package,build.ndepend.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.msTest.package">
+  </target>
+
   <target name="build.nunit.package" description="Generates the NUnit package">
     <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
     <zip zipfile="${build.dir}\WebDashboard\Packages\NUnit.zip">
       <fileset basedir="${src.dir}\WebDashboard\Packages\NUnit">
         <include name="*.*"/>
       </fileset>
-      <fileset basedir="${src.dir}\WebDashboard\Xsl">
+      <fileset basedir="${src.dir}\Xsl">
         <include name="unittests.xsl"/>
         <include name="tests.xsl"/>
         <include name="timing.xsl"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.ndepend.package" description="Generates the NDepend package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\NDepend.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\NDepend">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\Xsl">
+        <include name="ndependreport-ccnet.v2.xsl"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.nant.package" description="Generates the NAnt package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\NAnt.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\NAnt">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\Xsl">
+        <include name="compile.xsl"/>
+        <include name="NAnt.xsl"/>
+        <include name="NAntTiming.xsl"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.msbuild.package" description="Generates the MSBuild package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\MSBuild.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\MSBuild">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\Xsl">
+        <include name="compile-msbuild.xsl"/>
+        <include name="msbuild.xsl"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.msTest.package" description="Generates the MSTest package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\MSTest.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\MSTest">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\Xsl">
+        <include name="MsTestSummary.xsl"/>
+        <include name="MsTestReport.xsl"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.fxcop.package" description="Generates the FxCop package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\FxCop.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\FxCop">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\Xsl">
+        <include name="fxcop-summary_1_36.xsl"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.ncover.package" description="Generates the NCover package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\NCover.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\NCover">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\Xsl">
+        <include name="NCoverSummary.xsl"/>
+        <include name="NCover.xsl"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.simian.package" description="Generates the Simian package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\Simian.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\Simian">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\Xsl">
+        <include name="SimianSummary.xsl"/>
+        <include name="SimianReport.xsl"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.fitnesse.package" description="Generates the Fitnesse package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\Fitnesse.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\Fitnesse">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\Xsl">
+        <include name="fitnesse.xsl"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.gendarme.package" description="Generates the Gendarme package">
+    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
+    <zip zipfile="${build.dir}\WebDashboard\Packages\Gendarme.zip">
+      <fileset basedir="${src.dir}\WebDashboard\Packages\Gendarme">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}\Xsl">
+        <include name="gendarme-summary-ccnet.xsl"/>
+        <include name="gendarme-report-ccnet.xsl"/>
       </fileset>
     </zip>
   </target>

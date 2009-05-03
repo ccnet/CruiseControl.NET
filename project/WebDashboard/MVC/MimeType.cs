@@ -7,6 +7,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		public static readonly MimeType Jpg = new MimeType("image/jpeg", "jpg", "jpe");
 		public static readonly MimeType Png = new MimeType("image/png", "png");
 		public static readonly MimeType Xml = new MimeType("text/xml", "xml");
+        public static readonly MimeType Json = new MimeType("application/json", "json");
 
 		private ArrayList mimeExtension;
 		private string mimeType;

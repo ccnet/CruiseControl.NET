@@ -13,7 +13,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	/// TODO: This is very similar to the NAntBuilder, so refactoring required (can we have subclasses with reflector properties?)
 	/// </summary>
 	[ReflectorType("exec")]
-	public class ExecutableTask : BaseExecutableTask
+	public class ExecutableTask
+        : BaseExecutableTask, ITask
 	{
 		public const int DEFAULT_BUILD_TIMEOUT = 600;
 

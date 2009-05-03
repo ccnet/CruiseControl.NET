@@ -112,20 +112,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldEncloseDirectoriesInQuotesIfTheyContainSpaces()
 		{
-			DefaultWorkingDirectory = @"c:\dir with spaces";
-			result.ArtifactDirectory = DefaultWorkingDirectory;
-			result.WorkingDirectory = DefaultWorkingDirectory;
+			result.ArtifactDirectory = DefaultWorkingDirectoryWithSpaces;
+			result.WorkingDirectory = DefaultWorkingDirectoryWithSpaces;
 
-			task.AssemblyListFile = Path.Combine(DefaultWorkingDirectory, "gendarme assembly file.txt");
-			task.ConfigFile = Path.Combine(DefaultWorkingDirectory, "gendarme rules.xml");
-			task.IgnoreFile = Path.Combine(DefaultWorkingDirectory, "gendarme ignore file.txt");
+			task.AssemblyListFile = Path.Combine(DefaultWorkingDirectoryWithSpaces, "gendarme assembly file.txt");
+			task.ConfigFile = Path.Combine(DefaultWorkingDirectoryWithSpaces, "gendarme rules.xml");
+			task.IgnoreFile = Path.Combine(DefaultWorkingDirectoryWithSpaces, "gendarme ignore file.txt");
 
 			ExpectToExecuteArguments(@"--config " + StringUtil.AutoDoubleQuoteString(task.ConfigFile) + " --ignore " +
 			                         StringUtil.AutoDoubleQuoteString(task.IgnoreFile) + " --xml " +
 			                         StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, "gendarme-results.xml")) + " @" +
-			                         StringUtil.AutoDoubleQuoteString(task.AssemblyListFile));
+									 StringUtil.AutoDoubleQuoteString(task.AssemblyListFile), DefaultWorkingDirectoryWithSpaces);
 
-			task.ConfiguredBaseDirectory = DefaultWorkingDirectory;
+			task.ConfiguredBaseDirectory = DefaultWorkingDirectoryWithSpaces;
 			task.VerifyTimeoutSeconds = 600;
 			task.Run(result);
 		}
@@ -149,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void RebaseFromWorkingDirectory()
 		{
 			AddDefaultAssemblyToCheck(task);
-			ProcessInfo info = NewProcessInfo(string.Format("--xml {0} {1}", StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, "gendarme-results.xml")), StringUtil.AutoDoubleQuoteString("*.dll ")));
+			ProcessInfo info = NewProcessInfo(string.Format("--xml {0} {1}", StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, "gendarme-results.xml")), StringUtil.AutoDoubleQuoteString("*.dll ")), Path.Combine(DefaultWorkingDirectory, "src"));
 			info.WorkingDirectory = Path.Combine(DefaultWorkingDirectory, "src");
 			ExpectToExecute(info);
 			task.ConfiguredBaseDirectory = "src";

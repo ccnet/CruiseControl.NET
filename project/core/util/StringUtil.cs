@@ -107,28 +107,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return Strip(fileName, "\\", "/", ":", "*", "?", "\"", "<", ">", "|");
         }
 
-        public static string ReplaceInvalidCharsWithSpace(string item)
-        {
-            string result = item;
-
-            for (Int32 i = 0; i < result.Length; i++)
-            {
-                if (!char.IsLetterOrDigit(result, i) &&
-                    result[i] != '.' &&
-                    result[i] != ' ' &&
-                    result[i] != '-' &&
-					result[i] != '_')
-                {
-
-                    result = result.Remove(i, 1);
-                    result = result.Insert(i, " ");
-                }
-            }
-
-            result = Regex.Replace(result, " {2,}", " ");
-
-            return result.Trim();
-        }
+ 
 
         public static string AutoDoubleQuoteString(string value)
         {
@@ -245,5 +224,32 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
             return targets.ToArray();
         }
+
+
+
+        /// <summary>
+        /// returns the elements of the array as a string, delimited with the default delimitor
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public static string GetArrayContents(Array x)
+        {
+            System.Text.StringBuilder result = new System.Text.StringBuilder();
+
+            foreach (object o in x)
+            {
+                result.AppendFormat("{0}{1} ", o.ToString(),DEFAULT_DELIMITER );
+            }
+
+            if (result.Length > 0)
+            {
+                result.Length -= 2;
+            }
+
+            return result.ToString();
+
+        }
+
+
     }
 }

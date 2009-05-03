@@ -7,39 +7,67 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 	[TestFixture]
 	public class EmailGroupTest
 	{
-		[Test, ExpectedException(typeof (NetReflectorConverterException))]
+		[Test, ExpectedException(typeof (NetReflectorException))]
 		public void ReadEmailGroupFromXmlUsingInvalidNotificationType()
 		{
-			NetReflector.Read(@"<group name=""foo"" notification=""bar"" />");
+            NetReflector.Read(@"<group> name=""foo"" <notifications><NotificationType>bar</NotificationType></notifications>  </group>");
 		}
 
 		[Test]
 		public void ReadEmailGroupFromXmlUsingAlwaysNotificationType()
 		{
-			EmailGroup group = (EmailGroup) NetReflector.Read(@"<group name=""foo"" notification=""Always"" />");
+            EmailGroup group = (EmailGroup)NetReflector.Read(@"<group name=""foo""> <notifications><NotificationType>Always</NotificationType></notifications> </group>");
 			Assert.AreEqual("foo", group.Name);
-			Assert.AreEqual(EmailGroup.NotificationType.Always, group.Notification);
+			Assert.IsTrue(group.HasNotification(EmailGroup.NotificationType.Always ));
 		}
 
 		[Test]
 		public void ReadEmailGroupFromXmlUsingChangeNotificationType()
 		{
-			EmailGroup group = (EmailGroup) NetReflector.Read(@"<group name=""foo"" notification=""Change"" />");
-			Assert.AreEqual(EmailGroup.NotificationType.Change, group.Notification);
-		}
+            EmailGroup group = (EmailGroup)NetReflector.Read(@"<group name=""foo""> <notifications><NotificationType>Change</NotificationType></notifications> </group> ");
+            Assert.IsTrue(group.HasNotification(EmailGroup.NotificationType.Change));
+        }
 
 		[Test]
 		public void ReadEmailGroupFromXmlUsingFailedNotificationType()
 		{
-			EmailGroup group = (EmailGroup) NetReflector.Read(@"<group name=""foo"" notification=""Failed"" />");
-			Assert.AreEqual(EmailGroup.NotificationType.Failed, group.Notification);
-		}
+            EmailGroup group = (EmailGroup)NetReflector.Read(@"<group name=""foo""> <notifications><NotificationType>Failed</NotificationType></notifications> </group>");
+            Assert.IsTrue(group.HasNotification(EmailGroup.NotificationType.Failed));
+        }
 
         [Test]
         public void ReadEmailGroupFromXmlUsingSuccessNotificationType()
         {
-            EmailGroup group = (EmailGroup)NetReflector.Read(@"<group name=""foo"" notification=""Success"" />");
-            Assert.AreEqual(EmailGroup.NotificationType.Success, group.Notification);
+            EmailGroup group = (EmailGroup)NetReflector.Read(@"<group name=""foo""> <notifications><NotificationType>Success</NotificationType></notifications> </group> ");
+            Assert.IsTrue(group.HasNotification(EmailGroup.NotificationType.Success));
         }
-	}
+
+        [Test]
+        public void ReadEmailGroupFromXmlUsingFixedNotificationType()
+        {
+            EmailGroup group = (EmailGroup)NetReflector.Read(@"<group name=""foo""> <notifications><NotificationType>Fixed</NotificationType></notifications> </group> ");
+            Assert.IsTrue(group.HasNotification(EmailGroup.NotificationType.Fixed));
+        }
+
+        [Test]
+        public void ReadEmailGroupFromXmlUsingExceptionNotificationType()
+        {
+            EmailGroup group = (EmailGroup)NetReflector.Read(@"<group name=""foo""> <notifications><NotificationType>Exception</NotificationType></notifications> </group>");
+            Assert.IsTrue(group.HasNotification(EmailGroup.NotificationType.Exception));
+        }
+
+
+        [Test]
+        public void ReadEmailGroupFromXmlUsingMulipleNotificationTypes()
+        {
+            EmailGroup group = (EmailGroup)NetReflector.Read(@"<group name=""foo""> <notifications><NotificationType>Failed</NotificationType><NotificationType>Fixed</NotificationType><NotificationType>Exception</NotificationType></notifications> </group> ");
+            Assert.IsTrue(group.HasNotification(EmailGroup.NotificationType.Exception));
+            Assert.IsTrue(group.HasNotification(EmailGroup.NotificationType.Fixed));
+            Assert.IsTrue(group.HasNotification(EmailGroup.NotificationType.Failed));
+            Assert.IsFalse(group.HasNotification(EmailGroup.NotificationType.Change));
+        }
+
+
+    
+    }
 }

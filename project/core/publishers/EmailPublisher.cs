@@ -4,6 +4,7 @@ using System.Net.Mail;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Config;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -13,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// are configurable.
     /// </summary>
     [ReflectorType("email")]
-    public class EmailPublisher : ITask
+    public class EmailPublisher : ITask, IConfigurationValidation
     {
         private EmailGateway emailGateway = new EmailGateway();
         private string fromAddress;
@@ -26,6 +27,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private IEmailConverter[] converters = new IEmailConverter[0];
 
         private Hashtable subjectSettings = new Hashtable();
+
+        private string[] xslFiles;
 
         public EmailPublisher()
             : this(new HtmlLinkMessageBuilder(false))
@@ -112,6 +115,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             get { return replytoAddress; }
             set { replytoAddress = value; }
         }
+
+
+        [ReflectorProperty("xslFiles", Required = false)]
+        public string[] XslFiles
+        {
+            get { return xslFiles; }
+            set { xslFiles = value; }
+        }
+
+
+
 
         /// <summary>
         /// Set this property (in configuration) to enable HTML emails containing build details.
@@ -203,7 +217,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             if (result.Status == IntegrationStatus.Unknown)
                 return;
 
-            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Emailing ...");                
+            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Emailing ...");
 
             EmailMessage emailMessage = new EmailMessage(result, this);
             string to = emailMessage.Recipients;
@@ -251,6 +265,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             //      This information is included, when using Html email (all mods are shown)
             try
             {
+                messageBuilder.xslFiles = this.XslFiles;
                 return messageBuilder.BuildMessage(result);
             }
             catch (Exception e)
@@ -260,5 +275,42 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 return message;
             }
         }
+
+        #region Validate()
+        /// <summary>
+        /// Checks the internal validation of the item.
+        /// </summary>
+        /// <param name="configuration">The entire configuration.</param>
+        /// <param name="parent">The parent item for the item being validated.</param>
+        public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
+        {
+            if (parent is Project)
+            {
+                Project parentProject = parent as Project;
+
+                // Attempt to find this publisher in the publishers section
+                bool isPublisher = false;
+                foreach (ITask task in parentProject.Publishers)
+                {
+                    if (task == this)
+                    {
+                        isPublisher = true;
+                        break;
+                    }
+                }
+
+                // If not found then throw a validation exception
+                if (!isPublisher)
+                {
+                    errorProcesser.ProcessWarning("Email publishers are best placed in the publishers section of the configuration");
+                }
+            }
+            else
+            {
+                errorProcesser.ProcessError(
+                    new CruiseControlException("This publisher can only belong to a project"));
+            }
+        }
+        #endregion
     }
 }

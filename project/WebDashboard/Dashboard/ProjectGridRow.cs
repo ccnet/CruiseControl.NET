@@ -10,12 +10,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private readonly ProjectStatus status;
 		private readonly IServerSpecifier serverSpecifier;
 		private readonly string url;
+        private readonly string parametersUrl;
 
-		public ProjectGridRow(ProjectStatus status, IServerSpecifier serverSpecifier, string url)
+		public ProjectGridRow(ProjectStatus status, IServerSpecifier serverSpecifier, 
+            string url, string parametersUrl)
 		{
 			this.status = status;
 			this.serverSpecifier = serverSpecifier;
 			this.url = url;
+            this.parametersUrl = parametersUrl;
 		}
 
 		public string Name
@@ -47,6 +50,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		{
 			get { return DateUtil.FormatDate(status.LastBuildDate); }
 		}
+
+        public string NextBuildTime
+        {
+            get
+            {
+                if (status.NextBuildTime == System.DateTime.MaxValue)
+                {
+                    return "Force Build Only";
+                }
+                else
+                {
+                    return DateUtil.FormatDate(status.NextBuildTime);
+                }
+            }
+        }
 
 		public string LastBuildLabel
 		{
@@ -143,6 +161,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 else
                 { return GetFormattedBuildStage(CurrentBuildStage); }
             }
+        }
+
+        public string ParametersUrl
+        {
+            get { return parametersUrl; }
         }
 
         private string GetFormattedBuildStage(string buildStageData)

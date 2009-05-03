@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Specialized;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
+using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -10,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		private readonly IWebRetriever webRetriever;
 		private readonly ICruiseServerManager serverManager;
 		private Uri dashboardUri;
+        private Uri parametersUri;
 		private Uri webUrl;
 		private string serverAlias = "local";
 
@@ -20,32 +25,32 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			this.serverManager = serverManager;
 		}
 
-		public void ForceBuild()
+        public void ForceBuild(string sessionToken, Dictionary<string, string> parameters)
 		{
-			PushDashboardButton("ForceBuild");
+			PushDashboardButton(sessionToken, "ForceBuild");
 		}
 
-		public void AbortBuild()
+        public void AbortBuild(string sessionToken)
 		{
-			PushDashboardButton("AbortBuild");
+			PushDashboardButton(sessionToken, "AbortBuild");
 		}
 
-		public void FixBuild(string fixingUserName)
+		public void FixBuild(string sessionToken, string fixingUserName)
 		{
 			throw new NotImplementedException("Fix build not currently supported on projects monitored via HTTP");
 		}
 
-		public void StopProject()
+        public void StopProject(string sessionToken)
 		{
-			PushDashboardButton("StopBuild");
+			PushDashboardButton(sessionToken, "StopBuild");
 		}
 
-		public void StartProject()
+        public void StartProject(string sessionToken)
 		{
-			PushDashboardButton("StartBuild");
+			PushDashboardButton(sessionToken, "StartBuild");
 		}
 
-		public void CancelPendingRequest()
+        public void CancelPendingRequest(string sessionToken)
 		{
 			throw new NotImplementedException("Cancel pending not currently supported on projects monitored via HTTP");
 		}
@@ -55,7 +60,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			get { return projectName; }
 		}
 
-		public void PushDashboardButton(string buttonName)
+		public void PushDashboardButton(string sessionToken, string buttonName)
+		{
+            PushDashboardButton(sessionToken, buttonName, null);
+        }
+
+		public void PushDashboardButton(string sessionToken, string buttonName, Dictionary<string, string> parameters)
 		{
 			try
 			{
@@ -64,12 +74,51 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				input.Add(buttonName, "true");
 				input.Add("projectName", projectName);
 				input.Add("serverName", serverAlias);
-				webRetriever.Post(dashboardUri, input);
+                input.Add("sessionToken", sessionToken);
+                if (parameters != null)
+                {
+                    foreach (string key in parameters.Keys)
+                    {
+                        input.Add("param_" + key, parameters[key]);
+                    }
+                }
+                string response = webRetriever.Post(dashboardUri, input);
+
+                // The dashboard catches and handles all exceptions, these exceptions need to be passed on
+                HandleResponseAndThrowExceptions(response);
 			}
 			// Silently ignore exceptions that occur due to connection problems
 			catch (System.Net.WebException)
 			{
 			}
+            // Catch any permission denied exceptions and pass in the correct permission
+            catch (PermissionDeniedException)
+            {
+                throw new PermissionDeniedException(buttonName);
+            }
+		}
+
+        private void HandleResponseAndThrowExceptions(string response)
+        {
+            if (!string.IsNullOrEmpty(response))
+            {
+                if (response.Contains("ThoughtWorks.CruiseControl.Core.SessionInvalidException"))
+                {
+                    throw new SessionInvalidException();
+                }
+                else if (response.Contains("ThoughtWorks.CruiseControl.Core.PermissionDeniedException"))
+                {
+                    throw new PermissionDeniedException("Unknown");
+                }
+                else if (response.Contains("ThoughtWorks.CruiseControl.Core.SecurityException"))
+                {
+                    throw new SecurityException();
+                }
+                else if (response.Contains("ThoughtWorks.CruiseControl.Core.NoSuchProjectException"))
+                {
+                    throw new NoSuchProjectException();
+                }
+            }
 		}
 
 		private void InitConnection()
@@ -80,7 +129,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				webUrl = new Uri(ps.WebURL);
 				ExtractServerAlias();
 			}
-			dashboardUri = new Uri(new WebDashboardUrl(serverManager.ServerUrl, serverAlias).ViewFarmReport);
+            dashboardUri = new Uri(new WebDashboardUrl(serverManager.Configuration.Url, serverAlias).ViewFarmReport);
+            parametersUri = new Uri(new WebDashboardUrl(serverManager.Configuration.Url, serverAlias).ViewParametersReport(projectName));
 		}
 
 		private void ExtractServerAlias()
@@ -99,5 +149,87 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				}
 			}
 		}
+
+        #region RetrieveSnapshot()
+        /// <summary>
+        /// Retrieves a snapshot of the current build status.
+        /// </summary>
+        /// <returns>The current build status of the project.</returns>
+        public virtual ProjectStatusSnapshot RetrieveSnapshot()
+        {
+            ProjectStatusSnapshot snapshot = new ProjectStatusSnapshot();
+            snapshot.Name = projectName;
+            snapshot.Status = ItemBuildStatus.Unknown;
+            return snapshot;
+        }
+        #endregion
+
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the current list of available packages.
+        /// </summary>
+        /// <returns></returns>
+        public virtual PackageDetails[] RetrievePackageList()
+        {
+            PackageDetails[] list = new PackageDetails[0];
+            return list;
+        }
+        #endregion
+
+        #region RetrieveFileTransfer()
+        /// <summary>
+        /// Retrieve a file transfer object.
+        /// </summary>
+        /// <param name="project">The project to retrieve the file for.</param>
+        /// <param name="fileName">The name of the file.</param>
+        public virtual IFileTransfer RetrieveFileTransfer(string fileName)
+        {
+            throw new InvalidOperationException();
+        }
+        #endregion
+
+        /// <summary>
+        /// Retrieves any build parameters.
+        /// </summary>
+        /// <returns></returns>
+        public virtual List<ParameterBase> ListBuildParameters()
+        {
+            InitConnection();
+
+            string response = webRetriever.Post(parametersUri, new NameValueCollection());
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(response);
+            List<ParameterBase> results = new List<ParameterBase>();
+            foreach (XmlElement paramNode in document.SelectNodes("//parameter"))
+            {
+                XmlNodeList values = paramNode.SelectNodes("value");
+                if (values.Count > 0)
+                {
+                    RangeParameter parameter = new RangeParameter();
+                    List<string> allowedValues = new List<string>();
+                    foreach (XmlElement value in values)
+                    {
+                        allowedValues.Add(value.InnerText);
+                    }
+                    parameter.DataValues = allowedValues.ToArray();
+                    parameter.Name = paramNode.GetAttribute("name");
+                    parameter.DisplayName = paramNode.GetAttribute("displayName");
+                    parameter.Description = paramNode.GetAttribute("description");
+                    parameter.DefaultValue = paramNode.GetAttribute("defaultValue");
+                    results.Add(parameter);
+                }
+                else
+                {
+                    TextParameter parameter = new TextParameter();
+                    parameter.Name = paramNode.GetAttribute("name");
+                    parameter.DisplayName = paramNode.GetAttribute("displayName");
+                    parameter.Description = paramNode.GetAttribute("description");
+                    parameter.DefaultValue = paramNode.GetAttribute("defaultValue");
+                    results.Add(parameter);
+                }
+            }
+
+            return results;
+        }
 	}
 }

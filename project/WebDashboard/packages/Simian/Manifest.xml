@@ -1,0 +1,32 @@
+﻿<package>
+  <name>Simian Results</name>
+  <description>Display the results of a Simian report.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>SimianSummary.xsl</file>
+        <file>SimianReport.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\SimianSummary.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\SimianSummary.xsl</value>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\SimianReport.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="Simian Report"/>
+        <attribute name="actionName" value="SimianBuildReport"/>
+        <attribute name="xslFileName" value="xsl\SimianReport.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>

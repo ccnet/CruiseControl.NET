@@ -25,8 +25,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mockHistoryParser = new DynamicMock(typeof (IHistoryParser));
 			vault = new VaultVersionChecker(new VaultHistoryParser(culture), (ProcessExecutor) mockProcessExecutor.MockInstance, VaultVersionChecker.EForcedVaultVersion.Vault317);
 
-			this.DefaultWorkingDirectory = @"c:\source";
-
 			result = IntegrationResultMother.CreateSuccessful("foo");
 			result.WorkingDirectory = this.DefaultWorkingDirectory;
 			_bModificationsRetrieved = false;
@@ -186,7 +184,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			vault.ApplyLabel = true;
 			vault.UseVaultWorkingDirectory = true;
-			vault.WorkingDirectory = @"c:\source";
+			vault.WorkingDirectory = DefaultWorkingDirectory;
 			vault.CleanCopy = true;
 
 			GetModsToInitFolderVersionIfNecessary();
@@ -207,7 +205,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			vault.ApplyLabel = true;
 			vault.UseVaultWorkingDirectory = true;
-			vault.WorkingDirectory = @"c:\source";
+			vault.WorkingDirectory = DefaultWorkingDirectory;
 			vault.CleanCopy = false;
 
 			GetModsToInitFolderVersionIfNecessary();
@@ -233,7 +231,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			GetModsToInitFolderVersionIfNecessary();
 
-			this.ProcessResultOutput = listFolderOutputWithWorkingFolderSet;
+			this.ProcessResultOutput = string.Format(listFolderOutputWithWorkingFolderSet, DefaultWorkingDirectory);
 			ExpectToExecuteArguments(@"listworkingfolders" + SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(@"getversion 78 $" 
 				+ GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
@@ -270,7 +268,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			vault.ApplyLabel = true;
 			vault.UseVaultWorkingDirectory = false;
-			vault.WorkingDirectory = @"c:\source";
+			vault.WorkingDirectory = DefaultWorkingDirectory;
 			vault.CleanCopy = true;
 
 			GetModsToInitFolderVersionIfNecessary();
@@ -291,7 +289,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			vault.ApplyLabel = true;
 			vault.UseVaultWorkingDirectory = false;
-			vault.WorkingDirectory = @"c:\source";
+			vault.WorkingDirectory = DefaultWorkingDirectory;
 			vault.CleanCopy = false;
 
 			GetModsToInitFolderVersionIfNecessary();
@@ -317,7 +315,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			GetModsToInitFolderVersionIfNecessary();
 
-			this.ProcessResultOutput = listFolderOutputWithWorkingFolderSet;
+			this.ProcessResultOutput = string.Format(listFolderOutputWithWorkingFolderSet, DefaultWorkingDirectory);
 			ExpectToExecuteArguments(@"listworkingfolders" + SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(@"getversion 78 $" 
 				+ GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
@@ -354,7 +352,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			vault.ApplyLabel = false;
 			vault.UseVaultWorkingDirectory = true;
-			vault.WorkingDirectory = @"c:\source";
+			vault.WorkingDirectory = DefaultWorkingDirectory;
 			vault.CleanCopy = true;
 
 			GetModsToInitFolderVersionIfNecessary();
@@ -375,7 +373,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			vault.ApplyLabel = false;
 			vault.UseVaultWorkingDirectory = true;
-			vault.WorkingDirectory = @"c:\source";
+			vault.WorkingDirectory = DefaultWorkingDirectory;
 			vault.CleanCopy = false;
 
 			GetModsToInitFolderVersionIfNecessary();
@@ -401,7 +399,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			GetModsToInitFolderVersionIfNecessary();
 
-			this.ProcessResultOutput = listFolderOutputWithWorkingFolderSet;
+			this.ProcessResultOutput = string.Format(listFolderOutputWithWorkingFolderSet, DefaultWorkingDirectory);
 			ExpectToExecuteArguments(@"listworkingfolders" + SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(@"getversion 78 $" 
 				+ GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
@@ -438,7 +436,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			vault.ApplyLabel = false;
 			vault.UseVaultWorkingDirectory = false;
-			vault.WorkingDirectory = @"c:\source";
+			vault.WorkingDirectory = DefaultWorkingDirectory;
 			vault.CleanCopy = true;
 
 			GetModsToInitFolderVersionIfNecessary();
@@ -459,7 +457,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			vault.ApplyLabel = false;
 			vault.UseVaultWorkingDirectory = false;
-			vault.WorkingDirectory = @"c:\source";
+			vault.WorkingDirectory = DefaultWorkingDirectory;
 			vault.CleanCopy = false;
 
 			GetModsToInitFolderVersionIfNecessary();
@@ -485,7 +483,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			GetModsToInitFolderVersionIfNecessary();
 
-			this.ProcessResultOutput = listFolderOutputWithWorkingFolderSet;
+			this.ProcessResultOutput = string.Format(listFolderOutputWithWorkingFolderSet, DefaultWorkingDirectory);
 			ExpectToExecuteArguments(@"listworkingfolders" + SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(@"getversion 78 $" 
 				+ GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
@@ -593,7 +591,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vault.CleanCopy = true;
 			bool VaultExceptionThrown = false;
 
-			this.ProcessResultOutput = listFolderOutputWithWorkingFolderSet;
+			this.ProcessResultOutput = string.Format(listFolderOutputWithWorkingFolderSet, DefaultWorkingDirectory);
 			ExpectToExecuteArguments(@"listworkingfolders" + SetAndGetCommonOptionalArguments());
 
 			try
@@ -654,7 +652,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vault.WorkingDirectory = null;
 			vault.CleanCopy = true;
 
-			this.ProcessResultOutput = listFolderOutputWithNonXml;
+			this.ProcessResultOutput = string.Format(listFolderOutputWithNonXml, DefaultWorkingDirectory);
 			ExpectToExecuteArguments(@"listworkingfolders" + SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(@"getversion 78 $" 
 				+ GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
@@ -712,7 +710,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			args.Append(' ');
 			if ( !StringUtil.IsBlank(vault.WorkingDirectory) )
 			{
-				args.Append(@"c:\source ");
+				args.Append(string.Concat(StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory), " "));
 				if ( vault.UseVaultWorkingDirectory )
 					args.Append(@"-useworkingfolder ");
 			}

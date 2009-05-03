@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Failed to start: " + ex, AppDomain.CurrentDomain.FriendlyName);
+                MessageBox.Show("Failed to start: " + ex, AppDomain.CurrentDomain.FriendlyName, MessageBoxButtons.OK , MessageBoxIcon.Error);
                 return;
             }
 
@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
             {
                 string error_message = "Unhandled runtime error: " + ex;
                 Debug.WriteLine(error_message);
-                MessageBox.Show(error_message, AppDomain.CurrentDomain.FriendlyName);
+                MessageBox.Show(error_message, AppDomain.CurrentDomain.FriendlyName, MessageBoxButtons.OK , MessageBoxIcon.Error);
                 return;
             }
         }

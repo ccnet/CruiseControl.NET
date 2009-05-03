@@ -117,15 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="label2.Text" xml:space="preserve">
-    <value>This is the preferred way of monitoring build status.  In the box below, enter the http address of the dashboard home directory in the box below, e.g. http://build-server/ccnet.  The dashboard must be version 1.1 or later.</value>
-  </data>
-  <data name="label4.Text" xml:space="preserve">
-    <value>In the box below, enter the name of the build server to monitor.  If you have configured your build server to run on a port other than the default of 21234, you can follow the name of the build server with :port.</value>
-  </data>
-  <data name="label5.Text" xml:space="preserve">
-    <value>Use this option to monitor a non-CruiseControl.NET build server (e.g. CruiseControl for Java).  CCTray will perform an HTTP GET on this URL, and expect to retrieve an XML file as described at http://confluence.public.thoughtworks.org/display/CI/.</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

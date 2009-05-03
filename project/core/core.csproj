@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F8113DB9-6C47-4FD1-8A01-655FCF151747}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -98,10 +98,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="agsXMPP, Version=1.1.0.0, Culture=neutral, PublicKeyToken=ff839b81f1debe86, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\agsXMPP.dll</HintPath>
-    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -110,8 +106,8 @@
       <Name>log4net</Name>
       <HintPath>..\..\lib\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NetReflector">
-      <Name>NetReflector</Name>
+    <Reference Include="NetReflector, Version=1.1.2009.1004, Culture=neutral, PublicKeyToken=dbcd6104b72f39b2, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\NetReflector.dll</HintPath>
     </Reference>
     <Reference Include="NPlot">
@@ -157,6 +153,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="configuration\DefaultQueueConfiguration.cs" />
+    <Compile Include="configuration\IConfigurationErrorProcesser.cs" />
+    <Compile Include="configuration\IConfigurationValidation.cs" />
     <Compile Include="configuration\INetReflectorConfigurationReader.cs" />
     <Compile Include="configuration\QueueDuplicateHandling.cs" />
     <Compile Include="configuration\Configuration.cs">
@@ -201,6 +199,8 @@
     <Compile Include="configuration\preprocessor\Constant.cs" />
     <Compile Include="configuration\preprocessor\PreprocessorUrlResolver.cs" />
     <Compile Include="configuration\preprocessor\Utils.cs" />
+    <Compile Include="configuration\ServerConfiguration.cs" />
+    <Compile Include="configuration\ServerConfigurationHandler.cs" />
     <Compile Include="configuration\XmlValidatingLoader.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -222,10 +222,13 @@
     <Compile Include="CruiseServer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CruiseServerEventsBase.cs" />
     <Compile Include="CruiseServerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CruiseXmlWriter.cs" />
+    <Compile Include="Extensions\IntegrationRequestThrottleExtension.cs" />
+    <Compile Include="Extensions\IntegrationPerformanceCountersExtension.cs" />
     <Compile Include="IArgumentParser.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -251,6 +254,7 @@
     <Compile Include="IntegrationQueueManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IParamatisedProject.cs" />
     <Compile Include="IntegrationResult.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -284,6 +288,7 @@
     <Compile Include="IProjectSerializer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IStatusSnapshotGenerator.cs" />
     <Compile Include="ITask.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -347,6 +352,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ProjectInitialState.cs" />
+    <Compile Include="ProjectStartupMode.cs" />
     <Compile Include="publishers\BuildLogTransformer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -426,7 +432,6 @@
     <Compile Include="publishers\XmlLogPublisher.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="publishers\XmppPublisher.cs" />
     <Compile Include="Queues\IIntegrationQueue.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -442,9 +447,12 @@
     <Compile Include="Queues\IntegrationQueueItem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Queues\IntegrationQueueManagerFactory.cs" />
     <Compile Include="Queues\IntegrationQueueSet.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Queues\IQueueManager.cs" />
+    <Compile Include="Queues\IQueueManagerFactory.cs" />
     <Compile Include="RemoteCruiseServer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -481,9 +489,43 @@
     <Compile Include="Reporting\Dashboard\Navigation\IServerSpecifier.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Reporting\Dashboard\Navigation\ISessionStorer.cs" />
     <Compile Include="Reporting\Dashboard\Navigation\IUrlBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SourceControlOperation.cs" />
+    <Compile Include="Security\ActiveDirectoryAuthentication.cs" />
+    <Compile Include="Security\Auditing\AuditLoggerBase.cs" />
+    <Compile Include="Security\Auditing\FileXmlLogger.cs" />
+    <Compile Include="Security\Auditing\FileXmlReader.cs" />
+    <Compile Include="Security\Auditing\IAuditLogger.cs" />
+    <Compile Include="Security\Auditing\IAuditReader.cs" />
+    <Compile Include="Security\DefaultProjectAuthorisation.cs" />
+    <Compile Include="Security\ExternalFileSecurityManager.cs" />
+    <Compile Include="Security\FileBasedSessionCache.cs" />
+    <Compile Include="Security\IAuthentication.cs" />
+    <Compile Include="Security\InMemorySessionCache.cs" />
+    <Compile Include="Security\InternalSecurityManager.cs" />
+    <Compile Include="Security\IPermission.cs" />
+    <Compile Include="Security\IProjectAuthorisation.cs" />
+    <Compile Include="Security\ISecurityManager.cs" />
+    <Compile Include="Security\ISecuritySetting.cs" />
+    <Compile Include="Security\ISessionCache.cs" />
+    <Compile Include="Security\NullProjectAuthorisation.cs" />
+    <Compile Include="Security\NullSecurityManager.cs" />
+    <Compile Include="Security\PermissionBase.cs" />
+    <Compile Include="Security\ProjectSecurityConfigurationInformation.cs" />
+    <Compile Include="Security\RolePermission.cs" />
+    <Compile Include="Security\SecurityHelpers.cs" />
+    <Compile Include="Security\SecurityManagerBase.cs" />
+    <Compile Include="Security\SecurityPermission.cs" />
+    <Compile Include="Security\ServerSecurityConfigurationInformation.cs" />
+    <Compile Include="Security\SessionCacheBase.cs" />
+    <Compile Include="Security\SessionExpiryMode.cs" />
+    <Compile Include="Security\UserName.cs" />
+    <Compile Include="Security\UserNameAuthentication.cs" />
+    <Compile Include="Security\UserPasswordAuthentication.cs" />
+    <Compile Include="Security\UserPermission.cs" />
     <Compile Include="sourcecontrol\AccuRev.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -701,6 +743,12 @@
     <Compile Include="tasks\BuilderException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tasks\CoverageFilter.cs" />
+    <Compile Include="tasks\CoverageThreshold.cs" />
+    <Compile Include="tasks\DirectDynamicValue.cs" />
+    <Compile Include="tasks\DynamicValueUtility.cs" />
+    <Compile Include="tasks\NCoverReportTask.cs" />
+    <Compile Include="tasks\NCoverProfileTask.cs" />
     <Compile Include="tasks\DataTaskResult.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -719,6 +767,8 @@
     <Compile Include="tasks\FinalBuilderTask.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tasks\IDynamicValue.cs" />
+    <Compile Include="tasks\IParamatisedTask.cs" />
     <Compile Include="tasks\GendarmeTask.cs" />
     <Compile Include="tasks\MergeFilesTask.cs">
       <SubType>Code</SubType>
@@ -733,6 +783,7 @@
     <Compile Include="tasks\NAntTask.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tasks\NDependTask.cs" />
     <Compile Include="tasks\NullTask.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -746,6 +797,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="tasks\RakeTask.cs" />
+    <Compile Include="tasks\ReplacementDynamicValue.cs" />
+    <Compile Include="tasks\TaskBase.cs" />
     <Compile Include="Triggers\FilterTrigger.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -755,6 +808,7 @@
     <Compile Include="Triggers\MultipleTrigger.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Triggers\ParameterTrigger.cs" />
     <Compile Include="Triggers\ProjectTrigger.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -901,10 +955,12 @@
       <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Include="configuration\ccnet.xsd">
-      <SubType>Designer</SubType>
+      <SubType>
+      </SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="sourcecontrol\VssLocale.de.resx">
       <DependentUpon>VssLocale.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="sourcecontrol\VssLocale.es.resx">
       <DependentUpon>VssLocale.cs</DependentUpon>
@@ -920,6 +976,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="sourcecontrol\VssLocale.resx">
       <DependentUpon>VssLocale.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="configuration\ccnet.xsx">
       <DependentUpon>ccnet.xsd</DependentUpon>

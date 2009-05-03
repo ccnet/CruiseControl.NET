@@ -75,8 +75,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 			CCTrayMultiConfiguration provider = CreateTestConfiguration(ConfigXml);
             DynamicMock mockCruiseServerManager = new DynamicMock(typeof(ICruiseServerManager));
 		    mockCruiseServerManager.Strict = true;
-            mockCruiseServerManager.ExpectAndReturn("ServerUrl", "tcp://blah1");
-            mockCruiseServerManager.ExpectAndReturn("ServerUrl", "tcp://blah2");
+            mockCruiseServerManager.ExpectAndReturn("Configuration", new BuildServer("tcp://blah1"));
+            mockCruiseServerManager.ExpectAndReturn("Configuration", new BuildServer("tcp://blah2"));
 		    ICruiseServerManager cruiseServerManagerInstance = (ICruiseServerManager) mockCruiseServerManager.MockInstance;
 
             mockServerConfigFactory.ExpectAndReturn("Create", cruiseServerManagerInstance, provider.GetUniqueBuildServerList()[0]);
@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 </Configuration>";
 
 			CCTrayMultiConfiguration configuration = CreateTestConfiguration(SimpleConfig);
-			configuration.Projects = new CCTrayProject[1] {new CCTrayProject("url", "projName")};
+			configuration.Projects = new CCTrayProject[1] {new CCTrayProject("tcp://url", "projName")};
 
 			configuration.Persist();
 
@@ -184,5 +184,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 			configuration.Reload();
 		}
 
+        [Test]
+        public void SetExtensionSettings()
+        {
+            CCTrayProject newValue = new CCTrayProject();
+            newValue.ExtensionSettings = "Some settings";
+            Assert.AreEqual("Some settings", newValue.ExtensionSettings);
+        }
+
+        [Test]
+        public void SetExtensionNameNonBlank()
+        {
+            CCTrayProject newValue = new CCTrayProject();
+            newValue.ExtensionName = "An extension";
+            Assert.AreEqual("An extension", newValue.ExtensionName);
+            Assert.AreEqual(BuildServerTransport.Extension, newValue.BuildServer.Transport);
+        }
+
+        [Test]
+        public void SetExtensionNameBlank()
+        {
+            CCTrayProject newValue = new CCTrayProject();
+            newValue.ExtensionName = string.Empty;
+            Assert.AreEqual(string.Empty, newValue.ExtensionName);
+            Assert.AreEqual(BuildServerTransport.HTTP, newValue.BuildServer.Transport);
+        }
 	}
 }

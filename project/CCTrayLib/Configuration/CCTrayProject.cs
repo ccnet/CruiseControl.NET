@@ -17,6 +17,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
 		public CCTrayProject(string serverUrl, string projectName)
 		{
+            buildServer = new BuildServer(serverUrl);
 			ServerUrl = serverUrl;
 			ProjectName = projectName;
 			showProject = true;
@@ -33,7 +34,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		public string ServerUrl
 		{
 			get { return buildServer.Url; }
-			set { buildServer = new BuildServer(value); }
+            set
+            {
+                if (buildServer.Url == null) 
+                {
+                    buildServer = new BuildServer(value);
+                }
+                else
+                {
+                    buildServer = new BuildServer(value, buildServer.Transport, buildServer.ExtensionName, buildServer.ExtensionSettings);
+                }
+            }
 		}
 
 		[XmlAttribute(AttributeName="projectName")]
@@ -49,6 +60,38 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			get { return showProject; }
 			set { showProject = value; }
 		}
+
+        [XmlAttribute(AttributeName = "extension")]
+        public string ExtensionName
+        {
+            get { return buildServer.ExtensionName; }
+            set
+            {
+                buildServer.Transport = string.IsNullOrEmpty(value) ? BuildServerTransport.HTTP : BuildServerTransport.Extension;
+                buildServer.ExtensionName = value;
+            }
+        }
+
+        [XmlAttribute(AttributeName = "settings")]
+        public string ExtensionSettings
+        {
+            get { return buildServer.ExtensionSettings; }
+            set { buildServer.ExtensionSettings = value; }
+        }
+
+        [XmlAttribute(AttributeName = "securityType")]
+        public string SecurityType
+        {
+            get { return buildServer.SecurityType; }
+            set { buildServer.SecurityType = value; }
+        }
+
+        [XmlAttribute(AttributeName = "securitySettings")]
+        public string SecuritySettings
+        {
+            get { return buildServer.SecuritySettings; }
+            set { buildServer.SecuritySettings = value; }
+        }
 		
 		[XmlIgnore]
 		public BuildServer BuildServer

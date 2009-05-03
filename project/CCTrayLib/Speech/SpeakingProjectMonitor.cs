@@ -1,3 +1,5 @@
+#if !DISABLE_COM
+
 using System;
 using System.Diagnostics;
 using System.Collections;
@@ -67,3 +69,4 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Speech
 		}
 	}
 }
+#endif
