@@ -111,10 +111,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         public static string AutoDoubleQuoteString(string value)
         {
-            if (!string.IsNullOrEmpty(value) && (value.IndexOf(' ') > -1) && (value.IndexOf("\"") == -1))
-                return string.Format("\"{0}\"", value);
+			if (value.EndsWith(@"\"))
+				value = string.Concat(value, @"\");
 
-            return value;
+			if (!string.IsNullOrEmpty(value) && (value.IndexOf(' ') > -1) && (value.IndexOf('"') == -1))
+				return string.Concat('"', value, '"');
+
+			return value;
         }
 
         public static string RemoveTrailingPathDelimeter(string directory)
