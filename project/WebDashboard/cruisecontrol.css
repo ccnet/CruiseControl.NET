@@ -152,7 +152,7 @@ td>a.selected:hover { color:#006; }
 	background-color:#ffffff;
 }
 /* Projects grid */
-#StatusGrid
+.SortableGrid
 {
 	border-collapse: collapse;
 	width:100%;
@@ -160,40 +160,40 @@ td>a.selected:hover { color:#006; }
 	border-right: solid 2px #333399;
 	background-color:#FFFFF0;
 }
-#StatusGrid td
+.SortableGrid td
 {
 	border-top: solid 2px #333399;
 	border-bottom: solid 2px #333399;
 	padding:3px;
 	text-align:center;
 }
-#StatusGrid th
+.SortableGrid th
 {
 	border-top: solid 2px #333399;
 	background-color: #333399;
 	padding:3px;
 	text-align:center;
 }
-#StatusGrid .left
+.SortableGrid .left
 {
 	text-align:left;
 }
-#StatusGrid .Black
+.SortableGrid .Black
 {
 	font-weight:bold;
 	color:#000000;
 }
-#StatusGrid .Red
+.SortableGrid .Red
 {
 	font-weight:bold;
 	color:#FF0000;
 }
-#StatusGrid .Green
+.SortableGrid .Green
 {
 	font-weight:bold;
 	color:#008000;
 }
-#StatusGrid .Blue
+.SortableGrid .Blue
 {
 	font-weight:bold;
 	color:#0000FF;
@@ -223,7 +223,7 @@ td>a.selected:hover { color:#006; }
 	border: none !important;
 	text-align:left !important;
 }
-#StatusGrid thead tr .header 
+.SortableGrid thead tr .header 
 {
 	padding-right:16px;
 	background-image: url(images/bg.gif);
@@ -231,13 +231,13 @@ td>a.selected:hover { color:#006; }
 	background-position: center right;
 	cursor: pointer;
 }
-#StatusGrid thead tr .headerSortUp {
+.SortableGrid thead tr .headerSortUp {
 	background-image: url(images/asc.gif);
 }
-#StatusGrid thead tr .headerSortDown {
+.SortableGrid thead tr .headerSortDown {
 	background-image: url(images/desc.gif);
 }
-#StatusGrid thead tr .headerSortDown, #StatusGrid thead tr .headerSortUp {
+.SortableGrid thead tr .headerSortDown, .SortableGrid thead tr .headerSortUp {
 	background-color: #3333FF;
 }
 /* Tipsy */

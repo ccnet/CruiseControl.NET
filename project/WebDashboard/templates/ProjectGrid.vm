@@ -65,7 +65,7 @@
 #end
 
 #if ($projectGrid.Length > 0)
-<table id="StatusGrid">
+<table id="StatusGrid" class="SortableGrid">
   <thead>
     <tr class="ProjectGridHeader">
       #if ($wholeFarm)

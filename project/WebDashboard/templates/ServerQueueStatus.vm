@@ -1,31 +1,47 @@
-<table cellspacing="0" cellpadding="3" rules="rows" bordercolor="#333399" border="1" id="StatusGrid" bgcolor="White" width="100%">
-  <tr bgcolor="#333399" class="ProjectGridHeader">
-    <td width="5%">
-      <b>Queue</b>
-    </td>
-    <td width="45%">
-      <b>Project</b>
-    </td>
-    <td width="50%">
-      <b>Status</b>
-    </td>
-  </tr>
+<script type="text/javascript">
+  $(document).ready(function(){
+      $('#QueueStatus').tablesorter({
+          sortList:[[0,0]]
+        });
+    });
+</script>
+<table class="SortableGrid" id="QueueStatus">
+  <thead>
+    <tr class="ProjectGridHeader">
+      <th>Queue</th>
+      <th>Project</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
   #foreach ($queue in $queues)
-  <tr bgcolor="Ivory">
-    <td colspan="3">
-      <b>$queue.QueueName</b>
-    </td>
-  </tr>
-  #foreach ($project in $queue.Requests)
-  <tr>
-    <td width="5%">&nbsp;</td>
-    <td width="45%">
-      $project.ProjectName
-    </td>
-    <td width="50%">
-      $project.Activity
-    </td>
-  </tr>
+    #if ($queue.Requests.Count > 0)
+      #foreach ($project in $queue.Requests)
+      <tr>
+        <td class="left Black">
+          $queue.QueueName
+        </td>
+        <td class="left">
+          $project.ProjectName
+        </td>
+        <td>
+          $project.Activity
+        </td>
+      </tr>
+      #end
+    #else
+      <tr>
+        <td class="left Black">
+          $queue.QueueName
+        </td>
+        <td>
+          &nbsp;
+        </td>
+        <td>
+          &nbsp;
+        </td>
+      </tr>
+    #end
   #end
-  #end
+  </tbody>
 </table>
