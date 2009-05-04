@@ -79,6 +79,9 @@
 
 		<msbuild projectFile="${path::combine(src.dir, build.project)}" targets="${build.target}" verbosity="Minimal">
 			<property name="Configuration" value="${build.configuration}" />
+			
+			<!-- This is a hack until CCTrayLib uses plugins for Windows only stuff -->
+			<property name="DISABLE_COM" value="${platform::is-unix()}" />
 		</msbuild>
 		
 		<!-- copy ccnet.config into the server dictionary -->
