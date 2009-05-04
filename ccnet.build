@@ -26,6 +26,7 @@
 	<property name="gendarme.executable" value="${path::combine( path::combine(tools.dir, 'Gendarme'), 'gendarme.exe')}" readonly="true" />
 	<property name="ndepend.executable" value="${path::combine( path::combine(tools.dir, 'NDepend'), 'NDepend.Console.exe')}" readonly="true" />
 	<property name="fxcop.executable" value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}" readonly="true" />
+	<property name="nunit.executable" value="${path::combine( path::combine(tools.dir, 'nunit'), 'nunit-console.exe')}" readonly="true" />
 
 	<!-- common assembly info properties -->
 	<property name="assembly.company" value="ThoughtWorks Inc." readonly="true" />
@@ -41,7 +42,7 @@
 	<property name="nant.settings.currentframework" value="${framework::get-family(nant.settings.currentframework)}-${build.target.framework}" />
 
 	<!-- Targets -->
-	<target name="all" depends="clean, init, build, runCodeMetrics" description="" />
+	<target name="all" depends="clean, init, build, runTests, runCodeMetrics" description="" />
 
 	<target name="clean" description="Clean up">
 		<delete dir="${build.dir}" if="${directory::exists(build.dir)}" verbose="${nant.verbosity}" />
@@ -79,19 +80,34 @@
 
 		<msbuild projectFile="${path::combine(src.dir, build.project)}" targets="${build.target}" verbosity="Minimal">
 			<property name="Configuration" value="${build.configuration}" />
-			
+
 			<!-- This is a hack until CCTrayLib uses plugins for Windows only stuff -->
 			<property name="DISABLE_COM" value="${platform::is-unix()}" />
-			
+
 			<!-- Hack for current xbuild issues on Mono 2.5 -->
 			<environment>
 				<variable name="MONO_IOMAP" value="all" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
 				<variable name="MONO_PATH" value="${path::get-full-path('lib')}" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
 			</environment>
 		</msbuild>
-		
+
 		<!-- copy ccnet.config into the server dictionary -->
 		<copy file="${path::combine( path::combine(src.dir, 'service'), 'ccnet.config')}" tofile="${path::combine( path::combine(build.dir, 'Server'), 'ccnet.config')}" verbose="${nant.verbosity}"/>
+	</target>
+
+	<!-- Test targets -->
+	<target name="runTests" depends="build" description="Run unit tests">
+		<call target="runNUnitTests" cascade="false" />
+	</target>
+
+	<target name="runNUnitTests" depends="build" description="Run the NUnit tests">
+		<loadtasks assembly="${nauckit.nant.assembly}" />
+
+		<nunitTest executable="${nunit.executable}" workingDirectory="${path::combine(build.dir, 'UnitTests')}" outputFile="${path::combine(build.metrics.dir, 'nunit-results.xml')}">
+			<assemblies>
+				<include name="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll')}" />
+			</assemblies>
+		</nunitTest>
 	</target>
 
 	<!-- Code analyze metric targets -->
