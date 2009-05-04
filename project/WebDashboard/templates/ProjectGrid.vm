@@ -1,189 +1,168 @@
-    <script type="text/javascript">
+<script type="text/javascript">
   $(document).ready(function(){
-      $('#parameterCheck').dialog({
+    $('#parameterCheck').dialog({
         autoOpen:false,
         modal:true,
         title:'Project Parameters',
         width:400,
         height:300,
         overlay:{
-          opacity:0.5,
-          background:'black'
-        }
-      });
-  });
-  function checkForParams(buttonEl, checkUrl){
-    $('#parameterEditor').replaceWith('<div id="parameterEditor">Loading parameters, please wait...</div>');
-    $('#parameterCheck').dialog('open');
-    jQuery.get(checkUrl, function(data){
-      if(data=='NONE'){
-        $('#parameterCheck').dialog('close');
-        var button = $(buttonEl);
-        button.after('<input type="hidden" name="ForceBuild" value="Force" />');
-        buttonEl.parentNode.parentNode.submit();
-      }else{
-        $('#parameterEditor').replaceWith('<div id="parameterEditor">' + data + '</div>');
-      }
+            opacity:0.5,
+            background:'black'
+          }
+        });
+      $('#StatusGrid').tablesorter({
+          #if ($wholeFarm)
+          sortList:[[0,0],[1,0]]
+          #else
+          sortList:[[0,0]]
+          #end
+        });
+      #set ($RowId = 0)
+      #foreach ($projectGridRow in $projectGrid)
+      #set ($RowId = $RowId + 1)
+      #if ($projectGridRow.BuildStage.Length > 0)
+      $('#projectData$RowId').tipsy();
+      #end
+      #end
     });
-  }
+    function checkForParams(buttonEl, checkUrl){
+      $('#parameterEditor').replaceWith('<div id="parameterEditor">Loading parameters, please wait...</div>');
+      $('#parameterCheck').dialog('open');
+      jQuery.get(checkUrl, function(data){
+          if(data=='NONE'){
+            $('#parameterCheck').dialog('close');
+            var button = $(buttonEl);
+            button.after('<input type="hidden" name="ForceBuild" value="Force" />');
+            buttonEl.parentNode.parentNode.submit();
+          }else{
+            $('#parameterEditor').replaceWith('<div id="parameterEditor">' + data + '</div>');
+          }
+        });
+    }
 </script>
 <div id="parameterCheck">
   <div id="parameterEditor">Loading parameters, please wait...</div>
 </div>
 <form ID="RefreshForm" method="post">
-<table width="100%">
-<tr>
-    <td align="right"><input type="submit" align="right" name="Refresh" value="Refresh status" /></td>
-</tr>
-</table>
+  <table width="100%">
+    <tr>
+      <td align="right">
+        <input type="submit" align="right" name="Refresh" value="Refresh status" />
+      </td>
+    </tr>
+  </table>
 </form>
 
 #if ($forceBuildMessage.Length > 0)
-<P><span id="StatusLabel"><b><font color="#4A3C8C">$forceBuildMessage</font></b></span></P>
+<P>
+  <span id="StatusLabel">
+    <b>
+      <font color="#4A3C8C">$forceBuildMessage</font>
+    </b>
+  </span>
+</P>
 #end
 
 #if ($projectGrid.Length > 0)
-<table cellspacing="0" cellpadding="3" rules="rows" bordercolor="#333399" border="1" id="StatusGrid" bgcolor="White" width="100%">
-    <tr bgcolor="#333399" class="ProjectGridHeader">
-        #if ($wholeFarm)
-        <td align="Center">
-            <a href="$serverNameSortLink"><b>Server</b></a>
-        </td>
-        #end
-        <td>
-            <a href="$projectNameSortLink"><b>Project Name</b></a>
-        </td>
-        <td align="Center">
-            <a href="$buildStatusSortLink"><b>Last Build Status</b></a>
-        </td>
-        <td align="Center">
-            <a href="$lastBuildDateSortLink"><b>Last Build Time</b></a>
-        </td>
-        <td align="Center">          
-            <b>Next Build Time</b>          
-        </td>
-
-      <td align="Center">
-            <b>Last Build Label</b>
-        </td>
-        <td align="Center">
-            <b>CCNet Status</b>
-        </td>
-        <td align="Center">
-            <b>Activity</b>
-        </td>
-        <td align="Center">
-            <b>Messages</b>
-        </td>
-        <td align="Center">
-            <b>Admin</b>
-        </td>
+<table id="StatusGrid">
+  <thead>
+    <tr class="ProjectGridHeader">
+      #if ($wholeFarm)
+      <th class="left">Server</th>
+      #end
+      <th class="left">Project Name</th>
+      <th>Last Build Status</th>
+      <th>Last Build Time</th>
+      <th>Next Build Time</th>
+      <th>Last Build Label</th>
+      <th>CCNet Status</th>
+      <th>Activity</th>
+      <th class="{sorter:false}">Messages</th>
+      <th class="{sorter:false}">Admin</th>
     </tr>
-    
+  </thead>
+  <tbody>
+
     #set ($ProjectOKCounter = 0)
     #set ($ProjectNOKCounter = 0)
+    #set ($RowId = 0)
 
     #foreach ($projectGridRow in $projectGrid)
-    <tr bgcolor="Ivory">
-        #if ($projectGridRow.BuildStatus == "Success")
-           #set ($ProjectOKCounter = $ProjectOKCounter + 1)
-        #else
-           #set ($ProjectNOKCounter = $ProjectNOKCounter + 1)
-        #end
-
-        #if ($wholeFarm)
-        <td align="Left">
-            <b>$projectGridRow.ServerName</b>
-        </td>
-        #end
-        <td align="Left">
-            <font color="Black">
-                <a href="$projectGridRow.Url">$projectGridRow.Name</a>
-            </font>
-        </td>
-        <td align="Center">
-            <font color="$projectGridRow.BuildStatusHtmlColor">
-                <b>$projectGridRow.BuildStatus</b>
-            </font>
-        </td>
-        <td align="Center">
-            <font color="Black">$projectGridRow.LastBuildDate</font>
-        </td>
-        <td align="Center">
-          <font color="Black">$projectGridRow.NextBuildTime</font>
-        </td>
-
-      <td align="Center">
-            <font color="Black">$projectGridRow.LastBuildLabel</font>
-        </td>
-        <td align="Center">
-            <font color="Black">$projectGridRow.Status</font>
-        </td>
-        <td align="Center">
-            #if ($projectGridRow.Activity == "Building")
-                <b><font color="Red">$projectGridRow.Activity</font></b>
-            #else
-                <font color="Black">$projectGridRow.Activity</font>
-            #end
-        </td>
-        <td align="Center">
-            <font color="Black">
-                $projectGridRow.CurrentMessage
-            </font>
-        </td>
-        <td align="Center">
-          <form method="post" style="margin-bottom:0px;">
-          <input type="hidden" name="projectName" value="$projectGridRow.Name" />
-                <input type="hidden" name="serverName" value="$projectGridRow.ServerName" />
-                    <font color="Black">
-                    #if ($projectGridRow.allowForceBuild)
-          #if($projectGridRow.ForceAbortBuildButtonValue == "Force")
-          <input type="button" name="$projectGridRow.ForceAbortBuildButtonName" value="$projectGridRow.ForceAbortBuildButtonValue" onclick="checkForParams(this, '$projectGridRow.ParametersUrl')"/>
-          #else
-                        <input type="submit" name="$projectGridRow.ForceAbortBuildButtonName" value="$projectGridRow.ForceAbortBuildButtonValue"/>
-                    #end
-          #end
-                    #if ($projectGridRow.AllowStartStopBuild)               
-                        <input type="submit" name="$projectGridRow.StartStopButtonName" value="$projectGridRow.StartStopButtonValue"/>
-                    #end
-                    </font>
-          </form>
-        </td>
-    </tr>
+    #set ($RowId = $RowId + 1)
+    #if ($projectGridRow.BuildStatus == "Success")
+    #set ($ProjectOKCounter = $ProjectOKCounter + 1)
+    #else
+    #set ($ProjectNOKCounter = $ProjectNOKCounter + 1)
+    #end
 
     #if ($projectGridRow.BuildStage.Length > 0)
-    <tr  bgcolor="lavender">
-      <td align="Left" COLSPAN="10">
-        <font color="Black">
-          $projectGridRow.BuildStage
-        </font>
+    <tr id="projectData$RowId" title="$projectGridRow.BuildStage">
+    #else
+    <tr id="projectData$RowId">
+    #end
+      #if ($wholeFarm)
+      <td class="Black left">$projectGridRow.ServerName</td>
+      #end
+      <td class="left">
+        <a href="$projectGridRow.Url">$projectGridRow.Name</a>
+      </td>
+      <td class="$projectGridRow.BuildStatusHtmlColor">$projectGridRow.BuildStatus</td>
+      <td>$projectGridRow.LastBuildDate</td>
+      <td>$projectGridRow.NextBuildTime</td>
+      <td>$projectGridRow.LastBuildLabel</td>
+      <td>$projectGridRow.Status</td>
+      #if ($projectGridRow.Activity == "Building")
+      <td class="Red">$projectGridRow.Activity</td>
+      #else
+      <td class="Black" style="font-weight:normal;">$projectGridRow.Activity</td>
+      #end
+      <td class="left">$projectGridRow.CurrentMessage</td>
+      <td>
+        <form method="post" style="margin-bottom:0px;">
+          <input type="hidden" name="projectName" value="$projectGridRow.Name" />
+          <input type="hidden" name="serverName" value="$projectGridRow.ServerName" />
+          <font color="Black">
+            #if ($projectGridRow.allowForceBuild)
+            #if($projectGridRow.ForceAbortBuildButtonValue == "Force")
+            <input type="button" name="$projectGridRow.ForceAbortBuildButtonName" value="$projectGridRow.ForceAbortBuildButtonValue" onclick="checkForParams(this, '$projectGridRow.ParametersUrl')"/>
+            #else
+            <input type="submit" name="$projectGridRow.ForceAbortBuildButtonName" value="$projectGridRow.ForceAbortBuildButtonValue"/>
+            #end
+            #end
+            #if ($projectGridRow.AllowStartStopBuild)
+            <input type="submit" name="$projectGridRow.StartStopButtonName" value="$projectGridRow.StartStopButtonValue"/>
+            #end
+          </font>
+        </form>
       </td>
     </tr>
-    #end
-  
-  #end
 
-  #set ($ProjectCounter = $ProjectOKCounter + $ProjectNOKCounter)
-  #if ($ProjectCounter == 0)
-     #set ($OKPercent = 50)
-     #set ($NOKPercent = 0)
-  #else
-     #set ($OKPercent = 50 * $ProjectOKCounter / $ProjectCounter)
-     #set ($NOKPercent = 50 - $OKPercent)
-  #end
-  #set ($OKPercentToolTip = $OKPercent * 2)
-   <tr>
-     <td COLSPAN="10">
-      <table  cellspacing="0" cellpadding="0"  border="0" width="100%" >
-        <tr height=5 title="Percentage of successfull builds : $OKPercentToolTip%">
-            <td width=$OKPercent% bgcolor="#33CC00"> </td>
-            <td width=$NOKPercent% bgcolor="#FF0000"></td>
-            <td width=$NOKPercent% bgcolor="#FF0000"></td>
-            <td width=$OKPercent% bgcolor="#33CC00"> </td>
-        </tr>
-      </table>
-     </td>
-  </tr>
+    #end
+  </tbody>
+  <tfoot>
+    #set ($ProjectCounter = $ProjectOKCounter + $ProjectNOKCounter)
+    #if ($ProjectCounter == 0)
+    #set ($OKPercent = 50)
+    #set ($NOKPercent = 0)
+    #else
+    #set ($OKPercent = 50 * $ProjectOKCounter / $ProjectCounter)
+    #set ($NOKPercent = 50 - $OKPercent)
+    #end
+    #set ($OKPercentToolTip = $OKPercent * 2)
+    <tr>
+      <td COLSPAN="10">
+        <table  id="BuildPercentage">
+          <tr height="5" title="Percentage of successfull builds : $OKPercentToolTip%">
+            <td width=$"OKPercent"% bgcolor="#33CC00"> </td>
+            <td width=$"NOKPercent"% bgcolor="#FF0000"></td>
+            <td width=$"NOKPercent"% bgcolor="#FF0000"></td>
+            <td width=$"OKPercent"% bgcolor="#33CC00"> </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </tfoot>
 </table>
 #end
 
@@ -192,20 +171,38 @@
 
 #if ($exceptions.Length > 0)
 <P>
-<span id="ExceptionTitleLabel">There were exceptions connecting to the following servers:</span>
+  <span id="ExceptionTitleLabel">There were exceptions connecting to the following servers:</span>
 </P>
 <table cellspacing="0" cellpadding="4" rules="all" bordercolor="#CC9966" border="1" id="ExceptionGrid" bgcolor="White" width="100%">
-    <tr bgcolor="#990000">
-        <th><font color="#FFFFCC"><b>Server Name</b></font></th>
-        <th><font color="#FFFFCC"><b>Url</b></font></th>
-        <th><font color="#FFFFCC"><b>Message</b></font></th>
-    </tr>
-    #foreach ($exception in $exceptions)
-    <tr bgcolor="White">
-        <td><font color="#330099">$exception.ServerName</font></td>
-        <td><font color="#330099">$exception.Url</font></td>
-        <td><font color="#330099">$exception.Message</font></td>
-    </tr>
-    #end
+  <tr bgcolor="#990000">
+    <th>
+      <font color="#FFFFCC">
+        <b>Server Name</b>
+      </font>
+    </th>
+    <th>
+      <font color="#FFFFCC">
+        <b>Url</b>
+      </font>
+    </th>
+    <th>
+      <font color="#FFFFCC">
+        <b>Message</b>
+      </font>
+    </th>
+  </tr>
+  #foreach ($exception in $exceptions)
+  <tr bgcolor="White">
+    <td>
+      <font color="#330099">$exception.ServerName</font>
+    </td>
+    <td>
+      <font color="#330099">$exception.Url</font>
+    </td>
+    <td>
+      <font color="#330099">$exception.Message</font>
+    </td>
+  </tr>
+  #end
 </table>
 #end
