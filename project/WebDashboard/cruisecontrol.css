@@ -151,3 +151,96 @@ td>a.selected:hover { color:#006; }
 {
 	background-color:#ffffff;
 }
+/* Projects grid */
+.SortableGrid
+{
+	border-collapse: collapse;
+	width:100%;
+	border-left: solid 2px #333399;
+	border-right: solid 2px #333399;
+	background-color:#FFFFF0;
+}
+.SortableGrid td
+{
+	border-top: solid 2px #333399;
+	border-bottom: solid 2px #333399;
+	padding:3px;
+	text-align:center;
+}
+.SortableGrid th
+{
+	border-top: solid 2px #333399;
+	background-color: #333399;
+	padding:3px;
+	text-align:center;
+}
+.SortableGrid .left
+{
+	text-align:left;
+}
+.SortableGrid .Black
+{
+	font-weight:bold;
+	color:#000000;
+}
+.SortableGrid .Red
+{
+	font-weight:bold;
+	color:#FF0000;
+}
+.SortableGrid .Green
+{
+	font-weight:bold;
+	color:#008000;
+}
+.SortableGrid .Blue
+{
+	font-weight:bold;
+	color:#0000FF;
+}
+#BuildPercentage
+{
+	width:100%;
+	height:8px;
+	border-collapse:collapse;
+	border:none;
+}
+#BuildPercentage td
+{
+	border: none;
+}
+.BuildStage
+{
+	background-color:#E6E6FA;
+	text-align:left !important;
+}
+.BuildStage table
+{
+	border: none;
+}
+.BuildStage td
+{
+	border: none !important;
+	text-align:left !important;
+}
+.SortableGrid thead tr .header 
+{
+	padding-right:16px;
+	background-image: url(images/bg.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+}
+.SortableGrid thead tr .headerSortUp {
+	background-image: url(images/asc.gif);
+}
+.SortableGrid thead tr .headerSortDown {
+	background-image: url(images/desc.gif);
+}
+.SortableGrid thead tr .headerSortDown, .SortableGrid thead tr .headerSortUp {
+	background-color: #3333FF;
+}
+/* Tipsy */
+.tipsy { padding: 5px; font-size: 10px; opacity: 0.8; filter: alpha(opacity=80); background-repeat: no-repeat; }
+.tipsy-inner { padding: 4px 5px; background-color: black; color: white; max-width: 400px; text-align: center; }
+.tipsy-north { background-image: url(images/tipsy-north.gif); background-position: top center; }

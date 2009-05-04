@@ -1,29 +1,31 @@
-<table cellspacing="0" cellpadding="3" rules="rows" bordercolor="#333399" border="1" id="StatusGrid" bgcolor="White" width="100%">
-  <tr bgcolor="#333399" class="ProjectGridHeader">
-    <td >
-      <b>Queue</b>
-    </td>
-    <td >
-      <b>QueuePriority</b>
-    </td>
-    <td >
-      <b>Project</b>
-    </td>
-    <td >
-      <b>Category</b>
-    </td>
-    <td >
-      <b>Web Url</b>
-    </td>
-  </tr>
-
-  #foreach ($project in $projects)
-  <tr>
-    <td>$project.Queue</td>
-    <td>$project.QueuePriority</td>
-    <td>$project.Name</td>
-    <td>$project.Category</td>
-    <td>$project.WebURL</td>
-  </tr>
-  #end
+<script type="text/javascript">
+  $(document).ready(function(){
+      $('#ProjectConfig').tablesorter({
+          sortList:[[2,0]]
+        });
+    });
+</script>
+<table class="SortableGrid" id="ProjectConfig">
+  <thead>
+    <tr class="ProjectGridHeader">
+      <th>Queue</th>
+      <th>Queue Priority</th>
+      <th>Project</th>
+      <th>Category</th>
+      <th>Web Url</th>
+    </tr>
+  </thead>
+  <tbody>
+    #foreach ($project in $projects)
+    <tr>
+      <td class="left">$project.Queue</td>
+      <td>$project.QueuePriority</td>
+      <td class="left">$project.Name</td>
+      <td class="left">$project.Category</td>
+      <td class="left">
+        <a href="$project.WebURL">$project.WebURL</a>
+      </td>
+    </tr>
+    #end
+  </tbody>
 </table>

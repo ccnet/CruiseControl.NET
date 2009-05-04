@@ -1,41 +1,20 @@
-<table cellspacing="0" cellpadding="3" rules="rows" bordercolor="#333399" border="1" id="StatusGrid" bgcolor="White" width="100%">
-	<tr bgcolor="#333399" class="ProjectGridHeader">
-		<td align="Center">
-			<b>Server Name</b>
-		</td>
-		<td align="Center">
-			<b>Server Version</b>
-		</td>
-		<td align="Center">
-			<b>Free Disk Space</b>
-		</td>
-	</tr>
-	<tr bgcolor="Ivory">
-		<td align="Center">
-			<font color="Black">
-				$servername
-			</font>
-		</td>
-		<td align="Center">
-			<font color="Black">
-				$serverversion
-			</font>
-		</td>
-		<td align="Center">
-			<font color="Black">
-				$serverSpace
-			</font>
-		</td>
-	</tr>
-	#if ($spaceMessage != "")
-	<tr>
-	    <td colspan="3" align="center">
-	        <font color="red">
-	            $spaceMessage
-	        </font>
-	    </td>
-	</tr>
-	#end
+<table class="SortableGrid">
+  <thead>
+    <tr class="ProjectGridHeader">
+      <th>Server Name</th>
+      <th>Server Version</th>
+      <th>Free Disk Space</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>$servername</td>
+      <td>$serverversion</td>
+      <td>$serverSpace</td>
+      <td>$spaceMessage</td>
+    </tr>
+  </tbody>
 </table>
 
 

@@ -696,6 +696,8 @@
     <Content Include="fitnesse.css" />
     <Content Include="images\arrow_minus_small.gif" />
     <Content Include="images\arrow_plus_small.gif" />
+    <Content Include="images\asc.gif" />
+    <Content Include="images\bg.gif" />
     <Content Include="images\bg_blue_stripe.gif" />
     <Content Include="images\ccnet_logo.gif" />
     <Content Include="images\ccnet_logo_onwhite.gif" />
@@ -705,6 +707,7 @@
     <Content Include="images\corner_white_ll.gif" />
     <Content Include="images\corner_white_ul.gif" />
     <Content Include="images\corner_white_ur.GIF" />
+    <Content Include="images\desc.gif" />
     <Content Include="images\fxcop-critical-error.gif" />
     <Content Include="images\fxcop-critical-warning.gif" />
     <Content Include="images\fxcop-error.gif" />
@@ -714,7 +717,10 @@
     <Content Include="images\tw_dev_logo.gif" />
     <Content Include="javascript\jquery-ui.js" />
     <Content Include="javascript\jquery.js" />
+    <Content Include="javascript\jquery.metadata.js" />
+    <Content Include="javascript\jquery.tablesorter.js" />
     <Content Include="javascript\jQuery.timers.js" />
+    <Content Include="javascript\jquery.tipsy.js" />
     <Content Include="javascript\theme\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="javascript\theme\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="javascript\theme\images\ui-bg_glass_55_fbf9ee_1x400.png" />
