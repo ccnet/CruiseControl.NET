@@ -103,10 +103,70 @@
 	<target name="runNUnitTests" depends="build" description="Run the NUnit tests">
 		<loadtasks assembly="${nauckit.nant.assembly}" />
 
-		<nunitTest executable="${nunit.executable}" workingDirectory="${path::combine(build.dir, 'UnitTests')}" outputFile="${path::combine(build.metrics.dir, 'nunit-results.xml')}">
+		<!-- Hack to copy all required files into the UnitTest dictionary until xbuild on Mono 2.5 is fixed -->
+		<if test="${framework::get-family(nant.settings.currentframework) == 'mono'}">
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'CCTray')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'Core')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'Objection')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'Remote')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'Server')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'WebDashboard')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(tools.dir, 'nunit')}" failonempty="true">
+					<include name="nunit.framework.dll" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${tools.dir}" failonempty="true">
+					<include name="sleeper.exe" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${src.dir}" failonempty="true">
+					<include name="xsl/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(src.dir, 'UnitTests')}" failonempty="true">
+					<include name="resources/**" />
+				</fileset>
+			</copy>
+			<copy file="${path::combine( path::combine(src.dir, 'UnitTests'), 'test.config')}" tofile="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll.config')}" verbose="${nant.verbosity}" />
+		</if>
+
+		<nunitTest executable="${nunit.executable}" workingDirectory="${path::combine(build.dir, 'UnitTests')}" outputFile="${path::combine(build.metrics.dir, 'nunit-results.xml')}" commandLineParameterFlag="-">
 			<assemblies>
 				<include name="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll')}" />
 			</assemblies>
+			
+			<!-- Hack for current xbuild issues on Mono 2.5 -->
+			<environment>
+				<variable name="MONO_PATH" value="${path::get-full-path('lib')}" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+			</environment>
 		</nunitTest>
 	</target>
 
