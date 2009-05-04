@@ -1,9 +1,0 @@
-build
-dist
-package
-backup*
-.project
-web
-deployed
-netreflector.xml
-build.txt
