@@ -82,6 +82,12 @@
 			
 			<!-- This is a hack until CCTrayLib uses plugins for Windows only stuff -->
 			<property name="DISABLE_COM" value="${platform::is-unix()}" />
+			
+			<!-- Hack for current xbuild issues on Mono 2.5 -->
+			<environment>
+				<variable name="MONO_IOMAP" value="all" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+				<variable name="MONO_PATH" value="${path::get-full-path('lib')}" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+			</environment>
 		</msbuild>
 		
 		<!-- copy ccnet.config into the server dictionary -->
