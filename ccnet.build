@@ -151,8 +151,8 @@
 				</fileset>
 			</copy>
 			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-				<fileset basedir="${path::combine(src.dir, 'UnitTests')}" failonempty="true">
-					<include name="resources/**" />
+				<fileset basedir="${path::combine( path::combine(src.dir, 'UnitTests'), 'resources')}" failonempty="true">
+					<include name="*/**" />
 				</fileset>
 			</copy>
 			<copy file="${path::combine( path::combine(src.dir, 'UnitTests'), 'test.config')}" tofile="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll.config')}" verbose="${nant.verbosity}" />
