@@ -3,41 +3,41 @@
 <project name="CruiseControl.NET" default="all" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
 
 	<!-- properties -->
-	<property name="nant.verbosity" value="true" overwrite="false" />
-	<property name="build.configuration" value="Build" overwrite="false" />
-	<property name="build.target" value="Build" overwrite="false" />
-	<property name="build.project" value="ccnet.sln" overwrite="false" />
-	<property name="build.target.framework" value="3.5" overwrite="false" />
-	<property name="CCNetLabel" value="0" overwrite="false" />
-	<property name="codemetrics.output.type" value="XmlFile" overwrite="false" />
+	<property name="nant.verbosity"			 overwrite="false"	value="true"  />
+	<property name="build.configuration"	 overwrite="false"	value="Build"  />
+	<property name="build.target"			 overwrite="false"	value="Build"  />
+	<property name="build.project"			 overwrite="false"	value="ccnet.sln" />
+	<property name="build.target.framework"  overwrite="false"	value="3.5"  />
+	<property name="CCNetLabel"				 overwrite="false"	value="0" />
+	<property name="codemetrics.output.type" overwrite="false"	value="XmlFile" />
 
 	<!-- common path properties -->
-	<property name="src.dir" value="${path::get-full-path('project')}" readonly="true" />
-	<property name="build.dir" value="${path::get-full-path('Build')}" readonly="true" />
-	<property name="build.metrics.dir" value="${path::get-full-path('BuildMetrics')}" readonly="true" />
-	<property name="publish.dir" value="${path::get-full-path('Publish')}" readonly="true" />
-	<property name="dist.dir" value="${path::get-full-path('Dist')}" readonly="true" />
-	<property name="tools.dir" value="${path::get-full-path('Tools')}" readonly="true" />
-	<property name="gendarme.project" value="${path::combine(src.dir, 'gendarme.assemblies.txt')}" overwrite="false" />
-	<property name="ndepend.project" value="${path::combine(src.dir, 'NDependProject.xml')}" overwrite="false" />
-	<property name="fxcop.project" value="${path::combine(src.dir, 'CruiseControl.NET.FxCop')}" overwrite="false" />
+	<property name="src.dir"				readonly="true"		value="${path::get-full-path('project')}" />
+	<property name="build.dir"				readonly="true"		value="${path::get-full-path('Build')}"  />
+	<property name="build.metrics.dir"		readonly="true"		value="${path::get-full-path('BuildMetrics')}"  />
+	<property name="publish.dir"			readonly="true"		value="${path::get-full-path('Publish')}" />
+	<property name="dist.dir"				readonly="true"		value="${path::get-full-path('Dist')}"  />
+	<property name="tools.dir"				readonly="true"		value="${path::get-full-path('Tools')}"  />
+	<property name="gendarme.project"		overwrite="false"	value="${path::combine(src.dir, 'gendarme.assemblies.txt')}" />
+	<property name="ndepend.project"		overwrite="false"	value="${path::combine(src.dir, 'NDependProject.xml')}"  />
+	<property name="fxcop.project"			overwrite="false"	value="${path::combine(src.dir, 'CruiseControl.NET.FxCop')}"  />
 
 	<!-- tool path properties -->
-	<property name="nauckit.nant.assembly" value="${path::combine( path::combine(tools.dir, 'NAnt'), 'NauckIT.NAnt.dll')}" readonly="true" />
-	<property name="ra.nant.assembly" value="${path::combine( path::combine(tools.dir, 'NAnt'), 'Ra.Build.Tasks.dll')}" readonly="true" />
-	<property name="gendarme.executable" value="${path::combine( path::combine(tools.dir, 'Gendarme'), 'gendarme.exe')}" readonly="true" />
-	<property name="ndepend.executable" value="${path::combine( path::combine(tools.dir, 'NDepend'), 'NDepend.Console.exe')}" readonly="true" />
-	<property name="fxcop.executable" value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}" readonly="true" />
-	<property name="nunit.executable" value="${path::combine( path::combine(tools.dir, 'nunit'), 'nunit-console.exe')}" readonly="true" />
-	<property name="nsis.executable" value="${path::combine( path::combine(tools.dir, 'NSIS'), 'makensis.exe')}" readonly="true" />
+	<property name="nauckit.nant.assembly"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'NAnt'), 'NauckIT.NAnt.dll')}"  />
+	<property name="ra.nant.assembly"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NAnt'), 'Ra.Build.Tasks.dll')}"  />
+	<property name="gendarme.executable"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'Gendarme'), 'gendarme.exe')}" />
+	<property name="ndepend.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NDepend'), 'NDepend.Console.exe')}" />
+	<property name="fxcop.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}"  />
+	<property name="nunit.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'nunit'), 'nunit-console.exe')}" />
+	<property name="nsis.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NSIS'), 'makensis.exe')}"  />
 
 	<!-- common assembly info properties -->
-	<property name="assembly.company" value="ThoughtWorks Inc." readonly="true" />
-	<property name="assembly.product" value="CruiseControl.NET" readonly="true" />
-	<property name="assembly.copyright" value="Copyright © 2003 - ${datetime::get-year(datetime::now())} ${assembly.company}" readonly="true" />
-	<property name="assembly.trademark" value="" readonly="true" />
-	<property name="assembly.version" value="${CCNetLabel}" readonly="true" />
-	<property name="assembly.fileversion" value="${CCNetLabel}" readonly="true" />
+	<property name="assembly.company"		readonly="true"		value="ThoughtWorks Inc."  />
+	<property name="assembly.product"		readonly="true"		value="CruiseControl.NET"  />
+	<property name="assembly.copyright"		readonly="true"		value="Copyright © 2003 - ${datetime::get-year(datetime::now())} ${assembly.company}"  />
+	<property name="assembly.trademark"		readonly="true"		value=""  />
+	<property name="assembly.version"		readonly="true"		value="${CCNetLabel}" />
+	<property name="assembly.fileversion"	readonly="true"		value="${CCNetLabel}"  />
 
 	<!-- Framework Support
 	http://nant.sourceforge.net/faq.html#framework-support
