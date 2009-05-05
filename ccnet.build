@@ -16,6 +16,7 @@
 	<property name="build.dir" value="${path::get-full-path('Build')}" readonly="true" />
 	<property name="build.metrics.dir" value="${path::get-full-path('BuildMetrics')}" readonly="true" />
 	<property name="publish.dir" value="${path::get-full-path('Publish')}" readonly="true" />
+	<property name="dist.dir" value="${path::get-full-path('Dist')}" readonly="true" />
 	<property name="tools.dir" value="${path::get-full-path('Tools')}" readonly="true" />
 	<property name="gendarme.project" value="${path::combine(src.dir, 'gendarme.assemblies.txt')}" overwrite="false" />
 	<property name="ndepend.project" value="${path::combine(src.dir, 'NDependProject.xml')}" overwrite="false" />
@@ -51,12 +52,14 @@
 	<target name="clean" description="Clean up">
 		<delete dir="${build.dir}" if="${directory::exists(build.dir)}" verbose="${nant.verbosity}" />
 		<delete dir="${publish.dir}" if="${directory::exists(publish.dir)}" verbose="${nant.verbosity}" />
+		<delete dir="${dist.dir}" if="${directory::exists(dist.dir)}" verbose="${nant.verbosity}" />
 	</target>
 
 	<target name="init" description="Initial compilation setup">
 		<mkdir dir="${build.dir}" unless="${directory::exists(build.dir)}" verbose="${nant.verbosity}" />
 		<mkdir dir="${build.metrics.dir}" unless="${directory::exists(build.metrics.dir)}" verbose="${nant.verbosity}" />
 		<mkdir dir="${publish.dir}" unless="${directory::exists(publish.dir)}" verbose="${nant.verbosity}" />
+		<mkdir dir="${dist.dir}" unless="${directory::exists(dist.dir)}" verbose="${nant.verbosity}" />
 	</target>
 
 	<target name="createAssemblyInfo" description="Create an assembly info file with the current build number">
