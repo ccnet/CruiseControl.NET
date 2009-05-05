@@ -17,14 +17,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			InitializeComponent();
 
-			generalSettings.BindGeneralTabControls(configuration);
-			buildProjectsSettings.BindListView(configuration);
-			audioSettings.BindAudioControls(configuration);
-			iconSettings.BindIconControls(configuration);
-			x10Settings.BindX10Controls(configuration.X10);
-			speechSettings.BindSpeechControls(configuration.Speech);
+            BindAllSettings();
 			HookPersistentWindowState();
+            tabControl1.SelectedTab = tabGeneral;       // Default to the general settings tab
 		}
+
+        private void BindAllSettings()
+        {
+            generalSettings.BindGeneralTabControls(configuration);
+            buildProjectsSettings.BindListView(configuration);
+            audioSettings.BindAudioControls(configuration);
+            iconSettings.BindIconControls(configuration);
+            x10Settings.BindX10Controls(configuration.X10);
+            speechSettings.BindSpeechControls(configuration.Speech);
+        }
 
 		private void HookPersistentWindowState()
 		{
@@ -59,5 +65,49 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			configuration.Persist();
 		}
+
+        private void saveSettingsButton_Click(object sender, EventArgs e)
+        {
+            var saveDialog = new SaveFileDialog
+            {
+                AddExtension = true,
+                AutoUpgradeEnabled = true,
+                CheckPathExists = true,
+                DefaultExt = "cctray",
+                Filter = "CCTray files (*.cctray)|*.cctray|All files (*.*)|*.*",
+                FilterIndex = 1,
+                OverwritePrompt = true,
+                Title = "Save Current Settings",
+                ValidateNames = true
+            };
+            if (saveDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                configuration.Save(saveDialog.FileName);
+                MessageBox.Show("Settings have been saved", "Save Settings", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void loadSettingsButton_Click(object sender, EventArgs e)
+        {
+            var openDialog = new OpenFileDialog
+            {
+                AddExtension = true,
+                AutoUpgradeEnabled = true,
+                CheckFileExists = true,
+                DefaultExt = "cctray",
+                Filter = "CCTray files (*.cctray)|*.cctray|All files (*.*)|*.*",
+                FilterIndex = 1,
+                Multiselect = false,
+                ShowReadOnly = false,
+                Title = "Load Previous Settings",
+                ValidateNames = true
+            };
+            if (openDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                configuration.Load(openDialog.FileName);
+                BindAllSettings();
+                MessageBox.Show("Settings have been loaded", "Load Settings", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
 	}
 }

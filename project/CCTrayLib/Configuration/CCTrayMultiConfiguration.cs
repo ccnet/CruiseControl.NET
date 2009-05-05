@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			this.configFileName = configFileName;
 			serverManagersList = new Dictionary<BuildServer, ICruiseServerManager>();
 
-			ReadConfigurationFile();
+			ReadConfigurationFile(configFileName);
 		}
 
         public IProjectMonitor[] GetProjectStatusMonitors(ISingleServerMonitor[] serverMonitors)
@@ -139,12 +139,29 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
 		public void Persist()
 		{
-			WriteConfigurationFile();
+            WriteConfigurationFile(configFileName);
 		}
+        /// <summary>
+        /// Load the settings from a different location.
+        /// </summary>
+        /// <param name="settingsFile"></param>
+        public virtual void Load(string settingsFile)
+        {
+            ReadConfigurationFile(settingsFile);
+        }
 
-		private void ReadConfigurationFile()
+        /// <summary>
+        /// Save the settings to a different location.
+        /// </summary>
+        /// <param name="settingsFile"></param>
+        public virtual void Save(string settingsFile)
+        {
+            WriteConfigurationFile(settingsFile);
+        }
+
+        private void ReadConfigurationFile(string settingsFile)
 		{
-			if (!File.Exists(configFileName))
+            if (!File.Exists(settingsFile))
 			{
 				persistentConfiguration = new PersistentConfiguration();
 				return;
@@ -152,21 +169,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
 			XmlSerializer serializer = new XmlSerializer(typeof (PersistentConfiguration));
 
-			using (StreamReader configFile = File.OpenText(configFileName))
+            using (StreamReader configFile = File.OpenText(settingsFile))
 				persistentConfiguration = (PersistentConfiguration) serializer.Deserialize(configFile);
 		}
 
-		private void WriteConfigurationFile()
+        private void WriteConfigurationFile(string settingsFile)
 		{
 			XmlSerializer serializer = new XmlSerializer(typeof (PersistentConfiguration));
 
-			using (StreamWriter configFile = File.CreateText(configFileName))
+            using (StreamWriter configFile = File.CreateText(settingsFile))
 				serializer.Serialize(configFile, persistentConfiguration);
 		}
 
 		public void Reload()
 		{
-			ReadConfigurationFile();
+            ReadConfigurationFile(configFileName);
 		}
 
 		public ICCTrayMultiConfiguration Clone()

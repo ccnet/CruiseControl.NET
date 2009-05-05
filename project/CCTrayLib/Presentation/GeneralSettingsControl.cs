@@ -13,8 +13,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public void BindGeneralTabControls(ICCTrayMultiConfiguration configuration)
 		{
+            chkShowBalloons.DataBindings.Clear();
 			chkShowBalloons.DataBindings.Add("Checked", configuration, "ShouldShowBalloonOnBuildTransition");
+            chkAlwaysOnTop.DataBindings.Clear();
 			chkAlwaysOnTop.DataBindings.Add("Checked", configuration, "AlwaysOnTop");
+            chkShowInTaskbar.DataBindings.Clear();
 			chkShowInTaskbar.DataBindings.Add("Checked", configuration, "ShowInTaskbar");
 
 			rdoStatusWindow.Checked = (configuration.TrayIconDoubleClickAction == TrayIconDoubleClickAction.ShowStatusWindow);
@@ -25,11 +28,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             {
                 configuration.PollPeriodSeconds = (int)numPollPeriod.Minimum; 
             }
-            else
-            {
-                numPollPeriod.Value = configuration.PollPeriodSeconds;
-            }
-            
+            numPollPeriod.Value = configuration.PollPeriodSeconds;
+
+            txtFixUserName.DataBindings.Clear();
 			txtFixUserName.DataBindings.Add("Text", configuration, "FixUserName");
             BindNotificationLevelCombo(configuration);
 		}
