@@ -4,7 +4,7 @@
 
 	<target name="build.packages" description="Generates the dashboard packages"
           depends="farm.level.packages,server.level.packages,project.level.packages,build.level.packages">
-		<copy file="${src.dir}/webdashboard/Packages/packages.xml" tofile="Dist/WebDashboard/Packages/packages.xml" verbose="${nant.verbosity}"/>
+		<copy file="${src.dir}/WebDashboard/Packages/packages.xml" tofile="Dist/WebDashboard/Packages/packages.xml" verbose="${nant.verbosity}"/>
 		<copy todir="Dist/WebDashboard/Packages" verbose="${nant.verbosity}">
 			<fileset basedir="${build.dir}/WebDashboard/Packages">
 				<include name="*.zip" />
