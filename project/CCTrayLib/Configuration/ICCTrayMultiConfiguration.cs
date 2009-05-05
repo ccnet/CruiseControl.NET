@@ -25,8 +25,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		bool ShowInTaskbar { get; set; }
         string FixUserName { get; set; }
 
-		void Reload();
-		void Persist();
+        void Reload();
+        void Persist();
+        /// <summary>
+        /// Load the settings from a different location.
+        /// </summary>
+        /// <param name="settingsFile"></param>
+        void Load(string settingsFile);
+        /// <summary>
+        /// Save the settings to a different location.
+        /// </summary>
+        /// <param name="settingsFile"></param>
+        void Save(string settingsFile);
 
 		ICCTrayMultiConfiguration Clone();
 	}
