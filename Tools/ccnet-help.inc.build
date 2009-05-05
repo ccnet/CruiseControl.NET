@@ -11,6 +11,7 @@
 		<echo message="Minor targets :" />
 		<echo message="  init                 : Initial compilation setup" />
 		<echo message="  createAssemblyInfo   : Create an assembly info file with the current build number" />
+		<echo message="  cleanupDocsDictionary: Delete all files in the docs dictionary." />
 
 		<echo message="todo  show value of properties that can be set "/>
 

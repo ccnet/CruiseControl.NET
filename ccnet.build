@@ -47,6 +47,7 @@
 	<!-- Includes -->
 	<include buildfile="${path::combine(tools.dir, 'ccnet-packaging.inc.build')}" />
 	<include buildfile="${path::combine(tools.dir, 'ccnet-help.inc.build')}" />
+	<include buildfile="${path::combine(tools.dir, 'ccnet-utils.inc.build')}" />
 
 	<!-- Targets -->
 	<target name="all" depends="clean, init, build, runTests, runCodeMetrics, package" description="" />
