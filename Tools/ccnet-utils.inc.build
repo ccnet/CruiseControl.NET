@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="CruiseControl.NET" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
+
+	<target name="cleanupDocsDictionary" description="Delete all files in the docs dictionary.">
+
+		<delete includeemptydirs="false" verbose="${nant.verbosity}">
+			<fileset basedir="${path::get-full-path('doc')}" defaultexcludes="true">
+				<include name="CCNET/**"  />
+			</fileset>
+		</delete>
+
+	</target>
+
+</project>
