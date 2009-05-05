@@ -54,6 +54,11 @@
 		<delete dir="${build.dir}" if="${directory::exists(build.dir)}" verbose="${nant.verbosity}" />
 		<delete dir="${publish.dir}" if="${directory::exists(publish.dir)}" verbose="${nant.verbosity}" />
 		<delete dir="${dist.dir}" if="${directory::exists(dist.dir)}" verbose="${nant.verbosity}" />
+		<delete verbose="${nant.verbosity}">
+			<fileset basedir="." failonempty="false">
+				<include name="*.nsi"/>
+			</fileset>
+		</delete>
 	</target>
 
 	<target name="init" description="Initial compilation setup">
