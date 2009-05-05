@@ -66,7 +66,7 @@ Var FinishMessage
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "dist\${PRODUCT_NAME_NOSPACE}-${PRODUCT_VERSION}-Setup.exe"
+OutFile "Publish\${PRODUCT_NAME_NOSPACE}-${PRODUCT_VERSION}-Setup.exe"
 InstallDir "$PROGRAMFILES\CCTray"
 InstallDirRegKey HKLM "${PRODUCT_DEFAULT_DIR_KEY}" ""
 ShowInstDetails show
