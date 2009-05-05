@@ -109,6 +109,9 @@
 
 		<!-- copy ccnet.config into the server dictionary -->
 		<copy file="${path::combine( path::combine(src.dir, 'service'), 'ccnet.config')}" tofile="${path::combine( path::combine(build.dir, 'Server'), 'ccnet.config')}" verbose="${nant.verbosity}"/>
+
+		<!-- FIXME: find a better solution as adding so much targets -->
+		<call target="build.packages" cascade="false" />
 	</target>
 
 	<!-- Test targets -->
