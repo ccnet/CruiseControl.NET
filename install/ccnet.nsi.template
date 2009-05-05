@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "CruiseControl.NET"
-!define PRODUCT_VERSION "1.5.0"
+!define PRODUCT_VERSION "@VERSION@"
 !define PRODUCT_PUBLISHER "ThoughtWorks"
 !define PRODUCT_WEB_SITE "http://ccnet.thoughtworks.com/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\ccnet.exe"
@@ -33,7 +33,7 @@ SetCompressor lzma
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
-!insertmacro MUI_PAGE_LICENSE "deployed\license.txt"
+!insertmacro MUI_PAGE_LICENSE "Dist\license.txt"
 ; Components page
 !insertmacro MUI_PAGE_COMPONENTS
 ; Add service page
@@ -68,7 +68,7 @@ Var FinishMessage
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "dist\${PRODUCT_NAME}-${PRODUCT_VERSION}-Setup.exe"
+OutFile "Publish\${PRODUCT_NAME}-${PRODUCT_VERSION}-Setup.exe"
 InstallDir "$PROGRAMFILES\CruiseControl.NET"
 InstallDirRegKey HKLM "${PRODUCT_DEFAULT_DIR_KEY}" ""
 ShowInstDetails show
@@ -78,7 +78,7 @@ ShowUnInstDetails show
 Section "CruiseControl.NET Server" SEC01
   SetOutPath "$INSTDIR\server"
   SetOverwrite ifnewer
-  File /r /x *.config "deployed\server\*"
+  File /r /x *.config "Dist\Server\*"
 
   Call BackupAndExtractConfigFiles
 
@@ -96,7 +96,7 @@ SectionEnd
 Section "Web Dashboard" SEC02
   SetOutPath "$INSTDIR\webdashboard"
   SetOverwrite ifnewer
-  File /r "deployed\webdashboard\*"
+  File /r "Dist\WebDashboard\*"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   !insertmacro MUI_STARTMENU_WRITE_END
@@ -108,7 +108,7 @@ SectionEnd
 Section "Examples" SEC04
   SetOutPath "$INSTDIR\Examples"
   SetOverwrite on
-  File /r "deployed\examples\*.config"
+  File /r "Dist\examples\*.config"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   !insertmacro MUI_STARTMENU_WRITE_END
@@ -168,7 +168,7 @@ Function BackupAndExtractConfigFiles
     Rename $INSTDIR\server\ccnet.exe.config $INSTDIR\server\ccnet.exe.config.old
     StrCpy $ConfigBackedUp "yes"
   extractCCNetExeConfig:
-    File "deployed\server\ccnet.exe.config"
+    File "Dist\Server\ccnet.exe.config"
 
   IfFileExists $INSTDIR\server\ccservice.exe.config 0 extractCCServiceExeConfig
     DetailPrint "Backing up ccservice.exe.config to ccservice.exe.config.old..."
@@ -176,10 +176,10 @@ Function BackupAndExtractConfigFiles
     Rename $INSTDIR\server\ccservice.exe.config $INSTDIR\server\ccservice.exe.config.old
     StrCpy $ConfigBackedUp "yes"
   extractCCServiceExeConfig:
-    File "deployed\server\ccservice.exe.config"
+    File "Dist\Server\ccservice.exe.config"
 
   IfFileExists $INSTDIR\server\ccnet.config done 0
-    File "deployed\server\ccnet.config"
+    File "Dist\Server\ccnet.config"
   done:
 
 FunctionEnd

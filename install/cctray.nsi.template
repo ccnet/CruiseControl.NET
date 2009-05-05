@@ -3,7 +3,7 @@
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "CruiseControl.NET CCTray"
 !define PRODUCT_NAME_NOSPACE "CruiseControl.NET-CCTray"
-!define PRODUCT_VERSION "1.5.0"
+!define PRODUCT_VERSION "@VERSION@"
 !define PRODUCT_PUBLISHER "ThoughtWorks"
 !define PRODUCT_WEB_SITE "http://ccnet.thoughtworks.com/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\cctray.exe"
