@@ -23,6 +23,7 @@
 
 	<!-- tool path properties -->
 	<property name="nauckit.nant.assembly" value="${path::combine( path::combine(tools.dir, 'NAnt'), 'NauckIT.NAnt.dll')}" readonly="true" />
+	<property name="ra.nant.assembly" value="${path::combine( path::combine(tools.dir, 'NAnt'), 'Ra.Build.Tasks.dll')}" readonly="true" />
 	<property name="gendarme.executable" value="${path::combine( path::combine(tools.dir, 'Gendarme'), 'gendarme.exe')}" readonly="true" />
 	<property name="ndepend.executable" value="${path::combine( path::combine(tools.dir, 'NDepend'), 'NDepend.Console.exe')}" readonly="true" />
 	<property name="fxcop.executable" value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}" readonly="true" />
@@ -40,9 +41,12 @@
 	http://nant.sourceforge.net/faq.html#framework-support
 	-->
 	<property name="nant.settings.currentframework" value="${framework::get-family(nant.settings.currentframework)}-${build.target.framework}" />
+	
+	<!-- Includes -->
+	<include buildfile="ccnet-packaging.inc.build" />
 
 	<!-- Targets -->
-	<target name="all" depends="clean, init, build, runTests, runCodeMetrics" description="" />
+	<target name="all" depends="clean, init, build, runTests, runCodeMetrics, package" description="" />
 
 	<target name="clean" description="Clean up">
 		<delete dir="${build.dir}" if="${directory::exists(build.dir)}" verbose="${nant.verbosity}" />

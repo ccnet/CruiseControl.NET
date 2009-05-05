@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="CruiseControl.NET" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
+
+	<!-- packaging and publishing targets -->
+	<target name="package" depends="clean, build" description="Create and copy the CruiseControl.NET distribution to the publish dictionary">
+
+		<call target="packageSource" cascade="false" />
+	</target>
+
+	<target name="packageSource" depends="clean, init" description="Creates a zip file containing all sources and tools to build CruiseControl.NET">
+		<property name="source.zip.file" value="CruiseControl.NET-${assembly.version}.source.zip" />
+		
+		<zip zipfile="${path::combine(publish.dir, source.zip.file)}" verbose="${nant.verbosity}">
+			<fileset defaultexcludes="true">
+				<include name="*/**" />
+				<exclude name="nant*.log*" />
+				<exclude name="${build.dir}/**" />
+				<exclude name="${build.metrics.dir}/**" />
+				<exclude name="${publish.dir}/**" />
+				<exclude name="${path::get-directory-name(ndepend.executable)}/**" />
+				<exclude name="${src.dir}/*/bin/**"/>
+				<exclude name="${src.dir}/*/obj/**"/>
+				<exclude name="${src.dir}/_Resharper*/**"/>
+				<exclude name="${src.dir}/**/*.user"/>
+				<exclude name="${src.dir}/**/*.suo"/>
+				<exclude name="${src.dir}/*.sln.cache"/>
+				<exclude name="${src.dir}/*.sln.proj"/>
+			</fileset>
+		</zip>
+	</target>
+
+</project>
