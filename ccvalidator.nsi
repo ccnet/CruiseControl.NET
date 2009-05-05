@@ -34,7 +34,7 @@ SetCompressor lzma
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
-!insertmacro MUI_PAGE_LICENSE "deployed\license.txt"
+!insertmacro MUI_PAGE_LICENSE "Dist\license.txt"
 ; Components page
 !insertmacro MUI_PAGE_COMPONENTS
 ; Add service page
@@ -66,7 +66,7 @@ Var FinishMessage
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "dist\${PRODUCT_NAME_NOSPACE}-${PRODUCT_VERSION}-Setup.exe"
+OutFile "Publish\${PRODUCT_NAME_NOSPACE}-${PRODUCT_VERSION}-Setup.exe"
 InstallDir "$PROGRAMFILES\CCValidator"
 InstallDirRegKey HKLM "${PRODUCT_DEFAULT_DIR_KEY}" ""
 ShowInstDetails show
@@ -75,7 +75,7 @@ ShowUnInstDetails show
 Section "CCValidator" SEC_CCVALIDATOR
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File "deployed\ccvalidator\*"
+  File "Dist\CCValidator\*"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
