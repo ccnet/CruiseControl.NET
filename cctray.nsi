@@ -34,7 +34,7 @@ SetCompressor lzma
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
-!insertmacro MUI_PAGE_LICENSE "deployed\license.txt"
+!insertmacro MUI_PAGE_LICENSE "Dist\license.txt"
 ; Components page
 !insertmacro MUI_PAGE_COMPONENTS
 ; Add service page
@@ -75,7 +75,7 @@ ShowUnInstDetails show
 Section "CCTray" SEC_CCTRAY
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File "deployed\cctray\*"
+  File "Dist\CCTray\*"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
