@@ -6,7 +6,7 @@
           depends="farm.level.packages,server.level.packages,project.level.packages,build.level.packages">
 		<copy file="${src.dir}/WebDashboard/packages/packages.xml" tofile="Dist/WebDashboard/packages/packages.xml" verbose="${nant.verbosity}"/>
 		<copy todir="Dist/WebDashboard/packages" verbose="${nant.verbosity}">
-			<fileset basedir="${build.dir}/WebDashboard/Packages">
+			<fileset basedir="${build.dir}/WebDashboard/packages">
 				<include name="*.zip" />
 			</fileset>
 		</copy>
