@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<project name="CruiseControl.NET" default="help" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
+<project name="CruiseControl.NET" default="showHelp" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
 
 	<!-- properties -->
-	<property name="nant.verbosity"			 overwrite="false"	value="true"  />
-	<property name="build.configuration"	 overwrite="false"	value="Build"  />
-	<property name="build.target"			 overwrite="false"	value="Build"  />
+	<property name="nant.verbosity"			 overwrite="false"	value="true" />
+	<property name="build.configuration"	 overwrite="false"	value="Build" />
+	<property name="build.target"			 overwrite="false"	value="Build" />
 	<property name="build.project"			 overwrite="false"	value="ccnet.sln" />
 	<property name="build.target.framework"  overwrite="false"	value="3.5"  />
 	<property name="CCNetLabel"				 overwrite="false"	value="0" />
@@ -13,55 +13,42 @@
 
 	<!-- common path properties -->
 	<property name="src.dir"				readonly="true"		value="${path::get-full-path('project')}" />
-	<property name="build.dir"				readonly="true"		value="${path::get-full-path('Build')}"  />
-	<property name="build.metrics.dir"		readonly="true"		value="${path::get-full-path('BuildMetrics')}"  />
+	<property name="build.dir"				readonly="true"		value="${path::get-full-path('Build')}" />
+	<property name="build.metrics.dir"		readonly="true"		value="${path::get-full-path('BuildMetrics')}" />
 	<property name="publish.dir"			readonly="true"		value="${path::get-full-path('Publish')}" />
-	<property name="dist.dir"				readonly="true"		value="${path::get-full-path('Dist')}"  />
-	<property name="tools.dir"				readonly="true"		value="${path::get-full-path('Tools')}"  />
+	<property name="dist.dir"				readonly="true"		value="${path::get-full-path('Dist')}" />
+	<property name="tools.dir"				readonly="true"		value="${path::get-full-path('Tools')}" />
 	<property name="gendarme.project"		overwrite="false"	value="${path::combine(src.dir, 'gendarme.assemblies.txt')}" />
-	<property name="ndepend.project"		overwrite="false"	value="${path::combine(src.dir, 'NDependProject.xml')}"  />
-	<property name="fxcop.project"			overwrite="false"	value="${path::combine(src.dir, 'CruiseControl.NET.FxCop')}"  />
+	<property name="ndepend.project"		overwrite="false"	value="${path::combine(src.dir, 'NDependProject.xml')}" />
+	<property name="fxcop.project"			overwrite="false"	value="${path::combine(src.dir, 'CruiseControl.NET.FxCop')}" />
 
 	<!-- tool path properties -->
-	<property name="nauckit.nant.assembly"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'NAnt'), 'NauckIT.NAnt.dll')}"  />
-	<property name="ra.nant.assembly"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NAnt'), 'Ra.Build.Tasks.dll')}"  />
+	<property name="nauckit.nant.assembly"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'NAnt'), 'NauckIT.NAnt.dll')}" />
+	<property name="ra.nant.assembly"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NAnt'), 'Ra.Build.Tasks.dll')}" />
 	<property name="gendarme.executable"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'Gendarme'), 'gendarme.exe')}" />
 	<property name="ndepend.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NDepend'), 'NDepend.Console.exe')}" />
-	<property name="fxcop.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}"  />
+	<property name="fxcop.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}" />
 	<property name="nunit.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'nunit'), 'nunit-console.exe')}" />
-	<property name="nsis.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NSIS'), 'makensis.exe')}"  />
+	<property name="nsis.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NSIS'), 'makensis.exe')}" />
 
 	<!-- common assembly info properties -->
-	<property name="assembly.company"		readonly="true"		value="ThoughtWorks Inc."  />
-	<property name="assembly.product"		readonly="true"		value="CruiseControl.NET"  />
+	<property name="assembly.company"		readonly="true"		value="ThoughtWorks Inc." />
+	<property name="assembly.product"		readonly="true"		value="CruiseControl.NET" />
 	<property name="assembly.copyright"		readonly="true"		value="Copyright © 2003 - ${datetime::get-year(datetime::now())} ${assembly.company}"  />
-	<property name="assembly.trademark"		readonly="true"		value=""  />
+	<property name="assembly.trademark"		readonly="true"		value="" />
 	<property name="assembly.version"		readonly="true"		value="${CCNetLabel}" />
-	<property name="assembly.fileversion"	readonly="true"		value="${CCNetLabel}"  />
+	<property name="assembly.fileversion"	readonly="true"		value="${CCNetLabel}" />
 
 	<!-- Framework Support
 	http://nant.sourceforge.net/faq.html#framework-support
 	-->
 	<property name="nant.settings.currentframework" value="${framework::get-family(nant.settings.currentframework)}-${build.target.framework}" />
-	
+
 	<!-- Includes -->
-	<include buildfile="tools/ccnet-packaging.inc.build" />
+	<include buildfile="${path::combine(tools.dir, 'ccnet-packaging.inc.build')}" />
+	<include buildfile="${path::combine(tools.dir, 'ccnet-help.inc.build')}" />
 
 	<!-- Targets -->
-	<target name="help" description="shows available targets">
-		<echo message="Major targets :" />
-		<echo message="  clean          : Clean up" />
-		<echo message="  build          : Compilation of the build project" />
-		<echo message="  runTests       : Run the NUnit tests" />
-		<echo message="  runCodeMetrics : Analyze and collect code metrics of the compiled assemblies" />
-		<echo message="Minor targets :" />
-		<echo message="  init                 : Initial compilation setup" />
-		<echo message="  createAssemblyInfo   : Create an assembly info file with the current build number" />
-
-		<echo message="todo  show value of properties that can be set "/>
-
-	</target>
-
 	<target name="all" depends="clean, init, build, runTests, runCodeMetrics, package" description="" />
 
 	<target name="clean" description="Clean up">
@@ -189,7 +176,7 @@
 			<assemblies>
 				<include name="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll')}" />
 			</assemblies>
-			
+
 			<!-- Hack for current xbuild issues on Mono 2.5 -->
 			<environment>
 				<variable name="MONO_PATH" value="${path::get-full-path('lib')}" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
