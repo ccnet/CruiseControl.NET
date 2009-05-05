@@ -17,6 +17,9 @@
 		<call target="packageCCValidator" cascade="false" if="${platform::is-windows()}" />
 
 		<call target="compressJavaScript" cascade="false" />
+		
+		<!-- FIXME: find a better solution as adding so much targets -->
+		<call target="build.packages" cascade="false" />
 
 		<call target="packageCCNET" cascade="false" if="${platform::is-windows()}" />
 
