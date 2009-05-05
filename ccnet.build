@@ -29,6 +29,7 @@
 	<property name="ndepend.executable" value="${path::combine( path::combine(tools.dir, 'NDepend'), 'NDepend.Console.exe')}" readonly="true" />
 	<property name="fxcop.executable" value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}" readonly="true" />
 	<property name="nunit.executable" value="${path::combine( path::combine(tools.dir, 'nunit'), 'nunit-console.exe')}" readonly="true" />
+	<property name="nsis.executable" value="${path::combine( path::combine(tools.dir, 'NSIS'), 'makensis.exe')}" readonly="true" />
 
 	<!-- common assembly info properties -->
 	<property name="assembly.company" value="ThoughtWorks Inc." readonly="true" />

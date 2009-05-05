@@ -2,12 +2,19 @@
 
 <project name="CruiseControl.NET" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
 
+	<!-- properties -->
+	<property name="webdashboard.dist.dir" value="${path::combine(dist.dir, 'WebDashboard')}" />
+	
 	<!-- packaging and publishing targets -->
 	<target name="package" depends="clean, build" description="Create and copy the CruiseControl.NET distribution to the publish dictionary">
 
 		<call target="packageSource" cascade="false" />
 
 		<call target="prepackageDistribution" cascade="false" />
+
+		<call target="packageCCTray" cascade="false" if="${platform::is-windows()}" />
+
+		<call target="packageCCValidator" cascade="false" if="${platform::is-windows()}" />
 	</target>
 
 	<target name="packageSource" depends="clean, init" description="Creates a zip file containing all sources and tools to build CruiseControl.NET">
@@ -33,7 +40,7 @@
 		</zip>
 	</target>
 
-	<target name="prepackageDistribution" depends="clean, build" description="">
+	<target name="prepackageDistribution" depends="clean, build" description="Prepackage the CruiseControl.NET distribution to the dist dictionary">
 
 		<copy file="license.txt" todir="${dist.dir}" verbose="${nant.verbosity}" />
 		
@@ -82,7 +89,6 @@
 		<copy file="${path::combine(path::get-full-path('lib'), 'ThoughtWorks.CruiseControl.MSBuild.dll')}" todir="${path::combine(dist.dir, 'Server')}" verbose="${nant.verbosity}" />
 		
 		<!-- Create WebDashboard distribution -->
-		<property name="webdashboard.dist.dir" value="${path::combine(dist.dir, 'WebDashboard')}" />
 		<mkdir dir="${webdashboard.dist.dir}" unless="${directory::exists(webdashboard.dist.dir)}" verbose="${nant.verbosity}" />
 		<mkdir dir="${path::combine(webdashboard.dist.dir, 'bin')}" unless="${directory::exists(path::combine(webdashboard.dist.dir, 'bin'))}" verbose="${nant.verbosity}" />
 		<copy todir="${path::combine(webdashboard.dist.dir, 'bin')}" verbose="${nant.verbosity}">
@@ -121,6 +127,42 @@
 				<include name="doc/**" />
 			</fileset>
 		</copy>
+	</target>
+
+	<target name="packageCCTray" depends="prepackageDistribution" description="Create CCTray installer an copy to publish dictionary and WebDashboard distribution">
+		
+		<!-- Copy installer template into project root and replace installer version -->
+		<copy file="${path::combine(path::get-full-path('install'), 'cctray.nsi.template')}" tofile="cctray.nsi" overwrite="true" verbose="${nant.verbosity}">
+			<filterchain>
+				<replacetokens>
+					<token key="VERSION" value="${assembly.version}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<exec program="${nsis.executable}" commandline="cctray.nsi" verbose="${nant.verbosity}" />
+		
+		<!-- Copy CCTray setup into WebDashboard distribution -->
+		<mkdir dir="${path::combine(webdashboard.dist.dir, 'cctray')}" unless="${directory::exists(path::combine(webdashboard.dist.dir, 'cctray'))}" verbose="${nant.verbosity}" />
+		<copy todir="${path::combine(webdashboard.dist.dir, 'cctray')}" verbose="${nant.verbosity}">
+			<fileset basedir="${publish.dir}" failonempty="true">
+				<include name="CruiseControl.NET-CCTray-*-Setup.exe" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="packageCCValidator" depends="prepackageDistribution" description="Create CCValidator installer an copy to publish dictionary">
+		
+		<!-- Copy installer template into project root and replace installer version -->
+		<copy file="${path::combine(path::get-full-path('install'), 'ccvalidator.nsi.template')}" tofile="ccvalidator.nsi" overwrite="true" verbose="${nant.verbosity}">
+			<filterchain>
+				<replacetokens>
+					<token key="VERSION" value="${assembly.version}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<exec program="${nsis.executable}" commandline="ccvalidator.nsi" verbose="${nant.verbosity}" />
 	</target>
 
 </project>
