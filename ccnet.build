@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<project name="CruiseControl.NET" default="all" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
+<project name="CruiseControl.NET" default="help" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
 
 	<!-- properties -->
 	<property name="nant.verbosity"			 overwrite="false"	value="true"  />
@@ -45,9 +45,23 @@
 	<property name="nant.settings.currentframework" value="${framework::get-family(nant.settings.currentframework)}-${build.target.framework}" />
 	
 	<!-- Includes -->
-	<include buildfile="ccnet-packaging.inc.build" />
+	<include buildfile="tools/ccnet-packaging.inc.build" />
 
 	<!-- Targets -->
+	<target name="help" description="shows available targets">
+		<echo message="Major targets :" />
+		<echo message="  clean          : Clean up" />
+		<echo message="  build          : Compilation of the build project" />
+		<echo message="  runTests       : Run the NUnit tests" />
+		<echo message="  runCodeMetrics : Analyze and collect code metrics of the compiled assemblies" />
+		<echo message="Minor targets :" />
+		<echo message="  init                 : Initial compilation setup" />
+		<echo message="  createAssemblyInfo   : Create an assembly info file with the current build number" />
+
+		<echo message="todo  show value of properties that can be set "/>
+
+	</target>
+
 	<target name="all" depends="clean, init, build, runTests, runCodeMetrics, package" description="" />
 
 	<target name="clean" description="Clean up">
