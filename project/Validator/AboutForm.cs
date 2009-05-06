@@ -30,5 +30,10 @@ namespace Validator
         {
             Process.Start("http://csut017.wordpress.com/");
         }
+
+        private void famfamfamLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("http://www.famfamfam.com/");
+        }
     }
 }

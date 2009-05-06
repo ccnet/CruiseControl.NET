@@ -548,5 +548,20 @@ namespace Validator
             }
             return isValid;
         }
+
+        private void buttonOpen_Click(object sender, EventArgs e)
+        {
+            openMenuButton_Click(sender, e);
+        }
+
+        private void buttonReload_Click(object sender, EventArgs e)
+        {
+            reloadMenuButton_Click(sender, e);
+        }
+
+        private void buttonPrint_Click(object sender, EventArgs e)
+        {
+            printMenuButton_Click(sender, e);
+        }
     }
 }

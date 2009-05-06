@@ -60,9 +60,65 @@ namespace Validator.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap application {
+            get {
+                object obj = ResourceManager.GetObject("application", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap application_split {
+            get {
+                object obj = ResourceManager.GetObject("application_split", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap application_tile_horizontal {
+            get {
+                object obj = ResourceManager.GetObject("application_tile_horizontal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap dialog {
             get {
                 object obj = ResourceManager.GetObject("dialog", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap folder_table {
+            get {
+                object obj = ResourceManager.GetObject("folder_table", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap printer {
+            get {
+                object obj = ResourceManager.GetObject("printer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap table_gear {
+            get {
+                object obj = ResourceManager.GetObject("table_gear", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap table_refresh {
+            get {
+                object obj = ResourceManager.GetObject("table_refresh", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap table_relationship {
+            get {
+                object obj = ResourceManager.GetObject("table_relationship", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
