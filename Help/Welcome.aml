@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="8004ce1e-424a-4ce2-9e33-bbe34a05d5d7" revisionNumber="1">
+  <developerOrientationDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>Welcome to the CruiseControl.NET Communications client. This is a light-weight
+.NET library that can be used to communicate with a CruiseControl.NET server.</para>
+    </introduction>
+    <section>
+      <title>Important Details</title>
+      <content>
+        <para>This library is still in development. As such it should not be used for
+production systems (yet).</para>
+      </content>
+    </section>
+    <relatedTopics>
+    </relatedTopics>
+  </developerOrientationDocument>
+</topic>

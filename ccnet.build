@@ -76,6 +76,7 @@
     <property name="cctray.exe" value="cctray.exe"/>
     <property name="nunit-console.exe" value="tools\nunit\nunit-console.exe" />
     <property name="ncover-console.exe" value="tools\ncover\NCover.Console.exe" />
+    <property name="shfb.dir" value="tools\shfb" />
     <property name="nantcontrib.assembly" value="tools\nant\contrib\NAnt.Contrib.Tasks.dll" />
     <property name="vil.executable" value="tools\vil\vil.exe" />
     <property name="vil.assemblies" value="comma,separated,list,of,assemblies,to,analyze (full path)" />
@@ -196,6 +197,14 @@
 		<copy file="${src.dir}\service\app.config" tofile="${build.dir}\service\${service.exe}.config" verbose="${verbosity}"/>		
 		<copy file="${src.dir}\service\ccnet.config" tofile="${build.dir}\service\ccnet.config" verbose="${verbosity}"/>
 	</target>
+
+  <target name="help.compile" description="Generates the help documentation">
+  <!--<target name="help.compile" depends="compile" description="Generates the help documentation">-->
+    <loadtasks assembly="${nantcontrib.assembly}" />
+    <msbuild project="CCNet.shfbproj">
+      <property name="SHFBROOT" value="${directory::get-current-directory()}\${shfb.dir}"/>
+    </msbuild>
+  </target>
 
 	<!-- TEST -->
 	<target name="test" depends="compile, test.unit" />
