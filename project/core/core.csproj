@@ -222,6 +222,7 @@
     <Compile Include="CruiseServer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CruiseServerClient.cs" />
     <Compile Include="CruiseServerEventsBase.cs" />
     <Compile Include="CruiseServerFactory.cs">
       <SubType>Code</SubType>
@@ -493,6 +494,7 @@
     <Compile Include="Reporting\Dashboard\Navigation\IUrlBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Security\Permissions.cs" />
     <Compile Include="SourceControlOperation.cs" />
     <Compile Include="Security\ActiveDirectoryAuthentication.cs" />
     <Compile Include="Security\Auditing\AuditLoggerBase.cs" />

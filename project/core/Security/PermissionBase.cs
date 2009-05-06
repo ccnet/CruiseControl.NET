@@ -9,15 +9,10 @@ using System.ComponentModel;
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
     public abstract class PermissionBase
-        : IConfigurationValidation
+        : Permissions, IConfigurationValidation
     {
         #region Private fields
         private string refId;
-        private SecurityRight defaultRight = SecurityRight.Inherit;
-        private SecurityRight sendMessage = SecurityRight.Inherit;
-        private SecurityRight forceBuild = SecurityRight.Inherit;
-        private SecurityRight startProject = SecurityRight.Inherit;
-        private SecurityRight viewSecurity = SecurityRight.Inherit;
         private ISecurityManager manager;
         #endregion
 
@@ -31,71 +26,6 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         {
             get { return refId; }
             set { refId = value; }
-        }
-        #endregion
-
-        #region DefaultRight
-        /// <summary>
-        /// The default right to use.
-        /// </summary>
-        [ReflectorProperty("defaultRight", Required = false)]
-        [DefaultValue(SecurityRight.Inherit)]
-        public SecurityRight DefaultRight
-        {
-            get { return defaultRight; }
-            set { defaultRight = value; }
-        }
-        #endregion
-
-        #region SendMessageRight
-        /// <summary>
-        /// The right.
-        /// </summary>
-        [ReflectorProperty("sendMessage", Required = false)]
-        [DefaultValue(SecurityRight.Inherit)]
-        public SecurityRight SendMessageRight
-        {
-            get { return sendMessage; }
-            set { sendMessage = value; }
-        }
-        #endregion
-
-        #region ForceBuildRight
-        /// <summary>
-        /// The right.
-        /// </summary>
-        [ReflectorProperty("forceBuild", Required = false)]
-        [DefaultValue(SecurityRight.Inherit)]
-        public SecurityRight ForceBuildRight
-        {
-            get { return forceBuild; }
-            set { forceBuild = value; }
-        }
-        #endregion
-
-        #region StartProjectRight
-        /// <summary>
-        /// The right.
-        /// </summary>
-        [ReflectorProperty("startProject", Required = false)]
-        [DefaultValue(SecurityRight.Inherit)]
-        public SecurityRight StartProjectRight
-        {
-            get { return startProject; }
-            set { startProject = value; }
-        }
-        #endregion
-
-        #region ViewSecurityRight
-        /// <summary>
-        /// The right to view security.
-        /// </summary>
-        [ReflectorProperty("viewSecurity", Required = false)]
-        [DefaultValue(SecurityRight.Inherit)]
-        public SecurityRight ViewSecurityRight
-        {
-            get { return viewSecurity; }
-            set { viewSecurity = value; }
         }
         #endregion
 
@@ -199,24 +129,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <returns>The security right.</returns>
         protected virtual SecurityRight CheckPermissionActual(ISecurityManager manager, SecurityPermission permission)
         {
-            var result = SecurityRight.Inherit;
-            switch (permission)
-            {
-                case SecurityPermission.ForceBuild:
-                    result = forceBuild;
-                    break;
-                case SecurityPermission.SendMessage:
-                    result = sendMessage;
-                    break;
-                case SecurityPermission.StartProject:
-                    result = startProject;
-                    break;
-                case SecurityPermission.ViewSecurity:
-                    result = viewSecurity;
-                    break;
-            }
-            if (result == SecurityRight.Inherit) result = defaultRight;
-            return result;
+            return GetPermission(permission);
         }
         #endregion
         #endregion

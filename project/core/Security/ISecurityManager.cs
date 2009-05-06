@@ -4,6 +4,7 @@ using System.Text;
 using ThoughtWorks.CruiseControl.Core.Security.Auditing;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Security;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
@@ -22,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// </summary>
         /// <param name="credentials">The credentials to use.</param>
         /// <returns>The session token if the credentials are valid, null otherwise.</returns>
-        string Login(ISecurityCredentials credentials);
+        string Login(LoginRequest credentials);
 
         /// <summary>
         /// Terminates a user session.
@@ -79,10 +80,19 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// Lists all the users who have been defined in the system.
         /// </summary>
         /// <returns>
-        /// A list of <see cref="UserDetails"/> containing the details on all the users
+        /// A list of <see cref="UserNameCredentials"/> containing the details on all the users
         /// who have been defined.
         /// </returns>
         List<UserDetails> ListAllUsers();
+
+        #region GetDefaultRight()
+        /// <summary>
+        /// Gets the default right for a permission.
+        /// </summary>
+        /// <param name="permission">The permission to retrieve the default for.</param>
+        /// <returns>The default right.</returns>
+        SecurityRight GetDefaultRight(SecurityPermission permission);
+        #endregion
 
         /// <summary>
         /// Checks whether the user can perform the specified action at the server level.
@@ -107,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <param name="numberOfRecords">The number of records to read.</param>
         /// <param name="filter">The filter to use.</param>
         /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
-        List<AuditRecord> ReadAuditRecords(int startPosition, int numberOfRecords, IAuditFilter filter);
+        List<AuditRecord> ReadAuditRecords(int startPosition, int numberOfRecords, AuditFilterBase filter);
 
         /// <summary>
         /// Changes the password of the user.

@@ -47,10 +47,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 				Assert.IsNotNull(ChannelServices.GetChannel("ccnet"), "ccnet channel is missing");
 				Assert.IsNotNull(ChannelServices.GetChannel("ccnet2"), "ccnet2 channel is missing");
 
-				ICruiseManager remoteManager = (ICruiseManager) RemotingServices.Connect(typeof (ICruiseManager), "tcp://localhost:35354/" + RemoteCruiseServer.URI);
+				ICruiseManager remoteManager = (ICruiseManager) RemotingServices.Connect(typeof (ICruiseManager), "tcp://localhost:35354/" + RemoteCruiseServer.ManagerUri);
 				Assert.IsNotNull(remoteManager, "cruiseserver should be registered on tcp channel");
 
-				remoteManager = (ICruiseManager) RemotingServices.Connect(typeof (ICruiseManager), "http://localhost:35355/" + RemoteCruiseServer.URI);
+				remoteManager = (ICruiseManager) RemotingServices.Connect(typeof (ICruiseManager), "http://localhost:35355/" + RemoteCruiseServer.ManagerUri);
 				Assert.IsNotNull(remoteManager, "cruiseserver should be registered on http channel");
 			}
 			Assert.AreEqual(0, ChannelServices.RegisteredChannels.Length, "all registered channels should be closed.");

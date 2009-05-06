@@ -4,6 +4,7 @@ using System.Reflection;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -84,9 +85,11 @@ namespace ThoughtWorks.CruiseControl.Core
 					}
 					else
 					{
-						server.ForceBuild(null, parser.Project,"Forcing build on start",
-                            new Dictionary<string, string>());
-						server.WaitForExit(parser.Project);
+                        ValidateResponse(
+                            server.ForceBuild(
+                                new ProjectRequest(null, parser.Project)));
+						server.WaitForExit(
+                            new ProjectRequest(null, parser.Project));
 					}
 				}
 			}
@@ -96,5 +99,19 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			server.Dispose();
 		}
+
+        /// <summary>
+        /// Validates that the request processed ok.
+        /// </summary>
+        /// <param name="value">The response to check.</param>
+        private void ValidateResponse(Response value)
+        {
+            if (value.Result == ResponseResult.Failure)
+            {
+                string message = "Request has failed on the server:" + Environment.NewLine +
+                    value.ConcatenateErrors();
+                throw new CruiseControlException(message);
 	}
+        }
+    }
 }

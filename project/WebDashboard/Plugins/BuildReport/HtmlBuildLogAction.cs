@@ -19,14 +19,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 		private readonly IVelocityViewGenerator viewGenerator;
 		private readonly ICruiseUrlBuilder urlBuilder;
 	    private readonly IFingerprintFactory fingerprintFactory;
+        private readonly ISessionRetriever retriever;
 
 	    public HtmlBuildLogAction(IBuildRetriever buildRetriever, IVelocityViewGenerator viewGenerator,
-		                          ICruiseUrlBuilder urlBuilder, IFingerprintFactory fingerprintFactory)
+		                          ICruiseUrlBuilder urlBuilder, IFingerprintFactory fingerprintFactory,
+            ISessionRetriever retriever)
 		{
 			this.buildRetriever = buildRetriever;
 			this.viewGenerator = viewGenerator;
 			this.urlBuilder = urlBuilder;
 		    this.fingerprintFactory = fingerprintFactory;
+            this.retriever = retriever;
 		}
 
 		public IResponse Execute(ICruiseRequest cruiseRequest)
@@ -48,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 	    public ConditionalGetFingerprint GetFingerprint(IRequest request)
 	    {
 	        // TODO - Maybe should get date from Build type rather than LogFile?
-	        ICruiseRequest cruiseRequest = new NameValueCruiseRequestFactory().CreateCruiseRequest(request, urlBuilder);
+	        ICruiseRequest cruiseRequest = new NameValueCruiseRequestFactory().CreateCruiseRequest(request, urlBuilder, retriever);
             LogFile logFile = new LogFile(cruiseRequest.BuildSpecifier.BuildName);
 	        DateTime buildDate = logFile.Date;
 	        ConditionalGetFingerprint logFingerprint = fingerprintFactory.BuildFromDate(buildDate);

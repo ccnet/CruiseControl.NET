@@ -6,9 +6,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class NameValueCruiseRequestFactory : ICruiseRequestFactory
 	{
-		public ICruiseRequest CreateCruiseRequest (IRequest request, ICruiseUrlBuilder urlBuilder)
+		public ICruiseRequest CreateCruiseRequest (IRequest request, 
+            ICruiseUrlBuilder urlBuilder,
+            ISessionRetriever retriever)
 		{
-			return new RequestWrappingCruiseRequest(request, urlBuilder);
+			return new RequestWrappingCruiseRequest(request, urlBuilder, retriever);
 		}
 	}
 }

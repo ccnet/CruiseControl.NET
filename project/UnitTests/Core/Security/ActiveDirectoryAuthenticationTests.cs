@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Remote.Security;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
 {
@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         {
             ActiveDirectoryAuthentication authentication = new ActiveDirectoryAuthentication(userName);
             authentication.DomainName = domainName;
-            UserNameCredentials credentials = new UserNameCredentials(userName);
+            LoginRequest credentials = new LoginRequest(userName);
             bool isValid = authentication.Authenticate(credentials);
             Assert.IsTrue(isValid);
         }
@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         {
             ActiveDirectoryAuthentication authentication = new ActiveDirectoryAuthentication("janedoe");
             authentication.DomainName = domainName;
-            UserNameCredentials credentials = new UserNameCredentials(userName);
+            LoginRequest credentials = new LoginRequest(userName);
             bool isValid = authentication.Authenticate(credentials);
             Assert.IsFalse(isValid);
         }
@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         public void TestMissingUserName()
         {
             ActiveDirectoryAuthentication authentication = new ActiveDirectoryAuthentication("janedoe");
-            UserNameCredentials credentials = new UserNameCredentials();
+            LoginRequest credentials = new LoginRequest();
             bool isValid = authentication.Authenticate(credentials);
             Assert.IsFalse(isValid);
         }
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void GetUserNameReturnsName()
         {
-            UserNameCredentials credentials = new UserNameCredentials(userName);
+            LoginRequest credentials = new LoginRequest(userName);
             ActiveDirectoryAuthentication authentication = new ActiveDirectoryAuthentication();
             string result = authentication.GetUserName(credentials);
             Assert.AreEqual(userName, result);
@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         public void GetDisplayNameReturnsDisplayName()
         {
             string displayName = "John Doe";
-            UserNameCredentials credentials = new UserNameCredentials(userName);
+            LoginRequest credentials = new LoginRequest(userName);
             ActiveDirectoryAuthentication authentication = new ActiveDirectoryAuthentication();
             authentication.DomainName = domainName;
             string result = authentication.GetDisplayName(credentials);
@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Ignore("This requires a valid DomainName - which cannot be set in a generic way.")]
         public void GetDisplayNameReturnsUserName()
         {
-            UserNameCredentials credentials = new UserNameCredentials(userName);
+            LoginRequest credentials = new LoginRequest(userName);
             ActiveDirectoryAuthentication authentication = new ActiveDirectoryAuthentication();
             authentication.DomainName = domainName;
             string result = authentication.GetDisplayName(credentials);

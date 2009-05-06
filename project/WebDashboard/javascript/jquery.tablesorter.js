@@ -752,7 +752,7 @@
 			return /^(https?|ftp|file):\/\/$/.test(s);
 		},
 		format: function(s) {
-			return jQuery.trim(s.replace(new RegExp(/(https?|ftp|file):\/\//),''));
+			return jQuery.trim(s.replace(new RegExp(/(https?|ftp|file):/),''));
 		},
 		type: "text"
 	});
@@ -782,7 +782,7 @@
 	ts.addParser({
 		id: "usLongDate",
 		is: function(s) {
-			return s.match(new RegExp(/^[A-Za-z]{3,10}\.? [0-9]{1,2}, ([0-9]{4}|'?[0-9]{2}) (([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(AM|PM)))$/));
+			return s.match(new RegExp(/^[A-Za-z]{3,10}\.? [0-9]{1,2}, ([0-9]{4}|[0-9]{2}) (([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(AM|PM)))$/));
 		},
 		format: function(s) {
 			return $.tablesorter.formatFloat(new Date(s).getTime());

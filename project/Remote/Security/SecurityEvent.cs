@@ -22,5 +22,10 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         ListAllUsers,
         DiagnoseSecurityPermissions,
         ViewAuditLog,
+        ChangePassword,
+        ResetPassword,
+        AddProject,
+        DeleteProject,
+        UpdateProject,
     }
 }

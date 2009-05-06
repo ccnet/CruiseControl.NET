@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Remote.Security;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Security
 {
@@ -35,11 +35,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Security
             return !string.IsNullOrEmpty(settings);
         }
 
-        public ISecurityCredentials GenerateCredentials()
+        public LoginRequest GenerateCredentials()
         {
             string[] settings = SplitSettings();
-            UserNameCredentials credentials = new UserNameCredentials(settings[0]);
-            credentials["password"] = settings[1];
+            LoginRequest credentials = new LoginRequest(settings[0]);
+            credentials.AddCredential(LoginRequest.PasswordCredential, settings[1]);
             return credentials;
         }
 

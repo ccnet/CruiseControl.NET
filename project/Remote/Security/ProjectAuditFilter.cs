@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote.Security
 {
@@ -12,18 +13,39 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         private string project;
 
         /// <summary>
+        /// Initialises a new <see cref="ProjectAuditFilter"/>.
+        /// </summary>
+        public ProjectAuditFilter()
+        {
+        }
+
+        /// <summary>
         /// Starts a new filter with the project name.
         /// </summary>
         /// <param name="projectName"></param>
         public ProjectAuditFilter(string projectName)
             : this(projectName, null) { }
 
+        #region Public properties
+        #region ProjectName
+        /// <summary>
+        /// The name of the project.
+        /// </summary>
+        [XmlAttribute("project")]
+        public string ProjectName
+        {
+            get { return project; }
+            set { project = value; }
+        }
+        #endregion
+        #endregion
+
         /// <summary>
         /// Starts a new filter with the project name and inner filter..
         /// </summary>
         /// <param name="projectName"></param>
         /// <param name="innerFilter"></param>
-        public ProjectAuditFilter(string projectName, IAuditFilter innerFilter)
+        public ProjectAuditFilter(string projectName, AuditFilterBase innerFilter)
             : base(innerFilter)
         {
             if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");

@@ -346,11 +346,15 @@
     </Compile>
     <Compile Include="Core\Config\PreprocessorTest.cs" />
     <Compile Include="Core\Config\ServerConfigurationHandlerTest.cs" />
+    <Compile Include="Core\CruiseServerClientTests.cs" />
     <Compile Include="Core\Publishers\ManifestGeneratorTests.cs" />
     <Compile Include="Core\Publishers\ManifestImporterTests.cs" />
     <Compile Include="Core\Publishers\PackagePublisherTests.cs" />
     <Compile Include="Core\Label\AssemblyVersionLabellerTest.cs" />
     <Compile Include="Core\State\XmlProjectStateManagerTest.cs" />
+    <Compile Include="Remote\CommunicationsExceptionTests.cs" />
+    <Compile Include="Remote\CruiseServerClientFactoryTests.cs" />
+    <Compile Include="Remote\CruiseServerClientTests.cs" />
     <Compile Include="Remote\ExtensionConfigurationTests.cs" />
     <Compile Include="Core\Queues\IntegrationQueueManagerFactoryTests.cs" />
     <Compile Include="Core\Security\ActiveDirectoryAuthenticationTests.cs" />
@@ -365,17 +369,45 @@
     <Compile Include="Core\Tasks\DirectDynamicValueTests.cs" />
     <Compile Include="Core\Tasks\DynamicValueUtilityTests.cs" />
     <Compile Include="Remote\BadReferenceExceptionTests.cs" />
+    <Compile Include="Remote\IntegrationRequestTests.cs" />
+    <Compile Include="Remote\Messages\BuildParametersResponseTests.cs" />
+    <Compile Include="Remote\Messages\BuildIntegrationRequestTests.cs" />
+    <Compile Include="Remote\Messages\ChangePasswordRequestTests.cs" />
+    <Compile Include="Remote\Messages\BuildRequestTests.cs" />
+    <Compile Include="Remote\Messages\BuildListRequestTests.cs" />
+    <Compile Include="Remote\Messages\ListUsersResponseTests.cs" />
+    <Compile Include="Remote\Messages\ProjectStatusResponseTests.cs" />
+    <Compile Include="Remote\Messages\SnapshotResponseTests.cs" />
+    <Compile Include="Remote\Messages\DataListResponseTests.cs" />
+    <Compile Include="Remote\Messages\DataResponseTests.cs" />
+    <Compile Include="Remote\Messages\DiagnoseSecurityRequestTests.cs" />
+    <Compile Include="Remote\Messages\DiagnoseSecurityResponseTests.cs" />
+    <Compile Include="Remote\Messages\ExternalLinksListResponseTests.cs" />
+    <Compile Include="Remote\Messages\LoginRequestTests.cs" />
+    <Compile Include="Remote\Messages\LoginResponseTests.cs" />
+    <Compile Include="Remote\Messages\MessageRequestTests.cs" />
+    <Compile Include="Remote\Messages\ProjectRequestTests.cs" />
+    <Compile Include="Remote\Messages\ReadAuditRequestTests.cs" />
+    <Compile Include="Remote\Messages\ReadAuditResponseTests.cs" />
+    <Compile Include="Remote\Messages\ResponseTests.cs" />
+    <Compile Include="Remote\Messages\ServerRequestTests.cs" />
+    <Compile Include="Remote\MessageTests.cs" />
+    <Compile Include="Remote\NameValuePairTests.cs" />
     <Compile Include="Remote\NoSuchProjectExceptionTests.cs" />
     <Compile Include="Remote\Parameters\RangeParameterTests.cs" />
     <Compile Include="Remote\Parameters\TextParameterTests.cs" />
     <Compile Include="Remote\Parameters\NumericParameterTests.cs" />
+    <Compile Include="Remote\ProjectActivityTests.cs" />
+    <Compile Include="Remote\ProjectStatusTests.cs" />
+    <Compile Include="Remote\QueuedRequestSnapshotTests.cs" />
+    <Compile Include="Remote\QueueSnapshotTests.cs" />
     <Compile Include="Remote\Security\AuditFiltersTests.cs" />
     <Compile Include="Remote\Security\AuditRecordTests.cs" />
-    <Compile Include="Remote\UserNameCredentialsTests.cs" />
     <Compile Include="Remote\CruiseControlExceptionTests.cs" />
     <Compile Include="Remote\PermissionDeniedExceptionTests.cs" />
     <Compile Include="Remote\SecurityExceptionTests.cs" />
     <Compile Include="Remote\SessionInvalidExceptionTests.cs" />
+    <Compile Include="Remote\ServerExtensionStub.cs" />
     <Compile Include="Core\Config\ValidatingLoaderTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -907,12 +939,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Remote\CruiseServerSnapshotTest.cs" />
-    <Compile Include="Remote\MessageTests.cs" />
     <Compile Include="Remote\ProjectStatusCompatibilityTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Remote\XmlConversionUtilTests.cs" />
     <Compile Include="TestHelpers.cs" />
-    <Compile Include="Remote\ServerExtensionStub.cs" />
     <Compile Include="UnitTestUtils\ArrayConstraint.cs" />
     <Compile Include="UnitTestUtils\HashtableConstraint.cs">
       <SubType>Code</SubType>

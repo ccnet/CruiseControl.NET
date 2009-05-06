@@ -120,6 +120,44 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CommunicationsException.cs" />
+    <Compile Include="CruiseServerClient.cs" />
+    <Compile Include="CruiseServerClientFactory.cs" />
+    <Compile Include="Events\IntegrationCompletedEventArgs.cs" />
+    <Compile Include="HttpConnection.cs" />
+    <Compile Include="ICruiseManager.cs" />
+    <Compile Include="IMessageProcessor.cs" />
+    <Compile Include="IServerConnection.cs" />
+    <Compile Include="MessageReceivedEventArgs.cs" />
+    <Compile Include="Messages\BuildIntegrationRequest.cs" />
+    <Compile Include="Messages\BuildParametersResponse.cs" />
+    <Compile Include="Messages\ChangePasswordRequest.cs" />
+    <Compile Include="Messages\ChangeConfigurationRequest.cs" />
+    <Compile Include="Messages\ErrorMessage.cs" />
+    <Compile Include="Messages\ListPackagesResponse.cs" />
+    <Compile Include="Messages\SnapshotResponse.cs" />
+    <Compile Include="Messages\ExternalLinksListResponse.cs" />
+    <Compile Include="Messages\DataListResponse.cs" />
+    <Compile Include="Messages\DiagnoseSecurityRequest.cs" />
+    <Compile Include="Messages\DiagnoseSecurityResponse.cs" />
+    <Compile Include="Messages\BuildListRequest.cs" />
+    <Compile Include="Messages\BuildRequest.cs" />
+    <Compile Include="Messages\ProjectStatusResponse.cs" />
+    <Compile Include="Messages\ListUsersResponse.cs" />
+    <Compile Include="Messages\DataResponse.cs" />
+    <Compile Include="Messages\LoginRequest.cs" />
+    <Compile Include="Messages\LoginResponse.cs" />
+    <Compile Include="Messages\MessageRequest.cs" />
+    <Compile Include="Messages\ProjectRequest.cs" />
+    <Compile Include="Messages\ReadAuditRequest.cs" />
+    <Compile Include="Messages\ReadAuditResponse.cs" />
+    <Compile Include="Messages\ResponseResult.cs" />
+    <Compile Include="Messages\Response.cs" />
+    <Compile Include="Messages\ServerRequest.cs" />
+    <Compile Include="Messages\StatusSnapshotResponse.cs" />
+    <Compile Include="ProjectStatusSnapshot.cs" />
+    <Compile Include="RemotingConnection.cs" />
+    <Compile Include="Security\AuditFilterBase.cs" />
     <Compile Include="BadReferenceException.cs" />
     <Compile Include="BuildCondition.cs">
       <SubType>Code</SubType>
@@ -133,7 +171,6 @@
     <Compile Include="CruiseServerSnapshot.cs" />
     <Compile Include="Events\CancelProjectEventArgs.cs" />
     <Compile Include="Events\CancelProjectEventArgs.Generic.cs" />
-    <Compile Include="Events\IntegrationCompletedEventArgs.cs" />
     <Compile Include="Events\IntegrationStartedEventArgs.cs" />
     <Compile Include="Events\ProjectEventArgs.Generic.cs" />
     <Compile Include="Events\ProjectEventArgs.cs" />
@@ -141,7 +178,7 @@
     <Compile Include="ExternalLink.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ICruiseManager.cs">
+    <Compile Include="ICruiseServerClient.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ICruiseManagerFactory.cs">
@@ -163,7 +200,6 @@
     </Compile>
     <Compile Include="ItemBuildStatus.cs" />
     <Compile Include="ItemStatus.cs" />
-    <Compile Include="NameValuePair.cs" />
     <Compile Include="PermissionDeniedException.cs" />
     <Compile Include="SecurityException.cs" />
     <Compile Include="Security\ISecurityCredentials.cs" />
@@ -193,12 +229,9 @@
     <Compile Include="ProjectStatus.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ProjectStatusSnapshot.cs" />
     <Compile Include="QueuedRequestSnapshot.cs" />
-    <Compile Include="QueuedRequestSnapshotList.cs" />
     <Compile Include="QueueSetSnapshot.cs" />
     <Compile Include="QueueSnapshot.cs" />
-    <Compile Include="QueueSnapshotList.cs" />
     <Compile Include="RemoteCruiseManagerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -206,13 +239,11 @@
     <Compile Include="RemotingServiceAdapter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Security\AuditFilterBase.cs" />
     <Compile Include="Security\AuditFilters.cs" />
     <Compile Include="Security\AuditRecord.cs" />
     <Compile Include="Security\CombinationAuditFilter.cs" />
     <Compile Include="Security\DateRangeAuditFilter.cs" />
     <Compile Include="Security\EventTypeAuditFilter.cs" />
-    <Compile Include="Security\IAuditFilter.cs" />
     <Compile Include="Security\ProjectAuditFilter.cs" />
     <Compile Include="Security\SecurityCheckDiagnostics.cs" />
     <Compile Include="Security\SecurityEvent.cs" />
@@ -220,11 +251,12 @@
     <Compile Include="Security\SecurityRightFilter.cs" />
     <Compile Include="Security\UserAuditFilter.cs" />
     <Compile Include="Security\UserDetails.cs" />
-    <Compile Include="Security\UserNameCredentials.cs" />
     <Compile Include="SerializableDateTime.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SessionInvalidException.cs" />
+    <Compile Include="NameValuePair.cs" />
+    <Compile Include="XmlConversionUtil.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

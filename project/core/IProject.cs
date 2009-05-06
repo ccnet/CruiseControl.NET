@@ -27,6 +27,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			get;
 		}
 
+        /// <summary>
+        /// An optional description for the project.
+        /// </summary>
+        string Description { get; }
+
 		/// <summary>
 		/// A component to trigger integrations for this project.
 		/// TODO: remove

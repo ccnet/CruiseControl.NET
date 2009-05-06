@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
             ArrayList links = new ArrayList();
             links.Add(new ServerLink(request.UrlBuilder, request.ServerSpecifier, "Server", ActionName));
 
-            ProjectStatusListAndExceptions projects = farmService.GetProjectStatusListAndCaptureExceptions(request.ServerSpecifier);
+            ProjectStatusListAndExceptions projects = farmService.GetProjectStatusListAndCaptureExceptions(request.ServerSpecifier, request.RetrieveSessionToken());
             foreach (ProjectStatusOnServer projectStatusOnServer in projects.StatusAndServerList)
             {
                 DefaultProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(projectStatusOnServer.ServerSpecifier, projectStatusOnServer.ProjectStatus.Name);
@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
             if (!StringUtil.IsBlank(request.ProjectName))
             {
                 velocityContext["currentProject"] = request.ProjectName;
-                IAuditFilter filter = AuditFilters.ByProject(request.ProjectName);
+                AuditFilterBase filter = AuditFilters.ByProject(request.ProjectName);
                 velocityContext["auditHistory"] = farmService.ReadAuditRecords(request.ServerSpecifier, sessionToken, 0, 100, filter);
             }
             else

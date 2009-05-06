@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 	[ReflectorType("projectTrigger")]
 	public class ProjectTrigger : ITrigger
 	{
-		public const string DefaultServerUri = RemoteCruiseServer.DefaultUri;
+		public const string DefaultServerUri = RemoteCruiseServer.DefaultManagerUri;
 		private const int DefaultIntervalSeconds = 5;
 
 		private readonly ICruiseManagerFactory managerFactory;

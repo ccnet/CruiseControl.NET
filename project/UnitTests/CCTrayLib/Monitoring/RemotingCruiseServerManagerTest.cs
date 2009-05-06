@@ -1,9 +1,10 @@
 using System;
-using NMock;
 using NUnit.Framework;
+using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 {
@@ -11,18 +12,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	public class RemotingCruiseServerManagerTest
 	{
 		private const string ServerUrl = "tcp://blah:1000/";
-		private DynamicMock cruiseManagerMock;
+        private MockRepository mocks = new MockRepository();
+        private ICruiseServerClient cruiseManagerMock;
 		BuildServer buildServer;
 		RemotingCruiseServerManager manager;
 
 		[SetUp]
 		public void SetUp()
 		{
-			cruiseManagerMock = new DynamicMock(typeof (ICruiseManager));
-			cruiseManagerMock.Strict = true;
+			cruiseManagerMock = mocks.DynamicMock<ICruiseServerClient>();
 
 			buildServer = new BuildServer(ServerUrl);
-			manager = new RemotingCruiseServerManager((ICruiseManager)cruiseManagerMock.MockInstance, buildServer);
+			manager = new RemotingCruiseServerManager(cruiseManagerMock, buildServer);
 		}
 
 		[Test]
@@ -36,13 +37,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void RetrieveSnapshotFromManager()
 		{
-			CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
-			cruiseManagerMock.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
+            SnapshotResponse response = new SnapshotResponse();
+            response.Result= ResponseResult.Success;
+            response.Snapshot= new CruiseServerSnapshot();
+            SetupResult.For(cruiseManagerMock.GetCruiseServerSnapshot(null))
+                .IgnoreArguments()
+                .Return(response);
+            mocks.ReplayAll();
 
             CruiseServerSnapshot result = manager.GetCruiseServerSnapshot();
-			Assert.AreEqual(snapshot, result);
-
-			cruiseManagerMock.Verify();
+			Assert.AreEqual(response.Snapshot, result);
 		}
 	}
 }

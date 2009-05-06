@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 			mockCruiseManager.ExpectAndReturn("GetProjectStatus", new ProjectStatus[1] {NewProjectStatus("foo", "1")});
 
 			mockRemotingService = new DynamicMock(typeof (IRemotingService));
-			mockRemotingService.ExpectAndReturn("Connect", mockCruiseManager.MockInstance, typeof (ICruiseManager), RemoteCruiseServer.DefaultUri);
+			mockRemotingService.ExpectAndReturn("Connect", mockCruiseManager.MockInstance, typeof (ICruiseManager), RemoteCruiseServer.DefaultManagerUri);
 
 			labeller = new RemoteProjectLabeller((IRemotingService) mockRemotingService.MockInstance);
 		}

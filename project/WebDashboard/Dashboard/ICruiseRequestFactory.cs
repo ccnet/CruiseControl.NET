@@ -6,6 +6,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public interface ICruiseRequestFactory
 	{
-        ICruiseRequest CreateCruiseRequest(IRequest request, ICruiseUrlBuilder urlBuilder);
+        ICruiseRequest CreateCruiseRequest(IRequest request, 
+            ICruiseUrlBuilder urlBuilder,
+            ISessionRetriever retriever);
 	}
 }

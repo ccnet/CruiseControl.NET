@@ -48,14 +48,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
         public IResponse Execute(string actionName, ICruiseRequest request)
 		{
-			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(), actionName, request, null);
+            return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(request.RetrieveSessionToken()), actionName, request, null);
 		}
 
         public IResponse Execute(string actionName, IServerSpecifier serverSpecifier, ICruiseRequest request)
 		{
 			//Added code so since defaultServerSpecifier only sets the name of the server - not the actual config
 			serverSpecifier = farmService.GetServerConfiguration(serverSpecifier.ServerName);
-			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(serverSpecifier), actionName, request, serverSpecifier);
+            return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(serverSpecifier, request.RetrieveSessionToken()), actionName, request, serverSpecifier);
 		}
 
 		private HtmlFragmentResponse GenerateView(ProjectStatusListAndExceptions projectStatusListAndExceptions,

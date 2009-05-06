@@ -26,11 +26,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
         private TopControlsViewBuilder topControlsViewBuilder;
         private SideBarViewBuilder sideBarViewBuilder;
         private LoginViewBuilder loginViewBuilder;
+        private readonly ICruiseRequest cruiseRequest;
 
         public SiteTemplateActionDecorator(IAction decoratedAction, IVelocityViewGenerator velocityViewGenerator,
                                            ObjectSource objectSource, IVersionProvider versionProvider,
                                            IFingerprintFactory fingerprintFactory, IUrlBuilder urlBuilder,
-                                            IPluginConfiguration configuration)
+                                            IPluginConfiguration configuration, ICruiseRequest cruiseRequest)
         {
             this.decoratedAction = decoratedAction;
             this.velocityViewGenerator = velocityViewGenerator;
@@ -39,6 +40,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
             this.fingerprintFactory = fingerprintFactory;
             this.urlBuilder = urlBuilder;
             this.configuration = configuration;
+            this.cruiseRequest = cruiseRequest;
         }
 
         private TopControlsViewBuilder TopControlsViewBuilder
@@ -87,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
             if (decoratedActionResponse is HtmlFragmentResponse)
             {
                 velocityContext["breadcrumbs"] = (TopControlsViewBuilder.Execute()).ResponseFragment;
-                velocityContext["sidebar"] = (SideBarViewBuilder.Execute()).ResponseFragment;
+                velocityContext["sidebar"] = (SideBarViewBuilder.Execute(cruiseRequest)).ResponseFragment;
                 velocityContext["mainContent"] = ((HtmlFragmentResponse) decoratedActionResponse).ResponseFragment;
                 velocityContext["dashboardversion"] = versionProvider.GetVersion();
                 if (request.ApplicationPath == "/")

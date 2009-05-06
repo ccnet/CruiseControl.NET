@@ -1,4 +1,5 @@
 using System;
+using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -6,6 +7,7 @@ namespace ThoughtWorks.CruiseControl.Remote
     /// A user-readable message.
     /// </summary>
 	[Serializable]
+    [XmlRoot("message")]
 	public class Message
     {
         #region Private fields
@@ -35,6 +37,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// The text of the message.
         /// </summary>
+        [XmlText]
         public string Text
         {
             get { return message; }

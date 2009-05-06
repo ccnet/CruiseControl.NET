@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 		}
 
 		[ReflectorProperty("serverUri", Required=false)]
-		public string ServerUri = RemoteCruiseServer.DefaultUri;
+		public string ServerUri = RemoteCruiseServer.DefaultManagerUri;
 
 		[ReflectorProperty("project")]
 		public string ProjectName;

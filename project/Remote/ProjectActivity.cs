@@ -1,4 +1,5 @@
 using System;
+using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -7,14 +8,36 @@ namespace ThoughtWorks.CruiseControl.Remote
 	/// integration by CruiseControl.NET.
 	/// </summary>
 	[Serializable]
+    [XmlRoot("projectActivity")]
 	public class ProjectActivity
 	{
-		private readonly string type;
+		private string type;
+
+        #region Constructors
+        /// <summary>
+        /// Starts a new blank <see cref="ProjectActivity"/>.
+        /// </summary>
+        public ProjectActivity()
+        {
+        }
 
 		public ProjectActivity(string type)
 		{
 			this.type = type;
 		}
+        #endregion
+
+        #region Type
+        /// <summary>
+        /// The type of project activity.
+        /// </summary>
+        [XmlAttribute("type")]
+        public string Type
+        {
+            get { return type; }
+            set { type = value; }
+        }
+        #endregion
 
 		public bool IsBuilding()
 		{

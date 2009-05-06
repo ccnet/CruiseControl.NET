@@ -19,18 +19,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 
         private readonly IFarmService farmService;
         private readonly IVelocityViewGenerator viewGenerator;
+        private readonly ISessionRetriever sessionRetriever;
 
-        public ProjectConfigurationServerPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator)
+        public ProjectConfigurationServerPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator, ISessionRetriever sessionRetriever)
         {
             this.farmService = farmService;
             this.viewGenerator = viewGenerator;
+            this.sessionRetriever = sessionRetriever;
         }
 
         public IResponse Execute(ICruiseRequest request)
 		{
 			Hashtable velocityContext = new Hashtable();
 
-            ProjectStatusListAndExceptions projectList = farmService.GetProjectStatusListAndCaptureExceptions(request.ServerSpecifier);
+            ProjectStatusListAndExceptions projectList = farmService.GetProjectStatusListAndCaptureExceptions(request.ServerSpecifier,
+                request.RetrieveSessionToken(sessionRetriever));
             List<ProjectStatus> projects = new List<ProjectStatus>();
             for (int projectLoop = 0; projectLoop < projectList.StatusAndServerList.Length; projectLoop++)
             {

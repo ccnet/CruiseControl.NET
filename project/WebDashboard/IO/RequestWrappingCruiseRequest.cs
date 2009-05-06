@@ -10,11 +10,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 	{
 		private readonly IRequest request;
         private readonly ICruiseUrlBuilder urlBuilder;
+        private readonly ISessionRetriever sessionRetriever;
 
-        public RequestWrappingCruiseRequest(IRequest request, ICruiseUrlBuilder urlBuilder)
+        public RequestWrappingCruiseRequest(IRequest request, 
+            ICruiseUrlBuilder urlBuilder,
+            ISessionRetriever sessionRetriever)
 		{
 			this.request = request;
             this.urlBuilder = urlBuilder;
+            this.sessionRetriever = sessionRetriever;
 		}
 
         public ICruiseUrlBuilder UrlBuilder
@@ -79,6 +83,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 		{
 			get { return request; }
 		}
+
+        
+        /// <summary>
+        /// Attempt to retrieve a session token
+        /// </summary>
+        /// <returns></returns>
+        public virtual string RetrieveSessionToken()
+        {
+            return RetrieveSessionToken(sessionRetriever);
+        }
 
         /// <summary>
         /// Attempt to retrieve a session token

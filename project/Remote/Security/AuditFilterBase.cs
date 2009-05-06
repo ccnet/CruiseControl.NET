@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote.Security
 {
@@ -6,10 +7,15 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
     /// A base class that provides some common audit filtering.
     /// </summary>
     [Serializable]
+    [XmlInclude(typeof(CombinationAuditFilter))]
+    [XmlInclude(typeof(DateRangeAuditFilter))]
+    [XmlInclude(typeof(EventTypeAuditFilter))]
+    [XmlInclude(typeof(ProjectAuditFilter))]
+    [XmlInclude(typeof(SecurityRightAuditFilter))]
+    [XmlInclude(typeof(UserAuditFilter))]
     public abstract class AuditFilterBase
-        : IAuditFilter
     {
-        private IAuditFilter innerFilter;
+        private AuditFilterBase innerFilter;
 
         /// <summary>
         /// Starts a new blank filter.
@@ -20,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// Starts a new filter with an inner filter.
         /// </summary>
         /// <param name="inner">The inner filter.</param>
-        public AuditFilterBase(IAuditFilter inner)
+        public AuditFilterBase(AuditFilterBase inner)
         {
             this.innerFilter = inner;
         }
@@ -41,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// </summary>
         /// <param name="projectName"></param>
         /// <returns></returns>
-        public virtual IAuditFilter ByProject(string projectName)
+        public virtual AuditFilterBase ByProject(string projectName)
         {
             return new ProjectAuditFilter(projectName, this);
         }
@@ -51,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public virtual IAuditFilter ByUser(string userName)
+        public virtual AuditFilterBase ByUser(string userName)
         {
             return new UserAuditFilter(userName, this);
         }
@@ -61,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// </summary>
         /// <param name="eventType"></param>
         /// <returns></returns>
-        public virtual IAuditFilter ByEventType(SecurityEvent eventType)
+        public virtual AuditFilterBase ByEventType(SecurityEvent eventType)
         {
             return new EventTypeAuditFilter(eventType, this);
         }
@@ -71,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// </summary>
         /// <param name="right"></param>
         /// <returns></returns>
-        public virtual IAuditFilter ByRight(SecurityRight right)
+        public virtual AuditFilterBase ByRight(SecurityRight right)
         {
             return new SecurityRightAuditFilter(right, this);
         }
@@ -82,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
         /// <returns></returns>
-        public virtual IAuditFilter ByDateRange(DateTime startDate, DateTime endDate)
+        public virtual AuditFilterBase ByDateRange(DateTime startDate, DateTime endDate)
         {
             return new DateRangeAuditFilter(startDate, endDate, this);
         }

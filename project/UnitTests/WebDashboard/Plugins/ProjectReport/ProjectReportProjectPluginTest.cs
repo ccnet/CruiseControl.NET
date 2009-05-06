@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
                 });
 
 			farmServiceMock = new DynamicMock(typeof(IFarmService));
-            farmServiceMock.SetupResult("GetProjectStatusListAndCaptureExceptions", statusList, typeof(IServerSpecifier));
+            farmServiceMock.SetupResult("GetProjectStatusListAndCaptureExceptions", statusList, typeof(IServerSpecifier), typeof(string));
 			viewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
 			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
             ServerLocation serverConfig = new ServerLocation();
@@ -54,8 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 			plugin = new ProjectReportProjectPlugin((IFarmService) farmServiceMock.MockInstance,
 				(IVelocityViewGenerator) viewGeneratorMock.MockInstance,
 				(ILinkFactory) linkFactoryMock.MockInstance,
-                configuration,
-                null);
+                configuration);
 
 			cruiseRequestMock = new DynamicMock(typeof(ICruiseRequest));
 			cruiseRequest = (ICruiseRequest ) cruiseRequestMock.MockInstance;

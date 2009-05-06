@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			CruiseProjectManagerFactory factory = new CruiseProjectManagerFactory((ICruiseManagerFactory) mockCruiseManagerFactory.MockInstance);
 
 			BuildServer server= new BuildServer("tcp://somethingOrOther");
-			mockCruiseManagerFactory.ExpectAndReturn("GetCruiseManager", null, server.Url);
+            mockCruiseManagerFactory.ExpectAndReturn("GetCruiseServerClient", null, server.Url);
 
 			IDictionary<BuildServer, ICruiseServerManager> serverManagers = new Dictionary<BuildServer, ICruiseServerManager>();
 			serverManagers[server] = new HttpCruiseServerManager((IWebRetriever) webRetriever.MockInstance, dashboardXmlParser, server);

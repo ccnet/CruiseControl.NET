@@ -82,8 +82,12 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// </summary>
         /// <param name="userName">The name of the user that is being checked.</param>
         /// <param name="permission">The permission to check.</param>
+        /// <param name="defaultRight">The default right to use.</param>
         /// <returns>True if the permission is valid, false otherwise.</returns>
-        public virtual bool CheckPermission(ISecurityManager manager, string userName, SecurityPermission permission)
+        public virtual bool CheckPermission(ISecurityManager manager, 
+            string userName,
+            SecurityPermission permission,
+            SecurityRight defaultRight)
         {
             SecurityRight currentRight = SecurityRight.Inherit;
 
@@ -95,6 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             }
 
             // If we don't have a result, then use the default right
+            if (currentRight == SecurityRight.Inherit) currentRight = this.defaultRight;
             if (currentRight == SecurityRight.Inherit) currentRight = defaultRight;
             return (currentRight == SecurityRight.Allow);
         }

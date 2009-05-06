@@ -89,7 +89,7 @@
             // famfamfamLink
             // 
             this.famfamfamLink.AutoSize = true;
-            this.famfamfamLink.Location = new System.Drawing.Point(106, 236);
+            this.famfamfamLink.Location = new System.Drawing.Point(106, 237);
             this.famfamfamLink.Name = "famfamfamLink";
             this.famfamfamLink.Size = new System.Drawing.Size(191, 13);
             this.famfamfamLink.TabIndex = 5;

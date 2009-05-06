@@ -1,7 +1,12 @@
-﻿using System.DirectoryServices;
+﻿using Exortech.NetReflector;
+using System;
+using System.Collections.Generic;
+using System.DirectoryServices;
+using System.DirectoryServices.ActiveDirectory;
+using System.Text;
+using ThoughtWorks.CruiseControl.Remote;
 using System.Runtime.InteropServices;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Remote.Security;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
@@ -92,10 +97,10 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// </summary>
         /// <param name="credentials">The credentials.</param>
         /// <returns>True if the credentials are valid, false otherwise.</returns>
-        public bool Authenticate(ISecurityCredentials credentials)
+        public bool Authenticate(LoginRequest credentials)
         {
             // Check that the user name matches
-            string userName = credentials[userNameCredential];
+            string userName = GetUserName(credentials);
             bool isValid = !string.IsNullOrEmpty(userName);
             if (isValid)
             {
@@ -111,9 +116,10 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <param name="credentials">The credentials.</param>
         /// <returns>The name of the user from the credentials. If the credentials not not exist in the system
         /// then null will be returned.</returns>
-        public string GetUserName(ISecurityCredentials credentials)
+        public string GetUserName(LoginRequest credentials)
         {
-            string userName = credentials[userNameCredential];
+            string userName = NameValuePair.FindNamedValue(credentials.Credentials,
+                LoginRequest.UserNameCredential);
             return userName;
         }
 
@@ -123,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <param name="credentials">The credentials.</param>
         /// <returns>The name of the user from the credentials. If the credentials do not exist in the system
         /// then null will be returned.</returns>
-        public string GetDisplayName(ISecurityCredentials credentials)
+        public string GetDisplayName(LoginRequest credentials)
         {
             string userName = GetUserName(credentials);
             string nameToReturn = FindUser(userName);

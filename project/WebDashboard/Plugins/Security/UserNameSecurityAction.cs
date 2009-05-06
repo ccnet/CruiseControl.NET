@@ -4,7 +4,6 @@ using System.Collections;
 using System.Text;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -12,6 +11,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 using System.Web;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
 {
@@ -46,9 +46,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
             {
                 try
                 {
-                    UserNameCredentials credentials = new UserNameCredentials(userName);
+                    LoginRequest credentials = new LoginRequest(userName);
                     string password = cruiseRequest.Request.GetText("password");
-                    if (!string.IsNullOrEmpty(password)) credentials["password"] = password;
+                    if (!string.IsNullOrEmpty(password)) credentials.AddCredential(LoginRequest.PasswordCredential, password);
                     string sessionToken = farmService.Login(cruiseRequest.ServerName, credentials);
                     if (string.IsNullOrEmpty(sessionToken)) throw new Exception("Login failed!");
                     storer.SessionToken = sessionToken;

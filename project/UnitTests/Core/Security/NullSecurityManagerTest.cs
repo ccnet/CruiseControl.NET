@@ -5,6 +5,7 @@ using System.Text;
 using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Security;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
 {
@@ -14,11 +15,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void LoginReturnsUserName()
         {
-            UserNameCredentials credentials = new UserNameCredentials("johndoe");
+            LoginRequest credentials = new LoginRequest("johndoe");
             NullSecurityManager manager = new NullSecurityManager();
             manager.Initialise();
             string sessionToken = manager.Login(credentials);
-            Assert.AreEqual(credentials.UserName, sessionToken);
+            Assert.AreEqual(NameValuePair.FindNamedValue(credentials.Credentials, LoginRequest.UserNameCredential), sessionToken);
         }
 
         [Test]

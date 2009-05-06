@@ -13,6 +13,8 @@ using ThoughtWorks.CruiseControl.Remote.Events;
 using Rhino.Mocks.Interfaces;
 using ThoughtWorks.CruiseControl.UnitTests.Remote;
 using System.IO;
+using ThoughtWorks.CruiseControl.Remote.Messages;
+using NMock.Constraints;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -252,18 +254,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			server.Start();
 
             var parameters = new Dictionary<string, string>();
-            integratorMock1.Expect("ForceBuild", "BuildForcer", parameters);
+            integratorMock1.Expect("Request", new IntegrationRequestConstraint { Condition = BuildCondition.ForceBuild });
 
-            server.ForceBuild(null, "Project 1", "BuildForcer", parameters);
+            server.CruiseManager.ForceBuild("Project 1", "BuildForcer");
 
 			VerifyAll();
 		}
 
-		[Test, ExpectedException(typeof (NoSuchProjectException))]
+		[Test, ExpectedException(typeof (CruiseControlException))]
 		public void AttemptToForceBuildOnProjectThatDoesNotExist()
 		{
-            var parameters = new Dictionary<string, string>();
-            server.ForceBuild(null, "foo", "BuildForcer", parameters);
+            server.CruiseManager.ForceBuild("foo", "BuildForcer");
 		}
 
 		[Test]
@@ -276,7 +277,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			integratorMock1.Expect("WaitForExit");
 
-			server.WaitForExit("Project 1");
+			server.CruiseManager.WaitForExit("Project 1");
 
 			VerifyAll();
 		}
@@ -299,7 +300,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void DetectVersionMethod()
 		{
-			string ServerVersion = server.GetVersion();
+            string ServerVersion = server.CruiseManager.GetServerVersion();
 			Assert.IsFalse(ServerVersion.Length == 0, "Version not retrieved");
 		}
 
@@ -308,15 +309,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
             stateManagerMock.Expect("RecordProjectAsStopped", "Project 1");
             integratorMock1.Expect("Stop");
-			server.Stop(null,"Project 1");
+			server.CruiseManager.Stop("Project 1");
 			integratorMock1.Verify();
             stateManagerMock.Verify();
         }
 
-		[Test, ExpectedException(typeof(NoSuchProjectException))]
+		[Test, ExpectedException(typeof(CruiseControlException))]
 		public void ThrowExceptionIfProjectNotFound()
 		{
-			server.Stop(null, "Project unknown");			
+            server.CruiseManager.Stop("Project unknown");			
 		}
 
 		[Test]
@@ -324,7 +325,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
             stateManagerMock.Expect("RecordProjectAsStartable", "Project 2");
 			integratorMock2.Expect("Start");
-			server.Start(null,"Project 2");
+            server.CruiseManager.Start("Project 2");
 			integratorMock2.Verify();
             stateManagerMock.Verify();
 		}
@@ -332,9 +333,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void RequestNewIntegration()
 		{
+            var oldSource = Source;
+            Source = Environment.MachineName;
 			IntegrationRequest request = Request(BuildCondition.IfModificationExists);
+            Source = oldSource;
 			integratorMock2.Expect("Request", request);
-			server.Request(null,"Project 2", request);
+            server.CruiseManager.Request("Project 2", request);
 			integratorMock1.Verify();
 			integratorMock2.Verify();
 		}
@@ -357,7 +361,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.AreEqual(projectName, e.ProjectName);
             };
 
-            server.Start(null, projectName);
+            server.CruiseManager.Start(projectName);
             Assert.IsTrue(projectStartingFired, "ProjectStarting not fired");
             Assert.IsTrue(projectStartedFired, "ProjectStarted not fired");
         }
@@ -379,7 +383,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.Fail("ProjectStarted has been fired");
             };
 
-            server.Start(null, projectName);
+            server.CruiseManager.Start(projectName);
             Assert.IsTrue(projectStartingFired, "ProjectStarting not fired");
         }
 
@@ -401,7 +405,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.AreEqual(projectName, e.ProjectName);
             };
 
-            server.Stop(null, projectName);
+            server.CruiseManager.Stop(projectName);
             Assert.IsTrue(projectStoppingFired, "ProjectStopping not fired");
             Assert.IsTrue(projectStoppedFired, "ProjectStopped not fired");
         }
@@ -423,7 +427,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.Fail("ProjectStopped has been fired");
             };
 
-            server.Stop(null, projectName);
+            server.CruiseManager.Stop(projectName);
             Assert.IsTrue(projectStoppingFired, "ProjectStopping not fired");
         }
 
@@ -437,7 +441,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             {
                 forceBuildReceived = true;
                 Assert.AreEqual(projectName, e.ProjectName);
-                Assert.AreEqual(enforcer, e.Data);
             };
 
             bool forceBuildProcessed = false;
@@ -445,11 +448,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             {
                 forceBuildProcessed = true;
                 Assert.AreEqual(projectName, e.ProjectName);
-                Assert.AreEqual(enforcer, e.Data);
             };
 
-            var parameters = new Dictionary<string, string>();
-            server.ForceBuild(null, projectName, enforcer, parameters);
+            server.CruiseManager.ForceBuild(projectName, enforcer);
             Assert.IsTrue(forceBuildReceived, "ForceBuildReceived not fired");
             Assert.IsTrue(forceBuildProcessed, "ForceBuildProcessed not fired");
         }
@@ -464,7 +465,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             {
                 forceBuildReceived = true;
                 Assert.AreEqual(projectName, e.ProjectName);
-                Assert.AreEqual(enforcer, e.Data);
                 e.Cancel = true;
             };
 
@@ -473,8 +473,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.Fail("ForceBuildProcessed has been fired");
             };
 
-            var parameters = new Dictionary<string, string>();
-            server.ForceBuild(null, projectName, enforcer, parameters);
+            server.CruiseManager.ForceBuild(projectName, enforcer);
             Assert.IsTrue(forceBuildReceived, "ForceBuildReceived not fired");
         }
 
@@ -489,7 +488,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             {
                 forceBuildReceived = true;
                 Assert.AreEqual(projectName, e.ProjectName);
-                Assert.AreEqual(enforcer, e.Data);
             };
 
             bool forceBuildProcessed = false;
@@ -497,10 +495,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             {
                 forceBuildProcessed = true;
                 Assert.AreEqual(projectName, e.ProjectName);
-                Assert.AreEqual(enforcer, e.Data);
             };
 
-            server.Request(null, projectName, request);
+            server.CruiseManager.Request(projectName, request);
             Assert.IsTrue(forceBuildReceived, "ForceBuildReceived not fired");
             Assert.IsTrue(forceBuildProcessed, "ForceBuildProcessed not fired");
         }
@@ -516,7 +513,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             {
                 forceBuildReceived = true;
                 Assert.AreEqual(projectName, e.ProjectName);
-                Assert.AreEqual(enforcer, e.Data);
                 e.Cancel = true;
             };
 
@@ -525,7 +521,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.Fail("ForceBuildProcessed has been fired");
             };
 
-            server.Request(null, projectName, request);
+            server.CruiseManager.Request(projectName, request);
             Assert.IsTrue(forceBuildReceived, "ForceBuildReceived not fired");
         }
 
@@ -539,7 +535,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             {
                 abortBuildReceived = true;
                 Assert.AreEqual(projectName, e.ProjectName);
-                Assert.AreEqual(enforcer, e.Data);
             };
 
             bool abortBuildProcessed = false;
@@ -547,10 +542,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             {
                 abortBuildProcessed = true;
                 Assert.AreEqual(projectName, e.ProjectName);
-                Assert.AreEqual(enforcer, e.Data);
             };
 
-            server.AbortBuild(null, projectName, enforcer);
+            server.CruiseManager.AbortBuild(projectName, enforcer);
             Assert.IsTrue(abortBuildReceived, "AbortBuildReceived not fired");
             Assert.IsTrue(abortBuildProcessed, "AbortBuildProcessed not fired");
         }
@@ -565,7 +559,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             {
                 abortBuildReceived = true;
                 Assert.AreEqual(projectName, e.ProjectName);
-                Assert.AreEqual(enforcer, e.Data);
                 e.Cancel = true;
             };
 
@@ -574,7 +567,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.Fail("AbortBuildProcessed has been fired");
             };
 
-            server.AbortBuild(null, projectName, enforcer);
+            server.CruiseManager.AbortBuild(projectName, enforcer);
             Assert.IsTrue(abortBuildReceived, "AbortBuildReceived not fired");
         }
 
@@ -599,7 +592,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.AreEqual(message.Text, e.Data.Text);
             };
 
-            server.SendMessage(null, projectName, message);
+            server.CruiseManager.SendMessage(projectName, message);
             Assert.IsTrue(sendMessageReceived, "SendMessageReceived not fired");
             Assert.IsTrue(sendMessageProcessed, "SendMessageProcessed not fired");
         }
@@ -623,7 +616,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 Assert.Fail("SendMessageProcessed has been fired");
             };
 
-            server.SendMessage(null, projectName, message);
+            server.CruiseManager.SendMessage(projectName, message);
             Assert.IsTrue(sendMessageReceived, "SendMessageReceived not fired");
         }
 
@@ -776,16 +769,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         }
 
         [Test]
-        [ExpectedException(typeof(NoSuchProjectException))]
         public void TakeSnapshotThrowsExceptionForUnknownProject()
         {
-            server.TakeStatusSnapshot("garbage project");
+            var request = GenerateProjectRequest("garbage project");
+            var response = server.TakeStatusSnapshot(request);
+            Assert.AreEqual(ResponseResult.Failure, response.Result);
         }
 
         [Test]
         public void TakeSnapshotReturnsAValidSnapshot()
         {
-            ProjectStatusSnapshot snapshot = server.TakeStatusSnapshot("Project 1");
+            var request = GenerateProjectRequest("Project 1");
+            var response = server.TakeStatusSnapshot(request);
+            ProjectStatusSnapshot snapshot = response.Snapshot;
             Assert.IsNotNull(snapshot, "Snapshot not taken");
             Assert.AreEqual("Project 1", snapshot.Name, "Name not set");
         }
@@ -826,6 +822,39 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         {
             var transfer = server.RetrieveFileTransfer("Project 1", "GarbageFileNameThatShouldNotExist.NotHere");
             Assert.IsNull(transfer);
+        }
+
+        private ProjectRequest GenerateProjectRequest(string projectName)
+        {
+            var request = new ProjectRequest(null, projectName);
+            return request;
+        }
+    }
+
+    public class IntegrationRequestConstraint : BaseConstraint
+    {
+        public BuildCondition Condition { get; set; }
+        private string message = null;
+
+        public override bool Eval(object val)
+        {
+            if (val is IntegrationRequest)
+            {
+                if (!string.Equals(Condition, (val as IntegrationRequest).BuildCondition))
+                {
+                    message = "Conditions do not match";
+                }
+            }
+            else
+            {
+                message = "Expected an IntegrationRequest";
+            }
+            return (message == null);
+        }
+
+        public override string Message
+        {
+            get { return message; }
         }
     }
 }

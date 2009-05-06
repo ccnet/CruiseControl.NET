@@ -109,8 +109,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			QueueSetSnapshot queueSetSnapshot = integrationQueues.GetIntegrationQueueSnapshot();
 			Assert.IsNotNull(queueSetSnapshot);
 			Assert.AreEqual(2, queueSetSnapshot.Queues.Count);
-            Assert.IsTrue(queueSetSnapshot.Queues[TestQueueName].IsEmpty);
-            Assert.IsTrue(queueSetSnapshot.Queues[TestQueueName2].IsEmpty);
+            Assert.IsTrue(queueSetSnapshot.FindByName(TestQueueName).IsEmpty);
+            Assert.IsTrue(queueSetSnapshot.FindByName(TestQueueName).IsEmpty);
 		}
 
 		[Test]
@@ -147,7 +147,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
             Assert.IsFalse(queueSnapshot.IsEmpty);
             Assert.AreEqual(TestQueueName, queueSnapshot.QueueName);
 			Assert.AreEqual(1, queueSnapshot.Requests.Count);
-			Assert.AreEqual(queueSnapshot, queueSetSnapshot.Queues[TestQueueName]);
+            Assert.AreEqual(queueSnapshot, queueSetSnapshot.FindByName(TestQueueName));
 
 			QueuedRequestSnapshot queuedRequestSnapshot = queueSnapshot.Requests[0];
             Assert.AreEqual("ProjectOne", queuedRequestSnapshot.ProjectName);

@@ -6,261 +6,545 @@ using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
-	public class RemoteCruiseServer : CruiseServerEventsBase, ICruiseServer
-	{
-		public const string URI = "CruiseManager.rem";
-		public const string DefaultUri = "tcp://localhost:21234/" + URI;
+    /// <summary>
+    /// Connects to a remote CruiseControl.NET server.
+    /// </summary>
+    public class RemoteCruiseServer : CruiseServerEventsBase, ICruiseServer
+    {
+        public const string ManagerUri = "CruiseManager.rem";
+        public const string DefaultManagerUri = "tcp://localhost:21234/" + ManagerUri;
+        public const string ServerClientUri = "CruiseServerClient.rem";
+        public const string DefaultServerClientUri = "tcp://localhost:21234/" + ServerClientUri;
 
-		private ICruiseServer server;
-		private bool disposed;
-		private IExecutionEnvironment environment = new ExecutionEnvironment();
+        private ICruiseServer server;
+        private bool disposed;
+        private IExecutionEnvironment environment = new ExecutionEnvironment();
 
-		public RemoteCruiseServer(ICruiseServer server, string remotingConfigurationFile)
-		{
-			this.server = server;
-			RemotingConfiguration.Configure(remotingConfigurationFile, false);
-			RegisterForRemoting();
-		}
-
-		public void Start()
-		{
-			server.Start();
-		}
-
-		public void Stop()
-		{
-			server.Stop();
-		}
-
-		public void Abort()
-		{
-			server.Abort();
-		}
-
-		public void WaitForExit()
-		{
-			server.WaitForExit();
-		}
-
-        public void Start(string sessionToken, string project)
-		{
-			server.Start(sessionToken, project);
-		}
-
-        public void Stop(string sessionToken, string project)
-		{
-			server.Stop(sessionToken, project);
-		}
-
-		public ICruiseManager CruiseManager
-		{
-			get { return server.CruiseManager; }
-		}
-
-		public ProjectStatus[] GetProjectStatus()
-		{
-			return server.GetProjectStatus();
-		}
-
-        public void ForceBuild(string sessionToken, string projectName, string enforcerName, Dictionary<string, string> buildValues)
-		{
-            server.ForceBuild(sessionToken, projectName, enforcerName, buildValues);
-		}
-
-		public void AbortBuild(string sessionToken, string projectName, string enforcerName)
-		{
-			server.AbortBuild(sessionToken, projectName, enforcerName);
-		}
-		
-        public void Request(string sessionToken, string projectName, IntegrationRequest request)
-		{
-			server.Request(sessionToken, projectName, request);
-		}
-
-		public void WaitForExit(string projectName)
-		{
-			server.WaitForExit(projectName);
-		}
-
-        public void CancelPendingRequest(string sessionToken, string projectName)
-		{
-			server.CancelPendingRequest(sessionToken, projectName);
-		}
-		
-        public CruiseServerSnapshot GetCruiseServerSnapshot()
-		{
-			return server.GetCruiseServerSnapshot();
-		}
-
-		public string GetLatestBuildName(string projectName)
-		{
-			return server.GetLatestBuildName(projectName);
-		}
-
-		public string[] GetBuildNames(string projectName)
-		{
-			return server.GetBuildNames(projectName);
-		}
-
-		public string GetVersion()
-		{
-			return server.GetVersion();
-		}
-
-		public string[] GetMostRecentBuildNames(string projectName, int buildCount)
-		{
-			return server.GetMostRecentBuildNames(projectName, buildCount);
-		}
-
-		public string GetLog(string projectName, string buildName)
-		{
-			return server.GetLog(projectName, buildName);
-		}
-
-		public string GetServerLog()
-		{
-			return server.GetServerLog();
-		}
-
-		public string GetServerLog(string projectName)
-		{
-			return server.GetServerLog(projectName);
-		}
-
-		public void AddProject(string serializedProject)
-		{
-			server.AddProject(serializedProject);
-		}
-
-		public void DeleteProject(string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
-		{
-			server.DeleteProject(projectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
-		}
-
-		public string GetProject(string name)
-		{
-			return server.GetProject(name);
-		}
-
-		public void UpdateProject(string projectName, string serializedProject)
-		{
-			server.UpdateProject(projectName, serializedProject);
-		}
-
-		public ExternalLink[] GetExternalLinks(string projectName)
-		{
-			return server.GetExternalLinks(projectName);
-		}
-
-        public void SendMessage(string sessionToken, string projectName, Message message)
-		{
-			server.SendMessage(sessionToken, projectName, message);
-		}
-
-		public string GetArtifactDirectory(string projectName)
-		{
-			return server.GetArtifactDirectory(projectName);
-		}
-
-		public string GetStatisticsDocument(string projectName)
-		{
-            return server.GetStatisticsDocument(projectName);
-		}
-
-        public string GetModificationHistoryDocument(string projectName)
+        public RemoteCruiseServer(ICruiseServer server, string remotingConfigurationFile)
         {
-            return server.GetModificationHistoryDocument(projectName);
+            this.server = server;
+            RemotingConfiguration.Configure(remotingConfigurationFile, false);
+            RegisterManagerForRemoting();
+            RegisterServerClientForRemoting();
         }
 
-        public string GetRSSFeed(string projectName)
+        private void RegisterManagerForRemoting()
         {
-            return server.GetRSSFeed(projectName);
+            MarshalByRefObject marshalByRef = (MarshalByRefObject)server.CruiseManager;
+            RemotingServices.Marshal(marshalByRef, ManagerUri);
+
+            foreach (IChannel channel in ChannelServices.RegisteredChannels)
+            {
+                Log.Info("Registered channel: " + channel.ChannelName);
+
+                // GetUrlsForUri is not support on cross-AppDomain channels on mono (as of 1.1.8.3)
+                if (environment.IsRunningOnWindows)
+                {
+                    if (channel is IChannelReceiver)
+                    {
+                        foreach (string url in ((IChannelReceiver)channel).GetUrlsForUri(ManagerUri))
+                        {
+                            Log.Info("CruiseManager: Listening on url: " + url);
+                        }
+                    }
+                }
+            }
         }
 
-		private void RegisterForRemoting()
-		{
-			MarshalByRefObject marshalByRef = (MarshalByRefObject) server.CruiseManager;
-			RemotingServices.Marshal(marshalByRef, URI);
+        private void RegisterServerClientForRemoting()
+        {
+            MarshalByRefObject marshalByRef = (MarshalByRefObject)server.CruiseServerClient;
+            RemotingServices.Marshal(marshalByRef, ServerClientUri);
 
-			foreach (IChannel channel in ChannelServices.RegisteredChannels)
-			{
-				Log.Info("Registered channel: " + channel.ChannelName);
+            foreach (IChannel channel in ChannelServices.RegisteredChannels)
+            {
+                Log.Info("Registered channel: " + channel.ChannelName);
 
-				// GetUrlsForUri is not support on cross-AppDomain channels on mono (as of 1.1.8.3)
-				if (environment.IsRunningOnWindows)
-				{
-					if (channel is IChannelReceiver)
-					{
-						foreach (string url in ((IChannelReceiver) channel).GetUrlsForUri(URI))
-						{
-							Log.Info("CruiseManager: Listening on url: " + url);
-						}
-					}
-				}
-			}
-		}
+                // GetUrlsForUri is not support on cross-AppDomain channels on mono (as of 1.1.8.3)
+                if (environment.IsRunningOnWindows)
+                {
+                    if (channel is IChannelReceiver)
+                    {
+                        foreach (string url in ((IChannelReceiver)channel).GetUrlsForUri(ServerClientUri))
+                        {
+                            Log.Info("CruiseServerClient: Listening on url: " + url);
+                        }
+                    }
+                }
+            }
+        }
 
-		void IDisposable.Dispose()
-		{
-			lock (this)
-			{
-				if (disposed) return;
-				disposed = true;
-			}
-			Log.Info("Disconnecting remote server: ");
-			RemotingServices.Disconnect((MarshalByRefObject) server.CruiseManager);
-			foreach (IChannel channel in ChannelServices.RegisteredChannels)
-			{
-				Log.Info("Unregistering channel: " + channel.ChannelName);
-				ChannelServices.UnregisterChannel(channel);
-			}
-			server.Dispose();
-		}
+        void IDisposable.Dispose()
+        {
+            lock (this)
+            {
+                if (disposed) return;
+                disposed = true;
+            }
+            Log.Info("Disconnecting remote server: ");
+            RemotingServices.Disconnect((MarshalByRefObject)server.CruiseManager);
+            RemotingServices.Disconnect((MarshalByRefObject)server.CruiseServerClient);
+            foreach (IChannel channel in ChannelServices.RegisteredChannels)
+            {
+                Log.Info("Unregistering channel: " + channel.ChannelName);
+                ChannelServices.UnregisterChannel(channel);
+            }
+            server.Dispose();
+        }
+
+        #region Abort()
+        /// <summary>
+        /// Terminates the CruiseControl.NET server immediately, stopping all started projects
+        /// </summary>
+        public virtual void Abort()
+        {
+            server.Abort();
+        }
+        #endregion
+
+        #region Start()
+        /// <summary>
+        /// Launches the CruiseControl.NET server and starts all project schedules it contains
+        /// </summary>
+        public virtual void Start()
+        {
+            server.Start();
+        }
 
         /// <summary>
-        /// Retrieves the amount of free disk space.
+        /// Attempts to start a project.
+        /// </summary>
+        /// <param name="request">A <see cref="ProjectRequest"/> containing the request details.</param>
+        /// <returns>A <see cref="Response"/> containing the results of the request.</returns>
+        public virtual Response Start(ProjectRequest request)
+        {
+            return server.Start(request);
+        }
+        #endregion
+
+        #region Stop()
+        /// <summary>
+        /// Requests all started projects within the CruiseControl.NET server to stop
+        /// </summary>
+        public virtual void Stop()
+        {
+            server.Stop();
+        }
+
+        /// <summary>
+        /// Attempts to stop a project.
+        /// </summary>
+        /// <param name="request">A <see cref="ProjectRequest"/> containing the request details.</param>
+        /// <returns>A <see cref="Response"/> containing the results of the request.</returns>
+        public virtual Response Stop(ProjectRequest request)
+        {
+            return server.Stop(request);
+        }
+        #endregion
+
+        #region CancelPendingRequest()
+        /// <summary>
+        /// Cancel a pending project integration request from the integration queue.
+        /// </summary>
+        public virtual Response CancelPendingRequest(ProjectRequest request)
+        {
+            return server.CancelPendingRequest(request);
+        }
+        #endregion
+
+        #region SendMessage()
+        /// <summary>
+        /// Send a text message to the server.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public virtual Response SendMessage(MessageRequest request)
+        {
+            return server.SendMessage(request);
+        }
+        #endregion
+
+        #region GetCruiseServerSnapshot()
+        /// <summary>
+        /// Gets the projects and integration queues snapshot from this server.
+        /// </summary>
+        public virtual SnapshotResponse GetCruiseServerSnapshot(ServerRequest request)
+        {
+            return server.GetCruiseServerSnapshot(request);
+        }
+        #endregion
+
+        #region CruiseManager
+        /// <summary>
+        /// Retrieve CruiseManager interface for the server
+        /// </summary>
+        [Obsolete("Use CruiseServerClient instead")]
+        public virtual ICruiseManager CruiseManager
+        {
+            get { return server.CruiseManager; }
+        }
+        #endregion
+
+        #region CruiseServerClient
+        /// <summary>
+        /// Client for communicating with the server.
+        /// </summary>
+        public virtual ICruiseServerClient CruiseServerClient
+        {
+            get { return server.CruiseServerClient; }
+        }
+        #endregion
+
+        #region GetProjectStatus()
+        /// <summary>
+        /// Gets information about the last build status, current activity and project name.
+        /// for all projects on a cruise server
+        /// </summary>
+        public virtual ProjectStatusResponse GetProjectStatus(ServerRequest request)
+        {
+            return server.GetProjectStatus(request);
+        }
+        #endregion
+
+        #region ForceBuild()
+        /// <summary>
+        /// Forces a build for the named project.
+        /// </summary>
+        /// <param name="request">A <see cref="ProjectRequest"/> containing the request details.</param>
+        /// <returns>A <see cref="Response"/> containing the results of the request.</returns>
+        public virtual Response ForceBuild(ProjectRequest request)
+        {
+            return server.ForceBuild(request);
+        }
+        #endregion
+
+        #region AbortBuild()
+        /// <summary>
+        /// Aborts the build of the selected project.
+        /// </summary>
+        /// <param name="request">A <see cref="ProjectRequest"/> containing the request details.</param>
+        /// <returns>A <see cref="Response"/> containing the results of the request.</returns>
+        public virtual Response AbortBuild(ProjectRequest request)
+        {
+            return server.AbortBuild(request);
+        }
+        #endregion
+
+        #region WaitForExit()
+        /// <summary>
+        /// Wait for CruiseControl server to finish executing
+        /// </summary>
+        public virtual void WaitForExit()
+        {
+            server.WaitForExit();
+        }
+
+        /// <summary>
+        /// Waits for the project to exit.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public virtual Response WaitForExit(ProjectRequest request)
+        {
+            return server.WaitForExit(request);
+        }
+        #endregion
+
+        #region GetLatestBuildName()
+        /// <summary>
+        /// Returns the name of the most recent build for the specified project
+        /// </summary>
+        public virtual DataResponse GetLatestBuildName(ProjectRequest request)
+        {
+            return server.GetLatestBuildName(request);
+        }
+        #endregion
+
+        #region GetBuildNames()
+        /// <summary>
+        /// Returns the names of all builds for the specified project, sorted s.t. the newest build is first in the array
+        /// </summary>
+        public virtual DataListResponse GetBuildNames(ProjectRequest request)
+        {
+            return server.GetBuildNames(request);
+        }
+        #endregion
+
+        #region GetMostRecentBuildNames()
+        /// <summary>
+        /// Returns the names of the buildCount most recent builds for the specified project, sorted s.t. the newest build is first in the array
+        /// </summary>
+        public virtual DataListResponse GetMostRecentBuildNames(BuildListRequest request)
+        {
+            return server.GetMostRecentBuildNames(request);
+        }
+        #endregion
+
+        #region GetLog()
+        /// <summary>
+        /// Returns the build log contents for requested project and build name
+        /// </summary>
+        public virtual DataResponse GetLog(BuildRequest request)
+        {
+            return server.GetLog(request);
+        }
+        #endregion
+
+        #region GetServerLog()
+        /// <summary>
+        /// Returns a log of recent build server activity. How much information that is returned is configured on the build server.
+        /// </summary>
+        public virtual DataResponse GetServerLog(ServerRequest request)
+        {
+            return server.GetServerLog(request);
+        }
+        #endregion
+
+        #region GetServerVersion()
+        /// <summary>
+        /// Returns the version of the server
+        /// </summary>
+        public virtual DataResponse GetServerVersion(ServerRequest request)
+        {
+            return server.GetServerVersion(request);
+        }
+        #endregion
+
+        #region AddProject()
+        /// <summary>
+        /// Adds a project to the server
+        /// </summary>
+        public virtual Response AddProject(ChangeConfigurationRequest request)
+        {
+            return server.AddProject(request);
+        }
+        #endregion
+
+        #region DeleteProject()
+        /// <summary>
+        /// Deletes the specified project from the server
+        /// </summary>
+        public virtual Response DeleteProject(ChangeConfigurationRequest request)
+        {
+            return server.DeleteProject(request);
+        }
+        #endregion
+
+        #region UpdateProject()
+        /// <summary>
+        /// Updates the selected project on the server
+        /// </summary>
+        public virtual Response UpdateProject(ChangeConfigurationRequest request)
+        {
+            return server.UpdateProject(request);
+        }
+        #endregion
+
+        #region GetProject()
+        /// <summary>
+        /// Returns the serialized form of the requested project from the server
+        /// </summary>
+        public virtual DataResponse GetProject(ProjectRequest request)
+        {
+            return server.GetProject(request);
+        }
+        #endregion
+
+        #region GetExternalLinks()
+        /// <summary>
+        /// Retrieve the list of external links for the project.
+        /// </summary>
+        public virtual ExternalLinksListResponse GetExternalLinks(ProjectRequest request)
+        {
+            return server.GetExternalLinks(request);
+        }
+        #endregion
+
+        #region GetArtifactDirectory()
+        /// <summary>
+        /// Retrieves the name of directory used for storing artefacts for a project.
+        /// </summary>
+        public virtual DataResponse GetArtifactDirectory(ProjectRequest request)
+        {
+            return server.GetArtifactDirectory(request);
+        }
+        #endregion
+
+        #region GetStatisticsDocument()
+        /// <summary>
+        /// Retrieve the statistics document for a project.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public virtual DataResponse GetStatisticsDocument(ProjectRequest request)
+        {
+            return server.GetStatisticsDocument(request);
+        }
+        #endregion
+
+        #region GetModificationHistoryDocument()
+        /// <summary>
+        /// Retrieve the modification history document for a project.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public virtual DataResponse GetModificationHistoryDocument(ProjectRequest request)
+        {
+            return server.GetModificationHistoryDocument(request);
+        }
+        #endregion
+
+        #region GetRSSFeed()
+        /// <summary>
+        /// Retrieve the RSS feed for a project.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public virtual DataResponse GetRSSFeed(ProjectRequest request)
+        {
+            return server.GetRSSFeed(request);
+        }
+        #endregion
+
+        #region Login()
+        /// <summary>
+        /// Logs a user into the session and generates a session.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public virtual LoginResponse Login(LoginRequest request)
+        {
+            return server.Login(request);
+        }
+        #endregion
+
+        #region Logout()
+        /// <summary>
+        /// Logs a user out of the system and removes their session.
+        /// </summary>
+        /// <param name="request"></param>
+        public virtual Response Logout(ServerRequest request)
+        {
+            return server.Logout(request);
+        }
+        #endregion
+
+        #region GetSecurityConfiguration()
+        /// <summary>
+        /// Retrieves the security configuration.
+        /// </summary>
+        /// <param name="request"></param>
+        public virtual DataResponse GetSecurityConfiguration(ServerRequest request)
+        {
+            return server.GetSecurityConfiguration(request);
+        }
+        #endregion
+
+        #region ListUsers()
+        /// <summary>
+        /// Lists all the users who have been defined in the system.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>
+        /// A list of <see cref="UserNameCredentials"/> containing the details on all the users
+        /// who have been defined.
+        /// </returns>
+        public virtual ListUsersResponse ListUsers(ServerRequest request)
+        {
+            return server.ListUsers(request);
+        }
+        #endregion
+
+        #region DiagnoseSecurityPermissions()
+        /// <summary>
+        /// Checks the security permissions for a user against one or more projects.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>A set of diagnostics information.</returns>
+        public virtual DiagnoseSecurityResponse DiagnoseSecurityPermissions(DiagnoseSecurityRequest request)
+        {
+            return server.DiagnoseSecurityPermissions(request);
+        }
+        #endregion
+
+        #region ReadAuditRecords()
+        /// <summary>
+        /// Reads the specified number of filtered audit events.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
+        public virtual ReadAuditResponse ReadAuditRecords(ReadAuditRequest request)
+        {
+            return server.ReadAuditRecords(request);
+        }
+        #endregion
+
+        #region ListBuildParameters()
+        /// <summary>
+        /// Lists the build parameters for a project.
+        /// </summary>
+        /// <param name="projectName">The name of the project to retrieve the parameters for.</param>
+        /// <returns>The list of parameters (if any).</returns>
+        public virtual BuildParametersResponse ListBuildParameters(ProjectRequest request)
+        {
+            return server.ListBuildParameters(request);
+        }
+        #endregion
+
+        #region ChangePassword()
+        /// <summary>
+        /// Changes the password of the user.
+        /// </summary>
+        /// <param name="request"></param>
+        public virtual Response ChangePassword(ChangePasswordRequest request)
+        {
+            return server.ChangePassword(request);
+        }
+        #endregion
+
+        #region ResetPassword()
+        /// <summary>
+        /// Resets the password for a user.
+        /// </summary>
+        /// <param name="request"></param>
+        public virtual Response ResetPassword(ChangePasswordRequest request)
+        {
+            return server.ResetPassword(request);
+        }
+        #endregion
+
+        #region GetFreeDiskSpace()
+        /// <summary>
+        /// Retrieve the amount of free disk space.
         /// </summary>
         /// <returns></returns>
-        public long GetFreeDiskSpace()
+        public virtual DataResponse GetFreeDiskSpace(ServerRequest request)
         {
-            return server.GetFreeDiskSpace();
+            return server.GetFreeDiskSpace(request);
         }
+        #endregion
 
         #region TakeStatusSnapshot()
         /// <summary>
         /// Takes a status snapshot of a project.
         /// </summary>
-        /// <param name="projectName">The name of the project.</param>
-        /// <returns>The snapshot of the current status.</returns>
-        public virtual ProjectStatusSnapshot TakeStatusSnapshot(string projectName)
+        public virtual StatusSnapshotResponse TakeStatusSnapshot(ProjectRequest request)
         {
-            return server.TakeStatusSnapshot(projectName);
+            return server.TakeStatusSnapshot(request);
         }
         #endregion
 
         #region RetrievePackageList()
         /// <summary>
-        /// Retrieves the latest list of packages for a project.
+        /// Retrieves a list of packages for a project.
         /// </summary>
-        /// <param name="projectName"></param>
-        /// <returns></returns>
-        public virtual PackageDetails[] RetrievePackageList(string projectName)
+        public virtual ListPackagesResponse RetrievePackageList(ProjectRequest request)
         {
-            return server.RetrievePackageList(projectName);
-        }
-
-        /// <summary>
-        /// Retrieves the list of packages for a build for a project.
-        /// </summary>
-        /// <param name="projectName"></param>
-        /// <param name="buildLabel"></param>
-        /// <returns></returns>
-        public virtual PackageDetails[] RetrievePackageList(string projectName, string buildLabel)
-        {
-            return server.RetrievePackageList(projectName, buildLabel);
+            return server.RetrievePackageList(request);
         }
         #endregion
 
@@ -275,114 +559,5 @@ namespace ThoughtWorks.CruiseControl.Core
             return server.RetrieveFileTransfer(project, fileName);
         }
         #endregion
-
-        /// <summary>
-        /// Logs a user into the session and generates a session.
-        /// </summary>
-        /// <param name="credentials"></param>
-        /// <returns></returns>
-        public string Login(ISecurityCredentials credentials)
-        {
-            return server.Login(credentials);
-	}
-
-        /// <summary>
-        /// Logs a user out of the system and removes their session.
-        /// </summary>
-        /// <param name="sesionToken"></param>
-        public void Logout(string sesionToken)
-        {
-            server.Logout(sesionToken);
-        }
-
-        /// <summary>
-        /// Retrieves the security configuration.
-        /// </summary>
-        public virtual string GetSecurityConfiguration(string sessionToken)
-        {
-            return server.GetSecurityConfiguration(sessionToken);
-        }
-
-        /// <summary>
-        /// Lists all the users who have been defined in the system.
-        /// </summary>
-        /// <returns>
-        /// A list of <see cref="UserDetails"/> containing the details on all the users
-        /// who have been defined.
-        /// </returns>
-        public virtual List<UserDetails> ListAllUsers(string sessionToken)
-        {
-            return server.ListAllUsers(sessionToken);
-        }
-
-        /// <summary>
-        /// Checks the security permissions for a user against one or more projects.
-        /// </summary>
-        /// <param name="userName">The name of the user.</param>
-        /// <param name="projectNames">The names of the projects to check.</param>
-        /// <returns>A set of diagnostics information.</returns>
-        public virtual List<SecurityCheckDiagnostics> DiagnoseSecurityPermissions(string sessionToken, string userName, params string[] projectNames)
-        {
-            return server.DiagnoseSecurityPermissions(sessionToken, userName, projectNames);
-        }
-
-        /// <summary>
-        /// Reads all the specified number of audit events.
-        /// </summary>
-        /// <param name="startPosition">The starting position.</param>
-        /// <param name="numberOfRecords">The number of records to read.</param>
-        /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details.</returns>
-        public virtual List<AuditRecord> ReadAuditRecords(string sessionToken, int startPosition, int numberOfRecords)
-        {
-            return server.ReadAuditRecords(sessionToken, startPosition, numberOfRecords);
-        }
-
-        /// <summary>
-        /// Reads all the specified number of filtered audit events.
-        /// </summary>
-        /// <param name="startPosition">The starting position.</param>
-        /// <param name="numberOfRecords">The number of records to read.</param>
-        /// <param name="filter">The filter to use.</param>
-        /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
-        public virtual List<AuditRecord> ReadAuditRecords(string sessionToken, int startPosition, int numberOfRecords, IAuditFilter filter)
-        {
-            return server.ReadAuditRecords(sessionToken, startPosition, numberOfRecords, filter);
-        }
-
-        #region ChangePassword()
-        /// <summary>
-        /// Changes the password of the user.
-        /// </summary>
-        /// <param name="sessionToken">The session token for the current user.</param>
-        /// <param name="oldPassword">The person's old password.</param>
-        /// <param name="newPassword">The person's new password.</param>
-        public virtual void ChangePassword(string sessionToken, string oldPassword, string newPassword)
-        {
-            server.ChangePassword(sessionToken, oldPassword, newPassword);
-        }
-        #endregion
-
-        #region ResetPassword()
-        /// <summary>
-        /// Resets the password for a user.
-        /// </summary>
-        /// <param name="sessionToken">The session token for the current user.</param>
-        /// <param name="userName">The user name to reset the password for.</param>
-        /// <param name="newPassword">The person's new password.</param>
-        public virtual void ResetPassword(string sessionToken, string userName, string newPassword)
-        {
-            server.ResetPassword(sessionToken, userName, newPassword);
-        }
-        #endregion
-
-        /// <summary>
-        /// Lists all the parameters for a project.
-        /// </summary>
-        /// <param name="projectName"></param>
-        /// <returns></returns>
-        public virtual List<ParameterBase> ListBuildParameters(string projectName)
-        {
-            return server.ListBuildParameters(projectName);
-        }
     }
 }

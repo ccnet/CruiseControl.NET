@@ -1,4 +1,5 @@
 using System;
+using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -6,10 +7,11 @@ namespace ThoughtWorks.CruiseControl.Remote
     /// Contains a snapshot of the current CC.Net server status and activity.
     /// </summary>
     [Serializable]
+    [XmlRoot("serverSnapshot")]
     public class CruiseServerSnapshot
     {
-        private readonly ProjectStatus[] projectStatuses;
-        private readonly QueueSetSnapshot queueSetSnapshot;
+        private ProjectStatus[] projectStatuses;
+        private QueueSetSnapshot queueSetSnapshot;
 
         public CruiseServerSnapshot()
         {
@@ -23,14 +25,19 @@ namespace ThoughtWorks.CruiseControl.Remote
             this.queueSetSnapshot = queueSetSnapshot;
         }
 
+        [XmlArray("projects")]
+        [XmlArrayItem("projectStatus")]
         public ProjectStatus[] ProjectStatuses
         {
             get { return projectStatuses; }
+            set { projectStatuses = value; }
         }
 
+        [XmlElement("queueSet")]
         public QueueSetSnapshot QueueSetSnapshot
         {
             get { return queueSetSnapshot; }
+            set { queueSetSnapshot = value; }
         }
 
         public bool IsQueueSetSnapshotChanged(QueueSetSnapshot queueSetSnapshotToCompare)

@@ -5,6 +5,7 @@ using System.Text;
 using ThoughtWorks.CruiseControl.Core.Security.Auditing;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Security;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
@@ -27,11 +28,12 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// </summary>
         /// <param name="credentials">The credentials to use.</param>
         /// <returns>The session token if the credentials are valid, null otherwise.</returns>
-        public string Login(ISecurityCredentials credentials)
+        public string Login(LoginRequest credentials)
         {
             // Since we need a user name, let's attempt to find a user name in the credentials, otherwise 
             // we'll just have to use string.Empty
-            string userName = credentials["username"];
+            string userName = NameValuePair.FindNamedValue(credentials.Credentials, 
+                LoginRequest.UserNameCredential);
             return userName;
         }
 
@@ -166,7 +168,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <param name="numberOfRecords">The number of records to read.</param>
         /// <param name="filter">The filter to use.</param>
         /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
-        public virtual List<AuditRecord> ReadAuditRecords(int startPosition, int numberOfRecords, IAuditFilter filter)
+        public virtual List<AuditRecord> ReadAuditRecords(int startPosition, int numberOfRecords, AuditFilterBase filter)
         {
             List<AuditRecord> records = new List<AuditRecord>();
             return records;
@@ -208,6 +210,18 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             where TComponent : class
         {
             return null;
+        }
+        #endregion
+
+        #region GetDefaultRight()
+        /// <summary>
+        /// Gets the default right for a permission.
+        /// </summary>
+        /// <param name="permission">The permission to retrieve the default for.</param>
+        /// <returns>The default right.</returns>
+        public virtual SecurityRight GetDefaultRight(SecurityPermission permission)
+        {
+            return SecurityRight.Allow;
         }
         #endregion
     }

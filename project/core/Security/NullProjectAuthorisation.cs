@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
@@ -39,8 +40,12 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// </summary>
         /// <param name="userName">The name of the user that is being checked.</param>
         /// <param name="permission">The permission to check.</param>
+        /// <param name="defaultRight">The default right to use.</param>
         /// <returns>True if the permission is valid, false otherwise.</returns>
-        public virtual bool CheckPermission(ISecurityManager manager, string userName, SecurityPermission permission)
+        public virtual bool CheckPermission(ISecurityManager manager, 
+            string userName, 
+            SecurityPermission permission,
+            SecurityRight defaultRight)
         {
             return true;
         }

@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 		{
             DynamicMock urlBuilderMock = new DynamicMock(typeof(ICruiseUrlBuilder));
             underlyingRequest = new NameValueCollectionRequest(queryString, null, applicationPath + relativePath, null, applicationPath);
-            cruiseRequest = new RequestWrappingCruiseRequest(underlyingRequest, (ICruiseUrlBuilder)urlBuilderMock.MockInstance);
+            cruiseRequest = new RequestWrappingCruiseRequest(underlyingRequest, (ICruiseUrlBuilder)urlBuilderMock.MockInstance, null);
 		}
 
 		[Test]

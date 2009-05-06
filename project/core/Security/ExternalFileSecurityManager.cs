@@ -11,6 +11,7 @@ using ThoughtWorks.CruiseControl.Core.Config;
 using System.Globalization;
 using System.IO;
 using System.Xml;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
@@ -197,7 +198,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             }
 
             // If we don't have a result, then use the default right
-            if (currentRight == SecurityRight.Inherit) currentRight = DefaultRight;
+            if (currentRight == SecurityRight.Inherit) currentRight = GetDefaultRight(permission);
             return (currentRight == SecurityRight.Allow);
         }
         #endregion
@@ -233,14 +234,16 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             if (user == null) throw new SessionInvalidException();
 
             // Validate the old password
-            UserNameCredentials credientals = new UserNameCredentials(userName);
-            credientals["password"] = oldPassword;
+            LoginRequest credientals = new LoginRequest(userName);
+            credientals.AddCredential(LoginRequest.PasswordCredential, oldPassword);
             if (!user.Authenticate(credientals))
             {
+                LogEvent(null, userName, SecurityEvent.ChangePassword, SecurityRight.Deny, "Old password is incorrect");
                 throw new SecurityException("Old password is incorrect");
             }
 
             // Change the password
+            LogEvent(null, userName, SecurityEvent.ChangePassword, SecurityRight.Allow, null);
             user.ChangePassword(newPassword);
 
             // Update the file
@@ -260,12 +263,15 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             // Retrieve the user and make sure they have the right permission
             string currentUser = GetUserName(sessionToken);
             if (string.IsNullOrEmpty(currentUser)) throw new SessionInvalidException();
-            if (!CheckServerPermission(currentUser, SecurityPermission.ViewSecurity))
+            if (!CheckServerPermission(currentUser, SecurityPermission.ModifySecurity))
             {
+                LogEvent(null, currentUser, SecurityEvent.ResetPassword, SecurityRight.Deny, null);
                 throw new PermissionDeniedException("Reset password");
             }
 
             // Change the password
+            LogEvent(null, currentUser, SecurityEvent.ResetPassword, SecurityRight.Allow,
+                string.Format("Reset password for '{0}'", userName));
             IAuthentication user = RetrieveUser(userName);
             if (user == null) throw new SessionInvalidException();
             user.ChangePassword(newPassword);

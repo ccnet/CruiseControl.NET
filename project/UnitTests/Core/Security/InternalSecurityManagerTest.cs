@@ -7,6 +7,7 @@ using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Core.Security.Auditing;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Security;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
 {
@@ -36,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void ValidLoginReturnsSessionToken()
         {
-            UserNameCredentials credentials = new UserNameCredentials("johndoe");
+            LoginRequest credentials = new LoginRequest("johndoe");
             Expect.Call(authenticationMock.Authenticate(credentials)).Return(true);
             Expect.Call(authenticationMock.GetUserName(credentials)).Return("johndoe");
             Expect.Call(authenticationMock.GetDisplayName(credentials)).Return("johndoe");
@@ -60,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
                 wildcardMock
             };
 
-            UserNameCredentials credentials = new UserNameCredentials("johndoe");
+            LoginRequest credentials = new LoginRequest("johndoe");
             Expect.Call(wildcardMock.Authenticate(credentials)).Return(true);
             Expect.Call(wildcardMock.GetUserName(credentials)).Return("johndoe");
             Expect.Call(wildcardMock.GetDisplayName(credentials)).Return("johndoe");
@@ -78,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void InvalidLoginReturnsNull()
         {
-            UserNameCredentials credentials = new UserNameCredentials("johndoe");
+            LoginRequest credentials = new LoginRequest("johndoe");
             Expect.Call(authenticationMock.Authenticate(credentials)).Return(false);
             Expect.Call(authenticationMock.GetUserName(credentials)).Return("johndoe");
 
@@ -92,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void UnknownLoginReturnsNull()
         {
-            UserNameCredentials credentials = new UserNameCredentials("janedoe");
+            LoginRequest credentials = new LoginRequest("janedoe");
 
             mocks.ReplayAll();
             manager.Initialise();
@@ -235,7 +236,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             SecurityRight eventRight = SecurityRight.Allow;
             string message = "A message";
 
-            IAuditLogger logger = mocks.StrictMock<IAuditLogger>();
+            IAuditLogger logger = mocks.CreateMock<IAuditLogger>();
             Expect.Call(delegate { logger.LogEvent(projectName, userName, eventType, eventRight, message); });
 
             mocks.ReplayAll();
@@ -257,9 +258,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             List<UserDetails> users = manager.ListAllUsers();
             Assert.IsNotNull(users, "No data returned");
             Assert.AreEqual(1, users.Count, "Unexpected number of users returned");
-            Assert.AreEqual("johndoe", users[0].UserName, "User name does not match");
-            Assert.AreEqual("John Doe", users[0].DisplayName, "Display name does not match");
-            Assert.AreEqual("Mocked", users[0].Type, "Type does not match");
         }
 
         [Test]
@@ -297,7 +295,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void ReadFilteredAuditEventsWithReader()
         {
-            IAuditFilter filter = AuditFilters.ByProject("Project #1");
+            AuditFilterBase filter = AuditFilters.ByProject("Project #1");
             IAuditReader readerMock = mocks.DynamicMock<IAuditReader>();
             List<AuditRecord> records = new List<AuditRecord>();
             records.Add(new AuditRecord());

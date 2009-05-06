@@ -9,6 +9,7 @@ using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.Core.Security.Auditing;
 using ThoughtWorks.CruiseControl.Core.Config;
 using System.Globalization;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
@@ -27,6 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         private ISessionCache sessionCache = new InMemorySessionCache();
         private IAuditLogger[] loggers = new IAuditLogger[0];
         private IAuditReader reader;
+        private Permissions permissions = new Permissions();
         #endregion
 
         #region Public properties
@@ -39,22 +41,6 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         {
             get { return sessionCache; }
             set { sessionCache = value; }
-        }
-        #endregion
-
-        #region DefaultRight
-        /// <summary>
-        /// The default right to use.
-        /// </summary>
-        [ReflectorProperty("defaultRight", Required = false)]
-        public SecurityRight DefaultRight
-        {
-            get { return defaultRight; }
-            set
-            {
-                if (value == SecurityRight.Inherit) throw new ArgumentOutOfRangeException("DefaultRight", "DefaultRight must be either Allow or Deny");
-                defaultRight = value;
-            }
         }
         #endregion
 
@@ -79,6 +65,18 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         {
             get { return reader; }
             set { reader = value; }
+        }
+        #endregion
+
+        #region Permissions
+        /// <summary>
+        /// The default permissions.
+        /// </summary>
+        [ReflectorProperty("defaults", Required=false, InstanceType=typeof(Permissions))]
+        public Permissions DefaultPermissions
+        {
+            get { return permissions; }
+            set { permissions = value; }
         }
         #endregion
         #endregion
@@ -115,12 +113,13 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// </summary>
         /// <param name="credentials">The credentials to use.</param>
         /// <returns>The session token if the credentials are valid, null otherwise.</returns>
-        public virtual string Login(ISecurityCredentials credentials)
+        public virtual string Login(LoginRequest credentials)
         {
             string sessionToken = null;
 
             // Find the authentication
-            string identifier = credentials.Identifier;
+            string identifier = NameValuePair.FindNamedValue(credentials.Credentials,
+                LoginRequest.UserNameCredential);
             IAuthentication authentication = RetrieveUser(identifier);
 
             string userName = credentials.Identifier;
@@ -284,7 +283,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <param name="numberOfRecords">The number of records to read.</param>
         /// <param name="filter">The filter to use.</param>
         /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
-        public virtual List<AuditRecord> ReadAuditRecords(int startPosition, int numberOfRecords, IAuditFilter filter)
+        public virtual List<AuditRecord> ReadAuditRecords(int startPosition, int numberOfRecords, AuditFilterBase filter)
         {
             List<AuditRecord> records = new List<AuditRecord>();
             if (reader != null) records = reader.Read(startPosition, numberOfRecords, filter);
@@ -328,6 +327,18 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             where TComponent : class
         {
             return null;
+        }
+        #endregion
+
+        #region GetDefaultRight()
+        /// <summary>
+        /// Gets the default right for a permission.
+        /// </summary>
+        /// <param name="permission">The permission to retrieve the default for.</param>
+        /// <returns>The default right.</returns>
+        public virtual SecurityRight GetDefaultRight(SecurityPermission permission)
+        {
+            return permissions.GetPermission(permission);
         }
         #endregion
         #endregion

@@ -30,9 +30,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			proxy = new CruiseActionProxyAction(
 				(ICruiseAction) proxiedActionMock.MockInstance,
 				(ICruiseRequestFactory) cruiseRequestFactoryMock.MockInstance,
-                (ICruiseUrlBuilder)urlBuilderMock.MockInstance);
+                (ICruiseUrlBuilder)urlBuilderMock.MockInstance,
+                null);
 
-            cruiseRequest = new RequestWrappingCruiseRequest(null, (ICruiseUrlBuilder)urlBuilderMock.MockInstance);
+            cruiseRequest = new RequestWrappingCruiseRequest(null, (ICruiseUrlBuilder)urlBuilderMock.MockInstance, null);
             request = new NameValueCollectionRequest(new NameValueCollection(), null, null, null, null);
 		}
 
@@ -48,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			IResponse response = new HtmlFragmentResponse("foo");
 			// Setup
 			cruiseRequestFactoryMock.ExpectAndReturn("CreateCruiseRequest", cruiseRequest, request,
-                (ICruiseUrlBuilder)urlBuilderMock.MockInstance);
+                (ICruiseUrlBuilder)urlBuilderMock.MockInstance, null);
 			proxiedActionMock.ExpectAndReturn("Execute", response, cruiseRequest);
 
 			// Execute

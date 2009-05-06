@@ -19,14 +19,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private readonly IVelocityViewGenerator velocityViewGenerator;
 		private readonly IFarmService farmService;
 	    private readonly IFingerprintFactory fingerprintFactory;
+        private readonly ISessionRetriever sessionRetriever;
 
-	    public TopControlsViewBuilder(ICruiseRequest request, ILinkFactory linkFactory, IVelocityViewGenerator velocityViewGenerator, IFarmService farmService, IFingerprintFactory fingerprintFactory)
+	    public TopControlsViewBuilder(ICruiseRequest request, ILinkFactory linkFactory, IVelocityViewGenerator velocityViewGenerator,
+            IFarmService farmService, IFingerprintFactory fingerprintFactory, ISessionRetriever sessionRetriever)
 		{
 			this.request = request;
 			this.linkFactory = linkFactory;
 			this.velocityViewGenerator = velocityViewGenerator;
 			this.farmService = farmService;
 		    this.fingerprintFactory = fingerprintFactory;
+            this.sessionRetriever = sessionRetriever;
 		}
 
 		private string GetCategory()
@@ -39,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				!string.IsNullOrEmpty(request.ServerName) &&
 				!string.IsNullOrEmpty(request.ProjectName))
 				category = farmService
-					.GetProjectStatusListAndCaptureExceptions(request.ServerSpecifier)
+                    .GetProjectStatusListAndCaptureExceptions(request.ServerSpecifier, request.RetrieveSessionToken(sessionRetriever))
 					.GetStatusForProject(request.ProjectName)
 					.Category;
 

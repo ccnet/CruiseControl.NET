@@ -14,16 +14,28 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// </summary>
         SendMessage,
         /// <summary>
-        /// Can force or abort builds.
+        /// Can force a build or abort a build on a project.
         /// </summary>
-        ForceBuild,
+        ForceAbortBuild,
         /// <summary>
-        /// Can start or stop projects.
+        /// Can start or stop a project.
         /// </summary>
-        StartProject,
+        StartStopProject,
+        /// <summary>
+        /// Can change project configuration.
+        /// </summary>
+        ChangeProjectConfiguration,
         /// <summary>
         /// Can view security information.
         /// </summary>
         ViewSecurity,
+        /// <summary>
+        /// Can modify security information.
+        /// </summary>
+        ModifySecurity,
+        /// <summary>
+        /// Can view a project and all its details.
+        /// </summary>
+        ViewProject,
     }
 }

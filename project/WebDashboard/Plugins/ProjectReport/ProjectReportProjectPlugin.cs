@@ -26,7 +26,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         public static readonly string ACTION_NAME = "ViewProjectReport";
         private IBuildPlugin[] pluginNames = null;
         private readonly IRemoteServicesConfiguration configuration;
-        private readonly ISessionRetriever sessionRetriever;
         
         // retrieve at most this amount of builds                             
         public static readonly Int32 AmountOfBuildsToRetrieve = 100;
@@ -39,13 +38,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         }
 
         public ProjectReportProjectPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator, ILinkFactory linkFactory,
-            IRemoteServicesConfiguration configuration, ISessionRetriever sessionRetriever)
+            IRemoteServicesConfiguration configuration)
         {
             this.farmService = farmService;
             this.viewGenerator = viewGenerator;
             this.linkFactory = linkFactory;
             this.configuration = configuration;
-            this.sessionRetriever = sessionRetriever;
         }
 
         public IResponse Execute(ICruiseRequest cruiseRequest)
@@ -65,9 +63,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             velocityContext["externalLinks"] = farmService.GetExternalLinks(projectSpecifier);
             velocityContext["noLogsAvailable"] = (buildSpecifiers.Length == 0);
 
-            var sessionToken = cruiseRequest.RetrieveSessionToken(sessionRetriever);
+            var sessionToken = cruiseRequest.RetrieveSessionToken();
             velocityContext["StatusMessage"] = ForceBuildIfNecessary(projectSpecifier, cruiseRequest.Request, sessionToken);
-            ProjectStatus status = FindProjectStatus(projectSpecifier);
+            ProjectStatus status = FindProjectStatus(projectSpecifier, cruiseRequest);
             velocityContext["status"] = status;
             velocityContext["StartStopButtonName"] = (status.Status == ProjectIntegratorState.Running) ? "StopBuild" : "StartBuild"; 
             velocityContext["StartStopButtonValue"] = (status.Status == ProjectIntegratorState.Running) ? "Stop" : "Start";
@@ -136,9 +134,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             throw new Exception("Unable to find specified server");
         }
 
-        private ProjectStatus FindProjectStatus(IProjectSpecifier projectSpecifier)
+        private ProjectStatus FindProjectStatus(IProjectSpecifier projectSpecifier, ICruiseRequest request)
         {
-            ProjectStatusListAndExceptions list = farmService.GetProjectStatusListAndCaptureExceptions(projectSpecifier.ServerSpecifier);
+            ProjectStatusListAndExceptions list = farmService.GetProjectStatusListAndCaptureExceptions(projectSpecifier.ServerSpecifier, request.RetrieveSessionToken());
             foreach (ProjectStatusOnServer status in list.StatusAndServerList)
             {
                 if (string.Equals(status.ProjectStatus.Name, projectSpecifier.ProjectName, StringComparison.InvariantCultureIgnoreCase))
@@ -297,6 +295,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             public void ReplaceBuildSpecifier(IBuildSpecifier buildSpecifier)
             {
                 this.buildSpecifier = buildSpecifier;
+            }
+
+            /// <summary>
+            /// Attempt to retrieve a session token
+            /// </summary>
+            /// <returns></returns>
+            public virtual string RetrieveSessionToken()
+            {
+                return RetrieveSessionToken(null);
             }
 
             /// <summary>

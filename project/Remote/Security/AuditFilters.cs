@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// </summary>
         /// <param name="projectName"></param>
         /// <returns></returns>
-        public static IAuditFilter ByProject(string projectName)
+        public static AuditFilterBase ByProject(string projectName)
         {
             return new ProjectAuditFilter(projectName);
         }
@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public static IAuditFilter ByUser(string userName)
+        public static AuditFilterBase ByUser(string userName)
         {
             return new UserAuditFilter(userName);
         }
@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// </summary>
         /// <param name="eventType"></param>
         /// <returns></returns>
-        public static IAuditFilter ByEventType(SecurityEvent eventType)
+        public static AuditFilterBase ByEventType(SecurityEvent eventType)
         {
             return new EventTypeAuditFilter(eventType);
         }
@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// </summary>
         /// <param name="right"></param>
         /// <returns></returns>
-        public static IAuditFilter ByRight(SecurityRight right)
+        public static AuditFilterBase ByRight(SecurityRight right)
         {
             return new SecurityRightAuditFilter(right);
         }
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
         /// <returns></returns>
-        public static IAuditFilter ByDateRange(DateTime startDate, DateTime endDate)
+        public static AuditFilterBase ByDateRange(DateTime startDate, DateTime endDate)
         {
             return new DateRangeAuditFilter(startDate, endDate);
         }
@@ -63,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// </summary>
         /// <param name="filters">The filters to combine.</param>
         /// <returns></returns>
-        public static IAuditFilter Combine(params IAuditFilter[] filters)
+        public static AuditFilterBase Combine(params AuditFilterBase[] filters)
         {
             return new CombinationAuditFilter(filters);
         }

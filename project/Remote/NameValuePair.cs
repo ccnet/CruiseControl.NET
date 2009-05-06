@@ -4,7 +4,9 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+#if !NoReflector
 using Exortech.NetReflector;
+#endif
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -12,7 +14,9 @@ namespace ThoughtWorks.CruiseControl.Remote
     /// Define a name/value pair.
     /// </summary>
     [Serializable]
+#if !NoReflector
     [ReflectorType("namedValue")]
+#endif
     public class NameValuePair
     {
         #region Private fields
@@ -42,7 +46,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// The name.
         /// </summary>
         [XmlAttribute("name")]
+#if !NoReflector
         [ReflectorProperty("name")]
+#endif
         public string Name
         {
             get { return name; }
@@ -55,7 +61,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// The value.
         /// </summary>
         [XmlAttribute("value")]
+#if !NoReflector
         [ReflectorProperty("value")]
+#endif
         public string Value
         {
             get { return namedValue; }
