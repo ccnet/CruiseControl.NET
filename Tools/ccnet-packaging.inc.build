@@ -204,6 +204,7 @@
 		<jsmin todir="${path::combine(webdashboard.dist.dir, 'javascript-compressed')}" verbose="${nant.verbosity}" failonerror="false">
 			<fileset basedir="${path::combine(webdashboard.dist.dir, 'javascript')}">
 				<include name="**/*.js" />
+				<exclude name="jquery.tablesorter.js" />
 			</fileset>
 		</jsmin>
 		
