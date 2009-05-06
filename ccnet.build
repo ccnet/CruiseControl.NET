@@ -173,6 +173,7 @@
     <jsmin verbose="false" todir="${webdashboard.dir}\Javascript-compressed">
       <fileset basedir="${webdashboard.dir}\Javascript">
         <include name="\**\*.js" />
+        <exclude name="\**\jquery.tablesorter.js"/>
       </fileset>
     </jsmin>
     <move todir="${webdashboard.dir}\Javascript" overwrite="true">
@@ -304,7 +305,8 @@
 				<include name="**\*.js" />
 				<include name="**\*.vm" />
 				<include name="**\*.wav"/>
-				<include name="**\*.xsl"/>
+        <include name="**\*.xsl"/>
+        <include name="**\*.ico"/>
 
 				<exclude name="bin\**\*" />
 				<exclude name="obj\**\*" />
@@ -347,7 +349,8 @@
 				<exclude name="build.txt" />
 				<exclude name="build\**" />
 				<exclude name="deployed\**" />
-				<exclude name="dist\**" />
+        <exclude name="dist\**" />
+        <exclude name="tools\**" />
 				<exclude name="**\bin\**" />
 				<exclude name="**\obj\**" />
 				<exclude name="**\CVS\**" />
