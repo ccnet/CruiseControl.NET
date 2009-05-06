@@ -21,6 +21,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
         /// Attempt to retrieve a session token
         /// </summary>
         /// <returns></returns>
+        string RetrieveSessionToken();
+
+        /// <summary>
+        /// Attempt to retrieve a session token
+        /// </summary>
+        /// <returns></returns>
         string RetrieveSessionToken(ISessionRetriever sessionRetriever);
     }
 }

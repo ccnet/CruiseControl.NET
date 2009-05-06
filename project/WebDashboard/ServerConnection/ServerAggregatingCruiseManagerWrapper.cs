@@ -9,6 +9,7 @@ using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Security;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
@@ -25,71 +26,80 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 
 		public IBuildSpecifier GetLatestBuildSpecifier(IProjectSpecifier projectSpecifier)
 		{
-			return new DefaultBuildSpecifier(projectSpecifier, GetCruiseManager(projectSpecifier.ServerSpecifier).GetLatestBuildName(projectSpecifier.ProjectName));
+            DataResponse response = GetCruiseManager(projectSpecifier.ServerSpecifier)
+                .GetLatestBuildName(GenerateProjectRequest(projectSpecifier, null));
+            ValidateResponse(response);
+			return new DefaultBuildSpecifier(projectSpecifier, response.Data);
 		}
 
 		public string GetLog(IBuildSpecifier buildSpecifier)
 		{
-			return GetCruiseManager(buildSpecifier).GetLog(buildSpecifier.ProjectSpecifier.ProjectName, buildSpecifier.BuildName);
+            BuildRequest request = new BuildRequest(null, buildSpecifier.ProjectSpecifier.ProjectName);
+            request.BuildName = buildSpecifier.BuildName;
+            DataResponse response = GetCruiseManager(buildSpecifier)
+                .GetLog(request);
+            ValidateResponse(response);
+            return response.Data;
 		}
 
 		public IBuildSpecifier[] GetBuildSpecifiers(IProjectSpecifier projectSpecifier)
 		{
-			return CreateBuildSpecifiers(projectSpecifier, GetCruiseManager(projectSpecifier).GetBuildNames(projectSpecifier.ProjectName));
+            DataListResponse response = GetCruiseManager(projectSpecifier.ServerSpecifier)
+                .GetBuildNames(GenerateProjectRequest(projectSpecifier, null));
+            ValidateResponse(response);
+            return CreateBuildSpecifiers(projectSpecifier, response.Data.ToArray());
 		}
 
 		public IBuildSpecifier[] GetMostRecentBuildSpecifiers(IProjectSpecifier projectSpecifier, int buildCount)
 		{
-			return CreateBuildSpecifiers(projectSpecifier, GetCruiseManager(projectSpecifier).GetMostRecentBuildNames(projectSpecifier.ProjectName, buildCount));
+            BuildListRequest request = new BuildListRequest(null, projectSpecifier.ProjectName);
+            request.NumberOfBuilds = buildCount;
+            DataListResponse response = GetCruiseManager(projectSpecifier)
+                .GetMostRecentBuildNames(request);
+            ValidateResponse(response);
+            return CreateBuildSpecifiers(projectSpecifier, response.Data.ToArray());
+		}
+
+		private IBuildSpecifier[] CreateBuildSpecifiers(IProjectSpecifier projectSpecifier, string[] buildNames)
+		{
+			ArrayList buildSpecifiers = new ArrayList();
+			foreach (string buildName in buildNames)
+			{
+				buildSpecifiers.Add(new DefaultBuildSpecifier(projectSpecifier, buildName));
+			}
+			return (IBuildSpecifier[]) buildSpecifiers.ToArray(typeof (IBuildSpecifier));
 		}
 
 		public void DeleteProject(IProjectSpecifier projectSpecifier, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
 		{
-			GetCruiseManager(projectSpecifier).DeleteProject(projectSpecifier.ProjectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
+            ChangeConfigurationRequest request = new ChangeConfigurationRequest(null,
+                projectSpecifier.ProjectName);
+            request.PurgeArtifactDirectory = purgeArtifactDirectory;
+            request.PurgeSourceControlEnvironment = purgeSourceControlEnvironment;
+            request.PurgeWorkingDirectory = purgeWorkingDirectory;
+            Response response = GetCruiseManager(projectSpecifier)
+                .DeleteProject(request);
+            ValidateResponse(response);
+		}
+
+        public void Start(IProjectSpecifier projectSpecifier)
+        {
+            Start(projectSpecifier, null);
         }
 
-        #region Secure Project Methods
-        public void Start(IProjectSpecifier projectSpecifier, string sessionToken)
+        public void Stop(IProjectSpecifier projectSpecifier)
 			{
-            GetCruiseManager(projectSpecifier.ServerSpecifier).Start(sessionToken, projectSpecifier.ProjectName);
+            Stop(projectSpecifier, null);
 			}
 
-        public void Stop(IProjectSpecifier projectSpecifier, string sessionToken)
+        public void ForceBuild(IProjectSpecifier projectSpecifier, string enforcerName)
         {
-            GetCruiseManager(projectSpecifier.ServerSpecifier).Stop(projectSpecifier.ProjectName);
+            ForceBuild(projectSpecifier, null, enforcerName, new Dictionary<string, string>());
 		}
 
         public void ForceBuild(IProjectSpecifier projectSpecifier, string sessionToken, string enforcerName)
         {
             ForceBuild(projectSpecifier, sessionToken, enforcerName, new Dictionary<string, string>());
-        }
-
-        public void ForceBuild(IProjectSpecifier projectSpecifier, string sessionToken, string enforcerName, Dictionary<string, string> parameters)
-        {
-            GetCruiseManager(projectSpecifier.ServerSpecifier).ForceBuild(sessionToken, projectSpecifier.ProjectName, enforcerName, parameters);
-        }
-
-        public void AbortBuild(IProjectSpecifier projectSpecifier, string sessionToken, string enforcerName)
-		{
-            GetCruiseManager(projectSpecifier.ServerSpecifier).AbortBuild(sessionToken, projectSpecifier.ProjectName, enforcerName);
-		}
-        #endregion
-
-
-        #region Unsecure Project Methods
-        public void Start(IProjectSpecifier projectSpecifier)
-		{
-            Start(projectSpecifier, null);
-		}
-
-        public void Stop(IProjectSpecifier projectSpecifier)
-		{
-            Stop(projectSpecifier, null);
-        }
-
-        public void ForceBuild(IProjectSpecifier projectSpecifier, string enforcerName)
-        {
-            ForceBuild(projectSpecifier, null, enforcerName, new Dictionary<string, string>());
         }
 
         public void ForceBuild(IProjectSpecifier projectSpecifier, string enforcerName, Dictionary<string, string> parameters)
@@ -98,43 +108,130 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         }
 
         public void AbortBuild(IProjectSpecifier projectSpecifier, string enforcerName)
-				{
-            AbortBuild(projectSpecifier, null, enforcerName);
-			}
+        {
+            AbortBuild(projectSpecifier, null);
+        }
 
-        #endregion
+        public void ForceBuild(IProjectSpecifier projectSpecifier, string sessionToken, string enforcerName, Dictionary<string, string> parameters)
+        {
+            BuildIntegrationRequest request = new BuildIntegrationRequest();
+            request.SessionToken = sessionToken;
+            request.ProjectName = projectSpecifier.ProjectName;
+            request.BuildValues = NameValuePair.FromDictionary(parameters);
+            var manager = GetCruiseManager(projectSpecifier.ServerSpecifier);
+            var response = manager.ForceBuild(request);
+            ValidateResponse(response);
+        }
 
+        public void AbortBuild(IProjectSpecifier projectSpecifier, string sessionToken, string enforcerName)
+		{
+            ProjectRequest request = GenerateProjectRequest(projectSpecifier, sessionToken);
+            ValidateResponse(GetCruiseManager(projectSpecifier.ServerSpecifier).AbortBuild(request));
+		}
+
+        private string GetServerUrl(IServerSpecifier serverSpecifier)
+        {
+            var locations = ServerLocations;
+            foreach (var serverLocation in locations)
+            {
+                if (StringUtil.EqualsIgnoreCase(serverLocation.Name, serverSpecifier.ServerName))
+                {
+                    return serverLocation.Url;
+                }
+            }
+
+            throw new UnknownServerException(serverSpecifier.ServerName);
+        }
 
 		public ExternalLink[] GetExternalLinks(IProjectSpecifier projectSpecifier)
+        {
+            ExternalLinksListResponse response = GetCruiseManager(projectSpecifier.ServerSpecifier)
+                .GetExternalLinks(GenerateProjectRequest(projectSpecifier, null));
+            ValidateResponse(response);
+            return response.ExternalLinks.ToArray();
+        }
+
+		public ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(string sessionToken)
+        {
+			return GetProjectStatusListAndCaptureExceptions(GetServerSpecifiers(), sessionToken);
+        }
+
+        public ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier serverSpecifier, string sessionToken)
+				{
+			return GetProjectStatusListAndCaptureExceptions(new IServerSpecifier[] {serverSpecifier}, sessionToken);
+			}
+
+        private ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier[] serverSpecifiers, string sessionToken)
 		{
-			return GetCruiseManager(projectSpecifier).GetExternalLinks(projectSpecifier.ProjectName);
+			ArrayList projectStatusOnServers = new ArrayList();
+			ArrayList exceptions = new ArrayList();
+
+			foreach (IServerSpecifier serverSpecifier in serverSpecifiers)
+			{
+				try
+				{
+                    var manager = GetCruiseManager(serverSpecifier);
+					foreach (ProjectStatus projectStatus in manager
+                        .GetProjectStatus(new ServerRequest(sessionToken))
+                        .Projects)
+					{
+						projectStatusOnServers.Add(new ProjectStatusOnServer(projectStatus, serverSpecifier));
+					}
+				}
+				catch (SocketException)
+				{
+					AddException(exceptions, serverSpecifier, new CruiseControlException("Unable to connect to CruiseControl.NET server.  Please either start the server or check the url."));
+				}
+				catch (Exception e)
+		{
+					AddException(exceptions, serverSpecifier, e);
+				}
 		}
 
-		public ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions()
-		{
-			return GetProjectStatusListAndCaptureExceptions(GetServerSpecifiers());
+			return new ProjectStatusListAndExceptions((ProjectStatusOnServer[]) projectStatusOnServers.ToArray(typeof (ProjectStatusOnServer)),
+			                                          (CruiseServerException[]) exceptions.ToArray(typeof (CruiseServerException)));
 		}
 
-		public ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier serverSpecifier)
+		private void AddException(ArrayList exceptions, IServerSpecifier serverSpecifier, Exception e)
 		{
-			return GetProjectStatusListAndCaptureExceptions(new IServerSpecifier[] {serverSpecifier});
+			exceptions.Add(new CruiseServerException(serverSpecifier.ServerName, GetServerUrl(serverSpecifier), e));
 		}
 
 
 		public string GetServerLog(IServerSpecifier serverSpecifier)
 		{
-			return GetCruiseManager(serverSpecifier).GetServerLog();
+            DataResponse response = GetCruiseManager(serverSpecifier)
+                .GetServerLog(new ServerRequest());
+            ValidateResponse(response);
+            return response.Data;
 		}
 
 		public string GetServerLog(IProjectSpecifier projectSpecifier)
 		{
-			return GetCruiseManager(projectSpecifier.ServerSpecifier).GetServerLog(projectSpecifier.ProjectName);
+            DataResponse response = GetCruiseManager(projectSpecifier.ServerSpecifier)
+                .GetServerLog(GenerateProjectRequest(projectSpecifier, null));
+            ValidateResponse(response);
+            return response.Data;
 		}
 
+        public void Start(IProjectSpecifier projectSpecifier, string sessionToken)
+		{
+            ProjectRequest request = GenerateProjectRequest(projectSpecifier, sessionToken);
+            ValidateResponse(GetCruiseManager(projectSpecifier.ServerSpecifier).Start(request));
+		}
+
+        public void Stop(IProjectSpecifier projectSpecifier, string sessionToken)
+		{
+            ProjectRequest request = GenerateProjectRequest(projectSpecifier, sessionToken);
+            ValidateResponse(GetCruiseManager(projectSpecifier.ServerSpecifier).Stop(request));
+		}
 
 		public string GetServerVersion(IServerSpecifier serverSpecifier)
 		{
-			return GetCruiseManager(serverSpecifier).GetServerVersion();
+            DataResponse response = GetCruiseManager(serverSpecifier)
+                .GetServerVersion(new ServerRequest());
+            ValidateResponse(response);
+            return response.Data;
 		}
 
 		public IServerSpecifier[] GetServerSpecifiers()
@@ -149,121 +246,114 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 
 		public void AddProject(IServerSpecifier serverSpecifier, string serializedProject)
 		{
-			GetCruiseManager(serverSpecifier).AddProject(serializedProject);
+            ChangeConfigurationRequest request = new ChangeConfigurationRequest(null, null);
+            request.ProjectDefinition = serializedProject;
+            Response response = GetCruiseManager(serverSpecifier)
+                .AddProject(request);
+            ValidateResponse(response);
 		}
 
 		public string GetProject(IProjectSpecifier projectSpecifier)
 		{
-			return GetCruiseManager(projectSpecifier.ServerSpecifier).GetProject(projectSpecifier.ProjectName);
+            DataResponse response = GetCruiseManager(projectSpecifier.ServerSpecifier)
+                .GetProject(GenerateProjectRequest(projectSpecifier, null));
+            ValidateResponse(response);
+            return response.Data;
 		}
 
 		public void UpdateProject(IProjectSpecifier projectSpecifier, string serializedProject)
 		{
-			GetCruiseManager(projectSpecifier.ServerSpecifier).UpdateProject(projectSpecifier.ProjectName, serializedProject);
+            ChangeConfigurationRequest request = new ChangeConfigurationRequest(null, 
+                projectSpecifier.ProjectName);
+            request.ProjectDefinition = serializedProject;
+            Response response = GetCruiseManager(projectSpecifier)
+                .UpdateProject(request);
+            ValidateResponse(response);
 		}
 
 		public string GetArtifactDirectory(IProjectSpecifier projectSpecifier)
 		{
-			return GetCruiseManager(projectSpecifier).GetArtifactDirectory(projectSpecifier.ProjectName);
+            DataResponse response = GetCruiseManager(projectSpecifier.ServerSpecifier)
+                .GetArtifactDirectory(GenerateProjectRequest(projectSpecifier, null));
+            ValidateResponse(response);
+            return response.Data;
 		}
 
 		public string GetStatisticsDocument(IProjectSpecifier projectSpecifier)
 		{
-			return GetCruiseManager(projectSpecifier).GetStatisticsDocument(projectSpecifier.ProjectName);
+            DataResponse response = GetCruiseManager(projectSpecifier.ServerSpecifier)
+                .GetStatisticsDocument(GenerateProjectRequest(projectSpecifier, null));
+            ValidateResponse(response);
+            return response.Data;
 		}
 
         public string GetModificationHistoryDocument(IProjectSpecifier projectSpecifier)
         {
-            return GetCruiseManager(projectSpecifier).GetModificationHistoryDocument(projectSpecifier.ProjectName);
+            DataResponse response = GetCruiseManager(projectSpecifier.ServerSpecifier)
+                .GetModificationHistoryDocument(GenerateProjectRequest(projectSpecifier, null));
+            ValidateResponse(response);
+            return response.Data;
         }
 
         public string GetRSSFeed(IProjectSpecifier projectSpecifier)
         {
-            return GetCruiseManager(projectSpecifier).GetRSSFeed(projectSpecifier.ProjectName);
+            DataResponse response = GetCruiseManager(projectSpecifier.ServerSpecifier)
+                .GetRSSFeed(GenerateProjectRequest(projectSpecifier, null));
+            ValidateResponse(response);
+            return response.Data;
+        }
+
+		private ICruiseServerClient GetCruiseManager(IBuildSpecifier buildSpecifier)
+		{
+			return GetCruiseManager(buildSpecifier.ProjectSpecifier);
+		}
+
+		private ICruiseServerClient GetCruiseManager(IProjectSpecifier projectSpecifier)
+		{
+			return GetCruiseManager(projectSpecifier.ServerSpecifier);
+		}
+
+		private ICruiseServerClient GetCruiseManager(IServerSpecifier serverSpecifier)
+		{
+            var uri = GetServerUrl(serverSpecifier);
+			var manager = managerFactory.GetCruiseServerClient(uri);
+            return manager;
+		}
+
+		private ServerLocation[] ServerLocations
+        {
+			get { return configuration.Servers; }
         }
 
 		public IServerSpecifier GetServerConfiguration(string serverName)
 		{
 			foreach (ServerLocation serverLocation in ServerLocations)
-		{
+        {
 				if (serverLocation.ServerName == serverName)
 					return serverLocation;
-			}
+        }
 			return null;
-		}
+        }
 
         public CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions()
-		{
+        {
             return GetCruiseServerSnapshotListAndExceptions(GetServerSpecifiers());
-		}
+        }
 
         public CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions(IServerSpecifier serverSpecifier)
-		{
+        {
             return GetCruiseServerSnapshotListAndExceptions(new IServerSpecifier[] { serverSpecifier });
-		}
-
-        /// <summary>
-        /// Retrieve the amount of free disk space.
-        /// </summary>
-        /// <returns></returns>
-        public long GetFreeDiskSpace(IServerSpecifier serverSpecifier)
-        {
-            long space = GetCruiseManager(serverSpecifier).GetFreeDiskSpace();
-            return space;
         }
 
-        #region RetrieveFileTransfer()
-        public RemotingFileTransfer RetrieveFileTransfer(IProjectSpecifier projectSpecifier, string fileName)
-        {
-            RemotingFileTransfer fileTransfer = GetCruiseManager(projectSpecifier)
-                .RetrieveFileTransfer(projectSpecifier.ProjectName, fileName);
-            return fileTransfer;
-        }
-
-        public RemotingFileTransfer RetrieveFileTransfer(IBuildSpecifier buildSpecifier, string fileName)
-        {
-            var logFile = new LogFile(buildSpecifier.BuildName);
-            var fullName = string.Format("{0}\\{1}", logFile.Label, fileName);
-            RemotingFileTransfer fileTransfer = GetCruiseManager(buildSpecifier)
-                .RetrieveFileTransfer(buildSpecifier.ProjectSpecifier.ProjectName, fullName);
-            return fileTransfer;
-        }
-        #endregion
-
-        #region RetrievePackageList()
-        /// <summary>
-        /// List the available packages for a project.
-        /// </summary>
-        /// <param name="projectSpecifier"></param>
-        /// <returns></returns>
-        public PackageDetails[] RetrievePackageList(IProjectSpecifier projectSpecifier)
-        {
-            var packages = GetCruiseManager(projectSpecifier).RetrievePackageList(projectSpecifier.ProjectName);
-            return packages;
-        }
-
-        /// <summary>
-        /// List the available packages for a build.
-        /// </summary>
-        /// <param name="projectSpecifier"></param>
-        /// <returns></returns>
-        public PackageDetails[] RetrievePackageList(IBuildSpecifier buildSpecifier)
-        {
-            var logFile = new LogFile(buildSpecifier.BuildName);
-            var packages = GetCruiseManager(buildSpecifier)
-                .RetrievePackageList(buildSpecifier.ProjectSpecifier.ProjectName, logFile.Label);
-            return packages;
-        }
-        #endregion
-
-        public string Login(string server, ISecurityCredentials credentials)
+        public string Login(string server, LoginRequest credentials)
 		{
-            return GetCruiseManager(GetServerConfiguration(server)).Login(credentials);
+            return GetCruiseManager(GetServerConfiguration(server)).Login(credentials).SessionToken;
 		}
 
         public void Logout(string server, string sessionToken)
 			{
-            GetCruiseManager(GetServerConfiguration(server)).Logout(sessionToken);
+            GetCruiseManager(GetServerConfiguration(server)).Logout(
+                new ServerRequest(sessionToken));
 		}
 
         /// <summary>
@@ -275,7 +365,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <param name="newPassword"></param>
         public void ChangePassword(string server, string sessionToken, string oldPassword, string newPassword)
         {
-            GetCruiseManager(GetServerConfiguration(server)).ChangePassword(sessionToken, oldPassword, newPassword);
+            ChangePasswordRequest request = new ChangePasswordRequest();
+            request.SessionToken = sessionToken;
+            request.OldPassword = oldPassword;
+            request.NewPassword = newPassword;
+            ValidateResponse(
+                GetCruiseManager(GetServerConfiguration(server))
+                .ChangePassword(request));
         }
 
         /// <summary>
@@ -287,7 +383,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <param name="newPassword"></param>
         public virtual void ResetPassword(string server, string sessionToken, string userName, string newPassword)
         {
-            GetCruiseManager(GetServerConfiguration(server)).ResetPassword(sessionToken, userName, newPassword);
+            ChangePasswordRequest request = new ChangePasswordRequest();
+            request.SessionToken = sessionToken;
+            request.UserName = userName;
+            request.NewPassword = newPassword;
+            ValidateResponse(
+                GetCruiseManager(GetServerConfiguration(server))
+                .ResetPassword(request));
         }
 
         private CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions(IServerSpecifier[] serverSpecifiers)
@@ -299,8 +401,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
             {
                 try
                 {
-                    CruiseServerSnapshot cruiseServerSnapshot = GetCruiseManager(serverSpecifier).GetCruiseServerSnapshot();
-                    cruiseServerSnapshotsOnServers.Add(new CruiseServerSnapshotOnServer(cruiseServerSnapshot, serverSpecifier));
+                    SnapshotResponse response = GetCruiseManager(serverSpecifier).GetCruiseServerSnapshot(
+                        new ServerRequest(null));
+                    ValidateResponse(response);
+                    cruiseServerSnapshotsOnServers.Add(
+                        new CruiseServerSnapshotOnServer(response.Snapshot, serverSpecifier));
                 }
                 catch (SocketException)
                 {
@@ -324,7 +429,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <returns>An XML fragment containing the security configuration.</returns>
         public virtual string GetServerSecurity(IServerSpecifier serverSpecifier, string sessionToken)
         {
-            return GetCruiseManager(serverSpecifier).GetSecurityConfiguration(sessionToken);
+            return GetCruiseManager(serverSpecifier)
+                .GetSecurityConfiguration(new ServerRequest(sessionToken))
+                .Data;
         }
 
         /// <summary>
@@ -332,12 +439,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// </summary>
         /// <param name="serverSpecifier">The server to get the users from.</param>
         /// <returns>
-        /// A list of <see cref="UserDetails"/> containing the details on all the users
+        /// A list of <see cref="UserNameCredentials"/> containing the details on all the users
         /// who have been defined.
         /// </returns>
         public virtual List<UserDetails> ListAllUsers(IServerSpecifier serverSpecifier, string sessionToken)
         {
-            return GetCruiseManager(serverSpecifier).ListAllUsers(sessionToken);
+            ListUsersResponse response = GetCruiseManager(serverSpecifier)
+                .ListUsers(new ServerRequest(sessionToken));
+            ValidateResponse(response);
+            return response.Users;
         }
 
         /// <summary>
@@ -348,7 +458,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <returns>A set of diagnostics information.</returns>
         public virtual List<SecurityCheckDiagnostics> DiagnoseSecurityPermissions(IProjectSpecifier projectSpecifier, string sessionToken, string userName)
         {
-            return GetCruiseManager(projectSpecifier).DiagnoseSecurityPermissions(sessionToken, userName, projectSpecifier.ProjectName);
+            DiagnoseSecurityRequest request = new DiagnoseSecurityRequest();
+            request.SessionToken = sessionToken;
+            request.UserName = userName;
+            request.Projects.Add(projectSpecifier.ProjectName);
+            DiagnoseSecurityResponse response = GetCruiseManager(projectSpecifier).DiagnoseSecurityPermissions(request);
+            ValidateResponse(response);
+            return response.Diagnostics;
         }
 
         /// <summary>
@@ -359,9 +475,26 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <returns>A set of diagnostics information.</returns>
         public virtual List<SecurityCheckDiagnostics> DiagnoseSecurityPermissions(IServerSpecifier serverSpecifier, string sessionToken, string userName)
         {
-            return GetCruiseManager(serverSpecifier).DiagnoseSecurityPermissions(sessionToken, userName, string.Empty);
+            DiagnoseSecurityRequest request = new DiagnoseSecurityRequest();
+            request.SessionToken = sessionToken;
+            request.UserName = userName;
+            request.Projects.Add(string.Empty);
+            DiagnoseSecurityResponse response = GetCruiseManager(serverSpecifier).DiagnoseSecurityPermissions(request);
+            ValidateResponse(response);
+            return response.Diagnostics;
         }
 
+        /// <summary>
+        /// Lists the build parameters for a project.
+        /// </summary>
+        /// <param name="projectSpecifier">The project to check.</param>
+        /// <returns>The list of parameters (if any).</returns>
+        public virtual List<ParameterBase> ListBuildParameters(IProjectSpecifier projectSpecifier)
+        {
+            return GetCruiseManager(projectSpecifier)
+                .ListBuildParameters(GenerateProjectRequest(projectSpecifier, null))
+                .Parameters;
+        }
   
         /// <summary>
         /// Reads all the specified number of audit events.
@@ -371,7 +504,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details.</returns>
         public virtual List<AuditRecord> ReadAuditRecords(IServerSpecifier serverSpecifier, string sessionToken, int startPosition, int numberOfRecords)
         {
-            return GetCruiseManager(serverSpecifier).ReadAuditRecords(sessionToken, startPosition, numberOfRecords);
+            ReadAuditRequest request = new ReadAuditRequest();
+            request.SessionToken = sessionToken;
+            request.StartRecord = startPosition;
+            request.NumberOfRecords = numberOfRecords;
+            ReadAuditResponse response = GetCruiseManager(serverSpecifier).ReadAuditRecords(request);
+            ValidateResponse(response);
+            return response.Records;
         }
 
         /// <summary>
@@ -381,86 +520,130 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <param name="numberOfRecords">The number of records to read.</param>
         /// <param name="filter">The filter to use.</param>
         /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
-        public virtual List<AuditRecord> ReadAuditRecords(IServerSpecifier serverSpecifier, string sessionToken, int startPosition, int numberOfRecords, IAuditFilter filter)
+        public virtual List<AuditRecord> ReadAuditRecords(IServerSpecifier serverSpecifier, string sessionToken, int startPosition, int numberOfRecords, AuditFilterBase filter)
         {
-            return GetCruiseManager(serverSpecifier).ReadAuditRecords(sessionToken, startPosition, numberOfRecords, filter);
+            ReadAuditRequest request = new ReadAuditRequest();
+            request.SessionToken = sessionToken;
+            request.StartRecord = startPosition;
+            request.NumberOfRecords = numberOfRecords;
+            request.Filter = filter;
+            ReadAuditResponse response = GetCruiseManager(serverSpecifier).ReadAuditRecords(request);
+            ValidateResponse(response);
+            return response.Records;
         }
 
-        private ICruiseManager GetCruiseManager(IBuildSpecifier buildSpecifier)
+        /// <summary>
+        /// Generates a project request to send to a remote server.
+        /// </summary>
+        /// <param name="sessionToken">The sesison token to use (optional).</param>
+        /// <returns>The complete request.</returns>
+        private ProjectRequest GenerateProjectRequest(IProjectSpecifier projectSpecifier, string sessionToken)
         {
-            return GetCruiseManager(buildSpecifier.ProjectSpecifier);
+            ProjectRequest request = new ProjectRequest();
+            request.SessionToken = sessionToken;
+            request.ProjectName = projectSpecifier.ProjectName;
+            return request;
         }
 
-        private ICruiseManager GetCruiseManager(IProjectSpecifier projectSpecifier)
+        /// <summary>
+        /// Validates that the request processed ok.
+        /// </summary>
+        /// <param name="value">The response to check.</param>
+        private void ValidateResponse(Response value)
         {
-            return GetCruiseManager(projectSpecifier.ServerSpecifier);
-        }
-
-        private ICruiseManager GetCruiseManager(IServerSpecifier serverSpecifier)
-        {
-            return managerFactory.GetCruiseManager(GetServerUrl(serverSpecifier));
-        }
-
-        private ServerLocation[] ServerLocations
-        {
-            get { return configuration.Servers; }
-        }
-
-        private ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier[] serverSpecifiers)
-        {
-            ArrayList projectStatusOnServers = new ArrayList();
-            ArrayList exceptions = new ArrayList();
-
-            foreach (IServerSpecifier serverSpecifier in serverSpecifiers)
+            if (value.Result == ResponseResult.Failure)
             {
-                try
+                if (value.ErrorMessages.Count == 1)
                 {
-                    foreach (ProjectStatus projectStatus in GetCruiseManager(serverSpecifier).GetProjectStatus())
+                    ErrorMessage message = value.ErrorMessages[0];
+                    switch (message.Type)
                     {
-                        projectStatusOnServers.Add(new ProjectStatusOnServer(projectStatus, serverSpecifier));
+                        case "SessionInvalidException":
+                            throw new SessionInvalidException(message.Message);
+                        case "PermissionDeniedException":
+                            throw new PermissionDeniedException(message.Message);
+                        default:
+                            throw new CruiseControlException(message.Message);
                     }
                 }
-                catch (SocketException)
+                else
                 {
-                    AddException(exceptions, serverSpecifier, new CruiseControlException("Unable to connect to CruiseControl.NET server.  Please either start the server or check the url."));
+                    string message = "Request request has failed on the remote server:" + Environment.NewLine +
+                        value.ConcatenateErrors();
+                    throw new CruiseControlException(message);
                 }
-                catch (Exception e)
-                {
-                    AddException(exceptions, serverSpecifier, e);
                 }
             }
 
-            return new ProjectStatusListAndExceptions((ProjectStatusOnServer[])projectStatusOnServers.ToArray(typeof(ProjectStatusOnServer)),
-                                                      (CruiseServerException[])exceptions.ToArray(typeof(CruiseServerException)));
+        /// <summary>
+        /// Processes a message for a server.
+        /// </summary>
+        /// <param name="serverSpecifer">The server.</param>
+        /// <param name="action">The action.</param>
+        /// <param name="message">The message.</param>
+        /// <returns>The response.</returns>
+        public string ProcessMessage(IServerSpecifier serverSpecifer, string action, string message)
+        {
+            string response = GetCruiseManager(serverSpecifer)
+                .ProcessMessage(action, message);
+            return response;
         }
 
-        private void AddException(ArrayList exceptions, IServerSpecifier serverSpecifier, Exception e)
+        /// <summary>
+        /// Retrieve the amount of free disk space.
+        /// </summary>
+        /// <returns></returns>
+        public virtual long GetFreeDiskSpace(IServerSpecifier serverSpecifier)
         {
-            exceptions.Add(new CruiseServerException(serverSpecifier.ServerName, GetServerUrl(serverSpecifier), e));
+            DataResponse response = GetCruiseManager(serverSpecifier).GetFreeDiskSpace(new ServerRequest());
+            ValidateResponse(response);
+            return Convert.ToInt64(response.Data);
         }
 
-        private IBuildSpecifier[] CreateBuildSpecifiers(IProjectSpecifier projectSpecifier, string[] buildNames)
-        {
-            ArrayList buildSpecifiers = new ArrayList();
-            foreach (string buildName in buildNames)
+        #region RetrieveFileTransfer()
+        public virtual RemotingFileTransfer RetrieveFileTransfer(IProjectSpecifier projectSpecifier, string fileName)
             {
-                buildSpecifiers.Add(new DefaultBuildSpecifier(projectSpecifier, buildName));
-            }
-            return (IBuildSpecifier[])buildSpecifiers.ToArray(typeof(IBuildSpecifier));
+            return GetCruiseManager(projectSpecifier).RetrieveFileTransfer(projectSpecifier.ProjectName, fileName);
         }
 
-        private string GetServerUrl(IServerSpecifier serverSpecifier)
+        public virtual RemotingFileTransfer RetrieveFileTransfer(IBuildSpecifier buildSpecifier, string fileName)
         {
-            foreach (ServerLocation serverLocation in ServerLocations)
-            {
-                if (StringUtil.EqualsIgnoreCase(serverLocation.Name, serverSpecifier.ServerName))
-                {
-                    return serverLocation.Url;
-                }
-            }
-
-            throw new UnknownServerException(serverSpecifier.ServerName);
+            var logFile = new LogFile(buildSpecifier.BuildName);
+            var fullName = string.Format("{0}\\{1}", logFile.Label, fileName);
+            RemotingFileTransfer fileTransfer = GetCruiseManager(buildSpecifier)
+                .RetrieveFileTransfer(buildSpecifier.ProjectSpecifier.ProjectName, fullName);
+            return fileTransfer;
         }
+        #endregion
+
+        #region RetrievePackageList()
+        /// <summary>
+        /// List the available packages for a project.
+        /// </summary>
+        /// <param name="projectSpecifier"></param>
+        /// <returns></returns>
+        public virtual PackageDetails[] RetrievePackageList(IProjectSpecifier projectSpecifier)
+        {
+            var response = GetCruiseManager(projectSpecifier).RetrievePackageList(GenerateProjectRequest(projectSpecifier, null));
+            ValidateResponse(response);
+            return response.Packages.ToArray();
+        }
+
+        /// <summary>
+        /// List the available packages for a build.
+        /// </summary>
+        /// <param name="projectSpecifier"></param>
+        /// <returns></returns>
+        public virtual PackageDetails[] RetrievePackageList(IBuildSpecifier buildSpecifier)
+        {
+            var logFile = new LogFile(buildSpecifier.BuildName);
+            var request = new BuildRequest(null, buildSpecifier.ProjectSpecifier.ProjectName);
+            request.BuildName = logFile.Label;
+            var response = GetCruiseManager(buildSpecifier).RetrievePackageList(request);
+            ValidateResponse(response);
+            return response.Packages.ToArray();
+        }
+        #endregion
 
         /// <summary>
         /// Takes a status snapshot of a project.
@@ -469,18 +652,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <returns>The snapshot of the current status.</returns>
         public ProjectStatusSnapshot TakeStatusSnapshot(IProjectSpecifier projectSpecifier)
         {
-            return GetCruiseManager(projectSpecifier).TakeStatusSnapshot(projectSpecifier.ProjectName);
-        }
-
-        /// <summary>
-        /// Lists all the parameters for a project.
-        /// </summary>
-        /// <param name="projectName"></param>
-        /// <returns></returns>
-        public List<ParameterBase> ListBuildParameters(IProjectSpecifier projectSpecifier)
-        {
-            var parameters = GetCruiseManager(projectSpecifier).ListBuildParameters(projectSpecifier.ProjectName);
-            return parameters;
+            var response = GetCruiseManager(projectSpecifier).TakeStatusSnapshot(GenerateProjectRequest(projectSpecifier, null));
+            ValidateResponse(response);
+            return response.Snapshot;
         }
     }
 }

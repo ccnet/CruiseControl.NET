@@ -128,6 +128,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="AppIcon.ico" />
+    <None Include="Resources\printer.png" />
+    <None Include="Resources\folder_table.png" />
+    <None Include="Resources\table_refresh.png" />
+    <None Include="Resources\table_relationship.png" />
+    <None Include="Resources\application.png" />
+    <None Include="Resources\application_split.png" />
+    <None Include="Resources\application_tile_horizontal.png" />
+    <None Include="Resources\table_gear.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.csproj">

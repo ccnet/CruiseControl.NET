@@ -679,13 +679,13 @@ namespace ThoughtWorks.CruiseControl.Core
                                   LastIntegration.StartTime, LastIntegration.Label,
                                   LastIntegration.LastSuccessfulIntegrationLabel,
                                   Triggers.NextBuild, CurrentBuildStage(), QueueName, QueuePriority);
+            status.Description = Description;
             status.Messages = (Message[])messages.ToArray(typeof(Message));
             return status;
         }
 
         private string CurrentBuildStage()
         {
-
             if (CurrentActivity != ProjectActivity.Building)
                 return "";
             else

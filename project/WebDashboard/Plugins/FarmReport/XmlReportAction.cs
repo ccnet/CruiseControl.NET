@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 
 		public IResponse Execute(IRequest request)
 		{
-			ProjectStatusListAndExceptions allProjectStatus = farmService.GetProjectStatusListAndCaptureExceptions();
+			ProjectStatusListAndExceptions allProjectStatus = farmService.GetProjectStatusListAndCaptureExceptions(null);
 
 			StringWriter stringWriter = new StringWriter();
 			XmlTextWriter xmlWriter = new XmlTextWriter(stringWriter);

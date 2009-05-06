@@ -34,8 +34,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
         [Test]
         public void OverrideChangesFactory()
         {
-            IQueueManagerFactory newFactory = mocks.StrictMock<IQueueManagerFactory>();
-            IQueueManager newManager = mocks.StrictMock<IQueueManager>();
+            IQueueManagerFactory newFactory = mocks.CreateMock<IQueueManagerFactory>();
+            IQueueManager newManager = mocks.CreateMock<IQueueManager>();
             Expect.Call(newFactory.Create(null, null, null)).Return(newManager);
             mocks.ReplayAll();
 

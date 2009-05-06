@@ -33,6 +33,7 @@
             this.labelCopyright = new System.Windows.Forms.Label();
             this.labelVersion = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.famfamfamLink = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // okButton
@@ -88,6 +89,18 @@
             this.linkLabel1.Text = "Visit CruiseControl.Net online";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
+            // famfamfamLink
+            // 
+            this.famfamfamLink.AutoSize = true;
+            this.famfamfamLink.BackColor = System.Drawing.Color.Transparent;
+            this.famfamfamLink.Location = new System.Drawing.Point(291, 263);
+            this.famfamfamLink.Name = "famfamfamLink";
+            this.famfamfamLink.Size = new System.Drawing.Size(191, 13);
+            this.famfamfamLink.TabIndex = 29;
+            this.famfamfamLink.TabStop = true;
+            this.famfamfamLink.Text = "Some images provided by FamFamFam";
+            this.famfamfamLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.famfamfamLink_LinkClicked);
+            // 
             // About
             // 
             this.AcceptButton = this.okButton;
@@ -96,6 +109,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(494, 314);
+            this.Controls.Add(this.famfamfamLink);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.labelCopyright);
@@ -122,5 +136,6 @@
         private System.Windows.Forms.Label labelCopyright;
         private System.Windows.Forms.Label labelVersion;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.LinkLabel famfamfamLink;
     }
 }

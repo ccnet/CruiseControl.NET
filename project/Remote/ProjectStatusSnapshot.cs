@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Remote
     /// Defines the status of a project.
     /// </summary>
     [Serializable]
-    [XmlRoot("projectStatus")]
+    [XmlRoot("projectStatusSnapshot")]
     public class ProjectStatusSnapshot
         : ItemStatus
     {

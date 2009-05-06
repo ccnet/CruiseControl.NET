@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote.Security
 {
@@ -17,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// <summary>
         /// The name of the permission being diagnosed.
         /// </summary>
+        [XmlAttribute("permission")]
         public string Permission
         {
             get { return permissionName; }
@@ -26,6 +28,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// <summary>
         /// The name of the project the permission is being checked against.
         /// </summary>
+        [XmlAttribute("project")]
         public string Project
         {
             get { return projectName; }
@@ -35,6 +38,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// <summary>
         /// The name of the user being the permission is being checked for.
         /// </summary>
+        [XmlAttribute("user")]
         public string User
         {
             get { return userName; }
@@ -44,6 +48,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// <summary>
         /// Whether this permission is allowed.
         /// </summary>
+        [XmlAttribute("allowed")]
         public bool IsAllowed
         {
             get { return isAllowed; }

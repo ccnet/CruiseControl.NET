@@ -1,8 +1,10 @@
+using System.IO;
+using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 {
@@ -41,8 +43,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
         {
             try
             {
-                UserNameCredentials credentials = new UserNameCredentials();
-                credentials.Deserialise(request.GetText("credentials"));
+                LoginRequest credentials = Deserialise(request.GetText("credentials"));
                 string sessionToken = farmService.Login(request.GetText("server"), credentials);
                 return GenerateResult("success", string.Format("<session>{0}</session>", sessionToken));
             }
@@ -50,6 +51,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
             {
                 return GenerateResult("failure", "Login failure");
             }
+        }
+
+        private LoginRequest Deserialise(string data)
+        {
+            XmlSerializer serialiser = new XmlSerializer(typeof(LoginRequest));
+            StringReader reader = new StringReader(data);
+            LoginRequest request = serialiser.Deserialize(reader) as LoginRequest;
+            return request;
         }
 
         private string PerformLogout(IRequest request)

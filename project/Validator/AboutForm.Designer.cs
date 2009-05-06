@@ -34,6 +34,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.officalLink = new System.Windows.Forms.LinkLabel();
             this.blogLink = new System.Windows.Forms.LinkLabel();
+            this.famfamfamLink = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // label1
@@ -59,14 +60,14 @@
             // 
             this.label2.Location = new System.Drawing.Point(106, 65);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(381, 145);
+            this.label2.Size = new System.Drawing.Size(381, 120);
             this.label2.TabIndex = 2;
             this.label2.Text = resources.GetString("label2.Text");
             // 
             // officalLink
             // 
             this.officalLink.AutoSize = true;
-            this.officalLink.Location = new System.Drawing.Point(106, 210);
+            this.officalLink.Location = new System.Drawing.Point(106, 185);
             this.officalLink.Name = "officalLink";
             this.officalLink.Size = new System.Drawing.Size(196, 13);
             this.officalLink.TabIndex = 3;
@@ -77,13 +78,24 @@
             // blogLink
             // 
             this.blogLink.AutoSize = true;
-            this.blogLink.Location = new System.Drawing.Point(106, 234);
+            this.blogLink.Location = new System.Drawing.Point(106, 209);
             this.blogLink.Name = "blogLink";
             this.blogLink.Size = new System.Drawing.Size(218, 13);
             this.blogLink.TabIndex = 4;
             this.blogLink.TabStop = true;
             this.blogLink.Text = "Visit my blog (technical resources on CC.Net)";
             this.blogLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.blogLink_LinkClicked);
+            // 
+            // famfamfamLink
+            // 
+            this.famfamfamLink.AutoSize = true;
+            this.famfamfamLink.Location = new System.Drawing.Point(106, 237);
+            this.famfamfamLink.Name = "famfamfamLink";
+            this.famfamfamLink.Size = new System.Drawing.Size(191, 13);
+            this.famfamfamLink.TabIndex = 5;
+            this.famfamfamLink.TabStop = true;
+            this.famfamfamLink.Text = "Some images provided by FamFamFam";
+            this.famfamfamLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.famfamfamLink_LinkClicked);
             // 
             // AboutForm
             // 
@@ -93,6 +105,7 @@
             this.BackgroundImage = global::Validator.Properties.Resources.dialog;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(499, 320);
+            this.Controls.Add(this.famfamfamLink);
             this.Controls.Add(this.blogLink);
             this.Controls.Add(this.officalLink);
             this.Controls.Add(this.label2);
@@ -118,6 +131,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.LinkLabel officalLink;
         private System.Windows.Forms.LinkLabel blogLink;
+        private System.Windows.Forms.LinkLabel famfamfamLink;
 
     }
 }

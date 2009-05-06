@@ -1,0 +1,181 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>ThoughtWorks.CruiseControl.Communications</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>ThoughtWorks.CruiseControl.Remote</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;DEBUG;NoReflector</DefineConstants>
+    <DocumentationFile>bin\Debug\ThoughtWorks.CruiseControl.Communications.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningsAsErrors>1712,1591,1573,1570,1574,1580,1581,1584,1589,1590,1592,1598</WarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;NoReflector</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Build|AnyCPU' ">
+    <OutputPath>..\..\Build\Remote\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;DEBUG;NoReflector</DefineConstants>
+    <DocumentationFile>..\..\build\remote\ThoughtWorks.CruiseControl.Communications.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="BuildCondition.cs" />
+    <Compile Include="CommunicationsAssemblyInfo.cs" />
+    <Compile Include="CommunicationsException.cs" />
+    <Compile Include="CruiseServerClient.cs" />
+    <Compile Include="CruiseServerClientFactory.cs" />
+    <Compile Include="CruiseServerSnapshot.cs" />
+    <Compile Include="ExternalLink.cs" />
+    <Compile Include="HttpConnection.cs" />
+    <Compile Include="IMessageProcessor.cs" />
+    <Compile Include="IntegrationRequest.cs" />
+    <Compile Include="IntegrationStatus.cs" />
+    <Compile Include="IServerConnection.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="MessageReceivedEventArgs.cs" />
+    <Compile Include="Messages\BuildIntegrationRequest.cs" />
+    <Compile Include="Messages\BuildListRequest.cs" />
+    <Compile Include="Messages\BuildParametersResponse.cs" />
+    <Compile Include="Messages\BuildRequest.cs" />
+    <Compile Include="Messages\ChangeConfigurationRequest.cs" />
+    <Compile Include="Messages\ChangePasswordRequest.cs" />
+    <Compile Include="Messages\DataListResponse.cs" />
+    <Compile Include="Messages\DataResponse.cs" />
+    <Compile Include="Messages\DiagnoseSecurityRequest.cs" />
+    <Compile Include="Messages\DiagnoseSecurityResponse.cs" />
+    <Compile Include="Messages\ErrorMessage.cs" />
+    <Compile Include="Messages\ExternalLinksListResponse.cs" />
+    <Compile Include="Messages\ListUsersResponse.cs" />
+    <Compile Include="Messages\LoginRequest.cs" />
+    <Compile Include="Messages\LoginResponse.cs" />
+    <Compile Include="Messages\MessageRequest.cs" />
+    <Compile Include="Messages\ProjectRequest.cs" />
+    <Compile Include="Messages\ProjectStatusResponse.cs" />
+    <Compile Include="Messages\ReadAuditRequest.cs" />
+    <Compile Include="Messages\ReadAuditResponse.cs" />
+    <Compile Include="Messages\Response.cs" />
+    <Compile Include="Messages\ResponseResult.cs" />
+    <Compile Include="Messages\ServerRequest.cs" />
+    <Compile Include="Messages\SnapshotResponse.cs" />
+    <Compile Include="NameValuePair.cs" />
+    <Compile Include="Parameters\NumericParameter.cs" />
+    <Compile Include="Parameters\ParameterBase.cs" />
+    <Compile Include="Parameters\RangeParameter.cs" />
+    <Compile Include="Parameters\TextParameter.cs" />
+    <Compile Include="ProjectActivity.cs" />
+    <Compile Include="ProjectIntegratorState.cs" />
+    <Compile Include="ProjectStatus.cs" />
+    <Compile Include="QueuedRequestSnapshot.cs" />
+    <Compile Include="QueueSetSnapshot.cs" />
+    <Compile Include="QueueSnapshot.cs" />
+    <Compile Include="RemotingConnection.cs" />
+    <Compile Include="SecurityCheckDiagnostics.cs" />
+    <Compile Include="Security\AuditFilterBase.cs" />
+    <Compile Include="Security\AuditFilters.cs" />
+    <Compile Include="Security\AuditRecord.cs" />
+    <Compile Include="Security\CombinationAuditFilter.cs" />
+    <Compile Include="Security\DateRangeAuditFilter.cs" />
+    <Compile Include="Security\EventTypeAuditFilter.cs" />
+    <Compile Include="Security\ProjectAuditFilter.cs" />
+    <Compile Include="Security\SecurityEvent.cs" />
+    <Compile Include="Security\SecurityRight.cs" />
+    <Compile Include="Security\SecurityRightFilter.cs" />
+    <Compile Include="Security\UserAuditFilter.cs" />
+    <Compile Include="Security\UserDetails.cs" />
+    <Compile Include="SerializableDateTime.cs" />
+    <Compile Include="XmlConversionUtil.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -1,3 +1,10 @@
+<style type="text/css">
+#projectStatus tr th
+{
+	text-align:left;
+}
+</style>
+
 <h2>
   Project Report for $projectName
   #if ($rssDataPresent)
@@ -7,18 +14,20 @@
   #end
 </h2>
 
+
 <table width="100%">
 <tr><td VALIGN="top" width="50%">
-		<table >
+		<table id="projectStatus">
 		  <tr>
 		     <th colspan="2">Project Status for $projectName</th>
 		  </tr>
-			#if ($StatusMessage.Length > 0)			 
+		  </tr>
+		  #if ($status.Description.length > 0)
 		  <tr>
-			<td colspan="2">$StatusMessage</td>
+			<th>Description:</th>
+			<td>$status.Description</td>
 		  </tr>
-			#end
-		  </tr>
+		  #end
 		  <tr>
 			<th>Last Build Status:</th>
 			<td>$status.BuildStatus</td>
@@ -48,6 +57,11 @@
 
 		    </td>
 		  </tr>
+			#if ($StatusMessage.Length > 0)			 
+		  <tr>
+			<td colspan="2">$StatusMessage</td>
+		  </tr>
+			#end
 		</table>
 	</td>
 	<td VALIGN="top" width="50%">

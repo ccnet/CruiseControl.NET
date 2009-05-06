@@ -590,6 +590,7 @@
     <Compile Include="Plugins\Security\LogoutSecurityAction.cs" />
     <Compile Include="Plugins\Security\UserNameSecurityAction.cs" />
     <Compile Include="Plugins\Security\UserNameSecurityPlugin.cs" />
+    <Compile Include="Plugins\ServerReport\MessageHandlerPlugin.cs" />
     <Compile Include="Plugins\ServerReport\QueueStatusServerPlugin.cs" />
     <Compile Include="Plugins\ServerReport\ProjectConfigurationServerPlugin.cs" />
     <Compile Include="Plugins\ServerReport\ServerAuditHistoryServerPlugin.cs" />
@@ -691,6 +692,7 @@
     <Content Include="..\xsl\vil.xsl">
       <Link>xsl\vil.xsl</Link>
     </Content>
+    <Content Include="AppIcon.ico" />
     <Content Include="cruisecontrol.css" />
     <Content Include="default.aspx" />
     <Content Include="fitnesse.css" />

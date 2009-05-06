@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Specialized;
+using System.Xml;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.Remote;
-using System.Xml;
-using System.Collections.Specialized;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -73,7 +74,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
                 IAuthenticationMode authentication = ExtensionHelpers.RetrieveAuthenticationMode(configuration.SecurityType);
                 authentication.Settings = configuration.SecuritySettings;
 
-                XmlElement result = SendSecurityAction("login", new NameValuePair("credentials", authentication.GenerateCredentials().Serialise()));
+                LoginRequest request = authentication.GenerateCredentials();
+                XmlElement result = SendSecurityAction("login",
+                    new NameValuePair("credentials", request.ToString()));
                 if (string.Equals(result.GetAttribute("result"), "success", StringComparison.InvariantCultureIgnoreCase))
                 {
                     sessionToken = result.SelectSingleNode("session").InnerText;
@@ -117,18 +120,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         {
             string serverAlias = "local";
             return new Uri(new WebDashboardUrl(configuration.Url, serverAlias).Security);
-        }
-
-        private struct NameValuePair
-        {
-            public string Name;
-            public string Value;
-
-            public NameValuePair(string name, string value)
-            {
-                this.Name = name;
-                this.Value = value;
-            }
         }
 	}
 }

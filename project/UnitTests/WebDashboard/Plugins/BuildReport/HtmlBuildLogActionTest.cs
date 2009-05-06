@@ -40,7 +40,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			buildLogAction = new HtmlBuildLogAction((IBuildRetriever) buildRetrieverMock.MockInstance, 
 				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance,
 				(ICruiseUrlBuilder) urlBuilderMock.MockInstance, 
-                (IFingerprintFactory) fingerprintFactoryMock.MockInstance);
+                (IFingerprintFactory) fingerprintFactoryMock.MockInstance,
+                null);
 
 			buildLog = "some stuff in a log with a < and >";
 			buildSpecifier = new DefaultBuildSpecifier(new DefaultProjectSpecifier(new DefaultServerSpecifier("myserver"), "myproject"), "mybuild");

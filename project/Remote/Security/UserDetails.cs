@@ -18,6 +18,41 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         private string type;
         #endregion
 
+        #region Constructors
+        /// <summary>
+        /// Initialise a new blank <see cref="UserDetails"/>.
+        /// </summary>
+        public UserDetails()
+        {
+        }
+
+        /// <summary>
+        /// Initialise a new <see cref="UserDetails"/> with a user name.
+        /// </summary>
+        public UserDetails(string userName)
+            : this(userName, null, null)
+        {
+        }
+
+        /// <summary>
+        /// Initialise a new <see cref="UserDetails"/> with user and display names.
+        /// </summary>
+        public UserDetails(string userName, string displayName)
+            : this(userName, displayName, null)
+        {
+        }
+
+        /// <summary>
+        /// Initialise a new <see cref="UserDetails"/> with user name, display name and type.
+        /// </summary>
+        public UserDetails(string userName, string displayName, string type)
+        {
+            this.userName = userName;
+            this.displayName = displayName;
+            this.type = type;
+        }
+        #endregion
+
         #region Public properties
         #region UserName
         /// <summary>

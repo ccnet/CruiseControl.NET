@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             List<string> categories = new List<string>();
 
             foreach (ProjectStatusOnServer status in farmService
-                .GetProjectStatusListAndCaptureExceptions(serverSpecifier)
+                .GetProjectStatusListAndCaptureExceptions(serverSpecifier, request.RetrieveSessionToken())
                 .StatusAndServerList)
             {
                 string category = status.ProjectStatus.Category;
@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         }
 
         
-        private IAbsoluteLink[] GetCategoryLinks(IServerSpecifier[] serverSpecifiers)
+        private IAbsoluteLink[] GetCategoryLinks(IServerSpecifier[] serverSpecifiers, ICruiseRequest request)
         {
             if (serverSpecifiers == null) return null;
 
@@ -84,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 System.Diagnostics.Debug.WriteLine(serverSpecifier.ServerName);
 
                 foreach (ProjectStatusOnServer status in farmService
-                    .GetProjectStatusListAndCaptureExceptions(serverSpecifier)
+                    .GetProjectStatusListAndCaptureExceptions(serverSpecifier, request.RetrieveSessionToken())
                     .StatusAndServerList)
                 {
                     string category = status.ProjectStatus.Category;
@@ -111,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             return links.ToArray();
         }
 
-        public HtmlFragmentResponse Execute()
+        public HtmlFragmentResponse Execute(ICruiseRequest request)
         {
             Hashtable velocityContext = new Hashtable();
             string velocityTemplateName;
@@ -124,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 IServerSpecifier[] serverspecifiers = farmService.GetServerSpecifiers();
                 velocityContext["serverlinks"] = linkListFactory.CreateServerLinkList(serverspecifiers, "ViewServerReport");
 
-                IAbsoluteLink[] categoryLinks = GetCategoryLinks(serverspecifiers);
+                IAbsoluteLink[] categoryLinks = GetCategoryLinks(serverspecifiers, request);
                 velocityContext["showCategories"] = (categoryLinks != null) ? true : false;
                 velocityContext["categorylinks"] = categoryLinks;
                 velocityContext["farmLink"] = linkFactory.CreateFarmLink("Dashboard", FarmReportFarmPlugin.ACTION_NAME);

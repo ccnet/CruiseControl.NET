@@ -5,6 +5,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using System.Collections.Generic;
 using NMock.Constraints;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -48,8 +49,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			ArgumentParser parser = new ArgumentParser(new string[] { "-project:test" });
 			Mock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
-            mockCruiseServer.Expect("ForceBuild", (string)null, "test", "Forcing build on start", new ParametersConstraint());
-            mockCruiseServer.Expect("WaitForExit", "test");
+            var projectConstraint = new ProjectRequestConstraint
+            {
+                ProjectName = "test"
+            };
+            mockCruiseServer.ExpectAndReturn("ForceBuild", new Response { Result = ResponseResult.Success }, projectConstraint);
+            mockCruiseServer.Expect("WaitForExit", projectConstraint);
 			Mock mockCruiseServerFactory = new DynamicMock(typeof(ICruiseServerFactory));
 			mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, parser.UseRemoting, parser.ConfigFile);
 
@@ -87,16 +92,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         }
     }
 
-    public class ParametersConstraint : BaseConstraint
+    public class ProjectRequestConstraint : BaseConstraint
     {
+        public string ProjectName { get; set; }
+        private string message = null;
+
         public override bool Eval(object val)
         {
-            return val is Dictionary<string, string>;
+            if (val is ProjectRequest)
+            {
+                if (!string.Equals(ProjectName, (val as ProjectRequest).ProjectName))
+                {
+                    message = "Project names do not match";
+                }
+            }
+            else
+            {
+                message = "Expected a ProjectRequest";
+            }
+            return (message == null);
         }
 
         public override string Message
         {
-            get { return "Expected a Dictionary<string, string>."; }
+            get { return message; }
         }
     }
 }

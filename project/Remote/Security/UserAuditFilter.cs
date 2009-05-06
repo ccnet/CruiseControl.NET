@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote.Security
 {
@@ -12,18 +13,39 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         private string user;
 
         /// <summary>
+        /// Initialises a new <see cref="UserAuditFilter"/>.
+        /// </summary>
+        public UserAuditFilter()
+        {
+        }
+
+        /// <summary>
         /// Starts a new filter with the user name.
         /// </summary>
         /// <param name="userName"></param>
         public UserAuditFilter(string userName)
             : this(userName, null) { }
 
+        #region Public properties
+        #region UserName
+        /// <summary>
+        /// The name of the user.
+        /// </summary>
+        [XmlAttribute("user")]
+        public string UserName
+        {
+            get { return user; }
+            set { user = value; }
+        }
+        #endregion
+        #endregion
+
         /// <summary>
         /// Starts a new filter with the user name and inner filter..
         /// </summary>
         /// <param name="userName"></param>
         /// <param name="innerFilter"></param>
-        public UserAuditFilter(string userName, IAuditFilter innerFilter)
+        public UserAuditFilter(string userName, AuditFilterBase innerFilter)
             : base(innerFilter)
         {
             if (string.IsNullOrEmpty(userName)) throw new ArgumentNullException("userName");

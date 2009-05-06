@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
             ArrayList links = new ArrayList();
             links.Add(new ServerLink(request.UrlBuilder, request.ServerSpecifier, "Server Security Configuration", ActionName));
 
-            ProjectStatusListAndExceptions projects = farmService.GetProjectStatusListAndCaptureExceptions(request.ServerSpecifier);
+            ProjectStatusListAndExceptions projects = farmService.GetProjectStatusListAndCaptureExceptions(request.ServerSpecifier, request.RetrieveSessionToken());
             foreach (ProjectStatusOnServer projectStatusOnServer in projects.StatusAndServerList)
             {
                 DefaultProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(projectStatusOnServer.ServerSpecifier, projectStatusOnServer.ProjectStatus.Name);

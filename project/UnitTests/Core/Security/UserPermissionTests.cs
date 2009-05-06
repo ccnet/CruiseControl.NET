@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         public void MatchingPermissionReturnsRight()
         {
             UserPermission assertion = new UserPermission("johndoe", SecurityRight.Inherit, SecurityRight.Inherit, SecurityRight.Allow, SecurityRight.Inherit);
-            SecurityRight result = assertion.CheckPermission(null, SecurityPermission.ForceBuild);
+            SecurityRight result = assertion.CheckPermission(null, SecurityPermission.ForceAbortBuild);
             Assert.AreEqual(SecurityRight.Allow, result);
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote.Security
 {
@@ -12,6 +13,13 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         private SecurityRight right;
 
         /// <summary>
+        /// Initialises a new <see cref="SecurityRightAuditFilter"/>.
+        /// </summary>
+        public SecurityRightAuditFilter()
+        {
+        }
+
+        /// <summary>
         /// Starts a new filter with the security right.
         /// </summary>
         /// <param name="securityRight"></param>
@@ -23,11 +31,25 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// </summary>
         /// <param name="securityRight"></param>
         /// <param name="innerFilter"></param>
-        public SecurityRightAuditFilter(SecurityRight securityRight, IAuditFilter innerFilter)
+        public SecurityRightAuditFilter(SecurityRight securityRight, AuditFilterBase innerFilter)
             : base(innerFilter)
         {
             this.right = securityRight;
         }
+
+        #region Public properties
+        #region SecurityRight
+        /// <summary>
+        /// The type of event.
+        /// </summary>
+        [XmlAttribute("right")]
+        public SecurityRight SecurityRight
+        {
+            get { return right; }
+            set { right = value; }
+        }
+        #endregion
+        #endregion
 
         /// <summary>
         /// Checks if the security right matches.

@@ -4,6 +4,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -11,6 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// Exposes project management functionality (start, stop, status) via remoting.  
 	/// The CCTray is one such example of an application that may make use of this remote interface.
 	/// </summary>
+    [Obsolete("Use ICruiseServerClient instead")]
 	public class CruiseManager : MarshalByRefObject, ICruiseManager
 	{
 		private readonly ICruiseServer cruiseServer;
@@ -20,98 +22,81 @@ namespace ThoughtWorks.CruiseControl.Core
 			this.cruiseServer = cruiseServer;
 		}
 
-		public ProjectStatus[] GetProjectStatus()
+        public override object InitializeLifetimeService()
 		{
-			return cruiseServer.GetProjectStatus();
+            return null;
 		}
 
-        #region Unsecured Build Methods
-        public void ForceBuild(string project, string enforcerName)
+        /// <summary>
+        /// Gets information about the last build status, current activity and project name.
+        /// for all projects on a cruise server
+        /// </summary>
+        public ProjectStatus[] GetProjectStatus()
         {
-            cruiseServer.ForceBuild(null, project, enforcerName, new Dictionary<string,string>());
+            ProjectStatusResponse resp = cruiseServer.GetProjectStatus(GenerateServerRequest());
+            ValidateResponse(resp);
+            return resp.Projects.ToArray();
         }
 
-        public void ForceBuild(string project, string enforcerName, Dictionary<string, string> parameters)
+        /// <summary>
+        /// Forces a build for the named project.
+        /// </summary>
+        /// <param name="projectName">project to force</param>
+        /// <param name="enforcerName">ID of trigger/action forcing the build</param>
+        public void ForceBuild(string projectName, string enforcerName)
         {
-            cruiseServer.ForceBuild(null, project, enforcerName, parameters);
+            Response resp = cruiseServer.ForceBuild(GenerateProjectRequest(projectName));
+            ValidateResponse(resp);
         }
 
-        public void AbortBuild(string project, string enforcerName)
+        public void AbortBuild(string projectName, string enforcerName)
 		{
-            cruiseServer.AbortBuild(null, project, enforcerName);
+            Response resp = cruiseServer.AbortBuild(GenerateProjectRequest(projectName));
+            ValidateResponse(resp);
 		}
 		
 		public void Request(string projectName, IntegrationRequest integrationRequest)
 		{
-            cruiseServer.Request(null, projectName, integrationRequest);
+            BuildIntegrationRequest request = new BuildIntegrationRequest(null, projectName);
+            request.BuildCondition = integrationRequest.BuildCondition;
+            Response resp = cruiseServer.ForceBuild(request);
+            ValidateResponse(resp);
 		}
 
 		public void Start(string project)
 		{
-            cruiseServer.Start(null, project);
+            Response resp = cruiseServer.Start(GenerateProjectRequest(project));
+            ValidateResponse(resp);
 		}
 
 		public void Stop(string project)
 		{
-            cruiseServer.Stop(null, project);
+            Response resp = cruiseServer.Stop(GenerateProjectRequest(project));
+            ValidateResponse(resp);
 		}
 
 		public void SendMessage(string projectName, Message message)
 		{
-            cruiseServer.SendMessage(null, projectName, message);
-        }
-        #endregion
-
-        #region Secured Build Methods
-        public void ForceBuild(string sessionToken, string projectName, string enforcerName)
-        {
-            cruiseServer.ForceBuild(sessionToken, projectName, enforcerName, new Dictionary<string,string>());
+            MessageRequest request = new MessageRequest();
+            request.ProjectName = projectName;
+            request.Message = message.Text;
+            Response resp = cruiseServer.SendMessage(request);
+            ValidateResponse(resp);
         }
 
-        public void ForceBuild(string sessionToken, string projectName, string enforcerName, Dictionary<string, string> parameters)
+        public void WaitForExit(string projectName)
         {
-            cruiseServer.ForceBuild(sessionToken, projectName, enforcerName, parameters);
-        }
-
-        public void AbortBuild(string sessionToken, string projectName, string enforcerName)
-        {
-            cruiseServer.AbortBuild(sessionToken, projectName, enforcerName);
-        }
-
-        public void Request(string sessionToken, string projectName, IntegrationRequest integrationRequest)
-        {
-            cruiseServer.Request(sessionToken, projectName, integrationRequest);
-        }
-
-        public void Start(string sessionToken, string project)
-        {
-            cruiseServer.Start(sessionToken, project);
-        }
-
-        public void Stop(string sessionToken, string project)
-        {
-            cruiseServer.Stop(sessionToken, project);
+            Response resp = cruiseServer.WaitForExit(GenerateProjectRequest(projectName));
+            ValidateResponse(resp);
 		}
 
-        public void SendMessage(string sessionToken, string projectName, Message message)
-        {
-            cruiseServer.SendMessage(sessionToken, projectName, message);
-        }
-
-        public void CancelPendingRequest(string sessionToken, string projectName)
-        {
-            cruiseServer.CancelPendingRequest(sessionToken, projectName);
-        }
-        #endregion
-
-		public void WaitForExit(string project)
-		{
-			cruiseServer.WaitForExit(project);
-		}
-
+        /// <summary>
+        /// Cancel a pending project integration request from the integration queue.
+        /// </summary>
 		public void CancelPendingRequest(string projectName)
 		{
-            cruiseServer.CancelPendingRequest(null, projectName);
+            Response resp = cruiseServer.CancelPendingRequest(GenerateProjectRequest(projectName));
+            ValidateResponse(resp);
 		}
 		
 		/// <summary>
@@ -119,101 +104,163 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
         public CruiseServerSnapshot GetCruiseServerSnapshot()
 		{
-			return cruiseServer.GetCruiseServerSnapshot();
+            SnapshotResponse resp = cruiseServer.GetCruiseServerSnapshot(GenerateServerRequest());
+            ValidateResponse(resp);
+            return resp.Snapshot;
 		}
 
+        /// <summary>
+        /// Returns the name of the most recent build for the specified project
+        /// </summary>
 		public string GetLatestBuildName(string projectName)
 		{
-			return cruiseServer.GetLatestBuildName(projectName);
+            DataResponse resp = cruiseServer.GetLatestBuildName(GenerateProjectRequest(projectName));
+            ValidateResponse(resp);
+            return resp.Data;
 		}
 
+        /// <summary>
+        /// Returns the names of all builds for the specified project, sorted s.t. the newest build is first in the array
+        /// </summary>
 		public string[] GetBuildNames(string projectName)
 		{
-			return cruiseServer.GetBuildNames(projectName);
+            DataListResponse resp = cruiseServer.GetBuildNames(GenerateProjectRequest(projectName));
+            ValidateResponse(resp);
+            return resp.Data.ToArray();
 		}
 
+        /// <summary>
+        /// Returns the names of the buildCount most recent builds for the specified project, sorted s.t. the newest build is first in the array
+        /// </summary>
 		public string[] GetMostRecentBuildNames(string projectName, int buildCount)
 		{
-			try
-			{
-				return cruiseServer.GetMostRecentBuildNames(projectName, buildCount);
-			}
-			catch (Exception e)
-			{
-				Log.Error(e);
-				throw new CruiseControlException("Unexpected exception caught on server", e);
-			}
+            BuildListRequest request = new BuildListRequest(null, projectName);
+            request.NumberOfBuilds = buildCount;
+            DataListResponse resp = cruiseServer.GetMostRecentBuildNames(request);
+            ValidateResponse(resp);
+            return resp.Data.ToArray();
 		}
 
+        /// <summary>
+        /// Returns the build log contents for requested project and build name
+        /// </summary>
 		public string GetLog(string projectName, string buildName)
 		{
-			return cruiseServer.GetLog(projectName, buildName);
+            BuildRequest request = new BuildRequest(null, projectName);
+            request.BuildName = buildName;
+            DataResponse resp = cruiseServer.GetLog(request);
+            ValidateResponse(resp);
+            return resp.Data;
 		}
 
+        /// <summary>
+        /// Returns a log of recent build server activity. How much information that is returned is configured on the build server.
+        /// </summary>
 		public string GetServerLog()
 		{
-			return cruiseServer.GetServerLog();
+            DataResponse resp = cruiseServer.GetServerLog(GenerateServerRequest());
+            ValidateResponse(resp);
+            return resp.Data;
 		}
 
+        /// <summary>
+        /// Returns a log of recent build server activity for a specific project. How much information that is returned is configured on the build server.
+        /// </summary>
 		public string GetServerLog(string projectName)
 		{
-			return cruiseServer.GetServerLog(projectName);
+            DataResponse resp = cruiseServer.GetServerLog(GenerateProjectRequest(projectName));
+            ValidateResponse(resp);
+            return resp.Data;
+        }
+
+        /// <summary>
+        /// Returns the version of the server
+        /// </summary>
+        public string GetServerVersion()
+        {
+            DataResponse resp = cruiseServer.GetServerVersion(GenerateServerRequest());
+            ValidateResponse(resp);
+            return resp.Data;
 		}
 
+        /// <summary>
+        /// Adds a project to the server
+        /// </summary>
 		public void AddProject(string serializedProject)
 		{
-			cruiseServer.AddProject(serializedProject);
+            ChangeConfigurationRequest request = new ChangeConfigurationRequest();
+            request.ProjectDefinition = serializedProject;
+            Response resp = cruiseServer.AddProject(request);
+            ValidateResponse(resp);
 		}
 
+        /// <summary>
+        /// Deletes the specified project from the server
+        /// </summary>
 		public void DeleteProject(string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
 		{
-			cruiseServer.DeleteProject(projectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
+            ChangeConfigurationRequest request = new ChangeConfigurationRequest(null, projectName);
+            request.PurgeWorkingDirectory = purgeWorkingDirectory;
+            request.PurgeArtifactDirectory = purgeArtifactDirectory;
+            request.PurgeSourceControlEnvironment = purgeSourceControlEnvironment;
+            Response resp = cruiseServer.DeleteProject(request);
+            ValidateResponse(resp);
 		}
 
+        /// <summary>
+        /// Returns the serialized form of the requested project from the server
+        /// </summary>
 		public string GetProject(string projectName)
 		{
-			return cruiseServer.GetProject(projectName);
+            DataResponse resp = cruiseServer.GetProject(GenerateProjectRequest(projectName));
+            ValidateResponse(resp);
+            return resp.Data;
 		}
 
+        /// <summary>
+        /// Updates the selected project on the server
+        /// </summary>
 		public void UpdateProject(string projectName, string serializedProject)
 		{
-			cruiseServer.UpdateProject(projectName, serializedProject);
+            ChangeConfigurationRequest request = new ChangeConfigurationRequest(null, projectName);
+            request.ProjectDefinition = serializedProject;
+            Response resp = cruiseServer.UpdateProject(request);
+            ValidateResponse(resp);
 		}
 
 		public ExternalLink[] GetExternalLinks(string projectName)
 		{
-			return cruiseServer.GetExternalLinks(projectName);
+            ExternalLinksListResponse resp = cruiseServer.GetExternalLinks(GenerateProjectRequest(projectName));
+            ValidateResponse(resp);
+            return resp.ExternalLinks.ToArray();
 		}
 
 		public string GetArtifactDirectory(string projectName)
 		{
-			return cruiseServer.GetArtifactDirectory(projectName);
+            DataResponse resp = cruiseServer.GetArtifactDirectory(GenerateProjectRequest(projectName));
+            ValidateResponse(resp);
+            return resp.Data;
 		}
 
 		public string GetStatisticsDocument(string projectName)
 		{
-			return cruiseServer.GetStatisticsDocument(projectName);
+            DataResponse resp = cruiseServer.GetStatisticsDocument(GenerateProjectRequest(projectName));
+            ValidateResponse(resp);
+            return resp.Data;
 		}
 
         public string GetModificationHistoryDocument(string projectName)
         {
-            return cruiseServer.GetModificationHistoryDocument(projectName);
+            DataResponse resp = cruiseServer.GetModificationHistoryDocument(GenerateProjectRequest(projectName));
+            ValidateResponse(resp);
+            return resp.Data;
         }
 
         public string GetRSSFeed(string projectName)
         {
-            return cruiseServer.GetRSSFeed(projectName);
-        }
-
-
-		public override object InitializeLifetimeService()
-		{
-			return null;
-		}
-
-		public string GetServerVersion()
-		{
-			return cruiseServer.GetVersion();
+            DataResponse resp = cruiseServer.GetRSSFeed(GenerateProjectRequest(projectName));
+            ValidateResponse(resp);
+            return resp.Data;
 		}
 
         /// <summary>
@@ -222,43 +269,10 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <returns></returns>
         public long GetFreeDiskSpace()
         {
-            return cruiseServer.GetFreeDiskSpace();
+            DataResponse resp = cruiseServer.GetFreeDiskSpace(GenerateServerRequest());
+            ValidateResponse(resp);
+            return Convert.ToInt64(resp.Data);
         }
-
-        #region TakeStatusSnapshot()
-        /// <summary>
-        /// Takes a status snapshot of a project.
-        /// </summary>
-        /// <param name="projectName">The name of the project.</param>
-        /// <returns>The snapshot of the current status.</returns>
-        public virtual ProjectStatusSnapshot TakeStatusSnapshot(string projectName)
-        {
-            return cruiseServer.TakeStatusSnapshot(projectName);
-        }
-        #endregion
- 
-        #region RetrievePackageList()
-        /// <summary>
-        /// Retrieves the latest list of packages for a project.
-        /// </summary>
-        /// <param name="projectName"></param>
-        /// <returns></returns>
-        public virtual PackageDetails[] RetrievePackageList(string projectName)
-        {
-            return cruiseServer.RetrievePackageList(projectName);
-        }
-
-        /// <summary>
-        /// Retrieves the list of packages for a build for a project.
-        /// </summary>
-        /// <param name="projectName"></param>
-        /// <param name="buildLabel"></param>
-        /// <returns></returns>
-        public virtual PackageDetails[] RetrievePackageList(string projectName, string buildLabel)
-        {
-            return cruiseServer.RetrievePackageList(projectName, buildLabel);
-        }
-        #endregion
 
         #region RetrieveFileTransfer()
         /// <summary>
@@ -272,124 +286,48 @@ namespace ThoughtWorks.CruiseControl.Core
         }
 		#endregion
 
-        #region Security Methods
-
+        #region Helper methods - conversion from old to new
+        #region GenerateServerRequest()
         /// <summary>
-        /// Logs a user into the session and generates a session.
+        /// Generate a server request.
         /// </summary>
-        /// <param name="credentials"></param>
         /// <returns></returns>
-        public string Login(ISecurityCredentials credentials)
+        private ServerRequest GenerateServerRequest()
         {
-            string sessionToken = cruiseServer.Login(credentials);
-            return sessionToken;
+            ServerRequest request = new ServerRequest();
+            return request;
         }
-
-        /// <summary>
-        /// Logs a user out of the system and removes their session.
-        /// </summary>
-        /// <param name="sesionToken"></param>
-        public void Logout(string sesionToken)
-        {
-            cruiseServer.Logout(sesionToken);
-        }
-
-        /// <summary>
-        /// Validates and stores the session token.
-        /// </summary>
-        /// <param name="sessionToken">The session token to validate.</param>
-        /// <returns>True if the session is valid, false otherwise.</returns>
-        public bool ValidateSession(string sessionToken)
-        {
-            return true;
-        }
-
-        /// <summary>
-        /// Retrieves the security configuration.
-        /// </summary>
-        public virtual string GetSecurityConfiguration(string sessionToken)
-        {
-            return cruiseServer.GetSecurityConfiguration(sessionToken);
-        }
-
-        /// <summary>
-        /// Lists all the users who have been defined in the system.
-        /// </summary>
-        /// <returns>
-        /// A list of <see cref="UserDetails"/> containing the details on all the users
-        /// who have been defined.
-        /// </returns>
-        public virtual List<UserDetails> ListAllUsers(string sessionToken)
-        {
-            return cruiseServer.ListAllUsers(sessionToken);
-        }
-
-        /// <summary>
-        /// Checks the security permissions for a user against one or more projects.
-        /// </summary>
-        /// <param name="userName">The name of the user.</param>
-        /// <param name="projectNames">The names of the projects to check.</param>
-        /// <returns>A set of diagnostics information.</returns>
-        public virtual List<SecurityCheckDiagnostics> DiagnoseSecurityPermissions(string sessionToken, string userName, params string[] projectNames)
-        {
-            return cruiseServer.DiagnoseSecurityPermissions(sessionToken, userName, projectNames);
-        }
-
-        /// <summary>
-        /// Reads all the specified number of audit events.
-        /// </summary>
-        /// <param name="startPosition">The starting position.</param>
-        /// <param name="numberOfRecords">The number of records to read.</param>
-        /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details.</returns>
-        public virtual List<AuditRecord> ReadAuditRecords(string sessionToken, int startPosition, int numberOfRecords)
-        {
-            return cruiseServer.ReadAuditRecords(sessionToken, startPosition, numberOfRecords);
-        }
-
-        /// <summary>
-        /// Reads all the specified number of filtered audit events.
-        /// </summary>
-        /// <param name="startPosition">The starting position.</param>
-        /// <param name="numberOfRecords">The number of records to read.</param>
-        /// <param name="filter">The filter to use.</param>
-        /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
-        public virtual List<AuditRecord> ReadAuditRecords(string sessionToken, int startPosition, int numberOfRecords, IAuditFilter filter)
-        {
-            return cruiseServer.ReadAuditRecords(sessionToken, startPosition, numberOfRecords, filter);
-        }
-
-        /// <summary>
-        /// Changes the password of the user.
-        /// </summary>
-        /// <param name="sessionToken">The session token for the current user.</param>
-        /// <param name="oldPassword">The person's old password.</param>
-        /// <param name="newPassword">The person's new password.</param>
-        public virtual void ChangePassword(string sessionToken, string oldPassword, string newPassword)
-        {
-            cruiseServer.ChangePassword(sessionToken, oldPassword, newPassword);
-        }
-
-        /// <summary>
-        /// Resets the password for a user.
-        /// </summary>
-        /// <param name="sessionToken">The session token for the current user.</param>
-        /// <param name="userName">The user name to reset the password for.</param>
-        /// <param name="newPassword">The person's new password.</param>
-        public virtual void ResetPassword(string sessionToken, string userName, string newPassword)
-        {
-            cruiseServer.ResetPassword(sessionToken, userName, newPassword);
-        }
-
         #endregion
 
+        #region GenerateProjectRequest()
         /// <summary>
-        /// Lists all the parameters for a project.
+        /// Generate a project request.
         /// </summary>
         /// <param name="projectName"></param>
         /// <returns></returns>
-        public virtual List<ParameterBase> ListBuildParameters(string projectName)
+        private ProjectRequest GenerateProjectRequest(string projectName)
         {
-            return cruiseServer.ListBuildParameters(projectName);
+            ProjectRequest request = new ProjectRequest();
+            request.ProjectName = projectName;
+            return request;
         }
+        #endregion
+
+        #region ValidateResponse()
+        /// <summary>
+        /// Validate the response from the server.
+        /// </summary>
+        /// <param name="response"></param>
+        private void ValidateResponse(Response response)
+        {
+            if (response.Result == ResponseResult.Failure)
+        {
+                string message = "Request request has failed on the remote server:" + Environment.NewLine +
+                    response.ConcatenateErrors();
+                throw new CruiseControlException(message);
+        }
+        }
+        #endregion
+        #endregion
     }
 }

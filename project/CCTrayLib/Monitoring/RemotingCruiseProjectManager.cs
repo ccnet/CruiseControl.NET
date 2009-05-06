@@ -2,6 +2,8 @@ using System;
 using ThoughtWorks.CruiseControl.Remote;
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
+using ThoughtWorks.CruiseControl.Remote.Messages;
+using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -10,10 +12,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	/// </summary>
 	public class RemotingCruiseProjectManager : ICruiseProjectManager
 	{
-		private readonly ICruiseManager manager;
+        private readonly ICruiseServerClient manager;
 		private readonly string projectName;
 
-        public RemotingCruiseProjectManager(ICruiseManager manager, string projectName)
+        public RemotingCruiseProjectManager(ICruiseServerClient manager, string projectName)
 		{
 			this.manager = manager;
 			this.projectName = projectName;
@@ -23,7 +25,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			try
 			{
-				manager.Request(sessionToken, ProjectName, new IntegrationRequest(BuildCondition.ForceBuild, Environment.UserName));
+                BuildIntegrationRequest request = PopulateRequest(new BuildIntegrationRequest(), sessionToken);
+                request.BuildValues = NameValuePair.FromDictionary(parameters);
+                ValidateResponse(manager.ForceBuild(request));
 			}
 			// Silently ignore exceptions that occur due to connection problems
 			catch (System.Net.Sockets.SocketException)
@@ -48,7 +52,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 			try
 			{
-                manager.SendMessage(sessionToken, ProjectName, new Message(string.Format("{0} is fixing the build.", Fixer)));
+                string message = string.Format("{0} is fixing the build.", Fixer);
+                MessageRequest request = PopulateRequest(new MessageRequest(), sessionToken);
+                request.Message = message;
+                ValidateResponse(manager.SendMessage(request));
 			}
 			// Silently ignore exceptions that occur due to connection problems
 			catch (System.Net.Sockets.SocketException)
@@ -63,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			try
 			{
-				manager.AbortBuild(sessionToken, ProjectName, Environment.UserName);
+				ValidateResponse(manager.AbortBuild(GenerateProjectRequest(sessionToken)));
 			}
 			// Silently ignore exceptions that occur due to connection problems
 			catch (System.Net.Sockets.SocketException)
@@ -78,7 +85,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			try
 			{
-                manager.Stop(sessionToken, projectName);
+                ProjectRequest request = GenerateProjectRequest(sessionToken);
+                ValidateResponse(manager.Stop(request));
 			}
 			// Silently ignore exceptions that occur due to connection problems
 			catch (System.Net.Sockets.SocketException)
@@ -93,7 +101,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			try
 			{
-                manager.Start(sessionToken, projectName);
+                ProjectRequest request = GenerateProjectRequest(sessionToken);
+                ValidateResponse(manager.Start(request));
 			}
 			// Silently ignore exceptions that occur due to connection problems
 			catch (System.Net.Sockets.SocketException)
@@ -108,7 +117,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			try
 			{
-                manager.CancelPendingRequest(sessionToken, ProjectName);
+                ProjectRequest request = GenerateProjectRequest(sessionToken);
+                ValidateResponse(manager.CancelPendingRequest(request));
 			}
 			// Silently ignore exceptions that occur due to connection problems
 			catch (System.Net.Sockets.SocketException)
@@ -131,7 +141,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         /// <returns>The current build status of the project.</returns>
         public virtual ProjectStatusSnapshot RetrieveSnapshot()
         {
-            ProjectStatusSnapshot snapshot = manager.TakeStatusSnapshot(projectName);
+            var request = GenerateProjectRequest(null);
+            var response = manager.TakeStatusSnapshot(request);
+            ValidateResponse(response);
+            ProjectStatusSnapshot snapshot = response.Snapshot;
             return snapshot;
         }
         #endregion
@@ -143,7 +156,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         /// <returns></returns>
         public virtual PackageDetails[] RetrievePackageList()
         {
-            PackageDetails[] list = manager.RetrievePackageList(projectName);
+            var request = GenerateProjectRequest(null);
+            var response = manager.RetrievePackageList(request);
+            ValidateResponse(response);
+            PackageDetails[] list = response.Packages.ToArray();
             return list;
         }
         #endregion
@@ -167,7 +183,47 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         /// <returns></returns>
         public virtual List<ParameterBase> ListBuildParameters()
         {
-            return manager.ListBuildParameters(projectName);
+            return manager.ListBuildParameters(GenerateProjectRequest(null)).Parameters;
+        }
+
+        /// <summary>
+        /// Generates a project request to send to a remote server.
+        /// </summary>
+        /// <param name="sessionToken">The sesison token to use (optional).</param>
+        /// <returns>The complete request.</returns>
+        private ProjectRequest GenerateProjectRequest(string sessionToken)
+        {
+            ProjectRequest request = PopulateRequest(new ProjectRequest(), sessionToken);
+            return request;
+        }
+
+        /// <summary>
+        /// Populates a request.
+        /// </summary>
+        /// <typeparam name="TRequest"></typeparam>
+        /// <param name="request"></param>
+        /// <param name="sessionToken">The sesison token to use (optional).</param>
+        /// <returns>The complete request.</returns>
+        private TRequest PopulateRequest<TRequest>(TRequest request, string sessionToken)
+            where TRequest : ProjectRequest
+        {
+            request.SessionToken = sessionToken;
+            request.ProjectName = projectName;
+            return request;
+        }
+
+        /// <summary>
+        /// Validates that the request processed ok.
+        /// </summary>
+        /// <param name="value">The response to check.</param>
+        private void ValidateResponse(Response value)
+        {
+            if (value.Result == ResponseResult.Failure)
+            {
+                string message = "Request request has failed on the remote server:" + Environment.NewLine +
+                    value.ConcatenateErrors();
+                throw new CruiseControlException(message);
+            }
         }
 	}
 }

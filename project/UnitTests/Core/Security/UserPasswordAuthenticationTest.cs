@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Remote.Security;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
 {
@@ -15,8 +15,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         public void TestValidUserNameAndPassword()
         {
             UserPasswordAuthentication authentication = new UserPasswordAuthentication("johndoe", "iknowyou");
-            UserNameCredentials credentials = new UserNameCredentials("johndoe");
-            credentials["password"] = "iknowyou";
+            LoginRequest credentials = new LoginRequest("johndoe");
+            credentials.AddCredential(LoginRequest.PasswordCredential, "iknowyou");
             bool isValid = authentication.Authenticate(credentials);
             Assert.IsTrue(isValid);
         }
@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         public void TestMissingPassword()
         {
             UserPasswordAuthentication authentication = new UserPasswordAuthentication("johndoe", "iknowyou");
-            UserNameCredentials credentials = new UserNameCredentials("johndoe");
+            LoginRequest credentials = new LoginRequest("johndoe");
             bool isValid = authentication.Authenticate(credentials);
             Assert.IsFalse(isValid);
         }
@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         public void TestMissingUserName()
         {
             UserPasswordAuthentication authentication = new UserPasswordAuthentication("johndoe", "iknowyou");
-            UserNameCredentials credentials = new UserNameCredentials();
+            LoginRequest credentials = new LoginRequest();
             bool isValid = authentication.Authenticate(credentials);
             Assert.IsFalse(isValid);
         }
@@ -43,8 +43,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         public void TestIncorrectPassword()
         {
             UserPasswordAuthentication authentication = new UserPasswordAuthentication("johndoe", "iknowyou");
-            UserNameCredentials credentials = new UserNameCredentials("johndoe");
-            credentials["password"] = "idontknowyou";
+            LoginRequest credentials = new LoginRequest("johndoe");
+            credentials.AddCredential(LoginRequest.PasswordCredential, "idontknowyou");
             bool isValid = authentication.Authenticate(credentials);
             Assert.IsFalse(isValid);
         }
@@ -53,8 +53,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         public void TestIncorrectUserName()
         {
             UserPasswordAuthentication authentication = new UserPasswordAuthentication("johndoe", "iknowyou");
-            UserNameCredentials credentials = new UserNameCredentials("janedoe");
-            credentials["password"] = "iknowyou";
+            LoginRequest credentials = new LoginRequest("janedoe");
+            credentials.AddCredential(LoginRequest.PasswordCredential, "iknowyou");
             bool isValid = authentication.Authenticate(credentials);
             Assert.IsFalse(isValid);
         }
@@ -79,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         public void GetUserNameReturnsName()
         {
             string userName = "johndoe";
-            UserNameCredentials credentials = new UserNameCredentials(userName);
+            LoginRequest credentials = new LoginRequest(userName);
             UserPasswordAuthentication authentication = new UserPasswordAuthentication();
             string result = authentication.GetUserName(credentials);
             Assert.AreEqual(userName, result);
@@ -90,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         {
             string userName = "johndoe";
             string displayName = "John Doe";
-            UserNameCredentials credentials = new UserNameCredentials(userName);
+            LoginRequest credentials = new LoginRequest(userName);
             UserPasswordAuthentication authentication = new UserPasswordAuthentication();
             authentication.DisplayName = "John Doe";
             string result = authentication.GetDisplayName(credentials);
@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         public void GetDisplayNameReturnsUserName()
         {
             string userName = "johndoe";
-            UserNameCredentials credentials = new UserNameCredentials(userName);
+            LoginRequest credentials = new LoginRequest(userName);
             UserPasswordAuthentication authentication = new UserPasswordAuthentication();
             string result = authentication.GetDisplayName(credentials);
             Assert.AreEqual(userName, result);

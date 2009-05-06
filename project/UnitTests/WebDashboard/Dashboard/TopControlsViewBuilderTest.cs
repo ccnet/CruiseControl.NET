@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 				(ILinkFactory) linkFactoryMock.MockInstance,
 				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance,
 				(IFarmService) farmServiceMock.MockInstance,
-				null);
+				null, null);
 
 			serverSpecifier = new DefaultServerSpecifier("myServer");
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myProject");
@@ -147,10 +147,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			cruiseRequestMock.ExpectAndReturn("Request", requestMock.MockInstance);
 			requestMock.ExpectAndReturn("GetText", "", new object[] { "Category" });
 
-            ProjectStatus ps = new ProjectStatus("myProject", "", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "", 0);
+			ProjectStatus ps = new ProjectStatus("myProject", "", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "Queue 1", 1);
 			ProjectStatusOnServer[] psosa = new ProjectStatusOnServer[] { new ProjectStatusOnServer(ps, serverSpecifier) };
 			ProjectStatusListAndExceptions pslae = new ProjectStatusListAndExceptions(psosa, new CruiseServerException[0]);
-			farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", pslae, serverSpecifier);
+			farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", pslae, serverSpecifier, null);
 
 			expectedVelocityContext["serverName"] = "myServer";
 			expectedVelocityContext["categoryName"] = "";
@@ -188,10 +188,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			cruiseRequestMock.ExpectAndReturn("Request", requestMock.MockInstance);
 			requestMock.ExpectAndReturn("GetText", "", new object[] { "Category" });
 
-            ProjectStatus ps = new ProjectStatus("myProject", "", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "", 0);
+			ProjectStatus ps = new ProjectStatus("myProject", "", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "Queue 1", 1);
 			ProjectStatusOnServer[] psosa = new ProjectStatusOnServer[] { new ProjectStatusOnServer(ps, serverSpecifier) };
 			ProjectStatusListAndExceptions pslae = new ProjectStatusListAndExceptions(psosa, new CruiseServerException[0]);
-			farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", pslae, serverSpecifier);
+			farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", pslae, serverSpecifier, null);
 
 			expectedVelocityContext["serverName"] = "myServer";
 			expectedVelocityContext["categoryName"] = "";

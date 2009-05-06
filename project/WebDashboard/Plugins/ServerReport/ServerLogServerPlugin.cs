@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 		private readonly IVelocityViewGenerator viewGenerator;
 		private readonly ICruiseUrlBuilder urlBuilder;
 
-		public ServerLogServerPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator, ICruiseUrlBuilder urlBuilder)
+        public ServerLogServerPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator, ICruiseUrlBuilder urlBuilder)
 		{
 			this.farmService = farmService;
 			this.viewGenerator = viewGenerator;
@@ -34,7 +34,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 			ArrayList links = new ArrayList();
 			links.Add(new ServerLink(urlBuilder, request.ServerSpecifier, "Server Log", ActionName));
 
-			ProjectStatusListAndExceptions projects = farmService.GetProjectStatusListAndCaptureExceptions(request.ServerSpecifier);
+			ProjectStatusListAndExceptions projects = farmService.GetProjectStatusListAndCaptureExceptions(request.ServerSpecifier,
+                request.RetrieveSessionToken());
 			foreach (ProjectStatusOnServer projectStatusOnServer in projects.StatusAndServerList)
 			{
 				DefaultProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(projectStatusOnServer.ServerSpecifier, projectStatusOnServer.ProjectStatus.Name);

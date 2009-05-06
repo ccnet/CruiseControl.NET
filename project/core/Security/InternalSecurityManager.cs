@@ -235,7 +235,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             }
 
             // If we don't have a result, then use the default right
-            if (currentRight == SecurityRight.Inherit) currentRight = DefaultRight;
+            if (currentRight == SecurityRight.Inherit) currentRight = GetDefaultRight(permission);
             return (currentRight == SecurityRight.Allow);
         }
         #endregion

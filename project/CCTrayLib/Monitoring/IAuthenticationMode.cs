@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Remote.Security;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -12,6 +12,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         string Settings { get; set; }
         bool Configure(IWin32Window owner);
         bool Validate();
-        ISecurityCredentials GenerateCredentials();
+        LoginRequest GenerateCredentials();
     }
 }

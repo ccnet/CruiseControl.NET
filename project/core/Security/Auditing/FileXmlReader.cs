@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
         /// <param name="numberOfRecords">The number of records to read.</param>
         /// <param name="filter">The filter to use.</param>
         /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
-        public virtual List<AuditRecord> Read(int startPosition, int numberOfRecords, IAuditFilter filter)
+        public virtual List<AuditRecord> Read(int startPosition, int numberOfRecords, AuditFilterBase filter)
         {
             List<AuditRecord> records = new List<AuditRecord>();
             string[] lines = LoadAuditLines();

@@ -1,32 +1,27 @@
 using System;
-using NMock;
+using Rhino.Mocks;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
 using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 {
 	[TestFixture]
 	public class ProjectStatusMonitorTest
 	{
-		private DynamicMock mockCruiseManager;
+        private MockRepository repository = new MockRepository();
+        private ICruiseServerClient mockCruiseManager;
 		private ICruiseProjectManager manager;
 		const string PROJECT_NAME = "projectName";
 
 		[SetUp]
 		public void SetUp()
 		{
-			mockCruiseManager = new DynamicMock( typeof (ICruiseManager) );
-			mockCruiseManager.Strict = true;
+			mockCruiseManager = repository.DynamicMock<ICruiseServerClient>();
 
-			manager = new RemotingCruiseProjectManager((ICruiseManager) mockCruiseManager.MockInstance, PROJECT_NAME);
-		}
-
-		[TearDown]
-		public void TearDown()
-		{
-			mockCruiseManager.Verify();
+			manager = new RemotingCruiseProjectManager((ICruiseServerClient) mockCruiseManager, PROJECT_NAME);
 		}
 
 		[Test]
@@ -38,9 +33,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void CanForceABuild()
 		{
-            var parameters = new Dictionary<string, string>();
-			mockCruiseManager.Expect("Request", null, PROJECT_NAME, new IntegrationRequest(BuildCondition.ForceBuild, Environment.UserName));
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            Response response = new Response();
+            response.Result = ResponseResult.Success;
+            SetupResult.For(mockCruiseManager.ForceBuild(new BuildIntegrationRequest()))
+                .IgnoreArguments()
+                .Return(response);
+            repository.ReplayAll();
 			manager.ForceBuild(null, parameters);
+            repository.VerifyAll();
 		}
 	}
 }

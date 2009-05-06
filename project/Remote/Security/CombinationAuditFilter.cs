@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Xml.Serialization;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Remote.Security
 {
@@ -9,13 +11,20 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
     public class CombinationAuditFilter
         : AuditFilterBase
     {
-        private IAuditFilter[] combinedFilters;
+        private List<AuditFilterBase> combinedFilters = new List<AuditFilterBase>();
 
         /// <summary>
-        /// Starts a new filter with the security right.
+        /// Initialises a new <see cref="CombinationAuditFilter"/>.
+        /// </summary>
+        public CombinationAuditFilter()
+        {
+        }
+
+        /// <summary>
+        /// Starts a new filter with the filters to combine.
         /// </summary>
         /// <param name="filters"></param>
-        public CombinationAuditFilter(params IAuditFilter[] filters)
+        public CombinationAuditFilter(params AuditFilterBase[] filters)
             : this(filters, null) { }
 
         /// <summary>
@@ -23,11 +32,25 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// </summary>
         /// <param name="filters"></param>
         /// <param name="innerFilter"></param>
-        public CombinationAuditFilter(IAuditFilter[] filters, IAuditFilter innerFilter)
+        public CombinationAuditFilter(AuditFilterBase[] filters, AuditFilterBase innerFilter)
             : base(innerFilter)
         {
-            this.combinedFilters = filters;
+            this.combinedFilters = new List<AuditFilterBase>(filters);
         }
+
+        #region Public properties
+        #region Filters
+        /// <summary>
+        /// The filters to combine.
+        /// </summary>
+        [XmlElement("filter")]
+        public List<AuditFilterBase> Filters
+        {
+            get { return combinedFilters; }
+            set { combinedFilters = value; }
+        }
+        #endregion
+        #endregion
 
         /// <summary>
         /// Checks if the security right matches.
@@ -37,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         protected override bool DoCheckFilter(AuditRecord record)
         {
             bool include = false;
-            foreach (IAuditFilter filter in combinedFilters)
+            foreach (AuditFilterBase filter in combinedFilters)
             {
                 if (filter.CheckFilter(record))
                 {

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Remote.Security;
-
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
@@ -18,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// </summary>
         /// <param name="credentials">The credentials.</param>
         /// <returns>True if the credentials are valid, false otherwise..</returns>
-        bool Authenticate(ISecurityCredentials credentials);
+        bool Authenticate(LoginRequest credentials);
 
         /// <summary>
         /// Retrieves the user name from the credentials.
@@ -26,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <param name="credentials">The credentials.</param>
         /// <returns>The display name of the user from the credentials. If the credentials do not exist in the system
         /// then null will be returned.</returns>
-        string GetUserName(ISecurityCredentials credentials);
+        string GetUserName(LoginRequest credentials);
 
         /// <summary>
         /// Retrieves the display name from the credentials.
@@ -34,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <param name="credentials">The credentials.</param>
         /// <returns>The name of the user from the credentials. If the credentials do not exist in the system
         /// then null will be returned.</returns>
-        string GetDisplayName(ISecurityCredentials credentials);
+        string GetDisplayName(LoginRequest credentials);
 
         /// <summary>
         /// The user name from the configuration.

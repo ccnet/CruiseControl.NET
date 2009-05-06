@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "objection", "objection\obje
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validator", "Validator\Validator.csproj", "{CBB2F759-46EB-42DB-BCAD-D7E596A4BC41}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communications", "Remote\Communications.csproj", "{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Build|Any CPU = Build|Any CPU
@@ -96,6 +98,12 @@ Global
 		{CBB2F759-46EB-42DB-BCAD-D7E596A4BC41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBB2F759-46EB-42DB-BCAD-D7E596A4BC41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBB2F759-46EB-42DB-BCAD-D7E596A4BC41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}.Build|Any CPU.ActiveCfg = Build|Any CPU
+		{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}.Build|Any CPU.Build.0 = Build|Any CPU
+		{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
 		[ReflectorProperty("serverUri", Required=false)]
-		public string ServerUri = string.Format("tcp://localhost:21234/{0}", RemoteCruiseServer.URI);
+		public string ServerUri = string.Format("tcp://localhost:21234/{0}", RemoteCruiseServer.ManagerUri);
 
 		[ReflectorProperty("integrationStatus", Required=false)]
 		public IntegrationStatus IntegrationStatus = IntegrationStatus.Success;

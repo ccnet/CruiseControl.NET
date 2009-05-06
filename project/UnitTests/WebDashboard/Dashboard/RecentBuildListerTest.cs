@@ -48,7 +48,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 				(ILinkFactory) linkFactoryMock.MockInstance,
 				(ILinkListFactory) linkListFactoryMock.MockInstance,
                 (IFingerprintFactory) fingerprintFactoryMock.MockInstance,
-                (ICruiseUrlBuilder)urlBuilderMock.MockInstance);
+                (ICruiseUrlBuilder)urlBuilderMock.MockInstance,
+                null);
 
 			projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
             build2Specifier = new DefaultBuildSpecifier(projectSpecifier, "log20070401013456.xml");

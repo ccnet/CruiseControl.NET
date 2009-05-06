@@ -22,10 +22,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 	    private readonly IFingerprintFactory fingerprintFactory;
 	    private readonly IFarmService farmService;
         private readonly ICruiseUrlBuilder urlBuilder;
+        private readonly ISessionRetriever retriever;
 
 		public RecentBuildLister(IFarmService farmService, IVelocityTransformer velocityTransformer, 
 			IVelocityViewGenerator viewGenerator, ILinkFactory linkFactory, ILinkListFactory linkListFactory, IFingerprintFactory fingerprintFactory,
-            ICruiseUrlBuilder urlBuilder)
+            ICruiseUrlBuilder urlBuilder, ISessionRetriever retriever)
 		{
 			this.farmService = farmService;
 			this.velocityTransformer = velocityTransformer;
@@ -34,6 +35,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.linkListFactory = linkListFactory;
             this.urlBuilder = urlBuilder;
 		    this.fingerprintFactory = fingerprintFactory;
+            this.retriever = retriever;
 		}
 
 		// ToDo - use concatenatable views here, not strings
@@ -83,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 	    public ConditionalGetFingerprint GetFingerprint(IRequest request)
 	    {
-	        ICruiseRequest cruiseRequest = new NameValueCruiseRequestFactory().CreateCruiseRequest(request, urlBuilder);
+	        ICruiseRequest cruiseRequest = new NameValueCruiseRequestFactory().CreateCruiseRequest(request, urlBuilder, retriever);
 	        IBuildSpecifier mostRecentBuildSpecifier =
 	            farmService.GetMostRecentBuildSpecifiers(cruiseRequest.ProjectSpecifier, 1)[0];
 	        DateTime mostRecentBuildDate = new LogFile(mostRecentBuildSpecifier.BuildName).Date;

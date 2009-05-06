@@ -35,8 +35,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		{
 			mockFarmService.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions",
 			                                new ProjectStatusListAndExceptions(
-			                                	new ProjectStatusOnServer[0], new CruiseServerException[0]));
-
+                                                new ProjectStatusOnServer[0], new CruiseServerException[0]), 
+                                            (string)null);
 			IResponse response = reportAction.Execute(null);
 			Assert.IsNotNull(response);
 			Assert.AreEqual(typeof (XmlFragmentResponse), response.GetType());
@@ -49,7 +49,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		{
 			mockFarmService.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions",
 			                                new ProjectStatusListAndExceptions(
-			                                	new ProjectStatusOnServer[0], new CruiseServerException[0]));
+                                                new ProjectStatusOnServer[0], new CruiseServerException[0]), 
+                                            (string)null);
 			XmlFragmentResponse response = (XmlFragmentResponse) reportAction.Execute(null);
 			string xml = response.ResponseFragment;
 
@@ -68,7 +69,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
             ProjectStatusOnServer projectStatusOnServer = new ProjectStatusOnServer(projectStatus, ServerSpecifier);
 			mockFarmService.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions",
 			                                new ProjectStatusListAndExceptions(
-			                                	new ProjectStatusOnServer[] {projectStatusOnServer}, new CruiseServerException[0]));
+                                                new ProjectStatusOnServer[] { projectStatusOnServer }, new CruiseServerException[0]), 
+                                            (string)null);
 
 			XmlFragmentResponse response = (XmlFragmentResponse) reportAction.Execute(null);
 			string xml = response.ResponseFragment;
@@ -97,7 +99,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
             ProjectStatusOnServer projectStatusOnServer = new ProjectStatusOnServer(projectStatus, ServerSpecifier);
 			mockFarmService.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions",
 			                                new ProjectStatusListAndExceptions(
-			                                	new ProjectStatusOnServer[] {projectStatusOnServer}, new CruiseServerException[0]));
+                                                new ProjectStatusOnServer[] { projectStatusOnServer }, new CruiseServerException[0]), 
+                                            (string)null);
 
 			XmlFragmentResponse response = (XmlFragmentResponse) reportAction.Execute(null);
 			string xml = response.ResponseFragment;

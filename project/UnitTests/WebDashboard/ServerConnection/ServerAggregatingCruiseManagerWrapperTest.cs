@@ -1,10 +1,13 @@
 using NMock;
+using Rhino.Mocks;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Messages;
+using System;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 {
@@ -27,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		{
 			configurationMock = new DynamicMock(typeof (IRemoteServicesConfiguration));
 			cruiseManagerFactoryMock = new DynamicMock(typeof (ICruiseManagerFactory));
-			cruiseManagerMock = new DynamicMock(typeof (ICruiseManager));
+			cruiseManagerMock = new DynamicMock(typeof (ICruiseServerClient));
 			serverSpecifier = new DefaultServerSpecifier("myserver");
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myproject");
 			buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "mybuild");
@@ -84,212 +87,228 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		}
 
 		[Test]
-		public void ThrowsCorrectExceptionIfProjectNotRunningOnServer()
-		{
-			configurationMock.ExpectAndReturn("Servers", new ServerLocation[] {serverLocation});
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.ExpectAndThrow("GetLatestBuildName", new NoSuchProjectException("myproject"), "myproject");
-
-			try
-			{
-				managerWrapper.GetLatestBuildSpecifier(projectSpecifier);
-				Assert.Fail("Should throw exception");
-			}
-			catch (NoSuchProjectException e)
-			{
-				Assert.AreEqual("myproject", e.RequestedProject);
-			}
-
-			VerifyAll();
-		}
-
-		[Test]
 		public void ReturnsLatestLogNameFromCorrectProjectOnCorrectServer()
 		{
-			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
+            string buildName = "mylogformyserverformyproject";
+            MockRepository mocks = new MockRepository();
+            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
+                delegate(ICruiseServerClient manager)
+                {
+                    DataResponse response = new DataResponse();
+                    response.Result = ResponseResult.Success;
+                    response.Data = buildName;
+                    SetupResult.For(manager.GetLatestBuildName(null))
+                        .IgnoreArguments()
+                        .Return(response);
+                });
+            mocks.ReplayAll();
 
 			DefaultProjectSpecifier myProjectMyServer = new DefaultProjectSpecifier(new DefaultServerSpecifier("myserver"), "myproject");
-			DefaultProjectSpecifier myOtherProjectMyServer = new DefaultProjectSpecifier(new DefaultServerSpecifier("myserver"), "myotherproject");
-			DefaultProjectSpecifier myProjectMyOtherServer = new DefaultProjectSpecifier(new DefaultServerSpecifier("myotherserver"), "myproject");
-			DefaultProjectSpecifier myOtherProjectMyOtherServer = new DefaultProjectSpecifier(new DefaultServerSpecifier("myotherserver"), "myotherproject");
-
-			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.ExpectAndReturn("GetLatestBuildName", "mylogformyserverformyproject", "myproject");
-			Assert.AreEqual(new DefaultBuildSpecifier(myProjectMyServer, "mylogformyserverformyproject"), managerWrapper.GetLatestBuildSpecifier(myProjectMyServer));
-
-			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.ExpectAndReturn("GetLatestBuildName", "mylogformyserverformyotherproject", "myotherproject");
-			Assert.AreEqual(new DefaultBuildSpecifier(myOtherProjectMyServer, "mylogformyserverformyotherproject"), managerWrapper.GetLatestBuildSpecifier(myOtherProjectMyServer));
-
-			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myotherurl");
-			cruiseManagerMock.ExpectAndReturn("GetLatestBuildName", "mylogformyotherserverformyproject", "myproject");
-			Assert.AreEqual(new DefaultBuildSpecifier(myProjectMyOtherServer, "mylogformyotherserverformyproject"), managerWrapper.GetLatestBuildSpecifier(myProjectMyOtherServer));
-
-			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myotherurl");
-			cruiseManagerMock.ExpectAndReturn("GetLatestBuildName", "mylogformyotherserverformyotherproject", "myotherproject");
-			Assert.AreEqual(new DefaultBuildSpecifier(myOtherProjectMyOtherServer, "mylogformyotherserverformyotherproject"), managerWrapper.GetLatestBuildSpecifier(myOtherProjectMyOtherServer));
-
-			VerifyAll();
+            Assert.AreEqual(new DefaultBuildSpecifier(myProjectMyServer, buildName),
+                serverWrapper.GetLatestBuildSpecifier(myProjectMyServer));
 		}
 
 		[Test]
 		public void ReturnsCorrectLogFromCorrectProjectOnCorrectServer()
 		{
-			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
-
-			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.ExpectAndReturn("GetLog", "log\r\ncontents", "myproject", "mybuild");
-			Assert.AreEqual("log\r\ncontents", managerWrapper.GetLog(buildSpecifier));
-
-			VerifyAll();
+            string buildLog = "content\r\nlogdata";
+            MockRepository mocks = new MockRepository();
+            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
+                delegate(ICruiseServerClient manager)
+                {
+                    DataResponse response = new DataResponse();
+                    response.Result = ResponseResult.Success;
+                    response.Data = buildLog;
+                    SetupResult.For(manager.GetLog(null))
+                        .IgnoreArguments()
+                        .Return(response);
+                });
+            mocks.ReplayAll();
+            Assert.AreEqual(buildLog, serverWrapper.GetLog(new DefaultBuildSpecifier(projectSpecifier, "test")));
 		}
 
 		[Test]
 		public void ReturnsCorrectLogNamesFromCorrectProjectOnCorrectServer()
 		{
-			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
-
-			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.ExpectAndReturn("GetBuildNames", new string[] {"log1", "log2"}, "myproject");
-			Assert.AreEqual(new DefaultBuildSpecifier(projectSpecifier, "log1"), managerWrapper.GetBuildSpecifiers(projectSpecifier)[0]);
-
-			VerifyAll();
+            string[] buildNames = new string[] { "log1", "log2" };
+            MockRepository mocks = new MockRepository();
+            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
+                delegate(ICruiseServerClient manager)
+                {
+                    DataListResponse response = new DataListResponse();
+                    response.Result = ResponseResult.Success;
+                    response.Data.AddRange(buildNames);
+                    SetupResult.For(manager.GetBuildNames(null))
+                        .IgnoreArguments()
+                        .Return(response);
+                });
+            mocks.ReplayAll();
+            Assert.AreEqual(new DefaultBuildSpecifier(projectSpecifier, "log1"),
+                serverWrapper.GetBuildSpecifiers(projectSpecifier)[0]);
+            Assert.AreEqual(new DefaultBuildSpecifier(projectSpecifier, "log2"),
+                serverWrapper.GetBuildSpecifiers(projectSpecifier)[1]);
 		}
 
 		[Test]
 		public void ReturnCorrectArtifactDirectoryFromCorrectProjectFromCorrectServer()
 		{
-			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
-
-			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.ExpectAndReturn("GetArtifactDirectory", @"c:\ArtifactDirectory", "myproject");
-			Assert.AreEqual(@"c:\ArtifactDirectory", managerWrapper.GetArtifactDirectory(projectSpecifier));
+            string artifactDirectory = @"c:\ArtifactDirectory";
+            MockRepository mocks = new MockRepository();
+            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
+                delegate(ICruiseServerClient manager)
+                {
+                    DataResponse response = new DataResponse();
+                    response.Result = ResponseResult.Success;
+                    response.Data = artifactDirectory;
+                    SetupResult.For(manager.GetArtifactDirectory(null))
+                        .IgnoreArguments()
+                        .Return(response);
+                });
+            mocks.ReplayAll();
+            Assert.AreEqual(artifactDirectory, serverWrapper.GetArtifactDirectory(projectSpecifier));
 		}
 
 		[Test]
 		public void ReturnsCorrectBuildSpecifiersFromCorrectProjectOnCorrectServerWhenNumberOfBuildsSpecified()
 		{
-			// Setup
-			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
-
-			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.ExpectAndReturn("GetMostRecentBuildNames", new string[] {"log1", "log2"}, "myproject", 99);
-
-			// Execute
-			IBuildSpecifier[] returnedBuildSpecifiers = managerWrapper.GetMostRecentBuildSpecifiers(projectSpecifier, 99);
-
-			// Verify
-			Assert.AreEqual("log1", returnedBuildSpecifiers[0].BuildName);
-			Assert.AreEqual(projectSpecifier, returnedBuildSpecifiers[0].ProjectSpecifier);
-			Assert.AreEqual(2, returnedBuildSpecifiers.Length);
-
-			VerifyAll();
+            string[] buildNames = new string[] { "log1", "log2" };
+            MockRepository mocks = new MockRepository();
+            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
+                delegate(ICruiseServerClient manager)
+                {
+                    DataListResponse response = new DataListResponse();
+                    response.Result = ResponseResult.Success;
+                    response.Data.AddRange(buildNames);
+                    SetupResult.For(manager.GetMostRecentBuildNames(null))
+                        .IgnoreArguments()
+                        .Return(response);
+                });
+            mocks.ReplayAll();
+            Assert.AreEqual(new DefaultBuildSpecifier(projectSpecifier, "log1"),
+                serverWrapper.GetMostRecentBuildSpecifiers(projectSpecifier, 2)[0]);
+            Assert.AreEqual(new DefaultBuildSpecifier(projectSpecifier, "log2"),
+                serverWrapper.GetMostRecentBuildSpecifiers(projectSpecifier, 2)[1]);
 		}
 
 		[Test]
 		public void AddsProjectToCorrectServer()
 		{
-			/// Setup
-			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 			string serializedProject = "myproject---";
-
-			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.Expect("AddProject", serializedProject);
+            MockRepository mocks = new MockRepository();
+            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
+                delegate(ICruiseServerClient manager)
+                {
+                    Response response = new Response();
+                    response.Result = ResponseResult.Success;
+                    SetupResult.For(manager.AddProject(null))
+                        .IgnoreArguments()
+                        .Return(response);
+                });
+            mocks.ReplayAll();
 
 			/// Execute
-			managerWrapper.AddProject(serverSpecifier, serializedProject);
-
-			/// Verify
-			VerifyAll();
+            serverWrapper.AddProject(serverSpecifier, serializedProject);
 		}
 
 		[Test]
 		public void DeletesProjectOnCorrectServer()
 		{
-			// Setup
-			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
-
-			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.Expect("DeleteProject", "myproject", false, true, false);
+            MockRepository mocks = new MockRepository();
+            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
+                delegate(ICruiseServerClient manager)
+                {
+                    Response response = new Response();
+                    response.Result = ResponseResult.Success;
+                    SetupResult.For(manager.DeleteProject(null))
+                        .IgnoreArguments()
+                        .Return(response);
+                });
+            mocks.ReplayAll();
 
 			// Execute
-			managerWrapper.DeleteProject(projectSpecifier, false, true, false);
-
-			// Verify
-			VerifyAll();
+            serverWrapper.DeleteProject(projectSpecifier, false, true, false);
 		}
 
 		[Test]
 		public void GetsProjectFromCorrectServer()
 		{
-			// Setup
-			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 			string serializedProject = "a serialized project";
-
-			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.ExpectAndReturn("GetProject", serializedProject, "myproject");
+            MockRepository mocks = new MockRepository();
+            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
+                delegate(ICruiseServerClient manager)
+                {
+                    DataResponse response = new DataResponse();
+                    response.Result = ResponseResult.Success;
+                    response.Data = serializedProject;
+                    SetupResult.For(manager.GetProject(null))
+                        .IgnoreArguments()
+                        .Return(response);
+                });
+            mocks.ReplayAll();
 
 			// Execute
-			string returnedProject = managerWrapper.GetProject(projectSpecifier);
+            string returnedProject = serverWrapper.GetProject(projectSpecifier);
 
 			// Verify
-			VerifyAll();
 			Assert.AreEqual(serializedProject, returnedProject);
 		}
 
 		[Test]
 		public void UpdatesProjectOnCorrectServer()
 		{
-			/// Setup
-			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 			string serializedProject = "myproject---";
-
-			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.Expect("UpdateProject", "myproject", serializedProject);
+            MockRepository mocks = new MockRepository();
+            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
+                delegate(ICruiseServerClient manager)
+                {
+                    Response response = new Response();
+                    response.Result = ResponseResult.Success;
+                    SetupResult.For(manager.UpdateProject(null))
+                        .IgnoreArguments()
+                        .Return(response);
+                });
+            mocks.ReplayAll();
 
 			/// Execute
-			managerWrapper.UpdateProject(projectSpecifier, serializedProject);
-
-			/// Verify
-			VerifyAll();
+            serverWrapper.UpdateProject(projectSpecifier, serializedProject);
 		}
 
 		[Test]
 		public void ReturnsServerLogFromCorrectServer()
 		{
-			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
-
-			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.ExpectAndReturn("GetServerLog", "a server log");
-			Assert.AreEqual("a server log", managerWrapper.GetServerLog(serverSpecifier));
-
-			VerifyAll();
+            string serverLog = "a server log";
+            MockRepository mocks = new MockRepository();
+            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
+                delegate(ICruiseServerClient manager)
+                {
+                    DataResponse response = new DataResponse();
+                    response.Result = ResponseResult.Success;
+                    response.Data = serverLog;
+                    SetupResult.For(manager.GetServerLog(null))
+                        .IgnoreArguments()
+                        .Return(response);
+                });
+            mocks.ReplayAll();
+            Assert.AreEqual(serverLog, serverWrapper.GetServerLog(serverSpecifier));
 		}
 
 		[Test]
 		public void ReturnsServerLogFromCorrectServerForCorrectProject()
 		{
-			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
-
-			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.ExpectAndReturn("GetServerLog", "a server log", "myproject");
-			Assert.AreEqual("a server log", managerWrapper.GetServerLog(projectSpecifier));
-
-			VerifyAll();
+            string serverLog = "a server log";
+            MockRepository mocks = new MockRepository();
+            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
+                delegate(ICruiseServerClient manager)
+                {
+                    DataResponse response = new DataResponse();
+                    response.Result = ResponseResult.Success;
+                    response.Data = serverLog;
+                    SetupResult.For(manager.GetServerLog(null))
+                        .IgnoreArguments()
+                        .Return(response);
+                });
+            mocks.ReplayAll();
+            Assert.AreEqual("a server log", serverWrapper.GetServerLog(projectSpecifier));
 		}
 
 		[Test]
@@ -297,7 +316,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		{
 			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 
-			configurationMock.ExpectAndReturn("Servers", servers);
+			configurationMock.SetupResult("Servers", servers);
 			IServerSpecifier[] serverSpecifiers = managerWrapper.GetServerSpecifiers();
 			Assert.AreEqual(2, serverSpecifiers.Length);
 			Assert.AreEqual("myserver", serverSpecifiers[0].ServerName);
@@ -312,9 +331,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 
 			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-            var parameters = new Dictionary<string, string>();
-			cruiseManagerMock.Expect("ForceBuild", (string)null, "myproject","BuildForcer", parameters);
+            cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseServerClient", cruiseManagerMock.MockInstance, "http://myurl");
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            Response response = new Response();
+            response.Result = ResponseResult.Success;
+            cruiseManagerMock.SetupResult("ForceBuild", response, typeof(BuildIntegrationRequest));
 
             managerWrapper.ForceBuild(projectSpecifier, null, "BuildForcer", parameters);
 
@@ -322,30 +343,45 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		}
 
 		[Test]
-		public void ShouldMatchServersInCaseInsensitiveWay()
+        public void GetsExternalLinks()
+        {
+            ExternalLink[] links = new ExternalLink[] { new ExternalLink("1", "2"), new ExternalLink("3", "4") };
+            MockRepository mocks = new MockRepository();
+            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
+                delegate(ICruiseServerClient manager)
 		{
-			configurationMock.ExpectAndReturn("Servers", new ServerLocation[] {serverLocation, otherServerLocation});
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.ExpectAndReturn("GetServerVersion", "1.1");
+                    ExternalLinksListResponse response = new ExternalLinksListResponse();
+                    response.Result = ResponseResult.Success;
+                    response.ExternalLinks.AddRange(links);
+                    SetupResult.For(manager.GetExternalLinks(null))
+                        .IgnoreArguments()
+                        .Return(response);
+                });
+            mocks.ReplayAll();
 
-			managerWrapper.GetServerVersion(new DefaultServerSpecifier(serverLocation.Name.ToUpper()));
-
-			VerifyAll();
+            Assert.AreEqual(links, serverWrapper.GetExternalLinks(projectSpecifier));
 		}
 
-		[Test]
-		public void GetsExternalLinks()
+        private ServerAggregatingCruiseManagerWrapper InitialiseServerWrapper(MockRepository mocks,
+            Action<ICruiseServerClient> additionalSetup)
 		{
-			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
+            IRemoteServicesConfiguration configuration = mocks.DynamicMock<IRemoteServicesConfiguration>();
+            ICruiseManagerFactory cruiseManagerFactory = mocks.DynamicMock<ICruiseManagerFactory>();
+            ICruiseServerClient cruiseManager = mocks.DynamicMock<ICruiseServerClient>();
 
-			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			ExternalLink[] links = new ExternalLink[] {new ExternalLink("1", "2"), new ExternalLink("3", "4")};
-			cruiseManagerMock.ExpectAndReturn("GetExternalLinks", links, "myproject");
+            ServerLocation[] servers = new ServerLocation[] { serverLocation, otherServerLocation };
+            SetupResult.For(configuration.Servers)
+                .Return(servers);
+            SetupResult.For(cruiseManagerFactory.GetCruiseServerClient("http://myurl"))
+                .Return(cruiseManager);
 
-			Assert.AreEqual(links, managerWrapper.GetExternalLinks(projectSpecifier));
+            ServerAggregatingCruiseManagerWrapper serverWrapper = new ServerAggregatingCruiseManagerWrapper(
+                configuration,
+                cruiseManagerFactory);
 
-			VerifyAll();
+            if (additionalSetup != null) additionalSetup(cruiseManager);
+
+            return serverWrapper;
 		}
 
 		[Test]
@@ -360,20 +396,5 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 
 			VerifyAll();
 		}
-
-        [Test]
-        public void ReturnsServerSecurityFromCorrectServer()
-        {
-            ServerLocation[] servers = new ServerLocation[] { serverLocation, otherServerLocation };
-
-            configurationMock.ExpectAndReturn("Servers", servers);
-            cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-            string expected = "security configuration";
-            cruiseManagerMock.ExpectAndReturn("GetSecurityConfiguration", expected, string.Empty);
-            string actual = managerWrapper.GetServerSecurity(serverSpecifier, string.Empty);
-            Assert.AreEqual(expected, actual);
-
-            VerifyAll();
-        }
 	}
 }

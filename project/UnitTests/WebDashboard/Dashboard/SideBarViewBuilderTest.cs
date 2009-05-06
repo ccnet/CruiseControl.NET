@@ -92,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
             ProjectStatus ps = new ProjectStatus("", "", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "", 0);
             ProjectStatusOnServer[] psosa = new ProjectStatusOnServer[] { new ProjectStatusOnServer(ps, serverSpecifiers[0]) };
             ProjectStatusListAndExceptions pslae = new ProjectStatusListAndExceptions(psosa, new CruiseServerException[0]);
-            farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", pslae, serverSpecifiers[0]);
+            farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", pslae, serverSpecifiers[0], (string)null);
 
 			velocityContext["links"] = links;
 			velocityContext["serverlinks"] = serverLinks;
@@ -110,7 +110,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", velocityResponse, @"FarmSideBar.vm", new HashtableConstraint(velocityContext));
 
 			// Execute
-			HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute();
+            HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute(cruiseRequestWrapperMock.MockInstance as ICruiseRequest);
 
 			// Verify
 			Assert.AreEqual(velocityResponse, returnedResponse);
@@ -131,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
             ProjectStatus ps = new ProjectStatus("", "myCategory", null, 0, 0, null, DateTime.Now, null, null, DateTime.Now, null, "",0);
 			ProjectStatusOnServer[] psosa = new ProjectStatusOnServer[] { new ProjectStatusOnServer(ps, serverSpecifier) };
 			ProjectStatusListAndExceptions pslae = new ProjectStatusListAndExceptions(psosa, new CruiseServerException[0]);
-			farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", pslae, serverSpecifier);
+			farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", pslae, serverSpecifier, (string)null);
 
 			IAbsoluteLink link = new GeneralAbsoluteLink("link");
 			IAbsoluteLink[] categoryLinks = new GeneralAbsoluteLink[] { new GeneralAbsoluteLink("myCategory", "?Category=myCategory") };
@@ -146,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", velocityResponse, @"ServerSideBar.vm", new HashtableConstraint(velocityContext));
 
 			// Execute
-			HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute();
+            HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute(cruiseRequestWrapperMock.MockInstance as ICruiseRequest);
 
 			// Verify
 			Assert.AreEqual(velocityResponse, returnedResponse);
@@ -173,7 +173,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", velocityResponse, @"ProjectSideBar.vm", new HashtableConstraint(velocityContext));
 
 			// Execute
-			HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute();
+            HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute(cruiseRequestWrapperMock.MockInstance as ICruiseRequest);
 
 			// Verify
 			Assert.AreEqual(velocityResponse, returnedResponse);
@@ -220,7 +220,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", velocityResponse, @"BuildSideBar.vm", new HashtableConstraint(velocityContext));
 
 			// Execute
-			HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute();
+			HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute(cruiseRequestWrapperMock.MockInstance as ICruiseRequest);
 
 			// Verify
 			Assert.AreEqual(velocityResponse, returnedResponse);

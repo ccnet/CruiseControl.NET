@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			CruiseServerManagerFactory factory = new CruiseServerManagerFactory((ICruiseManagerFactory) mockCruiseManagerFactory.MockInstance);
 
 			BuildServer server = new BuildServer(@"tcp://1.2.3.4");
-			mockCruiseManagerFactory.ExpectAndReturn("GetCruiseManager", null, server.Url);
+            mockCruiseManagerFactory.ExpectAndReturn("GetCruiseServerClient", null, server.Url);
 
 			ICruiseServerManager manager = factory.Create(server);
 			Assert.AreEqual(server.Url, manager.Configuration.Url);
