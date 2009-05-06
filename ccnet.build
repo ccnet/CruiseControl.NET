@@ -8,7 +8,7 @@
 	<property name="build.target"			 overwrite="false"	value="Build" />
 	<property name="build.project"			 overwrite="false"	value="ccnet.sln" />
 	<property name="build.target.framework"  overwrite="false"	value="3.5"  />
-	<property name="CCNetLabel"				 overwrite="false"	value="0" />
+	<property name="CCNetLabel"				 overwrite="false"	value="0.0.0.0" />
 	<property name="codemetrics.output.type" overwrite="false"	value="XmlFile" />
 
 	<!-- common path properties -->
