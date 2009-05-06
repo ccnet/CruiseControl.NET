@@ -23,15 +23,12 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// <summary>
         /// Starts a new filter with the date range.
         /// </summary>
-        /// <param name="userName"></param>
         public DateRangeAuditFilter(DateTime startDate, DateTime endDate)
             : this(startDate, endDate, null) { }
 
         /// <summary>
         /// Starts a new filter with the date range and inner filter.
         /// </summary>
-        /// <param name="userName"></param>
-        /// <param name="innerFilter"></param>
         public DateRangeAuditFilter(DateTime startDate, DateTime endDate, AuditFilterBase innerFilter)
             : base(innerFilter)
         {

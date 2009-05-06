@@ -13,18 +13,29 @@ namespace ThoughtWorks.CruiseControl.Remote
         private ProjectStatus[] projectStatuses;
         private QueueSetSnapshot queueSetSnapshot;
 
+        /// <summary>
+        /// Initialise a new blank <see cref="CruiseServerSnapshot"/>.
+        /// </summary>
         public CruiseServerSnapshot()
         {
             projectStatuses = new ProjectStatus[0];
             queueSetSnapshot = new QueueSetSnapshot();
         }
 
+        /// <summary>
+        /// Initialise a new populated <see cref="CruiseServerSnapshot"/>.
+        /// </summary>
+        /// <param name="projectStatuses"></param>
+        /// <param name="queueSetSnapshot"></param>
         public CruiseServerSnapshot(ProjectStatus[] projectStatuses, QueueSetSnapshot queueSetSnapshot)
         {
             this.projectStatuses = projectStatuses;
             this.queueSetSnapshot = queueSetSnapshot;
         }
 
+        /// <summary>
+        /// The current state of the projects.
+        /// </summary>
         [XmlArray("projects")]
         [XmlArrayItem("projectStatus")]
         public ProjectStatus[] ProjectStatuses
@@ -33,6 +44,9 @@ namespace ThoughtWorks.CruiseControl.Remote
             set { projectStatuses = value; }
         }
 
+        /// <summary>
+        /// The current state of the queues.
+        /// </summary>
         [XmlElement("queueSet")]
         public QueueSetSnapshot QueueSetSnapshot
         {
@@ -40,6 +54,11 @@ namespace ThoughtWorks.CruiseControl.Remote
             set { queueSetSnapshot = value; }
         }
 
+        /// <summary>
+        /// Checks if a snapshot has changed.
+        /// </summary>
+        /// <param name="queueSetSnapshotToCompare"></param>
+        /// <returns></returns>
         public bool IsQueueSetSnapshotChanged(QueueSetSnapshot queueSetSnapshotToCompare)
         {
             if (queueSetSnapshotToCompare == null)
@@ -76,6 +95,11 @@ namespace ThoughtWorks.CruiseControl.Remote
             return false;
         }
 
+        /// <summary>
+        /// Retrieves the status of a project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
 		public ProjectStatus GetProjectStatus(string projectName)
 		{
 			foreach (ProjectStatus projectStatus in ProjectStatuses)

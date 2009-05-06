@@ -14,13 +14,27 @@ namespace ThoughtWorks.CruiseControl.Remote
 	    private ProjectActivity activity;
         private DateTime requestTime;
 
+        /// <summary>
+        /// Initialise a new blank <see cref="QueuedRequestSnapshot"/>.
+        /// </summary>
         public QueuedRequestSnapshot()
         {
         }
 
+        /// <summary>
+        /// Initialise a new populated <see cref="QueuedRequestSnapshot"/>.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="activity"></param>
 		public QueuedRequestSnapshot(string projectName, ProjectActivity activity)
             : this(projectName, activity, DateTime.MinValue) { }
 
+        /// <summary>
+        /// Initialise a new populated <see cref="QueuedRequestSnapshot"/>.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="activity"></param>
+        /// <param name="requestTime"></param>
         public QueuedRequestSnapshot(string projectName, ProjectActivity activity, DateTime requestTime)
 		{
 			this.projectName = projectName;
@@ -28,6 +42,9 @@ namespace ThoughtWorks.CruiseControl.Remote
             this.requestTime = requestTime;
 		}
 
+        /// <summary>
+        /// The name of the project.
+        /// </summary>
         [XmlAttribute("projectName")]
 		public string ProjectName
 		{
@@ -35,6 +52,9 @@ namespace ThoughtWorks.CruiseControl.Remote
             set { projectName = value; }
 		}
 
+        /// <summary>
+        /// The current activity.
+        /// </summary>
         [XmlElement("activity")]
 	    public ProjectActivity Activity
 	    {
@@ -42,6 +62,9 @@ namespace ThoughtWorks.CruiseControl.Remote
             set { activity = value; }
 	    }
 
+        /// <summary>
+        /// The time of the request.
+        /// </summary>
         [XmlAttribute("time")]
         public DateTime RequestTime
         {

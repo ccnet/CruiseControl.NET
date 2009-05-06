@@ -6,6 +6,9 @@ using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
+    /// <summary>
+    /// A link to an external resource.
+    /// </summary>
 #if !NoReflector
 	[ReflectorType("externalLink")]
 #endif
@@ -16,14 +19,25 @@ namespace ThoughtWorks.CruiseControl.Remote
 		private string name;
 		private string url;
 
+        /// <summary>
+        /// Initialise a new blank <see cref="ExternalLink"/>.
+        /// </summary>
 		public ExternalLink() : this ("", "")  { }
 
+        /// <summary>
+        /// Initialise a new populated <see cref="ExternalLink"/>.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="url"></param>
 		public ExternalLink(string name, string url)
 		{
 			this.name = name;
 			this.url = url;
 		}
 
+        /// <summary>
+        /// The name of the link.
+        /// </summary>
 #if !NoReflector
 		[ReflectorProperty("name")] 
 #endif
@@ -34,6 +48,9 @@ namespace ThoughtWorks.CruiseControl.Remote
 			set { name = value; }
 		}
 
+        /// <summary>
+        /// The URL for the link.
+        /// </summary>
 #if !NoReflector
 		[ReflectorProperty("url")] 
 #endif

@@ -22,12 +22,20 @@ namespace ThoughtWorks.CruiseControl.Remote
             queueSnapshots = new List<QueueSnapshot>();
 		}
 
+        /// <summary>
+        /// The queues on the server and their current status.
+        /// </summary>
         [XmlElement("queue")]
         public List<QueueSnapshot> Queues
 		{
 			get { return queueSnapshots; }
 		}
 
+        /// <summary>
+        /// Finds a queue by its name.
+        /// </summary>
+        /// <param name="queueName"></param>
+        /// <returns></returns>
         public QueueSnapshot FindByName(string queueName)
         {
             foreach (QueueSnapshot queueSnapshot in queueSnapshots)
