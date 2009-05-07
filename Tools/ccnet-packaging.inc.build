@@ -33,10 +33,12 @@
 			<fileset defaultexcludes="true">
 				<include name="*/**" />
 				<exclude name="nant*.log*" />
+				<exclude name="*.nsi" />
 				<exclude name="${build.dir}/**" />
 				<exclude name="${build.metrics.dir}/**" />
 				<exclude name="${publish.dir}/**" />
 				<exclude name="${dist.dir}/**" />
+				<exclude name="${tools.dir}/ncover*/**" />
 				<exclude name="${path::get-directory-name(ndepend.executable)}/**" />
 				<exclude name="${src.dir}/*/bin/**"/>
 				<exclude name="${src.dir}/*/obj/**"/>
