@@ -228,6 +228,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CruiseXmlWriter.cs" />
+    <Compile Include="Extensions\DiskSpaceMonitorExtension.cs" />
     <Compile Include="Extensions\IntegrationRequestThrottleExtension.cs" />
     <Compile Include="Extensions\IntegrationPerformanceCountersExtension.cs" />
     <Compile Include="IArgumentParser.cs">

@@ -408,5 +408,25 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="fileName">The name of the file.</param>
         RemotingFileTransfer RetrieveFileTransfer(string project, string fileName);
         #endregion
+
+        #region RetrieveService()
+        /// <summary>
+        /// Retrieves a service.
+        /// </summary>
+        /// <typeparam name="TService">The type of service to retrieve.</typeparam>
+        /// <returns>A valid service, if found, null otherwise.</returns>
+        TService RetrieveService<TService>()
+            where TService : class;
+        #endregion
+
+        #region AddService()
+        /// <summary>
+        /// Adds a service.
+        /// </summary>
+        /// <typeparam name="TService">The type of service to add.</typeparam>
+        /// <param name="service">The service to add.</param>
+        void AddService<TService>(TService service)
+            where TService : class;
+        #endregion
     }
 }

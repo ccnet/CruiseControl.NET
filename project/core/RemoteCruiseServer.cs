@@ -559,5 +559,31 @@ namespace ThoughtWorks.CruiseControl.Core
             return server.RetrieveFileTransfer(project, fileName);
         }
         #endregion
+
+        #region RetrieveService()
+        /// <summary>
+        /// Retrieves a service.
+        /// </summary>
+        /// <typeparam name="TService">The type of service to retrieve.</typeparam>
+        /// <returns>A valid service, if found, null otherwise.</returns>
+        public virtual TService RetrieveService<TService>()
+            where TService : class
+        {
+            return server.RetrieveService<TService>();
+        }
+        #endregion
+
+        #region AddService()
+        /// <summary>
+        /// Adds a service.
+        /// </summary>
+        /// <typeparam name="TService">The type of service to add.</typeparam>
+        /// <param name="service">The service to add.</param>
+        public virtual void AddService<TService>(TService service)
+            where TService : class
+        {
+            server.AddService(service);
+        }
+        #endregion
     }
 }

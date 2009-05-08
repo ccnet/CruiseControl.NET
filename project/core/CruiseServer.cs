@@ -38,6 +38,8 @@ namespace ThoughtWorks.CruiseControl.Core
         private Dictionary<string, DateTime> receivedRequests = new Dictionary<string, DateTime>();
         private bool disposed;
         private IQueueManager integrationQueueManager;
+        // TODO: Replace this with a proper IoC container
+        private Dictionary<Type, object> services = new Dictionary<Type, object>();
         #endregion
 
         #region Constructors
@@ -1127,6 +1129,37 @@ namespace ThoughtWorks.CruiseControl.Core
                 }));
             response.Parameters = parameters;
             return response;
+        }
+        #endregion
+
+        #region RetrieveService()
+        /// <summary>
+        /// Retrieves a service.
+        /// </summary>
+        /// <typeparam name="TService">The type of service to retrieve.</typeparam>
+        /// <returns>A valid service, if found, null otherwise.</returns>
+        public virtual TService RetrieveService<TService>()
+            where TService : class
+        {
+            TService service = null;
+            if (services.ContainsKey(typeof(TService)))
+            {
+                service = services[typeof(TService)] as TService;
+            }
+            return service;
+        }
+        #endregion
+
+        #region AddService()
+        /// <summary>
+        /// Adds a service.
+        /// </summary>
+        /// <typeparam name="TService">The type of service to add.</typeparam>
+        /// <param name="service">The service to add.</param>
+        public virtual void AddService<TService>(TService service)
+            where TService : class
+        {
+            services[typeof(TService)] = service;
         }
         #endregion
         #endregion
