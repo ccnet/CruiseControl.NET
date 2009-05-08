@@ -13,14 +13,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	{
 		private const string ServerUrl = "tcp://blah:1000/";
         private MockRepository mocks = new MockRepository();
-        private CruiseServerClient cruiseManagerMock;
+        private CruiseServerClientBase cruiseManagerMock;
 		BuildServer buildServer;
 		RemotingCruiseServerManager manager;
 
 		[SetUp]
 		public void SetUp()
 		{
-			cruiseManagerMock = mocks.StrictMock<CruiseServerClient>();
+			cruiseManagerMock = mocks.StrictMock<CruiseServerClientBase>();
 
 			buildServer = new BuildServer(ServerUrl);
 			manager = new RemotingCruiseServerManager(cruiseManagerMock, buildServer);

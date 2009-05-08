@@ -12,16 +12,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	public class ProjectStatusMonitorTest
 	{
         private MockRepository repository = new MockRepository();
-        private CruiseServerClient mockCruiseManager;
+        private CruiseServerClientBase mockCruiseManager;
 		private ICruiseProjectManager manager;
 		const string PROJECT_NAME = "projectName";
 
 		[SetUp]
 		public void SetUp()
 		{
-            mockCruiseManager = repository.StrictMock<CruiseServerClient>();
+            mockCruiseManager = repository.StrictMock<CruiseServerClientBase>();
 
-			manager = new RemotingCruiseProjectManager((CruiseServerClient) mockCruiseManager, PROJECT_NAME);
+			manager = new RemotingCruiseProjectManager(mockCruiseManager, PROJECT_NAME);
 		}
 
 		[Test]
@@ -34,8 +34,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void CanForceABuild()
 		{
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            Expect.Call(() => { mockCruiseManager.ForceBuild(null); })
+            Expect.Call(() => { mockCruiseManager.ForceBuild(null, null); })
                 .IgnoreArguments();
+            Expect.Call(mockCruiseManager.SessionToken).PropertyBehavior();
             repository.ReplayAll();
 			manager.ForceBuild(null, parameters);
             repository.VerifyAll();
