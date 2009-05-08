@@ -355,6 +355,10 @@
 			</fileset>
 		</zip>
     <exec program="tools\NSIS\makensis.exe" commandline="ccvalidator.nsi" />
+		
+		<!-- CCNET-1492: Set ColoredConsoleAppender to the ccnet.exe.config only for the windows installer -->
+		<xmlpoke file="deployed\server\${console.exe}.config" xpath="/configuration/log4net/appender[@name='Console']/@type" value="log4net.Appender.ColoredConsoleAppender" />
+		
     <exec program="tools\NSIS\makensis.exe" commandline="ccnet.nsi" />
   </target>
 		
