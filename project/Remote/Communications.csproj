@@ -36,7 +36,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE;DEBUG;NoReflector</DefineConstants>
-    <DocumentationFile>bin\Debug\ThoughtWorks.CruiseControl.Communications.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\ThoughtWorks.CruiseControl.Communications.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
@@ -75,14 +75,14 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Build|AnyCPU' ">
-    <OutputPath>..\..\build\remote\</OutputPath>
+    <OutputPath>..\..\Build\Remote\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE;DEBUG;NoReflector</DefineConstants>
-    <DocumentationFile>..\..\build\remote\ThoughtWorks.CruiseControl.Communications.XML</DocumentationFile>
+    <DocumentationFile>..\..\Build\Remote\ThoughtWorks.CruiseControl.Communications.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
