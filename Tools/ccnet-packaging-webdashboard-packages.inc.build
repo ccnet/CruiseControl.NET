@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="CruiseControl.NET" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
+
+	<target name="build.packages" description="Generates the dashboard packages"
+          depends="farm.level.packages,server.level.packages,project.level.packages,build.level.packages">
+		<copy file="${src.dir}/WebDashboard/packages/packages.xml" tofile="Dist/WebDashboard/packages/packages.xml" verbose="${nant.verbosity}"/>
+		<copy todir="Dist/WebDashboard/packages" verbose="${nant.verbosity}">
+			<fileset basedir="${build.dir}/WebDashboard/packages">
+				<include name="*.zip" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="farm.level.packages" description="Generate the farm level packages"
+          depends="build.admin.package">
+	</target>
+
+	<target name="build.admin.package" description="Generates the web dashboard admin package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/DashboardAdmin.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/DashboardAdmin">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/WebDashboard/Templates">
+				<include name="AdminLogin.vm"/>
+				<include name="AdministerDashboard.vm"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="server.level.packages" description="Generate the server level packages"
+          depends="build.queueStatus.package,build.serverLog.package,build.serverInfo.package,build.serverConfig.package,build.securityConfig.package,build.userList.package">
+	</target>
+
+	<target name="build.queueStatus.package" description="Generates the queue status package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/QueueStatus.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/QueueStatus">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/WebDashboard/Templates">
+				<include name="ServerQueueStatus.vm"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.serverLog.package" description="Generates the server log package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/ServerLog.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/ServerLog">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/WebDashboard/Templates">
+				<include name="ServerLog.vm"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.serverInfo.package" description="Generates the server information package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/ServerInfo.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/ServerInformation">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/WebDashboard/Templates">
+				<include name="ServerInfo.vm"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.serverConfig.package" description="Generates the server configuration package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/ServerConfig.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/ServerConfig">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/WebDashboard/Templates">
+				<include name="ProjectServerConfiguration.vm"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.securityConfig.package" description="Generates the security configuration package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/SecurityConfig.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/SecurityConfig">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/WebDashboard/Templates">
+				<include name="SecurityConfiguration.vm"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.userList.package" description="Generates the user list package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/UserList.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/UserList">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/WebDashboard/Templates">
+				<include name="UserList.vm"/>
+				<include name="UserDiagnostics.vm"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="project.level.packages" description="Generate the project level packages"
+          depends="build.projectStats.package,build.projectConfig.package,build.modificationHistory.package,build.packageList.package">
+	</target>
+
+	<target name="build.projectStats.package" description="Generates the project statistics package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/ProjectStats.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/ProjectStatistics">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/Xsl">
+				<include name="StatisticsGraphs.xsl"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.projectConfig.package" description="Generates the project configuration package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/ProjectConfig.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/ProjectConfig">
+				<include name="*.*"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.modificationHistory.package" description="Generates the modification history package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/ModificationHistory.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/ModificationHistory">
+				<include name="*.*"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.packageList.package" description="Generates the package list package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/PackageList.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/PackageList">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/WebDashboard/Templates">
+				<include name="PackageList.vm"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.level.packages" description="Generate the build level packages"
+          depends="build.nunit.package,build.ndepend.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.msTest.package">
+	</target>
+
+	<target name="build.nunit.package" description="Generates the NUnit package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/NUnit.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/NUnit">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/Xsl">
+				<include name="unittests.xsl"/>
+				<include name="tests.xsl"/>
+				<include name="timing.xsl"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.ndepend.package" description="Generates the NDepend package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/NDepend.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/NDepend">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/Xsl">
+				<include name="ndependreport-ccnet.v2.xsl"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.nant.package" description="Generates the NAnt package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/NAnt.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/NAnt">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/Xsl">
+				<include name="compile.xsl"/>
+				<include name="NAnt.xsl"/>
+				<include name="NAntTiming.xsl"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.msbuild.package" description="Generates the MSBuild package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/MSBuild.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/MSBuild">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/Xsl">
+				<include name="compile-msbuild.xsl"/>
+				<include name="msbuild.xsl"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.msTest.package" description="Generates the MSTest package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/MSTest.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/MSTest">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/Xsl">
+				<include name="MsTestSummary.xsl"/>
+				<include name="MsTestReport.xsl"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.fxcop.package" description="Generates the FxCop package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/FxCop.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/FxCop">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/Xsl">
+				<include name="fxcop-summary_1_36.xsl"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.ncover.package" description="Generates the NCover package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/NCover.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/NCover">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/Xsl">
+				<include name="NCoverSummary.xsl"/>
+				<include name="NCover.xsl"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.simian.package" description="Generates the Simian package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/Simian.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/Simian">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/Xsl">
+				<include name="SimianSummary.xsl"/>
+				<include name="SimianReport.xsl"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.fitnesse.package" description="Generates the Fitnesse package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/Fitnesse.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/Fitnesse">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/Xsl">
+				<include name="fitnesse.xsl"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build.gendarme.package" description="Generates the Gendarme package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/Gendarme.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/Gendarme">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/Xsl">
+				<include name="gendarme-summary-ccnet.xsl"/>
+				<include name="gendarme-report-ccnet.xsl"/>
+			</fileset>
+		</zip>
+	</target>
+
+</project>

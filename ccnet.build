@@ -1,755 +1,256 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 
-<project name="ccnet" default="test">
+<project name="CruiseControl.NET" default="showHelp" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
 
+	<!-- properties -->
+	<property name="nant.verbosity"			 overwrite="false"	value="true" />
+	<property name="build.configuration"	 overwrite="false"	value="Build" />
+	<property name="build.target"			 overwrite="false"	value="Build" />
+	<property name="build.project"			 overwrite="false"	value="ccnet.sln" />
+	<property name="build.target.framework"  overwrite="false"	value="3.5"  />
+	<property name="CCNetLabel"				 overwrite="false"	value="0.0.0.0" />
+	<property name="codemetrics.output.type" overwrite="false"	value="XmlFile" />
 
-    <!-- custom scripts -->
-    <script language="C#" prefix="RuWi">
-          <references>
-              <include name="System.dll" />
-		  </references>
+	<!-- common path properties -->
+	<property name="src.dir"				readonly="true"		value="${path::get-full-path('project')}" />
+	<property name="build.dir"				readonly="true"		value="${path::get-full-path('Build')}" />
+	<property name="build.metrics.dir"		readonly="true"		value="${path::get-full-path('BuildMetrics')}" />
+	<property name="publish.dir"			readonly="true"		value="${path::get-full-path('Publish')}" />
+	<property name="dist.dir"				readonly="true"		value="${path::get-full-path('Dist')}" />
+	<property name="tools.dir"				readonly="true"		value="${path::get-full-path('Tools')}" />
+	<property name="gendarme.project"		overwrite="false"	value="${path::combine(src.dir, 'gendarme.assemblies.txt')}" />
+	<property name="ndepend.project"		overwrite="false"	value="${path::combine(src.dir, 'NDependProject.xml')}" />
+	<property name="fxcop.project"			overwrite="false"	value="${path::combine(src.dir, 'CruiseControl.NET.FxCop')}" />
 
-		  <code>
-            <![CDATA[
-                [Function("UpdateNsiVersion")]
-                public static bool UpdateNsiVersion(string inputFile, string newVersion)
-                {
-                    bool ok = true;
+	<!-- tool path properties -->
+	<property name="nauckit.nant.assembly"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'NAnt'), 'NauckIT.NAnt.dll')}" />
+	<property name="ra.nant.assembly"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NAnt'), 'Ra.Build.Tasks.dll')}" />
+	<property name="gendarme.executable"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'Gendarme'), 'gendarme.exe')}" />
+	<property name="ndepend.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NDepend'), 'NDepend.Console.exe')}" />
+	<property name="fxcop.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}" />
+	<property name="nunit.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'nunit'), 'nunit-console.exe')}" />
+	<property name="nsis.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NSIS'), 'makensis.exe')}" />
 
-                    try
-                    {
-                        System.IO.StreamReader versionFile = new System.IO.StreamReader(inputFile, System.Text.Encoding.ASCII);
-                        string line = "";
-                        System.Text.StringBuilder result = new StringBuilder();
+	<!-- common assembly info properties -->
+	<property name="assembly.company"		readonly="true"		value="ThoughtWorks Inc." />
+	<property name="assembly.product"		readonly="true"		value="CruiseControl.NET" />
+	<property name="assembly.copyright"		readonly="true"		value="Copyright © 2003 - ${datetime::get-year(datetime::now())} ${assembly.company}"  />
+	<property name="assembly.trademark"		readonly="true"		value="" />
+	<property name="assembly.version"		readonly="true"		value="${CCNetLabel}" />
+	<property name="assembly.fileversion"	readonly="true"		value="${CCNetLabel}" />
 
-                        string searchPattern = @"\d+\.\d+\.\d+";
+	<!-- Framework Support
+	http://nant.sourceforge.net/faq.html#framework-support
+	-->
+	<property name="nant.settings.currentframework" value="${framework::get-family(nant.settings.currentframework)}-${build.target.framework}" />
 
-                        while (!versionFile.EndOfStream)
-                        {
-                            line = versionFile.ReadLine();
+	<!-- Includes -->
+	<include buildfile="${path::combine(tools.dir, 'ccnet-packaging.inc.build')}" />
+	<include buildfile="${path::combine(tools.dir, 'ccnet-help.inc.build')}" />
+	<include buildfile="${path::combine(tools.dir, 'ccnet-utils.inc.build')}" />
+	<include buildfile="${path::combine(tools.dir, 'ccnet-packaging-webdashboard-packages.inc.build')}" />	
 
-			                if (System.Text.RegularExpressions.Regex.IsMatch(line, searchPattern) && (line.StartsWith("!define PRODUCT_VERSION")))
-                            {
-                                line = System.Text.RegularExpressions.Regex.Replace(line, searchPattern, newVersion);
-                            }
+	<!-- Targets -->
+	<target name="all" depends="clean, init, build, runTests, runCodeMetrics, package" description="" />
 
-                            result.AppendLine(line);
-                        }
-
-                        versionFile.Close();
-
-                        System.IO.StreamWriter updatedVersionfile = new System.IO.StreamWriter(inputFile);
-                        updatedVersionfile.Write(result.ToString());
-                        updatedVersionfile.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        ok = false;
-                        Console.WriteLine(ex.ToString());
-                    }
-
-                    return ok;
-                }
-                ]]>
-          </code>
-     </script>
-    <!-- end custom scripts -->
-
-
-    <!-- PROPERTIES -->
-    <property name="debug" value="true"/>
-    <property name="verbosity" value="true"/>
-
-    <property name="build.dir" value="build"/>
-    <property name="src.dir" value="project"/>
-    <property name="lib.dir" value="lib"/>
-    <property name="package.dir" value="package"/>
-    <property name="webdashboard.dir" value="deployed\webdashboard"/>
-
-    <property name="remote.dll" value="ThoughtWorks.CruiseControl.Remote.dll"/>
-    <property name="core.dll" value="ThoughtWorks.CruiseControl.Core.dll"/>
-    <property name="webdashboard.dll" value="ThoughtWorks.CruiseControl.WebDashboard.dll"/>
-    <property name="unittests.dll" value="ThoughtWorks.CruiseControl.UnitTests.dll"/>
-    <property name="MSBuildLogger.dll" value="ThoughtWorks.CruiseControl.MSBuild.dll"/>
-    <property name="console.exe" value="ccnet.exe"/>
-    <property name="service.exe" value="ccservice.exe"/>
-    <property name="cctray.exe" value="cctray.exe"/>
-    <property name="nunit-console.exe" value="tools\nunit\nunit-console.exe" />
-    <property name="ncover-console.exe" value="tools\ncover\NCover.Console.exe" />
-    <property name="shfb.dir" value="tools\shfb" />
-    <property name="nantcontrib.assembly" value="tools\nant\contrib\NAnt.Contrib.Tasks.dll" />
-    <property name="vil.executable" value="tools\vil\vil.exe" />
-    <property name="vil.assemblies" value="comma,separated,list,of,assemblies,to,analyze (full path)" />
-    <property name="simian.executable" value="tools\simian\simian-2.2.17.exe" />
-    <property name="Gendarme.executable" value="tools\Gendarme\gendarme.exe" />
-    <property name="CCNetLabel" value="0" overwrite="false" />    
-    <property name="CCNetArtifactDirectory" value="${build.dir}" overwrite="false" />
-	<property name="ReleaseVersion" value="0.0.0" />    
-
-
-	<target name="PrepareForRelease" description="to be used by the person when doing a release on sourceforge, confluence, ...">
-
-		<fail message="Pass the ReleaseVersion property when calling this target with a correct value, eg.: 1.4.4" if="${ReleaseVersion=='0.0.0'}"   />
-		
-		<echo message="Clearing doc folder of all existing files ... " />
-		<delete includeemptydirs="false" >
-            <fileset>
-                <patternset >
-                    <include name="doc/CCNET/**"  />
-                    <exclude name="**/.svn/**"  />
-					<exclude name="**/_svn/**"  />
-				</patternset>
-            </fileset>
-        </delete>
-
-
-		<echo message="Updating Nsi files ..." />
-		<property name="nsiFile" value = "ccnet.nsi" />
-
-        <if test="${not RuWi::UpdateNsiVersion(nsiFile,ReleaseVersion)}">
-            <fail message="updating file: ${nsiFile} failed" />
-        </if>
-
-
-		<property name="nsiFile" value = "ccvalidator.nsi" />
-
-        <if test="${not RuWi::UpdateNsiVersion(nsiFile,ReleaseVersion)}">
-            <fail message="updating file: ${nsiFile} failed" />
-        </if>
-
-		<property name="nsiFile" value = "cctray.nsi" />
-
-        <if test="${not RuWi::UpdateNsiVersion(nsiFile,ReleaseVersion)}">
-            <fail message="updating file: ${nsiFile} failed" />
-        </if>
-
-
-
+	<target name="clean" description="Clean up">
+		<delete dir="${build.dir}" if="${directory::exists(build.dir)}" verbose="${nant.verbosity}" />
+		<delete dir="${publish.dir}" if="${directory::exists(publish.dir)}" verbose="${nant.verbosity}" />
+		<delete dir="${dist.dir}" if="${directory::exists(dist.dir)}" verbose="${nant.verbosity}" />
+		<delete verbose="${nant.verbosity}">
+			<fileset basedir="." failonempty="false">
+				<include name="*.nsi"/>
+			</fileset>
+		</delete>
 	</target>
 
-
-	<target name="all" depends="clean, compile, test, deploy, dist"/>
-
-	<target name="clean" description="cleans up everything">
-		<delete dir="${build.dir}" if="${directory::exists(build.dir)}"/>
-		<delete dir="deployed" if="${directory::exists('deployed')}"/>
-		<delete dir="dist" if="${directory::exists('dist')}"/>
+	<target name="init" description="Initial compilation setup">
+		<mkdir dir="${build.dir}" unless="${directory::exists(build.dir)}" verbose="${nant.verbosity}" />
+		<mkdir dir="${build.metrics.dir}" unless="${directory::exists(build.metrics.dir)}" verbose="${nant.verbosity}" />
+		<mkdir dir="${publish.dir}" unless="${directory::exists(publish.dir)}" verbose="${nant.verbosity}" />
+		<mkdir dir="${dist.dir}" unless="${directory::exists(dist.dir)}" verbose="${nant.verbosity}" />
 	</target>
 
-	<target name="clean-vs" description="Delete Visual Studio artifacts">
-		<!-- NB - this target will likely fail if you have the solution open in Visual Studio -->
-		<foreach item="File" property="filename">
-			<in>
-				<items basedir="project">
-					<include name="*.suo" />
-					<include name="*.resharperoptions" />
-					<include name="*\*.user" />
-				</items>
-			</in>
-			<do>
-				<delete file="${filename}" />
-			</do>
-		</foreach>
-		<foreach item="Folder" property="foldername">
-			<in>
-				<items basedir="project">
-					<include name="*\bin" />
-					<include name="*\obj" />
-					<!-- can't seem to pick this up using a wild card -->
-					<include name="_ReSharper.ccnet" />
-				</items>
-			</in>
-			<do>
-				<delete dir="${foldername}" />
-			</do>
-		</foreach>
+	<target name="createAssemblyInfo" description="Create an assembly info file with the current build number">
+		<asminfo language="CSharp" output="${path::combine(src.dir, 'CommonAssemblyInfo.cs')}" verbose="${nant.verbosity}">
+			<imports>
+				<import namespace="System.Reflection" />
+			</imports>
+			<attributes>
+				<attribute type="AssemblyCompanyAttribute" value="${assembly.company}" />
+				<attribute type="AssemblyProductAttribute" value="${assembly.product}" />
+				<attribute type="AssemblyCopyrightAttribute" value="${assembly.copyright}" />
+				<attribute type="AssemblyTrademarkAttribute" value="${assembly.trademark}" />
+				<attribute type="AssemblyVersionAttribute" value="${assembly.version}" />
+				<attribute type="AssemblyFileVersionAttribute" value="${assembly.fileversion}" />
+			</attributes>
+		</asminfo>
 	</target>
 
-	<target name="init" description="initial compilation setup">
-		<mkdir dir="${build.dir}" verbose="${verbosity}"/>
-	</target>
+	<target name="build" depends="init, createAssemblyInfo" description="Compilation of the build project">
+		<loadtasks assembly="${nauckit.nant.assembly}" />
 
-  <target name="compress" depends="deploy.webdashboard" description="Compresses the JavaScript files">
-    <loadtasks assembly="${lib.dir}\Ra.Build.Tasks.dll" />
-    <jsmin verbose="false" todir="${webdashboard.dir}\Javascript-compressed">
-      <fileset basedir="${webdashboard.dir}\Javascript">
-        <include name="\**\*.js" />
-        <exclude name="\**\jquery.tablesorter.js"/>
-      </fileset>
-    </jsmin>
-    <move todir="${webdashboard.dir}\Javascript" overwrite="true">
-      <fileset basedir="${webdashboard.dir}\Javascript-compressed">
-        <include name="\**\*.js"/>
-      </fileset>
-    </move>
-    <delete dir="${webdashboard.dir}\Javascript-compressed"/>
-  </target>
+		<echo message="Build configuration: ${build.configuration}" />
+		<echo message="Source Dictionary: ${src.dir}" />
+		<echo message="Build Dictionary: ${build.dir}" />
 
-	<!-- COMPILE -->
-	<target name="compile" depends="init" description="compiles everything to be released">
-		<loadtasks assembly="${nantcontrib.assembly}" />
-		<msbuild project="project\ccnet.sln">
-			<property name="Configuration" value="Build" />
+		<msbuild projectFile="${path::combine(src.dir, build.project)}" targets="${build.target}" verbosity="Minimal">
+			<property name="Configuration" value="${build.configuration}" />
+
+			<!-- This is a hack until CCTrayLib uses plugins for Windows only stuff -->
+			<property name="DISABLE_COM" value="${platform::is-unix()}" />
+
+			<!-- Hack for current xbuild issues on Mono 2.5 -->
+			<environment>
+				<variable name="MONO_IOMAP" value="all" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+				<variable name="MONO_PATH" value="${path::get-full-path('lib')}" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+			</environment>
 		</msbuild>
-		
-	<!-- <solution configuration="build" solutionfile="project\ccnet.sln" /> -->
-		<copy file="${src.dir}\console\app.config" tofile="${build.dir}\server\${console.exe}.config" verbose="${verbosity}"/>
-		<copy file="${src.dir}\service\app.config" tofile="${build.dir}\service\${service.exe}.config" verbose="${verbosity}"/>		
-		<copy file="${src.dir}\service\ccnet.config" tofile="${build.dir}\service\ccnet.config" verbose="${verbosity}"/>
+
+		<!-- copy ccnet.config into the server dictionary -->
+		<copy file="${path::combine( path::combine(src.dir, 'service'), 'ccnet.config')}" tofile="${path::combine( path::combine(build.dir, 'Server'), 'ccnet.config')}" verbose="${nant.verbosity}"/>
 	</target>
 
-  <target name="help.compile" description="Generates the help documentation">
-  <!--<target name="help.compile" depends="compile" description="Generates the help documentation">-->
-    <loadtasks assembly="${nantcontrib.assembly}" />
-    <msbuild project="CCNet.shfbproj">
-      <property name="SHFBROOT" value="${directory::get-current-directory()}\${shfb.dir}"/>
-    </msbuild>
-  </target>
-
-	<!-- TEST -->
-	<target name="test" depends="compile, test.unit" />
-
-	<target name="test.unit" description="runs unit tests">
-		<property name="unittests.fullpath" value="${path::get-full-path(build.dir)}\unittests" />
-		<exec program="${ncover-console.exe}" workingdir="${unittests.fullpath}" commandline="//reg &quot;..\..\${nunit-console.exe}&quot; &quot;${unittests.fullpath}\${unittests.dll}&quot;  /xml:../${unittests.dll}-results.xml /nologo //w &quot;${unittests.fullpath}&quot;"/>
-
-		<ncoverexplorer program="tools\ncoverexplorer\ncoverexplorer.console.exe" projectName="CCNet" outputDir="${build.dir}" satisfactoryCoverage="80" reportType="4" xmlReportName="CoverageSummary.xml">
-			<fileset>
-				<include name="${unittests.fullpath}\coverage.xml" />
-			</fileset>
-		</ncoverexplorer>
+	<!-- Test targets -->
+	<target name="runTests" depends="build" description="Run unit tests">
+		<call target="runNUnitTests" cascade="false" />
 	</target>
 
-	<!-- DEPLOY -->
+	<target name="runNUnitTests" depends="build" description="Run the NUnit tests">
+		<loadtasks assembly="${nauckit.nant.assembly}" />
 
-	<target name="deploy" depends="compile, deploy.server, deploy.cctray, deploy.webdashboard, compress, deploy.validator" />
-	
-	<target name="deploy.server" depends="compile">
-		<mkdir dir="deployed\server"/>
-		<copy todir="deployed\server" verbose="${verbosity}">
-			<fileset basedir="${build.dir}\server">
-				<include name="**\*" />
-				<exclude name="**\*.pdb" />
+		<!-- Hack to copy all required files into the UnitTest dictionary until xbuild on Mono 2.5 is fixed -->
+		<if test="${framework::get-family(nant.settings.currentframework) == 'mono'}">
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'CCTray')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'Core')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'Objection')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'Remote')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'Server')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(build.dir, 'WebDashboard')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine(tools.dir, 'nunit')}" failonempty="true">
+					<include name="nunit.framework.dll" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${tools.dir}" failonempty="true">
+					<include name="sleeper.exe" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${src.dir}" failonempty="true">
+					<include name="xsl/**" />
+				</fileset>
+			</copy>
+			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
+				<fileset basedir="${path::combine( path::combine(src.dir, 'UnitTests'), 'resources')}" failonempty="true">
+					<include name="*/**" />
+				</fileset>
+			</copy>
+			<copy file="${path::combine( path::combine(src.dir, 'UnitTests'), 'test.config')}" tofile="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll.config')}" verbose="${nant.verbosity}" />
+		</if>
 
-				<exclude name="**\*.incr" />
-				<exclude name="**\PostBuildEvent.bat" />
-			</fileset>
-		</copy>
+		<nunitTest executable="${nunit.executable}" workingDirectory="${path::combine(build.dir, 'UnitTests')}" outputFile="${path::combine(build.metrics.dir, 'nunit-result.xml')}" commandLineParameterFlag="-">
+			<assemblies>
+				<include name="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll')}" />
+			</assemblies>
 
-		<!-- deliberately copied into same folder as server -->
-		<copy todir="deployed\server" verbose="${verbosity}">
-			<fileset basedir="${build.dir}\service">
-				<include name="**\*" />
-
-				<exclude name="**\*.pdb" />
-				<exclude name="**\*.incr" />
-				<exclude name="**\PostBuildEvent.bat" />
-			</fileset>
-		</copy>
-
-		<!-- deliberately copied into same folder as server -->
-		<copy file="${lib.dir}\${MSBuildLogger.dll}" todir="deployed\server" verbose="${verbosity}" />
-		
-		<copy todir="deployed\server\xsl" verbose="${verbosity}">
-			<fileset basedir="${src.dir}\xsl">
-				<include name="**\*.xsl"/>
-				<include name="**\*.css"/>
-			</fileset>
-		</copy>
+			<!-- Hack for current xbuild issues on Mono 2.5 -->
+			<environment>
+				<variable name="MONO_PATH" value="${path::get-full-path('lib')}" if="${framework::get-family(nant.settings.currentframework) == 'mono'}" />
+			</environment>
+		</nunitTest>
 	</target>
 
-  <target name="deploy.validator" description="Generate the deployment files for CCValidator." depends="compile">
-    <copy todir="deployed\ccvalidator">
-      <fileset basedir="${build.dir}\server">
-        <include name="CCValidator.exe"/>
-        <include name="CCValidator.exe.config"/>
-        <include name="*.dll"/>
-      </fileset>
-    </copy>
-  </target>
+	<!-- Code analyze metric targets -->
+	<target name="runCodeMetrics" depends="build" description="Analyze and collect code metrics of the compiled assemblies">
 
-  <target name="deploy.cctray">
-		<mkdir dir="deployed\cctray" />
+		<call target="runGendarme" cascade="false" />
 
-		<copy todir="deployed\cctray">
-			<fileset basedir="${build.dir}\cctray">
-				<include name="**\*" />
+		<!-- Execute Windows only code metric tools -->
+		<if test="${platform::is-windows()}">
+			<!-- Check for NDepend installation -->
+			<if test="${not file::exists(ndepend.executable)}">
+				<echo level="Warning" message="NDepend installation not found at '${ndepend.executable}'. Please install NDepend! Target canceled." />
+			</if>
+			<if test="${file::exists(ndepend.executable)}">
+				<call target="runNdepend" cascade="false" />
+			</if>
 
-				<exclude name="**\*.pdb" />
-				<exclude name="**\*.incr" />
-				<exclude name="**\PostBuildEvent.bat" />
-			</fileset>
-		</copy>
-
-		<copy todir="deployed\cctray">
-			<fileset basedir="project\cctray\Audio">
-				<include name="*" />
-			</fileset>
-		</copy>
+			<!-- Run FxCop -->
+			<call target="runFxCop" cascade="false" />
+		</if>
 	</target>
 
-	<target name="deploy.webdashboard" description="deploys the web dashboard application" depends="compile,build.packages">
-		<mkdir dir="${webdashboard.dir}" verbose="${verbosity}"/>
-		<copy todir="${webdashboard.dir}\bin">
-			<fileset basedir="${build.dir}\webdashboard">
-				<include name="**\*" />
+	<target name="runGendarme" depends="build" description="Analyze the compiled assemblies with Mono's Gendarme">
+		<loadtasks assembly="${nauckit.nant.assembly}" />
 
-				<exclude name="**\*.pdb" />
-				<exclude name="**\*.incr" />
-				<exclude name="**\PostBuildEvent.bat" />
-			</fileset>
-		</copy>
-		<copy todir="${webdashboard.dir}">
-			<fileset basedir="project\webdashboard">
-				<include name="**\*.aspx"/>
-				<include name="**\*.ascx"/>
-				<include name="**\*.asax"/>
-				<include name="**\*.config"/>
-				<include name="**\*.css"/>
-        <include name="**\*.gif"/>
-        <include name="**\*.png"/>
-				<include name="**\*.html"/>
-				<include name="**\*.jpg"/>
-				<include name="**\*.jpeg"/>
-				<include name="**\*.js" />
-				<include name="**\*.vm" />
-				<include name="**\*.wav"/>
-        <include name="**\*.xsl"/>
-        <include name="**\*.ico"/>
+		<if test="${codemetrics.output.type == 'LogFile'}">
+			<property name="gendarme.output.file" value="gendarme-result.log" />
+		</if>
 
-				<exclude name="bin\**\*" />
-				<exclude name="obj\**\*" />
-				<exclude name="test\**\*" />
-			</fileset>
-		</copy>
+		<if test="${codemetrics.output.type == 'XmlFile'}">
+			<property name="gendarme.output.file" value="gendarme-result.xml" />
+		</if>
+
+		<if test="${codemetrics.output.type == 'HtmlFile'}">
+			<property name="gendarme.output.file" value="gendarme-result.html" />
+		</if>
+
+		<gendarme executable="${gendarme.executable}" outputType="${codemetrics.output.type}" outputFile="${path::combine(build.metrics.dir, gendarme.output.file)}"
+              workingDirectory="${build.dir}" assemblyListFile="${gendarme.project}" />
 	</target>
 
-	<!-- CREATE DISTRIBUTABLES -->
-  <target name="dist" depends="deploy">
-    <copy todir="deployed" file="license.txt" />
-    <mkdir dir="dist"/>
-		<copy todir="${webdashboard.dir}\doc">
-			<fileset basedir="doc">
-				<include name="**\*" />
-			</fileset>
-		</copy>
-		<copy todir="deployed\examples">
-			<fileset basedir="project/examples">
-				<include name="**\*" />
-			</fileset>
-		</copy>
+	<target name="runNdepend" depends="build" description="Analyze and collect code metrics of the compiled assemblies with NDepend">
+		<loadtasks assembly="${nauckit.nant.assembly}" />
 
-		<exec program="tools\NSIS\makensis.exe" commandline="cctray.nsi" />		
-		<copy todir="${webdashboard.dir}\cctray">
-			<fileset basedir="dist">
-				<include name="*CCTray*.exe" />
-			</fileset>
-		</copy>
-		
-		<zip zipfile="dist\CruiseControl.NET-${CCNetLabel}.zip">
-			<fileset basedir="deployed">
-				<include name="**\*" />
-			</fileset>
-		</zip>
-		
-		<zip zipfile="dist\CruiseControl.NET-${CCNetLabel}.source.zip">
-			<fileset>
-				<include name="**\*" />
-				<exclude name="build.txt" />
-				<exclude name="build\**" />
-				<exclude name="deployed\**" />
-        <exclude name="dist\**" />
-        <exclude name="tools\**" />
-				<exclude name="**\bin\**" />
-				<exclude name="**\obj\**" />
-				<exclude name="**\CVS\**" />
-				<exclude name="**\_Resharper*\**" />
-			</fileset>
-		</zip>
-    <exec program="tools\NSIS\makensis.exe" commandline="ccvalidator.nsi" />
-    <exec program="tools\NSIS\makensis.exe" commandline="ccnet.nsi" />
-  </target>
-		
-	<!-- FOR RUNNING CCNET AGAINST ITSELF -->
-	<target name="dist.publish" depends="dist">
-			
-			<property name="publish.dir" value="${CCNetArtifactDirectory}\${CCNetLabel}" />
-
-			<mkdir dir="${publish.dir}" />
-			<copy todir="${publish.dir}">
-					<fileset basedir="dist">
-							<include name="*"/>
-					</fileset>
-			</copy>			
-	</target>
-	
-	<target name="createAssemblyInfo" description="Create an assembly info file with the current build number" >
-	   <asminfo output="project/CommonAssemblyInfo.cs" language="CSharp">
-		<imports>
-		    <import namespace="System.Reflection" />
-		</imports>
-		<attributes>
-		    <attribute type="AssemblyVersionAttribute" value="${CCNetLabel}" />
-		    <attribute type="AssemblyCopyrightAttribute" value="Copyright © ${datetime::get-year(datetime::now())} ThoughtWorks Inc." />
-		    <attribute type="AssemblyCompanyAttribute" value="ThoughtWorks" />
-		    <attribute type="AssemblyProductAttribute" value="CruiseControl.NET" />
-		</attributes>
-	    </asminfo>
+		<ndepend executable="${ndepend.executable}" projectFile="${ndepend.project}" />
 	</target>
 
-	<target name="ContinuousIntegration" depends="createAssemblyInfo, all, dist.publish, reporting">	
-		<echo message="CI Run for build number ${CCNetLabel} successfully completed" />
+	<target name="runFxCop" depends="build" description="Analyze the compiled assemblies with FxCop">
+		<loadtasks assembly="${nauckit.nant.assembly}" />
+
+		<if test="${codemetrics.output.type == 'LogFile'}">
+			<property name="fxcop.output.file" value="fxcop-result.html" />
+			<property name="fxcop.output.xsl" value="true" />
+		</if>
+
+		<if test="${codemetrics.output.type == 'XmlFile'}">
+			<property name="fxcop.output.file" value="fxcop-result.xml" />
+			<property name="fxcop.output.xsl" value="false" />
+		</if>
+
+		<if test="${codemetrics.output.type == 'HtmlFile'}">
+			<property name="fxcop.output.file" value="fxcop-result.html" />
+			<property name="fxcop.output.xsl" value="true" />
+		</if>
+
+		<fxcop executable="${fxcop.executable}" projectFile="${fxcop.project}" outputFile="${path::combine(build.metrics.dir, fxcop.output.file)}"
+					 xslFile="${path::combine(build.metrics.dir, 'fxcop-report.xsl')}" applyXsl="${fxcop.output.xsl} "/>
 	</target>
-	
-	<target name="netreflector.docs" depends="compile">
-		<loadtasks assembly="lib\NetReflectorDocumenterTask.dll"/>
-		<netreflector assembly="${build.dir}\core\${core.dll}" />
-	</target>
-	
-	<target name="reporting" depends="compile, fxcop, vil, simian, Gendarme" />
-	
-	<target name="fxcop">
-		<mkdir dir="build\fxcop" />
-		<exec program="tools\fxcop\fxcopcmd.exe" 
-			  commandline="/p:tools\fxcop\ccnet.fxcop /o:build\fxcop\ccnet-fxcop.xml /s" failonerror="false"/>
-	</target>
 
-	<target name="vil">
-		<exec program="${vil.executable}" 
-			workingdir="${build.dir}\webdashboard"
-			commandline='/a="${remote.dll},${core.dll},${webdashboard.dll}" /outxml="../ccnet.results-vil.xml"  /m classes,enumerations,structs,types,LOC,events,impInterfaces,WMC,DIT,CBO,RFC,NOC,constructors,methods,imps,fields,properties /sc=type' 
-			failonerror="false"/>
-    	</target>
-
-    <target name="simian" description="runs simian">    
-	<exec program="${simian.executable}">
-		<arg value="-formatter=xml:${build.dir}\ccnet.simian-results.xml"/>
-		<arg value="-failOnDuplication-"/>
-		<arg value="project\core\**\*.cs"/>
-	</exec>
-	<tstamp/>
-	<echo message="Simian run complete"/>
-    </target>
-
-  <target name="Gendarme" description="runs Gendarme">
-    <exec program="${Gendarme.executable}">
-      <arg value="--xml"/>
-      <arg value="gendarme.xml"/>
-      <arg value="build\cctray\cctray.exe"/>
-      <arg value="build\cctray\ThoughtWorks.CruiseControl.CCTrayLib.dll"/>
-      <arg value="build\core\ThoughtWorks.CruiseControl.Core.dll"/>
-      <arg value="build\core\ThoughtWorks.CruiseControl.Remote.dll"/>
-      <arg value="build\server\ccnet.exe"/>
-      <arg value="build\server\CCValidator.exe"/>
-      <arg value="build\service\ccservice.exe"/>
-      <arg value="build\webdashboard\ThoughtWorks.CruiseControl.WebDashboard.dll"/>
-    </exec>
-    <tstamp/>
-    <echo message="Gendarme run complete"/>
-  </target>
-
-  <target name="msbuild">
-    	<property name="nant.settings.currentframework" value="net-2.0"/>
-    	
-	<csc target="library" output="${build.dir}/ThoughtWorks.CruiseControl.MsBuild.XmlLogger.dll" debug="${debug}">
-		<sources basedir=".">
-			<include name="${src.dir}/MsBuildXmlLogger/**/*.cs"/>
-		</sources>
-		<references>
-			<include name="Microsoft.Build.Framework.dll"/>
-			<include name="Microsoft.Build.Utilities.dll"/>
-		</references>
-	</csc>
-    </target>
-    
-    <target name="clean.cvs" description="deletes all backed up merge files from cvs">
-    	<delete>
-    		<fileset>
-    			<include name="**/#.*.*" />
-    		</fileset>
-    	</delete>
-    </target>
-
-  <target name="build.packages" description="Generates the dashboard packages"
-          depends="farm.level.packages,server.level.packages,project.level.packages,build.level.packages">
-    <copy file="${src.dir}\webdashboard\Packages\packages.xml" tofile="deployed\webdashboard\Packages\packages.xml" verbose="${verbosity}"/>
-    <copy todir="deployed\webdashboard\Packages" verbose="${verbosity}">
-      <fileset basedir="${build.dir}\webdashboard\Packages">
-        <include name="*.zip" />
-      </fileset>
-    </copy>
-  </target>
-
-  <target name="farm.level.packages" description="Generate the farm level packages"
-          depends="build.admin.package">
-  </target>
-  
-  <target name="build.admin.package" description="Generates the web dashboard admin package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\DashboardAdmin.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\DashboardAdmin">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\WebDashboard\Templates">
-        <include name="AdminLogin.vm"/>
-        <include name="AdministerDashboard.vm"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="server.level.packages" description="Generate the server level packages"
-          depends="build.queueStatus.package,build.serverLog.package,build.serverInfo.package,build.serverConfig.package,build.securityConfig.package,build.userList.package">
-  </target>
-
-  <target name="build.queueStatus.package" description="Generates the queue status package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\QueueStatus.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\QueueStatus">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\WebDashboard\Templates">
-        <include name="ServerQueueStatus.vm"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.serverLog.package" description="Generates the server log package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\ServerLog.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\ServerLog">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\WebDashboard\Templates">
-        <include name="ServerLog.vm"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.serverInfo.package" description="Generates the server information package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\ServerInfo.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\ServerInformation">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\WebDashboard\Templates">
-        <include name="ServerInfo.vm"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.serverConfig.package" description="Generates the server configuration package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\ServerConfig.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\ServerConfig">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\WebDashboard\Templates">
-        <include name="ProjectServerConfiguration.vm"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.securityConfig.package" description="Generates the security configuration package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\SecurityConfig.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\SecurityConfig">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\WebDashboard\Templates">
-        <include name="SecurityConfiguration.vm"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.userList.package" description="Generates the user list package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\UserList.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\UserList">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\WebDashboard\Templates">
-        <include name="UserList.vm"/>
-        <include name="UserDiagnostics.vm"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="project.level.packages" description="Generate the project level packages"
-          depends="build.projectStats.package,build.projectConfig.package,build.modificationHistory.package,build.packageList.package">
-  </target>
-
-  <target name="build.projectStats.package" description="Generates the project statistics package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\ProjectStats.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\ProjectStatistics">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\Xsl">
-        <include name="StatisticsGraphs.xsl"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.projectConfig.package" description="Generates the project configuration package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\ProjectConfig.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\ProjectConfig">
-        <include name="*.*"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.modificationHistory.package" description="Generates the modification history package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\ModificationHistory.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\ModificationHistory">
-        <include name="*.*"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.packageList.package" description="Generates the package list package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\PackageList.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\PackageList">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\WebDashboard\Templates">
-        <include name="PackageList.vm"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.level.packages" description="Generate the build level packages"
-          depends="build.nunit.package,build.ndepend.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.msTest.package">
-  </target>
-
-  <target name="build.nunit.package" description="Generates the NUnit package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\NUnit.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\NUnit">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\Xsl">
-        <include name="unittests.xsl"/>
-        <include name="tests.xsl"/>
-        <include name="timing.xsl"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.ndepend.package" description="Generates the NDepend package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\NDepend.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\NDepend">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\Xsl">
-        <include name="ndependreport-ccnet.v2.xsl"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.nant.package" description="Generates the NAnt package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\NAnt.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\NAnt">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\Xsl">
-        <include name="compile.xsl"/>
-        <include name="NAnt.xsl"/>
-        <include name="NAntTiming.xsl"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.msbuild.package" description="Generates the MSBuild package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\MSBuild.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\MSBuild">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\Xsl">
-        <include name="compile-msbuild.xsl"/>
-        <include name="msbuild.xsl"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.msTest.package" description="Generates the MSTest package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\MSTest.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\MSTest">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\Xsl">
-        <include name="MsTestSummary.xsl"/>
-        <include name="MsTestReport.xsl"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.fxcop.package" description="Generates the FxCop package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\FxCop.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\FxCop">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\Xsl">
-        <include name="fxcop-summary_1_36.xsl"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.ncover.package" description="Generates the NCover package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\NCover.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\NCover">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\Xsl">
-        <include name="NCoverSummary.xsl"/>
-        <include name="NCover.xsl"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.simian.package" description="Generates the Simian package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\Simian.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\Simian">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\Xsl">
-        <include name="SimianSummary.xsl"/>
-        <include name="SimianReport.xsl"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.fitnesse.package" description="Generates the Fitnesse package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\Fitnesse.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\Fitnesse">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\Xsl">
-        <include name="fitnesse.xsl"/>
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="build.gendarme.package" description="Generates the Gendarme package">
-    <mkdir dir="${build.dir}\WebDashboard\Packages\" verbose="${verbosity}"/>
-    <zip zipfile="${build.dir}\WebDashboard\Packages\Gendarme.zip">
-      <fileset basedir="${src.dir}\WebDashboard\Packages\Gendarme">
-        <include name="*.*"/>
-      </fileset>
-      <fileset basedir="${src.dir}\Xsl">
-        <include name="gendarme-summary-ccnet.xsl"/>
-        <include name="gendarme-report-ccnet.xsl"/>
-      </fileset>
-    </zip>
-  </target>
 </project>
