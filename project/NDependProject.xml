@@ -11,6 +11,7 @@
     <Name>ccservice</Name>
     <Name>CCValidator</Name>
     <Name>ThoughtWorks.CruiseControl.WebDashboard</Name>
+    <Name>ThoughtWorks.CruiseControl.Communications</Name>
   </Assemblies>
   <FrameworkAssemblies>
     <Name>mscorlib</Name>
