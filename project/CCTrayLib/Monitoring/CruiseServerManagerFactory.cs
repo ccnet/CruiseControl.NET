@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             switch (buildServer.Transport)
             {
                 case BuildServerTransport.Remoting:
-                    var manager = cruiseManagerFactory.GetCruiseServerClient(buildServer.Url);
+                    var manager = CruiseServerClientFactory.GenerateRemotingClient(buildServer.Url);
                     return new CachingCruiseServerManager(
                         new RemotingCruiseServerManager(manager, buildServer));
                 case BuildServerTransport.Extension:

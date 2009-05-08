@@ -11,12 +11,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	/// </summary>
 	public class RemotingCruiseServerManager : ICruiseServerManager
 	{
-        private readonly ICruiseServerClient manager;
+        private readonly CruiseServerClientBase manager;
 		private readonly BuildServer configuration;
 		private readonly string displayName;
-		private string sessionToken;
 
-		public RemotingCruiseServerManager(ICruiseServerClient manager, BuildServer buildServer)
+        public RemotingCruiseServerManager(CruiseServerClientBase manager, BuildServer buildServer)
 		{
 			this.manager = manager;
 			this.displayName = buildServer.DisplayName;
@@ -30,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
         public string SessionToken
         {
-            get { return sessionToken; }
+            get { return manager.SessionToken; }
         }
 
 		public string DisplayName
@@ -40,10 +39,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public void CancelPendingRequest(string projectName)
 		{
-            ProjectRequest request = new ProjectRequest();
-            request.SessionToken = sessionToken;
-            request.ProjectName = projectName;
-            ValidateResponse(manager.CancelPendingRequest(request));
+            manager.CancelPendingRequest(projectName);
 		}
 
 		/// <summary>
@@ -51,21 +47,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		/// </summary>
         public CruiseServerSnapshot GetCruiseServerSnapshot()
 		{
-            SnapshotResponse response = manager.GetCruiseServerSnapshot(
-                new ServerRequest(sessionToken));
-            ValidateResponse(response);
-            return response.Snapshot;
+            var snapshot = manager.GetCruiseServerSnapshot();
+            return snapshot;
 		}
 
         public bool Login()
         {
             if (configuration.SecurityType != null)
             {
-                if (sessionToken != null) Logout();
+                Logout();
                 IAuthenticationMode authentication = ExtensionHelpers.RetrieveAuthenticationMode(configuration.SecurityType);
                 authentication.Settings = configuration.SecuritySettings;
-                sessionToken = manager.Login(authentication.GenerateCredentials()).SessionToken;
-                return (sessionToken != null);
+                var isValid = manager.Login(authentication.GenerateCredentials().Credentials);
+                return isValid;
             }
             else
             {
@@ -75,25 +69,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
         public void Logout()
         {
-            if (sessionToken != null)
-            {
-                manager.Logout(new ServerRequest(sessionToken));
-                sessionToken = null;
-            }
-        }
-
-        /// <summary>
-        /// Validates that the request processed ok.
-        /// </summary>
-        /// <param name="value">The response to check.</param>
-        private void ValidateResponse(Response value)
-        {
-            if (value.Result == ResponseResult.Failure)
-            {
-                string message = "Request request has failed on the remote server:" + Environment.NewLine +
-                    value.ConcatenateErrors();
-                throw new CruiseControlException(message);
-            }
+            manager.Logout();
         }
 	}
 }

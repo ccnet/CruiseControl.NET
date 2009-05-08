@@ -462,18 +462,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         }
         #endregion
 
-        #region RetrieveCapacities()
-        [Test]
-        public void RetrieveCapacities()
-        {
-            DataListResponse response = new DataListResponse();
-            response.Result = ResponseResult.Success;
-            CruiseServerClient client = new CruiseServerClient(
-                new ServerStub("RetrieveCapacities", typeof(ServerRequest), null, response));
-            client.RetrieveCapacities();
-        }
-        #endregion
-
         #region ChangePassword()
         [Test]
         public void ChangePasswordSendsRequest()

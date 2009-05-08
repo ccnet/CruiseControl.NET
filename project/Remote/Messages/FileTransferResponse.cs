@@ -7,55 +7,55 @@ using ThoughtWorks.CruiseControl.Remote.Security;
 namespace ThoughtWorks.CruiseControl.Remote.Messages
 {
     /// <summary>
-    /// The response containing a status snapshot.
+    /// The response containing a file transfer instance.
     /// </summary>
-    [XmlRoot("statusSnapshotResponse")]
+    [XmlRoot("fileTransferResponse")]
     [Serializable]
-    public class StatusSnapshotResponse
+    public class FileTransferResponse
         : Response
     {
         #region Private fields
-        private ProjectStatusSnapshot snapshot;
+        private IFileTransfer fileTransfer;
         #endregion
 
         #region Constructors
         /// <summary>
-        /// Initialise a new instance of <see cref="StatusSnapshotResponse"/>.
+        /// Initialise a new instance of <see cref="FileTransferResponse"/>.
         /// </summary>
-        public StatusSnapshotResponse()
+        public FileTransferResponse()
             : base()
         {
         }
 
         /// <summary>
-        /// Initialise a new instance of <see cref="StatusSnapshotResponse"/> from a request.
+        /// Initialise a new instance of <see cref="FileTransferResponse"/> from a request.
         /// </summary>
         /// <param name="request">The request to use.</param>
-        public StatusSnapshotResponse(ServerRequest request)
+        public FileTransferResponse(ServerRequest request)
             : base(request)
         {
         }
 
         /// <summary>
-        /// Initialise a new instance of <see cref="StatusSnapshotResponse"/> from a response.
+        /// Initialise a new instance of <see cref="FileTransferResponse"/> from a response.
         /// </summary>
         /// <param name="response">The response to use.</param>
-        public StatusSnapshotResponse(Response response)
+        public FileTransferResponse(Response response)
             : base(response)
         {
         }
         #endregion
 
         #region Public properties
-        #region Snapshot
+        #region FileTransfer
         /// <summary>
-        /// The snapshot.
+        /// The file transfer instance.
         /// </summary>
-        [XmlElement("snapshot")]
-        public ProjectStatusSnapshot Snapshot
+        [XmlIgnore]
+        public IFileTransfer FileTransfer
         {
-            get { return snapshot; }
-            set { snapshot = value; }
+            get { return fileTransfer; }
+            set { fileTransfer = value; }
         }
         #endregion
         #endregion

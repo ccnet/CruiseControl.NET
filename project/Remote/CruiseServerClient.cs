@@ -11,11 +11,11 @@ namespace ThoughtWorks.CruiseControl.Remote
     /// A client connection to a remote CruiseControl.Net server.
     /// </summary>
     public class CruiseServerClient
+        : CruiseServerClientBase
     {
         #region Private fields
         private readonly IServerConnection connection;
         private string targetServer;
-        private string sessionToken;
         #endregion
 
         #region Constructors
@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// The server that will be targeted by all messages.
         /// </summary>
-        public string TargetServer
+        public override string TargetServer
         {
             get
             {
@@ -51,22 +51,11 @@ namespace ThoughtWorks.CruiseControl.Remote
         }
         #endregion
 
-        #region SessionToken
-        /// <summary>
-        /// The session token to use.
-        /// </summary>
-        public string SessionToken
-        {
-            get { return sessionToken; }
-            set { sessionToken = value; }
-        }
-        #endregion
-
         #region IsBusy
         /// <summary>
         /// Is this client busy performing an operation.
         /// </summary>
-        public bool IsBusy
+        public override bool IsBusy
         {
             get { return connection.IsBusy; }
         }
@@ -89,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Gets information about the last build status, current activity and project name.
         /// for all projects on a cruise server
         /// </summary>
-        public ProjectStatus[] GetProjectStatus()
+        public override ProjectStatus[] GetProjectStatus()
         {
             ProjectStatusResponse resp = ValidateResponse(
                 connection.SendMessage("GetProjectStatus", GenerateServerRequest()))
@@ -103,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Forces a build for the named project.
         /// </summary>
         /// <param name="projectName">project to force</param>
-        public void ForceBuild(string projectName)
+        public override void ForceBuild(string projectName)
         {
             Response resp = connection.SendMessage("ForceBuild", GenerateProjectRequest(projectName));
             ValidateResponse(resp);
@@ -114,9 +103,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">project to force</param>
         /// <param name="parameters"></param>
-        public void ForceBuild(string projectName, List<NameValuePair> parameters)
+        public override void ForceBuild(string projectName, List<NameValuePair> parameters)
         {
-            BuildIntegrationRequest request = new BuildIntegrationRequest(sessionToken, projectName);
+            BuildIntegrationRequest request = new BuildIntegrationRequest(SessionToken, projectName);
             request.BuildValues = parameters;
             Response resp = connection.SendMessage("ForceBuild", request);
             ValidateResponse(resp);
@@ -128,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Attempts to abort a current project build.
         /// </summary>
         /// <param name="projectName">The name of the project to abort.</param>
-        public void AbortBuild(string projectName)
+        public override void AbortBuild(string projectName)
         {
             Response resp = connection.SendMessage("AbortBuild", GenerateProjectRequest(projectName));
             ValidateResponse(resp);
@@ -141,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project to use.</param>
         /// <param name="integrationRequest"></param>
-        public void Request(string projectName, IntegrationRequest integrationRequest)
+        public override void Request(string projectName, IntegrationRequest integrationRequest)
         {
             BuildIntegrationRequest request = new BuildIntegrationRequest(null, projectName);
             request.BuildCondition = integrationRequest.BuildCondition;
@@ -155,7 +144,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Attempts to start a project.
         /// </summary>
         /// <param name="project"></param>
-        public void StartProject(string project)
+        public override void StartProject(string project)
         {
             Response resp = connection.SendMessage("Start", GenerateProjectRequest(project));
             ValidateResponse(resp);
@@ -167,7 +156,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Stop project.
         /// </summary>
         /// <param name="project"></param>
-        public void StopProject(string project)
+        public override void StopProject(string project)
         {
             Response resp = connection.SendMessage("Stop", GenerateProjectRequest(project));
             ValidateResponse(resp);
@@ -180,7 +169,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project to use.</param>
         /// <param name="message"></param>
-        public void SendMessage(string projectName, Message message)
+        public override void SendMessage(string projectName, Message message)
         {
             MessageRequest request = new MessageRequest();
             request.ProjectName = projectName;
@@ -195,7 +184,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Waits for a project to stop.
         /// </summary>
         /// <param name="projectName">The name of the project to use.</param>
-        public void WaitForExit(string projectName)
+        public override void WaitForExit(string projectName)
         {
             Response resp = connection.SendMessage("WaitForExit", GenerateProjectRequest(projectName));
             ValidateResponse(resp);
@@ -206,7 +195,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Cancel a pending project integration request from the integration queue.
         /// </summary>
-        public void CancelPendingRequest(string projectName)
+        public override void CancelPendingRequest(string projectName)
         {
             Response resp = connection.SendMessage("CancelPendingRequest", GenerateProjectRequest(projectName));
             ValidateResponse(resp);
@@ -217,7 +206,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Gets the projects and integration queues snapshot from this server.
         /// </summary>
-        public CruiseServerSnapshot GetCruiseServerSnapshot()
+        public override CruiseServerSnapshot GetCruiseServerSnapshot()
         {
             SnapshotResponse resp = ValidateResponse(
                 connection.SendMessage("GetCruiseServerSnapshot", GenerateServerRequest()))
@@ -230,7 +219,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns the name of the most recent build for the specified project
         /// </summary>
-        public string GetLatestBuildName(string projectName)
+        public override string GetLatestBuildName(string projectName)
         {
             DataResponse resp = ValidateResponse(
                 connection.SendMessage("GetLatestBuildName", GenerateProjectRequest(projectName)))
@@ -243,7 +232,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns the names of all builds for the specified project, sorted s.t. the newest build is first in the array
         /// </summary>
-        public string[] GetBuildNames(string projectName)
+        public override string[] GetBuildNames(string projectName)
         {
             DataListResponse resp = ValidateResponse(
                 connection.SendMessage("GetBuildNames", GenerateProjectRequest(projectName)))
@@ -256,7 +245,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns the names of the buildCount most recent builds for the specified project, sorted s.t. the newest build is first in the array
         /// </summary>
-        public string[] GetMostRecentBuildNames(string projectName, int buildCount)
+        public override string[] GetMostRecentBuildNames(string projectName, int buildCount)
         {
             BuildListRequest request = new BuildListRequest(null, projectName);
             request.NumberOfBuilds = buildCount;
@@ -271,7 +260,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns the build log contents for requested project and build name
         /// </summary>
-        public string GetLog(string projectName, string buildName)
+        public override string GetLog(string projectName, string buildName)
         {
             BuildRequest request = new BuildRequest(null, projectName);
             request.BuildName = buildName;
@@ -286,7 +275,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns a log of recent build server activity. How much information that is returned is configured on the build server.
         /// </summary>
-        public string GetServerLog()
+        public override string GetServerLog()
         {
             DataResponse resp = ValidateResponse(
                 connection.SendMessage("GetServerLog", GenerateServerRequest()))
@@ -299,7 +288,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns a log of recent build server activity for a specific project. How much information that is returned is configured on the build server.
         /// </summary>
-        public string GetServerLog(string projectName)
+        public override string GetServerLog(string projectName)
         {
             DataResponse resp = ValidateResponse(
                 connection.SendMessage("GetServerLog", GenerateProjectRequest(projectName)))
@@ -312,7 +301,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns the version of the server
         /// </summary>
-        public string GetServerVersion()
+        public override string GetServerVersion()
         {
             DataResponse resp = ValidateResponse(
                 connection.SendMessage("GetServerVersion", GenerateServerRequest()))
@@ -325,7 +314,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Adds a project to the server
         /// </summary>
-        public void AddProject(string serializedProject)
+        public override void AddProject(string serializedProject)
         {
             ChangeConfigurationRequest request = new ChangeConfigurationRequest();
             request.ProjectDefinition = serializedProject;
@@ -338,7 +327,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Deletes the specified project from the server
         /// </summary>
-        public void DeleteProject(string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
+        public override void DeleteProject(string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
         {
             ChangeConfigurationRequest request = new ChangeConfigurationRequest(null, projectName);
             request.PurgeWorkingDirectory = purgeWorkingDirectory;
@@ -353,7 +342,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns the serialized form of the requested project from the server
         /// </summary>
-        public string GetProject(string projectName)
+        public override string GetProject(string projectName)
         {
             DataResponse resp = ValidateResponse(
                 connection.SendMessage("GetProject", GenerateProjectRequest(projectName)))
@@ -366,7 +355,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Updates the selected project on the server
         /// </summary>
-        public void UpdateProject(string projectName, string serializedProject)
+        public override void UpdateProject(string projectName, string serializedProject)
         {
             ChangeConfigurationRequest request = new ChangeConfigurationRequest(null, projectName);
             request.ProjectDefinition = serializedProject;
@@ -381,7 +370,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project to use.</param>
         /// <returns></returns>
-        public ExternalLink[] GetExternalLinks(string projectName)
+        public override ExternalLink[] GetExternalLinks(string projectName)
         {
             ExternalLinksListResponse resp = ValidateResponse(
                 connection.SendMessage("GetExternalLinks", GenerateProjectRequest(projectName)))
@@ -396,7 +385,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project to use.</param>
         /// <returns></returns>
-        public string GetArtifactDirectory(string projectName)
+        public override string GetArtifactDirectory(string projectName)
         {
             DataResponse resp = ValidateResponse(
                 connection.SendMessage("GetArtifactDirectory", GenerateProjectRequest(projectName)))
@@ -411,7 +400,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project to use.</param>
         /// <returns></returns>
-        public string GetStatisticsDocument(string projectName)
+        public override string GetStatisticsDocument(string projectName)
         {
             DataResponse resp = ValidateResponse(
                 connection.SendMessage("GetStatisticsDocument", GenerateProjectRequest(projectName)))
@@ -426,7 +415,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project to use.</param>
         /// <returns></returns>
-        public string GetModificationHistoryDocument(string projectName)
+        public override string GetModificationHistoryDocument(string projectName)
         {
             DataResponse resp = ValidateResponse(
                 connection.SendMessage("GetModificationHistoryDocument", GenerateProjectRequest(projectName)))
@@ -441,7 +430,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project to use.</param>
         /// <returns></returns>
-        public string GetRSSFeed(string projectName)
+        public override string GetRSSFeed(string projectName)
         {
             DataResponse resp = ValidateResponse(
                 connection.SendMessage("GetRSSFeed", GenerateProjectRequest(projectName)))
@@ -455,9 +444,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Logs a user into the session and generates a session.
         /// </summary>
         /// <returns>True if the request is successful, false otherwise.</returns>
-        public virtual bool Login(List<NameValuePair> Credentials)
+        public override bool Login(List<NameValuePair> Credentials)
         {
-            sessionToken=null;
+            SessionToken = null;
 
             // Generate the response and send it
             LoginRequest request = new LoginRequest();
@@ -471,7 +460,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             // Check the results
             if (!string.IsNullOrEmpty(resp.SessionToken))
             {
-                sessionToken = resp.SessionToken;
+                SessionToken = resp.SessionToken;
                 return true;
             }
             else
@@ -485,12 +474,15 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Logs a user out of the system and removes their session.
         /// </summary>
-        public virtual void Logout()
+        public override void Logout()
         {
-            sessionToken = null;
-            ValidateResponse(
-                connection.SendMessage("Logout",
-                    GenerateServerRequest()));
+            if (SessionToken != null)
+            {
+                SessionToken = null;
+                ValidateResponse(
+                    connection.SendMessage("Logout",
+                        GenerateServerRequest()));
+            }
         }
         #endregion
 
@@ -498,7 +490,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Retrieves the security configuration.
         /// </summary>
-        public virtual string GetSecurityConfiguration()
+        public override string GetSecurityConfiguration()
         {
             DataResponse resp = ValidateResponse(
                 connection.SendMessage("GetSecurityConfiguration", GenerateServerRequest()))
@@ -515,7 +507,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// A list of <see cref="UserDetails"/> containing the details on all the users
         /// who have been defined.
         /// </returns>
-        public virtual List<UserDetails> ListUsers()
+        public override List<UserDetails> ListUsers()
         {
             ListUsersResponse resp = ValidateResponse(
                 connection.SendMessage("ListUsers", GenerateServerRequest()))
@@ -529,7 +521,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Checks the security permissions for a user against one or more projects.
         /// </summary>
         /// <returns>A set of diagnostics information.</returns>
-        public virtual List<SecurityCheckDiagnostics> DiagnoseSecurityPermissions(string userName, params string[] projects)
+        public override List<SecurityCheckDiagnostics> DiagnoseSecurityPermissions(string userName, params string[] projects)
         {
             DiagnoseSecurityRequest request = new DiagnoseSecurityRequest();
             request.ServerName = TargetServer;
@@ -547,7 +539,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Reads the specified number of audit events.
         /// </summary>
         /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
-        public virtual List<AuditRecord> ReadAuditRecords(int startRecord, int numberOfRecords)
+        public override List<AuditRecord> ReadAuditRecords(int startRecord, int numberOfRecords)
         {
             return ReadAuditRecords(startRecord, numberOfRecords, null);
         }
@@ -556,7 +548,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Reads the specified number of filtered audit events.
         /// </summary>
         /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
-        public virtual List<AuditRecord> ReadAuditRecords(int startRecord, int numberOfRecords, AuditFilterBase filter)
+        public override List<AuditRecord> ReadAuditRecords(int startRecord, int numberOfRecords, AuditFilterBase filter)
         {
             ReadAuditRequest request = new ReadAuditRequest();
             request.ServerName = TargetServer;
@@ -576,7 +568,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project to retrieve the parameters for.</param>
         /// <returns>The list of parameters (if any).</returns>
-        public virtual List<ParameterBase> ListBuildParameters(string projectName)
+        public override List<ParameterBase> ListBuildParameters(string projectName)
         {
             BuildParametersResponse resp = ValidateResponse(
                 connection.SendMessage("ListBuildParameters", GenerateProjectRequest(projectName)))
@@ -585,25 +577,11 @@ namespace ThoughtWorks.CruiseControl.Remote
         }
         #endregion
 
-        #region RetrieveCapacities()
-        /// <summary>
-        /// Retrieves the capacities of the server.
-        /// </summary>
-        /// <returns>The allowed functions of the server.</returns>
-        public virtual List<string> RetrieveCapacities()
-        {
-            DataListResponse resp = ValidateResponse(
-                connection.SendMessage("RetrieveCapacities", GenerateServerRequest()))
-                as DataListResponse;
-            return resp.Data;
-        }
-        #endregion
-
         #region ChangePassword()
         /// <summary>
         /// Changes the password of the user.
         /// </summary>
-        public virtual void ChangePassword(string oldPassword, string newPassword)
+        public override void ChangePassword(string oldPassword, string newPassword)
         {
             ChangePasswordRequest request = new ChangePasswordRequest();
             request.ServerName = TargetServer;
@@ -618,7 +596,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Resets the password for a user.
         /// </summary>
-        public virtual void ResetPassword(string userName, string newPassword)
+        public override void ResetPassword(string userName, string newPassword)
         {
             ChangePasswordRequest request = new ChangePasswordRequest();
             request.ServerName = TargetServer;
@@ -626,6 +604,52 @@ namespace ThoughtWorks.CruiseControl.Remote
             request.NewPassword = newPassword;
             ValidateResponse(
                 connection.SendMessage("ResetPassword", request));
+        }
+        #endregion
+
+        #region TakeStatusSnapshot()
+        /// <summary>
+        /// Takes a snapshot of the current project status.
+        /// </summary>
+        /// <param name="projectName">The name of the project.</param>
+        /// <returns>The current status snapshot.</returns>
+        public override ProjectStatusSnapshot TakeStatusSnapshot(string projectName)
+        {
+            var request = new ProjectRequest(SessionToken, projectName);
+            var response = connection.SendMessage("TakeStatusSnapshot", request);
+            ValidateResponse(response);
+            return (response as StatusSnapshotResponse).Snapshot;
+        }
+        #endregion
+
+        #region RetrievePackageList()
+        /// <summary>
+        /// Retrieves the current list of packages for a project.
+        /// </summary>
+        /// <param name="projectName">The name of the project.</param>
+        /// <returns>The currently available packages.</returns>
+        public override List<PackageDetails> RetrievePackageList(string projectName)
+        {
+            var request = new ProjectRequest(SessionToken, projectName);
+            var response = connection.SendMessage("RetrievePackageList", request);
+            ValidateResponse(response);
+            return (response as ListPackagesResponse).Packages;
+        }
+        #endregion
+
+        #region RetrieveFileTransfer()
+        /// <summary>
+        /// Retrieves a file transfer instance.
+        /// </summary>
+        /// <param name="projectName">The name of the project.</param>
+        /// <param name="fileName">The name of the file.</param>
+        /// <returns>The file transfer instance.</returns>
+        public override IFileTransfer RetrieveFileTransfer(string projectName, string fileName)
+        {
+            var request = new FileTransferRequest(SessionToken, projectName, fileName);
+            var response = connection.SendMessage("RetrieveFileTransfer", request);
+            ValidateResponse(response);
+            return (response as FileTransferResponse).FileTransfer;
         }
         #endregion
         #endregion
@@ -638,7 +662,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         private ServerRequest GenerateServerRequest()
         {
-            ServerRequest request = new ServerRequest(sessionToken);
+            ServerRequest request = new ServerRequest(SessionToken);
             request.ServerName = TargetServer;
             return request;
         }
@@ -652,7 +676,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         private ProjectRequest GenerateProjectRequest(string projectName)
         {
-            ProjectRequest request = new ProjectRequest(sessionToken, projectName);
+            ProjectRequest request = new ProjectRequest(SessionToken, projectName);
             request.ServerName = TargetServer;
             return request;
         }

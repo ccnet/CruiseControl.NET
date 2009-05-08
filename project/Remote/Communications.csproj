@@ -104,14 +104,18 @@
     <Compile Include="CommunicationsAssemblyInfo.cs" />
     <Compile Include="CommunicationsException.cs" />
     <Compile Include="CruiseServerClient.cs" />
+    <Compile Include="CruiseServerClientBase.cs" />
     <Compile Include="CruiseServerClientFactory.cs" />
     <Compile Include="CruiseServerSnapshot.cs" />
     <Compile Include="ExternalLink.cs" />
     <Compile Include="HttpConnection.cs" />
+    <Compile Include="IFileTransfer.cs" />
     <Compile Include="IMessageProcessor.cs" />
     <Compile Include="IntegrationRequest.cs" />
     <Compile Include="IntegrationStatus.cs" />
     <Compile Include="IServerConnection.cs" />
+    <Compile Include="ItemBuildStatus.cs" />
+    <Compile Include="ItemStatus.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageReceivedEventArgs.cs" />
     <Compile Include="Messages\BuildIntegrationRequest.cs" />
@@ -126,6 +130,9 @@
     <Compile Include="Messages\DiagnoseSecurityResponse.cs" />
     <Compile Include="Messages\ErrorMessage.cs" />
     <Compile Include="Messages\ExternalLinksListResponse.cs" />
+    <Compile Include="Messages\FileTransferRequest.cs" />
+    <Compile Include="Messages\FileTransferResponse.cs" />
+    <Compile Include="Messages\ListPackagesResponse.cs" />
     <Compile Include="Messages\ListUsersResponse.cs" />
     <Compile Include="Messages\LoginRequest.cs" />
     <Compile Include="Messages\LoginResponse.cs" />
@@ -138,7 +145,9 @@
     <Compile Include="Messages\ResponseResult.cs" />
     <Compile Include="Messages\ServerRequest.cs" />
     <Compile Include="Messages\SnapshotResponse.cs" />
+    <Compile Include="Messages\StatusSnapshotResponse.cs" />
     <Compile Include="NameValuePair.cs" />
+    <Compile Include="PackageDetails.cs" />
     <Compile Include="Parameters\NumericParameter.cs" />
     <Compile Include="Parameters\ParameterBase.cs" />
     <Compile Include="Parameters\RangeParameter.cs" />
@@ -146,6 +155,7 @@
     <Compile Include="ProjectActivity.cs" />
     <Compile Include="ProjectIntegratorState.cs" />
     <Compile Include="ProjectStatus.cs" />
+    <Compile Include="ProjectStatusSnapshot.cs" />
     <Compile Include="QueuedRequestSnapshot.cs" />
     <Compile Include="QueueSetSnapshot.cs" />
     <Compile Include="QueueSnapshot.cs" />

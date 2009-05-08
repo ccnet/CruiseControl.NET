@@ -13,6 +13,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         : IServerConnection, IDisposable
     {
         #region Private fields
+        private const string managerUri = "CruiseManager.rem";
+        private const string serverClientUri = "CruiseServerClient.rem";
         private readonly Uri serverAddress;
         private IMessageProcessor client;
         private bool isBusy;
@@ -188,8 +190,16 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             if (client == null)
             {
+                // Handle both old and new style connections
+                var actualUri = serverAddress.AbsoluteUri;
+                if (actualUri.EndsWith(managerUri, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    actualUri = actualUri.Substring(0, actualUri.Length - managerUri.Length) + serverClientUri;
+                }
+
+                // Initialise the actual client
                 client = RemotingServices.Connect(typeof(IMessageProcessor),
-                    serverAddress.AbsoluteUri) as IMessageProcessor;
+                    actualUri) as IMessageProcessor;
             }
         }
         #endregion

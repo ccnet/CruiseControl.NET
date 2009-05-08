@@ -6,6 +6,9 @@ using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
+    /// <summary>
+    /// Details on a package.
+    /// </summary>
     [XmlRoot("package")]
     [Serializable]
     public class PackageDetails

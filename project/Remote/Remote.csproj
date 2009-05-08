@@ -122,6 +122,7 @@
     </Compile>
     <Compile Include="CommunicationsException.cs" />
     <Compile Include="CruiseServerClient.cs" />
+    <Compile Include="CruiseServerClientBase.cs" />
     <Compile Include="CruiseServerClientFactory.cs" />
     <Compile Include="Events\IntegrationCompletedEventArgs.cs" />
     <Compile Include="HttpConnection.cs" />
@@ -133,6 +134,8 @@
     <Compile Include="Messages\BuildParametersResponse.cs" />
     <Compile Include="Messages\ChangePasswordRequest.cs" />
     <Compile Include="Messages\ChangeConfigurationRequest.cs" />
+    <Compile Include="Messages\FileTransferResponse.cs" />
+    <Compile Include="Messages\FileTransferRequest.cs" />
     <Compile Include="Messages\ErrorMessage.cs" />
     <Compile Include="Messages\ListPackagesResponse.cs" />
     <Compile Include="Messages\SnapshotResponse.cs" />

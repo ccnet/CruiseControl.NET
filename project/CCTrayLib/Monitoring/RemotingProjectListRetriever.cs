@@ -5,16 +5,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
 	public class RemotingProjectListRetriever
 	{
-		private readonly ICruiseManagerFactory manager;
+        private readonly CruiseServerClientBase manager;
 
-		public RemotingProjectListRetriever(ICruiseManagerFactory manager)
+        public RemotingProjectListRetriever(CruiseServerClientBase manager)
 		{
 			this.manager = manager;
 		}
 
 		public CCTrayProject[] GetProjectList(BuildServer server)
 		{
-			ProjectStatus[] statuses = manager.GetCruiseManager(server.Url).GetProjectStatus();
+			ProjectStatus[] statuses = manager.GetProjectStatus();
 			CCTrayProject[] projects = new CCTrayProject[statuses.Length];
 
 			for (int i = 0; i < statuses.Length; i++)

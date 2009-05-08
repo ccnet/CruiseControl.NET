@@ -13,14 +13,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	{
 		private const string ServerUrl = "tcp://blah:1000/";
         private MockRepository mocks = new MockRepository();
-        private ICruiseServerClient cruiseManagerMock;
+        private CruiseServerClient cruiseManagerMock;
 		BuildServer buildServer;
 		RemotingCruiseServerManager manager;
 
 		[SetUp]
 		public void SetUp()
 		{
-			cruiseManagerMock = mocks.DynamicMock<ICruiseServerClient>();
+			cruiseManagerMock = mocks.StrictMock<CruiseServerClient>();
 
 			buildServer = new BuildServer(ServerUrl);
 			manager = new RemotingCruiseServerManager(cruiseManagerMock, buildServer);
@@ -37,16 +37,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void RetrieveSnapshotFromManager()
 		{
-            SnapshotResponse response = new SnapshotResponse();
-            response.Result= ResponseResult.Success;
-            response.Snapshot= new CruiseServerSnapshot();
-            SetupResult.For(cruiseManagerMock.GetCruiseServerSnapshot(null))
+            var snapshot= new CruiseServerSnapshot();
+            Expect.Call(cruiseManagerMock.GetCruiseServerSnapshot())
                 .IgnoreArguments()
-                .Return(response);
+                .Return(snapshot);
             mocks.ReplayAll();
 
             CruiseServerSnapshot result = manager.GetCruiseServerSnapshot();
-			Assert.AreEqual(response.Snapshot, result);
+			Assert.AreEqual(snapshot, result);
 		}
 	}
 }
