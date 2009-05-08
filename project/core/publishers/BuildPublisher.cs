@@ -34,14 +34,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         public string Description = string.Empty;
 
 
-        [ReflectorProperty("cleanupMethod", Required = false)]
-        public CleanupPolicy CleanupMethod = CleanupPolicy.NoCleaning;
+        [ReflectorProperty("cleanUpMethod", Required = false)]
+        public CleanupPolicy CleanUpMethod = CleanupPolicy.NoCleaning;
 
         /// <summary>
         /// Defines the value for the cleanup procedure
         /// </summary>
         [ReflectorProperty("cleanUpValue", Required = false)]
-        public int CleanValue = 5;
+        public int cleanUpValue = 5;
 
 
         public void Run(IIntegrationResult result)
@@ -60,23 +60,23 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
                 RecurseSubDirectories(srcDir, pubDir);
 
-                switch (CleanupMethod)
+                switch (CleanUpMethod)
                 {
                     case CleanupPolicy.NoCleaning:
                         break;
 
                     case CleanupPolicy.DeleteBuildsOlderThanXDays:
                         DeleteSubDirsOlderThanXDays(new DirectoryInfo(result.BaseFromWorkingDirectory(SourceDir)).FullName,
-                                                    CleanValue, result.BuildLogDirectory);
+                                                    cleanUpValue, result.BuildLogDirectory);
                         break;
 
                     case CleanupPolicy.KeepLastXBuilds:
                         KeepLastXSubDirs(new DirectoryInfo(result.BaseFromWorkingDirectory(SourceDir)).FullName,
-                                                    CleanValue, result.BuildLogDirectory);
+                                                    cleanUpValue, result.BuildLogDirectory);
                         break;
 
                     default:
-                        throw new System.Exception(string.Format("unmapped cleaning method choosen {0}", CleanupMethod));
+                        throw new System.Exception(string.Format("unmapped cleaning method choosen {0}", CleanUpMethod));
                 }
             }
         }
