@@ -566,10 +566,9 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <typeparam name="TService">The type of service to retrieve.</typeparam>
         /// <returns>A valid service, if found, null otherwise.</returns>
-        public virtual TService RetrieveService<TService>()
-            where TService : class
+        public virtual object RetrieveService(Type serviceType)
         {
-            return server.RetrieveService<TService>();
+            return server.RetrieveService(serviceType);
         }
         #endregion
 
@@ -577,10 +576,8 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Adds a service.
         /// </summary>
-        /// <typeparam name="TService">The type of service to add.</typeparam>
         /// <param name="service">The service to add.</param>
-        public virtual void AddService<TService>(TService service)
-            where TService : class
+        public virtual void AddService(object service)
         {
             server.AddService(service);
         }

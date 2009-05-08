@@ -413,20 +413,17 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Retrieves a service.
         /// </summary>
-        /// <typeparam name="TService">The type of service to retrieve.</typeparam>
+        /// <param name="serviceType">The type of service to add.</param>
         /// <returns>A valid service, if found, null otherwise.</returns>
-        TService RetrieveService<TService>()
-            where TService : class;
+        object RetrieveService(Type serviceType);
         #endregion
 
         #region AddService()
         /// <summary>
         /// Adds a service.
         /// </summary>
-        /// <typeparam name="TService">The type of service to add.</typeparam>
         /// <param name="service">The service to add.</param>
-        void AddService<TService>(TService service)
-            where TService : class;
+        void AddService(object service);
         #endregion
     }
 }

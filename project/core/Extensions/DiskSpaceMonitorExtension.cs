@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
                 server.IntegrationStarted += (o, e) =>
                 {
                     // Check all the drives that they have sufficient space
-                    var fileSystem = server.RetrieveService<IFileSystem>() ?? new SystemIoFileSystem();
+                    var fileSystem = server.RetrieveService(typeof(IFileSystem)) as IFileSystem ?? new SystemIoFileSystem();
                     bool hasSpace = true;
                     foreach (var drive in driveSpaces.Keys)
                     {

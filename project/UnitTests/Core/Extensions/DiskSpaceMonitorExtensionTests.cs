@@ -148,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
 
             // Initialise the server
             var server = mocks.DynamicMock<ICruiseServer>();
-            SetupResult.For(server.RetrieveService<IFileSystem>())
+            SetupResult.For(server.RetrieveService(typeof(IFileSystem)))
                 .Return(fileSystem);
             server.IntegrationStarted += null;
             LastCall.IgnoreArguments();
@@ -179,7 +179,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
 
             // Initialise the server
             var server = mocks.DynamicMock<ICruiseServer>();
-            SetupResult.For(server.RetrieveService<IFileSystem>())
+            SetupResult.For(server.RetrieveService(typeof(IFileSystem)))
                 .Return(fileSystem);
             server.IntegrationStarted += null;
             LastCall.IgnoreArguments();
