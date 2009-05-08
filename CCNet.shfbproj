@@ -18,17 +18,58 @@
     <HtmlHelpName>CruiseControlNET</HtmlHelpName>
     <HelpFileFormat>HtmlHelp1x</HelpFileFormat>
     <ProjectSummary>Documentation for CruiseControl.NET.</ProjectSummary>
-    <HelpTitle>CruiseControl.NET Documentation</HelpTitle>
+    <HelpTitle>CruiseControl.NET Common Communications Client</HelpTitle>
     <Preliminary>True</Preliminary>
     <PresentationStyle>Prototype</PresentationStyle>
-    <MissingTags>Summary, Parameter, Returns, Remarks, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
+    <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
     <HtmlHelp1xCompilerPath>Tools\HTML Help Workshop\</HtmlHelp1xCompilerPath>
     <SandcastlePath>Tools\Sandcastle\</SandcastlePath>
     <DocumentationSources>
-      <DocumentationSource sourceFile="project\Remote\bin\Debug\ThoughtWorks.CruiseControl.Communications.dll" xmlns="" />
-      <DocumentationSource sourceFile="project\Remote\bin\Debug\ThoughtWorks.CruiseControl.Communications.xml" xmlns="" />
+      <DocumentationSource sourceFile="build\remote\ThoughtWorks.CruiseControl.Communications.dll" />
+      <DocumentationSource sourceFile="build\remote\ThoughtWorks.CruiseControl.Communications.xml" />
     </DocumentationSources>
     <HelpFileVersion>1.5.0.0</HelpFileVersion>
+    <ComponentConfigurations>
+      <ComponentConfig id="Post-transform Component" enabled="True" xmlns="">
+        <component id="Post-transform Component" type="SandcastleBuilder.Components.PostTransformComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll">
+          <!-- Code colorizer files (required).
+                 Attributes:
+                    Stylesheet file (required)
+                    Script file (required)
+                    "Copy" image file (required) -->
+          <colorizer stylesheet="{@SHFBFolder}Colorizer\highlight.css" scriptFile="{@SHFBFolder}Colorizer\highlight.js" copyImage="{@SHFBFolder}Colorizer\CopyCode.gif" />
+          <!-- Base output path for the files (required).  This should match
+                 the parent folder of the output path of the HTML files (see
+                 SaveComponent). -->
+          <outputPath value="Output\" />
+          <!-- Logo image file (optional).  Filename is required. The height,
+                 width, altText, placement, and alignment attributes are
+                 optional. -->
+          <logoFile filename="{@ProjectFolder}Help\CCNet-Icon.png" height="0" width="0" altText="" placement="left" alignment="left" />
+        </component>
+      </ComponentConfig>
+      <ComponentConfig id="Code Block Component" enabled="True" xmlns="">
+        <component id="Code Block Component" type="SandcastleBuilder.Components.CodeBlockComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll">
+          <basePath value="{@ProjectFolder}" />
+          <languageFilter value="true" />
+          <allowMissingSource value="false" />
+          <removeRegionMarkers value="false" />
+          <colorizer syntaxFile="{@SHFBFolder}Colorizer\highlight.xml" styleFile="{@SHFBFolder}Colorizer\highlight.xsl" copyImageUrl="../icons/CopyCode.gif" language="cs" tabSize="3" numberLines="false" outlining="true" keepSeeTags="false" defaultTitle="true" />
+        </component>
+      </ComponentConfig>
+    </ComponentConfigurations>
+    <PlugInConfigurations>
+    </PlugInConfigurations>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="ThoughtWorks.CruiseControl.Remote" isDocumented="True" xmlns="">Common communications client.
+
+This library provides a common standardised way of communicating with a CruiseControl.NET server.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="ThoughtWorks.CruiseControl.Remote.Messages" isDocumented="True" xmlns="">Message formats for communicating with the server.
+
+Most protocols will convert the request into a message which is then sent to the server. When the server has finished processing the request a response message will be returned.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="ThoughtWorks.CruiseControl.Remote.Parameters" isDocumented="True" xmlns="">These are used for dynamic build parameters.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="ThoughtWorks.CruiseControl.Remote.Security" isDocumented="True" xmlns="">These are used for security settings.</NamespaceSummaryItem>
+    </NamespaceSummaries>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->
@@ -40,7 +81,16 @@
     <Folder Include="Help\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Help\Connect to a Server via Remoting.aml" />
+    <None Include="Help\Connect to a Server via HTTP.aml" />
+    <None Include="Help\Add a New Transport Protocol.aml" />
+    <None Include="Help\Advanced Tasks.aml" />
+    <None Include="Help\Common Tasks.aml" />
+    <None Include="Help\Getting Started.aml" />
     <None Include="Help\Welcome.aml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ContentLayout Include="Help\Main.content" />
   </ItemGroup>
   <!-- Import the SHFB build targets -->
   <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />

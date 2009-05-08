@@ -2,15 +2,27 @@
 <topic id="8004ce1e-424a-4ce2-9e33-bbe34a05d5d7" revisionNumber="1">
   <developerOrientationDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Welcome to the CruiseControl.NET Communications client. This is a light-weight
+      <para>Welcome to the CruiseControl.NET Common Communications Client. This is a light-weight
 .NET library that can be used to communicate with a CruiseControl.NET server.</para>
+	<para>This library is still in the process of being developed and may change
+significantly over the next few iterations.</para>
     </introduction>
     <section>
-      <title>Important Details</title>
-      <content>
-        <para>This library is still in development. As such it should not be used for
-production systems (yet).</para>
-      </content>
+    	<title>What is the Common Communications Client?</title>
+    	<content>
+    		<para>The Common Communications Client is an attempt to consolidate the
+way that clients communicate with the CruiseControl.NET server.</para>
+			<para>There are different ways to communicate with the server - the most
+common are .NET remoting and HTTP. Unfortunately in versions of CruiseControl.NET prior
+to 1.5.0, each client needed to implement its own implementation of these protocols,
+and each client had its own quirks. Additionally, there was no implementation that could
+be used by third-party components and applications - they needed to build their own
+implementation!</para>
+			<para>In contrast, the Common Communications Client is designed to be a simple
+and easy way for any client to communicate with a server, over multiple different protocols.
+As well as this simple goal, the client is also designed to be extensible - so if you don't
+like the way we've done things, it is easy enough to swap in your own components.</para>
+    	</content>
     </section>
     <relatedTopics>
     </relatedTopics>

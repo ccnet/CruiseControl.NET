@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="628bb73f-cac4-4b94-9f59-8b2271bb728c" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>Connecting to a server via .NET Remoting can be done in one of two ways.</para>
+      <para>First, if the URI for the server starts with tcp://, it can be automatically
+detected by the factory</para>
+		<code language="C#">
+var httpClient = CruiseServerClientFactory
+      .GenerateClient("tcp://localhost:21234/CruiseManager.rem");
+		</code>
+		<para>This will detect that the protocol is TCP and assume that .NET Remoting is
+wanted as the transport protocol. This will create a client that uses .NET Remoting as the
+transport protocol</para>
+		<para>The second way is to explicitly create a client that uses .NET Remoting. Again, 
+this can be done by using the factory class:</para>
+		<code language="C#">
+var httpClient = CruiseServerClientFactory
+      .GenerateRemotingClient("tcp://localhost:21234/CruiseManager.rem");
+		</code>
+		<para>This approach will ignore the protocol portion of the URI and just create
+a client that uses .NET Remoting as the transport protocol.</para>
+		<para>Once the client is created, all the standard commands can be sent to the server.</para>
+    </introduction>
+    <relatedTopics>
+    	<link xlink:href="055533b6-7958-4895-9218-315b06efa1d4" />
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>

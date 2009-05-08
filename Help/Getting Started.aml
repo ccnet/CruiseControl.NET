@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="c3ca1106-907f-4cd2-ad3c-bad763b9c3c6" revisionNumber="1">
+  <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>As this library is designed to be very lightweight, it is very simple to
+start using.</para>
+    </introduction>
+    <!-- Optional procedures followed by optional code example but must have
+         at least one procedure or code example -->
+    <procedure>
+      <title>Getting Started</title>
+      <steps class="ordered">
+        <step>
+          <content>
+            <para>The first step is to add a reference to ThoughtWorks.CruiseControl.Communications.dll
+to your project. This library contains every thing that is needed to use the Common
+Communitications Client.</para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>Initialise a client instance to use in your code.</para>
+            <para>This can be done using the client factory:</para>
+            <code language="C#">
+// Retrieve a client instance
+var client = CruiseServerClientFactory
+      .GenerateClient("tcp://localhost:21234/CruiseManager.rem");
+            </code>
+          </content>
+        </step>
+        <step>
+        	<content>
+        		<para>And that's it, the client can now be used to send commands to
+the server and retrieve information.</para>
+        	</content>
+        </step>
+      </steps>
+    </procedure>
+    <codeExample>
+      <content>
+        <para>The following is a full example of how to initialise a client, login to a server
+and trigger a force build on a project:</para>
+        <code language="C#">
+// Retrieve the client instance
+var client = CruiseServerClientFactory
+      .GenerateClient("tcp://localhost:21234/CruiseManager.rem");
+      
+// Initialise the user credentials
+var credentials = new Dictionary&lt;string, string&gt;();
+credentials.Add("name", "JohnDoe");
+credentials.Add("password", "whoareyou");
+
+// Login to the server and trigger a build
+if (client.Login(NameValuePair.FromDictionary(Credentials)))
+{
+  client.ForceBuild("ProjectName");
+}
+else
+{
+  // Tell the user the login failed
+}
+        </code>
+      </content>
+    </codeExample>
+    <relatedTopics>
+      <codeEntityReference qualifyHint="true">T:ThoughtWorks.CruiseControl.Remote.CruiseServerClientBase</codeEntityReference>
+      <codeEntityReference qualifyHint="true">T:ThoughtWorks.CruiseControl.Remote.CruiseServerClientFactory</codeEntityReference>
+    </relatedTopics>
+  </developerHowToDocument>
+</topic>

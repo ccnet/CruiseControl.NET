@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="91b8f208-3603-4298-8021-6ea66c88ee14" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>This section includes some of the more advanced functionality that is
+available in the Common Communications Client.</para>
+    </introduction>
+    <section>
+      <content>
+		<list class="bullet">
+  			<listItem>
+  				<link xlink:href="4996a7ea-d46e-4a28-bb9c-41850bd4424b" />
+  			</listItem>
+  		</list>
+  	  </content>
+  	</section>
+    <relatedTopics>
+    	<link xlink:href="3bb52c4c-9288-4acf-8203-ed520b87e967" />
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>
