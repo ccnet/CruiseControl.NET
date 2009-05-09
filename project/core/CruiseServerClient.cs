@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using ThoughtWorks.CruiseControl.Remote;
-using System.Xml.Serialization;
-using ThoughtWorks.CruiseControl.Remote.Messages;
-using System.Xml;
-using System.Reflection;
 using System.IO;
+using System.Reflection;
+using System.Xml;
+using System.Xml.Serialization;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -17,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core
         : MarshalByRefObject, ICruiseServerClient
     {
         #region Private fields
-		private readonly ICruiseServer cruiseServer;
+        private readonly ICruiseServer cruiseServer;
         private Dictionary<string, Type> messageTypes = null;
         private Dictionary<Type, XmlSerializer> messageSerialisers = new Dictionary<Type, XmlSerializer>();
         #endregion
@@ -28,8 +27,8 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <param name="cruiseServer"></param>
         public CruiseServerClient(ICruiseServer cruiseServer)
-		{
-			this.cruiseServer = cruiseServer;
+        {
+            this.cruiseServer = cruiseServer;
         }
         #endregion
 
