@@ -2,6 +2,7 @@ using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 {
@@ -18,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 
         public IResponse Execute(IRequest request)
         {
-            CruiseServerSnapshotListAndExceptions allCruiseServerSnapshots = farmService.GetCruiseServerSnapshotListAndExceptions();
+            CruiseServerSnapshotListAndExceptions allCruiseServerSnapshots = farmService.GetCruiseServerSnapshotListAndExceptions(null);
             CruiseServerSnapshot[] cruiseServerSnapshots = allCruiseServerSnapshots.Snapshots;
 
             return new XmlFragmentResponse(new CruiseXmlWriter().Write(cruiseServerSnapshots));

@@ -21,10 +21,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 
 		public IResponse Execute(ICruiseRequest request)
 		{
-            string EnforcerName = "BuildForcer";
             string sessionToken = null;
             if ((request != null) && (request.Request != null)) request.Request.GetText("sessionToken");
-            farmService.ForceBuild(request.ProjectSpecifier, sessionToken, EnforcerName);
+            farmService.ForceBuild(request.ProjectSpecifier, sessionToken);
 
 			StringWriter stringWriter = new StringWriter();
 			XmlTextWriter xmlWriter = new XmlTextWriter(stringWriter);

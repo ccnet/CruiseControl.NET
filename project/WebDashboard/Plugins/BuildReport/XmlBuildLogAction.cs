@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 
 		public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
-			return new XmlFragmentResponse(buildRetriever.GetBuild(cruiseRequest.BuildSpecifier).Log);
+			return new XmlFragmentResponse(buildRetriever.GetBuild(cruiseRequest.BuildSpecifier, cruiseRequest.RetrieveSessionToken()).Log);
 		}
 	}
 }

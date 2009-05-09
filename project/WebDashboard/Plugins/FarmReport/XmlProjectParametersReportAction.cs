@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
         public IResponse Execute(IRequest request)
         {
             ICruiseRequest actualRequest = new RequestWrappingCruiseRequest(request, urlBuilder, retriever);
-            List<ParameterBase> parameters = farmService.ListBuildParameters(actualRequest.ProjectSpecifier);
+            List<ParameterBase> parameters = farmService.ListBuildParameters(actualRequest.ProjectSpecifier, null);
 
             XmlDocument document = new XmlDocument();
             XmlElement rootNode = document.CreateElement("parameters");

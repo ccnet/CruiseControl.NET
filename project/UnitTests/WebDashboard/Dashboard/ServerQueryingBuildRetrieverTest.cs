@@ -33,9 +33,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ReturnsBuildUsingLogFromServer()
 		{
-			cruiseManagerWrapperMock.ExpectAndReturn("GetLog", logContent, buildSpecifier);
+			cruiseManagerWrapperMock.ExpectAndReturn("GetLog", logContent, buildSpecifier, null);
 
-			Build returnedBuild = serverQueryingBuildRetriever.GetBuild(buildSpecifier);
+			Build returnedBuild = serverQueryingBuildRetriever.GetBuild(buildSpecifier, null);
 
 			Assert.AreEqual(buildSpecifier, returnedBuild.BuildSpecifier);
 			Assert.AreEqual(logContent, returnedBuild.Log);

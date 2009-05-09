@@ -40,24 +40,24 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		// ToDo - use concatenatable views here, not strings
 		// ToDo - something better for errors
-		public string BuildRecentBuildsTable(IProjectSpecifier projectSpecifier)
+        public string BuildRecentBuildsTable(IProjectSpecifier projectSpecifier, string sessionToken)
 		{
-			return BuildRecentBuildsTable(projectSpecifier, null);
+			return BuildRecentBuildsTable(projectSpecifier, null, sessionToken);
 		}
 
-		public string BuildRecentBuildsTable(IBuildSpecifier buildSpecifier)
+        public string BuildRecentBuildsTable(IBuildSpecifier buildSpecifier, string sessionToken)
 		{
-			return BuildRecentBuildsTable(buildSpecifier.ProjectSpecifier, buildSpecifier);
+			return BuildRecentBuildsTable(buildSpecifier.ProjectSpecifier, buildSpecifier, sessionToken);
 		}
 
-		private string BuildRecentBuildsTable(IProjectSpecifier projectSpecifier, IBuildSpecifier buildSpecifier)
+		private string BuildRecentBuildsTable(IProjectSpecifier projectSpecifier, IBuildSpecifier buildSpecifier, string sessionToken)
 		{
 			Hashtable primaryContext = new Hashtable();
 			Hashtable secondaryContext = new Hashtable();
 
 			try
 			{
-				IBuildSpecifier[] mostRecentBuildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 10);
+				IBuildSpecifier[] mostRecentBuildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 10, sessionToken);
 				secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(mostRecentBuildSpecifiers, buildSpecifier, BuildReportBuildPlugin.ACTION_NAME);
 				primaryContext["buildRows"] = velocityTransformer.Transform(@"BuildRows.vm", secondaryContext);
 				primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, "", ViewAllBuildsProjectPlugin.ACTION_NAME);
@@ -71,12 +71,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			}
 		}
 
-		public HtmlFragmentResponse GenerateAllBuildsView(IProjectSpecifier projectSpecifier)
+        public HtmlFragmentResponse GenerateAllBuildsView(IProjectSpecifier projectSpecifier, string sessionToken)
 		{
 			Hashtable primaryContext = new Hashtable();
 			Hashtable secondaryContext = new Hashtable();
 
-			secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(farmService.GetBuildSpecifiers(projectSpecifier), BuildReportBuildPlugin.ACTION_NAME);
+			secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(farmService.GetBuildSpecifiers(projectSpecifier, sessionToken), BuildReportBuildPlugin.ACTION_NAME);
 			primaryContext["buildRows"] = velocityTransformer.Transform(@"BuildRows.vm", secondaryContext);
 			primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, "", ViewAllBuildsProjectPlugin.ACTION_NAME);
 
@@ -87,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 	    {
 	        ICruiseRequest cruiseRequest = new NameValueCruiseRequestFactory().CreateCruiseRequest(request, urlBuilder, retriever);
 	        IBuildSpecifier mostRecentBuildSpecifier =
-	            farmService.GetMostRecentBuildSpecifiers(cruiseRequest.ProjectSpecifier, 1)[0];
+	            farmService.GetMostRecentBuildSpecifiers(cruiseRequest.ProjectSpecifier, 1, cruiseRequest.RetrieveSessionToken())[0];
 	        DateTime mostRecentBuildDate = new LogFile(mostRecentBuildSpecifier.BuildName).Date;
 	        ConditionalGetFingerprint mostRecentBuildFingerprint =
 	            fingerprintFactory.BuildFromDate(mostRecentBuildDate);

@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.DeleteProjec
 			requestMock.ExpectAndReturn("GetChecked", true, "PurgeWorkingDirectory");
 			requestMock.ExpectAndReturn("GetChecked", false, "PurgeArtifactDirectory");
 			requestMock.ExpectAndReturn("GetChecked", true, "PurgeSourceControlEnvironment");
-			farmServiceMock.Expect("DeleteProject", projectSpecifier, true, false, true);
+			farmServiceMock.Expect("DeleteProject", projectSpecifier, true, false, true, null);
 			string expectedMessage = "Project Deleted";
 			viewBuilderMock.ExpectAndReturn("BuildView", response, new DeleteProjectModel(projectSpecifier, expectedMessage, false, true, false, true));
 

@@ -44,12 +44,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 			velocityContext["projectLinks"] = links;
             if (string.IsNullOrEmpty(request.ProjectName))
 			{
-				velocityContext["log"] = HttpUtility.HtmlEncode(farmService.GetServerLog(request.ServerSpecifier));
+				velocityContext["log"] = HttpUtility.HtmlEncode(farmService.GetServerLog(request.ServerSpecifier, request.RetrieveSessionToken()));
 			}
 			else
 			{
 				velocityContext["currentProject"] = request.ProjectSpecifier.ProjectName;
-				velocityContext["log"] = HttpUtility.HtmlEncode(farmService.GetServerLog(request.ProjectSpecifier));
+				velocityContext["log"] = HttpUtility.HtmlEncode(farmService.GetServerLog(request.ProjectSpecifier, request.RetrieveSessionToken()));
 			}
 
 			return viewGenerator.GenerateView(@"ServerLog.vm", velocityContext);

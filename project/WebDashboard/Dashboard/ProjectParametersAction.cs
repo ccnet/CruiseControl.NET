@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         public IResponse Execute(ICruiseRequest cruiseRequest)
         {
             // Check for any build parameters
-            List<ParameterBase> buildParameters = farmService.ListBuildParameters(cruiseRequest.ProjectSpecifier);
+            List<ParameterBase> buildParameters = farmService.ListBuildParameters(cruiseRequest.ProjectSpecifier, cruiseRequest.RetrieveSessionToken());
             if ((buildParameters != null) && (buildParameters.Count > 0))
             {
                 // Send an HTML fragment with the parameters

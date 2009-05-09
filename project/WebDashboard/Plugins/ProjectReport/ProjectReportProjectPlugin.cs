@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             IProjectSpecifier projectSpecifier = cruiseRequest.ProjectSpecifier;
             IServerSpecifier serverSpecifier = FindServer(projectSpecifier);
 
-            IBuildSpecifier[] buildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 1);
+            IBuildSpecifier[] buildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 1, cruiseRequest.RetrieveSessionToken());
             if (buildSpecifiers.Length == 1)
             {
                 velocityContext["mostRecentBuildUrl"] = linkFactory.CreateProjectLink(projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME).Url;
@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 
             velocityContext["projectName"] = projectSpecifier.ProjectName;
             velocityContext["server"] = serverSpecifier;
-            velocityContext["externalLinks"] = farmService.GetExternalLinks(projectSpecifier);
+            velocityContext["externalLinks"] = farmService.GetExternalLinks(projectSpecifier, cruiseRequest.RetrieveSessionToken());
             velocityContext["noLogsAvailable"] = (buildSpecifiers.Length == 0);
 
             var sessionToken = cruiseRequest.RetrieveSessionToken();
@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             Int32 DateMultiPlier;
 
             GraphMaker = new BuildGraph(
-                farmService.GetMostRecentBuildSpecifiers(projectSpecifier, AmountOfBuildsToRetrieve),
+                farmService.GetMostRecentBuildSpecifiers(projectSpecifier, AmountOfBuildsToRetrieve, cruiseRequest.RetrieveSessionToken()),
                 this.linkFactory);
 
             velocityContext["graphDayInfo"] = GraphMaker.GetBuildHistory(MaxAmountOfDaysToDisplay);
@@ -161,12 +161,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             }
             else if (!string.IsNullOrEmpty(request.FindParameterStartingWith("ForceBuild")))
             {
-                farmService.ForceBuild(projectSpecifier, sessionToken, "Dashboard");
+                farmService.ForceBuild(projectSpecifier, sessionToken);
                 return string.Format("Build successfully forced for {0}", projectSpecifier.ProjectName);
             }
             else if (!string.IsNullOrEmpty(request.FindParameterStartingWith("AbortBuild")))
             {
-                farmService.AbortBuild(projectSpecifier, sessionToken, "Dashboard");
+                farmService.AbortBuild(projectSpecifier, sessionToken);
                 return string.Format("Abort successfully forced for {0}", projectSpecifier.ProjectName);
             }
             else

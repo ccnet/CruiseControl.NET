@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             xsltArgs["applicationPath"] = cruiseRequest.Request.ApplicationPath;
             xsltArgs["onlyShowBuildsWithModifications"] = OnlyShowBuildsWithModifications;
 
-            string HistoryDocument = farmService.GetModificationHistoryDocument(cruiseRequest.ProjectSpecifier);
+            string HistoryDocument = farmService.GetModificationHistoryDocument(cruiseRequest.ProjectSpecifier, cruiseRequest.RetrieveSessionToken());
             if (HistoryDocument.Length == 0)
             {
                 return new HtmlFragmentResponse("No history Data found, make sure you use the modificationHistory Publisher for this project");

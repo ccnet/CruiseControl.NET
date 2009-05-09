@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds
 
 		public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
-			return viewBuilder.GenerateAllBuildsView(cruiseRequest.ProjectSpecifier);
+			return viewBuilder.GenerateAllBuildsView(cruiseRequest.ProjectSpecifier, cruiseRequest.RetrieveSessionToken());
 		}
 
 		public string LinkDescription

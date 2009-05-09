@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 		public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
 			IProjectSpecifier projectSpecifier = cruiseRequest.ProjectSpecifier;
-			IBuildSpecifier[] buildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 1);
+			IBuildSpecifier[] buildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 1, cruiseRequest.RetrieveSessionToken());
 			if (buildSpecifiers.Length == 1)
 			{
 				return new RedirectResponse(linkFactory.CreateBuildLink(buildSpecifiers[0], BuildReportBuildPlugin.ACTION_NAME).Url);

@@ -188,12 +188,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			}
 			else if (request.FindParameterStartingWith("ForceBuild") != string.Empty)
 			{
-				farmService.ForceBuild(ProjectSpecifier(request), sessionToken, "Dashboard", parameters);
+				farmService.ForceBuild(ProjectSpecifier(request), sessionToken, parameters);
 				return string.Format("Build successfully forced for {0}", SelectedProject(request));
 			}
 			else if (request.FindParameterStartingWith("AbortBuild") != string.Empty)
 			{
-				farmService.AbortBuild(ProjectSpecifier(request), sessionToken, "Dashboard");
+				farmService.AbortBuild(ProjectSpecifier(request), sessionToken);
 				return string.Format("Abort successfully forced for {0}", SelectedProject(request));
 			}
 			else

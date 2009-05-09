@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
                 }
             }
 
-			return new HtmlFragmentResponse(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, new string[] {xslFileName}, xsltArgs));
+			return new HtmlFragmentResponse(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, new string[] {xslFileName}, xsltArgs, cruiseRequest.RetrieveSessionToken()));
 		}
 
         /// <summary>

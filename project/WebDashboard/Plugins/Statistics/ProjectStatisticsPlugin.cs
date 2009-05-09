@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
             xsltArgs["applicationPath"] = cruiseRequest.Request.ApplicationPath;
 
             string xslFile = pathProvider.GetFullPathFor(XslFileName);
-            string statisticsDocument = farmService.GetStatisticsDocument(cruiseRequest.ProjectSpecifier);
+            string statisticsDocument = farmService.GetStatisticsDocument(cruiseRequest.ProjectSpecifier, cruiseRequest.RetrieveSessionToken());
             Log.Debug(statisticsDocument);
             string htmlFragment;
             try

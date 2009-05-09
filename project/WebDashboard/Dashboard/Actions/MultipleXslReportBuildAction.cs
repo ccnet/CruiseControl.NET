@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
 			}
 			Hashtable xsltArgs = new Hashtable();
 			xsltArgs["applicationPath"] = cruiseRequest.Request.ApplicationPath;
-			return new HtmlFragmentResponse(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, xslFileNames, xsltArgs));
+			return new HtmlFragmentResponse(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, xslFileNames, xsltArgs, cruiseRequest.RetrieveSessionToken()));
 		}
 
 		[ReflectorArray("xslFileNames")]

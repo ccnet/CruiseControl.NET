@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         {
             var velocityContext = new Hashtable();
             velocityContext.Add("projectName", cruiseRequest.ProjectName);
-            var packages = farmService.RetrievePackageList(cruiseRequest.ProjectSpecifier);
+            var packages = farmService.RetrievePackageList(cruiseRequest.ProjectSpecifier, cruiseRequest.RetrieveSessionToken());
             var packageList = new List<PackageDisplay>();
             foreach (var package in packages)
             {

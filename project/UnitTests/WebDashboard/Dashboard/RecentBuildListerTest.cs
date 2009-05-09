@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			Hashtable context1 = new Hashtable();
 			Hashtable context2 = new Hashtable();
 
-			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", buildSpecifiers, projectSpecifier, 10);
+			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", buildSpecifiers, projectSpecifier, 10, null);
 			linkListFactoryMock.ExpectAndReturn("CreateStyledBuildLinkList", buildLinks, buildSpecifiers, build1Specifier, BuildReportBuildPlugin.ACTION_NAME);
 			context1["links"] = buildLinks;
 			velocityTransformerMock.ExpectAndReturn("Transform", buildRows, @"BuildRows.vm", new HashtableConstraint(context1));
@@ -87,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			context2["allBuildsLink"] = allBuildsLink;
 			velocityTransformerMock.ExpectAndReturn("Transform", recentBuilds, @"RecentBuilds.vm", new HashtableConstraint(context2));
 
-			Assert.AreEqual(recentBuilds, lister.BuildRecentBuildsTable(build1Specifier));
+			Assert.AreEqual(recentBuilds, lister.BuildRecentBuildsTable(build1Specifier, null));
 
 			VerifyAll();
 		}
@@ -102,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			Hashtable context1 = new Hashtable();
 			Hashtable context2 = new Hashtable();
 
-			farmServiceMock.ExpectAndReturn("GetBuildSpecifiers", new IBuildSpecifier [] { build2Specifier, build1Specifier }, projectSpecifier);
+			farmServiceMock.ExpectAndReturn("GetBuildSpecifiers", new IBuildSpecifier [] { build2Specifier, build1Specifier }, projectSpecifier, null);
 			linkListFactoryMock.ExpectAndReturn("CreateStyledBuildLinkList", buildLinks, buildSpecifiers, BuildReportBuildPlugin.ACTION_NAME);
 			context1["links"] = buildLinks;
 			velocityTransformerMock.ExpectAndReturn("Transform", buildRows, @"BuildRows.vm", new HashtableConstraint(context1));
@@ -113,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			context2["allBuildsLink"] = allBuildsLink;
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", allBuildsResponse, @"AllBuilds.vm", new HashtableConstraint(context2));
 
-			Assert.AreEqual(allBuildsResponse, lister.GenerateAllBuildsView(projectSpecifier));
+			Assert.AreEqual(allBuildsResponse, lister.GenerateAllBuildsView(projectSpecifier, null));
 
 			VerifyAll();
 		}
@@ -136,7 +136,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
             requestMock.SetupResult("SubFolders", new string[] {"server", "testServer", "project", "testProject", "build", "testBuild"});
 
-            farmServiceMock.SetupResult("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { build2Specifier, build1Specifier }, typeof(IProjectSpecifier), typeof(int));
+            farmServiceMock.SetupResult("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { build2Specifier, build1Specifier }, typeof(IProjectSpecifier), typeof(int), null);
 
 	        ConditionalGetFingerprint expectedFingerprint = new ConditionalGetFingerprint(mostRecentDate, testToken);
 

@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         {
             // Retrieve the actual snapshot
             IProjectSpecifier projectSpecifier = cruiseRequest.ProjectSpecifier;
-            ProjectStatusSnapshot snapshot = farmServer.TakeStatusSnapshot(projectSpecifier);
+            ProjectStatusSnapshot snapshot = farmServer.TakeStatusSnapshot(projectSpecifier, cruiseRequest.RetrieveSessionToken());
 
             // See what type of output is required
             IResponse output = null;

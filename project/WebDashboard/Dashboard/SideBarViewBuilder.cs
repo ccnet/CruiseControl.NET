@@ -152,17 +152,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                     {
                         IProjectSpecifier projectSpecifier = request.ProjectSpecifier;
                         velocityContext["links"] = pluginLinkCalculator.GetProjectPluginLinks(projectSpecifier);
-                        velocityContext["recentBuildsTable"] = recentBuildsViewBuilder.BuildRecentBuildsTable(projectSpecifier);
+                        velocityContext["recentBuildsTable"] = recentBuildsViewBuilder.BuildRecentBuildsTable(projectSpecifier, request.RetrieveSessionToken());
                         velocityTemplateName = @"ProjectSideBar.vm";
                     }
                     else
                     {
                         IBuildSpecifier buildSpecifier = request.BuildSpecifier;
                         velocityContext["links"] = pluginLinkCalculator.GetBuildPluginLinks(buildSpecifier);
-                        velocityContext["recentBuildsTable"] = recentBuildsViewBuilder.BuildRecentBuildsTable(buildSpecifier);
+                        velocityContext["recentBuildsTable"] = recentBuildsViewBuilder.BuildRecentBuildsTable(buildSpecifier, request.RetrieveSessionToken());
                         velocityContext["latestLink"] = linkFactory.CreateProjectLink(request.ProjectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME);
-                        velocityContext["nextLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetNextBuildSpecifier(buildSpecifier), "", BuildReportBuildPlugin.ACTION_NAME);
-                        velocityContext["previousLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetPreviousBuildSpecifier(buildSpecifier), "", BuildReportBuildPlugin.ACTION_NAME);
+                        velocityContext["nextLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetNextBuildSpecifier(buildSpecifier, request.RetrieveSessionToken()), "", BuildReportBuildPlugin.ACTION_NAME);
+                        velocityContext["previousLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetPreviousBuildSpecifier(buildSpecifier, request.RetrieveSessionToken()), "", BuildReportBuildPlugin.ACTION_NAME);
                         velocityTemplateName = @"BuildSideBar.vm";
                     }
                 }

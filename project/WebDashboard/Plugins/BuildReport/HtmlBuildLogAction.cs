@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 		{
 			Hashtable velocityContext = new Hashtable();
 			IBuildSpecifier buildSpecifier = cruiseRequest.BuildSpecifier;
-			Build build = buildRetriever.GetBuild(buildSpecifier);
+			Build build = buildRetriever.GetBuild(buildSpecifier, cruiseRequest.RetrieveSessionToken());
 			velocityContext["log"] = build.Log.Replace("<", "&lt;").Replace(">", "&gt;");
 
 			// TODO - urk, this is a hack, need a better way of setting extensions

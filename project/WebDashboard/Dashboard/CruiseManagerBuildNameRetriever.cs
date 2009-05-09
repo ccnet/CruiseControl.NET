@@ -12,14 +12,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.cruiseManagerWrapper = cruiseManagerWrapper;
 		}
 
-		public IBuildSpecifier GetLatestBuildSpecifier(IProjectSpecifier projectSpecifier)
+        public IBuildSpecifier GetLatestBuildSpecifier(IProjectSpecifier projectSpecifier, string sessionToken)
 		{
-			return cruiseManagerWrapper.GetLatestBuildSpecifier(projectSpecifier);	
+			return cruiseManagerWrapper.GetLatestBuildSpecifier(projectSpecifier, sessionToken);	
 		}
 
-		public IBuildSpecifier GetNextBuildSpecifier(IBuildSpecifier buildSpecifier)
+        public IBuildSpecifier GetNextBuildSpecifier(IBuildSpecifier buildSpecifier, string sessionToken)
 		{
-			IBuildSpecifier[] buildSpecifiers = cruiseManagerWrapper.GetBuildSpecifiers(buildSpecifier.ProjectSpecifier);
+			IBuildSpecifier[] buildSpecifiers = cruiseManagerWrapper.GetBuildSpecifiers(buildSpecifier.ProjectSpecifier, sessionToken);
 
 			if (buildSpecifiers.Length == 0 || buildSpecifier.Equals(buildSpecifiers[0]))
 			{
@@ -36,9 +36,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			throw new UnknownBuildException(buildSpecifier);
 		}
 
-		public IBuildSpecifier GetPreviousBuildSpecifier(IBuildSpecifier buildSpecifier)
+        public IBuildSpecifier GetPreviousBuildSpecifier(IBuildSpecifier buildSpecifier, string sessionToken)
 		{
-			IBuildSpecifier[] buildSpecifiers = cruiseManagerWrapper.GetBuildSpecifiers(buildSpecifier.ProjectSpecifier);
+			IBuildSpecifier[] buildSpecifiers = cruiseManagerWrapper.GetBuildSpecifiers(buildSpecifier.ProjectSpecifier, sessionToken);
 
 			if (buildSpecifier.Equals(buildSpecifiers[buildSpecifiers.Length - 1]))
 			{

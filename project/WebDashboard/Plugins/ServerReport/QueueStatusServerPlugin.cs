@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 		{
 			Hashtable velocityContext = new Hashtable();
 
-            CruiseServerSnapshotListAndExceptions snapshot = farmService.GetCruiseServerSnapshotListAndExceptions(request.ServerSpecifier);
+            CruiseServerSnapshotListAndExceptions snapshot = farmService.GetCruiseServerSnapshotListAndExceptions(request.ServerSpecifier, request.RetrieveSessionToken());
             List<QueueSnapshot> queues = new List<QueueSnapshot>();
             for (int snapshotLoop = 0; snapshotLoop < snapshot.Snapshots.Length; snapshotLoop++)
             {

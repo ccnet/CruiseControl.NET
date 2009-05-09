@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         public IResponse Execute(ICruiseRequest cruiseRequest)
         {
             IProjectSpecifier projectSpecifier = cruiseRequest.ProjectSpecifier;
-            string projectXml = cruiseManager.GetProject(projectSpecifier);
+            string projectXml = cruiseManager.GetProject(projectSpecifier, cruiseRequest.RetrieveSessionToken());
             return new HtmlFragmentResponse("<pre>" + HttpUtility.HtmlEncode(FormatXml(projectXml)) + "</pre>");
         }
 

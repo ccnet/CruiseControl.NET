@@ -165,7 +165,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			pluginLinkCalculatorMock.ExpectAndReturn("GetProjectPluginLinks", links, projectSpecifier);
 			string recentBuildsView = "";
-			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", recentBuildsView, projectSpecifier);
+			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", recentBuildsView, projectSpecifier, null);
 
 			velocityContext["links"] = links;
 			velocityContext["recentBuildsTable"] = recentBuildsView;
@@ -194,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			pluginLinkCalculatorMock.ExpectAndReturn("GetBuildPluginLinks", links, buildSpecifier);
 			string recentBuildsView = "";
-			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", recentBuildsView, buildSpecifier);
+			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", recentBuildsView, buildSpecifier, null);
 
 			IBuildSpecifier nextBuildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "next");
 			IBuildSpecifier previousBuildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "previous");
@@ -202,8 +202,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			IAbsoluteLink nextLink = new GeneralAbsoluteLink("test next");
 			IAbsoluteLink previousLink = new GeneralAbsoluteLink("test previous");
 
-			buildNameRetrieverMock.ExpectAndReturn("GetNextBuildSpecifier", nextBuildSpecifier, buildSpecifier);
-			buildNameRetrieverMock.ExpectAndReturn("GetPreviousBuildSpecifier", previousBuildSpecifier, buildSpecifier);
+			buildNameRetrieverMock.ExpectAndReturn("GetNextBuildSpecifier", nextBuildSpecifier, buildSpecifier, null);
+			buildNameRetrieverMock.ExpectAndReturn("GetPreviousBuildSpecifier", previousBuildSpecifier, buildSpecifier, null);
 
 			string action = BuildReportBuildPlugin.ACTION_NAME;
 

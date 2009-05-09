@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		{
 			// Setup
 			requestMock.ExpectAndReturn("BuildSpecifier", buildSpecifier);
-			buildRetrieverMock.ExpectAndReturn("GetBuild", build, buildSpecifier);
+			buildRetrieverMock.ExpectAndReturn("GetBuild", build, buildSpecifier, null);
 			urlBuilderMock.ExpectAndReturn("Extension", "foo");
 			urlBuilderMock.Expect("Extension", "xml");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "myUrl", XmlBuildLogAction.ACTION_NAME, buildSpecifier);

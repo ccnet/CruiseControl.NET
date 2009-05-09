@@ -21,13 +21,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			Build build = new Build(buildSpecifier, "logContents");
 
-			buildRetrieverMock.ExpectAndReturn("GetBuild", build, buildSpecifier);
+			buildRetrieverMock.ExpectAndReturn("GetBuild", build, buildSpecifier, null);
 
 			string[] fileNames = new string[] { "file1", "file2" };
 
 			delegateTransformerMock.ExpectAndReturn("Transform", "transformed", "logContents", fileNames, null);
 
-			Assert.AreEqual("transformed", requestTransformer.Transform(buildSpecifier, fileNames, null));
+			Assert.AreEqual("transformed", requestTransformer.Transform(buildSpecifier, fileNames, null, null));
 
 			buildRetrieverMock.Verify();
 			delegateTransformerMock.Verify();

@@ -4,14 +4,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
 	public interface ICruiseManagerWrapper
 	{
-		IBuildSpecifier GetLatestBuildSpecifier(IProjectSpecifier projectSpecifier);
-		string GetLog(IBuildSpecifier buildSpecifier);
-		IBuildSpecifier[] GetBuildSpecifiers(IProjectSpecifier projectSpecifier);
-		string GetServerLog(IServerSpecifier serverSpecifier);
+        IBuildSpecifier GetLatestBuildSpecifier(IProjectSpecifier projectSpecifier, string sessionToken);
+        string GetLog(IBuildSpecifier buildSpecifier, string sessionToken);
+        IBuildSpecifier[] GetBuildSpecifiers(IProjectSpecifier projectSpecifier, string sessionToken);
+        string GetServerLog(IServerSpecifier serverSpecifier, string sessionToken);
 		IServerSpecifier[] GetServerSpecifiers();
-		void AddProject(IServerSpecifier serverSpecifier, string serializedProject);
-		string GetProject(IProjectSpecifier projectSpecifier);
-		void UpdateProject(IProjectSpecifier projectSpecifier, string serializedProject);
-		IServerSpecifier GetServerConfiguration(string serverName);
+        void AddProject(IServerSpecifier serverSpecifier, string serializedProject, string sessionToken);
+        string GetProject(IProjectSpecifier projectSpecifier, string sessionToken);
+        void UpdateProject(IProjectSpecifier projectSpecifier, string serializedProject, string sessionToken);
+        IServerSpecifier GetServerConfiguration(string serverName);
 	}
 }

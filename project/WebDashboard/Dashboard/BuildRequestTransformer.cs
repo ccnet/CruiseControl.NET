@@ -15,9 +15,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.transformer = transformer;
 		}
 
-		public string Transform(IBuildSpecifier buildSpecifier, string[] transformerFileNames, Hashtable xsltArgs)
+        public string Transform(IBuildSpecifier buildSpecifier, string[] transformerFileNames, Hashtable xsltArgs, string sessionToken)
 		{
-			string log = buildRetriever.GetBuild(buildSpecifier).Log;
+			string log = buildRetriever.GetBuild(buildSpecifier, sessionToken).Log;
 			return transformer.Transform(log, transformerFileNames, xsltArgs);
 		}
 	}

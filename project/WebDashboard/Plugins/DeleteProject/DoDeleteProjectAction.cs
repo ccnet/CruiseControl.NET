@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 			bool purgeWorkingDirectory = request.Request.GetChecked("PurgeWorkingDirectory");
 			bool purgeArtifactDirectory = request.Request.GetChecked("PurgeArtifactDirectory");
 			bool purgeSourceControlEnvironment = request.Request.GetChecked("PurgeSourceControlEnvironment");
-			farmService.DeleteProject(projectSpecifier, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
+			farmService.DeleteProject(projectSpecifier, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment, request.RetrieveSessionToken());
 			return viewBuilder.BuildView(BuildModel(projectSpecifier, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment));
 		}
 

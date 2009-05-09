@@ -12,9 +12,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.cruiseManagerWrapper = cruiseManagerWrapper;
 		}
 
-		public Build GetBuild(IBuildSpecifier buildSpecifier)
+        public Build GetBuild(IBuildSpecifier buildSpecifier, string sessionToken)
 		{
-			string log = cruiseManagerWrapper.GetLog(buildSpecifier);
+			string log = cruiseManagerWrapper.GetLog(buildSpecifier, sessionToken);
 
 			return new Build(buildSpecifier, log);
 		}

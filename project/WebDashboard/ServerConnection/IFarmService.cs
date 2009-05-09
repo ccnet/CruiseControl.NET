@@ -9,32 +9,27 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
 	public interface IFarmService
 	{
-		IBuildSpecifier[] GetMostRecentBuildSpecifiers(IProjectSpecifier projectSpecifier, int buildCount);
-		IBuildSpecifier[] GetBuildSpecifiers(IProjectSpecifier serverSpecifier);
-		void DeleteProject(IProjectSpecifier projectSpecifier, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment);
-		string GetServerLog(IServerSpecifier serverSpecifier);
-		string GetServerLog(IProjectSpecifier specifier);
-		void Start(IProjectSpecifier projectSpecifier);
-		void Stop(IProjectSpecifier projectSpecifier);
-        void ForceBuild(IProjectSpecifier projectSpecifier, string enforcerName);
-        void ForceBuild(IProjectSpecifier projectSpecifier, string sessionToken, string enforcerName);
-        void ForceBuild(IProjectSpecifier projectSpecifier, string enforcerName, Dictionary<string, string> parameters);
-		void AbortBuild(IProjectSpecifier projectSpecifier, string enforcerName);
+        IBuildSpecifier[] GetMostRecentBuildSpecifiers(IProjectSpecifier projectSpecifier, int buildCount, string sessionToken);
+        IBuildSpecifier[] GetBuildSpecifiers(IProjectSpecifier serverSpecifier, string sessionToken);
+        void DeleteProject(IProjectSpecifier projectSpecifier, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment, string sessionToken);
+        string GetServerLog(IServerSpecifier serverSpecifier, string sessionToken);
+        string GetServerLog(IProjectSpecifier specifier, string sessionToken);
+        void ForceBuild(IProjectSpecifier projectSpecifier, string sessionToken);
+        void AbortBuild(IProjectSpecifier projectSpecifier, string sessionToken);
         void Start(IProjectSpecifier projectSpecifier, string sessionToken);
         void Stop(IProjectSpecifier projectSpecifier, string sessionToken);
-        void ForceBuild(IProjectSpecifier projectSpecifier, string sessionToken, string enforcerName, Dictionary<string, string> parameters);
-        void AbortBuild(IProjectSpecifier projectSpecifier, string sessionToken, string enforcerName);
+        void ForceBuild(IProjectSpecifier projectSpecifier, string sessionToken, Dictionary<string, string> parameters);
 		ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(string sessionToken);
         ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier serverSpecifier, string sessionToken);
-		ExternalLink[] GetExternalLinks(IProjectSpecifier projectSpecifier);
+        ExternalLink[] GetExternalLinks(IProjectSpecifier projectSpecifier, string sessionToken);
 		IServerSpecifier[] GetServerSpecifiers();
-		IServerSpecifier GetServerConfiguration(string serverName);
+        IServerSpecifier GetServerConfiguration(string serverName);
 		string GetServerVersion(IServerSpecifier serverSpecifier);
-		string GetArtifactDirectory(IProjectSpecifier projectSpecifier);
-		string GetStatisticsDocument(IProjectSpecifier projectSpecifier);
-        CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions();
-        CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions(IServerSpecifier serverSpecifier);
-        string GetModificationHistoryDocument(IProjectSpecifier projectSpecifier);
+        string GetArtifactDirectory(IProjectSpecifier projectSpecifier, string sessionToken);
+        string GetStatisticsDocument(IProjectSpecifier projectSpecifier, string sessionToken);
+        CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions(string sessionToken);
+        CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions(IServerSpecifier serverSpecifier, string sessionToken);
+        string GetModificationHistoryDocument(IProjectSpecifier projectSpecifier, string sessionToken);
         string GetRSSFeed(IProjectSpecifier projectSpecifier);
         string Login(string server, LoginRequest credentials);
         void Logout(string server, string sessionToken);
@@ -79,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// </summary>
         /// <param name="projectSpecifier">The project to check.</param>
         /// <returns>The list of parameters (if any).</returns>
-        List<ParameterBase> ListBuildParameters(IProjectSpecifier projectSpecifier);
+        List<ParameterBase> ListBuildParameters(IProjectSpecifier projectSpecifier, string sessionToken);
 
         /// <summary>
         /// Reads all the specified number of audit events.
@@ -114,9 +109,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         long GetFreeDiskSpace(IServerSpecifier serverSpecifier);
 
         #region RetrieveFileTransfer()
-        RemotingFileTransfer RetrieveFileTransfer(IProjectSpecifier projectSpecifier, string fileName);
+        RemotingFileTransfer RetrieveFileTransfer(IProjectSpecifier projectSpecifier, string fileName, string sessionToken);
 
-        RemotingFileTransfer RetrieveFileTransfer(IBuildSpecifier buildSpecifier, string fileName);
+        RemotingFileTransfer RetrieveFileTransfer(IBuildSpecifier buildSpecifier, string fileName, string sessionToken);
         #endregion
 
         #region RetrievePackageList()
@@ -125,14 +120,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// </summary>
         /// <param name="projectSpecifier"></param>
         /// <returns></returns>
-        PackageDetails[] RetrievePackageList(IProjectSpecifier projectSpecifier);
+        PackageDetails[] RetrievePackageList(IProjectSpecifier projectSpecifier, string sessionToken);
 
         /// <summary>
         /// List the available packages for a build.
         /// </summary>
         /// <param name="projectSpecifier"></param>
         /// <returns></returns>
-        PackageDetails[] RetrievePackageList(IBuildSpecifier buildSpecifier);
+        PackageDetails[] RetrievePackageList(IBuildSpecifier buildSpecifier, string sessionToken);
         #endregion
 
         /// <summary>
@@ -140,6 +135,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// </summary>
         /// <param name="projectName">The name of the project.</param>
         /// <returns>The snapshot of the current status.</returns>
-        ProjectStatusSnapshot TakeStatusSnapshot(IProjectSpecifier projectSpecifier);
+        ProjectStatusSnapshot TakeStatusSnapshot(IProjectSpecifier projectSpecifier, string sessionToken);
     }
 }

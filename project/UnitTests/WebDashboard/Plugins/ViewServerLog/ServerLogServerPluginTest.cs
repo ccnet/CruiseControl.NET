@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 			IResponse response = new HtmlFragmentResponse("foo");
 
 			requestMock.SetupResult("ServerSpecifier", serverSpecifier);
-			farmServiceMock.ExpectAndReturn("GetServerLog", serverLog, serverSpecifier);
+			farmServiceMock.ExpectAndReturn("GetServerLog", serverLog, serverSpecifier, null);
 			farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", new ProjectStatusListAndExceptions(new ProjectStatusOnServer[0], null), serverSpecifier, null);
 			viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ServerLog.vm", new HashtableConstraint(expectedHashtable));
 
@@ -82,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 			requestMock.SetupResult("ServerSpecifier", serverSpecifier);			
 			requestMock.SetupResult("ProjectName", projectSpecifier.ProjectName);
 			requestMock.SetupResult("ProjectSpecifier", projectSpecifier);
-			farmServiceMock.ExpectAndReturn("GetServerLog", serverLog, projectSpecifier);
+			farmServiceMock.ExpectAndReturn("GetServerLog", serverLog, projectSpecifier, null);
 			farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", new ProjectStatusListAndExceptions(new ProjectStatusOnServer[0], null), serverSpecifier, null);			
 			viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ServerLog.vm", new HashtableConstraint(expectedHashtable));
 

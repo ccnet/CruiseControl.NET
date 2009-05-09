@@ -4,8 +4,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public interface IBuildNameRetriever
 	{
-		IBuildSpecifier GetLatestBuildSpecifier(IProjectSpecifier projectSpecifier);
-		IBuildSpecifier GetNextBuildSpecifier(IBuildSpecifier buildSpecifier);
-		IBuildSpecifier GetPreviousBuildSpecifier(IBuildSpecifier buildSpecifier);
+        IBuildSpecifier GetLatestBuildSpecifier(IProjectSpecifier projectSpecifier, string sessionToken);
+        IBuildSpecifier GetNextBuildSpecifier(IBuildSpecifier buildSpecifier, string sessionToken);
+        IBuildSpecifier GetPreviousBuildSpecifier(IBuildSpecifier buildSpecifier, string sessionToken);
 	}
 }

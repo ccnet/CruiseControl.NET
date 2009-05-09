@@ -32,8 +32,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.FarmReport
 		public void ReturnsAnXmlResponse()
 		{
             mockFarmService.ExpectAndReturn("GetCruiseServerSnapshotListAndExceptions",
-			                                new CruiseServerSnapshotListAndExceptions(
-			                                	new CruiseServerSnapshotOnServer[0], new CruiseServerException[0]));
+			                                new CruiseServerSnapshotListAndExceptions(new CruiseServerSnapshotOnServer[0], new CruiseServerException[0]),
+                                            (string)null);
 
 			IResponse response = reportAction.Execute(null);
 			Assert.IsNotNull(response);
@@ -46,8 +46,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.FarmReport
 		public void WhenNoCruiseServerSnapshotEntriesAreReturnedByTheFarmServiceTheXmlContainsJustRootNodes()
 		{
             mockFarmService.ExpectAndReturn("GetCruiseServerSnapshotListAndExceptions",
-			                                new CruiseServerSnapshotListAndExceptions(
-			                                	new CruiseServerSnapshotOnServer[0], new CruiseServerException[0]));
+			                                new CruiseServerSnapshotListAndExceptions(new CruiseServerSnapshotOnServer[0], new CruiseServerException[0]),
+                                            (string)null);
 			XmlFragmentResponse response = (XmlFragmentResponse) reportAction.Execute(null);
 			string xml = response.ResponseFragment;
 
@@ -63,8 +63,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.FarmReport
 
 			CruiseServerSnapshotOnServer cruiseServerSnapshotOnServer = new CruiseServerSnapshotOnServer(cruiseServerSnapshot, null);
             mockFarmService.ExpectAndReturn("GetCruiseServerSnapshotListAndExceptions",
-			                                new CruiseServerSnapshotListAndExceptions(
-			                                	new CruiseServerSnapshotOnServer[] {cruiseServerSnapshotOnServer}, new CruiseServerException[0]));
+			                                new CruiseServerSnapshotListAndExceptions(new CruiseServerSnapshotOnServer[] {cruiseServerSnapshotOnServer}, new CruiseServerException[0]),
+                                            (string)null);
 
 			XmlFragmentResponse response = (XmlFragmentResponse) reportAction.Execute(null);
 			string xml = response.ResponseFragment;
@@ -96,8 +96,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.FarmReport
 
 			CruiseServerSnapshotOnServer cruiseServerSnapshotOnServer = new CruiseServerSnapshotOnServer(cruiseServerSnapshot, null);
             mockFarmService.ExpectAndReturn("GetCruiseServerSnapshotListAndExceptions",
-			                                new CruiseServerSnapshotListAndExceptions(
-			                                	new CruiseServerSnapshotOnServer[] {cruiseServerSnapshotOnServer}, new CruiseServerException[0]));
+			                                new CruiseServerSnapshotListAndExceptions(new CruiseServerSnapshotOnServer[] {cruiseServerSnapshotOnServer}, new CruiseServerException[0]),
+                                            (string)null);
 
 			XmlFragmentResponse response = (XmlFragmentResponse) reportAction.Execute(null);
 			string xml = response.ResponseFragment;

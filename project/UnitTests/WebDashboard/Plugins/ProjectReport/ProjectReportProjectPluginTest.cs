@@ -101,14 +101,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 
             cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
             cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
-			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, 1);
-			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier);
+			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, 1, null);
+			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier, null);
 			linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("foo", "buildUrl"), projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME);
 
             linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("RSS", @"myServer"), projectSpecifier, ThoughtWorks.CruiseControl.WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME);
 
-            
-            farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, ProjectReportProjectPlugin.AmountOfBuildsToRetrieve);            
+
+            farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, ProjectReportProjectPlugin.AmountOfBuildsToRetrieve, null);
             expectedContext["graphDayInfo"] = new NMock.Constraints.IsTypeOf(typeof(ArrayList));
             
             expectedContext["highestAmountPerDay"] = 1;
@@ -164,14 +164,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
             IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
             cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
             cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
-			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[0], projectSpecifier, 1);
-			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier);
+			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[0], projectSpecifier, 1, null);
+			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier, null);
 
             farmServiceMock.ExpectAndReturn("GetRSSFeed", "", projectSpecifier);
             linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("RSS", @"myServer"), projectSpecifier, ThoughtWorks.CruiseControl.WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME);
 
 
-            farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[0], projectSpecifier, ProjectReportProjectPlugin.AmountOfBuildsToRetrieve);
+            farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[0], projectSpecifier, ProjectReportProjectPlugin.AmountOfBuildsToRetrieve, null);
             expectedContext["graphDayInfo"] = new NMock.Constraints.IsTypeOf(typeof(ArrayList));
 
             expectedContext["highestAmountPerDay"] = 1;
@@ -233,14 +233,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 
             cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
             cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
-			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, 1);
-			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier);
+			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, 1, null);
+			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier, null);
 			linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("foo", "buildUrl"), projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME);
 
             farmServiceMock.ExpectAndReturn("GetRSSFeed", "", projectSpecifier);
             linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("RSS", @"myServer"), projectSpecifier, ThoughtWorks.CruiseControl.WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME);
 
-            farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, ProjectReportProjectPlugin.AmountOfBuildsToRetrieve);
+            farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, ProjectReportProjectPlugin.AmountOfBuildsToRetrieve, null);
             expectedContext["graphDayInfo"] = new NMock.Constraints.IsTypeOf(typeof(ArrayList));
 
             expectedContext["highestAmountPerDay"] = 1;

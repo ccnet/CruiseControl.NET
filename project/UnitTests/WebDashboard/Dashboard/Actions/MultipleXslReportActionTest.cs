@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 			requestStub.SetupResult("ApplicationPath", "myAppPath");
 			Hashtable expectedXsltArgs = new Hashtable();
 			expectedXsltArgs["applicationPath"] = "myAppPath";
-			buildLogTransformerMock.ExpectAndReturn("Transform", "transformed", buildSpecifier, new string[] { @"xsl\myxsl.xsl", @"xsl\myotherxsl.xsl" }, new HashtableConstraint(expectedXsltArgs));
+			buildLogTransformerMock.ExpectAndReturn("Transform", "transformed", buildSpecifier, new string[] { @"xsl\myxsl.xsl", @"xsl\myotherxsl.xsl" }, new HashtableConstraint(expectedXsltArgs), null);
 
 			MultipleXslReportBuildAction buildAction = new MultipleXslReportBuildAction((IBuildLogTransformer) buildLogTransformerMock.MockInstance, null);
 			buildAction.XslFileNames = new string[] { @"xsl\myxsl.xsl", @"xsl\myotherxsl.xsl" };
