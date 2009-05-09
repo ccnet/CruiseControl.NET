@@ -200,7 +200,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				return "deleted";
 			}
-			else if (StringUtil.IsBlank(line1) || Convert.ToInt32(line1) == 0)
+            else if (string.IsNullOrEmpty(line1) || Convert.ToInt32(line1) == 0)
 			{
 				return "added";
 			}

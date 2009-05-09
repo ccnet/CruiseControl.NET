@@ -103,10 +103,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 			Hashtable tasks = new Hashtable();
 
 			// don't bother doing anything if no modified objects were found
-			if (StringUtil.IsBlank(newObjects)) return new Modification[0];
+            if (string.IsNullOrEmpty(newObjects)) return new Modification[0];
 
 			// optionally, parse the comments from each associated task
-			if (! StringUtil.IsBlank(newTasks))
+            if (!string.IsNullOrEmpty(newTasks))
 			{
 				tasks = ParseTasks(newTasks);
 			}

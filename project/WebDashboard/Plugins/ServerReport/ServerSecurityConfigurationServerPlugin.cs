@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
             string securityConfig = farmService.GetServerSecurity(request.ServerSpecifier, sessionToken);
             XmlDocument document = new XmlDocument();
             document.LoadXml(securityConfig);
-            if (StringUtil.IsBlank(request.ProjectName))
+            if (string.IsNullOrEmpty(request.ProjectName))
             {
                 securityConfig = document.SelectSingleNode("/security/manager").OuterXml;
             }

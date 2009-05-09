@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
             velocityContext["userName"] = userName;
             velocityContext["message"] = string.Empty;
             string sessionToken = request.RetrieveSessionToken(sessionRetriever);
-            if (!StringUtil.IsBlank(request.ProjectName))
+            if (!string.IsNullOrEmpty(request.ProjectName))
             {
                 velocityContext["projectName"] = request.ProjectName;
                 velocityContext["diagnostics"] = farmService.DiagnoseSecurityPermissions(request.ProjectSpecifier, sessionToken, userName);
@@ -136,11 +136,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
             velocityContext["message"] = message;
             velocityContext["error"] = error;
 
-
-
-
-
-
             ArrayList links = new ArrayList();
             links.Add(new ServerLink(request.UrlBuilder, request.ServerSpecifier, "User List", ActionName));
 
@@ -158,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
                 if (user.DisplayName == null) user.DisplayName = string.Empty;
             }
             velocityContext["users"] = allUsers;
-            if (!StringUtil.IsBlank(request.ProjectName))
+            if (!string.IsNullOrEmpty(request.ProjectName))
             {
                 velocityContext["currentProject"] = request.ProjectName;
                 velocityContext["diagnosticsCall"] = new ProjectLink(request.UrlBuilder, request.ProjectSpecifier, string.Empty, DiagnosticsActionName);

@@ -52,11 +52,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return String.Empty;
         }
 
-        public static bool IsBlank(string input)
-        {
-            return string.IsNullOrEmpty(input);
-        }
-
         public static bool IsWhitespace(string input)
         {
             return (input == null || input.Trim().Length == 0);
@@ -213,7 +208,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         public static string[] NewLineSeparatedStringToArray(string input)
         {
-            if (IsBlank(input))
+            if (string.IsNullOrEmpty(input))
                 return new string[0];
 
             List<string> targets = new List<string>();

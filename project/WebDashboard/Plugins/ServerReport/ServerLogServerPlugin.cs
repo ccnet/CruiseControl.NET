@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 				links.Add(new ProjectLink(urlBuilder, projectSpecifier, projectSpecifier.ProjectName, ServerLogProjectPlugin.ActionName));
 			}
 			velocityContext["projectLinks"] = links;
-			if (StringUtil.IsBlank(request.ProjectName))
+            if (string.IsNullOrEmpty(request.ProjectName))
 			{
 				velocityContext["log"] = HttpUtility.HtmlEncode(farmService.GetServerLog(request.ServerSpecifier));
 			}

@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="value">The argument value.</param>
         public void AppendArgument(string format, string value)
 		{
-			if (StringUtil.IsBlank(value)) return;
+			if (string.IsNullOrEmpty(value)) return;
 
 			AppendSpaceIfNotEmpty();
 			builder.AppendFormat(format, value);
@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="value">The argument value.</param>
         public void AppendArgument(string value)
 		{
-			if (StringUtil.IsBlank(value)) return;
+            if (string.IsNullOrEmpty(value)) return;
 
 			AppendSpaceIfNotEmpty();
 			builder.Append(value);
@@ -97,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="value">The value of the argument to add.</param>
         public void AddArgument(string arg, string separator, string value)
 		{
-			if (StringUtil.IsBlank(value)) return;
+            if (string.IsNullOrEmpty(value)) return;
 			AppendSpaceIfNotEmpty();
 
 			builder.Append(string.Format("{0}{1}{2}", arg, separator, StringUtil.AutoDoubleQuoteString(value)));
@@ -111,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="value">The argument to add.</param>
 		public void AddArgument(string value)
 		{
-			if (StringUtil.IsBlank(value)) return;
+            if (string.IsNullOrEmpty(value)) return;
 			AppendSpaceIfNotEmpty();
 
 			builder.Append(StringUtil.AutoDoubleQuoteString(value));			

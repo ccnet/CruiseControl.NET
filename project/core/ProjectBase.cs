@@ -84,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get
 			{
-				if (StringUtil.IsBlank(configuredWorkingDirectory))
+                if (string.IsNullOrEmpty(configuredWorkingDirectory))
 				{
 					return new DirectoryInfo(Path.Combine(Name, DefaultWorkingSubDirectory)).FullName;
 				}
@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get
 			{
-				if (StringUtil.IsBlank(configuredArtifactDirectory))
+                if (string.IsNullOrEmpty(configuredArtifactDirectory))
 				{
 					return new DirectoryInfo(Path.Combine(Name, DefaultArtifactSubDirectory)).FullName;
 				}

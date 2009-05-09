@@ -26,15 +26,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		}
 
 		[Test]
-		public void TestIsBlank()
-		{
-			Assert.IsTrue(StringUtil.IsBlank(null));
-			Assert.IsTrue(StringUtil.IsBlank(string.Empty));
-			Assert.IsFalse(StringUtil.IsBlank(" "));
-			Assert.IsFalse(StringUtil.IsBlank("foo"));
-		}
-
-		[Test]
 		public void TestIsWhitespace()
 		{
 			Assert.IsTrue(StringUtil.IsWhitespace(null));

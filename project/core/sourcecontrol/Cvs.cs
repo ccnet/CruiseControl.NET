@@ -111,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private void CheckoutSource(IIntegrationResult result)
 		{
-			if (StringUtil.IsBlank(CvsRoot))
+            if (string.IsNullOrEmpty(CvsRoot))
 				throw new ConfigurationException("<cvsroot> configuration element must be specified in order to automatically checkout source from CVS.");
 			Execute(NewCheckoutProcessInfo(result));
 		}
@@ -179,8 +179,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AddArgument("-q"); // quiet
 			buffer.AddArgument("rlog");
 			buffer.AddArgument("-N"); // do not show tags
-			buffer.AppendIf(SuppressRevisionHeader, "-S"); 
-			if (StringUtil.IsBlank(Branch))
+			buffer.AppendIf(SuppressRevisionHeader, "-S");
+            if (string.IsNullOrEmpty(Branch))
 			{
 				buffer.AddArgument("-b"); // only list revisions on HEAD
 			}
@@ -189,7 +189,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				buffer.AppendArgument("-r{0}", Branch); // list revisions on branch
 			}
 			buffer.AppendArgument(@"""-d>{0}""", FormatCommandDate(from));
-			if (! StringUtil.IsBlank(RestrictLogins))
+            if (!string.IsNullOrEmpty(RestrictLogins))
 			{
 				foreach (string login in RestrictLogins.Split(','))
 				{

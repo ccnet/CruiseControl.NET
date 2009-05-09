@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			get
 			{
-				if (StringUtil.IsBlank(executable))
+                if (string.IsNullOrEmpty(executable))
 					executable = GetExecutableFromRegistry();
 				return executable;
 			}
@@ -136,7 +136,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private void SelectBranch()
 		{
-			if (! StringUtil.IsBlank(Branch))
+            if (!string.IsNullOrEmpty(Branch))
 			{
 				ProcessInfo process = CreateBranchProcess(BRANCH_COMMAND_TEMPLATE);
 				Execute(process);

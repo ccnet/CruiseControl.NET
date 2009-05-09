@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		// This is only public because of a nasty hack which I (MR) put in the code. To be made private later...
 		public string LogDirectory(string artifactDirectory)
 		{
-			if (StringUtil.IsBlank(ConfiguredLogDirectory))
+            if (string.IsNullOrEmpty(ConfiguredLogDirectory))
 			{
 				return Path.Combine(artifactDirectory, DEFAULT_LOG_SUBDIRECTORY);
 			}

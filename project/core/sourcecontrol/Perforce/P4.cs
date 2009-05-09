@@ -148,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			{
 				process = CreateDescribeProcess(changes);
 				Modification[] mods = parser.Parse(new StringReader(Execute(process, "GetModifications")), from.StartTime, to.StartTime);
-				if (! StringUtil.IsBlank(P4WebURLFormat))
+                if (!string.IsNullOrEmpty(P4WebURLFormat))
 				{
 					foreach (Modification mod in mods)
 					{
@@ -340,7 +340,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 		public void Initialize(IProject project)
 		{
-			if (StringUtil.IsBlank(WorkingDirectory))
+            if (string.IsNullOrEmpty(WorkingDirectory))
 			{
 				p4Initializer.Initialize(this, project.Name, project.WorkingDirectory);
 			}
@@ -352,7 +352,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 		public void Purge(IProject project)
 		{
-			if (StringUtil.IsBlank(WorkingDirectory))
+            if (string.IsNullOrEmpty(WorkingDirectory))
 			{
 				p4Purger.Purge(this, project.WorkingDirectory);
 			}

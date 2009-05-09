@@ -298,9 +298,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <param name="result">IntegrationResult for the command whose variables we are updating.</param>
 		private void SetEnvironmentVariables(StringDictionary environmentVariables, IIntegrationResult result)
 		{
-			if (!StringUtil.IsBlank(AccuRevHomeDir))
+            if (!string.IsNullOrEmpty(AccuRevHomeDir))
 				environmentVariables["ACCUREV_HOME"] = result.BaseFromArtifactsDirectory(AccuRevHomeDir);
-			if (!StringUtil.IsBlank(AccuRevPrincipal))
+            if (!string.IsNullOrEmpty(AccuRevPrincipal))
 				environmentVariables["ACCUREV_PRINCIPAL"] = AccuRevPrincipal;
 		}
 	}

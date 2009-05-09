@@ -89,10 +89,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			if (_shim.CleanCopy)
 			{
 				string cleanCopyWorkingFolder = null;
-				if (StringUtil.IsBlank(_shim.WorkingDirectory))
+                if (string.IsNullOrEmpty(_shim.WorkingDirectory))
 				{
 					cleanCopyWorkingFolder = GetVaultWorkingFolder(result);
-					if (StringUtil.IsBlank(cleanCopyWorkingFolder))
+                    if (string.IsNullOrEmpty(cleanCopyWorkingFolder))
 						throw new VaultException(
 							string.Format("Vault user {0} has no working folder set for {1} in repository {2} and no working directory has been specified.",
 							              _shim.Username, _shim.Folder, _shim.Repository));
@@ -239,7 +239,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			builder.AddArgument("getversion", _folderVersion.ToString());
 			builder.AddArgument(_shim.Folder);
 
-			if (!StringUtil.IsBlank(_shim.WorkingDirectory))
+            if (!string.IsNullOrEmpty(_shim.WorkingDirectory))
 			{
 				builder.AddArgument(result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
 				if (_shim.UseVaultWorkingDirectory)

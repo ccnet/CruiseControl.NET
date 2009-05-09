@@ -84,10 +84,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			_labelApplied = false;
 
-			if (StringUtil.IsBlank(_shim.WorkingDirectory) && !(!_shim.ApplyLabel && _shim.UseVaultWorkingDirectory && !_shim.CleanCopy))
+            if (string.IsNullOrEmpty(_shim.WorkingDirectory) && !(!_shim.ApplyLabel && _shim.UseVaultWorkingDirectory && !_shim.CleanCopy))
 			{
 				_shim.WorkingDirectory = GetVaultWorkingFolder(result);
-				if (StringUtil.IsBlank(_shim.WorkingDirectory))
+                if (string.IsNullOrEmpty(_shim.WorkingDirectory))
 					throw new VaultException(
 						string.Format("Vault user {0} has no working folder set for {1} in repository {2} and no working directory has been specified.",
 						              _shim.Username, _shim.Folder, _shim.Repository));
@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				_labelApplied = true;
 			}
 
-			if (_shim.CleanCopy && !StringUtil.IsBlank(this._shim.WorkingDirectory))
+            if (_shim.CleanCopy && !string.IsNullOrEmpty(this._shim.WorkingDirectory))
 			{
 				Log.Debug("Cleaning out source folder: " + result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
 				new IoService().EmptyDirectoryIncludingReadOnlyObjects(result.BaseFromWorkingDirectory(_shim.WorkingDirectory));

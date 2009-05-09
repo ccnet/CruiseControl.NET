@@ -242,7 +242,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private void AppendUsernameAndPassword(ProcessArgumentBuilder builder)
 		{
-            if (!StringUtil.IsBlank(Username))
+            if (!string.IsNullOrEmpty(Username))
             {
                 builder.AddArgument(string.Format("-Y{0},{1}", Username, Password));
             }

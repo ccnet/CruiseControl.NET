@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Service
             get
             {
                 string configFilename = ConfigurationManager.AppSettings["ccnet.config"];
-                return StringUtil.IsBlank(configFilename) ? DefaultConfigFilePath() : configFilename;
+                return string.IsNullOrEmpty(configFilename) ? DefaultConfigFilePath() : configFilename;
             }
         }
 

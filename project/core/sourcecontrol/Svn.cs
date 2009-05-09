@@ -232,7 +232,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private void CheckoutSource(IIntegrationResult result)
         {
-            if (StringUtil.IsBlank(TrunkUrl))
+            if (string.IsNullOrEmpty(TrunkUrl))
                 throw new ConfigurationException("<trunkurl> configuration element must be specified in order to automatically checkout source from SVN.");
             Execute(NewCheckoutProcessInfo(result));
         }

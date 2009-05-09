@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
             }
             velocityContext["projectLinks"] = links;
             string sessionToken = request.RetrieveSessionToken(sessionRetriever);
-            if (!StringUtil.IsBlank(request.ProjectName))
+            if (!string.IsNullOrEmpty(request.ProjectName))
             {
                 velocityContext["currentProject"] = request.ProjectName;
                 AuditFilterBase filter = AuditFilters.ByProject(request.ProjectName);

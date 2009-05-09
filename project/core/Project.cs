@@ -705,7 +705,7 @@ namespace ThoughtWorks.CruiseControl.Core
         public string GetBuildLog(string buildName)
         {
             string logDirectory = GetLogDirectory();
-            if (StringUtil.IsBlank(logDirectory)) return "";
+            if (string.IsNullOrEmpty(logDirectory)) return "";
             using (StreamReader sr = new StreamReader(Path.Combine(logDirectory, buildName)))
             {
                 return sr.ReadToEnd();
@@ -715,7 +715,7 @@ namespace ThoughtWorks.CruiseControl.Core
         public string[] GetBuildNames()
         {
             string logDirectory = GetLogDirectory();
-            if (StringUtil.IsBlank(logDirectory)) return new string[0];
+            if (string.IsNullOrEmpty(logDirectory)) return new string[0];
             string[] logFileNames = LogFileUtil.GetLogFileNames(logDirectory);
             Array.Reverse(logFileNames);
             return logFileNames;

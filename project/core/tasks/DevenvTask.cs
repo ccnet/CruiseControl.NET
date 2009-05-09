@@ -199,7 +199,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			else
 				sb.AppendFormat(" \"{0}\"", Configuration);
 
-			if (!StringUtil.IsBlank(Project))
+            if (!string.IsNullOrEmpty(Project))
 			{
 				if (Project.StartsWith("\""))
 					sb.AppendFormat(" /project {0}", Project);

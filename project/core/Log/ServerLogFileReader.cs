@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Logging
 		private static string ReadFilenameFromConfig()
 		{
 			string filename = ConfigurationManager.AppSettings["ServerLogFilePath"];
-			return StringUtil.IsBlank(filename) ? "ccnet.log" : filename;
+            return string.IsNullOrEmpty(filename) ? "ccnet.log" : filename;
 		}
 
 		private static int ReadMaxLinesFromConfig()

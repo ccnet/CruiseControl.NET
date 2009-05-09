@@ -708,7 +708,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			StringBuilder args = new StringBuilder(200);
 			args.Append(' ');
-			if ( !StringUtil.IsBlank(vault.WorkingDirectory) )
+            if (!string.IsNullOrEmpty(vault.WorkingDirectory))
 			{
 				args.Append(string.Concat(StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory), " "));
 				if ( vault.UseVaultWorkingDirectory )

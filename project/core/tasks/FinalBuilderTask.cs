@@ -92,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("FBCMDPath", Required = false)]
 		public string FBCMDPath
 		{
-			get {  return StringUtil.IsBlank(_fbcmdpath) ? GetFBPath() : _fbcmdpath; }
+            get { return string.IsNullOrEmpty(_fbcmdpath) ? GetFBPath() : _fbcmdpath; }
 			set {	_fbcmdpath = value;		}
 		}
 
@@ -212,8 +212,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			int fbversion = FBVersion;			
 			string keyName = String.Format(@"SOFTWARE\VSoft\FinalBuilder\{0}.0", fbversion); // Works for FB 3 through 5, should work for future versions
 	
-			string executableDir = _registry.GetLocalMachineSubKeyValue(keyName, "Location");			
-			if (StringUtil.IsBlank((executableDir)))
+			string executableDir = _registry.GetLocalMachineSubKeyValue(keyName, "Location");
+            if (string.IsNullOrEmpty((executableDir)))
 			{
 				throw new BuilderException(this, String.Format("Path to Finalbuilder {0} command line executable could not be found.", FBVersion));				
 			}

@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			while (reader.Peek() >= 0)
 			{
 				string line = reader.ReadLine();
-				if (StringUtil.IsBlank(line)) 
+                if (string.IsNullOrEmpty(line)) 
 					continue;
 
 				writer.WriteStartElement("message");

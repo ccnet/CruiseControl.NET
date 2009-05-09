@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set
 			{
 				baseLabelName = value;
-				LabelOnSuccess = ! StringUtil.IsBlank(baseLabelName);
+                LabelOnSuccess = !string.IsNullOrEmpty(baseLabelName);
 			}
 		}
 
@@ -274,7 +274,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private string TempFileNameIfBlank(string file)
 		{
-			return StringUtil.IsBlank(file) ? Path.GetTempFileName() : file;
+            return string.IsNullOrEmpty(file) ? Path.GetTempFileName() : file;
 		}
 
 		#region GetSource Logic

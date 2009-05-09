@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			writer.WriteElementString("user", UserName);
 			writer.WriteElementString("comment", Comment);
 			writer.WriteElementString("changeNumber", ChangeNumber.ToString());
-			if (! StringUtil.IsBlank(Version)) writer.WriteElementString("version", Version);
+            if (!string.IsNullOrEmpty(Version)) writer.WriteElementString("version", Version);
 			XmlUtil.WriteNonNullElementString(writer, "url", Url);
             XmlUtil.WriteNonNullElementString(writer, "issueUrl", IssueUrl);
 			XmlUtil.WriteNonNullElementString(writer, "email", EmailAddress);

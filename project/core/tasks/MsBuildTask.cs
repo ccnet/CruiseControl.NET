@@ -61,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			ProcessArgumentBuilder b = new ProcessArgumentBuilder();
 
 			b.AddArgument("/nologo");
-			if (!StringUtil.IsBlank(Targets))
+            if (!string.IsNullOrEmpty(Targets))
 			{
 				b.AddArgument("/t:");
 				string targets = string.Empty;
