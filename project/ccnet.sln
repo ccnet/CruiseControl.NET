@@ -2,7 +2,14 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9CC052DF-2AFB-4A27-BB68-F8C27C5BA0C8}"
 	ProjectSection(SolutionItems) = preProject
+		..\Tools\ccnet-help.inc.build = ..\Tools\ccnet-help.inc.build
+		..\Tools\ccnet-packaging-webdashboard-packages.inc.build = ..\Tools\ccnet-packaging-webdashboard-packages.inc.build
+		..\Tools\ccnet-packaging.inc.build = ..\Tools\ccnet-packaging.inc.build
+		..\Tools\ccnet-utils.inc.build = ..\Tools\ccnet-utils.inc.build
 		..\ccnet.build = ..\ccnet.build
+		..\install\ccnet.nsi.template = ..\install\ccnet.nsi.template
+		..\install\cctray.nsi.template = ..\install\cctray.nsi.template
+		..\install\ccvalidator.nsi.template = ..\install\ccvalidator.nsi.template
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDashboard", "WebDashboard\WebDashboard.csproj", "{482EF049-EC0C-4819-B568-75B5F74BDD5B}"

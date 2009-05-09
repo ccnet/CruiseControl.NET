@@ -11,10 +11,14 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     public interface IProjectAuthorisation
     {
         /// <summary>
+        /// Does this authorisation require security to be configured on the server?
+        /// </summary>
+        bool RequiresServerSecurity { get; }
+
+        /// <summary>
         /// Does this authorisation require a valid session?
         /// </summary>
-        bool RequiresSession { get; }
-
+        bool RequiresSession(ISecurityManager manager);
 
         /// <summary>
         /// Checks whether the user can perform the specified action.

@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The user name.
         /// </summary>
-        [ReflectorProperty("name", Required = true)]
+        [ReflectorProperty("user", Required = true)]
         public string UserName
         {
             get { return userName; }

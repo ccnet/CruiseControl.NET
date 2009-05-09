@@ -79,6 +79,16 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             set { permissions = value; }
         }
         #endregion
+
+        #region RequiresSession
+        /// <summary>
+        /// Does this manager require a session?
+        /// </summary>
+        public bool RequiresSession
+        {
+            get { return permissions.DefaultRight == SecurityRight.Deny; }
+        }
+        #endregion
         #endregion
 
         #region Public methods

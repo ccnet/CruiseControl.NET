@@ -24,6 +24,14 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         }
 
         /// <summary>
+        /// Does this manager require a session?
+        /// </summary>
+        public bool RequiresSession
+        {
+            get { return false; }
+        }
+
+        /// <summary>
         /// Starts a new session for a user.
         /// </summary>
         /// <param name="credentials">The credentials to use.</param>

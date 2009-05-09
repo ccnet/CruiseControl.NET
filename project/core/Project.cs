@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
         private ArrayList messages = new ArrayList();
         private int maxSourceControlRetries = 5;
-        private IProjectAuthorisation security = new NullProjectAuthorisation();
+        private IProjectAuthorisation security = new InheritedProjectAuthorisation();
         private ParameterBase[] parameters = new ParameterBase[0];
         private ProjectInitialState initialState = ProjectInitialState.Started;
         private ProjectStartupMode startupMode = ProjectStartupMode.UseLastState;
@@ -802,14 +802,13 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <param name="parent">The parent item for the item being validated.</param>
         public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
         {
-            if (!(security is NullProjectAuthorisation) &&
+            if (security.RequiresServerSecurity &&
                 (configuration.SecurityManager is NullSecurityManager))
             {
                 errorProcesser.ProcessError(
                     new ConfigurationException(
                         string.Format("Security is defined for project '{0}', but not defined at the server", this.Name)));
             }
-
 
             ValidateProject(errorProcesser);
             ValidateItem(sourceControl, configuration, errorProcesser);

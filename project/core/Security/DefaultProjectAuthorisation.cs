@@ -1,12 +1,13 @@
-﻿using Exortech.NetReflector;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
+    /// <summary>
+    /// The default security for a project.
+    /// </summary>
     [ReflectorType("defaultProjectSecurity")]
     public class DefaultProjectAuthorisation
         : IProjectAuthorisation, IConfigurationValidation
@@ -35,17 +36,6 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         #endregion
 
         #region Public properties
-
-        #region RequiresSession
-        /// <summary>
-        /// Does this authorisation require a valid session?
-        /// </summary>
-        public bool RequiresSession
-        {
-            get { return true; }
-        }
-        #endregion
-
         #region DefaultRight
         /// <summary>
         /// The default right to use.
@@ -73,9 +63,29 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             set { permissions = value; }
         }
         #endregion
+
+        #region RequiresServerSecurity
+        /// <summary>
+        /// Does this authorisation require security to be configured on the server?
+        /// </summary>
+        public bool RequiresServerSecurity
+        {
+            get { return true; }
+        }
+        #endregion
         #endregion
 
         #region Public methods
+        #region RequiresSession()
+        /// <summary>
+        /// Does this authorisation require a valid session?
+        /// </summary>
+        public bool RequiresSession(ISecurityManager manager)
+        {
+            return true;
+        }
+        #endregion
+
         #region CheckPermission()
         /// <summary>
         /// Checks whether the user can perform the specified action.

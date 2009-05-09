@@ -1,23 +1,22 @@
-﻿using Exortech.NetReflector;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
-    [ReflectorType("nullProjectSecurity")]
-    public class NullProjectAuthorisation
+    /// <summary>
+    /// The project inherits its security settings from the server settings.
+    /// </summary>
+    [ReflectorType("inheritedProjectSecurity")]
+    public class InheritedProjectAuthorisation
         : IProjectAuthorisation
     {
-        #region Private fields
-        #endregion
-
         #region Constructors
         /// <summary>
         /// Start a new blank instance.
         /// </summary>
-        public NullProjectAuthorisation() { }
+        public InheritedProjectAuthorisation() { }
         #endregion
 
         #region Public properties
@@ -33,13 +32,13 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         #endregion
 
         #region Public methods
-        #region RequiresSession
+        #region RequiresSession()
         /// <summary>
         /// Does this authorisation require a valid session?
         /// </summary>
         public bool RequiresSession(ISecurityManager manager)
         {
-            return false;
+            return manager.RequiresSession;
         }
         #endregion
 
@@ -51,12 +50,12 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <param name="permission">The permission to check.</param>
         /// <param name="defaultRight">The default right to use.</param>
         /// <returns>True if the permission is valid, false otherwise.</returns>
-        public virtual bool CheckPermission(ISecurityManager manager, 
-            string userName, 
+        public virtual bool CheckPermission(ISecurityManager manager,
+            string userName,
             SecurityPermission permission,
             SecurityRight defaultRight)
         {
-            return true;
+            return manager.CheckServerPermission(userName, permission);
         }
         #endregion
         #endregion

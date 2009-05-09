@@ -40,6 +40,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             actualCounts[0]++;
         }
 
+        public bool RequiresSession { get { return false; } }
+
         [ReflectorProperty("dummy")]
         public string Dummy
         {

@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     /// <summary>
     /// Defines a set of permissions.
     /// </summary>
-    [ReflectorType("Permissions")]
+    [ReflectorType("permissions")]
     public class Permissions
     {
         #region Private fields
@@ -22,6 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         private SecurityRight viewSecurity = SecurityRight.Inherit;
         private SecurityRight modifySecurity = SecurityRight.Inherit;
         private SecurityRight viewProject = SecurityRight.Inherit;
+        private SecurityRight viewConfiguration = SecurityRight.Inherit;
         #endregion
 
         #region Public properties
@@ -128,6 +129,19 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             set { viewProject = value; }
         }
         #endregion
+
+        #region ViewConfigurationRight
+        /// <summary>
+        /// The right to view configuration and logs.
+        /// </summary>
+        [ReflectorProperty("viewConfiguration", Required = false)]
+        [DefaultValue(SecurityRight.Inherit)]
+        public SecurityRight ViewConfigurationRight
+        {
+            get { return viewConfiguration; }
+            set { viewConfiguration = value; }
+        }
+        #endregion
         #endregion
 
         #region Public methods
@@ -139,25 +153,36 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <returns></returns>
         public SecurityRight GetPermission(SecurityPermission permission)
         {
+            var right = SecurityRight.Inherit;
             switch (permission)
             {
                 case SecurityPermission.ViewProject:
-                    return ViewProjectRight;
+                    right = ViewProjectRight;
+                    break;
+                case SecurityPermission.ViewConfiguration:
+                    right = ViewConfigurationRight;
+                    break;
                 case SecurityPermission.ForceAbortBuild:
-                    return ForceBuildRight;
+                    right = ForceBuildRight;
+                    break;
                 case SecurityPermission.SendMessage:
-                    return SendMessageRight;
+                    right = SendMessageRight;
+                    break;
                 case SecurityPermission.StartStopProject:
-                    return StartProjectRight;
+                    right = StartProjectRight;
+                    break;
                 case SecurityPermission.ChangeProjectConfiguration:
-                    return ChangeProjectRight;
+                    right = ChangeProjectRight;
+                    break;
                 case SecurityPermission.ViewSecurity:
-                    return ViewSecurityRight;
+                    right = ViewSecurityRight;
+                    break;
                 case SecurityPermission.ModifySecurity:
-                    return ModifySecurityRight;
-                default:
-                    return DefaultRight;
+                    right = ModifySecurityRight;
+                    break;
             }
+            if (right == SecurityRight.Inherit) right = DefaultRight;
+            return right;
         }
         #endregion
         #endregion

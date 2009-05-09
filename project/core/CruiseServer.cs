@@ -460,7 +460,7 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             string data = null;
             DataResponse response = new DataResponse(RunProjectRequest(request,
-                SecurityPermission.ViewProject,
+                SecurityPermission.ViewConfiguration,
                 null,
                 delegate(ProjectRequest arg)
                 {
@@ -486,7 +486,7 @@ namespace ThoughtWorks.CruiseControl.Core
             if (request is ProjectRequest)
             {
                 response = new DataResponse(RunProjectRequest(request as ProjectRequest,
-                    SecurityPermission.ViewProject,
+                    SecurityPermission.ViewConfiguration,
                     null,
                     delegate(ProjectRequest arg)
                     {
@@ -496,7 +496,7 @@ namespace ThoughtWorks.CruiseControl.Core
             else
             {
                 response = new DataResponse(RunServerRequest(request,
-                    null,
+                    SecurityPermission.ViewConfiguration,
                     null,
                     delegate(ServerRequest arg)
                     {
@@ -607,7 +607,7 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             string data = null;
             DataResponse response = new DataResponse(RunProjectRequest(request,
-                SecurityPermission.ViewProject,
+                SecurityPermission.ViewConfiguration,
                 null,
                 delegate(ProjectRequest arg)
                 {
@@ -1271,6 +1271,10 @@ namespace ThoughtWorks.CruiseControl.Core
             }
             catch (Exception error)
             {
+                // Security exceptions have already been logged, just need to log any other exception
+                if (!(error is SecurityException)) Log.Error(error);
+
+                // Tell the caller the request failed and include the error message (but not the stack trace!)
                 response.Result = ResponseResult.Failure;
                 response.ErrorMessages.Add(
                     new ErrorMessage(
@@ -1301,7 +1305,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 if (projectIntegrator != null)
                 {
                     IProjectAuthorisation authorisation = projectIntegrator.Project.Security;
-                    if ((authorisation != null) && authorisation.RequiresSession)
+                    if ((authorisation != null) && authorisation.RequiresSession(securityManager))
                     {
                         if (userName == null)
                         {
@@ -1453,7 +1457,7 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             // Retrieve the project authorisation
             IProjectAuthorisation authorisation = null;
-            bool requiresSession = true;
+            bool requiresSession = securityManager.RequiresSession;
             string userName = securityManager.GetUserName(sessionToken);
             string displayName = securityManager.GetDisplayName(sessionToken) ?? userName;
             if (!string.IsNullOrEmpty(projectName))
@@ -1465,7 +1469,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 {
                     // The project has been found and it has security
                     authorisation = projectIntegrator.Project.Security;
-                    requiresSession = authorisation.RequiresSession;
+                    requiresSession = authorisation.RequiresSession(securityManager);
                 }
                 else if ((projectIntegrator != null) &&
                     (projectIntegrator.Project != null) &&

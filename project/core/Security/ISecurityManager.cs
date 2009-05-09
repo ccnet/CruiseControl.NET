@@ -14,6 +14,11 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     public interface ISecurityManager
     {
         /// <summary>
+        /// Does this manager require a session?
+        /// </summary>
+        bool RequiresSession { get; }
+
+        /// <summary>
         /// Initialise the security manager.
         /// </summary>
         void Initialise();

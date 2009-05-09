@@ -37,5 +37,9 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// Can view a project and all its details.
         /// </summary>
         ViewProject,
+        /// <summary>
+        /// Can view configuration and log information.
+        /// </summary>
+        ViewConfiguration,
     }
 }

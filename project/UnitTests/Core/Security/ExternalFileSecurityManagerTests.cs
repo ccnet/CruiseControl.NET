@@ -169,7 +169,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             output.Append("<passwordUser><password>whoareyou</password><name>georgedoe</name></passwordUser>");
             output.AppendFormat("<passwordUser><password>{0}</password><name>johndoe</name></passwordUser>", password);
             output.Append("<passwordUser><password>whoareyou</password><name>janedoe</name></passwordUser>");
-            output.Append("<userPermission name=\"janedoe\" viewSecurity=\"Allow\" modifySecurity=\"Allow\" />");
+            output.Append("<userPermission user=\"janedoe\" viewSecurity=\"Allow\" modifySecurity=\"Allow\" />");
             output.Append("</security>");
             return output.ToString();
         }
