@@ -86,7 +86,7 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Assembly Version Labeller"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Assembly+Version+Labeller">Assembly Version Labeller</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Assembly Version Labeller  Uses the CruiseControl.NET change number, provided by source control systems like Subversion, to build a valid Assembly Version label.    This labeller is only available from release 1.4.4 onwards.     Examples: Minimalist Example:   <project>   <labeller ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Assembly Version Labeller  Provides a valid System.Version label for your .NET assemblies that could be used to set the AssemblyVersionAttribute(). It increments the build number on every successful integration and uses the CruiseControl.NET change number, provided by source control systems like Subversion ... </div>
         </td>
                                       </tr><tr valign="top">
                            <td><h4 style="margin-top: 0px"><a name="index-B"></a>B</h4>
@@ -105,7 +105,7 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Build Publisher"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Build+Publisher">Build Publisher</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Build Publisher lets you copy any arbitrary files on a successful build. You can set alwaysPublish to true, if you want the copy always to happen.   Example  \\   <buildpublisher>    <sourceDir>C:\myprojects\project1</sourceDir>    <publishDir>\\myfileserver\project1 ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Build Publisher lets you copy any arbitrary files on a successful build. You can set alwaysPublish to true, if you want the copy always to happen.  Example \\  <buildpublisher>   <sourceDir>C:\myprojects\project1</sourceDir>   <publishDir>\\myfileserver\project1 ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Build Report Build Plugin"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Build+Report+Build+Plugin">Build Report Build Plugin</a>
         <br />
@@ -207,7 +207,7 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="CCNet 1.4.4 (RC1) Release Notes"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/CCNet+1.4.4+%28RC1%29+Release+Notes">CCNet 1.4.4 (RC1) Release Notes</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Highlights of the CCNet 1.4.4 (RC1) release    Dashboard administration  A new plugin has been added to simplify the maintenance of the dashboard. Dashboard Administration Plugin contains all the details on this new plugin.  Note: This plugin is not enabled by default, it will need to be manually configured ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Highlights of the CCNet 1.4.4 (RC1) release   Dashboard administration A new plugin has been added to simplify the maintenance of the dashboard. Dashboard Administration Plugin contains all the details on this new plugin. Note: This plugin is not enabled by default, it will need to be manually configured ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="CCTray"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/CCTray">CCTray</a>
         <br />
@@ -282,11 +282,11 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Date Labeller"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Date+Labeller">Date Labeller</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Date Labeller is used to generate labels in the format "yyyy.mm.dd.build". Using the Date Labeller makes it easy for the user to identify and communicate the date that a particular build occurred.  <project>  <labeller type="dateLabeller" />  <! Other project configuration to go here > </project>  This labeller ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Date Labeller is used to generate labels in the format "yyyy.mm.dd.build". Using the Date Labeller makes it easy for the user to identify and communicate the date that a particular build occurred.  <project>  <labeller type="dateLabeller" />  <! Other project configuration to go here > </project>   Configuration ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Default Labeller"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Default+Labeller">Default Labeller</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Default Labeller By default, CCNet uses a plain incrementing build number as a build label. Some source controls (e.g. Perforce Source Control Block) require you to use a different naming scheme if you want CCNet to apply labels ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Default Labeller  By default, CCNet uses a plain incrementing build number as a build label. Some source controls (e.g. Perforce Source Control Block) require you to use a different naming scheme if you want CCNet to apply labels ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Default Manifest Generator"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Default+Manifest+Generator">Default Manifest Generator</a>
         <br />
@@ -663,7 +663,7 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Server Extensions"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Server+Extensions">Server Extensions</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Server Extensions    This documentation is in the process of being developed. As such it may omit details or be incomplete in areas.     Introduction    Explain the basics of why there are server extensions, how they differ from plugins and list some possibilities.     The Basics    Explain the interface that needs to be implemented, its ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Server Extensions    This documentation is in the process of being developed. As such it may omit details or be incomplete in areas.     Introduction  As of release 1.4.4, it is possible to build server extensions for both the console and the Windows service.   An extension is different from a plugin. A plugin must be referenced ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Server Information Server Plugin"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Server+Information+Server+Plugin">Server Information Server Plugin</a>
         <br />
@@ -1007,7 +1007,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Apr 23, 2009 20:44</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 10, 2009 21:25</font></td>
 		    </tr>
 	    </table>
     </body>

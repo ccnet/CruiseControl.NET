@@ -16,38 +16,49 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 01, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Apr 30, 2009 by <font color="#0050B2">dna</font>.
 				    </div>
 
 				    <h3><a name="AssemblyVersionLabeller-AssemblyVersionLabeller"></a>Assembly Version Labeller</h3>
 
-<p>Uses the CruiseControl.NET change number, provided by source control systems like Subversion, to build a valid Assembly Version label.</p>
-
+<p>Provides a valid System.Version label for your .NET assemblies that could be used to set the AssemblyVersionAttribute(). It increments the build number on every successful integration and uses the CruiseControl.NET change number, provided by source control systems like Subversion, for the revision number component.</p>
 <div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>New feature</b><br />
 <p>This labeller is only available from release 1.4.4 onwards.</p></td></tr></table></div>
 
 <h3><a name="AssemblyVersionLabeller-Examples%3A"></a>Examples:</h3>
-<p>Minimalist Example:<br/>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+
+<p>Minimalist Example:</p>
+
+<p><div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;project&gt;</span>
    <span class="code-tag">&lt;labeller type=<span class="code-quote">"assemblyVersionLabeller"</span> /&gt;</span>
    <span class="code-tag"><span class="code-comment">&lt;!-- Other project configuration to go here --&gt;</span></span>
 <span class="code-tag">&lt;/project&gt;</span></pre>
 </div></div><br clear="all" />
-Full Example:<br/>
+Full Example (build number and revision number component are incremented automatically):<br/>
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;project&gt;</span>
    <span class="code-tag">&lt;labeller type=<span class="code-quote">"assemblyVersionLabeller"</span>&gt;</span>
-      <span class="code-tag">&lt;major&gt;</span>$(majorVersion)<span class="code-tag">&lt;/major&gt;</span>
-      <span class="code-tag">&lt;minor&gt;</span>$(minorVersion)<span class="code-tag">&lt;/minor&gt;</span>
-      <span class="code-tag">&lt;build&gt;</span>$(buildVersion)<span class="code-tag">&lt;/build&gt;</span>
-      <span class="code-tag">&lt;revision&gt;</span>$(revisionVersion)<span class="code-tag">&lt;/revision&gt;</span>
+      <span class="code-tag">&lt;major&gt;</span>1<span class="code-tag">&lt;/major&gt;</span>
+      <span class="code-tag">&lt;minor&gt;</span>2<span class="code-tag">&lt;/minor&gt;</span>
+      <span class="code-tag">&lt;incrementOnFailure&gt;</span>false<span class="code-tag">&lt;/incrementOnFailure&gt;</span>
+   <span class="code-tag">&lt;/labeller&gt;</span>
+   <span class="code-tag"><span class="code-comment">&lt;!-- Other project configuration to go here --&gt;</span></span>
+<span class="code-tag">&lt;/project&gt;</span></pre>
+</div></div><br clear="all" />
+Specify all properties Example:<br/>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;project&gt;</span>
+   <span class="code-tag">&lt;labeller type=<span class="code-quote">"assemblyVersionLabeller"</span>&gt;</span>
+      <span class="code-tag">&lt;major&gt;</span>1<span class="code-tag">&lt;/major&gt;</span>
+      <span class="code-tag">&lt;minor&gt;</span>2<span class="code-tag">&lt;/minor&gt;</span>
+      <span class="code-tag">&lt;build&gt;</span>250<span class="code-tag">&lt;/build&gt;</span>
+      <span class="code-tag">&lt;revision&gt;</span>1765<span class="code-tag">&lt;/revision&gt;</span>
       <span class="code-tag">&lt;incrementOnFailure&gt;</span>false<span class="code-tag">&lt;/incrementOnFailure&gt;</span>
    <span class="code-tag">&lt;/labeller&gt;</span>
    <span class="code-tag"><span class="code-comment">&lt;!-- Other project configuration to go here --&gt;</span></span>
 <span class="code-tag">&lt;/project&gt;</span></pre>
 </div></div><br clear="all" /></p>
-
 <h3><a name="AssemblyVersionLabeller-ConfigurationElements%3A"></a>Configuration Elements:</h3>
 
 <table class='confluenceTable'><tbody>
@@ -74,27 +85,26 @@ Full Example:<br/>
 </tr>
 <tr>
 <td class='confluenceTd'> build </td>
-<td class='confluenceTd'> Build number component of the version. </td>
+<td class='confluenceTd'> Build number component of the version. If not specified the build number is incremented on every successful integration. </td>
 <td class='confluenceTd'> int </td>
 <td class='confluenceTd'> No </td>
-<td class='confluenceTd'> -1 </td>
+<td class='confluenceTd'> &#45;1 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> revision </td>
-<td class='confluenceTd'> Revision number component of the version. </td>
+<td class='confluenceTd'> Revision number component of the version. If not specified the revision number is the LastChangeNumber, provided by some VCS (e.g. the svn revision with the Subversion task). </td>
 <td class='confluenceTd'> int </td>
 <td class='confluenceTd'> No </td>
-<td class='confluenceTd'> -1 </td>
+<td class='confluenceTd'> &#45;1 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> incrementOnFailure </td>
-<td class='confluenceTd'> Whether to increase the label if the build fails. By default the label will only increase if the build is successful. </td>
+<td class='confluenceTd'> Whether to increase the build number component if the integration fails. By default the build number component will only increase if the integration was successful. </td>
 <td class='confluenceTd'> boolean </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> false </td>
 </tr>
 </tbody></table>
-
 <p>Labeller provided by Daniel Nauck.</p>
 
 				    
@@ -106,7 +116,7 @@ Full Example:<br/>
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Apr 23, 2009 20:44</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 10, 2009 21:25</font></td>
 		    </tr>
 	    </table>
     </body>
