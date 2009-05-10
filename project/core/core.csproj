@@ -106,6 +106,14 @@
       <Name>log4net</Name>
       <HintPath>..\..\lib\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.ObjectBuilder2, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Microsoft.Practices.ObjectBuilder2.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
     <Reference Include="NetReflector, Version=1.1.2009.1004, Culture=neutral, PublicKeyToken=dbcd6104b72f39b2, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\NetReflector.dll</HintPath>
@@ -751,6 +759,9 @@
     <Compile Include="tasks\CoverageThreshold.cs" />
     <Compile Include="tasks\DirectDynamicValue.cs" />
     <Compile Include="tasks\DynamicValueUtility.cs" />
+    <Compile Include="tasks\MergeFileSerialiser.cs" />
+    <Compile Include="tasks\MergeFileSerialiserFactory.cs" />
+    <Compile Include="tasks\MergeFileInfo.cs" />
     <Compile Include="tasks\NCoverReportTask.cs" />
     <Compile Include="tasks\NCoverProfileTask.cs" />
     <Compile Include="tasks\DataTaskResult.cs">

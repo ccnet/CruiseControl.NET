@@ -15,6 +15,7 @@ using ThoughtWorks.CruiseControl.Remote.Events;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Security;
+using Microsoft.Practices.Unity;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -39,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private bool disposed;
         private IQueueManager integrationQueueManager;
         // TODO: Replace this with a proper IoC container
-        private Dictionary<Type, object> services = new Dictionary<Type, object>();
+        private IUnityContainer container = new UnityContainer();
         #endregion
 
         #region Constructors
@@ -49,6 +50,9 @@ namespace ThoughtWorks.CruiseControl.Core
                             IProjectStateManager stateManager,
                             List<ExtensionConfiguration> extensionList)
         {
+            // Initialise the unity container
+            container.RegisterInstance(this, new ContainerControlledLifetimeManager());
+
             this.configurationService = configurationService;
             this.projectSerializer = projectSerializer;
 
@@ -57,7 +61,15 @@ namespace ThoughtWorks.CruiseControl.Core
             serverClient = new CruiseServerClient(this);
             InitializeServerThread();
 
+            // Initialise the configuration
             configuration = configurationService.Load();
+            foreach (var project in configuration.Projects)
+            {
+                container.BuildUp(project);
+            }
+            container.BuildUp(configuration.SecurityManager);
+
+            // Initialise the queue manager
             integrationQueueManager = IntegrationQueueManagerFactory.CreateManager(projectIntegratorListFactory, configuration, stateManager);
             integrationQueueManager.AssociateIntegrationEvents(OnIntegrationStarted, OnIntegrationCompleted);
 
@@ -460,7 +472,7 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             string data = null;
             DataResponse response = new DataResponse(RunProjectRequest(request,
-                SecurityPermission.ViewConfiguration,
+                SecurityPermission.ViewProject,
                 null,
                 delegate(ProjectRequest arg)
                 {
@@ -1140,12 +1152,17 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <returns>A valid service, if found, null otherwise.</returns>
         public virtual object RetrieveService(Type serviceType)
         {
-            object service = null;
-            if (services.ContainsKey(serviceType))
+            // TODO: Figure out a better way of doing this - should not need the try/catch block just to see
+            // if the service has been registered
+            try
             {
-                service = services[serviceType];
+                object service = container.Resolve(serviceType);
+                return service;
             }
-            return service;
+            catch
+            {
+                return null;
+            }
         }
         #endregion
 
@@ -1157,7 +1174,9 @@ namespace ThoughtWorks.CruiseControl.Core
         public virtual void AddService(object service)
         {
             if (service == null) throw new ArgumentNullException("service");
-            services[service.GetType()] = service;
+            container.RegisterInstance(service.GetType(), 
+                service, 
+                new ContainerControlledLifetimeManager());
         }
         #endregion
         #endregion
