@@ -255,7 +255,7 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 // Build up all the child items
                 // Note: this will only build up the direct children, it doesn't handle below the initial layer
-                if (!isInitialised)
+                if (!isInitialised && (Container != null))
                 {
                     foreach (var task in Tasks)
                     {
@@ -272,8 +272,8 @@ namespace ThoughtWorks.CruiseControl.Core
                     if (SourceControl != null) Container.BuildUp(SourceControl);
                     if (Security != null) Container.BuildUp(Security);
                     if (Triggers != null) Container.BuildUp(Triggers);
-                    isInitialised = true;
                 }
+                isInitialised = true;
 
                 // Initialise the status
                 currentProjectItems.Clear();

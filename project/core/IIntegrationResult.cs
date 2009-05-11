@@ -52,7 +52,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		Exception ExceptionResult { get; set; }
 		string TaskOutput { get; }
 		void AddTaskResult(string result);
-		void AddTaskResult(ITaskResult result);
+        void AddTaskResult(ITaskResult result);
+        void AddTaskResultFromFile(string filename);
 		bool HasModifications();
 		bool ShouldRunBuild();
 

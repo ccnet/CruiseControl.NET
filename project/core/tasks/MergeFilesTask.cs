@@ -1,5 +1,6 @@
 using System.IO;
 using Exortech.NetReflector;
+using Microsoft.Practices.Unity;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
@@ -8,8 +9,26 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	public class MergeFilesTask
         : TaskBase, ITask
 	{
-		[ReflectorArray("files")]
-		public string[] MergeFiles = new string[0];
+        /// <summary>
+        /// The folder to copy the files to.
+        /// </summary>
+        [ReflectorProperty("target", Required = false)]
+        public string TargetFolder { get; set; }
+
+        [ReflectorProperty("files", typeof(MergeFileSerialiserFactory))]
+        public MergeFileInfo[] MergeFiles = new MergeFileInfo[0];
+
+        /// <summary>
+        /// Allows this task to interact with the file system in a testable way.
+        /// </summary>
+        [Dependency]
+        public IFileSystem FileSystem { get; set; }
+
+        /// <summary>
+        /// Allows this task to interact with the logger in a testable way.
+        /// </summary>
+        [Dependency]
+        public ILogger Logger { get; set; }
 
         /// <summary>
         /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
@@ -17,30 +36,60 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("description", Required = false)]
         public string Description = string.Empty;
 
-
 		public void Run(IIntegrationResult result)
 		{
-            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Merging Files");                
+            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Merging Files");
 
-			foreach (string mergeFile in MergeFiles)
+            // Make sure the target folder is rooted
+            var targetFolder = TargetFolder;
+            if (!string.IsNullOrEmpty(targetFolder))
+            {
+                if (!Path.IsPathRooted(targetFolder))
+                {
+                    targetFolder = Path.Combine(
+                        Path.Combine(result.ArtifactDirectory, result.Label),
+                        targetFolder);
+                }
+            }
+            else
+            {
+                targetFolder = Path.Combine(result.ArtifactDirectory, result.Label);
+            }
+
+			foreach (var mergeFile in MergeFiles)
 			{
-				string fullMergeFile = mergeFile;
-				if (!Path.IsPathRooted(mergeFile))
-					fullMergeFile = Path.Combine(result.WorkingDirectory, mergeFile);
+                // Get the name of the file
+				string fullMergeFile = mergeFile.FileName;
+                if (!Path.IsPathRooted(fullMergeFile))
+                {
+                    fullMergeFile = Path.Combine(result.WorkingDirectory, fullMergeFile);
+                }
 
+                // Merge each file
 				WildCardPath path = new WildCardPath(fullMergeFile);
-				foreach (FileInfo fileInfo in path.GetFiles())
-				{
-					Log.Info("Merging file: " + fileInfo);
-					if (fileInfo.Exists)
-					{
-						result.AddTaskResult((new FileTaskResult(fileInfo)));
-					}
-					else
-					{
-						Log.Warning("File not Found: " + fileInfo);
-					}
-				}
+                foreach (var fileInfo in path.GetFiles())
+                {
+                    if (FileSystem.FileExists(fileInfo.FullName))
+                    {
+                        if (mergeFile.MergeAction == MergeFileInfo.MergeActionType.Merge)
+                        {
+                            // Add the file to the merge list
+                            Logger.Info("Merging file '{0}'", fileInfo);
+                            result.AddTaskResultFromFile(fileInfo.FullName);
+                        }
+                        else
+                        {
+                            // Copy the file to the target folder
+                            FileSystem.EnsureFolderExists(targetFolder);
+                            Logger.Info("Copying file '{0}' to '{1}'", fileInfo.Name, targetFolder);
+                            FileSystem.Copy(fileInfo.FullName, Path.Combine(targetFolder, fileInfo.Name));
+                        }
+                    }
+                    else
+                    {
+                        Logger.Warning("File not found '{0}", fileInfo);
+                    }
+                }
 			}
 		}
 	}

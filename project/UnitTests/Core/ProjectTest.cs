@@ -107,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		<nullTask />
 	</prebuild>
 	<tasks>
-		<merge files="""" />
+		<merge />
 	</tasks>
 	<externalLinks>
 		<externalLink name=""My Report"" url=""url1"" />

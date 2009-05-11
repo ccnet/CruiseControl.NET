@@ -36,52 +36,55 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         {
             var fileList = new List<MergeFileInfo>();
 
-            // Validate the attributes
-            if (node.Attributes.Count > 0)
+            if (node != null)
             {
-                throw new NetReflectorException("A file list cannot directly contain attributes.\r\nXML: " + node.OuterXml);
-            }
-
-            // Check each element
-            foreach (XmlElement fileElement in node.SelectNodes("*"))
-            {
-                if (fileElement.Name == "file")
+                // Validate the attributes
+                if (node.Attributes.Count > 0)
                 {
-                    // Make sure there are no child elements
-                    if (fileElement.SelectNodes("*").Count > 0)
-                    {
-                        throw new NetReflectorException("file cannot contain any sub-items.\r\nXML: " + node.OuterXml);
-                    }
+                    throw new NetReflectorException("A file list cannot directly contain attributes.\r\nXML: " + node.OuterXml);
+                }
 
-                    // Load the filename
-                    var newFile = new MergeFileInfo();
-                    newFile.FileName = fileElement.InnerText;
-
-                    // Load the merge action
-                    var typeAttribute = fileElement.GetAttribute("action");
-                    if (string.IsNullOrEmpty(typeAttribute))
+                // Check each element
+                foreach (XmlElement fileElement in node.SelectNodes("*"))
+                {
+                    if (fileElement.Name == "file")
                     {
-                        newFile.MergeAction = MergeFileInfo.MergeActionType.Merge;
+                        // Make sure there are no child elements
+                        if (fileElement.SelectNodes("*").Count > 0)
+                        {
+                            throw new NetReflectorException("file cannot contain any sub-items.\r\nXML: " + node.OuterXml);
+                        }
+
+                        // Load the filename
+                        var newFile = new MergeFileInfo();
+                        newFile.FileName = fileElement.InnerText;
+
+                        // Load the merge action
+                        var typeAttribute = fileElement.GetAttribute("action");
+                        if (string.IsNullOrEmpty(typeAttribute))
+                        {
+                            newFile.MergeAction = MergeFileInfo.MergeActionType.Merge;
+                        }
+                        else
+                        {
+                            try
+                            {
+                                newFile.MergeAction = (MergeFileInfo.MergeActionType)Enum.Parse(
+                                    typeof(MergeFileInfo.MergeActionType),
+                                    typeAttribute);
+                            }
+                            catch (Exception error)
+                            {
+                                throw new NetReflectorConverterException("Unknown action :'" + typeAttribute + "'\r\nXML: " + node.OuterXml, error);
+                            }
+                        }
+                        fileList.Add(newFile);
                     }
                     else
                     {
-                        try
-                        {
-                            newFile.MergeAction = (MergeFileInfo.MergeActionType)Enum.Parse(
-                                typeof(MergeFileInfo.MergeActionType),
-                                typeAttribute);
-                        }
-                        catch (Exception error)
-                        {
-                            throw new NetReflectorConverterException("Unknown action :'" + typeAttribute + "'\r\nXML: " + node.OuterXml, error);
-                        }
+                        // Unknown sub-item
+                        throw new NetReflectorException(fileElement.Name + " is not a valid sub-item.\r\nXML: " + node.OuterXml);
                     }
-                    fileList.Add(newFile);
-                }
-                else
-                {
-                    // Unknown sub-item
-                    throw new NetReflectorException(fileElement.Name + " is not a valid sub-item.\r\nXML: " + node.OuterXml);
                 }
             }
             return fileList.ToArray();
