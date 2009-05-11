@@ -847,6 +847,7 @@
     <Compile Include="util\DateUtil.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="util\DefaultLogger.cs" />
     <Compile Include="util\EnvironmentVariable.cs" />
     <Compile Include="util\ExecutionEnvironment.cs">
       <SubType>Code</SubType>
@@ -875,6 +876,7 @@
     <Compile Include="util\IFileWatcher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="util\ILogger.cs" />
     <Compile Include="util\IMultiTransformer.cs">
       <SubType>Code</SubType>
     </Compile>

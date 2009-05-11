@@ -29,12 +29,17 @@ namespace ThoughtWorks.CruiseControl.Core
             List<ExtensionConfiguration> extensionList = null;
             if (configuration != null) extensionList = configuration.Extensions;
 
-			return new CruiseServer(
+			var server = new CruiseServer(
 				NewConfigurationService(configFile),
 				new ProjectIntegratorListFactory(),
 				new NetReflectorProjectSerializer(),
                 stateManager,
                 extensionList);
+
+            // Initialise the IoC container.
+            server.InitialiseServices();
+
+            return server;
 		}
 
 		private static IConfigurationService NewConfigurationService(string configFile)

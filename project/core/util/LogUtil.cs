@@ -9,6 +9,7 @@ using log4net.Config;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    // TODO: Replace using this class with the ILogger interface and the IoC container.
 	public static class Log
 	{
 		private static ILog logger = LogManager.GetLogger("CruiseControl.NET");

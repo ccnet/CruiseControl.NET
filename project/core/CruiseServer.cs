@@ -109,6 +109,17 @@ namespace ThoughtWorks.CruiseControl.Core
         #endregion
 
         #region Public methods
+        #region InitialiseServices()
+        /// <summary>
+        /// Initialise the default services that are provided.
+        /// </summary>
+        public void InitialiseServices()
+        {
+            container.RegisterType<IFileSystem, SystemIoFileSystem>();
+            container.RegisterType<ILogger, DefaultLogger>();
+        }
+        #endregion
+
         #region Start()
         /// <summary>
         /// Start the server.
