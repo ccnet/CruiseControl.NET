@@ -221,6 +221,16 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             {
                 return false;
             }
+
+            public void ProcessError(string message, params object[] args)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void ProcessWarning(string message, params object[] args)
+            {
+                throw new NotImplementedException();
+            }
         }
 	}
 }

@@ -18,6 +18,15 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// <param name="message">The error message.</param>
         void ProcessError(string message);
 
+
+        /// <summary>
+        /// Process an error message.
+        /// </summary>
+        /// <param name="message">The error message.</param>
+        /// <param name="args">arguments of the message</param>
+        void ProcessError(string message, params object[] args);
+
+
         /// <summary>
         /// Process an exception.
         /// </summary>
@@ -31,6 +40,13 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// </summary>
         /// <param name="message">The warning message.</param>
         void ProcessWarning(string message);
+
+        /// <summary>
+        /// Process a warning message.
+        /// </summary>
+        /// <param name="message">The warning message.</param>
+        /// <param name="args">arguments of the message</param>
+        void ProcessWarning(string message, params object[] args);
         #endregion
 
         #region ProcessUnhandledNode()

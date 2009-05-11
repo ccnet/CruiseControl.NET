@@ -23,13 +23,21 @@ namespace Validator
         public bool Passed { get; private set; }
         public string ItemName { get; set; }
 
+
+
+        public void ProcessError(string message, params object[] args)
+        {
+            string info = string.Format(message, args);
+            ProcessError(info);
+        }
+
         public void ProcessError(string message)
         {
             bodyEl.AppendChild(
                 GenerateElement("div",
                 new HtmlAttribute("class", "error"),
-                GenerateElement("div", 
-                    string.Format("ERROR ({0}): {1}", 
+                GenerateElement("div",
+                    string.Format("ERROR ({0}): {1}",
                         ItemName,
                         message))));
             Passed = false;
@@ -40,11 +48,17 @@ namespace Validator
             bodyEl.AppendChild(
                 GenerateElement("div",
                 new HtmlAttribute("class", "error"),
-                GenerateElement("div", 
+                GenerateElement("div",
                     string.Format("ERROR ({0}): {1}",
                         ItemName,
                         error.Message))));
             Passed = false;
+        }
+
+        public void ProcessWarning(string message, params object[] args)
+        {
+            string info = string.Format(message, args);
+            ProcessWarning(info);
         }
 
         public void ProcessWarning(string message)
@@ -52,7 +66,7 @@ namespace Validator
             bodyEl.AppendChild(
                 GenerateElement("div",
                 new HtmlAttribute("class", "warning"),
-                GenerateElement("div", 
+                GenerateElement("div",
                     string.Format("Warning ({0}): {1}",
                         ItemName,
                         message))));
