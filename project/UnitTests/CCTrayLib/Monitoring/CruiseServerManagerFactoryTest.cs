@@ -57,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException), "Extension name cannot be empty or null\r\nParameter name: name")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void WhenRequestingACruiseServerManagerWithAnExtensionProtocolEmptyExtension()
         {
             DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof(ICruiseManagerFactory));

@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException), ExpectedMessage="DefaultRight must be either Allow or Deny\r\nParameter name: DefaultRight")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void SetDefaultRightToInheritDenied()
         {
             DefaultProjectAuthorisation authorisation = new DefaultProjectAuthorisation();
