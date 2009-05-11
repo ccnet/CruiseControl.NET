@@ -91,8 +91,8 @@
 		<loadtasks assembly="${nauckit.nant.assembly}" />
 
 		<echo message="Build configuration: ${build.configuration}" />
-		<echo message="Source Dictionary: ${src.dir}" />
-		<echo message="Build Dictionary: ${build.dir}" />
+		<echo message="Source Directory: ${src.dir}" />
+		<echo message="Build Directory: ${build.dir}" />
 
 		<msbuild projectFile="${path::combine(src.dir, build.project)}" targets="${build.target}" verbosity="Minimal">
 			<property name="Configuration" value="${build.configuration}" />
