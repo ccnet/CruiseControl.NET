@@ -216,7 +216,7 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -367,7 +367,7 @@
             this.buttonPrint});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(87, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(118, 25);
             this.toolStrip1.TabIndex = 0;
             // 
             // buttonOpen
@@ -377,7 +377,7 @@
             this.buttonOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonOpen.Name = "buttonOpen";
             this.buttonOpen.Size = new System.Drawing.Size(23, 22);
-            this.buttonOpen.Text = "toolStripButton1";
+            this.buttonOpen.Text = "Open configuration file";
             this.buttonOpen.Click += new System.EventHandler(this.buttonOpen_Click);
             // 
             // buttonReload
@@ -387,7 +387,7 @@
             this.buttonReload.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonReload.Name = "buttonReload";
             this.buttonReload.Size = new System.Drawing.Size(23, 22);
-            this.buttonReload.Text = "toolStripButton2";
+            this.buttonReload.Text = "Refresh current configuration";
             this.buttonReload.Click += new System.EventHandler(this.buttonReload_Click);
             // 
             // toolStripSeparator1
@@ -402,7 +402,7 @@
             this.buttonPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonPrint.Name = "buttonPrint";
             this.buttonPrint.Size = new System.Drawing.Size(23, 22);
-            this.buttonPrint.Text = "toolStripButton3";
+            this.buttonPrint.Text = "Print the validation report";
             this.buttonPrint.Click += new System.EventHandler(this.buttonPrint_Click);
             // 
             // MainForm
