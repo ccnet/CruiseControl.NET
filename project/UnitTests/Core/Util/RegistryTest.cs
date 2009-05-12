@@ -6,16 +6,17 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 {
 	[TestFixture]
-	[Category("WindowsOnly")]
 	public class RegistryTest
 	{
-		private const string VALID_REGISTRY_PATH = @"SOFTWARE\Microsoft\Shared Tools";
+		private const string VALID_REGISTRY_PATH = @"SOFTWARE\Microsoft\Windows\CurrentVersion";
 
 		[Test]
 		public void GetLocalMachineSubKeyValue()
 		{
-			string sharedPath = new Registry().GetLocalMachineSubKeyValue(VALID_REGISTRY_PATH, "SharedFilesDir");
-			Assert.IsTrue(Directory.Exists(sharedPath), "#A1");
+			string programFilesPath = new Registry().GetLocalMachineSubKeyValue(VALID_REGISTRY_PATH, "ProgramFilesPath");
+			Assert.IsNotNull(programFilesPath, "#A1");
+			Assert.AreNotEqual(string.Empty, programFilesPath, "#A2");
+			Assert.IsTrue(Directory.Exists(programFilesPath), "#A3");
 		}
 
 		[Test]
