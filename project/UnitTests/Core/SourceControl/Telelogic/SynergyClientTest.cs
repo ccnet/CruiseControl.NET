@@ -16,22 +16,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 		public void VerifyDefaultValues()
 		{
 			Synergy synergy = new Synergy();
-			Assert.AreEqual("ccm.exe", synergy.Connection.Executable);
-			Assert.AreEqual("localhost", synergy.Connection.Host);
-			Assert.IsNull(synergy.Connection.Database);
-			Assert.IsNull(synergy.Connection.SessionId);
-			Assert.AreEqual(3600, synergy.Connection.Timeout);
-			Assert.AreEqual('-', synergy.Connection.Delimiter);
-			Assert.IsNull(synergy.Project.Release);
-			Assert.AreEqual(0, synergy.Project.TaskFolder);
-			Assert.AreEqual(Environment.UserName, synergy.Connection.Username);
-			Assert.AreEqual(String.Empty, synergy.Connection.Password);
-			Assert.AreEqual("build_mgr", synergy.Connection.Role);
-			Assert.IsFalse(synergy.Connection.PollingEnabled);
-			Assert.IsFalse(synergy.Project.BaseliningEnabled);
-			Assert.IsFalse(synergy.Project.TemplateEnabled);
-			Assert.IsNull(synergy.Project.ReconcilePaths);
-			Assert.AreEqual("Integration Testing", synergy.Project.Purpose);
+			Assert.AreEqual("ccm.exe", synergy.Connection.Executable, "#A1");
+			Assert.AreEqual("localhost", synergy.Connection.Host, "#A2");
+			Assert.IsNull(synergy.Connection.Database, "#A3");
+			Assert.IsNull(synergy.Connection.SessionId, "#A4");
+			Assert.AreEqual(3600, synergy.Connection.Timeout, "#A5");
+			Assert.AreEqual('-', synergy.Connection.Delimiter, "#A6");
+			Assert.IsNull(synergy.Project.Release, "#A7");
+			Assert.AreEqual(0, synergy.Project.TaskFolder, "#A8");
+			Assert.AreEqual(Environment.UserName, synergy.Connection.Username, "#A9");
+			Assert.AreEqual(String.Empty, synergy.Connection.Password, "#A10");
+			Assert.AreEqual("build_mgr", synergy.Connection.Role, "#A11");
+			Assert.IsFalse(synergy.Connection.PollingEnabled, "#A12");
+			Assert.IsFalse(synergy.Project.BaseliningEnabled, "#A13");
+			Assert.IsFalse(synergy.Project.TemplateEnabled, "#A14");
+			Assert.IsNull(synergy.Project.ReconcilePaths, "#A15");
+			Assert.AreEqual("Integration Testing", synergy.Project.Purpose, "#A16");
 		}
 
 		[Test]
