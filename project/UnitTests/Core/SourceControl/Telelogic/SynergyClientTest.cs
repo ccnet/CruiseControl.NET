@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 			Assert.AreEqual('-', synergy.Connection.Delimiter, "#A6");
 			Assert.IsNull(synergy.Project.Release, "#A7");
 			Assert.AreEqual(0, synergy.Project.TaskFolder, "#A8");
-			Assert.AreEqual(Environment.UserName, synergy.Connection.Username, "#A9");
+			Assert.AreEqual(Environment.ExpandEnvironmentVariables("%USERNAME%"), synergy.Connection.Username, "#A9");
 			Assert.AreEqual(String.Empty, synergy.Connection.Password, "#A10");
 			Assert.AreEqual("build_mgr", synergy.Connection.Role, "#A11");
 			Assert.IsFalse(synergy.Connection.PollingEnabled, "#A12");

@@ -28,16 +28,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 		{
 			SynergyConnectionInfo actual = new SynergyConnectionInfo();
 
-			Assert.IsNull(actual.Database);
-			Assert.IsNull(actual.SessionId);
-			Assert.AreEqual(3600, actual.Timeout);
-			Assert.AreEqual("ccm.exe", actual.Executable);
-			Assert.AreEqual(Environment.UserName, actual.Username);
-			Assert.AreEqual("build_mgr", actual.Role);
-			Assert.AreEqual('-', actual.Delimiter);
-			Assert.AreEqual(Environment.ExpandEnvironmentVariables(@"%SystemDrive%\cmsynergy\%USERNAME%"), actual.HomeDirectory);
-			Assert.AreEqual(Environment.ExpandEnvironmentVariables(@"%SystemDrive%\cmsynergy\uidb"), actual.ClientDatabaseDirectory);
-			Assert.AreEqual(Environment.ExpandEnvironmentVariables(@"%ProgramFiles%\Telelogic\CM Synergy 6.3\bin"), actual.WorkingDirectory);
+			Assert.IsNull(actual.Database, "#A1");
+			Assert.IsNull(actual.SessionId, "#A2");
+			Assert.AreEqual(3600, actual.Timeout, "#A3");
+			Assert.AreEqual("ccm.exe", actual.Executable, "#A4");
+			Assert.AreEqual(Environment.ExpandEnvironmentVariables("%USERNAME%"), actual.Username, "#A5");
+			Assert.AreEqual("build_mgr", actual.Role, "#A6");
+			Assert.AreEqual('-', actual.Delimiter, "#A7");
+			Assert.AreEqual(Environment.ExpandEnvironmentVariables(@"%SystemDrive%\cmsynergy\%USERNAME%"), actual.HomeDirectory, "#A8");
+			Assert.AreEqual(Environment.ExpandEnvironmentVariables(@"%SystemDrive%\cmsynergy\uidb"), actual.ClientDatabaseDirectory, "#A9");
+			Assert.AreEqual(Environment.ExpandEnvironmentVariables(@"%ProgramFiles%\Telelogic\CM Synergy 6.3\bin"), actual.WorkingDirectory, "#A10");
 		}
 
 		[Test]
