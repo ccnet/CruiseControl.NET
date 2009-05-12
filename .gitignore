@@ -1,0 +1,10 @@
+/build
+/dist
+/package
+/backup*
+/.project
+/web
+/deployed
+/netreflector.xml
+/build.txt
+/start ccnet for test project.bat
