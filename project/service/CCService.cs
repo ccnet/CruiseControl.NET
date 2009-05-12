@@ -122,10 +122,10 @@ namespace ThoughtWorks.CruiseControl.Service
         {
             get
             {
-                // mono returns 128 when running on linux, .NET 2.0 returns 4
-                // see http://www.mono-project.com/FAQ:_Technical
-                int platform = (int)Environment.OSVersion.Platform;
-                return ((platform != 4) && (platform != 128));
+				int platform = (int)Environment.OSVersion.Platform;
+				return ((platform != 4) // PlatformID.Unix
+					&& (platform != 6) // PlatformID.MacOSX
+					&& (platform != 128)); // Mono compability value for PlatformID.Unix on .NET 1.x profile
             }
         }
     }
