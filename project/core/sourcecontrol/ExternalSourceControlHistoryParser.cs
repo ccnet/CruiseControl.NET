@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -40,33 +41,36 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <returns>the changes in the specified time range.</returns>
 		public Modification[] Parse(TextReader history, DateTime from, DateTime to)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof (Modification[]));
-            Modification[] mods;
-            try
-            {
-                mods = (Modification[]) serializer.Deserialize(history);
-            }
-            catch (InvalidOperationException e)
-            {
-                if ((e.InnerException is XmlException) && (e.InnerException.Message == "Root element is missing."))
-                {
-                    // This exception means that "history" was empty.  I wish there was a less-bogus way to know that.
-                    return new Modification[0];
-                }
-                else
-                    throw;
-            }
-            ArrayList results = new ArrayList();
-            
-            foreach (Modification mod in mods)
-            {
-                if ((mod.ModifiedTime >= from) & (mod.ModifiedTime <= to))
-                    results.Add(mod);
-            }
-            return (Modification[])results.ToArray(typeof(Modification));
+        	XmlSerializer serializer = new XmlSerializer(typeof (Modification[]));
+			Modification[] mods = new Modification[0];
+        	try
+        	{
+        		// return 0 modifications if "history" is empty.
+        		if (history.Peek() == -1)
+					return mods;
+
+        		mods = (Modification[]) serializer.Deserialize(history);
+        	}
+        	catch (InvalidOperationException e)
+        	{
+				Log.Error(e);
+
+        		if (e.InnerException is XmlException)
+					return mods;
+
+        		throw;
+        	}
+        	ArrayList results = new ArrayList();
+
+        	foreach (Modification mod in mods)
+        	{
+        		if ((mod.ModifiedTime >= from) & (mod.ModifiedTime <= to))
+        			results.Add(mod);
+        	}
+        	return (Modification[]) results.ToArray(typeof (Modification));
         }
 
-        #endregion
+		#endregion
 
         #region Internal methods
         // None yet.
