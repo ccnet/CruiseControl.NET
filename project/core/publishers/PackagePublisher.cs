@@ -161,6 +161,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { files = value; }
         }
         #endregion
+
+        #region OutputDirectory
+        /// <summary>
+        /// The location to output the package to.
+        /// </summary>
+        [ReflectorProperty("outputDir", Required = false)]
+        public string OutputDirectory { get; set; }
+        #endregion
         #endregion
 
         #region Public methods
@@ -383,6 +391,16 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             string actualFolder = Path.GetDirectoryName(actualFile);
             if (!Directory.Exists(actualFolder)) Directory.CreateDirectory(actualFolder);
             File.Move(tempFile, actualFile);
+
+            if (!string.IsNullOrEmpty(OutputDirectory))
+            {
+                // Copy the file to the output directory (so it can be used by other tasks)
+                var basePath = OutputDirectory;
+                if (!Path.IsPathRooted(basePath)) basePath = Path.Combine(result.ArtifactDirectory, basePath);
+                Log.Info(string.Format("Copying file to '{0}'", basePath));
+                File.Copy(actualFile, Path.Combine(basePath, Name), true);
+            }
+
             return actualFile;
         }
         #endregion
