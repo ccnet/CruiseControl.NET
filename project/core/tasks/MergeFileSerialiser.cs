@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         					// Make sure there are no child elements
         					var fileSubNodes = fileElement.SelectNodes("*");
 							if (fileSubNodes != null && fileSubNodes.Count > 0)
-								throw new NetReflectorException(string.Concat("file cannot contain any sub-items.", Environment.NewLine, "XML: ", fileElement.InnerXml));
+								throw new NetReflectorException(string.Concat("file cannot contain any sub-items.", Environment.NewLine, "XML: ", fileElement.OuterXml));
 
         					// Load the filename
         					var newFile = new MergeFileInfo();
@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         				{
         					// Unknown sub-item
         					throw new NetReflectorException(string.Concat(fileElement.Name, " is not a valid sub-item.",
-																		  Environment.NewLine, "XML: ", fileElement.InnerXml));
+																		  Environment.NewLine, "XML: ", fileElement.OuterXml));
         				}
         			}
         		}
