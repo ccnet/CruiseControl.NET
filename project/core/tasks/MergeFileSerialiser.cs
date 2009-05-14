@@ -4,6 +4,7 @@ using System.Text;
 using Exortech.NetReflector;
 using Exortech.NetReflector.Util;
 using System.Xml;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -32,64 +33,71 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="node"></param>
         /// <param name="table"></param>
         /// <returns></returns>
-        public override object Read(XmlNode node, NetReflectorTypeTable table)
+		public override object Read(XmlNode node, NetReflectorTypeTable table)
         {
-            var fileList = new List<MergeFileInfo>();
+        	var fileList = new List<MergeFileInfo>();
 
-            if (node != null)
-            {
-                // Validate the attributes
-                if (node.Attributes.Count > 0)
-                {
-                    throw new NetReflectorException("A file list cannot directly contain attributes.\r\nXML: " + node.OuterXml);
-                }
+        	if (node != null)
+        	{
+        		// Validate the attributes
+        		if (node.Attributes.Count > 0)
+					throw new NetReflectorException(string.Concat("A file list cannot directly contain attributes.", Environment.NewLine, "XML: ", node.OuterXml));
 
-                // Check each element
-                foreach (XmlElement fileElement in node.SelectNodes("*"))
-                {
-                    if (fileElement.Name == "file")
-                    {
-                        // Make sure there are no child elements
-                        if (fileElement.SelectNodes("*").Count > 0)
-                        {
-                            throw new NetReflectorException("file cannot contain any sub-items.\r\nXML: " + node.OuterXml);
-                        }
+        		// Check each element
+        		var subNodes = node.SelectNodes("*");
+        		if (subNodes != null)
+        		{
+        			foreach (XmlElement fileElement in subNodes)
+        			{
+        				if (fileElement.Name == "file")
+        				{
+        					// Make sure there are no child elements
+        					var fileSubNodes = fileElement.SelectNodes("*");
+							if (fileSubNodes != null && fileSubNodes.Count > 0)
+								throw new NetReflectorException(string.Concat("file cannot contain any sub-items.", Environment.NewLine, "XML: ", fileElement.InnerXml));
 
-                        // Load the filename
-                        var newFile = new MergeFileInfo();
-                        newFile.FileName = fileElement.InnerText;
+        					// Load the filename
+        					var newFile = new MergeFileInfo();
+        					newFile.FileName = fileElement.InnerText;
 
-                        // Load the merge action
-                        var typeAttribute = fileElement.GetAttribute("action");
-                        if (string.IsNullOrEmpty(typeAttribute))
-                        {
-                            newFile.MergeAction = MergeFileInfo.MergeActionType.Merge;
-                        }
-                        else
-                        {
-                            try
-                            {
-                                newFile.MergeAction = (MergeFileInfo.MergeActionType)Enum.Parse(
-                                    typeof(MergeFileInfo.MergeActionType),
-                                    typeAttribute);
-                            }
-                            catch (Exception error)
-                            {
-                                throw new NetReflectorConverterException("Unknown action :'" + typeAttribute + "'\r\nXML: " + node.OuterXml, error);
-                            }
-                        }
-                        fileList.Add(newFile);
-                    }
-                    else
-                    {
-                        // Unknown sub-item
-                        throw new NetReflectorException(fileElement.Name + " is not a valid sub-item.\r\nXML: " + node.OuterXml);
-                    }
-                }
-            }
-            return fileList.ToArray();
+        					// Load the merge action
+        					var typeAttribute = fileElement.GetAttribute("action");
+        					if (string.IsNullOrEmpty(typeAttribute))
+        					{
+        						newFile.MergeAction = MergeFileInfo.MergeActionType.Merge;
+        					}
+        					else
+        					{
+        						try
+        						{
+        							newFile.MergeAction = (MergeFileInfo.MergeActionType) Enum.Parse(
+        							                                                      	typeof (MergeFileInfo.MergeActionType),
+        							                                                      	typeAttribute);
+        						}
+        						catch (Exception error)
+        						{
+        							throw new NetReflectorConverterException(string.Concat(
+        							                                         	"Unknown action :'", typeAttribute, Environment.NewLine,
+																				"'XML: " + fileElement.InnerXml), error);
+        						}
+        					}
+
+        					Log.Debug(string.Concat("MergeFilesTask: Add '", newFile.FileName, "' to '", newFile.MergeAction.ToString(), "' file list."));
+        					fileList.Add(newFile);
+        				}
+        				else
+        				{
+        					// Unknown sub-item
+        					throw new NetReflectorException(string.Concat(fileElement.Name, " is not a valid sub-item.",
+																		  Environment.NewLine, "XML: ", fileElement.InnerXml));
+        				}
+        			}
+        		}
+        	}
+        	return fileList.ToArray();
         }
-        #endregion
+
+    	#endregion
 
         #region Write()
         /// <summary>
