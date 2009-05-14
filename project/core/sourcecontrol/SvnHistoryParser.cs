@@ -15,6 +15,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// </summary>
 	public class SvnHistoryParser : IHistoryParser
 	{
+        private bool integrationStatusUnknown = false;
+
+        public bool IntegrationStatusUnknown
+        {
+            set { integrationStatusUnknown = value; }
+            get { return integrationStatusUnknown; }
+        }
+
         /// <summary>
         /// Parse the output from a Subversion "svn log --xml" command into a set of <see cref="Modification"/>s.
         /// </summary>
@@ -74,10 +82,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             try
             {
                 DateTime changeTime = ParseDate(logEntry);
-                if (changeTime == DateTime.MinValue || changeTime < from || to < changeTime)
+
+                if (!IntegrationStatusUnknown)
                 {
-                    // Work around issue 1642 in Subversion (http://subversion.tigris.org/issues/show_bug.cgi?id=1642).
-                    return new ArrayList();
+                    if (changeTime == DateTime.MinValue || changeTime < from || to < changeTime)
+                    {
+                        // Work around issue 1642 in Subversion (http://subversion.tigris.org/issues/show_bug.cgi?id=1642).
+                        return new ArrayList();
+                    }
+                }
+                else
+                {
+                    IntegrationStatusUnknown = false;
                 }
 
                 int changeNumber = ParseChangeNumber(logEntry);

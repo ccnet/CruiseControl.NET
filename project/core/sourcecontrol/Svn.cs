@@ -6,6 +6,7 @@ using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -100,6 +101,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
+            if (to.LastIntegrationStatus == IntegrationStatus.Unknown)
+            {
+                ((SvnHistoryParser)historyParser).IntegrationStatusUnknown = true;
+            }
 
             if (WorkingFolderIsKnownAsSvnWorkingFolder(to.WorkingDirectory))
             {
