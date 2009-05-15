@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         }
         public static Stream GetAssemblyResourceStream (string resource_name )
         {
-            return Assembly.GetCallingAssembly().GetManifestResourceStream( resource_name );            
+            return Assembly.GetExecutingAssembly().GetManifestResourceStream(resource_name);            
         }
     }
 }

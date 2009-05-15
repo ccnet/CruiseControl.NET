@@ -10,7 +10,6 @@ using ThoughtWorks.CruiseControl.Core.Config.Preprocessor;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {
     [TestFixture]
-	[Ignore("Ignore PreprocessorTest until we found out why it fails after the build-refactoring branch merge.")]
     public class PreprocessorTest
     {
     	private static readonly string FAKE_ROOT = Path.DirectorySeparatorChar == '\\' ? "c:\\temp folder\\" : "/tmp/";
