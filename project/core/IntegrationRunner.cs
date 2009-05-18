@@ -27,6 +27,12 @@ namespace ThoughtWorks.CruiseControl.Core
             CreateDirectoryIfItDoesntExist(result.WorkingDirectory);
             CreateDirectoryIfItDoesntExist(result.ArtifactDirectory);
 
+            // Copy any parameters to the result
+            if ((request.BuildValues != null) && (request.BuildValues.Count > 0))
+            {
+                result.Parameters.AddRange(
+                    NameValuePair.FromDictionary(request.BuildValues));
+            }
             result.MarkStartTime();
             
             bool RunBuild = false;

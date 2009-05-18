@@ -456,7 +456,9 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public void Run(IIntegrationResult result)
         {
-            Run(result, new Dictionary<string, string>());
+            var parameters = new Dictionary<string, string>();
+            if (result.Parameters != null) parameters = NameValuePair.ToDictionary(result.Parameters);
+            Run(result, parameters);
         }
 
         public void Run(IIntegrationResult result, Dictionary<string, string> parameterValues)
