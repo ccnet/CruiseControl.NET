@@ -100,14 +100,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
+            string wd = StringUtil.AutoDoubleQuoteString(Path.GetFullPath(to.BaseFromWorkingDirectory(WorkingDirectory)));
 
-            if (WorkingFolderIsKnownAsSvnWorkingFolder(to.WorkingDirectory))
+            if (WorkingFolderIsKnownAsSvnWorkingFolder(wd) )
             {
                 if (CleanUp)
-					Execute(CleanupWorkingCopy(to));
+                    Execute(CleanupWorkingCopy(to));
 
-				if (Revert)
-					Execute(RevertWorkingCopy(to));
+                if (Revert)
+                    Execute(RevertWorkingCopy(to));
+            }
+            else
+            {
+                Util.Log.Warning(string.Format("{0} is not a svn working folder", wd));
+
             }
 
             List<Modification> modifications = new List<Modification>();
