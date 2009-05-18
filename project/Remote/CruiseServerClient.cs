@@ -282,9 +282,7 @@ namespace ThoughtWorks.CruiseControl.Remote
                 as DataResponse;
             return resp.Data;
         }
-        #endregion
 
-        #region GetServerLog()
         /// <summary>
         /// Returns a log of recent build server activity for a specific project. How much information that is returned is configured on the build server.
         /// </summary>

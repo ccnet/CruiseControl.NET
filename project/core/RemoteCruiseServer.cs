@@ -576,10 +576,11 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Adds a service.
         /// </summary>
+        /// <param name="serviceType">The type of service.</param>
         /// <param name="service">The service to add.</param>
-        public virtual void AddService(object service)
+        public virtual void AddService(Type serviceType, object service)
         {
-            server.AddService(service);
+            server.AddService(serviceType, service);
         }
         #endregion
     }

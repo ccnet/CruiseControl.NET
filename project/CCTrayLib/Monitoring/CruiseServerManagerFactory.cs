@@ -17,9 +17,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             switch (buildServer.Transport)
             {
                 case BuildServerTransport.Remoting:
-                    var manager = CruiseServerClientFactory.GenerateRemotingClient(buildServer.Url);
-                    return new CachingCruiseServerManager(
-                        new RemotingCruiseServerManager(manager, buildServer));
+                    var manager = GenerateRemotingClient(buildServer);
+                    return new CachingCruiseServerManager(new RemotingCruiseServerManager(manager, buildServer));
                 case BuildServerTransport.Extension:
                     ITransportExtension extensionInstance = ExtensionHelpers.RetrieveExtension(buildServer.ExtensionName);
                     extensionInstance.Settings = buildServer.ExtensionSettings;
@@ -29,6 +28,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
                     return new CachingCruiseServerManager(
                         new HttpCruiseServerManager(new WebRetriever(), new DashboardXmlParser(), buildServer));
             }
+        }
+
+        private CruiseServerClientBase GenerateRemotingClient(BuildServer server)
+        {
+            CruiseServerClientBase client;
+            switch (server.ExtensionSettings)
+            {
+                case "OLD":
+                    client = CruiseServerClientFactory.GenerateOldRemotingClient(server.Url);
+                    break;
+                default:
+                    client = CruiseServerClientFactory.GenerateRemotingClient(server.Url);
+                    break;
+            }
+            return client;
         }
     }
 }

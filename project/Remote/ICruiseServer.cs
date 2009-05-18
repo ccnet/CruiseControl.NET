@@ -422,8 +422,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Adds a service.
         /// </summary>
+        /// <param name="serviceType">The type of service.</param>
         /// <param name="service">The service to add.</param>
-        void AddService(object service);
+        void AddService(Type serviceType, object service);
         #endregion
     }
 }

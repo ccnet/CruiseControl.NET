@@ -17,7 +17,6 @@ using ThoughtWorks.CruiseControl.Remote;
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using System.Text;
-using Microsoft.Practices.Unity;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -65,19 +64,9 @@ namespace ThoughtWorks.CruiseControl.Core
         private ProjectStatusSnapshot currentProjectStatus;
         private Dictionary<ITask, ItemStatus> currentProjectItems = new Dictionary<ITask, ItemStatus>();
         private Dictionary<SourceControlOperation, ItemStatus> sourceControlOperations = new Dictionary<SourceControlOperation, ItemStatus>();
-        private bool isInitialised = false;
 
         [ReflectorProperty("prebuild", Required = false)]
         public ITask[] PrebuildTasks = new ITask[0];
-
-        /// <summary>
-        /// The server that currently owns this task.
-        /// </summary>
-        [Dependency]
-        public ICruiseServer Server { get; set; }
-
-        [Dependency]
-        public IUnityContainer Container { get; set; }
 
         public Project()
         {
@@ -248,34 +237,10 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public IIntegrationResult Integrate(IntegrationRequest request)
         {
-            // Not sure whether this lock is really needed, as in theory only one integration should be started 
-            // at any one time, but it is needed for the status as a client might be accessing at the same time
-            // as it is being initialised
             lock (currentProjectStatus)
             {
                 // Build up all the child items
                 // Note: this will only build up the direct children, it doesn't handle below the initial layer
-                if (!isInitialised && (Container != null))
-                {
-                    foreach (var task in Tasks)
-                    {
-                        Container.BuildUp(task);
-                    }
-                    foreach (var task in PrebuildTasks)
-                    {
-                        Container.BuildUp(task);
-                    }
-                    foreach (var task in Publishers)
-                    {
-                        Container.BuildUp(task);
-                    }
-                    if (SourceControl != null) Container.BuildUp(SourceControl);
-                    if (Security != null) Container.BuildUp(Security);
-                    if (Triggers != null) Container.BuildUp(Triggers);
-                }
-                isInitialised = true;
-
-                // Initialise the status
                 currentProjectItems.Clear();
                 sourceControlOperations.Clear();
                 currentProjectStatus.Status = ItemBuildStatus.Running;

@@ -106,9 +106,13 @@
     <Compile Include="CruiseServerClient.cs" />
     <Compile Include="CruiseServerClientBase.cs" />
     <Compile Include="CruiseServerClientFactory.cs" />
+    <Compile Include="CruiseServerRemotingClient.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CruiseServerSnapshot.cs" />
     <Compile Include="ExternalLink.cs" />
     <Compile Include="HttpConnection.cs" />
+    <Compile Include="ICruiseManager.cs" />
     <Compile Include="IFileTransfer.cs" />
     <Compile Include="IMessageProcessor.cs" />
     <Compile Include="IntegrationRequest.cs" />
@@ -160,6 +164,7 @@
     <Compile Include="QueueSetSnapshot.cs" />
     <Compile Include="QueueSnapshot.cs" />
     <Compile Include="RemotingConnection.cs" />
+    <Compile Include="RemotingFileTransfer.cs" />
     <Compile Include="SecurityCheckDiagnostics.cs" />
     <Compile Include="Security\AuditFilterBase.cs" />
     <Compile Include="Security\AuditFilters.cs" />

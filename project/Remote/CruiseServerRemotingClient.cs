@@ -1,18 +1,38 @@
-﻿using System;
+﻿#pragma warning disable 0618
+using System;
 using System.Collections.Generic;
 using System.Text;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Channels;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
     /// <summary>
-    /// A base class to implement client-side communications with a CruiseControl.NET server.
+    /// A client connection to an old (pre-1.5) version of CruiseControl.NET via .NET Remoting.
     /// </summary>
-    public abstract class CruiseServerClientBase
+    public class CruiseServerRemotingClient
+        : CruiseServerClientBase
     {
         #region Private fields
-        private string sessionToken;
+        private readonly string serverUri;
+        private string targetServer;
+        private ICruiseManager manager;
+        private string userName = Environment.UserName;
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initialises a new <see cref="CruiseServerRemotingClient"/>.
+        /// </summary>
+        /// <param name="serverUri">The address of the server.</param>
+        public CruiseServerRemotingClient(string serverUri)
+        {
+            this.serverUri = serverUri;
+            this.manager = (ICruiseManager)RemotingServices.Connect(typeof(ICruiseManager), serverUri);
+        }
         #endregion
 
         #region Public properties
@@ -20,17 +40,21 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// The server that will be targeted by all messages.
         /// </summary>
-        public abstract string TargetServer { get; set; }
-        #endregion
-
-        #region SessionToken
-        /// <summary>
-        /// The session token to use.
-        /// </summary>
-        public virtual string SessionToken
+        public override string TargetServer
         {
-            get { return sessionToken; }
-            set { sessionToken = value; }
+            get
+            {
+                if (string.IsNullOrEmpty(targetServer))
+                {
+                    var targetUri = new Uri(serverUri);
+                    return targetUri.Host;
+                }
+                else
+                {
+                    return targetServer;
+                }
+            }
+            set { targetServer = value; }
         }
         #endregion
 
@@ -38,16 +62,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Is this client busy performing an operation.
         /// </summary>
-        public abstract bool IsBusy { get; }
-        #endregion
-
-        #region IsLoggedIn
-        /// <summary>
-        /// Is this client currently logged in.
-        /// </summary>
-        public virtual bool IsLoggedIn
+        public override bool IsBusy
         {
-            get { return !string.IsNullOrEmpty(SessionToken); }
+            get { return false; }
         }
         #endregion
         #endregion
@@ -58,9 +75,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Gets information about the last build status, current activity and project name.
         /// for all projects on a cruise server
         /// </summary>
-        public virtual ProjectStatus[] GetProjectStatus()
+        public override ProjectStatus[] GetProjectStatus()
         {
-            throw new NotImplementedException();
+            var response = manager.GetProjectStatus();
+            return response;
         }
         #endregion
 
@@ -69,9 +87,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Forces a build for the named project.
         /// </summary>
         /// <param name="projectName">project to force</param>
-        public virtual void ForceBuild(string projectName)
+        public override void ForceBuild(string projectName)
         {
-            throw new NotImplementedException();
+            manager.ForceBuild(projectName, userName);
         }
 
         /// <summary>
@@ -79,9 +97,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">project to force</param>
         /// <param name="parameters"></param>
-        public virtual void ForceBuild(string projectName, List<NameValuePair> parameters)
+        public override void ForceBuild(string projectName, List<NameValuePair> parameters)
         {
-            throw new NotImplementedException();
+            ForceBuild(projectName);
         }
         #endregion
 
@@ -90,9 +108,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Attempts to abort a current project build.
         /// </summary>
         /// <param name="projectName">The name of the project to abort.</param>
-        public virtual void AbortBuild(string projectName)
+        public override void AbortBuild(string projectName)
         {
-            throw new NotImplementedException();
+            manager.AbortBuild(projectName, userName);
         }
         #endregion
 
@@ -102,9 +120,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project to use.</param>
         /// <param name="integrationRequest"></param>
-        public virtual void Request(string projectName, IntegrationRequest integrationRequest)
+        public override void Request(string projectName, IntegrationRequest integrationRequest)
         {
-            throw new NotImplementedException();
+            manager.Request(projectName, integrationRequest);
         }
         #endregion
 
@@ -113,9 +131,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Attempts to start a project.
         /// </summary>
         /// <param name="project"></param>
-        public virtual void StartProject(string project)
+        public override void StartProject(string project)
         {
-            throw new NotImplementedException();
+            manager.Start(project);
         }
         #endregion
 
@@ -124,9 +142,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Stop project.
         /// </summary>
         /// <param name="project"></param>
-        public virtual void StopProject(string project)
+        public override void StopProject(string project)
         {
-            throw new NotImplementedException();
+            manager.Stop(project);
         }
         #endregion
 
@@ -136,9 +154,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project to use.</param>
         /// <param name="message"></param>
-        public virtual void SendMessage(string projectName, Message message)
+        public override void SendMessage(string projectName, Message message)
         {
-            throw new NotImplementedException();
+            manager.SendMessage(projectName, message);
         }
         #endregion
 
@@ -147,9 +165,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Waits for a project to stop.
         /// </summary>
         /// <param name="projectName">The name of the project to use.</param>
-        public virtual void WaitForExit(string projectName)
+        public override void WaitForExit(string projectName)
         {
-            throw new NotImplementedException();
+            manager.WaitForExit(projectName);
         }
         #endregion
 
@@ -157,9 +175,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Cancel a pending project integration request from the integration queue.
         /// </summary>
-        public virtual void CancelPendingRequest(string projectName)
+        public override void CancelPendingRequest(string projectName)
         {
-            throw new NotImplementedException();
+            manager.CancelPendingRequest(projectName);
         }
         #endregion
 
@@ -167,9 +185,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Gets the projects and integration queues snapshot from this server.
         /// </summary>
-        public virtual CruiseServerSnapshot GetCruiseServerSnapshot()
+        public override CruiseServerSnapshot GetCruiseServerSnapshot()
         {
-            throw new NotImplementedException();
+            var response = manager.GetCruiseServerSnapshot();
+            return response;
         }
         #endregion
 
@@ -177,9 +196,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns the name of the most recent build for the specified project
         /// </summary>
-        public virtual string GetLatestBuildName(string projectName)
+        public override string GetLatestBuildName(string projectName)
         {
-            throw new NotImplementedException();
+            var response = manager.GetLatestBuildName(projectName);
+            return response;
         }
         #endregion
 
@@ -187,9 +207,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns the names of all builds for the specified project, sorted s.t. the newest build is first in the array
         /// </summary>
-        public virtual string[] GetBuildNames(string projectName)
+        public override string[] GetBuildNames(string projectName)
         {
-            throw new NotImplementedException();
+            var response = manager.GetBuildNames(projectName);
+            return response;
         }
         #endregion
 
@@ -197,9 +218,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns the names of the buildCount most recent builds for the specified project, sorted s.t. the newest build is first in the array
         /// </summary>
-        public virtual string[] GetMostRecentBuildNames(string projectName, int buildCount)
+        public override string[] GetMostRecentBuildNames(string projectName, int buildCount)
         {
-            throw new NotImplementedException();
+            var response = manager.GetMostRecentBuildNames(projectName, buildCount);
+            return response;
         }
         #endregion
 
@@ -207,9 +229,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns the build log contents for requested project and build name
         /// </summary>
-        public virtual string GetLog(string projectName, string buildName)
+        public override string GetLog(string projectName, string buildName)
         {
-            throw new NotImplementedException();
+            var response = manager.GetLog(projectName, buildName);
+            return response;
         }
         #endregion
 
@@ -217,19 +240,19 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns a log of recent build server activity. How much information that is returned is configured on the build server.
         /// </summary>
-        public virtual string GetServerLog()
+        public override string GetServerLog()
         {
-            throw new NotImplementedException();
+            var response = manager.GetServerLog();
+            return response;
         }
-        #endregion
 
-        #region GetServerLog()
         /// <summary>
         /// Returns a log of recent build server activity for a specific project. How much information that is returned is configured on the build server.
         /// </summary>
-        public virtual string GetServerLog(string projectName)
+        public override string GetServerLog(string projectName)
         {
-            throw new NotImplementedException();
+            var response = manager.GetServerLog(projectName);
+            return response;
         }
         #endregion
 
@@ -237,9 +260,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns the version of the server
         /// </summary>
-        public virtual string GetServerVersion()
+        public override string GetServerVersion()
         {
-            throw new NotImplementedException();
+            var response = manager.GetServerVersion();
+            return response;
         }
         #endregion
 
@@ -247,9 +271,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Adds a project to the server
         /// </summary>
-        public virtual void AddProject(string serializedProject)
+        public override void AddProject(string serializedProject)
         {
-            throw new NotImplementedException();
+            manager.AddProject(serializedProject);
         }
         #endregion
 
@@ -257,9 +281,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Deletes the specified project from the server
         /// </summary>
-        public virtual void DeleteProject(string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
+        public override void DeleteProject(string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
         {
-            throw new NotImplementedException();
+            manager.DeleteProject(projectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
         }
         #endregion
 
@@ -267,9 +291,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns the serialized form of the requested project from the server
         /// </summary>
-        public virtual string GetProject(string projectName)
+        public override string GetProject(string projectName)
         {
-            throw new NotImplementedException();
+            var response = manager.GetProject(projectName);
+            return response;
         }
         #endregion
 
@@ -277,9 +302,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Updates the selected project on the server
         /// </summary>
-        public virtual void UpdateProject(string projectName, string serializedProject)
+        public override void UpdateProject(string projectName, string serializedProject)
         {
-            throw new NotImplementedException();
+            manager.UpdateProject(projectName, serializedProject);
         }
         #endregion
 
@@ -289,9 +314,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project to use.</param>
         /// <returns></returns>
-        public virtual ExternalLink[] GetExternalLinks(string projectName)
+        public override ExternalLink[] GetExternalLinks(string projectName)
         {
-            throw new NotImplementedException();
+            var response = manager.GetExternalLinks(projectName);
+            return response;
         }
         #endregion
 
@@ -301,9 +327,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project to use.</param>
         /// <returns></returns>
-        public virtual string GetArtifactDirectory(string projectName)
+        public override string GetArtifactDirectory(string projectName)
         {
-            throw new NotImplementedException();
+            var response = manager.GetArtifactDirectory(projectName);
+            return response;
         }
         #endregion
 
@@ -313,9 +340,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project to use.</param>
         /// <returns></returns>
-        public virtual string GetStatisticsDocument(string projectName)
+        public override string GetStatisticsDocument(string projectName)
         {
-            throw new NotImplementedException();
+            var response = manager.GetStatisticsDocument(projectName);
+            return response;
         }
         #endregion
 
@@ -325,9 +353,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project to use.</param>
         /// <returns></returns>
-        public virtual string GetModificationHistoryDocument(string projectName)
+        public override string GetModificationHistoryDocument(string projectName)
         {
-            throw new NotImplementedException();
+            var response = manager.GetModificationHistoryDocument(projectName);
+            return response;
         }
         #endregion
 
@@ -337,9 +366,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project to use.</param>
         /// <returns></returns>
-        public virtual string GetRSSFeed(string projectName)
+        public override string GetRSSFeed(string projectName)
         {
-            throw new NotImplementedException();
+            var response = manager.GetRSSFeed(projectName);
+            return response;
         }
         #endregion
 
@@ -348,9 +378,20 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Logs a user into the session and generates a session.
         /// </summary>
         /// <returns>True if the request is successful, false otherwise.</returns>
-        public virtual bool Login(List<NameValuePair> Credentials)
+        public override bool Login(List<NameValuePair> Credentials)
         {
-            throw new NotImplementedException();
+            SessionToken = null;
+
+            foreach (var credential in Credentials)
+            {
+                if (string.Equals("username", credential.Name, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    SessionToken = credential.Value;
+                    break;
+                }
+            }
+
+            return IsLoggedIn;
         }
         #endregion
 
@@ -358,9 +399,12 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Logs a user out of the system and removes their session.
         /// </summary>
-        public virtual void Logout()
+        public override void Logout()
         {
-            throw new NotImplementedException();
+            if (SessionToken != null)
+            {
+                SessionToken = null;
+            }
         }
         #endregion
 
@@ -368,9 +412,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Retrieves the security configuration.
         /// </summary>
-        public virtual string GetSecurityConfiguration()
+        public override string GetSecurityConfiguration()
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
         }
         #endregion
 
@@ -382,9 +426,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// A list of <see cref="UserDetails"/> containing the details on all the users
         /// who have been defined.
         /// </returns>
-        public virtual List<UserDetails> ListUsers()
+        public override List<UserDetails> ListUsers()
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
         }
         #endregion
 
@@ -393,9 +437,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Checks the security permissions for a user against one or more projects.
         /// </summary>
         /// <returns>A set of diagnostics information.</returns>
-        public virtual List<SecurityCheckDiagnostics> DiagnoseSecurityPermissions(string userName, params string[] projects)
+        public override List<SecurityCheckDiagnostics> DiagnoseSecurityPermissions(string userName, params string[] projects)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
         }
         #endregion
 
@@ -404,18 +448,18 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Reads the specified number of audit events.
         /// </summary>
         /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
-        public virtual List<AuditRecord> ReadAuditRecords(int startRecord, int numberOfRecords)
+        public override List<AuditRecord> ReadAuditRecords(int startRecord, int numberOfRecords)
         {
-            throw new NotImplementedException();
+            return ReadAuditRecords(startRecord, numberOfRecords, null);
         }
 
         /// <summary>
         /// Reads the specified number of filtered audit events.
         /// </summary>
         /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
-        public virtual List<AuditRecord> ReadAuditRecords(int startRecord, int numberOfRecords, AuditFilterBase filter)
+        public override List<AuditRecord> ReadAuditRecords(int startRecord, int numberOfRecords, AuditFilterBase filter)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
         }
         #endregion
 
@@ -425,9 +469,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project to retrieve the parameters for.</param>
         /// <returns>The list of parameters (if any).</returns>
-        public virtual List<ParameterBase> ListBuildParameters(string projectName)
+        public override List<ParameterBase> ListBuildParameters(string projectName)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
         }
         #endregion
 
@@ -435,9 +479,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Changes the password of the user.
         /// </summary>
-        public virtual void ChangePassword(string oldPassword, string newPassword)
+        public override void ChangePassword(string oldPassword, string newPassword)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
         }
         #endregion
 
@@ -445,9 +489,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Resets the password for a user.
         /// </summary>
-        public virtual void ResetPassword(string userName, string newPassword)
+        public override void ResetPassword(string userName, string newPassword)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
         }
         #endregion
 
@@ -457,9 +501,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project.</param>
         /// <returns>The current status snapshot.</returns>
-        public virtual ProjectStatusSnapshot TakeStatusSnapshot(string projectName)
+        public override ProjectStatusSnapshot TakeStatusSnapshot(string projectName)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
         }
         #endregion
 
@@ -469,9 +513,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="projectName">The name of the project.</param>
         /// <returns>The currently available packages.</returns>
-        public virtual List<PackageDetails> RetrievePackageList(string projectName)
+        public override List<PackageDetails> RetrievePackageList(string projectName)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
         }
         #endregion
 
@@ -482,9 +526,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="projectName">The name of the project.</param>
         /// <param name="fileName">The name of the file.</param>
         /// <returns>The file transfer instance.</returns>
-        public virtual IFileTransfer RetrieveFileTransfer(string projectName, string fileName)
+        public override IFileTransfer RetrieveFileTransfer(string projectName, string fileName)
         {
-            throw new NotImplementedException();
+            var response = manager.RetrieveFileTransfer(projectName, fileName);
+            return response;
         }
         #endregion
         #endregion

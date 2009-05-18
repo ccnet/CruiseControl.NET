@@ -19,12 +19,44 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// <param name="projectName">project to force</param>
         /// <param name="enforcerName">ID of trigger/action forcing the build</param>
 		void ForceBuild(string projectName, string enforcerName );
+
+        /// <summary>
+        /// Abort a build.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="enforcerName"></param>
 		void AbortBuild(string projectName, string enforcerName);
+
+        /// <summary>
+        /// Send a build request.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="integrationRequest"></param>
 		void Request(string projectName, IntegrationRequest integrationRequest);
+
+        /// <summary>
+        /// Start a project.
+        /// </summary>
+        /// <param name="project"></param>
 		void Start(string project);
+
+        /// <summary>
+        /// Stop a project.
+        /// </summary>
+        /// <param name="project"></param>
 		void Stop(string project);
+
+        /// <summary>
+        /// Send a project message.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="message"></param>
 		void SendMessage(string projectName, Message message);
 
+        /// <summary>
+        /// Wait for the project to exit.
+        /// </summary>
+        /// <param name="projectName"></param>
 		void WaitForExit(string projectName);
 
 		/// <summary>
@@ -92,14 +124,39 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// </summary>
 		void UpdateProject(string projectName, string serializedProject);
 
+        /// <summary>
+        /// Get the external links.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
 		ExternalLink[] GetExternalLinks(string projectName);
 
+        /// <summary>
+        /// get the artefact directory.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
 		string GetArtifactDirectory(string projectName);
 
+        /// <summary>
+        /// get the statistics document.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
 		string GetStatisticsDocument(string projectName);
 
+        /// <summary>
+        /// Get the modification history document.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
         string GetModificationHistoryDocument(string projectName);
 
+        /// <summary>
+        /// Get the RSS feed.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <returns></returns>
         string GetRSSFeed(string projectName);
 
         /// <summary>

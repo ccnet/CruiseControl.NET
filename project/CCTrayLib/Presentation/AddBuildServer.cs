@@ -10,33 +10,38 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
 	public class AddBuildServer : Form
 	{
-		private Label label1;
-		private Label label2;
-		private Label label3;
-		private Label label4;
-		private Label label5;
+        private Label label1;
 		private Button btnCancel;
 		private Button btnOK;
 		private RadioButton rdoDashboard;
 		private RadioButton rdoRemoting;
-		private RadioButton rdoHttp;
-		private TextBox txtDashboard;
-		private TextBox txtRemoting;
-        private TextBox txtHttp;
+        private RadioButton rdoHttp;
 
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
 		private Container components = null;
 
-		private BuildServer buildServer;
-        private Label label6;
+        private BuildServer buildServer;
         private RadioButton rdoExtension;
-        private ComboBox cmbExtension;
-        private Button btnConfigureExtension;
-        private Label lblExtensionSettings;
 		private ICruiseProjectManagerFactory cruiseProjectManagerFactory;
         private TextBox txtFeedback;
+        private Panel dashboardPanel;
+        private TextBox txtDashboard;
+        private Label label2;
+        private Panel remotingPanel;
+        private CheckBox connectToOldServer;
+        private TextBox txtRemoting;
+        private Label label4;
+        private Label label3;
+        private Panel nonCcnetPanel;
+        private TextBox txtHttp;
+        private Label label5;
+        private Panel extensionPanel;
+        private Button btnConfigureExtension;
+        private ComboBox cmbExtension;
+        private Label label6;
+        private Label lblExtensionSettings;
         private ITransportExtension transportExtension;
 
 		public AddBuildServer(ICruiseProjectManagerFactory cruiseProjectManagerFactory)
@@ -81,28 +86,37 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.rdoDashboard = new System.Windows.Forms.RadioButton();
             this.rdoRemoting = new System.Windows.Forms.RadioButton();
             this.rdoHttp = new System.Windows.Forms.RadioButton();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtDashboard = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtRemoting = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.txtHttp = new System.Windows.Forms.TextBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
             this.rdoExtension = new System.Windows.Forms.RadioButton();
-            this.cmbExtension = new System.Windows.Forms.ComboBox();
-            this.btnConfigureExtension = new System.Windows.Forms.Button();
-            this.lblExtensionSettings = new System.Windows.Forms.Label();
             this.txtFeedback = new System.Windows.Forms.TextBox();
+            this.dashboardPanel = new System.Windows.Forms.Panel();
+            this.txtDashboard = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.remotingPanel = new System.Windows.Forms.Panel();
+            this.connectToOldServer = new System.Windows.Forms.CheckBox();
+            this.txtRemoting = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.nonCcnetPanel = new System.Windows.Forms.Panel();
+            this.txtHttp = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.extensionPanel = new System.Windows.Forms.Panel();
+            this.lblExtensionSettings = new System.Windows.Forms.Label();
+            this.btnConfigureExtension = new System.Windows.Forms.Button();
+            this.cmbExtension = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.dashboardPanel.SuspendLayout();
+            this.remotingPanel.SuspendLayout();
+            this.nonCcnetPanel.SuspendLayout();
+            this.extensionPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(5, 10);
+            this.label1.Location = new System.Drawing.Point(17, 10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(562, 35);
+            this.label1.Size = new System.Drawing.Size(623, 30);
             this.label1.TabIndex = 0;
             this.label1.Text = "CCTray can monitor build servers in different ways.  Select how you want to monit" +
                 "or the server, then enter the required information.";
@@ -110,9 +124,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // rdoDashboard
             // 
             this.rdoDashboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rdoDashboard.Location = new System.Drawing.Point(10, 38);
+            this.rdoDashboard.Location = new System.Drawing.Point(17, 43);
             this.rdoDashboard.Name = "rdoDashboard";
-            this.rdoDashboard.Size = new System.Drawing.Size(370, 24);
+            this.rdoDashboard.Size = new System.Drawing.Size(623, 24);
             this.rdoDashboard.TabIndex = 1;
             this.rdoDashboard.Text = "Via the CruiseControl.NET dashboard";
             this.rdoDashboard.CheckedChanged += new System.EventHandler(this.rdoDashboard_CheckedChanged);
@@ -120,9 +134,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // rdoRemoting
             // 
             this.rdoRemoting.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rdoRemoting.Location = new System.Drawing.Point(10, 120);
+            this.rdoRemoting.Location = new System.Drawing.Point(17, 70);
             this.rdoRemoting.Name = "rdoRemoting";
-            this.rdoRemoting.Size = new System.Drawing.Size(345, 24);
+            this.rdoRemoting.Size = new System.Drawing.Size(623, 24);
             this.rdoRemoting.TabIndex = 4;
             this.rdoRemoting.TabStop = true;
             this.rdoRemoting.Text = "Connect directly using .NET remoting";
@@ -131,176 +145,256 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // rdoHttp
             // 
             this.rdoHttp.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rdoHttp.Location = new System.Drawing.Point(10, 235);
+            this.rdoHttp.Location = new System.Drawing.Point(17, 97);
             this.rdoHttp.Name = "rdoHttp";
-            this.rdoHttp.Size = new System.Drawing.Size(345, 24);
-            this.rdoHttp.TabIndex = 8;
+            this.rdoHttp.Size = new System.Drawing.Size(623, 24);
+            this.rdoHttp.TabIndex = 9;
             this.rdoHttp.Text = "Supply a custom HTTP URL";
             this.rdoHttp.CheckedChanged += new System.EventHandler(this.rdoHttp_CheckedChanged);
-            // 
-            // label2
-            // 
-            this.label2.Location = new System.Drawing.Point(22, 63);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(554, 45);
-            this.label2.TabIndex = 2;
-            // 
-            // txtDashboard
-            // 
-            this.txtDashboard.Location = new System.Drawing.Point(25, 97);
-            this.txtDashboard.Name = "txtDashboard";
-            this.txtDashboard.Size = new System.Drawing.Size(532, 20);
-            this.txtDashboard.TabIndex = 3;
-            this.txtDashboard.Text = "http://localhost/ccnet";
-            // 
-            // label3
-            // 
-            this.label3.Location = new System.Drawing.Point(22, 145);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(554, 45);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "CCTray will connect directly to the build server using .NET Remoting.  This is ho" +
-                "w CruiseControl.NET 1.0 worked, but it often forces you to install a new version" +
-                " of CCTray when the server is upgraded.";
-            // 
-            // label4
-            // 
-            this.label4.Location = new System.Drawing.Point(22, 175);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(554, 45);
-            this.label4.TabIndex = 6;
-            // 
-            // txtRemoting
-            // 
-            this.txtRemoting.Location = new System.Drawing.Point(25, 207);
-            this.txtRemoting.Name = "txtRemoting";
-            this.txtRemoting.Size = new System.Drawing.Size(532, 20);
-            this.txtRemoting.TabIndex = 7;
-            this.txtRemoting.Text = "localhost";
-            // 
-            // label5
-            // 
-            this.label5.Location = new System.Drawing.Point(22, 262);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(554, 45);
-            this.label5.TabIndex = 9;
-            // 
-            // txtHttp
-            // 
-            this.txtHttp.Location = new System.Drawing.Point(25, 271);
-            this.txtHttp.Name = "txtHttp";
-            this.txtHttp.Size = new System.Drawing.Size(532, 20);
-            this.txtHttp.TabIndex = 10;
-            this.txtHttp.Text = "http://localhost/cruisecontrol/xml.jsp";
             // 
             // btnCancel
             // 
             this.btnCancel.CausesValidation = false;
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnCancel.Location = new System.Drawing.Point(305, 499);
+            this.btnCancel.Location = new System.Drawing.Point(334, 384);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 16;
+            this.btnCancel.TabIndex = 19;
             this.btnCancel.Text = "Cancel";
             // 
             // btnOK
             // 
             this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnOK.Location = new System.Drawing.Point(220, 499);
+            this.btnOK.Location = new System.Drawing.Point(253, 384);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 15;
+            this.btnOK.TabIndex = 18;
             this.btnOK.Text = "OK";
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
-            // 
-            // label6
-            // 
-            this.label6.Location = new System.Drawing.Point(22, 339);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(554, 31);
-            this.label6.TabIndex = 12;
-            this.label6.Text = "This will use an extension module to connect to the build server. This requires t" +
-                "he extension be installed in the bin folder for CCTray.";
             // 
             // rdoExtension
             // 
             this.rdoExtension.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rdoExtension.Location = new System.Drawing.Point(12, 307);
+            this.rdoExtension.Location = new System.Drawing.Point(17, 124);
             this.rdoExtension.Name = "rdoExtension";
-            this.rdoExtension.Size = new System.Drawing.Size(345, 24);
-            this.rdoExtension.TabIndex = 11;
+            this.rdoExtension.Size = new System.Drawing.Size(623, 24);
+            this.rdoExtension.TabIndex = 12;
             this.rdoExtension.Text = "Using a transport extension";
             this.rdoExtension.CheckedChanged += new System.EventHandler(this.rdoExtension_CheckedChanged);
             // 
-            // cmbExtension
-            // 
-            this.cmbExtension.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.cmbExtension.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cmbExtension.Location = new System.Drawing.Point(25, 377);
-            this.cmbExtension.Name = "cmbExtension";
-            this.cmbExtension.Size = new System.Drawing.Size(532, 21);
-            this.cmbExtension.Sorted = true;
-            this.cmbExtension.TabIndex = 13;
-            this.cmbExtension.SelectedValueChanged += new System.EventHandler(this.OnExtensionChanged);
-            this.cmbExtension.TextChanged += new System.EventHandler(this.OnExtensionChanged);
-            // 
-            // btnConfigureExtension
-            // 
-            this.btnConfigureExtension.Location = new System.Drawing.Point(379, 408);
-            this.btnConfigureExtension.Name = "btnConfigureExtension";
-            this.btnConfigureExtension.Size = new System.Drawing.Size(178, 23);
-            this.btnConfigureExtension.TabIndex = 14;
-            this.btnConfigureExtension.Text = "Configure Extension";
-            this.btnConfigureExtension.UseVisualStyleBackColor = true;
-            this.btnConfigureExtension.Click += new System.EventHandler(this.btnConfigureExtension_Click);
-            // 
-            // lblExtensionSettings
-            // 
-            this.lblExtensionSettings.AutoSize = true;
-            this.lblExtensionSettings.Location = new System.Drawing.Point(22, 411);
-            this.lblExtensionSettings.Name = "lblExtensionSettings";
-            this.lblExtensionSettings.Size = new System.Drawing.Size(153, 13);
-            this.lblExtensionSettings.TabIndex = 18;
-            this.lblExtensionSettings.Text = "Please configure this extension";
-            // 
             // txtFeedback
             // 
-            this.txtFeedback.Location = new System.Drawing.Point(24, 437);
+            this.txtFeedback.Location = new System.Drawing.Point(17, 322);
             this.txtFeedback.Multiline = true;
             this.txtFeedback.Name = "txtFeedback";
             this.txtFeedback.ReadOnly = true;
             this.txtFeedback.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtFeedback.Size = new System.Drawing.Size(532, 56);
-            this.txtFeedback.TabIndex = 19;
+            this.txtFeedback.Size = new System.Drawing.Size(623, 56);
+            this.txtFeedback.TabIndex = 17;
+            this.txtFeedback.TabStop = false;
+            // 
+            // dashboardPanel
+            // 
+            this.dashboardPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dashboardPanel.Controls.Add(this.txtDashboard);
+            this.dashboardPanel.Controls.Add(this.label2);
+            this.dashboardPanel.Location = new System.Drawing.Point(17, 151);
+            this.dashboardPanel.Name = "dashboardPanel";
+            this.dashboardPanel.Size = new System.Drawing.Size(623, 165);
+            this.dashboardPanel.TabIndex = 20;
+            this.dashboardPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // txtDashboard
+            // 
+            this.txtDashboard.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDashboard.Location = new System.Drawing.Point(9, 39);
+            this.txtDashboard.Name = "txtDashboard";
+            this.txtDashboard.Size = new System.Drawing.Size(607, 20);
+            this.txtDashboard.TabIndex = 5;
+            this.txtDashboard.Text = "http://localhost/ccnet";
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Location = new System.Drawing.Point(7, 7);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(609, 30);
+            this.label2.TabIndex = 4;
+            this.label2.Text = resources.GetString("label2.Text");
+            // 
+            // remotingPanel
+            // 
+            this.remotingPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.remotingPanel.Controls.Add(this.connectToOldServer);
+            this.remotingPanel.Controls.Add(this.txtRemoting);
+            this.remotingPanel.Controls.Add(this.label4);
+            this.remotingPanel.Controls.Add(this.label3);
+            this.remotingPanel.Location = new System.Drawing.Point(17, 151);
+            this.remotingPanel.Name = "remotingPanel";
+            this.remotingPanel.Size = new System.Drawing.Size(623, 165);
+            this.remotingPanel.TabIndex = 21;
+            this.remotingPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
+            // 
+            // connectToOldServer
+            // 
+            this.connectToOldServer.AutoSize = true;
+            this.connectToOldServer.Location = new System.Drawing.Point(6, 107);
+            this.connectToOldServer.Name = "connectToOldServer";
+            this.connectToOldServer.Size = new System.Drawing.Size(155, 17);
+            this.connectToOldServer.TabIndex = 12;
+            this.connectToOldServer.Text = "Connect to pre-1.5.0 server";
+            this.connectToOldServer.UseVisualStyleBackColor = true;
+            this.connectToOldServer.Visible = false;
+            // 
+            // txtRemoting
+            // 
+            this.txtRemoting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtRemoting.Location = new System.Drawing.Point(6, 77);
+            this.txtRemoting.Name = "txtRemoting";
+            this.txtRemoting.Size = new System.Drawing.Size(610, 20);
+            this.txtRemoting.TabIndex = 11;
+            this.txtRemoting.Text = "localhost";
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.Location = new System.Drawing.Point(6, 42);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(610, 30);
+            this.label4.TabIndex = 10;
+            this.label4.Text = resources.GetString("label4.Text");
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.Location = new System.Drawing.Point(6, 7);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(610, 30);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "CCTray will connect directly to the build server using .NET Remoting.  This is ho" +
+                "w CruiseControl.NET 1.0 worked, but it often forces you to install a new version" +
+                " of CCTray when the server is upgraded.";
+            // 
+            // nonCcnetPanel
+            // 
+            this.nonCcnetPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.nonCcnetPanel.Controls.Add(this.txtHttp);
+            this.nonCcnetPanel.Controls.Add(this.label5);
+            this.nonCcnetPanel.Location = new System.Drawing.Point(17, 151);
+            this.nonCcnetPanel.Name = "nonCcnetPanel";
+            this.nonCcnetPanel.Size = new System.Drawing.Size(623, 165);
+            this.nonCcnetPanel.TabIndex = 21;
+            this.nonCcnetPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel3_Paint);
+            // 
+            // txtHttp
+            // 
+            this.txtHttp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtHttp.Location = new System.Drawing.Point(9, 65);
+            this.txtHttp.Name = "txtHttp";
+            this.txtHttp.Size = new System.Drawing.Size(607, 20);
+            this.txtHttp.TabIndex = 13;
+            this.txtHttp.Text = "http://localhost/cruisecontrol/xml.jsp";
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.Location = new System.Drawing.Point(7, 7);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(609, 52);
+            this.label5.TabIndex = 12;
+            this.label5.Text = resources.GetString("label5.Text");
+            // 
+            // extensionPanel
+            // 
+            this.extensionPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.extensionPanel.Controls.Add(this.lblExtensionSettings);
+            this.extensionPanel.Controls.Add(this.btnConfigureExtension);
+            this.extensionPanel.Controls.Add(this.cmbExtension);
+            this.extensionPanel.Controls.Add(this.label6);
+            this.extensionPanel.Location = new System.Drawing.Point(17, 151);
+            this.extensionPanel.Name = "extensionPanel";
+            this.extensionPanel.Size = new System.Drawing.Size(623, 165);
+            this.extensionPanel.TabIndex = 22;
+            this.extensionPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel4_Paint);
+            // 
+            // lblExtensionSettings
+            // 
+            this.lblExtensionSettings.AutoSize = true;
+            this.lblExtensionSettings.Location = new System.Drawing.Point(7, 75);
+            this.lblExtensionSettings.Name = "lblExtensionSettings";
+            this.lblExtensionSettings.Size = new System.Drawing.Size(153, 13);
+            this.lblExtensionSettings.TabIndex = 21;
+            this.lblExtensionSettings.Text = "Please configure this extension";
+            // 
+            // btnConfigureExtension
+            // 
+            this.btnConfigureExtension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnConfigureExtension.Location = new System.Drawing.Point(438, 70);
+            this.btnConfigureExtension.Name = "btnConfigureExtension";
+            this.btnConfigureExtension.Size = new System.Drawing.Size(178, 23);
+            this.btnConfigureExtension.TabIndex = 20;
+            this.btnConfigureExtension.Text = "Configure Extension";
+            this.btnConfigureExtension.UseVisualStyleBackColor = true;
+            // 
+            // cmbExtension
+            // 
+            this.cmbExtension.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbExtension.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.cmbExtension.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cmbExtension.Location = new System.Drawing.Point(7, 47);
+            this.cmbExtension.Name = "cmbExtension";
+            this.cmbExtension.Size = new System.Drawing.Size(609, 21);
+            this.cmbExtension.Sorted = true;
+            this.cmbExtension.TabIndex = 18;
+            // 
+            // label6
+            // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.label6.Location = new System.Drawing.Point(7, 7);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(609, 37);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "This will use an extension module to connect to the build server. This requires t" +
+                "he extension be installed in the bin folder for CCTray.";
             // 
             // AddBuildServer
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(581, 530);
+            this.ClientSize = new System.Drawing.Size(652, 414);
             this.Controls.Add(this.txtFeedback);
-            this.Controls.Add(this.lblExtensionSettings);
-            this.Controls.Add(this.btnConfigureExtension);
-            this.Controls.Add(this.cmbExtension);
-            this.Controls.Add(this.label6);
             this.Controls.Add(this.rdoExtension);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
-            this.Controls.Add(this.txtHttp);
-            this.Controls.Add(this.txtRemoting);
-            this.Controls.Add(this.txtDashboard);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.rdoHttp);
             this.Controls.Add(this.rdoRemoting);
             this.Controls.Add(this.rdoDashboard);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.remotingPanel);
+            this.Controls.Add(this.dashboardPanel);
+            this.Controls.Add(this.extensionPanel);
+            this.Controls.Add(this.nonCcnetPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AddBuildServer";
             this.Text = "Build Server";
+            this.dashboardPanel.ResumeLayout(false);
+            this.dashboardPanel.PerformLayout();
+            this.remotingPanel.ResumeLayout(false);
+            this.remotingPanel.PerformLayout();
+            this.nonCcnetPanel.ResumeLayout(false);
+            this.nonCcnetPanel.PerformLayout();
+            this.extensionPanel.ResumeLayout(false);
+            this.extensionPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -340,21 +434,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void UpdateButtons()
 		{
-			txtDashboard.Enabled = rdoDashboard.Checked;
-			txtHttp.Enabled = rdoHttp.Checked;
-			txtRemoting.Enabled = rdoRemoting.Checked;
-            cmbExtension.Enabled = rdoExtension.Checked;
-            lblExtensionSettings.Enabled = rdoExtension.Checked;
-            btnConfigureExtension.Enabled = rdoExtension.Checked && !string.IsNullOrEmpty(cmbExtension.Text);
+            dashboardPanel.Visible = rdoDashboard.Checked;
+            remotingPanel.Visible = rdoRemoting.Checked;
+            nonCcnetPanel.Visible = rdoHttp.Checked;
+            extensionPanel.Visible = rdoExtension.Checked;
 
-			if (txtDashboard.Enabled)
-				txtDashboard.Focus();
+			if (txtDashboard.Enabled) txtDashboard.Focus();
 
-			if (txtHttp.Enabled)
-				txtHttp.Focus();
+			if (txtHttp.Enabled) txtHttp.Focus();
 
-			if (txtRemoting.Enabled)
-				txtRemoting.Focus();
+			if (txtRemoting.Enabled) txtRemoting.Focus();
 
             if (cmbExtension.Enabled) cmbExtension.Focus();
 		}
@@ -387,23 +476,26 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private BuildServer ConstructBuildServerFromSelectedOptions()
 		{
-			if (txtRemoting.Enabled)
+			if (rdoRemoting.Checked)
 			{
-				return BuildServer.BuildFromRemotingDisplayName(txtRemoting.Text);
+				var server = BuildServer.BuildFromRemotingDisplayName(txtRemoting.Text);
+                server.ExtensionSettings = connectToOldServer.Checked ? "OLD" : "NEW";
+                return server;
 			}
 
-			if (txtHttp.Enabled)
+			if (rdoHttp.Checked)
 			{
 				return new BuildServer(txtHttp.Text);
 			}
 
-			if (txtDashboard.Enabled)
+            if (rdoDashboard.Checked)
 			{
                 return new BuildServer(new WebDashboardUrl(txtDashboard.Text).XmlServerReport);
 			}
 
             if (rdoExtension.Checked)
             {
+                if (transportExtension == null) throw new ApplicationException("No extension selected");
                 return new BuildServer(transportExtension.Configuration.Url, BuildServerTransport.Extension, cmbExtension.Text, transportExtension.Settings);
             }
 
@@ -441,6 +533,26 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             cmbExtension.Items.Clear();
             string extensionsPath = Path.Combine(Environment.CurrentDirectory, "Extensions");
             cmbExtension.Items.AddRange(ExtensionHelpers.QueryAssembliesForTypes(extensionsPath, "ITransportExtension"));
+        }
+
+        private void panel4_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
 	}
 }

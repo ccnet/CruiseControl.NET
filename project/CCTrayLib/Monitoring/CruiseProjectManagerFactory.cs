@@ -19,7 +19,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             switch (server.Transport)
             {
                 case BuildServerTransport.Remoting:
-                    return new RemotingCruiseProjectManager(CruiseServerClientFactory.GenerateRemotingClient(server.Url), project.ProjectName);
+                    CruiseServerClientBase client = GenerateRemotingClient(server);
+                    return new RemotingCruiseProjectManager(client, project.ProjectName);
                 case BuildServerTransport.Extension:
                     ITransportExtension extensionInstance = ExtensionHelpers.RetrieveExtension(server.ExtensionName);
                     extensionInstance.Settings = server.ExtensionSettings;
@@ -35,12 +36,28 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             switch (server.Transport)
             {
                 case BuildServerTransport.Remoting:
-                    return new RemotingProjectListRetriever(CruiseServerClientFactory.GenerateRemotingClient(server.Url)).GetProjectList(server);
+                    CruiseServerClientBase client = GenerateRemotingClient(server);
+                    return new RemotingProjectListRetriever(client).GetProjectList(server);
                 case BuildServerTransport.Extension:
                     return new ExtensionTransportProjectListRetriever(server.ExtensionName).GetProjectList(server);
                 default:
                     return new HttpProjectListRetriever(new WebRetriever(), new DashboardXmlParser()).GetProjectList(server);
             }
+        }
+
+        private CruiseServerClientBase GenerateRemotingClient(BuildServer server)
+        {
+            CruiseServerClientBase client;
+            switch (server.ExtensionSettings)
+            {
+                case "OLD":
+                    client = CruiseServerClientFactory.GenerateOldRemotingClient(server.Url);
+                    break;
+                default:
+                    client = CruiseServerClientFactory.GenerateRemotingClient(server.Url);
+                    break;
+            }
+            return client;
         }
     }
 }

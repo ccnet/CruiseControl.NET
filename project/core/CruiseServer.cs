@@ -15,7 +15,6 @@ using ThoughtWorks.CruiseControl.Remote.Events;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Security;
-using Microsoft.Practices.Unity;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -40,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private bool disposed;
         private IQueueManager integrationQueueManager;
         // TODO: Replace this with a proper IoC container
-        private IUnityContainer container = new UnityContainer();
+        private Dictionary<Type, object> services = new Dictionary<Type,object>();
         #endregion
 
         #region Constructors
@@ -50,24 +49,18 @@ namespace ThoughtWorks.CruiseControl.Core
                             IProjectStateManager stateManager,
                             List<ExtensionConfiguration> extensionList)
         {
-            // Initialise the unity container
-            container.RegisterInstance(this, new ContainerControlledLifetimeManager());
-
             this.configurationService = configurationService;
             this.projectSerializer = projectSerializer;
 
             // Leave the manager for backwards compatability - it is marked as obsolete
+#pragma warning disable 0618
             manager = new CruiseManager(this);
+#pragma warning restore 0618
             serverClient = new CruiseServerClient(this);
             InitializeServerThread();
 
             // Initialise the configuration
             configuration = configurationService.Load();
-            foreach (var project in configuration.Projects)
-            {
-                container.BuildUp(project);
-            }
-            container.BuildUp(configuration.SecurityManager);
 
             // Initialise the queue manager
             integrationQueueManager = IntegrationQueueManagerFactory.CreateManager(projectIntegratorListFactory, configuration, stateManager);
@@ -115,8 +108,8 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         public void InitialiseServices()
         {
-            container.RegisterType<IFileSystem, SystemIoFileSystem>();
-            container.RegisterType<ILogger, DefaultLogger>();
+            services.Add(typeof(IFileSystem), new SystemIoFileSystem());
+            services.Add(typeof(ILogger), new DefaultLogger());
         }
         #endregion
 
@@ -1163,14 +1156,11 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <returns>A valid service, if found, null otherwise.</returns>
         public virtual object RetrieveService(Type serviceType)
         {
-            // TODO: Figure out a better way of doing this - should not need the try/catch block just to see
-            // if the service has been registered
-            try
+            if (services.ContainsKey(serviceType))
             {
-                object service = container.Resolve(serviceType);
-                return service;
+                return services[serviceType];
             }
-            catch
+            else
             {
                 return null;
             }
@@ -1181,13 +1171,14 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Adds a service.
         /// </summary>
+        /// <param name="serviceType">The type of service.</param>
         /// <param name="service">The service to add.</param>
-        public virtual void AddService(object service)
+        public virtual void AddService(Type serviceType, object service)
         {
-            if (service == null) throw new ArgumentNullException("service");
-            container.RegisterInstance(service.GetType(), 
-                service, 
-                new ContainerControlledLifetimeManager());
+            if (service != null)
+            {
+                services[serviceType] = service;
+            }
         }
         #endregion
         #endregion
@@ -1367,7 +1358,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <param name="args"></param>
         private void OnIntegrationStarted(object sender, IntegrationStartedEventArgs args)
         {
-            FireIntegrationStarted(args.Request, args.ProjectName);
+            args.Result = FireIntegrationStarted(args.Request, args.ProjectName);
         }
         #endregion
 

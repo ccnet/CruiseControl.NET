@@ -89,7 +89,6 @@ namespace ThoughtWorks.CruiseControl.Remote
             /// <summary>
             /// Transfer some data.
             /// </summary>
-            /// <param name="data"></param>
             /// <param name="length"></param>
             /// <returns></returns>
             public TransferPackage TransferData(int length)

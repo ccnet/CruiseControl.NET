@@ -124,6 +124,7 @@
     <Compile Include="CruiseServerClient.cs" />
     <Compile Include="CruiseServerClientBase.cs" />
     <Compile Include="CruiseServerClientFactory.cs" />
+    <Compile Include="CruiseServerRemotingClient.cs" />
     <Compile Include="Events\IntegrationCompletedEventArgs.cs" />
     <Compile Include="HttpConnection.cs" />
     <Compile Include="ICruiseManager.cs" />

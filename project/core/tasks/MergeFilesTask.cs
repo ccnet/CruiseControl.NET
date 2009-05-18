@@ -1,6 +1,5 @@
 using System.IO;
 using Exortech.NetReflector;
-using Microsoft.Practices.Unity;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
@@ -21,13 +20,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Allows this task to interact with the file system in a testable way.
         /// </summary>
-        [Dependency]
         public IFileSystem FileSystem { get; set; }
 
         /// <summary>
         /// Allows this task to interact with the logger in a testable way.
         /// </summary>
-        [Dependency]
         public ILogger Logger { get; set; }
 
         /// <summary>
@@ -39,6 +36,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public void Run(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Merging Files");
+
+            var actualFileSystem = FileSystem ?? new SystemIoFileSystem();
+            var actualLogger = Logger ?? new DefaultLogger();
 
             // Make sure the target folder is rooted
             var targetFolder = TargetFolder;
@@ -69,25 +69,25 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				WildCardPath path = new WildCardPath(fullMergeFile);
                 foreach (var fileInfo in path.GetFiles())
                 {
-                    if (FileSystem.FileExists(fileInfo.FullName))
+                    if (actualFileSystem.FileExists(fileInfo.FullName))
                     {
                         if (mergeFile.MergeAction == MergeFileInfo.MergeActionType.Merge)
                         {
                             // Add the file to the merge list
-                            Logger.Info("Merging file '{0}'", fileInfo);
+                            actualLogger.Info("Merging file '{0}'", fileInfo);
                             result.AddTaskResultFromFile(fileInfo.FullName);
                         }
                         else
                         {
                             // Copy the file to the target folder
-                            FileSystem.EnsureFolderExists(targetFolder);
-                            Logger.Info("Copying file '{0}' to '{1}'", fileInfo.Name, targetFolder);
-                            FileSystem.Copy(fileInfo.FullName, Path.Combine(targetFolder, fileInfo.Name));
+                            actualFileSystem.EnsureFolderExists(targetFolder);
+                            actualLogger.Info("Copying file '{0}' to '{1}'", fileInfo.Name, targetFolder);
+                            actualFileSystem.Copy(fileInfo.FullName, Path.Combine(targetFolder, fileInfo.Name));
                         }
                     }
                     else
                     {
-                        Logger.Warning("File not found '{0}", fileInfo);
+                        actualLogger.Warning("File not found '{0}", fileInfo);
                     }
                 }
 			}
