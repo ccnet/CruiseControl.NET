@@ -44,8 +44,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 if (parameter.DefaultValue != null)
                 {
                     PropertyInfo property = holderType.GetProperty(parameter.Name);
+                    object dataValue;
+                    if (property.PropertyType.IsEnum)
+                    {
+                        dataValue = Enum.Parse(property.PropertyType, parameter.DefaultValue);
+                    }
+                    else
+                    {
+                        dataValue = Convert.ChangeType(parameter.DefaultValue, parameter.DataType);
+                    }
                     property.SetValue(myParameterHolder,
-                        Convert.ChangeType(parameter.DefaultValue, parameter.DataType),
+                        dataValue,
                         new object[0]);
                 }
             }
