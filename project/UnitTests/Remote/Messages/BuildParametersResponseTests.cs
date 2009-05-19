@@ -65,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             response.Timestamp = DateTime.Now;
             response.Parameters.Add(new TextParameter("text"));
             response.Parameters.Add(new NumericParameter("numeric"));
-            response.Parameters.Add(new RangeParameter("range"));
+            response.Parameters.Add(new SelectParameter("select"));
             string actual = response.ToString();
             string expected = string.Format("<buildParametersResponse xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
                 "identifier=\"{0}\" result=\"{1}\" timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\">" +
@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
                 "<error>Error 2</error>" +
                 "<parameter xsi:type=\"TextParameter\" name=\"text\" display=\"text\" />" +
                 "<parameter xsi:type=\"NumericParameter\" name=\"numeric\" display=\"numeric\" />" +
-                "<parameter xsi:type=\"RangeParameter\" name=\"range\" display=\"range\" />" +
+                "<parameter xsi:type=\"SelectParameter\" name=\"select\" display=\"select\" />" +
                 "</buildParametersResponse>",
                 response.RequestIdentifier,
                 response.Result,

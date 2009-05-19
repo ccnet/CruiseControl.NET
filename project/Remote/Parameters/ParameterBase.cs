@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
     /// </summary>
     [Serializable]
     [XmlInclude(typeof(TextParameter))]
-    [XmlInclude(typeof(RangeParameter))]
+    [XmlInclude(typeof(SelectParameter))]
     [XmlInclude(typeof(NumericParameter))]
     public abstract class ParameterBase
     {

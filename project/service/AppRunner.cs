@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ThoughtWorks.CruiseControl.Core.Config;
-using System.IO;
-using ThoughtWorks.CruiseControl.Core.Util;
-using System.Reflection;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Core;
 using System.Configuration;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Service
 {

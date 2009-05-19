@@ -205,7 +205,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
                 XmlNodeList values = paramNode.SelectNodes("value");
                 if (values.Count > 0)
                 {
-                    RangeParameter parameter = new RangeParameter();
+                    SelectParameter parameter = new SelectParameter();
                     List<string> allowedValues = new List<string>();
                     foreach (XmlElement value in values)
                     {

@@ -217,7 +217,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Parameters\ParameterBase.cs" />
-    <Compile Include="Parameters\RangeParameter.cs" />
+    <Compile Include="Parameters\SelectParameter.cs" />
     <Compile Include="Parameters\TextParameter.cs" />
     <Compile Include="Parameters\NumericParameter.cs" />
     <Compile Include="PackageDetails.cs" />

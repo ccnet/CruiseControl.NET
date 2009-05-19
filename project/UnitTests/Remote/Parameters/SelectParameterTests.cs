@@ -7,12 +7,12 @@ using ThoughtWorks.CruiseControl.Remote.Parameters;
 namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Parameters
 {
     [TestFixture]
-    public class RangeParameterTests
+    public class SelectParameterTests
     {
         [Test]
         public void SetGetProperties()
         {
-            RangeParameter parameter = new RangeParameter();
+            SelectParameter parameter = new SelectParameter();
             Assert.AreEqual(typeof(string), parameter.DataType, "DataType does not match");
 
             parameter.IsRequired = false;
@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Parameters
         [Test]
         public void IsRequiredWithBlank()
         {
-            RangeParameter parameter = new RangeParameter();
+            SelectParameter parameter = new SelectParameter();
             parameter.Name = "Test";
             parameter.IsRequired = true;
             Exception[] results = parameter.Validate(string.Empty);
@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Parameters
         [Test]
         public void IsAllowedValue()
         {
-            RangeParameter parameter = new RangeParameter();
+            SelectParameter parameter = new SelectParameter();
             parameter.Name = "Test";
             parameter.DataValues = new string[] { "Dev", "Test", "Prod" };
             Exception[] results = parameter.Validate("Dev");
@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Parameters
         [Test]
         public void IsNotAllowedValue()
         {
-            RangeParameter parameter = new RangeParameter();
+            SelectParameter parameter = new SelectParameter();
             parameter.Name = "Test";
             parameter.DataValues = new string[] { "Dev", "Test", "Prod" };
             Exception[] results = parameter.Validate("QA");

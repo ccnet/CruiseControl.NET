@@ -395,7 +395,7 @@
     <Compile Include="Remote\MessageTests.cs" />
     <Compile Include="Remote\NameValuePairTests.cs" />
     <Compile Include="Remote\NoSuchProjectExceptionTests.cs" />
-    <Compile Include="Remote\Parameters\RangeParameterTests.cs" />
+    <Compile Include="Remote\Parameters\SelectParameterTests.cs" />
     <Compile Include="Remote\Parameters\TextParameterTests.cs" />
     <Compile Include="Remote\Parameters\NumericParameterTests.cs" />
     <Compile Include="Remote\ProjectActivityTests.cs" />
