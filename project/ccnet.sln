@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validator", "Validator\Vali
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communications", "Remote\Communications.csproj", "{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCCmd", "CCCmd\CCCmd.csproj", "{A943CE44-82B8-4000-A0A0-A86FE0051240}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Build|Any CPU = Build|Any CPU
@@ -107,6 +109,12 @@ Global
 		{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A943CE44-82B8-4000-A0A0-A86FE0051240}.Build|Any CPU.ActiveCfg = Build|Any CPU
+		{A943CE44-82B8-4000-A0A0-A86FE0051240}.Build|Any CPU.Build.0 = Build|Any CPU
+		{A943CE44-82B8-4000-A0A0-A86FE0051240}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A943CE44-82B8-4000-A0A0-A86FE0051240}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A943CE44-82B8-4000-A0A0-A86FE0051240}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A943CE44-82B8-4000-A0A0-A86FE0051240}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
