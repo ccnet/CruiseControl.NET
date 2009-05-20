@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Parameters
 {
@@ -19,7 +20,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Parameters
             Assert.AreEqual(false, parameter.IsRequired, "IsRequired does not match");
             parameter.IsRequired = true;
             Assert.AreEqual(true, parameter.IsRequired, "IsRequired does not match");
-            parameter.DataValues = new string[] { "Dev", "Test", "Prod" };
+            parameter.DataValues = new NameValuePair[] { 
+                new NameValuePair(string.Empty, "Dev"), 
+                new NameValuePair("Test", "Test"), 
+                new NameValuePair(null, "Prod") 
+            };
             Assert.AreEqual(3, parameter.AllowedValues.Length, "AllowedValues does not match");
             parameter.Description = "Some description goes here";
             Assert.AreEqual("Some description goes here", parameter.Description, "Description does not match");
@@ -46,7 +51,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Parameters
         {
             SelectParameter parameter = new SelectParameter();
             parameter.Name = "Test";
-            parameter.DataValues = new string[] { "Dev", "Test", "Prod" };
+            parameter.DataValues = new NameValuePair[] { 
+                new NameValuePair(string.Empty, "Dev"), 
+                new NameValuePair("Test", "Test"), 
+                new NameValuePair(null, "Prod") 
+            };
             Exception[] results = parameter.Validate("Dev");
             Assert.AreEqual(0, results.Length, "Number of exceptions does not match");
         }
@@ -56,7 +65,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Parameters
         {
             SelectParameter parameter = new SelectParameter();
             parameter.Name = "Test";
-            parameter.DataValues = new string[] { "Dev", "Test", "Prod" };
+            parameter.DataValues = new NameValuePair[] { 
+                new NameValuePair(string.Empty, "Dev"), 
+                new NameValuePair("Test", "Test"), 
+                new NameValuePair(null, "Prod") 
+            };
             Exception[] results = parameter.Validate("QA");
             Assert.AreEqual(1, results.Length, "Number of exceptions does not match");
             Assert.AreEqual("Value of 'Test' is not an allowed value", results[0].Message, "Exception message does not match");

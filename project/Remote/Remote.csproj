@@ -121,6 +121,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CommunicationsException.cs" />
+    <Compile Include="NameValuePairListSerialiserFactory.cs" />
     <Compile Include="CruiseServerClient.cs" />
     <Compile Include="CruiseServerClientBase.cs" />
     <Compile Include="CruiseServerClientFactory.cs" />
@@ -130,6 +131,8 @@
     <Compile Include="ICruiseManager.cs" />
     <Compile Include="IMessageProcessor.cs" />
     <Compile Include="IServerConnection.cs" />
+    <Compile Include="NameValuePairSerialiser.cs" />
+    <Compile Include="NameValuePairSerialiserFactory.cs" />
     <Compile Include="MessageReceivedEventArgs.cs" />
     <Compile Include="Messages\BuildIntegrationRequest.cs" />
     <Compile Include="Messages\BuildParametersResponse.cs" />
@@ -159,6 +162,8 @@
     <Compile Include="Messages\Response.cs" />
     <Compile Include="Messages\ServerRequest.cs" />
     <Compile Include="Messages\StatusSnapshotResponse.cs" />
+    <Compile Include="Parameters\DateParameter.cs" />
+    <Compile Include="Parameters\BooleanParameter.cs" />
     <Compile Include="ProjectStatusSnapshot.cs" />
     <Compile Include="RemotingConnection.cs" />
     <Compile Include="Security\AuditFilterBase.cs" />

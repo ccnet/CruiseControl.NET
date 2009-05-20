@@ -152,6 +152,8 @@
     <Compile Include="Messages\StatusSnapshotResponse.cs" />
     <Compile Include="NameValuePair.cs" />
     <Compile Include="PackageDetails.cs" />
+    <Compile Include="Parameters\BooleanParameter.cs" />
+    <Compile Include="Parameters\DateParameter.cs" />
     <Compile Include="Parameters\NumericParameter.cs" />
     <Compile Include="Parameters\ParameterBase.cs" />
     <Compile Include="Parameters\SelectParameter.cs" />

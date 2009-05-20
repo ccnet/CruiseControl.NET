@@ -437,7 +437,7 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 if (task is IParamatisedTask)
                 {
-                    (task as IParamatisedTask).ApplyParameters(parameterValues);
+                    (task as IParamatisedTask).ApplyParameters(parameterValues, parameters);
                 }
 
                 RunTask(task, result);
@@ -468,7 +468,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 {
                     if (publisher is IParamatisedTask)
                     {
-                        (publisher as IParamatisedTask).ApplyParameters(parameterValues);
+                        (publisher as IParamatisedTask).ApplyParameters(parameterValues, parameters);
                     }
 
                     RunTask(publisher, result);
@@ -1024,6 +1024,10 @@ namespace ThoughtWorks.CruiseControl.Core
             }
             else
             {
+                foreach (var parameter in parameters)
+                {
+                    parameter.GenerateClientDefault();
+                }
                 return new List<ParameterBase>(parameters);
             }
         }

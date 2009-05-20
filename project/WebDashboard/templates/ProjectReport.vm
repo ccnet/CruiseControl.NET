@@ -1,3 +1,59 @@
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#parameterCheck').dialog({
+        autoOpen:false,
+        modal:true,
+        title:'Project Parameters',
+        width:400,
+        height:300,
+        overlay:{
+            opacity:0.5,
+            background:'black'
+          }
+        });
+      $('#StatusGrid').tablesorter({
+          #if ($wholeFarm)
+          sortList:[[0,0],[1,0]]
+          #else
+          sortList:[[0,0]]
+          #end
+        });
+      #set ($RowId = 0)
+      #foreach ($projectGridRow in $projectGrid)
+      #set ($RowId = $RowId + 1)
+      #if ($projectGridRow.BuildStage.Length > 0)
+      $('#projectData$RowId').tipsy();
+      #end
+      #end
+    });
+    function checkForParams(buttonEl, checkUrl){
+      $('#parameterEditor').replaceWith('<div id="parameterEditor">Loading parameters, please wait...</div>');
+      $('#parameterCheck').dialog('open');
+      jQuery.get(checkUrl, function(data){
+          if(data=='NONE'){
+            $('#parameterCheck').dialog('close');
+            var button = $(buttonEl);
+            button.after('<input type="hidden" name="ForceBuild" value="Force" />');
+            buttonEl.parentNode.parentNode.submit();
+          }else{
+            $('#parameterEditor').replaceWith('<div id="parameterEditor">' + data + '</div>');
+          }
+        });
+    }
+</script>
+<div id="parameterCheck">
+  <div id="parameterEditor">Loading parameters, please wait...</div>
+</div>
+<form ID="RefreshForm" method="post">
+  <table width="100%">
+    <tr>
+      <td align="right">
+        <input type="submit" align="right" name="Refresh" value="Refresh status" />
+      </td>
+    </tr>
+  </table>
+</form>
+
 <style type="text/css">
 #projectStatus tr th
 {
@@ -48,7 +104,11 @@
 		    <td colspan="2">
 		          <form methd="POST">
     #if ($server.AllowForceBuild)
+    #if($ForceAbortBuildButtonValue == "Force")
+    <input type="button" name="$ForceAbortBuildButtonName" value="$ForceAbortBuildButtonValue" onclick="checkForParams(this, '$ParametersUrl')"/>
+    #else
     <input type="submit" name="$ForceAbortBuildButtonName" value="$ForceAbortBuildButtonValue"/>
+    #end
     #end
     #if ($server.AllowStartStopBuild)
     <input type="submit" name="$StartStopButtonName" value="$StartStopButtonValue"/>

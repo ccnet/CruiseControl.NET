@@ -790,6 +790,7 @@
     <None Include="templates\LoginAction.vm" />
     <None Include="templates\PackageList.vm" />
     <None Include="templates\ProjectGrid.vm" />
+    <None Include="templates\ProjectParameters.vm" />
     <None Include="templates\ProjectReport.vm" />
     <None Include="templates\ProjectServerConfiguration.vm" />
     <None Include="templates\ProjectSideBar.vm" />

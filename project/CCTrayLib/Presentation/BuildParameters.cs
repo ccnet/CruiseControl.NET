@@ -41,17 +41,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             Type holderType = myParameterHolder.GetType();
             foreach (ParameterBase parameter in myParameters.Values)
             {
-                if (parameter.DefaultValue != null)
+                if (parameter.ClientDefaultValue != null)
                 {
                     PropertyInfo property = holderType.GetProperty(parameter.Name);
                     object dataValue;
                     if (property.PropertyType.IsEnum)
                     {
-                        dataValue = Enum.Parse(property.PropertyType, parameter.DefaultValue);
+                        dataValue = Enum.Parse(property.PropertyType, parameter.ClientDefaultValue);
                     }
                     else
                     {
-                        dataValue = Convert.ChangeType(parameter.DefaultValue, parameter.DataType);
+                        dataValue = Convert.ChangeType(parameter.ClientDefaultValue, parameter.DataType);
                     }
                     property.SetValue(myParameterHolder,
                         dataValue,

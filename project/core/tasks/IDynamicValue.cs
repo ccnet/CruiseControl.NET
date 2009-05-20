@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -13,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <param name="value">The object to apply the value to.</param>
         /// <param name="parameters">The parameters to apply.</param>
-        void ApplyTo(object value, Dictionary<string, string> parameters);
+        /// <param name="parameterDefinitions">The original parameter definitions.</param>
+        void ApplyTo(object value, Dictionary<string, string> parameters, IEnumerable<ParameterBase> parameterDefinitions);
     }
 }

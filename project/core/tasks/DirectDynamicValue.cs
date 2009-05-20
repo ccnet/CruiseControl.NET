@@ -1,6 +1,7 @@
 ﻿using Exortech.NetReflector;
 using System;
 using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -57,14 +58,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <param name="value">The object to apply the value to.</param>
         /// <param name="parameters">The parameters to apply.</param>
-        public virtual void ApplyTo(object value, Dictionary<string, string> parameters)
+        /// <param name="parameterDefinitions">The original parameter definitions.</param>
+        public virtual void ApplyTo(object value, Dictionary<string, string> parameters, IEnumerable<ParameterBase> parameterDefinitions)
         {
             DynamicValueUtility.PropertyValue property = DynamicValueUtility.FindProperty(value, propertyName);
             if (property != null)
             {
                 string parameterValue = defaultValue;
                 if (parameters.ContainsKey(parameterName)) parameterValue = parameters[parameterName];
-                property.ChangeProperty(parameterValue);
+                var actualValue = DynamicValueUtility.ConvertValue(parameterName, parameterValue, parameterDefinitions);
+                property.ChangeProperty(actualValue);
             }
         }
     }

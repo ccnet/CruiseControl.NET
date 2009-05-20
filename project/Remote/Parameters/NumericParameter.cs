@@ -98,6 +98,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
             get { return null; }
         }
 
+        #region Public methods
+        #region Validate()
         /// <summary>
         /// Validates the parameter.
         /// </summary>
@@ -137,5 +139,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
 
             return exceptions.ToArray();
         }
+        #endregion
+        #endregion
     }
 }

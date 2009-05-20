@@ -10,7 +10,7 @@
         #if ($parameter.AllowedValues.Length > 0)
           <select name="param_$parameter.Name">
             #foreach ($value in $parameter.AllowedValues)
-            #if ($parameter.DefaultValue == $value)
+            #if ($parameter.ClientDefaultValue == $value)
             <option value="$value" selected>$value</option>
             #else
             <option value="$value">$value</option>
@@ -18,8 +18,8 @@
             #end
           </select>
         #else
-          #if ($parameter.DefaultValue.Length > 0)
-          <input type="text" name="param_$parameter.Name" value="$parameter.DefaultValue"/>
+          #if ($parameter.ClientDefaultValue.Length > 0)
+          <input type="text" name="param_$parameter.Name" value="$parameter.ClientDefaultValue"/>
           #else
           <input type="text" name="param_$parameter.Name"/>
           #end

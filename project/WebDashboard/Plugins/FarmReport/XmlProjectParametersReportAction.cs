@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
                 paramNode.SetAttribute("name", parameter.Name);
                 paramNode.SetAttribute("displayName", parameter.DisplayName);
                 paramNode.SetAttribute("description", parameter.Description);
-                paramNode.SetAttribute("defaultValue", parameter.DefaultValue);
+                paramNode.SetAttribute("defaultValue", parameter.ClientDefaultValue);
                 rootNode.AppendChild(paramNode);
 
                 if (parameter.AllowedValues != null)

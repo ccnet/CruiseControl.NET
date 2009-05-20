@@ -206,16 +206,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
                 if (values.Count > 0)
                 {
                     SelectParameter parameter = new SelectParameter();
-                    List<string> allowedValues = new List<string>();
+                    var allowedValues = new List<NameValuePair>();
                     foreach (XmlElement value in values)
                     {
-                        allowedValues.Add(value.InnerText);
+                        allowedValues.Add(new NameValuePair(null, value.InnerText));
                     }
                     parameter.DataValues = allowedValues.ToArray();
                     parameter.Name = paramNode.GetAttribute("name");
                     parameter.DisplayName = paramNode.GetAttribute("displayName");
                     parameter.Description = paramNode.GetAttribute("description");
-                    parameter.DefaultValue = paramNode.GetAttribute("defaultValue");
+                    parameter.ClientDefaultValue = paramNode.GetAttribute("defaultValue");
                     results.Add(parameter);
                 }
                 else
@@ -224,7 +224,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
                     parameter.Name = paramNode.GetAttribute("name");
                     parameter.DisplayName = paramNode.GetAttribute("displayName");
                     parameter.Description = paramNode.GetAttribute("description");
-                    parameter.DefaultValue = paramNode.GetAttribute("defaultValue");
+                    parameter.ClientDefaultValue = paramNode.GetAttribute("defaultValue");
                     results.Add(parameter);
                 }
             }

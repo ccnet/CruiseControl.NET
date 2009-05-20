@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 new NameValuePair("newDir", null));
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             parameters.Add("newDir", "a location");
-            value.ApplyTo(testTask, parameters);
+            value.ApplyTo(testTask, parameters, null);
             Assert.AreEqual("a location\\Happy", testTask.WorkingDirectory, "Value has not been correctly set");
         }
     }

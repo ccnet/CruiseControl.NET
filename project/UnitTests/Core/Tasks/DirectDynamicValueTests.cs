@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             DirectDynamicValue value = new DirectDynamicValue("newDir", "workingDirectory");
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             parameters.Add("newDir", "a location");
-            value.ApplyTo(testTask, parameters);
+            value.ApplyTo(testTask, parameters, null);
             Assert.AreEqual("a location", testTask.WorkingDirectory, "Value has not been correctly set");
         }
     }

@@ -3,6 +3,7 @@ using System;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -11,6 +12,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// </summary>
     public static class DynamicValueUtility
     {
+        #region Public methods
+        #region FindProperty()
         /// <summary>
         /// Attempts to find a property on an objec using reflection attributes.
         /// </summary>
@@ -79,7 +82,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             return actualProperty;
         }
+        #endregion
 
+        #region FindActualProperty()
         /// <summary>
         /// Attempts to find a reflector property.
         /// </summary>
@@ -122,7 +127,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             return actualProperty;
         }
+        #endregion
 
+        #region FindTypedValue()
         /// <summary>
         /// Finds a keyed value.
         /// </summary>
@@ -154,7 +161,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             return actualValue;
         }
+        #endregion
 
+        #region FindKeyedValue()
         /// <summary>
         /// Finds a keyed value.
         /// </summary>
@@ -191,7 +200,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             return actualValue;
         }
+        #endregion
 
+        #region SplitPropertyName()
         /// <summary>
         /// Splits a property name into its component parts.
         /// </summary>
@@ -240,7 +251,37 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             return results.ToArray();
         }
+        #endregion
 
+        #region ConvertValue()
+        /// <summary>
+        /// Performs any conversion required by the original parameter definition.
+        /// </summary>
+        /// <param name="parameterName">The name of the parameter.</param>
+        /// <param name="inputValue">The input value.</param>
+        /// <param name="parameterDefinitions">The definitions.</param>
+        /// <returns>The converted value.</returns>
+        public static object ConvertValue(string parameterName, string inputValue, IEnumerable<ParameterBase> parameterDefinitions)
+        {
+            object actualValue = inputValue;
+            if (parameterDefinitions != null)
+            {
+                foreach (var parameter in parameterDefinitions)
+                {
+                    if (parameter.Name == parameterName)
+                    {
+                        actualValue = parameter.Convert(inputValue);
+                        break;
+                    }
+                }
+            }
+            return actualValue;
+        }
+        #endregion
+        #endregion
+
+        #region Private methods
+        #region GetValue()
         private static object GetValue(MemberInfo member, object source)
         {
             object value = null;
@@ -256,7 +297,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             return value;
         }
+        #endregion
+        #endregion
 
+        #region Private methods
+        #region PropertyValue
         /// <summary>
         /// Defines a property value.
         /// </summary>
@@ -313,14 +358,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             /// <param name="value">The new value to set.</param>
             public void ChangeProperty(object value)
             {
-                object actualValue = value;
                 if (myProperty is PropertyInfo)
                 {
-                    ChangePropertyValue(value, actualValue);
+                    ChangePropertyValue(value);
                 }
                 else
                 {
-                    actualValue = ChangeFieldValue(value, actualValue);
+                    ChangeFieldValue(value);
                 }
             }
 
@@ -329,8 +373,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             /// </summary>
             /// <param name="value"></param>
             /// <param name="actualValue"></param>
-            private void ChangePropertyValue(object value, object actualValue)
+            private void ChangePropertyValue(object value)
             {
+                object actualValue = value;
                 object[] index = new object[0];
                 PropertyInfo property = (myProperty as PropertyInfo);
 
@@ -359,11 +404,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             /// Change the value when the source is a field.
             /// </summary>
             /// <param name="value"></param>
-            /// <param name="actualValue"></param>
             /// <returns></returns>
-            private object ChangeFieldValue(object value, object actualValue)
+            private void ChangeFieldValue(object value)
             {
                 FieldInfo property = (myProperty as FieldInfo);
+                object actualValue = value;
 
                 // If it is an array then just set the array value instead of changing the entire value
                 if (property.FieldType.IsArray)
@@ -383,10 +428,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     }
                     property.SetValue(mySource, actualValue);
                 }
-                return actualValue;
             }
         }
+        #endregion
 
+        #region PropertyPart
         /// <summary>
         /// Defines a part of a property.
         /// </summary>
@@ -412,5 +458,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             /// </summary>
             public int Index = -1;
         }
+        #endregion
+        #endregion
     }
 }

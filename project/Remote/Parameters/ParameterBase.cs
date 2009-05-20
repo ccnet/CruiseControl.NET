@@ -13,13 +13,17 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
     [XmlInclude(typeof(TextParameter))]
     [XmlInclude(typeof(SelectParameter))]
     [XmlInclude(typeof(NumericParameter))]
+    [XmlInclude(typeof(DateParameter))]
+    [XmlInclude(typeof(BooleanParameter))]
     public abstract class ParameterBase
     {
+        #region Private fields
         private string myName;
         private string myDisplayName = null;
         private string myDescription = null;
         private string myDefault = null;
-        
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initialise a new instance of a <see cref="ParameterBase"/>.
@@ -37,6 +41,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         }
         #endregion
 
+        #region Public properties
+        #region Name
         /// <summary>
         /// The name of the parameter.
         /// </summary>
@@ -49,7 +55,9 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
             get { return myName; }
             set { myName = value; }
         }
+        #endregion
 
+        #region DisplayName
         /// <summary>
         /// The display name of the parameter.
         /// </summary>
@@ -62,7 +70,9 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
             get { return myDisplayName ?? myName; }
             set { myDisplayName = value; }
         }
+        #endregion
 
+        #region Description
         /// <summary>
         /// The description of the parameter.
         /// </summary>
@@ -75,37 +85,90 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
             get { return myDescription; }
             set { myDescription = value; }
         }
+        #endregion
 
+        #region DefaultValue
         /// <summary>
         /// The default value to use.
         /// </summary>
 #if !NoReflector
         [ReflectorProperty("default", Required = false)]
 #endif
-        [XmlElement("default")]
+        [XmlIgnore]
         public virtual string DefaultValue
         {
             get { return myDefault; }
             set { myDefault = value; }
         }
+        #endregion
 
+        #region ClientDefaultValue
+        /// <summary>
+        /// The default value for the clients to use.
+        /// </summary>
+        [XmlElement("default")]
+        public virtual string ClientDefaultValue
+        {
+            get { return myDefault; }
+            set { myDefault = value; }
+        }
+        #endregion
+
+        #region DataType
         /// <summary>
         /// The type of the parameter.
         /// </summary>
         public abstract Type DataType { get; }
+        #endregion
 
+        #region AllowedValues
         /// <summary>
         /// An array of allowed values.
         /// </summary>
+        [XmlElement("allowedValue")]
         public abstract string[] AllowedValues { get; }
+        #endregion
+        #endregion
 
+        #region Public methods
+        #region Validate()
         /// <summary>
         /// Validates the parameter.
         /// </summary>
         /// <param name="value">The value to check.</param>
         /// <returns>Any validation exceptions.</returns>
         public abstract Exception[] Validate(string value);
+        #endregion
 
+        #region Convert()
+        /// <summary>
+        /// Converts the parameter into the value to use.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        /// <returns>The value to use.</returns>
+        public virtual object Convert(string value)
+        {
+            object actualValue = value;
+            if (DataType != typeof(string))
+            {
+                actualValue = System.Convert.ChangeType(value, DataType);
+            }
+            return actualValue;
+        }
+        #endregion
+
+        #region GenerateClientDefault()
+        /// <summary>
+        /// Updates the client default value.
+        /// </summary>
+        public virtual void GenerateClientDefault()
+        {
+        }
+        #endregion
+        #endregion
+
+        #region Protected methods
+        #region GenerateException()
         /// <summary>
         /// Generates a validation exception.
         /// </summary>
@@ -120,5 +183,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
                 values));
             return exception;
         }
+        #endregion
+        #endregion
     }
 }

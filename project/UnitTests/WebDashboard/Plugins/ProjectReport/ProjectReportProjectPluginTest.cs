@@ -50,11 +50,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
             configuration.Servers = new ServerLocation[] {
                 serverConfig
             };
+            var urlBuilderMock = new DynamicMock(typeof(ICruiseUrlBuilder));
+            urlBuilderMock.SetupResult("BuildProjectUrl", string.Empty, typeof(string), typeof(IProjectSpecifier));
 
 			plugin = new ProjectReportProjectPlugin((IFarmService) farmServiceMock.MockInstance,
 				(IVelocityViewGenerator) viewGeneratorMock.MockInstance,
 				(ILinkFactory) linkFactoryMock.MockInstance,
-                configuration);
+                configuration,
+                (ICruiseUrlBuilder)urlBuilderMock.MockInstance);
 
 			cruiseRequestMock = new DynamicMock(typeof(ICruiseRequest));
 			cruiseRequest = (ICruiseRequest ) cruiseRequestMock.MockInstance;

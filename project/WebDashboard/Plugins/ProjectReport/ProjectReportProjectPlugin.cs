@@ -26,6 +26,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         public static readonly string ACTION_NAME = "ViewProjectReport";
         private IBuildPlugin[] pluginNames = null;
         private readonly IRemoteServicesConfiguration configuration;
+        private ICruiseUrlBuilder urlBuilder;
         
         // retrieve at most this amount of builds                             
         public static readonly Int32 AmountOfBuildsToRetrieve = 100;
@@ -38,12 +39,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         }
 
         public ProjectReportProjectPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator, ILinkFactory linkFactory,
-            IRemoteServicesConfiguration configuration)
+            IRemoteServicesConfiguration configuration, ICruiseUrlBuilder urlBuilder)
         {
             this.farmService = farmService;
             this.viewGenerator = viewGenerator;
             this.linkFactory = linkFactory;
             this.configuration = configuration;
+            this.urlBuilder = urlBuilder;
         }
 
         public IResponse Execute(ICruiseRequest cruiseRequest)
@@ -71,6 +73,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             velocityContext["StartStopButtonValue"] = (status.Status == ProjectIntegratorState.Running) ? "Stop" : "Start";
             velocityContext["ForceAbortBuildButtonName"] = (status.Activity != ProjectActivity.Building) ? "ForceBuild" : "AbortBuild";
 		    velocityContext["ForceAbortBuildButtonValue"] = (status.Activity != ProjectActivity.Building) ? "Force" : "Abort";
+            velocityContext["ParametersUrl"] = urlBuilder.BuildProjectUrl(ProjectParametersAction.ActionName, projectSpecifier);
 
             if (cruiseRequest.Request.ApplicationPath == "/")
                 velocityContext["applicationPath"] = string.Empty;

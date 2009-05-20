@@ -19,9 +19,11 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
     public class TextParameter
         : ParameterBase
     {
+        #region Private fields
         private int myMinLength = 0;
         private int myMaxLength = int.MaxValue;
         private bool myIsRequired = false;
+        #endregion
 
         #region Constructors
         /// <summary>

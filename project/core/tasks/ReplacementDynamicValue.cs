@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -59,22 +60,26 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <param name="value">The object to apply the value to.</param>
         /// <param name="parameters">The parameters to apply.</param>
-        public virtual void ApplyTo(object value, Dictionary<string, string> parameters)
+        /// <param name="parameterDefinitions">The original parameter definitions.</param>
+        public virtual void ApplyTo(object value, Dictionary<string, string> parameters, IEnumerable<ParameterBase> parameterDefinitions)
         {
             DynamicValueUtility.PropertyValue property = DynamicValueUtility.FindProperty(value, propertyName);
             if (property != null)
             {
-                List<string> actualParameters = new List<string>();
+                var actualParameters = new List<object>();
                 foreach (NameValuePair parameterName in parameterValues)
                 {
+                    object actualValue;
                     if (parameters.ContainsKey(parameterName.Name))
                     {
-                        actualParameters.Add(parameters[parameterName.Name]);
+                        var inputValue = parameters[parameterName.Name];
+                        actualValue = DynamicValueUtility.ConvertValue(parameterName.Name, inputValue, parameterDefinitions);
                     }
                     else
                     {
-                        actualParameters.Add(parameterName.Value);
+                        actualValue = DynamicValueUtility.ConvertValue(parameterName.Name, parameterName.Value, parameterDefinitions);
                     }
+                    actualParameters.Add(actualValue);
                 }
                 string parameterValue = string.Format(this.formatValue, 
                     actualParameters.ToArray());
