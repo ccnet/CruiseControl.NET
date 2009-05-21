@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Service
             get { return ConfigurationManager.AppSettings["remoting"]; }
         }
 
-        public void Run()
+        public void Run(string action)
         {
             try
             {
@@ -50,6 +50,7 @@ namespace ThoughtWorks.CruiseControl.Service
                 }
                 Log.Info(string.Format(".NET Runtime Version: {0}{2}\tImage Runtime Version: {1}", Environment.Version, Assembly.GetExecutingAssembly().ImageRuntimeVersion, GetRuntime()));
                 Log.Info(string.Format("OS Version: {0}\tServer locale: {1}", Environment.OSVersion, CultureInfo.CurrentUICulture.NativeName));
+                if (!string.IsNullOrEmpty(action)) Log.Info(string.Format("Reason: {0}", action));
 
                 VerifyConfigFileExists();
                 CreateAndStartCruiseServer();
@@ -81,6 +82,7 @@ namespace ThoughtWorks.CruiseControl.Service
                 Log.Info("Stopping service: " + reason);
                 server.Stop();
                 server.WaitForExit();
+                Log.Debug("Service has been stopped");
             }
         }
 

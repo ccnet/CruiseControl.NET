@@ -12,11 +12,12 @@ namespace ThoughtWorks.CruiseControl.Service
     public class CCService : ServiceBase
     {
         private AppRunner runner;
+        private const int restartTime = 10;
         public const string DefaultServiceName = "CCService";
         private object lockObject = new object();
         private FileSystemWatcher watcher;
         private AppDomain runnerDomain;
-        private System.Timers.Timer waitTimer = new System.Timers.Timer(15000);
+        private System.Timers.Timer waitTimer = new System.Timers.Timer(restartTime * 1000);
 
         public CCService()
         {
@@ -30,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Service
             {
                 lock (lockObject)
                 {
-                    if (runner == null) RunApplication();
+                    if (runner == null) RunApplication("File change delay finished");
                 }
             };
             ServiceName = LookupServiceName();
@@ -38,17 +39,17 @@ namespace ThoughtWorks.CruiseControl.Service
 
         protected override void OnStart(string[] args)
         {
-            RunApplication();
+            RunApplication("SCM start");
         }
 
-        private void RunApplication()
+        private void RunApplication(string action)
         {
             if (watcher == null)
             {
                 watcher = new FileSystemWatcher(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
                 watcher.Changed += delegate(object sender, FileSystemEventArgs e)
                 {
-                    StopRunner("One or more DLLs have changed");
+                    StopRunner(string.Format("One or more DLLs have changed - waiting {0}s", restartTime));
                     waitTimer.Stop();
                     waitTimer.Start();
                 };
@@ -65,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.Service
                 typeof(AppRunner).FullName) as AppRunner;
             try
             {
-                runner.Run();
+                runner.Run(action);
             }
             catch (SerializationException)
             {
@@ -89,20 +90,29 @@ namespace ThoughtWorks.CruiseControl.Service
 
         private void StopRunner(string reason)
         {
+            AppRunner runnerToStop = null;
+
+            // Retrieve the runner in a thread-safe block and then clear it so we are not holding up otherwise processing
             lock (lockObject)
             {
                 if (runner != null)
                 {
-                    runner.Stop(reason);
-                    AppDomain.Unload(runnerDomain);
+                    runnerToStop = runner;
                     runner = null;
                 }
+            }
+
+            // If a runner needs to be stopped, do it here
+            if (runnerToStop != null)
+            {
+                runnerToStop.Stop(reason);
+                AppDomain.Unload(runnerDomain);
             }
         }
 
         protected override void OnContinue()
         {
-            RunApplication();
+            RunApplication("SCM continue");
         }
 
         private static string LookupServiceName()
