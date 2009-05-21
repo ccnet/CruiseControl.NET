@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.ServiceProcess;
 
 namespace ThoughtWorks.CruiseControl.Service
@@ -62,7 +63,17 @@ namespace ThoughtWorks.CruiseControl.Service
                 true);
             runner = runnerDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().Location,
                 typeof(AppRunner).FullName) as AppRunner;
-            runner.Run();
+            try
+            {
+                runner.Run();
+            }
+            catch (SerializationException)
+            {
+                var configFilename = ConfigurationManager.AppSettings["ccnet.config"];
+                configFilename = string.IsNullOrEmpty(configFilename) ? Path.Combine(Environment.CurrentDirectory, "ccnet.log") : configFilename;
+                throw new ApplicationException(
+                    string.Format("A fatal error has occurred while starting CCService. Please check '{0}' for any details.", configFilename));
+            }
         }
 
         // Should this be stop or abort?
