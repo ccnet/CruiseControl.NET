@@ -45,8 +45,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             {
                 TransferPackage package = streamHolder.TransferData(blockSize);
                 count = package.Length;
-                var data = Convert.FromBase64String(package.Data);
-                destination.Write(data, 0, count);
+                destination.Write(package.Data, 0, count);
             }
         }
         #endregion
@@ -131,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         private class TransferPackage
         {
             #region Private fields
-            private readonly string data;
+            private readonly byte[] data;
             private readonly int length;
             #endregion
 
@@ -143,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             /// <param name="length"></param>
             public TransferPackage(byte[] data, int length)
             {
-                this.data = Convert.ToBase64String(data);
+                this.data = data;
                 this.length = length;
             }
             #endregion
@@ -153,7 +152,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             /// <summary>
             /// The data.
             /// </summary>
-            public string Data
+            public byte[] Data
             {
                 get { return data; }
             }
