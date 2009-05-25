@@ -29,6 +29,7 @@ namespace Validator
         private NetReflectorReader myConfigReader;
         private PersistWindowState myWindowState;
         private List<string> myFileHistory = new List<string>();
+        private bool isConfigValid = true;
         
         public MainForm()
         {
@@ -50,6 +51,11 @@ namespace Validator
             Stream xmlStream = this.GetType().Assembly.GetManifestResourceStream(template);
             browser.DocumentStream = xmlStream;
         }
+
+        /// <summary>
+        /// The log file to use.
+        /// </summary>
+        public string LogFile { get; set; }
 
         private void InitialiseConfigReader()
         {
@@ -159,6 +165,19 @@ namespace Validator
         }
 
         /// <summary>
+        /// Validate a configuration file.
+        /// </summary>
+        /// <param name="configFile"></param>
+        /// <returns></returns>
+        public bool ValidateConfig(string configFile)
+        {
+            isConfigValid = true;
+            myFileName = configFile;
+            StartConfigurationLoad();
+            return isConfigValid;
+        }
+
+        /// <summary>
         /// Begin loading the configuration.
         /// </summary>
         private void StartConfigurationLoad()
@@ -177,18 +196,24 @@ namespace Validator
             catch (ConfigurationException error)
             {
                 // There is an error with the configuration
+                var message = "Configuration contains invalid XML: " + error.Message;
                 myBodyEl.AppendChild(
                     GenerateElement("div",
                     new HtmlAttribute("class", "error"),
-                    GenerateElement("div", "Configuration contains invalid XML: " + error.Message)));
+                    GenerateElement("div", message)));
+                LogMessage(message);
+                isConfigValid = false;
             }
             catch (PreprocessorException error)
             {
                 // There was an error with pre-processing
+                var message = "Preprocessing failed loading the XML: " + error.Message;
                 myBodyEl.AppendChild(
                     GenerateElement("div",
                     new HtmlAttribute("class", "error"),
-                    GenerateElement("div", "Preprocessing failed loading the XML: " + error.Message)));
+                    GenerateElement("div", message)));
+                LogMessage(message);
+                isConfigValid = false;
             }
             catch (Exception error)
             {
@@ -209,6 +234,7 @@ namespace Validator
                     }
                 }
                 MessageBox.Show(this, message.ToString(), "Unexpected error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                isConfigValid = false;
             }
         }
         private void DisplayFileName()
@@ -218,6 +244,7 @@ namespace Validator
                 GenerateElement("b", "Configuration file: "),
                 myFileName);
             myBodyEl.AppendChild(nameEl);
+            LogMessage(string.Format("Validating {0}", myFileName));
         }
 
         private HtmlElement GenerateElement(string tagName, params object[] contents)
@@ -278,10 +305,13 @@ namespace Validator
             XmlElement rootElement = document.SelectSingleNode("cruisecontrol") as XmlElement;
             if (rootElement == null)
             {
+                var message = "Configuration is missing root <cruisecontrol> element";
                 myBodyEl.AppendChild(
                     GenerateElement("div",
                     new HtmlAttribute("class", "error"),
-                    GenerateElement("div", "Configuration is missing root <cruisecontrol> element")));
+                    GenerateElement("div", message)));
+                LogMessage(message);
+                isConfigValid = false;
             }
             else
             {
@@ -298,11 +328,18 @@ namespace Validator
                 {
                     DisplayProgressMessage("Validating elements, please wait...", Convert.ToInt32(10 + row * increment));
                     object config = ValidateElement(tableEl, childElement, row++, configuration);
-                    if (config != null) items.Add(new ConfigurationItem(childElement.Name, config));
+                    if (config != null)
+                    {
+                        items.Add(new ConfigurationItem(childElement.Name, config));
+                    }
+                    else
+                    {
+                        isConfigValid = false;
+                    }
                 }
 
                 myBodyEl.AppendChild(tableEl);
-                InternalValidation(configuration);
+                isConfigValid &= InternalValidation(configuration);
 
                 DisplayProcessedConfiguration(items);
             }
@@ -343,6 +380,7 @@ namespace Validator
                             GenerateElement("td", project.Name),
                             GenerateElement("td", "Project"),
                             GenerateElement("td", "Yes")));
+                    LogMessage(string.Format("Loaded project '{0}'", project.Name));
                 }
                 else if (loadedItem is IQueueConfiguration)
                 {
@@ -354,11 +392,13 @@ namespace Validator
                             GenerateElement("td", queueConfig.Name),
                             GenerateElement("td", "Queue"),
                             GenerateElement("td", "Yes")));
+                    LogMessage(string.Format("Loaded queue '{0}'", queueConfig.Name));
                 }
                 else if (loadedItem is ISecurityManager)
                 {
                     ISecurityManager securityManager = loadedItem as ISecurityManager;
                     configuration.SecurityManager = securityManager as ISecurityManager;
+                    LogMessage("Loaded security manager");
                 }
                 else
                 {
@@ -368,6 +408,7 @@ namespace Validator
                             GenerateElement("td", (node as XmlElement).GetAttribute("name")),
                             GenerateElement("td", node.Name),
                             GenerateElement("td", "No")));
+                    var message = "Unknown configuration type: " + loadedItem.GetType().Name;
                     tableEl.AppendChild(
                         GenerateElement("tr",
                             rowClass,
@@ -375,7 +416,9 @@ namespace Validator
                                 new HtmlAttribute("colspan", "3"),
                                 GenerateElement("div",
                                     new HtmlAttribute("class", "error"),
-                                    "Unknown configuration type: " + loadedItem.GetType().Name))));
+                                    message))));
+                    LogMessage(message);
+                    isConfigValid = false;
                 }
             }
             catch (Exception error)
@@ -397,6 +440,8 @@ namespace Validator
                             GenerateElement("div", 
                                 new HtmlAttribute("class", "error"),
                                 errorMsg))));
+                isConfigValid = false;
+                LogMessage(error.Message);
             }
 
             return loadedItem;
@@ -416,8 +461,10 @@ namespace Validator
             // The following line is needed to make the browser display the styles correctly!
             myBodyEl.InnerHtml = myBodyEl.InnerHtml;
             myStopwatch.Stop();
-            DisplayProgressMessage(string.Format("Configuration loaded ({0:0.00}s)",
-                Convert.ToDouble(myStopwatch.ElapsedMilliseconds) / 1000), 100);
+            var message = string.Format("Configuration loaded ({0:0.00}s)",
+                Convert.ToDouble(myStopwatch.ElapsedMilliseconds) / 1000);
+            DisplayProgressMessage(message, 100);
+            LogMessage(message);
         }
 
         private void reloadMenuButton_Click(object sender, EventArgs e)
@@ -480,7 +527,7 @@ namespace Validator
             }
         }
 
-        private void InternalValidation(Configuration configuration)
+        private bool InternalValidation(Configuration configuration)
         {
             var errorProcesser = new ValidationErrorProcesser(validationResults);
             DisplayProgressMessage("Validating internal integrity, please wait...", 90);
@@ -518,10 +565,13 @@ namespace Validator
 
             if (isValid && errorProcesser.Passed)
             {
+                var message = "Internal validation passed";
                 myBodyEl.AppendChild(
                     GenerateElement("div",
-                    "Internal validation passed"));
+                    message));
+                LogMessage(message);
             }
+            return isValid;
         }
 
         private bool RunValidationCheck(Configuration configuration, IConfigurationValidation validator, string name, ref int row, IConfigurationErrorProcesser errorProcesser)
@@ -534,15 +584,17 @@ namespace Validator
             }
             catch (Exception error)
             {
+                var message = string.Format("Internal validation failed for {0}: {1}",
+                            name,
+                            error.Message);
                 HtmlAttribute rowClass = new HtmlAttribute("class", (row % 2) == 1 ? "even" : "odd");
                 myBodyEl.AppendChild(
                     GenerateElement("div",
                         rowClass,
                         GenerateElement("div",
                         new HtmlAttribute("class", "error"),
-                        string.Format("Internal validation failed for {0}: {1}",
-                            name,
-                            error.Message))));
+                        message)));
+                LogMessage(message);
                 isValid = false;
                 row++;
             }
@@ -562,6 +614,15 @@ namespace Validator
         private void buttonPrint_Click(object sender, EventArgs e)
         {
             printMenuButton_Click(sender, e);
+        }
+
+        private void LogMessage(string message)
+        {
+            if (!string.IsNullOrEmpty(LogFile))
+            {
+                File.AppendAllText(LogFile,
+                    string.Format("{0:o} {1}", DateTime.Now, message) + Environment.NewLine);
+            }
         }
     }
 }
