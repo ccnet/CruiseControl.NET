@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             foreach (Modification mod in modifications)
             {
-                if (mod.Comment.Length > 0)
+                if ((mod != null) && !string.IsNullOrEmpty(mod.Comment) && mod.Comment.Length > 0)
                 {
                     if (Regex.IsMatch(mod.Comment, _find))
                     {
