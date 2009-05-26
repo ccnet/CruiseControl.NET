@@ -3,7 +3,7 @@
 <project name="CruiseControl.NET" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
 
 	<target name="build.packages" description="Generates the dashboard packages"
-          depends="farm.level.packages,server.level.packages,project.level.packages,build.level.packages">
+          depends="farm.level.packages,server.level.packages,project.level.packages,build.level.packages,theme.packages">
 		<copy file="${src.dir}/WebDashboard/packages/packages.xml" tofile="Dist/WebDashboard/packages/packages.xml" verbose="${nant.verbosity}"/>
 		<copy todir="Dist/WebDashboard/packages" verbose="${nant.verbosity}">
 			<fileset basedir="${build.dir}/WebDashboard/packages">
@@ -296,5 +296,54 @@
 			</fileset>
 		</zip>
 	</target>
+
+  <target name="theme.packages" description="Generate the theme packages"
+        depends="obsess.theme.package,noteWorthy.theme.package,liquidBlue.theme.package">
+  </target>
+
+  <target name="liquidBlue.theme.package" description="Generates the liquidBlue theme package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/LiquidBlue.zip">
+      <fileset basedir="${src.dir}/WebDashboard/Themes/liquidBlue">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}/WebDashboard/Themes/liquidBlue/images">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}/WebDashboard/Themes/liquidBlue/templates">
+        <include name="*.*"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="noteWorthy.theme.package" description="Generates the noteWorthy theme package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/noteWorthy.zip">
+      <fileset basedir="${src.dir}/WebDashboard/Themes/noteWorthy">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}/WebDashboard/Themes/noteWorthy/images">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}/WebDashboard/Themes/noteWorthy/templates">
+        <include name="*.*"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="obsess.theme.package" description="Generates the obsess theme package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/obsess.zip">
+      <fileset basedir="${src.dir}/WebDashboard/Themes/Obsess">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}/WebDashboard/Themes/Obsess/images">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}/WebDashboard/Themes/Obsess/templates">
+        <include name="*.*"/>
+      </fileset>
+    </zip>
+  </target>
 
 </project>

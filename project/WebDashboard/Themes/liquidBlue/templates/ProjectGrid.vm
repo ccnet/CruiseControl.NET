@@ -1,0 +1,124 @@
+#if ($forceBuildMessage.Length > 0)
+<P><span id="StatusLabel"><b><font color="#4A3C8C">$forceBuildMessage</font></b></span></P>
+#end
+
+#if ($projectGrid.Length > 0)
+<table id="StatusGrid">
+	<tr>
+		#if ($wholeFarm)
+		<th>
+			<a href="$serverNameSortLink"><b>Server</b></a>
+		</th>
+		#elseif ($showCategoryColumn)
+		<th>
+			<a href="$projectCategorySortLink"><b>Category</b></a>
+		</th>
+		#end
+		<th>
+			<a href="$projectNameSortLink"><b>Project Name</b></a>
+		</th>
+		<th>
+			<a href="$buildStatusSortLink"><b>Last Build Status</b></a>
+		</th>
+		<th>
+			<a href="$lastBuildDateSortLink"><b>Last Build Time</b></a>
+		</th>
+		<th>
+			<b>Last Build Label</b>
+		</th>
+		<th>
+			<b>CCNet Status</b>
+		</th>
+		<th>
+			<b>Activity</b>
+		</th>
+		<th>
+			<b>Messages</b>
+		</th>
+		<th>
+			<b>Admin</b>
+		</th>
+	</tr>
+	
+	#foreach ($projectGridRow in $projectGrid)
+	<tr>
+		#if ($wholeFarm)
+		<td>
+			<b>$projectGridRow.ServerName</b>
+		</td>
+		#elseif ($showCategoryColumn)
+		<td>
+			<b>$projectGridRow.Category</b>
+		</td>
+		#end
+		<td>
+			<a href="$projectGridRow.Url">$projectGridRow.Name</a>
+		</td>
+		<td>
+		    <span class="status$projectGridRow.BuildStatusHtmlColor">$projectGridRow.BuildStatus</span>
+		</td>
+		<td>
+			$projectGridRow.LastBuildDate
+		</td>
+		<td>
+			$projectGridRow.LastBuildLabel
+		</td>
+		<td>
+			$projectGridRow.Status
+		</td>
+		<td>
+			#if ($projectGridRow.Activity == "Building")
+				<span class="statusBuild">$projectGridRow.Activity</span>
+			#else
+				$projectGridRow.Activity
+			#end
+		</td>
+		<td>
+			$projectGridRow.CurrentMessage
+		</td>
+    <td>
+      <form method="post" style="margin-bottom:0px;">
+        <input type="hidden" name="projectName" value="$projectGridRow.Name" />
+        <input type="hidden" name="serverName" value="$projectGridRow.ServerName" />
+          #if ($projectGridRow.allowForceBuild)
+          <input type="submit" name="$projectGridRow.ForceAbortBuildButtonName" value="$projectGridRow.ForceAbortBuildButtonValue"/>
+          #end
+          #if ($projectGridRow.AllowStartStopBuild)
+          <input type="submit" name="$projectGridRow.StartStopButtonName" value="$projectGridRow.StartStopButtonValue"/>
+				#end
+      </form>
+    </td>
+  </tr>
+
+    #if ($projectGridRow.BuildStage.Length > 0)
+    <tr>
+      <td class="buildStageDetails" COLSPAN="9">
+          $projectGridRow.BuildStage
+      </td>
+    </tr>
+    #end
+
+
+  #end
+</table>
+#end
+
+#if ($exceptions.Length > 0)
+<P>
+<span id="ExceptionTitleLabel">There were exceptions connecting to the following servers:</span>
+</P>
+<table id="ExceptionGrid">
+	<tr>
+		<th><b>Server Name</b></th>
+		<th><b>Url</b></th>
+		<th><b>Message</b></th>
+	</tr>
+	#foreach ($exception in $exceptions)
+	<tr>
+		<td>$exception.ServerName</td>
+		<td>$exception.Url</td>
+		<td>$exception.Message</td>
+	</tr>
+	#end
+</table>
+#end

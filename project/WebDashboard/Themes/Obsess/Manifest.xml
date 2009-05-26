@@ -1,0 +1,41 @@
+﻿<package>
+  <name>Obsess Theme</name>
+  <description>The Obsess theme.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Themes\Obsess</location>
+      <files>
+        <file>cruisecontrol.css</file>
+      </files>
+    </folder>
+    <folder>
+      <location>Themes\Obsess\images</location>
+      <files>
+        <file>arrow.gif</file>
+        <file>bg.jpg</file>
+        <file>header.jpg</file>
+        <file>top_section.jpg</file>
+        <file>bullet_black.png</file>
+        <file>bullet_cross.png</file>
+        <file>top_margin.jpg</file>
+        <file>bullet_tick.png</file>
+      </files>
+    </folder>
+    <folder>
+      <location>Themes\Obsess\templates</location>
+      <files>
+        <file>ProjectGrid.vm</file>
+        <file>SiteTemplate.vm</file>
+        <file>TopMenu.vm</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins</path>
+      <name>customTemplates</name>
+      <value>themes/Obsess/templates</value>
+    </setting>
+  </configuration>
+</package>
