@@ -1,10 +1,10 @@
 ﻿<packages>
   <package name="Server Information Display" description="Display the information on the server." type="Plugin" file="ServerInfo.zip" installed="no" />
-  <package name="Server Log Display" description="Display the server log." type="Plugin" file="ServerLog.zip" installed="yes" />
-  <package name="Server Configuration Display" description="Display the configuration for all the projects on a server." type="Plugin" file="ServerConfig.zip" installed="yes" />
+  <package name="Server Log Display" description="Display the server log." type="Plugin" file="ServerLog.zip" installed="no" />
+  <package name="Server Configuration Display" description="Display the configuration for all the projects on a server." type="Plugin" file="ServerConfig.zip" installed="no" />
   <package name="Queue Status Display" description="Display the status of the queues." type="Plugin" file="QueueStatus.zip" installed="no" />
   <package name="Web Dashboard Administration" description="An administration console for the web dashboard." type="Plugin" file="DashboardAdmin.zip" installed="yes" />
-  <package name="Project Configuration Display" description="Show the project configuration." type="Plugin" file="ProjectConfig.zip" installed="yes" />
+  <package name="Project Configuration Display" description="Show the project configuration." type="Plugin" file="ProjectConfig.zip" installed="no" />
   <package name="Modification History" description="Modification history for a project." type="Plugin" file="ModificationHistory.zip" installed="no" />
   <package name="Project Statistics" description="Statistics for a project." type="Plugin" file="ProjectStats.zip" installed="no" />
   <package name="NUnit Results" description="Display the results of a NUnit run." type="Plugin" file="NUnit.zip" installed="no" />
@@ -19,5 +19,6 @@
   <package name="Security Configuration Display" description="Display the security configuration a server." type="Plugin" file="SecurityConfig.zip" installed="no" />
   <package name="User List" description="Display the users defined on a server." type="Plugin" file="UserList.zip" installed="no" />
   <package name="MSTest Results" description="Display the results of a MSTest report." type="Plugin" file="MSTest.zip" installed="no" />
-  <package name="Package List" description="Display the list of packages that were generated." type="Plugin" file="PackageList.zip" installed="yes" />
+  <package name="Package List" description="Display the list of packages that were generated." type="Plugin" file="PackageList.zip" installed="no" />
+  <package name="Ohloh" description="Display the statistics from Ohloh." type="Plugin" file="OhlohStats.zip" installed="no" />
 </packages>
