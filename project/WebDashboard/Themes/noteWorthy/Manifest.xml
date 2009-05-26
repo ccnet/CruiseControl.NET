@@ -25,7 +25,6 @@
     <folder>
       <location>Themes\noteWorthy\templates</location>
       <files>
-        <file>ProjectGrid.vm</file>
         <file>SiteTemplate.vm</file>
         <file>TopMenu.vm</file>
       </files>
