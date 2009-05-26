@@ -426,5 +426,14 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="service">The service to add.</param>
         void AddService(Type serviceType, object service);
         #endregion
+
+        #region GetLinkedSiteId()
+        /// <summary>
+        /// Retrieve the identifer for this project on a linked site.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        DataResponse GetLinkedSiteId(ProjectItemRequest request);
+        #endregion
     }
 }

@@ -1,0 +1,19 @@
+﻿<package>
+  <name>Ohloh</name>
+  <description>Display the statistics from Ohloh.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Templates</location>
+      <files>
+        <file>OhlohStats.vm</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/projectPlugins</path>
+      <name>ohlohProjectPlugin</name>
+    </setting>
+  </configuration>
+</package>

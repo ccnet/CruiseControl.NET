@@ -172,6 +172,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 				get { throw new NotImplementedException(); }
 			}
 
+            #region Links
+            /// <summary>
+            /// Link this project to other sites.
+            /// </summary>
+            [ReflectorProperty("linkedSites")]
+            public NameValuePair[] LinkedSites { get; set; }
+            #endregion
+
             public string ModificationHistory
             {
                 get { throw new NotImplementedException(); }

@@ -136,5 +136,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <param name="projectName">The name of the project.</param>
         /// <returns>The snapshot of the current status.</returns>
         ProjectStatusSnapshot TakeStatusSnapshot(IProjectSpecifier projectSpecifier, string sessionToken);
+
+        #region GetLinkedSiteId()
+        /// <summary>
+        /// Retrieves the identifier for a project on a linked site.
+        /// </summary>
+        /// <param name="projectSpecifier">The project to retrieve the identifier for.</param>
+        /// <param name="siteName">The name of the linked site.</param>
+        /// <returns>The identifier of the other site.</returns>
+        string GetLinkedSiteId(IProjectSpecifier projectSpecifier, string sessionId, string siteName);
+        #endregion
     }
 }

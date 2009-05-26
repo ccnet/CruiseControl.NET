@@ -107,7 +107,7 @@
 	</target>
 
 	<target name="project.level.packages" description="Generate the project level packages"
-          depends="build.projectStats.package,build.projectConfig.package,build.modificationHistory.package,build.packageList.package">
+          depends="build.projectStats.package,build.projectConfig.package,build.modificationHistory.package,build.packageList.package,build.ohlohStats.package">
 	</target>
 
 	<target name="build.projectStats.package" description="Generates the project statistics package">
@@ -152,7 +152,19 @@
 		</zip>
 	</target>
 
-	<target name="build.level.packages" description="Generate the build level packages"
+  <target name="build.ohlohStats.package" description="Generates the Ohloh statistics package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/OhlohStats.zip">
+      <fileset basedir="${src.dir}/WebDashboard/packages/OhlohStats">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}/WebDashboard/Templates">
+        <include name="OhlohStats.vm"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.level.packages" description="Generate the build level packages"
           depends="build.nunit.package,build.ndepend.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.msTest.package">
 	</target>
 

@@ -583,5 +583,17 @@ namespace ThoughtWorks.CruiseControl.Core
             server.AddService(serviceType, service);
         }
         #endregion
+
+        #region GetLinkedSiteId()
+        /// <summary>
+        /// Retrieve the identifer for this project on a linked site.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public virtual DataResponse GetLinkedSiteId(ProjectItemRequest request)
+        {
+            return server.GetLinkedSiteId(request);
+        }
+        #endregion
     }
 }

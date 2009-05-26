@@ -53,8 +53,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             Hashtable velocityContext = new Hashtable();
             IProjectSpecifier projectSpecifier = cruiseRequest.ProjectSpecifier;
             IServerSpecifier serverSpecifier = FindServer(projectSpecifier);
+            var sessionToken = cruiseRequest.RetrieveSessionToken();
 
-            IBuildSpecifier[] buildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 1, cruiseRequest.RetrieveSessionToken());
+            IBuildSpecifier[] buildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 1, sessionToken);
             if (buildSpecifiers.Length == 1)
             {
                 velocityContext["mostRecentBuildUrl"] = linkFactory.CreateProjectLink(projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME).Url;
@@ -62,10 +63,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 
             velocityContext["projectName"] = projectSpecifier.ProjectName;
             velocityContext["server"] = serverSpecifier;
-            velocityContext["externalLinks"] = farmService.GetExternalLinks(projectSpecifier, cruiseRequest.RetrieveSessionToken());
+            velocityContext["externalLinks"] = farmService.GetExternalLinks(projectSpecifier, sessionToken);
             velocityContext["noLogsAvailable"] = (buildSpecifiers.Length == 0);
 
-            var sessionToken = cruiseRequest.RetrieveSessionToken();
             velocityContext["StatusMessage"] = ForceBuildIfNecessary(projectSpecifier, cruiseRequest.Request, sessionToken);
             ProjectStatus status = FindProjectStatus(projectSpecifier, cruiseRequest);
             velocityContext["status"] = status;
@@ -87,6 +87,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             //
             velocityContext["rss"] = RSSLinkBuilder.CreateRSSLink(linkFactory, projectSpecifier);
 
+            velocityContext["ohloh"] = farmService.GetLinkedSiteId(projectSpecifier, sessionToken, "ohloh") ?? string.Empty;
 
             string subReportData = GetPluginSubReport(cruiseRequest, projectSpecifier, buildSpecifiers);
             if (subReportData != null && subReportData != String.Empty)
@@ -104,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             Int32 DateMultiPlier;
 
             GraphMaker = new BuildGraph(
-                farmService.GetMostRecentBuildSpecifiers(projectSpecifier, AmountOfBuildsToRetrieve, cruiseRequest.RetrieveSessionToken()),
+                farmService.GetMostRecentBuildSpecifiers(projectSpecifier, AmountOfBuildsToRetrieve, sessionToken),
                 this.linkFactory);
 
             velocityContext["graphDayInfo"] = GraphMaker.GetBuildHistory(MaxAmountOfDaysToDisplay);

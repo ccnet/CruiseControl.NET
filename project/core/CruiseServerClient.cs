@@ -526,6 +526,18 @@ namespace ThoughtWorks.CruiseControl.Core
             return cruiseServer.RetrieveFileTransfer(project, fileName);
         }
         #endregion
+
+        #region GetLinkedSiteId()
+        /// <summary>
+        /// Retrieve the identifer for this project on a linked site.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public virtual DataResponse GetLinkedSiteId(ProjectItemRequest request)
+        {
+            return cruiseServer.GetLinkedSiteId(request);
+        }
+        #endregion
         #endregion
 
         #region Private methods

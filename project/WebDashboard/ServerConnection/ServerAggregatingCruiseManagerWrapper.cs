@@ -631,5 +631,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
             ValidateResponse(response);
             return response.Snapshot;
         }
+
+        #region GetLinkedSiteId()
+        /// <summary>
+        /// Retrieves the identifier for a project on a linked site.
+        /// </summary>
+        /// <param name="projectSpecifier">The project to retrieve the identifier for.</param>
+        /// <param name="siteName">The name of the linked site.</param>
+        /// <returns>The identifier of the other site.</returns>
+        public string GetLinkedSiteId(IProjectSpecifier projectSpecifier, string sessionId, string siteName)
+        {
+            var request = new ProjectItemRequest(sessionId, projectSpecifier.ProjectName);
+            request.ItemName = siteName;
+            var response = GetCruiseManager(projectSpecifier).GetLinkedSiteId(request);
+            ValidateResponse(response);
+            return response.Data;
+        }
+        #endregion
     }
 }

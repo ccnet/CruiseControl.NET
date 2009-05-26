@@ -115,6 +115,14 @@ namespace ThoughtWorks.CruiseControl.Core
             set { parameters = value; }
         }
 
+        #region Links
+        /// <summary>
+        /// Link this project to other sites.
+        /// </summary>
+        [ReflectorProperty("linkedSites", Required = false)]
+        public NameValuePair[] LinkedSites { get; set; }
+        #endregion
+
         [ReflectorProperty("state", InstanceTypeKey = "type", Required = false), Description("State")]
         public IStateManager StateManager
         {

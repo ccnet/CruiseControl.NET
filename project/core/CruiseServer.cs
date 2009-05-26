@@ -1631,6 +1631,41 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
         #endregion
+
+        #region GetLinkedSiteId()
+        /// <summary>
+        /// Retrieve the identifer for this project on a linked site.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public virtual DataResponse GetLinkedSiteId(ProjectItemRequest request)
+        {
+            string data = null;
+            DataResponse response = new DataResponse(RunProjectRequest(request,
+                SecurityPermission.ViewProject,
+                null,
+                (arg) => 
+                {
+                    // Retrieve the project configuration
+                    var project = GetIntegrator(arg.ProjectName).Project;
+
+                    // Find the site that has the matching name
+                    if (project.LinkedSites != null)
+                    {
+                        foreach (var siteLink in project.LinkedSites)
+                        {
+                            if (string.Equals(request.ItemName, siteLink.Name, StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                data = siteLink.Value;
+                                break;
+                            }
+                        }
+                    }
+                }));
+            response.Data = data;
+            return response;
+        }
+        #endregion
         #endregion
     }
 }

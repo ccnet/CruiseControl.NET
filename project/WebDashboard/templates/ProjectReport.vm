@@ -68,6 +68,11 @@
     <IMG SRC="$applicationPath/images/rss.png" WIDTH="16" HEIGHT="16" BORDER="0" ALT="$rss.text">
     </A>
   #end
+    <span style="padding-left:5px;">
+    #if ($ohloh != "")
+        <script type="text/javascript" src="http://www.ohloh.net/p/$ohloh/widgets/project_thin_badge.js"></script>
+    #end
+    </span>
 </h2>
 
 

@@ -19,6 +19,13 @@ namespace ThoughtWorks.CruiseControl.Core
 			get;
 		}
 
+        #region Links
+        /// <summary>
+        /// Link this project to other sites.
+        /// </summary>
+        NameValuePair[] LinkedSites { get; set; }
+        #endregion
+
 		/// <summary>
 		/// An optional category that groups the project
 		/// </summary>

@@ -566,6 +566,7 @@
     <Compile Include="Plugins\ForceBuild\ForceBuildXmlAction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\ProjectReport\OhlohProjectPlugin.cs" />
     <Compile Include="Plugins\ProjectReport\PackageListAction.cs" />
     <Compile Include="Plugins\ProjectReport\PackageListPlugin.cs" />
     <Compile Include="Plugins\ProjectReport\ProjectStatusPlugin.cs" />
@@ -745,6 +746,7 @@
     <Content Include="javascript\theme\ui.resizable.css" />
     <Content Include="javascript\theme\ui.theme.css" />
     <Content Include="packages\MSTest\Manifest.xml" />
+    <Content Include="packages\OhlohStats\Manifest.xml" />
     <Content Include="packages\PackageList\Manifest.xml" />
     <Content Include="packages\UserList\Manifest.xml" />
     <Content Include="packages\SecurityConfig\Manifest.xml" />
@@ -788,6 +790,7 @@
     <None Include="templates\LoggedIn.vm" />
     <None Include="templates\LoggedOut.vm" />
     <None Include="templates\LoginAction.vm" />
+    <None Include="templates\OhlohStats.vm" />
     <None Include="templates\PackageList.vm" />
     <None Include="templates\ProjectGrid.vm" />
     <None Include="templates\ProjectParameters.vm" />

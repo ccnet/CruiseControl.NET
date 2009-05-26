@@ -121,6 +121,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CommunicationsException.cs" />
+    <Compile Include="Messages\ProjectItemRequest.cs" />
     <Compile Include="NameValuePairListSerialiserFactory.cs" />
     <Compile Include="CruiseServerClient.cs" />
     <Compile Include="CruiseServerClientBase.cs" />

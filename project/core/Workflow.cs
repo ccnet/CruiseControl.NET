@@ -172,6 +172,14 @@ namespace ThoughtWorks.CruiseControl.Core
             set { initialState = value; }
         }
 
+        #region Links
+        /// <summary>
+        /// Link this project to other sites.
+        /// </summary>
+        [ReflectorProperty("linkedSites", Required = false)]
+        public NameValuePair[] LinkedSites { get; set; }
+        #endregion
+
         /// <summary>
         /// The start-up mode for this project.
         /// </summary>
