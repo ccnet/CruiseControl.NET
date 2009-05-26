@@ -176,7 +176,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             /// <summary>
             /// Link this project to other sites.
             /// </summary>
-            [ReflectorProperty("linkedSites")]
             public NameValuePair[] LinkedSites { get; set; }
             #endregion
 
