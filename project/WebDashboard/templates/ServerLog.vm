@@ -1,3 +1,4 @@
+<!-- ServerLog.vm: Start -->
 <div id="serverLogProjects">
 	#foreach ($projectLink in $projectLinks)
 	<a href="$projectLink.Url" style="padding: 10px">$projectLink.Text</a>
@@ -7,3 +8,4 @@
 <h2>Server Log for Project: $currentProject</h2>
 #end
 <pre class="log">$log</pre>
+<!-- ServerLog.vm: End -->

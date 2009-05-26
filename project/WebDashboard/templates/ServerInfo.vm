@@ -1,3 +1,4 @@
+<!-- ServerInfo.vm: Start -->
 <table class="SortableGrid">
   <thead>
     <tr class="ProjectGridHeader">
@@ -16,6 +17,4 @@
     </tr>
   </tbody>
 </table>
-
-
-
+<!-- ServerInfo.vm: End -->

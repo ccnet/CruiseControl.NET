@@ -1,3 +1,4 @@
+<!-- ProjectGrid.vm: Start -->
 <script type="text/javascript">
   $(document).ready(function(){
     $('#parameterCheck').dialog({
@@ -26,25 +27,11 @@
       #end
       #end
     });
-    function checkForParams(buttonEl, checkUrl){
-      $('#parameterEditor').replaceWith('<div id="parameterEditor">Loading parameters, please wait...</div>');
-      $('#parameterCheck').dialog('open');
-      jQuery.get(checkUrl, function(data){
-          if(data=='NONE'){
-            $('#parameterCheck').dialog('close');
-            var button = $(buttonEl);
-            button.after('<input type="hidden" name="ForceBuild" value="Force" />');
-            buttonEl.parentNode.parentNode.submit();
-          }else{
-            $('#parameterEditor').replaceWith('<div id="parameterEditor">' + data + '</div>');
-          }
-        });
-    }
 </script>
 <div id="parameterCheck">
   <div id="parameterEditor">Loading parameters, please wait...</div>
 </div>
-<form ID="RefreshForm" method="post">
+<form id="RefreshForm" method="post">
   <table width="100%">
     <tr>
       <td align="right">
@@ -151,13 +138,13 @@
     #end
     #set ($OKPercentToolTip = $OKPercent * 2)
     <tr>
-      <td COLSPAN="10">
+      <td colspan="10">
         <table  id="BuildPercentage">
-          <tr height="5" title="Percentage of successfull builds : $OKPercentToolTip%">
-            <td width=$"OKPercent"% bgcolor="#33CC00"> </td>
-            <td width=$"NOKPercent"% bgcolor="#FF0000"></td>
-            <td width=$"NOKPercent"% bgcolor="#FF0000"></td>
-            <td width=$"OKPercent"% bgcolor="#33CC00"> </td>
+          <tr title="Percentage of successfull builds : $OKPercentToolTip%">
+            <td width="$OKPercent%" bgcolor="#33CC00"> </td>
+            <td width="$NOKPercent%" bgcolor="#FF0000"></td>
+            <td width="$NOKPercent%" bgcolor="#FF0000"></td>
+            <td width="$OKPercent%" bgcolor="#33CC00"> </td>
           </tr>
         </table>
       </td>
@@ -206,3 +193,4 @@
   #end
 </table>
 #end
+<!-- ProjectGrid.vm: End -->

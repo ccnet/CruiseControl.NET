@@ -24,7 +24,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 			{
 				AddHeadersToEnable403Cacheing(response);
 			}
-			response.Write(htmlFragment);
+            response.ContentType = MimeType.Html.ContentType;
+            response.Write(htmlFragment);
 		}
 
 		private void AddHeadersToEnable403Cacheing(HttpResponse response)

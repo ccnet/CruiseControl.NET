@@ -1,3 +1,4 @@
+<!-- AdministerDashboard.vm: Start -->
 <style type="text/css">
 #adminFrame
 {
@@ -386,3 +387,4 @@ label
         </div>
     </form>
 </fieldset>
+<!-- AdministerDashboard.vm: End -->

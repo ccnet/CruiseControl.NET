@@ -1,4 +1,5 @@
-﻿<script src="$applicationPath/javascript/jquery.timers.js" type="text/javascript"></script>
+﻿<!-- ProjectStatusReport.vm: Start -->
+<script src="$applicationPath/javascript/jquery.timers.js" type="text/javascript"></script>
 <style type="text/css">
 .dataGroup
 {
@@ -144,3 +145,4 @@ function formatTime(time){
         </span>
     </div>
 </div>
+<!-- ProjectStatusReport.vm: End -->

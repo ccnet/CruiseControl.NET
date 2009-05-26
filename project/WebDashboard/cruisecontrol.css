@@ -102,6 +102,8 @@ td>a.selected:hover { color:#006; }
 .wholepage
 {
 	background-color: #000066;
+	margin:0;
+	padding:0;
 }
 
 .TopControls

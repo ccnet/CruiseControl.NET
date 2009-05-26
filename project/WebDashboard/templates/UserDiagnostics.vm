@@ -1,3 +1,4 @@
+<!-- UserDignostics.vm: Start -->
 <div>
   <table class="userList-table">
     <tr class="odd">
@@ -46,3 +47,4 @@
            type="Submit" name="action" value="Reset password"/>
   </form>
 </div>
+<!-- UserDignostics.vm: End -->

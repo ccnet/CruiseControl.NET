@@ -1,3 +1,4 @@
+<!-- ProjectParameters.vm: Start -->
 <form method="post">
   <input type="hidden" name="projectName" value="$projectName" />
   <input type="hidden" name="serverName" value="$serverName" />
@@ -33,3 +34,4 @@
     <input type="submit" value="Build"/>
   </div>
 </form>
+<!-- ProjectParameters.vm: End -->

@@ -1,3 +1,4 @@
+<!-- ProjectServerConfiguration.vm: Start -->
 <script type="text/javascript">
   $(document).ready(function(){
       $('#ProjectConfig').tablesorter({
@@ -29,3 +30,4 @@
     #end
   </tbody>
 </table>
+<!-- ProjectServerConfiguration.vm: End -->

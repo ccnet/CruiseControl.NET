@@ -1,3 +1,4 @@
+<!-- SecurityConfiguration.vm: Start -->
 <div id="serverLogProjects">
 	#foreach ($projectLink in $projectLinks)
 	<a href="$projectLink.Url" style="padding: 10px">$projectLink.Text</a>
@@ -9,3 +10,4 @@
 <h2>Server Security Configuration</h2>
 #end
 <pre class="log">$log</pre>
+<!-- SecurityConfiguration.vm: End -->

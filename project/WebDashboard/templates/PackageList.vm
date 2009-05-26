@@ -1,4 +1,5 @@
-﻿<script type="text/javascript">
+﻿<!-- PackageList.vm: Start -->
+<script type="text/javascript">
     function downloadPackage(packageName) {
         window.open('RetrieveFile.aspx?file=' + packageName);
     }
@@ -30,3 +31,4 @@
   #end
 </table>
 </div>
+<!-- PackageList.vm: End -->

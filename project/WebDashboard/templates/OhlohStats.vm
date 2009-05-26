@@ -1,4 +1,5 @@
-﻿<h2>Ohloh Statistics for $projectName</h2>
+﻿<!-- OhlohStats.vm: Start -->
+<h2>Ohloh Statistics for $projectName</h2>
 <table>
     <tr>
         <td>
@@ -17,3 +18,4 @@
         </td>
     </tr>
 </table>
+<!-- OhlohStats.vm: End -->

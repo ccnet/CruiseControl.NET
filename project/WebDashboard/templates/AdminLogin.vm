@@ -1,3 +1,4 @@
+<!-- AdminLogin.vm: Start -->
 <h3>Dashboard Administration</h3>
 #if ($Error != "")
 <div class="ui-widget">
@@ -18,3 +19,4 @@
         </div>
     </form>
 </div>
+<!-- AdminLogin.vm: End -->

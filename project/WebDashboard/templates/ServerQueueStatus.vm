@@ -1,3 +1,4 @@
+<!-- ServerQueueStatus.vm: Start -->
 <script type="text/javascript">
   $(document).ready(function(){
       $('#QueueStatus').tablesorter({
@@ -45,3 +46,4 @@
   #end
   </tbody>
 </table>
+<!-- ServerQueueStatus.vm: End -->

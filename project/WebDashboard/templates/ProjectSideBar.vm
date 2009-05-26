@@ -1,3 +1,4 @@
+<!-- ProjectSideBar.vm: Start -->
 <table width="100%">
 	#foreach ($link in $links)
 	<tr><td><a href="$link.Url" class="$link.LinkClass">$link.Text</a></td></tr>
@@ -5,3 +6,4 @@
 	<tr><td>&nbsp;</td></tr>
 	<tr><td>$recentBuildsTable</td></tr>
 </table>
+<!-- ProjectSideBar.vm: End -->

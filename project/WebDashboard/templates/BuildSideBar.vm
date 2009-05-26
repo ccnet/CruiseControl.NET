@@ -1,3 +1,4 @@
+<!-- BuildSideBar.vm: Start -->
 <table width="100%">
 	<tr><td><a href="$latestLink.Url">Latest</a></td></tr>
 	<tr><td><a href="$nextLink.Url">Next</a></td></tr>
@@ -9,3 +10,4 @@
 	<tr><td>&nbsp;</td></tr>
 	<tr><td>$recentBuildsTable</td></tr>
 </table>
+<!-- BuildSideBar.vm: End -->

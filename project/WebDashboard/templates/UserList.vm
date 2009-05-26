@@ -1,3 +1,4 @@
+<!-- UserList.vm: Start -->
 <script type="text/javascript">
   $(document).ready(function(){
       $('#securityPopUp').dialog({
@@ -78,3 +79,4 @@
 <div id="securityPopUp">
   <div id="securityPopUpContent"></div>
 </div>
+<!-- UserList.vm: End -->
