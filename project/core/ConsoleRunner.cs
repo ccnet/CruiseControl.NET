@@ -85,8 +85,14 @@ namespace ThoughtWorks.CruiseControl.Core
 					}
 					else
 					{
+                        // Force the build
                         ValidateResponse(
                             server.ForceBuild(
+                                new ProjectRequest(null, parser.Project)));
+
+                        // Tell the server to stop as soon as the build has finished and then wait for it
+                        ValidateResponse(
+                            server.Stop(
                                 new ProjectRequest(null, parser.Project)));
 						server.WaitForExit(
                             new ProjectRequest(null, parser.Project));
