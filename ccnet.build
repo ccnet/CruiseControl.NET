@@ -53,6 +53,75 @@
                 ]]>
           </code>
      </script>
+
+ 		<script language="C#" prefix="RuWi">
+          <references>
+              <include name="System.Xml.dll" />
+              <include name="System.Data.dll" />          
+		  </references>
+
+          <imports>
+              <import namespace="System.Xml" />
+          </imports>
+
+			  <code>
+				<![CDATA[
+					[Function("updateConsoleLogger")]
+						public bool updateConsoleLogger(string configFile)
+						{
+							bool ok = true;
+
+							string mappings =
+@" 
+			<mapping>
+				<level value=myFunkySeparatorERRORmyFunkySeparator/>
+				<foreColor value=myFunkySeparatorWhitemyFunkySeparator/>
+				<backColor value=myFunkySeparatorRed, HighIntensitymyFunkySeparator/>
+			</mapping>
+			<mapping>
+				<level value=myFunkySeparatorDEBUGmyFunkySeparator/>
+				<foreColor value=myFunkySeparatorGreenmyFunkySeparator/>
+			</mapping>
+			<mapping>
+				<level value=myFunkySeparatorINFOmyFunkySeparator/>
+				<foreColor value=myFunkySeparatorWhitemyFunkySeparator/>
+			</mapping>
+			<layout type=myFunkySeparatorlog4net.Layout.PatternLayoutmyFunkySeparator>
+				<conversionPattern value=myFunkySeparator[%thread:%level] %message%newlinemyFunkySeparator/>
+			</layout>	
+";
+
+					try
+					{					
+						System.Xml.XmlDataDocument originalConfig ;
+						
+						originalConfig = new System.Xml.XmlDataDocument();
+
+						originalConfig.Load(configFile);
+						System.Xml.XmlNode ConsoleAppenderNode = originalConfig.SelectSingleNode(@"configuration/log4net/appender[@name='Console']");
+
+						if (ConsoleAppenderNode == null)
+							throw new Exception(string.Format("Logging section not found in {0}", configFile));
+
+						ConsoleAppenderNode.Attributes["type"].Value = "log4net.Appender.ColoredConsoleAppender";
+
+						ConsoleAppenderNode.InnerXml = mappings.Replace("myFunkySeparator", "\"");
+
+						originalConfig.Save(configFile);
+					}
+					catch (Exception ex)
+		            {
+                        ok = false;
+                        Console.WriteLine(ex.ToString());
+                    }
+
+                    return ok;
+
+				}
+                ]]>
+          </code>
+     </script>
+
     <!-- end custom scripts -->
 
 
@@ -87,7 +156,6 @@
 
 
 	<target name="PrepareForRelease" description="to be used by the person when doing a release on sourceforge, confluence, ...">
-
 		<fail message="Pass the ReleaseVersion property when calling this target with a correct value, eg.: 1.4.4" if="${ReleaseVersion=='0.0.0'}"   />
 		
 		<echo message="Clearing doc folder of all existing files ... " />
@@ -357,7 +425,9 @@
     <exec program="tools\NSIS\makensis.exe" commandline="ccvalidator.nsi" />
 		
 		<!-- CCNET-1492: Set ColoredConsoleAppender to the ccnet.exe.config only for the windows installer -->
-		<xmlpoke file="deployed\server\${console.exe}.config" xpath="/configuration/log4net/appender[@name='Console']/@type" value="log4net.Appender.ColoredConsoleAppender" />
+		<property name="exe.config" value="deployed\server\${console.exe}.config" />
+		<echo message="Updating config file for colored console ... ${RuWi::updateConsoleLogger(exe.config)}" />
+
 		
     <exec program="tools\NSIS\makensis.exe" commandline="ccnet.nsi" />
   </target>
