@@ -54,6 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
                 ProjectName = "test"
             };
             mockCruiseServer.ExpectAndReturn("ForceBuild", new Response { Result = ResponseResult.Success }, projectConstraint);
+            mockCruiseServer.ExpectAndReturn("Stop", new Response { Result = ResponseResult.Success }, projectConstraint);
             mockCruiseServer.Expect("WaitForExit", projectConstraint);
 			Mock mockCruiseServerFactory = new DynamicMock(typeof(ICruiseServerFactory));
 			mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, parser.UseRemoting, parser.ConfigFile);
