@@ -321,7 +321,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
             ServerLocation[] servers = new ServerLocation[] { serverLocation, otherServerLocation };
             SetupResult.For(configuration.Servers)
                 .Return(servers);
-            SetupResult.For(cruiseManagerFactory.GenerateClient("http://myurl"))
+            SetupResult.For(cruiseManagerFactory.GenerateClient("http://myurl", new ClientStartUpSettings()))
+                .IgnoreArguments()
                 .Return(cruiseManager);
 
             ServerAggregatingCruiseManagerWrapper serverWrapper = new ServerAggregatingCruiseManagerWrapper(
