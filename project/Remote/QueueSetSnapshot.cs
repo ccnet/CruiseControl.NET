@@ -1,6 +1,7 @@
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -12,14 +13,15 @@ namespace ThoughtWorks.CruiseControl.Remote
     [XmlRoot("queueSetSnapshot")]
 	public class QueueSetSnapshot
 	{
-		private List<QueueSnapshot> queueSnapshots;
+        private List<QueueSnapshot> snapshots = new List<QueueSnapshot>();
+        // Required for 1.4.4 or earlier compatibility
+        private QueueSnapshotList queueSnapshots = null;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="QueueSetSnapshot"/> class.
 		/// </summary>
 		public QueueSetSnapshot()
 		{
-            queueSnapshots = new List<QueueSnapshot>();
 		}
 
         /// <summary>
@@ -28,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         [XmlElement("queue")]
         public List<QueueSnapshot> Queues
 		{
-			get { return queueSnapshots; }
+			get { return snapshots; }
 		}
 
         /// <summary>
@@ -38,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         public QueueSnapshot FindByName(string queueName)
         {
-            foreach (QueueSnapshot queueSnapshot in queueSnapshots)
+            foreach (QueueSnapshot queueSnapshot in snapshots)
             {
                 if (queueSnapshot.QueueName == queueName)
                 {
@@ -47,5 +49,26 @@ namespace ThoughtWorks.CruiseControl.Remote
             }
             return null;
         }
-	}
+
+        #region Private methods
+        #region DataReceived()
+        /// <summary>
+        /// Handle any old (pre-1.5.0) data.
+        /// </summary>
+        /// <param name="context"></param>
+        [OnDeserialized]
+        private void DataReceived(StreamingContext context)
+        {
+            if (queueSnapshots != null)
+            {
+                snapshots = new List<QueueSnapshot>();
+                foreach (var queue in queueSnapshots)
+                {
+                    snapshots.Add(queue as QueueSnapshot);
+                }
+            }
+        }
+        #endregion
+        #endregion
+    }
 }

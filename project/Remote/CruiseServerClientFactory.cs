@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.Remote
     /// <summary>
     /// Factory class for building <see cref="CruiseServerClientBase"/> instances.
     /// </summary>
-    public static class CruiseServerClientFactory
+    public class CruiseServerClientFactory : ThoughtWorks.CruiseControl.Remote.ICruiseServerClientFactory
     {
         #region Public methods
         #region GenerateClient()
@@ -17,22 +17,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="address">The address of the server.</param>
         /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
-        public static CruiseServerClientBase GenerateClient(string address)
+        public CruiseServerClientBase GenerateClient(string address)
         {
-            var serverUri = new Uri(address);
-            IServerConnection connection = null;
-            switch (serverUri.Scheme.ToLower())
-            {
-                case "http":
-                    connection = new HttpConnection(address);
-                    break;
-                case "tcp":
-                    connection = new RemotingConnection(address);
-                    break;
-                default:
-                    throw new ApplicationException("Unknown transport protocol");
-            }
-            var client = new CruiseServerClient(connection);
+            var client = GenerateClient(address, new ClientStartUpSettings());
             return client;
         }
 
@@ -43,9 +30,66 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="address">The address of the server.</param>
         /// <param name="targetServer">The name of the other server.</param>
         /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
-        public static CruiseServerClientBase GenerateClient(string address, string targetServer)
+        public CruiseServerClientBase GenerateClient(string address, string targetServer)
         {
-            var client = GenerateClient(address);
+            var client = GenerateClient(address, targetServer, new ClientStartUpSettings());
+            return client;
+        }
+
+        /// <summary>
+        /// Generates an instance of <see cref="CruiseServerClientBase"/>. The transport protocol will be
+        /// detected from the address.
+        /// </summary>
+        /// <param name="address">The address of the server.</param>
+        /// <param name="settings">The start-up settings to use.</param>
+        /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
+        public CruiseServerClientBase GenerateClient(string address, ClientStartUpSettings settings)
+        {
+            CruiseServerClientBase client; 
+            var serverUri = new Uri(address);
+            if (settings.BackwardsCompatable)
+            {
+                switch (serverUri.Scheme.ToLower())
+                {
+                    case "http":
+                        throw new NotImplementedException("HTTP is not backwards compatible (yet)");
+                    case "tcp":
+                        client = new CruiseServerRemotingClient(address);
+                        break;
+                    default:
+                        throw new ApplicationException("Unknown transport protocol");
+                }
+            }
+            else
+            {
+                IServerConnection connection = null;
+                switch (serverUri.Scheme.ToLower())
+                {
+                    case "http":
+                        connection = new HttpConnection(address);
+                        break;
+                    case "tcp":
+                        connection = new RemotingConnection(address);
+                        break;
+                    default:
+                        throw new ApplicationException("Unknown transport protocol");
+                }
+                client = new CruiseServerClient(connection);
+            }
+            return client;
+        }
+
+        /// <summary>
+        /// Generates an instance of <see cref="CruiseServerClientBase"/>. The transport protocol will be
+        /// detected from the address.
+        /// </summary>
+        /// <param name="address">The address of the server.</param>
+        /// <param name="targetServer">The name of the other server.</param>
+        /// <param name="settings">The start-up settings to use.</param>
+        /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
+        public CruiseServerClientBase GenerateClient(string address, string targetServer, ClientStartUpSettings settings)
+        {
+            var client = GenerateClient(address, settings);
             client.TargetServer = targetServer;
             return client;
         }
@@ -58,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="address">The address of the server.</param>
         /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
-        public static CruiseServerClientBase GenerateHttpClient(string address)
+        public CruiseServerClientBase GenerateHttpClient(string address)
         {
             var connection = new HttpConnection(address);
             var client = new CruiseServerClient(connection);
@@ -72,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="address">The address of the server.</param>
         /// <param name="targetServer">The name of the other server.</param>
         /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
-        public static CruiseServerClientBase GenerateHttpClient(string address, string targetServer)
+        public CruiseServerClientBase GenerateHttpClient(string address, string targetServer)
         {
             var client = GenerateHttpClient(address);
             client.TargetServer = targetServer;
@@ -87,10 +131,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="address">The address of the server.</param>
         /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
-        public static CruiseServerClientBase GenerateRemotingClient(string address)
+        public CruiseServerClientBase GenerateRemotingClient(string address)
         {
-            var connection = new RemotingConnection(address);
-            var client = new CruiseServerClient(connection);
+            var client = GenerateRemotingClient(address, new ClientStartUpSettings());
             return client;
         }
 
@@ -101,24 +144,31 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="address">The address of the server.</param>
         /// <param name="targetServer">The name of the other server.</param>
         /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
-        public static CruiseServerClientBase GenerateRemotingClient(string address, string targetServer)
+        public CruiseServerClientBase GenerateRemotingClient(string address, string targetServer)
         {
-            var client = GenerateRemotingClient(address);
-            client.TargetServer = targetServer;
+            var client = GenerateRemotingClient(address, targetServer, new ClientStartUpSettings());
             return client;
         }
-        #endregion
 
-        #region GenerateOldRemotingClient()
         /// <summary>
         /// Generates an instance of <see cref="CruiseServerClientBase"/> that connects via
-        /// .NET Remoting to an old (pre-1.5.0) server.
+        /// .NET Remoting.
         /// </summary>
         /// <param name="address">The address of the server.</param>
+        /// <param name="settings">The start-up settings to use.</param>
         /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
-        public static CruiseServerClientBase GenerateOldRemotingClient(string address)
+        public CruiseServerClientBase GenerateRemotingClient(string address, ClientStartUpSettings settings)
         {
-            var client = new CruiseServerRemotingClient(address);
+            CruiseServerClientBase client;
+            if (settings.BackwardsCompatable)
+            {
+                client = new CruiseServerRemotingClient(address);
+            }
+            else
+            {
+                var connection = new RemotingConnection(address);
+                client = new CruiseServerClient(connection);
+            }
             return client;
         }
 
@@ -128,10 +178,11 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="address">The address of the server.</param>
         /// <param name="targetServer">The name of the other server.</param>
+        /// <param name="settings">The start-up settings to use.</param>
         /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
-        public static CruiseServerClientBase GenerateOldRemotingClient(string address, string targetServer)
+        public CruiseServerClientBase GenerateRemotingClient(string address, string targetServer, ClientStartUpSettings settings)
         {
-            var client = GenerateRemotingClient(address);
+            var client = GenerateRemotingClient(address, settings);
             client.TargetServer = targetServer;
             return client;
         }

@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
 
         private static CruiseServerClientBase GenerateClient(CommandParameters parameters)
         {
-            var client = CruiseServerClientFactory.GenerateClient(parameters.ServerUrl,
+            var client = new CruiseServerClientFactory().GenerateClient(parameters.ServerUrl,
                 parameters.TargetServer);
             return client;
         }

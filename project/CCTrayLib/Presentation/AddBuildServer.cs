@@ -247,7 +247,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.connectToOldServer.TabIndex = 12;
             this.connectToOldServer.Text = "Connect to pre-1.5.0 server";
             this.connectToOldServer.UseVisualStyleBackColor = true;
-            this.connectToOldServer.Visible = false;
             // 
             // txtRemoting
             // 

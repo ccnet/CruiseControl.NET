@@ -360,8 +360,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         /// <returns>The current build status of the project.</returns>
         public virtual ProjectStatusSnapshot RetrieveSnapshot()
         {
-            ProjectStatusSnapshot snapshot = cruiseProjectManager.RetrieveSnapshot();
-            return snapshot;
+            // TODO: Replace this try-catch block with a mechanism to detect whether the remote server allows this functionality
+            try
+            {
+                ProjectStatusSnapshot snapshot = cruiseProjectManager.RetrieveSnapshot();
+                return snapshot;
+            }
+            catch (NotImplementedException)
+            {
+                return new ProjectStatusSnapshot();
+            }
         }
         #endregion
 
@@ -372,8 +380,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         /// <returns></returns>
         public virtual PackageDetails[] RetrievePackageList()
         {
-            PackageDetails[] list = cruiseProjectManager.RetrievePackageList();
-            return list;
+            // TODO: Replace this try-catch block with a mechanism to detect whether the remote server allows this functionality
+            try
+            {
+                PackageDetails[] list = cruiseProjectManager.RetrievePackageList();
+                return list;
+            }
+            catch (NotImplementedException)
+            {
+                return new PackageDetails[0];
+            }
         }
         #endregion
 
@@ -392,7 +408,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
         public List<ParameterBase> ListBuildParameters()
         {
-            return cruiseProjectManager.ListBuildParameters();
+            // TODO: Replace this try-catch block with a mechanism to detect whether the remote server allows this functionality
+            try
+            {
+                return cruiseProjectManager.ListBuildParameters();
+            }
+            catch (NotImplementedException)
+            {
+                return new List<ParameterBase>();
+            }
         }
 	}
 

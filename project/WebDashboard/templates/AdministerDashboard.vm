@@ -142,6 +142,7 @@ label
             jQuery('#serverUri').attr({ 'value': '' });
             jQuery('#serverForceBuild').attr({ 'checked': true });
             jQuery('#serverStartStop').attr({ 'checked': true });
+            jQuery('#serverBackwardsCompatible').attr({ 'checked': false });
             jQuery('#deleteServer').addClass('hidden');
             serverDialog.dialog('open');
         });
@@ -169,6 +170,7 @@ label
             jQuery('#serverUri').attr({ 'value': jQuery(e.target).attr('url') });
             jQuery('#serverForceBuild').attr({ 'checked': jQuery(e.target).attr('force') == 'True' });
             jQuery('#serverStartStop').attr({ 'checked': jQuery(e.target).attr('start') == 'True' });
+            jQuery('#serverBackwardsCompatible').attr({ 'checked': jQuery(e.target).attr('backwards') == 'True' });
             jQuery('#deleteServer').removeClass('hidden');
             serverDialog.dialog('open');
         });
@@ -223,6 +225,14 @@ label
                     <td>
                         <input type="checkbox" id="serverStartStop" name="serverStartStop" />
                         <label for="serverStartStop">Allow Start/Stop Project</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="serverBackwardsCompatible" name="serverBackwardsCompatible" />
+                        <label for="serverBackwardsCompatible">Backwards Compatible</label>
                     </td>
                 </tr>
                 <tr>
@@ -343,11 +353,11 @@ label
                 <legend>Remote Servers</legend>
                 #foreach ($Server in $Servers)
                 #odd
-                <div class="oddRow" name="$Server.Name" url="$Server.Url" force="$Server.AllowForceBuild" start="$Server.AllowStartStopBuild">
+                <div class="oddRow" name="$Server.Name" url="$Server.Url" force="$Server.AllowForceBuild" start="$Server.AllowStartStopBuild" backwards="$Server.BackwardCompatible">
                     $Server.Name [$Server.Url]
                 </div>
                 #even
-                <div class="evenRow" name="$Server.Name" url="$Server.Url" force="$Server.AllowForceBuild" start="$Server.AllowStartStopBuild">
+                <div class="evenRow" name="$Server.Name" url="$Server.Url" force="$Server.AllowForceBuild" start="$Server.AllowStartStopBuild" backwards="$Server.BackwardCompatible">
                     $Server.Name [$Server.Url]
                 </div>
                 #end

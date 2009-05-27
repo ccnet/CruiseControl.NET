@@ -4,6 +4,7 @@ using System.Text;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
+using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -648,6 +649,79 @@ namespace ThoughtWorks.CruiseControl.Remote
             var response = connection.SendMessage("RetrieveFileTransfer", request);
             ValidateResponse(response);
             return (response as FileTransferResponse).FileTransfer;
+        }
+        #endregion
+
+        #region GetFreeDiskSpace()
+        /// <summary>
+        /// Retrieve the amount of free disk space.
+        /// </summary>
+        /// <returns></returns>
+        public override long GetFreeDiskSpace()
+        {
+            var request = GenerateServerRequest();
+            var response = connection.SendMessage("GetFreeDiskSpace", request);
+            ValidateResponse(response);
+            return Convert.ToInt64((response as DataResponse).Data);
+        }
+        #endregion
+
+        #region GetLinkedSiteId()
+        /// <summary>
+        /// Retrieve the identifer for this project on a linked site.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="siteName"></param>
+        /// <returns></returns>
+        public override string GetLinkedSiteId(string projectName, string siteName)
+        {
+            var request = new ProjectItemRequest(SessionToken, projectName);
+            request.ItemName = siteName;
+            var response = connection.SendMessage("GetLinkedSiteId", request);
+            ValidateResponse(response);
+            return (response as DataResponse).Data;
+        }
+        #endregion
+
+        #region ProcessMessage()
+        /// <summary>
+        /// Processes a message.
+        /// </summary>
+        /// <param name="action">The action to use.</param>
+        /// <param name="message">The request message in an XML format.</param>
+        /// <returns>The response message in an XML format.</returns>
+        public override string ProcessMessage(string action, string message)
+        {
+            Response response = new Response();
+
+            try
+            {
+                // Find the type of message
+                var messageXml = new XmlDocument();
+                messageXml.LoadXml(message);
+                var messageType = XmlConversionUtil.FindMessageType(messageXml.DocumentElement.Name);
+                if (messageType == null)
+                {
+                    response.Result = ResponseResult.Failure;
+                    response.ErrorMessages.Add(
+                        new ErrorMessage(
+                            string.Format(
+                                "Unable to translate message: '{0}' is unknown",
+                                messageXml.DocumentElement.Name)));
+                }
+
+                // Convert the message and invoke the action
+                var request = XmlConversionUtil.ConvertXmlToObject(messageType, message);
+                response = connection.SendMessage(action, request as ServerRequest);
+            }
+            catch (Exception error)
+            {
+                response.Result = ResponseResult.Failure;
+                response.ErrorMessages.Add(
+                    new ErrorMessage("Unable to process error: " + error.Message));
+            }
+
+            return response.ToString();
         }
         #endregion
         #endregion

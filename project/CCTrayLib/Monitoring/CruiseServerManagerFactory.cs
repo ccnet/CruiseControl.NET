@@ -5,11 +5,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
     public class CruiseServerManagerFactory : ICruiseServerManagerFactory
     {
-        private readonly ICruiseManagerFactory cruiseManagerFactory;
+        private ICruiseServerClientFactory clientFactory;
 
-        public CruiseServerManagerFactory(ICruiseManagerFactory cruiseManagerFactory)
+        public CruiseServerManagerFactory(ICruiseServerClientFactory clientFactory)
         {
-            this.cruiseManagerFactory = cruiseManagerFactory;
+            this.clientFactory = clientFactory;
         }
 
         public ICruiseServerManager Create(BuildServer buildServer)
@@ -36,10 +36,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             switch (server.ExtensionSettings)
             {
                 case "OLD":
-                    client = CruiseServerClientFactory.GenerateOldRemotingClient(server.Url);
+                    var settings = new ClientStartUpSettings
+                    {
+                        BackwardsCompatable = true
+                    };
+                    client = clientFactory.GenerateRemotingClient(server.Url, settings);
                     break;
                 default:
-                    client = CruiseServerClientFactory.GenerateRemotingClient(server.Url);
+                    client = clientFactory.GenerateRemotingClient(server.Url);
                     break;
             }
             return client;

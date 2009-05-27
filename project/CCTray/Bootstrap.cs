@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
         private static MainForm GetMainForm(string settingsFilename)
         {
-            ICruiseManagerFactory remoteCruiseManagerFactory = new RemoteCruiseManagerFactory();
+            var remoteCruiseManagerFactory = new CruiseServerClientFactory();
             ICruiseServerManagerFactory cruiseServerManagerFactory = new CruiseServerManagerFactory(remoteCruiseManagerFactory);
             ICruiseProjectManagerFactory cruiseProjectManagerFactory = new CruiseProjectManagerFactory(remoteCruiseManagerFactory);
             CCTrayMultiConfiguration configuration = new CCTrayMultiConfiguration(cruiseServerManagerFactory, cruiseProjectManagerFactory, settingsFilename);

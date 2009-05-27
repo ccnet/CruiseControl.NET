@@ -1,4 +1,4 @@
-using NMock;
+using Rhino.Mocks;
 using NUnit.Framework;
 using System;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
@@ -11,93 +11,98 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	[TestFixture]
 	public class CruiseServerManagerFactoryTest
 	{
+        private MockRepository mocks = new MockRepository();
+
 		[Test]
 		public void WhenRequestingACruiseServerManagerWithATCPUrlAsksTheCruiseManagerFactory()
 		{
-			DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof (ICruiseManagerFactory));
-			mockCruiseManagerFactory.Strict = true;
-			CruiseServerManagerFactory factory = new CruiseServerManagerFactory((ICruiseManagerFactory) mockCruiseManagerFactory.MockInstance);
+            var serverAddress = @"tcp://1.2.3.4";
+            var server = new BuildServer(serverAddress);
+            var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
+            var factory = new CruiseServerManagerFactory(mockCruiseManagerFactory);
+            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            Expect.Call(mockCruiseManagerFactory.GenerateRemotingClient(serverAddress))
+                .Return(client);
 
-			BuildServer server = new BuildServer(@"tcp://1.2.3.4");
-
-			ICruiseServerManager manager = factory.Create(server);
+            mocks.ReplayAll();
+            var manager = factory.Create(server);
 			Assert.AreEqual(server.Url, manager.Configuration.Url);
 			Assert.AreEqual(typeof (CachingCruiseServerManager), manager.GetType());
 
-			mockCruiseManagerFactory.Verify();
+            mocks.VerifyAll();
 		}
 
 		[Test]
 		public void WhenRequestingACruiseServerManagerWithAnHttpUrlConstructsANewHttpServerManagerDecoratedWithACachingServerManager()
 		{
-			DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof (ICruiseManagerFactory));
-			mockCruiseManagerFactory.Strict = true;
-			CruiseServerManagerFactory factory = new CruiseServerManagerFactory((ICruiseManagerFactory) mockCruiseManagerFactory.MockInstance);
+            var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
+            var factory = new CruiseServerManagerFactory(mockCruiseManagerFactory);
 
-			BuildServer server = new BuildServer("http://somethingOrOther");
+            var server = new BuildServer("http://somethingOrOther");
 
-			ICruiseServerManager manager = factory.Create(server);
+            mocks.ReplayAll();
+            var manager = factory.Create(server);
 			Assert.AreEqual(server.Url, manager.Configuration.Url);
 			Assert.AreEqual(typeof (CachingCruiseServerManager), manager.GetType());
 
-			mockCruiseManagerFactory.Verify();
+            mocks.VerifyAll();
 		}
 
         [Test]
         [ExpectedException(typeof(CruiseControlException), "Unable to find extension 'Extension.Unknown,Extension'")]
         public void WhenRequestingACruiseServerManagerWithAnExtensionProtocolCannotFindExtension()
         {
-            DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof(ICruiseManagerFactory));
-            mockCruiseManagerFactory.Strict = true;
-            CruiseServerManagerFactory factory = new CruiseServerManagerFactory((ICruiseManagerFactory)mockCruiseManagerFactory.MockInstance);
+            var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
+            var factory = new CruiseServerManagerFactory(mockCruiseManagerFactory);
 
-            BuildServer server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "Extension.Unknown,Extension", string.Empty);
+            var server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "Extension.Unknown,Extension", string.Empty);
 
-            ICruiseServerManager manager = factory.Create(server);
+            mocks.ReplayAll();
+            var manager = factory.Create(server);
         }
 
         [Test]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void WhenRequestingACruiseServerManagerWithAnExtensionProtocolEmptyExtension()
         {
-            DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof(ICruiseManagerFactory));
-            mockCruiseManagerFactory.Strict = true;
-            CruiseServerManagerFactory factory = new CruiseServerManagerFactory((ICruiseManagerFactory)mockCruiseManagerFactory.MockInstance);
+            var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
+            var factory = new CruiseServerManagerFactory(mockCruiseManagerFactory);
 
-            BuildServer server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "New Extension", string.Empty);
+            var server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "New Extension", string.Empty);
             server.ExtensionName = null;
 
-            ICruiseServerManager manager = factory.Create(server);
+            mocks.ReplayAll();
+            var manager = factory.Create(server);
         }
 
         [Test]
         [ExpectedException(typeof(CruiseControlException), "Extension 'CruiseServerManagerFactoryTest'does not implement ITransportExtension")]
         public void WhenRequestingACruiseServerManagerWithAnExtensionProtocolCannotInvalidExtension()
         {
-            DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof(ICruiseManagerFactory));
-            mockCruiseManagerFactory.Strict = true;
-            CruiseServerManagerFactory factory = new CruiseServerManagerFactory((ICruiseManagerFactory)mockCruiseManagerFactory.MockInstance);
+            var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
+            var factory = new CruiseServerManagerFactory(mockCruiseManagerFactory);
 
-            BuildServer server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.CruiseServerManagerFactoryTest,ThoughtWorks.CruiseControl.UnitTests", string.Empty);
+            var server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.CruiseServerManagerFactoryTest,ThoughtWorks.CruiseControl.UnitTests", string.Empty);
 
-            ICruiseServerManager manager = factory.Create(server);
+            mocks.ReplayAll();
+            var manager = factory.Create(server);
         }
 
         [Test]
         public void WhenRequestingACruiseServerManagerWithAnExtensionProtocolValidExtension()
         {
-            DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof(ICruiseManagerFactory));
-            mockCruiseManagerFactory.Strict = true;
-            CruiseServerManagerFactory factory = new CruiseServerManagerFactory((ICruiseManagerFactory)mockCruiseManagerFactory.MockInstance);
+            var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
+            var factory = new CruiseServerManagerFactory(mockCruiseManagerFactory);
 
-            BuildServer server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.ExtensionProtocolStub,ThoughtWorks.CruiseControl.UnitTests", "Some settings");
+            var server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.ExtensionProtocolStub,ThoughtWorks.CruiseControl.UnitTests", "Some settings");
 
-            ICruiseServerManager manager = factory.Create(server);
+            mocks.ReplayAll();
+            var manager = factory.Create(server);
             Assert.AreEqual(server.Url, manager.Configuration.Url);
             Assert.AreEqual(server.ExtensionName, "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.ExtensionProtocolStub,ThoughtWorks.CruiseControl.UnitTests");
             Assert.AreEqual(server.ExtensionSettings, "Some settings");
 
-            mockCruiseManagerFactory.Verify();
+            mocks.VerifyAll();
         }
 	}
 }

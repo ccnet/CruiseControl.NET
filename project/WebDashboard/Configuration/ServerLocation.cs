@@ -39,6 +39,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			get { return allowStartStopBuild; }
 			set { allowStartStopBuild = value; }	
 		}
+
+        [ReflectorProperty("backwardsCompatible", Required = false)]
+        public bool BackwardCompatible { get; set; }
 		
 		public string ServerName		
 		{

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using NMock;
+using Rhino.Mocks;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -12,85 +12,81 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	public class CruiseProjectManagerFactoryTest
 	{
 		private const string ProjectName = "projectName";
+        private MockRepository mocks = new MockRepository();
 
 		[Test]
 		public void WhenRequestingACruiseProjectManagerWithATcpUrlAsksTheCruiseManagerFactory()
 		{
-			DynamicMock webRetriever = new DynamicMock(typeof(IWebRetriever));
-			webRetriever.Strict = true;
+            var serverAddress = "tcp://somethingOrOther";
+			var webRetriever = mocks.StrictMock<IWebRetriever>();
+			var dashboardXmlParser = new DashboardXmlParser();
 
-			DashboardXmlParser dashboardXmlParser = new DashboardXmlParser();
+            var client = mocks.DynamicMock<CruiseServerClientBase>();
+			var clientFactory = mocks.StrictMock<ICruiseServerClientFactory>();
+            Expect.Call(clientFactory.GenerateRemotingClient(serverAddress))
+                .Return(client);
+            var factory = new CruiseProjectManagerFactory(clientFactory);
 
-			DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof(ICruiseManagerFactory));
-			mockCruiseManagerFactory.Strict = true;
-			CruiseProjectManagerFactory factory = new CruiseProjectManagerFactory((ICruiseManagerFactory) mockCruiseManagerFactory.MockInstance);
+			var server= new BuildServer(serverAddress);
 
-			BuildServer server= new BuildServer("tcp://somethingOrOther");
+			var serverManagers = new Dictionary<BuildServer, ICruiseServerManager>();
+			serverManagers[server] = new HttpCruiseServerManager(webRetriever, dashboardXmlParser, server);
+            mocks.ReplayAll();
 
-			IDictionary<BuildServer, ICruiseServerManager> serverManagers = new Dictionary<BuildServer, ICruiseServerManager>();
-			serverManagers[server] = new HttpCruiseServerManager((IWebRetriever) webRetriever.MockInstance, dashboardXmlParser, server);
-
-			ICruiseProjectManager manager = factory.Create(new CCTrayProject(server, ProjectName), serverManagers);
+			var manager = factory.Create(new CCTrayProject(server, ProjectName), serverManagers);
 			Assert.AreEqual(ProjectName, manager.ProjectName);
 
-			mockCruiseManagerFactory.Verify();
-			webRetriever.Verify();
+            mocks.VerifyAll();
 		}
 
 		[Test]
 		public void WhenRequestingACruiseProjectManagerWithAnHttpUrlConstructsANewDashboardCruiseProjectManager()
 		{
-			BuildServer server = new BuildServer("http://somethingOrOther");
-			
-			DynamicMock webRetriever = new DynamicMock(typeof(IWebRetriever));
-			webRetriever.Strict = true;
+			var server = new BuildServer("http://somethingOrOther");
+			var webRetriever = mocks.StrictMock<IWebRetriever>();
+            var dashboardXmlParser = new DashboardXmlParser();
 
-			DashboardXmlParser dashboardXmlParser = new DashboardXmlParser();
+            var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
+            var factory = new CruiseProjectManagerFactory(mockCruiseManagerFactory);
 
-			DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof(ICruiseManagerFactory));
-			mockCruiseManagerFactory.Strict = true;
-			CruiseProjectManagerFactory factory = new CruiseProjectManagerFactory((ICruiseManagerFactory) mockCruiseManagerFactory.MockInstance);
+			var serverManagers = new Dictionary<BuildServer, ICruiseServerManager>();
+			serverManagers[server] = new HttpCruiseServerManager(webRetriever, dashboardXmlParser, server);
 
-			IDictionary<BuildServer, ICruiseServerManager> serverManagers = new Dictionary<BuildServer, ICruiseServerManager>();
-			serverManagers[server] = new HttpCruiseServerManager((IWebRetriever) webRetriever.MockInstance, dashboardXmlParser, server);
-
-			ICruiseProjectManager manager = factory.Create(new CCTrayProject(server, ProjectName), serverManagers);
+            mocks.ReplayAll();
+			var manager = factory.Create(new CCTrayProject(server, ProjectName), serverManagers);
 			Assert.AreEqual(ProjectName, manager.ProjectName);
-			Assert.AreEqual(typeof (HttpCruiseProjectManager), manager.GetType());
+			Assert.AreEqual(typeof(HttpCruiseProjectManager), manager.GetType());
 
-			mockCruiseManagerFactory.Verify();
-			webRetriever.Verify();
+            mocks.VerifyAll();
 		}
 
         [Test]
         public void WhenRequestingACruiseProjectManagerWithAnExtensionProtocolValidExtension()
         {
-            BuildServer server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.ExtensionProtocolStub,ThoughtWorks.CruiseControl.UnitTests", "");
+            var server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.ExtensionProtocolStub,ThoughtWorks.CruiseControl.UnitTests", "");
+            var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
+            var factory = new CruiseProjectManagerFactory(mockCruiseManagerFactory);
+            var serverManagers = new Dictionary<BuildServer, ICruiseServerManager>();
 
-            DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof(ICruiseManagerFactory));
-            mockCruiseManagerFactory.Strict = true;
-            CruiseProjectManagerFactory factory = new CruiseProjectManagerFactory((ICruiseManagerFactory)mockCruiseManagerFactory.MockInstance);
-
-            IDictionary<BuildServer, ICruiseServerManager> serverManagers = new Dictionary<BuildServer, ICruiseServerManager>();
-            ICruiseProjectManager manager = factory.Create(new CCTrayProject(server, ProjectName), serverManagers);
+            mocks.ReplayAll();
+            var manager = factory.Create(new CCTrayProject(server, ProjectName), serverManagers);
             Assert.AreEqual(ProjectName, manager.ProjectName);
 
-            mockCruiseManagerFactory.Verify();
+            mocks.VerifyAll();
         }
 
         [Test]
         public void GetProjectListWithAnExtensionProtocolValidExtension()
         {
-            BuildServer server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.ExtensionProtocolStub,ThoughtWorks.CruiseControl.UnitTests", "");
+            var server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.ExtensionProtocolStub,ThoughtWorks.CruiseControl.UnitTests", "");
+            var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
+            var factory = new CruiseProjectManagerFactory(mockCruiseManagerFactory);
 
-            DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof(ICruiseManagerFactory));
-            mockCruiseManagerFactory.Strict = true;
-            CruiseProjectManagerFactory factory = new CruiseProjectManagerFactory((ICruiseManagerFactory)mockCruiseManagerFactory.MockInstance);
-
+            mocks.ReplayAll();
             CCTrayProject[] projectList = factory.GetProjectList(server);
             Assert.AreNotEqual(0, projectList.Length);
 
-            mockCruiseManagerFactory.Verify();
+            mocks.VerifyAll();
         }
 	}
 }

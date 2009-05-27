@@ -165,6 +165,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             string serverUri = request.GetText("serverUri");
             bool serverForceBuild = request.GetChecked("serverForceBuild");
             bool serverStartStop = request.GetChecked("serverStartStop");
+            bool backwardsCompatible = request.GetChecked("serverBackwardsCompatible");
 
             // Validate the details
             if (string.IsNullOrEmpty(newName))
@@ -217,6 +218,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             serverEl.SetAttribute("url", serverUri);
             serverEl.SetAttribute("allowForceBuild", serverForceBuild ? "true" : "false");
             serverEl.SetAttribute("allowStartStopBuild", serverStartStop ? "true" : "false");
+            serverEl.SetAttribute("backwardsCompatible", backwardsCompatible ? "true" : "false");
             SaveConfig(configFile);
             if (location != null)
             {
@@ -224,6 +226,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                 location.Url = serverUri;
                 location.AllowForceBuild = serverForceBuild;
                 location.AllowStartStopBuild = serverStartStop;
+                location.BackwardCompatible = backwardsCompatible;
             }
 
             velocityContext["Result"] = "Server has been saved";

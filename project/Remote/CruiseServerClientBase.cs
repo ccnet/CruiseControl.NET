@@ -473,6 +473,17 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Retrieves the current list of packages for a build within a project.
+        /// </summary>
+        /// <param name="projectName">The name of the project.</param>
+        /// <param name="buildLabel">The label of the build.</param>
+        /// <returns>The currently available packages.</returns>
+        public virtual List<PackageDetails> RetrievePackageList(string projectName, string buildLabel)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
         #region RetrieveFileTransfer()
@@ -483,6 +494,43 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="fileName">The name of the file.</param>
         /// <returns>The file transfer instance.</returns>
         public virtual IFileTransfer RetrieveFileTransfer(string projectName, string fileName)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region GetFreeDiskSpace()
+        /// <summary>
+        /// Retrieve the amount of free disk space.
+        /// </summary>
+        /// <returns></returns>
+        public virtual long GetFreeDiskSpace()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region GetLinkedSiteId()
+        /// <summary>
+        /// Retrieve the identifer for this project on a linked site.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="siteName"></param>
+        /// <returns></returns>
+        public virtual string GetLinkedSiteId(string projectName, string siteName)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region ProcessMessage()
+        /// <summary>
+        /// Processes a message.
+        /// </summary>
+        /// <param name="action">The action to use.</param>
+        /// <param name="message">The request message in an XML format.</param>
+        /// <returns>The response message in an XML format.</returns>
+        public virtual string ProcessMessage(string action, string message)
         {
             throw new NotImplementedException();
         }

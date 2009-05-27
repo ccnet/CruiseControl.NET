@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		public void Setup()
 		{
 			configurationMock = new DynamicMock(typeof (IRemoteServicesConfiguration));
-			cruiseManagerFactoryMock = new DynamicMock(typeof (ICruiseManagerFactory));
+            cruiseManagerFactoryMock = new DynamicMock(typeof(ICruiseServerClientFactory));
 			cruiseManagerMock = new DynamicMock(typeof (ICruiseServerClient));
 			serverSpecifier = new DefaultServerSpecifier("myserver");
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myproject");
@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 
 			managerWrapper = new ServerAggregatingCruiseManagerWrapper(
 				(IRemoteServicesConfiguration) configurationMock.MockInstance,
-				(ICruiseManagerFactory) cruiseManagerFactoryMock.MockInstance
+                (ICruiseServerClientFactory)cruiseManagerFactoryMock.MockInstance
 				);
 
 			serverLocation = new ServerLocation();
@@ -92,14 +92,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
             string buildName = "mylogformyserverformyproject";
             MockRepository mocks = new MockRepository();
             ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
-                delegate(ICruiseServerClient manager)
+                delegate(CruiseServerClientBase manager)
                 {
-                    DataResponse response = new DataResponse();
-                    response.Result = ResponseResult.Success;
-                    response.Data = buildName;
                     SetupResult.For(manager.GetLatestBuildName(null))
                         .IgnoreArguments()
-                        .Return(response);
+                        .Return(buildName);
                 });
             mocks.ReplayAll();
 
@@ -114,14 +111,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
             string buildLog = "content\r\nlogdata";
             MockRepository mocks = new MockRepository();
             ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
-                delegate(ICruiseServerClient manager)
+                delegate(CruiseServerClientBase manager)
                 {
-                    DataResponse response = new DataResponse();
-                    response.Result = ResponseResult.Success;
-                    response.Data = buildLog;
-                    SetupResult.For(manager.GetLog(null))
+                    SetupResult.For(manager.GetLog(null, null))
                         .IgnoreArguments()
-                        .Return(response);
+                        .Return(buildLog);
                 });
             mocks.ReplayAll();
             Assert.AreEqual(buildLog, serverWrapper.GetLog(new DefaultBuildSpecifier(projectSpecifier, "test"), null));
@@ -133,14 +127,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
             string[] buildNames = new string[] { "log1", "log2" };
             MockRepository mocks = new MockRepository();
             ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
-                delegate(ICruiseServerClient manager)
+                delegate(CruiseServerClientBase manager)
                 {
-                    DataListResponse response = new DataListResponse();
-                    response.Result = ResponseResult.Success;
-                    response.Data.AddRange(buildNames);
                     SetupResult.For(manager.GetBuildNames(null))
                         .IgnoreArguments()
-                        .Return(response);
+                        .Return(buildNames);
                 });
             mocks.ReplayAll();
             Assert.AreEqual(new DefaultBuildSpecifier(projectSpecifier, "log1"),
@@ -155,14 +146,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
             string artifactDirectory = @"c:\ArtifactDirectory";
             MockRepository mocks = new MockRepository();
             ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
-                delegate(ICruiseServerClient manager)
+                delegate(CruiseServerClientBase manager)
                 {
-                    DataResponse response = new DataResponse();
-                    response.Result = ResponseResult.Success;
-                    response.Data = artifactDirectory;
                     SetupResult.For(manager.GetArtifactDirectory(null))
                         .IgnoreArguments()
-                        .Return(response);
+                        .Return(artifactDirectory);
                 });
             mocks.ReplayAll();
             Assert.AreEqual(artifactDirectory, serverWrapper.GetArtifactDirectory(projectSpecifier, null));
@@ -174,14 +162,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
             string[] buildNames = new string[] { "log1", "log2" };
             MockRepository mocks = new MockRepository();
             ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
-                delegate(ICruiseServerClient manager)
+                delegate(CruiseServerClientBase manager)
                 {
-                    DataListResponse response = new DataListResponse();
-                    response.Result = ResponseResult.Success;
-                    response.Data.AddRange(buildNames);
-                    SetupResult.For(manager.GetMostRecentBuildNames(null))
+                    SetupResult.For(manager.GetMostRecentBuildNames(null, 2))
                         .IgnoreArguments()
-                        .Return(response);
+                        .Return(buildNames);
                 });
             mocks.ReplayAll();
             Assert.AreEqual(new DefaultBuildSpecifier(projectSpecifier, "log1"),
@@ -195,15 +180,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		{
 			string serializedProject = "myproject---";
             MockRepository mocks = new MockRepository();
-            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
-                delegate(ICruiseServerClient manager)
-                {
-                    Response response = new Response();
-                    response.Result = ResponseResult.Success;
-                    SetupResult.For(manager.AddProject(null))
-                        .IgnoreArguments()
-                        .Return(response);
-                });
+            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks, null);
             mocks.ReplayAll();
 
 			/// Execute
@@ -214,15 +191,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		public void DeletesProjectOnCorrectServer()
 		{
             MockRepository mocks = new MockRepository();
-            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
-                delegate(ICruiseServerClient manager)
-                {
-                    Response response = new Response();
-                    response.Result = ResponseResult.Success;
-                    SetupResult.For(manager.DeleteProject(null))
-                        .IgnoreArguments()
-                        .Return(response);
-                });
+            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks, null);
             mocks.ReplayAll();
 
 			// Execute
@@ -235,14 +204,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			string serializedProject = "a serialized project";
             MockRepository mocks = new MockRepository();
             ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
-                delegate(ICruiseServerClient manager)
+                delegate(CruiseServerClientBase manager)
                 {
-                    DataResponse response = new DataResponse();
-                    response.Result = ResponseResult.Success;
-                    response.Data = serializedProject;
                     SetupResult.For(manager.GetProject(null))
                         .IgnoreArguments()
-                        .Return(response);
+                        .Return(serializedProject);
                 });
             mocks.ReplayAll();
 
@@ -258,15 +224,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		{
 			string serializedProject = "myproject---";
             MockRepository mocks = new MockRepository();
-            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
-                delegate(ICruiseServerClient manager)
-                {
-                    Response response = new Response();
-                    response.Result = ResponseResult.Success;
-                    SetupResult.For(manager.UpdateProject(null))
-                        .IgnoreArguments()
-                        .Return(response);
-                });
+            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks, null);
             mocks.ReplayAll();
 
 			/// Execute
@@ -279,14 +237,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
             string serverLog = "a server log";
             MockRepository mocks = new MockRepository();
             ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
-                delegate(ICruiseServerClient manager)
+                delegate(CruiseServerClientBase manager)
                 {
-                    DataResponse response = new DataResponse();
-                    response.Result = ResponseResult.Success;
-                    response.Data = serverLog;
-                    SetupResult.For(manager.GetServerLog(null))
+                    SetupResult.For(manager.GetServerLog())
                         .IgnoreArguments()
-                        .Return(response);
+                        .Return(serverLog);
                 });
             mocks.ReplayAll();
             Assert.AreEqual(serverLog, serverWrapper.GetServerLog(serverSpecifier, null));
@@ -298,14 +253,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
             string serverLog = "a server log";
             MockRepository mocks = new MockRepository();
             ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
-                delegate(ICruiseServerClient manager)
+                delegate(CruiseServerClientBase manager)
                 {
-                    DataResponse response = new DataResponse();
-                    response.Result = ResponseResult.Success;
-                    response.Data = serverLog;
                     SetupResult.For(manager.GetServerLog(null))
                         .IgnoreArguments()
-                        .Return(response);
+                        .Return(serverLog);
                 });
             mocks.ReplayAll();
             Assert.AreEqual("a server log", serverWrapper.GetServerLog(projectSpecifier, null));
@@ -328,18 +280,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		[Test]
 		public void ForcesBuild()
 		{
-			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
+            var parameters = new Dictionary<string, string>();
+            MockRepository mocks = new MockRepository();
+            ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
+                delegate(CruiseServerClientBase manager)
+                {
+                    Expect.Call(() => {
+                        manager.ForceBuild(projectSpecifier.ProjectName, NameValuePair.FromDictionary(parameters));
+                    }).IgnoreArguments();
+                });
+            mocks.ReplayAll();
 
-			configurationMock.ExpectAndReturn("Servers", servers);
-            cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseServerClient", cruiseManagerMock.MockInstance, "http://myurl");
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            Response response = new Response();
-            response.Result = ResponseResult.Success;
-            cruiseManagerMock.SetupResult("ForceBuild", response, typeof(BuildIntegrationRequest));
-
-            managerWrapper.ForceBuild(projectSpecifier, null, parameters);
-
-			VerifyAll();
+            serverWrapper.ForceBuild(projectSpecifier, null, parameters);
 		}
 
 		[Test]
@@ -348,14 +300,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
             ExternalLink[] links = new ExternalLink[] { new ExternalLink("1", "2"), new ExternalLink("3", "4") };
             MockRepository mocks = new MockRepository();
             ServerAggregatingCruiseManagerWrapper serverWrapper = InitialiseServerWrapper(mocks,
-                delegate(ICruiseServerClient manager)
-		{
-                    ExternalLinksListResponse response = new ExternalLinksListResponse();
-                    response.Result = ResponseResult.Success;
-                    response.ExternalLinks.AddRange(links);
+                delegate(CruiseServerClientBase manager)
+                {
                     SetupResult.For(manager.GetExternalLinks(null))
                         .IgnoreArguments()
-                        .Return(response);
+                        .Return(links);
                 });
             mocks.ReplayAll();
 
@@ -363,16 +312,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		}
 
         private ServerAggregatingCruiseManagerWrapper InitialiseServerWrapper(MockRepository mocks,
-            Action<ICruiseServerClient> additionalSetup)
+            Action<CruiseServerClientBase> additionalSetup)
 		{
             IRemoteServicesConfiguration configuration = mocks.DynamicMock<IRemoteServicesConfiguration>();
-            ICruiseManagerFactory cruiseManagerFactory = mocks.DynamicMock<ICruiseManagerFactory>();
-            ICruiseServerClient cruiseManager = mocks.DynamicMock<ICruiseServerClient>();
+            ICruiseServerClientFactory cruiseManagerFactory = mocks.DynamicMock<ICruiseServerClientFactory>();
+            CruiseServerClientBase cruiseManager = mocks.DynamicMock<CruiseServerClientBase>();
 
             ServerLocation[] servers = new ServerLocation[] { serverLocation, otherServerLocation };
             SetupResult.For(configuration.Servers)
                 .Return(servers);
-            SetupResult.For(cruiseManagerFactory.GetCruiseServerClient("http://myurl"))
+            SetupResult.For(cruiseManagerFactory.GenerateClient("http://myurl"))
                 .Return(cruiseManager);
 
             ServerAggregatingCruiseManagerWrapper serverWrapper = new ServerAggregatingCruiseManagerWrapper(

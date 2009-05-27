@@ -1,6 +1,7 @@
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -12,7 +13,9 @@ namespace ThoughtWorks.CruiseControl.Remote
 	public class QueueSnapshot
 	{
 		private string queueName;
-        private List<QueuedRequestSnapshot> _requests;
+        private List<QueuedRequestSnapshot> queueRequests = new List<QueuedRequestSnapshot>();
+        // Required for 1.4.4 or earlier compatibility
+        private QueuedRequestSnapshotList _requests;
 
         /// <summary>
         /// Initialise a new blank <see cref="QueueSnapshot"/>.
@@ -28,7 +31,6 @@ namespace ThoughtWorks.CruiseControl.Remote
 		public QueueSnapshot(string queueName)
 		{
 			this.queueName = queueName;
-            _requests = new List<QueuedRequestSnapshot>();
 		}
 
         /// <summary>
@@ -47,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         [XmlElement("queueRequest")]
         public List<QueuedRequestSnapshot> Requests
 		{
-			get { return _requests; }
+			get { return queueRequests; }
 		}
 
         /// <summary>
@@ -56,7 +58,28 @@ namespace ThoughtWorks.CruiseControl.Remote
         [XmlIgnore]
         public bool IsEmpty
         {
-            get { return _requests.Count == 0; }
+            get { return queueRequests.Count == 0; }
         }
-	}
+
+        #region Private methods
+        #region DataReceived()
+        /// <summary>
+        /// Handle any old (pre-1.5.0) data.
+        /// </summary>
+        /// <param name="context"></param>
+        [OnDeserialized]
+        private void DataReceived(StreamingContext context)
+        {
+            if (_requests != null)
+            {
+                queueRequests = new List<QueuedRequestSnapshot>();
+                foreach (var queue in _requests)
+                {
+                    queueRequests.Add(queue as QueuedRequestSnapshot);
+                }
+            }
+        }
+        #endregion
+        #endregion
+    }
 }

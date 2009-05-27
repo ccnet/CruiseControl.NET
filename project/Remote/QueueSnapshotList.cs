@@ -6,52 +6,38 @@ namespace ThoughtWorks.CruiseControl.Remote
 	/// <summary>
 	/// An enumerable list of named integration queues as stored in the snapshot.
 	/// </summary>
+    /// <remarks>
+    /// This class is required for backwards compatibility with 1.4.4 or earlier versions.
+    /// </remarks>
 	[Serializable]
-	public class QueueSnapshotList : IEnumerable
-	{
-		private ArrayList queueSnapshots;
+	internal class QueueSnapshotList
+        : IEnumerable
+    {
+        #region Private fields
+        private ArrayList queueSnapshots;
+        #endregion
 
-		/// <summary>
+        #region Constructors
+        /// <summary>
 		/// Initializes a new instance of the <see cref="QueueSnapshotList"/> class.
 		/// </summary>
 		public QueueSnapshotList()
 		{
 			queueSnapshots = new ArrayList();
-		}
+        }
+        #endregion
 
-		public int Count
-		{
-			get { return queueSnapshots.Count; }
-		}
-
-		public void Add(QueueSnapshot queueSnapshot)
-		{ 
-			queueSnapshots.Add(queueSnapshot);
-		}
-
-		public QueueSnapshot this[int index]
-		{ 
-			get { return queueSnapshots[index] as QueueSnapshot; }
-		}
-
-		public QueueSnapshot this[string queueName]
-		{ 
-			get 
-			{
-				foreach (QueueSnapshot queueSnapshot in queueSnapshots)
-				{
-					if (queueSnapshot.QueueName == queueName)
-					{
-						return queueSnapshot;
-					}
-				}
-				return null; 
-			}
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
+        #region Public methods
+        #region GetEnumerator()
+        /// <summary>
+        /// Get the enumerator.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator GetEnumerator()
 		{
 			return queueSnapshots.GetEnumerator();
 		}
-	}
+        #endregion
+        #endregion
+    }
 }

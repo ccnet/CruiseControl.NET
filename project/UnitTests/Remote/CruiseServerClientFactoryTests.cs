@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         [Test]
         public void GenerateClientDetectsHttpClient()
         {
-            CruiseServerClient client = CruiseServerClientFactory.GenerateClient("http://somewhere") as CruiseServerClient;
+            CruiseServerClient client = new CruiseServerClientFactory().GenerateClient("http://somewhere") as CruiseServerClient;
             Assert.AreEqual("HTTP", client.Connection.Type);
             Assert.AreEqual("somewhere", client.Connection.ServerName);
         }
@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         [Test]
         public void GenerateClientDetectsRemotingClient()
         {
-            CruiseServerClient client = CruiseServerClientFactory.GenerateClient("tcp://somewhere") as CruiseServerClient;
+            CruiseServerClient client = new CruiseServerClientFactory().GenerateClient("tcp://somewhere") as CruiseServerClient;
             Assert.AreEqual(".NET Remoting", client.Connection.Type);
             Assert.AreEqual("somewhere", client.Connection.ServerName);
         }
@@ -36,13 +36,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         [ExpectedException(typeof(ApplicationException))]
         public void GenerateClientThrowsExceptionOnUnknown()
         {
-            CruiseServerClient client = CruiseServerClientFactory.GenerateClient("ftp://somewhere") as CruiseServerClient;
+            CruiseServerClient client = new CruiseServerClientFactory().GenerateClient("ftp://somewhere") as CruiseServerClient;
         }
 
         [Test]
         public void GenerateClientSetsTargetServer()
         {
-            CruiseServerClient client = CruiseServerClientFactory.GenerateClient("http://somewhere", "elsewhere") as CruiseServerClient;
+            CruiseServerClient client = new CruiseServerClientFactory().GenerateClient("http://somewhere", "elsewhere") as CruiseServerClient;
             Assert.AreEqual("HTTP", client.Connection.Type);
             Assert.AreEqual("somewhere", client.Connection.ServerName);
             Assert.AreEqual("elsewhere", client.TargetServer);
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         [Test]
         public void GenerateHttpClientGeneratesClient()
         {
-            CruiseServerClient client = CruiseServerClientFactory.GenerateHttpClient("http://somewhere") as CruiseServerClient;
+            CruiseServerClient client = new CruiseServerClientFactory().GenerateHttpClient("http://somewhere") as CruiseServerClient;
             Assert.AreEqual("HTTP", client.Connection.Type);
             Assert.AreEqual("somewhere", client.Connection.ServerName);
         }
@@ -61,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         [Test]
         public void GenerateHttpClientSetsTargetServer()
         {
-            CruiseServerClient client = CruiseServerClientFactory.GenerateHttpClient("http://somewhere", "elsewhere") as CruiseServerClient;
+            CruiseServerClient client = new CruiseServerClientFactory().GenerateHttpClient("http://somewhere", "elsewhere") as CruiseServerClient;
             Assert.AreEqual("HTTP", client.Connection.Type);
             Assert.AreEqual("somewhere", client.Connection.ServerName);
             Assert.AreEqual("elsewhere", client.TargetServer);
@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         [Test]
         public void GenerateRemotingClientGeneratesClient()
         {
-            CruiseServerClient client = CruiseServerClientFactory.GenerateRemotingClient("http://somewhere") as CruiseServerClient;
+            CruiseServerClient client = new CruiseServerClientFactory().GenerateRemotingClient("http://somewhere") as CruiseServerClient;
             Assert.AreEqual(".NET Remoting", client.Connection.Type);
             Assert.AreEqual("somewhere", client.Connection.ServerName);
         }
@@ -80,7 +80,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         [Test]
         public void GenerateRemotingClientSetsTargetServer()
         {
-            CruiseServerClient client = CruiseServerClientFactory.GenerateRemotingClient("http://somewhere", "elsewhere") as CruiseServerClient;
+            CruiseServerClient client = new CruiseServerClientFactory().GenerateRemotingClient("http://somewhere", "elsewhere") as CruiseServerClient;
             Assert.AreEqual(".NET Remoting", client.Connection.Type);
             Assert.AreEqual("somewhere", client.Connection.ServerName);
             Assert.AreEqual("elsewhere", client.TargetServer);

@@ -101,6 +101,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BuildCondition.cs" />
+    <Compile Include="ClientStartUpSettings.cs" />
     <Compile Include="CommunicationsAssemblyInfo.cs" />
     <Compile Include="CommunicationsException.cs" />
     <Compile Include="CruiseServerClient.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="ExternalLink.cs" />
     <Compile Include="HttpConnection.cs" />
     <Compile Include="ICruiseManager.cs" />
+    <Compile Include="ICruiseServerClientFactory.cs" />
     <Compile Include="IFileTransfer.cs" />
     <Compile Include="IMessageProcessor.cs" />
     <Compile Include="IntegrationRequest.cs" />
@@ -141,6 +143,7 @@
     <Compile Include="Messages\LoginRequest.cs" />
     <Compile Include="Messages\LoginResponse.cs" />
     <Compile Include="Messages\MessageRequest.cs" />
+    <Compile Include="Messages\ProjectItemRequest.cs" />
     <Compile Include="Messages\ProjectRequest.cs" />
     <Compile Include="Messages\ProjectStatusResponse.cs" />
     <Compile Include="Messages\ReadAuditRequest.cs" />
@@ -163,8 +166,10 @@
     <Compile Include="ProjectStatus.cs" />
     <Compile Include="ProjectStatusSnapshot.cs" />
     <Compile Include="QueuedRequestSnapshot.cs" />
+    <Compile Include="QueuedRequestSnapshotList.cs" />
     <Compile Include="QueueSetSnapshot.cs" />
     <Compile Include="QueueSnapshot.cs" />
+    <Compile Include="QueueSnapshotList.cs" />
     <Compile Include="RemotingConnection.cs" />
     <Compile Include="RemotingFileTransfer.cs" />
     <Compile Include="SecurityCheckDiagnostics.cs" />
