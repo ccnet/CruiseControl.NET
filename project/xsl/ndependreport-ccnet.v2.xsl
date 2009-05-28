@@ -1102,7 +1102,6 @@
           <xsl:when test="@Status='Warn' and Rows">
             <table border="1" cellpadding="3" cellspacing="0" bordercolor="white">
               <tr>
-                <td class="hdrcell_left">Name</td>
                 <xsl:for-each select="Columns/Column">
                   <td class="hdrcell_left">
                     <xsl:value-of select="." />
