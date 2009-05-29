@@ -731,6 +731,8 @@
     <Compile Include="sourcecontrol\VssLocale.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="sourcecontrol\Vsts.cs" />
+    <Compile Include="sourcecontrol\VstsHistoryParser.cs" />
     <Compile Include="sourcecontrol\WebSVNUrlBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
