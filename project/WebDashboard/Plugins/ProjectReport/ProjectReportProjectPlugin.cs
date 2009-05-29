@@ -71,8 +71,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             velocityContext["status"] = status;
             velocityContext["StartStopButtonName"] = (status.Status == ProjectIntegratorState.Running) ? "StopBuild" : "StartBuild"; 
             velocityContext["StartStopButtonValue"] = (status.Status == ProjectIntegratorState.Running) ? "Stop" : "Start";
-            velocityContext["ForceAbortBuildButtonName"] = (status.Activity != ProjectActivity.Building) ? "ForceBuild" : "AbortBuild";
-		    velocityContext["ForceAbortBuildButtonValue"] = (status.Activity != ProjectActivity.Building) ? "Force" : "Abort";
+            velocityContext["ForceAbortBuildButtonName"] = (status.Activity.IsSleeping() ? "ForceBuild" : "AbortBuild");
+		    velocityContext["ForceAbortBuildButtonValue"] = (status.Activity.IsSleeping() ? "Force" : "Abort");
             velocityContext["ParametersUrl"] = urlBuilder.BuildProjectUrl(ProjectParametersAction.ActionName, projectSpecifier);
 
             if (cruiseRequest.Request.ApplicationPath == "/")

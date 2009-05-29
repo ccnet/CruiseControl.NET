@@ -1,12 +1,9 @@
 ﻿#pragma warning disable 0618
 using System;
 using System.Collections.Generic;
-using System.Text;
-using ThoughtWorks.CruiseControl.Remote.Messages;
-using ThoughtWorks.CruiseControl.Remote.Security;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
 using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
+using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -370,152 +367,6 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             var response = manager.GetRSSFeed(projectName);
             return response;
-        }
-        #endregion
-
-        #region Login()
-        /// <summary>
-        /// Logs a user into the session and generates a session.
-        /// </summary>
-        /// <returns>True if the request is successful, false otherwise.</returns>
-        public override bool Login(List<NameValuePair> Credentials)
-        {
-            SessionToken = null;
-
-            foreach (var credential in Credentials)
-            {
-                if (string.Equals("username", credential.Name, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    SessionToken = credential.Value;
-                    break;
-                }
-            }
-
-            return IsLoggedIn;
-        }
-        #endregion
-
-        #region Logout()
-        /// <summary>
-        /// Logs a user out of the system and removes their session.
-        /// </summary>
-        public override void Logout()
-        {
-            if (SessionToken != null)
-            {
-                SessionToken = null;
-            }
-        }
-        #endregion
-
-        #region GetSecurityConfiguration()
-        /// <summary>
-        /// Retrieves the security configuration.
-        /// </summary>
-        public override string GetSecurityConfiguration()
-        {
-            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
-        }
-        #endregion
-
-        #region ListUsers()
-        /// <summary>
-        /// Lists all the users who have been defined in the system.
-        /// </summary>
-        /// <returns>
-        /// A list of <see cref="UserDetails"/> containing the details on all the users
-        /// who have been defined.
-        /// </returns>
-        public override List<UserDetails> ListUsers()
-        {
-            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
-        }
-        #endregion
-
-        #region DiagnoseSecurityPermissions()
-        /// <summary>
-        /// Checks the security permissions for a user against one or more projects.
-        /// </summary>
-        /// <returns>A set of diagnostics information.</returns>
-        public override List<SecurityCheckDiagnostics> DiagnoseSecurityPermissions(string userName, params string[] projects)
-        {
-            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
-        }
-        #endregion
-
-        #region ReadAuditRecords()
-        /// <summary>
-        /// Reads the specified number of audit events.
-        /// </summary>
-        /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
-        public override List<AuditRecord> ReadAuditRecords(int startRecord, int numberOfRecords)
-        {
-            return ReadAuditRecords(startRecord, numberOfRecords, null);
-        }
-
-        /// <summary>
-        /// Reads the specified number of filtered audit events.
-        /// </summary>
-        /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
-        public override List<AuditRecord> ReadAuditRecords(int startRecord, int numberOfRecords, AuditFilterBase filter)
-        {
-            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
-        }
-        #endregion
-
-        #region ListBuildParameters()
-        /// <summary>
-        /// Lists the build parameters for a project.
-        /// </summary>
-        /// <param name="projectName">The name of the project to retrieve the parameters for.</param>
-        /// <returns>The list of parameters (if any).</returns>
-        public override List<ParameterBase> ListBuildParameters(string projectName)
-        {
-            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
-        }
-        #endregion
-
-        #region ChangePassword()
-        /// <summary>
-        /// Changes the password of the user.
-        /// </summary>
-        public override void ChangePassword(string oldPassword, string newPassword)
-        {
-            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
-        }
-        #endregion
-
-        #region ResetPassword()
-        /// <summary>
-        /// Resets the password for a user.
-        /// </summary>
-        public override void ResetPassword(string userName, string newPassword)
-        {
-            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
-        }
-        #endregion
-
-        #region TakeStatusSnapshot()
-        /// <summary>
-        /// Takes a snapshot of the current project status.
-        /// </summary>
-        /// <param name="projectName">The name of the project.</param>
-        /// <returns>The current status snapshot.</returns>
-        public override ProjectStatusSnapshot TakeStatusSnapshot(string projectName)
-        {
-            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
-        }
-        #endregion
-
-        #region RetrievePackageList()
-        /// <summary>
-        /// Retrieves the current list of packages for a project.
-        /// </summary>
-        /// <param name="projectName">The name of the project.</param>
-        /// <returns>The currently available packages.</returns>
-        public override List<PackageDetails> RetrievePackageList(string projectName)
-        {
-            throw new NotImplementedException("This method is only supported on CruiseControl.NET version 1.5.0 or later");
         }
         #endregion
 

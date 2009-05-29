@@ -404,9 +404,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Retrieve a file transfer object.
         /// </summary>
-        /// <param name="project">The project to retrieve the file for.</param>
-        /// <param name="fileName">The name of the file.</param>
-        RemotingFileTransfer RetrieveFileTransfer(string project, string fileName);
+        FileTransferResponse RetrieveFileTransfer(FileTransferRequest request);
         #endregion
 
         #region RetrieveService()

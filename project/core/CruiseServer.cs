@@ -888,38 +888,48 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Retrieve a file transfer object.
         /// </summary>
-        /// <param name="project">The project to retrieve the file for.</param>
-        /// <param name="fileName">The name of the file.</param>
-        public virtual RemotingFileTransfer RetrieveFileTransfer(string project, string fileName)
+        public virtual FileTransferResponse RetrieveFileTransfer(FileTransferRequest request)
         {
-            // Validate that the path is valid
-            var sourceProject = GetIntegrator(project).Project;
-            var filePath = Path.Combine(sourceProject.ArtifactDirectory, fileName);
-            var fileInfo = new FileInfo(filePath);
-            if (!fileInfo.FullName.StartsWith(sourceProject.ArtifactDirectory, StringComparison.InvariantCultureIgnoreCase))
+            var response = new FileTransferResponse(request);
+            try
             {
-                var message = string.Format("Files can only be retrieved from the artefact folder - unable to retrieve {0}", fileName);
-                Log.Warning(message);
-                throw new CruiseControlException(message);
-            }
-            else if (fileInfo.FullName.StartsWith(Path.Combine(sourceProject.ArtifactDirectory, "buildlogs"), StringComparison.InvariantCultureIgnoreCase))
-            {
-                var message = string.Format("Unable to retrieve files from the build logs folder - unable to retrieve {0}", fileName);
-                Log.Warning(message);
-                throw new CruiseControlException(message);
-            }
+                // Validate that the path is valid
+                var sourceProject = GetIntegrator(request.ProjectName).Project;
+                var filePath = Path.Combine(sourceProject.ArtifactDirectory, request.FileName);
+                var fileInfo = new FileInfo(filePath);
+                if (!fileInfo.FullName.StartsWith(sourceProject.ArtifactDirectory, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var message = string.Format("Files can only be retrieved from the artefact folder - unable to retrieve {0}", request.FileName);
+                    Log.Warning(message);
+                    throw new CruiseControlException(message);
+                }
+                else if (fileInfo.FullName.StartsWith(Path.Combine(sourceProject.ArtifactDirectory, "buildlogs"), StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var message = string.Format("Unable to retrieve files from the build logs folder - unable to retrieve {0}", request.FileName);
+                    Log.Warning(message);
+                    throw new CruiseControlException(message);
+                }
 
-            RemotingFileTransfer fileTransfer = null;
-            if (fileInfo.Exists)
-            {
-                Log.Debug(string.Format("Retrieving file '{0}' from '{1}'", fileName, project));
-                fileTransfer = new RemotingFileTransfer(File.OpenRead(filePath));
+                RemotingFileTransfer fileTransfer = null;
+                if (fileInfo.Exists)
+                {
+                    Log.Debug(string.Format("Retrieving file '{0}' from '{1}'", request.FileName, request.ProjectName));
+                    fileTransfer = new RemotingFileTransfer(File.OpenRead(filePath));
+                }
+                else
+                {
+                    Log.Warning(string.Format("Unable to find file '{0}' in '{1}'", request.FileName, request.ProjectName));
+                }
+                response.FileTransfer = fileTransfer;
+                response.Result = ResponseResult.Success;
             }
-            else
+            catch (Exception error)
             {
-                Log.Warning(string.Format("Unable to find file '{0}' in '{1}'", fileName, project));
+                response.Result = ResponseResult.Failure;
+                response.ErrorMessages.Add(
+                    new ErrorMessage(error.Message));
             }
-            return fileTransfer;
+            return response;
         }
         #endregion
 

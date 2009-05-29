@@ -282,7 +282,12 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <param name="fileName">The name of the file.</param>
         public virtual RemotingFileTransfer RetrieveFileTransfer(string project, string fileName)
         {
-            return cruiseServer.RetrieveFileTransfer(project, fileName);
+            var request = new FileTransferRequest();
+            request.ProjectName = project;
+            request.FileName = fileName;
+            var response = cruiseServer.RetrieveFileTransfer(request);
+            ValidateResponse(response);
+            return response.FileTransfer as RemotingFileTransfer;
         }
 		#endregion
 

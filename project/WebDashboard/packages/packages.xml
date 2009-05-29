@@ -13,7 +13,7 @@
   <package name="MSBuild Results" description="Display the results of a MSBuild build." type="Plugin" file="MSBuild.zip" installed="no" />
   <package name="FxCop Results" description="Display the results of a FxCop build." type="Plugin" file="FxCop.zip" installed="no" />
   <package name="Fitnesse Results" description="Display the results of a Fitnesse report." type="Plugin" file="Fitnesse.zip" installed="no" />
-  <package name="NCover Results" description="Display the results of a NCover report." type="Plugin" file="NCover.zip" installed="no" />
+  <package name="NCover Results" description="Display the results of a NCover report." type="Plugin" file="NCover.zip" installed="yes" />
   <package name="Simian Results" description="Display the results of a Simian report." type="Plugin" file="Simian.zip" installed="no" />
   <package name="Gendarme Results" description="Display the results of a Gendarme report." type="Plugin" file="Gendarme.zip" installed="no" />
   <package name="Security Configuration Display" description="Display the security configuration a server." type="Plugin" file="SecurityConfig.zip" installed="no" />

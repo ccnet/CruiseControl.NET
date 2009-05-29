@@ -122,6 +122,7 @@
     </Compile>
     <Compile Include="ClientStartUpSettings.cs" />
     <Compile Include="CommunicationsException.cs" />
+    <Compile Include="CruiseServerHttpClient.cs" />
     <Compile Include="ICruiseServerClientFactory.cs" />
     <Compile Include="Messages\ProjectItemRequest.cs" />
     <Compile Include="NameValuePairListSerialiserFactory.cs" />

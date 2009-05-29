@@ -95,6 +95,7 @@
 		  <tr>
 		    <td colspan="2">
 		          <form methd="POST">
+		            <span>
     #if ($server.AllowForceBuild)
     #if($ForceAbortBuildButtonValue == "Force")
     <input type="button" name="$ForceAbortBuildButtonName" value="$ForceAbortBuildButtonValue" onclick="checkForParams(this, '$ParametersUrl')"/>
@@ -105,13 +106,23 @@
     #if ($server.AllowStartStopBuild)
     <input type="submit" name="$StartStopButtonName" value="$StartStopButtonValue"/>
     #end
+    </span>
   </form>
 
 		    </td>
 		  </tr>
 			#if ($StatusMessage.Length > 0)			 
 		  <tr>
-			<td colspan="2">$StatusMessage</td>
+			<td colspan="2">
+<div class="ui-widget">
+	<div class="ui-state-highlight ui-corner-all" style="padding: 0pt 0.7em; margin-top: 20px;">
+		<p>
+			<span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
+			$StatusMessage
+		</p>
+	</div>
+</div>			
+			</td>
 		  </tr>
 			#end
 		</table>

@@ -7,7 +7,8 @@ namespace ThoughtWorks.CruiseControl.Remote
     /// <summary>
     /// Factory class for building <see cref="CruiseServerClientBase"/> instances.
     /// </summary>
-    public class CruiseServerClientFactory : ThoughtWorks.CruiseControl.Remote.ICruiseServerClientFactory
+    public class CruiseServerClientFactory 
+        : ICruiseServerClientFactory
     {
         #region Public methods
         #region GenerateClient()
@@ -52,7 +53,8 @@ namespace ThoughtWorks.CruiseControl.Remote
                 switch (serverUri.Scheme.ToLower())
                 {
                     case "http":
-                        throw new NotImplementedException("HTTP is not backwards compatible (yet)");
+                        client = new CruiseServerHttpClient(address);
+                        break;
                     case "tcp":
                         client = new CruiseServerRemotingClient(address);
                         break;
@@ -104,8 +106,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
         public CruiseServerClientBase GenerateHttpClient(string address)
         {
-            var connection = new HttpConnection(address);
-            var client = new CruiseServerClient(connection);
+            var client = GenerateHttpClient(address, new ClientStartUpSettings());
             return client;
         }
 
@@ -118,7 +119,43 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
         public CruiseServerClientBase GenerateHttpClient(string address, string targetServer)
         {
-            var client = GenerateHttpClient(address);
+            var client = GenerateHttpClient(address, targetServer, new ClientStartUpSettings());
+            return client;
+        }
+
+        /// <summary>
+        /// Generates an instance of <see cref="CruiseServerClientBase"/> that connects via
+        /// HTTP.
+        /// </summary>
+        /// <param name="address">The address of the server.</param>
+        /// <param name="settings">The start-up settings to use.</param>
+        /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
+        public CruiseServerClientBase GenerateHttpClient(string address, ClientStartUpSettings settings)
+        {
+            CruiseServerClientBase client;
+            if (settings.BackwardsCompatable)
+            {
+                client = new CruiseServerHttpClient(address);
+            }
+            else
+            {
+                var connection = new HttpConnection(address);
+                client = new CruiseServerClient(connection);
+            }
+            return client;
+        }
+
+        /// <summary>
+        /// Generates an instance of <see cref="CruiseServerClientBase"/> that connects via
+        /// HTTP to another server.
+        /// </summary>
+        /// <param name="address">The address of the server.</param>
+        /// <param name="targetServer">The name of the other server.</param>
+        /// <param name="settings">The start-up settings to use.</param>
+        /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
+        public CruiseServerClientBase GenerateHttpClient(string address, string targetServer, ClientStartUpSettings settings)
+        {
+            var client = GenerateHttpClient(address, settings);
             client.TargetServer = targetServer;
             return client;
         }

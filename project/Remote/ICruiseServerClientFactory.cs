@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         CruiseServerClientBase GenerateClient(string address, string targetServer);
         #endregion
 
-        #region Public methods
+        #region GenerateHttpClient()
         /// <summary>
         /// Generates an instance of <see cref="CruiseServerClientBase"/> that connects via
         /// HTTP.
@@ -63,9 +63,28 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="address">The address of the server.</param>
         /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
         CruiseServerClientBase GenerateHttpClient(string address);
+
+        /// <summary>
+        /// Generates an instance of <see cref="CruiseServerClientBase"/> that connects via
+        /// HTTP.
+        /// </summary>
+        /// <param name="address">The address of the server.</param>
+        /// <param name="settings">The start-up settings to use.</param>
+        /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
+        CruiseServerClientBase GenerateHttpClient(string address, ClientStartUpSettings settings);
+
+        /// <summary>
+        /// Generates an instance of <see cref="CruiseServerClientBase"/> that connects via
+        /// HTTP to another server.
+        /// </summary>
+        /// <param name="address">The address of the server.</param>
+        /// <param name="targetServer">The name of the other server.</param>
+        /// <param name="settings">The start-up settings to use.</param>
+        /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
+        CruiseServerClientBase GenerateHttpClient(string address, string targetServer, ClientStartUpSettings settings);
         #endregion
 
-        #region Public methods
+        #region GenerateRemotingClient()
         /// <summary>
         /// Generates an instance of <see cref="CruiseServerClientBase"/> that connects via
         /// .NET Remoting.

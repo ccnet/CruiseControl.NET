@@ -790,21 +790,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         [ExpectedException(typeof(CruiseControlException))]
         public void RetrieveFileTransferOnlyWorksForFilesInArtefactFolder()
         {
-        	server.RetrieveFileTransfer("Project 1", Path.Combine("..", "testfile.txt"));
+        	server.CruiseManager.RetrieveFileTransfer("Project 1", Path.Combine("..", "testfile.txt"));
         }
 
         [Test]
         [ExpectedException(typeof(CruiseControlException))]
         public void RetrieveFileTransferFailsForBuildLogsFolder()
         {
-        	server.RetrieveFileTransfer("Project 1", Path.Combine("buildlogs", "testfile.txt"));
+            server.CruiseManager.RetrieveFileTransfer("Project 1", Path.Combine("buildlogs", "testfile.txt"));
         }
 
         [Test]
         [ExpectedException(typeof(CruiseControlException))]
         public void RetrieveFileTransferFailsForAbsolutePaths()
         {
-        	server.RetrieveFileTransfer("Project 1", Path.GetFullPath(Path.Combine(".", "MyFile.txt")));
+            server.CruiseManager.RetrieveFileTransfer("Project 1", Path.GetFullPath(Path.Combine(".", "MyFile.txt")));
         }
 
         [Test]
@@ -813,14 +813,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             var tempFile = Path.GetTempFileName();
             if (!File.Exists(tempFile)) File.WriteAllText(tempFile, "This is a test");
             project1.ConfiguredArtifactDirectory = Path.GetDirectoryName(tempFile);
-            var transfer = server.RetrieveFileTransfer("Project 1", Path.GetFileName(tempFile));
+            var transfer = server.CruiseManager.RetrieveFileTransfer("Project 1", Path.GetFileName(tempFile));
             Assert.IsNotNull(transfer);
         }
 
         [Test]
         public void RetrieveFileTransferGeneratesNullForInvalidFile()
         {
-            var transfer = server.RetrieveFileTransfer("Project 1", "GarbageFileNameThatShouldNotExist.NotHere");
+            var transfer = server.CruiseManager.RetrieveFileTransfer("Project 1", "GarbageFileNameThatShouldNotExist.NotHere");
             Assert.IsNull(transfer);
         }
 
