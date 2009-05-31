@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 1.4.4 Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 1.4.4 Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on May 31, 2009 by <font color="#0050B2">williams</font>.
+				    </div>
+
+				    <h2><a name="CCNet1.4.4ReleaseNotes-UpgradingtoCCNet1.4.4"></a>Upgrading to CCNet 1.4.4 </h2>
+
+<p>There are no breaking changes for people coming from 1.4.4 RC2, 1.4.4 RC1, or 1.4.3<br/>
+List of changes after 1.4.4 RC2</p>
+
+<h4><a name="CCNet1.4.4ReleaseNotes-Bug"></a>Bug</h4>
+
+<ul>
+	<li>CCNET\-1497 &#45; CC .NET fails periodically with working copy locked.</li>
+	<li>CCNET\-1512 &#45; wrong setting in ccnet.exe.config for log4net settings</li>
+	<li>CCNET\-1525 &#45; ModificationHistory.xsl contains incorrect XPath for modification URL</li>
+	<li>CCNET\-1530 &#45; NDepend 2.12.1 results transformation broken</li>
+</ul>
+
+
+<h4><a name="CCNet1.4.4ReleaseNotes-Improvement"></a>Improvement</h4>
+
+<ul>
+	<li>CCNET\-1470 &#45; improve release process</li>
+	<li>CCNET\-1471 &#45; improve docs on release</li>
+</ul>
+
+
+<h4><a name="CCNet1.4.4ReleaseNotes-NewFeature"></a>New Feature</h4>
+
+<ul>
+	<li>CCNET\-1483 &#45; Implement a BuildPublisher Cleanup Task</li>
+</ul>
+
+
+
+<h2><a name="CCNet1.4.4ReleaseNotes-HighlightsoftheCCNet1.4.4FinalRelease"></a>Highlights of the CCNet 1.4.4 Final Release</h2>
+
+<h4><a name="CCNet1.4.4ReleaseNotes-Dashboardadministration"></a>Dashboard administration</h4>
+
+<p>A new plugin has been added to simplify the maintenance of the dashboard. <a href="Dashboard Administration Plugin.html" title="Dashboard Administration Plugin">Dashboard Administration Plugin</a> contains<br/>
+all the details on this new plugin.</p>
+
+<p><b>Note:</b> This plugin is not enabled by default, it will need to be manually configured in dashboard.config.</p>
+
+<h4><a name="CCNet1.4.4ReleaseNotes-StatisticsinFireFox3"></a>Statistics in FireFox 3</h4>
+
+<p>These graphs have now been fixed and work like they do in FireFox 2 or IE.</p>
+
+<h4><a name="CCNet1.4.4ReleaseNotes-GendarmeandNDepend"></a>Gendarme and NDepend</h4>
+
+<p>These tools can now be used directly from CruiseControl.NET. Tasks have been added to call these external tools and integrate the results.</p>
+
+<h4><a name="CCNet1.4.4ReleaseNotes-Hotswapping"></a>Hot swapping</h4>
+
+<p>Hot swapping has been enabled for both the console and the service. This allows the DLLs (but not the EXEs) to be updated while the application is running.</p>
+
+<h4><a name="CCNet1.4.4ReleaseNotes-Validator"></a>Validator</h4>
+
+<p>As well as miscellaneous fixes and improvements, the validator will now be installed as part of the standard server install. Additionally a stand-alone installer has been added to allow the validator to be installed on non-server machines.</p>
+
+<h4><a name="CCNet1.4.4ReleaseNotes-MorecontrolonSourceControlExceptions"></a>More control on Source Control Exceptions</h4>
+
+<p>You have now more control on the behaviour when the source control has problems getting the modifications. Loot at <a href="Project Configuration Block.html" title="Project Configuration Block">Project configuration</a> for the following settings : maxSourceControlRetries, stopProjectOnReachingMaxSourceControlRetries and sourceControlErrorHandling.</p>
+
+<h4><a name="CCNet1.4.4ReleaseNotes-SVNsourcecontrolhasarevertandcleanoption"></a>SVN source control has a revert and clean option</h4>
+<p>This allows to remove locks of the working folder, so no manual intervention is needed for this. </p>
+
+<h4><a name="CCNet1.4.4ReleaseNotes-Thebuildpublisherhasitsowncleaning"></a>The build publisher has its own cleaning</h4>
+<p>You can now set a clean behaviour on the build publisher, this should help to keep disk space usage under control.</p>
+
+
+<h2><a name="CCNet1.4.4ReleaseNotes-Totallistofchangesforthe1.4.4FinalRelease"></a>Total list of changes for the 1.4.4 Final Release </h2>
+
+<h4><a name="CCNet1.4.4ReleaseNotes-Bug"></a>Bug</h4>
+<ul>
+	<li>CCNET\-1057 - WebDashboard broken on Mono 1.2.6</li>
+	<li>CCNET\-1181 - Statistics reports do not appear in Firefox V3.0</li>
+	<li>CCNET\-1384 - Index out of range sporadically in Integraion Queues</li>
+	<li>CCNET\-1396 - When viewing a large build log in dashboard, the bottom part is black.</li>
+	<li>CCNET\-1415 - Installer does not correctly install the validator.</li>
+	<li>CCNET\-1422 - lastchange labeler is wrong when prefix is in the form of 1.2</li>
+	<li>CCNET\-1430 - Fix file names in ResxFileRefs of CCTrayLib</li>
+	<li>CCNET\-1431 - Fix references to .cs files in UnitTests.csproj</li>
+	<li>CCNET\-1433 - Project name must be unique per buildserver</li>
+	<li>CCNET\-1435 - &lt;issueUrlBuilder&gt; - object reference not set</li>
+	<li>CCNET\-1440 - ThoughtWorks.CruiseControl.Remote.Message cannot be serialized because it does not have a parameterless constructor.</li>
+	<li>CCNET\-1443 - Latest installation package of Cruise control.Net 1.4.3 Build 4090</li>
+	<li>CCNET\-1447 - Unable to successfully stop CCNet Service</li>
+	<li>CCNET\-1448 - latest updates to improve exception logging, break the latest revision labeller</li>
+	<li>CCNET\-1449 - integration queues seems to allow building the same project on the same time</li>
+	<li>CCNET\-1450 - NullReferenceException in Artifact Cleanup Publisher</li>
+	<li>CCNET\-1451 - specifying IntervalTrigger as intervalTrigger (wrong casing) results in an error description that does not offer much help on identifying the problem</li>
+	<li>CCNET\-1452 - Starting CCNet Service using build CCNet 1.4.3.4112</li>
+	<li>CCNET\-1454 - email publisher may reside in tasks section (although not advised)</li>
+	<li>CCNET\-1456 - CC .Net hangs with 'svn log' command under MONO</li>
+	<li>CCNET\-1473 - preprocessor broken</li>
+	<li>CCNET\-1485 - Could not load dashboard from version 1.4.4 Build 36 onwards</li>
+	<li>CCNET\-1487 - CCTray 1.4.4 RC1 can't connect to CCNET 1.4.4 RC1</li>
+	<li>CCNET\-1490 - workDirectory containing spaces and/or trailing backslash?</li>
+	<li>CCNET\-1495 - Documentation link not working</li>
+	<li>CCNET\-1497 - CC .NET fails periodically with working copy locked.</li>
+	<li>CCNET\-1512 - wrong setting in ccnet.exe.config for log4net settings</li>
+	<li>CCNET\-1525 - ModificationHistory.xsl contains incorrect XPath for modification URL</li>
+	<li>CCNET\-1530 - NDepend 2.12.1 results transformation broken</li>
+	<li>CCNET\-457 - Strip trailing slash from project working directory</li>
+	<li>CCNET\-626 - Build does not fail if SVN fails with it needs an svn cleanup</li>
+	<li>CCNET\-689 - FxCop values are reported wrong in statistics page</li>
+	<li>CCNET\-845 - FxCop summary fails to expand Target elements in javascript</li>
+	<li>CCNET\-935 - FxCop Statistics - no warnings populated</li>
+</ul>
+
+
+<h4><a name="CCNet1.4.4ReleaseNotes-Improvement"></a>Improvement</h4>
+<ul>
+	<li>CCNET\-1032 - cctray should foresee option for passing it's credentials via http to the dashboard</li>
+	<li>CCNET\-1234 - Additional extension points</li>
+	<li>CCNET\-1324 - "exec" task should allow use of built-in shell commands</li>
+	<li>CCNET\-1356 - The svn lock is not properly detected</li>
+	<li>CCNET\-1375 - $categoryList variable in ProjectGrid.vm template</li>
+	<li>CCNET\-1398 - the project name and label should be eliminated of all characters that are invalid for folders and files</li>
+	<li>CCNET\-1402 - schedule trigger must have a setting for adding a random time after the set time</li>
+	<li>CCNET\-1405 - add properties to the date labeller, so the formatting of the individual elements can be set</li>
+	<li>CCNET\-1407 - svn : when no trunkurl is filled and autogetsource is true (default) null reference exception</li>
+	<li>CCNET\-1409 - Service/console "hot swapping" : like asp.net beiing able to copy new dll's over the running program</li>
+	<li>CCNET\-1412 - RSS Feed Improvements</li>
+	<li>CCNET\-1417 - Perforce - Silent Failure</li>
+	<li>CCNET\-1421 - foresee a 'force update of local files' property in svn source control block</li>
+	<li>CCNET\-1432 - Date labeller must expose formatting of the elements</li>
+	<li>CCNET\-1437 - foresee a randomoffset in the schedule trigger to lessen the strain on a server at the specified time</li>
+	<li>CCNET\-1439 - Patch for path handling in ConfigPreprocessorTests running on Linux</li>
+	<li>CCNET\-1441 - finetune source control error handling (improvement on ccnet 748)</li>
+	<li>CCNET\-1444 - Custom plugings should still be loaded when the config file is not located in the server folder</li>
+	<li>CCNET\-1453 - set the project name check for invalid chars to a warning iso removing invalid chars</li>
+	<li>CCNET\-1461 - add the next build time in the webdashboard</li>
+	<li>CCNET\-1462 - update pre-processor so that a POSSIBLE bug in mono is solved</li>
+	<li>CCNET\-1470 - improve release process</li>
+	<li>CCNET\-1471 - improve docs on release</li>
+	<li>CCNET\-1474 - Improve release process : clearing the doc folder</li>
+	<li>CCNET\-1475 - Improve release Process:  update the product versions of the nsi files</li>
+	<li>CCNET\-1476 - Improve release Process:  automatically set year in assembly info task</li>
+	<li>CCNET\-1488 - Can't copy error message from cctray ("Connecting to Buildserver"-Form) due to missing "Strg + C" support and ability to select any text</li>
+	<li>CCNET\-1489 - Can't copy error message from cctray ("Connecting to Buildserver"-Form) because of missing ability to scroll text</li>
+	<li>CCNET\-1492 - Remove ColoredConsoleAppender from ccnet.exe.config in zip distribution</li>
+	<li>CCNET\-1498 - Clean up published builds</li>
+	<li>CCNET\-1507 - Update documentation for Build Publisher and fix case of cleanupMethod</li>
+	<li>CCNET\-847 - If a Subversion working copy is locked, CC.NET should attempt to unlock it and try again before failing the build.</li>
+	<li>CCNET\-943 - Image's not showing in MbUnit XSL</li>
+</ul>
+
+
+<h4><a name="CCNet1.4.4ReleaseNotes-NewFeature"></a>New Feature</h4>
+<ul>
+	<li>CCNET\-1401 - Implement a task for Mono's Gendarme</li>
+	<li>CCNET\-1410 - ZIP Package Publisher</li>
+	<li>CCNET\-1424 - Assembly Version Labeller</li>
+	<li>CCNET\-1425 - Move "exception" state back out of "change" state</li>
+	<li>CCNET\-1428 - Add an NDepend task</li>
+	<li>CCNET\-1436 - Web Dashboard Administration Plugin</li>
+	<li>CCNET\-1483 - Implement a BuildPublisher Cleanup Task</li>
+	<li>CCNET\-366 - Subversion specific labeller for using Subversion revision number</li>
+	<li>CCNET\-370 - Add Force Build button to Project Report page</li>
+</ul>
+
+
+<h4><a name="CCNet1.4.4ReleaseNotes-Task"></a>Task</h4>
+<ul>
+	<li>CCNET\-1413 - Convert the Projects and Solution to use Visual Studio 2008 Formats</li>
+	<li>CCNET\-1414 - Add Gendarme Analysis to the Build</li>
+</ul>
+
+
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 31, 2009 21:17</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

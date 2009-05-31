@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 08, 2009 by <font color="#0050B2">williams</font>.
+					    This page last changed on May 20, 2009 by <font color="#0050B2">williams</font>.
 				    </div>
 
 				    <p>This is the CruiseControl.NET <em>Frequently Asked Questions</em> (FAQ)</p>
@@ -34,6 +34,20 @@
 <h4><a name="FAQ-WhenIruntheinstallers%2CMcAfeeVirusScan8.0ispoppingupadialogreportingproblemswith%27nsScm.dll%27."></a><em>When I run the installers, McAfee VirusScan 8.0 is popping up a dialog reporting problems with 'nsScm.dll'.</em></h4>
 
 <p>The 'nsScm.dll' is a library supplied by the <a href="http://nsis.sourceforge.net/Service_Control_Manager_plugin_(install_services_and_drivers_on_NT/2K/XP)">NullSoft installer for installing services</a>. There is no virus in this dll. The easiest way to proceed with the installation is to uncheck the "Install CCService" checkbox and install <a href="The Server Service Application.html" title="The Server Service Application">CCService manually</a> once the installer has completed.</p>
+
+<h2><a name="FAQ-ConnectionIssues"></a>Connection Issues</h2>
+
+
+<h4><a name="FAQ-CCtraycannotconnecttothebuildserverusingremoting"></a>CCtray can not connect to the buildserver using remoting</h4>
+
+<ul>
+	<li>First check that the used port is correct, standard it is 21234. If you never changed this, or it's the first time you see this number, this setting will probably be correct.<br/>
+You can find the value in the exe.config files (CCNet.exe.config, CCService.exe.config) in the system.runtime.remoting/application/channels part.</li>
+	<li>Next, check the firewall on the server. You can do this by running the following command in a prompt : <b>netsh firewall show portopening</b><br/>
+If you get an empty list, no firewall is on, if you see a list, check that there is a line containing the correct port : standard it is 21234<br/>
+To open the port, run the following command : <b>netsh firewall add portopening TCP 21234 CCNET</b></li>
+</ul>
+
 
 <h2><a name="FAQ-Resultfiles"></a>Result files</h2>
 
@@ -145,12 +159,10 @@ Previous versions can reduce some duplication in the configuration with the use 
 <p>You may be running the CCNet Service under the <tt>SYSTEM</tt> account, or some different account other than your own. Many environment variables under MS Windows are set on a per-user basis, which means that the <tt>SYSTEM</tt> account won't have the same variables as you. Depending on the circumstances, you might want to move those environment variable definitions to be system-wide. Another alternative is to run the service under your account, or create a separate <tt>build</tt> account for use by CC.Net. Finally, some tasks such as NAnt can explictly create environment variables for themselves (but these won't be passed on to other CruiseControl.Net tasks).</p>
 <div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
 <p>It turns out the path (and all environment variables) are read only once, at system start-up. So if the path is changed while the system is running the services will not detect any changes to it (at least in Win2003 see <a href="http://support.microsoft.com/kb/887693">http://support.microsoft.com/kb/887693</a>).</p></td></tr></table></div>
-
 <div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
 <p>Sometimes you may get errors even if you do not use the system account. For example : if you use 'DevEnv.exe' via the exec task, you <b><em>CAN</em></b> get '<em>the application data folder for visual studio could not be created</em>'.<br/>
 It is always advisable to not use IDE's on a build server. The above problem is easily solved by using msbuild. just point to to the sln file.<br/>
-so iso of&nbsp;&nbsp;&nbsp;&nbsp; <b><em>devenv c:\source\myFunkyStuff.sln</em></b>&nbsp;&nbsp;&nbsp; use&nbsp;&nbsp;&nbsp; <b><em>msbuild c:\source\myFunkyStuff.sln</em></b></p>
-</td></tr></table></div>
+so iso of&nbsp;&nbsp;&nbsp;&nbsp; <b><em>devenv c:\source\myFunkyStuff.sln</em></b>&nbsp;&nbsp;&nbsp; use&nbsp;&nbsp;&nbsp; <b><em>msbuild c:\source\myFunkyStuff.sln</em></b></p></td></tr></table></div>
 
 <h4><a name="FAQ-MybuildisfailingandI%27mnotsurewhy"></a><em>My build is failing and I'm not sure why</em></h4>
 
@@ -306,7 +318,7 @@ Executing task X</p>
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on May 10, 2009 21:25</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 31, 2009 21:17</font></td>
 		    </tr>
 	    </table>
     </body>
