@@ -5,6 +5,7 @@ using Exortech.NetReflector;
 using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Config;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -13,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// </summary>
     [ReflectorType("parallel")]
     public class ParallelTask
-        : TaskBase, ITask
+        : TaskBase, ITask, IConfigurationValidation
     {
         #region Public properties
         #region Tasks
@@ -119,6 +120,39 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
 
             logger.Info("Parallel task completed: {0} successful, {1} failed", successCount, failureCount);
+        }
+        #endregion
+
+        #region Validate()
+        /// <summary>
+        /// Validates this task.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="parent"></param>
+        /// <param name="errorProcesser"></param>
+        public void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
+        {
+            var project = parent as Project;
+
+            if (project != null)
+            {
+                // Check if this task is set in the publishers section
+                var isPublisher = false;
+                foreach (var publisher in project.Publishers)
+                {
+                    if (object.ReferenceEquals(publisher, this))
+                    {
+                        isPublisher = true;
+                        break;
+                    }
+                }
+
+                // Display a warning
+                if (isPublisher)
+                {
+                    errorProcesser.ProcessWarning("Putting the parallel task in the publishers section may cause unpredictable results");
+                }
+            }
         }
         #endregion
         #endregion
