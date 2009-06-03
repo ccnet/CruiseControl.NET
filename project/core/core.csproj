@@ -804,6 +804,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="tasks\ParallelTask.cs" />
+    <Compile Include="tasks\PowerShellTask.cs" />
     <Compile Include="tasks\ProcessTaskResult.cs">
       <SubType>Code</SubType>
     </Compile>
