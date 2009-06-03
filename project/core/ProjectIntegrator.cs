@@ -103,6 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		
 		public void Request(IntegrationRequest request)
 		{
+            if (State == ProjectIntegratorState.Stopping) throw new CruiseControlException("Project is stopping - unable to start integration");
 			AddToQueue(request);
 			Start();
 		}
@@ -320,13 +321,18 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		public void WaitForExit()
-		{
-			if (thread != null && thread.IsAlive)
-			{
-				thread.Join();
-			}
-		}
+        public void WaitForExit()
+        {
+            if (thread != null && thread.IsAlive)
+            {
+                if (State != ProjectIntegratorState.Stopping)
+                {
+                    Log.Info(string.Format("WaitForExit requested for non stopping project '{0}' - stopping project", Name));
+                    Stop();
+                }
+                thread.Join();
+            }
+        }
 
 		/// <summary>
 		/// Ensure that the integrator's thread is aborted when this object is disposed.
