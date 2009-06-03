@@ -10,6 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         private string _buildInformation = string.Empty;
         private DateTime _lastTimeQueried;
         private const Int32 buildStageCheckIntervalInSeconds = 5;
+        private static object lockObject = new object();
 
         public BuildProgressInformation(string artifactDirectory, string projectName)
         {
@@ -29,24 +30,27 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// Signals the start of a new task, so initialise all needed actions for monitoring this tasks progress
         /// </summary>
         /// <param name="information"></param>
-        public void SignalStartRunTask(string information)
+        public virtual void SignalStartRunTask(string information)
         {
-            RemoveListenerFile();
+            lock (lockObject)
+            {
+                RemoveListenerFile();
 
-            System.Text.StringBuilder ListenData = new StringBuilder();
+                System.Text.StringBuilder ListenData = new StringBuilder();
 
-            ListenData.AppendLine("<data>");
-            ListenData.AppendLine(string.Format("<Item Time=\"{0}\" Data=\"{1}\" />",
-                                    System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                                    CleanUpMessageForXMLLogging(information)));
-            ListenData.AppendLine("</data>");
+                ListenData.AppendLine("<data>");
+                ListenData.AppendLine(string.Format("<Item Time=\"{0}\" Data=\"{1}\" />",
+                                        System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                                        CleanUpMessageForXMLLogging(information)));
+                ListenData.AppendLine("</data>");
 
-            this._buildInformation = ListenData.ToString();
+                this._buildInformation = ListenData.ToString();
 
-            this._lastTimeQueried = DateTime.Now.AddYears(-10);
+                this._lastTimeQueried = DateTime.Now.AddYears(-10);
+            }
         }
 
-        public string GetBuildProgressInformation()
+        public virtual string GetBuildProgressInformation()
         {
             if (DateTime.Now.AddSeconds(-buildStageCheckIntervalInSeconds) <= this._lastTimeQueried)
                 return this._buildInformation;

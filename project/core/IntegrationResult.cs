@@ -470,6 +470,67 @@ namespace ThoughtWorks.CruiseControl.Core
             return Result;
         }
 
+        #region Clone()
+        /// <summary>
+        /// Clones this integration result.
+        /// </summary>
+        /// <returns>Returns a clone of the result.</returns>
+        public virtual IIntegrationResult Clone()
+        {
+            var clone = new IntegrationResult(projectName, workingDirectory, artifactDirectory, request, lastIntegration);
+            clone.projectUrl = projectUrl;
+            clone.buildLogDirectory = buildLogDirectory;
+            clone.parameters = new List<NameValuePair>(parameters);
+            clone.label = label;
+            clone.modifications = (Modification[])modifications.Clone();
+            return clone;
+        }
+        #endregion
 
+        #region Merge()
+        /// <summary>
+        /// Merges another result.
+        /// </summary>
+        /// <param name="value">The result to merge.</param>
+        public virtual void Merge(IIntegrationResult value)
+        {
+            // Apply some rules to the status merging - basically apply a hierachy of status codes
+            if ((value.Status == IntegrationStatus.Exception) || (this.status == IntegrationStatus.Unknown))
+            {
+                this.status = value.Status;
+            }
+            else if (((value.Status == IntegrationStatus.Failure) ||
+                (value.Status == IntegrationStatus.Cancelled)) &&
+                (this.status != IntegrationStatus.Exception))
+            {
+                this.status = value.Status;
+            }
+
+            // Merge the exceptions
+            if (value.ExceptionResult != null)
+            {
+                if (this.exception != null)
+                {
+                    var mutliple = this.exception as MultipleIntegrationFailureException;
+                    if (mutliple == null)
+                    {
+                        mutliple = new MultipleIntegrationFailureException(this.exception);
+                        this.exception = mutliple;
+                    }
+                    mutliple.AddFailure(value.ExceptionResult);
+                }
+                else
+                {
+                    this.exception = value.ExceptionResult;
+                }
+            }
+
+            // Merge the results
+            foreach (ITaskResult result in value.TaskResults)
+            {
+                AddTaskResult(result);
+            }
+        }
+        #endregion
     }
 }

@@ -332,6 +332,7 @@
     <Compile Include="Log\ServerLogFileReader.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MultipleIntegrationFailureException.cs" />
     <Compile Include="NetReflectorProjectSerializer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -802,6 +803,7 @@
     <Compile Include="tasks\NUnitTask.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tasks\ParallelTask.cs" />
     <Compile Include="tasks\ProcessTaskResult.cs">
       <SubType>Code</SubType>
     </Compile>

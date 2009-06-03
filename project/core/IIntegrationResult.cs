@@ -65,8 +65,23 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </remarks>
         Exception SourceControlError { get; set; }
 
-
 		IDictionary IntegrationProperties { get; }
         Util.BuildProgressInformation BuildProgressInformation { get; }
-	}
+
+        #region Clone()
+        /// <summary>
+        /// Clones this integration result.
+        /// </summary>
+        /// <returns>Returns a clone of the result.</returns>
+        IIntegrationResult Clone();
+        #endregion
+
+        #region Merge()
+        /// <summary>
+        /// Merges another result.
+        /// </summary>
+        /// <param name="value">The result to merge.</param>
+        void Merge(IIntegrationResult value);
+        #endregion
+    }
 }
