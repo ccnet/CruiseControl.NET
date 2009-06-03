@@ -11,7 +11,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
     [TestFixture]
-    public class ParallelTaskTests
+    public class SequentialTaskTests
     {
         private MockRepository mocks = new MockRepository();
 
@@ -20,19 +20,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         public void ExecuteRunsMultipleSuccessfulTasks()
         {
             // Initialise the task
-            var subTasks = new List<ParallelTestTask>();
+            var subTasks = new List<SequentialTestTask>();
             for (var loop = 1; loop <= 5; loop++)
             {
-                subTasks.Add(new ParallelTestTask { TaskNumber = loop, Result = IntegrationStatus.Success });
+                subTasks.Add(new SequentialTestTask { TaskNumber = loop, Result = IntegrationStatus.Success });
             }
-            var task = new ParallelTask
+            var task = new SequentialTask
             {
                 Tasks = subTasks.ToArray()
             };
 
             // Setup the mocks
             var logger = mocks.DynamicMock<ILogger>();
-            var result = GenerateResultMock();
+            var result = GenerateResultMock(5);
             mocks.ReplayAll();
 
             // Run the actual task
@@ -44,22 +44,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         }
 
         [Test]
-        public void ExecuteRunsSuccessAndFailureTasks()
+        public void ExecuteStopsOnFirstFailure()
         {
             // Initialise the task
-            var subTasks = new List<ParallelTestTask>();
+            var subTasks = new List<SequentialTestTask>();
             for (var loop = 1; loop <= 5; loop++)
             {
-                subTasks.Add(new ParallelTestTask { TaskNumber = loop, Result = loop >= 3 ? IntegrationStatus.Failure : IntegrationStatus.Success });
+                subTasks.Add(new SequentialTestTask { TaskNumber = loop, Result = loop > 3 ? IntegrationStatus.Failure : IntegrationStatus.Success });
             }
-            var task = new ParallelTask
+            var task = new SequentialTask
             {
                 Tasks = subTasks.ToArray()
             };
 
             // Setup the mocks
             var logger = mocks.DynamicMock<ILogger>();
-            var result = GenerateResultMock();
+            var result = GenerateResultMock(4);
             mocks.ReplayAll();
 
             // Run the actual task
@@ -70,25 +70,52 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Assert.AreEqual(IntegrationStatus.Failure, result.Status, "Status does not match");
         }
 
-        private IIntegrationResult GenerateResultMock()
+        [Test]
+        public void ExecuteIgnoresFailures()
+        {
+            // Initialise the task
+            var subTasks = new List<SequentialTestTask>();
+            for (var loop = 1; loop <= 5; loop++)
+            {
+                subTasks.Add(new SequentialTestTask { TaskNumber = loop, Result = loop > 3 ? IntegrationStatus.Failure : IntegrationStatus.Success });
+            }
+            var task = new SequentialTask
+            {
+                Tasks = subTasks.ToArray(),
+                ContinueOnFailure = true
+            };
+
+            // Setup the mocks
+            var logger = mocks.DynamicMock<ILogger>();
+            var result = GenerateResultMock(5);
+            mocks.ReplayAll();
+
+            // Run the actual task
+            task.Run(result);
+
+            // Verify the results
+            mocks.VerifyAll();
+            Assert.AreEqual(IntegrationStatus.Failure, result.Status, "Status does not match");
+        }
+
+        private IIntegrationResult GenerateResultMock(int runCount)
         {
             var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
             var result = mocks.StrictMock<IIntegrationResult>();
             SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
-            SetupResult.For(result.ProjectName).Return("Project name");
-            for (var loop = 1; loop <= 5; loop++)
+            for (var loop = 1; loop <= runCount; loop++)
             {
                 Expect.Call(() => { result.AddTaskResult(string.Format("Task #{0} has run", loop)); });
             }
             Expect.Call(result.Status).PropertyBehavior();
-            Expect.Call(result.Clone()).Return(result).Repeat.Times(5);
-            Expect.Call(() => { result.Merge(result); }).Repeat.Times(5);
+            Expect.Call(result.Clone()).Return(result).Repeat.Times(runCount);
+            Expect.Call(() => { result.Merge(result); }).Repeat.Times(runCount);
             return result;
         }
         #endregion
 
         #region Private classes
-        private class ParallelTestTask
+        private class SequentialTestTask
             : ITask
         {
             public IntegrationStatus Result { get; set; }

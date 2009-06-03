@@ -51,7 +51,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             // Initialise the task
             var logger = Logger ?? new DefaultLogger();
             var numberOfTasks = Tasks.Length;
-            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Running NCover profile");
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) 
+                ? Description 
+                : string.Format("Running parallel tasks ({0} task(s))", numberOfTasks));
             logger.Info("Starting parallel task with {0} sub-task(s)", numberOfTasks);
 
             // Initialise the arrays
@@ -59,19 +61,22 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             var results = new IIntegrationResult[numberOfTasks];
 
             // Launch each task using the ThreadPool
+            var countLock = new object();
+            var successCount = 0;
+            var failureCount = 0;
             for (var loop = 0; loop < numberOfTasks; loop++)
             {
                 events[loop] = new ManualResetEvent(false);
                 results[loop] = result.Clone();
                 ThreadPool.QueueUserWorkItem((state) =>
                 {
-                    // Generate some task information and logging
                     var taskNumber = (int)state;
                     var taskName = string.Format("{0} [{1}]", Tasks[taskNumber].GetType().Name, taskNumber);
-                    Thread.CurrentThread.Name = string.Format("{0} [Parallel-{1}]", result.ProjectName, taskNumber);
-                    logger.Debug("Starting task '{0}'", taskName);
                     try
                     {
+                        Thread.CurrentThread.Name = string.Format("{0} [Parallel-{1}]", result.ProjectName, taskNumber);
+                        logger.Debug("Starting task '{0}'", taskName);
+
                         // Start the actual task
                         Tasks[taskNumber].Run(results[taskNumber]);
                     }
@@ -81,6 +86,19 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                         results[taskNumber].ExceptionResult = error;
                         results[taskNumber].Status = IntegrationStatus.Exception;
                         logger.Warning("Task '{0}' failed!", taskName);
+                    }
+
+                    // Record the results
+                    lock (countLock)
+                    {
+                        if (results[taskNumber].Status == IntegrationStatus.Success)
+                        {
+                            successCount++;
+                        }
+                        else
+                        {
+                            failureCount++;
+                        }
                     }
 
                     // Tell everyone the task is done
@@ -99,6 +117,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             {
                 result.Merge(taskResult);
             }
+
+            logger.Info("Parallel task completed: {0} successful, {1} failed", successCount, failureCount);
         }
         #endregion
         #endregion
