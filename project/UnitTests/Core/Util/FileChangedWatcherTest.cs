@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		private void UpdateFile(string text)
 		{
 			TempFileUtil.CreateTempXmlFile("FileChangedWatcherTest", "foo.xml", text);
-			Assert.IsTrue(monitor.WaitOne(5000, false));
+			Assert.IsTrue(monitor.WaitOne(10000, false));
 			monitor.Reset();
 		}
 

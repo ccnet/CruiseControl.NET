@@ -360,6 +360,7 @@
     <Compile Include="Remote\CommunicationsExceptionTests.cs" />
     <Compile Include="Remote\CruiseServerClientFactoryTests.cs" />
     <Compile Include="Remote\CruiseServerClientTests.cs" />
+    <Compile Include="Remote\CruiseServerHttpClientTests.cs" />
     <Compile Include="Remote\ExtensionConfigurationTests.cs" />
     <Compile Include="Core\Queues\IntegrationQueueManagerFactoryTests.cs" />
     <Compile Include="Core\Security\ActiveDirectoryAuthenticationTests.cs" />

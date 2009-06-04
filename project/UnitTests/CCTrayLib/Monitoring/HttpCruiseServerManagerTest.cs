@@ -1,5 +1,5 @@
 using System;
-using NMock;
+using Rhino.Mocks;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -12,21 +12,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	{
 		private const string SERVER_URL = @"http://localhost/ccnet/XmlServerReport.aspx";
 
-		private DynamicMock mockWebRetriever;
-		private DynamicMock mockDashboardXmlParser;
+        private MockRepository mocks = new MockRepository();
+        private CruiseServerClientBase serverClient;
         private BuildServer buildServer;
         private HttpCruiseServerManager manager;
 
 		[SetUp]
 		public void SetUp()
 		{
-			mockWebRetriever = new DynamicMock(typeof (IWebRetriever));
-			mockWebRetriever.Strict = true;
-			mockDashboardXmlParser = new DynamicMock(typeof(IDashboardXmlParser));
-			IDashboardXmlParser dashboardXmlParser = (IDashboardXmlParser) mockDashboardXmlParser.MockInstance;
+            serverClient = mocks.DynamicMock<CruiseServerClientBase>();
 
 			buildServer = new BuildServer(SERVER_URL);
-			manager = new HttpCruiseServerManager((IWebRetriever)mockWebRetriever.MockInstance, dashboardXmlParser, buildServer);
+            manager = new HttpCruiseServerManager(serverClient, buildServer);
 		}
 
 		[Test]
@@ -41,16 +38,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void RetrieveSnapshotFromManager()
 		{
 			CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
-			const string xmlContent = "<CruiseControl />";
 
-			mockWebRetriever.ExpectAndReturn("Get", xmlContent, new Uri(SERVER_URL));
-			mockDashboardXmlParser.ExpectAndReturn("ExtractAsCruiseServerSnapshot", snapshot, xmlContent);
+            Expect.Call(serverClient.GetCruiseServerSnapshot()).Return(snapshot);
+            mocks.ReplayAll();
 			CruiseServerSnapshot actual = manager.GetCruiseServerSnapshot();
 			
 			Assert.AreSame(snapshot, actual);
-
-			mockWebRetriever.Verify();
-			mockDashboardXmlParser.Verify();
 		}
 
         [Test]

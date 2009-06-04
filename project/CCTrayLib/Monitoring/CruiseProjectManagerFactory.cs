@@ -36,31 +36,37 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             switch (server.Transport)
             {
                 case BuildServerTransport.Remoting:
-                    CruiseServerClientBase client = GenerateRemotingClient(server);
-                    return new RemotingProjectListRetriever(client).GetProjectList(server);
+                    {
+                        var client = GenerateRemotingClient(server);
+                        return new RemotingProjectListRetriever(client).GetProjectList(server);
+                    }
                 case BuildServerTransport.Extension:
                     return new ExtensionTransportProjectListRetriever(server.ExtensionName).GetProjectList(server);
                 default:
-                    return new HttpProjectListRetriever(new WebRetriever(), new DashboardXmlParser()).GetProjectList(server);
+                    {
+                        var client = GenerateHttpClient(server);
+                        return new HttpProjectListRetriever(client).GetProjectList(server);
+                    }
             }
         }
 
         private CruiseServerClientBase GenerateRemotingClient(BuildServer server)
         {
-            CruiseServerClientBase client;
-            switch (server.ExtensionSettings)
+            var settings = new ClientStartUpSettings
             {
-                case "OLD":
-                    var settings = new ClientStartUpSettings
-                    {
-                        BackwardsCompatable = true
-                    };
-                    client = clientFactory.GenerateRemotingClient(server.Url, settings);
-                    break;
-                default:
-                    client = clientFactory.GenerateRemotingClient(server.Url);
-                    break;
-            }
+                BackwardsCompatable = (server.ExtensionSettings == "OLD")
+            };
+            var client = clientFactory.GenerateRemotingClient(server.Url, settings);
+            return client;
+        }
+
+        private CruiseServerClientBase GenerateHttpClient(BuildServer server)
+        {
+            var settings = new ClientStartUpSettings
+            {
+                BackwardsCompatable = (server.ExtensionSettings == "OLD")
+            };
+            var client = clientFactory.GenerateHttpClient(server.Url, settings);
             return client;
         }
     }

@@ -42,6 +42,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private ComboBox cmbExtension;
         private Label label6;
         private Label lblExtensionSettings;
+        private CheckBox connectToOldDashboard;
         private ITransportExtension transportExtension;
 
 		public AddBuildServer(ICruiseProjectManagerFactory cruiseProjectManagerFactory)
@@ -106,6 +107,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.btnConfigureExtension = new System.Windows.Forms.Button();
             this.cmbExtension = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.connectToOldDashboard = new System.Windows.Forms.CheckBox();
             this.dashboardPanel.SuspendLayout();
             this.remotingPanel.SuspendLayout();
             this.nonCcnetPanel.SuspendLayout();
@@ -197,6 +199,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // dashboardPanel
             // 
             this.dashboardPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dashboardPanel.Controls.Add(this.connectToOldDashboard);
             this.dashboardPanel.Controls.Add(this.txtDashboard);
             this.dashboardPanel.Controls.Add(this.label2);
             this.dashboardPanel.Location = new System.Drawing.Point(17, 151);
@@ -366,6 +369,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.label6.Text = "This will use an extension module to connect to the build server. This requires t" +
                 "he extension be installed in the bin folder for CCTray.";
             // 
+            // connectToOldDashboard
+            // 
+            this.connectToOldDashboard.AutoSize = true;
+            this.connectToOldDashboard.Location = new System.Drawing.Point(10, 65);
+            this.connectToOldDashboard.Name = "connectToOldDashboard";
+            this.connectToOldDashboard.Size = new System.Drawing.Size(155, 17);
+            this.connectToOldDashboard.TabIndex = 13;
+            this.connectToOldDashboard.Text = "Connect to pre-1.5.0 server";
+            this.connectToOldDashboard.UseVisualStyleBackColor = true;
+            // 
             // AddBuildServer
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -378,10 +391,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.Controls.Add(this.rdoRemoting);
             this.Controls.Add(this.rdoDashboard);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.remotingPanel);
             this.Controls.Add(this.dashboardPanel);
             this.Controls.Add(this.extensionPanel);
             this.Controls.Add(this.nonCcnetPanel);
+            this.Controls.Add(this.remotingPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AddBuildServer";
@@ -484,12 +497,22 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			if (rdoHttp.Checked)
 			{
-				return new BuildServer(txtHttp.Text);
+				var server = new BuildServer(txtHttp.Text);
+                server.ExtensionSettings = "OLD";
+                return server;
 			}
 
             if (rdoDashboard.Checked)
 			{
-                return new BuildServer(new WebDashboardUrl(txtDashboard.Text).XmlServerReport);
+                var baseUri = txtDashboard.Text;
+                if (baseUri.EndsWith("XmlStatusReport.aspx", StringComparison.CurrentCultureIgnoreCase) ||
+                    baseUri.EndsWith("XmlServerReport.aspx", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    baseUri = baseUri.Substring(0, baseUri.Length - 20);
+                }
+                var server = new BuildServer(baseUri);
+                server.ExtensionSettings = connectToOldDashboard.Checked ? "OLD" : "NEW";
+                return server;
 			}
 
             if (rdoExtension.Checked)

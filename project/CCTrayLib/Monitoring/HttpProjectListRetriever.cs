@@ -1,30 +1,29 @@
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
 	public class HttpProjectListRetriever
 	{
-		private readonly IWebRetriever webRetriever;
-		private readonly IDashboardXmlParser dashboardXmlParser;
+        private readonly CruiseServerClientBase manager;
 
-		public HttpProjectListRetriever(IWebRetriever webRetriever, IDashboardXmlParser dashboardXmlParser)
+        public HttpProjectListRetriever(CruiseServerClientBase manager)
 		{
-			this.webRetriever = webRetriever;
-			this.dashboardXmlParser = dashboardXmlParser;
-		}
+            this.manager = manager;
+        }
 
 		public CCTrayProject[] GetProjectList(BuildServer server)
 		{
-			string xml = webRetriever.Get(server.Uri);
-			string[] projectNames = dashboardXmlParser.ExtractProjectNames(xml);
+            ProjectStatus[] statuses = manager.GetProjectStatus();
+            CCTrayProject[] projects = new CCTrayProject[statuses.Length];
 
-			CCTrayProject[] projects = new CCTrayProject[projectNames.Length];
-			for (int i = 0; i < projectNames.Length; i++)
-			{
-				projects[i] = new CCTrayProject(server, projectNames[i]);
-			}
-			
-			return projects;
-		}
+            for (int i = 0; i < statuses.Length; i++)
+            {
+                ProjectStatus status = statuses[i];
+                projects[i] = new CCTrayProject(server, status.Name);
+            }
+
+            return projects;
+        }
 	}
 }

@@ -9,18 +9,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
 	public class HttpCruiseServerManager : ICruiseServerManager
 	{
-		private readonly IWebRetriever webRetriever;
-		private readonly IDashboardXmlParser dashboardXmlParser;
-		private readonly BuildServer configuration;
+        private readonly CruiseServerClientBase manager;
+        private readonly BuildServer configuration;
 		private readonly string displayName;
         private string sessionToken;
 
-		public HttpCruiseServerManager(IWebRetriever webRetriever, IDashboardXmlParser dashboardXmlParser, 
+        public HttpCruiseServerManager(CruiseServerClientBase manager, 
 			BuildServer buildServer)
 		{
-			this.webRetriever = webRetriever;
-			this.dashboardXmlParser = dashboardXmlParser;
-			this.configuration = buildServer;
+            this.manager = manager;
+            this.configuration = buildServer;
 			displayName = GetDisplayNameFromUri(buildServer.Uri);
 		}
 
@@ -49,8 +47,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		/// </summary>
         public CruiseServerSnapshot GetCruiseServerSnapshot()
 		{
-			string xml = webRetriever.Get(configuration.Uri);
-			return dashboardXmlParser.ExtractAsCruiseServerSnapshot(xml);
+            var snapshot = manager.GetCruiseServerSnapshot();
+			return snapshot;
 		}
 
 		private static string GetDisplayNameFromUri(Uri uri)
@@ -74,12 +72,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
                 IAuthenticationMode authentication = ExtensionHelpers.RetrieveAuthenticationMode(configuration.SecurityType);
                 authentication.Settings = configuration.SecuritySettings;
 
-                LoginRequest request = authentication.GenerateCredentials();
-                XmlElement result = SendSecurityAction("login",
-                    new NameValuePair("credentials", request.ToString()));
-                if (string.Equals(result.GetAttribute("result"), "success", StringComparison.InvariantCultureIgnoreCase))
+                var request = authentication.GenerateCredentials();
+                if (manager.Login(request.Credentials))
                 {
-                    sessionToken = result.SelectSingleNode("session").InnerText;
+                    sessionToken = manager.SessionToken;
+                }
+                else
+                {
+                    sessionToken = null;
                 }
 
                 return (sessionToken != null);
@@ -94,32 +94,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         {
             if (sessionToken != null)
             {
-                SendSecurityAction("logout", new NameValuePair("sessionToken", sessionToken));
+                manager.Logout();
                 sessionToken = null;
             }
-        }
-
-        private XmlElement SendSecurityAction(string action, params NameValuePair[] values)
-        {
-            Uri securityUri = InitConnection();
-            NameValueCollection input = new NameValueCollection();
-            input.Add("action", action);
-            input.Add("server", "local");
-            foreach (NameValuePair namedValue in values)
-            {
-                input.Add(namedValue.Name, namedValue.Value);
-            }
-            string result = webRetriever.Post(securityUri, input);
-
-            XmlDocument resultXml = new XmlDocument();
-            resultXml.LoadXml(result);
-            return resultXml.DocumentElement;
-        }
-
-        private Uri InitConnection()
-        {
-            string serverAlias = "local";
-            return new Uri(new WebDashboardUrl(configuration.Url, serverAlias).Security);
         }
 	}
 }

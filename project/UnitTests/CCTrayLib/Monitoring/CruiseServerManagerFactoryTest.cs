@@ -5,6 +5,7 @@ using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
+using Rhino.Mocks.Constraints;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 {
@@ -21,7 +22,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
             var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
             var factory = new CruiseServerManagerFactory(mockCruiseManagerFactory);
             var client = mocks.DynamicMock<CruiseServerClientBase>();
-            Expect.Call(mockCruiseManagerFactory.GenerateRemotingClient(serverAddress))
+            Expect.Call(mockCruiseManagerFactory.GenerateRemotingClient(serverAddress, new ClientStartUpSettings()))
+                .Constraints(new Equal(serverAddress), new Anything())
                 .Return(client);
 
             mocks.ReplayAll();
@@ -38,7 +40,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
             var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
             var factory = new CruiseServerManagerFactory(mockCruiseManagerFactory);
 
-            var server = new BuildServer("http://somethingOrOther");
+            var serverAddress = "http://somethingOrOther";
+            var server = new BuildServer(serverAddress);
+            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            Expect.Call(mockCruiseManagerFactory.GenerateHttpClient(serverAddress, new ClientStartUpSettings()))
+                .Constraints(new Equal(serverAddress), new Anything())
+                .Return(client);
 
             mocks.ReplayAll();
             var manager = factory.Create(server);

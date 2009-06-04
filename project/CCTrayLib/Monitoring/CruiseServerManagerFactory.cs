@@ -17,35 +17,41 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             switch (buildServer.Transport)
             {
                 case BuildServerTransport.Remoting:
-                    var manager = GenerateRemotingClient(buildServer);
-                    return new CachingCruiseServerManager(new RemotingCruiseServerManager(manager, buildServer));
+                    {
+                        var manager = GenerateRemotingClient(buildServer);
+                        return new CachingCruiseServerManager(new RemotingCruiseServerManager(manager, buildServer));
+                    }
                 case BuildServerTransport.Extension:
                     ITransportExtension extensionInstance = ExtensionHelpers.RetrieveExtension(buildServer.ExtensionName);
                     extensionInstance.Settings = buildServer.ExtensionSettings;
                     extensionInstance.Configuration = buildServer;
                     return extensionInstance.RetrieveServerManager();
                 default:
-                    return new CachingCruiseServerManager(
-                        new HttpCruiseServerManager(new WebRetriever(), new DashboardXmlParser(), buildServer));
+                    {
+                        var manager = GenerateHttpClient(buildServer);
+                        return new CachingCruiseServerManager(
+                            new HttpCruiseServerManager(manager, buildServer));
+                    }
             }
         }
 
         private CruiseServerClientBase GenerateRemotingClient(BuildServer server)
         {
-            CruiseServerClientBase client;
-            switch (server.ExtensionSettings)
+            var settings = new ClientStartUpSettings
             {
-                case "OLD":
-                    var settings = new ClientStartUpSettings
-                    {
-                        BackwardsCompatable = true
-                    };
-                    client = clientFactory.GenerateRemotingClient(server.Url, settings);
-                    break;
-                default:
-                    client = clientFactory.GenerateRemotingClient(server.Url);
-                    break;
-            }
+                BackwardsCompatable = (server.ExtensionSettings == "OLD")
+            };
+            var client = clientFactory.GenerateRemotingClient(server.Url, settings);
+            return client;
+        }
+
+        private CruiseServerClientBase GenerateHttpClient(BuildServer server)
+        {
+            var settings = new ClientStartUpSettings
+            {
+                BackwardsCompatable = (server.ExtensionSettings == "OLD")
+            };
+            var client = clientFactory.GenerateHttpClient(server.Url, settings);
             return client;
         }
     }
