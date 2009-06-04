@@ -24,7 +24,6 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         private bool myIsRequired = false;
         private NameValuePair[] myAllowedValues = { };
         private string myClientDefault;
-        private bool isLoaded;
         #endregion
 
         #region Constructors
@@ -223,9 +222,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// </summary>
         public override void GenerateClientDefault()
         {
-            if (!isLoaded & !string.IsNullOrEmpty(SourceFile))
+            if (!string.IsNullOrEmpty(SourceFile))
             {
-                isLoaded = true;
                 using (var reader = File.OpenText(SourceFile))
                 {
                     var currentLine = reader.ReadLine();
@@ -238,10 +236,6 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
                     }
                     myAllowedValues = values.ToArray();
                 }
-            }
-            else
-            {
-                isLoaded = true;
             }
         }
         #endregion
