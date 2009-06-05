@@ -5,6 +5,7 @@ using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using System.Reflection;
 using System;
+using ThoughtWorks.CruiseControl.Core.util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -16,6 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public const string DefaultLogger = "";
 		public const string LogFilename = "msbuild-results.xml";
 		public const int DefaultTimeout = 600;
+        private IShadowCopier shadowCopier = new DefaultShadowCopier();
 
 		public MsBuildTask() : this(new ProcessExecutor())
 		{}
@@ -45,6 +47,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		[ReflectorProperty("timeout", Required=false)]
 		public int Timeout = DefaultTimeout;
+
+        /// <summary>
+        /// The shadow copier to use.
+        /// </summary>
+        public IShadowCopier ShadowCopier
+        {
+            get { return shadowCopier; }
+            set { shadowCopier = value; }
+        }
 
         /// <summary>
         /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
@@ -137,32 +148,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			if (Logger == DefaultLogger)
 			{
                 // Since hot-swapping shadow copies the files, we also need to move the logger over
-                var appendLogger = true;
-                var defaultLogger = "ThoughtWorks.CruiseControl.MsBuild.dll";
-                var loggerPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), defaultLogger);
-                if (!File.Exists(loggerPath))
-                {
-                    var source = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, defaultLogger);
-
-                    // Only want to copy the logger if it exists
-                    if (File.Exists(source))
-                    {
-                        File.Copy(source, loggerPath);
-                    }
-                    else
-                    {
-                        // If the logger doesn't exist, then give up!
-                        appendLogger = false;
-                    }
-                }
-                if (appendLogger) builder.Append(StringUtil.AutoDoubleQuoteString(loggerPath));
+                var loggerPath = shadowCopier.RetrieveFilePath("ThoughtWorks.CruiseControl.MsBuild.dll");
+                if (!string.IsNullOrEmpty(loggerPath)) builder.Append(StringUtil.AutoDoubleQuoteString(loggerPath) + ";");
 			}
 			else
 			{
-				builder.Append(CheckAndQuoteLoggerSetting(Logger));
+				builder.Append(CheckAndQuoteLoggerSetting(Logger) + ";");
 			}
 
-			builder.Append(";");
 			builder.Append(StringUtil.AutoDoubleQuoteString(MsBuildOutputFile(result)));
 			return builder.ToString();
 		}

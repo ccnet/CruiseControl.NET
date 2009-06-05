@@ -848,6 +848,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="util\DefaultLogger.cs" />
+    <Compile Include="util\DefaultShadowCopier.cs" />
     <Compile Include="util\EnvironmentVariable.cs" />
     <Compile Include="util\ExecutionEnvironment.cs">
       <SubType>Code</SubType>
@@ -886,6 +887,7 @@
     <Compile Include="util\IRegistry.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="util\IShadowCopier.cs" />
     <Compile Include="util\IStringFormatter.cs">
       <SubType>Code</SubType>
     </Compile>

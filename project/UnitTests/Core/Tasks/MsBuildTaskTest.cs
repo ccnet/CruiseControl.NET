@@ -5,6 +5,8 @@ using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.util;
+using Rhino.Mocks;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
@@ -14,6 +16,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		private string logfile;
 		private IIntegrationResult result;
 		private MsBuildTask task;
+        private MockRepository mocks = new MockRepository();
 
 		[SetUp]
 		protected void SetUp()
@@ -36,13 +39,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ExecuteSpecifiedProject()
 		{
-			string args = "/nologo /t:target1;target2 " + IntegrationProperties() + " /p:Configuration=Release myproject.sln" + DefaultLogger();
+            task.ShadowCopier = InitialiseShadowCopier();
+            string args = "/nologo /t:target1;target2 " + IntegrationProperties() + " /p:Configuration=Release myproject.sln" + DefaultLogger();
 			ExpectToExecuteArguments(args, DefaultWorkingDirectory);
 
 			task.ProjectFile = "myproject.sln";
 			task.Targets = "target1;target2";
 			task.BuildArgs = "/p:Configuration=Release";
 			task.Timeout = 600;
+
+            mocks.ReplayAll();
 			task.Run(result);
 
 			Assert.AreEqual(1, result.TaskResults.Count);
@@ -53,16 +59,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void AddQuotesAroundProjectsWithSpacesAndHandleNoSpecifiedTargets()
 		{
+            task.ShadowCopier = InitialiseShadowCopier();
 			ExpectToExecuteArguments(@"/nologo " + IntegrationProperties() + @" ""my project.proj""" + DefaultLogger());
 			task.ProjectFile = "my project.proj";
-			task.Run(result);
+
+            mocks.ReplayAll();
+            task.Run(result);
 		}
 
 		[Test]
 		public void AddQuotesAroundTargetsWithSpaces()
 		{
-			ExpectToExecuteArguments(@"/nologo /t:first;""next task"" " + IntegrationProperties() + DefaultLogger());
+            task.ShadowCopier = InitialiseShadowCopier();
+            ExpectToExecuteArguments(@"/nologo /t:first;""next task"" " + IntegrationProperties() + DefaultLogger());
 			task.Targets = "first;next task";
+
+            mocks.ReplayAll();
 			task.Run(result);
 		}
 
@@ -73,27 +85,35 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			// Tests that look for the correct arguments will fail if the following properties
 			// are not sorted alphabetically.
 			string expectedProperties = string.Format(@"/p:CCNetArtifactDirectory={2};CCNetBuildCondition=IfModificationExists;CCNetBuildDate={0};CCNetBuildTime={1};CCNetFailureUsers=;CCNetIntegrationStatus=Success;CCNetLabel=""My Label"";CCNetLastIntegrationStatus=Success;CCNetListenerFile={3};CCNetModifyingUsers=;CCNetNumericLabel=0;CCNetProject=test;CCNetRequestSource=foo;CCNetWorkingDirectory={4}", testDateString, testTimeString, StringUtil.AutoDoubleQuoteString(result.ArtifactDirectory), StringUtil.AutoDoubleQuoteString(Path.GetTempPath() + "test_ListenFile.xml"), StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectoryWithSpaces));
-			ExpectToExecuteArguments(@"/nologo " + expectedProperties + DefaultLogger(), DefaultWorkingDirectoryWithSpaces);
+            task.ShadowCopier = InitialiseShadowCopier();
+            ExpectToExecuteArguments(@"/nologo " + expectedProperties + DefaultLogger(), DefaultWorkingDirectoryWithSpaces);
 			result.Label = @"My Label";
 			result.WorkingDirectory = DefaultWorkingDirectoryWithSpaces;
+
+            mocks.ReplayAll();
 			task.Run(result);
 		}
 
 		[Test]
 		public void DoNotAddQuotesAroundBuildArgs()
 		{
-			ExpectToExecuteArguments(@"/nologo " + IntegrationProperties() + @" /noconsolelogger /p:Configuration=Debug" + DefaultLogger());
+            task.ShadowCopier = InitialiseShadowCopier();
+            ExpectToExecuteArguments(@"/nologo " + IntegrationProperties() + @" /noconsolelogger /p:Configuration=Debug" + DefaultLogger());
 			task.BuildArgs = "/noconsolelogger /p:Configuration=Debug";
+            mocks.ReplayAll();
 			task.Run(result);			
 		}
 
 		[Test]
 		public void RebaseFromWorkingDirectory()
 		{
-			ProcessInfo info = NewProcessInfo("/nologo " + IntegrationProperties() + DefaultLogger(), Path.Combine(DefaultWorkingDirectory, "src"));
+            task.ShadowCopier = InitialiseShadowCopier();
+            ProcessInfo info = NewProcessInfo("/nologo " + IntegrationProperties() + DefaultLogger(), Path.Combine(DefaultWorkingDirectory, "src"));
 			info.WorkingDirectory = Path.Combine(DefaultWorkingDirectory, "src");
 			ExpectToExecute(info);
 			task.WorkingDirectory = "src";
+
+            mocks.ReplayAll();
 			task.Run(result);
 		}
 
@@ -176,11 +196,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			string defaultLogger;
 			if (MsBuildTask.DefaultLogger == string.Empty)
-				defaultLogger = StringUtil.AutoDoubleQuoteString(string.Format("{0}{1}ThoughtWorks.CruiseControl.MsBuild.dll", Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(MsBuildTask)).Location), Path.DirectorySeparatorChar));
+				defaultLogger = "ThoughtWorks.CruiseControl.MsBuild.dll";
 			else
 				defaultLogger = MsBuildTask.DefaultLogger;
 			return string.Format(@" /l:{0};{1}", StringUtil.AutoDoubleQuoteString(defaultLogger), StringUtil.AutoDoubleQuoteString(logfile));
 		}
+
+        private IShadowCopier InitialiseShadowCopier()
+        {
+			string defaultLogger;
+			if (MsBuildTask.DefaultLogger == string.Empty)
+				defaultLogger = "ThoughtWorks.CruiseControl.MsBuild.dll";
+			else
+				defaultLogger = MsBuildTask.DefaultLogger;
+            var copier = mocks.DynamicMock<IShadowCopier>();
+            SetupResult.For(copier.RetrieveFilePath(defaultLogger)).Return(defaultLogger);
+            return copier;
+        }
 
 		private string IntegrationProperties()
 		{
