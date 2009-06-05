@@ -3,6 +3,8 @@ using System.IO;
 using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Reflection;
+using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -134,10 +136,26 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			builder.Append("/l:");
 			if (Logger == DefaultLogger)
 			{
-				builder.Append(StringUtil.AutoDoubleQuoteString(
-								string.Format("{0}{1}ThoughtWorks.CruiseControl.MsBuild.dll",
-									Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
-									Path.DirectorySeparatorChar)));
+                // Since hot-swapping shadow copies the files, we also need to move the logger over
+                var appendLogger = true;
+                var defaultLogger = "ThoughtWorks.CruiseControl.MsBuild.dll";
+                var loggerPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), defaultLogger);
+                if (!File.Exists(loggerPath))
+                {
+                    var source = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, defaultLogger);
+
+                    // Only want to copy the logger if it exists
+                    if (File.Exists(source))
+                    {
+                        File.Copy(source, loggerPath);
+                    }
+                    else
+                    {
+                        // If the logger doesn't exist, then give up!
+                        appendLogger = false;
+                    }
+                }
+                if (appendLogger) builder.Append(StringUtil.AutoDoubleQuoteString(loggerPath));
 			}
 			else
 			{
