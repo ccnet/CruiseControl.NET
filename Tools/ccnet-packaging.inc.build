@@ -14,9 +14,7 @@
 
 		<call target="packageCCTray" cascade="false" if="${platform::is-windows()}" />
 
-    <call target="packageCCValidator" cascade="false" if="${platform::is-windows()}" />
-
-    <call target="packageCCCmd" cascade="false" />
+    <call target="packageCCTools" cascade="false" if="${platform::is-windows()}" />
 
     <call target="compressJavaScript" cascade="false" />
 		
@@ -185,24 +183,11 @@
 		</copy>
 	</target>
 
-	<target name="packageCCValidator" depends="prepackageDistribution" description="Create CCValidator installer an copy to publish dictionary">
-		
-		<!-- Copy installer template into project root and replace installer version -->
-		<copy file="${path::combine(path::get-full-path('install'), 'ccvalidator.nsi.template')}" tofile="ccvalidator.nsi" overwrite="true" verbose="${nant.verbosity}">
-			<filterchain>
-				<replacetokens>
-					<token key="VERSION" value="${assembly.version}" />
-				</replacetokens>
-			</filterchain>
-		</copy>
-
-		<exec program="${nsis.executable}" commandline="ccvalidator.nsi" verbose="${nant.verbosity}" />
-	</target>
-
-  <target name="packageCCCmd" depends="prepackageDistribution" description="Create CCCmd installer an copy to publish dictionary">
+  <!-- Generate the tools distribution -->
+  <target name="packageCCTools" depends="prepackageDistribution" description="Create CCCmd installer an copy to publish dictionary">
 
     <!-- Copy installer template into project root and replace installer version -->
-    <copy file="${path::combine(path::get-full-path('install'), 'cccmd.nsi.template')}" tofile="cccmd.nsi" overwrite="true" verbose="${nant.verbosity}">
+    <copy file="${path::combine(path::get-full-path('install'), 'cctools.nsi.template')}" tofile="cctools.nsi" overwrite="true" verbose="${nant.verbosity}">
       <filterchain>
         <replacetokens>
           <token key="VERSION" value="${assembly.version}" />
@@ -210,7 +195,7 @@
       </filterchain>
     </copy>
 
-    <exec program="${nsis.executable}" commandline="cccmd.nsi" verbose="${nant.verbosity}" />
+    <exec program="${nsis.executable}" commandline="cctools.nsi" verbose="${nant.verbosity}" />
   </target>
 
   <target name="packageCCNET" depends="prepackageDistribution" description="Create CruiseControl.NET installer an copy to publish dictionary">
