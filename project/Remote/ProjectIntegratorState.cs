@@ -23,6 +23,11 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// The project integrator has stopped integration.  The project will
 		/// not be integrated until the integrator is started again.
 		/// </summary>
-		Stopped
+		Stopped,
+
+        /// <summary>
+        /// The project status is unknown.
+        /// </summary>
+        Unknown,
 	}
 }

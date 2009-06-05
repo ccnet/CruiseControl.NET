@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Xml;
+using System.Collections.Specialized;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -47,18 +48,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public override string TargetServer
         {
-            get
-            {
-                if (string.IsNullOrEmpty(targetServer))
-                {
-                    var targetUri = new Uri(serverUri);
-                    return targetUri.Host;
-                }
-                else
-                {
-                    return targetServer;
-                }
-            }
+            get { return string.IsNullOrEmpty(targetServer) ? "local" : targetServer; }
             set { targetServer = value; }
         }
         #endregion
@@ -109,14 +99,14 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="projectName">project to force</param>
         public override void ForceBuild(string projectName)
         {
-            throw new NotImplementedException();
+            SendButtonPush("ForceBuild", projectName);
         }
 
         /// <summary>
-        /// Forces a build for the named project with some parameters.
+        /// Forces a build for a named project.
         /// </summary>
-        /// <param name="projectName">project to force</param>
-        /// <param name="parameters"></param>
+        /// <param name="projectName">The project to force.</param>
+        /// <param name="parameters">The parameters to pass into the project (these are ignored).</param>
         public override void ForceBuild(string projectName, List<NameValuePair> parameters)
         {
             ForceBuild(projectName);
@@ -130,7 +120,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="projectName">The name of the project to abort.</param>
         public override void AbortBuild(string projectName)
         {
-            throw new NotImplementedException();
+            SendButtonPush("AbortBuild", projectName);
         }
         #endregion
 
@@ -142,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="integrationRequest"></param>
         public override void Request(string projectName, IntegrationRequest integrationRequest)
         {
-            throw new NotImplementedException();
+            ForceBuild(projectName);
         }
         #endregion
 
@@ -153,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="project"></param>
         public override void StartProject(string project)
         {
-            throw new NotImplementedException();
+            SendButtonPush("StartBuild", project);
         }
         #endregion
 
@@ -164,19 +154,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="project"></param>
         public override void StopProject(string project)
         {
-            throw new NotImplementedException();
-        }
-        #endregion
-
-        #region SendMessage()
-        /// <summary>
-        /// Sends a message for a project.
-        /// </summary>
-        /// <param name="projectName">The name of the project to use.</param>
-        /// <param name="message"></param>
-        public override void SendMessage(string projectName, Message message)
-        {
-            throw new NotImplementedException();
+            SendButtonPush("StopBuild", project);
         }
         #endregion
 
@@ -196,9 +174,9 @@ namespace ThoughtWorks.CruiseControl.Remote
                     var url = GenerateUrl("XmlServerReport.aspx");
                     response = client.DownloadString(url);
                 }
-                catch (Exception error)
+                catch (Exception)
                 {
-                    // Retrieve the XML from the server - ealier than 1.3
+                    // Retrieve the XML from the server - earlier than 1.3
                     var url = GenerateUrl("XmlStatusReport.aspx");
                     response = client.DownloadString(url);
                 }
@@ -209,13 +187,16 @@ namespace ThoughtWorks.CruiseControl.Remote
                 document.LoadXml(response);
 
                 var snapshot = new CruiseServerSnapshot();
-                if (document.DocumentElement.Name == "projects")
+                if (document.DocumentElement.Name == "CruiseControl")
                 {
-                    snapshot.ProjectStatuses = ParseProjects(document.SelectNodes("/Projects/Project")).ToArray();
+                    snapshot.ProjectStatuses = ParseProjects(document.SelectNodes("/CruiseControl/Projects/Project")).ToArray();
+
+                    // Add all the queues
+                    ParseQueues(document, snapshot);
                 }
                 else
                 {
-                    snapshot.ProjectStatuses = ParseProjects(document.SelectNodes("/CruiseControl/Projects/Project")).ToArray();
+                    snapshot.ProjectStatuses = ParseProjects(document.SelectNodes("/Projects/Project")).ToArray();
                 }
                 return snapshot;
             }
@@ -271,12 +252,44 @@ namespace ThoughtWorks.CruiseControl.Remote
                     Name = node.GetAttribute("name"),
                     NextBuildTime = RetrieveAttributeValue(node, "nextBuildTime", DateTime.MaxValue),
                     ServerName = node.GetAttribute("serverName"),
+                    Status = RetrieveAttributeValue(node, "status", ProjectIntegratorState.Unknown),
                     WebURL = node.GetAttribute("webUrl")
                 };
                 projects.Add(project);
             }
 
             return projects;
+        }
+        #endregion
+
+        #region ParseQueues()
+        /// <summary>
+        /// Parse the queue information.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="snapshot"></param>
+        private void ParseQueues(XmlDocument document, CruiseServerSnapshot snapshot)
+        {
+            foreach (XmlElement queueSnapshotEl in document.SelectNodes("/CruiseControl/Queues/Queue"))
+            {
+                // Retrieve the queue details
+                var queueSnapshot = new QueueSnapshot
+                {
+                    QueueName = RetrieveAttributeValue(queueSnapshotEl, "name", string.Empty)
+                };
+                snapshot.QueueSetSnapshot.Queues.Add(queueSnapshot);
+
+                // Retrieve the requests
+                foreach (XmlElement requestEl in queueSnapshotEl.SelectNodes("Request"))
+                {
+                    var request = new QueuedRequestSnapshot
+                    {
+                        Activity = new ProjectActivity(RetrieveAttributeValue(requestEl, "activity", "Unknown")),
+                        ProjectName = RetrieveAttributeValue(requestEl, "projectName", string.Empty)
+                    };
+                    queueSnapshot.Requests.Add(request);
+                }
+            }
         }
         #endregion
 
@@ -325,6 +338,32 @@ namespace ThoughtWorks.CruiseControl.Remote
                 ? defaultValue
                 : (TEnum)Enum.Parse(typeof(TEnum), value);
             return enumValue;
+        }
+        #endregion
+
+        #region SendButtonPush()
+        /// <summary>
+        /// Sends a button push command.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="project">The project the command is for.</param>
+        private void SendButtonPush(string command, string project)
+        {
+            var url = GenerateUrl("ViewFarmReport.aspx");
+            var values = new NameValueCollection();
+            values.Add(command, "true");
+            values.Add("projectName", project);
+            values.Add("serverName", TargetServer);
+            try
+            {
+                client.UploadValues(url, values);
+            }
+            catch (Exception error)
+            {
+                throw new CommunicationsException(
+                    string.Format("{0} failed: {1}", command, error.Message),
+                    error);
+            }
         }
         #endregion
         #endregion

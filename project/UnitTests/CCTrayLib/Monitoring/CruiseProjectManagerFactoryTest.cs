@@ -15,6 +15,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		private const string ProjectName = "projectName";
         private MockRepository mocks = new MockRepository();
 
+        [SetUp]
+        public void SetUp()
+        {
+            mocks = new MockRepository();
+        }
+
 		[Test]
 		public void WhenRequestingACruiseProjectManagerWithATcpUrlAsksTheCruiseManagerFactory()
 		{
@@ -42,11 +48,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void WhenRequestingACruiseProjectManagerWithAnHttpUrlConstructsANewDashboardCruiseProjectManager()
 		{
-			var server = new BuildServer("http://somethingOrOther");
+            var serverAddress = "http://somethingOrOther";
+            var server = new BuildServer(serverAddress);
             var client = mocks.DynamicMock<CruiseServerClientBase>();
 
-            var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
-            var factory = new CruiseProjectManagerFactory(mockCruiseManagerFactory);
+            var clientFactory = mocks.StrictMock<ICruiseServerClientFactory>();
+            Expect.Call(clientFactory.GenerateHttpClient(serverAddress, new ClientStartUpSettings()))
+                .Constraints(new Equal(serverAddress), new Anything())
+                .Return(client);
+            var factory = new CruiseProjectManagerFactory(clientFactory);
 
 			var serverManagers = new Dictionary<BuildServer, ICruiseServerManager>();
 			serverManagers[server] = new HttpCruiseServerManager(client, server);

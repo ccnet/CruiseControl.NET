@@ -19,15 +19,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             switch (server.Transport)
             {
                 case BuildServerTransport.Remoting:
-                    CruiseServerClientBase client = GenerateRemotingClient(server);
-                    return new RemotingCruiseProjectManager(client, project.ProjectName);
+                    {
+                        var client = GenerateRemotingClient(server);
+                        return new RemotingCruiseProjectManager(client, project.ProjectName);
+                    }
                 case BuildServerTransport.Extension:
                     ITransportExtension extensionInstance = ExtensionHelpers.RetrieveExtension(server.ExtensionName);
                     extensionInstance.Settings = server.ExtensionSettings;
                     extensionInstance.Configuration = server;
                     return extensionInstance.RetrieveProjectManager(project.ProjectName);
                 default:
-                    return new HttpCruiseProjectManager(new WebRetriever(), project.ProjectName, serverManagers[server]);
+                    {
+                        var client = GenerateHttpClient(server);
+                        return new HttpCruiseProjectManager(client, project.ProjectName, serverManagers[server]);
+                    }
             }
         }
 

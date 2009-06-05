@@ -1,9 +1,10 @@
 using System;
-using NMock;
+using Rhino.Mocks;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 {
@@ -12,9 +13,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	{
 		private readonly string serverUrl = "http://xxx";
 		private readonly string serverAlias = "local";
-		private DynamicMock webRetrieverMock;
-		private DynamicMock serverManagerMock;
+        private MockRepository mocks = new MockRepository();
 		private HttpCruiseProjectManager manager;
+        private ICruiseServerManager serverManagerMock;
+        private CruiseServerClientBase serverClient;
 
 		const string CRUISE_SERVER_XML = @"<CruiseControl xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
     <Projects>
@@ -35,75 +37,83 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[SetUp]
 		public void SetUp()
 		{
-			webRetrieverMock = new DynamicMock(typeof (IWebRetriever));
-			webRetrieverMock.ExpectAndReturn("Post", null, new object[] { new Uri(new WebDashboardUrl(serverUrl, serverAlias).ViewFarmReport), null });
-			webRetrieverMock.Strict = true;
-			IWebRetriever webRetriever = (IWebRetriever)webRetrieverMock.MockInstance;
-
-			serverManagerMock = new DynamicMock(typeof(ICruiseServerManager));
-			serverManagerMock.ExpectAndReturn("GetCruiseServerSnapshot", new DashboardXmlParser().ExtractAsCruiseServerSnapshot(CRUISE_SERVER_XML), null);
-            serverManagerMock.ExpectAndReturn("Configuration", new BuildServer(serverUrl));
-			serverManagerMock.Strict = true;
-			ICruiseServerManager serverManager = (ICruiseServerManager) serverManagerMock.MockInstance;
-
-			manager = new HttpCruiseProjectManager(webRetriever, "yyy", serverManager);		
+            serverClient = mocks.DynamicMock<CruiseServerClientBase>();
+            serverManagerMock = mocks.StrictMock<ICruiseServerManager>();
+            manager = new HttpCruiseProjectManager(serverClient, "yyy", serverManagerMock);		
 		}
 
 		[Test]
 		public void ShouldNotThrowExceptionsOnCreation()
 		{
-			new HttpCruiseProjectManager((IWebRetriever)new DynamicMock(typeof(IWebRetriever)).MockInstance, "foo",
-										 (ICruiseServerManager)new DynamicMock(typeof(ICruiseServerManager)).MockInstance);
+            new HttpCruiseProjectManager(mocks.StrictMock<CruiseServerClientBase>(), 
+                "foo",
+                mocks.StrictMock<ICruiseServerManager>());
 		}
 
 		[Test]
 		public void ShouldNotUseTheWebRetrieverOrServerManagerOnCreation()
 		{
-			webRetrieverMock = new DynamicMock(typeof(IWebRetriever));
-			serverManagerMock = new DynamicMock(typeof(ICruiseServerManager));
-			webRetrieverMock.Strict = true;
-			serverManagerMock.Strict = true;
-			new HttpCruiseProjectManager((IWebRetriever)webRetrieverMock.MockInstance, "foo",
-										 (ICruiseServerManager)serverManagerMock.MockInstance);
-			webRetrieverMock.Verify();
-			serverManagerMock.Verify();
+            var client = mocks.StrictMock<CruiseServerClientBase>();
+            var server = mocks.StrictMock<ICruiseServerManager>();
+
+            mocks.ReplayAll();
+            new HttpCruiseProjectManager(client, "foo", server);
+            mocks.VerifyAll();
 		}
 		
 		[Test]
 		public void ForceBuild()
 		{
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            serverManagerMock.ExpectAndReturn("Configuration", new BuildServer(serverUrl));
+
+            Expect.Call(serverClient.SessionToken).PropertyBehavior();
+            Expect.Call(() =>
+            {
+                serverClient.ForceBuild("yyy", NameValuePair.FromDictionary(parameters));
+            });
+            mocks.ReplayAll();
+
             manager.ForceBuild(null, parameters);
-			serverManagerMock.Verify();
-			webRetrieverMock.Verify();
+            mocks.VerifyAll();
 		}
 
 		[Test]
 		public void AbortBuild()
 		{
-            serverManagerMock.ExpectAndReturn("Configuration", new BuildServer(serverUrl));
+            Expect.Call(serverClient.SessionToken).PropertyBehavior();
+            Expect.Call(() =>
+            {
+                serverClient.AbortBuild("yyy");
+            });
+            mocks.ReplayAll();
             manager.AbortBuild(null);
-			serverManagerMock.Verify();
-			webRetrieverMock.Verify();
+            mocks.VerifyAll();
 		}
 
 		[Test]
 		public void StartProject()
 		{
-            serverManagerMock.ExpectAndReturn("Configuration", new BuildServer(serverUrl));
+            Expect.Call(serverClient.SessionToken).PropertyBehavior();
+            Expect.Call(() =>
+            {
+                serverClient.StartProject("yyy");
+            });
+            mocks.ReplayAll();
             manager.StartProject(null);
-			serverManagerMock.Verify();
-			webRetrieverMock.Verify();
+            mocks.VerifyAll();
 		}
 
 		[Test]
 		public void StopProject()
 		{
-            serverManagerMock.ExpectAndReturn("Configuration", new BuildServer(serverUrl));
+            Expect.Call(serverClient.SessionToken).PropertyBehavior();
+            Expect.Call(() =>
+            {
+                serverClient.StopProject("yyy");
+            });
+            mocks.ReplayAll();
             manager.StopProject(null);
-			serverManagerMock.Verify();
-			webRetrieverMock.Verify();
+            mocks.VerifyAll();
 		}
 
         [Test]
@@ -111,8 +121,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         public void FixBuildThrowsAnNotImplementedException()
         {
             manager.FixBuild(null, "John Do");
-			serverManagerMock.Verify();
-			webRetrieverMock.Verify();
         }
 
 
@@ -121,8 +129,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         public void CancelPendingRequestThrowsAnNotImplementedException()
         {
             manager.CancelPendingRequest(null);
-			serverManagerMock.Verify();
-			webRetrieverMock.Verify();
         }
 	}
 }
