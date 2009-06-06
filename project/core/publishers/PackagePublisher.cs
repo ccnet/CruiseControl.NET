@@ -6,6 +6,8 @@ using Exortech.NetReflector;
 using ICSharpCode.SharpZipLib.Zip;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Tasks;
+using System.Threading;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -18,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// </remarks>
     [ReflectorType("package")]
     public class PackagePublisher
-        : ITask
+        : TaskBase, ITask
     {
         #region Private fields
         private int compressionLevel = 5;
@@ -239,6 +241,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                     if (File.Exists(tempFile)) File.Delete(tempFile);
                 }
             }
+
+            // Set the status of the result
+            if (result.Status == IntegrationStatus.Unknown) result.Status = IntegrationStatus.Success;
         }
         #endregion
         #endregion
@@ -387,7 +392,34 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             if (!actualFile.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase)) actualFile += ".zip";
             if (!singleInstance) actualFile = Path.Combine(result.Label, actualFile);
             actualFile = result.BaseFromArtifactsDirectory(actualFile);
-            if (File.Exists(actualFile)) File.Delete(actualFile);
+            if (File.Exists(actualFile))
+            {
+                // Add a retry loop for deleting the file
+                var retryLoop = 3;
+                while (retryLoop > 0)
+                {
+                    try
+                    {
+                        File.Delete(actualFile);
+                        retryLoop = 0;
+                    }
+                    catch (IOException)
+                    {
+                        if (retryLoop-- > 0)
+                        {
+                            Log.Warning(
+                                string.Format(
+                                    "Unable to delete file '{0}', delaying before retry",
+                                    actualFile));
+                            Thread.Sleep(1000);
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                }
+            }
             string actualFolder = Path.GetDirectoryName(actualFile);
             if (!Directory.Exists(actualFolder)) Directory.CreateDirectory(actualFolder);
             File.Move(tempFile, actualFile);
