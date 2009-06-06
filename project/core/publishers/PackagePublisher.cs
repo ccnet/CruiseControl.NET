@@ -233,7 +233,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                     if (!singleInstance)
                     {
                         listFile = Path.Combine(result.Label, listFile);
-                        AddToPackageList(result, listFile, actualFile, fileList.Count);
+                        var buildCopy = Path.Combine(
+                            Path.Combine(
+                                Path.GetDirectoryName(actualFile),
+                                result.Label),
+                                Path.GetFileName(actualFile));
+                        File.Copy(actualFile, buildCopy);
+                        AddToPackageList(result, listFile, buildCopy, fileList.Count);
                     }
                 }
                 finally
