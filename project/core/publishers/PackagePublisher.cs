@@ -238,6 +238,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                                 Path.GetDirectoryName(actualFile),
                                 result.Label),
                                 Path.GetFileName(actualFile));
+
+                        // Make sure the folder name exists
+                        string folderName = Path.GetDirectoryName(buildCopy);
+                        if (!Directory.Exists(folderName)) Directory.CreateDirectory(folderName);
+
+                        // Copy over the file and add it to the list
+                        if (File.Exists(buildCopy)) DeleteFileWithRetry(buildCopy);
                         File.Copy(actualFile, buildCopy);
                         AddToPackageList(result, listFile, buildCopy, fileList.Count);
                     }
@@ -373,10 +380,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             packageElement.SetAttribute("files", numberOfFiles.ToString());
             packageElement.SetAttribute("size", packageFile.Length.ToString());
 
-            // Make sure the folder name exists
-            string folderName = Path.GetDirectoryName(listFile);
-            if (!Directory.Exists(folderName)) Directory.CreateDirectory(folderName);
-
             // Save the updated list
             listXml.Save(listFile);
         }
@@ -398,34 +401,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             if (!actualFile.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase)) actualFile += ".zip";
             if (!singleInstance) actualFile = Path.Combine(result.Label, actualFile);
             actualFile = result.BaseFromArtifactsDirectory(actualFile);
-            if (File.Exists(actualFile))
-            {
-                // Add a retry loop for deleting the file
-                var retryLoop = 3;
-                while (retryLoop > 0)
-                {
-                    try
-                    {
-                        File.Delete(actualFile);
-                        retryLoop = 0;
-                    }
-                    catch (IOException)
-                    {
-                        if (retryLoop-- > 0)
-                        {
-                            Log.Warning(
-                                string.Format(
-                                    "Unable to delete file '{0}', delaying before retry",
-                                    actualFile));
-                            Thread.Sleep(1000);
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                }
-            }
+            if (File.Exists(actualFile)) DeleteFileWithRetry(actualFile);
             string actualFolder = Path.GetDirectoryName(actualFile);
             if (!Directory.Exists(actualFolder)) Directory.CreateDirectory(actualFolder);
             File.Move(tempFile, actualFile);
@@ -440,6 +416,40 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
 
             return actualFile;
+        }
+        #endregion
+
+        #region DeleteFileWithRetry()
+        /// <summary>
+        /// Attempts to delete a file within a retry loop.
+        /// </summary>
+        /// <param name="actualFile"></param>
+        private void DeleteFileWithRetry(string actualFile)
+        {
+            var retryLoop = 3;
+            while (retryLoop > 0)
+            {
+                try
+                {
+                    File.Delete(actualFile);
+                    retryLoop = 0;
+                }
+                catch (IOException)
+                {
+                    if (retryLoop-- > 0)
+                    {
+                        Log.Warning(
+                            string.Format(
+                                "Unable to delete file '{0}', delaying before retry",
+                                actualFile));
+                        Thread.Sleep(1000);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
         }
         #endregion
 
