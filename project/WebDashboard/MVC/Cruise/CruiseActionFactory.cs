@@ -45,13 +45,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 
         private object CreateHandler(string actionName)
         {
+            var actionNameLower = actionName.ToLowerInvariant();
+
             // Can probably do something clever with this in CruiseObjectSourceInitialiser
-            if (actionName == string.Empty || actionName.ToLower() == "default")
+            if (actionName == string.Empty || actionNameLower == "default")
             {
                 return objectSource.GetByType(typeof (DefaultAction));
             }
 
-            object action = objectSource.GetByName(actionName);
+            object action = objectSource.GetByName(actionNameLower);
 
             return action;
         }
