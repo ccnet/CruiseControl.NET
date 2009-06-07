@@ -39,11 +39,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mods[0] = new Modification();
 			mods[0].FolderName = "/trunk";
 			mods[0].FileName = "nant.bat";
-			mods[0].ChangeNumber = 3;
+			mods[0].ChangeNumber = "3";
 			mods[1] = new Modification();
 			mods[1].FolderName = "/trunk/MiniACE.Test";
 			mods[1].FileName = "AssemblyInfo.cs";
-			mods[1].ChangeNumber = 2;
+			mods[1].ChangeNumber = "2";
 
 			CreateBuilder().SetupModification(mods);
 

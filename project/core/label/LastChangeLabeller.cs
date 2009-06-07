@@ -44,29 +44,38 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         public virtual string Generate(IIntegrationResult resultFromThisBuild)
         {
 
-            int changeNumber = resultFromThisBuild.LastChangeNumber;
+            int changeNumber = 0;
+            if (int.TryParse(resultFromThisBuild.LastChangeNumber, out changeNumber))
+            {
+                Log.Debug(
+                    string.Format("LastChangeNumber retrieved - {0}",
+                    changeNumber));
+            }
+            else
+            {
+                Log.Debug("LastChangeNumber defaulted to 0");
+            }
 
             IntegrationSummary lastIntegration = resultFromThisBuild.LastIntegration;
 
             string firstSuffix = AllowDuplicateSubsequentLabels ? "" : "." + INITIAL_SUFFIX_NUMBER.ToString();
 
-            Log.Debug(string.Format("Last change number is \"{0}\"", changeNumber));
-
             if (changeNumber != 0)
-
+            {
                 return LabelPrefix + changeNumber + firstSuffix;
-
+            }
             else if (lastIntegration.IsInitial() || lastIntegration.Label == null)
-
+            {
                 return LabelPrefix + "unknown" + firstSuffix;
-
+            }
             else if (!AllowDuplicateSubsequentLabels)
-
+            {
                 return IncrementLabel(lastIntegration.Label);
-
+            }
             else
-
+            {
                 return lastIntegration.Label;
+            }
         }
 
         // Nothing seems to use this, but ILabellers are ITasks, and ITasks need a Run().  All the other

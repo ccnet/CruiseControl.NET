@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             headerElement.SetAttribute("status", result.Status.ToString());
 
             // Add the list of modifications
-            Dictionary<int, XmlElement> changes = new Dictionary<int, XmlElement>();
+            var changes = new Dictionary<string, XmlElement>();
             foreach (Modification modification in result.Modifications)
             {
                 // Add each change header only once

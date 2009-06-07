@@ -4,6 +4,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
@@ -94,10 +95,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), expectedProcessRequest);
             IntegrationResult result = new IntegrationResult();
             result.Modifications = new Modification[2];
-            result.Modifications[0] = new Modification();
-            result.Modifications[0].ChangeNumber = 5;
-            result.Modifications[1] = new Modification();
-            result.Modifications[1].ChangeNumber = 10;
+            result.Modifications[0] = new Modification
+            {
+                ChangeNumber = "5",
+                ModifiedTime = new DateTime(2009, 1, 1)
+            };
+            result.Modifications[1] = new Modification
+            {
+                ChangeNumber = "10",
+                ModifiedTime = new DateTime(2009, 1, 2)
+            };
             accurev.mods = result.Modifications;
 
             accurev.GetSource(result);

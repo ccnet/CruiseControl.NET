@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core
         // Users who contributed modifications to a series of failing builds:
         ArrayList FailureUsers { get; }             // This should really be a Set but sets are not available in .NET 1.1
 		DateTime LastModificationDate { get; }
-		int LastChangeNumber { get; }
+		string LastChangeNumber { get; }
 		IntegrationSummary LastIntegration { get; }
 
 		// Last successful integration state

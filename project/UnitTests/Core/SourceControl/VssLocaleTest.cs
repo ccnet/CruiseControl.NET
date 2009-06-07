@@ -3,7 +3,7 @@ using System.Globalization;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Vss
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	[TestFixture]
 	public class VssLocaleTest

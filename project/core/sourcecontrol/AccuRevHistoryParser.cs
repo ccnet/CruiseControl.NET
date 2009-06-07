@@ -146,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				// Parsing worked, fill the transaction summary into the template modification:
 				GroupCollection tokens = parsed.Groups;
-				modificationTemplate.ChangeNumber = int.Parse(tokens[1].ToString());
+				modificationTemplate.ChangeNumber = tokens[1].ToString();
 				modificationTemplate.Type = tokens[2].ToString();
 				modificationTemplate.ModifiedTime = DateTime.Parse(tokens[3].ToString());
 				modificationTemplate.UserName = tokens[4].ToString();

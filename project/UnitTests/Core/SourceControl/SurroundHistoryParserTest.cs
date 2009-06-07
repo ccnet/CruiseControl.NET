@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod[0] = new Modification();
 			mod[0].FolderName = @"m20040908/scctt3";
 			mod[0].FileName = @"App.ico";
-			mod[0].ChangeNumber = 1;
+			mod[0].ChangeNumber = "1";
 			mod[0].Type = @"Add";
 			mod[0].ModifiedTime = DateTime.Parse("2005-Sep-26 10:27:13");
 			mod[0].Comment = @"new icon";
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod[1] = new Modification();
 			mod[1].FolderName = @"m20040908/scctt3";
 			mod[1].FileName = @"AssemblyInfo.cs";
-			mod[1].ChangeNumber = 7;
+			mod[1].ChangeNumber = "7";
 			mod[1].Type = @"Check in";
 			mod[1].ModifiedTime = DateTime.Parse("2005-Sep-30 15:28:20");
 			mod[1].Comment = @"changes for defect #1234";
@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod[2] = new Modification();
 			mod[2].FolderName = @"m20040908/scctt3";
 			mod[2].FileName = @"Form1.cs";
-			mod[2].ChangeNumber = 14;
+			mod[2].ChangeNumber = "14";
 			mod[2].Type = @"Check in";
 			mod[2].ModifiedTime = DateTime.Parse("2005-Sep-30 15:28:38");
 			mod[2].Comment = @"fixed build error";
@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod[3] = new Modification();
 			mod[3].FolderName = @"m20040908/scctt3";
 			mod[3].FileName = @"Form1.resx";
-			mod[3].ChangeNumber = 1;
+			mod[3].ChangeNumber = "1";
 			mod[3].Type = @"Add";
 			mod[3].ModifiedTime = DateTime.Parse("2005-Sep-26 10:27:13");
 			mod[3].Comment = @"";
@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod[4] = new Modification();
 			mod[4].FolderName = @"m20040908/scctt3";
 			mod[4].FileName = @"scctt3.csproj";
-			mod[4].ChangeNumber = 3;
+			mod[4].ChangeNumber = "3";
 			mod[4].Type = @"Check in";
 			mod[4].ModifiedTime = DateTime.Parse("2005-Sep-30 15:28:54");
 			mod[4].Comment = @"new icon";
@@ -110,7 +110,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod[5] = new Modification();
 			mod[5].FolderName = @"m20040908/scctt3";
 			mod[5].FileName = @"scctt3.csproj.vspscc";
-			mod[5].ChangeNumber = 1;
+			mod[5].ChangeNumber = "1";
 			mod[5].Type = @"Add";
 			mod[5].ModifiedTime = DateTime.Parse("2005-Sep-26 10:27:13");
 			mod[5].Comment = @"";
@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod[6] = new Modification();
 			mod[6].FolderName = @"m20040908/scctt3";
 			mod[6].FileName = @"scctt3.sln";
-			mod[6].ChangeNumber = 3;
+			mod[6].ChangeNumber = "3";
 			mod[6].Type = @"Check in";
 			mod[6].ModifiedTime = DateTime.Parse("2005-Sep-30 15:29:08");
 			mod[6].Comment = @"new icon";
@@ -132,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod[7] = new Modification();
 			mod[7].FolderName = @"m20040908/scctt3";
 			mod[7].FileName = @"scctt3.vssscc";
-			mod[7].ChangeNumber = 1;
+			mod[7].ChangeNumber = "1";
 			mod[7].Type = @"Add";
 			mod[7].ModifiedTime = DateTime.Parse("2005-Sep-26 10:27:13");
 			mod[7].Comment = @"";

@@ -66,25 +66,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         [Test]
         public void ShouldReturnTheMaximumChangeNumberFromAllModificationsAsLastChangeNumber()
         {
-            Modification mod1 = new Modification();
-            mod1.ChangeNumber = 10;
+            Modification mod1 = new Modification
+            {
+                ChangeNumber = "10",
+                ModifiedTime = new DateTime(2009, 1, 1)
+            };
 
-            Modification mod2 = new Modification();
-            mod2.ChangeNumber = 20;
+            Modification mod2 = new Modification
+            {
+                ChangeNumber = "20",
+                ModifiedTime = new DateTime(2009, 1, 2)
+            };
 
             Modification[] modifications = new Modification[] { mod1 };
-            Assert.AreEqual(10, Modification.GetLastChangeNumber(modifications), "from Modification.GetLastChangeNumber({10})");
+            Assert.AreEqual("10", Modification.GetLastChangeNumber(modifications), "from Modification.GetLastChangeNumber({10})");
             modifications = new Modification[] { mod1, mod2 };
-            Assert.AreEqual(20, Modification.GetLastChangeNumber(modifications), "from Modification.GetLastChangeNumber({10, 20})");
+            Assert.AreEqual("20", Modification.GetLastChangeNumber(modifications), "from Modification.GetLastChangeNumber({10, 20})");
             modifications = new Modification[] { mod2, mod1 };
-            Assert.AreEqual(20, Modification.GetLastChangeNumber(modifications), "from Modification.GetLastChangeNumber({20, 10})");
+            Assert.AreEqual("20", Modification.GetLastChangeNumber(modifications), "from Modification.GetLastChangeNumber({20, 10})");
         }
 
         [Test]
-        public void ShouldReturnZeroAsLastChangeNumberIfNoModifications()
+        public void ShouldReturnNullAsLastChangeNumberIfNoModifications()
         {
             Modification[] modifications = new Modification[0];
-            Assert.AreEqual(0, Modification.GetLastChangeNumber(modifications), "LastChangeNumer({})");
+            Assert.AreEqual(null, Modification.GetLastChangeNumber(modifications), "LastChangeNumer({})");
         }
 
 		private static Modification CreateModification()
@@ -95,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod.ModifiedTime = DateTime.Now;
 			mod.UserName = "User<>Name";
 			mod.Comment = "Comment";
-			mod.ChangeNumber = 16;
+			mod.ChangeNumber = "16";
 			mod.EmailAddress = "foo.bar@quuuux.quuux.quux.qux";
 			mod.Url = "http://localhost/viewcvs/";
 			return mod;

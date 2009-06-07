@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(new DateTime(2003, 5, 13, 22, 41, 30), mod.ModifiedTime);
 			Assert.AreEqual("Created", mod.Type);
 			Assert.AreEqual("admin", mod.UserName);
-			Assert.AreEqual(2, mod.ChangeNumber);
+			Assert.AreEqual("2", mod.ChangeNumber);
 		}
 
 		[Test]
@@ -144,7 +144,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             reader.Close();
             Assert.AreEqual(7, modifications.Length);
 
-            Assert.AreEqual(43754, modifications[0].ChangeNumber);
+            Assert.AreEqual("43754", modifications[0].ChangeNumber);
             Assert.AreEqual("update length", modifications[0].Comment);
             Assert.AreEqual("Message.cs", modifications[0].FileName);
             Assert.AreEqual("MyProductName.Enterprise/MyProductName.BusinessLayer", modifications[0].FolderName);
@@ -152,7 +152,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             Assert.AreEqual("Checked in", modifications[0].Type);
             Assert.AreEqual("joe_coder", modifications[0].UserName);
 
-            Assert.AreEqual(43753, modifications[1].ChangeNumber);
+            Assert.AreEqual("43753", modifications[1].ChangeNumber);
             Assert.AreEqual("Updated Version to 1.0.4", modifications[1].Comment);
             Assert.AreEqual("AssemblyInfo.cs", modifications[1].FileName);
             Assert.AreEqual("MyProductName.Enterprise/DataWorkbenchMessageCenter/Properties", modifications[1].FolderName);
@@ -160,7 +160,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             Assert.AreEqual("Checked in", modifications[1].Type);
             Assert.AreEqual("admin", modifications[1].UserName);
 
-            Assert.AreEqual(43752, modifications[2].ChangeNumber);
+            Assert.AreEqual("43752", modifications[2].ChangeNumber);
             Assert.AreEqual("Updated Version to 1.0.4", modifications[2].Comment);
             Assert.AreEqual("AssemblyInfo.cs", modifications[2].FileName);
             Assert.AreEqual("MyProductName.Enterprise/MPSAdministrator/Properties", modifications[2].FolderName);
@@ -168,7 +168,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             Assert.AreEqual("Checked in", modifications[2].Type);
             Assert.AreEqual("admin", modifications[2].UserName);
 
-            Assert.AreEqual(43751, modifications[3].ChangeNumber);
+            Assert.AreEqual("43751", modifications[3].ChangeNumber);
             Assert.AreEqual("Updated Version to 1.0.4", modifications[3].Comment);
             Assert.AreEqual("AssemblyInfo.cs", modifications[3].FileName);
             Assert.AreEqual("MyProductName.Enterprise/MyProductName.Tester/Properties", modifications[3].FolderName);
@@ -176,7 +176,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             Assert.AreEqual("Checked in", modifications[3].Type);
             Assert.AreEqual("admin", modifications[3].UserName);
 
-            Assert.AreEqual(43750, modifications[4].ChangeNumber);
+            Assert.AreEqual("43750", modifications[4].ChangeNumber);
             Assert.AreEqual("Updated Version to 1.0.4", modifications[4].Comment);
             Assert.AreEqual("AssemblyInfo.cs", modifications[4].FileName);
             Assert.AreEqual("MyProductName.Enterprise/MyProductName.WebService/Properties", modifications[4].FolderName);
@@ -184,7 +184,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             Assert.AreEqual("Checked in", modifications[4].Type);
             Assert.AreEqual("admin", modifications[4].UserName);
 
-            Assert.AreEqual(43749, modifications[5].ChangeNumber); 
+            Assert.AreEqual("43749", modifications[5].ChangeNumber); 
             Assert.AreEqual("Updated Version to 1.0.4", modifications[5].Comment);
             Assert.AreEqual("AssemblyInfo.cs", modifications[5].FileName);
             Assert.AreEqual("MyProductName.Enterprise/MyProductName.DataLayer/Properties", modifications[5].FolderName);
@@ -192,7 +192,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             Assert.AreEqual("Checked in", modifications[5].Type);
             Assert.AreEqual("admin", modifications[5].UserName);
 
-            Assert.AreEqual(43748, modifications[6].ChangeNumber);
+            Assert.AreEqual("43748", modifications[6].ChangeNumber);
             Assert.AreEqual("Updated Version to 1.0.4", modifications[6].Comment);
             Assert.AreEqual("AssemblyInfo.cs", modifications[6].FileName);
             Assert.AreEqual("MyProductName.Enterprise/MyProductName.BusinessLayer/Properties", modifications[6].FolderName);

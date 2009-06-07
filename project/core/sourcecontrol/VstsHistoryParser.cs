@@ -83,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
             Match ChangeSet = parser.Match(changeSet.ToString(), 0);            
 
-            int changeNumber = Convert.ToInt32(ChangeSet.Groups["changenumber"].Value);
+            string changeNumber = ChangeSet.Groups["changenumber"].Value;
             string author = ChangeSet.Groups["author"].Value;
             DateTime changeTime = DateTime.Parse(ChangeSet.Groups["date"].Value);           
             string comment = ChangeSet.Groups["comment"].Value.Trim();

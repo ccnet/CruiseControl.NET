@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			modification.UserName = node.Attributes["user"].InnerText;
 			modification.Type = GetTypeString(node.Attributes["type"].InnerText);
 			modification.Comment = GetComment(node);
-			modification.ChangeNumber = int.Parse(node.Attributes["txid"].InnerText);
+			modification.ChangeNumber = node.Attributes["txid"].InnerText;
 			return modification;
 		}
 

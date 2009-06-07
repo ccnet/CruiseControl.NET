@@ -432,7 +432,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 
 			int length = modifications.Length;
 			// initalize a string build with an approximately sized buffer
-			int[] taskList = new int[length];
+			var taskList = new string[length];
 			StringBuilder retVal = new StringBuilder(10*length);
 
 			// build an array of all unique task numbers

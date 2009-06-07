@@ -529,7 +529,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             expected.FileName = string.Empty; ;
             expected.FolderName = @"$/maintrunk/Dev/somefolder/folder";
             expected.ModifiedTime = CreateDate("2009-05-14T17:47:53Z");
-            expected.ChangeNumber = 996969;
+            expected.ChangeNumber = "996969";
             expected.UserName = "s.user";
             expected.Comment = "Delete unused directory";
 
@@ -548,7 +548,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             mbrMod1.FileName = "WndUtil.cpp";
             mbrMod1.FolderName = "$/Project/Dev/Src";
             mbrMod1.ModifiedTime = CreateDate("2009-05-07T14:31:10");
-            mbrMod1.ChangeNumber = Convert.ToInt32("110558");
+            mbrMod1.ChangeNumber = "110558";
             mbrMod1.UserName = "s.user";
             mbrMod1.Comment = "Fix GDI leak";
 
@@ -558,7 +558,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             mbrMod1.FileName = "characterMapTests.cpp";
             mbrMod1.FolderName = "$/Project/Dev/Misc/MFCcharacterCaptureTest/MFCcharacterCaptureTest";
             mbrMod1.ModifiedTime = CreateDate("2009-05-07T13:47:46");
-            mbrMod1.ChangeNumber = Convert.ToInt32("110551");
+            mbrMod1.ChangeNumber = "110551";
             mbrMod1.UserName = "s.otheruser";
             mbrMod1.Comment = "Cleanup tests a little";
 

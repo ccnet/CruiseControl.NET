@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ArrayList modList = new ArrayList(itemModifications.Length);
 			foreach (Modification mod in itemModifications)
 			{
-				if (mod.ChangeNumber <= _lastTxID)
+				if (int.Parse(mod.ChangeNumber) <= _lastTxID)
 					modList.Add(mod);
 			}
 

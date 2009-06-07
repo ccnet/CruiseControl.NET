@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			expected.FileName = "addedfile.txt";
 			expected.FolderName = "/foo";
 			expected.ModifiedTime = CreateDate("2003-12-12T16:48:51Z");
-			expected.ChangeNumber = 4;
+			expected.ChangeNumber = "4";
 			expected.UserName = "";
 			expected.Comment = "i added a file";
 
@@ -56,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mbrMod1.FileName = "myfile.txt";
 			mbrMod1.FolderName = "";
 			mbrMod1.ModifiedTime = CreateDate("2003-12-12T17:09:44.559203Z");
-			mbrMod1.ChangeNumber = 3;
+			mbrMod1.ChangeNumber = "3";
 			mbrMod1.UserName = "mbr";
 			mbrMod1.Comment = "Other Mike made some changes";
 
@@ -129,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             ";
             Modification[] mods = svn.Parse(new StringReader(xml), new DateTime(2007, 2, 1, 23, 17, 8), new DateTime(2007, 2, 3, 23, 17, 9));
             Assert.AreEqual(1, mods.Length, "Number of modifications found");
-            Assert.AreEqual(4, mods[0].ChangeNumber, "Revision number");
+            Assert.AreEqual("4", mods[0].ChangeNumber, "Revision number");
             Assert.IsEmpty(mods[0].Comment, "Message should be empty");
             Assert.IsNull(mods[0].EmailAddress, "Email address should be null");
             Assert.AreEqual("addedfile.txt", mods[0].FileName, "File name");

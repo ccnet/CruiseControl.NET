@@ -335,7 +335,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         private Modification GenerateModification(string name, string type)
         {
             Modification modification = new Modification();
-            modification.ChangeNumber = 1;
+            modification.ChangeNumber = "1";
             modification.Comment = "A comment";
             modification.EmailAddress = "email@somewhere.com";
             modification.FileName = name;

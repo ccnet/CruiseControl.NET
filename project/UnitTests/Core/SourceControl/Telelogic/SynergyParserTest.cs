@@ -121,8 +121,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 
 			Modification[] actual = parser.Parse(string.Empty, SynergyMother.NewObjects, from);
 			Assert.AreEqual(7, actual.Length);
-			Assert.AreEqual(15, actual[0].ChangeNumber);
-			Assert.AreEqual(9999, actual[6].ChangeNumber);
+			Assert.AreEqual("15", actual[0].ChangeNumber);
+			Assert.AreEqual("9999", actual[6].ChangeNumber);
 		}
 
 		private void ParseNewObjects(string newTasks, string newObjects)
@@ -143,35 +143,35 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 				Assert.IsNull(modification.Url);
 			}
 
-			Assert.AreEqual(15, actual[0].ChangeNumber);
+			Assert.AreEqual("15", actual[0].ChangeNumber);
 			Assert.AreEqual(@"sourcecontrol-3", actual[0].FileName);
 			Assert.AreEqual(@"$/MyProject/CruiseControl.NET/project/core", actual[0].FolderName);
 			Assert.AreEqual(@"dir", actual[0].Type);
 			Assert.AreEqual(@"lorem ipsum dolerem ", actual[0].Comment);
 
 			// test that the last task number is used when an object is associated with multiple tasks
-			Assert.AreEqual(21, actual[1].ChangeNumber);
+			Assert.AreEqual("21", actual[1].ChangeNumber);
 			Assert.AreEqual(@"Synergy.cs-1", actual[1].FileName);
 			Assert.AreEqual(@"$/MyProject/CruiseControl.NET/project/core/sourcecontrol", actual[1].FolderName);
 			Assert.AreEqual(@"ms_cs", actual[1].Type);
 			// check that trailing spaces are honored
 			Assert.AreEqual("jdoe's Insulated Development projects", actual[1].Comment);
 
-			Assert.AreEqual(22, actual[2].ChangeNumber);
+			Assert.AreEqual("22", actual[2].ChangeNumber);
 			// check that branched version numbers are parsed
 			Assert.AreEqual(@"SynergyCommandBuilder.cs-1.1.1", actual[2].FileName);
 			Assert.AreEqual(@"$/MyProject/CruiseControl.NET/project/core/sourcecontrol", actual[2].FolderName);
 			Assert.AreEqual(@"ms_cs", actual[2].Type);
 			Assert.AreEqual("Insulated Development projects for release PRODUCT/1.0", actual[2].Comment);
 
-			Assert.AreEqual(22, actual[3].ChangeNumber);
+			Assert.AreEqual("22", actual[3].ChangeNumber);
 			Assert.AreEqual(@"SynergyConnectionInfo.cs-2", actual[3].FileName);
 			Assert.AreEqual(@"$/MyProject/CruiseControl.NET/project/core/sourcecontrol", actual[3].FolderName);
 			Assert.AreEqual(@"ms_cs", actual[3].Type);
 			// check that trailing spaces are honored
 			Assert.AreEqual("Insulated Development projects for release PRODUCT/1.0", actual[3].Comment);
 
-			Assert.AreEqual(1, actual[4].ChangeNumber);
+			Assert.AreEqual("1", actual[4].ChangeNumber);
 			// check that branched version numbers are parsed
 			Assert.AreEqual(@"SynergyHistoryParser.cs-2.2.1", actual[4].FileName);
 			Assert.AreEqual(@"$/MyProject/CruiseControl.NET/project/core/sourcecontrol", actual[4].FolderName);
@@ -179,7 +179,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 			// check that trailing spaces are honored
 			Assert.AreEqual(@"0123456789 ~!@#$%^&*()_=", actual[4].Comment);
 
-			Assert.AreEqual(17, actual[5].ChangeNumber);
+			Assert.AreEqual("17", actual[5].ChangeNumber);
 			// check that branched version numbers are parsed
 			Assert.AreEqual(@"SynergyProjectInfo.cs-1", actual[5].FileName);
 			Assert.AreEqual(@"$/MyProject/CruiseControl.NET/project/core/sourcecontrol", actual[5].FolderName);
@@ -187,7 +187,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 			// check that reserved regular expression classes are escaped
 			Assert.AreEqual(@"the quick brown fox jumped over the lazy dog ", actual[5].Comment);
 
-			Assert.AreEqual(9999, actual[6].ChangeNumber);
+			Assert.AreEqual("9999", actual[6].ChangeNumber);
 			// check that branched version numbers are parsed
 			Assert.AreEqual(@"NotUsed-10", actual[6].FileName);
 			Assert.AreEqual(@"", actual[6].FolderName);

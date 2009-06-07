@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public string FolderName;
 		public DateTime ModifiedTime;
 		public string UserName;
-		public int ChangeNumber;
+		public string ChangeNumber;
 		public string Version = "";
 		public string Comment;
 		public string Url;
@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			writer.WriteElementString("date", DateUtil.FormatDate(ModifiedTime));
 			writer.WriteElementString("user", UserName);
 			writer.WriteElementString("comment", Comment);
-			writer.WriteElementString("changeNumber", ChangeNumber.ToString());
+			writer.WriteElementString("changeNumber", ChangeNumber);
             if (!string.IsNullOrEmpty(Version)) writer.WriteElementString("version", Version);
 			XmlUtil.WriteNonNullElementString(writer, "url", Url);
             XmlUtil.WriteNonNullElementString(writer, "issueUrl", IssueUrl);
@@ -69,15 +69,30 @@ namespace ThoughtWorks.CruiseControl.Core
 			return ReflectionUtil.ReflectionToString(this);
 		}
 
-        public static int GetLastChangeNumber(Modification[] modifications)
+        /// <summary>
+        /// Retrieves the change number of the last modification.
+        /// </summary>
+        /// <param name="modifications">The modifications to check.</param>
+        /// <returns>The last change number if there are any changes, null otherwise.</returns>
+        /// <remarks>
+        /// Since ChangeNumbers are no longer numbers, this will return null if there are no 
+        /// modifications.
+        /// </remarks>
+        public static string GetLastChangeNumber(Modification[] modifications)
         {
-            int lastChangeNumber = 0;
+            var lastModification = new Modification
+            {
+                ModifiedTime = DateTime.MinValue,
+                ChangeNumber = null
+            };
             foreach (Modification modification in modifications)
             {
-                if (modification.ChangeNumber > lastChangeNumber)
-                    lastChangeNumber = modification.ChangeNumber;
+                if (modification.ModifiedTime > lastModification.ModifiedTime)
+                {
+                    lastModification = modification;
+                }
             }
-            return lastChangeNumber;
+            return lastModification.ChangeNumber;
         }
 	}
 }

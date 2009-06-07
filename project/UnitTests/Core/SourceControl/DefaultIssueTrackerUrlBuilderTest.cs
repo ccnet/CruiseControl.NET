@@ -5,7 +5,7 @@ using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
     [TestFixture]
     public class DefaultIssueTrackerUrlBuilderTest
@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
             mods[0] = new Modification();
             mods[0].FolderName = "/trunk";
             mods[0].FileName = "nant.bat";
-            mods[0].ChangeNumber = 3;
+            mods[0].ChangeNumber = "3";
             mods[0].Comment= "CCNET-5000 blablabla";
 
             DefaultIssueTrackerUrlBuilder defaultIssue = CreateBuilder();
@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
             mods[0] = new Modification();
             mods[0].FolderName = "/trunk";
             mods[0].FileName = "nant.bat";
-            mods[0].ChangeNumber = 3;
+            mods[0].ChangeNumber = "3";
             mods[0].Comment = "CCNET-5000";
 
             DefaultIssueTrackerUrlBuilder defaultIssue = CreateBuilder();
@@ -78,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
             mods[0] = new Modification();
             mods[0].FolderName = "/trunk";
             mods[0].FileName = "nant.bat";
-            mods[0].ChangeNumber = 3;
+            mods[0].ChangeNumber = "3";
             mods[0].Comment = "5000 blablabla";
 
             DefaultIssueTrackerUrlBuilder defaultIssue = CreateBuilder();
@@ -95,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
             mods[0] = new Modification();
             mods[0].FolderName = "/trunk";
             mods[0].FileName = "nant.bat";
-            mods[0].ChangeNumber = 3;
+            mods[0].ChangeNumber = "3";
             mods[0].Comment = "5000";
 
             DefaultIssueTrackerUrlBuilder defaultIssue = CreateBuilder();
@@ -113,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
             mods[0] = new Modification();
             mods[0].FolderName = "/trunk";
             mods[0].FileName = "nant.bat";
-            mods[0].ChangeNumber = 3;
+            mods[0].ChangeNumber = "3";
             mods[0].Comment = "bla blabla bla bla";
 
             DefaultIssueTrackerUrlBuilder defaultIssue = CreateBuilder();
@@ -130,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
             mods[0] = new Modification();
             mods[0].FolderName = "/trunk";
             mods[0].FileName = "nant.bat";
-            mods[0].ChangeNumber = 3;
+            mods[0].ChangeNumber = "3";
             mods[0].Comment = "";
 
             DefaultIssueTrackerUrlBuilder defaultIssue = CreateBuilder();
@@ -147,7 +147,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
             mods[0] = new Modification();
             mods[0].FolderName = "/trunk";
             mods[0].FileName = "nant.bat";
-            mods[0].ChangeNumber = 3;
+            mods[0].ChangeNumber = "3";
             mods[0].Comment = " ";
 
             DefaultIssueTrackerUrlBuilder defaultIssue = CreateBuilder();

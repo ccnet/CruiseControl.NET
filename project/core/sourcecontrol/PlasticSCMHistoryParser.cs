@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				mod.FolderName = Path.GetDirectoryName(path);
 				mod.UserName = data[2];
 				mod.ModifiedTime = DateTime.ParseExact (data[3], PlasticSCM.DATEFORMAT, System.Globalization.CultureInfo.InvariantCulture);
-				mod.ChangeNumber =  int.Parse(data[4]);
+				mod.ChangeNumber =  data[4];
 				if (!filemods.Contains(path)) 
 				{
 					filemods.Add(path);

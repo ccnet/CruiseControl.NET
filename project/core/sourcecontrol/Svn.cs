@@ -147,7 +147,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                     // will also contain the changes in the external paths.
                     if (repositoryUrl == TrunkUrl)
                     {
-                        latestRevision = Modification.GetLastChangeNumber(modsInRepository);
+                        var lastChangeNumber = Modification.GetLastChangeNumber(modsInRepository);
+                        latestRevision = int.Parse(lastChangeNumber ?? "0");
                     }
                     modifications.AddRange(modsInRepository);
                 }
@@ -366,7 +367,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private string TagSource(IIntegrationResult result)
         {
-            if (Modification.GetLastChangeNumber(mods) == 0)
+            if (Modification.GetLastChangeNumber(mods) == null)
             {
                 return Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)).TrimEnd(Path.DirectorySeparatorChar);
             }

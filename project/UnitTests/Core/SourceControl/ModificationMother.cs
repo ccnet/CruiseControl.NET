@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			DateTime modifiedTime,
 			string userName,
 			string comment,
-			int changeNumber,
+			string changeNumber,
 			string emailAddress,
 			string url)
 		{
@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			                          DateTime.Now,
 			                          "SomeUser",
 			                          "Comment",
-			                          15,
+			                          "15",
 			                          "someuser@somecompany.com",
 			                          "http://someserver/someview");
 		}
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			                          modifiedTime,
 			                          userName,
 			                          "Comment",
-			                          15,
+			                          "15",
 			                          "someuser@somecompany.com",
 			                          "http://someserver/someview");
 		}

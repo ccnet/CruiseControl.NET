@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             historyOutputModifications = new Modification[5];
 
             historyOutputModifications[0] = new Modification();
-            historyOutputModifications[0].ChangeNumber = 12245;
+            historyOutputModifications[0].ChangeNumber = "12245";
             historyOutputModifications[0].Comment = "New Project for accessing SICS/nt web services";
             historyOutputModifications[0].FileName = "AssemblyInfo.cs";
             historyOutputModifications[0].FolderName = @"Dev\Server\Interface\Properties\";
@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             historyOutputModifications[0].UserName = "joe_user";
 
             historyOutputModifications[1] = new Modification();
-            historyOutputModifications[1].ChangeNumber = 12244;
+            historyOutputModifications[1].ChangeNumber = "12244";
             historyOutputModifications[1].Comment = "New Project for accessing web services";
             historyOutputModifications[1].FileName = "Interface";
             historyOutputModifications[1].FolderName = @"Dev\Server\";
@@ -85,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             historyOutputModifications[1].UserName = "sam_spade";
 
             historyOutputModifications[2] = new Modification();
-            historyOutputModifications[2].ChangeNumber = 12244;
+            historyOutputModifications[2].ChangeNumber = "12244";
             historyOutputModifications[2].Comment = "New Project for accessing web services";
             historyOutputModifications[2].FileName = "App.config";
             historyOutputModifications[2].FolderName = @"Dev\Server\Interface\";
@@ -94,7 +94,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             historyOutputModifications[2].UserName = "sam_spade";
 
             historyOutputModifications[3] = new Modification();
-            historyOutputModifications[3].ChangeNumber = 12244;
+            historyOutputModifications[3].ChangeNumber = "12244";
             historyOutputModifications[3].Comment = "New Project for accessing web services";
             historyOutputModifications[3].FileName = "CommonTypes.cs";
             historyOutputModifications[3].FolderName = @"Dev\Server\Interface\";
@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             historyOutputModifications[3].UserName = "sam_spade";
 
             historyOutputModifications[4] = new Modification();
-            historyOutputModifications[4].ChangeNumber = 12244;
+            historyOutputModifications[4].ChangeNumber = "12244";
             historyOutputModifications[4].Comment = "New Project for accessing web services";
             historyOutputModifications[4].FileName = "Connection.cs";
             historyOutputModifications[4].FolderName = @"Dev\Server\Interface\";
@@ -152,7 +152,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             historyOutputModifications = new Modification[5];
 
             historyOutputModifications[0] = new Modification();
-            historyOutputModifications[0].ChangeNumber = 12245;
+            historyOutputModifications[0].ChangeNumber = "12245";
             historyOutputModifications[0].Comment = "New Project for accessing SICS/nt web services";
             historyOutputModifications[0].FileName = "AssemblyInfo.cs";
             historyOutputModifications[0].FolderName = @"Dev/Server/Interface/Properties/";
@@ -161,7 +161,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             historyOutputModifications[0].UserName = "joe_user";
 
             historyOutputModifications[1] = new Modification();
-            historyOutputModifications[1].ChangeNumber = 12244;
+            historyOutputModifications[1].ChangeNumber = "12244";
             historyOutputModifications[1].Comment = "New Project for accessing web services";
             historyOutputModifications[1].FileName = "Interface";
             historyOutputModifications[1].FolderName = @"Dev/Server/";
@@ -170,7 +170,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             historyOutputModifications[1].UserName = "sam_spade";
 
             historyOutputModifications[2] = new Modification();
-            historyOutputModifications[2].ChangeNumber = 12244;
+            historyOutputModifications[2].ChangeNumber = "12244";
             historyOutputModifications[2].Comment = "New Project for accessing web services";
             historyOutputModifications[2].FileName = "App.config";
             historyOutputModifications[2].FolderName = @"Dev/Server/Interface/";
@@ -179,7 +179,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             historyOutputModifications[2].UserName = "sam_spade";
 
             historyOutputModifications[3] = new Modification();
-            historyOutputModifications[3].ChangeNumber = 12244;
+            historyOutputModifications[3].ChangeNumber = "12244";
             historyOutputModifications[3].Comment = "New Project for accessing web services";
             historyOutputModifications[3].FileName = "CommonTypes.cs";
             historyOutputModifications[3].FolderName = @"Dev/Server/Interface/";
@@ -188,7 +188,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             historyOutputModifications[3].UserName = "sam_spade";
 
             historyOutputModifications[4] = new Modification();
-            historyOutputModifications[4].ChangeNumber = 12244;
+            historyOutputModifications[4].ChangeNumber = "12244";
             historyOutputModifications[4].Comment = "New Project for accessing web services";
             historyOutputModifications[4].FileName = "Connection.cs";
             historyOutputModifications[4].FolderName = @"Dev/Server/Interface/";

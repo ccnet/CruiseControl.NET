@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 {
 	public class P4Mother
 	{

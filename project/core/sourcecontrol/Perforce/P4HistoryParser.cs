@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 				{
 					// when this line is matched, we're finished with this mod, so add it
 					Modification mod = new Modification();
-					mod.ChangeNumber = Int32.Parse(change);
+					mod.ChangeNumber = change;
 					mod.Version = modificationMatch.Groups["revision"].Value;
 					mod.FolderName = modificationMatch.Groups["folder"].Value;
 					mod.FileName = modificationMatch.Groups["file"].Value;

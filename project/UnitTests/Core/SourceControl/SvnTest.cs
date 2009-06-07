@@ -159,8 +159,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void CreatingLabelProcessPerformsServerToServerCopyWithRevisionWhenKnown()
 		{
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful("foo");
-			Modification mod = new Modification();
-			mod.ChangeNumber = 5;
+            Modification mod = new Modification
+            {
+                ModifiedTime = new DateTime(2009, 1, 1),
+                ChangeNumber = "5"
+            };
 			svn.latestRevision = 5;
 			result.Modifications = new Modification[] { mod };
 			svn.mods = result.Modifications;
@@ -211,7 +214,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			IIntegrationResult result = IntegrationResult();
 			Modification mod = new Modification();
-			mod.ChangeNumber = 10;
+			mod.ChangeNumber = "10";
 			svn.latestRevision = 10;
 			result.Modifications = new Modification[] {mod};
 			svn.mods = result.Modifications;

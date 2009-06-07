@@ -4,7 +4,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 
     [TestFixture]

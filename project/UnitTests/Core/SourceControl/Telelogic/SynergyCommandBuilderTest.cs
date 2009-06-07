@@ -47,11 +47,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 				{
 					new Modification(), new Modification(), new Modification(), new Modification()
 				};
-			result.Modifications[0].ChangeNumber = 100;
-			result.Modifications[1].ChangeNumber = 2000;
-			result.Modifications[2].ChangeNumber = 30000;
+			result.Modifications[0].ChangeNumber = "100";
+			result.Modifications[1].ChangeNumber = "2000";
+			result.Modifications[2].ChangeNumber = "30000";
 			// duplicate the last change number
-			result.Modifications[3].ChangeNumber = 30000;
+			result.Modifications[3].ChangeNumber = "30000";
 
 			result.Label = "765";
 			((IntegrationResult) result).StartTime = new DateTime(1970, 1, 1);

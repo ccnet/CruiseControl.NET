@@ -66,35 +66,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			string change )
 		{
 			Modification modification = new Modification();
-			// ClearCase change number is a string, not an int
-			modification.ChangeNumber = ParseChangeNumber( change );
+			modification.ChangeNumber = change;
 			modification.UserName = userName;
 			modification.Type = modificationType;
 			modification.Comment = ( comment == string.Empty ? null : comment );
 			AssignFileInfo( modification, elementName );
 			AssignModificationTime( modification, time );
 			return modification;
-		}
-
-		public int ParseChangeNumber( string item )
-		{
-			if ( item == null )
-			{
-				return -1;
-			}
-			int index = item.LastIndexOf( "\\" );
-			if ( index == -1 )
-			{
-				return -1;
-			}
-			try 
-			{
-				return Int32.Parse( item.Substring( index + 1 ) );
-			}
-			catch ( FormatException )
-			{
-				return -1;
-			}
 		}
 
 		public Modification ParseEntry( string line )

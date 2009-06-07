@@ -217,9 +217,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 			    string command = "update";
 				PossiblyLogIn(result);
-			    int lastChange = Modification.GetLastChangeNumber(mods);
-                if (lastChange != 0)
-                    command = command + " -t " + lastChange;
+                var lastChangeNumber = Modification.GetLastChangeNumber(mods);
+			    int lastChange = int.Parse(lastChangeNumber ?? "0");
+                if (lastChange != 0) command = command + " -t " + lastChange;
                 RunCommand(command, result);
 			}
 		}

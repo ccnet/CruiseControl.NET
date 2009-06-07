@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod[0] = new Modification();
 			mod[0].FolderName = @"c:\work\cruise\plasticwks\src";
 			mod[0].FileName = "HelloWorld.cs";
-			mod[0].ChangeNumber = 27;
+			mod[0].ChangeNumber = "27";
 			mod[0].ModifiedTime = DateTime.ParseExact("24/05/2007 17:06:10", PlasticSCM.DATEFORMAT, System.Globalization.CultureInfo.InvariantCulture);
 			mod[0].UserName = "testing01";
 
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod[1] = new Modification();
 			mod[1].FolderName = @"c:\work\cruise\plasticwks";
 			mod[1].FileName = "hello.build";
-			mod[1].ChangeNumber = 29;
+			mod[1].ChangeNumber = "29";
 			mod[1].ModifiedTime = DateTime.ParseExact ("24/05/2007 17:07:10", PlasticSCM.DATEFORMAT, System.Globalization.CultureInfo.InvariantCulture);
 			mod[1].UserName = "edmund";
 

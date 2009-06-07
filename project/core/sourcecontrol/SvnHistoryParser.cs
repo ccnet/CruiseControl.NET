@@ -107,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 foreach (XmlNode path in paths)
                 {
                     Modification mod = new Modification();
-                    mod.ChangeNumber = changeNumber;
+                    mod.ChangeNumber = changeNumber.ToString();
                     mod.ModifiedTime = changeTime;
                     mod.UserName = author;
                     mod.Comment = message;

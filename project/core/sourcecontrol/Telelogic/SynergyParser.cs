@@ -141,11 +141,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 						SynergyTaskInfo info = (SynergyTaskInfo) tasks[capture.Value];
 						if (info == null)
 						{
-							modification.ChangeNumber = Int32.Parse(Regex.Match(capture.Value, @"\d+").Value);
+							modification.ChangeNumber = Regex.Match(capture.Value, @"\d+").Value;
 						}
 						else
 						{
-							modification.ChangeNumber = info.TaskNumber;
+							modification.ChangeNumber = info.TaskNumber.ToString();
 							modification.ModifiedTime = info.CompletionDate;
 							if (null != info.TaskSynopsis)
 								modification.Comment = info.TaskSynopsis;

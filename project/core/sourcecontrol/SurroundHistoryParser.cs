@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			Modification modification = new Modification();
 			modification.FolderName = match.Groups[1].ToString();
 			modification.FileName = match.Groups[2].ToString();
-			modification.ChangeNumber = Int32.Parse(match.Groups[3].ToString());
+			modification.ChangeNumber = match.Groups[3].ToString();
 			modification.Type = match.Groups[4].ToString();
 			modification.ModifiedTime = DateTime.ParseExact(match.Groups[5].ToString(), TO_SSCM_DATE_FORMAT, CultureInfo.InvariantCulture);
 			modification.Comment = match.Groups[6].ToString();

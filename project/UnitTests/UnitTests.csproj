@@ -771,7 +771,7 @@
     <Compile Include="Core\SourceControl\VssTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\SourceControl\Vss\VssLocaleTest.cs">
+    <Compile Include="Core\SourceControl\VssLocaleTest.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\SourceControl\WebSVNBuilderTest.cs">

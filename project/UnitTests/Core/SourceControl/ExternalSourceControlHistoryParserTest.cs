@@ -4,7 +4,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
     [TestFixture]
     public class ExternalSourceControlHistoryParserTest
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
 ";
 
             expectedModifications[0] = new Modification();
-            expectedModifications[0].ChangeNumber = 12245;
+            expectedModifications[0].ChangeNumber = "12245";
             expectedModifications[0].Comment = "New Project for testing stuff";
             expectedModifications[0].EmailAddress = "JUser@Example.Com";
             expectedModifications[0].FileName = "AssemblyInfo.cs";
@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
             expectedModifications[0].Version = "5";
 
             expectedModifications[1] = new Modification();
-            expectedModifications[1].ChangeNumber = 12244;
+            expectedModifications[1].ChangeNumber = "12244";
             expectedModifications[1].Comment = "New Project for accessing web services";
             expectedModifications[1].EmailAddress = "SSpade@Example.Com";
             expectedModifications[1].FileName = "Interface";

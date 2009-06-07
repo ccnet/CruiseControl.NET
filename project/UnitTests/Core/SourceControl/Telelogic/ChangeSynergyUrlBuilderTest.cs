@@ -79,9 +79,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 				{
 					new Modification(), new Modification(), new Modification()
 				};
-			testModifications[0].ChangeNumber = 100;
-			testModifications[1].ChangeNumber = 2000;
-			testModifications[2].ChangeNumber = 30000;
+			testModifications[0].ChangeNumber = "100";
+			testModifications[1].ChangeNumber = "2000";
+			testModifications[2].ChangeNumber = "30000";
 			return (testModifications);
 		}
 	}

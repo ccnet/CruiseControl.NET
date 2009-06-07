@@ -23,16 +23,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		{
 			result.Modifications = new Modification[3];
 			result.Modifications[0] = ModificationMother.CreateModification("fileName", "folderName",
-																			new DateTime(), "userName",
-																			"comment", 10, "email@address",
+																			new DateTime(2009, 1, 1), "userName",
+																			"comment", "10", "email@address",
 																			"http://url");
 			result.Modifications[1] = ModificationMother.CreateModification("fileName", "folderName",
-																			new DateTime(), "userName",
-																			"comment", 30, "email@address",
+																			new DateTime(2009, 1, 3), "userName",
+																			"comment", "30", "email@address",
 																			"http://url");
 			result.Modifications[2] = ModificationMother.CreateModification("fileName", "folderName",
-																			new DateTime(), "userName",
-																			"comment", 20, "email@address",
+																			new DateTime(2009, 1, 2), "userName",
+																			"comment", "20", "email@address",
 																			"http://url");
 		}
 

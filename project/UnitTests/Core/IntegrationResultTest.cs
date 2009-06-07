@@ -62,26 +62,32 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		}
 
 		[Test]
-		public void ShouldReturnZeroAsLastChangeNumberIfNoModifications()
+		public void ShouldReturnNullAsLastChangeNumberIfNoModifications()
 		{
-			Assert.AreEqual(0, result.LastChangeNumber);
+			Assert.AreEqual(null, result.LastChangeNumber);
 		}
 
 		[Test]
 		public void ShouldReturnTheMaximumChangeNumberFromAllModificationsForLastChangeNumber()
 		{
-			Modification mod1 = new Modification();
-			mod1.ChangeNumber = 10;
+            Modification mod1 = new Modification
+            {
+                ChangeNumber = "10",
+                ModifiedTime = new DateTime(2009, 1, 2)
+            };
 
-			Modification mod2 = new Modification();
-			mod2.ChangeNumber = 20;
+            Modification mod2 = new Modification
+            {
+                ChangeNumber = "20",
+                ModifiedTime = new DateTime(2009, 1, 3)
+            };
 
 			result.Modifications = new Modification[] {mod1};
-			Assert.AreEqual(10, result.LastChangeNumber);
+			Assert.AreEqual("10", result.LastChangeNumber);
 			result.Modifications = new Modification[] {mod1, mod2};
-			Assert.AreEqual(20, result.LastChangeNumber);
+			Assert.AreEqual("20", result.LastChangeNumber);
 			result.Modifications = new Modification[] {mod2, mod1};
-			Assert.AreEqual(20, result.LastChangeNumber);
+			Assert.AreEqual("20", result.LastChangeNumber);
 		}
 
 		[Test]

@@ -4,7 +4,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 {
 	[TestFixture]
 	public class P4HistoryParserTest
@@ -49,13 +49,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			Assert.AreEqual("//shipping", mods[0].FolderName);
 			Assert.AreEqual("edit", mods[0].Type);
 			Assert.AreEqual("a test comment", mods[0].Comment);
-			Assert.AreEqual(23680, mods[0].ChangeNumber);
+			Assert.AreEqual("23680", mods[0].ChangeNumber);
 			Assert.AreEqual("10", mods[0].Version);
 		}
 
 		private void AssertModification(Modification mod, int changeNumber, string revision, string file, string folder, DateTime modifiedTime, string type, string email, string username, string comment)
 		{
-			Assert.AreEqual(changeNumber, mod.ChangeNumber);
+			Assert.AreEqual(changeNumber.ToString(), mod.ChangeNumber);
 			Assert.AreEqual(file, mod.FileName);
 			Assert.AreEqual(folder, mod.FolderName);
 			Assert.AreEqual(modifiedTime, mod.ModifiedTime);

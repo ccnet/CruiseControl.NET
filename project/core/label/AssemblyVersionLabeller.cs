@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			Log.Debug(string.Concat("Old version is: ", oldVersion.ToString()));
 
 			// get current change number
-			int currentRevision;
+			int currentRevision = 0;
 
 			if (Revision > -1)
 			{
@@ -75,13 +75,20 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			}
 			else
 			{
-				currentRevision = integrationResult.LastChangeNumber;
-				Log.Debug(string.Concat("LastChangeNumber is: ", currentRevision.ToString()));
+                if (int.TryParse(integrationResult.LastChangeNumber, out currentRevision))
+                {
+                    Log.Debug(
+                        string.Format("LastChangeNumber retrieved - {0}", 
+                        currentRevision));
+                }
+                else
+                {
+                    Log.Debug("LastChangeNumber defaulted to 0");
+                }
 
 				// use the revision from last build,
 				// because LastChangeNumber is 0 on ForceBuild or other failures
-				if (currentRevision <= 0)
-					currentRevision = oldVersion.Revision;
+				if (currentRevision <= 0) currentRevision = oldVersion.Revision;
 			}
 
 			// get current build number

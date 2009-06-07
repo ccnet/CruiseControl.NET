@@ -171,7 +171,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
                 Modification[] modifications = new Modification[1];
                 modifications[0] = new Modification();
                 modifications[0].ModifiedTime = new DateTime(2002, 2, 3);
-                modifications[0].ChangeNumber = 2;
+                modifications[0].ChangeNumber = "2";
                 result.Modifications = modifications;
             }
             return result;

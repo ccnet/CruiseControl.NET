@@ -219,7 +219,16 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
-        public int LastChangeNumber
+        /// <summary>
+        /// Retrieves the change number of the last modification.
+        /// </summary>
+        /// <param name="modifications">The modifications to check.</param>
+        /// <returns>The last change number if there are any changes, null otherwise.</returns>
+        /// <remarks>
+        /// Since ChangeNumbers are no longer numbers, this will return null if there are no 
+        /// modifications.
+        /// </remarks>
+        public string LastChangeNumber
         {
             get
             {
