@@ -1,4 +1,4 @@
-using NMock;
+using Rhino.Mocks;
 using NUnit.Framework;
 using Objection;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
@@ -10,75 +10,79 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 	[TestFixture]
 	public class CruiseActionFactoryTest
 	{
-		private DynamicMock objectSourceMock;
+        private MockRepository mocks = new MockRepository();
+        private ObjectSource objectSource;
 		private CruiseActionFactory actionFactory;
-		private DynamicMock requestMock;
 		private IRequest request;
 
 		[SetUp]
 		public void Setup()
 		{
-			objectSourceMock = new DynamicMock(typeof(ObjectSource))	;
-			actionFactory = new CruiseActionFactory((ObjectSource) objectSourceMock.MockInstance);
-
-			requestMock = new DynamicMock(typeof(IRequest));
-			request = (IRequest) requestMock.MockInstance;
-		}
-
-		private void VerifyAll()
-		{
-			objectSourceMock.Verify();
-			requestMock.Verify();
+			objectSource = mocks.StrictMock<ObjectSource>();
+			actionFactory = new CruiseActionFactory(objectSource);
+			request = mocks.StrictMock<IRequest>();
 		}
 
 		[Test]
 		public void ShouldReturnUnknownActionIfActionIsntAvailable()
 		{
-			requestMock.ExpectAndReturn("FileNameWithoutExtension", "ThisAintNoAction");
-			objectSourceMock.ExpectAndReturn("GetByName", null, "ThisAintNoAction");
+			Expect.Call(request.FileNameWithoutExtension)
+                .Return("ThisAintNoAction");
+			Expect.Call(objectSource.GetByName("thisaintnoaction"))
+                .Return(null);
+            mocks.ReplayAll();
 
 			Assert.IsTrue(actionFactory.Create(request) is UnknownActionAction);
 
-			VerifyAll();
+            mocks.VerifyAll();
 		}
 
 		[Test]
 		public void ShouldReturnDefaultActionIfNoActionSpecified()
 		{
-			requestMock.ExpectAndReturn("FileNameWithoutExtension", "");
+			Expect.Call(request.FileNameWithoutExtension)
+                .Return(string.Empty);
 
-			IAction stubAction = (IAction) new DynamicMock(typeof(IAction)).MockInstance;
-			objectSourceMock.ExpectAndReturn("GetByType", stubAction, typeof(DefaultAction));
+			var stubAction = mocks.DynamicMock<IAction>();
+			Expect.Call(objectSource.GetByType(typeof(DefaultAction)))
+                .Return(stubAction);
+            mocks.ReplayAll();
 
 			Assert.AreEqual(stubAction, actionFactory.Create(request));
 
-			VerifyAll();
+            mocks.VerifyAll();
 		}
 
 		[Test]
 		public void ShouldReturnDefaultActionIfDefaultActionSpecified()
 		{
-			requestMock.ExpectAndReturn("FileNameWithoutExtension", "default");
+			Expect.Call(request.FileNameWithoutExtension)
+                .Return("default");
 
-			IAction stubAction = (IAction) new DynamicMock(typeof(IAction)).MockInstance;
-			objectSourceMock.ExpectAndReturn("GetByType", stubAction, typeof(DefaultAction));
+			var stubAction = mocks.DynamicMock<IAction>();
+			Expect.Call(objectSource.GetByType(typeof(DefaultAction)))
+                .Return(stubAction);
+            mocks.ReplayAll();
 
 			Assert.AreEqual(stubAction, actionFactory.Create(request));
 
-			VerifyAll();
+            mocks.VerifyAll();
 		}
 
 		[Test]
 		public void ShouldReturnRequestedActionIfAvailable()
 		{
-			requestMock.ExpectAndReturn("FileNameWithoutExtension", "myAction");
+			Expect.Call(request.FileNameWithoutExtension)
+                .Return("myAction");
 
-			IAction stubAction = (IAction) new DynamicMock(typeof(IAction)).MockInstance;
-			objectSourceMock.ExpectAndReturn("GetByName", stubAction, "myAction");
+			var stubAction = mocks.DynamicMock<IAction>();
+			Expect.Call(objectSource.GetByName("myaction"))
+                .Return(stubAction);
+            mocks.ReplayAll();
 
 			Assert.AreSame(stubAction, actionFactory.Create(request));
 
-			VerifyAll();
+            mocks.VerifyAll();
 		}
 	}
 }
