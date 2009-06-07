@@ -506,7 +506,10 @@
     <Compile Include="StatusIcon.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="X10\Cm11Message.cs" />
     <Compile Include="X10\Cm11LowLevelDriver.cs" />
+    <Compile Include="X10\Cm11LowLevelDriverError.cs" />
+    <Compile Include="X10\Cm11LowLevelDriverWorker.cs" />
     <Compile Include="X10\Cm17LowLevelDriver.cs" />
     <Compile Include="X10\ILampController.cs">
       <SubType>Code</SubType>

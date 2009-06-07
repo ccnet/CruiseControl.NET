@@ -44,6 +44,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
             if (statusLabel != null) { statusLabel.Text = "finished" + statusLine + "\n" + output; }
         }
 
+        public void CloseDriver()
+        {
+           // Not implemented
+        }
+
         private int getPortNum()
         {
             int portNum = 0;

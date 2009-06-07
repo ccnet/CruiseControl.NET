@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
     /// This class controls the CM11a X10 Controller.  It is responsible for all
     /// IO operations between the CM11a Hardware and the Module classes.  
     /// </summary>
-    public class Cm11LowLevelDriver : IX10LowLevelDriver
+    public partial class Cm11LowLevelDriver : IX10LowLevelDriver
     {
         [Flags]
         private enum CM11aHouseCode
@@ -61,14 +61,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
             Function = 0x06
         }
 
-        private SerialPort comm; //Serial Port CM11a Controller is on
         private CM11aHouseCode x10HouseCode; //House code to control
-        private int transmissionRetries = 5; //Number of times to retry transmissions
-        static readonly byte[] okBuffer = new byte[1] { 0x00 }; //Const for the OK command
+        private Cm11LowLevelDriverWorker worker;
         private const ControllerType controller = ControllerType.CM11; //Controller Type
+        private System.Threading.Thread workerThread;
 
         /// <summary>
-        /// Constructor for the X10CM11aController object.  This opens the comm port and initializes global variables
+        /// Constructor for the X10CM11aController object.
         /// </summary>
         /// <param name="houseCode">House Code to control</param>
         /// <param name="comPort">Comm port the CM11a is on</param>
@@ -79,21 +78,30 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
         public Cm11LowLevelDriver(String houseCode, string comPort, int baudRate, Parity parity, int dataBits,
                                   StopBits stopBits)
         {
+            x10HouseCode = (CM11aHouseCode)Enum.Parse(typeof(CM11aHouseCode), houseCode);
+            worker = new Cm11LowLevelDriverWorker(x10HouseCode, comPort, baudRate, parity, dataBits, stopBits);
+            worker.Error += new EventHandler<Cm11LowLevelDriverError>(worker_Error);
+
             try
             {
-                comm = new SerialPort(comPort, baudRate, parity, dataBits, stopBits);
-                comm.ReadTimeout = 1500;
-                comm.Open();
-                x10HouseCode = (CM11aHouseCode)Enum.Parse(typeof(CM11aHouseCode),houseCode);
+                workerThread = new System.Threading.Thread(worker.StartProcessing);
+                workerThread.IsBackground = true;
+                workerThread.Start();
             }
             catch (ApplicationException ae)
             {
-                throw (new ApplicationException("Error Initializing CM11 X10 Controller",ae));
+                throw (new ApplicationException("Error Initializing CM11 X10 Controller", ae));
             }
-            catch (IOException ioe)
-            {
-                throw (new ApplicationException("Error Initializing CM11 X10 Controller",ioe));
-            }
+        }
+
+        ~Cm11LowLevelDriver()
+        {
+            worker.CloseDriver();
+        }
+        void worker_Error(object sender, Cm11LowLevelDriverError e)
+        {
+            // Used for tracing
+            System.Diagnostics.Debug.WriteLine("Cm11LowLevelDriver: Error: " + e.Message);
         }
 
         /// <summary>
@@ -113,69 +121,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
         /// <param name="count">size of command array</param>
         private void Send(byte[] buffer, int count)
         {
-            if (!comm.IsOpen)
-            {
-                return;
-            }
-            int retVal = 0;
-            int x = 0;
-            do
-            {
-                comm.DiscardInBuffer(); //Get rid of anything in the buffer
-                comm.Write(buffer, 0, count); //send transmission to device
-                retVal = comm.ReadByte();
-                if (0x5a == retVal)
-                { //If status messages are being transmitted cmd will not go through
-                    byte[] sendpollack = new byte[1];
-                    sendpollack[0] = 0xc3;
-                    comm.Write(sendpollack, 0, 1); //Send cmd to acknowledged status command.
-                }
-                x++;
-            } while ((Checksum(buffer, count) != retVal) && TransmissionRetries > x);
-            //Try to resend transmission of it did not go through
-
-            //If too many retried send exception
-            if (TransmissionRetries <= x)
-            {
-                throw new ApplicationException("Failed to communicate with X10 controller device");
-            }
-
-        }
-
-        /// <summary>
-        /// Sends OK Command
-        /// </summary>
-        private void SendOK()
-        {
-            Send(okBuffer, 1);
-        }
-
-        /// <summary>
-        /// Computes Checksum of transmission to determine if the controller received command
-        /// properly
-        /// </summary>
-        /// <param name="buffer">Command to send in the form of a byte array.</param>
-        /// <param name="count">length of command array</param>
-        /// <returns></returns>
-        private int Checksum(byte[] buffer, int count)
-        {
-            if (1 < count)
-            {
-                byte iRetVal = 0;
-                foreach (byte element in buffer)
-                {
-                    iRetVal += element;
-                }
-                return (iRetVal & (byte)0xFF);
-            }
-            else if (1 == count)
-            {
-                if (0 == buffer[0])
-                {
-                    return (0x55);
-                }
-            }
-            return (0x00);
+            worker.AddMessage(new Cm11Message(buffer, count));
         }
 
         /// <summary>
@@ -254,18 +200,35 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
             buffer[0] = (byte)Header.Address;
             buffer[1] = (byte)(((byte)x10HouseCode) | ((byte)deviceCode));
             Send(buffer, 2);
-            SendOK();
-
+         
             buffer[0] = (byte)(((byte)lightLevel) | ((byte)Header.Function));
             buffer[1] = (byte)(((byte)x10HouseCode) | ((byte)deviceCommand));
             Send(buffer, 2);
-            SendOK();
         }
 
         public void ResetStatus(Label statusLabel)
         {
         }
 
+        /// <summary>
+        /// Tells driver to close down and release all locked up resouces.
+        /// </summary>
+        public void CloseDriver()
+        {
+            if (worker != null && workerThread!=null)
+                if (workerThread.IsAlive)
+                {
+                    // Tell worker thread to stop processing message queue and release resources
+                    worker.StopProcessing();
+
+                    // Give thread 3 secs to clean up before killing it.
+                    workerThread.Join(3000);
+                    if (workerThread.IsAlive)
+                        workerThread.Abort();
+
+                    workerThread = null;
+                }
+        }
 
         /// <summary>
         /// Sends the Turn All Units Off code
@@ -277,12 +240,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
             buffer[0] = (byte)Header.Address;
             buffer[1] = (byte)(((byte)x10HouseCode) | ((byte)CM11aDeviceCode.ONE));
             Send(buffer, 2);
-            SendOK();
-
+         
             buffer[0] = (byte)Header.Function;
             buffer[1] = (byte)(((byte)x10HouseCode) | ((byte)Function.AllUnitsOff));
             Send(buffer, 2);
-            SendOK();
         }
 
         /// <summary>
@@ -295,12 +256,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
             buffer[0] = (byte)Header.Address;
             buffer[1] = (byte)(((byte)x10HouseCode) | ((byte)CM11aDeviceCode.ONE));
             Send(buffer, 2);
-            SendOK();
 
             buffer[0] = (byte)Header.Function;
             buffer[1] = (byte)(((byte)x10HouseCode) | ((byte)Function.AllLightsOn));
             Send(buffer, 2);
-            SendOK();
+
         }
 
         /// <summary>
@@ -313,22 +273,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
             TurnAllUnitsOff();
         }
 
-        public void Close()
-        {
-            comm.Close();
-        }
-
-        /// <value>Returns or Sets the number of communication retries.</value>
-        public int TransmissionRetries
-        {
-            get { return (transmissionRetries); }
-            set { transmissionRetries = value; }
-        }
-
-        /// <value>Returns the ControllerType of this object.</value>
+        /// <summary>
+        /// Returns the ControllerType of this object.
+        /// </summary>
         public ControllerType Controller
         {
             get { return (controller); }
         }
+       
     }
 }

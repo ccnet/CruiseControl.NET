@@ -19,5 +19,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
         // drivers can use this Label to show output when simulating success or failure. 
         void ResetStatus(Label statusLabel);
 
+        /// <summary>
+        /// This closes any open ports and releases any locks the driver might have aquiried.
+        /// </summary>
+        void CloseDriver();
 	}
 }
