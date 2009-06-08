@@ -100,9 +100,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         {
             return Strip(fileName, "\\", "/", ":", "*", "?", "\"", "<", ">", "|");
         }
-
  
-
+		/// <summary>
+		/// Add leading and trailing double quotes to the provides string if required.
+		/// If the string contains a trailing backslash, that escape the added double quote,
+		/// escape it also with another backslash.
+		/// </summary>
+		/// <param name="value">The string to double quote.</param>
+		/// <returns>A double quoted string.</returns>
         public static string AutoDoubleQuoteString(string value)
         {
 			if (!string.IsNullOrEmpty(value) && (value.IndexOf(' ') > -1) && (value.IndexOf('"') == -1))
