@@ -102,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         }
  
 		/// <summary>
-		/// Add leading and trailing double quotes to the provides string if required.
+		/// Add leading and trailing double quotes to the provided string if required.
 		/// If the string contains a trailing backslash, that escape the added double quote,
 		/// escape it also with another backslash.
 		/// </summary>
