@@ -105,11 +105,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         public static string AutoDoubleQuoteString(string value)
         {
-			if (value.EndsWith(@"\"))
-				value = string.Concat(value, @"\");
-
 			if (!string.IsNullOrEmpty(value) && (value.IndexOf(' ') > -1) && (value.IndexOf('"') == -1))
+			{
+				if (value.EndsWith(@"\"))
+					value = string.Concat(value, @"\");
+
 				return string.Concat('"', value, '"');
+			}
 
 			return value;
         }
