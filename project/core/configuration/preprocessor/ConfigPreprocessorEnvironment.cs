@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -406,11 +407,14 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         }
     }
 
+	[Serializable]
     public class EvaluationException : PreprocessorException
     {
-        internal EvaluationException( string msg ) : base( msg )
-        {            
-        }
+		public EvaluationException() {}
+		public EvaluationException(string msg) : base(msg) { }
+		public EvaluationException(string message, Exception innerException) : base(message, innerException) {}
+		protected EvaluationException(SerializationInfo info, StreamingContext context)
+			: base(info, context) {}
 
         internal static Exception CreateException (string msg, params object[] args)
         {
@@ -418,11 +422,14 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         }
     }
 
+	[Serializable]
     public class DefinitionException : PreprocessorException
     {
-        internal DefinitionException( string msg ) : base( msg )
-        {            
-        }
+		public DefinitionException() {}
+		public DefinitionException(string msg) : base(msg) { }
+		public DefinitionException(string message, Exception innerException) : base(message, innerException) {}
+		protected DefinitionException(SerializationInfo info, StreamingContext context)
+			: base(info, context) {}
 
         internal static Exception CreateException (string msg, params object[] args)
         {
@@ -430,11 +437,14 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         }
     }
 
+	[Serializable]
     public class PreprocessorException : ApplicationException
     {
-        internal PreprocessorException( string msg ) : base( msg )
-        {            
-        }
+		public PreprocessorException() {}
+		public PreprocessorException(string msg) : base(msg) { }
+		public PreprocessorException(string message, Exception innerException) : base(message, innerException) {}
+		protected PreprocessorException(SerializationInfo info, StreamingContext context)
+			: base(info, context) {}
     }
 
     internal delegate Exception ExceptionFactory( string msg, params object[] args);
