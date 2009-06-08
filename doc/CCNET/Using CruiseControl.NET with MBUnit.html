@@ -24,6 +24,126 @@
 <p>Check Andrew Stopford's blog for more info: <a href="http://weblogs.asp.net/astopford">http://weblogs.asp.net/astopford</a></p>
 
 				    
+                                            <div class="tabletitle">
+                            <a name="comments">Comments:</a>
+                        </div>
+
+                        <table border="0" width="100%">
+                                                        <tr>
+                                <td >
+                                    <a name="comment-28016643"></a>
+                                    <font class="smallfont"><p>MbUnit/Gallio work with CCNet via several interfaces and a Web Dashboard plugin. When you install Gallio, you should find this guide in your extra/ccnet folder (the following version may not come through with all the XML intact):</p>
+
+<p>How to use Gallio with CruiseControl.Net<br/>
+========================================</p>
+
+<p>Using Gallio in CruiseControl.Net is very straightforward.</p>
+
+<p>NOTE: These instructions are designed for use with CruiseControl.Net v1.4 RTM.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; They may work with other versions but there are no guarantees.</p>
+
+<p>CONFIGURING THE SERVER<br/>
+&#45;--------------------&#45;</p>
+
+<p>For the server, we need to ensure that the build script runs the tests and generates an XML<br/>
+formatted Gallio Test Report that is then merged into the CruiseControl.Net artifacts file<br/>
+with the publisher task.</p>
+
+<p>You can use any of the supported Gallio test runners to run your tests such as Gallio.Echo,<br/>
+Gallio.MSBuildTasks, Gallio.NAntTasks or Gallio.PowerShellCmdlet.&nbsp; The important thing is<br/>
+to provide appropriate arguments to the test runner such that an XML report is generated<br/>
+so that the test results can be saved for subsequent display in the dashboard.</p>
+
+<p>Here is one way to do this:</p>
+
+<p>1. Edit the "ccnet.config" file in the CruiseControl.Net "server" folder.</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; * Within the element, add an element similar to the following AFTER the tasks that<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; build your project.&nbsp; This will run the tests in your test assembly and generate an<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; XML test report in the project working directory.</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$$$PathToGallioInstallationFolder$$$\bin\Gallio.Echo.exe<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/rnf:test-report /rt:Xml-Inline /v:Quiet $$$MyTestAssembly.dll$$$<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; * Within the element, add an element similar to the following BEFORE the<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;task element.&nbsp; This will merge the XML test report into the build artifacts.</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; test-report.xml</p>
+
+<p>2. Double-check:</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; * The XML test report is being generated as part of a build task.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp; * The XML test report is being merged into the CruiseControl.Net artifacts file<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; as part of a publisher task.</p>
+
+<p>3. There is normally no need to restart the CruiseControl.Net server since it automatically<br/>
+&nbsp;&nbsp; detects changes to the "ccnet.config" file.</p>
+
+<p>CONFIGURING THE DASHBOARD<br/>
+&#45;-----------------------&#45;</p>
+
+<p>For the dashboard, we need to add some new resources that are used to render the Gallio Test Report<br/>
+we must update the dashboard configuration file to include the new test report plugin.</p>
+
+<p>1. Copy the entire contents of the "extras\CCNet\webdashboard" folder from the Gallio<br/>
+&nbsp;&nbsp; installation direction into the "webdashboard" folder of your CruiseControl.Net<br/>
+&nbsp;&nbsp; installation.</p>
+
+<p>2. (Skip if running CruiseControl.Net v1.4 or more recent.)</p>
+
+<p>&nbsp;&nbsp; Edit the "templates/SiteTemplates.vm" file manually to add the following DTD<br/>
+&nbsp;&nbsp; declaraction to the top of this <a href="file:\\">file:\\</a></p>
+
+<p>3. Edit the "dashboard.config" file in the CruiseControl.Net "webdashboard" folder.</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; * Within the element, add the following elements:</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; actionName="GallioTestReport"<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; xslFileName="gallio\xsl\Gallio-Report.ccnet-details.xsl" /&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; actionName="GallioTestReportCondensed"<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; xslFileName="gallio\xsl\Gallio-Report.ccnet-details-condensed.xsl" /&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+
+<p>4. Double-check:</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; * The "webdashboard" folder now contains "gallio\css", "gallio\img", "gallio\js", "gallio\xml".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp; * The "webdashboard" folder now contains "bin\CCNet.Gallio.WebDashboard.Plugin.dll".<br/>
+&nbsp;&nbsp;&nbsp;&nbsp; * The "webdashboard" folder now contains "templates\SiteTemplate.vm" with an updated DTD declaration.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp; * The "dashboard.config" file has been edited to include the new build report section.</p>
+
+<p>5. Restart the CruiseControl.Net web application.&nbsp; (eg. By resetting IIS.)</p>
+
+<p>Note:</p>
+
+<p>&nbsp; It can happen that the plugin distributed with Gallio is incompatible with the version<br/>
+&nbsp; of CruiseControl.Net that you have installed.&nbsp;&nbsp; The dashboard may fail to start in this<br/>
+&nbsp; case.</p>
+
+<p>&nbsp; In this case you may choose to omit the element and<br/>
+&nbsp; delete the plugin dll from your dashboard's bin directory which will cause attachments and<br/>
+&nbsp; images within the Gallio reports to not be displayed.</p>
+
+<p>&nbsp; Or you may choose to recompile the plugin yourself by checking out the Gallio source tree,<br/>
+&nbsp; replacing the version of the CruiseControl.Net libraries in the "src\Extensions\CCNet\libs"<br/>
+&nbsp; folder and running the "Build.bat" file.</p>
+
+<p>Usage Remark:</p>
+
+<p>&nbsp; The full Gallio report may be quite large and take a long time to load because it includes<br/>
+&nbsp; all test results.&nbsp; In contrast, the "Condensed" report excludes passing tests so it is<br/>
+&nbsp; often somewhat easier to work with when there are only a few failures in a large test suite.<br/>
+&nbsp;</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by ifland at May 26, 2009 20:21
+                                    </div>
+                                </td>
+                            </tr>
+                                                    </table>
                     			    </td>
 		    </tr>
 	    </table>
@@ -32,7 +152,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on May 31, 2009 21:17</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jun 08, 2009 20:52</font></td>
 		    </tr>
 	    </table>
     </body>

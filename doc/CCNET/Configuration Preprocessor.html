@@ -389,6 +389,68 @@
 <p>XML requires that all "namespace" definitions (<em>i.e.</em>, <b>xmlns:</b><b><em>xxx</em></b> attributes) must be declared in every file where they're used.  Every included file must have an <b>xmlns:cb="urn:ccnet.config.builder"</b> attribute on its root element, even if the namespace was defined in the file that included it.</p>
 
 				    
+                                            <div class="tabletitle">
+                            <a name="comments">Comments:</a>
+                        </div>
+
+                        <table border="0" width="100%">
+                                                        <tr>
+                                <td >
+                                    <a name="comment-25952262"></a>
+                                    <font class="smallfont"><p>I would suggest to implement yet another cb&nbsp;node&nbsp;e.g.&nbsp;<b>&lt;cb:block&gt; &lt;/cb:block&gt;</b></p>
+
+<p>that would be just a container for multiple nodes required to include&nbsp;from&nbsp;single file.</p>
+
+<p>to avoid <b>XmlException: "There are multiple root elements" when including another file</b><br clear="all" /></p>
+
+<p>All content of this node would just be inserted to result configuration xml.</p>
+
+<p>I could do it myself, but xslt is my weak point, so I cannot implement this contribution.</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by moudrick at Mar 23, 2009 19:34
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-26247282"></a>
+                                    <font class="smallfont"><p>We have been successful using the &lt;cb:scope/&gt; tag to serve as the&nbsp;root node&nbsp;tag of include files with multiple projects within.</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by bpmerkel at Apr 09, 2009 15:43
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-26247286"></a>
+                                    <font class="smallfont"><p>Of cource, I tried cb:scope.</p>
+
+<p>But the definitions within scope are accessible only within this scope.</p>
+
+
+<p>&nbsp;But I was trying to put definition of for instance EmailPublisher in one include file, and then use it in other include files for different projects.</p>
+
+<p>&nbsp;cb:scope does not allow this.
+<br clear="all" /></p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by moudrick at Apr 10, 2009 10:18
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-26574868"></a>
+                                    <font class="smallfont"><p>Use <b>&lt;cb:config-template&gt; &lt;/cb:config-template&gt;</b> it was written for that exact purpose (it just wasn't documented).</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by arieh at Apr 14, 2009 06:42
+                                    </div>
+                                </td>
+                            </tr>
+                                                    </table>
                     			    </td>
 		    </tr>
 	    </table>
@@ -397,7 +459,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on May 31, 2009 21:17</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jun 08, 2009 20:52</font></td>
 		    </tr>
 	    </table>
     </body>

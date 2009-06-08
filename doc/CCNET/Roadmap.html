@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on May 29, 2009 by <font color="#0050B2">williams</font>.
+					    This page last changed on Jun 08, 2009 by <font color="#0050B2">dna</font>.
 				    </div>
 
 				    
@@ -33,21 +33,16 @@
 <h3><a name="Roadmap-NewFeatures"></a>New Features</h3>
 
 <ul>
-	<li>Communications client <em>(in-progress)</em></li>
+	<li>Communications client <b>(completed)</b></li>
 	<li>Dynamic build parameters <b>(completed)</b></li>
 	<li>Messaging interfaces <b>(completed)</b></li>
-	<li>Security <em>(in-progress)</em></li>
-	<li>Server extension points <b>(completed)</b></li>
-	<li>Service/console "hot swapping" <b>(completed)</b></li>
-	<li>Task status display <em>(in-progress)</em></li>
-	<li>ZIP package publisher <em>(in-progress)</em></li>
+	<li>Security <b>(completed)</b></li>
+	<li>Task status display <b>(completed)</b></li>
+	<li>ZIP package publisher <b>(completed)</b></li>
 	<li>Mercurial source control <b><em>(patch available)</em></b></li>
 	<li>Git source control <em>(in-progress)</em></li>
 	<li>Robocopy source control <b><em>(patch available)</em></b></li>
-	<li>Simplified web administration <em>(in-progress)</em></li>
-	<li>Web dashboard plugin packages <em>(in-progress)</em></li>
-	<li>Add Gendarme Task <b><em>(patch available)</em></b></li>
-	<li>Add Assembly Version Labeller <b><em>(patch available)</em></b></li>
+	<li>Add Assembly Version Labeller <b>(completed)</b></li>
 	<li>Add PowerShell task <b><em>(patch available)</em></b></li>
 	<li>Add RemoteResults task <b><em>(patch available)</em></b></li>
 </ul>
@@ -56,19 +51,14 @@
 <h3><a name="Roadmap-Code%2FdevelopmentProcessImprovements"></a>Code/development Process Improvements</h3>
 
 <ul>
-	<li>Move documentation to MediaWiki &#8211; this will resolve the reliability problems that Confluence has given us</li>
-	<li>Move development toolset to VisualStudio 2008 (but continue to target .net 2.0) <b>(completed)</b></li>
-	<li>Upgrade other tools: NAnt, ...</li>
+	<li>Move documentation to MediaWiki - this will resolve the reliability problems that Confluence has given us</li>
 	<li>Change mocking framework to Rhino.Mock <em>(in-progress)</em></li>
-	<li>Spaces instead of tabs &#8211; using tabs along with object initalizers and lambdas and other C#3.0 features makes patches less and less readable. A bad thing when our process partly depends on patches.</li>
-	<li>Implement Gendarme static analysis <b>(completed)</b></li>
+	<li>Spaces instead of tabs - using tabs along with object initalizers and lambdas and other C#3.0 features makes patches less and less readable. A bad thing when our process partly depends on patches.</li>
 	<li>Improve unit test coverage in the areas where it has diminished and where we are seeing bugs. The SVN source control block comes to mind. <em>(in-progress)</em></li>
-	<li>Automate more of the deployment process. 1.4.3 took somewhere between 6 and 10 hours to do. A lot of that time is waiting, but it is still painful.</li>
-	<li>More managers for the ccnet-devel google group.</li>
 	<li>A clear explanation somewhere in the google groups that messages will need to be approved before they are posted to the group.</li>
-	<li>An automated build against mono?</li>
+	<li>An automated build against mono? <b>(completed)</b></li>
 	<li>Configure the bug URL builder on ccnetlive.</li>
-	<li>Make NAnt build script platform idenpendent (no hardcoded paths anymore, new msbuild task for xbuild compability, exclude some targets on linux (like the NIS installer, etc)</li>
+	<li>Make NAnt build script platform independent (no hardcoded paths anymore, new msbuild task for xbuild compability, exclude some targets on linux (like the NIS installer, etc) <b>(completed)</b></li>
 </ul>
 </div></div>
 <p>There is currently no planned release date for 1.5, but hopefully it will be during 2009.</p>
@@ -87,6 +77,9 @@
 	<li>Store build history in a database of some kind: CouchDB, Rhino.Prevalence, the build-in Windows Jet Engine backed database facility.</li>
 	<li>Create a plugin system for CCTray. Voice, X10, build lights could be done as plugins. This would allow people to more easily support their own lights and other notification mechanisms.</li>
 	<li>Contact the CIFactory guys and find out if they are still interested in merging back any of their features to CCNet. Could be quite complex as they forked at 1.0. Could also be quite rewarding.</li>
+	<li>Refactor the dashboard to use an open source MVC framework (e.g. MonoRail, ASP.NET MVC, etc.)</li>
+	<li>Replace objection with an open source IoC library (e.g. Microkernel, Unity, Ninject, etc.)</li>
+	<li>Modify the server and CCTray to use IoC.</li>
 </ul>
 </div></div>
 <div class="panel" style="border-width: 1px;"><div class="panelContent">
@@ -97,11 +90,42 @@
 	<li>Provide more developer documentation to understand the code. I was thinking "///" class headers to describe the intended responsibility of each class. This would also provide a guide for reviewing other's work, as the reviewer could compare the new code to the class's declared responsibility. Some overall architectural explanation on the wiki would probably be good. Some of the suggested diagrams from Domain Driven Design sound like a good start. How to share these sorts of artifacts effectively over the internet though.</li>
 </ul>
 </div></div>
-<p>There is currently no planned release date for 1.6.</p>
+<p>There is currently no planned release date for 1.6, but it a provisional date is 2010.</p>
 
 <p>Please use the <a href="http://jira.public.thoughtworks.org/secure/BrowseProject.jspa?id=10000">Jira issue tracker</a> for consulting the progress, or look for / provide patches.</p>
 
 				    
+                                            <div class="tabletitle">
+                            <a name="comments">Comments:</a>
+                        </div>
+
+                        <table border="0" width="100%">
+                                                        <tr>
+                                <td >
+                                    <a name="comment-25591964"></a>
+                                    <font class="smallfont"><p>Regarding the build script changes to be platform independent:
+<br clear="all" /></p>
+<ul>
+	<li>switching to a MSBuild script is not useful, because xbuild (Mono's msbuild) is not ready.</li>
+</ul>
+</font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by dna at Mar 19, 2009 14:06
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-28016658"></a>
+                                    <font class="smallfont"><p>Where can I get the Mercurial patch?</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="images/icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by rweason at May 28, 2009 09:15
+                                    </div>
+                                </td>
+                            </tr>
+                                                    </table>
                     			    </td>
 		    </tr>
 	    </table>
@@ -110,7 +134,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on May 31, 2009 21:17</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jun 08, 2009 20:52</font></td>
 		    </tr>
 	    </table>
     </body>
