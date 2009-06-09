@@ -19,6 +19,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		private string configuredArtifactDirectory = "";
         private ITrigger triggers = new MultipleTrigger(new ITrigger[] { });
 		private ExternalLink[] externalLinks = new ExternalLink[0];
+        private DisplayLevel askForForceBuildReason = DisplayLevel.None;
+
 
 		[ReflectorProperty("name")]
 		public virtual string Name
@@ -84,8 +86,13 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Should a reason be requested when a force build is triggered.
         /// </summary>
-        [ReflectorProperty("forceBuildReason")]
-        public DisplayLevel AskForForceBuildReason { get; set; }
+        [ReflectorProperty("askForForceBuildReason", Required = false)]
+        public DisplayLevel AskForForceBuildReason
+        {
+            get { return askForForceBuildReason; }
+            set { askForForceBuildReason = value; }
+        }
+
         #endregion
 
 		public string WorkingDirectory
