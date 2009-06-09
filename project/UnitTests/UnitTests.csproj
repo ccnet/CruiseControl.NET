@@ -352,6 +352,10 @@
     <Compile Include="Core\Publishers\ManifestImporterTests.cs" />
     <Compile Include="Core\Publishers\PackagePublisherTests.cs" />
     <Compile Include="Core\Label\AssemblyVersionLabellerTest.cs" />
+    <Compile Include="Core\SourceControl\Mercurial\HgWebUrlBuilderTest.cs" />
+    <Compile Include="Core\SourceControl\Mercurial\MercurialHistoryParserTest.cs" />
+    <Compile Include="Core\SourceControl\Mercurial\MercurialModificationTest.cs" />
+    <Compile Include="Core\SourceControl\Mercurial\MercurialTest.cs" />
     <Compile Include="Core\SourceControl\RobocopyHistoryParserTest.cs" />
     <Compile Include="Core\SourceControl\VstsHistoryParserTest.cs" />
     <Compile Include="Core\State\XmlProjectStateManagerTest.cs" />

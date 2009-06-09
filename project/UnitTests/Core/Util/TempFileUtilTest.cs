@@ -6,7 +6,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 {
-	[TestFixture]
+    [TestFixture]
 	public class TempFileUtilTest : CustomAssertion
 	{
 		private static readonly string TempDir = "tempfileutiltest";
