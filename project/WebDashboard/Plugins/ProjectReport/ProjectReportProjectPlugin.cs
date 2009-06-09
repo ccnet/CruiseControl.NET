@@ -14,6 +14,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
@@ -153,6 +154,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 
         private string ForceBuildIfNecessary(IProjectSpecifier projectSpecifier, IRequest request, string sessionToken)
         {
+            // Retrieve the parameters
+            var parameters = new Dictionary<string, string>();
+            foreach (string parameterName in HttpContext.Current.Request.Form.AllKeys)
+            {
+                if (parameterName.StartsWith("param_"))
+                {
+                    parameters.Add(parameterName.Substring(6), HttpContext.Current.Request.Form[parameterName]);
+                }
+            }
+
             if (!string.IsNullOrEmpty(request.FindParameterStartingWith("StopBuild")))
             {
                 farmService.Stop(projectSpecifier, sessionToken);
@@ -165,7 +176,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             }
             else if (!string.IsNullOrEmpty(request.FindParameterStartingWith("ForceBuild")))
             {
-                farmService.ForceBuild(projectSpecifier, sessionToken);
+                farmService.ForceBuild(projectSpecifier, sessionToken, parameters);
                 return string.Format("Build successfully forced for {0}", projectSpecifier.ProjectName);
             }
             else if (!string.IsNullOrEmpty(request.FindParameterStartingWith("AbortBuild")))

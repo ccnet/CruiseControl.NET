@@ -131,6 +131,12 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         int MaxSourceControlRetries { get; }
 
+        #region AskForForceBuildReason
+        /// <summary>
+        /// Should a comment be requested when a force build is triggered.
+        /// </summary>
+        DisplayLevel AskForForceBuildReason { get; }
+        #endregion
 
         /// <summary>
         /// Stop the project when the MaxSourceControlRetries limit has been reached
@@ -168,5 +174,6 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <returns></returns>
         List<PackageDetails> RetrievePackageList(string buildName);
         #endregion
+
     }
 }

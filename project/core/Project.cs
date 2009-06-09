@@ -1062,18 +1062,31 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <returns></returns>
         public virtual List<ParameterBase> ListBuildParameters()
         {
-            if (parameters == null)
+            var parameterList = new List<ParameterBase>();
+
+            // Add the force build reason
+            if (AskForForceBuildReason != DisplayLevel.None)
             {
-                return new List<ParameterBase>();
+                var reasonParameter = new TextParameter
+                {
+                    Description = "What is the reason for this force build?",
+                    DisplayName = "Reason",
+                    Name = "CCNetForceBuildReason",
+                    IsRequired = (AskForForceBuildReason == DisplayLevel.Required)
+                };
+                parameterList.Add(reasonParameter);
             }
-            else
+
+            // Add the user defined parameters
+            if (parameters != null)
             {
                 foreach (var parameter in parameters)
                 {
                     parameter.GenerateClientDefault();
                 }
-                return new List<ParameterBase>(parameters);
+                parameterList.AddRange(parameters);
             }
+            return parameterList;
         }
     }
 }

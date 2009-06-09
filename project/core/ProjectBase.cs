@@ -80,6 +80,14 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { externalLinks = value; }
 		}
 
+        #region AskForForceBuildReason
+        /// <summary>
+        /// Should a reason be requested when a force build is triggered.
+        /// </summary>
+        [ReflectorProperty("forceBuildReason")]
+        public DisplayLevel AskForForceBuildReason { get; set; }
+        #endregion
+
 		public string WorkingDirectory
 		{
 			get

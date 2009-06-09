@@ -332,6 +332,7 @@
     <Compile Include="Log\ServerLogFileReader.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DisplayLevel.cs" />
     <Compile Include="MultipleIntegrationFailureException.cs" />
     <Compile Include="NetReflectorProjectSerializer.cs">
       <SubType>Code</SubType>

@@ -154,6 +154,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             WriteIntegrationProperty(result.LastSuccessfulIntegrationLabel, "LastSuccessfulIntegrationLabel");
             WriteIntegrationProperty(result.LastModificationDate, "LastModificationDate");
 
+            var buildParameters = NameValuePair.ToDictionary(result.Parameters);
+            if (buildParameters.ContainsKey("CCNetForceBuildReason"))
+            {
+                WriteIntegrationProperty(buildParameters["CCNetForceBuildReason"], "CCNetForceBuildReason");
+            }
+
             writer.WriteEndElement();
         }
 

@@ -43,6 +43,17 @@
 					<xsl:value-of select="/cruisecontrol/request" />
                 </td>
             </tr>
+
+          <xsl:if test="/cruisecontrol/integrationProperties/CCNetForceBuildReason">
+            <tr>
+              <td class="header-label">
+                <nobr>Reason for Force Build:</nobr>
+              </td>
+              <td class="header-data">
+                <xsl:value-of select="/cruisecontrol/integrationProperties/CCNetForceBuildReason"/>
+              </td>
+            </tr>
+          </xsl:if>
             
             <xsl:apply-templates select="$modification.list">
                 <xsl:sort select="date" order="descending" data-type="text" />
