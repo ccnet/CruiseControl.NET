@@ -493,6 +493,7 @@ namespace ThoughtWorks.CruiseControl.Core
             else
             {
                 AddBreakersToMessages(result);
+                AddFailedTaskToMessages();
             }
         }
 
@@ -594,7 +595,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
         private void AddBreakersToMessages(IIntegrationResult result)
         {
-            System.Collections.Generic.List<string> breakers = new System.Collections.Generic.List<string>();
+            List<string> breakers = new List<string>();
             string breakingusers = "";
 
             foreach (Modification mod in result.Modifications)
@@ -628,6 +629,41 @@ namespace ThoughtWorks.CruiseControl.Core
             }
 
             AddMessage(new Message(breakingusers));
+        }
+
+        private void AddFailedTaskToMessages()
+        {
+            // Find all the items that failed (there can be multiple)
+            var failedTasks = new List<string>();
+            FindFailedTasks(currentProjectStatus, failedTasks);
+
+            if (failedTasks.Count > 0)
+            {
+                // Add a message containing the failed tasks
+                AddMessage(
+                    new Message(
+                        "Failed task(s): " + string.Join(
+                            ", ",
+                            failedTasks.ToArray())));
+            }
+        }
+
+        private void FindFailedTasks(ItemStatus item, List<string> failedTasks)
+        {
+            if (item.ChildItems.Count > 0)
+            {
+                foreach (var childItem in item.ChildItems)
+                {
+                    FindFailedTasks(childItem, failedTasks);
+                }
+            }
+            else
+            {
+                if (item.Status == ItemBuildStatus.CompletedFailed)
+                {
+                    failedTasks.Add(item.Name);
+                }
+            }
         }
 
         public void Initialize()
