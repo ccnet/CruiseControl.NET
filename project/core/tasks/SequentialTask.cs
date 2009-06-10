@@ -5,6 +5,7 @@ using Exortech.NetReflector;
 using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -15,6 +16,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     public class SequentialTask
         : TaskBase, ITask
     {
+        #region Private fields
+        private Dictionary<string, string> parameters;
+        private IEnumerable<ParameterBase> parameterDefinitions;
+        #endregion
+
         #region Public properties
         #region Tasks
         /// <summary>
@@ -75,7 +81,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 {
                     // Start the actual task
                     var taskResult = result.Clone();
-                    Tasks[loop].Run(taskResult);
+                    var task = Tasks[loop];
+
+                    if (task is IParamatisedTask)
+                    {
+                        (task as IParamatisedTask).ApplyParameters(parameters, parameterDefinitions);
+                    }
+
+                    task.Run(taskResult);
                     result.Merge(taskResult);
                 }
                 catch (Exception error)
@@ -99,6 +112,20 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
 
             logger.Info("Sequential task completed: {0} successful, {1} failed", successCount, failureCount);
+        }
+        #endregion
+
+        #region ApplyParameters()
+        /// <summary>
+        /// Applies the input parameters to the task.
+        /// </summary>
+        /// <param name="parameters">The parameters to apply.</param>
+        /// <param name="parameterDefinitions">The original parameter definitions.</param>
+        public override void ApplyParameters(Dictionary<string, string> parameters, IEnumerable<ParameterBase> parameterDefinitions)
+        {
+            this.parameters = parameters;
+            this.parameterDefinitions = parameterDefinitions;
+            base.ApplyParameters(parameters, parameterDefinitions);
         }
         #endregion
         #endregion

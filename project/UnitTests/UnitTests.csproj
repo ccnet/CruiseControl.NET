@@ -348,6 +348,7 @@
     <Compile Include="Core\Config\ServerConfigurationHandlerTest.cs" />
     <Compile Include="Core\CruiseServerClientTests.cs" />
     <Compile Include="Core\Extensions\DiskSpaceMonitorExtensionTests.cs" />
+    <Compile Include="Core\Publishers\ConditionalPublisherTests.cs" />
     <Compile Include="Core\Publishers\ManifestGeneratorTests.cs" />
     <Compile Include="Core\Publishers\ManifestImporterTests.cs" />
     <Compile Include="Core\Publishers\PackagePublisherTests.cs" />

@@ -6,6 +6,7 @@ using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -16,6 +17,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     public class ParallelTask
         : TaskBase, ITask, IConfigurationValidation
     {
+        #region Private fields
+        private Dictionary<string, string> parameters;
+        private IEnumerable<ParameterBase> parameterDefinitions;
+        #endregion
+
         #region Public properties
         #region Tasks
         /// <summary>
@@ -79,7 +85,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                         logger.Debug("Starting task '{0}'", taskName);
 
                         // Start the actual task
-                        Tasks[taskNumber].Run(results[taskNumber]);
+                        var task = Tasks[taskNumber];
+                        if (task is IParamatisedTask)
+                        {
+                            (task as IParamatisedTask).ApplyParameters(parameters, parameterDefinitions);
+                        }
+                        task.Run(results[taskNumber]);
                     }
                     catch (Exception error)
                     {
@@ -153,6 +164,20 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     errorProcesser.ProcessWarning("Putting the parallel task in the publishers section may cause unpredictable results");
                 }
             }
+        }
+        #endregion
+
+        #region ApplyParameters()
+        /// <summary>
+        /// Applies the input parameters to the task.
+        /// </summary>
+        /// <param name="parameters">The parameters to apply.</param>
+        /// <param name="parameterDefinitions">The original parameter definitions.</param>
+        public override void ApplyParameters(Dictionary<string, string> parameters, IEnumerable<ParameterBase> parameterDefinitions)
+        {
+            this.parameters = parameters;
+            this.parameterDefinitions = parameterDefinitions;
+            base.ApplyParameters(parameters, parameterDefinitions);
         }
         #endregion
         #endregion

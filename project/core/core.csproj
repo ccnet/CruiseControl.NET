@@ -363,6 +363,7 @@
     <Compile Include="publishers\BuildPublisher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="publishers\ConditionalPublisher.cs" />
     <Compile Include="publishers\EmailLDAPConverter.cs" />
     <Compile Include="publishers\EmailRegexConverter.cs" />
     <Compile Include="publishers\EmailGateway.cs">
