@@ -29,5 +29,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         void Start();
         void Stop();
         bool RefreshSession();
-	}
+
+        #region ServerSnapshotChanged
+        /// <summary>
+        /// The snapshot of projects has changed.
+        /// </summary>
+        event ServerSnapshotChangedEventHandler ServerSnapshotChanged;
+        #endregion
+    }
 }

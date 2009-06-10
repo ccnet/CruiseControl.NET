@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 
 			eventCount = 0;
 
-			controller = new MainFormController(configuration, null);
+			controller = new MainFormController(configuration, null, null);
 		}
 
 		[Test]

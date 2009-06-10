@@ -309,6 +309,7 @@
     <Compile Include="Monitoring\ServerMonitor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Monitoring\ServerSnapshotChangedEvent.cs" />
     <Compile Include="Monitoring\WebDashboardUrl.cs" />
     <Compile Include="Monitoring\WebRetriever.cs">
       <SubType>Code</SubType>
@@ -379,6 +380,13 @@
     <Compile Include="Presentation\CurrentStatusWindow.Designer.cs">
       <DependentUpon>CurrentStatusWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presentation\DisplayChangedProjects.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\DisplayChangedProjects.Designer.cs">
+      <DependentUpon>DisplayChangedProjects.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\Func.cs" />
     <Compile Include="Presentation\KeyUtils.cs" />
     <Compile Include="Presentation\PackagesListForm.cs">
       <SubType>Form</SubType>
@@ -486,6 +494,11 @@
     </Compile>
     <Compile Include="Presentation\WindowStateEventArgs.cs">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Security\ConfigureUserName.cs">
       <SubType>Form</SubType>
@@ -604,6 +617,9 @@
     <EmbeddedResource Include="Presentation\CurrentStatusWindow.resx">
       <DependentUpon>CurrentStatusWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\DisplayChangedProjects.resx">
+      <DependentUpon>DisplayChangedProjects.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Presentation\PackagesListForm.resx">
       <DependentUpon>PackagesListForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -618,6 +634,10 @@
     <EmbeddedResource Include="Presentation\IconSettingsControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>IconSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Security\ConfigureUserName.resx">
       <DependentUpon>ConfigureUserName.cs</DependentUpon>
@@ -639,7 +659,16 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <None Include="Resources\exclamation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\computer_error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\application_add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\application_delete.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

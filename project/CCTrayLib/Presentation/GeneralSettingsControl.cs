@@ -18,7 +18,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             chkAlwaysOnTop.DataBindings.Clear();
 			chkAlwaysOnTop.DataBindings.Add("Checked", configuration, "AlwaysOnTop");
             chkShowInTaskbar.DataBindings.Clear();
-			chkShowInTaskbar.DataBindings.Add("Checked", configuration, "ShowInTaskbar");
+            chkShowInTaskbar.DataBindings.Add("Checked", configuration, "ShowInTaskbar");
+            displayProjectChangeNotifications.DataBindings.Clear();
+            displayProjectChangeNotifications.DataBindings.Add("Checked", configuration, "ReportProjectChanges");
 
 			rdoStatusWindow.Checked = (configuration.TrayIconDoubleClickAction == TrayIconDoubleClickAction.ShowStatusWindow);
 			rdoWebPage.Checked =

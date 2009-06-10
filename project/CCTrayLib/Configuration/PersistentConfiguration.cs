@@ -14,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		public SpeechConfiguration Speech = new SpeechConfiguration();
         public bool AlwaysOnTop = false;
 		public bool ShowInTaskbar = false;
+        public bool ReportProjectChanges = true;
         public string FixUserName = string.Empty;
 	}
 }

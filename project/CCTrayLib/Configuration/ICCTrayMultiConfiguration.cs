@@ -23,6 +23,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
         bool AlwaysOnTop { get; set; }
 		bool ShowInTaskbar { get; set; }
+        /// <summary>
+        /// Report any changes to the projects.
+        /// </summary>
+        bool ReportProjectChanges { get; set; }
         string FixUserName { get; set; }
 
         void Reload();

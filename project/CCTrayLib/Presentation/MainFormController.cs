@@ -10,6 +10,7 @@ using ThoughtWorks.CruiseControl.CCTrayLib.Speech;
 #endif
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
+using System.Text;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -28,12 +29,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private readonly IIntegrationQueueIconProvider queueIconProvider;
 		private BuildTransitionSoundPlayer soundPlayer;
         private X10Controller x10Controller;
+        private MainForm mainForm;
+        private Dictionary<string, ServerSnapshotChangedEventArgs> changeList = new Dictionary<string, ServerSnapshotChangedEventArgs>();
 #if !DISABLE_COM
         private SpeakingProjectMonitor speakerForTheDead;
 #endif
 
-		public MainFormController(ICCTrayMultiConfiguration configuration, ISynchronizeInvoke owner)
+		public MainFormController(ICCTrayMultiConfiguration configuration, ISynchronizeInvoke owner, MainForm mainForm)
 		{
+            this.mainForm = mainForm;
 			this.configuration = configuration;
 
 			serverMonitors = configuration.GetServerMonitors();
@@ -237,6 +241,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				IntegrationQueueTreeNodeAdaptor adaptor = new IntegrationQueueTreeNodeAdaptor(monitor);
 				TreeNode serverTreeNode = adaptor.Create();
 				treeView.Nodes.Add(serverTreeNode);
+                monitor.ServerSnapshotChanged += HandleServerSnapshotChange;
 			}
 			treeView.EndUpdate();
 			if (treeView.Nodes.Count > 0)
@@ -258,7 +263,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 			treeView.Nodes.Clear();
 			treeView.EndUpdate();
-		}
+
+            foreach (ISingleServerMonitor monitor in serverMonitors)
+            {
+                monitor.ServerSnapshotChanged -= HandleServerSnapshotChange;
+            }
+        }
 
 		public void StartServerMonitoring()
 		{
@@ -471,6 +481,180 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         {
             PackagesListForm window = new PackagesListForm(SelectedProject);
             window.Show();
+        }
+
+        /// <summary>
+        /// Display the list of changed and deleted projects.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void HandleServerSnapshotChange(object sender, ServerSnapshotChangedEventArgs args)
+        {
+            if (configuration.ReportProjectChanges)
+            {
+                if (mainForm.InvokeRequired)
+                {
+                    mainForm.Invoke(
+                        new ServerSnapshotChangedEventHandler(HandleServerSnapshotChange),
+                        sender,
+                        args);
+                }
+                else
+                {
+                    // Update the cached changes
+                    if (changeList.ContainsKey(args.Server))
+                    {
+                        // Work out which projects have been added or deleted
+                        var newList = new List<string>(changeList[args.Server].AddedProjects);
+                        var oldList = new List<string>(changeList[args.Server].DeletedProjects);
+                        foreach (var project in args.AddedProjects)
+                        {
+                            if (oldList.Contains(project))
+                            {
+                                oldList.Remove(project);
+                            }
+                            else if (!newList.Contains(project))
+                            {
+                                newList.Add(project);
+                            }
+                        }
+                        foreach (var project in args.DeletedProjects)
+                        {
+                            if (newList.Contains(project))
+                            {
+                                newList.Remove(project);
+                            }
+                            else if (!oldList.Contains(project))
+                            {
+                                // See if the project is being monitored
+                                foreach (var projectConfig in configuration.Projects)
+                                {
+                                    if (projectConfig.BuildServer.Equals(args.Configuration) &&
+                                        projectConfig.ProjectName.Equals(project))
+                                    {
+                                        oldList.Add(project);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        // Add/remove the server entry
+                        if ((newList.Count > 0) || (oldList.Count > 0))
+                        {
+                            changeList[args.Server] = new ServerSnapshotChangedEventArgs(args.Server, args.Configuration, newList, oldList);
+                        }
+                        else
+                        {
+                            changeList.Remove(args.Server);
+                        }
+                    }
+                    else
+                    {
+                        var deletedProjects = new List<string>();
+                        foreach (var project in args.DeletedProjects)
+                        {
+                            // See if the project is being monitored
+                            foreach (var projectConfig in configuration.Projects)
+                            {
+                                if (projectConfig.BuildServer.Equals(args.Configuration) &&
+                                    projectConfig.ProjectName.Equals(project))
+                                {
+                                    deletedProjects.Add(project);
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Only add the args if there are new projects, or monitored projects are deleted
+                        if ((args.AddedProjects.Count > 0) || (deletedProjects.Count > 0))
+                        {
+                            changeList.Add(args.Server,
+                                new ServerSnapshotChangedEventArgs(args.Server,
+                                    args.Configuration,
+                                    args.AddedProjects,
+                                    deletedProjects.ToArray()));
+                        }
+                    }
+
+                    // Update the form
+                    if (changeList.Count > 0)
+                    {
+                        mainForm.ShowChangedProjects(changeList);
+                    }
+                    else
+                    {
+                        mainForm.CloseUpdatePanel();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clear the change list.
+        /// </summary>
+        public void ClearChangedProjectList()
+        {
+            changeList.Clear();
+        }
+
+        /// <summary>
+        /// Update the projects configuration.
+        /// </summary>
+        public void UpdateProjectList()
+        {
+            mainForm.ReloadConfiguration(() =>
+            {
+                var form = new DisplayChangedProjects(changeList);
+                form.UpdateConfiguration += (servers) =>
+                {
+                    // Update each server
+                    var projects = new List<CCTrayProject>(configuration.Projects);
+                    foreach (var server in servers)
+                    {
+                        // Generate each project and add it to the configuration
+                        foreach (var newProject in server.AddedProjects)
+                        {
+                            var projectConfig = new CCTrayProject
+                            {
+                                BuildServer = server.Configuration,
+                                ProjectName = newProject,
+                                ShowProject = true
+
+                            };
+                            projects.Add(projectConfig);
+                        }
+
+                        // Remove the old projects
+                        foreach (var oldProject in server.DeletedProjects)
+                        {
+                            // Try to find the project
+                            CCTrayProject actualProject = null;
+                            foreach (var project in projects)
+                            {
+                                if (project.BuildServer.Equals(server.Configuration) &&
+                                    project.ProjectName.Equals(oldProject))
+                                {
+                                    actualProject = project;
+                                    break;
+                                }
+                            }
+
+                            // If the project is found, it can be removed
+                            if (actualProject != null) projects.Remove(actualProject);
+                        }
+                    }
+                    var newConfig = configuration.Clone();
+                    newConfig.Projects = projects.ToArray();
+
+                    // Save the configuration and reload
+                    newConfig.Persist();
+                    mainForm.CloseUpdatePanel();
+                };
+
+                var result = form.ShowDialog(mainForm);
+                return (result == DialogResult.OK);
+            });
         }
 	}
 }

@@ -112,5 +112,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
         {
             return true;
         }
-	}
+
+        #region ServerSnapshotChanged
+        /// <summary>
+        /// The snapshot of projects has changed.
+        /// </summary>
+        public event ServerSnapshotChangedEventHandler ServerSnapshotChanged;
+        #endregion
+    }
 }

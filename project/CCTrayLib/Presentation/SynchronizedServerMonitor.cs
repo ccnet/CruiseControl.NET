@@ -23,6 +23,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public SynchronizedServerMonitor(ISingleServerMonitor serverMonitor, ISynchronizeInvoke synchronizeInvoke)
 		{
 			this.serverMonitor = serverMonitor;
+
+            // Pass on the ServerSnapshotChanged event
+            serverMonitor.ServerSnapshotChanged += (sender, args) =>
+            {
+                if (ServerSnapshotChanged != null) ServerSnapshotChanged(sender, args);
+            };
 			this.synchronizeInvoke = synchronizeInvoke;
 
 			serverMonitor.Polled += new MonitorServerPolledEventHandler(ServerMonitor_Polled);
@@ -120,5 +126,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         {
             return serverMonitor.RefreshSession();
         }
-	}
+
+        #region ServerSnapshotChanged
+        /// <summary>
+        /// The snapshot of projects has changed.
+        /// </summary>
+        public event ServerSnapshotChangedEventHandler ServerSnapshotChanged;
+        #endregion
+    }
 }

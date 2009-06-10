@@ -7,6 +7,8 @@ using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using Message = System.Windows.Forms.Message;
+using System.Text;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -65,10 +67,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private MenuItem mnuAbout;
         private ToolTip tltBuildStage;
         private PersistWindowState windowState;
-        private MenuItem menuItem1;
         private MenuItem currentStatusMenu;
         private MenuItem packagesMenu;
+        private Panel serverChangedPanel;
+        private Button updateProjectsButton;
+        private Label updateProjectsMessage;
         private bool queueViewPanelVisible;
+        private Button closeUpdateButton;
+        private Label label1;
 
         public MainForm(ICCTrayMultiConfiguration configuration)
         {
@@ -122,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
         private void CreateController()
         {
-            controller = new MainFormController(configuration, this);
+            controller = new MainFormController(configuration, this, this);
 
             DataBindings.Add("Icon", controller.ProjectStateIconAdaptor, "Icon");
 
@@ -182,7 +188,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.MenuItem menuItem1;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            this.mnuAbout = new System.Windows.Forms.MenuItem();
             this.lvProjects = new System.Windows.Forms.ListView();
             this.colProject = new System.Windows.Forms.ColumnHeader();
             this.colServer = new System.Windows.Forms.ColumnHeader();
@@ -200,7 +208,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuCancelPending = new System.Windows.Forms.MenuItem();
             this.mnuFixBuild = new System.Windows.Forms.MenuItem();
             this.mnuCopyBuildLabel = new System.Windows.Forms.MenuItem();
-            this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.currentStatusMenu = new System.Windows.Forms.MenuItem();
             this.packagesMenu = new System.Windows.Forms.MenuItem();
             this.largeIconList = new System.Windows.Forms.ImageList(this.components);
@@ -214,7 +221,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuViewIcons = new System.Windows.Forms.MenuItem();
             this.mnuViewList = new System.Windows.Forms.MenuItem();
             this.mnuViewDetails = new System.Windows.Forms.MenuItem();
-            this.mnuAbout = new System.Windows.Forms.MenuItem();
             this.mnuTrayContextMenu = new System.Windows.Forms.ContextMenu();
             this.mnuTraySettings = new System.Windows.Forms.MenuItem();
             this.mnuShow = new System.Windows.Forms.MenuItem();
@@ -226,15 +232,35 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.btnStartStopProject = new System.Windows.Forms.Button();
             this.splitterQueueView = new System.Windows.Forms.Splitter();
             this.pnlViewQueues = new System.Windows.Forms.Panel();
-            this.queueTreeView = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.QueueTreeView();
             this.queueIconList = new System.Windows.Forms.ImageList(this.components);
             this.queueContextMenu = new System.Windows.Forms.ContextMenu();
             this.mnuQueueCancelPending = new System.Windows.Forms.MenuItem();
             this.tltBuildStage = new System.Windows.Forms.ToolTip(this.components);
+            this.serverChangedPanel = new System.Windows.Forms.Panel();
+            this.closeUpdateButton = new System.Windows.Forms.Button();
+            this.updateProjectsButton = new System.Windows.Forms.Button();
+            this.updateProjectsMessage = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.queueTreeView = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.QueueTreeView();
             this.trayIcon = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.TrayIcon();
+            menuItem1 = new System.Windows.Forms.MenuItem();
             this.pnlButtons.SuspendLayout();
             this.pnlViewQueues.SuspendLayout();
+            this.serverChangedPanel.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // menuItem1
+            // 
+            menuItem1.Index = 2;
+            menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuAbout});
+            menuItem1.Text = "&Help";
+            // 
+            // mnuAbout
+            // 
+            this.mnuAbout.Index = 0;
+            this.mnuAbout.Text = "&About";
+            this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
             // 
             // lvProjects
             // 
@@ -251,10 +277,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.lvProjects.FullRowSelect = true;
             this.lvProjects.HideSelection = false;
             this.lvProjects.LargeImageList = this.largeIconList;
-            this.lvProjects.Location = new System.Drawing.Point(203, 0);
+            this.lvProjects.Location = new System.Drawing.Point(203, 38);
             this.lvProjects.MultiSelect = false;
             this.lvProjects.Name = "lvProjects";
-            this.lvProjects.Size = new System.Drawing.Size(689, 93);
+            this.lvProjects.Size = new System.Drawing.Size(689, 123);
             this.lvProjects.SmallImageList = this.iconList;
             this.lvProjects.TabIndex = 0;
             this.lvProjects.UseCompatibleStateImageBehavior = false;
@@ -308,7 +334,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuCancelPending,
             this.mnuFixBuild,
             this.mnuCopyBuildLabel,
-            this.menuItem1,
             this.currentStatusMenu,
             this.packagesMenu});
             this.projectContextMenu.Popup += new System.EventHandler(this.projectContextMenu_Popup);
@@ -361,21 +386,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuCopyBuildLabel.Text = "Copy Build &Label";
             this.mnuCopyBuildLabel.Click += new System.EventHandler(this.mnuCopyBuildLabel_Click);
             // 
-            // menuItem1
-            // 
-            this.menuItem1.Index = 8;
-            this.menuItem1.Text = "-";
-            // 
             // currentStatusMenu
             // 
-            this.currentStatusMenu.Index = 9;
+            this.currentStatusMenu.Index = 8;
             this.currentStatusMenu.Shortcut = System.Windows.Forms.Shortcut.F4;
             this.currentStatusMenu.Text = "C&urrent Status";
             this.currentStatusMenu.Click += new System.EventHandler(this.currentStatusMenu_Click);
             // 
             // packagesMenu
             // 
-            this.packagesMenu.Index = 10;
+            this.packagesMenu.Index = 9;
             this.packagesMenu.Shortcut = System.Windows.Forms.Shortcut.CtrlP;
             this.packagesMenu.Text = "&Packages";
             this.packagesMenu.Click += new System.EventHandler(this.packagesMenu_Click);
@@ -453,19 +473,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuViewDetails.Text = "&Details";
             this.mnuViewDetails.Click += new System.EventHandler(this.mnuViewDetails_Click);
             // 
-            // menuItem1
-            // 
-            menuItem1.Index = 2;
-            menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuAbout});
-            menuItem1.Text = "&Help";
-            // 
-            // mnuAbout
-            // 
-            this.mnuAbout.Index = 0;
-            this.mnuAbout.Text = "&About";
-            this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
-            // 
             // mnuTrayContextMenu
             // 
             this.mnuTrayContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
@@ -505,7 +512,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.pnlButtons.Controls.Add(this.btnForceBuild);
             this.pnlButtons.Controls.Add(this.btnStartStopProject);
             this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlButtons.Location = new System.Drawing.Point(0, 93);
+            this.pnlButtons.Location = new System.Drawing.Point(0, 161);
             this.pnlButtons.Name = "pnlButtons";
             this.pnlButtons.Size = new System.Drawing.Size(892, 45);
             this.pnlButtons.TabIndex = 1;
@@ -542,9 +549,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             // splitterQueueView
             // 
-            this.splitterQueueView.Location = new System.Drawing.Point(200, 0);
+            this.splitterQueueView.Location = new System.Drawing.Point(200, 38);
             this.splitterQueueView.Name = "splitterQueueView";
-            this.splitterQueueView.Size = new System.Drawing.Size(3, 93);
+            this.splitterQueueView.Size = new System.Drawing.Size(3, 123);
             this.splitterQueueView.TabIndex = 3;
             this.splitterQueueView.TabStop = false;
             this.splitterQueueView.Visible = false;
@@ -553,23 +560,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             this.pnlViewQueues.Controls.Add(this.queueTreeView);
             this.pnlViewQueues.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnlViewQueues.Location = new System.Drawing.Point(0, 0);
+            this.pnlViewQueues.Location = new System.Drawing.Point(0, 38);
             this.pnlViewQueues.Name = "pnlViewQueues";
-            this.pnlViewQueues.Size = new System.Drawing.Size(200, 93);
+            this.pnlViewQueues.Size = new System.Drawing.Size(200, 123);
             this.pnlViewQueues.TabIndex = 4;
             this.pnlViewQueues.Visible = false;
-            // 
-            // queueTreeView
-            // 
-            this.queueTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.queueTreeView.ImageIndex = 0;
-            this.queueTreeView.ImageList = this.queueIconList;
-            this.queueTreeView.Location = new System.Drawing.Point(0, 0);
-            this.queueTreeView.Name = "queueTreeView";
-            this.queueTreeView.SelectedImageIndex = 0;
-            this.queueTreeView.Size = new System.Drawing.Size(200, 93);
-            this.queueTreeView.TabIndex = 2;
-            this.queueTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.queueTreeView_MouseUp);
             // 
             // queueIconList
             // 
@@ -588,6 +583,77 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuQueueCancelPending.Text = "&Cancel Pending";
             this.mnuQueueCancelPending.Click += new System.EventHandler(this.mnuQueueCancelPending_Click);
             // 
+            // serverChangedPanel
+            // 
+            this.serverChangedPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.serverChangedPanel.Controls.Add(this.closeUpdateButton);
+            this.serverChangedPanel.Controls.Add(this.label1);
+            this.serverChangedPanel.Controls.Add(this.updateProjectsButton);
+            this.serverChangedPanel.Controls.Add(this.updateProjectsMessage);
+            this.serverChangedPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.serverChangedPanel.Location = new System.Drawing.Point(0, 0);
+            this.serverChangedPanel.Name = "serverChangedPanel";
+            this.serverChangedPanel.Size = new System.Drawing.Size(892, 38);
+            this.serverChangedPanel.TabIndex = 5;
+            this.serverChangedPanel.Visible = false;
+            // 
+            // closeUpdateButton
+            // 
+            this.closeUpdateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.closeUpdateButton.Location = new System.Drawing.Point(784, 3);
+            this.closeUpdateButton.Name = "closeUpdateButton";
+            this.closeUpdateButton.Size = new System.Drawing.Size(101, 28);
+            this.closeUpdateButton.TabIndex = 3;
+            this.closeUpdateButton.Text = "Close";
+            this.closeUpdateButton.UseVisualStyleBackColor = true;
+            this.closeUpdateButton.Click += new System.EventHandler(this.closeUpdateButton_Click);
+            // 
+            // updateProjectsButton
+            // 
+            this.updateProjectsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.updateProjectsButton.Location = new System.Drawing.Point(677, 3);
+            this.updateProjectsButton.Name = "updateProjectsButton";
+            this.updateProjectsButton.Size = new System.Drawing.Size(101, 28);
+            this.updateProjectsButton.TabIndex = 1;
+            this.updateProjectsButton.Text = "Update Projects";
+            this.updateProjectsButton.UseVisualStyleBackColor = true;
+            this.updateProjectsButton.Click += new System.EventHandler(this.updateProjectsButton_Click);
+            // 
+            // updateProjectsMessage
+            // 
+            this.updateProjectsMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.updateProjectsMessage.AutoEllipsis = true;
+            this.updateProjectsMessage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.updateProjectsMessage.Location = new System.Drawing.Point(42, 3);
+            this.updateProjectsMessage.Name = "updateProjectsMessage";
+            this.updateProjectsMessage.Size = new System.Drawing.Size(629, 28);
+            this.updateProjectsMessage.TabIndex = 0;
+            this.updateProjectsMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label1
+            // 
+            this.label1.AutoEllipsis = true;
+            this.label1.Image = global::ThoughtWorks.CruiseControl.CCTrayLib.Properties.Resources.ServerWarning;
+            this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label1.Location = new System.Drawing.Point(10, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(26, 28);
+            this.label1.TabIndex = 2;
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // queueTreeView
+            // 
+            this.queueTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.queueTreeView.ImageIndex = 0;
+            this.queueTreeView.ImageList = this.queueIconList;
+            this.queueTreeView.Location = new System.Drawing.Point(0, 0);
+            this.queueTreeView.Name = "queueTreeView";
+            this.queueTreeView.SelectedImageIndex = 0;
+            this.queueTreeView.Size = new System.Drawing.Size(200, 123);
+            this.queueTreeView.TabIndex = 2;
+            this.queueTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.queueTreeView_MouseUp);
+            // 
             // trayIcon
             // 
             this.trayIcon.ContextMenu = this.mnuTrayContextMenu;
@@ -600,11 +666,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(892, 138);
+            this.ClientSize = new System.Drawing.Size(892, 206);
             this.Controls.Add(this.lvProjects);
             this.Controls.Add(this.splitterQueueView);
             this.Controls.Add(this.pnlViewQueues);
             this.Controls.Add(this.pnlButtons);
+            this.Controls.Add(this.serverChangedPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Menu = this.mainMenu;
@@ -615,6 +682,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.Closing += new System.ComponentModel.CancelEventHandler(this.MainForm_Closing);
             this.pnlButtons.ResumeLayout(false);
             this.pnlViewQueues.ResumeLayout(false);
+            this.serverChangedPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -788,11 +856,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
         private void ShowPreferencesForm()
         {
+            ReloadConfiguration(() =>
+            {
+                var form = new CCTrayMultiSettingsForm(configuration);
+                var result = form.ShowDialog();
+                return (result == DialogResult.OK);
+            });
+        }
+
+        public void ReloadConfiguration(Func<bool> loadPreferences)
+        {
             controller.StopServerMonitoring();
             try
             {
-                if (new CCTrayMultiSettingsForm(configuration).ShowDialog() != DialogResult.OK)
-                    return;
+                if (!loadPreferences()) return;
 
                 configuration.Reload();
                 lvProjects.Items.Clear();
@@ -1087,6 +1164,47 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             {
                 controller.ShowPackages();
             }
+        }
+
+        public void ShowChangedProjects(Dictionary<string, ServerSnapshotChangedEventArgs> changeList)
+        {
+            // Generate the message
+            var builder = new StringBuilder();
+            int[] counts = { 0, 0, 0 };
+            foreach (var server in changeList.Values)
+            {
+                counts[0]++;
+                counts[1] += server.AddedProjects.Count;
+                counts[2] += server.DeletedProjects.Count;
+            }
+            builder.AppendFormat("There {0} ", (counts[1] + counts[2]) == 1 ? "is" : "are");
+            if (counts[1] > 0) builder.AppendFormat("{0} added project{1}", counts[1], counts[1] == 1 ? string.Empty : "s");
+            if ((counts[1] > 0) && (counts[2] > 0)) builder.Append(" and ");
+            if (counts[2] > 0) builder.AppendFormat("{0} deleted project{1}", counts[2], counts[2] == 1 ? string.Empty : "s");
+            builder.AppendFormat(" on {0} server{1}", counts[0], counts[0] == 1 ? string.Empty : "s");
+
+            // Display the change panel
+            serverChangedPanel.Visible = true;
+            updateProjectsMessage.Text = builder.ToString();
+        }
+
+        /// <summary>
+        /// Closes the update panel and resets the status
+        /// </summary>
+        public void CloseUpdatePanel()
+        {
+            controller.ClearChangedProjectList();
+            serverChangedPanel.Visible = false;
+        }
+
+        private void closeUpdateButton_Click(object sender, EventArgs e)
+        {
+            CloseUpdatePanel();
+        }
+
+        private void updateProjectsButton_Click(object sender, EventArgs e)
+        {
+            controller.UpdateProjectList();
         }
     }
 }

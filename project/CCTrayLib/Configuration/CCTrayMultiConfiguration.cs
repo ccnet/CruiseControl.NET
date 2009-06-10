@@ -124,6 +124,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			get { return persistentConfiguration.ShowInTaskbar; }
 			set { persistentConfiguration.ShowInTaskbar = value; }
 		}
+        /// <summary>
+        /// Report any changes to the projects.
+        /// </summary>
+        public bool ReportProjectChanges
+        {
+            get { return persistentConfiguration.ReportProjectChanges; }
+            set { persistentConfiguration.ReportProjectChanges = value; }
+        }
 
         public string FixUserName
         {
