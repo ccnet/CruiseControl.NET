@@ -12,6 +12,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
 		private DynamicMock x10LowLevelDriverMock;
         private const int GREEN_LAMP_DEVICE_CODE = 1;
         private const int RED_LAMP_DEVICE_CODE = 2;
+        private const int YELLOW_LAMP_DEVICE_CODE = 3;
 
 		[SetUp]
 		public void SetUp()
@@ -21,6 +22,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
 
 			X10Configuration configuration = new X10Configuration();
 			configuration.SuccessUnitCode = GREEN_LAMP_DEVICE_CODE;
+			configuration.BuildingUnitCode = YELLOW_LAMP_DEVICE_CODE;
 			configuration.FailureUnitCode = RED_LAMP_DEVICE_CODE;
 			IX10LowLevelDriver x10LowLevelDriver = x10LowLevelDriverMock.MockInstance as IX10LowLevelDriver;
 			lampController = new LampController(configuration,x10LowLevelDriver);
@@ -81,7 +83,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
 			lampController.GreenLightOn = false;
 			lampController.GreenLightOn = false;
 
-		
 		}
 
 	}

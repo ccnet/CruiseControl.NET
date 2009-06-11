@@ -8,18 +8,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
 	public class LampController : ILampController
 	{
 		private readonly Lamp red;
+        private readonly Lamp yellow;
 		private readonly Lamp green;
 
 		public LampController(X10Configuration configuration, IX10LowLevelDriver lowLevelDriver)
 		{
 			if (configuration != null){
 	            int successUnitCode = configuration.SuccessUnitCode;
+                int buildingUnitCode = configuration.BuildingUnitCode;
 	           	int failureUnitCode = configuration.FailureUnitCode;
 	            LowLevelDriverFactory factory = new LowLevelDriverFactory(configuration);
 	            if (lowLevelDriver == null){
 	            	lowLevelDriver = factory.getDriver();
 				}
 				red = new Lamp("red", failureUnitCode, lowLevelDriver);
+                yellow = new Lamp("yellow", buildingUnitCode, lowLevelDriver);
 				green = new Lamp("green", successUnitCode, lowLevelDriver);
 			}
 		}
@@ -29,7 +32,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
 			set { red.SetState(value ? LampState.On : LampState.Off); }
 		}
 
-		public bool GreenLightOn
+        public bool YellowLightOn
+        {
+            set { yellow.SetState(value ? LampState.On : LampState.Off); }
+        }
+        
+        public bool GreenLightOn
 		{
 			set { green.SetState(value ? LampState.On : LampState.Off); }
 		}

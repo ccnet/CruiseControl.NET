@@ -51,26 +51,47 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
 				lampController);
 		}
 
-		[TearDown]
-		public void TearDown()
-		{
-			mockLampController.Verify();
-		}
-		
 		[Test]
 		public void SetsTheLightStatusCorrectlyBasedOnTheIntegrationStatus()
 		{
-			AssertIntegrationStatusEventGeneratesAppropriateLightSwitching(IntegrationStatus.Success, false, true);
-			AssertIntegrationStatusEventGeneratesAppropriateLightSwitching(IntegrationStatus.Failure, true, false);
-			AssertIntegrationStatusEventGeneratesAppropriateLightSwitching(IntegrationStatus.Exception, true, false);
-			AssertIntegrationStatusEventGeneratesAppropriateLightSwitching(IntegrationStatus.Unknown, true, true);
-		}
+			// for each set of conditions (Integration Status + Project State),
+			// set the lights (Red, Yellow, Green)
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Success, ProjectState.Building, false, true, true);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Failure, ProjectState.Building, true, true, false);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Exception, ProjectState.Building, true, true, false);
+			// If we can't get status, turn all lights off. 
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Unknown, ProjectState.Building, false, false, false);
 		
-		private void AssertIntegrationStatusEventGeneratesAppropriateLightSwitching(IntegrationStatus status, bool redLightOn, bool greenLightOn)
+			// this next case seems to be degenerate - can this ever happen?
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Success, ProjectState.Broken, true, false, false);
+
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Failure, ProjectState.Broken, true, false, false);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Exception, ProjectState.Broken, true, false, false);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Unknown, ProjectState.Broken, false, false, false);
+
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Success, ProjectState.BrokenAndBuilding, true, true, false);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Failure, ProjectState.BrokenAndBuilding, true, true, false);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Exception, ProjectState.BrokenAndBuilding, true, true, false);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Unknown, ProjectState.BrokenAndBuilding, false, false, false);
+		
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Success, ProjectState.NotConnected, false, false, false);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Failure, ProjectState.NotConnected, false, false, false);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Exception, ProjectState.NotConnected, false, false, false);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Unknown, ProjectState.NotConnected, false, false, false);
+
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Success, ProjectState.Success, false, false, true);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Failure, ProjectState.Success, true, false, false);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Exception, ProjectState.Success, true, false, false);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Unknown, ProjectState.Success, false, false, false);
+		}
+
+		private void AssertPollingGeneratesAppropriateLights(IntegrationStatus status, ProjectState state, bool redLightOn, bool yellowLightOn, bool greenLightOn)
 		{
 			stubProjectMonitor.IntegrationStatus = status;
+			stubProjectMonitor.ProjectState = state;
 			
 			mockLampController.Expect("RedLightOn", redLightOn);
+			mockLampController.Expect("YellowLightOn", yellowLightOn);
 			mockLampController.Expect("GreenLightOn", greenLightOn);
 			
 			stubProjectMonitor.OnPolled(new MonitorPolledEventArgs(stubProjectMonitor));
@@ -79,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
 		}
 		
 		[Test]
-		public void WhenTheCurrentTimeIsOutsideTheAvailableHoursBothLightsAreSwitchedOff()
+		public void WhenTheCurrentTimeIsOutsideTheAvailableHoursAllLightsAreSwitchedOff()
 		{
 			stubCurrentTimeProvider.SetNow(new DateTime(2005, 11, 05, 12, 00, 00));
 			Assert.AreEqual(DayOfWeek.Saturday, stubCurrentTimeProvider.Now.DayOfWeek);
@@ -99,10 +120,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
 
 		private void AssertLightsAreSwitchedOffRegardlessOfIntegrationStateOutsideOfConfiguredHours()
 		{
-			AssertIntegrationStatusEventGeneratesAppropriateLightSwitching(IntegrationStatus.Success, false, false);
-			AssertIntegrationStatusEventGeneratesAppropriateLightSwitching(IntegrationStatus.Failure, false, false);
-			AssertIntegrationStatusEventGeneratesAppropriateLightSwitching(IntegrationStatus.Exception, false, false);
-			AssertIntegrationStatusEventGeneratesAppropriateLightSwitching(IntegrationStatus.Unknown, false, false);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Success, ProjectState.Success, false, false, false);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Failure, ProjectState.Success, false, false, false);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Exception, ProjectState.Success, false, false, false);
+			AssertPollingGeneratesAppropriateLights(IntegrationStatus.Unknown, ProjectState.Success, false, false, false);
 		}
 	}
 }

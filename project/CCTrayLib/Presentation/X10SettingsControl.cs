@@ -43,6 +43,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             listBoxComPort.SelectedItem = configuration.ComPort;
 
             listBoxFailureUnitCode.SelectedIndex = configuration.FailureUnitCode - 1;
+            listBoxBuildingUnitCode.SelectedIndex = configuration.BuildingUnitCode -1;
             listBoxSuccessUnitCode.SelectedIndex = configuration.SuccessUnitCode - 1;
 
             checkBoxActiveSunday.Checked = configuration.ActiveDays[(int)DayOfWeek.Sunday];
@@ -66,6 +67,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             configuration.StartTime = dateTimePickerStartTime.Value;
             configuration.EndTime = dateTimePickerEndTime.Value;
             configuration.FailureUnitCode = listBoxFailureUnitCode.SelectedIndex+1;
+            configuration.BuildingUnitCode = listBoxBuildingUnitCode.SelectedIndex+1;
             configuration.SuccessUnitCode = listBoxSuccessUnitCode.SelectedIndex+1;
             configuration.ActiveDays[(int)DayOfWeek.Sunday] = checkBoxActiveSunday.Checked;
             configuration.ActiveDays[(int)DayOfWeek.Monday] = checkBoxActiveMonday.Checked;
@@ -81,6 +83,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             bool controlsEnabled = checkBoxX10Enabled.Checked;
             listBoxComPort.Enabled = controlsEnabled;
             listBoxFailureUnitCode.Enabled = controlsEnabled;
+            listBoxBuildingUnitCode.Enabled = controlsEnabled;
             listBoxSuccessUnitCode.Enabled = controlsEnabled;
             listBoxHouseCode.Enabled = controlsEnabled;
             checkBoxActiveSunday.Enabled = controlsEnabled;
@@ -91,14 +94,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             checkBoxActiveFriday.Enabled = controlsEnabled;
             checkBoxActiveSaturday.Enabled = controlsEnabled;
             labelComPort.Enabled = controlsEnabled;
-            labelFailureUnitCode.Enabled = controlsEnabled;
             labelHouseCode.Enabled = controlsEnabled;
-            labelStartTime.Enabled = controlsEnabled;
-            labelStopTime.Enabled = controlsEnabled;
             labelSuccessUnit.Enabled = controlsEnabled;
+            labelBuildingUnit.Enabled = controlsEnabled;
+            labelFailureUnit.Enabled = controlsEnabled;
             groupBoxActiveDays.Enabled = controlsEnabled;
             labelControllerType.Enabled = controlsEnabled;
             comboBoxControllerType.Enabled = controlsEnabled;
+            labelStartTime.Enabled = controlsEnabled;
+            labelStopTime.Enabled = controlsEnabled;
+            dateTimePickerEndTime.Enabled = controlsEnabled;
+            dateTimePickerStartTime.Enabled = controlsEnabled;
 
         }
 

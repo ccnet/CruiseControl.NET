@@ -12,6 +12,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
         public String HouseCode = ThoughtWorks.CruiseControl.CCTrayLib.X10.HouseCode.A.ToString();
         public int SuccessUnitCode = 1;
         public int FailureUnitCode = 2;
+        public int BuildingUnitCode = 3;
 		[XmlElement(DataType="time")]
 		public DateTime StartTime = new DateTime(2001, 1, 1, 9, 0, 0);
 		[XmlElement(DataType="time")]

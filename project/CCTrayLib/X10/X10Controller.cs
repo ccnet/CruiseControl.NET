@@ -12,7 +12,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
 		private readonly ILampController lampController;
 		private readonly DateTimeProvider dateTimeProvider;
 		private readonly X10Configuration configuration;
-
+		private IProjectMonitor monitor;
+		
 		public X10Controller(IProjectMonitor monitor, DateTimeProvider dateTimeProvider, X10Configuration configuration, ILampController lampController)
 		{
 			if (configuration != null && configuration.Enabled)
@@ -21,6 +22,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
                 this.lampController = lampController;
 				this.dateTimeProvider = dateTimeProvider;
 				this.configuration = configuration;
+				this.monitor = monitor;
 	
 				monitor.Polled += new MonitorPolledEventHandler(Monitor_Polled);
 			}
@@ -33,37 +35,28 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
 			{
 				if (!IsInsideLampSwitchingHours)
 				{
-                    Cursor.Current = Cursors.WaitCursor;
-					lampController.GreenLightOn = false;
-					lampController.RedLightOn = false;
-                    Cursor.Current = Cursors.Default;
+					SetRedYellowGreenLamps(false,false,false);
                     return;
 				}
 
-				switch (((IProjectMonitor)sender).IntegrationStatus)
-				{
-					case IntegrationStatus.Success:
-                        Cursor.Current = Cursors.WaitCursor;
-                        lampController.GreenLightOn = true;
-						lampController.RedLightOn = false;
-                        Cursor.Current = Cursors.Default;
-                        break;
+				ProjectState state = monitor.ProjectState;
+				IntegrationStatus status = ((IProjectMonitor)sender).IntegrationStatus;
 
-					case IntegrationStatus.Exception:
-					case IntegrationStatus.Failure:
-                        Cursor.Current = Cursors.WaitCursor;
-                        lampController.GreenLightOn = false;
-						lampController.RedLightOn = true;
-                        Cursor.Current = Cursors.Default;
-                        break;
-
-					default:
-                        Cursor.Current = Cursors.WaitCursor;
-                        lampController.GreenLightOn = true;
-						lampController.RedLightOn = true;
-                        Cursor.Current = Cursors.Default;
-                        break;
-				}
+				if (state.Equals(ProjectState.NotConnected) || status.Equals(IntegrationStatus.Unknown)) {
+	             	SetRedYellowGreenLamps(false, false, false);
+                 }
+                 else {
+					bool red = status.Equals(IntegrationStatus.Exception) ||
+						       status.Equals(IntegrationStatus.Failure) ||
+							   state.Equals(ProjectState.Broken) || 
+							   state.Equals(ProjectState.BrokenAndBuilding);
+					bool yellow = state.Equals(ProjectState.Building) || 
+					              state.Equals(ProjectState.BrokenAndBuilding);
+					bool green = (status.Equals(IntegrationStatus.Success) &&
+								(state.Equals(ProjectState.Success) || (state.Equals(ProjectState.Building))));
+	
+  					SetRedYellowGreenLamps(red,yellow,green);
+                 }
 			}
 			catch (ApplicationException ex)
 			{
@@ -81,6 +74,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
                 
                 return (isTodayActive && isInTimeRange);
 			}
+		}
+		
+		private void SetRedYellowGreenLamps(bool red, bool yellow, bool green) {
+		    Cursor.Current = Cursors.WaitCursor;
+			lampController.RedLightOn = red;
+		    lampController.YellowLightOn = yellow;
+			lampController.GreenLightOn = green;
+		    Cursor.Current = Cursors.Default;
 		}
 	}
 }
