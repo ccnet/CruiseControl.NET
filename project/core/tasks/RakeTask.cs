@@ -37,13 +37,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("trace", Required = false)]
 		public bool Trace;
 
-
-        /// <summary>
-        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
-        /// </summary>
-        [ReflectorProperty("description", Required = false)]
-        public string Description = string.Empty;
-
 		public RakeTask()
 			: this(new ProcessExecutor()) {}
 
@@ -55,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public override void Run(IIntegrationResult result)
 		{
 			ProcessInfo processInfo = CreateProcessInfo(result);
-            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : string.Format("Executing Rake: {0}", processInfo.Arguments));
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format("Executing Rake: {0}", processInfo.Arguments));
 			ProcessResult processResult = TryToRun(processInfo);
 
 			if (!StringUtil.IsWhitespace(processResult.StandardOutput + processResult.StandardError))

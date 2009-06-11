@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -11,7 +12,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// So retrieving the modifications across builds is very easy. (Timeline, ... )
     /// </summary>
     [ReflectorType("modificationHistory")]
-    public class ModificationHistoryPublisher : ITask
+    public class ModificationHistoryPublisher 
+        : TaskBase, ITask
     {
         public const string DataHistoryFileName = "HistoryData.xml";
         private bool onlyLogWhenChangesFound = false;
@@ -29,17 +31,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { onlyLogWhenChangesFound = value; }
         }
 
-        /// <summary>
-        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
-        /// </summary>
-        [ReflectorProperty("description", Required = false)]
-        public string Description = string.Empty;
-
         public void Run(IIntegrationResult result)
         {
             if ((OnlyLogWhenChangesFound) & (result.Modifications.Length == 0)) return;
 
-            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Saving modification history");                
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Saving modification history");                
 
 
             string DataHistoryFile = System.IO.Path.Combine(result.ArtifactDirectory, DataHistoryFileName);

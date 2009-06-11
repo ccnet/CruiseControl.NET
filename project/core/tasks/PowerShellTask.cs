@@ -13,7 +13,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	/// This is a specialized Exec for PowerShell
 	/// </summary>
 	[ReflectorType("powershell")]
-	public class PowerShellTask : ITask
+	public class PowerShellTask 
+        : TaskBase, ITask
 	{
 		public const int DefaultBuildTimeOut = 600;
         public const string PowerShellExe = "powershell.exe";

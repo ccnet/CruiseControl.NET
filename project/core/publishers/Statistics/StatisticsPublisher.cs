@@ -4,11 +4,13 @@ using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
     [ReflectorType("statistics")]
-    public class StatisticsPublisher : ITask
+    public class StatisticsPublisher 
+        : TaskBase, ITask
     {
         /// <summary>
         /// The location of the CSV statistics file, relative to the project artifacts directory.

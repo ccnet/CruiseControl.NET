@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Exortech.NetReflector;
 using System.Xml;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -10,7 +11,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// Publishes the results in an RSS feed.
     /// </summary>
     [ReflectorType("rss")]
-    public class RssPublisher : ITask
+    public class RssPublisher 
+        : TaskBase, ITask
     {
         private const string RssFilename = "RSSData.xml";
         private const string contentNamespace = "http://purl.org/rss/1.0/modules/content/";
@@ -43,15 +45,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return result;
         }
 
-        /// <summary>
-        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
-        /// </summary>
-        [ReflectorProperty("description", Required = false)]
-        public string Description = string.Empty;
-
         public void Run(IIntegrationResult result)
         {
-            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Making RSS feed");
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Making RSS feed");
 
             string feedFile = RSSDataFileLocation(result.ArtifactDirectory);
             XmlElement channelElement = LoadOrInitialiseChannelElement(result, feedFile);

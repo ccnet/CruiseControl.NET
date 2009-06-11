@@ -31,17 +31,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             set { deleteAfterRead = value; }
         }
 
-        /// <summary>
-        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
-        /// </summary>
-        [ReflectorProperty("description", Required = false)]
-        public string Description = string.Empty;
-
-
         public void Run(IIntegrationResult result)
         {
             List<string> filesToDelete = new List<string>();
-            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Reading Modifications");                
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Reading Modifications");                
 
 
 			List<object> stuff = new List<object>();

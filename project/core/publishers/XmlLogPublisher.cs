@@ -3,11 +3,13 @@ using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
     [ReflectorType("xmllogger")]
-    public class XmlLogPublisher : ITask
+    public class XmlLogPublisher 
+        : TaskBase, ITask
     {
 		public static readonly string DEFAULT_LOG_SUBDIRECTORY = "buildlogs";
 

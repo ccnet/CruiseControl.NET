@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(GendarmeTask.defaultVerbose, task.Verbose);
 			Assert.AreEqual(GendarmeTask.defaultFailBuildOnFoundDefects, task.FailBuildOnFoundDefects);
 			Assert.AreEqual(GendarmeTask.defaultVerifyTimeout, task.VerifyTimeoutSeconds);
-			Assert.AreEqual(string.Empty, task.Description);
+			Assert.AreEqual(null, task.Description);
 			Assert.AreEqual(0, task.Assemblies.Length);
 			Assert.AreEqual(string.Empty, task.AssemblyListFile);
 		}

@@ -77,18 +77,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         }
         #endregion
 
-        #region Description
-        /// <summary>
-        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
-        /// </summary>
-        [ReflectorProperty("description", Required = false)]
-        public string Description
-        {
-            get { return description; }
-            set { description = value; }
-        }
-        #endregion
-
         #region EmitXml
         /// <summary>
         /// Whether to emit the XML report data or not.

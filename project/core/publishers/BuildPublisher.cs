@@ -1,10 +1,12 @@
 using System.IO;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
     [ReflectorType("buildpublisher")]
-    public class BuildPublisher : ITask
+    public class BuildPublisher 
+        : TaskBase, ITask
     {
         public enum CleanupPolicy
         {
@@ -27,13 +29,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         [ReflectorProperty("alwaysPublish", Required = false)]
         public bool AlwaysPublish = false;
 
-        /// <summary>
-        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
-        /// </summary>
-        [ReflectorProperty("description", Required = false)]
-        public string Description = string.Empty;
-
-
         [ReflectorProperty("cleanUpMethod", Required = false)]
         public CleanupPolicy CleanUpMethod = CleanupPolicy.NoCleaning;
 
@@ -47,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         public void Run(IIntegrationResult result)
         {
 
-            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Publishing build results");
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Publishing build results");
 
             if (result.Succeeded || AlwaysPublish)
             {

@@ -5,6 +5,7 @@ using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -14,7 +15,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// are configurable.
     /// </summary>
     [ReflectorType("email")]
-    public class EmailPublisher : ITask, IConfigurationValidation
+    public class EmailPublisher 
+        : TaskBase, ITask, IConfigurationValidation
     {
         private EmailGateway emailGateway = new EmailGateway();
         private string fromAddress;
@@ -205,19 +207,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { subjectPrefix = value; }
         }
 
-        /// <summary>
-        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
-        /// </summary>
-        [ReflectorProperty("description", Required = false)]
-        public string Description = string.Empty;
-
-
         public void Run(IIntegrationResult result)
         {
             if (result.Status == IntegrationStatus.Unknown)
                 return;
 
-            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Emailing ...");
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Emailing ...");
 
             EmailMessage emailMessage = new EmailMessage(result, this);
             string to = emailMessage.Recipients;

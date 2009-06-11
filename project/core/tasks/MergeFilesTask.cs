@@ -27,15 +27,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         public ILogger Logger { get; set; }
 
-        /// <summary>
-        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
-        /// </summary>
-        [ReflectorProperty("description", Required = false)]
-        public string Description = string.Empty;
-
 		public void Run(IIntegrationResult result)
 		{
-            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : "Merging Files");
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Merging Files");
 
             var actualFileSystem = FileSystem ?? new SystemIoFileSystem();
             var actualLogger = Logger ?? new DefaultLogger();

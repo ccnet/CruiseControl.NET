@@ -57,13 +57,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             set { shadowCopier = value; }
         }
 
-        /// <summary>
-        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
-        /// </summary>
-        [ReflectorProperty("description", Required = false)]
-        public string Description = string.Empty;
-
-
 		protected override string GetProcessFilename()
 		{
 			return Executable;
@@ -107,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		public override void Run(IIntegrationResult result)
 		{
-            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description :
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
 				string.Format("Executing MSBuild :BuildFile: {0}", ProjectFile));
 
 			ProcessResult processResult = executor.Execute(CreateProcessInfo(result));

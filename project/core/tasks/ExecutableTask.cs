@@ -35,13 +35,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("buildArgs", Required = false)]
 		public string BuildArgs = string.Empty;
 
-        /// <summary>
-        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
-        /// </summary>
-        [ReflectorProperty("description", Required = false)]
-        public string Description = string.Empty;
-
-
 		/// <summary>
 		/// A set of environment variables set for commands that are executed.
 		/// </summary>
@@ -106,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="result">the IIntegrationResult object for the build</param>
 		public override void Run(IIntegrationResult result)
 		{
-            result.BuildProgressInformation.SignalStartRunTask(Description != string.Empty ? Description : string.Format("Executing {0}", Executable));
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format("Executing {0}", Executable));
 
 			ProcessInfo info = CreateProcessInfo(result);
 			SetConfiguredEnvironmentVariables(info.EnvironmentVariables, EnvironmentVariables);

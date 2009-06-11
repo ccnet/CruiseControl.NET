@@ -31,14 +31,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         public ITask[] Publishers { get; set; }
         #endregion
 
-        #region Description
-        /// <summary>
-        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
-        /// </summary>
-        [ReflectorProperty("description", Required = false)]
-        public string Description { get; set; }
-        #endregion
-
         #region Conditions
         /// <summary>
         /// The conditions to test for.
