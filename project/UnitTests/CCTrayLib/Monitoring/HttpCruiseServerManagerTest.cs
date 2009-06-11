@@ -4,6 +4,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Net;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 {
@@ -46,6 +47,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.AreSame(snapshot, actual);
 		}
 
+		[Test]
+		public void CanHandleTimeouts(){
+            Expect.Call(serverClient.GetCruiseServerSnapshot()).Throw(new WebException("The operation has timed out"));
+            mocks.ReplayAll();
+
+			CruiseServerSnapshot actual = manager.GetCruiseServerSnapshot();
+			
+			Assert.IsNotNull(actual);
+			// mainly want to make sure that the exception is caught, and return is not null. 
+		}
+			
         [Test]
         [ExpectedException(typeof(NotImplementedException), "Cancel pending not currently supported on servers monitored via HTTP")]
         public void CancelPendingRequestThrowsAnNotImplementedException()

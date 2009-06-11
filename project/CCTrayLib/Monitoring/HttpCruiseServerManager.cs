@@ -46,10 +46,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		/// Gets the projects and integration queues snapshot from this server.
 		/// </summary>
         public CruiseServerSnapshot GetCruiseServerSnapshot()
-		{
-            var snapshot = manager.GetCruiseServerSnapshot();
-			return snapshot;
-		}
+        {
+            // Question - what should happen if we get a System.Net.WebException (timeout) here?
+            // I frequently see these when querying a CruiseControl.java instance.
+            try
+            {
+                var snapshot = manager.GetCruiseServerSnapshot();
+                return snapshot;
+            }
+            catch (System.Net.WebException)
+            {
+                return new CruiseServerSnapshot();
+            }
+        }
 
 		private static string GetDisplayNameFromUri(Uri uri)
 		{

@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		[Test]
 		public void ReadConfig()
 		{
-			string xml = @"
+			string xml = string.Format(@"
 <sourceControl type=""p4"">
   <executable>c:\bin\p4.exe</executable>
   <view>//depot/myproject/...</view>
@@ -57,8 +57,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
   <password>mypassword</password>
   <port>anotherserver:2666</port>
   <workingDirectory>myWorkingDirectory</workingDirectory>
-  <p4WebURLFormat>http://perforceWebServer:8080/@md=d&amp;cd=//&amp;c=3IB@/{0}?ac=10</p4WebURLFormat>
-  <timeZoneOffset>-5.5</timeZoneOffset>
+  <p4WebURLFormat>http://perforceWebServer:8080/@md=d&amp;cd=//&amp;c=3IB@/{{0}}?ac=10</p4WebURLFormat>
+  <timeZoneOffset>{0}</timeZoneOffset>
   <useExitCode>true</useExitCode>
   <errorPattern>Error: (.*)</errorPattern>
   <acceptableErrors>
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
     <acceptableError>(.*)\.accept2</acceptableError>
   </acceptableErrors>
 </sourceControl>
-";
+", -5.5);
 			P4 p4 = CreateP4WithNoArgContructor(xml);
 			Assert.AreEqual(@"c:\bin\p4.exe", p4.Executable);
 			Assert.AreEqual("//depot/myproject/...", p4.View);

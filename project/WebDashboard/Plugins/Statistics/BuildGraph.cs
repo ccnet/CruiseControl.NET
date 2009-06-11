@@ -64,13 +64,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
             }
         }
 
-
-        public override int GetHashCode()
-        {
-            return (myHighestAmountPerDay + myFailedBuildAmount + myOKBuildAmount).GetHashCode();
-        }
-
-
         public override bool Equals(object obj)
         {            
             if (obj.GetType() != this.GetType() )
@@ -91,6 +84,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
             return true;
         }
 
+		public override int GetHashCode()
+		{
+			int hashCode = 0;
+			unchecked {
+				if (mybuildSpecifiers != null) hashCode += 1000000007 * mybuildSpecifiers.GetHashCode(); 
+				if (mylinkFactory != null) hashCode += 1000000009 * mylinkFactory.GetHashCode(); 
+				hashCode += 1000000021 * myHighestAmountPerDay.GetHashCode();
+				hashCode += 1000000033 * myOKBuildAmount.GetHashCode();
+				hashCode += 1000000087 * myFailedBuildAmount.GetHashCode();
+			}
+			return hashCode;
+		}
+        
         /// <summary>
         //Returns a sorted list containing build information per buildday
         /// </summary>

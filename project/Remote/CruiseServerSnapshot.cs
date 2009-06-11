@@ -111,5 +111,32 @@ namespace ThoughtWorks.CruiseControl.Remote
 			}
 			return null;
 		}
+		
+        /// <summary>
+        /// Retrieves the hashcode for the snapshot.
+        /// </summary>
+        /// <returns></returns>
+		public override int GetHashCode()
+		{
+			int hashCode = 0;
+			unchecked {
+				if (projectStatuses != null) hashCode += 1000000007 * projectStatuses.GetHashCode(); 
+				if (queueSetSnapshot != null) hashCode += 1000000009 * queueSetSnapshot.GetHashCode(); 
+			}
+			return hashCode;
+		}
+    	
+        /// <summary>
+        /// Compares two snapshots to see if they are equal.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+		public override bool Equals(object obj)
+		{
+			CruiseServerSnapshot other = obj as CruiseServerSnapshot;
+			if (other == null) return false; 
+			return object.Equals(this.projectStatuses, other.projectStatuses) && object.Equals(this.queueSetSnapshot, other.queueSetSnapshot);
+		}
+		
     }
 }
