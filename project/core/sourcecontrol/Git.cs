@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         private readonly IFileSystem _fileSystem;
 
         [ReflectorProperty("autoGetSource", Required = false)]
-        public bool AutoGetSource;
+		public bool AutoGetSource = true;
 
         [ReflectorProperty("executable", Required = false)]
         public string Executable = "git";

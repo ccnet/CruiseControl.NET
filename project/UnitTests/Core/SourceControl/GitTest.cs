@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         {
             git.TagOnSuccess = true;
 
-            ExpectToExecuteArguments(@"tag -a -m ""ccnet build foo"" foo");
+			ExpectToExecuteArguments(@"tag -a -m ""CCNET build foo"" foo");
             ExpectToExecuteArguments(@"push --tags");
 
             git.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
