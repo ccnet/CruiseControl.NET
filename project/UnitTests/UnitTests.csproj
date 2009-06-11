@@ -354,6 +354,8 @@
     <Compile Include="Core\Publishers\ManifestImporterTests.cs" />
     <Compile Include="Core\Publishers\PackagePublisherTests.cs" />
     <Compile Include="Core\Label\AssemblyVersionLabellerTest.cs" />
+    <Compile Include="Core\SourceControl\GitHistoryParserTest.cs" />
+    <Compile Include="Core\SourceControl\GitTest.cs" />
     <Compile Include="Core\SourceControl\Mercurial\HgWebUrlBuilderTest.cs" />
     <Compile Include="Core\SourceControl\Mercurial\MercurialHistoryParserTest.cs" />
     <Compile Include="Core\SourceControl\Mercurial\MercurialModificationTest.cs" />
