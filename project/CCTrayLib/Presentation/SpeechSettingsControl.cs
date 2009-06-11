@@ -21,14 +21,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.currentConfiguration = configuration;
             this.checkBoxSpeechEnabled.Checked = configuration.Enabled;
             this.checkBoxSpeakBuildStartedEvents.Checked = configuration.SpeakBuildStarted;
-            this.checkBoxSpeakBuildResultEvents.Checked = configuration.SpeakBuildResults;
+            this.checkBoxSpeakBuildSuccededEvents.Checked = configuration.SpeakBuildSucceded;
+            this.checkBoxSpeakBuildFailedEvents.Checked = configuration.SpeakBuildFailed;
 		}
 		
 		public void PersistSpeechTabSettings(SpeechConfiguration configuration)
 		{
             configuration.Enabled = this.checkBoxSpeechEnabled.Checked;
             configuration.SpeakBuildStarted = this.checkBoxSpeakBuildStartedEvents.Checked;
-            configuration.SpeakBuildResults = this.checkBoxSpeakBuildResultEvents.Checked;
+            configuration.SpeakBuildSucceded = this.checkBoxSpeakBuildSuccededEvents.Checked;
+            configuration.SpeakBuildFailed = this.checkBoxSpeakBuildFailedEvents.Checked;
 
             this.currentConfiguration = configuration;
 		}
@@ -37,7 +39,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         {
             bool controlsEnabled = this.checkBoxSpeechEnabled.Checked;
             this.checkBoxSpeakBuildStartedEvents.Enabled = controlsEnabled;
-            this.checkBoxSpeakBuildResultEvents.Enabled = controlsEnabled;
+            this.checkBoxSpeakBuildSuccededEvents.Enabled = controlsEnabled;
+            this.checkBoxSpeakBuildFailedEvents.Enabled = controlsEnabled;
         }
 		
 		

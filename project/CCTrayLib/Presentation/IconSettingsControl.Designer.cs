@@ -182,8 +182,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// IconSettingsControl
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
 			this.Controls.Add(this.btnNotConnectedBrowse);
 			this.Controls.Add(this.txtIconNotConnected);
 			this.Controls.Add(this.chkIconNotConnected);
@@ -200,7 +199,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.Controls.Add(this.txtIconSuccess);
 			this.Controls.Add(this.chkIconSuccess);
 			this.Name = "IconSettingsControl";
-			this.Size = new System.Drawing.Size(667, 298);
+			this.Size = new System.Drawing.Size(667, 289);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

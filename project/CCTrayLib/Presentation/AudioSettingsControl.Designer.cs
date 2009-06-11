@@ -57,19 +57,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// chkAudioSuccessful
 			// 
-			this.chkAudioSuccessful.BackColor = System.Drawing.SystemColors.Control;
-			this.chkAudioSuccessful.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.chkAudioSuccessful.Location = new System.Drawing.Point(16, 16);
 			this.chkAudioSuccessful.Name = "chkAudioSuccessful";
 			this.chkAudioSuccessful.Size = new System.Drawing.Size(96, 16);
 			this.chkAudioSuccessful.TabIndex = 0;
 			this.chkAudioSuccessful.Text = "Successful";
-			this.chkAudioSuccessful.UseVisualStyleBackColor = false;
+			this.chkAudioSuccessful.UseVisualStyleBackColor = true;
 			// 
 			// btnStillFailingPlay
 			// 
 			this.btnStillFailingPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnStillFailingPlay.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnStillFailingPlay.Location = new System.Drawing.Point(560, 88);
 			this.btnStillFailingPlay.Name = "btnStillFailingPlay";
 			this.btnStillFailingPlay.Size = new System.Drawing.Size(75, 23);
@@ -88,7 +85,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// btnFixedPlay
 			// 
 			this.btnFixedPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnFixedPlay.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnFixedPlay.Location = new System.Drawing.Point(560, 40);
 			this.btnFixedPlay.Name = "btnFixedPlay";
 			this.btnFixedPlay.Size = new System.Drawing.Size(75, 23);
@@ -97,19 +93,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// chkAudioFixed
 			// 
-			this.chkAudioFixed.BackColor = System.Drawing.SystemColors.Control;
-			this.chkAudioFixed.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.chkAudioFixed.Location = new System.Drawing.Point(16, 40);
 			this.chkAudioFixed.Name = "chkAudioFixed";
 			this.chkAudioFixed.Size = new System.Drawing.Size(96, 16);
 			this.chkAudioFixed.TabIndex = 4;
 			this.chkAudioFixed.Text = "Fixed";
-			this.chkAudioFixed.UseVisualStyleBackColor = false;
+			this.chkAudioFixed.UseVisualStyleBackColor = true;
 			// 
 			// btnFixedBrowse
 			// 
 			this.btnFixedBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnFixedBrowse.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnFixedBrowse.Location = new System.Drawing.Point(472, 40);
 			this.btnFixedBrowse.Name = "btnFixedBrowse";
 			this.btnFixedBrowse.Size = new System.Drawing.Size(75, 23);
@@ -119,7 +112,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// btnStillFailingBrowse
 			// 
 			this.btnStillFailingBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnStillFailingBrowse.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnStillFailingBrowse.Location = new System.Drawing.Point(472, 88);
 			this.btnStillFailingBrowse.Name = "btnStillFailingBrowse";
 			this.btnStillFailingBrowse.Size = new System.Drawing.Size(75, 23);
@@ -129,7 +121,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// btnBrokenPlay
 			// 
 			this.btnBrokenPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnBrokenPlay.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnBrokenPlay.Location = new System.Drawing.Point(560, 64);
 			this.btnBrokenPlay.Name = "btnBrokenPlay";
 			this.btnBrokenPlay.Size = new System.Drawing.Size(75, 23);
@@ -139,7 +130,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// btnBrokenBrowse
 			// 
 			this.btnBrokenBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnBrokenBrowse.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnBrokenBrowse.Location = new System.Drawing.Point(472, 62);
 			this.btnBrokenBrowse.Name = "btnBrokenBrowse";
 			this.btnBrokenBrowse.Size = new System.Drawing.Size(75, 23);
@@ -149,7 +139,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// btnSuccessfulPlay
 			// 
 			this.btnSuccessfulPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnSuccessfulPlay.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnSuccessfulPlay.Location = new System.Drawing.Point(560, 16);
 			this.btnSuccessfulPlay.Name = "btnSuccessfulPlay";
 			this.btnSuccessfulPlay.Size = new System.Drawing.Size(75, 23);
@@ -159,7 +148,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// btnSuccessfulBrowse
 			// 
 			this.btnSuccessfulBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnSuccessfulBrowse.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnSuccessfulBrowse.Location = new System.Drawing.Point(472, 16);
 			this.btnSuccessfulBrowse.Name = "btnSuccessfulBrowse";
 			this.btnSuccessfulBrowse.Size = new System.Drawing.Size(75, 23);
@@ -168,25 +156,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// chkAudioBroken
 			// 
-			this.chkAudioBroken.BackColor = System.Drawing.SystemColors.Control;
-			this.chkAudioBroken.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.chkAudioBroken.Location = new System.Drawing.Point(16, 64);
 			this.chkAudioBroken.Name = "chkAudioBroken";
 			this.chkAudioBroken.Size = new System.Drawing.Size(96, 16);
 			this.chkAudioBroken.TabIndex = 8;
 			this.chkAudioBroken.Text = "Broken";
-			this.chkAudioBroken.UseVisualStyleBackColor = false;
+			this.chkAudioBroken.UseVisualStyleBackColor = true;
 			// 
 			// chkAudioStillFailing
 			// 
-			this.chkAudioStillFailing.BackColor = System.Drawing.SystemColors.Control;
-			this.chkAudioStillFailing.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.chkAudioStillFailing.Location = new System.Drawing.Point(16, 88);
 			this.chkAudioStillFailing.Name = "chkAudioStillFailing";
 			this.chkAudioStillFailing.Size = new System.Drawing.Size(96, 16);
 			this.chkAudioStillFailing.TabIndex = 12;
 			this.chkAudioStillFailing.Text = "Still failing";
-			this.chkAudioStillFailing.UseVisualStyleBackColor = false;
+			this.chkAudioStillFailing.UseVisualStyleBackColor = true;
 			// 
 			// txtAudioFileFixed
 			// 

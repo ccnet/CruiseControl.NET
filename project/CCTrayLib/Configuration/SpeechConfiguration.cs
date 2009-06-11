@@ -7,6 +7,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 	{
 		public bool Enabled = false;
 		public bool SpeakBuildStarted = true;
-		public bool SpeakBuildResults = true;
+		public bool SpeakBuildSucceded = true;
+		public bool SpeakBuildFailed = true;
 	}
 }

@@ -21,6 +21,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Speech
 		private IBalloonMessageProvider balloonMessageProvider;
         private SpVoice voice = new SpVoice();
 		private IDictionary projectStates = new Hashtable();
+		private bool speakBuildSucceded;
+		private bool speakBuildFailed;
 
         public SpeakingProjectMonitor (IProjectMonitor monitor, IBalloonMessageProvider balloonMessageProvider, SpeechConfiguration configuration) {
         	this.monitor = monitor;
@@ -28,7 +30,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Speech
 
 			if (configuration != null && configuration.Enabled)
 			{
-				if (configuration.SpeakBuildResults) {
+				speakBuildSucceded = configuration.SpeakBuildSucceded;
+				speakBuildFailed = configuration.SpeakBuildFailed;
+				
+				if (speakBuildSucceded || speakBuildFailed) {
 					monitor.BuildOccurred += new MonitorBuildOccurredEventHandler(Monitor_BuildOccurred);
 				}
 				if (configuration.SpeakBuildStarted) {
@@ -39,18 +44,22 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Speech
         
 		private void Monitor_BuildOccurred(object sender, MonitorBuildOccurredEventArgs e)
 		{
-			String projectName = e.ProjectMonitor.Detail.ProjectName;
-
-			CaptionAndMessage captionAndMessage = balloonMessageProvider.GetCaptionAndMessageForBuildTransition(e.BuildTransition);
-
-			String message = String.Format("The {0} project reports {1}", projectName, captionAndMessage.Message);
-            voice.Speak(message, SpeechVoiceSpeakFlags.SVSFDefault);
-            Trace.WriteLine("speaking: " + message);
+			if (SpeechUtil.shouldSpeak(e.BuildTransition,speakBuildSucceded,speakBuildFailed)) {
+				String projectName = e.ProjectMonitor.Detail.ProjectName;
+				projectName = SpeechUtil.makeProjectNameMoreSpeechFriendly(projectName);
+	
+				CaptionAndMessage captionAndMessage = balloonMessageProvider.GetCaptionAndMessageForBuildTransition(e.BuildTransition);
+				String message = String.Format("The {0} project reports {1}", projectName, captionAndMessage.Message);
+	            voice.Speak(message, SpeechVoiceSpeakFlags.SVSFDefault);
+	            Trace.WriteLine("speaking: " + message);
+			}
 		}
 
 		private void Monitor_Polled(object sender, MonitorPolledEventArgs args)
 		{
 			String projectName = args.ProjectMonitor.Detail.ProjectName;
+			projectName = SpeechUtil.makeProjectNameMoreSpeechFriendly(projectName);
+
 			ProjectState currentState = (ProjectState)projectStates[projectName];
 			ProjectState newState = args.ProjectMonitor.Detail.ProjectState;
 			
@@ -65,8 +74,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Speech
 		            Trace.WriteLine("speaking: " + message);
 				}
 			}
-
 		}
+		
+		
 	}
 }
 #endif

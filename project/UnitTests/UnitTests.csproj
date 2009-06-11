@@ -301,6 +301,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CCTrayLib\Presentation\X10SettingsControlTest.cs" />
+    <Compile Include="CCTrayLib\Speech\SpeechUtilTest.cs" />
     <Compile Include="CCTrayLib\StatusIconTest.cs">
       <SubType>Code</SubType>
     </Compile>

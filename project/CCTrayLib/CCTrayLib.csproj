@@ -516,6 +516,7 @@
     <Compile Include="Security\UserPasswordAuthentication.cs" />
     <Compile Include="Security\UserNameAuthentication.cs" />
     <Compile Include="Speech\SpeakingProjectMonitor.cs" />
+    <Compile Include="Speech\SpeechUtil.cs" />
     <Compile Include="StatusIcon.cs">
       <SubType>Code</SubType>
     </Compile>
