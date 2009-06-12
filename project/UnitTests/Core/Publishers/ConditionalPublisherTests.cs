@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             var publisher = new ConditionalPublisher
             {
                 Logger = logger,
-                Publishers = new ITask[] {
+                Tasks = new ITask[] {
                     childPublisher
                 },
                 Conditions = new IntegrationStatus[] {
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             var publisher = new ConditionalPublisher
             {
                 Logger = logger,
-                Publishers = new ITask[] {
+                Tasks = new ITask[] {
                     childPublisher
                 },
                 Conditions = new IntegrationStatus[] {

@@ -15,20 +15,19 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// </summary>
     [ReflectorType("conditionalPublisher")]
     public class ConditionalPublisher
-        : TaskBase, ITask
+        : TaskContainerBase
     {
-        #region Private fields
-        private Dictionary<string, string> parameters;
-        private IEnumerable<ParameterBase> parameterDefinitions;
-        #endregion
-
         #region Public properties
         #region Publishers
         /// <summary>
         /// The publishers to run if the condition is met.
         /// </summary>
         [ReflectorProperty("publishers")]
-        public ITask[] Publishers { get; set; }
+        public override ITask[] Tasks
+        {
+            get { return base.Tasks; }
+            set { base.Tasks = value; }
+        }
         #endregion
 
         #region Conditions
@@ -47,13 +46,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         #endregion
         #endregion
 
-        #region Public methods
-        #region Run()
+        #region Protected methods
+        #region RunTasks()
         /// <summary>
         /// Runs the task, given the specified <see cref="IIntegrationResult"/>, in the specified <see cref="IProject"/>.
         /// </summary>
         /// <param name="result"></param>
-        public virtual void Run(IIntegrationResult result)
+        protected override void RunTasks(IIntegrationResult result)
         {
             // Initialise the publisher
             var logger = Logger ?? new DefaultLogger();
@@ -75,16 +74,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 logger.Info("Conditions met - running publishers");
                 for (var loop = 0; loop < Conditions.Length; loop++)
                 {
-                    var publisher = Publishers[loop];
+                    var publisher = Tasks[loop];
                     logger.Debug("Running publisher #{0}", loop);
                     try
                     {
-                        if (publisher is IParamatisedTask)
-                        {
-                            (publisher as IParamatisedTask).ApplyParameters(parameters, parameterDefinitions);
-                        }
-
-                        publisher.Run(result);
+                        RunTask(publisher, result);
                     }
                     catch (Exception e)
                     {
@@ -96,20 +90,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             {
                 logger.Info("Conditions not met - publishers not run");
             }
-        }
-        #endregion
-
-        #region ApplyParameters()
-        /// <summary>
-        /// Applies the input parameters to the task.
-        /// </summary>
-        /// <param name="parameters">The parameters to apply.</param>
-        /// <param name="parameterDefinitions">The original parameter definitions.</param>
-        public override void ApplyParameters(Dictionary<string, string> parameters, IEnumerable<ParameterBase> parameterDefinitions)
-        {
-            this.parameters = parameters;
-            this.parameterDefinitions = parameterDefinitions;
-            base.ApplyParameters(parameters, parameterDefinitions);
         }
         #endregion
         #endregion

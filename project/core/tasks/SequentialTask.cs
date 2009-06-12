@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Exortech.NetReflector;
-using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -14,20 +10,19 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// </summary>
     [ReflectorType("sequential")]
     public class SequentialTask
-        : TaskBase, ITask
+        : TaskContainerBase
     {
-        #region Private fields
-        private Dictionary<string, string> parameters;
-        private IEnumerable<ParameterBase> parameterDefinitions;
-        #endregion
-
         #region Public properties
         #region Tasks
         /// <summary>
         /// The tasks to run in sequence.
         /// </summary>
         [ReflectorProperty("tasks")]
-        public ITask[] Tasks { get; set; }
+        public override ITask[] Tasks
+        {
+            get { return base.Tasks; }
+            set { base.Tasks = value; }
+        }
         #endregion
 
         #region ContinueOnFailure
@@ -46,13 +41,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
         #endregion
 
-        #region Public methods
-        #region Run()
+        #region Protected methods
+        #region RunTasks()
         /// <summary>
         /// Runs the task, given the specified <see cref="IIntegrationResult"/>, in the specified <see cref="IProject"/>.
         /// </summary>
         /// <param name="result"></param>
-        public virtual void Run(IIntegrationResult result)
+        protected override void RunTasks(IIntegrationResult result)
         {
             // Initialise the task
             var logger = Logger ?? new DefaultLogger();
@@ -74,13 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     // Start the actual task
                     var taskResult = result.Clone();
                     var task = Tasks[loop];
-
-                    if (task is IParamatisedTask)
-                    {
-                        (task as IParamatisedTask).ApplyParameters(parameters, parameterDefinitions);
-                    }
-
-                    task.Run(taskResult);
+                    RunTask(task, taskResult);
                     result.Merge(taskResult);
                 }
                 catch (Exception error)
@@ -104,20 +93,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
 
             logger.Info("Sequential task completed: {0} successful, {1} failed", successCount, failureCount);
-        }
-        #endregion
-
-        #region ApplyParameters()
-        /// <summary>
-        /// Applies the input parameters to the task.
-        /// </summary>
-        /// <param name="parameters">The parameters to apply.</param>
-        /// <param name="parameterDefinitions">The original parameter definitions.</param>
-        public override void ApplyParameters(Dictionary<string, string> parameters, IEnumerable<ParameterBase> parameterDefinitions)
-        {
-            this.parameters = parameters;
-            this.parameterDefinitions = parameterDefinitions;
-            base.ApplyParameters(parameters, parameterDefinitions);
         }
         #endregion
         #endregion

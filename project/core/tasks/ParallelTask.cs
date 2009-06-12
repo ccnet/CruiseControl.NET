@@ -15,20 +15,19 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// </summary>
     [ReflectorType("parallel")]
     public class ParallelTask
-        : TaskBase, ITask, IConfigurationValidation
+        : TaskContainerBase
     {
-        #region Private fields
-        private Dictionary<string, string> parameters;
-        private IEnumerable<ParameterBase> parameterDefinitions;
-        #endregion
-
         #region Public properties
         #region Tasks
         /// <summary>
         /// The tasks to run in parallel.
         /// </summary>
         [ReflectorProperty("tasks")]
-        public ITask[] Tasks { get; set; }
+        public override ITask[] Tasks
+        {
+            get { return base.Tasks; }
+            set { base.Tasks = value; }
+        }
         #endregion
 
         #region Logger
@@ -40,18 +39,54 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
 
         #region Public methods
-        #region Run()
+        #region Validate()
+        /// <summary>
+        /// Validates this task.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="parent"></param>
+        /// <param name="errorProcesser"></param>
+        public override void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
+        {
+            base.Validate(configuration, parent, errorProcesser);
+            var project = parent as Project;
+
+            if (project != null)
+            {
+                // Check if this task is set in the publishers section
+                var isPublisher = false;
+                foreach (var publisher in project.Publishers)
+                {
+                    if (object.ReferenceEquals(publisher, this))
+                    {
+                        isPublisher = true;
+                        break;
+                    }
+                }
+
+                // Display a warning
+                if (isPublisher)
+                {
+                    errorProcesser.ProcessWarning("Putting the parallel task in the publishers section may cause unpredictable results");
+                }
+            }
+        }
+        #endregion
+        #endregion
+
+        #region Public methods
+        #region RunTasks()
         /// <summary>
         /// Runs the task, given the specified <see cref="IIntegrationResult"/>, in the specified <see cref="IProject"/>.
         /// </summary>
         /// <param name="result"></param>
-        public virtual void Run(IIntegrationResult result)
+        protected override void RunTasks(IIntegrationResult result)
         {
             // Initialise the task
             var logger = Logger ?? new DefaultLogger();
             var numberOfTasks = Tasks.Length;
-            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) 
-                ? Description 
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description)
+                ? Description
                 : string.Format("Running parallel tasks ({0} task(s))", numberOfTasks));
             logger.Info("Starting parallel task with {0} sub-task(s)", numberOfTasks);
 
@@ -78,11 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
                         // Start the actual task
                         var task = Tasks[taskNumber];
-                        if (task is IParamatisedTask)
-                        {
-                            (task as IParamatisedTask).ApplyParameters(parameters, parameterDefinitions);
-                        }
-                        task.Run(results[taskNumber]);
+                        RunTask(task, results[taskNumber]);
                     }
                     catch (Exception error)
                     {
@@ -123,53 +154,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
 
             logger.Info("Parallel task completed: {0} successful, {1} failed", successCount, failureCount);
-        }
-        #endregion
-
-        #region Validate()
-        /// <summary>
-        /// Validates this task.
-        /// </summary>
-        /// <param name="configuration"></param>
-        /// <param name="parent"></param>
-        /// <param name="errorProcesser"></param>
-        public void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
-        {
-            var project = parent as Project;
-
-            if (project != null)
-            {
-                // Check if this task is set in the publishers section
-                var isPublisher = false;
-                foreach (var publisher in project.Publishers)
-                {
-                    if (object.ReferenceEquals(publisher, this))
-                    {
-                        isPublisher = true;
-                        break;
-                    }
-                }
-
-                // Display a warning
-                if (isPublisher)
-                {
-                    errorProcesser.ProcessWarning("Putting the parallel task in the publishers section may cause unpredictable results");
-                }
-            }
-        }
-        #endregion
-
-        #region ApplyParameters()
-        /// <summary>
-        /// Applies the input parameters to the task.
-        /// </summary>
-        /// <param name="parameters">The parameters to apply.</param>
-        /// <param name="parameterDefinitions">The original parameter definitions.</param>
-        public override void ApplyParameters(Dictionary<string, string> parameters, IEnumerable<ParameterBase> parameterDefinitions)
-        {
-            this.parameters = parameters;
-            this.parameterDefinitions = parameterDefinitions;
-            base.ApplyParameters(parameters, parameterDefinitions);
         }
         #endregion
         #endregion
