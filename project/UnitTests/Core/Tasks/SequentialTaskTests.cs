@@ -98,6 +98,32 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Assert.AreEqual(IntegrationStatus.Failure, result.Status, "Status does not match");
         }
 
+        [Test]
+        public void ExecuteHandlesAnExceptionInATask()
+        {
+            // Initialise the task
+            var task = new SequentialTask
+            {
+                Tasks = new ITask[] 
+                {
+                    new ExceptionTestTask()
+                }
+            };
+
+            // Setup the mocks
+            var logger = mocks.DynamicMock<ILogger>();
+            var result = GenerateResultMock(0);
+            Expect.Call(result.ExceptionResult).PropertyBehavior();
+            mocks.ReplayAll();
+
+            // Run the actual task
+            task.Run(result);
+
+            // Verify the results
+            mocks.VerifyAll();
+            Assert.AreEqual(IntegrationStatus.Failure, result.Status, "Status does not match");
+        }
+
         private IIntegrationResult GenerateResultMock(int runCount)
         {
             var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
@@ -108,8 +134,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 Expect.Call(() => { result.AddTaskResult(string.Format("Task #{0} has run", loop)); });
             }
             Expect.Call(result.Status).PropertyBehavior();
-            Expect.Call(result.Clone()).Return(result).Repeat.Times(runCount);
-            Expect.Call(() => { result.Merge(result); }).Repeat.Times(runCount);
+            Expect.Call(result.Clone()).Return(result).Repeat.Times(runCount == 0 ? 1 : runCount);
+            if (runCount > 0) Expect.Call(() => { result.Merge(result); }).Repeat.Times(runCount);
             return result;
         }
         #endregion
@@ -125,6 +151,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             {
                 result.AddTaskResult(string.Format("Task #{0} has run", TaskNumber));
                 result.Status = Result;
+            }
+        }
+
+        private class ExceptionTestTask
+            : ITask
+        {
+            public void Run(IIntegrationResult result)
+            {
+                throw new Exception();
             }
         }
         #endregion

@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 {
                     // Handle any error details
                     result.ExceptionResult = error;
-                    result.Status = IntegrationStatus.Exception;
+                    result.Status = IntegrationStatus.Failure;
                     logger.Warning("Task '{0}' failed!", taskName);
                 }
 
