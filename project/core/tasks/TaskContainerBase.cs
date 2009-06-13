@@ -52,12 +52,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
         {
             // Validate all the child tasks
-            foreach (var task in Tasks)
+            if (Tasks != null)
             {
-                var validatorTask = task as IConfigurationValidation;
-                if (validatorTask != null)
+                foreach (var task in Tasks)
                 {
-                    validatorTask.Validate(configuration, parent, errorProcesser);
+                    var validatorTask = task as IConfigurationValidation;
+                    if (validatorTask != null)
+                    {
+                        validatorTask.Validate(configuration, parent, errorProcesser);
+                    }
                 }
             }
         }
@@ -65,26 +68,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
 
         #region Protected methods
-        #region Execute()
-        /// <summary>
-        /// Execute the actual task functionality.
-        /// </summary>
-        /// <param name="result"></param>
-        /// <returns>True if the task was successful, false otherwise.</returns>
-        protected override bool Execute(IIntegrationResult result)
-        {
-            return RunTasks(result);
-        }
-        #endregion
-
-        #region RunTasks()
-        /// <summary>
-        /// Run all the child tasks.
-        /// </summary>
-        /// <param name="result"></param>
-        protected abstract bool RunTasks(IIntegrationResult result);
-        #endregion
-
         #region RunTask()
         /// <summary>
         /// Runs a task.
@@ -113,24 +96,27 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             base.InitialiseStatus();
 
             // Add each status
-            foreach (ITask task in Tasks)
+            if (Tasks != null)
             {
-                ItemStatus taskItem = null;
-                if (task is IStatusSnapshotGenerator)
+                foreach (ITask task in Tasks)
                 {
-                    taskItem = (task as IStatusSnapshotGenerator).GenerateSnapshot();
-                }
-                else
-                {
-                    taskItem = new ItemStatus(task.GetType().Name);
-                    taskItem.Status = ItemBuildStatus.Pending;
-                }
+                    ItemStatus taskItem = null;
+                    if (task is IStatusSnapshotGenerator)
+                    {
+                        taskItem = (task as IStatusSnapshotGenerator).GenerateSnapshot();
+                    }
+                    else
+                    {
+                        taskItem = new ItemStatus(task.GetType().Name);
+                        taskItem.Status = ItemBuildStatus.Pending;
+                    }
 
-                // Only add the item if it has been initialised
-                if (taskItem != null)
-                {
-                    CurrentStatus.AddChild(taskItem);
-                    taskStatuses.Add(task, taskItem);
+                    // Only add the item if it has been initialised
+                    if (taskItem != null)
+                    {
+                        CurrentStatus.AddChild(taskItem);
+                        taskStatuses.Add(task, taskItem);
+                    }
                 }
             }
         }

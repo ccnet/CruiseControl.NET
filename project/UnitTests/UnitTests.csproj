@@ -366,6 +366,7 @@
     <Compile Include="Core\Tasks\ParallelTaskTests.cs" />
     <Compile Include="Core\Tasks\SequentialTaskTests.cs" />
     <Compile Include="Core\Tasks\TaskBaseTests.cs" />
+    <Compile Include="Core\Tasks\TaskContainerBaseTests.cs" />
     <Compile Include="Remote\CommunicationsExceptionTests.cs" />
     <Compile Include="Remote\CruiseServerClientFactoryTests.cs" />
     <Compile Include="Remote\CruiseServerClientTests.cs" />

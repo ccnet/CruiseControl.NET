@@ -42,12 +42,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
 
         #region Protected methods
-        #region RunTasks()
+        #region Execute()
         /// <summary>
         /// Runs the task, given the specified <see cref="IIntegrationResult"/>, in the specified <see cref="IProject"/>.
         /// </summary>
         /// <param name="result"></param>
-        protected override bool RunTasks(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
         {
             // Initialise the task
             var logger = Logger ?? new DefaultLogger();
