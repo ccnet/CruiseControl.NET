@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// Publish the statistics for this build.
         /// </summary>
         /// <param name="integrationResult">The results of the build.</param>
-        public void Run(IIntegrationResult integrationResult)
+        protected override bool Execute(IIntegrationResult integrationResult)
         {
             StatisticsBuilder builder = new StatisticsBuilder();
             for (int i = 0; i < ConfiguredStatistics.Length; i++)
@@ -55,6 +55,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             //ChartGenerator(builder.Statistics).Process(xmlDocument, integrationResult.ArtifactDirectory);
             
             UpdateCsvFile(stats, builder.Statistics, integrationResult);
+
+            return true;
         }
 
         #endregion

@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorArray("includedCategories", Required = false)]
         public string[] IncludedCategories = new string[0];
 
-		public virtual void Run(IIntegrationResult result)
+		protected override bool Execute(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Executing NUnit"); 
 
@@ -54,7 +54,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			else
 			{
 				Log.Warning(string.Format("NUnit test output file {0} was not created", outputFile));
-			}           
+			}
+            return !nunitResult.Failed;
 		}
 
 		private ProcessInfo NewProcessInfo(string outputFile, IIntegrationResult result)

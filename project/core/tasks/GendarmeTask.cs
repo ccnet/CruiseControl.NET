@@ -171,7 +171,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return VerifyTimeoutSeconds * 1000;
 		}
 
-		public override void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
 				"Executing Gendarme to verifiy assemblies.");
@@ -186,6 +186,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 			if (processResult.TimedOut)
 				throw new BuilderException(this, string.Concat("Gendarme process timed out (after ", VerifyTimeoutSeconds, " seconds)"));
+
+            return !processResult.Failed;
 		}
 
 		/// <summary>

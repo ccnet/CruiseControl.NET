@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			set { cleanUpValue = value; }
 		}
 
-		public void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Cleaning up");                
 
@@ -82,6 +82,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				default:
 					throw new NotImplementedException("Unmapped cleaning up method used");
 			}
+
+            return true;
 		}
 
 		private void KeepLastXSubDirs(IIntegrationResult result, int amountToKeep)

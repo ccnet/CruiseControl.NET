@@ -207,10 +207,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { subjectPrefix = value; }
         }
 
-        public void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
         {
-            if (result.Status == IntegrationStatus.Unknown)
-                return;
+            if (result.Status == IntegrationStatus.Unknown) return false;
 
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Emailing ...");
 
@@ -223,6 +222,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 Log.Info(string.Format("Emailing \"{0}\" to {1}", subject, to));
                 SendMessage(fromAddress, to, replytoAddress, subject, message);
             }
+
+            return true;
         }
 
         private static bool IsRecipientSpecified(string to)

@@ -80,7 +80,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Runs the task, given the specified <see cref="IIntegrationResult"/>, in the specified <see cref="IProject"/>.
         /// </summary>
         /// <param name="result"></param>
-        protected override void RunTasks(IIntegrationResult result)
+        protected override bool RunTasks(IIntegrationResult result)
         {
             // Initialise the task
             var logger = Logger ?? new DefaultLogger();
@@ -154,6 +154,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
 
             logger.Info("Parallel task completed: {0} successful, {1} failed", successCount, failureCount);
+            return true;
         }
         #endregion
         #endregion

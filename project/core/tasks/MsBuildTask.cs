@@ -98,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return Timeout * 1000;
 		}
 
-		public override void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
 				string.Format("Executing MSBuild :BuildFile: {0}", ProjectFile));
@@ -113,6 +113,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 			if (processResult.TimedOut)
 				throw new BuilderException(this, "MSBuild process timed out (after " + Timeout + " seconds)");
+
+            return !processResult.Failed;
 		}
 
 		private static string GetPropertyArgs(IIntegrationResult result)

@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             set { deleteAfterRead = value; }
         }
 
-        public void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
         {
             List<string> filesToDelete = new List<string>();
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Reading Modifications");                
@@ -85,6 +85,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                             error.Message));
                 }
             }
+
+            return true;
         }
 
         private string[] GetModificationFiles(IIntegrationResult result)

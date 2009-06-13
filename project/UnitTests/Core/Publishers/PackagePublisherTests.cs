@@ -61,8 +61,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             ManifestGenerator generator = new ManifestGenerator();
             publisher.ManifestGenerator = generator;
             Assert.AreSame(generator, publisher.ManifestGenerator);
-            publisher.Name = "Package name";
-            Assert.AreEqual("Package name", publisher.Name);
+            publisher.PackageName = "Package name";
+            Assert.AreEqual("Package name", publisher.PackageName);
             publisher.SingleInstance = true;
             Assert.AreEqual(true, publisher.SingleInstance);
             publisher.Files = new string[] { "filename" };
@@ -126,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             string packageName = packageLocation + ".zip";
             if (File.Exists(packageName)) File.Delete(packageName);
             PackagePublisher publisher = new PackagePublisher();
-            publisher.Name = packageLocation;
+            publisher.PackageName = packageLocation;
             publisher.Files = new string[] { dataFilePath };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
@@ -155,7 +155,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             string packageName = packageLocation + ".zip";
             if (File.Exists(packageName)) File.Delete(packageName);
             PackagePublisher publisher = new PackagePublisher();
-            publisher.Name = packageLocation;
+            publisher.PackageName = packageLocation;
             publisher.Flatten = true;
             publisher.Files = new string[] { dataFilePath };
             publisher.Run(result);
@@ -185,7 +185,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             string packageName = packageLocation + ".zip";
             if (File.Exists(packageName)) File.Delete(packageName);
             PackagePublisher publisher = new PackagePublisher();
-            publisher.Name = packageLocation;
+            publisher.PackageName = packageLocation;
             publisher.Flatten = true;
             publisher.BaseDirectory = Path.GetTempPath();
             publisher.Files = new string[] { "datafile.txt" };
@@ -216,7 +216,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             string packageName = packageLocation + ".zip";
             if (File.Exists(packageName)) File.Delete(packageName);
             PackagePublisher publisher = new PackagePublisher();
-            publisher.Name = packageLocation;
+            publisher.PackageName = packageLocation;
             publisher.Files = new string[] { Path.GetTempFileName() };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
@@ -253,7 +253,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             string packageName = packageLocation + ".zip";
             if (File.Exists(packageName)) File.Delete(packageName);
             PackagePublisher publisher = new PackagePublisher();
-            publisher.Name = packageLocation;
+            publisher.PackageName = packageLocation;
             publisher.Files = new string[] { Path.Combine(tempPath, "*.txt") };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
@@ -282,7 +282,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             string packageName = packageLocation + ".zip";
             if (File.Exists(packageName)) File.Delete(packageName);
             PackagePublisher publisher = new PackagePublisher();
-            publisher.Name = packageLocation;
+            publisher.PackageName = packageLocation;
             publisher.Files = new string[] { Path.Combine(Path.GetTempPath(), "**\\datafile.txt") };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
@@ -318,7 +318,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             string packageName = packageLocation + ".zip";
             if (File.Exists(packageName)) File.Delete(packageName);
             PackagePublisher publisher = new PackagePublisher();
-            publisher.Name = packageLocation;
+            publisher.PackageName = packageLocation;
             publisher.ManifestGenerator = generatorMock.MockInstance as IManifestGenerator;
             publisher.Files = new string[] { dataFilePath };
             publisher.Run(result);

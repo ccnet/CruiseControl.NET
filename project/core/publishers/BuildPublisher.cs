@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         public int CleanUpValue = 5;
 
 
-        public void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
         {
 
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Publishing build results");
@@ -74,6 +74,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                         throw new System.Exception(string.Format("unmapped cleaning method choosen {0}", CleanUpMethod));
                 }
             }
+
+            return true;
         }
 
         private void RecurseSubDirectories(DirectoryInfo srcDir, DirectoryInfo pubDir)

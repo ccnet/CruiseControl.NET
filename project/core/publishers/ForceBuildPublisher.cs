@@ -36,14 +36,15 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		[ReflectorProperty("integrationStatus", Required=false)]
 		public IntegrationStatus IntegrationStatus = IntegrationStatus.Success;
 
-		public void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
 		{
-			if (IntegrationStatus != result.Status) return;
+			if (IntegrationStatus != result.Status) return false;
 
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Running for build publisher");                
 
-
             factory.GetCruiseManager(ServerUri).ForceBuild(Project, BuildForcerName);
+
+            return true;
 		}
 	}
 }

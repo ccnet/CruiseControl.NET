@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		/// StdOut from nant.exe is redirected and stored.
 		/// </summary>
 		/// <param name="result">For storing build output.</param>
-		public override void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : 
                 string.Format("Executing Nant :BuildFile: {0} Targets: {1} ", BuildFile, string.Join(", ", Targets)));
@@ -66,6 +66,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			// is this right?? or should this break the build
 			if (processResult.TimedOut)
 				throw new BuilderException(this, "NAnt process timed out (after " + BuildTimeoutSeconds + " seconds)");
+
+            return !processResult.Failed;
 		}
 
 		protected override string GetProcessFilename()

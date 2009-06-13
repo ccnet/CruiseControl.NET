@@ -10,12 +10,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// A base class for tasks that contain other tasks.
     /// </summary>
     public abstract class TaskContainerBase
-        : TaskBase, IStatusSnapshotGenerator, ITask, IConfigurationValidation
+        : TaskBase, IConfigurationValidation
     {
         #region Private fields
         private Dictionary<string, string> parameters;
         private IEnumerable<ParameterBase> parameterDefinitions;
-        private ItemStatus currentStatus;
         private Dictionary<ITask, ItemStatus> taskStatuses = new Dictionary<ITask, ItemStatus>();
         #endregion
 
@@ -29,37 +28,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
 
         #region Public methods
-        #region Run()
-        /// <summary>
-        /// Runs the task, given the specified <see cref="IIntegrationResult"/>, in the specified <see cref="IProject"/>.
-        /// </summary>
-        /// <param name="result"></param>
-        public virtual void Run(IIntegrationResult result)
-        {
-            // Initialise the task
-            if (currentStatus == null) InitialiseStatus(GetType().Name, Tasks);
-            currentStatus.Status = ItemBuildStatus.Running;
-            currentStatus.TimeStarted = DateTime.Now;
-
-            // Perform the actual run
-            try
-            {
-                RunTasks(result);
-            }
-            catch (Exception)
-            {
-                result.Status = IntegrationStatus.Exception;
-                throw;
-            }
-            finally
-            {
-                // Clean up
-                currentStatus.Status = (result.Status == IntegrationStatus.Success) ? ItemBuildStatus.CompletedSuccess : ItemBuildStatus.CompletedFailed;
-                currentStatus.TimeCompleted = DateTime.Now;
-            }
-        }
-        #endregion
-
         #region ApplyParameters()
         /// <summary>
         /// Applies the input parameters to the task.
@@ -71,18 +39,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             this.parameters = parameters;
             this.parameterDefinitions = parameterDefinitions;
             base.ApplyParameters(parameters, parameterDefinitions);
-        }
-        #endregion
-
-        #region GenerateSnapshot()
-        /// <summary>
-        /// Generates a snapshot of the current status.
-        /// </summary>
-        /// <returns></returns>
-        public virtual ItemStatus GenerateSnapshot()
-        {
-            if (currentStatus == null) InitialiseStatus(GetType().Name, Tasks);
-            return currentStatus;
         }
         #endregion
 
@@ -109,12 +65,24 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
 
         #region Protected methods
+        #region Execute()
+        /// <summary>
+        /// Execute the actual task functionality.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns>True if the task was successful, false otherwise.</returns>
+        protected override bool Execute(IIntegrationResult result)
+        {
+            return RunTasks(result);
+        }
+        #endregion
+
         #region RunTasks()
         /// <summary>
         /// Run all the child tasks.
         /// </summary>
         /// <param name="result"></param>
-        protected abstract void RunTasks(IIntegrationResult result);
+        protected abstract bool RunTasks(IIntegrationResult result);
         #endregion
 
         #region RunTask()
@@ -139,21 +107,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Initialise an <see cref="ItemStatus"/>.
         /// </summary>
         /// <param name="tasks"></param>
-        protected virtual void InitialiseStatus(string name, ITask[] tasks)
+        protected override void InitialiseStatus()
         {
-            taskStatuses.Clear();
-            currentStatus = new ItemStatus
-            {
-                Name = name,
-                Description = Description,
-                Status = ItemBuildStatus.Pending,
-                TimeCompleted = null,
-                TimeOfEstimatedCompletion = null,
-                TimeStarted = null
-            };
+            // This needs to be called first, otherwise the status is not set up
+            base.InitialiseStatus();
 
             // Add each status
-            foreach (ITask task in tasks)
+            foreach (ITask task in Tasks)
             {
                 ItemStatus taskItem = null;
                 if (task is IStatusSnapshotGenerator)
@@ -169,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 // Only add the item if it has been initialised
                 if (taskItem != null)
                 {
-                    currentStatus.AddChild(taskItem);
+                    CurrentStatus.AddChild(taskItem);
                     taskStatuses.Add(task, taskItem);
                 }
             }

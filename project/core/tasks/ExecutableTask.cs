@@ -97,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Run the specified executable and add its output to the build results.
         /// </summary>
         /// <param name="result">the IIntegrationResult object for the build</param>
-		public override void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format("Executing {0}", Executable));
 
@@ -123,6 +123,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         	if (processResult.TimedOut)
         		throw new BuilderException(this, "Command Line Build timed out (after " + BuildTimeoutSeconds + " seconds)");
+
+            return !processResult.Failed;
 		}
 
 		protected override string GetProcessFilename()

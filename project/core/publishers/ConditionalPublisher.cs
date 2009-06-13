@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// Runs the task, given the specified <see cref="IIntegrationResult"/>, in the specified <see cref="IProject"/>.
         /// </summary>
         /// <param name="result"></param>
-        protected override void RunTasks(IIntegrationResult result)
+        protected override bool RunTasks(IIntegrationResult result)
         {
             // Initialise the publisher
             var logger = Logger ?? new DefaultLogger();
@@ -90,6 +90,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             {
                 logger.Info("Conditions not met - publishers not run");
             }
+
+            return true;
         }
         #endregion
         #endregion

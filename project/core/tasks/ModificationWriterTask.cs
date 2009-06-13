@@ -20,10 +20,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             this.fileSystem = fileSystem;
         }
 
-        public void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
         {
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Writing Modifications");                
-
 
             XmlSerializer serializer = new XmlSerializer(typeof(Modification[]));
             StringWriter writer = new Utf8StringWriter();
@@ -31,6 +30,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             string filename = ModificationFile(result);
             fileSystem.EnsureFolderExists(filename);
             fileSystem.Save(filename, writer.ToString());
+
+            return true;
         }
 
         private string ModificationFile(IIntegrationResult result)

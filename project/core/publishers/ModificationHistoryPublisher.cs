@@ -31,16 +31,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { onlyLogWhenChangesFound = value; }
         }
 
-        public void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
         {
-            if ((OnlyLogWhenChangesFound) & (result.Modifications.Length == 0)) return;
+            if ((OnlyLogWhenChangesFound) & (result.Modifications.Length == 0)) return false;
 
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Saving modification history");                
-
 
             string DataHistoryFile = System.IO.Path.Combine(result.ArtifactDirectory, DataHistoryFileName);
 
             WriteModifications(DataHistoryFile, result);
+
+            return true;
         }
 
 

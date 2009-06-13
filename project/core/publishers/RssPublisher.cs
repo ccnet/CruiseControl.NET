@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return result;
         }
 
-        public void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
         {
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Making RSS feed");
 
@@ -53,6 +53,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             XmlElement channelElement = LoadOrInitialiseChannelElement(result, feedFile);
             GenerateDocument(result, channelElement);
             channelElement.OwnerDocument.Save(feedFile);
+
+            return true;
         }
 
         private XmlElement LoadOrInitialiseChannelElement(IIntegrationResult result, string feedFile)

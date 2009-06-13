@@ -174,13 +174,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
         #endregion
 
-        #region Public methods
-        #region Run()
+        #region Protected methods
+        #region Execute()
         /// <summary>
         /// Run the task.
         /// </summary>
         /// <param name="result"></param>
-        public override void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
         {
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Executing NDepend");
 
@@ -196,7 +196,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             ProcessResult processResult = TryToRun(CreateProcessInfo(result));
             result.AddTaskResult(new ProcessTaskResult(processResult));
 
-            if (publish)
+            if (publish && !processResult.Failed)
             {
                 // Check for any new files
                 FileInfo[] newFiles = ListFileDifferences(oldFiles, outputDirectory);
@@ -218,11 +218,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     }
                 }
             }
+
+            return !processResult.Failed;
         }
         #endregion
-        #endregion
 
-        #region Protected methods
         #region GetProcessFilename()
         /// <summary>
         /// Retrieve the executable to use.

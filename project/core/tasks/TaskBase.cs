@@ -5,6 +5,7 @@ using ThoughtWorks.CruiseControl.Remote.Parameters;
 using System.Xml;
 using System.Text.RegularExpressions;
 using System.Text;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -12,12 +13,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// An abstract base class to add parameters to a task
     /// </summary>
     public abstract class TaskBase
-        : IParamatisedTask
+        : IParamatisedTask, IStatusSnapshotGenerator, ITask
     {
         #region Private fields
         private static Regex parameterRegex = new Regex(@"\$\[[^\]]*\]", RegexOptions.Compiled);
         private static Regex paramPartRegex = new Regex(@"(?<!\\)\|", RegexOptions.Compiled);
         private IDynamicValue[] myDynamicValues = new IDynamicValue[0];
+        private ItemStatus currentStatus;
         #endregion
 
         #region Public properties
@@ -33,6 +35,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         }
         #endregion
 
+        #region Name
+        /// <summary>
+        /// The name of the task - by default this is the name of the type.
+        /// </summary>
+        public virtual string Name
+        {
+            get { return GetType().Name; }
+        }
+        #endregion
+
         #region Description
         /// <summary>
         /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
@@ -40,9 +52,58 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("description", Required = false)]
         public string Description { get; set; }
         #endregion
+
+        #region CurrentStatus
+        /// <summary>
+        /// The current status of the task.
+        /// </summary>
+        public ItemStatus CurrentStatus
+        {
+            get { return currentStatus; }
+        }
+        #endregion
         #endregion
 
         #region Public methods
+        #region Run()
+        /// <summary>
+        /// Runs the task, given the specified <see cref="IIntegrationResult"/>, in the specified <see cref="IProject"/>.
+        /// </summary>
+        /// <param name="result"></param>
+        public virtual void Run(IIntegrationResult result)
+        {
+            // Initialise the task
+            if (currentStatus == null) InitialiseStatus();
+            currentStatus.Status = ItemBuildStatus.Running;
+            currentStatus.TimeStarted = DateTime.Now;
+
+            // Perform the actual run
+            var taskSuccess = false;
+            try
+            {
+                taskSuccess = Execute(result);
+            }
+            finally
+            {
+                // Clean up
+                currentStatus.Status = (taskSuccess) ? ItemBuildStatus.CompletedSuccess : ItemBuildStatus.CompletedFailed;
+                currentStatus.TimeCompleted = DateTime.Now;
+            }
+        }
+        #endregion
+
+        #region GenerateSnapshot()
+        /// <summary>
+        /// Generates a snapshot of the current status.
+        /// </summary>
+        /// <returns></returns>
+        public virtual ItemStatus GenerateSnapshot()
+        {
+            if (currentStatus == null) InitialiseStatus();
+            return currentStatus;
+        }
+        #endregion
+
         #region ApplyParameters()
         /// <summary>
         /// Applies the input parameters to the task.
@@ -158,6 +219,47 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
 
             return resultNode;
+        }
+        #endregion
+
+        #region RetrieveDescriptionOrName()
+        /// <summary>
+        /// Retrieves the description if it is set, otherwise the name of the task.
+        /// </summary>
+        /// <returns>The description or name of the task.</returns>
+        public virtual string RetrieveDescriptionOrName()
+        {
+            var value = string.IsNullOrEmpty(Description) ? Name : Description;
+            return value;
+        }
+        #endregion
+        #endregion
+
+        #region Protected methods
+        #region Execute()
+        /// <summary>
+        /// Execute the actual task functionality.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns>True if the task was successful, false otherwise.</returns>
+        protected abstract bool Execute(IIntegrationResult result);
+        #endregion
+
+        #region InitialiseStatus()
+        /// <summary>
+        /// Initialise an <see cref="ItemStatus"/>.
+        /// </summary>
+        protected virtual void InitialiseStatus()
+        {
+            currentStatus = new ItemStatus
+            {
+                Name = Name,
+                Description = Description,
+                Status = ItemBuildStatus.Pending,
+                TimeCompleted = null,
+                TimeOfEstimatedCompletion = null,
+                TimeStarted = null
+            };
         }
         #endregion
         #endregion

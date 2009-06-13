@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// will be added automatically.
         /// </remarks>
         [ReflectorProperty("name")]
-        public string Name
+        public string PackageName
         {
             get { return name; }
             set { name = value; }
@@ -173,13 +173,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         #endregion
         #endregion
 
-        #region Public methods
-        #region Run()
+        #region Protected methods
+        #region Execute()
         /// <summary>
         /// Run this publisher.
         /// </summary>
         /// <param name="result">The result of the build.</param>
-        public void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
         {
             // Check whether the package should be generated
             if (alwaysPackage || (result.Status == IntegrationStatus.Success))
@@ -257,6 +257,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             // Set the status of the result
             if (result.Status == IntegrationStatus.Unknown) result.Status = IntegrationStatus.Success;
+            return true;
         }
         #endregion
         #endregion

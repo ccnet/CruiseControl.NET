@@ -232,13 +232,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
         #endregion
 
-        #region Public methods
-        #region Run()
+        #region Protected methods
+        #region Execute()
         /// <summary>
         /// Run the task.
         /// </summary>
         /// <param name="result"></param>
-        public override void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
         {
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Running NCover reporting");
 
@@ -255,27 +255,30 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             result.AddTaskResult(new ProcessTaskResult(processResult));
 
             // Check for any new files and copy them to the artefact folder
-            outputDirectory.Refresh();
-            var newFiles = ListFileDifferences(oldFiles, outputDirectory);
-            if (newFiles.Length > 0)
+            if (!processResult.Failed)
             {
-                // Copy all the new files over
-                var publishDir = Path.Combine(result.BaseFromArtifactsDirectory(result.Label), "NCover");
-                Log.Debug(string.Format("Copying {0} files to {1}", newFiles.Length, publishDir));
-
-                var index = outputDirectory.FullName.Length + 1;
-                foreach (FileInfo newFile in newFiles)
+                outputDirectory.Refresh();
+                var newFiles = ListFileDifferences(oldFiles, outputDirectory);
+                if (newFiles.Length > 0)
                 {
-                    var fileInfo = new FileInfo(Path.Combine(publishDir, newFile.FullName.Substring(index)));
-                    if (!fileInfo.Directory.Exists) fileInfo.Directory.Create();
-                    newFile.CopyTo(fileInfo.FullName, true);
+                    // Copy all the new files over
+                    var publishDir = Path.Combine(result.BaseFromArtifactsDirectory(result.Label), "NCover");
+                    Log.Debug(string.Format("Copying {0} files to {1}", newFiles.Length, publishDir));
+
+                    var index = outputDirectory.FullName.Length + 1;
+                    foreach (FileInfo newFile in newFiles)
+                    {
+                        var fileInfo = new FileInfo(Path.Combine(publishDir, newFile.FullName.Substring(index)));
+                        if (!fileInfo.Directory.Exists) fileInfo.Directory.Create();
+                        newFile.CopyTo(fileInfo.FullName, true);
+                    }
                 }
             }
+
+            return !processResult.Failed;
         }
         #endregion
-        #endregion
 
-        #region Protected methods
         #region GetProcessFilename()
         /// <summary>
         /// Retrieve the executable to use.

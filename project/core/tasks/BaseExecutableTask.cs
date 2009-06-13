@@ -18,8 +18,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return null;
 		}
 
-		public abstract void Run(IIntegrationResult result);
-
 		protected virtual ProcessInfo CreateProcessInfo(IIntegrationResult result)
 		{
 			ProcessInfo info = new ProcessInfo(GetProcessFilename(), GetProcessArguments(result), GetProcessBaseDirectory(result), GetProcessSuccessCodes());

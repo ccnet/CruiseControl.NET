@@ -33,12 +33,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			}
 		}
 
-		public void Run(IIntegrationResult result)
-        {
-         
+        protected override bool Execute(IIntegrationResult result)
+        {         
             // only deal with known integration status
             if (result.Status == IntegrationStatus.Unknown)
-                return;
+                return true;
 
             using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(CreateWriter(LogDirectory(result.ArtifactDirectory), GetFilename(result))))
             {
@@ -48,6 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             result.BuildLogDirectory = LogDirectory(result.ArtifactDirectory);
 
+            return true;
         }
 
         private TextWriter CreateWriter(string dirname, string filename)

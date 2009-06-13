@@ -140,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("project", Required = false)]
 		public string Project  = DEFAULT_PROJECT;
 
-		public virtual void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format("Executing Devenv :{0}", GetArguments()));
 			ProcessResult processResult = TryToRun(result);
@@ -149,6 +149,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 			if (processResult.TimedOut)
 				throw new BuilderException(this, string.Format("Devenv process timed out after {0} seconds.", BuildTimeoutSeconds));
+
+            return !processResult.Failed;
 		}
 
 		private ProcessResult TryToRun(IIntegrationResult result)

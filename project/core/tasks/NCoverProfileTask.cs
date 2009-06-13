@@ -310,13 +310,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
         #endregion
 
-        #region Public methods
-        #region Run()
+        #region Protected methods
+        #region Execute()
         /// <summary>
         /// Run the task.
         /// </summary>
         /// <param name="result"></param>
-        public override void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
         {
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Running NCover profile");
 
@@ -328,16 +328,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             var processResult = TryToRun(CreateProcessInfo(result));
             result.AddTaskResult(new ProcessTaskResult(processResult));
 
-            if (Publish)
+            if (Publish && !processResult.Failed)
             {
                 var coverageFile = string.IsNullOrEmpty(CoverageFile) ? "coverage.xml" : CoverageFile;
                 result.AddTaskResult(new FileTaskResult(RootPath(coverageFile, false)));
             }
+
+            return !processResult.Failed;
         }
         #endregion
-        #endregion
 
-        #region Protected methods
         #region GetProcessFilename()
         /// <summary>
         /// Retrieve the executable to use.

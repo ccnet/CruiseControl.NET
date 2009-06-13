@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         public ILogger Logger { get; set; }
 
-		public void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Merging Files");
 
@@ -85,6 +85,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     }
                 }
 			}
+
+            return true;
 		}
 	}
 }

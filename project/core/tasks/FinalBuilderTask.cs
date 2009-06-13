@@ -105,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("Timeout", Required = false)]
 		public int Timeout;
 
-		public void Run(IIntegrationResult result)
+        protected override bool Execute(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : 
                             string.Format("Executing FinalBuilder : BuildFile: {0} ", ProjectFile));
@@ -117,6 +117,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				throw new BuilderException(this, "Build timed out (after " + Timeout + " seconds)");
 			}
+
+            return !processResult.Failed;
 		}
 
 		#endregion

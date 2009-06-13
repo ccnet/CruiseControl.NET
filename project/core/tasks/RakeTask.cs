@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			this.executor = executor;
 		}
 
-		public override void Run(IIntegrationResult result)
+		protected override bool Execute(IIntegrationResult result)
 		{
 			ProcessInfo processInfo = CreateProcessInfo(result);
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format("Executing Rake: {0}", processInfo.Arguments));
@@ -69,6 +69,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 			if (processResult.TimedOut)
 				throw new BuilderException(this, "Command Line Build timed out (after " + BuildTimeoutSeconds + " seconds)");
+
+            return (!processResult.Failed);
 		}
 
 		protected override string GetProcessArguments(IIntegrationResult result)
