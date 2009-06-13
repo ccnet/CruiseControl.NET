@@ -143,6 +143,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     // Generate the format string
                     var parametersEl = doc.CreateElement("parameters");
                     var index = 0;
+                    var lastReplacement = string.Empty;
                     var format = parameterRegex.Replace(text, (match) =>
                     {
                         // Split into it's component parts
@@ -155,16 +156,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                         parametersEl.AppendChild(dynamicValueEl);
 
                         // Generate the replacement
-                        var replacement = string.Format("{{{0}{1}}}",
+                        lastReplacement = string.Format("{{{0}{1}}}",
                             index++,
                             parts.Length > 2 ? ":" + parts[2].Replace("\\|", "|") : string.Empty);
-                        return replacement;
+                        return lastReplacement;
                     });
 
                     // Generate the dynamic value element
                     var replacementValue = string.Empty;
                     XmlElement replacementEl;
-                    if (parametersEl.ChildNodes.Count > 1)
+                    if (lastReplacement != format)
                     {
                         replacementEl = doc.CreateElement("replacementValue");
                         AddElement(replacementEl, "format", format);
