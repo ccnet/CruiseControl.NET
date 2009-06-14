@@ -21,5 +21,25 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			return (a > b) ? a : b;
 		}
+
+		/// <summary>
+		/// Convert a Unix timestamp into a DateTime object with local time.
+		/// </summary>
+		/// <param name="timestamp">The unix timestamp to convert.</param>
+		/// <returns>A DateTime object in local time.</returns>
+		public static DateTime ConvertFromUnixTimestamp(double timestamp)
+		{
+			return new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(timestamp).ToLocalTime();
+		}
+
+		/// <summary>
+		/// Convert a DateTime object into a unix timestamp.
+		/// </summary>
+		/// <param name="dateTime">The DateTime object to convert.</param>
+		/// <returns>The unix timestamp in UTC time.</returns>
+		public static double ConvertToUnixTimestamp(DateTime dateTime)
+		{
+			return dateTime.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
+		}
 	}
 }
