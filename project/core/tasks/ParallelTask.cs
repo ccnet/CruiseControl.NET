@@ -119,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     {
                         // Handle any error details
                         results[taskNumber].ExceptionResult = error;
-                        results[taskNumber].Status = IntegrationStatus.Exception;
+                        results[taskNumber].Status = IntegrationStatus.Failure;
                         logger.Warning("Task '{0}' failed!", taskName);
                     }
 

@@ -8,6 +8,7 @@ using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Config;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
@@ -33,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
             // Setup the mocks
             var logger = mocks.DynamicMock<ILogger>();
-            var result = GenerateResultMock();
+            var result = GenerateResultMock(false);
             mocks.ReplayAll();
 
             // Run the actual task
@@ -60,7 +61,32 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
             // Setup the mocks
             var logger = mocks.DynamicMock<ILogger>();
-            var result = GenerateResultMock();
+            var result = GenerateResultMock(false);
+            mocks.ReplayAll();
+
+            // Run the actual task
+            task.Run(result);
+
+            // Verify the results
+            mocks.VerifyAll();
+            Assert.AreEqual(IntegrationStatus.Failure, result.Status, "Status does not match");
+        }
+
+        [Test]
+        public void ExecuteRunsHandlesExceptionTask()
+        {
+            // Initialise the task
+            var task = new ParallelTask
+            {
+                Tasks = new ITask[] 
+                {
+                    new ExceptionTestTask()
+                }
+            };
+
+            // Setup the mocks
+            var logger = mocks.DynamicMock<ILogger>();
+            var result = GenerateResultMock(true);
             mocks.ReplayAll();
 
             // Run the actual task
@@ -93,22 +119,67 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             NetReflector.Read(config, task);
             Assert.AreEqual("Testing", task.Description);
         }
+
+        [Test]
+        public void ValidatePassesForTasksSection()
+        {
+            var task = new ParallelTask();
+            var project = new Project
+            {
+                Tasks = new ITask[]
+                {
+                    task
+                }
+            };
+            var errorProcessor = mocks.StrictMock<IConfigurationErrorProcesser>();
+            mocks.ReplayAll();
+
+            task.Validate(null, project, errorProcessor);
+            mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ValidateFailsForPublishersSection()
+        {
+            var task = new ParallelTask();
+            var project = new Project
+            {
+                Publishers = new ITask[]
+                {
+                    task
+                }
+            };
+            var errorProcessor = mocks.StrictMock<IConfigurationErrorProcesser>();
+            Expect.Call(() =>
+            {
+                errorProcessor.ProcessWarning(string.Empty);
+            }).IgnoreArguments();
+            mocks.ReplayAll();
+
+            task.Validate(null, project, errorProcessor);
+            mocks.VerifyAll();
+        }
         #endregion
 
         #region Private methods
-        private IIntegrationResult GenerateResultMock()
+        private IIntegrationResult GenerateResultMock(bool forException)
         {
             var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
             var result = mocks.StrictMock<IIntegrationResult>();
             SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
             SetupResult.For(result.ProjectName).Return("Project name");
-            for (var loop = 1; loop <= 5; loop++)
+            for (var loop = 1; loop <= (forException ? 0 : 5); loop++)
             {
                 Expect.Call(() => { result.AddTaskResult(string.Format("Task #{0} has run", loop)); });
             }
             Expect.Call(result.Status).PropertyBehavior();
-            Expect.Call(result.Clone()).Return(result).Repeat.Times(5);
-            Expect.Call(() => { result.Merge(result); }).Repeat.Times(5);
+            Expect.Call(result.Clone()).Return(result).Repeat.Times((forException ? 1 : 5));
+            Expect.Call(() => { result.Merge(result); }).Repeat.Times((forException ? 1 : 5));
+
+            if (forException)
+            {
+                Expect.Call(result.ExceptionResult).PropertyBehavior();
+            }
             return result;
         }
         #endregion
@@ -124,6 +195,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             {
                 result.AddTaskResult(string.Format("Task #{0} has run", TaskNumber));
                 result.Status = Result;
+            }
+        }
+
+        private class ExceptionTestTask
+            : ITask
+        {
+            public void Run(IIntegrationResult result)
+            {
+                throw new Exception();
             }
         }
         #endregion
