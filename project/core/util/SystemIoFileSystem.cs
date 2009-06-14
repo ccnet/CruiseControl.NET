@@ -2,6 +2,7 @@ using System.IO;
 using System.Text;
 using System.Runtime.InteropServices;
 using System;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -195,6 +196,45 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			DriveInfo drive = new DriveInfo(driveName);
 
         	return drive.AvailableFreeSpace;
+        }
+        #endregion
+
+        #region GetFilesInDirectory()
+        /// <summary>
+        /// Lists all the files within a directory.
+        /// </summary>
+        /// <param name="directory"></param>
+        /// <returns></returns>
+        public string[] GetFilesInDirectory(string directory)
+        {
+            return Directory.GetFiles(directory);
+        }
+        #endregion
+
+        #region GetLastWriteTime()
+        /// <summary>
+        /// Retrieves the last write time of a file.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public DateTime GetLastWriteTime(string fileName)
+        {
+            var writeTime = DateTime.MinValue;
+            var fileInfo = new FileInfo(fileName);
+            if (fileInfo.Exists) writeTime = fileInfo.LastWriteTime;
+            return writeTime;
+        }
+        #endregion
+
+        #region GenerateTaskResultFromFile()
+        /// <summary>
+        /// Generates a task result from a file.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public ITaskResult GenerateTaskResultFromFile(string fileName)
+        {
+            return new FileTaskResult(fileName);
         }
         #endregion
     }

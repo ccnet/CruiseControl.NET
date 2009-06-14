@@ -31,6 +31,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         private string baseDirectory;
         private string rootPath;
         private bool publish = true;
+        private IFileSystem fileSystem;
+        private ILogger logger;
         #endregion
 
         #region Constructors
@@ -38,17 +40,19 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Initialise a new <see cref="NDependTask"/>.
         /// </summary>
         public NDependTask()
-            : this(new ProcessExecutor())
+            : this(new ProcessExecutor(), new SystemIoFileSystem(), new DefaultLogger())
         {
         }
 
         /// <summary>
-        /// Initialise a new <see cref="NDependTask"/> with a <see cref="ProcessExecutor"/>.
+        /// Initialise a new <see cref="NDependTask"/> with the injection properties.
         /// </summary>
         /// <param name="executor"></param>
-        public NDependTask(ProcessExecutor executor)
+        public NDependTask(ProcessExecutor executor, IFileSystem fileSystem, ILogger logger)
         {
             this.executor = executor;
+            this.fileSystem = fileSystem;
+            this.logger = logger;
         }
         #endregion
 
@@ -189,31 +193,35 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             if (string.IsNullOrEmpty(rootPath)) rootPath = result.WorkingDirectory;
 
             // Take a before snapshot of all the files
-            DirectoryInfo outputDirectory = new DirectoryInfo(RootPath(outputDir, false));
-            Dictionary<string, DateTime> oldFiles = GenerateOriginalFileList(outputDirectory);
+            var outputDirectory = RootPath(outputDir, false);
+            var oldFiles = GenerateOriginalFileList(outputDirectory);
 
             // Run the executable
-            ProcessResult processResult = TryToRun(CreateProcessInfo(result));
+            var processResult = TryToRun(CreateProcessInfo(result));
             result.AddTaskResult(new ProcessTaskResult(processResult));
 
             if (publish && !processResult.Failed)
             {
                 // Check for any new files
-                FileInfo[] newFiles = ListFileDifferences(oldFiles, outputDirectory);
+                var newFiles = ListFileDifferences(oldFiles, outputDirectory);
 
                 if (newFiles.Length > 0)
                 {
+                    logger.Debug("Copying {0} new file(s)", newFiles.Length);
+
                     // Copy all the new files over
-                    string publishDir = Path.Combine(result.BaseFromArtifactsDirectory(result.Label), "NDepend");
-                    if (!Directory.Exists(publishDir)) Directory.CreateDirectory(publishDir);
-                    foreach (FileInfo newFile in newFiles)
+                    var publishDir = Path.Combine(result.BaseFromArtifactsDirectory(result.Label), "NDepend");
+                    fileSystem.EnsureFolderExists(publishDir);
+                    foreach (var newFile in newFiles)
                     {
-                        newFile.CopyTo(Path.Combine(publishDir, newFile.Name));
+                        fileSystem.Copy(newFile, 
+                            Path.Combine(publishDir, 
+                                Path.GetFileName(newFile)));
 
                         // Merge all XML files
-                        if (newFile.Extension == ".xml")
+                        if (Path.GetExtension(newFile) == ".xml")
                         {
-                            result.AddTaskResult((new FileTaskResult(newFile)));
+                            result.AddTaskResult(fileSystem.GenerateTaskResultFromFile(newFile));
                         }
                     }
                 }
@@ -335,20 +343,20 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="originalList"></param>
         /// <param name="newList"></param>
         /// <returns></returns>
-        private FileInfo[] ListFileDifferences(Dictionary<string, DateTime> originalList, DirectoryInfo outputDirectory)
+        private string[] ListFileDifferences(Dictionary<string, DateTime> originalList, string outputDirectory)
         {
-            FileInfo[] newList = {};
-            if (outputDirectory.Exists) newList = outputDirectory.GetFiles();
+            string[] newList = {};
+            if (fileSystem.DirectoryExists(outputDirectory)) newList = fileSystem.GetFilesInDirectory(outputDirectory);
 
-            List<FileInfo> differenceList = new List<FileInfo>();
+            var differenceList = new List<string>();
 
             // For each new file, see if it is in the old file list
-            foreach (FileInfo newFile in newList)
+            foreach (var newFile in newList)
             {
-                if (originalList.ContainsKey(newFile.Name))
+                if (originalList.ContainsKey(newFile))
                 {
                     // Check if the times are different
-                    if (originalList[newFile.Name] != newFile.LastWriteTime)
+                    if (originalList[newFile] != fileSystem.GetLastWriteTime(newFile))
                     {
                         differenceList.Add(newFile);
                     }
@@ -370,15 +378,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <param name="outputDirectory"></param>
         /// <returns></returns>
-        private Dictionary<string, DateTime> GenerateOriginalFileList(DirectoryInfo outputDirectory)
+        private Dictionary<string, DateTime> GenerateOriginalFileList(string outputDirectory)
         {
-            Dictionary<string, DateTime> originalFiles = new Dictionary<string, DateTime>();
-            if (outputDirectory.Exists)
+            var originalFiles = new Dictionary<string, DateTime>();
+            if (fileSystem.DirectoryExists(outputDirectory))
             {
-                FileInfo[] oldFiles = outputDirectory.GetFiles();
-                foreach (FileInfo oldFile in oldFiles)
+                var oldFiles = fileSystem.GetFilesInDirectory(outputDirectory);
+                foreach (var oldFile in oldFiles)
                 {
-                    originalFiles.Add(oldFile.Name, oldFile.LastWriteTime);
+                    originalFiles.Add(Path.GetFileName(oldFile),  
+                        fileSystem.GetLastWriteTime(oldFile));
                 }
             }
             return originalFiles;

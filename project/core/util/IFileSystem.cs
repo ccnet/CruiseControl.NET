@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text;
+using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -26,5 +27,26 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		/// <param name="driveName">The name of the drive (e.g. c:).</param>
         /// <returns>The amount of free space in bytes.</returns>
         long GetFreeDiskSpace(string driveName);
+
+        /// <summary>
+        /// Lists all the files within a directory.
+        /// </summary>
+        /// <param name="directory"></param>
+        /// <returns></returns>
+        string[] GetFilesInDirectory(string directory);
+
+        /// <summary>
+        /// Retrieves the last write time of a file.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        DateTime GetLastWriteTime(string fileName);
+
+        /// <summary>
+        /// Generates a task result from a file.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        ITaskResult GenerateTaskResultFromFile(string fileName);
 	}
 }
