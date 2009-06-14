@@ -101,6 +101,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Assert.AreEqual(POWERSHELL1_PATH + "\\powershell.exe", task.Executable);
             mockRegistry2.Verify();
             mockProcessExecutor.Verify();
+        }
+
+        [Test]
+        [ExpectedException(typeof(BuilderException))]
+        public void ShouldThrowAnExceptionIfPowerShellNotInstalled()
+        {
+            IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
+
+            PowerShellTask task = new PowerShellTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, PowerShellTask.regkeypowershell2, PowerShellTask.regkeyholder);
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, PowerShellTask.regkeypowershell1, PowerShellTask.regkeyholder);
+            Assert.AreEqual(POWERSHELL1_PATH + "\\powershell.exe", task.Executable);
+            mockRegistry2.Verify();
+            mockProcessExecutor.Verify();
         }  
 
         [Test]
@@ -158,6 +172,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] { new IsAnything() });
             mytask.Executable = POWERSHELL_PATH;
             mytask.Script = "MyScript.ps1";
+            mytask.BuildArgs = "an arg";
+            mytask.EnvironmentVariables = new EnvironmentVariable[]
+            {
+                new EnvironmentVariable
+                {
+                    name = "test",
+                    value = "value"
+                }
+            };
 
             IntegrationResult result = (IntegrationResult)IntegrationResult();
             mytask.Run(result);
@@ -219,5 +242,40 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             mytask.Run(IntegrationResult());
         }
 
+        [Test]
+        public void SuccessExitCodesIsSuccessfullySplitAndRebuilt()
+        {
+            var task = new PowerShellTask();
+            task.SuccessExitCodes = "1,2,3";
+            Assert.AreEqual("1,2,3", task.SuccessExitCodes);
+        }
+
+        [Test]
+        public void SuccessExitCodesHandlesNull()
+        {
+            var task = new PowerShellTask();
+            task.SuccessExitCodes = null;
+            Assert.AreEqual(string.Empty, task.SuccessExitCodes);
+        }
+
+        [Test]
+        public void SuccessExitCodesHandlesEmpty()
+        {
+            var task = new PowerShellTask();
+            task.SuccessExitCodes = string.Empty;
+            Assert.AreEqual(string.Empty, task.SuccessExitCodes);
+        }
+
+        [Test]
+        public void ToStringReturnsTheBaseDirectoryAndExe()
+        {
+            var task = new PowerShellTask
+            {
+                ConfiguredScriptsDirectory = "testDir"
+            };
+            var actual = task.ToString();
+            var expected = " BaseDirectory: testDir, PowerShell: powershell.exe";
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

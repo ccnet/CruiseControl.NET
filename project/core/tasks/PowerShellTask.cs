@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			get 
             {
-                string result = "";
+                string result = string.Empty;
                 if (successExitCodes != null)
                 {
                     foreach (int code in successExitCodes)
@@ -95,22 +95,22 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
 
 			set 
-			{ 
-				string[] codes = value.Split(',');
+			{
+                if (!string.IsNullOrEmpty(value))
+                {
+                    string[] codes = value.Split(',');
 
-				if (codes.Length != 0)
-				{
-					successExitCodes = new int[codes.Length];
+                    successExitCodes = new int[codes.Length];
 
-					for (int i = 0; i < codes.Length; ++i)
-					{
-						successExitCodes[i] = Int32.Parse(codes[i]);
-					}
-				}
-				else
-				{
-					successExitCodes = null;
-				}
+                    for (int i = 0; i < codes.Length; ++i)
+                    {
+                        successExitCodes[i] = Int32.Parse(codes[i]);
+                    }
+                }
+                else
+                {
+                    successExitCodes = null;
+                }
 			}
 		}
 		

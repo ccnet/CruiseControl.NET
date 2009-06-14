@@ -19,18 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
 
         #region Private fields
-        private string projectFile;
-        private string description;
-        private string executable;
-        private bool emitXml;
-        private string[] inputDirs;
-        private string outputDir;
-        private bool silent;
-        private string reportXslt;
-        private int timeOut = 600;
-        private string baseDirectory;
         private string rootPath;
-        private bool publish = true;
         private IFileSystem fileSystem;
         private ILogger logger;
         #endregion
@@ -53,6 +42,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             this.executor = executor;
             this.fileSystem = fileSystem;
             this.logger = logger;
+            TimeOut = 600;
+            Publish = true;
         }
         #endregion
 
@@ -62,11 +53,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// The NDepend project file.
         /// </summary>
         [ReflectorProperty("project")]
-        public string ProjectFile
-        {
-            get { return projectFile; }
-            set { projectFile = value; }
-        }
+        public string ProjectFile { get; set; }
         #endregion
 
         #region Executable
@@ -74,11 +61,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// The executable to use.
         /// </summary>
         [ReflectorProperty("executable", Required = false)]
-        public string Executable
-        {
-            get { return executable; }
-            set { executable = value; }
-        }
+        public string Executable { get; set; }
         #endregion
 
         #region EmitXml
@@ -86,11 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Whether to emit the XML report data or not.
         /// </summary>
         [ReflectorProperty("emitXml", Required = false)]
-        public bool EmitXml
-        {
-            get { return emitXml; }
-            set { emitXml = value; }
-        }
+        public bool EmitXml { get; set; }
         #endregion
 
         #region OutputDir
@@ -98,11 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// The output directory to use.
         /// </summary>
         [ReflectorProperty("outputDir", Required = false)]
-        public string OutputDir
-        {
-            get { return outputDir; }
-            set { outputDir = value; }
-        }
+        public string OutputDir { get; set; }
         #endregion
 
         #region InputDirs
@@ -110,11 +85,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// The input directories to use.
         /// </summary>
         [ReflectorProperty("inputDirs", Required = false)]
-        public string[] InputDirs
-        {
-            get { return inputDirs; }
-            set { inputDirs = value; }
-        }
+        public string[] InputDirs { get; set; }
         #endregion
 
         #region Silent
@@ -122,11 +93,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Whether to hide any output or not.
         /// </summary>
         [ReflectorProperty("silent", Required = false)]
-        public bool Silent
-        {
-            get { return silent; }
-            set { silent = value; }
-        }
+        public bool Silent { get; set; }
         #endregion
 
         #region ReportXslt
@@ -134,11 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// The location of a report XSL-T.
         /// </summary>
         [ReflectorProperty("reportXslt", Required = false)]
-        public string ReportXslt
-        {
-            get { return reportXslt; }
-            set { reportXslt = value; }
-        }
+        public string ReportXslt { get; set; }
         #endregion
 
         #region TimeOut
@@ -146,11 +109,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// The time-out period in seconds.
         /// </summary>
         [ReflectorProperty("timeout", Required = false)]
-        public int TimeOut
-        {
-            get { return timeOut; }
-            set { timeOut = value; }
-        }
+        public int TimeOut { get; set; }
         #endregion
 
         #region BaseDirectory
@@ -158,11 +117,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// The base directory to use.
         /// </summary>
         [ReflectorProperty("baseDir", Required = false)]
-        public string BaseDirectory
-        {
-            get { return baseDirectory; }
-            set { baseDirectory = value; }
-        }
+        public string BaseDirectory { get; set; }
         #endregion
 
         #region Publish
@@ -170,10 +125,26 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Whether to publish the output files or not.
         /// </summary>
         [ReflectorProperty("publish", Required = false)]
-        public bool Publish
+        public bool Publish { get; set; }
+        #endregion
+
+        #region FileSystem
+        /// <summary>
+        /// The file system that is being used.
+        /// </summary>
+        public IFileSystem FileSystem
         {
-            get { return publish; }
-            set { publish = value; }
+            get { return fileSystem; }
+        }
+        #endregion
+
+        #region Logger
+        /// <summary>
+        /// The logger that is being used.
+        /// </summary>
+        public ILogger Logger
+        {
+            get { return logger; }
         }
         #endregion
         #endregion
@@ -189,18 +160,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Executing NDepend");
 
             // Make sure there is a root directory
-            rootPath = baseDirectory;
+            rootPath = BaseDirectory;
             if (string.IsNullOrEmpty(rootPath)) rootPath = result.WorkingDirectory;
 
             // Take a before snapshot of all the files
-            var outputDirectory = RootPath(outputDir, false);
+            var outputDirectory = RootPath(OutputDir, false);
             var oldFiles = GenerateOriginalFileList(outputDirectory);
 
             // Run the executable
             var processResult = TryToRun(CreateProcessInfo(result));
             result.AddTaskResult(new ProcessTaskResult(processResult));
 
-            if (publish && !processResult.Failed)
+            if (Publish && !processResult.Failed)
             {
                 // Check for any new files
                 var newFiles = ListFileDifferences(oldFiles, outputDirectory);
@@ -239,13 +210,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         protected override string GetProcessFilename()
         {
             string path;
-            if (string.IsNullOrEmpty(executable))
+            if (string.IsNullOrEmpty(Executable))
             {
                 path = RootPath(defaultExecutable, true);
             }
             else
             {
-                path = RootPath(executable, true);
+                path = RootPath(Executable, true);
             }
             return path;
         }
@@ -259,7 +230,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <returns></returns>
         protected override string GetProcessBaseDirectory(IIntegrationResult result)
         {
-            string path = RootPath(rootPath, true);
+            string path = StringUtil.AutoDoubleQuoteString(rootPath);
             return path;
         }
         #endregion
@@ -271,7 +242,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <returns></returns>
         protected override int GetProcessTimeout()
         {
-            return timeOut * 1000;
+            return TimeOut * 1000;
         }
         #endregion
 
@@ -284,22 +255,22 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         protected override string GetProcessArguments(IIntegrationResult result)
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.Append(RootPath(projectFile, true));
-            buffer.AppendIf(silent, "/Silent");
-            buffer.AppendIf(emitXml, "/EmitVisualNDependBinXml ");
-            if ((inputDirs != null) && (inputDirs.Length > 0))
+            buffer.Append(RootPath(ProjectFile, true));
+            buffer.AppendIf(Silent, "/Silent");
+            buffer.AppendIf(EmitXml, "/EmitVisualNDependBinXml ");
+            if ((InputDirs != null) && (InputDirs.Length > 0))
             {
                 List<string> dirs = new List<string>();
-                foreach (string dir in inputDirs)
+                foreach (string dir in InputDirs)
                 {
                     dirs.Add(RootPath(dir, true));
                 }
                 buffer.AppendArgument("/InDirs {0}", string.Join(" ", dirs.ToArray()));
             }
-            buffer.AppendArgument("/OutDir {0}", RootPath(outputDir, true));
-            if (!string.IsNullOrEmpty(reportXslt))
+            buffer.AppendArgument("/OutDir {0}", RootPath(OutputDir, true));
+            if (!string.IsNullOrEmpty(ReportXslt))
             {
-                buffer.AppendArgument("/XslForReport  {0}", RootPath(reportXslt, true));
+                buffer.AppendArgument("/XslForReport  {0}", RootPath(ReportXslt, true));
             }
             return buffer.ToString();
         }
@@ -386,8 +357,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 var oldFiles = fileSystem.GetFilesInDirectory(outputDirectory);
                 foreach (var oldFile in oldFiles)
                 {
-                    originalFiles.Add(Path.GetFileName(oldFile),  
-                        fileSystem.GetLastWriteTime(oldFile));
+                    originalFiles.Add(oldFile, fileSystem.GetLastWriteTime(oldFile));
                 }
             }
             return originalFiles;
