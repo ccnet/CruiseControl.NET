@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     [ReflectorType("git")]
     public class Git : ProcessSourceControl
     {
-        public const string HistoryFormat = @"""<Modification><Type>Commit %H</Type><ModifiedTime>%ci</ModifiedTime><UserName>%cN</UserName><EmailAddress>%ce</EmailAddress><Comment><![CDATA[%s]]></Comment></Modification>""";
+		private const string historyFormat = "'Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:'";
 
         private readonly IFileSystem _fileSystem;
 
@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             if (!Fetch(to) && GitLogOriginHash(to) == GitLogLocalHash(to))
 				return new Modification[0];
 
-            return ParseModifications(GitLogHistory(to), from.StartTime, to.StartTime);
+			return ParseModifications(GitLogHistory(from, to), from.StartTime, to.StartTime);
         }
 
         public override void GetSource(IIntegrationResult result)
@@ -185,25 +185,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <summary>
         /// Get a list of all commits in date order.  The position of each commit in the list is used as the ChangeNumber.
         /// </summary>
-        private ProcessResult GitLogHistory(IIntegrationResult result)
+        private ProcessResult GitLogHistory(IIntegrationResult from, IIntegrationResult to)
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("log");
             buffer.AddArgument("origin/master");
             buffer.AddArgument("--date-order");
-            buffer.AddArgument("--reverse");
-            buffer.AddArgument(string.Concat("--pretty=format:", HistoryFormat));
+			buffer.AddArgument(string.Concat("--after=", from.StartTime.ToUniversalTime().ToString("R")));
+			buffer.AddArgument(string.Concat("--before=", to.StartTime.ToUniversalTime().ToString("R")));
+            buffer.AddArgument(string.Concat("--pretty=format:", historyFormat));
 
-            ProcessResult pr = Execute(NewProcessInfo(buffer.ToString(), BaseWorkingDirectory(result)));
-
-            //Need to change dates to be valid xml dates.
-            //<ModifiedTime>2009-03-02 16:10:39 +1000</ModifiedTime>
-            //to
-            //<ModifiedTime>2009-03-02T16:10:39+10:00</ModifiedTime>
-            string parsedStandardOutput = Regex.Replace(pr.StandardOutput, @"<ModifiedTime>(\d{4}-\d\d-\d\d)\s(\d\d:\d\d:\d\d)\s(\+|-)(\d\d)(\d\d)</ModifiedTime>", "<ModifiedTime>$1T$2$3$4:$5</ModifiedTime>");
-
-            return new ProcessResult(parsedStandardOutput, pr.StandardError, pr.ExitCode, pr.TimedOut, pr.Failed);
-
+            return Execute(NewProcessInfo(buffer.ToString(), BaseWorkingDirectory(to)));
         }
 
         private void GitClone(IIntegrationResult result)
