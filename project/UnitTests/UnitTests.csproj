@@ -1223,6 +1223,7 @@
     <EmbeddedResource Include="Core\Publishers\Rss.NewFeed.xml" />
     <EmbeddedResource Include="Core\Publishers\Rss.WithinLimits.xml" />
     <Content Include="resources\buildlog.xml" />
+    <Content Include="resources\CCNet.git.log.txt" />
     <Content Include="resources\failedbuildlog.xml" />
     <Content Include="resources\statistics.xml" />
   </ItemGroup>
