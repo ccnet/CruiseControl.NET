@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		const string GIT_FETCH = "fetch";
 		const string GIT_REMOTE_HASH = "log origin/master --date-order -1 --pretty=format:'%H'";
 		const string GIT_LOCAL_HASH = "log --date-order -1 --pretty=format:'%H'";
-		const string GIT_REMOTE_COMMITS = "log origin/master --date-order \"--after=Sun, 21 Jan 2001 19:00:00 GMT\" \"--before=Mon, 22 Jan 2001 19:00:00 GMT\" --pretty=format:'Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:'";
+		const string GIT_REMOTE_COMMITS = "log origin/master --date-order --name-status \"--after=Sun, 21 Jan 2001 19:00:00 GMT\" \"--before=Mon, 22 Jan 2001 19:00:00 GMT\" --pretty=format:'Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:'";
 		const string GIT_CONFIG1 = @"config remote.origin.url xyz.git";
 		const string GIT_CONFIG2 = "config remote.origin.fetch +refs/heads/*:refs/remotes/origin/*";
 		const string GIT_CONFIG3 = "config branch.master.remote origin";

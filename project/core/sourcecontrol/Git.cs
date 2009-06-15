@@ -194,6 +194,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.AddArgument("log");
             buffer.AddArgument("origin/master");
             buffer.AddArgument("--date-order");
+			buffer.AddArgument("--name-status");
 			buffer.AddArgument(string.Concat("--after=", from.StartTime.ToUniversalTime().ToString("R")));
 			buffer.AddArgument(string.Concat("--before=", to.StartTime.ToUniversalTime().ToString("R")));
             buffer.AddArgument(string.Concat("--pretty=format:", historyFormat));
