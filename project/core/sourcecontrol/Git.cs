@@ -134,10 +134,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return first;
         }
 
-        private ProcessInfo NewProcessInfo(string args, string dir)
+		private ProcessInfo NewProcessInfo(string args, IIntegrationResult result)
         {
+			string workingDirectory = Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory));
+			_fileSystem.EnsureFolderExists(workingDirectory);
+
             Log.Info("Calling git " + args);
-            ProcessInfo processInfo = new ProcessInfo(Executable, args, dir);
+			ProcessInfo processInfo = new ProcessInfo(Executable, args, workingDirectory);
             processInfo.StreamEncoding = Encoding.UTF8;
             return processInfo;
         }
@@ -155,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.AddArgument("--date-order");
             buffer.AddArgument("-1");
             buffer.AddArgument("--pretty=format:'%H'");
-            return Execute(NewProcessInfo(buffer.ToString(), BaseWorkingDirectory(result))).StandardOutput.Trim();
+			return Execute(NewProcessInfo(buffer.ToString(), result)).StandardOutput.Trim();
         }
 
         /// <summary>
@@ -172,7 +175,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             string hash = null;
             try
             {
-                hash = Execute(NewProcessInfo(buffer.ToString(), BaseWorkingDirectory(result))).StandardOutput.Trim();
+				hash = Execute(NewProcessInfo(buffer.ToString(), result)).StandardOutput.Trim();
             }
             catch (CruiseControlException ex)
             {
@@ -195,7 +198,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AddArgument(string.Concat("--before=", to.StartTime.ToUniversalTime().ToString("R")));
             buffer.AddArgument(string.Concat("--pretty=format:", historyFormat));
 
-            return Execute(NewProcessInfo(buffer.ToString(), BaseWorkingDirectory(to)));
+            return Execute(NewProcessInfo(buffer.ToString(), to));
         }
 
         private void GitClone(IIntegrationResult result)
@@ -204,14 +207,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.AddArgument("clone");
             buffer.AddArgument(Repository);
             buffer.AddArgument(BaseWorkingDirectory(result));
-            Execute(NewProcessInfo(buffer.ToString(), BaseWorkingDirectory(result)));
+			Execute(NewProcessInfo(buffer.ToString(), result));
         }
 
         private void GitInit(IIntegrationResult result)
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("init");
-            Execute(NewProcessInfo(buffer.ToString(), BaseWorkingDirectory(result)));
+			Execute(NewProcessInfo(buffer.ToString(), result));
         }
 
         private void GitConfig(string name, string value, IIntegrationResult result)
@@ -220,14 +223,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.AddArgument("config");
             buffer.AddArgument(name);
             buffer.AddArgument(value);
-            Execute(NewProcessInfo(buffer.ToString(), BaseWorkingDirectory(result)));
+			Execute(NewProcessInfo(buffer.ToString(), result));
         }
 
         private void GitFetch(IIntegrationResult result)
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("fetch");
-            Execute(NewProcessInfo(buffer.ToString(), BaseWorkingDirectory(result)));
+			Execute(NewProcessInfo(buffer.ToString(), result));
         }
 
         private void GitTag(IIntegrationResult result)
@@ -237,7 +240,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.AddArgument("-a");
             buffer.AddArgument("-m", string.Format(TagCommitMessage, result.Label));
             buffer.AddArgument(result.Label);
-            Execute(NewProcessInfo(buffer.ToString(), BaseWorkingDirectory(result)));
+			Execute(NewProcessInfo(buffer.ToString(), result));
         }
 
         private void GitClean(IIntegrationResult result)
@@ -247,7 +250,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.AddArgument("-d");
             buffer.AddArgument("-f");
             buffer.AddArgument("-x");
-            Execute(NewProcessInfo(buffer.ToString(), BaseWorkingDirectory(result)));
+			Execute(NewProcessInfo(buffer.ToString(), result));
         }
 
         private void GitReset(IIntegrationResult result)
@@ -256,7 +259,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.AddArgument("reset");
             buffer.AddArgument("HEAD");
             buffer.AddArgument("--hard");
-            Execute(NewProcessInfo(buffer.ToString(), BaseWorkingDirectory(result)));
+			Execute(NewProcessInfo(buffer.ToString(), result));
         }
 
         private void GitMerge(IIntegrationResult result)
@@ -264,7 +267,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("merge");
             buffer.AddArgument(string.Format("origin/{0}", Branch));
-            Execute(NewProcessInfo(buffer.ToString(), BaseWorkingDirectory(result)));
+			Execute(NewProcessInfo(buffer.ToString(), result));
         }
 
         private void GitPushTags(IIntegrationResult result)
@@ -272,7 +275,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("push");
             buffer.AddArgument("--tags");
-            Execute(NewProcessInfo(buffer.ToString(), BaseWorkingDirectory(result)));
+			Execute(NewProcessInfo(buffer.ToString(), result));
         }
         #endregion
 
