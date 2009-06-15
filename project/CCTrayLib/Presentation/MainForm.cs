@@ -897,7 +897,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
         private void mnuShow_Click(object sender, EventArgs e)
         {
-            ShowStatusWindow();
+            ToggleStatusWindow();
         }
 
         private void trayIcon_Click(object sender, EventArgs e)
@@ -910,15 +910,22 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         {
             if (!controller.OnDoubleClick())
             {
-                ShowStatusWindow();
+                ToggleStatusWindow();
             }
         }
 
-        private void ShowStatusWindow()
+        private void ToggleStatusWindow()
         {
-            WindowState = FormWindowState.Normal;
-            Show();
-            NativeMethods.SetForegroundWindow(Handle);
+            if (!Visible)
+            {
+                WindowState = FormWindowState.Normal;
+                Show();
+                NativeMethods.SetForegroundWindow(Handle);
+            }
+            else
+            {
+                Hide();
+            }
         }
 
         protected override void WndProc(ref Message m)
