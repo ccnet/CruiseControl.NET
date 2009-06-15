@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     [ReflectorType("git")]
     public class Git : ProcessSourceControl
     {
-		private const string historyFormat = "'Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:'";
+		private const string historyFormat = "Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:";
 
         private readonly IFileSystem _fileSystem;
 
@@ -197,7 +197,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AddArgument("--name-status");
 			buffer.AddArgument(string.Concat("--after=", from.StartTime.ToUniversalTime().ToString("R")));
 			buffer.AddArgument(string.Concat("--before=", to.StartTime.ToUniversalTime().ToString("R")));
-            buffer.AddArgument(string.Concat("--pretty=format:", historyFormat));
+        	buffer.AddArgument(string.Concat("--pretty=format:", '"', historyFormat, '"'));
 
             return Execute(NewProcessInfo(buffer.ToString(), to));
         }
