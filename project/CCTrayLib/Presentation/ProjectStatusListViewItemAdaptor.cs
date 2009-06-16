@@ -14,8 +14,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private readonly ListViewItem.ListViewSubItem lastBuildLabel;
 		private readonly ListViewItem.ListViewSubItem lastBuildTime;
 		private readonly ListViewItem.ListViewSubItem projectStatus;
-		private readonly ListViewItem.ListViewSubItem serverName;
-		private readonly ICCTrayMultiConfiguration config = null;
+        private readonly ListViewItem.ListViewSubItem serverName;
+        private readonly ListViewItem.ListViewSubItem category;
+        private readonly ICCTrayMultiConfiguration config = null;
 		
 		public ProjectStatusListViewItemAdaptor(IDetailStringProvider detailStringProvider, ICCTrayMultiConfiguration config) : this(detailStringProvider)
 		{
@@ -27,7 +28,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.detailStringProvider = detailStringProvider;
 			serverName = new ListViewItem.ListViewSubItem();
 			item.SubItems.Add(serverName);
-			activity = new ListViewItem.ListViewSubItem(item, "");
+            category = new ListViewItem.ListViewSubItem(item, "");
+            item.SubItems.Add(category);
+            activity = new ListViewItem.ListViewSubItem(item, "");
 			item.SubItems.Add(activity);
 			detail = new ListViewItem.ListViewSubItem(item, "");
 			item.SubItems.Add(detail);
@@ -35,9 +38,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			item.SubItems.Add(lastBuildLabel);
 			lastBuildTime = new ListViewItem.ListViewSubItem(item, "");
 			item.SubItems.Add(lastBuildTime);
-			projectStatus = new ListViewItem.ListViewSubItem(item, "");
-			item.SubItems.Add(projectStatus);
-		}
+            projectStatus = new ListViewItem.ListViewSubItem(item, "");
+            item.SubItems.Add(projectStatus);
+        }
 
 		public ListViewItem Create(IProjectMonitor projectMonitor)
 		{
@@ -75,15 +78,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				{
 					serverName.Text = new Uri(monitor.Detail.WebURL).Host;
 				}
-                lastBuildLabel.Text = monitor.Detail.LastBuildLabel;
-                lastBuildTime.Text = monitor.Detail.LastBuildTime.ToString();
-                projectStatus.Text = monitor.ProjectIntegratorState;
-                activity.Text = monitor.Detail.Activity.ToString();
-            }
-            else
-            {
-                activity.Text = lastBuildLabel.Text = "";
-            }
+				lastBuildLabel.Text = monitor.Detail.LastBuildLabel;
+				lastBuildTime.Text = monitor.Detail.LastBuildTime.ToString();
+				projectStatus.Text = monitor.ProjectIntegratorState;
+				activity.Text = monitor.Detail.Activity.ToString();
+                category.Text = monitor.Detail.Category;
+			}
+			else
+			{
+				activity.Text = lastBuildLabel.Text = "";
+			}
 
 			detail.Text = detailStringProvider.FormatDetailString(monitor.Detail);
 		}

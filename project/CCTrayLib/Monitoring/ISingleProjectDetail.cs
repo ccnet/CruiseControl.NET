@@ -19,6 +19,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		bool IsConnected { get; }
 
         string ServerName { get; }	
+
+        string Category { get; }
 		ProjectActivity Activity { get; }
 		string LastBuildLabel { get; }
 		DateTime LastBuildTime { get; }

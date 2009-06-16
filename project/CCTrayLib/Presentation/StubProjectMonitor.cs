@@ -13,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private ProjectState projectState = ProjectState.NotConnected;
 		private IntegrationStatus integrationStatus = IntegrationStatus.Unknown;
 		private string projectName;
+        private string category;
 		private Exception connectException;
         private CCTrayProject _configuration;
 
@@ -20,6 +21,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			this.projectName = projectName;
 		}
+
+        public string Category
+        {
+            get { return category; }
+        }
 
 		public string ProjectName
 		{

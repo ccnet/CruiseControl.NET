@@ -21,6 +21,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private ListView lvProjects;
         private ColumnHeader colProject;
         private ColumnHeader colServer;
+        private ColumnHeader colCategory;
         private ImageList iconList;
         private MainMenu mainMenu;
         private TrayIcon trayIcon;
@@ -99,6 +100,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // get additional state information from registry
             colProject.Width = (int)e.Key.GetValue("ProjectColumnWidth", 160);
             colServer.Width = (int)e.Key.GetValue("ServerColumnWidth", 100);
+            colCategory.Width = (int)e.Key.GetValue("CategoryColumnWidth", 100);
             colActivity.Width = (int)e.Key.GetValue("ActivityColumnWidth", 132);
             colDetail.Width = (int)e.Key.GetValue("DetailColumnWidth", 250);
             colLastBuildLabel.Width = (int)e.Key.GetValue("LastBuildLabelColumnWidth", 120);
@@ -117,6 +119,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // save additional state information to registry
             e.Key.SetValue("ProjectColumnWidth", colProject.Width);
             e.Key.SetValue("ServerColumnWidth", colServer.Width);
+            e.Key.SetValue("CategoryColumnWidth", colCategory.Width);
             e.Key.SetValue("ActivityColumnWidth", colActivity.Width);
             e.Key.SetValue("DetailColumnWidth", colDetail.Width);
             e.Key.SetValue("LastBuildLabelColumnWidth", colLastBuildLabel.Width);
@@ -194,6 +197,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.lvProjects = new System.Windows.Forms.ListView();
             this.colProject = new System.Windows.Forms.ColumnHeader();
             this.colServer = new System.Windows.Forms.ColumnHeader();
+            this.colCategory = new System.Windows.Forms.ColumnHeader();
             this.colActivity = new System.Windows.Forms.ColumnHeader();
             this.colDetail = new System.Windows.Forms.ColumnHeader();
             this.colLastBuildLabel = new System.Windows.Forms.ColumnHeader();
@@ -267,6 +271,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colProject,
             this.colServer,
+            this.colCategory,
             this.colActivity,
             this.colDetail,
             this.colLastBuildLabel,
@@ -298,6 +303,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             this.colServer.Text = "Server";
             this.colServer.Width = 100;
+            // 
+            // colCategory
+            // 
+            this.colCategory.Text = "Catgeory";
+            this.colCategory.Width = 100;
             // 
             // colActivity
             // 

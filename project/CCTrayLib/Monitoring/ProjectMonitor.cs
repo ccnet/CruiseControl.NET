@@ -44,6 +44,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			get { return lastProjectStatus != null; }
 		}
 
+        public string Category
+        {
+            get
+            {
+                if (IsConnected)
+                {
+                    return lastProjectStatus.Category;
+                }
+                return string.Empty;
+            }
+        }
+
 		public ProjectActivity Activity
 		{
 			get
