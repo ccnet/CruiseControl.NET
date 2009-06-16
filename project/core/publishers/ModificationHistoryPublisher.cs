@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         protected override bool Execute(IIntegrationResult result)
         {
-            if ((OnlyLogWhenChangesFound) & (result.Modifications.Length == 0)) return false;
+            if ((OnlyLogWhenChangesFound) & (result.Modifications.Length == 0)) return true;
 
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Saving modification history");                
 

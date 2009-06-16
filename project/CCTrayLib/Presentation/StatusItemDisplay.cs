@@ -62,5 +62,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             get { return item.TimeCompleted.HasValue ? item.TimeCompleted.Value.ToString("F") : string.Empty; }
             set { }
         }
+
+        [DisplayName("Error Message")]
+        [Description("Any error details on why the item failed")]
+        public string ErrorMessage
+        {
+            get { return item.Error; }
+            set { }
+        }
     }
 }

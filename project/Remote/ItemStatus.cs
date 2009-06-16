@@ -79,6 +79,14 @@ namespace ThoughtWorks.CruiseControl.Remote
         }
         #endregion
 
+        #region Error
+        /// <summary>
+        /// Any error message for why the item failed.
+        /// </summary>
+        [XmlElement("error")]
+        public string Error { get; set; }
+        #endregion
+
         #region Status
         /// <summary>
         /// The status of the item.

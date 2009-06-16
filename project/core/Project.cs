@@ -526,18 +526,27 @@ namespace ThoughtWorks.CruiseControl.Core
                 task.Run(result);
                 if (status != null)
                 {
-                    if (result.Failed)
+                    // Only need to update the status if it is not already set
+                    switch (status.Status)
                     {
-                        status.Status = ItemBuildStatus.CompletedFailed;
-                    }
-                    else
-                    {
-                        status.Status = ItemBuildStatus.CompletedSuccess;
+                        case ItemBuildStatus.Pending:
+                        case ItemBuildStatus.Running:
+                        case ItemBuildStatus.Unknown:
+                            if (result.Failed)
+                            {
+                                status.Status = ItemBuildStatus.CompletedFailed;
+                            }
+                            else
+                            {
+                                status.Status = ItemBuildStatus.CompletedSuccess;
+                            }
+                            break;
                     }
                 }
             }
             catch
             {
+                // An exception was thrown, so we will assume that the task failed
                 if (status != null) status.Status = ItemBuildStatus.CompletedFailed;
                 throw;
             }

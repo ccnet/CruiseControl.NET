@@ -83,6 +83,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             {
                 taskSuccess = Execute(result);
             }
+            catch (Exception error)
+            {
+                // Store the error message
+                currentStatus.Error = error.Message;
+                throw;
+            }
             finally
             {
                 // Clean up

@@ -220,7 +220,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             SetupResult.For(result.ArtifactDirectory).Return(artefact);
             SetupResult.For(result.Label).Return(label);
             Expect.Call(() => { buildProgress.SignalStartRunTask("Merging Files"); });
-            Expect.Call(() => { result.AddTaskResultFromFile(Path.Combine(working, "text.xml")); });
+            Expect.Call(() => { result.AddTaskResultFromFile(Path.Combine(working, "text.xml"), false); });
 
             // Run the test
             mocks.ReplayAll();
