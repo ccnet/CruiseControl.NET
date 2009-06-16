@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		private static readonly Regex modificationList =
 			new Regex(
-				"Commit:(?<Hash>[a-z0-9]{40})\nTime:(?<Time>.+?)\nAuthor:(?<Author>.+?)\nE-Mail:(?<Mail>.+?)\nMessage:(?<Message>.*?)\nChanges:\n(?<Changes>.*?)\n\n",
+				"Commit:(?<Hash>[a-z0-9]{40})(?:\n|\r\n)Time:(?<Time>.+?)(?:\n|\r\n)Author:(?<Author>.+?)(?:\n|\r\n)E-Mail:(?<Mail>.+?)(?:\n|\r\n)Message:(?<Message>.*?)(?:\n|\r\n)Changes:(?:\n|\r\n)(?<Changes>.*?)(?:\n|\r\n){2}",
 				RegexOptions.Compiled | RegexOptions.Singleline);
 
 		private static readonly Regex changeList = new Regex("(?<Type>[A-Z]{1})\t(?<FileName>.*)", RegexOptions.Compiled | RegexOptions.CultureInvariant);
@@ -33,7 +33,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			foreach (Match mod in modificationList.Matches(history.ReadToEnd()))
 			{
-				Log.Debug(string.Concat("[Git] Found commit: ", mod.Value));
 				result.AddRange(GetCommitModifications(mod, from, to));
 			}
 
@@ -55,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			DateTime modifiedTime = DateTime.Parse(commitMatch.Groups["Time"].Value);
 			string username = commitMatch.Groups["Author"].Value;
 			string emailAddress = commitMatch.Groups["Mail"].Value;
-			string comment = commitMatch.Groups["Message"].Value;
+			string comment = commitMatch.Groups["Message"].Value.TrimEnd('\r', '\n');
 			string changes = commitMatch.Groups["Changes"].Value;
 
 			if (modifiedTime < from || modifiedTime > to)
@@ -77,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 				mod.Type = GetModificationType(change.Groups["Type"].Value);
 
-				string fullFilePath = change.Groups["FileName"].Value;
+				string fullFilePath = change.Groups["FileName"].Value.TrimEnd('\r', '\n');
 				mod.FileName = GetFileFromPath(fullFilePath);
 				mod.FolderName = GetFolderFromPath(fullFilePath);
 
