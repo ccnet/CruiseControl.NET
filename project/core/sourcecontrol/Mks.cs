@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			ProcessInfo info = NewProcessInfoWithArgs(BuildModsCommand());
-			Log.Info(string.Format("Getting Modifications: {0} {1}", info.FileName, info.Arguments));
+			Log.Info(string.Format("Getting Modifications: {0} {1}", info.FileName, info.SafeArguments));
 			Modification[] modifications = GetModifications(info, from.StartTime, to.StartTime);
 			AddMemberInfoToModifiedOrAddedModifications(modifications);
             base.FillIssueUrl(modifications);
@@ -118,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private void ExecuteWithLogging(ProcessInfo processInfo, string comment)
 		{
-			Log.Info(string.Format(comment + " : {0} {1}", processInfo.FileName, processInfo.Arguments));
+			Log.Info(string.Format(comment + " : {0} {1}", processInfo.FileName, processInfo.SafeArguments));
 			Execute(processInfo);
 		}
 
@@ -172,7 +172,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			buffer.AddArgument("-S", Path.Combine(SandboxRoot, SandboxFile));
 			buffer.AppendArgument("--user={0}", User);
-			buffer.AppendArgument("--password={0}", Password);
+			buffer.AppendHiddenArgument("--password={0}", Password);
 			buffer.AppendArgument("--quiet");
 		}
 

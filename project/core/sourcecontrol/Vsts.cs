@@ -473,7 +473,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                     Username = Domain + @"\" + Username;
                 }
 
-                buffer.AppendArgument(String.Format("-login:{0},{1}",Username,Password));
+                buffer.AppendArgument(String.Format("-login:{0},{1}", 
+                    Username, 
+                    ProcessArgumentBuilder.HideArgument(Password)));
             }           
 
             return NewProcessInfo(buffer.ToString(), to);

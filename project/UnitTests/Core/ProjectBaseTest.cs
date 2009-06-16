@@ -1,6 +1,8 @@
 using System.IO;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
+using System;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -35,7 +37,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Name = "myProject";
 
 			// Execute & Verify
-			Assert.AreEqual(new DirectoryInfo(Path.Combine("myProject", "WorkingDirectory")).FullName, project.WorkingDirectory);
+			Assert.AreEqual(
+                Path.Combine(PathUtils.DefaultProgramDataFolder,
+                    Path.Combine("myProject", "WorkingDirectory")), 
+                project.WorkingDirectory);
 		}
 
 		[Test]
@@ -57,7 +62,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Name = "myProject";
 
 			// Execute & Verify
-			Assert.AreEqual(new DirectoryInfo(Path.Combine("myProject", "Artifacts")).FullName, project.ArtifactDirectory);
+			Assert.AreEqual(
+                Path.Combine(PathUtils.DefaultProgramDataFolder, 
+                    Path.Combine("myProject", "Artifacts")), 
+                project.ArtifactDirectory);
 		}
 
 

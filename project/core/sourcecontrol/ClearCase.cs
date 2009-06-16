@@ -125,7 +125,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			else if (result.Failed && HasFatalError(result.StandardError))
 			{
 				throw new CruiseControlException(string.Format("Source control operation failed: {0}. Process command: {1} {2}",
-				                                               result.StandardError, info.FileName, info.Arguments));
+				                                               result.StandardError, info.FileName, info.SafeArguments));
 			}
 			else if (result.HasErrorOutput)
 			{
@@ -267,7 +267,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			if (AutoGetSource)
 			{
 				ProcessInfo info = new ProcessInfo(Executable, BuildGetSourceArguments());
-				Log.Info(string.Format("Getting source from ClearCase: {0} {1}", info.FileName, info.Arguments));
+				Log.Info(string.Format("Getting source from ClearCase: {0} {1}", info.FileName, info.SafeArguments));
 				Execute(info);
 			}
 		}

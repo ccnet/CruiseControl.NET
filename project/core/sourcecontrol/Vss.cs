@@ -244,7 +244,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
             if (!string.IsNullOrEmpty(Username))
             {
-                builder.AddArgument(string.Format("-Y{0},{1}", Username, Password));
+                builder.AddArgument(string.Format("-Y{0},{1}", Username, ProcessArgumentBuilder.HideArgument(Password)));
             }
 		}
 	}

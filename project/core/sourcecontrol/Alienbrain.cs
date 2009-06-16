@@ -175,7 +175,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			builder.AddArgument("-s", Server);
 			builder.AddArgument("-d", Database);
 			builder.AddArgument("-u", Username);
-			builder.AddArgument("-p", Password);
+			builder.AddHiddenArgument("-p", Password);
 			builder.AddArgument("-localpath", WorkingDirectory);
 			builder.AppendArgument("-overwritewritable replace -overwritecheckedout replace -response:GetLatest.PathInvalid y -response:GetLatest.Writable y -response:GetLatest.CheckedOut y");
 			return new ProcessInfo(Executable, builder.ToString());

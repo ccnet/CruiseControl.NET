@@ -487,7 +487,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// </summary>
         public static string DefaultProgramDataFolder
         {
-            get { return defaultProgramDataFolder; }
+            get
+            {
+                if (!Directory.Exists(defaultProgramDataFolder)) Directory.CreateDirectory(defaultProgramDataFolder);
+                return defaultProgramDataFolder;
+            }
             set { defaultProgramDataFolder = value; }
         }
     }

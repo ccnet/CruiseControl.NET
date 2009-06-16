@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}
 			catch (IOException e)
 			{
-				throw new BuilderException(this, string.Format("Unable to execute: {0} {1}\n{2}", info.FileName, info.Arguments, e), e);
+				throw new BuilderException(this, string.Format("Unable to execute: {0} {1}\n{2}", info.FileName, info.SafeArguments, e), e);
 			}
 		}		
 	}

@@ -67,10 +67,15 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public string Arguments
 		{
-			get { return startInfo.Arguments; }
+            get { return ProcessArgumentBuilder.GenerateApplicationArguments(startInfo.Arguments); }
 		}
 
-		public string WorkingDirectory
+        public string SafeArguments
+        {
+            get { return ProcessArgumentBuilder.GenerateSanitisedArguments(startInfo.Arguments); }
+        }
+
+        public string WorkingDirectory
 		{
 			get { return startInfo.WorkingDirectory; }
 			set { startInfo.WorkingDirectory = value; }

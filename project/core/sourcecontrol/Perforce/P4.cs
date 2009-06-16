@@ -323,7 +323,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 		protected virtual string Execute(ProcessInfo process, string description)
 		{
-            Log.Info(String.Format("Perforce {0}: {1} {2}", description, process.FileName, process.Arguments));
+            Log.Info(String.Format("Perforce {0}: {1} {2}", description, process.FileName, process.SafeArguments));
 			ProcessResult result = processExecutor.Execute(process);
             string errorSummary = ParseErrors(result.StandardOutput, result.StandardError);
             if (errorSummary != null)
@@ -331,7 +331,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
                 string errorMessage =
                     string.Format(
                         "Perforce {0} failed: {1} {2}\r\nError output from process was: \r\n{3}",
-                        description, process.FileName, process.Arguments, errorSummary);
+                        description, process.FileName, process.SafeArguments, errorSummary);
                 Log.Error(errorMessage);
                 throw new CruiseControlException(errorMessage);
             }

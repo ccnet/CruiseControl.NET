@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			else if (result.Failed)
 			{
 				throw new CruiseControlException(string.Format("Source control operation failed: {0}. Process command: {1} {2}",
-				                                               result.StandardError, processInfo.FileName, processInfo.Arguments));
+				                                               result.StandardError, processInfo.FileName, processInfo.SafeArguments));
 			}
 			else if (result.HasErrorOutput)
 			{

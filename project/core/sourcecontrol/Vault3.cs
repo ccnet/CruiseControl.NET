@@ -206,14 +206,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			builder.AddArgument("-host", _shim.Host);
 			builder.AddArgument("-user", _shim.Username);
-			builder.AddArgument("-password", _shim.Password);
+			builder.AddHiddenArgument("-password", _shim.Password);
 			builder.AddArgument("-repository", _shim.Repository);
 			builder.AppendIf(_shim.Ssl, "-ssl");
 
 			builder.AddArgument("-proxyserver", _shim.proxyServer);
 			builder.AddArgument("-proxyport", _shim.proxyPort);
 			builder.AddArgument("-proxyuser", _shim.proxyUser);
-			builder.AddArgument("-proxypassword", _shim.proxyPassword);
+			builder.AddHiddenArgument("-proxypassword", _shim.proxyPassword);
 			builder.AddArgument("-proxydomain", _shim.proxyDomain);
 
 			builder.AppendArgument(_shim.otherVaultArguments);
@@ -265,7 +265,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			catch (XmlException)
 			{
 				throw new VaultException(string.Format(
-					"Unable to parse vault XML output for vault command: [{0}].  Vault Output: [{1}]", info.Arguments, result.StandardOutput));
+					"Unable to parse vault XML output for vault command: [{0}].  Vault Output: [{1}]", info.SafeArguments, result.StandardOutput));
 			}
 			return xml;
 		}

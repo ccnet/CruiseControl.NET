@@ -382,7 +382,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         private void AppendCommonSwitches(ProcessArgumentBuilder buffer)
         {
             buffer.AddArgument("--username", Username);
-            buffer.AddArgument("--password", Password);
+            buffer.AddHiddenArgument("--password", Password);
             buffer.AddArgument("--non-interactive");
             buffer.AddArgument("--no-auth-cache");
         }
