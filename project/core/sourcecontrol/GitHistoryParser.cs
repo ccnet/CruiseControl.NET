@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -32,6 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			foreach (Match mod in modificationList.Matches(history.ReadToEnd()))
 			{
+				Log.Debug(string.Concat("[Git] Found commit: ", mod.Value));
 				result.AddRange(GetCommitModifications(mod, from, to));
 			}
 
@@ -57,7 +59,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			string changes = commitMatch.Groups["Changes"].Value;
 
 			if (modifiedTime < from || modifiedTime > to)
+			{
+				Log.Debug(string.Concat("[Git] Ignore commit '", hash, "' from '", modifiedTime.ToUniversalTime(),
+				                        "' because it is older then '",
+				                        from.ToUniversalTime(), "' or newer then '", to.ToUniversalTime(), "'."));
 				return result;
+			}
 
 			foreach (Match change in changeList.Matches(changes))
 			{
