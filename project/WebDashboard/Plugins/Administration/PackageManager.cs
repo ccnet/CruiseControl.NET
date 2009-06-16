@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using System.Xml;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
 {
@@ -16,18 +17,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         private const int blockSize = 16384;
         #endregion
 
-        #region Private fields
-        private readonly IPhysicalApplicationPathProvider physicalApplicationPathProvider;
-        #endregion
-
         #region Constructors
         /// <summary>
         /// Create a new <see cref="PackageManager"/>.
         /// </summary>
-        /// <param name="physicalApplicationPathProvider"></param>
-        public PackageManager(IPhysicalApplicationPathProvider physicalApplicationPathProvider)
+        public PackageManager()
 		{
-			this.physicalApplicationPathProvider = physicalApplicationPathProvider;
         }
         #endregion
 
@@ -42,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         {
             // Initialise the path and make sure the folder is there
             FileInfo packageDetails = new FileInfo(fileName);
-            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("Packages"),
+            string packagePath = Path.Combine(ProgramDataFolder.MapPath("Packages"),
                 packageDetails.Name);
             packageDetails = new FileInfo(packagePath);
             if (!packageDetails.Directory.Exists) packageDetails.Directory.Create();
@@ -93,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         public List<PackageImportEventArgs> InstallPackage(string fileName)
         {
             // Validate that the package is still valid, just in case somebody else deleted it
-            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("Packages"),
+            string packagePath = Path.Combine(ProgramDataFolder.MapPath("Packages"),
                 fileName);
             FileInfo packageDetails = new FileInfo(packagePath);
             List<PackageImportEventArgs> events = null;
@@ -109,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                         {
                             events.Add(args);
                         };
-                        package.Install(physicalApplicationPathProvider);
+                        package.Install();
 
                         // Update the list
                         XmlDocument packageList = LoadPackageList();
@@ -133,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         {
             // Initialise the path and make sure the folder is there
             FileInfo packageDetails = new FileInfo(fileName);
-            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("Packages"),
+            string packagePath = Path.Combine(ProgramDataFolder.MapPath("Packages"),
                 packageDetails.Name);
             packageDetails = new FileInfo(packagePath);
             string packageName = null;
@@ -179,7 +174,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         public List<PackageImportEventArgs> UninstallPackage(string fileName)
         {
             // Validate that the package is still valid, just in case somebody else deleted it
-            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("Packages"),
+            string packagePath = Path.Combine(ProgramDataFolder.MapPath("Packages"),
                 fileName);
             FileInfo packageDetails = new FileInfo(packagePath);
             List<PackageImportEventArgs> events = null;
@@ -195,7 +190,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                         {
                             events.Add(args);
                         };
-                        package.Uninstall(physicalApplicationPathProvider);
+                        package.Uninstall();
 
                         // Update the list
                         XmlDocument packageList = LoadPackageList();
@@ -268,7 +263,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// <returns></returns>
         private XmlDocument LoadPackageList()
         {
-            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("Packages"),
+            string packagePath = Path.Combine(ProgramDataFolder.MapPath("Packages"),
                 "packages.xml");
             FileInfo listDetails = new FileInfo(packagePath);
             XmlDocument document = new XmlDocument();
@@ -332,7 +327,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// </summary>
         private void SavePackageList(XmlDocument packageList)
         {
-            string packagePath = Path.Combine(physicalApplicationPathProvider.GetFullPathFor("Packages"),
+            string packagePath = Path.Combine(ProgramDataFolder.MapPath("Packages"),
                 "packages.xml");
 
             // Configure the document options

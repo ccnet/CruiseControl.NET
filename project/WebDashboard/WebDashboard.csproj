@@ -199,6 +199,7 @@
     <Compile Include="Dashboard\ISessionStore.cs" />
     <Compile Include="Dashboard\LoginViewBuilder.cs" />
     <Compile Include="Dashboard\ProjectParametersAction.cs" />
+    <Compile Include="IO\ProgramDataFolder.cs" />
     <Compile Include="Plugins\Administration\AdministerAction.cs" />
     <Compile Include="Plugins\Administration\AdministerPlugin.cs" />
     <Compile Include="Plugins\Administration\ConfigurationAttribute.cs" />
@@ -694,7 +695,9 @@
       <Link>xsl\vil.xsl</Link>
     </Content>
     <Content Include="AppIcon.ico" />
+    <Content Include="DataMigrationDone.htm" />
     <Content Include="cruisecontrol.css" />
+    <Content Include="DataMigration.htm" />
     <Content Include="default.aspx" />
     <Content Include="fitnesse.css" />
     <Content Include="images\arrow_minus_small.gif" />

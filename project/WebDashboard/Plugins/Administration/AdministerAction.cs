@@ -298,7 +298,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// <returns></returns>
         private XmlDocument LoadConfig()
         {
-            string configPath = DashboardConfigurationLoader.CalculateDashboardConfigPath(physicalApplicationPathProvider);
+            string configPath = DashboardConfigurationLoader.CalculateDashboardConfigPath();
             XmlDocument document = new XmlDocument();
             document.Load(configPath);
             return document;
@@ -312,7 +312,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// <param name="configFile"></param>
         private void SaveConfig(XmlDocument configFile)
         {
-            string configPath = DashboardConfigurationLoader.CalculateDashboardConfigPath(physicalApplicationPathProvider);
+            string configPath = DashboardConfigurationLoader.CalculateDashboardConfigPath();
             configFile.Save(configPath);
         }
         #endregion

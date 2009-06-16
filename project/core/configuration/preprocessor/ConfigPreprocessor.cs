@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Xsl;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 {
@@ -62,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
                            ( String.IsNullOrEmpty( input.BaseURI )
                                  ? new Uri(
                                        Path.Combine(
-                                           Environment.CurrentDirectory,
+                                           PathUtils.DefaultProgramDataFolder,
                                            "nofile.xml" ) )
                                  : new Uri( input.BaseURI ) );
             _current_env = new ConfigPreprocessorEnvironment( base_uri, resolver );

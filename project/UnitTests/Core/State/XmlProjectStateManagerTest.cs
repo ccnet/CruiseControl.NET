@@ -9,8 +9,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
     public class XmlProjectStateManagerTest
     {
         #region Fields
-        private IProjectStateManager _stateManager = new XmlProjectStateManager();
-        private readonly string _persistanceFilePath = Path.Combine(Environment.CurrentDirectory, "ProjectsState.xml");
+        private readonly string persistanceFilePath = Path.Combine(Path.GetTempPath(), "ProjectsState.xml");
+        private IProjectStateManager stateManager;
         #endregion
 
         #region Public methods
@@ -18,9 +18,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
         [TestFixtureSetUp]
         public void Setup()
         {
-            if (File.Exists(_persistanceFilePath)) File.Delete(_persistanceFilePath);
-            _stateManager.RecordProjectAsStopped("Test Project #3");
-            _stateManager.RecordProjectAsStartable("Test Project #4");
+            stateManager = new XmlProjectStateManager(persistanceFilePath);
+            if (File.Exists(persistanceFilePath)) File.Delete(persistanceFilePath);
+            stateManager.RecordProjectAsStopped("Test Project #3");
+            stateManager.RecordProjectAsStartable("Test Project #4");
         }
         #endregion
 
@@ -28,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
         [TestFixtureTearDown]
         public void CleanUp()
         {
-            if (File.Exists(_persistanceFilePath)) File.Delete(_persistanceFilePath);
+            if (File.Exists(persistanceFilePath)) File.Delete(persistanceFilePath);
         }
         #endregion
 
@@ -36,23 +37,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
         [Test]
         public void RecordProjectAsStopped()
         {
-            if (File.Exists(_persistanceFilePath)) File.Delete(_persistanceFilePath);
+            if (File.Exists(persistanceFilePath)) File.Delete(persistanceFilePath);
             string projectName = "Test Project #1";
-            _stateManager.RecordProjectAsStopped(projectName);
-            bool result = _stateManager.CheckIfProjectCanStart(projectName);
+            stateManager.RecordProjectAsStopped(projectName);
+            bool result = stateManager.CheckIfProjectCanStart(projectName);
             Assert.IsFalse(result, "Project state incorrect");
-            Assert.IsTrue(File.Exists(_persistanceFilePath), "Persistence file not generated");
+            Assert.IsTrue(File.Exists(persistanceFilePath), "Persistence file not generated");
         }
 
         [Test]
         public void RecordProjectAsStoppedAlreadyStopped()
         {
-            if (File.Exists(_persistanceFilePath)) File.Delete(_persistanceFilePath);
+            if (File.Exists(persistanceFilePath)) File.Delete(persistanceFilePath);
             string projectName = "Test Project #1";
-            _stateManager.RecordProjectAsStopped(projectName);
-            bool result = _stateManager.CheckIfProjectCanStart(projectName);
+            stateManager.RecordProjectAsStopped(projectName);
+            bool result = stateManager.CheckIfProjectCanStart(projectName);
             Assert.IsFalse(result, "Project state incorrect");
-            Assert.IsFalse(File.Exists(_persistanceFilePath), "Persistence file generated");
+            Assert.IsFalse(File.Exists(persistanceFilePath), "Persistence file generated");
         }
         #endregion
 
@@ -60,12 +61,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
         [Test]
         public void RecordProjectAsStartable()
         {
-            if (File.Exists(_persistanceFilePath)) File.Delete(_persistanceFilePath);
+            if (File.Exists(persistanceFilePath)) File.Delete(persistanceFilePath);
             string projectName = "Test Project #1";
-            _stateManager.RecordProjectAsStartable(projectName);
-            bool result = _stateManager.CheckIfProjectCanStart(projectName);
+            stateManager.RecordProjectAsStartable(projectName);
+            bool result = stateManager.CheckIfProjectCanStart(projectName);
             Assert.IsTrue(result, "Project state incorrect");
-            Assert.IsTrue(File.Exists(_persistanceFilePath), "Persistence file not generated");
+            Assert.IsTrue(File.Exists(persistanceFilePath), "Persistence file not generated");
         }
         #endregion
 
@@ -74,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
         public void CheckIfProjectCanStartUnknownProject()
         {
             string projectName = "Test Project #2";
-            bool result = _stateManager.CheckIfProjectCanStart(projectName);
+            bool result = stateManager.CheckIfProjectCanStart(projectName);
             Assert.IsTrue(result, "Project state incorrect");
         }
 
@@ -82,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
         public void CheckIfProjectCanStartKnownStoppedProject()
         {
             string projectName = "Test Project #3";
-            bool result = _stateManager.CheckIfProjectCanStart(projectName);
+            bool result = stateManager.CheckIfProjectCanStart(projectName);
             Assert.IsFalse(result, "Project state incorrect");
         }
 
@@ -90,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
         public void CheckIfProjectCanStartKnownStartableProject()
         {
             string projectName = "Test Project #4";
-            bool result = _stateManager.CheckIfProjectCanStart(projectName);
+            bool result = stateManager.CheckIfProjectCanStart(projectName);
             Assert.IsTrue(result, "Project state incorrect");
         }
 

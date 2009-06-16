@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			dashboardConfiguration = context.Cache[DashboardConfigurationKey] as IDashboardConfiguration;
 			if (dashboardConfiguration == null)
 			{
-				dashboardConfiguration = new DashboardConfigurationLoader(new ObjectionNetReflectorInstantiator(objectSource), new HttpPathMapper(context));
+				dashboardConfiguration = new DashboardConfigurationLoader(new ObjectionNetReflectorInstantiator(objectSource));
 				context.Cache.Add(DashboardConfigurationKey, dashboardConfiguration, null, DateTime.MaxValue, TimeSpan.Zero, CacheItemPriority.Normal, null);
 			}
 		}

@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
                 if (string.IsNullOrEmpty(configuredWorkingDirectory))
 				{
-					return new DirectoryInfo(Path.Combine(Name, DefaultWorkingSubDirectory)).FullName;
+					return PathUtils.EnsurePathIsRooted(Path.Combine(Name, DefaultWorkingSubDirectory));
 				}
 				return new DirectoryInfo(configuredWorkingDirectory).FullName;
 			}
@@ -113,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
                 if (string.IsNullOrEmpty(configuredArtifactDirectory))
 				{
-					return new DirectoryInfo(Path.Combine(Name, DefaultArtifactSubDirectory)).FullName;
+                    return PathUtils.EnsurePathIsRooted(Path.Combine(Name, DefaultArtifactSubDirectory));
 				}
 				return new DirectoryInfo(configuredArtifactDirectory).FullName;
 			}

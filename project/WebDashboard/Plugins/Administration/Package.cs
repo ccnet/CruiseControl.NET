@@ -8,6 +8,7 @@ using System.Xml;
 using System.Diagnostics;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
 {
@@ -83,8 +84,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// <summary>
         /// Installs the package to the specified location.
         /// </summary>
-        /// <param name="physicalApplicationPathProvider"></param>
-        public void Install(IPhysicalApplicationPathProvider physicalApplicationPathProvider)
+        public void Install()
         {
             if (!IsValid) throw new ApplicationException("This is not a valid package");
 
@@ -99,12 +99,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                 FireMessage(TraceLevel.Verbose, "Installing files");
                 foreach (FileLocation folder in manifest.FileLocations)
                 {
-                    CopyFiles(physicalApplicationPathProvider, folder);
+                    CopyFiles(folder);
                 }
 
                 // Add all the configuration settings
                 FireMessage(TraceLevel.Verbose, "Updating configuration");
-                UpdateConfigurationFile(physicalApplicationPathProvider, true);
+                UpdateConfigurationFile(true);
             }
             catch (Exception error)
             {
@@ -129,8 +129,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// <summary>
         /// Uninstalls the package from the specified location.
         /// </summary>
-        /// <param name="physicalApplicationPathProvider"></param>
-        public void Uninstall(IPhysicalApplicationPathProvider physicalApplicationPathProvider)
+        public void Uninstall()
         {
             if (!IsValid) throw new ApplicationException("This is not a valid package");
 
@@ -145,12 +144,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                 FireMessage(TraceLevel.Verbose, "Removing files");
                 foreach (FileLocation folder in manifest.FileLocations)
                 {
-                    RemoveFiles(physicalApplicationPathProvider, folder);
+                    RemoveFiles(folder);
                 }
 
                 // Remove all the configuration settings
                 FireMessage(TraceLevel.Verbose, "Updating configuration");
-                UpdateConfigurationFile(physicalApplicationPathProvider, false);
+                UpdateConfigurationFile(false);
             }
             catch (Exception error)
             {
@@ -245,14 +244,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// <summary>
         /// Copies files to the install location.
         /// </summary>
-        /// <param name="physicalApplicationPathProvider"></param>
         /// <param name="folder">The details of the files to copy.</param>
-        private void CopyFiles(IPhysicalApplicationPathProvider physicalApplicationPathProvider, 
-            FileLocation folder)
+        private void CopyFiles(FileLocation folder)
         {
             // Make sure the target folder exists
             FireMessage(TraceLevel.Verbose, "Copying files to target '{0}'", folder.Location);
-            string target = physicalApplicationPathProvider.GetFullPathFor(folder.Location);
+            string target = ProgramDataFolder.MapPath(folder.Location);
             if (!Directory.Exists(target))
             {
                 FireMessage(TraceLevel.Info, "Adding target folder '{0}'", folder.Location);
@@ -282,12 +279,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// </summary>
         /// <param name="physicalApplicationPathProvider"></param>
         /// <param name="folder">The details of the files to remove.</param>
-        private void RemoveFiles(IPhysicalApplicationPathProvider physicalApplicationPathProvider,
-            FileLocation folder)
+        private void RemoveFiles(FileLocation folder)
         {
             // Make sure the target folder exists
             FireMessage(TraceLevel.Verbose, "Removing files from target '{0}'", folder.Location);
-            string target = physicalApplicationPathProvider.GetFullPathFor(folder.Location);
+            string target = ProgramDataFolder.MapPath(folder.Location);
             if (Directory.Exists(target))
             {
                 foreach (string file in folder.Files)
@@ -388,11 +384,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// </summary>
         /// <param name="physicalApplicationPathProvider"></param>
         /// <param name="addSettings"></param>
-        private void UpdateConfigurationFile(IPhysicalApplicationPathProvider physicalApplicationPathProvider, 
-            bool addSettings)
+        private void UpdateConfigurationFile(bool addSettings)
         {
             // Load the existing configuration file
-            string configFile = DashboardConfigurationLoader.CalculateDashboardConfigPath(physicalApplicationPathProvider);
+            string configFile = DashboardConfigurationLoader.CalculateDashboardConfigPath();
             XmlDocument configXml = new XmlDocument();
             if (File.Exists(configFile))
             {

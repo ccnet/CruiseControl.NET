@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.State
 {
@@ -13,8 +14,27 @@ namespace ThoughtWorks.CruiseControl.Core.State
         : IProjectStateManager
     {
         #region Fields
-        private readonly string persistanceFileName = Path.Combine(Environment.CurrentDirectory, "ProjectsState.xml");
+        private readonly string persistanceFileName;
         private Dictionary<string, bool> projectStates = null;
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initialise a new <see cref="XmlProjectStateManager"/> with the default path.
+        /// </summary>
+        public XmlProjectStateManager()
+            : this(Path.Combine(PathUtils.DefaultProgramDataFolder, "ProjectsState.xml"))
+        {
+        }
+
+        /// <summary>
+        /// Initialise a new <see cref="XmlProjectStateManager"/> with a file name.
+        /// </summary>
+        /// <param name="persistanceFileName"></param>
+        public XmlProjectStateManager(string persistanceFileName)
+        {
+            this.persistanceFileName = persistanceFileName;
+        }
         #endregion
 
         #region Public methods

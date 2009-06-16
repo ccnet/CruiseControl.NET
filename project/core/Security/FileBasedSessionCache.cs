@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
@@ -14,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     public class FileBasedSessionCache
         : SessionCacheBase
     {
-        private string storeLocation = Path.Combine(Environment.CurrentDirectory, "sessions");
+        private string storeLocation = Path.Combine(PathUtils.DefaultProgramDataFolder, "sessions");
 
         /// <summary>
         /// The location where session files will be stored.

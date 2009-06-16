@@ -7,6 +7,7 @@ using Exortech.NetReflector;
 using Objection.NetReflectorPlugin;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 {
@@ -16,17 +17,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
         private const string CONFIG_ASSEMBLY_PATTERN = "ccnet.*.plugin.dll";
 
 		private readonly ObjectionNetReflectorInstantiator instantiator;
-		private readonly IPhysicalApplicationPathProvider physicalApplicationPathProvider;
 		private static readonly string DashboardConfigAppSettingKey = "DashboardConfigLocation";
 		private static readonly string DefaultDashboardConfigLocation = "dashboard.config";
 		private IRemoteServicesConfiguration remoteServicesConfiguration;
 		private IPluginConfiguration pluginsConfiguration;
 		private NetReflectorTypeTable typeTable;
 
-		public DashboardConfigurationLoader(ObjectionNetReflectorInstantiator instantiator, IPhysicalApplicationPathProvider physicalApplicationPathProvider)
+		public DashboardConfigurationLoader(ObjectionNetReflectorInstantiator instantiator)
 		{
 			this.instantiator = instantiator;
-			this.physicalApplicationPathProvider = physicalApplicationPathProvider;
 			typeTable = GetTypeTable();
 		}
 
@@ -71,12 +70,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			return newTypeTable;
 		}
 
-		private string CalculateDashboardConfigPath()
-        {
-            return CalculateDashboardConfigPath(physicalApplicationPathProvider);
-        }
-
-		public static string CalculateDashboardConfigPath(IPhysicalApplicationPathProvider physicalApplicationPathProvider)
+		public static string CalculateDashboardConfigPath()
 		{
 			string path = ConfigurationManager.AppSettings[DashboardConfigAppSettingKey];
 			if (path == null || path == string.Empty)
@@ -85,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			}
 			if (! Path.IsPathRooted(path))
 			{
-				path = physicalApplicationPathProvider.GetFullPathFor(path);
+				path = ProgramDataFolder.MapPath(path);
 			}
 			return path;
 		}

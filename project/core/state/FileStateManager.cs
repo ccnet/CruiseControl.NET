@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.State
 	public class FileStateManager : IStateManager
 	{
 		private readonly IFileSystem fileSystem;
-		private string directory = Directory.GetCurrentDirectory();
+        private string directory = PathUtils.DefaultProgramDataFolder;
 
 		public FileStateManager() : this(new SystemIoFileSystem())
 		{}

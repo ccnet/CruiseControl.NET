@@ -17,11 +17,11 @@
 /*
  *  This is a direct port from the Apache Ant product.
  */
+using System;
+using System.IO;
+
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
-    using System;
-    using System.IO;
-
     ///<summary>
     /// This is a utility class containing static methods that match file patterns
     /// against file paths. This utility is uses the Ant project tools as a basis.
@@ -34,8 +34,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
     /// 
     /// The patterns may be combined.
     ///</summary>
-    public class PathUtils
+    public static class PathUtils
     {
+        private static string defaultProgramDataFolder = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), 
+            Path.Combine("CruiseControl.NET", "Server"));
+
         /// <summary>
         /// Tests wheter or not a string matches against a pattern. The
         /// pattern can contain two special characters: <br/>
@@ -471,9 +475,20 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         {
             if (!Path.IsPathRooted(path))
             {
-                path = Path.Combine(Environment.CurrentDirectory, path);
+                path = Path.Combine(
+                    DefaultProgramDataFolder,
+                    path);
             }
             return path;
+        }
+
+        /// <summary>
+        /// The default program data folder to use.
+        /// </summary>
+        public static string DefaultProgramDataFolder
+        {
+            get { return defaultProgramDataFolder; }
+            set { defaultProgramDataFolder = value; }
         }
     }
 }
