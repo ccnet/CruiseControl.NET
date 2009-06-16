@@ -65,18 +65,24 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 {
                     if (actualFileSystem.FileExists(fileInfo.FullName))
                     {
-                        if (mergeFile.MergeAction == MergeFileInfo.MergeActionType.Merge)
+                        switch (mergeFile.MergeAction)
                         {
-                            // Add the file to the merge list
-                            actualLogger.Info("Merging file '{0}'", fileInfo);
-                            result.AddTaskResultFromFile(fileInfo.FullName);
-                        }
-                        else
-                        {
-                            // Copy the file to the target folder
-                            actualFileSystem.EnsureFolderExists(targetFolder);
-                            actualLogger.Info("Copying file '{0}' to '{1}'", fileInfo.Name, targetFolder);
-                            actualFileSystem.Copy(fileInfo.FullName, Path.Combine(targetFolder, fileInfo.Name));
+                            case MergeFileInfo.MergeActionType.Merge:
+                            case MergeFileInfo.MergeActionType.CData:
+                                // Add the file to the merge list
+                                actualLogger.Info("Merging file '{0}'", fileInfo);
+                                var useCData = (mergeFile.MergeAction == MergeFileInfo.MergeActionType.CData);
+                                result.AddTaskResultFromFile(fileInfo.FullName, useCData);
+                                break;
+                            case MergeFileInfo.MergeActionType.Copy:
+                                // Copy the file to the target folder
+                                actualFileSystem.EnsureFolderExists(targetFolder);
+                                actualLogger.Info("Copying file '{0}' to '{1}'", fileInfo.Name, targetFolder);
+                                actualFileSystem.Copy(fileInfo.FullName, Path.Combine(targetFolder, fileInfo.Name));
+                                break;
+                            default:
+                                throw new CruiseControlException(
+                                    string.Format("Unknown file merge action '{0}'", mergeFile.MergeAction));
                         }
                     }
                     else

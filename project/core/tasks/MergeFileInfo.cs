@@ -36,6 +36,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             /// Copy the files into the target folder.
             /// </summary>
             Copy,
+            /// <summary>
+            /// Merge the data in a CData section.
+            /// </summary>
+            CData,
         }
         #endregion
     }

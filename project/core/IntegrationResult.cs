@@ -308,7 +308,14 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public void AddTaskResultFromFile(string filename)
         {
-            AddTaskResult(new FileTaskResult(filename));
+            AddTaskResultFromFile(filename, false);
+        }
+
+        public void AddTaskResultFromFile(string filename, bool wrapInCData)
+        {
+            var result = new FileTaskResult(filename);
+            result.WrapInCData = wrapInCData;
+            AddTaskResult(result);
         }
 
         public void MarkStartTime()

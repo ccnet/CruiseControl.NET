@@ -15,9 +15,24 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			data = ReadFileContents(file);
 		}
 
+        /// <summary>
+        /// Should the data be wrapped in a CData section.
+        /// </summary>
+        public bool WrapInCData { get; set; }
+
 		public string Data
 		{
-			get { return data; }
+            get
+            {
+                if (WrapInCData)
+                {
+                    return string.Format("<![CDATA[{0}]]>", data);
+                }
+                else
+                {
+                    return data;
+                }
+            }
 		}
 
 		public bool Succeeded()
