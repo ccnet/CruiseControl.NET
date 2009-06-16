@@ -113,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ParsingLogWithCRLF()
 		{
 			Modification[] modifications = git.Parse(new StringReader(rubyOnRailsLog), new DateTime(2009, 06, 13, 10, 00, 00, DateTimeKind.Utc), DateTime.Now);
-			Assert.AreEqual(127, modifications.Length, "#E1");
+			Assert.AreEqual(129, modifications.Length, "#E1");
 
 			Modification mod = modifications[0];
 			Assert.AreEqual("1fbfa3e705c37656c308436f21d42b09591ba60e", mod.ChangeNumber, "#E2");
