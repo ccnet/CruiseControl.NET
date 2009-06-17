@@ -39,6 +39,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
             public DateTime GetLastWriteTime(string fileName) { return DateTime.MinValue; }
 
             public ITaskResult GenerateTaskResultFromFile(string fileName) { return null; }
+
+            public Stream OpenOutputStream(string fileName) { return null;}
+
+            public Stream OpenInputStream(string fileName) { return null; }
         }
 
         [Test]

@@ -237,5 +237,31 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return new FileTaskResult(fileName);
         }
         #endregion
+
+        #region OpenOutputStream()
+        /// <summary>
+        /// Opens an output stream for saving data.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public Stream OpenOutputStream(string fileName)
+        {
+            var stream = File.OpenWrite(fileName);
+            return stream;
+        }
+        #endregion
+
+        #region OpenOutputStream()
+        /// <summary>
+        /// Opens an input stream for loading data.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public Stream OpenInputStream(string fileName)
+        {
+            var stream = File.OpenRead(fileName);
+            return stream;
+        }
+        #endregion
     }
 }

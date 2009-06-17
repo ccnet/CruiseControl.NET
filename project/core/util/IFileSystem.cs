@@ -48,5 +48,19 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="fileName"></param>
         /// <returns></returns>
         ITaskResult GenerateTaskResultFromFile(string fileName);
-	}
+
+        /// <summary>
+        /// Opens an output stream for saving data.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        Stream OpenOutputStream(string fileName);
+
+        /// <summary>
+        /// Opens an input stream for loading data.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        Stream OpenInputStream(string fileName);
+    }
 }

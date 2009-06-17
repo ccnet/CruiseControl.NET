@@ -16,6 +16,8 @@ namespace ThoughtWorks.CruiseControl.Core.State
         #region Fields
         private readonly string persistanceFileName;
         private Dictionary<string, bool> projectStates = null;
+        private IFileSystem fileSystem = new SystemIoFileSystem();
+        private bool isLoading;
         #endregion
 
         #region Constructors
@@ -35,6 +37,19 @@ namespace ThoughtWorks.CruiseControl.Core.State
         {
             this.persistanceFileName = persistanceFileName;
         }
+        #endregion
+
+        #region Public properties
+        #region FileSystem
+        /// <summary>
+        /// The underlying file system to use.
+        /// </summary>
+        public IFileSystem FileSystem
+        {
+            get { return fileSystem; }
+            set { fileSystem = value; }
+        }
+        #endregion
         #endregion
 
         #region Public methods
@@ -93,13 +108,24 @@ namespace ThoughtWorks.CruiseControl.Core.State
             {
                 projectStates = new Dictionary<string, bool>();
 
-                if (File.Exists(persistanceFileName))
+                if (fileSystem.FileExists(persistanceFileName))
                 {
-                    XmlDocument stateDocument = new XmlDocument();
-                    stateDocument.Load(persistanceFileName);
-                    foreach (XmlElement projectState in stateDocument.SelectNodes("/state/project"))
+                    isLoading = true;
+                    try
                     {
-                        ChangeProjectState(projectState.InnerText, false);
+                        var stateDocument = new XmlDocument();
+                        using (var stream = fileSystem.OpenInputStream(persistanceFileName))
+                        {
+                            stateDocument.Load(stream);
+                        }
+                        foreach (XmlElement projectState in stateDocument.SelectNodes("/state/project"))
+                        {
+                            ChangeProjectState(projectState.InnerText, false);
+                        }
+                    }
+                    finally
+                    {
+                        isLoading = false;
                     }
                 }
             }
@@ -114,22 +140,30 @@ namespace ThoughtWorks.CruiseControl.Core.State
         {
             if (projectStates != null)
             {
-                XmlDocument stateDocument = new XmlDocument();
-                XmlElement rootElement = stateDocument.CreateElement("state");
+                var stateDocument = new XmlDocument();
+                var rootElement = stateDocument.CreateElement("state");
                 stateDocument.AppendChild(rootElement);
-                foreach (string projectName in projectStates.Keys)
+                foreach (var projectName in projectStates.Keys)
                 {
                     if (!projectStates[projectName])
                     {
-                        XmlElement projectElement = stateDocument.CreateElement("project");
+                        var projectElement = stateDocument.CreateElement("project");
                         projectElement.InnerText = projectName;
                         rootElement.AppendChild(projectElement);
                     }
                 }
-                using (XmlTextWriter xmlWriter = new XmlTextWriter(persistanceFileName, Encoding.UTF8))
+                using (var stream = fileSystem.OpenOutputStream(persistanceFileName))
                 {
-                    xmlWriter.Formatting = Formatting.Indented;
-                    stateDocument.Save(xmlWriter);
+                    var settings = new XmlWriterSettings
+                    {
+                        Encoding = Encoding.UTF8,
+                        OmitXmlDeclaration = true,
+                        Indent = false
+                    };
+                    using (var xmlWriter = XmlTextWriter.Create(stream, settings))
+                    {
+                        stateDocument.Save(xmlWriter);
+                    }
                 }
             }
         }
@@ -144,7 +178,7 @@ namespace ThoughtWorks.CruiseControl.Core.State
         private void ChangeProjectState(string projectName, bool newState)
         {
             LoadProjectStates(false);
-            bool saveStates = true;
+            var saveStates = true;
             if (projectStates.ContainsKey(projectName))
             {
                 if (projectStates[projectName] != newState)
@@ -160,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.Core.State
             {
                 projectStates.Add(projectName, newState);
             }
-            if (saveStates) SaveProjectStates();
+            if (saveStates && !isLoading) SaveProjectStates();
         }
         #endregion
         #endregion
