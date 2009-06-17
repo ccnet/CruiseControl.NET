@@ -137,6 +137,40 @@ namespace ThoughtWorks.CruiseControl.Remote
             return actualValue;
         }
         #endregion
+
+        #region Copy()
+        /// <summary>
+        /// Copies all the values from a dictionary into a list.
+        /// </summary>
+        /// <param name="dictionary"></param>
+        /// <param name="list"></param>
+        public static void Copy(Dictionary<string, string> dictionary, List<NameValuePair> list)
+        {
+            if (dictionary != null)
+            {
+                foreach (var pair in dictionary)
+                {
+                    list.Add(new NameValuePair(pair.Key, pair.Value));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Copies all the values from one list to another.
+        /// </summary>
+        /// <param name="destination"></param>
+        /// <param name="source"></param>
+        public static void Copy(List<NameValuePair> source, List<NameValuePair> destination)
+        {
+            if (source != null)
+            {
+                foreach (var pair in source)
+                {
+                    destination.Add(new NameValuePair(pair.Name, pair.Value));
+                }
+            }
+        }
+        #endregion
         #endregion
     }
 }

@@ -4,6 +4,7 @@ using System.Text;
 using System.Xml.Serialization;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.State
 {
@@ -27,8 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			get { return directory; }
 			set
 			{
-				if (! Directory.Exists(value))
-                    Directory.CreateDirectory(value);
+                if (!string.IsNullOrEmpty(value)) fileSystem.EnsureFolderExists(value);
 				directory = value;
 			}
 		}
@@ -40,30 +40,35 @@ namespace ThoughtWorks.CruiseControl.Core.State
 		
 		public IIntegrationResult LoadState(string project)
 		{
-			TextReader stateFileReader = GetStateFileReader(project);
-			return LoadState(stateFileReader);
+			var stateFile = LoadStateIntoDocument(project);
+            if (stateFile.DocumentElement.Name == "IntegrationResult")
+            {
+                using (var reader = new StringReader(stateFile.OuterXml))
+                {
+                    return LoadState(reader);
+                }
+            }
+            else
+            {
+                throw new CruiseControlException("State file contains invalid data");
+            }
 		}
 
 		public IIntegrationResult LoadState(TextReader stateFileReader)
 		{
 			XmlSerializer serializer = new XmlSerializer(typeof (IntegrationResult));
-			try
-			{
-				return (IntegrationResult) serializer.Deserialize(stateFileReader);
-			}
-			catch (Exception e)
-			{
-				throw new CruiseControlException(
-					string.Format("Unable to read the specified saved state.  The configuration data may be invalid."), e);
-			}
+			return (IntegrationResult) serializer.Deserialize(stateFileReader);
 		}
 
-		private TextReader GetStateFileReader(string project)
+		private XmlDocument LoadStateIntoDocument(string project)
 		{
+            var document = new XmlDocument();
 			string stateFilePath = GetFilePath(project);
 			try
 			{
-				return fileSystem.Load(stateFilePath);
+                document.Load(
+                    fileSystem.Load(stateFilePath));
+				return document;
 			}
 			catch (Exception e)
 			{
@@ -113,5 +118,5 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			}
 			return strBuilder.Append(".state").ToString();
 		}
-	}
+    }
 }

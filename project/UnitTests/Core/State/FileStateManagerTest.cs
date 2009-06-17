@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using Exortech.NetReflector;
-using NMock;
-using NMock.Constraints;
 using NUnit.Framework;
+using Rhino.Mocks;
+using Rhino.Mocks.Constraints;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -18,16 +18,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		private const string DefaultStateFilename = "Test.state";
 		private FileStateManager state;
 		private IntegrationResult result;
-		private IMock mockIO;
+		private MockRepository mocks;
+        private IFileSystem fileSystem;
 
 		[SetUp]
 		public void SetUp()
 		{
-			mockIO = new DynamicMock(typeof (IFileSystem));
-			mockIO.Strict = true;
-
-			state = new FileStateManager((IFileSystem) mockIO.MockInstance);
-			state.StateFileDirectory = Path.GetTempPath();
+            mocks = new MockRepository();
+            fileSystem = mocks.StrictMock<IFileSystem>();
+			state = new FileStateManager(fileSystem);
 			result = IntegrationResultMother.CreateSuccessful();
 			result.ProjectName = ProjectName;
 		}
@@ -35,76 +34,105 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		[TearDown]
 		public void TearDown()
 		{
-			mockIO.Verify();
+			mocks.VerifyAll();
 		}
 
 		[Test]
 		public void PopulateFromReflector()
 		{
 			string xml = @"<state><directory>c:\temp</directory></state>";
-			state = (FileStateManager) NetReflector.Read(xml);
+            mocks.ReplayAll();
+            state = (FileStateManager)NetReflector.Read(xml);
 			Assert.AreEqual(@"c:\temp", state.StateFileDirectory);
 		}
 
 		[Test, ExpectedException(typeof(CruiseControlException))]
 		public void LoadShouldThrowExceptionIfStateFileDoesNotExist()
 		{
-			mockIO.ExpectAndThrow("Load", new FileNotFoundException(), StateFilename());		
+            Expect.Call(fileSystem.Load(StateFilename())).Throw(new FileNotFoundException());
+            mocks.ReplayAll();
 			state.LoadState(ProjectName);
 		}
 
 		[Test]
 		public void HasPreviousStateIsTrueIfStateFileExists()
 		{
-			mockIO.ExpectAndReturn("FileExists", true, StateFilename());		
-			Assert.IsTrue(state.HasPreviousState(ProjectName));			
-		}
-		
-		[Test]
-		public void SaveAndReload()
-		{
-			CollectingConstraint contents = new CollectingConstraint();
-            mockIO.Expect("AtomicSave", StateFilename(), contents);
-			state.SaveState(result);
-
-			mockIO.ExpectAndReturn("Load", new StringReader(contents.Parameter.ToString()), StateFilename());
-			IIntegrationResult actual = state.LoadState(ProjectName);
-			Assert.AreEqual(result, actual);
+            Expect.Call(fileSystem.FileExists(StateFilename())).Return(true);
+            mocks.ReplayAll();
+            Assert.IsTrue(state.HasPreviousState(ProjectName));			
 		}
 
-		[Test]
-		public void SaveWithInvalidDirectory()
-		{
+        [Test]
+        public void SaveWithInvalidDirectory()
+        {
             string foldername = @"c:\CCNet_remove_invalid";
 
-            try
-            {
-                if (Directory.Exists(foldername)) Directory.Delete(foldername);
-
-                state.StateFileDirectory = foldername;
-                Assert.IsTrue(Directory.Exists(foldername));
-            }
-            finally
-            {
-                if (Directory.Exists(foldername)) Directory.Delete(foldername);
-            }
-            
-		}
+            Expect.Call(() => fileSystem.EnsureFolderExists(foldername));
+            mocks.ReplayAll();
+            state.StateFileDirectory = foldername;
+        }
 
 		[Test]
 		public void AttemptToSaveWithInvalidXml()
 		{
-			mockIO.Expect("AtomicSave", StateFilename(), new IsAnything());
+            Expect.Call(() => fileSystem.AtomicSave(string.Empty, string.Empty)).
+                Constraints(
+                    new Equal(StateFilename()),
+                    new Anything());
+            mocks.ReplayAll();
 
 			result.Label = "<&/<>";
 			result.AddTaskResult("<badxml>>");
 			state.SaveState(result);
 		}
 
+        [Test]
+        public void LoadStateFileWithValid144Data()
+        {
+            var data = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<IntegrationResult xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <ProjectName>ccnetlive</ProjectName>
+  <ProjectUrl>http://CRAIG-PC/ccnet</ProjectUrl>
+  <BuildCondition>ForceBuild</BuildCondition>
+  <Label>7</Label>
+  <Parameters />
+  <WorkingDirectory>e:\sourcecontrols\sourceforge\ccnetlive</WorkingDirectory>
+  <ArtifactDirectory>e:\download-area\CCNetLive-Builds</ArtifactDirectory>
+  <Status>Success</Status>
+  <StartTime>2009-06-17T13:28:35.7652391+12:00</StartTime>
+  <EndTime>2009-06-17T13:29:13.7824391+12:00</EndTime>
+  <LastIntegrationStatus>Success</LastIntegrationStatus>
+  <LastSuccessfulIntegrationLabel>7</LastSuccessfulIntegrationLabel>
+  <FailureUsers />
+</IntegrationResult>";
+
+            Expect.Call(fileSystem.Load(StateFilename()))
+                .Return(new StringReader(data));
+            mocks.ReplayAll();
+            state.LoadState(ProjectName);
+        }
+
+        [Test]
+        [ExpectedException(typeof(CruiseControlException))]
+        public void LoadStateThrowsAnExceptionWithInvalidData()
+        {
+            var data = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<garbage />";
+
+            Expect.Call(fileSystem.Load(StateFilename()))
+                .Return(new StringReader(data));
+            mocks.ReplayAll();
+            state.LoadState(ProjectName);
+        }
+
 		[Test]
 		public void SaveProjectWithSpacesInName()
 		{
-            mockIO.Expect("AtomicSave", Path.Combine(Path.GetTempPath(), "MyProject.state"), new IsAnything());
+            Expect.Call(() => fileSystem.AtomicSave(string.Empty, string.Empty)).
+                Constraints(
+                    new Equal(Path.Combine(PathUtils.DefaultProgramDataFolder, "MyProject.state")),
+                    new Anything());
+            mocks.ReplayAll();
 
 			result.ProjectName = "my project";
 			state.SaveState(result);
@@ -113,7 +141,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		[Test]
 		public void ShouldWriteXmlUsingUTF8Encoding()
 		{
-            mockIO.Expect("AtomicSave", StateFilename(), new StartsWith("<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
+            Expect.Call(() => fileSystem.AtomicSave(string.Empty, string.Empty)).
+                Constraints(
+                    new Equal(StateFilename()),
+                    new StartsWith("<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
+            mocks.ReplayAll();
 
 			result = IntegrationResultMother.CreateSuccessful();
 			result.ArtifactDirectory = "artifactDir";
@@ -123,15 +155,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		[Test, ExpectedException(typeof(CruiseControlException))]
 		public void HandleExceptionSavingStateFile()
 		{
-            mockIO.ExpectAndThrow("AtomicSave", new SystemException(), StateFilename(), new IsAnything());
-			state.SaveState(result);
+            Expect.Call(() => fileSystem.AtomicSave(string.Empty, string.Empty)).
+                Constraints(
+                    new Equal(StateFilename()),
+                    new Anything())
+                .Throw(new SystemException());
+            mocks.ReplayAll();
+            state.SaveState(result);
 		}
 
 		[Test, ExpectedException(typeof(CruiseControlException))]
 		public void HandleExceptionLoadingStateFile()
 		{
-			mockIO.ExpectAndThrow("Load", new SystemException(), StateFilename());
-			state.LoadState(ProjectName);
+            Expect.Call(fileSystem.Load(StateFilename()))
+                .Throw(new SystemException());
+            mocks.ReplayAll();
+            state.LoadState(ProjectName);
 		}
 
 		[Test]
@@ -153,7 +192,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
   <EndTime>2006-12-10T14:42:12-08:00</EndTime>
 </IntegrationResult>";
 
-			result = (IntegrationResult) state.LoadState(new StringReader(xml));
+            mocks.ReplayAll();
+            result = (IntegrationResult)state.LoadState(new StringReader(xml));
 			Assert.AreEqual("NetReflector", result.ProjectName);
 			Assert.AreEqual("http://localhost/ccnet", result.ProjectUrl);
 			Assert.AreEqual(BuildCondition.ForceBuild, result.BuildCondition);
@@ -168,7 +208,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 
 		private string StateFilename()
 		{
-			return Path.Combine(Path.GetTempPath(), DefaultStateFilename);
+			return Path.Combine(PathUtils.DefaultProgramDataFolder, DefaultStateFilename);
 		}
 	}
 }

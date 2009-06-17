@@ -61,6 +61,7 @@ namespace ThoughtWorks.CruiseControl.Core
             IntegrationResult newResult = new IntegrationResult(project.Name, project.WorkingDirectory, project.ArtifactDirectory, request, LastIntegration);
             newResult.ArtifactDirectory = project.ArtifactDirectory;
             newResult.ProjectUrl = project.WebURL;
+            NameValuePair.Copy(LastIntegrationResult.SourceControlData, newResult.SourceControlData);
 
             return currentIntegration = newResult;
         }

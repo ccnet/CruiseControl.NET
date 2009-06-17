@@ -69,7 +69,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("cleanUp", Required = false)]
         public bool CleanUp = false;
 
-
+        [ReflectorProperty("revisionNumbers", Required = false)]
+        public bool UserRevsionNumbers { get; set; }
 
         private readonly IFileSystem fileSystem;
 
@@ -101,6 +102,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
+            var revisionData = NameValuePair.ToDictionary(from.SourceControlData);
+
             if (to.LastIntegrationStatus == IntegrationStatus.Unknown)
             {
                 ((SvnHistoryParser)historyParser).IntegrationStatusUnknown = true;
@@ -138,19 +141,38 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
             foreach (string repositoryUrl in repositoryUrls)
             {
-                ProcessResult result = Execute(NewHistoryProcessInfo(from, to, repositoryUrl));
-                Modification[] modsInRepository = ParseModifications(result, from.StartTime, to.StartTime);
+                var lastRepositoryRevisionName = "SVN:LastRevision:" + repositoryUrl;
+                Modification[] modsInRepository;
+                string lastRepositoryRevision = null;
+                if (UserRevsionNumbers)
+                {
+                    // Since we are using the last revision number, see if there is any number stored to use
+                    lastRepositoryRevision = revisionData.ContainsKey(lastRepositoryRevisionName)
+                        ? revisionData[lastRepositoryRevisionName]
+                        : null;
+                    ProcessResult result = Execute(NewHistoryProcessInfoFromRevision(lastRepositoryRevision, to, repositoryUrl));
+                    modsInRepository = ParseModifications(result, lastRepositoryRevision);
+                }
+                else
+                {
+                    // Use use the date range
+                    ProcessResult result = Execute(NewHistoryProcessInfo(from, to, repositoryUrl));
+                    modsInRepository = ParseModifications(result, from.StartTime, to.StartTime);
+                }
+
+                // If there are modifications, get the number and add them to the output
                 if (modsInRepository != null)
                 {
-                    // If there are modifications in the repository track the revision number.
-                    // Do not just get the latest revision from all modifications because they
-                    // will also contain the changes in the external paths.
-                    if (repositoryUrl == TrunkUrl)
-                    {
-                        var lastChangeNumber = Modification.GetLastChangeNumber(modsInRepository);
-                        latestRevision = int.Parse(lastChangeNumber ?? "0");
-                    }
+                    lastRepositoryRevision = Modification.GetLastChangeNumber(modsInRepository)
+                        ?? lastRepositoryRevision;
                     modifications.AddRange(modsInRepository);
+                    revisionData[lastRepositoryRevisionName] = lastRepositoryRevision;
+                }
+
+                // Set the latest revision - this always need to be done just in case an external has triggered a build
+                if (repositoryUrl == TrunkUrl)
+                {
+                    latestRevision = int.Parse(lastRepositoryRevision ?? "0");
                 }
             }
 
@@ -160,6 +182,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 UrlBuilder.SetupModification(mods);
             }
             FillIssueUrl(mods);
+
+            // Store the latest revision number
+            to.SourceControlData.Clear();
+            NameValuePair.Copy(revisionData, to.SourceControlData);
 
             return mods;
         }
@@ -304,6 +330,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.AddArgument("log");
             buffer.AddArgument(url);
             buffer.AppendArgument(string.Format("-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
+            buffer.AppendArgument("--verbose --xml");
+            AppendCommonSwitches(buffer);
+            return NewProcessInfo(buffer.ToString(), to);
+        }
+
+        //		HISTORY_COMMAND_FORMAT = "log url --revision {LastRevision}:HEAD --verbose --xml --non-interactive";
+        private ProcessInfo NewHistoryProcessInfoFromRevision(string lastRevision, IIntegrationResult to, string url)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("log");
+            buffer.AddArgument(url);
+            buffer.AppendArgument(string.Format("-r {0}:HEAD", string.IsNullOrEmpty(lastRevision) ? "0" : lastRevision));
             buffer.AppendArgument("--verbose --xml");
             AppendCommonSwitches(buffer);
             return NewProcessInfo(buffer.ToString(), to);

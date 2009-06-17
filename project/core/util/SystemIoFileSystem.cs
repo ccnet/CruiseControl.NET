@@ -246,7 +246,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <returns></returns>
         public Stream OpenOutputStream(string fileName)
         {
-            var stream = File.OpenWrite(fileName);
+            var stream = File.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.None);
             return stream;
         }
         #endregion

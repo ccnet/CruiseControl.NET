@@ -36,6 +36,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
         }
         #endregion
 
+        #region Constructors
+        [Test]
+        public void DefaultConstructorSetsPersistanceLocation()
+        {
+            // This is an indirect test - if the correct location is set, then the FileExists call
+            // will be valid
+            stateManager = new XmlProjectStateManager();
+            stateManager.FileSystem = mocks.StrictMock<IFileSystem>();
+            Expect.Call(stateManager.FileSystem.FileExists(
+                Path.Combine(PathUtils.DefaultProgramDataFolder,
+                    "ProjectsState.xml"))).Return(false);
+            mocks.ReplayAll();
+            stateManager.CheckIfProjectCanStart("Project");
+            mocks.VerifyAll();
+        }
+        #endregion
+
         #region RecordProjectAsStopped() tests
         [Test]
         public void RecordProjectAsStopped()
@@ -78,6 +95,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
             SetupDefaultContent();
             var stream = InitialiseOutputStream();
             mocks.ReplayAll();
+            stateManager.RecordProjectAsStartable(projectName);
+            var result = stateManager.CheckIfProjectCanStart(projectName);
+            Assert.IsTrue(result, "Project state incorrect");
+            mocks.VerifyAll();
+
+            var expectedData = "<state><project>Test Project #3</project></state>";
+            ValidateStreamData(stream, expectedData);
+        }
+
+        [Test]
+        public void RecordProjectAsStartableAlreadyStarted()
+        {
+            var projectName = "Test Project #1";
+            SetupDefaultContent();
+            var stream = InitialiseOutputStream();
+            mocks.ReplayAll();
+            stateManager.RecordProjectAsStartable(projectName);
             stateManager.RecordProjectAsStartable(projectName);
             var result = stateManager.CheckIfProjectCanStart(projectName);
             Assert.IsTrue(result, "Project state incorrect");

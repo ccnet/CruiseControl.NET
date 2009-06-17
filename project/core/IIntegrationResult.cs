@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -83,6 +84,16 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <param name="value">The result to merge.</param>
         void Merge(IIntegrationResult value);
+        #endregion
+
+        #region SourceControlData
+        /// <summary>
+        /// Extended source control data.
+        /// </summary>
+        /// <remarks>
+        /// It is up to the individual source control providers to decide what to store in here.
+        /// </remarks>
+        List<NameValuePair> SourceControlData { get; }
         #endregion
     }
 }

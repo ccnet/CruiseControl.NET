@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -28,6 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private IntegrationSummary lastIntegration = IntegrationSummary.Initial;
         private string buildLogDirectory;
         private List<NameValuePair> parameters = new List<NameValuePair>();
+        private List<NameValuePair> sourceControlData = new List<NameValuePair>();
 
         // mutable properties
         private IntegrationStatus status = IntegrationStatus.Unknown;
@@ -546,6 +548,20 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 AddTaskResult(result);
             }
+        }
+        #endregion
+
+        #region SourceControlData
+        /// <summary>
+        /// Extended source control data.
+        /// </summary>
+        /// <remarks>
+        /// It is up to the individual source control providers to decide what to store in here.
+        /// </remarks>
+        [XmlElement("SourceControl")]
+        public List<NameValuePair> SourceControlData
+        {
+            get { return sourceControlData; }
         }
         #endregion
     }

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -63,6 +64,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			return ParseModifications(new StringReader(result.StandardOutput), from, to);
 		}
+
+        protected Modification[] ParseModifications(ProcessResult result, string lastRevision)
+        {
+            var mods = ParseModifications(new StringReader(result.StandardOutput), DateTime.MinValue, DateTime.MaxValue);
+            if (!string.IsNullOrEmpty(lastRevision))
+            {
+                var actualModes = new List<Modification>();
+                foreach (var mod in mods)
+                {
+                    if (mod.ChangeNumber != lastRevision) actualModes.Add(mod);
+                }
+                mods = actualModes.ToArray();
+            }
+            return mods;
+        }
 
 		protected Modification[] ParseModifications(TextReader reader, DateTime from, DateTime to)
 		{
