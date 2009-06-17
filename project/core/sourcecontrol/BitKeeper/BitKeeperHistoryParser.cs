@@ -74,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 			// Example: "ChangeSet@1.6, 2005-10-06 12:58:40-07:00, user@host.(none)\n  Remove file in subdir."
 			Regex regex = new Regex(@"ChangeSet@(?<version>[\d.]+),\s+(?<datetime>\d{2,4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}),\s+(?<username>\S+).*");
 
-			return ParseModification(regex, "ChangeSet", "", bkLog);
+			return ParseModification(regex, "ChangeSet",string.Empty, bkLog);
 		}
 
         private Modification ParsePost40VerboseEntry(TextReader bkLog)

@@ -79,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             string projectLine = projectReader.ReadLine();
 
             System.IO.StringWriter result = new StringWriter();
-            string replacedPassword="";
+            string replacedPassword=string.Empty;
 
             int startPos;
             int endPos;
@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
                     else
                     {
                         //structure : <password />
-                        replacedPassword = projectLine.Replace(" /","");
+                        replacedPassword = projectLine.Replace(" /",string.Empty);
                         string temp = replacedPassword.Trim();
 
                         replacedPassword += PasswordReplacement;

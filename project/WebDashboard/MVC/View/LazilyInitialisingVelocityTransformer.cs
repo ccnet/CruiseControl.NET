@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 
         public string Transform(string transformerFileName, Hashtable transformable)
         {
-            string output = "";
+            string output = string.Empty;
             using (TextWriter writer = new StringWriter())
             {
                 try

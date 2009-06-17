@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 
 		private string Decorate(string relativeUrl)
 		{
-			return string.Format("{0}{1}{2}", basePath, basePath.EndsWith("/") ? "" : "/", relativeUrl);
+			return string.Format("{0}{1}{2}", basePath, basePath.EndsWith("/") ? string.Empty : "/", relativeUrl);
 		}
 	}
 }

@@ -195,7 +195,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 }
             }
 
-            return "";
+            return string.Empty;
         }
 
         private string GetBuildModifications(IIntegrationResult result)
@@ -246,7 +246,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             mods.WriteLine("<h4>Detailed information of the modifications in the build :</h4>");
             mods.WriteLine("<table cellpadding=\"5\">");
-            string previousModificationChecksum = "";
+            string previousModificationChecksum = string.Empty;
             foreach (Modification modification in modifications)
             {
                 string modificationChecksum = modification.UserName + "__CCNET__" + modification.Comment;

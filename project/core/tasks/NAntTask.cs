@@ -120,7 +120,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		public override string ToString()
 		{
-			string baseDirectory = ConfiguredBaseDirectory ?? "";
+			string baseDirectory = ConfiguredBaseDirectory ??string.Empty;
 			return string.Format(@" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", baseDirectory, string.Join(", ", Targets), Executable, BuildFile);
 		}
 

@@ -157,7 +157,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 string CurrentBuildStage = status.BuildStage;
 
                 if (CurrentBuildStage.Length == 0)
-                { return ""; }
+                { return string.Empty; }
                 else
                 { return GetFormattedBuildStage(CurrentBuildStage); }
             }

@@ -67,12 +67,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			velocityContext["farmLink"] = linkFactory.CreateFarmLink("Dashboard", FarmReportFarmPlugin.ACTION_NAME);
 
-			if (serverName != "")
+			if (serverName != string.Empty)
 			{
 				velocityContext["serverLink"] = linkFactory.CreateServerLink(request.ServerSpecifier, ServerReportServerPlugin.ACTION_NAME);
 			}
 
-            if (categoryName != "")
+            if (categoryName != string.Empty)
             {
                 IServerSpecifier serverSpecifier;
                 try
@@ -99,12 +99,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             }
 
 
-			if (projectName != "")
+			if (projectName != string.Empty)
 			{
 				velocityContext["projectLink"] = linkFactory.CreateProjectLink(request.ProjectSpecifier,  ProjectReportProjectPlugin.ACTION_NAME);
 			}
 
-			if (buildName != "")
+			if (buildName != string.Empty)
 			{
 				velocityContext["buildLink"] = linkFactory.CreateBuildLink(request.BuildSpecifier,  BuildReportBuildPlugin.ACTION_NAME);
 			}

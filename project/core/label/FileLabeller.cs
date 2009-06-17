@@ -144,7 +144,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
                 }
                 // Remove leading and trailing blanks
                 label = label.Trim();
-                if (label == "")
+                if (label == string.Empty)
                     throw new CruiseControlException("Label only contains whitespace.");
                 return label;
             }
@@ -172,7 +172,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
                         String.Format("Error reading file {0}: {1}", labelFilePath, e.Message),
                         e);
                 }
-                if (ver == "")
+                if (ver == string.Empty)
                     throw new CruiseControlException(
                         String.Format("File {0} only contains whitespace.", labelFilePath));
                 return ver;

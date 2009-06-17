@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public static string GetSingleElementValue(XmlDocument doc, string name)
 		{
-			return GetSingleElementValue(doc, name, "");
+			return GetSingleElementValue(doc, name,string.Empty);
 		}
 
 		public static string GetSingleElementValue(XmlDocument doc, string name, string defaultValue)

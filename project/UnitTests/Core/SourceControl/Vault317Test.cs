@@ -585,7 +585,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			GetModsToInitFolderVersionIfNecessary();
 
 			vault.AutoGetSource = true;
-			vault.WorkingDirectory = "";
+			vault.WorkingDirectory =string.Empty;
 			vault.UseVaultWorkingDirectory = true;
 			vault.Folder = @"$/noworkingfoldersetforme";
 			vault.CleanCopy = true;
@@ -612,7 +612,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			GetModsToInitFolderVersionIfNecessary();
 
 			vault.AutoGetSource = true;
-			vault.WorkingDirectory = "";
+			vault.WorkingDirectory =string.Empty;
 			vault.UseVaultWorkingDirectory = true;
 			vault.Folder = @"$";
 			vault.CleanCopy = true;

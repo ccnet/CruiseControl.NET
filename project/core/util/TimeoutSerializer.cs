@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				{
 					TimeUnits units = TimeUnits.MILLIS;
 					string unitsString = e.GetAttribute("units");
-					if (unitsString != null && unitsString != "")
+					if (unitsString != null && unitsString !=string.Empty)
 					{
 						units = TimeUnits.Parse(unitsString);
 					}

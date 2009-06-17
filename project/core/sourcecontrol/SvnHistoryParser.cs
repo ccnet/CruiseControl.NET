@@ -155,7 +155,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <returns>The message if found, or "" if not.</returns>
         private static string ParseMessage(XmlNode logEntry)
 		{
-		    String msg = "";
+		    String msg =string.Empty;
 			XmlNode msgNode = logEntry.SelectSingleNode("msg");
             if (msgNode != null)
                 msg = msgNode.InnerText;
@@ -169,7 +169,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <returns>The userid if found, or "" if not.</returns>
         private string ParseAuthor(XmlNode logEntry)
 		{
-			String author = "";
+			String author =string.Empty;
 			XmlNode authorNode = logEntry.SelectSingleNode("author");
 			if (authorNode != null)
 			{

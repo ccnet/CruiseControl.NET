@@ -168,7 +168,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				// Format is: "Basis:          __stream_name__"
 			}
 			Log.Error(string.Format("No \"Basis:\" line found in output from AccuRev \"accurev info\": {0}", cmdResults.StandardOutput));
-			return "";
+			return string.Empty;
 		}
 
 		/// <summary>
@@ -229,7 +229,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <param name="result">the IntegrationResult containing the label</param>
 		public override void LabelSourceControl(IIntegrationResult result)
 		{
-			if (LabelOnSuccess && result.Succeeded && (result.Label != ""))
+			if (LabelOnSuccess && result.Succeeded && (result.Label != string.Empty))
 			{
 				PossiblyLogIn(result);
 				string args = string.Format("mksnap -s \"{0}\" -b \"{1}\" -t \"{2}\"",
@@ -284,7 +284,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				Log.Error(string.Format("AccuRev command \"{0} {1}\" failed with RC={2}", 
 					Executable, args, cmdResults.ExitCode));
-				if ((cmdResults.StandardError != null) && (cmdResults.StandardError != ""))
+				if ((cmdResults.StandardError != null) && (cmdResults.StandardError != string.Empty))
 					Log.Error(string.Format("\tError output: {0}", cmdResults.StandardError));
 			}
 			return cmdResults;

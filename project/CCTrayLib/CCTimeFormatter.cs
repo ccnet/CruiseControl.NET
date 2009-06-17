@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		private void AddIfNeeded(StringBuilder sb, int value, String type)
 		{
 			if (value != 0)
-				sb.AppendFormat("{0} {1}{2} ", value, type, (value > 1 ? "s" : ""));
+				sb.AppendFormat("{0} {1}{2} ", value, type, (value > 1 ? "s" : string.Empty));
 		}
 	}
 }

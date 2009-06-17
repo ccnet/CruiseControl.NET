@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             string velocityTemplateName;
 
             string serverName = request.ServerName;
-            if (serverName == "")
+            if (serverName == string.Empty)
             {
                 velocityContext["links"] = pluginLinkCalculator.GetFarmPluginLinks();
 
@@ -133,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             else
             {
                 string projectName = request.ProjectName;
-                if (projectName == "")
+                if (projectName == string.Empty)
                 {
                     IServerSpecifier serverSpecifier = request.ServerSpecifier;
                     velocityContext["links"] = pluginLinkCalculator.GetServerPluginLinks(serverSpecifier);
@@ -148,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 else
                 {
                     string buildName = request.BuildName;
-                    if (buildName == "")
+                    if (buildName == string.Empty)
                     {
                         IProjectSpecifier projectSpecifier = request.ProjectSpecifier;
                         velocityContext["links"] = pluginLinkCalculator.GetProjectPluginLinks(projectSpecifier);
@@ -161,8 +161,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                         velocityContext["links"] = pluginLinkCalculator.GetBuildPluginLinks(buildSpecifier);
                         velocityContext["recentBuildsTable"] = recentBuildsViewBuilder.BuildRecentBuildsTable(buildSpecifier, request.RetrieveSessionToken());
                         velocityContext["latestLink"] = linkFactory.CreateProjectLink(request.ProjectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME);
-                        velocityContext["nextLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetNextBuildSpecifier(buildSpecifier, request.RetrieveSessionToken()), "", BuildReportBuildPlugin.ACTION_NAME);
-                        velocityContext["previousLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetPreviousBuildSpecifier(buildSpecifier, request.RetrieveSessionToken()), "", BuildReportBuildPlugin.ACTION_NAME);
+                        velocityContext["nextLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetNextBuildSpecifier(buildSpecifier, request.RetrieveSessionToken()), string.Empty, BuildReportBuildPlugin.ACTION_NAME);
+                        velocityContext["previousLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetPreviousBuildSpecifier(buildSpecifier, request.RetrieveSessionToken()), string.Empty, BuildReportBuildPlugin.ACTION_NAME);
                         velocityTemplateName = @"BuildSideBar.vm";
                     }
                 }

@@ -186,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             }
             else
             {
-                return "";
+                return string.Empty;
             }
         }
 
@@ -284,7 +284,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
                     }
                 }
 
-                return "";
+                return string.Empty;
             }
 
             public IServerSpecifier ServerSpecifier

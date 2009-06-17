@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 	public class XslReportBuildPlugin : ProjectConfigurableBuildPlugin
 	{
 		private readonly IActionInstantiator actionInstantiator;
-		private string xslFileName = "";
+		private string xslFileName = string.Empty;
 		private string description = "no description set";
 		private string actionName = "NoActionSet";
 

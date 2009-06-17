@@ -24,8 +24,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// <item>  <param>executable</param> <code>SETLABEL</code> "<param>label</param>" "<param>sourcetimestamp</param>" <param>argstring</param> </item>
     /// </list>
     /// </remarks>
-	[ReflectorType("external")]
-	public class ExternalSourceControl : ProcessSourceControl
+    [ReflectorType("external")]
+    public class ExternalSourceControl : ProcessSourceControl
     {
         #region Fields
         // None yet
@@ -34,32 +34,35 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         #region Constructors
 
         /// <summary>
-		/// Create an instance of the source control integration with the default history parser and
-		/// process executor.
-		/// </summary>
-		/// <remarks>
-		/// Uses <see cref="ExternalSourceControl(IHistoryParser, ProcessExecutor)"/> to do the heavy lifting.
-		/// <remarks>
-		public ExternalSourceControl() : this(new ExternalSourceControlHistoryParser(), new ProcessExecutor())
-		{
-		}
-		
-		/// <summary>
+        /// Create an instance of the source control integration with the default history parser and
+        /// process executor.
+        /// </summary>
+        /// <remarks>
+        /// Uses <see cref="ExternalSourceControl(IHistoryParser, ProcessExecutor)"/> to do the heavy lifting.
+        /// <remarks>
+        public ExternalSourceControl()
+            : this(new ExternalSourceControlHistoryParser(), new ProcessExecutor())
+        {
+        }
+
+        /// <summary>
         /// Create an instance of the source control integration with the default history parser.
-		/// </summary>
-		/// <remarks>
-		/// Uses <see cref="ExternalSourceControl(IHistoryParser, ProcessExecutor)"/> to do the heavy lifting.
-		/// <remarks>
-		public ExternalSourceControl(ProcessExecutor executor) : this(new ExternalSourceControlHistoryParser(), executor)
-		{
-		}
-      
-		/// <summary>
-		/// Create an instance of the source control integration.
-		/// </summary>
-		public ExternalSourceControl(IHistoryParser parser, ProcessExecutor executor) : base(parser, executor)
-		{
-		}
+        /// </summary>
+        /// <remarks>
+        /// Uses <see cref="ExternalSourceControl(IHistoryParser, ProcessExecutor)"/> to do the heavy lifting.
+        /// <remarks>
+        public ExternalSourceControl(ProcessExecutor executor)
+            : this(new ExternalSourceControlHistoryParser(), executor)
+        {
+        }
+
+        /// <summary>
+        /// Create an instance of the source control integration.
+        /// </summary>
+        public ExternalSourceControl(IHistoryParser parser, ProcessExecutor executor)
+            : base(parser, executor)
+        {
+        }
 
         #endregion
 
@@ -72,8 +75,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// quotation marks, thus allowing you to specify what the executable will see as multiple
         /// parameters.
         /// </remarks>
-        [ReflectorProperty("args", Required=false)]
-		public string ArgString = "";
+        [ReflectorProperty("args", Required = false)]
+        public string ArgString = string.Empty;
 
         /// <summary>
         /// Should we automatically obtain updated source from the source control system or not? 
@@ -82,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// Optional, default is not to do so.
         /// </remarks>
         [ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = false;
+        public bool AutoGetSource = false;
 
         /// <summary>
         /// A set of environment variables set for commands that are executed.
@@ -129,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// The command must return the modification list as its standard output.
         /// </remarks>
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
-		{
+        {
             string args = string.Format(@"GETMODS ""{0}"" ""{1}"" {2}",
                 FormatCommandDate(to.StartTime),
                 FormatCommandDate(from.StartTime),
@@ -177,14 +180,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// in local 24-hour time.
         public override void LabelSourceControl(IIntegrationResult result)
         {
-            if (LabelOnSuccess && result.Succeeded && (result.Label != ""))
-			{
-				string args = string.Format(@"SETLABEL ""{0}"" ""{1}"" {2}",
-					result.Label,
-					FormatCommandDate(result.StartTime),
+            if (LabelOnSuccess && result.Succeeded && (result.Label != string.Empty))
+            {
+                string args = string.Format(@"SETLABEL ""{0}"" ""{1}"" {2}",
+                    result.Label,
+                    FormatCommandDate(result.StartTime),
                     ArgString);
-				RunCommand(Executable, args, result);
-			}
+                RunCommand(Executable, args, result);
+            }
         }
 
         #endregion
@@ -232,7 +235,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             {
                 Log.Error(string.Format(@"Source control command ""{0} {1}"" failed with RC={2}",
                     Executable, args, cmdResults.ExitCode));
-                if ((cmdResults.StandardError != null) && (cmdResults.StandardError != ""))
+                if ((cmdResults.StandardError != null) && (cmdResults.StandardError !=string.Empty))
                     Log.Error(string.Format("\tError output: {0}", cmdResults.StandardError));
             }
             return cmdResults;

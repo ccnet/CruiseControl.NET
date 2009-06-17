@@ -229,7 +229,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 				throw new NotImplementedException();
 			}
 
-			public string WebURL { get {return ""; } }
+			public string WebURL { get {return string.Empty; } }
             public IProjectAuthorisation Security
             {
                 get { return null; }

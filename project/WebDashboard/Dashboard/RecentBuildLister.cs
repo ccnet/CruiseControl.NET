@@ -60,14 +60,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				IBuildSpecifier[] mostRecentBuildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 10, sessionToken);
 				secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(mostRecentBuildSpecifiers, buildSpecifier, BuildReportBuildPlugin.ACTION_NAME);
 				primaryContext["buildRows"] = velocityTransformer.Transform(@"BuildRows.vm", secondaryContext);
-				primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, "", ViewAllBuildsProjectPlugin.ACTION_NAME);
+				primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, string.Empty, ViewAllBuildsProjectPlugin.ACTION_NAME);
 
 				return velocityTransformer.Transform(@"RecentBuilds.vm", primaryContext);
 			}
 			catch (Exception)
 			{
 				// Assume exception also caught where we care about (i.e. by action)
-				return "";
+				return string.Empty;
 			}
 		}
 
@@ -78,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(farmService.GetBuildSpecifiers(projectSpecifier, sessionToken), BuildReportBuildPlugin.ACTION_NAME);
 			primaryContext["buildRows"] = velocityTransformer.Transform(@"BuildRows.vm", secondaryContext);
-			primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, "", ViewAllBuildsProjectPlugin.ACTION_NAME);
+			primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, string.Empty, ViewAllBuildsProjectPlugin.ACTION_NAME);
 
 			return velocityViewGenerator.GenerateView(@"AllBuilds.vm", primaryContext);
 		}

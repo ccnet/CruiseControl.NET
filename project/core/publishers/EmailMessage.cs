@@ -187,9 +187,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         {
             get
             {
-                string prefix = "";
-                string message = "";
-                string subject = "";
+                string prefix = string.Empty;
+                string message = string.Empty;
+                string subject = string.Empty;
 
                 if (emailPublisher.SubjectPrefix != null)
                     prefix = emailPublisher.SubjectPrefix + " ";
@@ -240,7 +240,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private string FailureUsersToString(ArrayList failureUsers)
         {
 
-            if (failureUsers.Count == 0) return "";
+            if (failureUsers.Count == 0) return string.Empty;
 
             System.Text.StringBuilder result = new StringBuilder();
 

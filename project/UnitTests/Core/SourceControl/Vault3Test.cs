@@ -278,7 +278,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vault.WorkingDirectory = DefaultWorkingDirectory;
 			vault.CleanCopy = true;
 
-			this.ProcessResultOutput = "";
+			this.ProcessResultOutput =string.Empty;
 			ExpectToCleanFolder();
 			ExpectToExecuteArguments(@"label $ foo" + SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(@"getlabel $ foo -destpath " + StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)
@@ -299,7 +299,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vault.WorkingDirectory = DefaultWorkingDirectory;
 			vault.CleanCopy = false;
 
-			this.ProcessResultOutput = "";
+			this.ProcessResultOutput =string.Empty;
 			ExpectToNotCleanFolder();
 			ExpectToExecuteArguments(@"label $ foo" + SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(@"getlabel $ foo -destpath " + StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)
@@ -362,7 +362,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vault.WorkingDirectory = DefaultWorkingDirectory;
 			vault.CleanCopy = true;
 
-			this.ProcessResultOutput = "";
+			this.ProcessResultOutput =string.Empty;
 			ExpectToCleanFolder();
 			ExpectToExecuteArguments(@"get $" + GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
 
@@ -381,7 +381,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vault.WorkingDirectory = DefaultWorkingDirectory;
 			vault.CleanCopy = false;
 
-			this.ProcessResultOutput = "";
+			this.ProcessResultOutput =string.Empty;
 			ExpectToNotCleanFolder();
 			ExpectToExecuteArguments(@"get $" + GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
 
@@ -419,7 +419,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vault.WorkingDirectory = @"";
 			vault.CleanCopy = false;
 
-			this.ProcessResultOutput = "";
+			this.ProcessResultOutput =string.Empty;
 			ExpectToExecuteArguments(@"get $" + GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
 
 			vault.GetSource(result);
@@ -437,7 +437,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vault.WorkingDirectory = DefaultWorkingDirectory;
 			vault.CleanCopy = true;
 
-			this.ProcessResultOutput = "";
+			this.ProcessResultOutput =string.Empty;
 			ExpectToCleanFolder();
 			ExpectToExecuteArguments(@"get $ -destpath " + StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory) + GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
 
@@ -456,7 +456,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vault.WorkingDirectory = DefaultWorkingDirectory;
 			vault.CleanCopy = false;
 
-			this.ProcessResultOutput = "";
+			this.ProcessResultOutput =string.Empty;
 			ExpectToNotCleanFolder();
 			ExpectToExecuteArguments(@"get $ -destpath " + StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory) + GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
 
@@ -508,7 +508,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			this.ProcessResultOutput = string.Format(listFolderOutputWithWorkingFolderSet, DefaultWorkingDirectory);
 			ExpectToExecuteArguments(@"listworkingfolders");
 			vault.AutoGetSource = true;
-			vault.WorkingDirectory = "";
+			vault.WorkingDirectory =string.Empty;
 			vault.UseVaultWorkingDirectory = true;
 			vault.Folder = @"$/noworkingfoldersetforme";
 			vault.ApplyLabel = true;

@@ -737,15 +737,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private string GetBuildStage()
         {
             if (!controller.SelectedProject.Detail.IsConnected)
-            { return ""; }
+            { return string.Empty; }
 
             if (controller.SelectedProject.ProjectState != ProjectState.Building &&
                 controller.SelectedProject.ProjectState != ProjectState.BrokenAndBuilding)
-            { return ""; }
+            { return string.Empty; }
 
             String currentBuildStage = controller.SelectedProject.Detail.CurrentBuildStage;
             if (currentBuildStage == null || currentBuildStage.Length == 0)
-            { return ""; }
+            { return string.Empty; }
 
             System.Text.StringBuilder SB = new System.Text.StringBuilder();
             System.IO.StringWriter BuildStage = new System.IO.StringWriter(SB);

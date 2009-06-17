@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 
             IntegrationSummary lastIntegration = resultFromThisBuild.LastIntegration;
 
-            string firstSuffix = AllowDuplicateSubsequentLabels ? "" : "." + INITIAL_SUFFIX_NUMBER.ToString();
+            string firstSuffix = AllowDuplicateSubsequentLabels ? string.Empty : "." + INITIAL_SUFFIX_NUMBER.ToString();
 
             if (changeNumber != 0)
             {

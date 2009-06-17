@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Speech
 		private static String addSpacesToCamelCase(String text)
 		{
 	        if (String.IsNullOrEmpty(text))
-	           return "";
+	           return string.Empty;
 	        StringBuilder newText = new StringBuilder(text.Length * 2);
 	        newText.Append(text[0]);
 	        for (int i = 1; i < text.Length; i++)

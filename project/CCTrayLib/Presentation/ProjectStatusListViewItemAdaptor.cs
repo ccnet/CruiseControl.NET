@@ -28,17 +28,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.detailStringProvider = detailStringProvider;
 			serverName = new ListViewItem.ListViewSubItem();
 			item.SubItems.Add(serverName);
-            category = new ListViewItem.ListViewSubItem(item, "");
+            category = new ListViewItem.ListViewSubItem(item, string.Empty);
             item.SubItems.Add(category);
-            activity = new ListViewItem.ListViewSubItem(item, "");
+            activity = new ListViewItem.ListViewSubItem(item, string.Empty);
 			item.SubItems.Add(activity);
-			detail = new ListViewItem.ListViewSubItem(item, "");
+			detail = new ListViewItem.ListViewSubItem(item, string.Empty);
 			item.SubItems.Add(detail);
-			lastBuildLabel = new ListViewItem.ListViewSubItem(item, "");
+			lastBuildLabel = new ListViewItem.ListViewSubItem(item, string.Empty);
 			item.SubItems.Add(lastBuildLabel);
-			lastBuildTime = new ListViewItem.ListViewSubItem(item, "");
+			lastBuildTime = new ListViewItem.ListViewSubItem(item, string.Empty);
 			item.SubItems.Add(lastBuildTime);
-            projectStatus = new ListViewItem.ListViewSubItem(item, "");
+            projectStatus = new ListViewItem.ListViewSubItem(item, string.Empty);
             item.SubItems.Add(projectStatus);
         }
 
@@ -86,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 			else
 			{
-				activity.Text = lastBuildLabel.Text = "";
+				activity.Text = lastBuildLabel.Text = string.Empty;
 			}
 
 			detail.Text = detailStringProvider.FormatDetailString(monitor.Detail);

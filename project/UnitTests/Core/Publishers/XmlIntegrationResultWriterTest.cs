@@ -250,7 +250,7 @@ e:\RW\WORKSPACES\WIN2000\MSVC60\8S\INCLUDE\iterator(563) : warning C4284: return
 			mod.FolderName = "tools";
 			mod.ModifiedTime = new DateTime(2002, 9, 5, 11, 38, 30);
 			mod.UserName = "owen";
-			mod.EmailAddress = "";
+			mod.EmailAddress =string.Empty;
 			mod.Comment = "ccnet self-admin config folder files";
 
 			Modification[] mods = new Modification[1];

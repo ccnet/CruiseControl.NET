@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 		{
 			if (path == null || path.Trim() == string.Empty)
 			{
-				return "";
+				return string.Empty;
 			}
 			else
 			{

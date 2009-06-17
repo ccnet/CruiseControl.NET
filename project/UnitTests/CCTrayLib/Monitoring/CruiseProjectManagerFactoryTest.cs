@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         [Test]
         public void WhenRequestingACruiseProjectManagerWithAnExtensionProtocolValidExtension()
         {
-            var server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.ExtensionProtocolStub,ThoughtWorks.CruiseControl.UnitTests", "");
+            var server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.ExtensionProtocolStub,ThoughtWorks.CruiseControl.UnitTests",string.Empty);
             var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
             var factory = new CruiseProjectManagerFactory(mockCruiseManagerFactory);
             var serverManagers = new Dictionary<BuildServer, ICruiseServerManager>();
@@ -87,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         [Test]
         public void GetProjectListWithAnExtensionProtocolValidExtension()
         {
-            var server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.ExtensionProtocolStub,ThoughtWorks.CruiseControl.UnitTests", "");
+            var server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.ExtensionProtocolStub,ThoughtWorks.CruiseControl.UnitTests",string.Empty);
             var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
             var factory = new CruiseProjectManagerFactory(mockCruiseManagerFactory);
 

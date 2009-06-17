@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			                               File,
 			                               from.StartTime.ToString(TO_SSCM_DATE_FORMAT),
 			                               to.StartTime.ToString(TO_SSCM_DATE_FORMAT),
-			                               (Recursive == 0) ? "" : "-r",
+			                               (Recursive == 0) ?string.Empty : "-r",
 			                               Branch,
 			                               Repository,
 			                               (SearchRegExp == 0) ? "-x-" : "-x",
@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             result.BuildProgressInformation.SignalStartRunTask("Getting source from Surround SCM");
 
 			string command = String.Format("get * -q -tcheckin -wreplace {0} -d{1} -b{2} -p{3} -z{4} -y{5}",
-			                               (Recursive == 0) ? "" : "-r",
+			                               (Recursive == 0) ?string.Empty : "-r",
 			                               WorkingDirectory,
 										   Branch,
 			                               Repository,

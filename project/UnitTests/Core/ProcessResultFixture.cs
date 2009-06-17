@@ -11,22 +11,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		public static ProcessResult CreateSuccessfulResult(string stdOut)
 		{
-			return new ProcessResult(stdOut, "", ProcessResult.SUCCESSFUL_EXIT_CODE, false);
+			return new ProcessResult(stdOut,string.Empty, ProcessResult.SUCCESSFUL_EXIT_CODE, false);
 		}
 
 		public static ProcessResult CreateTimedOutResult()
 		{
-			return new ProcessResult("timed out", "", ProcessResult.TIMED_OUT_EXIT_CODE, true);
+			return new ProcessResult("timed out",string.Empty, ProcessResult.TIMED_OUT_EXIT_CODE, true);
 		}
 
 		public static ProcessResult CreateNonZeroExitCodeResult()
 		{
-            return CreateNonZeroExitCodeResult("failed", "");
+            return CreateNonZeroExitCodeResult("failed",string.Empty);
 		}
 
         public static ProcessResult CreateNonZeroExitCodeResult(string stdOut)
         {
-            return CreateNonZeroExitCodeResult(stdOut, "");
+            return CreateNonZeroExitCodeResult(stdOut,string.Empty);
         }
 
 		public static ProcessResult CreateNonZeroExitCodeResult(string stdOut, string stdErr)

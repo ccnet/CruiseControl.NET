@@ -134,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
         public static IntegrationResult CreateInitial()
 		{
-			return IntegrationResult.CreateInitialIntegrationResult(DefaultProjectName, "", "");
+			return IntegrationResult.CreateInitialIntegrationResult(DefaultProjectName,string.Empty,string.Empty);
 		}
 
 		private static IntegrationRequest ModificationExistRequest()

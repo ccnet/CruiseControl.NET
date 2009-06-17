@@ -24,8 +24,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public ProcessResult(string standardOutput, string standardError, int errorCode, bool timedOut, bool failed)
 		{
-			this.standardOutput = (standardOutput ?? "");
-			this.standardError = (standardError ?? "");
+			this.standardOutput = (standardOutput ??string.Empty);
+			this.standardError = (standardError ??string.Empty);
 			this.errorCode = errorCode;
 			this.timedOut = timedOut;
 			this.failed = failed;

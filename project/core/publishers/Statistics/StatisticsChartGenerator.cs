@@ -92,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
                     string value = statistic.Value;
                     Log.Debug(string.Format("Relevant Stat: {0}, Raw Value: {1}", relevantStat, value));
                     ordinateData.Add(GetPlottableValue(relevantStat, value));
-                    abscissaData.Add(integration.GetAttribute("build-label", ""));
+                    abscissaData.Add(integration.GetAttribute("build-label", string.Empty));
                 }
 
                 try

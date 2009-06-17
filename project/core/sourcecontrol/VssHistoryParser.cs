@@ -134,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public VSSParser(string entry, IVssLocale locale)
 		{
-			this.entry = entry.Replace(Convert.ToChar(160).ToString(), "");
+			this.entry = entry.Replace(Convert.ToChar(160).ToString(),string.Empty);
 			this.locale = locale;
 			string regex = string.Format(@"{0}:(.+){1}:(.+){2}:(.+)$", locale.UserKeyword, locale.DateKeyword, locale.TimeKeyword);
 			REGEX_USER_DATE_LINE = new Regex(regex, RegexOptions.Multiline);

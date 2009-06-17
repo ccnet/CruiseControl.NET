@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			expected.FolderName = "/foo";
 			expected.ModifiedTime = CreateDate("2003-12-12T16:48:51Z");
 			expected.ChangeNumber = "4";
-			expected.UserName = "";
+			expected.UserName =string.Empty;
 			expected.Comment = "i added a file";
 
 			Assert.AreEqual(expected, modifications[0]);
@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Modification mbrMod1 = new Modification();
 			mbrMod1.Type = "Modified";
 			mbrMod1.FileName = "myfile.txt";
-			mbrMod1.FolderName = "";
+			mbrMod1.FolderName =string.Empty;
 			mbrMod1.ModifiedTime = CreateDate("2003-12-12T17:09:44.559203Z");
 			mbrMod1.ChangeNumber = "3";
 			mbrMod1.UserName = "mbr";

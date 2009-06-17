@@ -86,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 {
                     foreach (int code in successExitCodes)
                     {
-                        if (result != "")
+                        if (result !=string.Empty)
                             result = result + ",";
                         result = result + code;
                     }
@@ -138,7 +138,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 // The PowerShell produced some output.  We need to transform it into an XML build report 
                 // fragment so the rest of CC.Net can process it.
                 ProcessResult newResult = new ProcessResult(
-                    MakeBuildResult(processResult.StandardOutput, ""), 
+                    MakeBuildResult(processResult.StandardOutput,string.Empty), 
                     MakeBuildResult(processResult.StandardError, "Error"), 
                     processResult.ExitCode, 
                     processResult.TimedOut,
@@ -224,7 +224,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 foreach (Match line in lines)
                 {
                     output.Append("  <message");
-                    if (msgLevel != "")
+                    if (msgLevel !=string.Empty)
                         output.AppendFormat(" level=\"{0}\"", msgLevel);
                     output.Append(">");
                     output.Append(XmlUtil.EncodePCDATA(line.ToString()));

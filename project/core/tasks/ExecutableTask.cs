@@ -54,12 +54,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			get 
             {
-                string result = "";
+                string result =string.Empty;
                 if (successExitCodes != null)
                 {
                     foreach (int code in successExitCodes)
                     {
-                        if (result != "")
+                        if (result !=string.Empty)
                             result = result + ",";
                         result = result + code;
                     }
@@ -111,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 // The executable produced some output.  We need to transform it into an XML build report 
                 // fragment so the rest of CC.Net can process it.
                 ProcessResult newResult = new ProcessResult(
-                    StringUtil.MakeBuildResult(processResult.StandardOutput, ""),
+                    StringUtil.MakeBuildResult(processResult.StandardOutput,string.Empty),
 					StringUtil.MakeBuildResult(processResult.StandardError, "Error"), 
                     processResult.ExitCode, 
                     processResult.TimedOut,

@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		                                                       LOCALPATH, CHANGED_BY, NXN_VERSIONNUMBER);
 
 		private static string SAMPLE_TWO_LINES = string.Format("{0}\n{1}", SAMPLE_ONE_LINES, SAMPLE_ONE_LINES);
-		private static string SAMPLE_NO_CHANGES = string.Format("{0}\n{1}", "", Alienbrain.NO_CHANGE);
+		private static string SAMPLE_NO_CHANGES = string.Format("{0}\n{1}",string.Empty, Alienbrain.NO_CHANGE);
 
 		[SetUp]
 		protected void Setup()

@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		
 		private static string GetInputString(NameValueCollection input)
 		{
-			string strInput = "";
+			string strInput = string.Empty;
 			
 			for (int i = 0; i < input.Keys.Count; i++)
 			{

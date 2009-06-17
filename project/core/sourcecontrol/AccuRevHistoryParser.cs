@@ -86,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				// Get the first non-whitespace token in the line and decide how to parse based on it:
 				Match parsed = firstTokenPattern.Match(line);
-				string firstToken = "";
+				string firstToken =string.Empty;
                 if (parsed.Success)
                     firstToken = parsed.Groups[1].ToString();
                 switch (firstToken)

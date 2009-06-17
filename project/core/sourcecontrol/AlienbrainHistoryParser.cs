@@ -43,8 +43,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		// strip carriage return, new line, and all leading and trailing characters from parameters
 		public string[] AllModificationParams(string matchedLine)
 		{
-			matchedLine = matchedLine.Replace("\n", "");
-			matchedLine = matchedLine.Replace("\r", "");
+			matchedLine = matchedLine.Replace("\n",string.Empty);
+			matchedLine = matchedLine.Replace("\r",string.Empty);
 			string[] modificationParams = matchedLine.Split(DELIMITER);
 			for (int ii = 0; ii < modificationParams.Length; ii++)
 			{
@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			Modification modification = new Modification();
 			modification.Comment = modificationParams[0];
 			modification.FileName = modificationParams[1];
-			modification.FolderName = "ab:/" + modificationParams[2].Replace("/" + modificationParams[1], "");
+			modification.FolderName = "ab:/" + modificationParams[2].Replace("/" + modificationParams[1],string.Empty);
 			modification.ModifiedTime = DateTime.FromFileTime(long.Parse(modificationParams[3]));
 			modification.Type = modificationParams[4];
 			modification.Url = modificationParams[5];

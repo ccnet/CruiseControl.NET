@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private string projectName;
         private string projectUrl;
         private string workingDirectory;
-        private string artifactDirectory = "";
+        private string artifactDirectory = string.Empty;
         private IntegrationRequest request = IntegrationRequest.NullRequest;
         private IntegrationSummary lastIntegration = IntegrationSummary.Initial;
         private string buildLogDirectory;
@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
         private readonly List<ITaskResult> taskResults = new List<ITaskResult>();
 
-        private readonly BuildProgressInformation buildProgressInformation = new BuildProgressInformation("", "");
+        private readonly BuildProgressInformation buildProgressInformation = new BuildProgressInformation(string.Empty, string.Empty);
 
         private Exception sourceControlError;
 

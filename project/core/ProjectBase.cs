@@ -14,9 +14,9 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private string name;
         private string description;
-		private string category = "";
-		private string configuredWorkingDirectory = "";
-		private string configuredArtifactDirectory = "";
+		private string category = string.Empty;
+		private string configuredWorkingDirectory = string.Empty;
+		private string configuredArtifactDirectory = string.Empty;
         private ITrigger triggers = new MultipleTrigger(new ITrigger[] { });
 		private ExternalLink[] externalLinks = new ExternalLink[0];
         private DisplayLevel askForForceBuildReason = DisplayLevel.None;

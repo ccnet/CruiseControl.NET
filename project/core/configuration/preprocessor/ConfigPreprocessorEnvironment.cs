@@ -177,7 +177,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
                     XmlWriter writer = doc.CreateNavigator().AppendChild() )
                 {
                     writer.WriteElementString(
-                        "root", "", const_def.Value.ToString() );
+                        "root", string.Empty, const_def.Value.ToString() );
                 }
                 return
                     doc.DocumentElement.CreateNavigator().SelectChildren(

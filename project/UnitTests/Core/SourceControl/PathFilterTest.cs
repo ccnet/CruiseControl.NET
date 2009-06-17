@@ -129,17 +129,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         }
 		private static Modification[] Modifications = 
 			{
-				ModificationMother.CreateModification("theName.dat", ""),
-				ModificationMother.CreateModification("TheName.dat", ""),
+				ModificationMother.CreateModification("theName.dat",string.Empty),
+				ModificationMother.CreateModification("TheName.dat",string.Empty),
 				ModificationMother.CreateModification("theName.dat", "/theFolder"),
-				ModificationMother.CreateModification("theFile.bin", ""),
+				ModificationMother.CreateModification("theFile.bin",string.Empty),
 				ModificationMother.CreateModification("theFile.bin", "/theFolder"),
 				ModificationMother.CreateModification("theName.dat", "/TheFolder"),
 				ModificationMother.CreateModification("theName.dat", "/theFolder/theSubFolder"),
 				ModificationMother.CreateModification("theName.dat", "/theFolder/theSubFolder/theSubSubFolder"),
 				ModificationMother.CreateModification("theName.dat", "/theFolder/theSubFolder/theSubFolder"),
 				ModificationMother.CreateModification("theName.dat", "/theFolder/theSubFolder/ThesubFolder"),
-				ModificationMother.CreateModification("theName", ""),
+				ModificationMother.CreateModification("theName",string.Empty),
 				ModificationMother.CreateModification("theName", "/theFolder/theSubFolder"),
 				ModificationMother.CreateModification("theName.dav", "\\theFolder\\theSubFolder"),
 				ModificationMother.CreateModification("theName.dav", "\\theFolder")

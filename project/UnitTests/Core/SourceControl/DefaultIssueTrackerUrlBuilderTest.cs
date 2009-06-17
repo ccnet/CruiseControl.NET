@@ -131,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             mods[0].FolderName = "/trunk";
             mods[0].FileName = "nant.bat";
             mods[0].ChangeNumber = "3";
-            mods[0].Comment = "";
+            mods[0].Comment =string.Empty;
 
             DefaultIssueTrackerUrlBuilder defaultIssue = CreateBuilder();
             defaultIssue.SetupModification(mods);

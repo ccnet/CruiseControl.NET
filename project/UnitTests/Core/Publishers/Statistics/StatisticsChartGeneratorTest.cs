@@ -227,7 +227,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 	        while(dataList.MoveNext())
             {
                 XPathNavigator xPathNavigator = dataList.Current;
-                Console.Out.WriteLine("build-label = {0}", xPathNavigator.GetAttribute("build-label", ""));
+                Console.Out.WriteLine("build-label = {0}", xPathNavigator.GetAttribute("build-label",string.Empty));
                 XPathNavigator duration = xPathNavigator.SelectSingleNode(string.Format("statistic[@name='{0}']", "Duration"));
                 Console.Out.WriteLine("duration = {0}", duration);
             }

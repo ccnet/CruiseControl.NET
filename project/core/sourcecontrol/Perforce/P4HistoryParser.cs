@@ -86,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 						user = changeMatch.Groups["user"].Value;
 						date = DateTime.Parse(changeMatch.Groups["date"].Value);
 						// TODO this is necessary, could someone explain why?
-						comment = "";
+						comment =string.Empty;
 					}
 					else 
 					{

@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			Modification[] mods = new Modification[2];
 			mods[0] = new Modification();
-			mods[0].FolderName = "";
+			mods[0].FolderName =string.Empty;
 			mods[0].FileName = "NUnitDemo.build";
 			mods[1] = new Modification();
 			mods[1].FolderName = "NUnitDemo";

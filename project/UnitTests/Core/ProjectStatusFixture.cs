@@ -57,24 +57,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		public static ProjectStatus New(string project, ProjectActivity activity, IntegrationStatus integrationStatus, ProjectIntegratorState integratorState, string label, DateTime lastBuildDate)
 		{
-            return new ProjectStatus(project, DefaultCategory, activity, integrationStatus, integratorState, DefaultUrl, lastBuildDate, label, label, DefaultLastBuildDate, "", "", 0);
+            return new ProjectStatus(project, DefaultCategory, activity, integrationStatus, integratorState, DefaultUrl, lastBuildDate, label, label, DefaultLastBuildDate,string.Empty,string.Empty, 0);
 		}
 
 
         public static ProjectStatus New(string project, ProjectActivity activity, IntegrationStatus integrationStatus, ProjectIntegratorState integratorState, string label, DateTime lastBuildDate, string buildStage)
         {
-            return new ProjectStatus(project, DefaultCategory, activity, integrationStatus, integratorState, DefaultUrl, lastBuildDate, label, label, DefaultLastBuildDate, buildStage, "", 0);
+            return new ProjectStatus(project, DefaultCategory, activity, integrationStatus, integratorState, DefaultUrl, lastBuildDate, label, label, DefaultLastBuildDate, buildStage,string.Empty, 0);
         }
 
 
 		public static ProjectStatus New(string project, string category, ProjectActivity activity, IntegrationStatus integrationStatus, ProjectIntegratorState integratorState, string label, DateTime lastBuildDate)
 		{
-            return new ProjectStatus(project, category, activity, integrationStatus, integratorState, DefaultUrl, lastBuildDate, label, label, DefaultLastBuildDate, "", "", 0);
+            return new ProjectStatus(project, category, activity, integrationStatus, integratorState, DefaultUrl, lastBuildDate, label, label, DefaultLastBuildDate,string.Empty,string.Empty, 0);
 		}
 
         public static ProjectStatus New(string project, string category, ProjectActivity activity, IntegrationStatus integrationStatus, ProjectIntegratorState integratorState, string label, DateTime lastBuildDate, string buildStage)
         {
-            return new ProjectStatus(project, category, activity, integrationStatus, integratorState, DefaultUrl, lastBuildDate, label, label, DefaultLastBuildDate, buildStage, "", 0);
+            return new ProjectStatus(project, category, activity, integrationStatus, integratorState, DefaultUrl, lastBuildDate, label, label, DefaultLastBuildDate, buildStage,string.Empty, 0);
         }
 	}
 }

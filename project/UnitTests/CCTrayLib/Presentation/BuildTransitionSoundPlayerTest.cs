@@ -56,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		public void WhenATransitionIsNullOrEmptyStringNoAudioIsPlayed()
 		{
 			AudioFiles files = new AudioFiles();
-			files.StillSuccessfulBuildSound = "";
+			files.StillSuccessfulBuildSound =string.Empty;
 			files.StillFailingBuildSound = null;
 
 			new BuildTransitionSoundPlayer(

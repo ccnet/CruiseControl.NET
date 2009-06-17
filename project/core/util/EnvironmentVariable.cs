@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         [ReflectorProperty("value", Required = false)]
         public string value
         {
-            get { return (my_value == null) ? "" : my_value; }
+            get { return (my_value == null) ?string.Empty : my_value; }
             set { my_value = value; }
         }
     }

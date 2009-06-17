@@ -123,7 +123,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         public static string RemoveTrailingPathDelimeter(string directory)
         {
-            return string.IsNullOrEmpty(directory) ? "" : directory.TrimEnd(new char[] { Path.DirectorySeparatorChar });
+            return string.IsNullOrEmpty(directory) ?string.Empty : directory.TrimEnd(new char[] { Path.DirectorySeparatorChar });
         }
 
         public static string IntegrationPropertyToString(object value)
@@ -184,7 +184,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 foreach (Match line in lines)
                 {
                     sb.Append("  <message");
-                    if (msgLevel != "")
+                    if (msgLevel !=string.Empty)
                         sb.AppendFormat(" level=\"{0}\"", msgLevel);
                     sb.Append(">");
                     sb.Append(XmlUtil.EncodePCDATA(line.ToString()));

@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
         public void ResetStatus(Label labelSimulationStatus)
         {
             this.statusLabel = labelSimulationStatus;
-            this.statusLabel.Text = "";
+            this.statusLabel.Text = string.Empty;
         }
 
         public void ControlDevice(int deviceCode, Function deviceCommand, int lightLevel)

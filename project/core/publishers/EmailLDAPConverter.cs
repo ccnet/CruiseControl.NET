@@ -6,11 +6,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     [ReflectorType("ldapConverter")]
     public class EmailLDAPConverter : IEmailConverter
     {
-        private string domainName = "";
+        private string domainName = string.Empty;
         private string ldap_Mail = "mail";
         private string ldap_QueryField = "MailNickName";
-        private string ldap_LogOnUser = "";
-        private string ldap_LogOnPassword = "";
+        private string ldap_LogOnUser = string.Empty;
+        private string ldap_LogOnPassword = string.Empty;
 
 
         /// <summary>

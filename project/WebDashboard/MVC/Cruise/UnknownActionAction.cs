@@ -5,7 +5,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
         public IResponse Execute(IRequest request)
         {
             string actionName = request.FileNameWithoutExtension;
-            if (actionName == "")
+            if (actionName == string.Empty)
             {
                 return new HtmlFragmentResponse("Internal Error - 'UnknownActionAction' called but there is no action is request!");
             }

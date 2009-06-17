@@ -211,7 +211,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AddArgument("label", Project);
 			builder.AddArgument("-L" + label);
-			builder.AddArgument("-VL", "", oldLabel); // only append argument if old label is specified
+			builder.AddArgument("-VL",string.Empty, oldLabel); // only append argument if old label is specified
 			AppendUsernameAndPassword(builder);
 			builder.AddArgument("-I-Y");
 			return builder.ToString();

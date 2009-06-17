@@ -11,10 +11,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public const string DefaultExecutable = @"rake";
 
 		[ReflectorProperty("buildArgs", Required = false)]
-		public string BuildArgs = "";
+		public string BuildArgs =string.Empty;
 
 		[ReflectorProperty("baseDirectory", Required = false)]
-		public string BaseDirectory = "";
+		public string BaseDirectory =string.Empty;
 
 		[ReflectorProperty("buildTimeoutSeconds", Required = false)]
 		public int BuildTimeoutSeconds = DefaultBuildTimeout;
@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public string Executable = DefaultExecutable;
 
 		[ReflectorProperty("rakefile", Required = false)]
-		public string Rakefile = "";
+		public string Rakefile =string.Empty;
 
 		[ReflectorProperty("silent", Required = false)]
 		public bool Silent;
@@ -56,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				// The executable produced some output.  We need to transform it into an XML build report 
 				// fragment so the rest of CC.Net can process it.
 				ProcessResult newResult = new ProcessResult(
-					StringUtil.MakeBuildResult(processResult.StandardOutput, ""),
+					StringUtil.MakeBuildResult(processResult.StandardOutput,string.Empty),
 					StringUtil.MakeBuildResult(processResult.StandardError, "Error"),
 					processResult.ExitCode,
 					processResult.TimedOut,

@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				IServerSpecifier serverSpecifier = statusOnServer.ServerSpecifier;
 				DefaultProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, status.Name);
 				
-				if ((categoryFilter != "") && (categoryFilter != status.Category))
+				if ((categoryFilter != string.Empty) && (categoryFilter != status.Category))
 					continue;
 
 				rows.Add(

@@ -34,13 +34,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			@"{0} ""{1}{2}\{3}"" ";
 
 		private TimeZone currentTimeZone = TimeZone.CurrentTimeZone;
-		private string baseLabelName = "";
+		private string baseLabelName =string.Empty;
 		private Modification[] modifications = null;
 		private Modification[] baseModifications = null;
-		private string errorFile = "";
-		private string logFile = "";
-		private string tempFile = "";
-		private string tempLabel = "";
+		private string errorFile =string.Empty;
+		private string logFile =string.Empty;
+		private string tempFile =string.Empty;
+		private string tempLabel =string.Empty;
 
 		public Pvcs() : this(new PvcsHistoryParser(), new ProcessExecutor())
 		{}
@@ -58,13 +58,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public string Subproject;
 
 		[ReflectorProperty("username", Required = false)]
-		public string Username = "";
+		public string Username =string.Empty;
 
 		[ReflectorProperty("password", Required = false)]
-		public string Password = "";
+		public string Password =string.Empty;
 
 		[ReflectorProperty("workingdirectory", Required = false)]
-		public string WorkingDirectory = "";
+		public string WorkingDirectory =string.Empty;
 
 		[ReflectorProperty("workspace", Required = false)]
 		public string Workspace = "/@/RootWorkspace";
@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public string LabelOrPromotionInput(string label)
 		{
-			return (label.Length == 0) ? "" : (IsPromotionGroup == false ? "-v" : "-g") + label;
+			return (label.Length == 0) ?string.Empty : (IsPromotionGroup == false ? "-v" : "-g") + label;
 		}
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
@@ -242,13 +242,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public string CreateIndividualGetString(Modification mod, string fileLocation)
 		{
-			return string.Format(INDIVIDUAL_GET_REVISION_TEMPLATE, GetVersion(mod, ""), GetUncPathPrefix(mod), mod.FolderName, mod.FileName, fileLocation);
+			return string.Format(INDIVIDUAL_GET_REVISION_TEMPLATE, GetVersion(mod,string.Empty), GetUncPathPrefix(mod), mod.FolderName, mod.FileName, fileLocation);
 		}
 
 		private string GetUncPathPrefix(Modification mod)
 		{
 			//Add extract \ for UNC paths
-			return mod.FolderName.StartsWith("\\") ? @"\" : "";
+			return mod.FolderName.StartsWith("\\") ? @"\" :string.Empty;
 		}
 
 		private string GetVersion(Modification mod, string label)
@@ -390,7 +390,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				foreach (Modification mod in modifications)
 				{
-					stream.WriteLine(CreateIndividualLabelString(mod, (oldLabel.Length > 0 ? newLabel : "")));
+					stream.WriteLine(CreateIndividualLabelString(mod, (oldLabel.Length > 0 ? newLabel :string.Empty)));
 				}
 			}
 			Log.Info("Applying PVCS Label " + newLabel + " on Project " + project);

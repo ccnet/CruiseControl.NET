@@ -262,7 +262,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         {
             string pattern = t[0].Text.ToUpper();
 
-            CCProjectsView view = new CCProjectsView(this, "");
+            CCProjectsView view = new CCProjectsView(this, string.Empty);
             AddView(view);
             foreach (ListViewItem lvi in m_current.ListView.Items)
             {
@@ -354,7 +354,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
         void mnuSendToNewTab_Click(object sender, EventArgs e)
         {
-            CCProjectsView view = new CCProjectsView(this, "");
+            CCProjectsView view = new CCProjectsView(this, string.Empty);
             AddView(view);
             foreach (ListViewItem lvi in m_current.ListView.SelectedItems)
             {
@@ -604,7 +604,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         void CCProjectsViewMgrPanel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             CCProjectsViewMgr viewMgr = (CCProjectsViewMgr)((Panel)sender).Tag;
-            CCProjectsView view = new CCProjectsView(viewMgr, "");
+            CCProjectsView view = new CCProjectsView(viewMgr, string.Empty);
             AddView(view);
         }
 
@@ -966,7 +966,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
         public CCProjectsView(CCProjectsViewMgr viewMgr, string viewName)
         {
-            if (viewName == "")
+            if (viewName == string.Empty)
             {
                 viewName = "NewView" + viewMgr.TabControl.TabCount;
             }

@@ -6,17 +6,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private readonly string url;
 		private string linkClass;
 
-		public GeneralAbsoluteLink(string text) : this (text, "", "") { }
+		public GeneralAbsoluteLink(string text) : this (text, string.Empty, string.Empty) { }
 
-		public GeneralAbsoluteLink(string text, string url) : this (text, url, "") { }
+		public GeneralAbsoluteLink(string text, string url) : this (text, url, string.Empty) { }
 
 		public GeneralAbsoluteLink(string text, string url, string linkClass)
 		{
 			this.text = text;
 			this.url = url;
-			this.linkClass = linkClass;
+            this.linkClass = linkClass; 
 		}
-
+        
 		public virtual string Text
 		{
 			get { return text; }

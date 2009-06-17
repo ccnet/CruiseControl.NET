@@ -150,7 +150,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public string WebURL 
 		{ 
-			get { return ""; }
+			get { return string.Empty; }
 		}
         public IProjectAuthorisation Security
         {

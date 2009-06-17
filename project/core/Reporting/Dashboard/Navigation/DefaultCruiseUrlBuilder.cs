@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 
 		public string BuildServerUrl(string action, IServerSpecifier serverSpecifier)
 		{
-			return BuildServerUrl(action, serverSpecifier, "");
+			return BuildServerUrl(action, serverSpecifier, string.Empty);
 		}
 
 		public string BuildServerUrl(string action, IServerSpecifier serverSpecifier, string queryString)
@@ -27,22 +27,22 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 			return urlBuilder.BuildUrl(
 				action, 
 				queryString, 
-				GeneratePath(serverSpecifier.ServerName, "", ""));
+				GeneratePath(serverSpecifier.ServerName, string.Empty, string.Empty));
 		}
 
 		public string BuildProjectUrl(string action, IProjectSpecifier projectSpecifier)
 		{
 			return urlBuilder.BuildUrl(
 				action, 
-				"",
-				GeneratePath(projectSpecifier.ServerSpecifier.ServerName, projectSpecifier.ProjectName, ""));
+				string.Empty,
+				GeneratePath(projectSpecifier.ServerSpecifier.ServerName, projectSpecifier.ProjectName, string.Empty));
 		}
 
 		public string BuildBuildUrl(string action, IBuildSpecifier buildSpecifier)
 		{
 			return urlBuilder.BuildUrl(
 				action, 
-				"",
+				string.Empty,
 				GeneratePath(
 					buildSpecifier.ProjectSpecifier.ServerSpecifier.ServerName, 
 					buildSpecifier.ProjectSpecifier.ProjectName, 

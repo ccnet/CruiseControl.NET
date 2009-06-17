@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			{
 				foreach (object key in xsltArgs.Keys)
 				{
-					args.AddParam(key.ToString(), "", xsltArgs[key]);
+					args.AddParam(key.ToString(),string.Empty, xsltArgs[key]);
 				}
 			}
 			return args;

@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 		public void ReadUnknownFile()
 		{
 			ServerLogFileReader reader = new ServerLogFileReader("BogusFileName", 10);
-			Assert.AreEqual("Error reading unknown file", "", reader.Read());
+			Assert.AreEqual("Error reading unknown file",string.Empty, reader.Read());
 		}
 
 		[Test]

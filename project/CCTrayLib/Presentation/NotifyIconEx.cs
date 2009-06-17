@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private uint icon_id;
         private ContextMenu contextMenu;
         private Icon icon;
-        private string tooltip = "";
+        private string tooltip = string.Empty;
         private bool visible;
         private bool m_doubleClick; // fix for extra mouse up message we want to discard
 

@@ -61,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 				}
 			}
 
-			return "";
+			return string.Empty;
 		}
 
 		public IServerSpecifier ServerSpecifier

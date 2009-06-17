@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Initialise a new blank <see cref="ExternalLink"/>.
         /// </summary>
-		public ExternalLink() : this ("", "")  { }
+		public ExternalLink() : this (string.Empty, string.Empty)  { }
 
         /// <summary>
         /// Initialise a new populated <see cref="ExternalLink"/>.

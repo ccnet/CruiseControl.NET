@@ -605,7 +605,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private void AddBreakersToMessages(IIntegrationResult result)
         {
             List<string> breakers = new List<string>();
-            string breakingusers = "";
+            string breakingusers = string.Empty;
 
             foreach (Modification mod in result.Modifications)
             {
@@ -740,7 +740,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private string CurrentBuildStage()
         {
             if (CurrentActivity != ProjectActivity.Building)
-                return "";
+                return string.Empty;
             else
                 return integrationResultManager.CurrentIntegration.BuildProgressInformation.GetBuildProgressInformation();
         }
@@ -758,7 +758,7 @@ namespace ThoughtWorks.CruiseControl.Core
         public string GetBuildLog(string buildName)
         {
             string logDirectory = GetLogDirectory();
-            if (string.IsNullOrEmpty(logDirectory)) return "";
+            if (string.IsNullOrEmpty(logDirectory)) return string.Empty;
             using (StreamReader sr = new StreamReader(Path.Combine(logDirectory, buildName)))
             {
                 return sr.ReadToEnd();

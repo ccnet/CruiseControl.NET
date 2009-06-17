@@ -169,7 +169,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private static int GetNumericBuildNumber(string buildlabel)
 		{
-			return Int32.Parse(Regex.Replace(buildlabel, @"\D", ""));
+			return Int32.Parse(Regex.Replace(buildlabel, @"\D", string.Empty));
 		}
 
 		public static DateTime GetLastBuildDate(string[] filenames, DateTime defaultValue)

@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 					return key;
 				}
 			}
-			return "";
+			return string.Empty;
 		}
 
 		public string GetText(string id)

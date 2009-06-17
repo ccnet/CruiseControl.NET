@@ -157,7 +157,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             {
 
                 if (statisticResult.Value == null)
-                    result = "";
+                    result = string.Empty;
                 else
                     result = statisticResult.Value.ToString();
 

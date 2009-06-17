@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             resultMock = mockery.NewDynamicMock(typeof(IIntegrationResult));
             resultMock.SetupResult("WorkingDirectory", TempFileUtil.GetTempPath("workingDir"));
             resultMock.SetupResult("ArtifactDirectory", TempFileUtil.GetTempPath("artifactDir"));
-            resultMock.SetupResult("BuildProgressInformation", new ThoughtWorks.CruiseControl.Core.Util.BuildProgressInformation("", ""));
+            resultMock.SetupResult("BuildProgressInformation", new ThoughtWorks.CruiseControl.Core.Util.BuildProgressInformation("",string.Empty));
             result = (IIntegrationResult)resultMock.MockInstance;
 
             lastResultMock = mockery.NewDynamicMock(typeof(IIntegrationResult));

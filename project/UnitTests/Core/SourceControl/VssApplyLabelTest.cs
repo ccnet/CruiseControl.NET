@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void GetModificationsWhenApplyLabelIsDisabledDoesNotCreateLabels()
 		{
-			ProcessResult result = new ProcessResult("", "", 0, false);
+			ProcessResult result = new ProcessResult("",string.Empty, 0, false);
 			Modification[] dummyArray = new Modification[1] { new Modification() };
 			_historyParser.SetupResult("Parse", dummyArray, typeof(TextReader), typeof(DateTime), typeof(DateTime));
 			_executor.ExpectAndReturn("Execute", result, new IsTypeOf(typeof(ProcessInfo)));
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void GetModificationsDoesNotCreateLabelWhenThereAreNoModifications()
 		{
-			ProcessResult result = new ProcessResult("", "", 0, false);
+			ProcessResult result = new ProcessResult("",string.Empty, 0, false);
 			Modification[] emptyArray = new Modification[0];
 			_historyParser.SetupResult("Parse", emptyArray, typeof(TextReader), typeof(DateTime), typeof(DateTime));
 			_executor.ExpectAndReturn("Execute", result, new IsTypeOf(typeof(ProcessInfo)));

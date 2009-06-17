@@ -87,8 +87,8 @@ namespace ThoughtWorks.CruiseControl.Core.Label
             // if only 1 part found, that should be the label
             // otherwise it is impossible to identify the label
 
-            label = label.Replace(LabelPrefix, "");
-            label = label.Replace(LabelPostfix, "");
+            label = label.Replace(LabelPrefix, string.Empty);
+            label = label.Replace(LabelPostfix, string.Empty);
 
             NumericParts = Regex.Matches(label, @"\D*?(\d{1,9})\D*");
 
