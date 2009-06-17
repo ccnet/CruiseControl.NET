@@ -1,11 +1,8 @@
 using System;
-using System.Collections;
-using System.Globalization;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml;
-using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {  
@@ -30,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
             string logFileLine;
             StringBuilder changeSet = new StringBuilder(null);
-			ArrayList mods = new ArrayList();
+            var mods = new List<Modification>();
             
             if (vstsLog.Peek() != -1 && Convert.ToChar(vstsLog.Peek()) == Convert.ToChar("-"))
             {                
@@ -71,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 }
             }
 
-            return (Modification[]) mods.ToArray(typeof(Modification));
+            return mods.ToArray();
 		}
 
         private Modification[] ParseChangeSet(StringBuilder changeSet)
@@ -88,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             DateTime changeTime = DateTime.Parse(ChangeSet.Groups["date"].Value);           
             string comment = ChangeSet.Groups["comment"].Value.Trim();
 
-            ArrayList mods = new ArrayList();
+            var mods = new List<Modification>();
 
             if ((changeTime >= startTime) && (changeTime <= endTime))
             {
@@ -110,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 }                
             }
 
-            return (Modification[])mods.ToArray(typeof(Modification));
+            return mods.ToArray();
         }
 
         private string[] parseItem(string itemName)

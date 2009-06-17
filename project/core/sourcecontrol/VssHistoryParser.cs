@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -31,9 +31,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			// not every entry will yield a valid modification so we can't use
 			// an array, but we can assume that most will so starting our 
-			// arraylist to be at least as big as the array will save
+			// list to be at least as big as the array will save
 			// some resizing
-			ArrayList modifications = new ArrayList(entries.Length);
+            var modifications = new List<Modification>(entries.Length);
 
 			foreach (string entry in entries)
 			{
@@ -43,12 +43,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					modifications.Add(mod);
 			}
 
-			return (Modification[]) modifications.ToArray(typeof (Modification));
+			return modifications.ToArray();
 		}
 
 		public string[] ReadAllEntries(TextReader history)
 		{
-			ArrayList entries = new ArrayList();
+            var entries = new List<string>();
 			string currentLine = history.ReadLine();
 			while (IsEndOfFile(currentLine) == false)
 			{
@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					currentLine = history.ReadLine();
 				}
 			}
-			return (string[]) entries.ToArray(typeof (string));
+			return entries.ToArray();
 		}
 
 		public bool IsEntryDelimiter(string line)

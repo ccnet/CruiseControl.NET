@@ -1,7 +1,7 @@
+using System.Diagnostics;
+using System.Reflection;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
-using System.Reflection;
-using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
 

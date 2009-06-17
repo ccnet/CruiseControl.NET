@@ -1,6 +1,6 @@
 using System;
-using System.Globalization;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using Exortech.NetReflector;
@@ -93,8 +93,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			if (!Directory.Exists(workingDirectory))
 				return false;
 
-            return System.IO.Directory.GetDirectories(workingDirectory, ".svn").Length != 0 ||
-                   System.IO.Directory.GetDirectories(workingDirectory, "_svn").Length != 0;
+            return Directory.GetDirectories(workingDirectory, ".svn").Length != 0 ||
+                   Directory.GetDirectories(workingDirectory, "_svn").Length != 0;
         }
 
 

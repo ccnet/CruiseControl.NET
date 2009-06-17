@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			Regex historyRegex = new Regex(starTeamRegExProvider.FileHistoryRegEx);
 
 			// Temporary holder of Modification objects
-			ArrayList modList = new ArrayList();
+            var modList = new List<Modification>();
 
 			// Read conetent of the stream as a string
 			// ASSUMPTION: entire log fits into the available memory
@@ -94,7 +94,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					modList.Add(mod);
 				}
 			}
-			return (Modification[]) modList.ToArray(typeof (Modification));
+			return modList.ToArray();
 		}
 	}
 }

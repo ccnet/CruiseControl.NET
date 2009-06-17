@@ -13,7 +13,7 @@
  ********************************************************************************/
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -39,13 +39,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			string line = sscmLog.ReadLine();
 			int totalLines = int.Parse(line.Split('-')[1]);
 
-			ArrayList modList = new ArrayList(totalLines);
+            var modList = new List<Modification>(totalLines);
 			for (int i = 0; i < totalLines; i++)
 			{
 				line = sscmLog.ReadLine();
 				modList.Add(ParseModificationLine(line));
 			}
-			return (Modification[]) modList.ToArray(typeof (Modification));
+			return modList.ToArray();
 		}
 
 		private Modification ParseModificationLine(string line)

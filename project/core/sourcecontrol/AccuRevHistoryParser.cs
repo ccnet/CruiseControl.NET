@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <summary>
 		/// The list of modifications we find.
 		/// </summary>
-		private ArrayList modificationList;
+        private List<Modification> modificationList;
 		
 		/// <summary>
 		/// A temporary Modification, used to make new modificationList entries.
@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			string line;
 			fromDateTime = from;
 			toDateTime = to;
-			modificationList = new ArrayList();
+            modificationList = new List<Modification>();
 			modificationTemplate = null;
 			Regex firstTokenPattern = new Regex(@"^\s*(\S+)");
             Regex absolutePathPrefixPattern = new Regex(@"(\\|/)\.(\\|/)");
@@ -98,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                         // String together the lines of the comment, with a newline sequence between 
                         // adjacent lines.
                         if (modificationTemplate.Comment != null)
-                            modificationTemplate.Comment += System.Environment.NewLine;
+                            modificationTemplate.Comment += Environment.NewLine;
                         Match commentText = commentTextPattern.Match(line);
                         if (commentText.Groups.Count != 0)
                             modificationTemplate.Comment += commentText.Groups[1].ToString();
@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 }
             }
 			Log.Debug(string.Format("AccuRev reported {0} modifications", modificationList.Count));
-			return (Modification[]) modificationList.ToArray(typeof (Modification));
+			return modificationList.ToArray();
 		}
 
 		/// <summary>

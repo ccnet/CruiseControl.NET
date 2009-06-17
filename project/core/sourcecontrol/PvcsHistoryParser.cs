@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -14,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public Modification[] Parse(TextReader reader, DateTime from, DateTime to)
 		{
 			string modificationFile = reader.ReadToEnd();
-			ArrayList mods = new ArrayList();
+            var mods = new List<Modification>();
 
 			MatchCollection matches = _searchRegEx.Matches(modificationFile);
 			foreach (Match archive in matches)

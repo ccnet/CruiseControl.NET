@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Text;
 using System.Web;
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 {

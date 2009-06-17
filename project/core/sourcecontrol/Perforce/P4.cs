@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -263,12 +263,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		{
 			get
 			{
-				ArrayList viewLineList = new ArrayList();
+                var viewLineList = new List<string>();
 				foreach (string viewLine in View.Split(','))
 				{
 					viewLineList.Add(viewLine);
 				}
-				return (string[]) viewLineList.ToArray(typeof (string));
+				return viewLineList.ToArray();
 			}
 		}
 

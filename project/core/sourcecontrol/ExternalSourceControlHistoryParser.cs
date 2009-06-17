@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
@@ -60,14 +60,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         		throw;
         	}
-        	ArrayList results = new ArrayList();
+            var results = new List<Modification>();
 
         	foreach (Modification mod in mods)
         	{
         		if ((mod.ModifiedTime >= from) & (mod.ModifiedTime <= to))
         			results.Add(mod);
         	}
-        	return (Modification[]) results.ToArray(typeof (Modification));
+        	return results.ToArray();
         }
 
 		#endregion

@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -42,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public Modification[] Parse(TextReader cvsLog, DateTime from, DateTime to)
 		{
-			ArrayList mods = new ArrayList();
+            var mods = new List<Modification>();
 
 			// Read to the first RCS file name. The first entry in the log
 			// information will begin with this line. A CVS_FILE_DELIMITER is NOT
@@ -50,17 +51,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			while ((currentLine = ReadToNotPast(cvsLog, CVS_RCSFILE_LINE, null)) != null)
 			{
 				// Parse the single file entry, which may include several modifications.
-				IList entryList = ParseFileEntry(currentLine, cvsLog);
+				var entryList = ParseFileEntry(currentLine, cvsLog);
 
 				//Add all the modifications to the local list.
 				mods.AddRange(entryList);
 			}
-			return (Modification[]) mods.ToArray(typeof (Modification));
+			return mods.ToArray();
 		}
 
-		private IList ParseFileEntry(string rcsFileLine, TextReader cvsLog)
+        private List<Modification> ParseFileEntry(string rcsFileLine, TextReader cvsLog)
 		{
-			ArrayList mods = new ArrayList();
+            var mods = new List<Modification>();
 
 			string rcsFile = ParseFileNameAndPath(rcsFileLine);
 			string fileName = ParseFileName(rcsFile);

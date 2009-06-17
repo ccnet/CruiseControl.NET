@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -65,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private Modification[] ValidModifications(Modification[] modifications, DateTime from, DateTime to)
 		{
 			if (CheckpointOnSuccess) return modifications;
-			ArrayList validModifications = new ArrayList();
+            var validModifications = new List<Modification>();
 			for (int i = 0; i < modifications.Length; i++)
 			{
 				if (from <= modifications[i].ModifiedTime && to >= modifications[i].ModifiedTime)
@@ -73,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					validModifications.Add(modifications[i]);
 				}
 			}
-			return (Modification[]) validModifications.ToArray(typeof (Modification));
+			return validModifications.ToArray();
 		}
 
 		public override void LabelSourceControl(IIntegrationResult result)

@@ -1,10 +1,7 @@
 using System;
-using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Xml;
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial

@@ -1,5 +1,3 @@
-using System;
-
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	public interface IStarTeamRegExProvider

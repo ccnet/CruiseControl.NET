@@ -20,7 +20,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		const string GIT_FETCH = "fetch origin";
 		const string GIT_REMOTE_HASH = "log origin/master --date-order -1 --pretty=format:\"%H\"";
 		const string GIT_LOCAL_HASH = "log --date-order -1 --pretty=format:\"%H\"";
-		const string GIT_REMOTE_COMMITS = "log origin/master --date-order --name-status \"--after=Sun, 21 Jan 2001 19:00:00 GMT\" \"--before=Mon, 22 Jan 2001 19:00:00 GMT\" --pretty=format:\"Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:\"";
+        readonly string GIT_REMOTE_COMMITS = string.Format(
+            "log origin/master --date-order --name-status \"--after=Sun, 21 Jan 2001 {0:HH:mm:ss} GMT\" \"--before=Mon, 22 Jan 2001 {0:HH:mm:ss} GMT\" --pretty=format:\"Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:\"",
+            new DateTime(2001, 1, 22, 18, 0, 0, DateTimeKind.Utc).ToLocalTime());
 
 		private Git git;
 		private IMock mockHistoryParser;

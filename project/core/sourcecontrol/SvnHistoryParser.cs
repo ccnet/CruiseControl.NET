@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Xml;
@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <returns>A list of modifications between the two timestamps, possibly empty.</returns>
 		public Modification[] Parse(TextReader svnLog, DateTime from, DateTime to)
 		{
-			ArrayList mods = new ArrayList();
+            var mods = new List<Modification>();
 
 			XmlNode svnLogRoot = ReadSvnLogIntoXmlNode(svnLog);
 			XmlNodeList logEntries = svnLogRoot.SelectNodes("/log/logentry");
@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                     mods.AddRange(ParseModificationsFromLogEntry(logEntry, from, to));
                 }
             }
-            return (Modification[]) mods.ToArray(typeof(Modification));
+            return mods.ToArray();
 		}
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <param name="from">The starting timestamp.</param>
         /// <param name="to">The ending timestamp.</param>
         /// <returns>A list of modifications between the two timestamps, possibly empty.</returns>
-        private ArrayList ParseModificationsFromLogEntry(XmlNode logEntry, DateTime from, DateTime to)
+        private List<Modification> ParseModificationsFromLogEntry(XmlNode logEntry, DateTime from, DateTime to)
 		{
             try
             {
@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                     if (changeTime == DateTime.MinValue || changeTime < from || to < changeTime)
                     {
                         // Work around issue 1642 in Subversion (http://subversion.tigris.org/issues/show_bug.cgi?id=1642).
-                        return new ArrayList();
+                        return new List<Modification>();
                     }
                 }
                 else
@@ -102,8 +102,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
                 XmlNodeList paths = logEntry.SelectNodes("paths/path");
                 if (paths == null)
-                    return new ArrayList();
-                ArrayList mods = new ArrayList();
+                    return new List<Modification>();
+                var mods = new List<Modification>();
                 foreach (XmlNode path in paths)
                 {
                     Modification mod = new Modification();

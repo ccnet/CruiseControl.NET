@@ -1,5 +1,6 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
@@ -8,9 +9,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		public Modification[] Parse(TextReader input, DateTime from, DateTime to)
 		{
-			
-			ArrayList mods = new ArrayList();
-			ArrayList filemods = new ArrayList();
+            var mods = new List<Modification>();
+            var filemods = new List<string>();
 
 			string line;
 
@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				mod.FileName = Path.GetFileName(path);
 				mod.FolderName = Path.GetDirectoryName(path);
 				mod.UserName = data[2];
-				mod.ModifiedTime = DateTime.ParseExact (data[3], PlasticSCM.DATEFORMAT, System.Globalization.CultureInfo.InvariantCulture);
+				mod.ModifiedTime = DateTime.ParseExact (data[3], PlasticSCM.DATEFORMAT, CultureInfo.InvariantCulture);
 				mod.ChangeNumber =  data[4];
 				if (!filemods.Contains(path)) 
 				{
@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					mods.Add(mod);
 				}
 			}
-			return (Modification[]) mods.ToArray(typeof (Modification));
+			return mods.ToArray();
 			
 		}
 	}

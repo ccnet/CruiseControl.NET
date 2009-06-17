@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using System.Resources;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {

@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -13,14 +13,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public virtual Modification[] Parse(TextReader history, DateTime from, DateTime to)
 		{
-			ArrayList result = new ArrayList();
+            var result = new List<Modification>();
 			MatchCollection revisionMatches = MODIFICATION_SEARCH_REGEX.Matches(history.ReadToEnd());
 			foreach (Match revisionMatch in revisionMatches)
 			{
 				result.Add(CreateModification(revisionMatch));
 			}
 
-			return (Modification[]) result.ToArray(typeof (Modification));
+			return result.ToArray();
 		}
 
 		public virtual void ParseMemberInfoAndAddToModification(Modification modification, StringReader reader)

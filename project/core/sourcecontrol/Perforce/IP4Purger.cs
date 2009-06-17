@@ -1,5 +1,3 @@
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce;
-
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 {
 	public interface IP4Purger

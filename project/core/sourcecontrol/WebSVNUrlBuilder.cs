@@ -1,5 +1,5 @@
-using Exortech.NetReflector;
 using System;
+using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {

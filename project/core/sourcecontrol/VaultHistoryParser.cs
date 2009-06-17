@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public Modification[] Parse(TextReader history, DateTime from, DateTime to)
 		{
-			ArrayList mods = new ArrayList();
+            var mods = new List<Modification>();
 			XmlDocument xml = new XmlDocument();
 			xml.LoadXml(ExtractXmlFromHistory(history));
 			XmlNode parent = xml.SelectSingleNode("/vault/history");
@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					mods.Add(modification);
 				}
 			}
-			return (Modification[]) mods.ToArray(typeof (Modification));
+			return mods.ToArray();
 		}
 
 		/// <summary

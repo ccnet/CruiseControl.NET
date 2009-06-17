@@ -10,7 +10,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string pathPattern;
         private bool caseSensitive = true;
 
-
 		[ReflectorProperty("pattern", Required=true)]
 		public string Pattern
 		{

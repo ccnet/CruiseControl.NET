@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
-
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {

@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 
 			regex = new Regex(FILE_REGEX);
-			ArrayList result = new ArrayList();
+            var result = new List<Modification>();
 			string oldfile = ",";
 
 			for (Match match = regex.Match(historyLog); match.Success; match = match.NextMatch())
@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					}
 				}
 			}
-			return (Modification[]) result.ToArray(typeof (Modification));
+			return result.ToArray();
 		}
 
 		// strip carriage return, new line, and all leading and trailing characters from parameters

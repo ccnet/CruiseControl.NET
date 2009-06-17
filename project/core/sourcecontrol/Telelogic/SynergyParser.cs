@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
-using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 {
@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// </returns>
 		public virtual Modification[] Parse(string newTasks, string newObjects, DateTime from)
 		{
-			ArrayList modifications = new ArrayList();
+            var modifications = new List<Modification>();
 			Hashtable tasks = new Hashtable();
 
 			// don't bother doing anything if no modified objects were found
@@ -154,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 				}
 				modifications.Add(modification);
 			}
-			return (Modification[]) modifications.ToArray(typeof (Modification));
+			return modifications.ToArray();
 		}
 
 		/// <summary>

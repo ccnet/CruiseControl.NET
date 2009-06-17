@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.IO;
-using System.Collections;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 {
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		/// <returns></returns>
 		public Modification[] Parse(TextReader reader, DateTime from, DateTime to)
 		{
-			ArrayList mods = new ArrayList();
+            var mods = new List<Modification>();
 			string line;
 			string change = null, email = null, user = null, comment = string.Empty;
 			DateTime date = DateTime.Now;
@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 				}
 			}
 			
-			return (Modification[]) mods.ToArray(typeof(Modification));
+			return mods.ToArray();
 		}
 	}
 }

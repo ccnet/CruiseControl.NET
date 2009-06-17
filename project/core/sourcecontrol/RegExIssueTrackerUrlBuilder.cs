@@ -1,6 +1,5 @@
-using Exortech.NetReflector;
-using System;
 using System.Text.RegularExpressions;
+using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {

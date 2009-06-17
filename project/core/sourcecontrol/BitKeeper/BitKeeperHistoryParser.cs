@@ -1,9 +1,8 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
-using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 {
@@ -33,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 			currentLine = ReadToNotPast(bkLog, BK_CHANGESET_LINE, null);
 			fileHistory = DetermineHistoryType();
 
-			ArrayList mods = new ArrayList();
+            var mods = new List<Modification>();
 			while (currentLine != null)
 			{
 				// Parse the ChangeSet entry and read till next ChangeSet
@@ -52,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 				currentLine = bkLog.ReadLine();
 			}
 
-			return (Modification[]) mods.ToArray(typeof (Modification));
+			return mods.ToArray();
 		}
 
 		private Modification ParsePre40VerboseEntry(TextReader bkLog)

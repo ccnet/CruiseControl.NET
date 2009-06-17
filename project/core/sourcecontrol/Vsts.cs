@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Net;
 using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -406,7 +404,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("workspace");
             buffer.AppendArgument("/new");
-            buffer.AppendArgument(string.Format("/computer:{0}", System.Environment.MachineName));
+            buffer.AppendArgument(string.Format("/computer:{0}", Environment.MachineName));
             buffer.AppendArgument(string.Format("/comment:\"{0}\"", DEFAULT_WORKSPACE_COMMENT));
             buffer.AppendArgument(string.Format("/server:{0}", Server));
             buffer.AppendArgument(String.Format("\"{0}\"", Workspace));
@@ -420,7 +418,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("workspace");
             buffer.AppendArgument("/delete");
-            buffer.AppendArgument(string.Format("/computer:{0}", System.Environment.MachineName));
+            buffer.AppendArgument(string.Format("/computer:{0}", Environment.MachineName));
             buffer.AppendArgument(string.Format("-server:{0}", Server));
             buffer.AppendArgument(String.Format("\"{0}\"", Workspace));
             return NewProcessInfo(buffer.ToString(), result);
@@ -431,7 +429,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("workspaces");
-            buffer.AppendArgument(string.Format("/computer:{0}", System.Environment.MachineName));
+            buffer.AppendArgument(string.Format("/computer:{0}", Environment.MachineName));
             buffer.AppendArgument(string.Format("-server:{0}", Server));
             buffer.AppendArgument("/format:detailed");
             buffer.AppendArgument(String.Format("\"{0}\"", Workspace));

@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -104,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             try
             {
                 Execute(CreateHistoryProcessInfo(from, to, tempOutputFileName));
-                TextReader outputReader = new StreamReader(tempOutputFileName, System.Text.Encoding.Default);
+                TextReader outputReader = new StreamReader(tempOutputFileName, Encoding.Default);
                 try
                 {
                     // return ParseModifications(outputReader, from.StartTime, to.StartTime);

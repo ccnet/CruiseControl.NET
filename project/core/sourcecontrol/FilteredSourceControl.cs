@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			Modification[] allModifications = _realScProvider.GetModifications(from, to);
-			ArrayList acceptedModifications = new ArrayList();
+            var acceptedModifications = new List<Modification>();
 
 			foreach (Modification modification in allModifications)
 			{
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                         modification));
             }
 
-			return (Modification[]) acceptedModifications.ToArray(typeof (Modification));
+			return acceptedModifications.ToArray();
 		}
 
 		public void LabelSourceControl(IIntegrationResult result)

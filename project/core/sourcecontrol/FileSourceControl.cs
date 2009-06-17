@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -32,13 +32,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
             DirectoryInfo root = new DirectoryInfo(from.BaseFromWorkingDirectory(RepositoryRoot));
-            ArrayList modifications = GetMods(root, from.StartTime);
-            return (Modification[])modifications.ToArray(typeof(Modification));
+            var modifications = GetMods(root, from.StartTime);
+            return modifications.ToArray();
         }
 
-        private ArrayList GetMods(DirectoryInfo dir, DateTime from)
+        private List<Modification> GetMods(DirectoryInfo dir, DateTime from)
         {
-            ArrayList mods = new ArrayList();
+            var mods = new List<Modification>();
             try
             {
                 foreach (FileInfo file in dir.GetFiles())

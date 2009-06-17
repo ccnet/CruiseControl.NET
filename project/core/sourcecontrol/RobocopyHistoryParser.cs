@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Text;
 using System.Text.RegularExpressions;
-using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -12,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		public Modification[] Parse(TextReader reader, DateTime from, DateTime to)
 		{
-			ArrayList mods = new ArrayList();
+            var mods = new List<Modification>();
 
 			string currentLine = reader.ReadLine();
 
@@ -40,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				currentLine = reader.ReadLine();
 			}
 
-			return (Modification[]) mods.ToArray(typeof (Modification));
+			return mods.ToArray();
 		}
 
 		private static string DELETED_DIR_TAG = "*EXTRA Dir";

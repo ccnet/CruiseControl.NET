@@ -1,4 +1,4 @@
-using System.Collections;
+using System.Collections.Generic;
 using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public virtual Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			ArrayList modifications = new ArrayList();
+            var modifications = new List<Modification>();
 			foreach (ISourceControl sourceControl in SourceControls)
 			{
 				Modification[] mods = sourceControl.GetModifications(from, to);
@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				}
 			}
 
-			return (Modification[]) modifications.ToArray(typeof(Modification));
+			return modifications.ToArray();
 		}
 
 		public void LabelSourceControl(IIntegrationResult result)

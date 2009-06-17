@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
@@ -414,7 +414,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				}
 			}
 
-			ArrayList allMods = new ArrayList();
+            var allMods = new List<Modification>();
 			foreach (Modification mod in baseModifications)
 			{
 				allMods.Add(mod);

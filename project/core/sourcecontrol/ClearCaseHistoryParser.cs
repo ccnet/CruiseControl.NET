@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -100,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		internal Modification[] ParseStream( TextReader reader )
 		{
-			ArrayList modifications = new ArrayList();
+            var modifications = new List<Modification>();
 			string nextLine;
 			while ( ( nextLine = reader.ReadLine() ) != null )
 			{
@@ -123,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					modifications.Add( modification );
 				}
 			}
-			return ( Modification[] ) modifications.ToArray( typeof( Modification ) );
+			return modifications.ToArray();
 		}
 
 		private string AccumulateMultiLineEntry(string nextLine, TextReader reader)
@@ -139,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public string[] TokenizeEntry( string line )
 		{
-			ArrayList items = new ArrayList();
+            var items = new List<string>();
 			int firstDelimiter = -1;
 			int entryIndex = 0;
 			int secondDelimiter = line.IndexOf( DELIMITER, entryIndex );
@@ -152,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				secondDelimiter = line.IndexOf( DELIMITER, entryIndex );
 			}
 			items.Add( line.Substring( entryIndex, line.Length - entryIndex ) );
-			return ( string[] ) items.ToArray( typeof( string ) );
+			return items.ToArray();
 		}
 	}
 }

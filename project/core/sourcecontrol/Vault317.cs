@@ -1,9 +1,8 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Xml;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -56,14 +55,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			// Unfortunately we have to go through these one more time to ensure there's nothing beyond the version we're going to retrieve.
 			// We've made two history queries, and if changes were committed after our first check it's possible that they would be erroneously
 			// included in the list of mods without this extra check.
-			ArrayList modList = new ArrayList(itemModifications.Length);
+            var modList = new List<Modification>(itemModifications.Length);
 			foreach (Modification mod in itemModifications)
 			{
 				if (int.Parse(mod.ChangeNumber) <= _lastTxID)
 					modList.Add(mod);
 			}
 
-            Modification[] modifications = (Modification[]) modList.ToArray(typeof (Modification));
+            Modification[] modifications = modList.ToArray();
             base.FillIssueUrl(modifications);
             return modifications;
         }
