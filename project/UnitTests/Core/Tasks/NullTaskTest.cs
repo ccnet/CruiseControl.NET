@@ -22,5 +22,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.Run(result);
 			Assert.IsTrue(result.Succeeded);
 		}
-	}
+
+        [Test, ExpectedException("System.Exception", "Simulating a failure")]
+        public void ShouldThrowExceptionWhenSimulateFailureIsTrue()
+        {
+            IntegrationResult result = new IntegrationResult();
+            task.SimulateFailure = true;
+            task.Run(result);
+            
+        }
+
+    
+    }
 }
