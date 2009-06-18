@@ -49,11 +49,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 			{
 				return PlaySound (audio, 0, Snd_Options);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				if (!bIgnoreErrors)
 				{
-					throw ex;
+					throw;
 				}
 				else
 				{
@@ -115,11 +115,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 			{
 				return sndPlaySoundA (sSoundFile, Snd_Options);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				if (!bIgnoreErrors)
 				{
-					throw ex;
+					throw;
 				}
 				else
 				{

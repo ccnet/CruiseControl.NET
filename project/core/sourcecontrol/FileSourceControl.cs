@@ -54,11 +54,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                     mods.AddRange(GetMods(sub, from));
                 }
             }
-            catch (DirectoryNotFoundException exc)
+            catch (DirectoryNotFoundException)
             {
                 if (!IgnoreMissingRoot)
                 {
-                    throw exc;
+                    throw;
                 }
             }
 

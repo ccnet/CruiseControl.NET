@@ -171,9 +171,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 }
                
             }
-            catch (Exception Ex )
+            catch (Exception)
             {                
-                throw Ex;
+                throw;
             }            
             
             return ParseModifications(result, from.StartTime, to.StartTime);           
@@ -188,10 +188,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                     lookForErrorReturns(executor.Execute(NewLabelProcessInfo(result)));
                 }
             }
-            catch (Exception Ex)
+            catch (Exception)
             {
                 
-                throw Ex;
+                throw;
             }            
         }        
 
@@ -251,9 +251,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                     lookForErrorReturns(executor.Execute(pi));
                     
                 }
-                catch (Exception Ex)
+                catch (Exception)
                 {
-                    throw Ex;
+                    throw;
                 }               
             }
         }       
@@ -275,9 +275,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
                 return (!pr.StandardOutput.Contains(failedMessage));
             }
-            catch (Exception Ex)
+            catch (Exception)
             {
-                throw Ex;
+                throw;
             }
         }       
 
@@ -294,9 +294,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
                 return (pr.StandardOutput.Contains(expected));
             }
-            catch (Exception Ex)
+            catch (Exception)
             {
-                throw Ex;
+                throw;
             }
         }
      
