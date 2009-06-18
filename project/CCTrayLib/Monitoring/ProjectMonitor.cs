@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				{
 					return lastProjectStatus.Activity;
 				}
-				return new ProjectActivity("");
+				return new ProjectActivity(string.Empty);
 			}
 		}
 
