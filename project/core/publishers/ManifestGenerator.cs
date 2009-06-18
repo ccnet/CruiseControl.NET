@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                     XmlElement modificationElement = manifest.CreateElement("modification");
                     headerElement.AppendChild(modificationElement);
                     modificationElement.SetAttribute("user", modification.UserName);
-                    modificationElement.SetAttribute("changeNumber", modification.ChangeNumber.ToString());
+                    modificationElement.SetAttribute("changeNumber", modification.ChangeNumber);
                     if (!string.IsNullOrEmpty(modification.Comment))
                     {
                         XmlElement commentElement = manifest.CreateElement("comment");

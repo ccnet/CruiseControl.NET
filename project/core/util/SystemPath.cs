@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		
 		public string ReadTextFile()
 		{
-			using (StreamReader textReader = File.OpenText(path.ToString()))
+			using (StreamReader textReader = File.OpenText(path))
 			{
 				return textReader.ReadToEnd();
 			}

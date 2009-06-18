@@ -524,31 +524,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			return null;
 		}
 
-        private void OnExtensionChanged(object sender, EventArgs e)
-        {
-            btnConfigureExtension.Enabled = !string.IsNullOrEmpty(cmbExtension.Text);
-            lblExtensionSettings.Text = "Please configure this extension";
-            transportExtension = null;
-        }
 
-        private void btnConfigureExtension_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (transportExtension == null) transportExtension = ExtensionHelpers.RetrieveExtension(cmbExtension.Text);
-                if (transportExtension.Configure(this))
-                {
-                    lblExtensionSettings.Text = transportExtension.DisplayName;
-                }
-            }
-            catch (Exception error)
-            {
-                MessageBox.Show(this,
-                    "Unable to configure extension:" + Environment.NewLine + error.Message,
-                    "Extension Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-        }
 
         private void LoadExtensions()
         {

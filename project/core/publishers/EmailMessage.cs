@@ -237,25 +237,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
         }
 
-        private string FailureUsersToString(ArrayList failureUsers)
-        {
-
-            if (failureUsers.Count == 0) return string.Empty;
-
-            System.Text.StringBuilder result = new StringBuilder();
-
-            for (int i = 0; i <= failureUsers.Count - 2; i++)
-            {
-                result.AppendFormat("{0},", failureUsers[i]);
-            }
-
-            result.Append(failureUsers[failureUsers.Count - 1]);
-
-            return result.ToString();
-        }
-
-
-
 
         private EmailUser GetEmailUser(string username)
         {
