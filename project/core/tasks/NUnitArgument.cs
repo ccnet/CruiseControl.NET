@@ -4,7 +4,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	public class NUnitArgument
 	{
-		public readonly string[] assemblies;
+		public  string[] assemblies;
 		private readonly string outputfile;
         public string[] IncludedCategories;
         public string[] ExcludedCategories;
