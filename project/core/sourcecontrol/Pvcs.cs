@@ -370,7 +370,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			// Ensure the Label Or Promotion Name exist
 			if (LabelOrPromotionName.Length > 0)
-				LabelSourceControl("", LabelOrPromotionName, result.ProjectName);
+				LabelSourceControl(string.Empty, LabelOrPromotionName, result.ProjectName);
 			// This allows for the labeller concept to support absolute labelling
 			if (result.Label != LabelOrPromotionName)
 				LabelSourceControl(LabelOrPromotionName, result.Label, result.ProjectName);
