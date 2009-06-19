@@ -91,9 +91,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private bool WorkingFolderIsKnownAsSvnWorkingFolder(string workingDirectory)
         {
+            Log.Debug("Checking if {0} is a svn working folder", workingDirectory);
+
 			if (!Directory.Exists(workingDirectory))
 				return false;
-
+            
             return Directory.GetDirectories(workingDirectory, ".svn").Length != 0 ||
                    Directory.GetDirectories(workingDirectory, "_svn").Length != 0;
         }
@@ -122,7 +124,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             else
             {
                 Util.Log.Warning(string.Format("{0} is not a svn working folder", wd));
-
             }
 
             List<Modification> modifications = new List<Modification>();

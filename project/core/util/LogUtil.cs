@@ -46,6 +46,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             if (loggingEnabled) logger.Debug(message);
 		}
 
+        public static void Debug(string message, params object[] args)
+        {
+            if (loggingEnabled) logger.Debug(string.Format(message,args));
+        }
+
 		public static void Warning(string message)
 		{
             if (loggingEnabled) logger.Warn(message);
