@@ -98,6 +98,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="edtFTPnet, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4b0c991f43097782">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\edtFTPnet.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -766,6 +770,7 @@
     <Compile Include="tasks\CoverageThreshold.cs" />
     <Compile Include="tasks\DirectDynamicValue.cs" />
     <Compile Include="tasks\DynamicValueUtility.cs" />
+    <Compile Include="tasks\FtpTask.cs" />
     <Compile Include="tasks\MergeFileSerialiser.cs" />
     <Compile Include="tasks\MergeFileSerialiserFactory.cs" />
     <Compile Include="tasks\MergeFileInfo.cs" />
@@ -867,6 +872,7 @@
     <Compile Include="util\FileChangedWatcher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="util\FtpLib.cs" />
     <Compile Include="util\HtmlAwareMultiTransformer.cs">
       <SubType>Code</SubType>
     </Compile>
