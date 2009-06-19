@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ThoughtWorks.CruiseControl.Core.util
+namespace ThoughtWorks.CruiseControl.Core.Util
 {
     /// <summary>
     /// Handles the shadow copying of files.

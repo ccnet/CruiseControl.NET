@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace ThoughtWorks.CruiseControl.Core.util
+namespace ThoughtWorks.CruiseControl.Core.Util
 {
     /// <summary>
     /// A default instance of the shadow copier.

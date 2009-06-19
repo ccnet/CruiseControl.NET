@@ -5,7 +5,6 @@ using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Core.util;
 using Rhino.Mocks;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks

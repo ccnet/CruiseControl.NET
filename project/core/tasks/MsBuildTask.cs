@@ -5,7 +5,7 @@ using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using System.Reflection;
 using System;
-using ThoughtWorks.CruiseControl.Core.util;
+
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
