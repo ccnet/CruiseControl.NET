@@ -130,7 +130,8 @@
 				<include name="**/*.aspx"/>
 				<include name="**/*.ascx"/>
 				<include name="**/*.asax"/>
-				<include name="**/*.html"/>
+        <include name="**/*.htm"/>
+        <include name="**/*.html"/>
 				<include name="**/*.config"/>
 				<include name="**/*.css"/>
 				<include name="**/*.gif"/>
