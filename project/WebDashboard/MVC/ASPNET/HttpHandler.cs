@@ -23,6 +23,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
                 if ((context.Request.HttpMethod == "POST") &&
                     (context.Request.Form["Upgrade"] == "Yes"))
                 {
+                    if (!Directory.Exists(ProgramDataFolder.Location)) Directory.CreateDirectory(ProgramDataFolder.Location);
                     File.Copy(context.Server.MapPath("dashboard.config"), configPath);
                     file = context.Server.MapPath("~/DataMigrationDone.htm");
                 }
