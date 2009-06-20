@@ -1,42 +1,38 @@
 ﻿using System;
-using System.Runtime.Remoting;
+using System.ServiceModel;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
     /// <summary>
-    /// A server connection using .NET remoting.
+    /// A server connection using Windows Communications Foundation.
     /// </summary>
-    public class RemotingConnection
+    public class WcfConnection
         : IServerConnection, IDisposable
     {
         #region Private fields
-        private const string managerUri = "CruiseManager.rem";
-        private const string serverClientUri = "CruiseServerClient.rem";
-        private readonly Uri serverAddress;
-        private IMessageProcessor client;
+        private Uri serverAddress;
+        private CruiseControlContractClient client;
         private bool isBusy;
         #endregion
 
         #region Constructors
         /// <summary>
-        /// Initialises a new <see cref="RemotingConnection"/> to a remote server.
+        /// Initialises a new <see cref="WcfConnection"/> to a remote server.
         /// </summary>
         /// <param name="serverAddress">The address of the remote server.</param>
-        public RemotingConnection(string serverAddress)
+        public WcfConnection(string serverAddress)
             : this(new Uri(serverAddress))
         {
         }
 
         /// <summary>
-        /// Initialises a new <see cref="RemotingConnection"/> to a remote server.
+        /// Initialises a new <see cref="WcfConnection"/> to a remote server.
         /// </summary>
         /// <param name="serverAddress">The address of the remote server.</param>
-        public RemotingConnection(Uri serverAddress)
+        public WcfConnection(Uri serverAddress)
         {
-            UriBuilder builder = new UriBuilder(serverAddress);
-            if (builder.Port == -1) builder.Port = 21234;
-            this.serverAddress = new Uri(builder.Uri, "/CruiseManager.rem");
+            this.serverAddress = serverAddress;
         }
         #endregion
 
@@ -47,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public string Type
         {
-            get { return ".NET Remoting"; }
+            get { return "Windows Communication Foundation"; }
         }
         #endregion
 
@@ -57,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public string ServerName
         {
-            get { return serverAddress.Host; }
+            get { return client.Endpoint.ListenUri.Host; }
         }
         #endregion
 
@@ -83,8 +79,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         public virtual Response SendMessage(string action, ServerRequest request)
         {
             // Initialise the connection and send the message
-            InitialiseRemoting();
-            Response result = client.ProcessMessage(action, request);
+            InitialiseClient();
+            var result = client.ProcessMessage(action, request);
             return result;
         }
         #endregion
@@ -116,25 +112,27 @@ namespace ThoughtWorks.CruiseControl.Remote
             try
             {
                 isBusy = true;
-                InitialiseRemoting();
-                Response result = client.ProcessMessage(action, request);
-
-                if (SendMessageCompleted != null)
+                InitialiseClient();
+                IAsyncResult async = null;
+                async = client.BeginProcessMessage(action, request, (result) =>
                 {
-                    MessageReceivedEventArgs args = new MessageReceivedEventArgs(result, null, false, userState);
-                    SendMessageCompleted(this, args);
-                }
+                    if (SendMessageCompleted != null)
+                    {
+                        var response = client.EndProcessMessage(async);
+                        var args = new MessageReceivedEventArgs(response, null, false, userState);
+                        SendMessageCompleted(this, args);
+                    }
+                    isBusy = false;
+                }, userState);
+
             }
             catch (Exception error)
             {
                 if (SendMessageCompleted != null)
                 {
-                    MessageReceivedEventArgs args = new MessageReceivedEventArgs(null, error, false, userState);
+                    var args = new MessageReceivedEventArgs(null, error, false, userState);
                     SendMessageCompleted(this, args);
                 }
-            }
-            finally
-            {
                 isBusy = false;
             }
         }
@@ -155,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="userState"></param>
         public void CancelAsync(object userState)
         {
-            // .NET remoting operations are not asynchronous, therefore can't cancel anything
+            if (isBusy) client.Abort();
         }
         #endregion
 
@@ -165,7 +163,11 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public virtual void Dispose()
         {
-            client = null;
+            if (client != null)
+            {
+                client.Close();
+                client = null;
+            }
         }
         #endregion
         #endregion
@@ -184,20 +186,18 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Initialises the client connection.
         /// </summary>
-        private void InitialiseRemoting()
+        private void InitialiseClient()
         {
+            if ((client != null) && (client.State != CommunicationState.Opened))
+            {
+                Dispose();
+            }
+
             if (client == null)
             {
-                // Handle both old and new style connections
-                var actualUri = serverAddress.AbsoluteUri;
-                if (actualUri.EndsWith(managerUri, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    actualUri = actualUri.Substring(0, actualUri.Length - managerUri.Length) + serverClientUri;
-                }
-
-                // Initialise the actual client
-                client = RemotingServices.Connect(typeof(IMessageProcessor),
-                    actualUri) as IMessageProcessor;
+                client = new CruiseControlContractClient(new BasicHttpBinding(),
+                    new EndpointAddress(serverAddress));
+                client.Open();
             }
         }
         #endregion

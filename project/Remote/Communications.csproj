@@ -95,6 +95,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
+    <WarningsAsErrors>1712,1591,1573,1570,1574,1580,1581,1584,1589,1590,1592,1598</WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">

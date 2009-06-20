@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCCmd", "CCCmd\CCCmd.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Extensions", "Core.Extensions\Core.Extensions.csproj", "{F5896F45-B5BB-4A7B-AD1A-279CE12A0650}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communications.Extensions", "Communications.Extensions\Communications.Extensions.csproj", "{A1B0C773-4779-4A1B-AE4E-8A53D73A8BE5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Build|Any CPU = Build|Any CPU
@@ -123,6 +125,12 @@ Global
 		{F5896F45-B5BB-4A7B-AD1A-279CE12A0650}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5896F45-B5BB-4A7B-AD1A-279CE12A0650}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5896F45-B5BB-4A7B-AD1A-279CE12A0650}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B0C773-4779-4A1B-AE4E-8A53D73A8BE5}.Build|Any CPU.ActiveCfg = Build|Any CPU
+		{A1B0C773-4779-4A1B-AE4E-8A53D73A8BE5}.Build|Any CPU.Build.0 = Build|Any CPU
+		{A1B0C773-4779-4A1B-AE4E-8A53D73A8BE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B0C773-4779-4A1B-AE4E-8A53D73A8BE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B0C773-4779-4A1B-AE4E-8A53D73A8BE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B0C773-4779-4A1B-AE4E-8A53D73A8BE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
