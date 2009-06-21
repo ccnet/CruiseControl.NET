@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -8,6 +9,22 @@ namespace ThoughtWorks.CruiseControl.Remote
     public class CruiseServerClientFactory 
         : ICruiseServerClientFactory
     {
+        #region Private fields
+        private Dictionary<string, ClientInitialiser> initialisers = new Dictionary<string, ClientInitialiser>();
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initialise a new <see cref="CruiseServerClientFactory"/>.
+        /// </summary>
+        public CruiseServerClientFactory()
+        {
+            // Add the initial initialisers
+            InitialiseDefaultTcpClient();
+            InitialiseDefaultHttpClient();
+        }
+        #endregion
+
         #region Public methods
         #region GenerateClient()
         /// <summary>
@@ -44,39 +61,17 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
         public CruiseServerClientBase GenerateClient(string address, ClientStartUpSettings settings)
         {
-            CruiseServerClientBase client; 
             var serverUri = new Uri(address);
-            if (settings.BackwardsCompatable)
+            var transport = serverUri.Scheme.ToLower();
+            if (initialisers.ContainsKey(transport))
             {
-                switch (serverUri.Scheme.ToLower())
-                {
-                    case "http":
-                        client = new CruiseServerHttpClient(address);
-                        break;
-                    case "tcp":
-                        client = new CruiseServerRemotingClient(address);
-                        break;
-                    default:
-                        throw new ApplicationException("Unknown transport protocol");
-                }
+                var client = initialisers[transport](address, settings);
+                return client;
             }
             else
             {
-                IServerConnection connection = null;
-                switch (serverUri.Scheme.ToLower())
-                {
-                    case "http":
-                        connection = new HttpConnection(address);
-                        break;
-                    case "tcp":
-                        connection = new RemotingConnection(address);
-                        break;
-                    default:
-                        throw new ApplicationException("Unknown transport protocol");
-                }
-                client = new CruiseServerClient(connection);
+                throw new ApplicationException("Unknown transport protocol");
             }
-            return client;
         }
 
         /// <summary>
@@ -221,6 +216,69 @@ namespace ThoughtWorks.CruiseControl.Remote
             client.TargetServer = targetServer;
             return client;
         }
+        #endregion
+
+        #region InitialiseDefaultHttpClient()
+        /// <summary>
+        /// Initialise the default HTTP client (via Web Dashboard).
+        /// </summary>
+        public void InitialiseDefaultHttpClient()
+        {
+            initialisers["http"] = (address, settings) =>
+            {
+                if (settings.BackwardsCompatable)
+                {
+                    return new CruiseServerHttpClient(address);
+                }
+                else
+                {
+                    return new CruiseServerClient(new HttpConnection(address));
+                }
+            };
+        }
+        #endregion
+
+        #region InitialiseDefaultTcpClient()
+        /// <summary>
+        /// Initialise the default TCP client (via .NET Remoting).
+        /// </summary>
+        public void InitialiseDefaultTcpClient()
+        {
+            initialisers["tcp"] = (address, settings) =>
+            {
+                if (settings.BackwardsCompatable)
+                {
+                    return new CruiseServerRemotingClient(address);
+                }
+                else
+                {
+                    return new CruiseServerClient(new RemotingConnection(address));
+                }
+            };
+        }
+        #endregion
+
+        #region AddInitialiser()
+        /// <summary>
+        /// Adds a transport initialiser.
+        /// </summary>
+        /// <param name="transport">The transport to initialise.</param>
+        /// <param name="initialiser">The new initialiser.</param>
+        public void AddInitialiser(string transport, ClientInitialiser initialiser)
+        {
+            initialisers[transport.ToLower()] = initialiser;
+        }
+        #endregion
+        #endregion
+
+        #region Public delegates
+        #region ClientInitialiser
+        /// <summary>
+        /// Initialises a client.
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="settings"></param>
+        public delegate CruiseServerClientBase ClientInitialiser(string address, ClientStartUpSettings settings);
         #endregion
         #endregion
     }

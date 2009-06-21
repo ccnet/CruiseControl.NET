@@ -67,6 +67,21 @@
             return client;
         }
         #endregion
+
+        #region SwitchHtppToWcf()
+        /// <summary>
+        /// Switches the default HTTP transport to use WCF instead of Web Dashboard.
+        /// </summary>
+        /// <param name="factory">The factory to switch.</param>
+        public static void SwitchHtppToWcf(this CruiseServerClientFactory factory)
+        {
+            factory.AddInitialiser("http", (address, settings) =>
+            {
+                var client = new CruiseServerClient(new WcfConnection(address));
+                return client;
+            });
+        }
+        #endregion
         #endregion
     }
 }
