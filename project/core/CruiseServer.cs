@@ -121,6 +121,14 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             Log.Info("Starting CruiseControl.NET Server");
             monitor.Reset();
+
+            // Make sure the default program data folder exists
+            if (!Directory.Exists(PathUtils.DefaultProgramDataFolder))
+            {
+                Log.Info("Initialising data folder: '{0}'", PathUtils.DefaultProgramDataFolder);
+                Directory.CreateDirectory(PathUtils.DefaultProgramDataFolder);
+            }
+
             integrationQueueManager.StartAllProjects();
             Log.Info("Initialising security");
             securityManager.Initialise();

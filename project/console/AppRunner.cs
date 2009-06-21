@@ -49,6 +49,17 @@ namespace ThoughtWorks.CruiseControl.Console
             }
         }
 
+        #region InitializeLifetimeService()
+        /// <summary>
+        /// Initialise the lifetime service.
+        /// </summary>
+        /// <returns></returns>
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
+        #endregion
+
         /// <summary>
         /// Stop the application.
         /// </summary>
