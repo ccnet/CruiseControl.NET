@@ -4,7 +4,6 @@ using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     [ReflectorType("ftp")]
@@ -56,7 +55,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     remoteFolder = ftp.CurrentWorkingFolder() + "/" + FtpFolderName;
                 }
 
-
                 if (Action == FtpAction.UploadFolder)
                 {
                     Log.Debug("Uploading {0} to {1}, recursive : {2}", LocalFolderName, remoteFolder, RecursiveCopy);
@@ -81,7 +79,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     }
                     catch { }
                 }
-
                 throw ex;
             }
 

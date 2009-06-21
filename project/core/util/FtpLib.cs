@@ -1,7 +1,7 @@
 ﻿
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
-    public class FtpLib
+    public class FtpLib : IFtpLib
     {
         private EnterpriseDT.Net.Ftp.FTPConnection FtpServer;
 

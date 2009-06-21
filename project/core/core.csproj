@@ -894,6 +894,7 @@
     <Compile Include="util\IFileWatcher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="util\IFtpLib.cs" />
     <Compile Include="util\ILogger.cs" />
     <Compile Include="util\IMultiTransformer.cs">
       <SubType>Code</SubType>
