@@ -4,6 +4,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
     public class FtpLib : IFtpLib
     {
         private EnterpriseDT.Net.Ftp.FTPConnection FtpServer;
+        private Tasks.TaskBase CallingTask;
 
         public FtpLib()
         {
@@ -12,6 +13,23 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             this.FtpServer.ReplyReceived += HandleMessages;
 
             this.FtpServer.CommandSent += HandleMessages;
+
+        }
+
+        public FtpLib(Tasks.TaskBase callingTask)
+        {
+            CallingTask = callingTask;
+
+            this.FtpServer = new EnterpriseDT.Net.Ftp.FTPConnection();
+
+            this.FtpServer.ReplyReceived += HandleMessages;
+
+            this.FtpServer.CommandSent += HandleMessages;
+
+            this.FtpServer.Downloaded += new EnterpriseDT.Net.Ftp.FTPFileTransferEventHandler(FtpServer_Downloaded);
+
+            this.FtpServer.Uploaded += new EnterpriseDT.Net.Ftp.FTPFileTransferEventHandler(FtpServer_Uploaded);
+
         }
 
 
@@ -54,6 +72,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             bool DownloadFile = false;
             string LocalFile = null;
             System.IO.FileInfo fi = default(System.IO.FileInfo);
+
+            if (!System.IO.Directory.Exists(localFolder))
+            {
+                Log.Debug("creating {0}", localFolder);
+                System.IO.Directory.CreateDirectory(localFolder);
+            }
 
             foreach (EnterpriseDT.Net.Ftp.FTPFile CurrentFileOrDirectory in FtpServerFileInfo)
             {
@@ -221,12 +245,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return this.FtpServer.ServerDirectory;
         }
 
-
-        private void HandleMessages(object sender, EnterpriseDT.Net.Ftp.FTPMessageEventArgs e)
-        {
-            Log.Info(e.Message);
-        }
-
         private bool FileExistsAtFtp(EnterpriseDT.Net.Ftp.FTPFile[] ftpServerFileInfo, string localFileName)
         {
 
@@ -290,5 +308,33 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
             return isDifferent;
         }
+
+        private void HandleMessages(object sender, EnterpriseDT.Net.Ftp.FTPMessageEventArgs e)
+        {
+            Log.Info(e.Message);
+        }
+
+        void FtpServer_Uploaded(object sender, EnterpriseDT.Net.Ftp.FTPFileTransferEventArgs e)
+        {
+            string file;
+            if (!e.RemoteDirectory.EndsWith("/"))
+                file = string.Concat("Uploaded : ", e.RemoteDirectory, "/", e.RemoteFile);
+            else
+                file = string.Concat("Uploaded : ", e.RemoteDirectory, e.RemoteFile);
+
+            CallingTask.CurrentStatus.AddChild(new ThoughtWorks.CruiseControl.Remote.ItemStatus(file));
+        }
+
+        void FtpServer_Downloaded(object sender, EnterpriseDT.Net.Ftp.FTPFileTransferEventArgs e)
+        {
+            string file;
+            if (!e.RemoteDirectory.EndsWith("/"))
+                file = string.Concat("Downloaded : ", e.RemoteDirectory, "/", e.RemoteFile);
+            else
+                file = string.Concat("Downloaded : ", e.RemoteDirectory, e.RemoteFile);
+
+            CallingTask.CurrentStatus.AddChild(new ThoughtWorks.CruiseControl.Remote.ItemStatus(file));
+        }
+    
     }
 }

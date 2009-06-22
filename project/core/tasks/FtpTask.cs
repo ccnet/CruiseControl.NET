@@ -24,10 +24,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("password", Required = true)]
         public string Password = string.Empty;
 
-        [ReflectorProperty("useActiveConnectionMode", Required = true)]
+        [ReflectorProperty("useActiveConnectionMode", Required = false)]
         public bool UseActiveConnectionMode = true;
 
-        [ReflectorProperty("action", Required = true)]
+        [ReflectorProperty("action", Required = false)]
         public FtpAction Action = FtpAction.DownloadFolder;
 
         [ReflectorProperty("ftpFolderName", Required = true)]
@@ -41,11 +41,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         protected override bool Execute(IIntegrationResult result)
         {
-            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Ftp");
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : GetDescription());
 
             string remoteFolder = FtpFolderName;
-            FtpLib ftp = new FtpLib();
+            FtpLib ftp = new FtpLib(this);
 
+            
             try
             {
                 ftp.LogIn(ServerName, UserName, Password, UseActiveConnectionMode);
@@ -83,6 +84,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
 
             return true;
+        }
+
+        private string GetDescription()
+        {
+            if (Action == FtpAction.DownloadFolder)
+            {
+                return string.Concat("Downloading ", FtpFolderName, " to ", LocalFolderName);
+            }
+
+            return string.Concat("Uploading ", LocalFolderName, " to ", FtpFolderName);
         }
 
     }
