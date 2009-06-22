@@ -2,7 +2,6 @@ using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.Remote;
 using System;
 using ThoughtWorks.CruiseControl.Remote.Messages;
-using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {

@@ -117,11 +117,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\Remote\Remote.csproj">
-      <Name>Remote</Name>
-      <Project>{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">
@@ -143,6 +138,7 @@
     <Compile Include="CCTimeFormatter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CCTrayLibException.cs" />
     <Compile Include="Configuration\AudioFiles.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -670,6 +666,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\application_delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Remote\Remote.csproj">
+      <Project>{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}</Project>
+      <Name>Remote</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

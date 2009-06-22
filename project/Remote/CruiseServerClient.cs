@@ -106,6 +106,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="parameters"></param>
         public override void ForceBuild(string projectName, List<NameValuePair> parameters)
         {
+            if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
+
             BuildIntegrationRequest request = new BuildIntegrationRequest(SessionToken, projectName);
             request.BuildValues = parameters;
             Response resp = connection.SendMessage("ForceBuild", request);
@@ -133,7 +135,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="integrationRequest"></param>
         public override void Request(string projectName, IntegrationRequest integrationRequest)
         {
-            BuildIntegrationRequest request = new BuildIntegrationRequest(null, projectName);
+            if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
+
+            BuildIntegrationRequest request = new BuildIntegrationRequest(SessionToken, projectName);
             request.BuildCondition = integrationRequest.BuildCondition;
             Response resp = connection.SendMessage("ForceBuild", request);
             ValidateResponse(resp);
@@ -144,10 +148,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Attempts to start a project.
         /// </summary>
-        /// <param name="project"></param>
-        public override void StartProject(string project)
+        /// <param name="projectName"></param>
+        public override void StartProject(string projectName)
         {
-            Response resp = connection.SendMessage("Start", GenerateProjectRequest(project));
+            Response resp = connection.SendMessage("Start", GenerateProjectRequest(projectName));
             ValidateResponse(resp);
         }
         #endregion
@@ -156,10 +160,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Stop project.
         /// </summary>
-        /// <param name="project"></param>
-        public override void StopProject(string project)
+        /// <param name="projectName"></param>
+        public override void StopProject(string projectName)
         {
-            Response resp = connection.SendMessage("Stop", GenerateProjectRequest(project));
+            Response resp = connection.SendMessage("Stop", GenerateProjectRequest(projectName));
             ValidateResponse(resp);
         }
         #endregion
@@ -172,6 +176,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="message"></param>
         public override void SendMessage(string projectName, Message message)
         {
+            if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
+
             MessageRequest request = new MessageRequest();
             request.ProjectName = projectName;
             request.Message = message.Text;
@@ -248,6 +254,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public override string[] GetMostRecentBuildNames(string projectName, int buildCount)
         {
+            if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
+
             BuildListRequest request = new BuildListRequest(null, projectName);
             request.NumberOfBuilds = buildCount;
             DataListResponse resp = ValidateResponse(
@@ -263,6 +271,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public override string GetLog(string projectName, string buildName)
         {
+            if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
+
             BuildRequest request = new BuildRequest(null, projectName);
             request.BuildName = buildName;
             DataResponse resp = ValidateResponse(
@@ -328,6 +338,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public override void DeleteProject(string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
         {
+            if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
+
             ChangeConfigurationRequest request = new ChangeConfigurationRequest(null, projectName);
             request.PurgeWorkingDirectory = purgeWorkingDirectory;
             request.PurgeArtifactDirectory = purgeArtifactDirectory;
@@ -356,6 +368,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public override void UpdateProject(string projectName, string serializedProject)
         {
+            if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
+
             ChangeConfigurationRequest request = new ChangeConfigurationRequest(null, projectName);
             request.ProjectDefinition = serializedProject;
             Response resp = connection.SendMessage("UpdateProject", request);
@@ -614,7 +628,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns>The current status snapshot.</returns>
         public override ProjectStatusSnapshot TakeStatusSnapshot(string projectName)
         {
-            var request = new ProjectRequest(SessionToken, projectName);
+            var request = GenerateProjectRequest(projectName);
             var response = connection.SendMessage("TakeStatusSnapshot", request);
             ValidateResponse(response);
             return (response as StatusSnapshotResponse).Snapshot;
@@ -629,7 +643,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns>The currently available packages.</returns>
         public override List<PackageDetails> RetrievePackageList(string projectName)
         {
-            var request = new ProjectRequest(SessionToken, projectName);
+            var request = GenerateProjectRequest(projectName);
             var response = connection.SendMessage("RetrievePackageList", request);
             ValidateResponse(response);
             return (response as ListPackagesResponse).Packages;
@@ -645,6 +659,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns>The file transfer instance.</returns>
         public override IFileTransfer RetrieveFileTransfer(string projectName, string fileName)
         {
+            if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
+
             var request = new FileTransferRequest(SessionToken, projectName, fileName);
             var response = connection.SendMessage("RetrieveFileTransfer", request);
             ValidateResponse(response);
@@ -675,6 +691,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         public override string GetLinkedSiteId(string projectName, string siteName)
         {
+            if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
+
             var request = new ProjectItemRequest(SessionToken, projectName);
             request.ItemName = siteName;
             var response = connection.SendMessage("GetLinkedSiteId", request);
@@ -748,6 +766,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         private ProjectRequest GenerateProjectRequest(string projectName)
         {
+            if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
+
             ProjectRequest request = new ProjectRequest(SessionToken, projectName);
             request.ServerName = TargetServer;
             return request;

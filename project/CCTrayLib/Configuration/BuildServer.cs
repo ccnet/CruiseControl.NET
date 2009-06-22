@@ -1,5 +1,4 @@
 using System;
-using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
@@ -36,14 +35,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
         public BuildServer(string url, BuildServerTransport transportMode, string extensionName, string settings)
         {
             if ((transportMode == BuildServerTransport.Extension) && string.IsNullOrEmpty(extensionName))
-		{
-                throw new CruiseControlException("Extension transport must always define an extension name");
+            {
+                throw new CCTrayLibException("Extension transport must always define an extension name");
             }
-			this.url = url;
+            this.url = url;
             this.transportMode = transportMode;
             this.extensionName = extensionName;
             this.settings = settings;
-		}
+        }
 
 		public string Url
 		{

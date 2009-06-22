@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using System.Collections.Generic;
@@ -234,7 +233,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             {
                 actionToTry();
             }
-            catch (SessionInvalidException)
+            catch (CommunicationsException)
             {
                 // Let's assume the session has expired, so login again
                 if (this.serverMonitor.RefreshSession())

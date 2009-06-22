@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
-using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -49,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         public static ITransportExtension RetrieveExtension(string name)
         {
             object extensionInstance = RetrieveTypedObject(name);
-            if (!(extensionInstance is ITransportExtension)) throw new CruiseControlException("Extension '" + extensionInstance.GetType().Name + "'does not implement ITransportExtension");
+            if (!(extensionInstance is ITransportExtension)) throw new CCTrayLibException("Extension '" + extensionInstance.GetType().Name + "'does not implement ITransportExtension");
             return extensionInstance as ITransportExtension;
         }
 
@@ -61,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         public static IAuthenticationMode RetrieveAuthenticationMode(string name)
         {
             object extensionInstance = RetrieveTypedObject(name);
-            if (!(extensionInstance is IAuthenticationMode)) throw new CruiseControlException("Extension '" + extensionInstance.GetType().Name + "'does not implement IAuthenticationMode");
+            if (!(extensionInstance is IAuthenticationMode)) throw new CCTrayLibException("Extension '" + extensionInstance.GetType().Name + "'does not implement IAuthenticationMode");
             return extensionInstance as IAuthenticationMode;
         }
 
@@ -105,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             {
                 AppDomain.CurrentDomain.AssemblyResolve -= new ResolveEventHandler(CurrentDomain_AssemblyResolve);
             }
-            if (extensionType == null) throw new CruiseControlException("Unable to find extension '" + name + "'");
+            if (extensionType == null) throw new CCTrayLibException("Unable to find extension '" + name + "'");
             return extensionType;
         }
 
@@ -118,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         {
             Type extensionType = RetrieveType(name);
             object extensionInstance = Activator.CreateInstance(extensionType);
-            if (extensionInstance == null) throw new CruiseControlException("Unable to create extension '" + extensionType.Name + "'");
+            if (extensionInstance == null) throw new CCTrayLibException("Unable to create extension '" + extensionType.Name + "'");
             return extensionInstance;
         }
 

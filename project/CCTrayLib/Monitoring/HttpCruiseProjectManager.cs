@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Specialized;
-using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Parameters;

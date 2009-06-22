@@ -83,9 +83,17 @@ namespace ThoughtWorks.CruiseControl.Remote
         public virtual Response SendMessage(string action, ServerRequest request)
         {
             // Initialise the connection and send the message
-            InitialiseRemoting();
-            Response result = client.ProcessMessage(action, request);
-            return result;
+            try
+            {
+                InitialiseRemoting();
+                Response result = client.ProcessMessage(action, request);
+                return result;
+            }
+            catch (Exception error)
+            {
+                // Replace the original exception with a communications exception
+                throw new CommunicationsException(error.Message);
+            }
         }
         #endregion
 

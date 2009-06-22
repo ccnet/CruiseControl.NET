@@ -3,7 +3,6 @@ using ThoughtWorks.CruiseControl.Remote;
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Messages;
-using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {

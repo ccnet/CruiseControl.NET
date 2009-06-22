@@ -768,6 +768,9 @@
     </Compile>
     <Compile Include="tasks\CoverageFilter.cs" />
     <Compile Include="tasks\CoverageThreshold.cs" />
+    <Compile Include="tasks\CruiseServerControlTask.cs" />
+    <Compile Include="tasks\CruiseServerControlTaskAction.cs" />
+    <Compile Include="tasks\CruiseServerControlTaskActionType.cs" />
     <Compile Include="tasks\DirectDynamicValue.cs" />
     <Compile Include="tasks\DynamicValueUtility.cs" />
     <Compile Include="tasks\FtpTask.cs" />
