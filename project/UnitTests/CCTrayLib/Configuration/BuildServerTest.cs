@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
+using ThoughtWorks.CruiseControl.CCTrayLib;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 {
@@ -58,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 		}
 		
 		[Test]
-        [ExpectedException(typeof(CruiseControlException), "Extension transport must always define an extension name")]
+        [ExpectedException(typeof(CCTrayLibException), "Extension transport must always define an extension name")]
         public void ThrowsWhenMissingExtension()
         {
             BuildServer newServer = new BuildServer("http://test", BuildServerTransport.Extension, null, null);

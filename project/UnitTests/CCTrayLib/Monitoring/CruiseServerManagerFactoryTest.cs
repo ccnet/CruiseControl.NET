@@ -6,6 +6,7 @@ using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 using Rhino.Mocks.Constraints;
+using ThoughtWorks.CruiseControl.CCTrayLib;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 {
@@ -56,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		}
 
         [Test]
-        [ExpectedException(typeof(CruiseControlException), "Unable to find extension 'Extension.Unknown,Extension'")]
+        [ExpectedException(typeof(CCTrayLibException), "Unable to find extension 'Extension.Unknown,Extension'")]
         public void WhenRequestingACruiseServerManagerWithAnExtensionProtocolCannotFindExtension()
         {
             var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
@@ -83,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         }
 
         [Test]
-        [ExpectedException(typeof(CruiseControlException), "Extension 'CruiseServerManagerFactoryTest'does not implement ITransportExtension")]
+        [ExpectedException(typeof(CCTrayLibException), "Extension 'CruiseServerManagerFactoryTest'does not implement ITransportExtension")]
         public void WhenRequestingACruiseServerManagerWithAnExtensionProtocolCannotInvalidExtension()
         {
             var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
