@@ -306,7 +306,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             // colCategory
             // 
-            this.colCategory.Text = "Catgeory";
+            this.colCategory.Text = "Category";
             this.colCategory.Width = 100;
             // 
             // colActivity
