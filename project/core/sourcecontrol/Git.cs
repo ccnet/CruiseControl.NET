@@ -296,7 +296,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 
 		/// <summary>
-		/// Checkout a remote branch with the "git checkout -f 'origin/branchName'" command.
+		/// Checkout a remote branch with the "git checkout -q -f 'origin/branchName'" command.
 		/// </summary>
 		/// <param name="branchName">Name of the branch to checkout.</param>
 		/// <param name="result">IIntegrationResult of the current build.</param>
@@ -304,6 +304,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("checkout");
+			buffer.AddArgument("-q");
 			buffer.AddArgument("-f");
 			buffer.AddArgument(string.Concat("origin/", branchName));
 			Execute(NewProcessInfo(buffer.ToString(), result));

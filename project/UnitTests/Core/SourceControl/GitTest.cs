@@ -180,7 +180,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			git.AutoGetSource = true;
 
-			ExpectToExecuteArguments("checkout -f origin/master");
+			ExpectToExecuteArguments("checkout -q -f origin/master");
 			ExpectToExecuteArguments("clean -d -f -x");
 
 			git.GetSource(IntegrationResult());
