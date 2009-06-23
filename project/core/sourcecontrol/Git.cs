@@ -120,12 +120,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			string workingDirectory = BaseWorkingDirectory(result);
 			string gitRepositoryDirectory = Path.Combine(workingDirectory, ".git");
 
-			// check whenever the working directory exist.
+			// check whether the working directory exist
 			if (!_fileSystem.DirectoryExists(workingDirectory))
 			{
 				Log.Debug(string.Concat("[Git] Working directory '", workingDirectory, "' does not exist."));
 
-				// if the working dies does not exist, call git clone
+				// if the working does not exist, call git clone
 				GitClone(result);
 
 				// setup some required configuration settings for the local repository
@@ -139,7 +139,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			if (!_fileSystem.DirectoryExists(gitRepositoryDirectory))
 			{
 				Log.Debug(string.Concat("[Git] Working directory '", workingDirectory,
-										"' already exist, but its not a git repository. Deleting it and start again."));
+										"' already exists, but it is not a git repository. Try deleting it and starting again."));
 
 				// delete working directory and call CreateUpateLocalRepository recursive
 				_fileDirectoryDeleter.DeleteIncludingReadOnlyObjects(workingDirectory);
