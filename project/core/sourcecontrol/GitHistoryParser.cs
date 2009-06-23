@@ -59,8 +59,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			if (modifiedTime < from || modifiedTime > to)
 			{
 				Log.Debug(string.Concat("[Git] Ignore commit '", hash, "' from '", modifiedTime.ToUniversalTime(),
-				                        "' because it is older then '",
-				                        from.ToUniversalTime(), "' or newer then '", to.ToUniversalTime(), "'."));
+										"' because it is older then '",
+										from.ToUniversalTime(), "' or newer then '", to.ToUniversalTime(), "'."));
 				return result;
 			}
 

@@ -20,8 +20,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		const string GIT_FETCH = "fetch origin";
 		const string GIT_REMOTE_HASH = "log origin/master --date-order -1 --pretty=format:\"%H\"";
 		const string GIT_LOCAL_HASH = "log --date-order -1 --pretty=format:\"%H\"";
-        string GIT_REMOTE_COMMITS = "log origin/master --date-order --name-status \"--after={0}\" \"--before={1}\" --pretty=format:\"Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:\"";
-    
+		string GIT_REMOTE_COMMITS = "log origin/master --date-order --name-status \"--after={0}\" \"--before={1}\" --pretty=format:\"Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:\"";
+
 		private Git git;
 		private IMock mockHistoryParser;
 		private DateTime from;
@@ -36,12 +36,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mockFileSystem = new DynamicMock(typeof(IFileSystem));
 			mockFileDirectoryDeleter = new DynamicMock(typeof(IFileDirectoryDeleter));
 			CreateProcessExecutorMock("git");
-			
-            from = new DateTime(2001, 1, 21, 20, 0, 0, DateTimeKind.Local);
+
+			from = new DateTime(2001, 1, 21, 20, 0, 0, DateTimeKind.Local);
 			to = from.AddDays(1);
 
-		    GIT_REMOTE_COMMITS = string.Format(GIT_REMOTE_COMMITS, from.ToUniversalTime().ToString("R"),
-		                                       to.ToUniversalTime().ToString("R"));
+			GIT_REMOTE_COMMITS = string.Format(GIT_REMOTE_COMMITS, from.ToUniversalTime().ToString("R"),
+											   to.ToUniversalTime().ToString("R"));
 
 			SetupGit((IFileSystem)mockFileSystem.MockInstance, (IFileDirectoryDeleter)mockFileDirectoryDeleter.MockInstance);
 		}
