@@ -5,20 +5,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
     {
         private EnterpriseDT.Net.Ftp.FTPConnection FtpServer;
         private Tasks.TaskBase CallingTask;
+        private Util.BuildProgressInformation bpi;
 
-        public FtpLib()
-        {
-            this.FtpServer = new EnterpriseDT.Net.Ftp.FTPConnection();
-
-            this.FtpServer.ReplyReceived += HandleMessages;
-
-            this.FtpServer.CommandSent += HandleMessages;
-
-        }
-
-        public FtpLib(Tasks.TaskBase callingTask)
+        public FtpLib(Tasks.TaskBase callingTask, Util.BuildProgressInformation buildProgressInformation)
         {
             CallingTask = callingTask;
+            bpi = buildProgressInformation;
 
             this.FtpServer = new EnterpriseDT.Net.Ftp.FTPConnection();
 
@@ -29,6 +21,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             this.FtpServer.Downloaded += new EnterpriseDT.Net.Ftp.FTPFileTransferEventHandler(FtpServer_Downloaded);
 
             this.FtpServer.Uploaded += new EnterpriseDT.Net.Ftp.FTPFileTransferEventHandler(FtpServer_Uploaded);
+
+        }
+
+        public FtpLib()
+        {
+            this.FtpServer = new EnterpriseDT.Net.Ftp.FTPConnection();
+
+            this.FtpServer.ReplyReceived += HandleMessages;
+
+            this.FtpServer.CommandSent += HandleMessages;
 
         }
 
@@ -311,10 +313,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         private void HandleMessages(object sender, EnterpriseDT.Net.Ftp.FTPMessageEventArgs e)
         {
+            bpi.AddTaskInformation(e.Message);
+
             Log.Info(e.Message);
         }
 
-        void FtpServer_Uploaded(object sender, EnterpriseDT.Net.Ftp.FTPFileTransferEventArgs e)
+        private void FtpServer_Uploaded(object sender, EnterpriseDT.Net.Ftp.FTPFileTransferEventArgs e)
         {
             string file;
             if (!e.RemoteDirectory.EndsWith("/"))
@@ -322,10 +326,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             else
                 file = string.Concat("Uploaded : ", e.RemoteDirectory, e.RemoteFile);
 
-            CallingTask.CurrentStatus.AddChild(new ThoughtWorks.CruiseControl.Remote.ItemStatus(file));
+            AddTaskStatusItem(file);
         }
 
-        void FtpServer_Downloaded(object sender, EnterpriseDT.Net.Ftp.FTPFileTransferEventArgs e)
+        private void FtpServer_Downloaded(object sender, EnterpriseDT.Net.Ftp.FTPFileTransferEventArgs e)
         {
             string file;
             if (!e.RemoteDirectory.EndsWith("/"))
@@ -333,8 +337,20 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             else
                 file = string.Concat("Downloaded : ", e.RemoteDirectory, e.RemoteFile);
 
-            CallingTask.CurrentStatus.AddChild(new ThoughtWorks.CruiseControl.Remote.ItemStatus(file));
+            AddTaskStatusItem(file);
         }
-    
+
+        private void AddTaskStatusItem(string information)
+        {
+            CallingTask.CurrentStatus.AddChild(new ThoughtWorks.CruiseControl.Remote.ItemStatus(information));
+
+            if (CallingTask.CurrentStatus.ChildItems.Count > 10)
+            {
+                CallingTask.CurrentStatus.ChildItems.RemoveAt(0);
+            }
+
+        }
+
+
     }
 }

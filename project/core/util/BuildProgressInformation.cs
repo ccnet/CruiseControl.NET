@@ -11,6 +11,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         private DateTime _lastTimeQueried;
         private const Int32 buildStageCheckIntervalInSeconds = 5;
         private static object lockObject = new object();
+        private static System.Collections.Generic.List<BuildProgressInformationData> Progress;
+        private const Int32 MaxItemsInQueue = 10;
+
 
         public BuildProgressInformation(string artifactDirectory, string projectName)
         {
@@ -36,19 +39,24 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             {
                 RemoveListenerFile();
 
-                System.Text.StringBuilder ListenData = new StringBuilder();
+                Progress = new System.Collections.Generic.List<BuildProgressInformationData>();
+                AddToInternalQueue(information);
 
-                ListenData.AppendLine("<data>");
-                ListenData.AppendLine(string.Format("<Item Time=\"{0}\" Data=\"{1}\" />",
-                                        System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                                        CleanUpMessageForXMLLogging(information)));
-                ListenData.AppendLine("</data>");
-
-                this._buildInformation = ListenData.ToString();
-
+                this._buildInformation = GetQueueDataAsXml();
                 this._lastTimeQueried = DateTime.Now.AddYears(-10);
+
             }
         }
+
+
+        public virtual void AddTaskInformation(string information)
+        {
+            lock (lockObject)
+            {
+                AddToInternalQueue(information);
+            }
+        }
+
 
         public virtual string GetBuildProgressInformation()
         {
@@ -66,6 +74,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 }
                 catch
                 { }
+            }
+            else
+            {
+                this._buildInformation = GetQueueDataAsXml();
             }
 
             this._lastTimeQueried = DateTime.Now;
@@ -99,11 +111,64 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 }
             }
         }
+      
+        private void AddToInternalQueue(string info)
+        {
+            Progress.Add(new BuildProgressInformationData(info));
+
+            if (Progress.Count > MaxItemsInQueue) Progress.RemoveAt(1); // keep the first 1 because this contains the taks name (signal start run)
+
+        }
+
+        private string GetQueueDataAsXml()
+        {
+            System.Text.StringBuilder ListenData = new StringBuilder();
+
+            ListenData.AppendLine("<data>");
+            
+            foreach( BuildProgressInformationData bpi in Progress)
+            {
+                ListenData.AppendLine(string.Format("<Item Time=\"{0}\" Data=\"{1}\" />",
+                            bpi.At, bpi.Information ));
+            }
+
+            ListenData.AppendLine("</data>");
+
+            return ListenData.ToString();
+        }
+
+
+    }
+
+    struct BuildProgressInformationData
+    {
+        private DateTime at;
+        private string information;
+
+        public string At
+        {
+            get { return at.ToString("yyyy-MM-dd HH:mm:ss"); }
+        }
+
+        public string Information
+        {
+            get { return CleanUpMessageForXMLLogging(information); }
+        }
+
+        public BuildProgressInformationData(string info)
+        {
+            at = DateTime.Now;
+            information = info;
+        }
 
         private string CleanUpMessageForXMLLogging(string msg)
         {
             return msg.Replace("\"", string.Empty);
         }
-
     }
+
+
 }
+
+
+

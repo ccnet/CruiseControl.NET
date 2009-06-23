@@ -14,6 +14,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             UploadFolder,
             DownloadFolder
         }
+        //todo: limit number of files shown to the last 10 like in build stage : done
+        //todo : change color of progress bar in cctray to red if a failure is found
 
         [ReflectorProperty("serverName", Required = true)]
         public string ServerName = string.Empty;
@@ -44,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : GetDescription());
 
             string remoteFolder = FtpFolderName;
-            FtpLib ftp = new FtpLib(this);
+            FtpLib ftp = new FtpLib(this,result.BuildProgressInformation);
 
             
             try
@@ -53,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
                 if (!FtpFolderName.StartsWith("/"))
                 {
-                    remoteFolder = ftp.CurrentWorkingFolder() + "/" + FtpFolderName;
+                    remoteFolder = System.IO.Path.Combine(ftp.CurrentWorkingFolder(),FtpFolderName);
                 }
 
                 if (Action == FtpAction.UploadFolder)
@@ -71,6 +73,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
             catch (Exception ex)
             {
+                Log.Error(ex);
                 // try to disconnect in a proper way on getting an error
                 if (ftp != null)
                 {
@@ -80,6 +83,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     }
                     catch { }
                 }
+                Log.Info("throwing");
                 throw ex;
             }
 
