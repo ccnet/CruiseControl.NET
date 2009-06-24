@@ -91,6 +91,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			List<string> sortNames = new List<string>();
 			const string dateFormat = "yyyyMMddHHmmssffffff";
 
+            Util.Log.Debug("Deleting Subdirs of {0}", result.ArtifactDirectory);
+
 			foreach (string folder in Directory.GetDirectories(result.ArtifactDirectory))
 			{
 				if (folder != result.BuildLogDirectory)
@@ -109,7 +111,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private void DeleteSubDirsOlderThanXDays(IIntegrationResult result, int daysToKeep)
 		{
-			DateTime cutoffDate = DateTime.Now.Date.AddDays(-daysToKeep);
+            Util.Log.Debug("Deleting Subdirs of {0}", result.ArtifactDirectory);
+
+            DateTime cutoffDate = DateTime.Now.Date.AddDays(-daysToKeep);
+
 
 			foreach (string folder in Directory.GetDirectories(result.ArtifactDirectory))
 			{
@@ -121,6 +126,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private void DeleteFolder(string folderName)
 		{
+            Util.Log.Debug("Deleting {0}", folderName);
+
 			SetFilesToNormalAttributeAndDelete(folderName);
 			Directory.Delete(folderName);
 		}
