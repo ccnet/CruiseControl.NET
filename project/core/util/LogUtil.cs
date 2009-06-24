@@ -40,15 +40,31 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			if (loggingEnabled) logger.Info(message);
 		}
 
+        public static void Info(string message, params object[] args)
+        {
+            if (loggingEnabled) logger.Info(string.Format(message, args));
+        }
+
 		public static void Debug(string message)
 		{
             if (loggingEnabled) logger.Debug(message);
 		}
 
+        public static void Debug(string message, params object[] args)
+        {
+            if (loggingEnabled) logger.Debug(string.Format(message, args));
+        }
+
 		public static void Warning(string message)
 		{
             if (loggingEnabled) logger.Warn(message);
 		}
+
+        public static void Warning(string message, params object[] args)
+        {
+            if (loggingEnabled) logger.Warn(string.Format(message, args));
+        }
+
 
 		public static void Warning(Exception ex)
 		{
@@ -59,6 +75,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
             logger.Error(message);
 		}
+
+        public static void Error(string message, params object[] args)
+        {
+            logger.Error(string.Format(message, args));
+        }
+
 
 		public static void Error(Exception ex)
 		{

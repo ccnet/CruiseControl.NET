@@ -66,12 +66,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                         break;
 
                     case CleanupPolicy.DeleteBuildsOlderThanXDays:
-                        DeleteSubDirsOlderThanXDays(new DirectoryInfo(result.BaseFromWorkingDirectory(SourceDir)).FullName,
+                        DeleteSubDirsOlderThanXDays(new DirectoryInfo(result.BaseFromArtifactsDirectory(PublishDir)).FullName,
                                                     cleanUpValue, result.BuildLogDirectory);
                         break;
 
                     case CleanupPolicy.KeepLastXBuilds:
-                        KeepLastXSubDirs(new DirectoryInfo(result.BaseFromWorkingDirectory(SourceDir)).FullName,
+                        KeepLastXSubDirs(new DirectoryInfo(result.BaseFromArtifactsDirectory(PublishDir)).FullName,
                                                     cleanUpValue, result.BuildLogDirectory);
                         break;
 
@@ -103,6 +103,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private void KeepLastXSubDirs(string targetFolder, int amountToKeep, string buildLogDirectory)
         {
+            Util.Log.Debug("Deleting Subdirs of {0}",targetFolder);
+
             System.Collections.Generic.List<string> sortNames = new System.Collections.Generic.List<string>();
             const string dateFormat = "yyyyMMddHHmmssffffff";
 
@@ -124,6 +126,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private void DeleteSubDirsOlderThanXDays(string targetFolder, int daysToKeep, string buildLogDirectory)
         {
+            Util.Log.Debug("Deleting Subdirs of {0}", targetFolder);
+
             System.DateTime cutoffDate = System.DateTime.Now.Date.AddDays(-daysToKeep);
 
             foreach (string folder in Directory.GetDirectories(targetFolder))
@@ -136,6 +140,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private void DeleteFolder(string folderName)
         {
+            Util.Log.Debug("    Deleting {0}", folderName);
+
             SetFilesToNormalAttributeAndDelete(folderName);
             Directory.Delete(folderName);
         }
