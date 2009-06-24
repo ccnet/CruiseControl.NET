@@ -61,12 +61,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                         break;
 
                     case CleanupPolicy.DeleteBuildsOlderThanXDays:
-                        DeleteSubDirsOlderThanXDays(new DirectoryInfo(result.BaseFromWorkingDirectory(SourceDir)).FullName,
+                        DeleteSubDirsOlderThanXDays(new DirectoryInfo(result.BaseFromArtifactsDirectory(PublishDir)).FullName,
                                                     CleanUpValue, result.BuildLogDirectory);
                         break;
 
                     case CleanupPolicy.KeepLastXBuilds:
-                        KeepLastXSubDirs(new DirectoryInfo(result.BaseFromWorkingDirectory(SourceDir)).FullName,
+                        KeepLastXSubDirs(new DirectoryInfo(result.BaseFromArtifactsDirectory(PublishDir)).FullName,
                                                     CleanUpValue, result.BuildLogDirectory);
                         break;
 
