@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[ReflectorProperty("save", Required=false)]
 		public bool SaveToFile = false;
 
-		public override void SendMessage(string from, string to, string replyto, string subject, string message)
+        public override void SendMessage(string from, string to, string replyto, string subject, string message, string workingFolder)
 		{
 			CruiseControl.Core.Util.Log.Debug("email message = " + message);
 			if (SaveToFile)

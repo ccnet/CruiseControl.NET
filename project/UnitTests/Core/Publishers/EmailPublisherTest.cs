@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		{
             mockGateway.Expect("Send", new MailMessageValidator());
 
-			publisher.SendMessage("from@foo.com", "to@bar.com", "replyto@bar.com", "test subject", "test message");
+			publisher.SendMessage("from@foo.com", "to@bar.com", "replyto@bar.com", "test subject", "test message", "workingDir");
             mockGateway.Verify();
 		}
 

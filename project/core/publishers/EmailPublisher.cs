@@ -6,6 +6,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Tasks;
+using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -126,8 +127,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { xslFiles = value; }
         }
 
-
-
+        [ReflectorProperty("attachments", Required = false)]
+        public string[] Attachments { get; set; }
 
         /// <summary>
         /// Set this property (in configuration) to enable HTML emails containing build details.
@@ -220,7 +221,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             if (IsRecipientSpecified(to))
             {
                 Log.Info(string.Format("Emailing \"{0}\" to {1}", subject, to));
-                SendMessage(fromAddress, to, replytoAddress, subject, message);
+                SendMessage(fromAddress, to, replytoAddress, subject, message, result.WorkingDirectory);
             }
 
             return true;
@@ -231,11 +232,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return to != null && to.Trim() != string.Empty;
         }
 
-        public virtual void SendMessage(string from, string to, string replyto, string subject, string message)
+        public virtual void SendMessage(string from, string to, string replyto, string subject, string message, string workingFolder)
         {
             try
             {
-                emailGateway.Send(GetMailMessage(from, to, replyto, subject, message));
+                emailGateway.Send(GetMailMessage(from, to, replyto, subject, message, workingFolder, Attachments));
             }
             catch (Exception e)
             {
@@ -243,7 +244,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
         }
 
-        protected static MailMessage GetMailMessage(string from, string to, string replyto, string subject, string messageText)
+        protected static MailMessage GetMailMessage(string from, string to, string replyto, string subject, string messageText, string workingFolder, string[] attachments)
         {
             MailMessage mailMessage = new MailMessage();
             mailMessage.To.Add(to);
@@ -252,6 +253,22 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             mailMessage.Subject = subject;
             mailMessage.IsBodyHtml = true;
             mailMessage.Body = messageText;
+
+            // Add any attachments
+            if (attachments != null)
+            {
+                foreach (var attachment in attachments)
+                {
+                    var fullPath = attachment;
+                    if (!Path.IsPathRooted(fullPath)) fullPath = Path.Combine(workingFolder, fullPath);
+                    if (File.Exists(fullPath))
+                    {
+                        var mailAttachment = new Attachment(fullPath);
+                        mailMessage.Attachments.Add(mailAttachment);
+                    }
+                }
+            }
+
             return mailMessage;
         }
 
