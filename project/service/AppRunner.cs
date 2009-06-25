@@ -31,6 +31,17 @@ namespace ThoughtWorks.CruiseControl.Service
             }
         }
 
+        #region InitializeLifetimeService()
+        /// <summary>
+        /// Initialise the lifetime service.
+        /// </summary>
+        /// <returns></returns>
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
+        #endregion
+
         private static string Remoting
         {
             get { return ConfigurationManager.AppSettings["remoting"]; }
