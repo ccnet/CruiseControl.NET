@@ -695,9 +695,7 @@
       <Link>xsl\vil.xsl</Link>
     </Content>
     <Content Include="AppIcon.ico" />
-    <Content Include="DataMigrationDone.htm" />
     <Content Include="cruisecontrol.css" />
-    <Content Include="DataMigration.htm" />
     <Content Include="default.aspx" />
     <Content Include="fitnesse.css" />
     <Content Include="images\arrow_minus_small.gif" />
