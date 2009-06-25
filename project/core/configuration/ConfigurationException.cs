@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
@@ -10,6 +11,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 	{
 		public ConfigurationException(string s) : base(s) {}
 		public ConfigurationException(string s, Exception e) : base(s, e) {}
+		protected ConfigurationException(SerializationInfo info, StreamingContext context)
+			:base (info, context) {}
 	}
 
 	/// <summary>
@@ -20,5 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 	{
 		public ConfigurationFileMissingException(string s) : base(s) {}
 		public ConfigurationFileMissingException(string s, Exception e) : base(s, e) {}
+		protected ConfigurationFileMissingException(SerializationInfo info, StreamingContext context)
+			: base(info, context) {}
 	}
 }

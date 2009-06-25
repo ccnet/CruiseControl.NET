@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib
 {
@@ -14,6 +15,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		}
 
 		public IconNotFoundException (string error, Exception e) : base (error, e)
+		{
+		}
+
+		protected IconNotFoundException(SerializationInfo info, StreamingContext context)
+			: base (info, context)
 		{
 		}
 	}
