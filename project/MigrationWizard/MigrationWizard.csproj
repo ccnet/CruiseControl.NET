@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{04FB3476-5761-45C8-A053-9E7CF0DE2794}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ThoughtWorks.CruiseControl.MigrationWizard</RootNamespace>
+    <AssemblyName>CCNetMigrationWizard</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
+    <ApplicationIcon>AppIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Build|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Build\Migration\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="CompletedPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CompletedPage.Designer.cs">
+      <DependentUpon>CompletedPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationOptionsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigurationOptionsPage.Designer.cs">
+      <DependentUpon>ConfigurationOptionsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfirmationPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfirmationPage.Designer.cs">
+      <DependentUpon>ConfirmationPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IntroductionPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="IntroductionPage.Designer.cs">
+      <DependentUpon>IntroductionPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LogForm.Designer.cs">
+      <DependentUpon>LogForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainFormController.cs" />
+    <Compile Include="MigrationEngine.cs" />
+    <Compile Include="MigrationEventArgs.cs" />
+    <Compile Include="MigrationEventType.cs" />
+    <Compile Include="MigrationOptions.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="ProgressPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ProgressPage.Designer.cs">
+      <DependentUpon>ProgressPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerOptionsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ServerOptionsPage.Designer.cs">
+      <DependentUpon>ServerOptionsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VersionSelectionPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="VersionSelectionPage.Designer.cs">
+      <DependentUpon>VersionSelectionPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WebDashboardOptionsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WebDashboardOptionsPage.Designer.cs">
+      <DependentUpon>WebDashboardOptionsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WizardPageBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WizardPageBase.Designer.cs">
+      <DependentUpon>WizardPageBase.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CompletedPage.resx">
+      <DependentUpon>CompletedPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationOptionsPage.resx">
+      <DependentUpon>ConfigurationOptionsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfirmationPage.resx">
+      <DependentUpon>ConfirmationPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IntroductionPage.resx">
+      <DependentUpon>IntroductionPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogForm.resx">
+      <DependentUpon>LogForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProgressPage.resx">
+      <DependentUpon>ProgressPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ServerOptionsPage.resx">
+      <DependentUpon>ServerOptionsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VersionSelectionPage.resx">
+      <DependentUpon>VersionSelectionPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WebDashboardOptionsPage.resx">
+      <DependentUpon>WebDashboardOptionsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WizardPageBase.resx">
+      <DependentUpon>WizardPageBase.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AppIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

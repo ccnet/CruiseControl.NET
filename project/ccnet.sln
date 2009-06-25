@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Extensions", "Core.Ext
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communications.Extensions", "Communications.Extensions\Communications.Extensions.csproj", "{A1B0C773-4779-4A1B-AE4E-8A53D73A8BE5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MigrationWizard", "MigrationWizard\MigrationWizard.csproj", "{04FB3476-5761-45C8-A053-9E7CF0DE2794}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Build|Any CPU = Build|Any CPU
@@ -131,6 +133,12 @@ Global
 		{A1B0C773-4779-4A1B-AE4E-8A53D73A8BE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1B0C773-4779-4A1B-AE4E-8A53D73A8BE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1B0C773-4779-4A1B-AE4E-8A53D73A8BE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04FB3476-5761-45C8-A053-9E7CF0DE2794}.Build|Any CPU.ActiveCfg = Build|Any CPU
+		{04FB3476-5761-45C8-A053-9E7CF0DE2794}.Build|Any CPU.Build.0 = Build|Any CPU
+		{04FB3476-5761-45C8-A053-9E7CF0DE2794}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04FB3476-5761-45C8-A053-9E7CF0DE2794}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04FB3476-5761-45C8-A053-9E7CF0DE2794}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04FB3476-5761-45C8-A053-9E7CF0DE2794}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
