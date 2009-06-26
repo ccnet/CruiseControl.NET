@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// </remarks>
     [ReflectorType("package")]
     public class PackagePublisher
-        : TaskBase, ITask
+        : TaskBase
     {
         #region Private fields
         private int compressionLevel = 5;

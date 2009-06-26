@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// </summary>
     [ReflectorType("rss")]
     public class RssPublisher 
-        : TaskBase, ITask
+        : TaskBase
     {
         private const string RssFilename = "RSSData.xml";
         private const string contentNamespace = "http://purl.org/rss/1.0/modules/content/";

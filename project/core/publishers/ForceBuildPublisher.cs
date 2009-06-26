@@ -6,7 +6,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	[ReflectorType("forcebuild")]
 	public class ForceBuildPublisher 
-        : TaskBase, ITask
+        : TaskBase
 	{
 		private readonly ICruiseManagerFactory factory;
         private string BuildForcerName="BuildForcer";

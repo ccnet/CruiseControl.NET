@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// </summary>
     [ReflectorType("modificationReader")]
     public class ModificationReaderTask
-        : TaskBase, ITask
+        : TaskBase
     {
         private readonly IFileSystem fileSystem;
         private bool deleteAfterRead = false;

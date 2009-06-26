@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	[ReflectorType("devenv")]
 	public class DevenvTask
-        : TaskBase, ITask
+        : TaskBase
 	{
 		public const string VS2008_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\9.0";
 		public const string VS2005_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\8.0";

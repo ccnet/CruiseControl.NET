@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
     [ReflectorType("statistics")]
     public class StatisticsPublisher 
-        : TaskBase, ITask
+        : TaskBase
     {
         /// <summary>
         /// The location of the CSV statistics file, relative to the project artifacts directory.

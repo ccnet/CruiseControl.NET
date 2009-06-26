@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// </summary>
     [ReflectorType("email")]
     public class EmailPublisher 
-        : TaskBase, ITask, IConfigurationValidation
+        : TaskBase, IConfigurationValidation
     {
         private EmailGateway emailGateway = new EmailGateway();
         private string fromAddress;

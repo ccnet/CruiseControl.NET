@@ -4,7 +4,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
-    public abstract class BaseExecutableTask : TaskBase, ITask
+    public abstract class BaseExecutableTask : TaskBase
 	{
 		protected ProcessExecutor executor;
 

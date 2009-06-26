@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     [ReflectorType("modificationWriter")]
     public class ModificationWriterTask 
-        : TaskBase, ITask
+        : TaskBase
     {
         private readonly IFileSystem fileSystem;
 

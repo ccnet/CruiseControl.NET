@@ -6,7 +6,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	[ReflectorType("merge")]
 	public class MergeFilesTask
-        : TaskBase, ITask
+        : TaskBase
 	{
         /// <summary>
         /// The folder to copy the files to.

@@ -6,7 +6,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	[ReflectorType("nant")]
 	public class NAntTask
-        : BaseExecutableTask, ITask
+        : BaseExecutableTask
 	{
 		public const int DefaultBuildTimeout = 600;
 		public const string defaultExecutable = "nant";

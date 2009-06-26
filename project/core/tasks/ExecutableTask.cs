@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	/// </summary>
 	[ReflectorType("exec")]
 	public class ExecutableTask
-        : BaseExecutableTask, ITask
+        : BaseExecutableTask
 	{
 		public const int DEFAULT_BUILD_TIMEOUT = 600;
 

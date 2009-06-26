@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
     [ReflectorType("xmllogger")]
     public class XmlLogPublisher 
-        : TaskBase, ITask
+        : TaskBase
     {
 		public static readonly string DEFAULT_LOG_SUBDIRECTORY = "buildlogs";
 

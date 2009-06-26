@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	/// </summary>
 	[ReflectorType("artifactcleanup")]
     internal class ArtifactCleanUpTask
-        : TaskBase, ITask
+        : TaskBase
 	{
 		/// <summary>
 		/// Supported cleaning up methods

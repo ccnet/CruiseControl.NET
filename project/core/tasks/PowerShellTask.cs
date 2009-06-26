@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	/// </summary>
 	[ReflectorType("powershell")]
 	public class PowerShellTask 
-        : TaskBase, ITask
+        : TaskBase
 	{
 		public const int DefaultBuildTimeOut = 600;
         public const string PowerShellExe = "powershell.exe";

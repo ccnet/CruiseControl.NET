@@ -6,7 +6,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	[ReflectorType("nunit")]
 	public class NUnitTask
-        : TaskBase, ITask
+        : TaskBase
 	{
 		public const string DefaultPath = @"nunit-console";
 		public const int DefaultTimeout = 600;

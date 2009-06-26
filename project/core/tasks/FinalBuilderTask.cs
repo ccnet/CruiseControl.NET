@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	[ReflectorType("FinalBuilder")]
 	public class FinalBuilderTask
-        : TaskBase, ITask
+        : TaskBase
 	{
 		#region Fields
 

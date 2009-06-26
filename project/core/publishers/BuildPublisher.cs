@@ -6,7 +6,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
     [ReflectorType("buildpublisher")]
     public class BuildPublisher 
-        : TaskBase, ITask
+        : TaskBase
     {
         public enum CleanupPolicy
         {
