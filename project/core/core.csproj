@@ -584,6 +584,7 @@
     <Compile Include="sourcecontrol\FilteredSourceControl.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="sourcecontrol\FtpSourceControl.cs" />
     <Compile Include="sourcecontrol\Git.cs" />
     <Compile Include="sourcecontrol\GitHistoryParser.cs" />
     <Compile Include="sourcecontrol\IHistoryParser.cs">

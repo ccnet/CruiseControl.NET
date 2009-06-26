@@ -46,5 +46,15 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="localFolder"></param>
         /// <param name="recursive"></param>
         void UploadFolder(string remoteFolder, string localFolder, bool recursive);
+
+
+        /// <summary>
+        /// Returns a list of new or updated files at the ftp site, compared to a local folder
+        /// </summary>
+        /// <param name="localFolder"></param>
+        /// <param name="remoteFolder"></param>
+        /// <param name="recursive"></param>
+        /// <returns></returns>
+        Modification[] ListNewOrUpdatedFilesAtFtpSite(string localFolder, string remoteFolder, bool recursive);
     }
 }

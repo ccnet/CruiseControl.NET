@@ -1,5 +1,4 @@
-﻿
-namespace ThoughtWorks.CruiseControl.Core.Util
+﻿namespace ThoughtWorks.CruiseControl.Core.Util
 {
     public class FtpLib : IFtpLib
     {
@@ -24,6 +23,17 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         }
 
+        public FtpLib(Util.BuildProgressInformation buildProgressInformation)
+        {
+            bpi = buildProgressInformation;
+
+            this.FtpServer = new EnterpriseDT.Net.Ftp.FTPConnection();
+
+            this.FtpServer.ReplyReceived += HandleMessages;
+
+            this.FtpServer.CommandSent += HandleMessages;
+        }
+
         public FtpLib()
         {
             this.FtpServer = new EnterpriseDT.Net.Ftp.FTPConnection();
@@ -33,7 +43,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             this.FtpServer.CommandSent += HandleMessages;
 
         }
-
 
         public void LogIn(string serverName, string userName, string password, bool activeConnectionMode)
         {
@@ -60,7 +69,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 this.FtpServer.TransferType = EnterpriseDT.Net.Ftp.FTPTransferType.BINARY;
             }
         }
-
 
         public void DownloadFolder(string localFolder, string remoteFolder, bool recursive)
         {
@@ -154,7 +162,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             }
         }
 
-
         public void UploadFolder(string remoteFolder, string localFolder, bool recursive)
         {
 
@@ -235,16 +242,113 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             this.FtpServer.Close();
         }
 
-
         public bool IsConnected()
         {
             return this.FtpServer.IsConnected;
         }
 
-
         public string CurrentWorkingFolder()
         {
             return this.FtpServer.ServerDirectory;
+        }
+
+        public Modification[] ListNewOrUpdatedFilesAtFtpSite(string localFolder, string remoteFolder, bool recursive)
+        {
+            System.Collections.Generic.List<Modification> mods = new System.Collections.Generic.List<Modification>();
+
+            GetTheList(mods, localFolder, remoteFolder, recursive);
+
+            return mods.ToArray();
+        }
+
+        private void GetTheList(System.Collections.Generic.List<Modification> mods, string localFolder, string remoteFolder, bool recursive)
+        {
+            this.FtpServer.ChangeWorkingDirectory(remoteFolder);
+
+            EnterpriseDT.Net.Ftp.FTPFile[] FtpServerFileInfo = this.FtpServer.GetFileInfos();
+
+            string LocalTargetFolder = null;
+            string FtpTargetFolder = null;
+            bool DownloadFile = false;
+            string LocalFile = null;
+            System.IO.FileInfo fi = default(System.IO.FileInfo);
+
+            if (!System.IO.Directory.Exists(localFolder))
+            {
+                Log.Debug("creating {0}", localFolder);
+                System.IO.Directory.CreateDirectory(localFolder);
+            }
+
+            foreach (EnterpriseDT.Net.Ftp.FTPFile CurrentFileOrDirectory in FtpServerFileInfo)
+            {
+                if (recursive)
+                {
+                    if (CurrentFileOrDirectory.Dir && CurrentFileOrDirectory.Name != "." && CurrentFileOrDirectory.Name != "..")
+                    {
+
+                        LocalTargetFolder = System.IO.Path.Combine(localFolder, CurrentFileOrDirectory.Name);
+                        FtpTargetFolder = string.Format("{0}/{1}", remoteFolder, CurrentFileOrDirectory.Name);
+
+                        if (!System.IO.Directory.Exists(LocalTargetFolder))
+                        {
+                            Log.Debug("creating {0}", LocalTargetFolder);
+                            System.IO.Directory.CreateDirectory(LocalTargetFolder);
+                        }
+
+                        GetTheList(mods, LocalTargetFolder, FtpTargetFolder, recursive);
+
+                        //set the ftp working folder back to the correct value
+                        this.FtpServer.ChangeWorkingDirectory(remoteFolder);
+                    }
+                }
+
+                if (!CurrentFileOrDirectory.Dir)
+                {
+                    DownloadFile = false;
+                    Modification m = new Modification();
+
+                    LocalFile = System.IO.Path.Combine(localFolder, CurrentFileOrDirectory.Name);
+
+
+                    // check file existence
+                    if (!System.IO.File.Exists(LocalFile))
+                    {
+                        DownloadFile = true;
+                        m.Type = "added";
+                    }
+                    else
+                    {
+                        //check file size
+                        fi = new System.IO.FileInfo(LocalFile);
+                        if (CurrentFileOrDirectory.Size != fi.Length)
+                        {
+                            DownloadFile = true;
+                            m.Type = "Updated";
+                        }
+                        else
+                        {
+                            //check modification time
+                            if (CurrentFileOrDirectory.LastModified != fi.CreationTime)
+                            {
+                                DownloadFile = true;
+                                m.Type = "Updated";
+                            }
+                        }
+                    }
+
+                    if (DownloadFile)
+                    {                        
+                        m.FileName = CurrentFileOrDirectory.Name;
+                        m.FolderName = remoteFolder;
+                        m.ModifiedTime = CurrentFileOrDirectory.LastModified;
+                        
+                        mods.Add(m);
+                    }
+                }
+
+            }
+
+
         }
 
         private bool FileExistsAtFtp(EnterpriseDT.Net.Ftp.FTPFile[] ftpServerFileInfo, string localFileName)
@@ -315,7 +419,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         {
             bpi.AddTaskInformation(e.Message);
 
-            Log.Info(e.Message);
+            Log.Debug(e.Message);
         }
 
         private void FtpServer_Uploaded(object sender, EnterpriseDT.Net.Ftp.FTPFileTransferEventArgs e)
@@ -350,7 +454,5 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             }
 
         }
-
-
     }
 }
