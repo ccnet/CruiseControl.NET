@@ -41,10 +41,12 @@ namespace ThoughtWorks.CruiseControl.MigrationWizard
                         currentBuilder.AppendLine();
                         break;
                     case MigrationEventType.Warning:
+                        if (currentBuilder == null) currentBuilder = new StringBuilder();
                         currentBuilder.AppendFormat("\tWarning: {0}", msg.Message);
                         currentBuilder.AppendLine();
                         break;
                     case MigrationEventType.Error:
+                        if (currentBuilder == null) currentBuilder = new StringBuilder();
                         currentBuilder.AppendFormat("\tERROR:   {0}", msg.Message);
                         currentBuilder.AppendLine();
                         break;

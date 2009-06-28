@@ -31,11 +31,13 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label label1;
             System.Windows.Forms.Label label2;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ServerOptionsPage));
             this.migrateServer = new System.Windows.Forms.CheckBox();
             this.settingsPanel = new System.Windows.Forms.GroupBox();
             this.selectLocationButton = new System.Windows.Forms.Button();
             this.settingsLocation = new System.Windows.Forms.TextBox();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.backupFile = new System.Windows.Forms.CheckBox();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             this.settingsPanel.SuspendLayout();
@@ -56,12 +58,11 @@
             label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            label2.Location = new System.Drawing.Point(6, 47);
+            label2.Location = new System.Drawing.Point(6, 65);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(526, 174);
+            label2.Size = new System.Drawing.Size(526, 156);
             label2.TabIndex = 3;
-            label2.Text = "This will migrate the following files:\r\n* State files\r\n* Arfefact files\r\n* Projec" +
-                "t files\r\n\r\nIt will not migrate the configuration files.";
+            label2.Text = resources.GetString("label2.Text");
             // 
             // migrateServer
             // 
@@ -84,6 +85,7 @@
             this.settingsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.settingsPanel.Controls.Add(this.backupFile);
             this.settingsPanel.Controls.Add(label2);
             this.settingsPanel.Controls.Add(this.selectLocationButton);
             this.settingsPanel.Controls.Add(this.settingsLocation);
@@ -119,6 +121,18 @@
             // 
             this.errorProvider.ContainerControl = this;
             // 
+            // backupFile
+            // 
+            this.backupFile.AutoSize = true;
+            this.backupFile.Checked = true;
+            this.backupFile.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.backupFile.Location = new System.Drawing.Point(98, 45);
+            this.backupFile.Name = "backupFile";
+            this.backupFile.Size = new System.Drawing.Size(244, 17);
+            this.backupFile.TabIndex = 5;
+            this.backupFile.Text = "Back up the configuration file before modifying";
+            this.backupFile.UseVisualStyleBackColor = true;
+            // 
             // ServerOptionsPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -144,5 +158,6 @@
         private System.Windows.Forms.Button selectLocationButton;
         private System.Windows.Forms.TextBox settingsLocation;
         private System.Windows.Forms.ErrorProvider errorProvider;
+        private System.Windows.Forms.CheckBox backupFile;
     }
 }

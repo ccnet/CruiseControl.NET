@@ -123,6 +123,16 @@
   <metadata name="label2.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
+  <data name="label2.Text" xml:space="preserve">
+    <value>This will migrate the following files:
+* State files
+* Arfefact files
+* Project files
+
+It will not migrate the configuration files.
+
+If back up is selected, this will generate files called ccnet.exe.config.bak and ccservice.exe.config.bak.</value>
+  </data>
   <metadata name="errorProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

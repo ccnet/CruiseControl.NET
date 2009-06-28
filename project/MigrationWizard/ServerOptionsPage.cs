@@ -22,6 +22,7 @@ namespace ThoughtWorks.CruiseControl.MigrationWizard
             // Set the default values
             migrateServer.Checked = MigrationOptions.MigrateServer;
             settingsLocation.Text = MigrationOptions.CurrentServerLocation;
+            backupFile.Checked = MigrationOptions.BackupServerConfiguration;
             ValidateSettings();
         }
 
@@ -35,6 +36,7 @@ namespace ThoughtWorks.CruiseControl.MigrationWizard
             // Set the new values
             MigrationOptions.MigrateServer = migrateServer.Checked;
             MigrationOptions.CurrentServerLocation = settingsLocation.Text;
+            MigrationOptions.BackupServerConfiguration = backupFile.Checked;
         }
 
         private void migrateServer_CheckedChanged(object sender, EventArgs e)

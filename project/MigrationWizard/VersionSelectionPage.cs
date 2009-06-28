@@ -19,12 +19,19 @@ namespace ThoughtWorks.CruiseControl.MigrationWizard
 
         public override void RunPage()
         {
-            currentVersion.SelectedItem = MigrationOptions.CurrentVersion;
+            for (var loop = 0; loop < currentVersion.Items.Count; loop++)
+            {
+                if (currentVersion.Items[0] == MigrationOptions.CurrentVersion)
+                {
+                    currentVersion.SelectedIndex = loop;
+                    break;
+                }
+            }
         }
 
         public override void CompletePage()
         {
-            MigrationOptions.CurrentVersion = currentVersion.SelectedText;
+            MigrationOptions.CurrentVersion = currentVersion.Items[currentVersion.SelectedIndex].ToString();
         }
     }
 }

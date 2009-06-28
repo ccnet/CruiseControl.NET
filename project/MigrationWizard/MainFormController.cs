@@ -24,8 +24,9 @@ namespace ThoughtWorks.CruiseControl.MigrationWizard
         {
             MigrationOptions = new MigrationOptions
             {
-                CurrentVersion = "1.4.4",       // Assume the user has the mist recent version
+                CurrentVersion = "1.4.4",       // Assume the user has the second most recent version
                 BackupConfiguration = true,
+                BackupServerConfiguration = true,
                 ConfigurationLocation = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
                     Path.Combine("CruiseControl.NET",

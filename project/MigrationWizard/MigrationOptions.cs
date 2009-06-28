@@ -41,6 +41,13 @@ namespace ThoughtWorks.CruiseControl.MigrationWizard
         public string NewServerLocation { get; set; }
         #endregion
 
+        #region BackupServerConfiguration
+        /// <summary>
+        /// Should the server configuration files be backed-up before migration.
+        /// </summary>
+        public bool BackupServerConfiguration { get; set; }
+        #endregion
+
         #region MigrateConfiguration
         /// <summary>
         /// Should the configuration be migrated.
