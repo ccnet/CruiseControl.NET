@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("localFolderName", Required = true)]
         public string LocalFolderName = string.Empty;
 
-        [ReflectorProperty("recursiveCopy", Required = true)]
+        [ReflectorProperty("recursiveCopy", Required = false)]
         public bool RecursiveCopy = true;
 
         protected override bool Execute(IIntegrationResult result)
