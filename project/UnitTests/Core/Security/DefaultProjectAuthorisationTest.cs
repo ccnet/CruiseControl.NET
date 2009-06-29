@@ -45,13 +45,5 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             bool result = authorisation.CheckPermission(null, "janedoe", SecurityPermission.SendMessage, SecurityRight.Inherit);
             Assert.AreEqual(false, result);
         }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void SetDefaultRightToInheritDenied()
-        {
-            DefaultProjectAuthorisation authorisation = new DefaultProjectAuthorisation();
-            authorisation.DefaultRight = SecurityRight.Inherit;
-        }
     }
 }
