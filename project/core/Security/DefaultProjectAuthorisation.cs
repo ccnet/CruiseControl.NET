@@ -44,11 +44,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         public SecurityRight DefaultRight
         {
             get { return defaultRight; }
-            set
-            {
-                if (value == SecurityRight.Inherit) throw new ArgumentOutOfRangeException("DefaultRight", "DefaultRight must be either Allow or Deny");
-                defaultRight = value;
-            }
+            set { defaultRight = value; }
         }
         #endregion
 
