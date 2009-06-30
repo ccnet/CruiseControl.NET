@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
         [Test]
         public void GenerateLabel()
         {
-            IntegrationResult result = CreateIntegrationResult();
+            IntegrationResult result = CreateSucessfullIntegrationResult();
             AddModifications(result);
             Assert.AreEqual("30", labeller.Generate(result));
         }
@@ -33,14 +33,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
         [Test]
         public void GenerateLabelFromNoMods()
         {
-            IntegrationResult result = CreateIntegrationResult();
+            IntegrationResult result = CreateSucessfullIntegrationResult();
             Assert.AreEqual("unknown", labeller.Generate(result));
         }
 
         [Test]
         public void GeneratePrefixedLabel()
         {
-            IntegrationResult result = CreateIntegrationResult();
+            IntegrationResult result = CreateSucessfullIntegrationResult();
             AddModifications(result);
             labeller.LabelPrefix = "Sample";
             Assert.AreEqual("Sample30", labeller.Generate(result));
@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
         [Test]
         public void GeneratePrefixedLabelWhenPrefixAndLastIntegrationLabelDontMatch()
         {
-            IntegrationResult result = CreateIntegrationResult();
+            IntegrationResult result = CreateSucessfullIntegrationResult();
             AddModifications(result);
             labeller.LabelPrefix = "Sample";
             result.LastSuccessfulIntegrationLabel = "SomethingElse23";
@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
         [Test]
         public void GeneratePrefixedLabelWhenPrefixIsNumeric()
         {
-            IntegrationResult result = CreateIntegrationResult();
+            IntegrationResult result = CreateSucessfullIntegrationResult();
             AddModifications(result);
             labeller.LabelPrefix = "R3SX";
             result.LastSuccessfulIntegrationLabel = "R3SX23";
@@ -70,11 +70,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
         [Test]
         public void GeneratePrefixedLabelWhenPrefixIsVersionLikePrefix()
         {
-            IntegrationResult result = CreateIntegrationResult();
+            IntegrationResult result = CreateSucessfullIntegrationResult();
             AddModifications(result);
             labeller.LabelPrefix = "1.2.";
             Assert.AreEqual("1.2.30", labeller.Generate(result));
         }
+
+        [Test]
+        public void GeneratePrefixedLabelWhenPrefixIsVersionLikePrefix2()
+        {
+            IntegrationResult result = CreateSucessfullIntegrationResult();
+            AddModifications(result);
+            labeller.LabelPrefix = "2.2.0.";
+            Assert.AreEqual("2.2.0.30", labeller.Generate(result));
+        }
+
 
 
         [Test]
@@ -102,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
             Assert.AreEqual(true, labeller.AllowDuplicateSubsequentLabels);
         }
 
-        private static IntegrationResult CreateIntegrationResult()
+        private static IntegrationResult CreateSucessfullIntegrationResult()
         {
             IntegrationResult result = IntegrationResultMother.CreateSuccessful();
             return result;
@@ -152,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
         [Test]
         public void GeneratePrefixedLabelWhenDuplicatesAreNotAllowed()
         {
-            IntegrationResult result = CreateIntegrationResult();
+            IntegrationResult result = CreateSucessfullIntegrationResult();
             AddModifications(result);
             labeller.LabelPrefix = "Sample";
             labeller.AllowDuplicateSubsequentLabels = false;
