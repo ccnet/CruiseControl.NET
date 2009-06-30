@@ -89,6 +89,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private bool WorkingFolderIsKnownAsSvnWorkingFolder(string workingDirectory)
         {
+            Log.Debug("Checking if {0} is a svn working folder", workingDirectory);
+
 			if (!Directory.Exists(workingDirectory))
 				return false;
 
