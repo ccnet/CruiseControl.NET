@@ -164,10 +164,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			if (!string.IsNullOrEmpty(CommitterName) && !string.IsNullOrEmpty(CommitterEMail))
 			{
-				GitConfig("user.name", CommitterName, result);
-				GitConfig("user.email", CommitterEMail, result);
+				GitConfigSet("user.name", CommitterName, result);
+				GitConfigSet("user.email", CommitterEMail, result);
 			}
-			else
+			else if (string.IsNullOrEmpty(GitConfigGet("user.name", result)) || string.IsNullOrEmpty(GitConfigGet("user.email", result)))
 			{
 				Log.Warning("[Git] Properties 'committerName' and 'committerEMail' are not provided. They're required to use the 'TagOnSuccess' feature.");
 			}
@@ -273,13 +273,28 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <param name="name">Name of the config parameter.</param>
 		/// <param name="value">Value of the config parameter.</param>
 		/// <param name="result">IIntegrationResult of the current build.</param>
-		private void GitConfig(string name, string value, IIntegrationResult result)
+		private void GitConfigSet(string name, string value, IIntegrationResult result)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("config");
 			buffer.AddArgument(name);
 			buffer.AddArgument(value);
 			Execute(NewProcessInfo(buffer.ToString(), result));
+		}
+
+		/// <summary>
+		/// Call "git config --get 'name'" to get the value of a local repository property.
+		/// </summary>
+		/// <param name="name">Name of the config parameter.</param>
+		/// <param name="result">IIntegrationResult of the current build.</param>
+		/// <returns>Result of the "git config --get 'name'" command.</returns>
+		private string GitConfigGet(string name, IIntegrationResult result)
+		{
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+			buffer.AddArgument("config");
+			buffer.AddArgument("--get");
+			buffer.AddArgument(name);
+			return Execute(NewProcessInfo(buffer.ToString(), result)).StandardOutput.Trim();
 		}
 
 		/// <summary>

@@ -131,6 +131,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			ExpectToExecuteArguments(string.Concat(GIT_CLONE, " ", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)), Path.GetDirectoryName(DefaultWorkingDirectory.TrimEnd(Path.DirectorySeparatorChar)));
 
+			ExpectToExecuteArguments("config --get user.name");
+			ExpectToExecuteArguments("config --get user.email");
+
 			ExpectToExecuteArguments("log origin/master --date-order -1 --pretty=format:\"%H\"");
 
 			ExpectToExecuteArguments(GIT_REMOTE_COMMITS);
