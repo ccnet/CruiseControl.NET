@@ -29,6 +29,14 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             get { return false; }
         }
         #endregion
+
+        #region GuestAccountName
+        /// <summary>
+        /// The name of the account to use for guests.
+        /// </summary>
+        [ReflectorProperty("guest", Required = false)]
+        public string GuestAccountName { get; set; }
+        #endregion
         #endregion
 
         #region Public methods

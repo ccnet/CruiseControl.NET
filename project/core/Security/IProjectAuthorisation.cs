@@ -16,6 +16,11 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         bool RequiresServerSecurity { get; }
 
         /// <summary>
+        /// The name of the account to use for guests.
+        /// </summary>
+        string GuestAccountName { get; }
+
+        /// <summary>
         /// Does this authorisation require a valid session?
         /// </summary>
         bool RequiresSession(ISecurityManager manager);

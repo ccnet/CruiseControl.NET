@@ -1346,6 +1346,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     IProjectAuthorisation authorisation = projectIntegrator.Project.Security;
                     if ((authorisation != null) && authorisation.RequiresSession(securityManager))
                     {
+                        if (string.IsNullOrEmpty(userName)) userName = authorisation.GuestAccountName;
                         if (userName == null)
                         {
                             isAllowed = defaultIsAllowed;

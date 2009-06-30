@@ -30,6 +30,16 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             get { return false; }
         }
         #endregion
+
+        #region GuestAccountName
+        /// <summary>
+        /// The name of the account to use for guests.
+        /// </summary>
+        public string GuestAccountName
+        {
+            get { return null; }
+        }
+        #endregion
         #endregion
 
         #region Public methods
