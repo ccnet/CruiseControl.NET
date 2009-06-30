@@ -196,6 +196,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                     List<string> fileList = new List<string>();
                     ZipOutputStream zipStream = new ZipOutputStream(File.Create(tempFile));
                     zipStream.IsStreamOwner = true;
+                    zipStream.UseZip64 = UseZip64.Off;
                     try
                     {
                         zipStream.SetLevel(compressionLevel);
@@ -485,13 +486,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private string PackageFile(IIntegrationResult result, string file, ZipOutputStream zipStream)
         {
             // Generate the full path to the file and make sure it exists
-            string baseFolder = string.IsNullOrEmpty(baseDirectory) ? result.WorkingDirectory : baseDirectory;
-            string fullName = Path.IsPathRooted(file) ? file : Path.Combine(baseFolder, file);
-            FileInfo fileInfo = new FileInfo(fullName);
+            var baseFolder = string.IsNullOrEmpty(baseDirectory) ? result.WorkingDirectory : baseDirectory;
+            var fullName = Path.IsPathRooted(file) ? file : Path.Combine(baseFolder, file);
+            var fileInfo = new FileInfo(fullName);
             if (fileInfo.Exists)
             {
                 // Generate the name of the file to store in the package
-                string fileName = file;
+                var fileName = file;
                 if (flatten)
                 {
                     // For flattened packages, just store the name of the file
@@ -508,15 +509,16 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 }
 
                 // Add the entry to the file file
-                ZipEntry entry = new ZipEntry(fileName);
+                var entry = new ZipEntry(ZipEntry.CleanName(fileName));
+                entry.Size = fileInfo.Length;
                 zipStream.PutNextEntry(entry);
-                byte[] buffer = new byte[8182];
+                var buffer = new byte[8182];
 
                 // Add the actual file - just tranfer the data from one stream to another
-                FileStream inputStream = fileInfo.OpenRead();
+                var inputStream = fileInfo.OpenRead();
                 try
                 {
-                    int dataLength = 1;
+                    var dataLength = 1;
                     while (dataLength > 0)
                     {
                         dataLength = inputStream.Read(buffer, 0, buffer.Length);
