@@ -111,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 ((SvnHistoryParser)historyParser).IntegrationStatusUnknown = true;
             }
 
-            string wd = StringUtil.AutoDoubleQuoteString(Path.GetFullPath(to.BaseFromWorkingDirectory(WorkingDirectory)));
+            string wd = Path.GetFullPath(to.BaseFromWorkingDirectory(WorkingDirectory));
 
             if (WorkingFolderIsKnownAsSvnWorkingFolder(wd) )
             {
