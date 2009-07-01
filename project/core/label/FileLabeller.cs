@@ -10,7 +10,8 @@ namespace ThoughtWorks.CruiseControl.Core.Label
     /// reads the file content to generate the label for CCNet.
     /// </summary>
     [ReflectorType("fileLabeller")]
-    public class FileLabeller : ILabeller
+    public class FileLabeller 
+        : LabellerBase
     {
         private readonly FileReader fileReader;
         private bool allowDuplicateSubsequentLabels = true;
@@ -72,22 +73,12 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// </summary>
         /// <param name="integrationResult">the current integration result</param>
         /// <returns>the label</returns>
-        public string Generate(IIntegrationResult integrationResult)
+        public override string Generate(IIntegrationResult integrationResult)
         {
             string label = fileReader.GetLabel(integrationResult.BaseFromWorkingDirectory(labelFilePath));
             string suffix = GetSuffixBasedOn(label, integrationResult.LastIntegration.Label);
             return string.Format("{0}{1}{2}", prefix, label, suffix);
         }
-
-        /// <summary>
-        /// Generate a label from the file content and save it in the integration result.
-        /// </summary>
-        /// <param name="result">the current integration result</param>
-        public void Run(IIntegrationResult result)
-        {
-            result.Label = Generate(result);
-        }
-
         #endregion
 
         /// <summary>

@@ -14,7 +14,8 @@ namespace ThoughtWorks.CruiseControl.Core.Label
     /// This code is based on code\label\DefaultLabeller.cs.
     /// </remarks> 
     [ReflectorType("lastChangeLabeller")]
-    public class LastChangeLabeller : ILabeller
+    public class LastChangeLabeller
+        : LabellerBase
     {
         private const int INITIAL_SUFFIX_NUMBER = 1;
 
@@ -41,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// </summary>
         /// <param name="resultFromThisBuild">IntegrationResult object for the current build</param>
         /// <returns>the new label</returns>
-        public virtual string Generate(IIntegrationResult resultFromThisBuild)
+        public override string Generate(IIntegrationResult resultFromThisBuild)
         {
 
             int changeNumber = 0;
@@ -78,13 +79,6 @@ namespace ThoughtWorks.CruiseControl.Core.Label
             }
         }
 
-        // Nothing seems to use this, but ILabellers are ITasks, and ITasks need a Run().  All the other
-        // labellers use this implementation, so we will too.
-        public void Run(IIntegrationResult result)
-        {
-            result.Label = Generate(result);
-        }
-
         private string IncrementLabel(string label)
         {
             int current = 0;
@@ -96,7 +90,5 @@ namespace ThoughtWorks.CruiseControl.Core.Label
             }
             return String.Format("{0}.{1}", label, current + 1);
         }
-
-
     }
 }

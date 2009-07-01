@@ -12,7 +12,8 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 	/// configurable number of weeks (the default is 2).
 	/// </summary>
 	[ReflectorType("iterationlabeller")]
-	public class IterationLabeller : DefaultLabeller
+	public class IterationLabeller 
+        : DefaultLabeller
 	{
 		private readonly DateTimeProvider dateTimeProvider;
 		public const int InitialLabel = 1;

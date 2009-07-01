@@ -312,9 +312,11 @@
     <Compile Include="label\ILabeller.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="label\IParamatisedLabeller.cs" />
     <Compile Include="label\IterationLabeller.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="label\LabellerBase.cs" />
     <Compile Include="label\LastChangeLabeller.cs">
       <SubType>Code</SubType>
     </Compile>

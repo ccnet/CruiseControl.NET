@@ -10,7 +10,8 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 	/// source control systems like Subversion, to build a valid Assembly Version label.
 	/// </summary>
 	[ReflectorType("assemblyVersionLabeller")]
-	public class AssemblyVersionLabeller : ILabeller
+	public class AssemblyVersionLabeller
+        : LabellerBase
 	{
 		#region public properties
 
@@ -49,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 
 		#region ILabeller Members
 
-		public string Generate(IIntegrationResult integrationResult)
+		public override string Generate(IIntegrationResult integrationResult)
 		{
 			Version oldVersion;
 
@@ -123,15 +124,6 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 
 			// return new version string
 			return newVersion.ToString();
-		}
-
-		#endregion
-
-		#region ITask Members
-
-		public void Run(IIntegrationResult result)
-		{
-			result.Label = Generate(result);
 		}
 
 		#endregion

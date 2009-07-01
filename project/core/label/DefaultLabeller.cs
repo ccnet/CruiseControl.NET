@@ -5,7 +5,8 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
     [ReflectorType("defaultlabeller")]
-    public class DefaultLabeller : ILabeller
+    public class DefaultLabeller
+        : LabellerBase
     {
         public const int INITIAL_LABEL = 1;
 
@@ -24,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         [ReflectorProperty("labelFormat", Required = false)]
         public string LabelFormat = "0";
 
-        public virtual string Generate(IIntegrationResult integrationResult)
+        public override string Generate(IIntegrationResult integrationResult)
         {
             IntegrationSummary lastIntegration = integrationResult.LastIntegration;
             if (integrationResult == null || lastIntegration.IsInitial())
@@ -44,11 +45,6 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         private bool ShouldIncrementLabel(IntegrationSummary previousResult)
         {
             return previousResult.Status == IntegrationStatus.Success || IncrementOnFailed;
-        }
-
-        public void Run(IIntegrationResult result)
-        {
-            result.Label = Generate(result);
         }
 
         private string IncrementLabel(string label)

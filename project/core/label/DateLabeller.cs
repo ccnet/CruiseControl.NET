@@ -6,7 +6,8 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 {
 	/// <summary>Generates label numbers according to Ccp standards.</summary>
 	[ReflectorType("dateLabeller")]
-	public class DateLabeller : ILabeller
+	public class DateLabeller
+        : LabellerBase
 	{
 		private readonly DateTimeProvider dateTimeProvider;
 
@@ -31,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			this.dateTimeProvider = dateTimeProvider;
 		}
 
-		public string Generate(IIntegrationResult integrationResult)
+		public override string Generate(IIntegrationResult integrationResult)
 		{
 			DateTime now = dateTimeProvider.Now;
 
@@ -60,11 +61,6 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			{
 				return new Version(date.Year, date.Month, date.Day, 0);
 			}
-		}
-
-		public void Run(IIntegrationResult result)
-		{
-			result.Label = Generate(result);
 		}
 	}
 }

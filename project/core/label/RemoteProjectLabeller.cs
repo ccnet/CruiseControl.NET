@@ -4,7 +4,8 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
 	[ReflectorType("remoteProjectLabeller")]
-	public class RemoteProjectLabeller : ILabeller
+	public class RemoteProjectLabeller
+        : LabellerBase
 	{
 		private IRemotingService remotingService;
 
@@ -22,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 		[ReflectorProperty("project")]
 		public string ProjectName;
 
-		public string Generate(IIntegrationResult result)
+		public override string Generate(IIntegrationResult result)
 		{
 			ICruiseManager manager = (ICruiseManager) remotingService.Connect(typeof (ICruiseManager), ServerUri);
 
@@ -35,11 +36,6 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 				}
 			}
 			throw new NoSuchProjectException(ProjectName);
-		}
-
-		public void Run(IIntegrationResult result)
-		{
-			result.Label = Generate(result);
 		}
 	}
 }

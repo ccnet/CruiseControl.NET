@@ -823,6 +823,11 @@ namespace ThoughtWorks.CruiseControl.Core
         
         public void CreateLabel(IIntegrationResult result)
         {
+            if (Labeller is IParamatisedLabeller)
+            {
+                (Labeller as IParamatisedLabeller).ApplyParameters(result.IntegrationRequest.BuildValues, 
+                    parameters);
+            }
             result.Label = Labeller.Generate(result);
         }
 

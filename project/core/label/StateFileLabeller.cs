@@ -5,7 +5,8 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
 	[ReflectorType("stateFileLabeller")]
-	public class StateFileLabeller : ILabeller
+	public class StateFileLabeller 
+        : LabellerBase
 	{
 		private readonly IStateManager stateManager;
 
@@ -20,14 +21,9 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 		[ReflectorProperty("project")]
 		public string Project;
 
-		public string Generate(IIntegrationResult integrationResult)
+		public override string Generate(IIntegrationResult integrationResult)
 		{
 			return stateManager.LoadState(Project).LastSuccessfulIntegrationLabel;
-		}
-
-		public void Run(IIntegrationResult result)
-		{
-			result.Label = Generate(result);
 		}
 	}
 }
