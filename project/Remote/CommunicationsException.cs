@@ -29,7 +29,33 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Initialise a new <see cref="CommunicationsException"/>.
         /// </summary>
+        public CommunicationsException(string s, string type)
+            : base(s)
+        {
+            ErrorType = type;
+        }
+
+        /// <summary>
+        /// Initialise a new <see cref="CommunicationsException"/>.
+        /// </summary>
+        public CommunicationsException(string s, Exception e, string type) : base(s, e)
+        {
+            ErrorType = type;
+        }
+
+        /// <summary>
+        /// Initialise a new <see cref="CommunicationsException"/>.
+        /// </summary>
         public CommunicationsException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        #endregion
+
+        #region Public properties
+        #region ErrorType
+        /// <summary>
+        /// The error tytpe returned from the server.
+        /// </summary>
+        public string ErrorType { get; private set; }
+        #endregion
         #endregion
     }
 }

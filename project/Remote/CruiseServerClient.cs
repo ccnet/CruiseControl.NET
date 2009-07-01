@@ -785,7 +785,10 @@ namespace ThoughtWorks.CruiseControl.Remote
             {
                 string message = "Request processing has failed on the remote server:" + Environment.NewLine +
                     response.ConcatenateErrors();
-                throw new CommunicationsException(message);
+                var errorType = response.ErrorMessages.Count == 1 ?
+                    response.ErrorMessages[0].Type :
+                    null;
+                throw new CommunicationsException(message, errorType);
             }
             return response;
         }
