@@ -244,7 +244,30 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             }
         }
 
+        private TResult AttemptActionWithRetry<TResult>(ActionHandler<TResult> actionToTry)
+        {
+            try
+            {
+                return actionToTry();
+            }
+            catch (CommunicationsException error)
+            {
+                if (error.ErrorType == "SessionInvalidException")
+                {
+                    // Let's assume the session has expired, so login again
+                    if (this.serverMonitor.RefreshSession())
+                    {
+                        // Now retry the action again
+                        return actionToTry();
+                    }
+                }
+                throw;
+            }
+        }
+
         private delegate void ActionHandler();
+
+        private delegate TResult ActionHandler<TResult>();
 
         public void ForceBuild(Dictionary<string, string> parameters)
 		{
@@ -419,15 +442,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
         public List<ParameterBase> ListBuildParameters()
         {
-            // TODO: Replace this try-catch block with a mechanism to detect whether the remote server allows this functionality
-            try
-            {
-                return cruiseProjectManager.ListBuildParameters();
-            }
-            catch (NotImplementedException)
-            {
-                return new List<ParameterBase>();
-            }
+            return AttemptActionWithRetry(() => cruiseProjectManager.ListBuildParameters());
         }
 	}
 

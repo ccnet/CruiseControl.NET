@@ -57,5 +57,5 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         #endregion
 
         List<ParameterBase> ListBuildParameters();
-	}
+    }
 }

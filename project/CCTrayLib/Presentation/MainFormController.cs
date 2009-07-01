@@ -157,15 +157,27 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
         public void ForceBuild()
         {
-            List<ParameterBase> buildParameters = ListBuildParameters();
-            if ((buildParameters == null) || (buildParameters.Count == 0))
+            try
             {
-                ForceBuild(null);
+                List<ParameterBase> buildParameters = ListBuildParameters();
+                if ((buildParameters == null) || (buildParameters.Count == 0))
+                {
+                    ForceBuild(null);
+                }
+                else
+                {
+                    BuildParameters display = new BuildParameters(this, buildParameters);
+                    display.ShowDialog();
+                }
             }
-            else
+            catch (Exception error)
             {
-                BuildParameters display = new BuildParameters(this, buildParameters);
-                display.ShowDialog();
+                MessageBox.Show("An unexpected error has occurred while trying to force build" +
+                        Environment.NewLine +
+                        error.Message,
+                    "Unknown error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
