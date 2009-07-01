@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// A null request.
         /// </summary>
-		public static readonly IntegrationRequest NullRequest = new IntegrationRequest(BuildCondition.NoBuild, "NullRequest");
+		public static readonly IntegrationRequest NullRequest = new IntegrationRequest(BuildCondition.NoBuild, "NullRequest", null);
 		private readonly BuildCondition buildCondition;
 		private readonly string source;
         private readonly DateTime requestTime;
@@ -24,11 +24,13 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="buildCondition"></param>
         /// <param name="source"></param>
-		public IntegrationRequest(BuildCondition buildCondition, string source)
+        /// <param name="userName"></param>
+		public IntegrationRequest(BuildCondition buildCondition, string source, string userName)
 		{
 			this.buildCondition = buildCondition;
 			this.source = source;
             this.requestTime = DateTime.Now;
+            UserName = userName;
 		}
 
         /// <summary>
@@ -46,6 +48,11 @@ namespace ThoughtWorks.CruiseControl.Remote
 		{
 			get { return source; }
 		}
+
+        /// <summary>
+        /// The user who triggered the build.
+        /// </summary>
+        public string UserName { get; private set; }
 
         /// <summary>
         /// The build parameters to use.
@@ -90,7 +97,14 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
 		public override string ToString()
 		{
-			return string.Format("{0} triggered a build ({1})", Source, BuildCondition);
+            if (!string.IsNullOrEmpty(UserName))
+            {
+                return string.Format("{0} triggered a build ({1}) from {2}", UserName, BuildCondition, Source);
+            }
+            else
+            {
+                return string.Format("Build ({1}) triggered from {0}", Source, BuildCondition);
+            }
 		}
 
         /// <summary>

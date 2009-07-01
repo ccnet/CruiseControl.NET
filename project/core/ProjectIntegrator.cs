@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void ForceBuild(string enforcerName, Dictionary<string, string> buildValues)
 		{
 			Log.Info(string.Format("{0} forced Build for project: {1}", enforcerName, project.Name));
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, enforcerName);
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, enforcerName, enforcerName);
             request.BuildValues = buildValues;
 			AddToQueue(request);
 

@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void VerifyNewGetSourceProcessInfoBasic()
 		{
-		    IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source", null);
 		    IntegrationSummary lastSummary =
 		        new IntegrationSummary(IntegrationStatus.Success, "label", "lastlabel", DateTime.Now);
 		    IntegrationResult result = new IntegrationResult("test", @"c:\workspace", @"c:\artifacts", request, lastSummary);
@@ -82,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         [Test]
         public void VerifyNewGetSourceProcessInfoWithAttribtues()
         {
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source", null);
             IntegrationSummary lastSummary = new IntegrationSummary(IntegrationStatus.Success, "label", "lastlabel", DateTime.Now);
             IntegrationResult result = new IntegrationResult("test", @"c:\workspace", @"c:\artifacts", request, lastSummary);
             
@@ -97,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void VerifyGoToBranchProcessInfoWithAttributes()
 		{
-		    IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source", null);
 		    IntegrationSummary lastSummary =
 		        new IntegrationSummary(IntegrationStatus.Success, "label", "lastlabel", DateTime.Now);
 		    IntegrationResult result = new IntegrationResult("test", @"c:\workspace", @"c:\artifacts", request, lastSummary);
@@ -111,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         [Test]
         public void VerifyGoToBranchProcessInfoBasic()
         {
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source", null);
             IntegrationSummary lastSummary =
                 new IntegrationSummary(IntegrationStatus.Success, "label", "lastlabel", DateTime.Now);
             IntegrationResult result = new IntegrationResult("test", @"c:\workspace", @"c:\artifacts", request, lastSummary);
@@ -129,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         {
             string fromtime = "01/02/2003 00:00:00";
             string totime = "23/02/2006 23:14:05";
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source", null);
             IntegrationSummary lastSummary =
                 new IntegrationSummary(IntegrationStatus.Success, "label", "lastlabel", DateTime.Now);
             IntegrationResult from =
@@ -156,7 +156,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			string fromtime = "01/02/2003 00:00:00";
 			string totime = "23/02/2006 23:14:05";
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source", null);
             IntegrationSummary lastSummary = new IntegrationSummary(IntegrationStatus.Success, "label", "lastlabel", DateTime.Now);
             IntegrationResult from = new IntegrationResult("test", @"c:\workspace", @"c:\artifacts", request, lastSummary);
 			from.StartTime = DateTime.ParseExact (fromtime, PlasticSCM.DATEFORMAT, System.Globalization.CultureInfo.InvariantCulture);
@@ -179,7 +179,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void VerifyCreateLabelProcessInfoBasic()
 		{
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source", null);
             IntegrationSummary lastSummary = new IntegrationSummary(IntegrationStatus.Success, "label", "lastlabel", DateTime.Now);
             IntegrationResult result = new IntegrationResult("test", @"c:\workspace", @"c:\artifacts", request, lastSummary);
             result.Label = "1";
@@ -195,7 +195,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         [Test]
         public void VerifyCreateLabelProcessInfoWithAttributes()
         {
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source", null);
             IntegrationSummary lastSummary = new IntegrationSummary(IntegrationStatus.Success, "label", "lastlabel", DateTime.Now);
             IntegrationResult result = new IntegrationResult("test", @"c:\workspace", @"c:\artifacts", request, lastSummary);
             result.Label = "1";
@@ -212,7 +212,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void VerifyLabelProcessInfoBasic()
 		{
 
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source", null);
             IntegrationSummary lastSummary = new IntegrationSummary(IntegrationStatus.Success, "label", "lastlabel", DateTime.Now);
             IntegrationResult result = new IntegrationResult("test", @"c:\workspace", @"c:\artifacts", request, lastSummary);
             result.Label = "1";
@@ -228,7 +228,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         public void VerifyLabelProcessInfoWithAttributes()
         {
 
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "source", null);
             IntegrationSummary lastSummary = new IntegrationSummary(IntegrationStatus.Success, "label", "lastlabel", DateTime.Now);
             IntegrationResult result = new IntegrationResult("test", @"c:\workspace", @"c:\artifacts", request, lastSummary);
             result.Label = "1";

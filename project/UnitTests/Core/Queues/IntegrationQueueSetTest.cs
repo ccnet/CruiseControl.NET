@@ -68,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			integrationQueue1 = integrationQueues[TestQueueName];
 			integrationQueue2 = integrationQueues[TestQueueName2];
 
-			integrationRequest = new IntegrationRequest(BuildCondition.ForceBuild, "Test");
+            integrationRequest = new IntegrationRequest(BuildCondition.ForceBuild, "Test", null);
 
 			project1Mock = new LatchMock(typeof (IProject));
 			project1Mock.Strict = true;

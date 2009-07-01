@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         public void GenerateFullManifest()
         {
             ManifestGenerator generator = new ManifestGenerator();
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere", null);
             IntegrationSummary summary = new IntegrationSummary(IntegrationStatus.Success, "A Label", "Another Label", new DateTime(2009, 1, 1));
             IntegrationResult result = new IntegrationResult("Test project", "Working directory", "Artifact directory", request, summary);
             Modification modification1 = GenerateModification("first file", "Add");

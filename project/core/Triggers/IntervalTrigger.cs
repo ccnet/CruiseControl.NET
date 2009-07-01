@@ -102,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		{
 			BuildCondition buildCondition = ShouldRunIntegration();
 			if (buildCondition == BuildCondition.NoBuild) return null;
-			return new IntegrationRequest(buildCondition, Name);
+			return new IntegrationRequest(buildCondition, Name, null);
 		}
 
 		private BuildCondition ShouldRunIntegration()

@@ -63,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core
             ProjectName = projectName;
             WorkingDirectory = workingDirectory;
             ArtifactDirectory = artifactDirectory;
-            this.request = (lastIntegration.IsInitial()) ? new IntegrationRequest(BuildCondition.ForceBuild, request.Source) : request;
+            this.request = (lastIntegration.IsInitial()) ? new IntegrationRequest(BuildCondition.ForceBuild, request.Source, request.UserName) : request;
             this.lastIntegration = lastIntegration;
             if ((lastIntegration.Status == IntegrationStatus.Exception)
                 || (lastIntegration.Status == IntegrationStatus.Failure))
@@ -71,9 +71,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
             buildProgressInformation = new BuildProgressInformation(artifactDirectory, projectName);
             
-            
             this.label = this.LastIntegration.Label;
-
         }
 
         public string ProjectName
@@ -91,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core
         public BuildCondition BuildCondition
         {
             get { return request.BuildCondition; }
-            set { request = new IntegrationRequest(value, "reloaded from state file"); }
+            set { request = new IntegrationRequest(value, "reloaded from state file", null); }
         }
 
         public string Label
@@ -337,7 +335,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public static IntegrationResult CreateInitialIntegrationResult(string project, string workingDirectory, string artifactDirectory)
         {
-            IntegrationRequest initialRequest = new IntegrationRequest(BuildCondition.ForceBuild, "Initial Build");
+            IntegrationRequest initialRequest = new IntegrationRequest(BuildCondition.ForceBuild, "Initial Build", null);
             IntegrationResult result = new IntegrationResult(project, workingDirectory, artifactDirectory, initialRequest, IntegrationSummary.Initial);
             result.StartTime = DateTime.Now.AddDays(-1);
             result.EndTime = DateTime.Now;
@@ -434,6 +432,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 fullProps[IntegrationPropertyNames.CCNetListenerFile] = BuildProgressInformation.ListenerFile;
                 fullProps[IntegrationPropertyNames.CCNetFailureUsers] = FailureUsers;
                 fullProps[IntegrationPropertyNames.CCNetModifyingUsers] = GetModifiers();
+                fullProps[IntegrationPropertyNames.CCNetUser] = request.UserName;
                 if (IntegrationRequest != null) fullProps[IntegrationPropertyNames.CCNetRequestSource] = IntegrationRequest.Source;
                 return fullProps;
             }

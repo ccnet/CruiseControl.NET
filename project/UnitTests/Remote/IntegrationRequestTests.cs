@@ -12,7 +12,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         public void GetHashCodeReturnsAValidHasCode()
         {
             IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, 
-                "Me");
+                "Me",
+                null);
             int expected = request.ToString().GetHashCode();
             int actual = request.GetHashCode();
             Assert.AreEqual(expected, actual);

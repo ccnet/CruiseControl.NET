@@ -147,7 +147,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                                                             IntegrationPropertyNames.CCNetRequestSource);
             WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetWorkingDirectory],
                                                             IntegrationPropertyNames.CCNetWorkingDirectory);
-
+            WriteIntegrationProperty(result.IntegrationProperties[IntegrationPropertyNames.CCNetUser],
+                                                            IntegrationPropertyNames.CCNetUser);
 
             WriteIntegrationProperty(result.LastChangeNumber, "LastChangeNumber");
             WriteIntegrationProperty(result.LastIntegrationStatus, "LastIntegrationStatus");

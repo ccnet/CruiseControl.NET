@@ -186,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			string artifactDir = Path.GetFullPath(Path.Combine(".", "artifacts"));
 
 			result = new IntegrationResult("project", workingDir, artifactDir,
-			                               new IntegrationRequest(BuildCondition.IfModificationExists, "myTrigger"),
+                                           new IntegrationRequest(BuildCondition.IfModificationExists, "myTrigger", null),
 			                               new IntegrationSummary(IntegrationStatus.Unknown, "label23", "label22",
 			                                                      new DateTime(2005, 06, 06, 08, 45, 00)));
 			result.StartTime = new DateTime(2005,06,06,08,45,00);

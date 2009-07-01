@@ -482,7 +482,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         {
             string projectName = "Project 1";
             string enforcer = "JohnDoe";
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, enforcer);
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, enforcer, null);
             bool forceBuildReceived = false;
             server.ForceBuildReceived += delegate(object o, CancelProjectEventArgs<string> e)
             {
@@ -507,7 +507,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         {
             string projectName = "Project 1";
             string enforcer = "JohnDoe";
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, enforcer);
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, enforcer, null);
             bool forceBuildReceived = false;
             server.ForceBuildReceived += delegate(object o, CancelProjectEventArgs<string> e)
             {
@@ -625,7 +625,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         {
             string enforcer = "JohnDoe";
             string projectName = "Project 4";
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, enforcer);
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, enforcer, null);
 
             // Need to set up a new integrator that can return an event
             IProjectIntegrator integrator4;
@@ -665,7 +665,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         {
             string enforcer = "JohnDoe";
             string projectName = "Project 4";
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, enforcer);
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, enforcer, null);
 
             // Need to set up a new integrator that can return an event
             IProjectIntegrator integrator4;

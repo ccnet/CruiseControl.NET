@@ -24,6 +24,8 @@ namespace ThoughtWorks.CruiseControl.Core
             IIntegrationResult result = resultManager.StartNewIntegration(request);
             IIntegrationResult lastResult = resultManager.LastIntegrationResult;
 
+            GenerateSystemParameterValues(result);
+
             CreateDirectoryIfItDoesntExist(result.WorkingDirectory);
             CreateDirectoryIfItDoesntExist(result.ArtifactDirectory);
 
@@ -99,6 +101,21 @@ namespace ThoughtWorks.CruiseControl.Core
 
             target.Activity = ProjectActivity.Sleeping;
             return result;
+        }
+
+        /// <summary>
+        /// Generates parameter values from the incoming request values.
+        /// </summary>
+        /// <param name="result"></param>
+        private void GenerateSystemParameterValues(IIntegrationResult result)
+        {
+            var props = result.IntegrationProperties;
+            foreach (var property in props.Keys)
+            {
+                var key = string.Format("${0}", property);
+                var value = (props[property] ?? string.Empty).ToString();
+                result.IntegrationRequest.BuildValues[key] = value;
+            }
         }
 
         /// <summary>

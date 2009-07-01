@@ -113,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         [Test]
         public void MinimalRun()
         {
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere", null);
             IntegrationSummary summary = new IntegrationSummary(IntegrationStatus.Success, "A Label", "Another Label", new DateTime(2009, 1, 1));
             IntegrationResult result = new IntegrationResult("Test project", "Working directory", "Artifact directory", request, summary);
             Modification modification1 = GenerateModification("first file", "Add");
@@ -142,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         [Test]
         public void RunWithFlatten()
         {
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere", null);
             IntegrationSummary summary = new IntegrationSummary(IntegrationStatus.Success, "A Label", "Another Label", new DateTime(2009, 1, 1));
             IntegrationResult result = new IntegrationResult("Test project", "Working directory", "Artifact directory", request, summary);
             Modification modification1 = GenerateModification("first file", "Add");
@@ -172,7 +172,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         [Test]
         public void RunWithRelativeFileAndBaseFolder()
         {
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere", null);
             IntegrationSummary summary = new IntegrationSummary(IntegrationStatus.Success, "A Label", "Another Label", new DateTime(2009, 1, 1));
             IntegrationResult result = new IntegrationResult("Test project", "Working directory", "Artifact directory", request, summary);
             Modification modification1 = GenerateModification("first file", "Add");
@@ -203,7 +203,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         [Test]
         public void RunForNonExistantFiles()
         {
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere", null);
             IntegrationSummary summary = new IntegrationSummary(IntegrationStatus.Success, "A Label", "Another Label", new DateTime(2009, 1, 1));
             IntegrationResult result = new IntegrationResult("Test project", "Working directory", "Artifact directory", request, summary);
             Modification modification1 = GenerateModification("first file", "Add");
@@ -232,7 +232,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         [Test]
         public void RunForWildCard()
         {
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere", null);
             IntegrationSummary summary = new IntegrationSummary(IntegrationStatus.Success, "A Label", "Another Label", new DateTime(2009, 1, 1));
             IntegrationResult result = new IntegrationResult("Test project", "Working directory", "Artifact directory", request, summary);
             Modification modification1 = GenerateModification("first file", "Add");
@@ -269,7 +269,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         [Test]
         public void RunForDirectoryWildCard()
         {
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere", null);
             IntegrationSummary summary = new IntegrationSummary(IntegrationStatus.Success, "A Label", "Another Label", new DateTime(2009, 1, 1));
             IntegrationResult result = new IntegrationResult("Test project", "Working directory", "Artifact directory", request, summary);
             Modification modification1 = GenerateModification("first file", "Add");
@@ -298,7 +298,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         [Test]
         public void IncludeManifestInPackage()
         {
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere", null);
             IntegrationSummary summary = new IntegrationSummary(IntegrationStatus.Success, "A Label", "Another Label", new DateTime(2009, 1, 1));
             IntegrationResult result = new IntegrationResult("Test project", "Working directory", "Artifact directory", request, summary);
             Modification modification1 = GenerateModification("first file", "Add");

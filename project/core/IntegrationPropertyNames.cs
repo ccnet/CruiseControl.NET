@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core
         public const string CCNetFailureUsers = "CCNetFailureUsers";
         public const string CCNetModifyingUsers = "CCNetModifyingUsers";
         public const string CCNetRequestSource = "CCNetRequestSource";
-
+        public const string CCNetUser = "CCNetUser";
 
     }
 }

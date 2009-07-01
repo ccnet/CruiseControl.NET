@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		public IntegrationRequest Request(BuildCondition buildCondition)
 		{
-			return new IntegrationRequest(buildCondition, Source);
+			return new IntegrationRequest(buildCondition, Source, null);
 		}
 
 		public IntegrationRequest ForceBuildRequest()

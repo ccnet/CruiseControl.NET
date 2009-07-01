@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		public void HasAttributesAssignedCorrectly()
 		{
 			IProject project = new Project();
-			IntegrationRequest integrationRequest = new IntegrationRequest(BuildCondition.NoBuild, "Test");
+			IntegrationRequest integrationRequest = new IntegrationRequest(BuildCondition.NoBuild, "Test", null);
 			IIntegrationQueueNotifier integrationQueueNotifier = new TestIntegrationQueueCallback();
 
 			IIntegrationQueueItem integrationQueueItem = new IntegrationQueueItem(project, integrationRequest, integrationQueueNotifier);

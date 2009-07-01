@@ -87,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         public void RequestSendsRequest()
         {
             CruiseServerClient client = new CruiseServerClient(new ServerStub("ForceBuild", typeof(BuildIntegrationRequest), "Project #1"));
-            client.Request("Project #1", new IntegrationRequest(BuildCondition.ForceBuild, "Me"));
+            client.Request("Project #1", new IntegrationRequest(BuildCondition.ForceBuild, "Me", null));
         }
         #endregion
 

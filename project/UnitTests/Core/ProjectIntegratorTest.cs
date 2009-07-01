@@ -248,7 +248,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void RequestIntegration()
 		{
-			IntegrationRequest request = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			projectMock.Expect("NotifyPendingState");
 			projectMock.Expect("Integrate", request);
 			projectMock.ExpectAndSignal("NotifySleepingState");
@@ -265,7 +265,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ShouldClearRequestQueueAsSoonAsRequestIsProcessed()
 		{
-			IntegrationRequest request = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			projectMock.Expect("NotifyPendingState");
 			projectMock.Expect("Integrate", request);
 			projectMock.ExpectAndSignal("NotifySleepingState");
@@ -295,11 +295,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			IProject project = (IProject) projectMock.MockInstance;
 
-			IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+            IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			projectMock.Expect("NotifyPendingState");
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
 
-			IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+            IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			projectMock.ExpectNoCall("NotifyPendingState");
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request2, integrator));
 
@@ -320,7 +320,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			IProject project = (IProject) projectMock.MockInstance;
 
-			IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+            IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			projectMock.Expect("NotifyPendingState");
 
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
@@ -332,10 +332,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			IProject project = (IProject) projectMock.MockInstance;
 
-			IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+            IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			projectMock.Expect("NotifyPendingState");
 
-			IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+            IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			projectMock.ExpectNoCall("NotifyPendingState");
 
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
@@ -348,7 +348,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			IProject project = (IProject) projectMock.MockInstance;
 
-			IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+            IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			projectMock.Expect("NotifyPendingState");
 			integrationTriggerMock.Expect("IntegrationCompleted");
 			projectMock.Expect("NotifySleepingState");
@@ -364,10 +364,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			IProject project = (IProject) projectMock.MockInstance;
 
-			IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+            IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			projectMock.Expect("NotifyPendingState");
 
-			IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+            IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 
 			// As first build completes we go to pending as still another build on queue
 			integrationTriggerMock.Expect("IntegrationCompleted");
@@ -386,10 +386,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			IProject project = (IProject) projectMock.MockInstance;
 
-			IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+            IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			projectMock.Expect("NotifyPendingState");
 
-			IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+            IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			// As first build completes we go to pending as still another build on queue
 			integrationTriggerMock.Expect("IntegrationCompleted");
 			projectMock.Expect("NotifyPendingState");
@@ -412,10 +412,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			IProject project = (IProject) projectMock.MockInstance;
 
-			IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+            IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			projectMock.Expect("NotifyPendingState");
 
-			IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+            IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			// As pending build is cancelled we should not alter state
 			projectMock.ExpectNoCall("NotifyPendingState");
 			projectMock.ExpectNoCall("NotifySleepingState");
@@ -446,11 +446,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			ProjectIntegrator otherIntegrator = new ProjectIntegrator(otherProject, integrationQueue);
 			// Queue up the "otherProject" in the first queue position to build
-			IntegrationRequest otherProjectRequest = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+            IntegrationRequest otherProjectRequest = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			otherProjectMock.Expect("NotifyPendingState");
 
 			// Queue up our test project on the same queue as so it goes to pending
-			IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+            IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger", null);
 			projectMock.Expect("NotifyPendingState");
 			// Cancelling the pending request should revert status to sleeping
 			projectMock.Expect("NotifySleepingState");

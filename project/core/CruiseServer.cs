@@ -287,12 +287,12 @@ namespace ThoughtWorks.CruiseControl.Core
                         if (request is BuildIntegrationRequest)
                         {
                             BuildIntegrationRequest actualRequest = arg as BuildIntegrationRequest;
-                            integrationRequest = new IntegrationRequest(actualRequest.BuildCondition, request.SourceName);
+                            integrationRequest = new IntegrationRequest(actualRequest.BuildCondition, request.SourceName, userName);
                             integrationRequest.BuildValues = NameValuePair.ToDictionary(actualRequest.BuildValues);
                         }
                         else
                         {
-                            integrationRequest = new IntegrationRequest(BuildCondition.ForceBuild, request.SourceName);
+                            integrationRequest = new IntegrationRequest(BuildCondition.ForceBuild, request.SourceName, userName);
                         }
 
                         // Send the request on

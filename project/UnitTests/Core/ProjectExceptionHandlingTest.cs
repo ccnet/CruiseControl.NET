@@ -22,10 +22,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Name = "test";
 			project.SourceControl = (ISourceControl) mockSourceControl.MockInstance;
 			project.StateManager = new StateManagerStub();
-			try { project.Integrate(new IntegrationRequest(BuildCondition.ForceBuild, "test"));}
+			try { project.Integrate(new IntegrationRequest(BuildCondition.ForceBuild, "test", null));}
 			catch (Exception) { }
 
-			project.Integrate(new IntegrationRequest(BuildCondition.ForceBuild, "test"));
+			project.Integrate(new IntegrationRequest(BuildCondition.ForceBuild, "test", null));
 			Assert.AreEqual(IntegrationStatus.Success, project.CurrentResult.Status);
 			Assert.AreEqual("1", project.CurrentResult.Label);
 		}
@@ -44,10 +44,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Name = "test";
 			project.SourceControl = (ISourceControl) mockSourceControl.MockInstance;
 			project.StateManager = stateManagerStub;
-			try { project.Integrate(new IntegrationRequest(BuildCondition.ForceBuild, "test"));}
+			try { project.Integrate(new IntegrationRequest(BuildCondition.ForceBuild, "test", null));}
 			catch (Exception) { }
 
-			project.Integrate(new IntegrationRequest(BuildCondition.ForceBuild, "test"));
+            project.Integrate(new IntegrationRequest(BuildCondition.ForceBuild, "test", null));
 			Assert.AreEqual(IntegrationStatus.Success, project.CurrentResult.Status);
 			Assert.AreEqual("11", project.CurrentResult.Label);			
 		}

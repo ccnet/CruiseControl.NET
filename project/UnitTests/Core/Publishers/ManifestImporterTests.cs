@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
             ManifestImporter generator = new ManifestImporter();
             generator.FileName = sourceFile;
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere", null);
             IntegrationSummary summary = new IntegrationSummary(IntegrationStatus.Success, "A Label", "Another Label", new DateTime(2009, 1, 1));
             IntegrationResult result = new IntegrationResult("Test project", "Working directory", "Artifact directory", request, summary);
             List<string> files = new List<string>();
@@ -71,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
             ManifestImporter generator = new ManifestImporter();
             generator.FileName = "ImportManifest.xml";
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere");
+            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere", null);
             IntegrationSummary summary = new IntegrationSummary(IntegrationStatus.Success, "A Label", "Another Label", new DateTime(2009, 1, 1));
             IntegrationResult result = new IntegrationResult("Test project", "Working directory", "Artifact directory", request, summary);
             List<string> files = new List<string>();

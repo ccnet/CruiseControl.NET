@@ -50,8 +50,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
             integrationQueues.Add(thirdQueueName, replaceConfig);
             integrationQueueReplace = integrationQueues[thirdQueueName];
 
-            integrationRequestForceBuild = new IntegrationRequest(BuildCondition.ForceBuild, "Test");
-            integrationRequestIfModificationExists = new IntegrationRequest(BuildCondition.IfModificationExists, "Test");
+            integrationRequestForceBuild = new IntegrationRequest(BuildCondition.ForceBuild, "Test", null);
+            integrationRequestIfModificationExists = new IntegrationRequest(BuildCondition.IfModificationExists, "Test", null);
 			
 			project1Mock = new LatchMock(typeof (IProject));
 			project1Mock.Strict = true;

@@ -141,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
             if (now > NextBuild && IsValidWeekDay(now.DayOfWeek))
             {
                 triggered = true;
-                return new IntegrationRequest(BuildCondition, Name);
+                return new IntegrationRequest(BuildCondition, Name, null);
             }
             return null;
         }
