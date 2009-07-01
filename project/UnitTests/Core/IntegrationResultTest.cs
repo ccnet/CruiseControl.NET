@@ -186,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			string artifactDir = Path.GetFullPath(Path.Combine(".", "artifacts"));
 
 			result = new IntegrationResult("project", workingDir, artifactDir,
-                                           new IntegrationRequest(BuildCondition.IfModificationExists, "myTrigger", null),
+                                           new IntegrationRequest(BuildCondition.IfModificationExists, "myTrigger", "John Doe"),
 			                               new IntegrationSummary(IntegrationStatus.Unknown, "label23", "label22",
 			                                                      new DateTime(2005, 06, 06, 08, 45, 00)));
 			result.StartTime = new DateTime(2005,06,06,08,45,00);
@@ -198,7 +198,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
             result.Modifications = new Modification[] { mods };            
 
-			Assert.AreEqual(15, result.IntegrationProperties.Count);
+			Assert.AreEqual(16, result.IntegrationProperties.Count);
 			Assert.AreEqual("project", result.IntegrationProperties[IntegrationPropertyNames.CCNetProject]);
 			Assert.AreEqual("http://localhost/ccnet2", result.IntegrationProperties[IntegrationPropertyNames.CCNetProjectUrl]);
             Assert.AreEqual("label23", result.IntegrationProperties[IntegrationPropertyNames.CCNetLabel]);
@@ -212,6 +212,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             Assert.AreEqual(IntegrationStatus.Unknown, result.IntegrationProperties[IntegrationPropertyNames.CCNetIntegrationStatus]);
             Assert.AreEqual(IntegrationStatus.Unknown, result.IntegrationProperties[IntegrationPropertyNames.CCNetLastIntegrationStatus]);
             Assert.AreEqual("myTrigger", result.IntegrationProperties[IntegrationPropertyNames.CCNetRequestSource]);
+            Assert.AreEqual("John Doe", result.IntegrationProperties[IntegrationPropertyNames.CCNetUser]);
 			Assert.AreEqual(Path.Combine(artifactDir, "project_ListenFile.xml"), result.IntegrationProperties[IntegrationPropertyNames.CCNetListenerFile]);
             ArrayList failureUsers = result.IntegrationProperties[IntegrationPropertyNames.CCNetFailureUsers] as ArrayList;
             Assert.IsNotNull(failureUsers);
