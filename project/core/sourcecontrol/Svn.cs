@@ -102,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
-            string wd = StringUtil.AutoDoubleQuoteString(Path.GetFullPath(to.BaseFromWorkingDirectory(WorkingDirectory)));
+            string wd = Path.GetFullPath(to.BaseFromWorkingDirectory(WorkingDirectory));
 
             if (WorkingFolderIsKnownAsSvnWorkingFolder(wd) )
             {
