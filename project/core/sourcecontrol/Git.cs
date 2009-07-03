@@ -28,7 +28,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public string Branch = "master";
 
 		[ReflectorProperty("tagCommitMessage", Required = false)]
-		public string TagCommitMessage = "CCNET build {0}";
+		public string TagCommitMessage = "CCNet Build {0}";
+
+		[ReflectorProperty("tagNameFormat", Required = false)]
+		public string TagNameFormat = "CCNet-Build-{0}";
 
 		[ReflectorProperty("tagOnSuccess", Required = false)]
 		public bool TagOnSuccess;
@@ -86,10 +89,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			if (!TagOnSuccess || result.Failed)
 				return;
 
-			string tagName = result.Label;
+			string tagName = string.Format(TagNameFormat, result.Label);
+			string commitMessage = string.Format(TagCommitMessage, result.Label);
 
-			// create a tag with the current build label as name and push it.
-			GitCreateTag(tagName, string.Format(TagCommitMessage, tagName), result);
+			// create a tag and push it.
+			GitCreateTag(tagName, commitMessage, result);
 			GitPushTag(tagName, result);
 		}
 

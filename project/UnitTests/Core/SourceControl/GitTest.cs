@@ -72,16 +72,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	<workingDirectory>c:\git\working</workingDirectory>
 	<tagOnSuccess>true</tagOnSuccess>
 	<autoGetSource>true</autoGetSource>
+	<tagCommitMessage>CCNet Test Build {0}</tagCommitMessage>
+	<tagNameFormat>{0}</tagNameFormat>
+	<committerName>Max Mustermann</committerName>
+	<committerEMail>max.mustermann@gmx.de</committerEMail>
 </git>";
 
 			git = (Git)NetReflector.Read(xml);
-			Assert.AreEqual(@"git", git.Executable, "#B1");
+			Assert.AreEqual("git", git.Executable, "#B1");
 			Assert.AreEqual(@"c:\git\ccnet\mygitrepo", git.Repository, "#B2");
-			Assert.AreEqual(@"master", git.Branch, "#B3");
+			Assert.AreEqual("master", git.Branch, "#B3");
 			Assert.AreEqual(new Timeout(5), git.Timeout, "#B4");
 			Assert.AreEqual(@"c:\git\working", git.WorkingDirectory, "#B5");
 			Assert.AreEqual(true, git.TagOnSuccess, "#B6");
 			Assert.AreEqual(true, git.AutoGetSource, "#B7");
+			Assert.AreEqual("CCNet Test Build {0}", git.TagCommitMessage, "#B8");
+			Assert.AreEqual("{0}", git.TagNameFormat, "#B9");
+			Assert.AreEqual("Max Mustermann", git.CommitterName, "#B10");
+			Assert.AreEqual("max.mustermann@gmx.de", git.CommitterEMail, "#B11");
 		}
 
 		[Test]
@@ -99,6 +107,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(null, git.WorkingDirectory, "#C5");
 			Assert.AreEqual(false, git.TagOnSuccess, "#C6");
 			Assert.AreEqual(true, git.AutoGetSource, "#C7");
+			Assert.AreEqual("CCNet Build {0}", git.TagCommitMessage, "#C8");
+			Assert.AreEqual("CCNet-Build-{0}", git.TagNameFormat, "#C9");
+			Assert.AreEqual(null, git.CommitterName, "#C10");
+			Assert.AreEqual(null, git.CommitterEMail, "#C11");
 		}
 
 		[Test]
@@ -106,8 +118,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			git.TagOnSuccess = true;
 
-			ExpectToExecuteArguments(@"tag -a -m ""CCNET build foo"" foo");
-			ExpectToExecuteArguments(@"push origin tag foo");
+			ExpectToExecuteArguments(@"tag -a -m ""CCNet Build foo"" CCNet-Build-foo");
+			ExpectToExecuteArguments(@"push origin tag CCNet-Build-foo");
 
 			git.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
 		}
@@ -118,8 +130,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			git.TagOnSuccess = true;
 			git.TagCommitMessage = "a---- {0} ----a";
 
-			ExpectToExecuteArguments(@"tag -a -m ""a---- foo ----a"" foo");
-			ExpectToExecuteArguments(@"push origin tag foo");
+			ExpectToExecuteArguments(@"tag -a -m ""a---- foo ----a"" CCNet-Build-foo");
+			ExpectToExecuteArguments(@"push origin tag CCNet-Build-foo");
+
+			git.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
+		}
+
+		[Test]
+		public void ShouldApplyTagNameFormatWithCustomFormatIfTagOnSuccessTrueAndATagNameFormatIsSpecified()
+		{
+			git.TagOnSuccess = true;
+			git.TagNameFormat = "Build/{0}";
+
+			ExpectToExecuteArguments(@"tag -a -m ""CCNet Build foo"" Build/foo");
+			ExpectToExecuteArguments(@"push origin tag Build/foo");
 
 			git.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
 		}
