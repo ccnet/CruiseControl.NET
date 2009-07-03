@@ -35,9 +35,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		protected static void AddDefaultAssemblyToCheck(GendarmeTask task)
 		{
-            AssemblyMatch match = new AssemblyMatch();
-            match.Expression = "*.dll";
-			task.Assemblies = new AssemblyMatch[] { match };
+            AssemblyMatch match1 = new AssemblyMatch();
+            match1.Expression = "*.dll";
+			AssemblyMatch match2 = new AssemblyMatch();
+			match2.Expression = "*.exe";
+			task.Assemblies = new AssemblyMatch[] { match1, match2 };
 		}
 
 		[Test]
@@ -148,7 +150,34 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void RebaseFromWorkingDirectory()
 		{
 			AddDefaultAssemblyToCheck(task);
-			ProcessInfo info = NewProcessInfo(string.Format("--xml {0} {1}", StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, "gendarme-results.xml")), StringUtil.AutoDoubleQuoteString("*.dll ")), Path.Combine(DefaultWorkingDirectory, "src"));
+			ProcessInfo info =
+				NewProcessInfo(
+					string.Format("--xml {0} {1} {2}",
+					              StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, "gendarme-results.xml")),
+					              StringUtil.AutoDoubleQuoteString("*.dll"), StringUtil.AutoDoubleQuoteString("*.exe")),
+					Path.Combine(DefaultWorkingDirectory, "src"));
+
+			info.WorkingDirectory = Path.Combine(DefaultWorkingDirectory, "src");
+			ExpectToExecute(info);
+			task.ConfiguredBaseDirectory = "src";
+			task.VerifyTimeoutSeconds = 600;
+			task.Run(result);
+		}
+
+		[Test]
+		public void UseAssemblyCollectionAndAssemblyListFile()
+		{
+			AddDefaultAssemblyToCheck(task);
+			task.AssemblyListFile = Path.Combine(DefaultWorkingDirectoryWithSpaces, "gendarme assembly file.txt");
+
+			ProcessInfo info =
+				NewProcessInfo(
+					string.Format("--xml {0} @{1} {2} {3}",
+					              StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, "gendarme-results.xml")),
+					              StringUtil.AutoDoubleQuoteString(task.AssemblyListFile),
+					              StringUtil.AutoDoubleQuoteString("*.dll"), StringUtil.AutoDoubleQuoteString("*.exe")),
+					Path.Combine(DefaultWorkingDirectory, "src"));
+
 			info.WorkingDirectory = Path.Combine(DefaultWorkingDirectory, "src");
 			ExpectToExecute(info);
 			task.ConfiguredBaseDirectory = "src";

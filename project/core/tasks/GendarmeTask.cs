@@ -156,7 +156,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			buffer.AppendArgument("--xml {0}", StringUtil.AutoDoubleQuoteString(GetGendarmeOutputFile(result)));
 
 			// append assembly list or list file
-			buffer.AddArgument(GetAssemblyList());
+			CreateAssemblyList(buffer);
 
 			return buffer.ToString();
 		}
@@ -216,22 +216,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return Path.Combine(result.ArtifactDirectory, logFilename);
 		}
 
-		private string GetAssemblyList()
+		private void CreateAssemblyList(ProcessArgumentBuilder buffer)
 		{
-			// check whenver the assembly list file was set ...
+			if (string.IsNullOrEmpty(AssemblyListFile) && (Assemblies == null || Assemblies.Length == 0))
+				throw new ConfigurationException("[GendarmeTask] Neither 'assemblyListFile' nor 'assemblies' are specified. Please specify one of them.");
+
+			// append the assembly list file if set
 			if (!string.IsNullOrEmpty(AssemblyListFile))
-				return string.Concat("@", StringUtil.AutoDoubleQuoteString(AssemblyListFile));
+				buffer.AppendArgument(string.Concat("@", StringUtil.AutoDoubleQuoteString(AssemblyListFile)));
 
-			// ... if not build the assembly list by the assembly match collection
-			if (Assemblies == null || Assemblies.Length == 0)
-				throw new ConfigurationException("GendarmeTask: Neither 'assemblyListFile' nor 'assemblies' are specified. Please specify one of them.");
-
-			StringBuilder assemblyList = new StringBuilder(Assemblies.Length);
-
+			// build the assembly list by the assembly match collection
 			foreach (AssemblyMatch asm in Assemblies)
-				assemblyList.Append(string.Concat(asm.Expression, " "));
-
-			return assemblyList.ToString();
+				buffer.AppendArgument(asm.Expression);
 		}
 
 		#endregion
