@@ -64,17 +64,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		}
 
 		[Test]
-		public void MostRecentMessageReturnsMostRecentMessage()
+        public void AllStatusMessagesReturnsMustReturnThemAll()
 		{
 			Message latestMessage = new Message("latest message");
+            Message firstMessage = new Message("message");
+
 
 			ProjectStatus oldProjectStatus = ProjectStatusFixture.New("test project");
 			oldProjectStatus.Messages = new Message[] {};
 			ProjectStatus newProjectStatus = ProjectStatusFixture.New("test project");
-			newProjectStatus.Messages = new Message[] {new Message("message"), latestMessage};
+            newProjectStatus.Messages = new Message[] { firstMessage, latestMessage };
 			PollIntervalReporter pollIntervalReporter = new PollIntervalReporter(newProjectStatus, newProjectStatus);
 
-			Assert.AreEqual(latestMessage, pollIntervalReporter.LatestStatusMessage);
+            System.Text.StringBuilder expected = new System.Text.StringBuilder();
+            expected.AppendLine(firstMessage.Text);
+            expected.Append(latestMessage.Text);
+
+
+			Assert.AreEqual(new Message(expected.ToString()), pollIntervalReporter.AllStatusMessages);
 		}
 
 		[Test]
@@ -84,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			newProjectStatus.Messages = new Message[] {};
 			PollIntervalReporter pollIntervalReporter = new PollIntervalReporter(newProjectStatus, newProjectStatus);
 
-			Assert.AreEqual(new Message("").ToString(), pollIntervalReporter.LatestStatusMessage.ToString());
+			Assert.AreEqual(new Message("").ToString(), pollIntervalReporter.AllStatusMessages.ToString());
 		}
 
 		[Test]

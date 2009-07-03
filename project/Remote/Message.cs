@@ -6,9 +6,9 @@ namespace ThoughtWorks.CruiseControl.Remote
     /// <summary>
     /// A user-readable message.
     /// </summary>
-	[Serializable]
+    [Serializable]
     [XmlRoot("message")]
-	public class Message
+    public class Message
     {
         #region Private fields
         private string message;
@@ -26,9 +26,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Initialise a new <see cref="Message"/> with a message.
         /// </summary>
         /// <param name="message">The message.</param>
-		public Message(string message)
-		{
-			this.message = message;
+        public Message(string message)
+        {
+            this.message = message;
         }
         #endregion
 
@@ -53,9 +53,35 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <returns>The text of the message.</returns>
         public override string ToString()
-		{
-			return message;
-		}
+        {
+            return message;
+        }
+
+        /// <summary>
+        /// compares 2 message objects
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            //check if obj isn't null, if it is return false 
+            if (obj == null)
+            {
+                return false;
+            }
+
+            Message m = obj as Message;
+
+            //if obj can't be casted as Message, return false 
+            if (m == null)
+            {
+                return false;
+            }
+
+            //compare the values 
+            return string.Equals(this.Text, m.Text);
+        }
+
         #endregion
         #endregion
     }

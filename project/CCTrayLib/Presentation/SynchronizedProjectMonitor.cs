@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			this.projectMonitor = projectMonitor;
 			this.synchronizeInvoke = synchronizeInvoke;
-
+            
 			projectMonitor.Polled += new MonitorPolledEventHandler(ProjectMonitor_Polled);
 			projectMonitor.BuildOccurred += new MonitorBuildOccurredEventHandler(ProjectMonitor_BuildOccurred);
 			projectMonitor.MessageReceived += new MessageEventHandler(ProjectMonitor_MessageReceived);
@@ -116,14 +116,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             }
 		}
 
-		private void ProjectMonitor_MessageReceived(ThoughtWorks.CruiseControl.Remote.Message message)
+		private void ProjectMonitor_MessageReceived(string projectName, ThoughtWorks.CruiseControl.Remote.Message message)
 		{
             if (MessageReceived != null)
             {
                 var canInvoke = true;
                 if (synchronizeInvoke is Control) canInvoke = !(synchronizeInvoke as Control).IsDisposed;
 
-                if (canInvoke) synchronizeInvoke.BeginInvoke(MessageReceived, new object[] { message });
+                string caption = string.Concat("Project Name : ", projectName);
+
+                if (canInvoke) synchronizeInvoke.BeginInvoke(MessageReceived, new object[] { caption, message });
             }
 		}
 

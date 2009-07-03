@@ -366,7 +366,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
             mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
             mockServerMonitor.ExpectAndReturn("GetProjectStatus", newStatus, PROJECT_NAME);
 
-			monitor.MessageReceived += new MessageEventHandler(OnMessageReceived);
+            monitor.MessageReceived += new MessageEventHandler(OnMessageReceived);
 			monitor.Poll();
 			monitor.Poll();
 			Assert.AreEqual(actualMessage, expectedMessage);
@@ -387,7 +387,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.IsFalse(monitor.IsPending);
 		}
 
-		private void OnMessageReceived(Message message)
+		private void OnMessageReceived(string projectName, Message message)
 		{
 			actualMessage = message;
 		}
