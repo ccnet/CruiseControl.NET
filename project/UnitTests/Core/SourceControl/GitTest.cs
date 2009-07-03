@@ -159,6 +159,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
+		public void ShouldApplyLabelIfTagOnSuccessTrueAndNotAddFilesIfCommitBuildModificationsIsFalseAndCommitUntrackedFilesIsTrue()
+		{
+			git.TagOnSuccess = true;
+			git.CommitBuildModifications = false;
+			git.CommitUntrackedFiles = true;
+
+			ExpectToExecuteArguments(@"tag -a -m ""CCNet Build foo"" CCNet-Build-foo");
+			ExpectToExecuteArguments(@"push origin tag CCNet-Build-foo");
+
+			git.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
+		}
+
+		[Test]
 		public void ShouldApplyLabelWithCustomMessageIfTagOnSuccessTrueAndACustomMessageIsSpecified()
 		{
 			git.TagOnSuccess = true;

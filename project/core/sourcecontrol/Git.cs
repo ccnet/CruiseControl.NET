@@ -98,13 +98,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			string tagName = string.Format(TagNameFormat, result.Label);
 			string commitMessage = string.Format(TagCommitMessage, result.Label);
 
-			// add all modified and all untracked files to the git index.
-			if (CommitUntrackedFiles)
-				GitAddAll(result);
-
-			// commit all modifications during build before tagging.
 			if (CommitBuildModifications)
+			{
+				// add all modified and all untracked files to the git index.
+				if (CommitUntrackedFiles)
+					GitAddAll(result);
+
+				// commit all modifications during build before tagging.
 				GitCommitAll(commitMessage, result);
+			}
 
 			// create a tag and push it.
 			GitCreateTag(tagName, commitMessage, result);
