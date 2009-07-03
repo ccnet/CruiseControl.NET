@@ -71,6 +71,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	<timeout>5</timeout>
 	<workingDirectory>c:\git\working</workingDirectory>
 	<tagOnSuccess>true</tagOnSuccess>
+	<commitBuildModifications>true</commitBuildModifications>
+	<commitUntrackedFiles>true</commitUntrackedFiles>
 	<autoGetSource>true</autoGetSource>
 	<tagCommitMessage>CCNet Test Build {0}</tagCommitMessage>
 	<tagNameFormat>{0}</tagNameFormat>
@@ -90,6 +92,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("{0}", git.TagNameFormat, "#B9");
 			Assert.AreEqual("Max Mustermann", git.CommitterName, "#B10");
 			Assert.AreEqual("max.mustermann@gmx.de", git.CommitterEMail, "#B11");
+			Assert.AreEqual(true, git.CommitBuildModifications, "#B12");
+			Assert.AreEqual(true, git.CommitUntrackedFiles, "#B13");
 		}
 
 		[Test]
@@ -111,6 +115,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("CCNet-Build-{0}", git.TagNameFormat, "#C9");
 			Assert.AreEqual(null, git.CommitterName, "#C10");
 			Assert.AreEqual(null, git.CommitterEMail, "#C11");
+			Assert.AreEqual(false, git.CommitBuildModifications, "#C12");
+			Assert.AreEqual(false, git.CommitUntrackedFiles, "#C13");
 		}
 
 		[Test]
@@ -118,6 +124,34 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			git.TagOnSuccess = true;
 
+			ExpectToExecuteArguments(@"tag -a -m ""CCNet Build foo"" CCNet-Build-foo");
+			ExpectToExecuteArguments(@"push origin tag CCNet-Build-foo");
+
+			git.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
+		}
+
+		[Test]
+		public void ShouldCommitBuildModificationsAndApplyLabelIfCommitBuildModificationsAndTagOnSuccessIsTrue()
+		{
+			git.TagOnSuccess = true;
+			git.CommitBuildModifications = true;
+
+			ExpectToExecuteArguments(@"commit --all --allow-empty -m ""CCNet Build foo""");
+			ExpectToExecuteArguments(@"tag -a -m ""CCNet Build foo"" CCNet-Build-foo");
+			ExpectToExecuteArguments(@"push origin tag CCNet-Build-foo");
+
+			git.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
+		}
+
+		[Test]
+		public void ShouldAddAndCommitBuildModificationsAndApplyLabelIfCommitUntrackedFilesAndCommitBuildModificationsAndTagOnSuccessIsTrue()
+		{
+			git.TagOnSuccess = true;
+			git.CommitBuildModifications = true;
+			git.CommitUntrackedFiles = true;
+
+			ExpectToExecuteArguments(@"add --all");
+			ExpectToExecuteArguments(@"commit --all --allow-empty -m ""CCNet Build foo""");
 			ExpectToExecuteArguments(@"tag -a -m ""CCNet Build foo"" CCNet-Build-foo");
 			ExpectToExecuteArguments(@"push origin tag CCNet-Build-foo");
 

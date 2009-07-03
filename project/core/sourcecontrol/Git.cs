@@ -36,6 +36,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("tagOnSuccess", Required = false)]
 		public bool TagOnSuccess;
 
+		[ReflectorProperty("commitBuildModifications", Required = false)]
+		public bool CommitBuildModifications;
+
+		[ReflectorProperty("commitUntrackedFiles", Required = false)]
+		public bool CommitUntrackedFiles;
+
 		[ReflectorProperty("committerName", Required = false)]
 		public string CommitterName;
 
@@ -91,6 +97,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			string tagName = string.Format(TagNameFormat, result.Label);
 			string commitMessage = string.Format(TagCommitMessage, result.Label);
+
+			// add all modified and all untracked files to the git index.
+			if (CommitUntrackedFiles)
+				GitAddAll(result);
+
+			// commit all modifications during build before tagging.
+			if (CommitBuildModifications)
+				GitCommitAll(commitMessage, result);
 
 			// create a tag and push it.
 			GitCreateTag(tagName, commitMessage, result);
@@ -340,6 +354,36 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AddArgument("-d");
 			buffer.AddArgument("-f");
 			buffer.AddArgument("-x");
+			Execute(NewProcessInfo(buffer.ToString(), result));
+		}
+
+		/// <summary>
+		/// Automatically stage files that have been modified and deleted
+		/// and commit them with the "git commit --all --allow-empty -m 'message'"
+		/// command.
+		/// </summary>
+		/// <param name="commitMessage">Commit message.</param>
+		/// <param name="result">IIntegrationResult of the current build.</param>
+		private void GitCommitAll(string commitMessage, IIntegrationResult result)
+		{
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+			buffer.AddArgument("commit");
+			buffer.AddArgument("--all");
+			buffer.AddArgument("--allow-empty");
+			buffer.AddArgument("-m", commitMessage);
+			Execute(NewProcessInfo(buffer.ToString(), result));
+		}
+
+		/// <summary>
+		/// Add all modified and all untracked files that are not ignored by .gitignore
+		/// to the git index with the "git add --all" command.
+		/// </summary>
+		/// <param name="result">IIntegrationResult of the current build.</param>
+		private void GitAddAll(IIntegrationResult result)
+		{
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+			buffer.AddArgument("add");
+			buffer.AddArgument("--all");
 			Execute(NewProcessInfo(buffer.ToString(), result));
 		}
 
