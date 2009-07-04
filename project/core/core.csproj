@@ -504,6 +504,7 @@
     <Compile Include="Reporting\Dashboard\Navigation\IUrlBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Security\ImpersonationDetails.cs" />
     <Compile Include="Security\InheritedProjectAuthorisation.cs" />
     <Compile Include="Security\Permissions.cs" />
     <Compile Include="SourceControlOperation.cs" />
@@ -902,6 +903,7 @@
     </Compile>
     <Compile Include="util\IFtpLib.cs" />
     <Compile Include="util\ILogger.cs" />
+    <Compile Include="util\Impersonation.cs" />
     <Compile Include="util\IMultiTransformer.cs">
       <SubType>Code</SubType>
     </Compile>

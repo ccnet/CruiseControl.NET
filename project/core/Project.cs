@@ -137,6 +137,11 @@ namespace ThoughtWorks.CruiseControl.Core
             set { webUrl = value; }
         }
 
+        /// <summary>
+        /// An optional impersonation account.
+        /// </summary>
+        [ReflectorProperty("impersonation", InstanceType = typeof(ImpersonationDetails), Required = false)]
+        public ImpersonationDetails Impersonation { get; set; }
 
         [ReflectorProperty("maxSourceControlRetries", Required = false)]
         public int MaxSourceControlRetries
@@ -265,18 +270,31 @@ namespace ThoughtWorks.CruiseControl.Core
 
             // Start the integration
             IIntegrationResult result = null;
-            try 
+            IDisposable impersonation = null;
+            var hasError = false;
+            try
             {
+                if (Impersonation != null) impersonation = Impersonation.Impersonate();
                 result = integratable.Integrate(request);
+            }
+            catch (Exception error)
+            {
+                Log.Error(error);
+                hasError = true;
+                throw;
             }
             finally
             {
+                if (impersonation != null) impersonation.Dispose();
+
                 // Tidy up the status
                 lock (currentProjectStatus)
                 {
                     CancelAllOutstandingItems(currentProjectStatus);
                     currentProjectStatus.TimeCompleted = DateTime.Now;
-                    IntegrationStatus resultStatus = result == null ? IntegrationStatus.Unknown : result.Status;
+                    IntegrationStatus resultStatus = result == null ? 
+                        (hasError ? IntegrationStatus.Exception : IntegrationStatus.Unknown) : 
+                        result.Status;
                     switch (resultStatus)
                     {
                         case IntegrationStatus.Success:
