@@ -34,9 +34,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             watchers.Add( watcher );
 	        watcher.Filter = Path.GetFileName( filename );
 	        watcher.Path = new FileInfo(filename).DirectoryName;
+	    	watcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName | NotifyFilters.Attributes |
+	    	                       NotifyFilters.Size | NotifyFilters.LastWrite;
 	        watcher.Changed += HandleFileChanged;
 	        watcher.Renamed += HandleFileChanged;
-	        watcher.EnableRaisingEvents = true;            
+	        watcher.EnableRaisingEvents = true;
+			Log.Debug(string.Concat("[FileChangedWatcher] Add config file '", filename, "' to file change watcher collection."));
 	    }
 
 	    private void HandleFileChanged(object sender, FileSystemEventArgs args)
