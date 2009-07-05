@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -36,11 +37,23 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				return isRunningOnWindows.Value;
 			}
 		}
+
+		/// <summary>
+		/// Gets the directory where the common language runtime is installed. 
+		/// </summary>
+		public string RuntimeDirectory
+		{
+			get
+			{
+				return RuntimeEnvironment.GetRuntimeDirectory();
+			}
+		}
 	}
 
 	public interface IExecutionEnvironment
 	{
 		char DirectorySeparator { get; }
 		bool IsRunningOnWindows { get; }
+		string RuntimeDirectory { get; }
 	}
 }

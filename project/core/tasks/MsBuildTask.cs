@@ -13,22 +13,25 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     public class MsBuildTask
         : BaseExecutableTask
 	{
-		public const string defaultExecutable = @"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe";
-		public const string DefaultLogger = "";
 		public const string LogFilename = "msbuild-results.xml";
 		public const int DefaultTimeout = 600;
-        private IShadowCopier shadowCopier = new DefaultShadowCopier();
+        private IShadowCopier shadowCopier;
+		private readonly IExecutionEnvironment executionEnvironment;
 
-		public MsBuildTask() : this(new ProcessExecutor())
+		public MsBuildTask() : this(new ProcessExecutor(), new ExecutionEnvironment(), new DefaultShadowCopier())
 		{}
 
-		public MsBuildTask(ProcessExecutor executor)
+		public MsBuildTask(ProcessExecutor executor, IExecutionEnvironment executionEnvironment, IShadowCopier shadowCopier)
 		{
 			this.executor = executor;
+			this.executionEnvironment = executionEnvironment;
+			this.shadowCopier = shadowCopier;
+
+			Executable = GetDefaultExecutable();
 		}
 
 		[ReflectorProperty("executable", Required=false)]
-		public string Executable = defaultExecutable;
+		public string Executable;
 
 		[ReflectorProperty("workingDirectory", Required=false)]
 		public string WorkingDirectory;
@@ -43,23 +46,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public string Targets;
 
 		[ReflectorProperty("logger", Required=false)]
-		public string Logger = DefaultLogger;
+		public string Logger;
 
 		[ReflectorProperty("timeout", Required=false)]
 		public int Timeout = DefaultTimeout;
 
-        /// <summary>
-        /// The shadow copier to use.
-        /// </summary>
-        public IShadowCopier ShadowCopier
-        {
-            get { return shadowCopier; }
-            set { shadowCopier = value; }
-        }
-
 		protected override string GetProcessFilename()
 		{
-			return Executable;
+			return string.IsNullOrEmpty(Executable) ? GetDefaultExecutable() : Executable;
 		}
 
 		protected override string GetProcessArguments(IIntegrationResult result)
@@ -140,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.Append("/l:");
-			if (Logger == DefaultLogger)
+			if (string.IsNullOrEmpty(Logger))
 			{
                 // Since hot-swapping shadow copies the files, we also need to move the logger over
                 var loggerPath = shadowCopier.RetrieveFilePath("ThoughtWorks.CruiseControl.MsBuild.dll");
@@ -190,6 +184,28 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				b.Append(",");
 			}
 			return b.ToString().TrimEnd(',');
+		}
+
+		/// <summary>
+		/// Gets the default msbuild/xbuild executable.
+		/// 
+		/// On Windows/.NET:
+		///		Return the path of the msbuild.exe of the current .NET framework CCNet is running on.
+		/// 
+		/// On Unix/Mono:
+		///		Return xbuild.
+		/// </summary>
+		/// <returns></returns>
+		private string GetDefaultExecutable()
+		{
+			if(executionEnvironment.IsRunningOnWindows)
+			{
+				return Path.Combine(executionEnvironment.RuntimeDirectory, "MSBuild.exe");
+			}
+			else
+			{
+				return "xbuild";
+			}
 		}
 	}
 }
