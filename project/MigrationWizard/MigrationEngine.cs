@@ -325,12 +325,7 @@ namespace ThoughtWorks.CruiseControl.MigrationWizard
             foreach (XmlElement statisticsEl in document.SelectNodes("//statistics"))
             {
                 var projectEl = FindProjectNode(statisticsEl) as XmlElement;
-                var artefactFolder = projectEl.GetAttribute("artifactDirectory");
-                if (string.IsNullOrEmpty(artefactFolder))
-                {
-                    var artefactNode = projectEl.SelectSingleNode("artifactDirectory");
-                    if (artefactNode != null) artefactFolder = artefactNode.InnerText;
-                }
+                var artefactFolder = RetrievePropertyValue(projectEl, "artifactDirectory");
 
                 string fileName;
                 if (!string.IsNullOrEmpty(artefactFolder))
@@ -339,8 +334,7 @@ namespace ThoughtWorks.CruiseControl.MigrationWizard
                 }
                 else
                 {
-                    var projectName = projectEl.GetAttribute("name");
-                    if (string.IsNullOrEmpty(projectName)) projectName = projectEl.SelectSingleNode("name").InnerText;
+                    var projectName = RetrievePropertyValue(projectEl, "name");
                     fileName = Path.Combine(
                             Path.Combine(MigrationOptions.NewServerLocation, projectName),
                             Path.Combine("Artifacts", "report.xml"));
@@ -368,12 +362,7 @@ namespace ThoughtWorks.CruiseControl.MigrationWizard
 
                 if (!hasArtefact || !hasWorking)
                 {
-                    var projectName = projectEl.GetAttribute("name");
-                    if (string.IsNullOrEmpty(projectName))
-                    {
-                        var nameEl = projectEl.SelectSingleNode("name");
-                        if (nameEl != null) projectName = nameEl.InnerText;
-                    }
+                    var projectName = RetrievePropertyValue(projectEl, "name");
 
                     // Since we are not validating the XML, there is the possibility of invalid XML (i.e. no name)
                     if (!string.IsNullOrEmpty(projectName))
@@ -394,12 +383,7 @@ namespace ThoughtWorks.CruiseControl.MigrationWizard
             var projectStatesToMove = new List<string>();
             foreach (XmlElement projectEl in document.SelectNodes("/cruisecontrol/project"))
             {
-                var projectName = projectEl.GetAttribute("name");
-                if (string.IsNullOrEmpty(projectName))
-                {
-                    var nameEl = projectEl.SelectSingleNode("name");
-                    if (nameEl != null) projectName = nameEl.InnerText;
-                }
+                var projectName = RetrievePropertyValue(projectEl, "name");
 
                 // Since we are not validating the XML, there is the possibility of invalid XML (i.e. no name)
                 if (!string.IsNullOrEmpty(projectName))
@@ -409,6 +393,19 @@ namespace ThoughtWorks.CruiseControl.MigrationWizard
                 }
             }
             return projectStatesToMove;
+        }
+        #endregion
+
+        #region RetrievePropertyValue()
+        private string RetrievePropertyValue(XmlElement parentEl, string property)
+        {
+            var value = parentEl.GetAttribute(property);
+            if (string.IsNullOrEmpty(value))
+            {
+                var nameEl = parentEl.SelectSingleNode(property);
+                if (nameEl != null) value = nameEl.InnerText;
+            }
+            return value;
         }
         #endregion
 
@@ -508,8 +505,61 @@ namespace ThoughtWorks.CruiseControl.MigrationWizard
                 // Backup the configuration
                 if (MigrationOptions.BackupConfiguration)
                 {
-                    BackupFile(Path.Combine(MigrationOptions.CurrentServerLocation, "ccnet.config"));
+                    BackupFile(MigrationOptions.ConfigurationLocation);
                 }
+
+                // Open the configuration file
+                var configDoc = new XmlDocument();
+                configDoc.Load(MigrationOptions.ConfigurationLocation);
+
+                if (versionNumber < version150)
+                {
+                    FireMessage("Updating e-mail group configuration", MigrationEventType.Information);
+                    var groups = configDoc.SelectNodes("//email/groups/group");
+                    if (groups.Count == 0)
+                    {
+                        FireMessage("No e-mail groups found", MigrationEventType.Information);
+                    }
+                    else
+                    {
+                        foreach (XmlElement groupEl in groups)
+                        {
+                            // Retrieve the property value
+                            var notification = RetrievePropertyValue(groupEl, "notification");
+
+                            // Remove the old value
+                            var notificationEl = groupEl.SelectSingleNode("notification");
+                            if (notificationEl != null)
+                            {
+                                groupEl.RemoveChild(notificationEl);
+                            }
+                            else 
+                            {
+                                groupEl.RemoveAttribute("notification");
+                            }
+
+                            // Add the new structure
+                            var notificationsEl = configDoc.CreateElement("notifications");
+                            groupEl.AppendChild(notificationsEl);
+                            notificationEl = configDoc.CreateElement("notificationType");
+                            notificationsEl.AppendChild(notificationEl);
+                            if (!string.IsNullOrEmpty(notification))
+                            {
+                                notificationEl.InnerText = notification;
+                            }
+                            else
+                            {
+                                notificationEl.InnerText = "Always";
+                            }
+                        }
+                        FireMessage(
+                            string.Format("{0} e-mail groups found and converted", groups.Count),
+                            MigrationEventType.Information);
+                    }
+                }
+
+                // Save the configuration file
+                configDoc.Save(MigrationOptions.ConfigurationLocation);
 
                 FireMessage("Configuration files successfully migrated", MigrationEventType.Information);
                 isSuccessful = true;
