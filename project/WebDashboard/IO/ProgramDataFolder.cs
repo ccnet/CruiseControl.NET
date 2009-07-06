@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 {
@@ -11,9 +12,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
     public static class ProgramDataFolder
     {
         #region private fields
-        private static string location = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-            Path.Combine("CruiseControl.NET", "WebDashboard"));
+
+		private static readonly IFileSystem fileSystem = new SystemIoFileSystem();
+    	private static readonly IExecutionEnvironment executionEnvironment = new ExecutionEnvironment();
+
+        private static string location;
         #endregion
 
         #region Public properties
@@ -24,8 +27,23 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
         /// <value>The program data folder path.</value>
         public static string Location
         {
-            get { return location; }
-            set { location = value; }
+            get
+            {
+				if (string.IsNullOrEmpty(location))
+				{
+					location = executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.WebDasboard);
+					Log.Debug(string.Concat("Initialising data folder: '", location,"'."));
+					fileSystem.EnsureFolderExists(location);
+				}
+
+            	return location;
+            }
+            set
+            {
+				Log.Debug(string.Concat("Data folder set to: '", value, "'."));
+				fileSystem.EnsureFolderExists(value);
+            	location = value;
+            }
         }
         #endregion
         #endregion
@@ -39,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
         /// <returns>The mapped path.</returns>
         public static string MapPath(string path)
         {
-            var fullPath = new DirectoryInfo(Path.Combine(location, path)).FullName;
+			var fullPath = new DirectoryInfo(Path.Combine(Location, path)).FullName;
             return fullPath;
         }
         #endregion
