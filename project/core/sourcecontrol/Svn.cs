@@ -15,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     {
         public const string DefaultExecutable = "svn";
         public static readonly string UtcXmlDateFormat = "yyyy-MM-ddTHH:mm:ssZ";
+		private BuildProgressInformation _buildProgressInformation;
 
         public Svn(ProcessExecutor executor, IHistoryParser parser, IFileSystem fileSystem)
             : base(parser, executor)
@@ -199,6 +200,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             }
         }
 
+		private BuildProgressInformation GetBuildProgressInformation(IIntegrationResult result)
+		{
+			if (_buildProgressInformation == null)
+				_buildProgressInformation = new BuildProgressInformation(result.ArtifactDirectory, result.ProjectName);
+
+			return _buildProgressInformation;
+		}
+
+		private void ProcessExecutor_ProcessOutput(object sender, ProcessOutputEventArgs e)
+		{
+			if (_buildProgressInformation == null)
+				return;
+
+			// ignore error output in the progress information
+			if (e.OutputType == ProcessOutputType.ErrorOutput)
+				return;
+
+			_buildProgressInformation.AddTaskInformation(e.Data);
+		}
+
         private ProcessInfo PropGetProcessInfo(IIntegrationResult result)
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
@@ -274,7 +295,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             if (string.IsNullOrEmpty(TrunkUrl))
                 throw new ConfigurationException("<trunkurl> configuration element must be specified in order to automatically checkout source from SVN.");
+
+			// initialize progress information
+			var bpi = GetBuildProgressInformation(result);
+			bpi.SignalStartRunTask("Calling svn checkout ...");
+
+			// enable Stdout monitoring
+			ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+
             Execute(NewCheckoutProcessInfo(result));
+
+			// remove Stdout monitoring
+			ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
         }
 
         private ProcessInfo NewCheckoutProcessInfo(IIntegrationResult result)
@@ -289,7 +321,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private void UpdateSource(IIntegrationResult result)
         {
+			// initialize progress information
+			var bpi = GetBuildProgressInformation(result);
+			bpi.SignalStartRunTask("Calling svn update ...");
+
+			// enable Stdout monitoring
+			ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+
             Execute(NewGetSourceProcessInfo(result));
+
+			// remove Stdout monitoring
+			ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
         }
 
         private bool DoesSvnDirectoryExist(IIntegrationResult result)
