@@ -17,13 +17,15 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	/// </summary>
 	public class ProcessExecutor
 	{
-		private RunnableProcess p;
+		public event EventHandler<ProcessOutputEventArgs> ProcessOutput;
 
 		public virtual ProcessResult Execute(ProcessInfo processInfo)
 		{
 			string projectName = Thread.CurrentThread.Name;
-			using (p = new RunnableProcess(processInfo, projectName))
+			using (RunnableProcess p = new RunnableProcess(processInfo, projectName))
 			{
+				p.ProcessOutput += ((sender, e) => OnProcessOutput(e));
+
 				ProcessMonitor.MonitorProcessForProject(p.Process, projectName);
 				ProcessResult run = p.Run();
 				ProcessMonitor.RemoveMonitorForProject(projectName);
@@ -44,8 +46,19 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 		}
 
+		protected virtual void OnProcessOutput(ProcessOutputEventArgs eventArgs)
+		{
+			EventHandler<ProcessOutputEventArgs> handler = this.ProcessOutput;
+			if (handler == null)
+				return;
+
+			handler(this, eventArgs);
+		}
+
 		private class RunnableProcess : IDisposable
 		{
+			public event EventHandler<ProcessOutputEventArgs> ProcessOutput;
+
 			private readonly string projectName;
 			private readonly ProcessInfo processInfo;
 			private readonly Process process;
@@ -199,6 +212,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				try
 				{
 					CollectOutput(outLine.Data, stdOutput, outputStreamClosed);
+
+					if (!string.IsNullOrEmpty(outLine.Data))
+						OnProcessOutput(new ProcessOutputEventArgs(ProcessOutputType.StandardOutput, outLine.Data));
 				}
 				catch (Exception e)
 				{
@@ -213,6 +229,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				try
 				{
 					CollectOutput(outLine.Data, stdError, errorStreamClosed);
+
+					if (!string.IsNullOrEmpty(outLine.Data))
+						OnProcessOutput(new ProcessOutputEventArgs(ProcessOutputType.ErrorOutput, outLine.Data));
 				}
 				catch (Exception e)
 				{
@@ -247,6 +266,15 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			public Process Process
 			{
 				get { return process; }
+			}
+
+			protected virtual void OnProcessOutput(ProcessOutputEventArgs eventArgs)
+			{
+				EventHandler<ProcessOutputEventArgs> handler = this.ProcessOutput;
+				if (handler == null)
+					return;
+
+				handler(this, eventArgs);
 			}
 		}
 
