@@ -22,6 +22,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			this.historyParser = historyParser;
 		}
 
+		protected ProcessExecutor ProcessExecutor
+		{
+			get { return executor; }
+		}
+
 		[ReflectorProperty("timeout", typeof (TimeoutSerializerFactory))]
 		public Timeout Timeout
 		{

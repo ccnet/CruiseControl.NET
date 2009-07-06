@@ -14,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private readonly IFileSystem _fileSystem;
 		private readonly IFileDirectoryDeleter _fileDirectoryDeleter;
+		private BuildProgressInformation _buildProgressInformation;
 
 		[ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = true;
@@ -118,6 +119,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string BaseWorkingDirectory(IIntegrationResult result)
 		{
 			return Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory));
+		}
+
+		private BuildProgressInformation GetBuildProgressInformation(IIntegrationResult result)
+		{
+			if (_buildProgressInformation == null)
+				_buildProgressInformation = new BuildProgressInformation(result.ArtifactDirectory, result.ProjectName);
+
+			return _buildProgressInformation;
+		}
+
+		private void ProcessExecutor_ProcessOutput(object sender, ProcessOutputEventArgs e)
+		{
+			if (_buildProgressInformation == null)
+				return;
+
+			// ignore error output in the progress information
+			if (e.OutputType == ProcessOutputType.ErrorOutput)
+				return;
+
+			_buildProgressInformation.AddTaskInformation(e.Data);
 		}
 
 		/// <summary>
@@ -278,6 +299,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AddArgument(Repository);
 			buffer.AddArgument(wd);
 
+			// initialize progress information
+			var bpi = GetBuildProgressInformation(result);
+			bpi.SignalStartRunTask(string.Concat("git ", buffer.ToString()));
+
+			// enable Stdout monitoring
+			ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+
 			ProcessInfo pi = NewProcessInfo(buffer.ToString(), result);
 			// Use upper level of the working directory, because the
 			// working directory currently does not exist and
@@ -285,6 +313,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			// the working directory already exist.
 			pi.WorkingDirectory = Path.GetDirectoryName(wd.Trim().TrimEnd(Path.DirectorySeparatorChar));
 			Execute(pi);
+
+			// remove Stdout monitoring
+			ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
 		}
 
 		/// <summary>
@@ -327,7 +358,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("fetch");
 			buffer.AddArgument("origin");
+
+			// initialize progress information
+			var bpi = GetBuildProgressInformation(result);
+			bpi.SignalStartRunTask(string.Concat("git ", buffer.ToString()));
+
+			// enable Stdout monitoring
+			ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+
 			Execute(NewProcessInfo(buffer.ToString(), result));
+
+			// remove Stdout monitoring
+			ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
 		}
 
 		/// <summary>
@@ -342,7 +384,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AddArgument("-q");
 			buffer.AddArgument("-f");
 			buffer.AddArgument(string.Concat("origin/", branchName));
+
+			// initialize progress information
+			var bpi = GetBuildProgressInformation(result);
+			bpi.SignalStartRunTask(string.Concat("git ", buffer.ToString()));
+
+			// enable Stdout monitoring
+			ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+
 			Execute(NewProcessInfo(buffer.ToString(), result));
+
+			// remove Stdout monitoring
+			ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
 		}
 
 		/// <summary>
@@ -417,7 +470,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AddArgument("origin");
 			buffer.AddArgument("tag");
 			buffer.AddArgument(tagName);
+
+			// initialize progress information
+			var bpi = GetBuildProgressInformation(result);
+			bpi.SignalStartRunTask(string.Concat("git ", buffer.ToString()));
+
+			// enable Stdout monitoring
+			ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+
 			Execute(NewProcessInfo(buffer.ToString(), result));
+
+			// remove Stdout monitoring
+			ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
 		}
 
 		#endregion
