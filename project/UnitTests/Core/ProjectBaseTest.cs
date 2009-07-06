@@ -11,10 +11,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	{
 		private ProjectBase project;
 		private class ConcreteProject : ProjectBase { }
+		private IExecutionEnvironment executionEnvironment;
 
 		[SetUp]
 		public void Setup()
 		{
+			executionEnvironment = new ExecutionEnvironment();
+
 			project = new ConcreteProject();
 		}
 
@@ -38,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			// Execute & Verify
 			Assert.AreEqual(
-                Path.Combine(PathUtils.DefaultProgramDataFolder,
+				Path.Combine(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server),
                     Path.Combine("myProject", "WorkingDirectory")), 
                 project.WorkingDirectory);
 		}
@@ -63,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			// Execute & Verify
 			Assert.AreEqual(
-                Path.Combine(PathUtils.DefaultProgramDataFolder, 
+				Path.Combine(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server), 
                     Path.Combine("myProject", "Artifacts")), 
                 project.ArtifactDirectory);
 		}

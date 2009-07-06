@@ -48,6 +48,41 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				return RuntimeEnvironment.GetRuntimeDirectory();
 			}
 		}
+
+		/// <summary>
+		/// Get the directory for the default location of the CruiseControl.NET data files.
+		/// </summary>
+		/// <param name="application">Type of the application. E.g. Server or WebDashboard.</param>
+		/// <returns>The location of the CruiseControl.NET data files.</returns>
+		public string GetDefaultProgramDataFolder(ApplicationType application)
+		{
+			if (application == ApplicationType.Unknown)
+				throw new ArgumentOutOfRangeException("application");
+
+			string pgfPath;
+			if (IsRunningOnWindows)
+				pgfPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+			else
+				pgfPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+			return Path.Combine(pgfPath, Path.Combine("CruiseControl.NET", application.ToString()));
+		}
+
+		/// <summary>
+		/// Enstures the path is rooted.
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
+		public string EnsurePathIsRooted(string path)
+		{
+			if (!Path.IsPathRooted(path))
+			{
+				path = Path.Combine(
+					GetDefaultProgramDataFolder(ApplicationType.Server),
+					path);
+			}
+			return path;
+		}
 	}
 
 	public interface IExecutionEnvironment
@@ -55,5 +90,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		char DirectorySeparator { get; }
 		bool IsRunningOnWindows { get; }
 		string RuntimeDirectory { get; }
+		string GetDefaultProgramDataFolder(ApplicationType application);
+		string EnsurePathIsRooted(string path);
+	}
+
+	public enum ApplicationType
+	{
+		Unknown = 0,
+		Server = 1,
+		WebDasboard = 2
 	}
 }

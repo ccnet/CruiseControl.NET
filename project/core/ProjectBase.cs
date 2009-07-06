@@ -20,7 +20,15 @@ namespace ThoughtWorks.CruiseControl.Core
         private ITrigger triggers = new MultipleTrigger(new ITrigger[] { });
 		private ExternalLink[] externalLinks = new ExternalLink[0];
         private DisplayLevel askForForceBuildReason = DisplayLevel.None;
+		private readonly IExecutionEnvironment executionEnvironment;
 
+		protected ProjectBase() : this(new ExecutionEnvironment())
+		{}
+
+		protected ProjectBase(IExecutionEnvironment executionEnvironment)
+		{
+			this.executionEnvironment = executionEnvironment;
+		}
 
 		[ReflectorProperty("name")]
 		public virtual string Name
@@ -101,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
                 if (string.IsNullOrEmpty(configuredWorkingDirectory))
 				{
-					return PathUtils.EnsurePathIsRooted(Path.Combine(Name, DefaultWorkingSubDirectory));
+					return executionEnvironment.EnsurePathIsRooted(Path.Combine(Name, DefaultWorkingSubDirectory));
 				}
 				return new DirectoryInfo(configuredWorkingDirectory).FullName;
 			}
@@ -113,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
                 if (string.IsNullOrEmpty(configuredArtifactDirectory))
 				{
-                    return PathUtils.EnsurePathIsRooted(Path.Combine(Name, DefaultArtifactSubDirectory));
+					return executionEnvironment.EnsurePathIsRooted(Path.Combine(Name, DefaultArtifactSubDirectory));
 				}
 				return new DirectoryInfo(configuredArtifactDirectory).FullName;
 			}

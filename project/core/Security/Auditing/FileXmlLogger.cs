@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Xml;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
@@ -15,6 +16,15 @@ namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
         : AuditLoggerBase, IAuditLogger
     {
         private string auditFile = "SecurityAudit.xml";
+		private readonly IExecutionEnvironment executionEnvironment;
+
+		public FileXmlLogger() : this(new ExecutionEnvironment())
+		{}
+
+		public FileXmlLogger(IExecutionEnvironment executionEnvironment)
+		{
+			this.executionEnvironment = executionEnvironment;
+		}
 
         /// <summary>
         /// The location to log the audit events.
@@ -48,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
             if (!string.IsNullOrEmpty(message)) AddXmlElement(auditXml, xmlRoot, "message", message);
 
             // Write the entry
-            string auditLog = Util.PathUtils.EnsurePathIsRooted(this.auditFile);
+			string auditLog = executionEnvironment.EnsurePathIsRooted(this.auditFile);
             lock (this)
             {
                 File.AppendAllText(auditLog, auditXml.OuterXml.Replace(Environment.NewLine, " ") + Environment.NewLine);

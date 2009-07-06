@@ -36,7 +36,16 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         private NetReflectorTypeTable typeTable;
         private NetReflectorReader reflectionReader;
         private Dictionary<string, string> settingFileMap;
+		private readonly IExecutionEnvironment executionEnvironment;
         #endregion
+
+		public ExternalFileSecurityManager() : this(new ExecutionEnvironment())
+		{}
+
+		public ExternalFileSecurityManager(IExecutionEnvironment executionEnvironment)
+		{
+			this.executionEnvironment = executionEnvironment;
+		}
 
         #region Public properties
         #region Files
@@ -291,7 +300,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         private void LoadFile(string fileName)
         {
             XmlDocument sourceDocument = new XmlDocument();
-            sourceDocument.Load(Util.PathUtils.EnsurePathIsRooted(fileName));
+			sourceDocument.Load(executionEnvironment.EnsurePathIsRooted(fileName));
 
             foreach (XmlElement setting in sourceDocument.DocumentElement.SelectNodes("*"))
             {
@@ -358,7 +367,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             // Load the file that the setting is in
             string fileName = settingFileMap[setting.Identifier];
             XmlDocument sourceDocument = new XmlDocument();
-            sourceDocument.Load(Util.PathUtils.EnsurePathIsRooted(fileName));
+			sourceDocument.Load(executionEnvironment.EnsurePathIsRooted(fileName));
 
             // Find the item that is being updated
             foreach (XmlElement settingEl in sourceDocument.DocumentElement.SelectNodes("*"))

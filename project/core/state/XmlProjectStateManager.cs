@@ -14,9 +14,11 @@ namespace ThoughtWorks.CruiseControl.Core.State
         : IProjectStateManager
     {
         #region Fields
+		private readonly IFileSystem fileSystem;
+		private readonly IExecutionEnvironment executionEnvironment;
+
         private readonly string persistanceFileName;
         private Dictionary<string, bool> projectStates = null;
-        private IFileSystem fileSystem = new SystemIoFileSystem();
         private bool isLoading;
         #endregion
 
@@ -25,32 +27,24 @@ namespace ThoughtWorks.CruiseControl.Core.State
         /// Initialise a new <see cref="XmlProjectStateManager"/> with the default path.
         /// </summary>
         public XmlProjectStateManager()
-            : this(Path.Combine(PathUtils.DefaultProgramDataFolder, "ProjectsState.xml"))
+			: this(new SystemIoFileSystem(), new ExecutionEnvironment())
         {
         }
 
-        /// <summary>
-        /// Initialise a new <see cref="XmlProjectStateManager"/> with a file name.
-        /// </summary>
-        /// <param name="persistanceFileName"></param>
-        public XmlProjectStateManager(string persistanceFileName)
-        {
-            this.persistanceFileName = persistanceFileName;
-        }
+		public XmlProjectStateManager(IFileSystem fileSystem, IExecutionEnvironment executionEnvironment)
+		{
+			this.fileSystem = fileSystem;
+			this.executionEnvironment = executionEnvironment;
+
+			persistanceFileName = Path.Combine(this.executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server), "ProjectsState.xml");
+			fileSystem.EnsureFolderExists(persistanceFileName);
+		}
         #endregion
 
-        #region Public properties
-        #region FileSystem
-        /// <summary>
-        /// The underlying file system to use.
-        /// </summary>
-        public IFileSystem FileSystem
-        {
-            get { return fileSystem; }
-            set { fileSystem = value; }
-        }
-        #endregion
-        #endregion
+		public string PersistanceFileName
+		{
+			get { return persistanceFileName; }
+		}
 
         #region Public methods
         #region RecordProjectAsStopped()

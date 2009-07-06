@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private ITask[] tasks = new ITask[] { new NullTask() };
         private ITask[] publishers = new ITask[] { new XmlLogPublisher() };
         private ProjectActivity currentActivity = ProjectActivity.Sleeping;
-        private IStateManager state = new FileStateManager(new SystemIoFileSystem());
+        private IStateManager state = new FileStateManager();
         private IIntegrationResultManager integrationResultManager;
         private IIntegratable integratable;
         private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());

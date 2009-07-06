@@ -12,24 +12,31 @@ namespace ThoughtWorks.CruiseControl.Core.State
 	public class FileStateManager : IStateManager
 	{
 		private readonly IFileSystem fileSystem;
-        private string directory = PathUtils.DefaultProgramDataFolder;
+		private readonly IExecutionEnvironment executionEnvironment;
+		private string stateFileDirectory;
 
-		public FileStateManager() : this(new SystemIoFileSystem())
+		public FileStateManager() : this(new SystemIoFileSystem(), new ExecutionEnvironment())
 		{}
 
-		public FileStateManager(IFileSystem fileSystem)
+		public FileStateManager(IFileSystem fileSystem, IExecutionEnvironment executionEnvironment)
 		{
 			this.fileSystem = fileSystem;
+			this.executionEnvironment = executionEnvironment;
+
+			stateFileDirectory = this.executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server);
+			fileSystem.EnsureFolderExists(stateFileDirectory);
 		}
 
 		[ReflectorProperty("directory", Required=false)]
 		public string StateFileDirectory
 		{
-			get { return directory; }
+			get { return stateFileDirectory; }
 			set
 			{
-                if (!string.IsNullOrEmpty(value)) fileSystem.EnsureFolderExists(value);
-				directory = value;
+                if (!string.IsNullOrEmpty(value))
+					fileSystem.EnsureFolderExists(value);
+
+				stateFileDirectory = value;
 			}
 		}
 

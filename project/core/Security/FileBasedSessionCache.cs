@@ -15,7 +15,21 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     public class FileBasedSessionCache
         : SessionCacheBase
     {
-        private string storeLocation = Path.Combine(PathUtils.DefaultProgramDataFolder, "sessions");
+		private readonly IFileSystem fileSystem;
+		private readonly IExecutionEnvironment executionEnvironment;
+        private string storeLocation;
+
+		public FileBasedSessionCache() : this(new SystemIoFileSystem(), new ExecutionEnvironment())
+		{ }
+
+		public FileBasedSessionCache(IFileSystem fileSystem, IExecutionEnvironment executionEnvironment)
+		{
+			this.fileSystem = fileSystem;
+			this.executionEnvironment = executionEnvironment;
+
+			storeLocation = Path.Combine(this.executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server), "sessions");
+			fileSystem.EnsureFolderExists(storeLocation);
+		}
 
         /// <summary>
         /// The location where session files will be stored.
@@ -25,7 +39,12 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             get { return storeLocation; }
             set
             {
-                storeLocation = Util.PathUtils.EnsurePathIsRooted(value);
+				string path = executionEnvironment.EnsurePathIsRooted(value);
+
+				if (!string.IsNullOrEmpty(path))
+					fileSystem.EnsureFolderExists(path);
+
+            	storeLocation = path;
             }
         }
 

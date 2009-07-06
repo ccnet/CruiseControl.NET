@@ -8,6 +8,7 @@ using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Queues;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Events;
 using Rhino.Mocks.Interfaces;
@@ -45,8 +46,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private IProjectIntegrator integrator2;
 		private IProjectIntegrator integrator3;
 		private ProjectIntegratorList integratorList;
+		private IFileSystem fileSystem;
+		private IExecutionEnvironment executionEnvironment;
 
 		private ManualResetEvent monitor;
+
+		private string applicationDataPath =
+			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+			             Path.Combine("CruiseControl.NET", "Server"));
 
 		[SetUp]
 		protected void SetUp()
@@ -62,6 +69,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             integratorMock1.SetupResult("Name", "Project 1");
 			integratorMock2.SetupResult("Name", "Project 2");
 			integratorMock3.SetupResult("Name", "Project 3");
+
+			fileSystem = mocks.DynamicMock<IFileSystem>();
+			executionEnvironment = mocks.DynamicMock<IExecutionEnvironment>();
+
+			SetupResult.For(executionEnvironment.IsRunningOnWindows).Return(true);
+			SetupResult.For(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).Return(applicationDataPath);
+			SetupResult.For(fileSystem.DirectoryExists(applicationDataPath)).Return(true);
+			mocks.ReplayAll();
 
 			integrationQueue = null; // We have no way of injecting currently.
 
@@ -105,6 +120,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			                          (IProjectIntegratorListFactory) projectIntegratorListFactoryMock.MockInstance,
 			                          (IProjectSerializer) projectSerializerMock.MockInstance,
                                       (IProjectStateManager)stateManagerMock.MockInstance,
+									  fileSystem,
+									  executionEnvironment,
                                       null);
 		}
 
@@ -643,7 +660,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             server = new CruiseServer((IConfigurationService)configServiceMock.MockInstance,
                                       (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.MockInstance,
                                       (IProjectSerializer)projectSerializerMock.MockInstance,
-                                      (IProjectStateManager)stateManagerMock.MockInstance,
+									  (IProjectStateManager)stateManagerMock.MockInstance,
+									  fileSystem,
+									  executionEnvironment,
                                       null);
 
             bool eventFired = false;
@@ -683,7 +702,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             server = new CruiseServer((IConfigurationService)configServiceMock.MockInstance,
                                       (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.MockInstance,
                                       (IProjectSerializer)projectSerializerMock.MockInstance,
-                                      (IProjectStateManager)stateManagerMock.MockInstance,
+									  (IProjectStateManager)stateManagerMock.MockInstance,
+									  fileSystem,
+									  executionEnvironment,
                                       null);
 
             bool eventFired = false;
@@ -714,7 +735,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             server = new CruiseServer((IConfigurationService)configServiceMock.MockInstance,
                                       (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.MockInstance,
                                       (IProjectSerializer)projectSerializerMock.MockInstance,
-                                      (IProjectStateManager)stateManagerMock.MockInstance,
+									  (IProjectStateManager)stateManagerMock.MockInstance,
+									  fileSystem,
+									  executionEnvironment,
                                       extensions);
             Assert.IsTrue(ServerExtensionStub.HasInitialised);
 
@@ -740,7 +763,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             server = new CruiseServer((IConfigurationService)configServiceMock.MockInstance,
                                       (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.MockInstance,
                                       (IProjectSerializer)projectSerializerMock.MockInstance,
-                                      (IProjectStateManager)stateManagerMock.MockInstance,
+									  (IProjectStateManager)stateManagerMock.MockInstance,
+									  fileSystem,
+									  executionEnvironment,
                                       extensions);
         }
 
@@ -757,7 +782,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             server = new CruiseServer((IConfigurationService)configServiceMock.MockInstance,
                                       (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.MockInstance,
                                       (IProjectSerializer)projectSerializerMock.MockInstance,
-                                      (IProjectStateManager)stateManagerMock.MockInstance,
+									  (IProjectStateManager)stateManagerMock.MockInstance,
+									  fileSystem,
+									  executionEnvironment,
                                       extensions);
             Assert.IsTrue(ServerExtensionStub.HasInitialised);
 

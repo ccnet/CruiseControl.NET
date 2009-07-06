@@ -27,6 +27,8 @@ namespace ThoughtWorks.CruiseControl.Core
         #region Private fields
         private readonly IProjectSerializer projectSerializer;
         private readonly IConfigurationService configurationService;
+		private readonly IFileSystem fileSystem;
+		private readonly IExecutionEnvironment executionEnvironment;
         private IConfiguration configuration;
         [Obsolete]
         private readonly ICruiseManager manager;
@@ -40,6 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private IQueueManager integrationQueueManager;
         // TODO: Replace this with a proper IoC container
         private Dictionary<Type, object> services = new Dictionary<Type,object>();
+    	private readonly string programmDataFolder;
         #endregion
 
         #region Constructors
@@ -47,10 +50,14 @@ namespace ThoughtWorks.CruiseControl.Core
                             IProjectIntegratorListFactory projectIntegratorListFactory,
                             IProjectSerializer projectSerializer,
                             IProjectStateManager stateManager,
+							IFileSystem fileSystem,
+							IExecutionEnvironment executionEnvironment,
                             List<ExtensionConfiguration> extensionList)
         {
             this.configurationService = configurationService;
             this.projectSerializer = projectSerializer;
+			this.fileSystem = fileSystem;
+			this.executionEnvironment = executionEnvironment;
 
             // Leave the manager for backwards compatability - it is marked as obsolete
 #pragma warning disable 0618
@@ -75,6 +82,8 @@ namespace ThoughtWorks.CruiseControl.Core
             }
 
             this.configurationService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(Restart));
+
+        	programmDataFolder = this.executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server);
         }
         #endregion
 
@@ -123,10 +132,10 @@ namespace ThoughtWorks.CruiseControl.Core
             monitor.Reset();
 
             // Make sure the default program data folder exists
-            if (!Directory.Exists(PathUtils.DefaultProgramDataFolder))
+			if (!fileSystem.DirectoryExists(programmDataFolder))
             {
-                Log.Info("Initialising data folder: '{0}'", PathUtils.DefaultProgramDataFolder);
-                Directory.CreateDirectory(PathUtils.DefaultProgramDataFolder);
+				Log.Info("Initialising data folder: '{0}'", programmDataFolder);
+            	fileSystem.EnsureFolderExists(programmDataFolder);
             }
 
             integrationQueueManager.StartAllProjects();

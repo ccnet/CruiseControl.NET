@@ -465,34 +465,5 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             char sep = Path.DirectorySeparatorChar;
             return (c == '\\' || c == '/' || c == sep);
         }
-
-        /// <summary>
-        /// Enstures the path is rooted.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static string EnsurePathIsRooted(string path)
-        {
-            if (!Path.IsPathRooted(path))
-            {
-                path = Path.Combine(
-                    DefaultProgramDataFolder,
-                    path);
-            }
-            return path;
-        }
-
-        /// <summary>
-        /// The default program data folder to use.
-        /// </summary>
-        public static string DefaultProgramDataFolder
-        {
-            get
-            {
-                if (!Directory.Exists(defaultProgramDataFolder)) Directory.CreateDirectory(defaultProgramDataFolder);
-                return defaultProgramDataFolder;
-            }
-            set { defaultProgramDataFolder = value; }
-        }
     }
 }

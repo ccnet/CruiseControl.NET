@@ -34,6 +34,8 @@ namespace ThoughtWorks.CruiseControl.Core
 				new ProjectIntegratorListFactory(),
 				new NetReflectorProjectSerializer(),
                 stateManager,
+				new SystemIoFileSystem(), 
+				new ExecutionEnvironment(),
                 extensionList);
 
             // Initialise the IoC container.

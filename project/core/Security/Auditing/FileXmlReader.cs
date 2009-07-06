@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
@@ -16,6 +17,15 @@ namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
         : IAuditReader
     {
         private string auditFile = "SecurityAudit.xml";
+		private readonly IExecutionEnvironment executionEnvironment;
+
+		public FileXmlReader() : this(new ExecutionEnvironment())
+		{}
+
+		public FileXmlReader(IExecutionEnvironment executionEnvironment)
+		{
+			this.executionEnvironment = executionEnvironment;
+		}
 
         /// <summary>
         /// The location to log the audit events.
@@ -116,9 +126,9 @@ namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
         /// <returns></returns>
         private string[] LoadAuditLines()
         {
-            string auditLog = Util.PathUtils.EnsurePathIsRooted(this.auditFile);
+			string auditLog = executionEnvironment.EnsurePathIsRooted(this.auditFile);
 
-            Stream inputStream = File.Open(auditFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+			Stream inputStream = File.Open(auditLog, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             StreamReader reader = new StreamReader(inputStream);
             string fileData;
             try

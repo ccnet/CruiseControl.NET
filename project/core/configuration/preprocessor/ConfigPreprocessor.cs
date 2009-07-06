@@ -15,7 +15,22 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// </summary>
     internal class ConfigPreprocessor
     {
-        private ConfigPreprocessorEnvironment _current_env;        
+        private ConfigPreprocessorEnvironment _current_env;
+		private readonly IFileSystem fileSystem;
+		private readonly IExecutionEnvironment executionEnvironment;
+		private readonly string programDataFolder;
+       
+		internal ConfigPreprocessor() : this(new SystemIoFileSystem(), new ExecutionEnvironment())
+		{}
+
+		internal ConfigPreprocessor(IFileSystem fileSystem, IExecutionEnvironment executionEnvironment)
+		{
+			this.fileSystem = fileSystem;
+			this.executionEnvironment = executionEnvironment;
+
+			programDataFolder = this.executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server);
+			fileSystem.EnsureFolderExists(programDataFolder);
+		}
 
         /// <summary>
         /// Run the given input reader through the preprocessor, writing it
@@ -63,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
                            ( String.IsNullOrEmpty( input.BaseURI )
                                  ? new Uri(
                                        Path.Combine(
-                                           PathUtils.DefaultProgramDataFolder,
+										   programDataFolder,
                                            "nofile.xml" ) )
                                  : new Uri( input.BaseURI ) );
             _current_env = new ConfigPreprocessorEnvironment( base_uri, resolver );
