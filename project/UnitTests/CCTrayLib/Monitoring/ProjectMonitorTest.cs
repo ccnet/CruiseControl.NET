@@ -382,7 +382,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.IsFalse(monitor.IsPending);
 		}
 
-		private void OnMessageReceived(Message message)
+		private void OnMessageReceived(string projectName,Message message)
 		{
 			actualMessage = message;
 		}

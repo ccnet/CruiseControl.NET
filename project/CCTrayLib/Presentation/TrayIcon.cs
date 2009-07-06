@@ -44,9 +44,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 		}
 
-		private void Monitor_MessageReceived(Message message)
+		private void Monitor_MessageReceived(string projectName, Message message)
 		{
-			ShowBalloon(message.ToString(), message.ToString(), NotifyInfoFlags.Info, 5000);
+			ShowBalloon(projectName, message.ToString(), NotifyInfoFlags.Info, 5000);
 		}
 
 		private void IconProvider_IconChanged(object sender, EventArgs e)

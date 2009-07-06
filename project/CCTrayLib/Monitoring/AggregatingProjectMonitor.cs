@@ -98,9 +98,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			if (Polled != null) Polled(this, args);
 		}
 
-		private void Monitor_MessageReceived(Message message)
+		private void Monitor_MessageReceived(string projectName, Message message)
 		{
-			if (MessageReceived != null) MessageReceived(message);
+			if (MessageReceived != null) MessageReceived(projectName, message);
 		}
 
 		public void Poll()

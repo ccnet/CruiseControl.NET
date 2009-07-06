@@ -101,11 +101,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			if (BuildOccurred != null) synchronizeInvoke.BeginInvoke(BuildOccurred, new object[] {sender, args});
 		}
 
-		private void ProjectMonitor_MessageReceived(Message message)
-		{
-			if (MessageReceived != null) synchronizeInvoke.BeginInvoke(MessageReceived, new object[] {message});
-		}
+        private void ProjectMonitor_MessageReceived(string projectName, Message message)
+        {
+            if (MessageReceived != null)
+            {
+                string caption = string.Concat("Project Name : ", projectName);
 
+                synchronizeInvoke.BeginInvoke(MessageReceived, new object[] { caption, message });         
+            }
+        }
 		public IntegrationStatus IntegrationStatus
 		{
 			get { return projectMonitor.IntegrationStatus; }

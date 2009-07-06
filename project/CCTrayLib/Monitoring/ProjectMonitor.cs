@@ -263,7 +263,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 					if (duringInterval.HasNewBuildStarted) buildDurationTracker.OnBuildStart();
 
-					if (duringInterval.WasNewStatusMessagesReceived) OnMessageReceived(duringInterval.LatestStatusMessage);
+					if (duringInterval.WasNewStatusMessagesReceived) OnMessageReceived(newProjectStatus.Name, duringInterval.LatestStatusMessage);
 				}
 				lastProjectStatus = newProjectStatus;
 			}
@@ -291,9 +291,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			if (Polled != null) Polled(this, args);
 		}
 
-		private void OnMessageReceived(Message message)
+		private void OnMessageReceived(string projectName, Message message)
 		{
-			if (MessageReceived != null) MessageReceived(message);
+			if (MessageReceived != null) MessageReceived(projectName, message);
 		}
 
 		public string SummaryStatusString
@@ -315,5 +315,5 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		}
 	}
 
-	public delegate void MessageEventHandler(Message message);
+	public delegate void MessageEventHandler(string ProjectName, Message message);
 }

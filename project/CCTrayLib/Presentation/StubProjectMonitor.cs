@@ -130,10 +130,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				Polled(this, args);
 		}
 
-		public void OnMessageReceived( Message message )
+		public void OnMessageReceived(string projectName, Message message )
 		{
 			if (MessageReceived != null)
-				MessageReceived( message );
+				MessageReceived( projectName, message );
 		}
 
 		public event MonitorBuildOccurredEventHandler BuildOccurred;

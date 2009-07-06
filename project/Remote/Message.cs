@@ -54,6 +54,33 @@ namespace ThoughtWorks.CruiseControl.Remote
 			return message;
 		}
         #endregion
+
+        /// <summary>
+        /// compares 2 message objects
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            //check if obj isn't null, if it is return false 
+            if (obj == null)
+            {
+                return false;
+            }
+
+            Message m = obj as Message;
+
+            //if obj can't be casted as Message, return false 
+            if (m == null)
+            {
+                return false;
+            }
+
+            //compare the values 
+            return string.Equals(this.Text, m.Text);
+        }
+
+
         #endregion
     }
 }
