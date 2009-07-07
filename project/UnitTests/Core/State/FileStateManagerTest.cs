@@ -12,7 +12,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 {
 	[TestFixture]
-	[Ignore("Ignored until someone with Rhino.Mocks knowlege fixed this.")]
+	//[Ignore("Ignored until someone with Rhino.Mocks knowlege fixed this.")]
 	public class FileStateManagerTest : CustomAssertion
 	{
 		private const string ProjectName = IntegrationResultMother.DefaultProjectName;
@@ -33,16 +33,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
             mocks = new MockRepository();
 			fileSystem = mocks.DynamicMock<IFileSystem>();
 			executionEnvironment = mocks.DynamicMock<IExecutionEnvironment>();
-
-			SetupResult.For(executionEnvironment.IsRunningOnWindows).Return(true);
-			SetupResult.For(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).Return(applicationDataPath);
-			SetupResult.For(fileSystem.DirectoryExists(applicationDataPath)).Return(true);
-			Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); });
-			mocks.ReplayAll();
-
-			state = new FileStateManager(fileSystem, executionEnvironment);
-			result = IntegrationResultMother.CreateSuccessful();
-			result.ProjectName = ProjectName;
 		}
 
 		[TearDown]
@@ -63,17 +53,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		[Test, ExpectedException(typeof(CruiseControlException))]
 		public void LoadShouldThrowExceptionIfStateFileDoesNotExist()
 		{
-            Expect.Call(fileSystem.Load(StateFilename())).Throw(new FileNotFoundException());
+			Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Is.NotNull()).Return(applicationDataPath);
+			Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); });
+			Expect.Call(fileSystem.Load(null)).IgnoreArguments().Constraints(Is.NotNull()).Throw(new FileNotFoundException());
             mocks.ReplayAll();
+
+            state = new FileStateManager(fileSystem, executionEnvironment);
+			result = IntegrationResultMother.CreateSuccessful();
+			result.ProjectName = ProjectName;
 			state.LoadState(ProjectName);
 		}
 
 		[Test]
 		public void HasPreviousStateIsTrueIfStateFileExists()
 		{
-            Expect.Call(fileSystem.FileExists(StateFilename())).Return(true);
+			Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Is.NotNull()).Return(applicationDataPath);
+			Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); });
+			Expect.Call(fileSystem.FileExists(null)).IgnoreArguments().Constraints(Is.NotNull()).Return(true);
             mocks.ReplayAll();
-            Assert.IsTrue(state.HasPreviousState(ProjectName));			
+
+
+            state = new FileStateManager(fileSystem, executionEnvironment);
+            Assert.IsTrue(state.HasPreviousState(ProjectName));
 		}
 
         [Test]
@@ -81,22 +82,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
         {
             string foldername = @"c:\CCNet_remove_invalid";
 
-            Expect.Call(() => fileSystem.EnsureFolderExists(foldername));
+            Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Is.NotNull()).Return(applicationDataPath);
+			Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); });
+			Expect.Call(delegate { fileSystem.EnsureFolderExists(foldername); });
             mocks.ReplayAll();
+
+            state = new FileStateManager(fileSystem, executionEnvironment);
             state.StateFileDirectory = foldername;
         }
 
 		[Test]
 		public void AttemptToSaveWithInvalidXml()
 		{
-            Expect.Call(() => fileSystem.AtomicSave(string.Empty, string.Empty)).
+			Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Is.NotNull()).Return(applicationDataPath);
+			Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); });
+			Expect.Call(delegate { fileSystem.AtomicSave(string.Empty, string.Empty); }).IgnoreArguments().
                 Constraints(
-                    new Equal(StateFilename()),
-                    new Anything());
+            		Is.NotNull(),
+                    Is.Anything());
             mocks.ReplayAll();
 
+            result = IntegrationResultMother.CreateSuccessful();
 			result.Label = "<&/<>";
 			result.AddTaskResult("<badxml>>");
+			state = new FileStateManager(fileSystem, executionEnvironment);
 			state.SaveState(result);
 		}
 
@@ -120,9 +129,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
   <FailureUsers />
 </IntegrationResult>";
 
-            Expect.Call(fileSystem.Load(StateFilename()))
-                .Return(new StringReader(data));
+            Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Is.NotNull()).Return(applicationDataPath);
+			Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); });
+            Expect.Call(fileSystem.Load(null)).IgnoreArguments().Constraints(Is.NotNull()).Return(new StringReader(data));
             mocks.ReplayAll();
+
+            state = new FileStateManager(fileSystem, executionEnvironment);
             state.LoadState(ProjectName);
         }
 
@@ -133,57 +145,71 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
             var data = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <garbage />";
 
-            Expect.Call(fileSystem.Load(StateFilename()))
-                .Return(new StringReader(data));
+            Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Is.NotNull()).Return(applicationDataPath);
+			Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); });
+            Expect.Call(fileSystem.Load(null)).IgnoreArguments().Constraints(Is.NotNull()).Return(new StringReader(data));
             mocks.ReplayAll();
+
+            state = new FileStateManager(fileSystem, executionEnvironment);
             state.LoadState(ProjectName);
         }
 
 		[Test]
 		public void SaveProjectWithSpacesInName()
 		{
-            Expect.Call(() => fileSystem.AtomicSave(string.Empty, string.Empty)).
-                Constraints(
-					new Equal(Path.Combine(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server), "MyProject.state")),
-                    new Anything());
+			Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Is.NotNull()).Return(applicationDataPath);
+			Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); });
+			Expect.Call(delegate { fileSystem.AtomicSave(string.Empty, string.Empty); }).IgnoreArguments().Constraints(Is.NotNull(), Is.Anything());
             mocks.ReplayAll();
 
+            result = IntegrationResultMother.CreateSuccessful();
 			result.ProjectName = "my project";
+			state = new FileStateManager(fileSystem, executionEnvironment);
 			state.SaveState(result);
 		}
 
 		[Test]
 		public void ShouldWriteXmlUsingUTF8Encoding()
 		{
+			Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Is.NotNull()).Return(applicationDataPath);
+			Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); });
             Expect.Call(() => fileSystem.AtomicSave(string.Empty, string.Empty)).
                 Constraints(
-                    new Equal(StateFilename()),
+            		Is.NotNull(),
                     new StartsWith("<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
             mocks.ReplayAll();
 
 			result = IntegrationResultMother.CreateSuccessful();
 			result.ArtifactDirectory = "artifactDir";
+			state = new FileStateManager(fileSystem, executionEnvironment);
 			state.SaveState(result);
 		}
 
 		[Test, ExpectedException(typeof(CruiseControlException))]
 		public void HandleExceptionSavingStateFile()
 		{
-            Expect.Call(() => fileSystem.AtomicSave(string.Empty, string.Empty)).
-                Constraints(
-                    new Equal(StateFilename()),
-                    new Anything())
+			Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Is.NotNull()).Return(applicationDataPath);
+			Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); });
+			Expect.Call(() => fileSystem.AtomicSave(string.Empty, string.Empty)).IgnoreArguments()
+				.Constraints(
+            		Is.NotNull(),
+                    Is.Anything())
                 .Throw(new SystemException());
             mocks.ReplayAll();
+
+            state = new FileStateManager(fileSystem, executionEnvironment);
             state.SaveState(result);
 		}
 
 		[Test, ExpectedException(typeof(CruiseControlException))]
 		public void HandleExceptionLoadingStateFile()
 		{
-            Expect.Call(fileSystem.Load(StateFilename()))
-                .Throw(new SystemException());
+			Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Is.NotNull()).Return(applicationDataPath);
+			Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); });
+			Expect.Call(fileSystem.Load(null)).IgnoreArguments().Constraints(Is.NotNull()).Throw(new SystemException());
             mocks.ReplayAll();
+
+            state = new FileStateManager(fileSystem, executionEnvironment);
             state.LoadState(ProjectName);
 		}
 
@@ -218,11 +244,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 			Assert.AreEqual(IntegrationStatus.Success, result.LastIntegrationStatus);
 			Assert.AreEqual("1.0.0.7", result.LastSuccessfulIntegrationLabel);
 			Assert.AreEqual(new DateTime(2006, 12, 10, 22, 41, 50), result.StartTime.ToUniversalTime());
-		}
-
-		private string StateFilename()
-		{
-			return Path.Combine(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server), DefaultStateFilename);
 		}
 	}
 }
