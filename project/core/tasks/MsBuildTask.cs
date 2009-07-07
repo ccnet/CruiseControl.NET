@@ -97,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
 				string.Format("Executing MSBuild :BuildFile: {0}", ProjectFile));
 
-			ProcessResult processResult = executor.Execute(CreateProcessInfo(result));
+        	ProcessResult processResult = TryToRun(CreateProcessInfo(result), result);
 
 			string buildOutputFile = MsBuildOutputFile(result);
 			if (File.Exists(buildOutputFile))

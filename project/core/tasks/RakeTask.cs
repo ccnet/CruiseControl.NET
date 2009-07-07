@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			ProcessInfo processInfo = CreateProcessInfo(result);
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format("Executing Rake: {0}", processInfo.SafeArguments));
-			ProcessResult processResult = TryToRun(processInfo);
+			ProcessResult processResult = TryToRun(processInfo, result);
 
 			if (!StringUtil.IsWhitespace(processResult.StandardOutput + processResult.StandardError))
 			{

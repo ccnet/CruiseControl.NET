@@ -7,6 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     public abstract class BaseExecutableTask : TaskBase
 	{
 		protected ProcessExecutor executor;
+		protected BuildProgressInformation buildProgressInformation;
 
 		protected abstract string GetProcessFilename();
 		protected abstract string GetProcessArguments(IIntegrationResult result);
@@ -32,16 +33,38 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return info;
 		}
 
-		protected ProcessResult TryToRun(ProcessInfo info)
+		protected ProcessResult TryToRun(ProcessInfo info, IIntegrationResult result)
 		{
+			buildProgressInformation = result.BuildProgressInformation;
+
 			try
 			{
+				// enable Stdout monitoring
+				executor.ProcessOutput += ProcessExecutor_ProcessOutput;
+
 				return executor.Execute(info);
 			}
 			catch (IOException e)
 			{
 				throw new BuilderException(this, string.Format("Unable to execute: {0} {1}\n{2}", info.FileName, info.SafeArguments, e), e);
 			}
-		}		
+			finally
+			{
+				// remove Stdout monitoring
+				executor.ProcessOutput -= ProcessExecutor_ProcessOutput;
+			}
+		}
+
+		private void ProcessExecutor_ProcessOutput(object sender, ProcessOutputEventArgs e)
+		{
+			if (buildProgressInformation == null)
+				return;
+
+			// ignore error output in the progress information
+			if (e.OutputType == ProcessOutputType.ErrorOutput)
+				return;
+
+			buildProgressInformation.AddTaskInformation(e.Data);
+		}
 	}
 }

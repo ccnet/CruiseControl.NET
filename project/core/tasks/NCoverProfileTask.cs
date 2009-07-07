@@ -325,7 +325,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             if (string.IsNullOrEmpty(rootPath)) rootPath = result.WorkingDirectory;
 
             // Run the executable
-            var processResult = TryToRun(CreateProcessInfo(result));
+			var processResult = TryToRun(CreateProcessInfo(result), result);
             result.AddTaskResult(new ProcessTaskResult(processResult));
 
             if (Publish && !processResult.Failed)

@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			ProcessInfo info = CreateProcessInfo(result);
 			SetConfiguredEnvironmentVariables(info.EnvironmentVariables, EnvironmentVariables);
 
-			ProcessResult processResult = TryToRun(info);
+			ProcessResult processResult = TryToRun(info, result);
             
 			if (!StringUtil.IsWhitespace(processResult.StandardOutput + processResult.StandardError))
             {

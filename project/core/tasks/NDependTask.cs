@@ -168,7 +168,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             var oldFiles = GenerateOriginalFileList(outputDirectory);
 
             // Run the executable
-            var processResult = TryToRun(CreateProcessInfo(result));
+			var processResult = TryToRun(CreateProcessInfo(result), result);
             result.AddTaskResult(new ProcessTaskResult(processResult));
 
             if (Publish && !processResult.Failed)
