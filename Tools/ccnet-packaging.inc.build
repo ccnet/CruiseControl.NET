@@ -114,7 +114,6 @@
 				<include name="xsl/**" />
 			</fileset>
 		</copy>
-		<copy file="${path::combine(path::get-full-path('lib'), 'ThoughtWorks.CruiseControl.MSBuild.dll')}" todir="${path::combine(dist.dir, 'Server')}" verbose="${nant.verbosity}" />
 		
 		<!-- Create WebDashboard distribution -->
 		<mkdir dir="${webdashboard.dist.dir}" unless="${directory::exists(webdashboard.dist.dir)}" verbose="${nant.verbosity}" />

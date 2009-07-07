@@ -42,6 +42,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communications.Extensions",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MigrationWizard", "MigrationWizard\MigrationWizard.csproj", "{04FB3476-5761-45C8-A053-9E7CF0DE2794}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuildLogger", "MSBuildLogger\MSBuildLogger.csproj", "{E9D3235E-2268-4846-B9EC-DFE24AAA438D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Build|Any CPU = Build|Any CPU
@@ -139,6 +141,12 @@ Global
 		{04FB3476-5761-45C8-A053-9E7CF0DE2794}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04FB3476-5761-45C8-A053-9E7CF0DE2794}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04FB3476-5761-45C8-A053-9E7CF0DE2794}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9D3235E-2268-4846-B9EC-DFE24AAA438D}.Build|Any CPU.ActiveCfg = Release|Any CPU
+		{E9D3235E-2268-4846-B9EC-DFE24AAA438D}.Build|Any CPU.Build.0 = Release|Any CPU
+		{E9D3235E-2268-4846-B9EC-DFE24AAA438D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9D3235E-2268-4846-B9EC-DFE24AAA438D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9D3235E-2268-4846-B9EC-DFE24AAA438D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9D3235E-2268-4846-B9EC-DFE24AAA438D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
