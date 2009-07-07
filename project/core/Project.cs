@@ -757,10 +757,12 @@ namespace ThoughtWorks.CruiseControl.Core
 
         private string CurrentBuildStage()
         {
-            if (CurrentActivity != ProjectActivity.Building)
-                return string.Empty;
+            if (CurrentActivity == ProjectActivity.Building ||
+				CurrentActivity == ProjectActivity.CheckingModifications)
+				return integrationResultManager.CurrentIntegration.BuildProgressInformation.GetBuildProgressInformation();
+                
             else
-                return integrationResultManager.CurrentIntegration.BuildProgressInformation.GetBuildProgressInformation();
+				return string.Empty;
         }
 
         private IntegrationSummary LastIntegration
