@@ -24,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public const bool defaultVerbose = false;
 		public const bool defaultFailBuildOnFoundDefects = false;
 		public const int defaultVerifyTimeout = 0;
+		private BuildProgressInformation _buildProgressInformation;
 
 		public GendarmeTask(): 
 			this(new ProcessExecutor()){}
@@ -173,8 +174,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         protected override bool Execute(IIntegrationResult result)
 		{
-            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
+        	_buildProgressInformation = result.BuildProgressInformation;
+
+			_buildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
 				"Executing Gendarme to verifiy assemblies.");
+
+			// enable Stdout monitoring
+			executor.ProcessOutput += ProcessExecutor_ProcessOutput;
 
 			ProcessResult processResult = TryToRun(CreateProcessInfo(result));
 
@@ -183,6 +189,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				result.AddTaskResult(new FileTaskResult(gendarmeOutputFile));
 
 			result.AddTaskResult(new ProcessTaskResult(processResult));
+
+			// remove Stdout monitoring
+			executor.ProcessOutput -= ProcessExecutor_ProcessOutput;
 
 			if (processResult.TimedOut)
 				throw new BuilderException(this, string.Concat("Gendarme process timed out (after ", VerifyTimeoutSeconds, " seconds)"));
@@ -228,6 +237,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			// build the assembly list by the assembly match collection
 			foreach (AssemblyMatch asm in Assemblies)
 				buffer.AppendArgument(asm.Expression);
+		}
+
+		private void ProcessExecutor_ProcessOutput(object sender, ProcessOutputEventArgs e)
+		{
+			if (_buildProgressInformation == null)
+				return;
+
+			// ignore error output in the progress information
+			if (e.OutputType == ProcessOutputType.ErrorOutput)
+				return;
+
+			_buildProgressInformation.AddTaskInformation(e.Data);
 		}
 
 		#endregion
