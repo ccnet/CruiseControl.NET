@@ -43,6 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
       		<target>foo</target>
     	</targetList>
 		<logger>SourceForge.NAnt.XmlLogger</logger>
+		<listener>CCNetListener, CCNetListener</listener>
 		<buildTimeoutSeconds>123</buildTimeoutSeconds>
 		<nologo>FALSE</nologo>
     </nant>";
@@ -54,6 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(1, builder.Targets.Length);
 			Assert.AreEqual(123, builder.BuildTimeoutSeconds);
 			Assert.AreEqual("SourceForge.NAnt.XmlLogger", builder.Logger);
+			Assert.AreEqual("CCNetListener, CCNetListener", builder.Listener);
 			Assert.AreEqual("foo", builder.Targets[0]);
 			Assert.AreEqual(false, builder.NoLogo);
 		}
@@ -69,6 +71,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(0, builder.Targets.Length);
 			Assert.AreEqual(NAntTask.DefaultBuildTimeout, builder.BuildTimeoutSeconds);
 			Assert.AreEqual(NAntTask.DefaultLogger, builder.Logger);
+			Assert.AreEqual(NAntTask.DefaultListener, builder.Listener);
 			Assert.AreEqual(NAntTask.DefaultNoLogo, builder.NoLogo);
 		}
 
@@ -113,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory) + " target1 target2";
+			string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger -listener:NAnt.Core.DefaultLogger myArgs " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory) + " target1 target2";
 			ProcessInfo info = NewProcessInfo(args, DefaultWorkingDirectory);
 			info.TimeOut = 2000;
 			ExpectToExecute(info);
@@ -133,7 +136,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPassAppropriateDefaultPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory));
+			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -listener:NAnt.Core.DefaultLogger " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory));
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
 			result.ArtifactDirectory = DefaultWorkingDirectory;
 			result.WorkingDirectory = DefaultWorkingDirectory;
@@ -143,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPutQuotesAroundBuildFileIfItContainsASpace()
 		{
-			ExpectToExecuteArguments(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory));
+			ExpectToExecuteArguments(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger -listener:NAnt.Core.DefaultLogger " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory));
 
 			builder.BuildFile = "my project.build";
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
@@ -155,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldEncloseDirectoriesInQuotesIfTheyContainSpaces()
 		{
-			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger " + IntegrationProperties(DefaultWorkingDirectoryWithSpaces, DefaultWorkingDirectoryWithSpaces), DefaultWorkingDirectoryWithSpaces);
+			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -listener:NAnt.Core.DefaultLogger " + IntegrationProperties(DefaultWorkingDirectoryWithSpaces, DefaultWorkingDirectoryWithSpaces), DefaultWorkingDirectoryWithSpaces);
 
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectoryWithSpaces;
 			result.ArtifactDirectory = DefaultWorkingDirectoryWithSpaces;

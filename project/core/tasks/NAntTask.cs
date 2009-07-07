@@ -11,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public const int DefaultBuildTimeout = 600;
 		public const string defaultExecutable = "nant";
 		public const string DefaultLogger = "NAnt.Core.XmlLogger";
+		public const string DefaultListener = "NAnt.Core.DefaultLogger";
 		public const bool DefaultNoLogo = true;
 
 		public NAntTask(): 
@@ -38,6 +39,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		[ReflectorProperty("logger", Required = false)]
 		public string Logger = DefaultLogger;
+
+		[ReflectorProperty("listener", Required = false)]
+		public string Listener = DefaultListener;
 
 		[ReflectorProperty("nologo", Required = false)]
 		public bool NoLogo = DefaultNoLogo;
@@ -86,6 +90,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			buffer.AppendIf(NoLogo, "-nologo");
 			buffer.AppendArgument(@"-buildfile:{0}", StringUtil.AutoDoubleQuoteString(BuildFile));
 			buffer.AppendArgument("-logger:{0}", Logger);
+			buffer.AppendArgument("-listener:{0}", Listener);
 			buffer.AppendArgument(BuildArgs);
 			AppendIntegrationResultProperties(buffer, result);
 			AppendTargets(buffer);
