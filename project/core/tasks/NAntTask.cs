@@ -1,4 +1,5 @@
 using System.Collections;
+using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -9,6 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         : BaseExecutableTask
 	{
 		public const int DefaultBuildTimeout = 600;
+		public const string logFilename = "nant-results.xml";
 		public const string defaultExecutable = "nant";
 		public const string DefaultLogger = "NAnt.Core.XmlLogger";
 		public const string DefaultListener = "NAnt.Core.DefaultLogger";
@@ -66,6 +68,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 			ProcessResult processResult = TryToRun(CreateProcessInfo(result), result);
 
+			string nantOutputFile = GetNantOutputFile(result);
+			if (File.Exists(nantOutputFile))
+				result.AddTaskResult(new FileTaskResult(nantOutputFile));
+
 			result.AddTaskResult(new ProcessTaskResult(processResult));
 			// is this right?? or should this break the build
 			if (processResult.TimedOut)
@@ -90,6 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			buffer.AppendIf(NoLogo, "-nologo");
 			buffer.AppendArgument(@"-buildfile:{0}", StringUtil.AutoDoubleQuoteString(BuildFile));
 			buffer.AppendArgument("-logger:{0}", Logger);
+			buffer.AppendArgument("-logfile:{0}", StringUtil.AutoDoubleQuoteString(GetNantOutputFile(result)));
 			buffer.AppendArgument("-listener:{0}", Listener);
 			buffer.AppendArgument(BuildArgs);
 			AppendIntegrationResultProperties(buffer, result);
@@ -139,6 +146,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				Targets = StringUtil.NewLineSeparatedStringToArray(value);
 			}
+		}
+
+		private static string GetNantOutputFile(IIntegrationResult result)
+		{
+			return Path.Combine(result.ArtifactDirectory, logFilename);
 		}
 	}
 }

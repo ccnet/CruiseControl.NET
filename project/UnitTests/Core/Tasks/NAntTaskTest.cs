@@ -116,14 +116,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger -listener:NAnt.Core.DefaultLogger myArgs " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory) + " target1 target2";
-			ProcessInfo info = NewProcessInfo(args, DefaultWorkingDirectory);
-			info.TimeOut = 2000;
-			ExpectToExecute(info);
-			
 			result.Label = "1.0";
 			result.WorkingDirectory = DefaultWorkingDirectory;
 			result.ArtifactDirectory = DefaultWorkingDirectory;
+
+			string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger -logfile:" + StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, "nant-results.xml")) + " -listener:NAnt.Core.DefaultLogger myArgs " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory) + " target1 target2";
+			ProcessInfo info = NewProcessInfo(args, DefaultWorkingDirectory);
+			info.TimeOut = 2000;
+			ExpectToExecute(info);
 
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
 			builder.BuildFile = "mybuild.build";
@@ -136,33 +136,34 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPassAppropriateDefaultPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -listener:NAnt.Core.DefaultLogger " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory));
-			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
 			result.ArtifactDirectory = DefaultWorkingDirectory;
 			result.WorkingDirectory = DefaultWorkingDirectory;
+			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -logfile:" + StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, "nant-results.xml")) + " -listener:NAnt.Core.DefaultLogger " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory));
+			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
 			builder.Run(result);
 		}
 
 		[Test]
 		public void ShouldPutQuotesAroundBuildFileIfItContainsASpace()
 		{
-			ExpectToExecuteArguments(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger -listener:NAnt.Core.DefaultLogger " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory));
+			result.ArtifactDirectory = DefaultWorkingDirectory;
+			result.WorkingDirectory = DefaultWorkingDirectory;
+			ExpectToExecuteArguments(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger -logfile:" + StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, "nant-results.xml")) + " -listener:NAnt.Core.DefaultLogger " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory));
 
 			builder.BuildFile = "my project.build";
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
-			result.ArtifactDirectory = DefaultWorkingDirectory;
-			result.WorkingDirectory = DefaultWorkingDirectory;
 			builder.Run(result);
 		}
 
 		[Test]
 		public void ShouldEncloseDirectoriesInQuotesIfTheyContainSpaces()
 		{
-			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -listener:NAnt.Core.DefaultLogger " + IntegrationProperties(DefaultWorkingDirectoryWithSpaces, DefaultWorkingDirectoryWithSpaces), DefaultWorkingDirectoryWithSpaces);
-
-			builder.ConfiguredBaseDirectory = DefaultWorkingDirectoryWithSpaces;
 			result.ArtifactDirectory = DefaultWorkingDirectoryWithSpaces;
 			result.WorkingDirectory = DefaultWorkingDirectoryWithSpaces;
+
+			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -logfile:" + StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, "nant-results.xml")) + " -listener:NAnt.Core.DefaultLogger " + IntegrationProperties(DefaultWorkingDirectoryWithSpaces, DefaultWorkingDirectoryWithSpaces), DefaultWorkingDirectoryWithSpaces);
+
+			builder.ConfiguredBaseDirectory = DefaultWorkingDirectoryWithSpaces;
 			builder.Run(result);
 		}
 
