@@ -12,6 +12,11 @@
     <Name>CCValidator</Name>
     <Name>ThoughtWorks.CruiseControl.WebDashboard</Name>
     <Name>ThoughtWorks.CruiseControl.Communications</Name>
+    <Name>ThoughtWorks.CruiseControl.Core.Extensions</Name>
+    <Name>CCCmd</Name>
+    <Name>CCNetMigrationWizard</Name>
+    <Name>ThoughtWorks.CruiseControl.Remote.Extensions</Name>
+    <Name>ThoughtWorks.CruiseControl.MSBuild</Name>
   </Assemblies>
   <FrameworkAssemblies>
     <Name>mscorlib</Name>
@@ -22,6 +27,7 @@
     <Name>Interop.SpeechLib</Name>
     <Name>NetReflector</Name>
     <Name>ICSharpCode.SharpZipLib</Name>
+    <Name>edtFTPnet</Name>
     <Name>log4net</Name>
     <Name>System.Configuration</Name>
     <Name>System.DirectoryServices</Name>
@@ -32,6 +38,10 @@
     <Name>ScintillaNet</Name>
     <Name>NVelocity</Name>
     <Name>CSharpFormat</Name>
+    <Name>System.ServiceModel</Name>
+    <Name>System.Core</Name>
+    <Name>Microsoft.Build.Utilities</Name>
+    <Name>Microsoft.Build.Framework</Name>
   </FrameworkAssemblies>
   <Dirs>
     <Dir>C:\Windows\Microsoft.NET\Framework\v2.0.50727</Dir>
@@ -43,6 +53,8 @@
     <Dir>..\Build\Remote</Dir>
     <Dir>..\Build\Server</Dir>
     <Dir>..\Build\WebDashboard</Dir>
+    <Dir>..\Build\CCCmd</Dir>
+    <Dir>..\Build\Migration</Dir>
   </Dirs>
   <Report XslPath="">
     <Section Enabled="True">Application Metrics</Section>
