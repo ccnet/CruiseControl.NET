@@ -4,7 +4,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 {
 	[TestFixture]
 	public class P4HistoryParserTest
