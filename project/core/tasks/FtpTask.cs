@@ -84,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     catch { }
                 }
                 Log.Info("throwing");
-                throw ex;
+                throw;
             }
 
             return true;
