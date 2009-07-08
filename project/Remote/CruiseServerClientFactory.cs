@@ -11,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.Remote
     {
         #region Private fields
         private Dictionary<string, ClientInitialiser> initialisers = new Dictionary<string, ClientInitialiser>();
+        private Dictionary<string, CruiseServerClientBase> clients = new Dictionary<string, CruiseServerClientBase>();
         #endregion
 
         #region Constructors
@@ -22,7 +23,22 @@ namespace ThoughtWorks.CruiseControl.Remote
             // Add the initial initialisers
             InitialiseDefaultTcpClient();
             InitialiseDefaultHttpClient();
+            UseClientCaching = true;
         }
+        #endregion
+
+        #region Public properties
+        #region UseClientCaching
+        /// <summary>
+        /// Should the clients be cached.
+        /// </summary>
+        /// <remarks>
+        /// If the clients are cached, then attempting to generate a client for a duplicate address
+        /// will return the same client. If caching is off, then a new client will be returned
+        /// everytime.
+        /// </remarks>
+        public bool UseClientCaching { get; set; }
+        #endregion
         #endregion
 
         #region Public methods
@@ -65,8 +81,16 @@ namespace ThoughtWorks.CruiseControl.Remote
             var transport = serverUri.Scheme.ToLower();
             if (initialisers.ContainsKey(transport))
             {
-                var client = initialisers[transport](address, settings);
-                return client;
+                if (UseClientCaching && clients.ContainsKey(address))
+                {
+                    return clients[address];
+                }
+                else
+                {
+                    var client = initialisers[transport](address, settings);
+                    if (UseClientCaching) clients.Add(address, client);
+                    return client;
+                }
             }
             else
             {
@@ -125,15 +149,21 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
         public CruiseServerClientBase GenerateHttpClient(string address, ClientStartUpSettings settings)
         {
-            CruiseServerClientBase client;
-            if (settings.BackwardsCompatable)
+            var client = clients.ContainsKey(address) ?
+                clients[address] :
+                null;
+            if (client == null)
             {
-                client = new CruiseServerHttpClient(address);
-            }
-            else
-            {
-                var connection = new HttpConnection(address);
-                client = new CruiseServerClient(connection);
+                if (settings.BackwardsCompatable)
+                {
+                    client = new CruiseServerHttpClient(address);
+                }
+                else
+                {
+                    var connection = new HttpConnection(address);
+                    client = new CruiseServerClient(connection);
+                }
+                if (UseClientCaching) clients.Add(address, client);
             }
             return client;
         }
@@ -189,15 +219,21 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
         public CruiseServerClientBase GenerateRemotingClient(string address, ClientStartUpSettings settings)
         {
-            CruiseServerClientBase client;
-            if (settings.BackwardsCompatable)
+            var client = clients.ContainsKey(address) ?
+                clients[address] :
+                null;
+            if (client == null)
             {
-                client = new CruiseServerRemotingClient(address);
-            }
-            else
-            {
-                var connection = new RemotingConnection(address);
-                client = new CruiseServerClient(connection);
+                if (settings.BackwardsCompatable)
+                {
+                    client = new CruiseServerRemotingClient(address);
+                }
+                else
+                {
+                    var connection = new RemotingConnection(address);
+                    client = new CruiseServerClient(connection);
+                }
+                if (UseClientCaching) clients.Add(address, client);
             }
             return client;
         }

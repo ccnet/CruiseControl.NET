@@ -1,15 +1,24 @@
 using Exortech.NetReflector;
-using NMock;
-using NMock.Remoting;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Remote;
+using Rhino.Mocks;
+using Rhino.Mocks.Constraints;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
 	[TestFixture]
 	public class ForceBuildPublisherTest
 	{
+        private MockRepository mocks;
+
+        [SetUp]
+        public void Setup()
+        {
+            mocks = new MockRepository();
+        }
+
 		[Test]
 		public void PopulateFromConfigurationXml()
 		{
@@ -33,31 +42,34 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void ShouldReqestForceBuildOnRemoteCruiseServer()
 		{
-			IMock mockCruiseManager = new RemotingMock(typeof (ICruiseManager));
-            mockCruiseManager.Expect("ForceBuild", "project", "BuildForcer");
-			IMock mockManagerFactory = new DynamicMock(typeof (ICruiseManagerFactory));
-			mockManagerFactory.ExpectAndReturn("GetCruiseManager", mockCruiseManager.MockInstance, "tcp://localhost:21234/CruiseManager.rem");
+            var factory = mocks.StrictMock<ICruiseServerClientFactory>();
+            var client = mocks.StrictMock<CruiseServerClientBase>();
+            SetupResult.For(factory.GenerateClient("tcp://localhost:21234/CruiseManager.rem"))
+                .Return(client);
+            Expect.Call(() => client.ForceBuild("project", null))
+                .Constraints(Is.Equal("project"),
+                    Is.TypeOf<List<NameValuePair>>());
+            mocks.ReplayAll();
 
-			ForceBuildPublisher publisher = new ForceBuildPublisher((ICruiseManagerFactory) mockManagerFactory.MockInstance);
+			ForceBuildPublisher publisher = new ForceBuildPublisher(factory);
 			publisher.Project = "project";
 			publisher.ServerUri = "tcp://localhost:21234/CruiseManager.rem";
 			publisher.Run(IntegrationResultMother.CreateSuccessful());
 
-			mockCruiseManager.Verify();
-			mockManagerFactory.Verify();
+            mocks.VerifyAll();
 		}
 
 		[Test]
 		public void ShouldOnlyForceBuildIfIntegrationStatusMatches()
 		{
-			IMock mockManagerFactory = new DynamicMock(typeof (ICruiseManagerFactory));
-			mockManagerFactory.ExpectNoCall("GetCruiseManager", typeof (string));
+            var factory = mocks.StrictMock<ICruiseServerClientFactory>();
+            mocks.ReplayAll();
 
-			ForceBuildPublisher publisher = new ForceBuildPublisher((ICruiseManagerFactory) mockManagerFactory.MockInstance);
+			ForceBuildPublisher publisher = new ForceBuildPublisher(factory);
 			publisher.IntegrationStatus = IntegrationStatus.Exception;
 			publisher.Run(IntegrationResultMother.CreateFailed());
 
-			mockManagerFactory.Verify();
-		}
+            mocks.VerifyAll();
+        }
 	}
 }
