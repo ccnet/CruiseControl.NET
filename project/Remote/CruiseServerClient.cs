@@ -491,10 +491,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             if (SessionToken != null)
             {
-                SessionToken = null;
                 ValidateResponse(
                     connection.SendMessage("Logout",
                         GenerateServerRequest()));
+                SessionToken = null;
             }
         }
         #endregion
