@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
             {
 				if (string.IsNullOrEmpty(location))
 				{
-					location = executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.WebDasboard);
+					location = executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.WebDashboard);
 					Log.Debug(string.Concat("Initialising data folder: '", location,"'."));
 					fileSystem.EnsureFolderExists(location);
 				}

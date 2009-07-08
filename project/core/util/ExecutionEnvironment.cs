@@ -98,6 +98,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	{
 		Unknown = 0,
 		Server = 1,
-		WebDasboard = 2
+		WebDashboard = 2
 	}
 }
