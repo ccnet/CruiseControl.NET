@@ -10,8 +10,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         private string _buildInformation = string.Empty;
         private DateTime _lastTimeQueried;
         private const Int32 buildStageCheckIntervalInSeconds = 5;
-        private static object lockObject = new object();
-        private static System.Collections.Generic.List<BuildProgressInformationData> Progress;
+        private readonly object lockObject = new object();
+        private System.Collections.Generic.List<BuildProgressInformationData> Progress;
         private const Int32 MaxItemsInQueue = 10;
 
 
