@@ -246,7 +246,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 
             public ICruiseUrlBuilder UrlBuilder
             {
-                get { return this.UrlBuilder; }
+				get { return this.urlBuilder; }
             }
 
             public string ServerName
