@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
@@ -109,10 +110,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             System.Text.StringBuilder integration = new System.Text.StringBuilder();
             DateTime now = DateTime.Now;
 
-            integration.AppendFormat("<integration build-label=\"{0}\" status=\"{1}\" day=\"{2}\" month=\"{3}\" year=\"{4}\">",
-                                        integrationResult.Label, 
-                                        integrationResult.Status.ToString(),
-                                        now.Day.ToString(), now.ToString("MMM"), now.Year.ToString());
+			integration.AppendFormat("<integration build-label=\"{0}\" status=\"{1}\" day=\"{2}\" month=\"{3}\" year=\"{4}\">",
+										integrationResult.Label,
+										integrationResult.Status.ToString(),
+										now.Day.ToString(), now.ToString("MMM", CultureInfo.InvariantCulture), now.Year.ToString());
 
             integration.AppendLine(ToXml(stats));
 
