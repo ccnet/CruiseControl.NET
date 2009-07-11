@@ -28,18 +28,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			backup.Reset();
 		}
 
-		[Test, Ignore("This test has initimate knowledge of the logging implementation; it should not")]
+		[Test]
 		public void ShowHelp()
 		{
-			ArgumentParser parser = new ArgumentParser(new string[] { "-remoting:on", "-help" });
+			ConsoleRunnerArguments consoleArgs = new ConsoleRunnerArguments();
+			consoleArgs.UseRemoting = true;
+			consoleArgs.ShowHelp = true;			
+			
 			Mock mockCruiseServerFactory = new DynamicMock(typeof(ICruiseServerFactory));
 			mockCruiseServerFactory.ExpectNoCall("Create", typeof(bool), typeof(string));
 
-			ConsoleRunner runner = new ConsoleRunner(parser, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance);
+			ConsoleRunner runner = new ConsoleRunner(consoleArgs, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance);
 			runner.Run();
-
-			Assert.AreEqual(1, listener.Traces.Count);
-			Assert.IsTrue(listener.Traces[0].ToString().IndexOf(ArgumentParser.Usage) > 0, "Wrong message was logged.");
+			
+			// FIXME: should we care for the usage text and the logging implementation?
+			// If yes read it from the embedded resource
+			//Assert.AreEqual(1, listener.Traces.Count);
+			//Assert.IsTrue(listener.Traces[0].ToString().IndexOf(ConsoleRunnerArguments.Usage) > 0, "Wrong message was logged.");
 
 			mockCruiseServerFactory.Verify();
 		}
@@ -47,7 +52,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ForceBuildCruiseServerProject()
 		{
-			ArgumentParser parser = new ArgumentParser(new string[] { "-project:test" });
+			ConsoleRunnerArguments consoleArgs = new ConsoleRunnerArguments();
+			consoleArgs.Project = "test";
+			
 			Mock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
             var projectConstraint = new ProjectRequestConstraint
             {
@@ -57,9 +64,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             mockCruiseServer.ExpectAndReturn("Stop", new Response { Result = ResponseResult.Success }, projectConstraint);
             mockCruiseServer.Expect("WaitForExit", projectConstraint);
 			Mock mockCruiseServerFactory = new DynamicMock(typeof(ICruiseServerFactory));
-			mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, parser.UseRemoting, parser.ConfigFile);
+			mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, consoleArgs.UseRemoting, consoleArgs.ConfigFile);
 
-			new ConsoleRunner(parser, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance).Run();
+			new ConsoleRunner(consoleArgs, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance).Run();
 
 			mockCruiseServer.Verify();
 		}	
@@ -67,14 +74,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void StartCruiseServerProject()
 		{
-			ArgumentParser parser = new ArgumentParser(new string[0]);
+			ConsoleRunnerArguments consoleArgs = new ConsoleRunnerArguments();
 			Mock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
 			mockCruiseServer.Expect("Start");
 			mockCruiseServer.Expect("WaitForExit");
 			Mock mockCruiseServerFactory = new DynamicMock(typeof(ICruiseServerFactory));
-			mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, parser.UseRemoting, parser.ConfigFile);
+			mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, consoleArgs.UseRemoting, consoleArgs.ConfigFile);
 
-			new ConsoleRunner(parser, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance).Run();
+			new ConsoleRunner(consoleArgs, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance).Run();
 
 			mockCruiseServer.Verify();
 		}
@@ -82,12 +89,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         [Test]
         public void ValidateConfigFileShouldNotStartServer()
         {
-            ArgumentParser parser = new ArgumentParser(new string[] { "-validate" });
+            ConsoleRunnerArguments consoleArgs = new ConsoleRunnerArguments();
+            consoleArgs.ValidateConfigOnly = true;
+            
             Mock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
             Mock mockCruiseServerFactory = new DynamicMock(typeof(ICruiseServerFactory));
-            mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, false, parser.ConfigFile);
+            mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, false, consoleArgs.ConfigFile);
 
-            new ConsoleRunner(parser, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance).Run();
+            new ConsoleRunner(consoleArgs, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance).Run();
 
             mockCruiseServer.Verify();
         }

@@ -147,7 +147,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ArgumentParser.cs">
+    <Compile Include="ConsoleRunnerArguments.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs">
@@ -235,9 +235,6 @@
     <Compile Include="Extensions\DiskSpaceMonitorExtension.cs" />
     <Compile Include="Extensions\IntegrationRequestThrottleExtension.cs" />
     <Compile Include="Extensions\IntegrationPerformanceCountersExtension.cs" />
-    <Compile Include="IArgumentParser.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ICruiseServerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -930,6 +927,7 @@
     <Compile Include="util\NotifierList.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="util\Options.cs" />
     <Compile Include="util\PathUtil.cs">
       <SubType>Code</SubType>
     </Compile>

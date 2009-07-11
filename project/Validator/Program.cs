@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Reflection;
+using System.IO;
+using System.Text;
+using Mono.Options;
 
 namespace Validator
 {
     static class Program
     {
-        private static Dictionary<string, string> parsedArgs = new Dictionary<string, string>();
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -16,39 +18,68 @@ namespace Validator
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            
+            bool help = false;
+            bool nogui = false;
+            string logfile = null;
+            List<string> extra = new List<string>();
+            
+            OptionSet opts = new OptionSet();            
+            opts.Add("h|?|help", "display this help screen", delegate(string v) { help = v != null; })
+            	.Add("l|logfile", "the log file to use", delegate(string v) { logfile = v; })
+            	.Add("n|nogui", "do not open a graphical user interface", delegate(string v) { nogui = v != null; });
+          
+            try
+        	{
+        		extra = opts.Parse(args);
+        	}
+        	catch (OptionException e)
+        	{
+				Console.WriteLine(e.Message);
+				Console.WriteLine(e.StackTrace);
+				return 1;
+			}
+        	
+        	if(help)
+        	{
+        		DisplayHelp(opts);
+        		return 0;
+        	}
+            
             using (var main = new MainForm())
             {
                 var isValid = true;
-                if ((args != null) && (args.Length > 0)) ParseArgs(args);
-                if (parsedArgs.ContainsKey("-l")) main.LogFile = parsedArgs["-l"];
-                if (parsedArgs.ContainsKey(string.Empty)) isValid = main.ValidateConfig(parsedArgs[string.Empty]);
-                if (!parsedArgs.ContainsKey("-nui")) Application.Run(main);
+                if (!string.IsNullOrEmpty(logfile)) main.LogFile = logfile;
+                if (extra.Count == 1) isValid = main.ValidateConfig(extra[0]);                
+                if (!nogui) Application.Run(main);
                 return isValid ? 0 : 1;
             }
         }
-
-        private static void ParseArgs(string[] args)
+        
+        private static void DisplayHelp(OptionSet opts)
         {
-            for (var loop = 0; loop < args.Length; loop++)
+        	StringBuilder sb = new StringBuilder();
+        	
+            Assembly thisApp = Assembly.GetExecutingAssembly();
+            Stream helpStream = thisApp.GetManifestResourceStream("Validator.Help.txt");
+            try
             {
-                if (args[loop].StartsWith("-"))
-                {
-                    var arg = args[loop].ToLower();
-                    switch (arg)
-                    {
-                        case "-nui":
-                            parsedArgs.Add(arg, string.Empty);
-                            break;
-                        default:
-                            parsedArgs.Add(arg, args[++loop]);
-                            break;
-                    }
-                }
-                else
-                {
-                    parsedArgs.Add(string.Empty, args[0]);
-                }
+                StreamReader reader = new StreamReader(helpStream);
+                string data = reader.ReadToEnd();
+                reader.Close();
+                sb.Append(data);
             }
+            finally
+            {            	
+                helpStream.Close();
+            }
+            
+            StringWriter writer = new StringWriter(sb);
+            opts.WriteOptionDescriptions (writer);
+            
+            MessageBox.Show(sb.ToString());
+            
+            writer.Close();
         }
     }
 }

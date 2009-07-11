@@ -1,0 +1,8 @@
+﻿CruiseControl.Net System Tray Utility
+Provides functionality to monitor CruiseControl.NET servers from the system tray
+
+cctray <settings> [options]
+
+settings: the settings file to use
+
+options:

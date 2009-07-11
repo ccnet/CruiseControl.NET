@@ -117,10 +117,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Help.txt" />
     <Content Include="App.ico" />
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="..\core\util\Options.cs">
+      <Link>Options.cs</Link>
     </Compile>
     <Compile Include="AppRunner.cs" />
     <Compile Include="AssemblyInfo.cs">

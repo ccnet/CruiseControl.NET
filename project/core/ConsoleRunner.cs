@@ -10,13 +10,13 @@ namespace ThoughtWorks.CruiseControl.Core
 {
 	public class ConsoleRunner
 	{
-		private readonly ArgumentParser parser;
+		private readonly ConsoleRunnerArguments args;
 		private readonly ICruiseServerFactory serverFactory;
 		private ICruiseServer server;
 
-		public ConsoleRunner(ArgumentParser parser, ICruiseServerFactory serverFactory)
+		public ConsoleRunner(ConsoleRunnerArguments args, ICruiseServerFactory serverFactory)
 		{
-			this.parser = parser;
+			this.args = args;
 			this.serverFactory = serverFactory;
 		}
 
@@ -34,24 +34,24 @@ namespace ThoughtWorks.CruiseControl.Core
 			Console.WriteLine();
 
             // In DEBUG builds, give the developer a chance to debug our execution
-            if (parser.LaunchDebugger)
+            if (args.LaunchDebugger)
                 System.Diagnostics.Debugger.Launch();
 
-			if (parser.ShowHelp)
+			if (args.ShowHelp)
 			{
-				Log.Warning(ArgumentParser.Usage);
+				//Log.Warning(ConsoleRunnerArguments.Usage);
 				return;
 			}
 
-            if (parser.NoLogging)
+            if (!args.Logging)
             {
                 Log.Warning("Logging has been disabled - no information (except errors) will be written to the log");
                 Log.DisableLogging();
             }
 
-            if (parser.ValidateConfigOnly)
+            if (args.ValidateConfigOnly)
             {
-                serverFactory.Create(false, parser.ConfigFile);
+                serverFactory.Create(false, args.ConfigFile);
                 return;
             }
 			LaunchServer();
@@ -76,9 +76,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				handler.OnConsoleEvent += new EventHandler(HandleControlEvent);
 
-				using (server = serverFactory.Create(parser.UseRemoting, parser.ConfigFile))
+				using (server = serverFactory.Create(args.UseRemoting, args.ConfigFile))
 				{
-					if (parser.Project == null)
+					if (args.Project == null)
 					{
 						server.Start();
 						server.WaitForExit();
@@ -88,14 +88,14 @@ namespace ThoughtWorks.CruiseControl.Core
                         // Force the build
                         ValidateResponse(
                             server.ForceBuild(
-                                new ProjectRequest(null, parser.Project)));
+                                new ProjectRequest(null, args.Project)));
 
                         // Tell the server to stop as soon as the build has finished and then wait for it
                         ValidateResponse(
                             server.Stop(
-                                new ProjectRequest(null, parser.Project)));
+                                new ProjectRequest(null, args.Project)));
 						server.WaitForExit(
-                            new ProjectRequest(null, parser.Project));
+                            new ProjectRequest(null, args.Project));
 					}
 				}
 			}

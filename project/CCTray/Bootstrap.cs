@@ -1,13 +1,16 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
 using ThoughtWorks.CruiseControl.Remote;
+using Mono.Options;
 
 namespace ThoughtWorks.CruiseControl.CCTray
 {
@@ -19,9 +22,26 @@ namespace ThoughtWorks.CruiseControl.CCTray
         [STAThread]
         private static void Main(string[] args)
         {
-            if (ShowUsage(args))
+        	bool help = false;
+        	List<string> extra = new List<string>();
+        	
+        	OptionSet opts = new OptionSet();
+        	opts.Add("h|?|help", "display this help screen", delegate(string v) { help = v != null; });
+        	
+        	try
+        	{
+        		extra = opts.Parse(args);
+        	}
+        	catch (OptionException e)
+        	{
+				Console.WriteLine(e.Message);
+				Console.WriteLine(e.StackTrace);
+				return;
+			}
+        	
+            if (help)
             {
-                MessageBox.Show("usage: cctray [settings file]");
+            	DisplayHelp(opts);
                 return;
             }
 
@@ -32,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
             MainForm mainForm;
             try
             {
-                mainForm = GetMainForm(GetSettingsFilename(args));
+                mainForm = GetMainForm(GetSettingsFilename(extra));
             }
             catch (Exception ex)
             {
@@ -63,20 +83,14 @@ namespace ThoughtWorks.CruiseControl.CCTray
             return new MainForm(configuration);
         }
 
-        private static bool ShowUsage(string[] args)
-        {
-            if (args.Length == 0) return false;
-            return args.Length > 1 || args[0].IndexOf("help") >= 0 || args[0].IndexOf('?') >= 0;
-        }
-
         private static void UnhandledWinFormException(object sender, ThreadExceptionEventArgs e)
         {
             MessageBox.Show("Unhandled exception: " + e.Exception);
         }
 
-        private static string GetSettingsFilename(string[] args)
+        private static string GetSettingsFilename(List<string> extra)
         {
-            if (args.Length == 1) return args[0]; // use settings file specified on command line
+            if (extra.Count == 1) return extra[0]; // use settings file specified on command line
 
             string oldFashionedSettingsFilename = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "settings.xml");
             string newSettingsFilename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "cctray-settings.xml");
@@ -85,6 +99,32 @@ namespace ThoughtWorks.CruiseControl.CCTray
                 File.Copy(oldFashionedSettingsFilename, newSettingsFilename);
 
             return newSettingsFilename;
+        }
+        
+        private static void DisplayHelp(OptionSet opts)
+        {
+        	StringBuilder sb = new StringBuilder();
+        	
+            Assembly thisApp = Assembly.GetExecutingAssembly();
+            Stream helpStream = thisApp.GetManifestResourceStream("ThoughtWorks.CruiseControl.CCTray.Help.txt");
+            try
+            {
+                StreamReader reader = new StreamReader(helpStream);
+                string data = reader.ReadToEnd();
+                reader.Close();
+                sb.Append(data);
+            }
+            finally
+            {            	
+                helpStream.Close();
+            }
+            
+            StringWriter writer = new StringWriter(sb);
+            opts.WriteOptionDescriptions (writer);
+            
+            MessageBox.Show(sb.ToString());
+            
+            writer.Close();
         }
     }
 }

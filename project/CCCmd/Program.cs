@@ -4,38 +4,76 @@ using System.IO;
 using System.Reflection;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Remote;
+using Mono.Options;
 
 namespace ThoughtWorks.CruiseControl.CCCmd
 {
     class Program
     {
+    	private static bool help;
+        private static string server;
+        private static string target;
+        private static string project;
+        private static bool all;
+        private static bool quiet;
+        private static CommandType command;
+        private static List<string> extra = new List<string>();
+        
         static void Main(string[] args)
         {
+           	OptionSet opts = new OptionSet();
+        	opts.Add("h|?|help", "display this help screen", delegate (string v) { help = v != null; })
+        		.Add("s|server", "the CruiseControl.Net server to send the commands to (required for all actions except help)", delegate (string v) { server = v; })
+        		.Add("t|target", "the target server for all messages", delegate (string v) { target = v; })
+        		.Add("p|project", "the project to use (required for all actions except help and retrieve)", delegate (string v) { project = v; })
+        		.Add("a|all", "lists all the projects (only valid for retrieve)", delegate (string v) { all = v != null; })
+        		.Add("q|quiet", "run in quiet mode (do not print messages)", delegate (string v) { quiet = v != null; });
+        	
+        	try
+        	{
+        		extra = opts.Parse(args);
+        	}
+        	catch (OptionException e)
+        	{
+				Console.WriteLine(e.Message);
+				Console.WriteLine(e.StackTrace);
+				return;
+			}
+        	
+        	if((extra.Count == 1) && !help)
+        	{
+        		command = (CommandType) Enum.Parse(typeof(CommandType), extra[0], true);
+        	}
+        	else
+        	{
+        		DisplayHelp(opts);
+        		return;
+        	}
+        	
             try
-            {
-                CommandParameters parameters = CommandParameters.Parse(args);
-                switch (parameters.Command)
+            {                
+                switch (command)
                 {
                     case CommandType.Help:
-                        DisplayHelp();
+                        DisplayHelp(opts);
                         break;
                     case CommandType.Retrieve:
-                        RunRetrive(parameters);
+                        RunRetrive();
                         break;
                     case CommandType.ForceBuild:
-                        RunForceBuild(parameters);
+                        RunForceBuild();
                         break;
                     case CommandType.AbortBuild:
-                        RunAbortBuild(parameters);
+                        RunAbortBuild();
                         break;
                     case CommandType.StartProject:
-                        RunStartProject(parameters);
+                        RunStartProject();
                         break;
                     case CommandType.StopProject:
-                        RunStopProject(parameters);
+                        RunStopProject();
                         break;
                     default:
-                        throw new Exception("Unknown action: " + parameters.Command.ToString());
+                        throw new Exception("Unknown action: " + command.ToString());
                 }
             }
             catch (Exception error)
@@ -44,25 +82,24 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             }
         }
 
-        private static CruiseServerClientBase GenerateClient(CommandParameters parameters)
+        private static CruiseServerClientBase GenerateClient()
         {
-            var client = new CruiseServerClientFactory().GenerateClient(parameters.ServerUrl,
-                parameters.TargetServer);
+            var client = new CruiseServerClientFactory().GenerateClient(server, target);
             return client;
         }
 
-        private static void RunForceBuild(CommandParameters parameters)
+        private static void RunForceBuild()
         {
-            if (ValidateParameter(parameters.ServerUrl, "-server") &&
-                ValidateNotAll(parameters) && 
-                ValidateParameter(parameters.ProjectName, "-project"))
+            if (ValidateParameter(server, "-server") &&
+        	    ValidateNotAll() &&
+                ValidateParameter(project, "-project"))
             {
                 try
                 {
-                    var client = GenerateClient(parameters);
-                    if (!parameters.QuietMode) WriteLine(string.Format("Sending ForceBuild request for '{0}'", parameters.ProjectName), ConsoleColor.White);
-                    client.ForceBuild(parameters.ProjectName);
-                    if (!parameters.QuietMode) WriteLine("ForceBuild request sent", ConsoleColor.White);
+                    var client = GenerateClient();
+                    if (!quiet) WriteLine(string.Format("Sending ForceBuild request for '{0}'", project), ConsoleColor.White);
+                    client.ForceBuild(project);
+                    if (!quiet) WriteLine("ForceBuild request sent", ConsoleColor.White);
                 }
                 catch (Exception error)
                 {
@@ -71,18 +108,18 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             }
         }
 
-        private static void RunAbortBuild(CommandParameters parameters)
+        private static void RunAbortBuild()
         {
-            if (ValidateParameter(parameters.ServerUrl, "-server") &&
-                ValidateNotAll(parameters) &&
-                ValidateParameter(parameters.ProjectName, "-project"))
+            if (ValidateParameter(server, "-server") &&
+                ValidateNotAll() &&
+                ValidateParameter(project, "-project"))
             {
                 try
                 {
-                    var client = GenerateClient(parameters);
-                    if (!parameters.QuietMode) WriteLine(string.Format("Sending AbortBuild request for '{0}'", parameters.ProjectName), ConsoleColor.White);
-                    client.AbortBuild(parameters.ProjectName);
-                    if (!parameters.QuietMode) WriteLine("AbortBuild request sent", ConsoleColor.White);
+                    var client = GenerateClient();
+                    if (!quiet) WriteLine(string.Format("Sending AbortBuild request for '{0}'", project), ConsoleColor.White);
+                    client.AbortBuild(project);
+                    if (!quiet) WriteLine("AbortBuild request sent", ConsoleColor.White);
                 }
                 catch (Exception error)
                 {
@@ -91,18 +128,18 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             }
         }
 
-        private static void RunStartProject(CommandParameters parameters)
+        private static void RunStartProject()
         {
-            if (ValidateParameter(parameters.ServerUrl, "-server") &&
-                ValidateNotAll(parameters) &&
-                ValidateParameter(parameters.ProjectName, "-project"))
+            if (ValidateParameter(server, "-server") &&
+                ValidateNotAll() &&
+                ValidateParameter(project, "-project"))
             {
                 try
                 {
-                    var client = GenerateClient(parameters);
-                    if (!parameters.QuietMode) WriteLine(string.Format("Sending StartProject request for '{0}'", parameters.ProjectName), ConsoleColor.White);
-                    client.StartProject(parameters.ProjectName);
-                    if (!parameters.QuietMode) WriteLine("StartProject request sent", ConsoleColor.White);
+                    var client = GenerateClient();
+                    if (!quiet) WriteLine(string.Format("Sending StartProject request for '{0}'", project), ConsoleColor.White);
+                    client.StartProject(project);
+                    if (!quiet) WriteLine("StartProject request sent", ConsoleColor.White);
                 }
                 catch (Exception error)
                 {
@@ -111,18 +148,18 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             }
         }
 
-        private static void RunStopProject(CommandParameters parameters)
+        private static void RunStopProject()
         {
-            if (ValidateParameter(parameters.ServerUrl, "-server") &&
-                ValidateNotAll(parameters) &&
-                ValidateParameter(parameters.ProjectName, "-project"))
+            if (ValidateParameter(server, "-server") &&
+                ValidateNotAll() &&
+                ValidateParameter(project, "-project"))
             {
                 try
                 {
-                    var client = GenerateClient(parameters);
-                    if (!parameters.QuietMode) WriteLine(string.Format("Sending StopProject request for '{0}'", parameters.ProjectName), ConsoleColor.White);
-                    client.StopProject(parameters.ProjectName);
-                    if (!parameters.QuietMode) WriteLine("StopProject request sent", ConsoleColor.White);
+                    var client = GenerateClient();
+                    if (!quiet) WriteLine(string.Format("Sending StopProject request for '{0}'", project), ConsoleColor.White);
+                    client.StopProject(project);
+                    if (!quiet) WriteLine("StopProject request sent", ConsoleColor.White);
                 }
                 catch (Exception error)
                 {
@@ -131,24 +168,24 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             }
         }
 
-        private static void RunRetrive(CommandParameters parameters)
+        private static void RunRetrive()
         {
-            if (ValidateParameter(parameters.ServerUrl, "-server"))
+            if (ValidateParameter(server, "-server"))
             {
-                if (string.IsNullOrEmpty(parameters.ProjectName) && !parameters.IsAll)
+            	if (string.IsNullOrEmpty(project) && !all)
                 {
                     WriteLine("Must specify either a project or use the '-all' option", ConsoleColor.Red);
                 }
                 else
                 {
-                    var client = GenerateClient(parameters);
-                    if (parameters.IsAll)
+                    var client = GenerateClient();
+                    if (all)
                     {
-                        DisplayServerStatus(client, parameters.QuietMode);
+                        DisplayServerStatus(client, quiet);
                     }
                     else
                     {
-                        DisplayProjectStatus(client, parameters.ProjectName, parameters.QuietMode);
+                        DisplayProjectStatus(client, project, quiet);
                     }
                 }
             }
@@ -228,11 +265,11 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             return true;
         }
 
-        private static bool ValidateNotAll(CommandParameters parameters)
+        private static bool ValidateNotAll()
         {
-            if (parameters.IsAll)
+            if (all)
             {
-                WriteError(string.Format("Input parameter '-all' is not valid for {0}", parameters.Command), null);
+                WriteError(string.Format("Input parameter '-all' is not valid for {0}", command), null);
                 return false;
             }
             return true;
@@ -260,7 +297,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             }
         }
 
-        private static void DisplayHelp()
+        private static void DisplayHelp(OptionSet opts)
         {
             Assembly thisApp = Assembly.GetExecutingAssembly();
             Stream helpStream = thisApp.GetManifestResourceStream("ThoughtWorks.CruiseControl.CCCmd.Help.txt");
@@ -274,6 +311,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             {
                 helpStream.Close();
             }
+            opts.WriteOptionDescriptions (Console.Out);
         }
     }
 }

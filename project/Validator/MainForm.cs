@@ -616,7 +616,7 @@ namespace Validator
             printMenuButton_Click(sender, e);
         }
 
-        private void LogMessage(string message)
+        public void LogMessage(string message)
         {
             if (!string.IsNullOrEmpty(LogFile))
             {

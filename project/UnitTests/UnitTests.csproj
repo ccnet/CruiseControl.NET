@@ -315,7 +315,7 @@
     <Compile Include="Config\CCNetConfigFileValidationTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\ArgumentParserTest.cs">
+    <Compile Include="Core\ConsoleRunnerArgumentsTest.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\Config\CachingConfigurationServiceTest.cs">

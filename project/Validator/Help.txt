@@ -1,0 +1,8 @@
+﻿CruiseControl.Net Configuration Validator
+Provides functionality to validate CruiseControl.NET server configuration files
+
+CCValidator <config> [options]
+
+config: the config file to validate
+
+options:
