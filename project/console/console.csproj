@@ -117,7 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Help.txt" />
+    <EmbeddedResource Include="Help.txt" />
     <Content Include="App.ico" />
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
