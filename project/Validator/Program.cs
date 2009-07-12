@@ -26,7 +26,7 @@ namespace Validator
             
             OptionSet opts = new OptionSet();            
             opts.Add("h|?|help", "display this help screen", delegate(string v) { help = v != null; })
-            	.Add("l|logfile", "the log file to use", delegate(string v) { logfile = v; })
+            	.Add("l|logfile=", "the log file to use", delegate(string v) { logfile = v; })
             	.Add("n|nogui", "do not open a graphical user interface", delegate(string v) { nogui = v != null; });
           
             try

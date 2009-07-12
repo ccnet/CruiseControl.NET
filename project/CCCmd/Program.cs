@@ -23,9 +23,9 @@ namespace ThoughtWorks.CruiseControl.CCCmd
         {
            	OptionSet opts = new OptionSet();
         	opts.Add("h|?|help", "display this help screen", delegate (string v) { help = v != null; })
-        		.Add("s|server", "the CruiseControl.Net server to send the commands to (required for all actions except help)", delegate (string v) { server = v; })
-        		.Add("t|target", "the target server for all messages", delegate (string v) { target = v; })
-        		.Add("p|project", "the project to use (required for all actions except help and retrieve)", delegate (string v) { project = v; })
+        		.Add("s|server=", "the CruiseControl.Net server to send the commands to (required for all actions except help)", delegate (string v) { server = v; })
+        		.Add("t|target=", "the target server for all messages", delegate (string v) { target = v; })
+        		.Add("p|project=", "the project to use (required for all actions except help and retrieve)", delegate (string v) { project = v; })
         		.Add("a|all", "lists all the projects (only valid for retrieve)", delegate (string v) { all = v != null; })
         		.Add("q|quiet", "run in quiet mode (do not print messages)", delegate (string v) { quiet = v != null; });
         	
@@ -90,9 +90,9 @@ namespace ThoughtWorks.CruiseControl.CCCmd
 
         private static void RunForceBuild()
         {
-            if (ValidateParameter(server, "-server") &&
+            if (ValidateParameter(server, "--server") &&
         	    ValidateNotAll() &&
-                ValidateParameter(project, "-project"))
+                ValidateParameter(project, "--project"))
             {
                 try
                 {
@@ -110,9 +110,9 @@ namespace ThoughtWorks.CruiseControl.CCCmd
 
         private static void RunAbortBuild()
         {
-            if (ValidateParameter(server, "-server") &&
+            if (ValidateParameter(server, "--server") &&
                 ValidateNotAll() &&
-                ValidateParameter(project, "-project"))
+                ValidateParameter(project, "--project"))
             {
                 try
                 {
@@ -130,9 +130,9 @@ namespace ThoughtWorks.CruiseControl.CCCmd
 
         private static void RunStartProject()
         {
-            if (ValidateParameter(server, "-server") &&
+            if (ValidateParameter(server, "--server") &&
                 ValidateNotAll() &&
-                ValidateParameter(project, "-project"))
+                ValidateParameter(project, "--project"))
             {
                 try
                 {
@@ -150,9 +150,9 @@ namespace ThoughtWorks.CruiseControl.CCCmd
 
         private static void RunStopProject()
         {
-            if (ValidateParameter(server, "-server") &&
+            if (ValidateParameter(server, "--server") &&
                 ValidateNotAll() &&
-                ValidateParameter(project, "-project"))
+                ValidateParameter(project, "--project"))
             {
                 try
                 {
@@ -170,7 +170,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
 
         private static void RunRetrive()
         {
-            if (ValidateParameter(server, "-server"))
+            if (ValidateParameter(server, "--server"))
             {
             	if (string.IsNullOrEmpty(project) && !all)
                 {
@@ -269,7 +269,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
         {
             if (all)
             {
-                WriteError(string.Format("Input parameter '-all' is not valid for {0}", command), null);
+                WriteError(string.Format("Input parameter '--all' is not valid for {0}", command), null);
                 return false;
             }
             return true;
