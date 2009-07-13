@@ -37,21 +37,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
         private CruiseServerClientBase GenerateRemotingClient(BuildServer server)
         {
-            var settings = new ClientStartUpSettings
-            {
-                BackwardsCompatable = (server.ExtensionSettings == "OLD")
-            };
-            var client = clientFactory.GenerateRemotingClient(server.Url, settings);
+            var client = clientFactory.GenerateRemotingClient(server.Url,
+                ClientStartUpSettingsExtensions.GenerateStartupSettings(server));
             return client;
         }
 
         private CruiseServerClientBase GenerateHttpClient(BuildServer server)
         {
-            var settings = new ClientStartUpSettings
-            {
-                BackwardsCompatable = (server.ExtensionSettings == "OLD")
-            };
-            var client = clientFactory.GenerateHttpClient(server.Url, settings);
+            var client = clientFactory.GenerateHttpClient(server.Url,
+                ClientStartUpSettingsExtensions.GenerateStartupSettings(server));
             return client;
         }
     }

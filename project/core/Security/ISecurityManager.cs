@@ -147,5 +147,12 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <returns>The component of the specified type, if available, null otherwise.</returns>
         TComponent RetrieveComponent<TComponent>()
             where TComponent : class;
+
+        #region Channel
+        /// <summary>
+        /// The channel security requirements.
+        /// </summary>
+        IChannelSecurity Channel { get; }
+        #endregion
     }
 }

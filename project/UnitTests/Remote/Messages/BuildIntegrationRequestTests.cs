@@ -57,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             BuildIntegrationRequest request = new BuildIntegrationRequest();
             string actual = request.ToString();
             string expected = string.Format("<integrationMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-                "identifier=\"{0}\" source=\"{1}\" timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" condition=\"{3}\" />",
+                "timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" source=\"{1}\" condition=\"{3}\" />",
                 request.Identifier,
                 request.SourceName,
                 request.Timestamp,
@@ -79,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             request.AddBuildValue("value1", "actual value");
             string actual = request.ToString();
             string expected = string.Format("<integrationMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-                "identifier=\"{0}\" server=\"{1}\" source=\"{2}\" session=\"{3}\" timestamp=\"{4:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" project=\"{5}\" condition=\"{6}\">" + 
+                "timestamp=\"{4:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" server=\"{1}\" source=\"{2}\" session=\"{3}\" project=\"{5}\" condition=\"{6}\">" + 
                 "<buildValue name=\"value1\" value=\"actual value\" />" + 
                 "</integrationMessage>",
                 request.Identifier,

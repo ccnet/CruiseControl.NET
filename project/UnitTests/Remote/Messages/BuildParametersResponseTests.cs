@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             BuildParametersResponse response = new BuildParametersResponse();
             string actual = response.ToString();
             string expected = string.Format("<buildParametersResponse xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-                "result=\"{0}\" timestamp=\"{1:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" />",
+                "timestamp=\"{1:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" result=\"{0}\" />",
                 response.Result,
                 response.Timestamp);
             Assert.AreEqual(expected, actual);
@@ -68,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             response.Parameters.Add(new SelectParameter("select"));
             string actual = response.ToString();
             string expected = string.Format("<buildParametersResponse xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-                "identifier=\"{0}\" result=\"{1}\" timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\">" +
+                "timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" result=\"{1}\">" +
                 "<error>Error 1</error>" +
                 "<error>Error 2</error>" +
                 "<parameter xsi:type=\"TextParameter\" name=\"text\" display=\"text\" />" +

@@ -209,6 +209,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Monitoring\CachingCruiseServerManager.cs" />
+    <Compile Include="Monitoring\ClientStartUpSettingsExtensions.cs" />
     <Compile Include="Monitoring\CruiseProjectManagerFactory.cs">
       <SubType>Code</SubType>
     </Compile>

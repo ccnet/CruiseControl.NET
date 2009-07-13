@@ -31,6 +31,16 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             get { return false; }
         }
 
+        #region Channel
+        /// <summary>
+        /// The channel security requirements.
+        /// </summary>
+        public IChannelSecurity Channel
+        {
+            get { return null; }
+        }
+        #endregion
+
         /// <summary>
         /// Starts a new session for a user.
         /// </summary>

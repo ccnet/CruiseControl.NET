@@ -6,6 +6,9 @@ using System.Xml;
 using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Messages;
+using ThoughtWorks.CruiseControl.Core.Security;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -17,8 +20,10 @@ namespace ThoughtWorks.CruiseControl.Core
     {
         #region Private fields
         private readonly ICruiseServer cruiseServer;
+        private readonly IChannelSecurity channelSecurity;
         private Dictionary<string, Type> messageTypes = null;
         private Dictionary<Type, XmlSerializer> messageSerialisers = new Dictionary<Type, XmlSerializer>();
+        private Dictionary<string, SecureConnection> connections = new Dictionary<string, SecureConnection>();
         #endregion
 
         #region Constructors
@@ -29,6 +34,14 @@ namespace ThoughtWorks.CruiseControl.Core
         public CruiseServerClient(ICruiseServer cruiseServer)
         {
             this.cruiseServer = cruiseServer;
+
+            // Retrieve any associated channel security
+            var server = cruiseServer as CruiseServer;
+            if ((server != null) &&
+                (server.SecurityManager != null))
+            {
+                channelSecurity = server.SecurityManager.Channel;
+            }
         }
         #endregion
 
@@ -387,49 +400,22 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <returns>The response message in an XML format.</returns>
         public virtual string ProcessMessage(string action, string message)
         {
-            Response response = new Response();
+            var response = new Response();
 
             try
             {
-                // Find the type of message
-                XmlDocument messageXml = new XmlDocument();
-                messageXml.LoadXml(message);
-                Type messageType = FindMessageType(messageXml.DocumentElement.Name);
-                if (messageType == null)
-                {
-                    throw new CruiseControlException(
-                        string.Format(
-                            "Unable to translate message: '{0}' is unknown",
-                            messageXml.DocumentElement.Name));
-                }
-
-                // Find the action
-                Type cruiseType = typeof(ICruiseServerClient);
-                MethodInfo actionMethod = cruiseType.GetMethod(action,
-                    BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Public);
-                if (actionMethod == null)
-                {
-                    throw new CruiseControlException(
-                        string.Format(
-                            "Unable to locate action '{0}'",
-                            action));
-                }
-
-                // Convert the message and invoke the action
-                object request = ConvertXmlToObject(messageType, message);
-                response = actionMethod.Invoke(this,
-                    new object[] {
-                        request
-                    }) as Response;
+                // Find the action and message type, extract the message and invoke the method
+                response = ExtractAndInvokeMessage(message, action, new RemotingChannelSecurityInformation());
             }
             catch (Exception error)
             {
                 response.Result = ResponseResult.Failure;
                 response.ErrorMessages.Add(
-                    new ErrorMessage("Unable to process error: " + error.Message));
+                    new ErrorMessage("Unable to process: " + error.Message));
             }
 
-            return response.ToString();
+            var responseText = response.ToString();
+            return responseText;
         }
 
         /// <summary>
@@ -445,7 +431,7 @@ namespace ThoughtWorks.CruiseControl.Core
             try
             {
                 // Find the action
-                Type cruiseType = typeof(ICruiseServerClient);
+                Type cruiseType = this.GetType();
                 MethodInfo actionMethod = cruiseType.GetMethod(action,
                     BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Public);
                 if (actionMethod == null)
@@ -457,6 +443,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 }
 
                 // Invoke the action
+                message.ChannelInformation = new RemotingChannelSecurityInformation();
                 response = actionMethod.Invoke(this,
                     new object[] {
                         message
@@ -465,8 +452,12 @@ namespace ThoughtWorks.CruiseControl.Core
             catch (Exception error)
             {
                 response.Result = ResponseResult.Failure;
+                if ((error is TargetInvocationException) && (error.InnerException != null))
+                {
+                    error = error.InnerException;
+                }
                 response.ErrorMessages.Add(
-                    new ErrorMessage("Unable to process error: " + error.Message));
+                    new ErrorMessage("Unable to process: " + error.Message));
             }
 
             return response;
@@ -536,6 +527,120 @@ namespace ThoughtWorks.CruiseControl.Core
             return cruiseServer.GetLinkedSiteId(request);
         }
         #endregion
+
+        #region ProcessSecureRequest()
+        /// <summary>
+        /// Processes an encrypted request.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public Response ProcessSecureRequest(ServerRequest request)
+        {
+            // Validate the request
+            var encryptedRequest = request as EncryptedRequest;
+            if (encryptedRequest == null) throw new CruiseControlException("Incoming request is not an encrypted request");
+            if (!connections.ContainsKey(request.SourceName)) throw new CruiseControlException("No secure connection for the source");
+            var connection = connections[request.SourceName];
+
+            // Decrypt the data
+            var crypto = new RijndaelManaged();
+            crypto.Key = connection.Key;
+            crypto.IV = connection.IV;
+            string data = DecryptMessage(crypto, encryptedRequest.EncryptedData);
+
+            // Find the action and message type, extract the message and invoke the method
+            var response = ExtractAndInvokeMessage(data, encryptedRequest.Action,
+                new RemotingChannelSecurityInformation { IsEncrypted = true });
+
+            // Encrypt the response
+            var encryptedResponse = new EncryptedResponse(request);
+            encryptedResponse.EncryptedData = response.ToString();
+            encryptedResponse.EncryptedData = EncryptMessage(crypto, encryptedResponse.EncryptedData);
+            encryptedResponse.Result = ResponseResult.Success;
+
+            return encryptedResponse;
+        }
+        #endregion
+
+        #region RetrievePublicKey()
+        /// <summary>
+        /// Retrieve the public key for the server.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public DataResponse RetrievePublicKey(ServerRequest request)
+        {
+            var response = new DataResponse(request);
+
+            // Either generate or retrieve the key for CruiseControl.NET Server
+            var cp = new CspParameters();
+            cp.KeyContainerName = "CruiseControl.NET Server";
+            var provider = new RSACryptoServiceProvider(cp);
+
+            // Return the public key
+            response.Data = provider.ToXmlString(false);
+            response.Result = ResponseResult.Success;
+
+            return response;
+        }
+        #endregion
+
+        #region InitialiseSecureConnection()
+        /// <summary>
+        /// Initialise a secure communications connection.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public Response InitialiseSecureConnection(LoginRequest request)
+        {
+            // Decrypt the password
+            var cp = new CspParameters();
+            cp.KeyContainerName = "CruiseControl.NET Server";
+            var provider = new RSACryptoServiceProvider(cp);
+            var originalKey = request.FindCredential(LoginRequest.UserNameCredential).Value;
+            var decryptedKey = UTF8Encoding.UTF8.GetString(
+                provider.Decrypt(Convert.FromBase64String(originalKey), false));
+            var originalIv = request.FindCredential(LoginRequest.PasswordCredential).Value;
+            var decryptedIv = UTF8Encoding.UTF8.GetString(
+                provider.Decrypt(Convert.FromBase64String(originalIv), false));
+
+            // Generate the connection details
+            var connection = new SecureConnection
+            {
+                Expiry = DateTime.Now.AddMinutes(15),
+                IV = Convert.FromBase64String(decryptedIv),
+                Key = Convert.FromBase64String(decryptedKey)
+            };
+            connections.Add(request.SourceName, 
+                connection);
+
+            // Generate a response
+            var response = new Response(request);
+            response.Result = ResponseResult.Success;
+            return response;
+        }
+        #endregion
+
+        #region TerminateSecureConnection()
+        /// <summary>
+        /// Terminate a secure communications connection.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public Response TerminateSecureConnection(ServerRequest request)
+        {
+            // Remove the connection details
+            if (connections.ContainsKey(request.SourceName))
+            {
+                connections.Remove(request.SourceName);
+            }
+
+            // Generate a response
+            var response = new Response(request);
+            response.Result = ResponseResult.Success;
+            return response;
+        }
+        #endregion
         #endregion
 
         #region Private methods
@@ -601,6 +706,118 @@ namespace ThoughtWorks.CruiseControl.Core
             }
 
             return messageObj;
+        }
+        #endregion
+
+        #region EncryptMessage()
+        private static string EncryptMessage(RijndaelManaged crypto, string message)
+        {
+            var encryptStream = new MemoryStream();
+            var encrypt = new CryptoStream(encryptStream,
+                crypto.CreateEncryptor(),
+                CryptoStreamMode.Write);
+
+            var dataToEncrypt = Encoding.UTF8.GetBytes(message);
+            encrypt.Write(dataToEncrypt, 0, dataToEncrypt.Length);
+            encrypt.FlushFinalBlock();
+            encrypt.Close();
+
+            var data = Convert.ToBase64String(encryptStream.ToArray());
+            return data;
+        }
+        #endregion
+
+        #region DecryptMessage()
+        private static string DecryptMessage(RijndaelManaged crypto, string message)
+        {
+            var inputStream = new MemoryStream(Convert.FromBase64String(message));
+            string data;
+            using (var decryptionStream = new CryptoStream(inputStream,
+                crypto.CreateDecryptor(),
+                CryptoStreamMode.Read))
+            {
+                using (var reader = new StreamReader(decryptionStream))
+                {
+                    data = reader.ReadToEnd();
+                }
+            }
+            return data;
+        }
+        #endregion
+
+        #region ExtractAndInvokeMessage()
+        private Response ExtractAndInvokeMessage(string message, 
+            string action,
+            object channelInformation)
+        {
+            // Load the message
+            var messageXml = new XmlDocument();
+            messageXml.LoadXml(message);
+
+            // Find the action
+            var cruiseType = typeof(ICruiseServerClient);
+            var actionMethod = cruiseType.GetMethod(action,
+                BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Public);
+            if (actionMethod == null)
+            {
+                throw new CruiseControlException(
+                    string.Format(
+                        "Unable to locate action '{0}'",
+                        action));
+            }
+
+            // Find the type of message
+            var messageType = FindMessageType(messageXml.DocumentElement.Name);
+            if (messageType == null)
+            {
+                throw new CruiseControlException(
+                    string.Format(
+                        "Unable to translate message: '{0}' is unknown",
+                        messageXml.DocumentElement.Name));
+            }
+
+            // Convert the message and invoke the action
+            var request = ConvertXmlToObject(messageType, message);
+            var requestMessage = request as CommunicationsMessage;
+            if (requestMessage != null) requestMessage.ChannelInformation = channelInformation;
+            var response = actionMethod.Invoke(this,
+                new object[] {
+                        request
+                    }) as Response;
+            return response;
+        }
+        #endregion
+        #endregion
+
+        #region Private classes
+        #region SecureConnection
+        /// <summary>
+        /// Stores the details on a secure connection.
+        /// </summary>
+        private class SecureConnection
+        {
+            #region Public properties
+            #region Key
+            /// <summary>
+            /// The key.
+            /// </summary>
+            public byte[] Key { get; set; }
+            #endregion
+
+            #region IV
+            /// <summary>
+            /// The IV.
+            /// </summary>
+            public byte[] IV { get; set; }
+            #endregion
+
+            #region Expiry
+            /// <summary>
+            /// The expiry time.
+            /// </summary>
+            public DateTime Expiry { get; set; }
+            #endregion
+            #endregion
         }
         #endregion
         #endregion

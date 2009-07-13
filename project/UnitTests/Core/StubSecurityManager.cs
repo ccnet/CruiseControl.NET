@@ -42,6 +42,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
         public bool RequiresSession { get { return false; } }
 
+        #region Channel
+        /// <summary>
+        /// The channel security requirements.
+        /// </summary>
+        public IChannelSecurity Channel
+        {
+            get { return null; }
+        }
+        #endregion
+
         [ReflectorProperty("dummy")]
         public string Dummy
         {

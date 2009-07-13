@@ -16,6 +16,16 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public bool BackwardsCompatable { get; set; }
         #endregion
+
+        #region UseEncryption
+        /// <summary>
+        /// Should all communications use encryption.
+        /// </summary>
+        /// <remarks>
+        /// This setting is mutually exclusive with BackwardsCompatable.
+        /// </remarks>
+        public bool UseEncryption { get; set; }
+        #endregion
         #endregion
     }
 }

@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		private SerializableDateTime nextBuildTime = SerializableDateTime.Default;
         private string currentBuildStage;
         private string _serverName = Environment.MachineName;       // Store the machine name that this project is running on
-
+        private Message[] messages = new Message[0];
         private string queue;
         private int queuePriority;
 
@@ -233,7 +233,11 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Any messages for a build.
         /// </summary>
         [XmlElement("message")]
-		public Message[] Messages = new Message[0];
+        public Message[] Messages
+        {
+            get { return messages ?? new Message[0]; }
+            set { messages = value; }
+        }
 		
         /// <summary>
         /// The most current message in the build.
@@ -243,8 +247,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		{
 			get
 			{
-				if (Messages.Length > 0)
-					return Messages[Messages.Length-1].ToString();
+				if (Messages.Length > 0) return Messages[Messages.Length-1].ToString();
 				return string.Empty;
 			}
 		}

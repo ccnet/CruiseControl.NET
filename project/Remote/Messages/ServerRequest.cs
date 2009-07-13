@@ -11,12 +11,12 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
     [XmlRoot("serverMessage")]
     [Serializable]
     public class ServerRequest
+        : CommunicationsMessage
     {
         #region Private fields
         private string identifier = Guid.NewGuid().ToString();
         private string serverName;
         private string sessionToken;
-        private DateTime timestamp = DateTime.Now;
         private string sourceName = Environment.MachineName;
         #endregion
 
@@ -84,18 +84,6 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
         {
             get { return sessionToken; }
             set { sessionToken = value; }
-        }
-        #endregion
-
-        #region Timestamp
-        /// <summary>
-        /// The timestamp of when this message was generated.
-        /// </summary>
-        [XmlAttribute("timestamp")]
-        public DateTime Timestamp
-        {
-            get { return timestamp; }
-            set { timestamp = value; }
         }
         #endregion
         #endregion

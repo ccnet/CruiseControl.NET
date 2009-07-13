@@ -123,7 +123,11 @@
     <Compile Include="ClientStartUpSettings.cs" />
     <Compile Include="CommunicationsException.cs" />
     <Compile Include="CruiseServerHttpClient.cs" />
+    <Compile Include="EncryptingConnection.cs" />
     <Compile Include="ICruiseServerClientFactory.cs" />
+    <Compile Include="Messages\CommunicationsMessage.cs" />
+    <Compile Include="Messages\EncryptedRequest.cs" />
+    <Compile Include="Messages\EncryptedResponse.cs" />
     <Compile Include="Messages\ProjectItemRequest.cs" />
     <Compile Include="NameValuePairListSerialiserFactory.cs" />
     <Compile Include="CruiseServerClient.cs" />

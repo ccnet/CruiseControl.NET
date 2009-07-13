@@ -89,6 +89,14 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             get { return permissions.DefaultRight == SecurityRight.Deny; }
         }
         #endregion
+
+        #region Channel
+        /// <summary>
+        /// The channel security requirements.
+        /// </summary>
+        [ReflectorProperty("channel", InstanceTypeKey = "type", Required = false)]
+        public virtual IChannelSecurity Channel { get; set; }
+        #endregion
         #endregion
 
         #region Public methods

@@ -113,6 +113,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CruiseServerSnapshot.cs" />
+    <Compile Include="EncryptingConnection.cs" />
     <Compile Include="ExternalLink.cs" />
     <Compile Include="HttpConnection.cs" />
     <Compile Include="ICruiseManager.cs" />
@@ -132,10 +133,13 @@
     <Compile Include="Messages\BuildRequest.cs" />
     <Compile Include="Messages\ChangeConfigurationRequest.cs" />
     <Compile Include="Messages\ChangePasswordRequest.cs" />
+    <Compile Include="Messages\CommunicationsMessage.cs" />
     <Compile Include="Messages\DataListResponse.cs" />
     <Compile Include="Messages\DataResponse.cs" />
     <Compile Include="Messages\DiagnoseSecurityRequest.cs" />
     <Compile Include="Messages\DiagnoseSecurityResponse.cs" />
+    <Compile Include="Messages\EncryptedRequest.cs" />
+    <Compile Include="Messages\EncryptedResponse.cs" />
     <Compile Include="Messages\ErrorMessage.cs" />
     <Compile Include="Messages\ExternalLinksListResponse.cs" />
     <Compile Include="Messages\FileTransferRequest.cs" />

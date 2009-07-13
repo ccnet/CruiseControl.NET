@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             ChangePasswordRequest request = new ChangePasswordRequest();
             string actual = request.ToString();
             string expected = string.Format("<changePasswordMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-                "identifier=\"{0}\" source=\"{1}\" timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" />",
+                "timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" source=\"{1}\" />",
                 request.Identifier,
                 request.SourceName,
                 request.Timestamp);
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             request.Timestamp = DateTime.Now;
             string actual = request.ToString();
             string expected = string.Format("<changePasswordMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-                "identifier=\"{0}\" server=\"{1}\" source=\"{2}\" session=\"{3}\" timestamp=\"{4:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" oldPassword=\"{5}\" newPassword=\"{6}\" userName=\"{7}\" />",
+                "timestamp=\"{4:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" server=\"{1}\" source=\"{2}\" session=\"{3}\" oldPassword=\"{5}\" newPassword=\"{6}\" userName=\"{7}\" />",
                 request.Identifier,
                 request.ServerName,
                 request.SourceName,

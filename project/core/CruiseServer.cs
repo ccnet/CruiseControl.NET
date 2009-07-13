@@ -108,6 +108,16 @@ namespace ThoughtWorks.CruiseControl.Core
             get { return serverClient; }
         }
         #endregion
+
+        #region SecurityManager
+        /// <summary>
+        /// The underlying security manager.
+        /// </summary>
+        public ISecurityManager SecurityManager
+        {
+            get { return securityManager; }
+        }
+        #endregion
         #endregion
 
         #region Public methods
@@ -393,7 +403,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     data = integrationQueueManager.GetProjectStatuses();
                     data = FilterProjects(request.SessionToken, data);
                 }));
-            response.Projects.AddRange(data);
+            if (data != null) response.Projects.AddRange(data);
             return response;
         }
         #endregion
@@ -459,7 +469,7 @@ namespace ThoughtWorks.CruiseControl.Core
                         .IntegrationRepository
                         .GetMostRecentBuildNames(request.NumberOfBuilds);
                 }));
-            response.Data.AddRange(data);
+            if (data != null) response.Data.AddRange(data);
             return response;
         }
         #endregion
@@ -1218,27 +1228,41 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <param name="request"></param>
         private void ValidateRequest(ServerRequest request)
         {
-            // Validate the time
-            if (request.Timestamp < DateTime.Now.AddDays(-1))
+            try
             {
-                throw new CruiseControlException("Request is too old");
-            }
+                // Validate any channel information
+                if (securityManager.Channel != null)
+                {
+                    securityManager.Channel.Validate(request.ChannelInformation);
+                }
 
-            // Make sure the message isn't duplicated
-            if (receivedRequests.ContainsKey(request.Identifier))
-            {
+                // Validate the time
+                if (request.Timestamp < DateTime.Now.AddDays(-1))
+                {
+                    throw new CruiseControlException("Request is too old");
+                }
+
+                // Make sure the message isn't duplicated
                 if (receivedRequests.ContainsKey(request.Identifier))
                 {
-                    if (receivedRequests[request.Identifier] < DateTime.Now.AddDays(-1))
+                    if (receivedRequests.ContainsKey(request.Identifier))
                     {
-                        receivedRequests.Remove(request.Identifier);
+                        if (receivedRequests[request.Identifier] < DateTime.Now.AddDays(-1))
+                        {
+                            receivedRequests.Remove(request.Identifier);
+                        }
+                        else
+                        {
+                            throw new CruiseControlException("This request has already been processed");
+                        }
+                        receivedRequests.Add(request.Identifier, request.Timestamp);
                     }
-                    else
-                    {
-                        throw new CruiseControlException("This request has already been processed");
-                    }
-                    receivedRequests.Add(request.Identifier, request.Timestamp);
                 }
+            }
+            catch (SecurityException error)
+            {
+                Log.Warning("Message validation failed: {0}", error.Message);
+                throw;
             }
         }
         #endregion

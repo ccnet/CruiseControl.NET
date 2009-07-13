@@ -43,6 +43,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private Label label6;
         private Label lblExtensionSettings;
         private CheckBox connectToOldDashboard;
+        private Label label7;
+        private CheckBox remotingEncryption;
+        private Label label8;
+        private CheckBox httpEncryption;
         private ITransportExtension transportExtension;
 
 		public AddBuildServer(ICruiseProjectManagerFactory cruiseProjectManagerFactory)
@@ -92,6 +96,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.rdoExtension = new System.Windows.Forms.RadioButton();
             this.txtFeedback = new System.Windows.Forms.TextBox();
             this.dashboardPanel = new System.Windows.Forms.Panel();
+            this.connectToOldDashboard = new System.Windows.Forms.CheckBox();
             this.txtDashboard = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.remotingPanel = new System.Windows.Forms.Panel();
@@ -107,7 +112,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.btnConfigureExtension = new System.Windows.Forms.Button();
             this.cmbExtension = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.connectToOldDashboard = new System.Windows.Forms.CheckBox();
+            this.remotingEncryption = new System.Windows.Forms.CheckBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.httpEncryption = new System.Windows.Forms.CheckBox();
             this.dashboardPanel.SuspendLayout();
             this.remotingPanel.SuspendLayout();
             this.nonCcnetPanel.SuspendLayout();
@@ -199,6 +207,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // dashboardPanel
             // 
             this.dashboardPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dashboardPanel.Controls.Add(this.label8);
+            this.dashboardPanel.Controls.Add(this.httpEncryption);
             this.dashboardPanel.Controls.Add(this.connectToOldDashboard);
             this.dashboardPanel.Controls.Add(this.txtDashboard);
             this.dashboardPanel.Controls.Add(this.label2);
@@ -207,6 +217,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.dashboardPanel.Size = new System.Drawing.Size(623, 165);
             this.dashboardPanel.TabIndex = 20;
             this.dashboardPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // connectToOldDashboard
+            // 
+            this.connectToOldDashboard.AutoSize = true;
+            this.connectToOldDashboard.Location = new System.Drawing.Point(10, 65);
+            this.connectToOldDashboard.Name = "connectToOldDashboard";
+            this.connectToOldDashboard.Size = new System.Drawing.Size(155, 17);
+            this.connectToOldDashboard.TabIndex = 13;
+            this.connectToOldDashboard.Text = "Connect to pre-1.5.0 server";
+            this.connectToOldDashboard.UseVisualStyleBackColor = true;
+            this.connectToOldDashboard.CheckedChanged += new System.EventHandler(this.connectToOldDashboard_CheckedChanged);
             // 
             // txtDashboard
             // 
@@ -231,6 +252,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // remotingPanel
             // 
             this.remotingPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.remotingPanel.Controls.Add(this.label7);
+            this.remotingPanel.Controls.Add(this.remotingEncryption);
             this.remotingPanel.Controls.Add(this.connectToOldServer);
             this.remotingPanel.Controls.Add(this.txtRemoting);
             this.remotingPanel.Controls.Add(this.label4);
@@ -250,6 +273,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.connectToOldServer.TabIndex = 12;
             this.connectToOldServer.Text = "Connect to pre-1.5.0 server";
             this.connectToOldServer.UseVisualStyleBackColor = true;
+            this.connectToOldServer.CheckedChanged += new System.EventHandler(this.connectToOldServer_CheckedChanged);
             // 
             // txtRemoting
             // 
@@ -369,15 +393,43 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.label6.Text = "This will use an extension module to connect to the build server. This requires t" +
                 "he extension be installed in the bin folder for CCTray.";
             // 
-            // connectToOldDashboard
+            // remotingEncryption
             // 
-            this.connectToOldDashboard.AutoSize = true;
-            this.connectToOldDashboard.Location = new System.Drawing.Point(10, 65);
-            this.connectToOldDashboard.Name = "connectToOldDashboard";
-            this.connectToOldDashboard.Size = new System.Drawing.Size(155, 17);
-            this.connectToOldDashboard.TabIndex = 13;
-            this.connectToOldDashboard.Text = "Connect to pre-1.5.0 server";
-            this.connectToOldDashboard.UseVisualStyleBackColor = true;
+            this.remotingEncryption.AutoSize = true;
+            this.remotingEncryption.Location = new System.Drawing.Point(6, 130);
+            this.remotingEncryption.Name = "remotingEncryption";
+            this.remotingEncryption.Size = new System.Drawing.Size(141, 17);
+            this.remotingEncryption.TabIndex = 13;
+            this.remotingEncryption.Text = "Encrypt communications";
+            this.remotingEncryption.UseVisualStyleBackColor = true;
+            this.remotingEncryption.CheckedChanged += new System.EventHandler(this.remotingEncryption_CheckedChanged);
+            // 
+            // label7
+            // 
+            this.label7.Location = new System.Drawing.Point(167, 108);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(142, 39);
+            this.label7.TabIndex = 14;
+            this.label7.Text = "Encryption is not available for pre-1.5.0 servers.";
+            // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(166, 65);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(142, 39);
+            this.label8.TabIndex = 16;
+            this.label8.Text = "Encryption is not available for pre-1.5.0 servers.";
+            // 
+            // httpEncryption
+            // 
+            this.httpEncryption.AutoSize = true;
+            this.httpEncryption.Location = new System.Drawing.Point(10, 84);
+            this.httpEncryption.Name = "httpEncryption";
+            this.httpEncryption.Size = new System.Drawing.Size(141, 17);
+            this.httpEncryption.TabIndex = 15;
+            this.httpEncryption.Text = "Encrypt communications";
+            this.httpEncryption.UseVisualStyleBackColor = true;
+            this.httpEncryption.CheckedChanged += new System.EventHandler(this.httpEncryption_CheckedChanged);
             // 
             // AddBuildServer
             // 
@@ -491,14 +543,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			if (rdoRemoting.Checked)
 			{
 				var server = BuildServer.BuildFromRemotingDisplayName(txtRemoting.Text);
-                server.ExtensionSettings = connectToOldServer.Checked ? "OLD" : "NEW";
+                server.ExtensionSettings = ClientStartUpSettingsExtensions.GenerateExtensionSettings(connectToOldServer.Checked,
+                    remotingEncryption.Checked);
                 return server;
 			}
 
 			if (rdoHttp.Checked)
 			{
 				var server = new BuildServer(txtHttp.Text);
-                server.ExtensionSettings = "OLD";
+                server.ExtensionSettings = ClientStartUpSettingsExtensions.GenerateExtensionSettings(true, false);
                 return server;
 			}
 
@@ -511,14 +564,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                     baseUri = baseUri.Substring(0, baseUri.Length - 20);
                 }
                 var server = new BuildServer(baseUri);
-                server.ExtensionSettings = connectToOldDashboard.Checked ? "OLD" : "NEW";
+                server.ExtensionSettings = ClientStartUpSettingsExtensions.GenerateExtensionSettings(connectToOldDashboard.Checked,
+                    httpEncryption.Checked);
                 return server;
 			}
 
             if (rdoExtension.Checked)
             {
                 if (transportExtension == null) throw new ApplicationException("No extension selected");
-                return new BuildServer(transportExtension.Configuration.Url, BuildServerTransport.Extension, cmbExtension.Text, transportExtension.Settings);
+                var server = new BuildServer(transportExtension.Configuration.Url, 
+                    BuildServerTransport.Extension, 
+                    cmbExtension.Text, 
+                    transportExtension.Settings);
+                return server;
             }
 
 			return null;
@@ -551,6 +609,26 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void connectToOldServer_CheckedChanged(object sender, EventArgs e)
+        {
+            if (connectToOldServer.Checked) remotingEncryption.Checked = false;
+        }
+
+        private void remotingEncryption_CheckedChanged(object sender, EventArgs e)
+        {
+            if (remotingEncryption.Checked) connectToOldServer.Checked = false;
+        }
+
+        private void connectToOldDashboard_CheckedChanged(object sender, EventArgs e)
+        {
+            if (connectToOldDashboard.Checked) httpEncryption.Checked = false;
+        }
+
+        private void httpEncryption_CheckedChanged(object sender, EventArgs e)
+        {
+            if (httpEncryption.Checked) connectToOldDashboard.Checked = false;
         }
 	}
 }

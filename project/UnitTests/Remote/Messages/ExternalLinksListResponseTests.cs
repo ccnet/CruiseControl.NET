@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             ExternalLinksListResponse response = new ExternalLinksListResponse();
             string actual = response.ToString();
             string expected = string.Format("<externalLinksResponse xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-                "result=\"{0}\" timestamp=\"{1:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" />",
+                "timestamp=\"{1:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" result=\"{0}\" />",
                 response.Result,
                 response.Timestamp);
             Assert.AreEqual(expected, actual);
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             response.ExternalLinks.Add(new ExternalLink("link name", "link url"));
             string actual = response.ToString();
             string expected = string.Format("<externalLinksResponse xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-                "identifier=\"{0}\" result=\"{1}\" timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\">" +
+                "timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" result=\"{1}\">" +
                 "<error>Error 1</error>" +
                 "<error>Error 2</error>" +
                 "<link name=\"link name\" url=\"link url\" />" + 

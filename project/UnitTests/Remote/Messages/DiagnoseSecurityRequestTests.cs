@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             DiagnoseSecurityRequest request = new DiagnoseSecurityRequest();
             string actual = request.ToString();
             string expected = string.Format("<diagnoseSecurityMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-                "identifier=\"{0}\" source=\"{1}\" timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" />",
+                "timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" source=\"{1}\" />",
                 request.Identifier,
                 request.SourceName,
                 request.Timestamp);
@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             request.Projects.Add("test project");
             string actual = request.ToString();
             string expected = string.Format("<diagnoseSecurityMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-                "identifier=\"{0}\" server=\"{1}\" source=\"{2}\" session=\"{3}\" timestamp=\"{4:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" userName=\"{5}\">"+
+                "timestamp=\"{4:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" server=\"{1}\" source=\"{2}\" session=\"{3}\" userName=\"{5}\">" +
                 "<project>test project</project>" +
                 "</diagnoseSecurityMessage>",
                 request.Identifier,

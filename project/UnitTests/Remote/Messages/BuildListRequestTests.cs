@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             BuildListRequest request = new BuildListRequest();
             string actual = request.ToString();
             string expected = string.Format("<buildListMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-                "identifier=\"{0}\" source=\"{1}\" timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" number=\"0\" />",
+                "timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" source=\"{1}\" number=\"0\" />",
                 request.Identifier,
                 request.SourceName,
                 request.Timestamp);
@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             request.NumberOfBuilds = 6;
             string actual = request.ToString();
             string expected = string.Format("<buildListMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-                "identifier=\"{0}\" server=\"{1}\" source=\"{2}\" session=\"{3}\" timestamp=\"{4:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" number=\"6\" />",
+                "timestamp=\"{4:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" server=\"{1}\" source=\"{2}\" session=\"{3}\" number=\"6\" />",
                 request.Identifier,
                 request.ServerName,
                 request.SourceName,

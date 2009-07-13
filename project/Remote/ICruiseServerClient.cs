@@ -296,5 +296,32 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         DataResponse GetLinkedSiteId(ProjectItemRequest request);
         #endregion
+
+        #region RetrievePublicKey()
+        /// <summary>
+        /// Retrieve the public key for the server.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        DataResponse RetrievePublicKey(ServerRequest request);
+        #endregion
+
+        #region InitialiseSecureConnection()
+        /// <summary>
+        /// Initialise a secure communications connection.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Response InitialiseSecureConnection(LoginRequest request);
+        #endregion
+
+        #region TerminateSecureConnection()
+        /// <summary>
+        /// Terminate a secure communications connection.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Response TerminateSecureConnection(ServerRequest request);
+        #endregion
     }
 }

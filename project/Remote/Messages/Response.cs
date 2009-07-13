@@ -12,12 +12,12 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
     [XmlRoot("response")]
     [Serializable]
     public class Response
+        : CommunicationsMessage
     {
         #region Private fields
         private List<ErrorMessage> errorMessages;
         private string requestIdentifier;
         private ResponseResult result = ResponseResult.Failure;
-        private DateTime timestamp = DateTime.Now;
         #endregion
 
         #region Constructors
@@ -27,7 +27,6 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
         public Response()
         {
             errorMessages = new List<ErrorMessage>();
-            timestamp = DateTime.Now;
         }
 
         /// <summary>
@@ -49,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
             errorMessages = response.errorMessages;
             requestIdentifier = response.requestIdentifier;
             result = response.result;
-            timestamp = response.timestamp;
+            Timestamp = response.Timestamp;
         }
         #endregion
 
@@ -88,18 +87,6 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
             set { result = value; }
         }
         #endregion
-
-        #region Timestamp
-        /// <summary>
-        /// The date and time the response was generated.
-        /// </summary>
-        [XmlAttribute("timestamp")]
-        public DateTime Timestamp
-        {
-            get { return timestamp; }
-            set { timestamp = value; }
-        }
-        #endregion
         #endregion
 
         #region Public methods
@@ -115,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
             {
                 Response other = obj as Response;
                 return string.Equals(other.requestIdentifier, requestIdentifier) &&
-                    DateTime.Equals(other.timestamp, timestamp);
+                    DateTime.Equals(other.Timestamp, Timestamp);
             }
             else
             {
@@ -132,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
         public override int GetHashCode()
         {
             return (requestIdentifier ?? string.Empty).GetHashCode() &
-                timestamp.GetHashCode();
+                Timestamp.GetHashCode();
         }
         #endregion
 

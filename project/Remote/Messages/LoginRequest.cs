@@ -94,6 +94,27 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
             return credential;
         }
         #endregion
+
+        #region FindCredential()
+        /// <summary>
+        /// Attempts to find a credential.
+        /// </summary>
+        /// <param name="credential"></param>
+        /// <returns></returns>
+        public NameValuePair FindCredential(string credential)
+        {
+            NameValuePair pair = null;
+            foreach (var value in credentials)
+            {
+                if (credential == value.Name)
+                {
+                    pair = value;
+                    break;
+                }
+            }
+            return pair;
+        }
+        #endregion
         #endregion
     }
 }

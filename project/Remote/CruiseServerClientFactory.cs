@@ -160,7 +160,8 @@ namespace ThoughtWorks.CruiseControl.Remote
                 }
                 else
                 {
-                    var connection = new HttpConnection(address);
+                    IServerConnection connection = new HttpConnection(address);
+                    connection = BuildUpConnection(connection, settings);
                     client = new CruiseServerClient(connection);
                 }
                 if (UseClientCaching) clients.Add(address, client);
@@ -230,7 +231,8 @@ namespace ThoughtWorks.CruiseControl.Remote
                 }
                 else
                 {
-                    var connection = new RemotingConnection(address);
+                    IServerConnection connection = new RemotingConnection(address);
+                    connection = BuildUpConnection(connection, settings);
                     client = new CruiseServerClient(connection);
                 }
                 if (UseClientCaching) clients.Add(address, client);
@@ -268,7 +270,9 @@ namespace ThoughtWorks.CruiseControl.Remote
                 }
                 else
                 {
-                    return new CruiseServerClient(new HttpConnection(address));
+                    IServerConnection connection = new HttpConnection(address);
+                    connection = BuildUpConnection(connection, settings);
+                    return new CruiseServerClient(connection);
                 }
             };
         }
@@ -288,7 +292,9 @@ namespace ThoughtWorks.CruiseControl.Remote
                 }
                 else
                 {
-                    return new CruiseServerClient(new RemotingConnection(address));
+                    IServerConnection connection = new RemotingConnection(address);
+                    connection = BuildUpConnection(connection, settings);
+                    return new CruiseServerClient(connection);
                 }
             };
         }
@@ -303,6 +309,20 @@ namespace ThoughtWorks.CruiseControl.Remote
         public void AddInitialiser(string transport, ClientInitialiser initialiser)
         {
             initialisers[transport.ToLower()] = initialiser;
+        }
+        #endregion
+
+        #region BuildUpConnection()
+        /// <summary>
+        /// Builds a server connection based on the start-up options.
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
+        public static IServerConnection BuildUpConnection(IServerConnection connection, ClientStartUpSettings settings)
+        {
+            if (settings.UseEncryption) connection = new EncryptingConnection(connection);
+            return connection;
         }
         #endregion
         #endregion

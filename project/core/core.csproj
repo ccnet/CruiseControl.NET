@@ -501,9 +501,13 @@
     <Compile Include="Reporting\Dashboard\Navigation\IUrlBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Security\ChannelSecurityInformation.cs" />
+    <Compile Include="Security\IChannelSecurity.cs" />
     <Compile Include="Security\ImpersonationDetails.cs" />
     <Compile Include="Security\InheritedProjectAuthorisation.cs" />
     <Compile Include="Security\Permissions.cs" />
+    <Compile Include="Security\RemotingChannelSecurityInformation.cs" />
+    <Compile Include="Security\SecureMessagesChannel.cs" />
     <Compile Include="SourceControlOperation.cs" />
     <Compile Include="Security\ActiveDirectoryAuthentication.cs" />
     <Compile Include="Security\Auditing\AuditLoggerBase.cs" />
