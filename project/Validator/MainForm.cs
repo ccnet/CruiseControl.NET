@@ -48,8 +48,35 @@ namespace Validator
         {
             browser.AllowNavigation = false;
             browser.AllowWebBrowserDrop = false;
-            Stream xmlStream = this.GetType().Assembly.GetManifestResourceStream(template);
-            browser.DocumentStream = xmlStream;
+            using (Stream xmlStream = this.GetType().Assembly.GetManifestResourceStream(template)) {
+                CompletionClosure.LoadSynchronously(browser, xmlStream);
+            }
+        }
+
+        private class CompletionClosure {
+            public WebBrowserDocumentCompletedEventHandler Handler;
+            public volatile bool done;
+            public CompletionClosure() {
+                done = false;
+                Handler = new WebBrowserDocumentCompletedEventHandler(b_DocumentCompleted);
+            }
+            void b_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e) {
+                done = true;
+            }
+            public static void LoadSynchronously(WebBrowser b, Stream page) {
+                CompletionClosure cc = new CompletionClosure();
+                b.DocumentCompleted += cc.Handler;
+                try {
+                    b.DocumentStream = page;
+                    while (!cc.done) {
+                        Application.DoEvents();
+                        System.Threading.Thread.Sleep(0);
+                    }
+                }
+                finally {
+                    b.DocumentCompleted -= cc.Handler;
+                }
+            }
         }
 
         /// <summary>
