@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         public void ConvertXmlToObjectConvertsCorrectly()
         {
             string xml = string.Format("<response xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-                "result=\"{0}\" timestamp=\"{1:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" />",
+                "timestamp=\"{1:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" result=\"{0}\" />",
                 ResponseResult.Success,
                 DateTime.Today);
             object result = XmlConversionUtil.ConvertXmlToObject(typeof(Response), xml);
@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         public void ProcessResponseHandlesKnownMessage()
         {
             string xml = string.Format("<response xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-                "result=\"{0}\" timestamp=\"{1:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" />",
+                "timestamp=\"{1:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" result=\"{0}\" />",
                 ResponseResult.Success,
                 DateTime.Today);
             object result = XmlConversionUtil.ProcessResponse(xml);
