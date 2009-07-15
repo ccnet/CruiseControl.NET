@@ -6,7 +6,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     /// <summary>
     /// The messages must be sent via a secure channel (i.e. the messages must be encrypted).
     /// </summary>
-    [ReflectorType("secureChannel")]
+    [ReflectorType("encryptedChannel")]
     public class SecureMessagesChannel
         : IChannelSecurity
     {
