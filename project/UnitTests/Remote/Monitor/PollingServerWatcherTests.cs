@@ -80,7 +80,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
                     eventFired = true;
                     monitor.Set();
                 };
-                monitor.WaitOne(new TimeSpan(0, 0, 10));
+                monitor.WaitOne(new TimeSpan(0, 0, 10), false);
 
                 mocks.VerifyAll();
                 Assert.IsTrue(eventFired);
