@@ -91,7 +91,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
             monitor.ProjectAdded += (o, e) =>
             {
                 hasFired = true;
-                Assert.AreEqual(e.Project.Name, "Project3");
             };
             monitor.Refresh();
             watcher.Snapshot.ProjectStatuses = new ProjectStatus[]{

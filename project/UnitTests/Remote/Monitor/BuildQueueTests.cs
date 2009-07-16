@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         {
             try
             {
-                var project = new BuildQueue(null, null, null);
+                var queue = new BuildQueue(null, null, null);
                 Assert.Fail("ArgumentNullException was expected");
             }
             catch (ArgumentNullException) { }
@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
             mocks.ReplayAll();
             try
             {
-                var project = new BuildQueue(client, null, null);
+                var queue = new BuildQueue(client, null, null);
                 Assert.Fail("ArgumentNullException was expected");
             }
             catch (ArgumentNullException) { }
@@ -57,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
             mocks.ReplayAll();
             try
             {
-                var project = new BuildQueue(client, server, null);
+                var queue = new BuildQueue(client, server, null);
                 Assert.Fail("ArgumentNullException was expected");
             }
             catch (ArgumentNullException) { }
@@ -71,9 +71,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
             var client = mocks.DynamicMock<CruiseServerClientBase>();
             var server = InitialiseServer();
             var status = new QueueSnapshot();
-            var project = new BuildQueue(client, server, status);
+            var queue = new BuildQueue(client, server, status);
             mocks.ReplayAll();
-            Assert.AreSame(server, project.Server);
+            Assert.AreSame(server, queue.Server);
         }
         #endregion
 
@@ -84,9 +84,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
             var client = mocks.DynamicMock<CruiseServerClientBase>();
             var server = InitialiseServer();
             var status = new QueueSnapshot { QueueName = "Test BuildQueue" };
-            var project = new BuildQueue(client, server, status);
+            var queue = new BuildQueue(client, server, status);
             mocks.ReplayAll();
-            Assert.AreEqual(status.QueueName, project.Name);
+            Assert.AreEqual(status.QueueName, queue.Name);
         }
         #endregion
 
@@ -104,9 +104,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
                         }
                     }
             };
-            var project = new BuildQueue(client, server, status);
+            var queue = new BuildQueue(client, server, status);
             mocks.ReplayAll();
-            Assert.AreEqual(status.Requests.ToArray(), project.Requests);
         }
         #endregion
 
@@ -117,11 +116,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
             var client = mocks.DynamicMock<CruiseServerClientBase>();
             var server = InitialiseServer();
             var status = new QueueSnapshot { QueueName = "Testing" };
-            var project = new BuildQueue(client, server, status);
+            var queue = new BuildQueue(client, server, status);
             mocks.ReplayAll();
             try
             {
-                project.Update(null);
+                queue.Update(null);
                 Assert.Fail("ArgumentNullException was expected");
             }
             catch (ArgumentNullException) { }
@@ -141,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
                         }
                     }
                 };
-            var project = new BuildQueue(client, server, status);
+            var queue = new BuildQueue(client, server, status);
             mocks.ReplayAll();
             var eventFired = false;
 
@@ -156,12 +155,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
                         }
                     }
             };
-            project.PropertyChanged += (o, e) =>
+            queue.BuildQueueRequestAdded += (o, e) =>
             {
-                if (e.PropertyName == "Requests") eventFired = true;
+                eventFired = true;
             };
-            project.Update(newStatus);
-            Assert.IsTrue(eventFired, "PropertyChanged for Requests change not fired");
+            queue.Update(newStatus);
+            Assert.IsTrue(eventFired, "BuildQueueRequestAdded for Requests change not fired");
         }
 
         [Test]
@@ -181,9 +180,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
                         }
                     }
             };
-            var project = new BuildQueue(client, server, status);
+            var queue = new BuildQueue(client, server, status);
             mocks.ReplayAll();
             var eventFired = false;
+            queue.Update(status);
 
             var newStatus = new QueueSnapshot
             {
@@ -193,46 +193,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
                         }
                     }
             };
-            project.PropertyChanged += (o, e) =>
+            queue.BuildQueueRequestRemoved += (o, e) =>
             {
-                if (e.PropertyName == "Requests") eventFired = true;
+                eventFired = true;
             };
-            project.Update(newStatus);
-            Assert.IsTrue(eventFired, "PropertyChanged for Requests change not fired");
-        }
-
-        [Test]
-        public void UpdateFiresPropertyChangedWhenMessageIsChanged()
-        {
-            mocks = new MockRepository();
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
-            var server = InitialiseServer();
-            var status = new QueueSnapshot
-            {
-                Requests = {
-                        new QueuedRequestSnapshot{
-                            ProjectName = "Project 1"
-                        }
-                    }
-            };
-            var project = new BuildQueue(client, server, status);
-            mocks.ReplayAll();
-            var eventFired = false;
-
-            var newStatus = new QueueSnapshot
-            {
-                Requests = {
-                        new QueuedRequestSnapshot{
-                            ProjectName = "Project 2"
-                        }
-                    }
-            };
-            project.PropertyChanged += (o, e) =>
-            {
-                if (e.PropertyName == "Requests") eventFired = true;
-            };
-            project.Update(newStatus);
-            Assert.IsTrue(eventFired, "PropertyChanged for Requests change not fired");
+            queue.Update(newStatus);
+            Assert.IsTrue(eventFired, "BuildQueueRequestRemoved for Requests change not fired");
         }
         #endregion
         #endregion
