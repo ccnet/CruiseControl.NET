@@ -50,6 +50,13 @@ namespace ThoughtWorks.CruiseControl.Remote
             get { return !string.IsNullOrEmpty(SessionToken); }
         }
         #endregion
+
+        #region Address
+        /// <summary>
+        /// The address of the client.
+        /// </summary>
+        public abstract string Address { get; }
+        #endregion
         #endregion
 
         #region Public methods

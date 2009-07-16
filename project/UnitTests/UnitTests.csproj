@@ -409,6 +409,10 @@
     <Compile Include="Remote\Messages\ResponseTests.cs" />
     <Compile Include="Remote\Messages\ServerRequestTests.cs" />
     <Compile Include="Remote\MessageTests.cs" />
+    <Compile Include="Remote\Monitor\BuildQueueTests.cs" />
+    <Compile Include="Remote\Monitor\PollingServerWatcherTests.cs" />
+    <Compile Include="Remote\Monitor\ProjectTests.cs" />
+    <Compile Include="Remote\Monitor\ServerTests.cs" />
     <Compile Include="Remote\NameValuePairTests.cs" />
     <Compile Include="Remote\NoSuchProjectExceptionTests.cs" />
     <Compile Include="Remote\Parameters\SelectParameterTests.cs" />

@@ -74,6 +74,16 @@ namespace ThoughtWorks.CruiseControl.Remote
             get { return isBusy || (asyncOperations.Count > 0); }
         }
         #endregion
+
+        #region Address
+        /// <summary>
+        /// The address of the client.
+        /// </summary>
+        public virtual string Address
+        {
+            get { return serverAddress.AbsoluteUri; }
+        }
+        #endregion
         #endregion
 
         #region Public methods
@@ -87,8 +97,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         public Response SendMessage(string action, ServerRequest request)
         {
             // Generate the target URI
-            Uri targetAddress = new Uri(serverAddress,
-                string.Format("/server/{0}/RawXmlMessage.aspx", request.ServerName));
+            Uri targetAddress = GenerateTargetUri(request);
 
             // Build the request and send it
             WebClient client = new WebClient();
@@ -167,8 +176,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             try
             {
                 // Generate the target URI
-                Uri targetAddress = new Uri(serverAddress,
-                    string.Format("/server/{0}/RawXmlMessage.aspx", request.ServerName));
+                Uri targetAddress = GenerateTargetUri(request);
 
                 // Build the request and send it
                 NameValueCollection formData = new NameValueCollection();
@@ -239,6 +247,22 @@ namespace ThoughtWorks.CruiseControl.Remote
                 }
                 if (asyncOperations.ContainsKey(userState ?? string.Empty)) asyncOperations.Remove(userState ?? string.Empty);
             }
+        }
+        #endregion
+
+        #region GenerateTargetUri()
+        /// <summary>
+        /// Generates the target URI.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        private Uri GenerateTargetUri(ServerRequest request)
+        {
+            Uri targetAddress = new Uri(serverAddress,
+                string.Format("{1}/server/{0}/RawXmlMessage.aspx", 
+                    request.ServerName,
+                    serverAddress.AbsolutePath));
+            return targetAddress;
         }
         #endregion
         #endregion

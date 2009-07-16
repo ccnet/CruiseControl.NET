@@ -31,6 +31,13 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         bool IsBusy { get; }
         #endregion
+
+        #region Address
+        /// <summary>
+        /// The address of the client.
+        /// </summary>
+        string Address { get; }
+        #endregion
         #endregion
 
         #region Methods

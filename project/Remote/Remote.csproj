@@ -129,6 +129,16 @@
     <Compile Include="Messages\EncryptedRequest.cs" />
     <Compile Include="Messages\EncryptedResponse.cs" />
     <Compile Include="Messages\ProjectItemRequest.cs" />
+    <Compile Include="Monitor\BuildQueue.cs" />
+    <Compile Include="Monitor\BuildQueueChangedArgs.cs" />
+    <Compile Include="Monitor\BuildQueueRequest.cs" />
+    <Compile Include="Monitor\BuildQueueRequestChangedArgs.cs" />
+    <Compile Include="Monitor\IServerWatcher.cs" />
+    <Compile Include="Monitor\PollingServerWatcher.cs" />
+    <Compile Include="Monitor\Project.cs" />
+    <Compile Include="Monitor\ProjectChangedArgs.cs" />
+    <Compile Include="Monitor\Server.cs" />
+    <Compile Include="Monitor\ServerUpdateArgs.cs" />
     <Compile Include="NameValuePairListSerialiserFactory.cs" />
     <Compile Include="CruiseServerClient.cs" />
     <Compile Include="CruiseServerClientBase.cs" />

@@ -71,6 +71,16 @@ namespace ThoughtWorks.CruiseControl.Remote
             get { return connection; }
         }
         #endregion
+
+        #region Address
+        /// <summary>
+        /// The address of the client.
+        /// </summary>
+        public override string Address
+        {
+            get { return connection.Address; }
+        }
+        #endregion
         #endregion
 
         #region Public methods

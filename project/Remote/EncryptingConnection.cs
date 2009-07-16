@@ -46,6 +46,16 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             get { return innerConnection.Type; }
         }
+
+        #region Address
+        /// <summary>
+        /// The address of the client.
+        /// </summary>
+        public virtual string Address
+        {
+            get { return innerConnection.Address; }
+        }
+        #endregion
         #endregion
 
         #region ServerName

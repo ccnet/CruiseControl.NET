@@ -62,6 +62,16 @@ namespace ThoughtWorks.CruiseControl.Remote
             get { return false; }
         }
         #endregion
+
+        #region Address
+        /// <summary>
+        /// The address of the client.
+        /// </summary>
+        public override string Address
+        {
+            get { return serverUri; }
+        }
+        #endregion
         #endregion
 
         #region Public methods
@@ -204,6 +214,19 @@ namespace ThoughtWorks.CruiseControl.Remote
             {
                 throw new CommunicationsException("Unable to retrieve project status from the remote server", error);
             }
+        }
+        #endregion
+
+        #region GetServerVersion()
+        /// <summary>
+        /// Returns the version of the server
+        /// </summary>
+        public override string GetServerVersion()
+        {
+            // We can't actually get the server version, just attempt to get the statuses , if this
+            // passes returns a made-up version, otherwise there will be an exception thrown
+            GetProjectStatus();
+            return "0.0.0.0";
         }
         #endregion
         #endregion

@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         #endregion
 
         /// <summary>
-        /// This is a building status.
+        /// Is this a building status?
         /// </summary>
         /// <returns></returns>
 		public bool IsBuilding()
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		}
 
         /// <summary>
-        /// This is a sleeping status.
+        /// Is this a sleeping status?
         /// </summary>
         /// <returns></returns>
 		public bool IsSleeping()
@@ -62,13 +62,22 @@ namespace ThoughtWorks.CruiseControl.Remote
 		}
 
         /// <summary>
-        /// This is a pending status.
+        /// Is this a pending status?
         /// </summary>
         /// <returns></returns>
 		public bool IsPending()
 		{
 			return type == Pending.type;
 		}
+
+        /// <summary>
+        /// Is this a CheckingModifications status?
+        /// </summary>
+        /// <returns></returns>
+        public bool IsCheckingModifications()
+        {
+            return type == CheckingModifications.type;
+        }
 
         /// <summary>
         /// Checks if two <see cref="ProjectActivity"/> are the same.

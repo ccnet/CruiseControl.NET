@@ -554,6 +554,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
                 get { throw new NotImplementedException(); }
             }
 
+            public string Address
+            {
+                get { return "Address"; }
+            }
+
             public Response SendMessage(string action, ServerRequest request)
             {
                 Assert.AreEqual(this.action, action);
