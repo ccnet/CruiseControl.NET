@@ -23,11 +23,36 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         /// <summary>
         /// Initialise a new <see cref="Server"/> with the default watcher.
         /// </summary>
+        /// <param name="address">The address of the server.</param>
+        public Server(string address)
+        {
+            if (string.IsNullOrEmpty(address)) throw new ArgumentNullException("address");
+            var factory = new CruiseServerClientFactory();
+            var client = factory.GenerateClient(address);
+            InitialiseServer(client, new ManualServerWatcher(client));
+        }
+
+        /// <summary>
+        /// Initialise a new <see cref="Server"/> with the default watcher.
+        /// </summary>
+        /// <param name="address">The address of the server.</param>
+        /// <param name="settings">The start-up settings to use.</param>
+        public Server(string address, ClientStartUpSettings settings)
+        {
+            if (string.IsNullOrEmpty(address)) throw new ArgumentNullException("address");
+            var factory = new CruiseServerClientFactory();
+            var client = factory.GenerateClient(address, settings);
+            InitialiseServer(client, new ManualServerWatcher(client));
+        }
+
+        /// <summary>
+        /// Initialise a new <see cref="Server"/> with the default watcher.
+        /// </summary>
         /// <param name="client">The underlying client.</param>
         public Server(CruiseServerClientBase client)
         {
             if (client == null) throw new ArgumentNullException("client");
-            InitialiseServer(client, new PollingServerWatcher(client));
+            InitialiseServer(client, new ManualServerWatcher(client));
         }
 
         /// <summary>

@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         {
             try
             {
-                var monitor = new Server(null);
+                var monitor = new Server(string.Empty);
                 Assert.Fail("ArgumentNullException was expected");
             }
             catch (ArgumentNullException) { }
