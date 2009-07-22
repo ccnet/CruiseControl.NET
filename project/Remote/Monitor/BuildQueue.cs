@@ -144,7 +144,10 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
                 }
                 foreach (var request in newRequests)
                 {
-                    requests.Add(request.Name, request);
+                    if (!requests.ContainsKey(request.Name))
+                    {
+                        requests.Add(request.Name, request);
+                    }
                 }
                 buildQueue = value;
 

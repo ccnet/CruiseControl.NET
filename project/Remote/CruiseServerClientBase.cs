@@ -13,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.Remote
     {
         #region Private fields
         private string sessionToken;
+        private object lockObject = new object();
         #endregion
 
         #region Public properties
@@ -540,6 +541,22 @@ namespace ThoughtWorks.CruiseControl.Remote
         public virtual string ProcessMessage(string action, string message)
         {
             throw new NotImplementedException();
+        }
+        #endregion
+
+        #region ProcessSingleAction()
+        /// <summary>
+        /// Process a single action within a monitor lock.
+        /// </summary>
+        /// <typeparam name="T">The type of parameter to pass.</typeparam>
+        /// <param name="action">The action to process.</param>
+        /// <param name="value">The value to pass to the action.</param>
+        public void ProcessSingleAction<T>(Action<T> action, T value)
+        {
+            lock (lockObject)
+            {
+                action(value);
+            }
         }
         #endregion
         #endregion

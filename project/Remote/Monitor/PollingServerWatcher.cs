@@ -93,7 +93,10 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
                 CruiseServerSnapshot snapshot = null;
                 try
                 {
-                    snapshot = client.GetCruiseServerSnapshot();
+                    client.ProcessSingleAction<object>(o =>
+                    {
+                        snapshot = client.GetCruiseServerSnapshot();
+                    }, null);
                 }
                 catch (NotImplementedException)
                 {

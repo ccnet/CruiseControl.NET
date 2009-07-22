@@ -17,6 +17,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         private IServerWatcher watcher;
         private CruiseServerClientBase client;
         private Exception exception;
+        private Version version;
         #endregion
 
         #region Constructors
@@ -172,6 +173,16 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         public IServerWatcher Watcher
         {
             get { return watcher; }
+        }
+        #endregion
+
+        #region Version
+        /// <summary>
+        /// The current version of the server.
+        /// </summary>
+        public Version Version
+        {
+            get { return version; }
         }
         #endregion
         #endregion
@@ -471,6 +482,18 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             this.watcher = watcher;
             this.watcher.Update += OnWatcherUpdate;
             this.client = client;
+
+            try
+            {
+                client.ProcessSingleAction(s =>
+                {
+                    version = new Version(client.GetServerVersion());
+                }, client);
+            }
+            catch
+            {
+                // This means there will be no version for the server
+            }
         }
         #endregion
         #endregion

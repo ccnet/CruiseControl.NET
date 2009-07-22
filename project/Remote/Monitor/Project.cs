@@ -15,6 +15,9 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         private readonly Server server;
         private ProjectStatus project;
         private Exception exception;
+        private Dictionary<string, ProjectBuild> builds = new Dictionary<string, ProjectBuild>();
+        private bool buildsLoaded;
+        private object lockObject = new object();
         #endregion
 
         #region Constructors
@@ -201,9 +204,23 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         /// <summary>
         /// Any associated messages for the project.
         /// </summary>
-        public Message[] Messages
+        public IEnumerable<Message> Messages
         {
             get { return InnerProject.Messages; }
+        }
+        #endregion
+
+        #region Builds
+        /// <summary>
+        /// The builds for this project.
+        /// </summary>
+        public IEnumerable<ProjectBuild> Builds
+        {
+            get
+            {
+                if (!buildsLoaded) LoadBuilds(InnerProject);
+                return builds.Values;
+            }
         }
         #endregion
 
@@ -269,6 +286,9 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
                 if (messageChanged) changes.Add("Messages");
             }
 
+            // Update the builds
+            LoadBuilds(value);
+
             // Make the actual change
             project = value;
 
@@ -286,7 +306,10 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         /// </summary>
         public void ForceBuild()
         {
-            client.ForceBuild(InnerProject.Name);
+            client.ProcessSingleAction(p =>
+            {
+                client.ForceBuild(p.Name);
+            }, InnerProject);
         }
 
         /// <summary>
@@ -295,7 +318,10 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         /// <param name="parameters">The parameters for the build.</param>
         public void ForceBuild(List<NameValuePair> parameters)
         {
-            client.ForceBuild(InnerProject.Name, parameters);
+            client.ProcessSingleAction(p =>
+            {
+                client.ForceBuild(p.Name, parameters);
+            }, InnerProject);
         }
         #endregion
 
@@ -305,7 +331,10 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         /// </summary>
         public void AbortBuild()
         {
-            client.AbortBuild(InnerProject.Name);
+            client.ProcessSingleAction(p =>
+            {
+                client.AbortBuild(p.Name);
+            }, InnerProject);
         }
         #endregion
 
@@ -315,7 +344,10 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         /// </summary>
         public void Start()
         {
-            client.StartProject(InnerProject.Name);
+            client.ProcessSingleAction(p =>
+            {
+                client.StartProject(p.Name);
+            }, InnerProject);
         }
         #endregion
 
@@ -325,7 +357,26 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         /// </summary>
         public void Stop()
         {
-            client.StopProject(InnerProject.Name);
+            client.ProcessSingleAction(p =>
+            {
+                client.StopProject(p.Name);
+            }, InnerProject);
+        }
+        #endregion
+
+        #region RetrieveCurrentStatus()
+        /// <summary>
+        /// Retrieves the current snapshot of the status.
+        /// </summary>
+        /// <returns>The current status snapshot.</returns>
+        public ProjectStatusSnapshot RetrieveCurrentStatus()
+        {
+            ProjectStatusSnapshot snapshot = null;
+            client.ProcessSingleAction(p =>
+            {
+                snapshot = client.TakeStatusSnapshot(p.Name);
+            }, InnerProject);
+            return snapshot;
         }
         #endregion
         #endregion
@@ -363,6 +414,68 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             {
                 var args = new PropertyChangedEventArgs(propertyName);
                 PropertyChanged(this, args);
+            }
+        }
+        #endregion
+
+        #region LoadBuilds()
+        /// <summary>
+        /// Load the builds for the project.
+        /// </summary>
+        /// <param name="value"></param>
+        protected virtual void LoadBuilds(ProjectStatus value)
+        {
+            lock (lockObject)
+            {
+                buildsLoaded = true;
+                if (builds.Count == 0)
+                {
+                    // This is the first load - so load all of the builds
+                    string[] buildNames = { };
+                    try
+                    {
+                        client.ProcessSingleAction(p =>
+                        {
+                            buildNames = client.GetBuildNames(p.Name);
+                        }, InnerProject);
+                    }
+                    catch
+                    { 
+                        // Ignore any errors - just means that no builds will be loaded
+                    }
+                    foreach (var buildName in buildNames)
+                    {
+                        builds.Add(buildName, new ProjectBuild(buildName, this, client));
+                    }
+                }
+                else
+                {
+                    if (project.LastBuildDate != value.LastBuildDate)
+                    {
+                        // Last build date has changed, therefore there will be one or more builds to load
+                        string[] buildNames = { };
+                        try
+                        {
+                            client.ProcessSingleAction(p =>
+                            {
+                                // Cannot pass in a date, only a number, so guessing there will be no more then 
+                                // 10 builds since the last build
+                                buildNames = client.GetMostRecentBuildNames(p.Name, 10);
+                            }, InnerProject);
+                        }
+                        catch
+                        {
+                            // Ignore any errors - just means that no builds will be loaded
+                        }
+                        foreach (var buildName in buildNames)
+                        {
+                            if (!builds.ContainsKey(buildName))
+                            {
+                                builds.Add(buildName, new ProjectBuild(buildName, this, client));
+                            }
+                        }
+                    }
+                }
             }
         }
         #endregion
