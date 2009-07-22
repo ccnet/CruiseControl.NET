@@ -443,7 +443,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
                     { 
                         // Ignore any errors - just means that no builds will be loaded
                     }
-                    foreach (var buildName in buildNames)
+                    foreach (var buildName in buildNames ?? new string[0])
                     {
                         builds.Add(buildName, new ProjectBuild(buildName, this, client));
                     }

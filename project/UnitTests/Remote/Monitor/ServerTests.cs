@@ -51,25 +51,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         }
         #endregion
 
-        #region ProjectCount tests
-        [Test]
-        public void ProjectCountReturnsZeroForNoProjects()
-        {
-            var monitor = InitialiseServer();
-            mocks.ReplayAll();
-            Assert.AreEqual(0, monitor.ProjectCount);
-        }
-
-        [Test]
-        public void ProjectCountReturnsTheNumberOfLoadedProjects()
-        {
-            var monitor = InitialiseServer();
-            mocks.ReplayAll();
-            monitor.Refresh();
-            Assert.AreEqual(2, monitor.ProjectCount);
-        }
-        #endregion
-
         #region Refresh() tests
         [Test]
         public void RefreshCallsRefreshOnWatcher()
@@ -164,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
 
         private Server InitialiseServer(IServerWatcher watcher)
         {
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = new CruiseServerClientMock();
             var monitor = new Server(client, watcher);
             return monitor;
         }

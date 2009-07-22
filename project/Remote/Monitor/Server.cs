@@ -70,32 +70,6 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         #endregion
 
         #region Public properties
-        #region ProjectCount
-        /// <summary>
-        /// The number of projects on the server.
-        /// </summary>
-        public int ProjectCount
-        {
-            get
-            {
-                lock (syncLock) { return projects.Count; }
-            }
-        }
-        #endregion
-
-        #region BuildQueueCount
-        /// <summary>
-        /// The number of build queues on the server.
-        /// </summary>
-        public int BuildQueueCount
-        {
-            get
-            {
-                lock (syncLock) { return buildQueues.Count; }
-            }
-        }
-        #endregion
-
         #region Name
         /// <summary>
         /// The name of the server.

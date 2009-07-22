@@ -207,7 +207,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
         private Server InitialiseServer()
         {
             var watcher = mocks.Stub<IServerWatcher>();
-            var client = mocks.DynamicMock<CruiseServerClientBase>();
+            var client = new CruiseServerClientMock();
             var monitor = new Server(client, watcher);
             return monitor;
         }
