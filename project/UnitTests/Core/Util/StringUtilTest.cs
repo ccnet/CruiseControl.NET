@@ -179,8 +179,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[ExpectedException(typeof(ArgumentException))]
 		public void TestIntegrationPropertyToStringWithUnsupportedType()
 		{
-			StringUtil.IntegrationPropertyToString(new object());
-			StringUtil.IntegrationPropertyToString(new object(), "-");
+			Assert.That(delegate { StringUtil.IntegrationPropertyToString(new object()); },
+                        Throws.TypeOf<ArgumentException>().With.Property("ParamName").EqualTo("value"));
+			Assert.That(delegate { StringUtil.IntegrationPropertyToString(new object(), "-"); },
+                        Throws.TypeOf<ArgumentException>().With.Property("ParamName").EqualTo("value"));
 		}
 
 		[Test]
@@ -199,7 +201,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void TestMakeBuildResultThrowsArgumentNullException()
 		{
-			StringUtil.MakeBuildResult(null, "");
+            Assert.That(delegate { StringUtil.MakeBuildResult(null, ""); },
+                        Throws.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("input"));
 		}
 
 		[Test]

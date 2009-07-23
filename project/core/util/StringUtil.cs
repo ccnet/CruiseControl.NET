@@ -149,7 +149,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             }
 
             throw new ArgumentException(
-                string.Format("The IntegrationProperty type {0} is not supported yet", value.GetType()));
+                string.Format("The IntegrationProperty type {0} is not supported yet", value.GetType()), "value");
         }
 
         /// <summary>

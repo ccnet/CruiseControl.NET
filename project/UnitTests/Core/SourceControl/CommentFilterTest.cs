@@ -12,8 +12,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         public void ShouldNotPopulateWithoutPattern()
         {
             Assert.That(delegate { NetReflector.Read(@"<commentFilter/>"); },
-                        Throws.TypeOf<NetReflectorException>().With.Message.EqualTo(
-                            "No loaded type is marked up with a ReflectorType attribute that matches the Xml node (commentFilter).  Xml Source: <commentFilter />"));
+                        Throws.TypeOf<NetReflectorException>());
         }
 
         [Test]

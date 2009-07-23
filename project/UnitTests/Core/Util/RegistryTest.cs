@@ -31,16 +31,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			Assert.IsNull(new Registry().GetLocalMachineSubKeyValue(VALID_REGISTRY_PATH, "Barrios"), "#C1");
 		}
 
-		[Test, ExpectedException(typeof(CruiseControlException))]
+		[Test]
 		public void TryToGetExpectedInvalidSubKey()
 		{
-			new Registry().GetExpectedLocalMachineSubKeyValue(@"SOFTWARE\BozosSoftwareEmporium\Clowns", "Barrios");
+			Assert.That(delegate { new Registry().GetExpectedLocalMachineSubKeyValue(@"SOFTWARE\BozosSoftwareEmporium\Clowns", "Barrios"); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
-		[Test, ExpectedException(typeof(CruiseControlException))]
+		[Test]
 		public void TryToGetExpectedInvalidSubKeyValue()
 		{
-			new Registry().GetExpectedLocalMachineSubKeyValue(VALID_REGISTRY_PATH, "Barrios");
+            Assert.That(delegate { new Registry().GetExpectedLocalMachineSubKeyValue(VALID_REGISTRY_PATH, "Barrios"); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 	}
 }

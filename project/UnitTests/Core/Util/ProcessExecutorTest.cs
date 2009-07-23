@@ -88,16 +88,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			AssertProcessExitsWithFailure(result);
 		}
 
-		[Test, ExpectedException(typeof (IOException))]
+		[Test]
 		public void SupplyInvalidFilenameAndVerifyException()
 		{
-			executor.Execute(new ProcessInfo("foodaddy.bat"));
+            Assert.That(delegate { executor.Execute(new ProcessInfo("foodaddy.bat")); },
+                        Throws.TypeOf<IOException>());
 		}
 
-		[Test, ExpectedException(typeof(DirectoryNotFoundException))]
+		[Test]
 		public void ShouldThrowMeaningfulExceptionIfWorkingDirectoryDoesNotExist()
 		{
-			executor.Execute(new ProcessInfo("myExecutable", "", @"c:\invalid_path\that_is_invalid"));
+            Assert.That(delegate { executor.Execute(new ProcessInfo("myExecutable", "", @"c:\invalid_path\that_is_invalid")); },
+                        Throws.TypeOf<DirectoryNotFoundException>());
 		}
 
 		[Test]
