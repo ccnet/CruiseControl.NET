@@ -52,13 +52,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         }
 
         [Test]
-        [ExpectedException(typeof(ConfigurationException))]
         public void DeserialiseSingleProjectPlusUnknownFromXml()
         {
             string projectXml = ConfigurationFixture.GenerateProjectXml("test");
             string queueXml = "<garbage/>";
-            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml), null);
-            ValidateProject(configuration, "test");
+            Assert.That(delegate { reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml), null); },
+                        Throws.TypeOf<ConfigurationException>());
         }
 
 		[Test]
@@ -90,30 +89,33 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		}
 
 		[Test]
-        [ExpectedException(typeof(ConfigurationException))]
 		public void DeserialiseProjectFromXmlWithUnusedNodesShouldGenerateEvent()
 		{
 			string xml = @"<customtestproject name=""foo"" bar=""baz"" />";
-			IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(xml), null);
+			Assert.That(delegate {  reader.Read(ConfigurationFixture.GenerateConfig(xml), null); },
+                        Throws.TypeOf<ConfigurationException>());
 		}
 
-		[Test, ExpectedException(typeof(ConfigurationException))]
+		[Test]
 		public void AttemptToDeserialiseProjectWithMissingXmlForRequiredProperties()
 		{
 			string projectXml = @"<project />";
-			reader.Read(ConfigurationFixture.GenerateConfig(projectXml), null);
+			Assert.That(delegate { reader.Read(ConfigurationFixture.GenerateConfig(projectXml), null); },
+                        Throws.TypeOf<ConfigurationException>());
 		}
 
-		[Test, ExpectedException(typeof(ConfigurationException))]
+		[Test]
 		public void AttemptToDeserialiseProjectFromEmptyDocument()
 		{
-			reader.Read(new XmlDocument(), null);
+			Assert.That(delegate { reader.Read(new XmlDocument(), null); },
+                        Throws.TypeOf<ConfigurationException>());
 		}
 
-		[Test, ExpectedException(typeof(ConfigurationException))]
+		[Test]
 		public void AttemptToDeserialiseProjectFromXmlWithInvalidRootElement()
 		{
-			reader.Read(XmlUtil.CreateDocument("<loader/>"), null);
+			Assert.That(delegate { reader.Read(XmlUtil.CreateDocument("<loader/>"), null); },
+                        Throws.TypeOf<ConfigurationException>());
 		}
 
         [Test]
@@ -135,13 +137,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         }
 
         [Test]
-        [ExpectedException(typeof(ConfigurationException), ExpectedMessage="An unused queue definition has been found: name 'testQueue'")]
         public void QueueValidationForUnreferencedQueue()
         {
             string projectXml = ConfigurationFixture.GenerateProjectXml("test");
             string queueXml = "<queue name=\"testQueue\" duplicates=\"ApplyForceBuildsReAdd\"/>";
-            IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml), null);
-            ValidateProject(configuration, "test");
+            Assert.That(delegate { reader.Read(ConfigurationFixture.GenerateConfig(projectXml + queueXml), null); },
+                        Throws.TypeOf<ConfigurationException>());
         }
         
 		private void ValidateProject(IConfiguration configuration, string projectName)

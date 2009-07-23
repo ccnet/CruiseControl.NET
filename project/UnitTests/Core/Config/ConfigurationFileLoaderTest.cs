@@ -33,26 +33,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			Assert.AreEqual(xml, config.OuterXml);
 		}
 
-		[Test, ExpectedException(typeof(ConfigurationFileMissingException))]
+		[Test]
 		public void LoadConfigurationFile_MissingFile()
 		{
 			FileInfo configFile = new FileInfo(@"c:\unknown\config.file.xml");
-			fileLoader.LoadConfiguration(configFile);
+			Assert.That(delegate { fileLoader.LoadConfiguration(configFile); },
+                        Throws.TypeOf<ConfigurationFileMissingException>());
 		}
 
-		[Test, ExpectedException(typeof(ConfigurationFileMissingException))]
+		[Test]
 		public void LoadConfigurationFile_FileOnlyNoPath()
 		{
 			FileInfo configFile = new FileInfo(@"ccnet_unknown.config");
-			fileLoader.LoadConfiguration(configFile);
+			Assert.That(delegate { fileLoader.LoadConfiguration(configFile); },
+                        Throws.TypeOf<ConfigurationFileMissingException>());
 		}
 
-		[Test, ExpectedException(typeof(ConfigurationException))]
+		[Test]
 		public void LoadConfiguration_BadXml()
 		{
 			FileInfo configFile = new FileInfo(TempFileUtil.CreateTempXmlFile(TempFileUtil.CreateTempDir(this), "loadernet.config"
 				, "<test><a><b/></test>"));
-			fileLoader.LoadConfiguration(configFile);
+            Assert.That(delegate { fileLoader.LoadConfiguration(configFile); },
+                        Throws.TypeOf<ConfigurationException>());
 		}
 	}
 }
