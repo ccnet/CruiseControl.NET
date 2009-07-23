@@ -131,19 +131,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.Run(result);
 		}
 
-		[Test, ExpectedException(typeof(ThoughtWorks.CruiseControl.Core.Config.ConfigurationException))]
+		[Test]
 		public void ShouldThrowConfigurationExceptionIfAssemblyListNotSet()
 		{
 			//DO NOT SET: AddDefaultAssemblyToCheck(task);
-			task.Run(result);
+            Assert.That(delegate { task.Run(result); },
+                        Throws.TypeOf<ThoughtWorks.CruiseControl.Core.Config.ConfigurationException>());
 		}
 
-		[Test, ExpectedException(typeof(BuilderException))]
+		[Test]
 		public void ShouldThrowBuilderExceptionIfProcessThrowsException()
 		{
 			AddDefaultAssemblyToCheck(task);
 			ExpectToExecuteAndThrow();
-			task.Run(result);
+            Assert.That(delegate { task.Run(result); },
+                        Throws.TypeOf<BuilderException>());
 		}
 
 		[Test]
@@ -201,12 +203,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		}
 
 		[Test]
-		[ExpectedException(typeof(BuilderException))]
 		public void TimedOutExecutionShouldCauseBuilderException()
 		{
 			AddDefaultAssemblyToCheck(task);
 			ExpectToExecuteAndReturn(TimedOutProcessResult());
-			task.Run(result);
+            Assert.That(delegate { task.Run(result); },
+                        Throws.TypeOf<BuilderException>());
 		}
 
 		[Test]
@@ -216,8 +218,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			TempFileUtil.CreateTempXmlFile(logfile, "<output/>");
 			ExpectToExecuteAndReturn(SuccessfulProcessResult());
 			task.Run(result);
-			Assert.AreEqual(2, result.TaskResults.Count);
-			Assert.AreEqual("<output/>" + ProcessResultOutput, result.TaskOutput);
+			Assert.AreEqual(1, result.TaskResults.Count);
+		    Assert.That(result.TaskOutput, Is.Empty);
 			Assert.IsTrue(result.Succeeded);
 		}
 
@@ -228,8 +230,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			TempFileUtil.CreateTempXmlFile(logfile, "<output/>");
 			ExpectToExecuteAndReturn(FailedProcessResult());
 			task.Run(result);
-			Assert.AreEqual(2, result.TaskResults.Count);
-			Assert.AreEqual("<output/>" + ProcessResultOutput, result.TaskOutput);
+			Assert.AreEqual(1, result.TaskResults.Count);
+		    Assert.That(result.TaskOutput, Is.EqualTo(ProcessResultOutput));
 			Assert.IsTrue(result.Failed);
 		}
 	}
