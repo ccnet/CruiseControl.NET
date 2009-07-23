@@ -76,11 +76,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(@"", task2.Project);
 		}
 
-		[Test, ExpectedException(typeof (NetReflectorException))]
+		[Test]
 		public void ShouldFailToLoadInvalidVersionFromConfiguration()
 		{
 			const string xml = @"<devenv solutionfile=""mySolution.sln"" configuration=""Release"" version=""VSBAD""/>";
-			NetReflector.Read(xml);
+            Assert.That(delegate { NetReflector.Read(xml); },
+                        Throws.TypeOf<NetReflectorException>());
 		}
 
 		[Test]
@@ -344,7 +345,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			AssertMatches(@"(\.|\n)*could not be found and will not be loaded", result.TaskOutput);
 		}
 
-		[Test, ExpectedException(typeof (BuilderException))]
+		[Test]
 		public void ShouldThrowBuilderExceptionIfProcessExecutorThrowsAnException()
 		{
 			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[] {new IsAnything()});
@@ -352,10 +353,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.SolutionFile = @"D:\dev\ccnet\ccnet\project\nosolution.sln";
 			task.Configuration = "Debug";
 
-			task.Run(IntegrationResult());
+            Assert.That(delegate { task.Run(IntegrationResult()); },
+                        Throws.TypeOf<BuilderException>());
 		}
 
-		[Test, ExpectedException(typeof (BuilderException))]
+		[Test]
 		public void ShouldThrowBuilderExceptionIfProcessExecutorThrowsAnExceptionUsingUnkownProject()
 		{
 			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[] {new IsAnything()});
@@ -364,10 +366,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.Configuration = CONFIGURATION;
 			task.Project = "unknownproject";
 
-			task.Run(IntegrationResult());
+            Assert.That(delegate { task.Run(IntegrationResult()); },
+                        Throws.TypeOf<BuilderException>());
 		}
 
-		[Test, ExpectedException(typeof (BuilderException))]
+		[Test]
 		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
 			ProcessResult processResult = new ProcessResult(string.Empty, string.Empty, ProcessResult.TIMED_OUT_EXIT_CODE, true);
@@ -377,7 +380,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.SolutionFile = SOLUTION_FILE;
 			task.Configuration = CONFIGURATION;
 
-			task.Run(IntegrationResult());
+            Assert.That(delegate { task.Run(IntegrationResult()); },
+                        Throws.TypeOf<BuilderException>());
 		}
 	}
 }

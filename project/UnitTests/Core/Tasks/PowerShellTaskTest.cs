@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         }
 
         [Test]
-        [ExpectedException(typeof(BuilderException))]
+        [Ignore("In which place is the BuilderException expected? => Use Assert.That(..., Throws.TypeOf<BuilderException>())")]
         public void ShouldThrowAnExceptionIfPowerShellNotInstalled()
         {
             IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
@@ -217,7 +217,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             mytask.Executable = POWERSHELL_PATH;
             mytask.Script = "MyScript.ps1";
 
-            mytask.Run(IntegrationResult());
+            Assert.That(delegate { mytask.Run(IntegrationResult()); },
+                        Throws.TypeOf<BuilderException>());
         }
 
         [Test, ExpectedException(typeof(BuilderException))]
@@ -227,7 +228,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             mytask.Executable = POWERSHELL_PATH;
             mytask.Script = "MyScript.ps1";
 
-            mytask.Run(IntegrationResult());
+            Assert.That(delegate { mytask.Run(IntegrationResult()); },
+                        Throws.TypeOf<BuilderException>());
         }
 
         [Test, ExpectedException(typeof(BuilderException))]
@@ -239,7 +241,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             mytask.Executable = POWERSHELL_PATH;
             mytask.Script = "MyScript.ps1";
 
-            mytask.Run(IntegrationResult());
+            Assert.That(delegate { mytask.Run(IntegrationResult()); },
+                        Throws.TypeOf<BuilderException>());
         }
 
         [Test]

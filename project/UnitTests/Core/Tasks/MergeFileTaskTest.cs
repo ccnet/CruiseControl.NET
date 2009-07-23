@@ -60,7 +60,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         }
 
         [Test]
-        [ExpectedException(typeof(ConfigurationException))]
         public void AttributeOnElementThrowsException()
         {
             var reader = new NetReflectorConfigurationReader();
@@ -80,11 +79,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
     </project>
 </cruisecontrol>
 ");
-            var configuration = reader.Read(xml, null);
+            Assert.That(delegate { reader.Read(xml, null); },
+                        Throws.TypeOf<ConfigurationException>());
         }
 
         [Test]
-        [ExpectedException(typeof(ConfigurationException))]
         public void SubItemsOnFileThrowsException()
         {
             var reader = new NetReflectorConfigurationReader();
@@ -104,11 +103,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
     </project>
 </cruisecontrol>
 ");
-            var configuration = reader.Read(xml, null);
+            Assert.That(delegate { reader.Read(xml, null); },
+                        Throws.TypeOf<ConfigurationException>());
         }
 
         [Test]
-        [ExpectedException(typeof(ConfigurationException))]
         public void UnknownItemThrowsException()
         {
             var reader = new NetReflectorConfigurationReader();
@@ -128,11 +127,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
     </project>
 </cruisecontrol>
 ");
-            var configuration = reader.Read(xml, null);
+            Assert.That(delegate { reader.Read(xml, null); },
+                        Throws.TypeOf<ConfigurationException>());
         }
 
         [Test]
-        [ExpectedException(typeof(ConfigurationException))]
         public void UnknownActionThrowsException()
         {
             var reader = new NetReflectorConfigurationReader();
@@ -152,7 +151,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
     </project>
 </cruisecontrol>
 ");
-            var configuration = reader.Read(xml, null);
+            Assert.That(delegate { reader.Read(xml, null); },
+                        Throws.TypeOf<ConfigurationException>());
         }
 
         [Test]
