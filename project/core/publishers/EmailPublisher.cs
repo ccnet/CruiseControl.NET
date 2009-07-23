@@ -236,7 +236,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         {
             try
             {
-                emailGateway.Send(GetMailMessage(from, to, replyto, subject, message, workingFolder, Attachments));
+                using (var actualMessage = GetMailMessage(from, to, replyto, subject, message, workingFolder, Attachments))
+                {
+                    emailGateway.Send(actualMessage);
+                }
             }
             catch (Exception e)
             {
