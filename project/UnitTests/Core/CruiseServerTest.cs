@@ -278,10 +278,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			VerifyAll();
 		}
 
-		[Test, ExpectedException(typeof (CruiseControlException))]
+		[Test]
 		public void AttemptToForceBuildOnProjectThatDoesNotExist()
 		{
-            server.CruiseManager.ForceBuild("foo", "BuildForcer");
+            Assert.That(delegate { server.CruiseManager.ForceBuild("foo", "BuildForcer"); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
 		[Test]
@@ -331,10 +332,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             stateManagerMock.Verify();
         }
 
-		[Test, ExpectedException(typeof(CruiseControlException))]
+		[Test]
 		public void ThrowExceptionIfProjectNotFound()
 		{
-            server.CruiseManager.Stop("Project unknown");			
+            Assert.That(delegate { server.CruiseManager.Stop("Project unknown"); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
 		[Test]
@@ -749,8 +751,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         }
 
         [Test]
-        [ExpectedException(typeof(NullReferenceException),
-            ExpectedMessage = "Unable to find extension 'ThoughtWorks.CruiseControl.UnitTests.Remote.Garbage,ThoughtWorks.CruiseControl.UnitTests'")]
         public void InitialiseingANonExistantExtensionThrowsAnException()
         {
             List<ExtensionConfiguration> extensions = new List<ExtensionConfiguration>();
@@ -760,13 +760,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
             configServiceMock.ExpectAndReturn("Load", configuration);
             projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
-            server = new CruiseServer((IConfigurationService)configServiceMock.MockInstance,
-                                      (IProjectIntegratorListFactory)projectIntegratorListFactoryMock.MockInstance,
-                                      (IProjectSerializer)projectSerializerMock.MockInstance,
-									  (IProjectStateManager)stateManagerMock.MockInstance,
-									  fileSystem,
-									  executionEnvironment,
-                                      extensions);
+
+            Assert.That(delegate
+                            {
+                                new CruiseServer((IConfigurationService) configServiceMock.MockInstance,
+                                                 (IProjectIntegratorListFactory)
+                                                 projectIntegratorListFactoryMock.MockInstance,
+                                                 (IProjectSerializer) projectSerializerMock.MockInstance,
+                                                 (IProjectStateManager) stateManagerMock.MockInstance,
+                                                 fileSystem,
+                                                 executionEnvironment,
+                                                 extensions);
+                            },
+                        Throws.TypeOf<NullReferenceException>().With.Message.EqualTo(
+                            "Unable to find extension 'ThoughtWorks.CruiseControl.UnitTests.Remote.Garbage,ThoughtWorks.CruiseControl.UnitTests'"));
         }
 
         [Test]
@@ -814,24 +821,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         }
 
         [Test]
-        [ExpectedException(typeof(CruiseControlException))]
         public void RetrieveFileTransferOnlyWorksForFilesInArtefactFolder()
         {
-        	server.CruiseManager.RetrieveFileTransfer("Project 1", Path.Combine("..", "testfile.txt"));
+        	Assert.That(delegate { server.CruiseManager.RetrieveFileTransfer("Project 1", Path.Combine("..", "testfile.txt")); },
+                        Throws.TypeOf<CruiseControlException>());
         }
 
         [Test]
-        [ExpectedException(typeof(CruiseControlException))]
         public void RetrieveFileTransferFailsForBuildLogsFolder()
         {
-            server.CruiseManager.RetrieveFileTransfer("Project 1", Path.Combine("buildlogs", "testfile.txt"));
+            Assert.That(delegate { server.CruiseManager.RetrieveFileTransfer("Project 1", Path.Combine("buildlogs", "testfile.txt")); },
+                        Throws.TypeOf<CruiseControlException>());
         }
 
         [Test]
-        [ExpectedException(typeof(CruiseControlException))]
         public void RetrieveFileTransferFailsForAbsolutePaths()
         {
-            server.CruiseManager.RetrieveFileTransfer("Project 1", Path.GetFullPath(Path.Combine(".", "MyFile.txt")));
+            Assert.That(delegate { server.CruiseManager.RetrieveFileTransfer("Project 1", Path.GetFullPath(Path.Combine(".", "MyFile.txt"))); },
+                        Throws.TypeOf<CruiseControlException>());
         }
 
         [Test]
