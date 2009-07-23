@@ -40,7 +40,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         {
             XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
             xmlReaderSettings.CloseInput = true;
-            xmlReaderSettings.ConformanceLevel = ConformanceLevel.Fragment;
+
+            //use ConformanceLevel.Auto as discussed in
+            //https://bugzilla.novell.com/show_bug.cgi?id=520080
+            xmlReaderSettings.ConformanceLevel = ConformanceLevel.Auto;
+
             xmlReaderSettings.IgnoreProcessingInstructions = true;
             return XmlReader.Create(new StringReader(xml), xmlReaderSettings);
         }
