@@ -134,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
             Assert.AreEqual(@"file\(s\) up-to-date\.", p4.AcceptableErrors[0]);
 		}
 
-		[Test, ExpectedException(typeof (NetReflectorException))]
+		[Test]
 		public void ReadConfigBarfsWhenViewIsExcluded()
 		{
 			string xml = @"
@@ -258,7 +258,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		}
 
 		[Test]
-		[ExpectedException(typeof (CruiseControlException))]
 		public void CreateGetDescribeProcessWithEvilCode()
 		{
 			string changes = "3327 3328 332; echo 'rm -rf /'";

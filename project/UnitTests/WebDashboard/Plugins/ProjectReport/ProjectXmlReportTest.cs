@@ -52,12 +52,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
             XPathAssert.Matches(XPathAssert.LoadAsDocument(xml), "/CruiseControl/Projects/Project/@name", "test");
         }
 
-        [Test, ExpectedException(typeof (NoSuchProjectException))]
+        [Test]
         [Ignore("Cannot get the mocking to work properly")]
         public void ShouldThrowExceptionIfProjectNameIsInvalid()
         {
             mockFarmService.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", ProjectStatusList(), null);
-            report.Execute((ICruiseRequest)mockRequest.MockInstance);
+            Assert.That(delegate { report.Execute((ICruiseRequest)mockRequest.MockInstance); },
+                        Throws.TypeOf<NoSuchProjectException>());
         }
 
         private static ProjectStatusListAndExceptions ProjectStatusList(params ProjectStatusOnServer[] statuses)

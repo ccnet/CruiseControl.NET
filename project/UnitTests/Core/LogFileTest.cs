@@ -159,14 +159,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(expected, actual);
 		}
 		
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void AttemptToCreateLogFileForFilenameWithWrongPrefix()
 		{
             Assert.That(delegate { new LogFile("garbage.txt"); },
                         Throws.TypeOf<ArgumentException>().With.Property("ParamName").EqualTo("filename"));
 		}
 		
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void AttemptToCreateLogFileForFilenameWithoutDate()
 		{
 			Assert.That(delegate { new LogFile("log3.xml"); },

@@ -210,7 +210,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             CustomAssertion.AssertMatches(@"(\.|\n)*is not recognized as a cmdlet", result.TaskOutput);
         }
 
-        [Test, ExpectedException(typeof(BuilderException))]
+        [Test]
         public void ShouldThrowBuilderExceptionIfProcessExecutorThrowsAnException()
         {
             mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[] { new IsAnything() });
@@ -221,7 +221,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                         Throws.TypeOf<BuilderException>());
         }
 
-        [Test, ExpectedException(typeof(BuilderException))]
+        [Test]
         public void ShouldThrowBuilderExceptionIfProcessExecutorThrowsAnExceptionUsingUnkownProject()
         {
             mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[] { new IsAnything() });
@@ -232,7 +232,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                         Throws.TypeOf<BuilderException>());
         }
 
-        [Test, ExpectedException(typeof(BuilderException))]
+        [Test]
         public void ShouldThrowBuilderExceptionIfProcessTimesOut()
         {
             ProcessResult processResult = new ProcessResult(string.Empty, string.Empty, ProcessResult.TIMED_OUT_EXIT_CODE, true);

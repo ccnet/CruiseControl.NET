@@ -30,10 +30,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			Assert.AreEqual(DateTime.MinValue, lastModTime);
 		}
 
-		[Test, ExpectedException(typeof(WebException))]
+		[Test]
 		public void TestInvalidUrl()
 		{
-			httpWrapper.GetLastModifiedTimeFor(new Uri(@"http://wibble.wibble/"), DateTime.MinValue);
+            Assert.That(delegate { httpWrapper.GetLastModifiedTimeFor(new Uri(@"http://wibble.wibble/"), DateTime.MinValue); },
+                        Throws.TypeOf<WebException>());
 		}
 
 		[Test]

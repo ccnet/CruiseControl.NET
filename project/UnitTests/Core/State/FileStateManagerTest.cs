@@ -177,7 +177,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 			state.SaveState(result);
 		}
 
-		[Test, ExpectedException(typeof(CruiseControlException))]
+		[Test]
 		public void HandleExceptionSavingStateFile()
 		{
             Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
@@ -190,7 +190,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
             Assert.That(delegate { state.SaveState(result); }, Throws.TypeOf<CruiseControlException>());
 		}
 
-		[Test, ExpectedException(typeof(CruiseControlException))]
+		[Test]
 		public void HandleExceptionLoadingStateFile()
 		{
             Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);

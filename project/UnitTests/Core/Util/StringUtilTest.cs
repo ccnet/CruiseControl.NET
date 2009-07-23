@@ -176,7 +176,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void TestIntegrationPropertyToStringWithUnsupportedType()
 		{
 			Assert.That(delegate { StringUtil.IntegrationPropertyToString(new object()); },
@@ -198,7 +197,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void TestMakeBuildResultThrowsArgumentNullException()
 		{
             Assert.That(delegate { StringUtil.MakeBuildResult(null, ""); },
