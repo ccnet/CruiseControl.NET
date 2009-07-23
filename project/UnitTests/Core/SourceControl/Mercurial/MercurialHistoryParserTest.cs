@@ -36,7 +36,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
             Assert.AreEqual(4, modifications.Length);
         }
 
-        [Test, ExpectedException(typeof (CruiseControlException))]
-        public void HandleInvalidXml() { hg.Parse(new StringReader("<foo/><bar/>"), DateTime.Now, DateTime.Now); }
+        [Test]
+        public void HandleInvalidXml()
+        {
+            Assert.That(delegate { hg.Parse(new StringReader("<foo/><bar/>"), DateTime.Now, DateTime.Now); },
+                        Throws.TypeOf<CruiseControlException>());
+        }
     }
 }

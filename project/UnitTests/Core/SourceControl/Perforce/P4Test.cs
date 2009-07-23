@@ -141,7 +141,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 <sourceControl name=""p4"">
 </sourceControl>
 ";
-			CreateP4WithNoArgContructor(xml);
+            Assert.That(delegate { CreateP4WithNoArgContructor(xml); },
+                        Throws.TypeOf<NetReflectorException>());
 		}
 
 		[Test]
@@ -261,14 +262,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		public void CreateGetDescribeProcessWithEvilCode()
 		{
 			string changes = "3327 3328 332; echo 'rm -rf /'";
-			new P4().CreateDescribeProcess(changes);
+
+            Assert.That(delegate { new P4().CreateDescribeProcess(changes); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
-		[Test, ExpectedException(typeof (Exception))]
+		[Test]
 		public void CreateGetDescribeProcessWithNoChanges()
 		{
-			new P4().CreateDescribeProcess("");
-			// this should never happen, but here's a test just in case.
+            Assert.That(delegate { new P4().CreateDescribeProcess(""); },
+                        Throws.TypeOf<Exception>());
 		}
 
 		[Test]

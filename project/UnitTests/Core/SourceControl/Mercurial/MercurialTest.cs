@@ -307,7 +307,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
         }
 
         [Test]
-        [ExpectedException(typeof (MultipleHeadsFoundException))]
         public void ShouldThrowMultipleHeadsExceptionWhenMultipleHeadsAreFound()
         {
             hg.AutoGetSource = true;
@@ -317,7 +316,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
             ExpectToExecuteArguments("heads --template <modification><node>{node|short}</node><author>{author|user}</author><date>{date|rfc822date}</date><desc>{desc|escape}</desc><rev>{rev}</rev><email>{author|email|obfuscate}</email><files>{files}</files></modification> --noninteractive");
             mockHistoryParser.ExpectAndReturn("Parse", heads, new IsAnything(), new IsAnything(), new IsAnything());
 
-            hg.GetSource(IntegrationResult());
+            Assert.That(delegate { hg.GetSource(IntegrationResult()); },
+                        Throws.TypeOf<MultipleHeadsFoundException>());
         }
 
         [Test]
