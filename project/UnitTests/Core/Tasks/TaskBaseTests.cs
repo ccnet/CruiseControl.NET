@@ -4,7 +4,7 @@ using System.Text;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
+//using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
 using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Remote;
 using System.Xml;
@@ -540,7 +540,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         private class TestTask
             : TaskBase
         {
-            public Func<bool> Result { get; set; }
+            public ThoughtWorks.CruiseControl.CCTrayLib.Presentation.Func<bool> Result { get; set; }
             public bool Executed { get; set; }
 
             protected override bool Execute(IIntegrationResult result)
