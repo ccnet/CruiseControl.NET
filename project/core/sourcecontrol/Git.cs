@@ -176,7 +176,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 
 
-			// check whenver this is a local git repository or just an existing folder
+            // check whether this is a local git repository or just an existing folder
 			if (!_fileSystem.DirectoryExists(gitRepositoryDirectory))
 			{
 				Log.Debug(string.Concat("[Git] Working directory '", workingDirectory,
