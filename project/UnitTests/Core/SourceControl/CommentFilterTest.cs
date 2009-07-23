@@ -9,11 +9,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	public class CommentFilterTest
 	{
         [Test]
-        [ExpectedException(typeof(NetReflectorException), "Missing Xml node (pattern) for required member (ThoughtWorks.CruiseControl.Core.Sourcecontrol.CommentFilter.Pattern).\r\n" +
-            "Xml: <commentFilter />")]
         public void ShouldNotPopulateWithoutPattern()
         {
-            NetReflector.Read(@"<commentFilter/>");
+            Assert.That(delegate { NetReflector.Read(@"<commentFilter/>"); },
+                        Throws.TypeOf<NetReflectorException>().With.Message.EqualTo(
+                            "No loaded type is marked up with a ReflectorType attribute that matches the Xml node (commentFilter).  Xml Source: <commentFilter />"));
         }
 
         [Test]

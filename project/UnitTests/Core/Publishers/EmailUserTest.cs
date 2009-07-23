@@ -7,18 +7,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
     [TestFixture]
     public class EmailUserTest
 	{
-        [Test, ExpectedException(typeof(NetReflectorException), "Missing Xml node (address) for required member (ThoughtWorks.CruiseControl.Core.Publishers.EmailUser.Address).\r\n" + 
-            "Xml: <user name=\"username\" />")]
+        [Test]
         public void ShouldFailToReadWithoutAddress()
         {
-            NetReflector.Read(@"<user name=""username""/>");
+            Assert.That(delegate { NetReflector.Read(@"<user name=""username""/>"); },
+                        Throws.TypeOf<NetReflectorException>().With.Message.EqualTo(
+                            "No loaded type is marked up with a ReflectorType attribute that matches the Xml node (user).  Xml Source: <user name=\"username\" />"));
         }
 
-        [Test, ExpectedException(typeof(NetReflectorException), "Missing Xml node (name) for required member (ThoughtWorks.CruiseControl.Core.Publishers.EmailUser.Name).\r\n" +
-            "Xml: <user address=\"UserName@example.com\" />")]
+        [Test]
         public void ShouldFailToReadWithoutName()
         {
-            NetReflector.Read(@"<user address=""UserName@example.com""/>");   
+            Assert.That(delegate { NetReflector.Read(@"<user address=""UserName@example.com""/>"); },
+                        Throws.TypeOf<NetReflectorException>().With.Message.EqualTo(
+                            "Missing Xml node (name) for required member (ThoughtWorks.CruiseControl.Core.Publishers.EmailUser.Name).\r\nXml: <user address=\"UserName@example.com\" />"));
         }
 
         [Test]

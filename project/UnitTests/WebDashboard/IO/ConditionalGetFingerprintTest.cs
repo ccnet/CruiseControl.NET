@@ -54,13 +54,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
         }
 
         [Test]
-        [ExpectedException(typeof(UncombinableFingerprintException))]
         public void ShouldThrowExceptionIfFingerprintsAreCombinedWhichHaveDifferentETags()
         {
             ConditionalGetFingerprint testFingerprint = new ConditionalGetFingerprint(testDate, testETag);
             ConditionalGetFingerprint fingerprintWithDifferentETag= new ConditionalGetFingerprint(testDate, testETag + "different");
 
-            testFingerprint.Combine(fingerprintWithDifferentETag);
+            Assert.That(delegate { testFingerprint.Combine(fingerprintWithDifferentETag); },
+                        Throws.TypeOf<UncombinableFingerprintException>());
         }
 
         [Test]

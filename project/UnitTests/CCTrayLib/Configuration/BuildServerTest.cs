@@ -43,26 +43,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 			BuildServer server = BuildServer.BuildFromRemotingDisplayName("server");
 			Assert.AreEqual("tcp://server:21234/CruiseManager.rem", server.Url);
 		}
-		
-		[Test]
-		[ExpectedException(typeof(ApplicationException), "Expected string in format server[:port]")]
-		public void ThrowsWhenParsingAStringThatContainsMoreThanOneColon()
-		{
-			BuildServer.BuildFromRemotingDisplayName("tcp://server:123/blah.rem");
-		}
-		
-		[Test]
-		[ExpectedException(typeof(ApplicationException), "Port number must be an integer")]
-		public void ThrowsWhenParsingAStringWithNonNumericPortNumber()
-		{
-			BuildServer.BuildFromRemotingDisplayName("server:xxx");
-		}
-		
-		[Test]
-        [ExpectedException(typeof(CCTrayLibException), "Extension transport must always define an extension name")]
+
+        [Test(Description = "Expected string in format server[:port]")]
+        public void ThrowsWhenParsingAStringThatContainsMoreThanOneColon()
+        {
+            Assert.That(delegate { BuildServer.BuildFromRemotingDisplayName("tcp://server:123/blah.rem"); },
+                        Throws.TypeOf<ApplicationException>());
+        }
+
+        [Test(Description = "Port number must be an integer")]
+        public void ThrowsWhenParsingAStringWithNonNumericPortNumber()
+        {
+            Assert.That(delegate { BuildServer.BuildFromRemotingDisplayName("server:xxx"); },
+                        Throws.TypeOf<ApplicationException>());
+        }
+
+        [Test(Description = "Extension transport must always define an extension name")]
         public void ThrowsWhenMissingExtension()
         {
-            BuildServer newServer = new BuildServer("http://test", BuildServerTransport.Extension, null, null);
+            Assert.That(delegate { new BuildServer("http://test", BuildServerTransport.Extension, null, null); },
+                        Throws.TypeOf<CCTrayLibException>());
         }
 
         [Test]

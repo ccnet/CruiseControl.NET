@@ -169,22 +169,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         }
 
         [Test]
-        [ExpectedException(typeof(ApplicationException), "Project 'projectName' not found on server")]
+        //[ExpectedException(typeof(ApplicationException), )]
         public void ProjectStatusThrowsIfProjectNotFound()
         {
             ProjectStatus[] result = new ProjectStatus[]
-				{
-					CreateProjectStatus("a name"),
-					CreateProjectStatus("another name"),
-			};
+                {
+                    CreateProjectStatus("a name"),
+                    CreateProjectStatus("another name"),
+            };
 
             CruiseServerSnapshot snapshot = new CruiseServerSnapshot(result, null);
             mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
 
-            monitor.Poll(); // Force the snapshot to be loaded
-            ProjectStatus projectStatus = monitor.GetProjectStatus(PROJECT_NAME);
+            monitor.Poll();// Force the snapshot to be loaded 
 
-            Assert.AreSame(result[1], projectStatus);
+            Assert.That(delegate { monitor.GetProjectStatus(PROJECT_NAME); }, 
+                        Throws.TypeOf<ApplicationException>().With.Message.EqualTo(
+                            "Project 'projectName' not found on server"));
         }
 
         private static ProjectStatus CreateProjectStatus(string projectName)

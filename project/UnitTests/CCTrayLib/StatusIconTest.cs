@@ -22,10 +22,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib
 		}
 
 		[Test]
-		[ExpectedException(typeof (IconNotFoundException))]
 		public void ShouldThrowIconNotFoundExceptionIfFileDoesNotExist()
 		{
-			StatusIcon.LoadFromFile("./fileNotOnDisk.ico");
+		    Assert.That(delegate { StatusIcon.LoadFromFile("./fileNotOnDisk.ico"); },
+		                Throws.TypeOf<IconNotFoundException>());
 		}
 
 		[TearDown]

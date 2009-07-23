@@ -63,8 +63,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         [ExpectedException(typeof(CommunicationsException))]
         public void ProcessResponseThrowsAnExceptionForUnknownMessage()
         {
-            string xml = "<garbage/>";
-            object result = XmlConversionUtil.ProcessResponse(xml);
+            Assert.That(delegate { XmlConversionUtil.ProcessResponse("<garbage/>"); },
+                        Throws.TypeOf<CommunicationsException>());
         }
         #endregion
         #endregion

@@ -32,11 +32,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 			Assert.AreEqual("1", labeller.Generate(IntegrationResultMother.CreateSuccessful()));
 		}
 
-		[Test, ExpectedException(typeof (NoSuchProjectException))]
+		[Test]
 		public void ShouldThrowExceptionIfProjectNameIsInvalid()
 		{
 			labeller.ProjectName = "invalid";
-			labeller.Generate(IntegrationResultMother.CreateSuccessful());
+            Assert.That(delegate { labeller.Generate(IntegrationResultMother.CreateSuccessful()); },
+                        Throws.TypeOf<NoSuchProjectException>());
 		}
 
 		private ProjectStatus NewProjectStatus(string projectName, string label)

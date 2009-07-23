@@ -69,43 +69,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             Assert.AreEqual(false, externalSC.LabelOnSuccess);
         }
 
-        [Test, ExpectedException(
-                    typeof(NetReflectorException),
-                    "Missing Xml node (executable) for required member (ThoughtWorks.CruiseControl.Core.Sourcecontrol.ExternalSourceControl.Executable).\r\n" + 
-                    "Xml: <sourceControl type=\"external\"></sourceControl>")
-        ]
+        [Test]
         public void ShouldFailToPopulateFromConfigurationMissingRequiredFields()
         {
             const string xml = @"<sourceControl type=""external""></sourceControl>";
             ExternalSourceControl externalSC = new ExternalSourceControl();
-            NetReflector.Read(xml, externalSC);
-            Assert.Fail("Should have received a NetReflectorException");
+            Assert.That(delegate { NetReflector.Read(xml, externalSC); },
+                        Throws.TypeOf<NetReflectorException>());
         }
-
-
-        [Test, ExpectedException(typeof(NetReflectorConverterException), @"Cannot convert from type System.String to System.Boolean for object with value: ""NOT_A_BOOLEAN""")]
-        public void ShouldFailToPopulateWithInvalidAutoGetSource()
-		{
-            ExternalSourceControl externalSC = new ExternalSourceControl();
-            const string invalidXml =
-@"<sourceControl type=""external"">
-    <executable>banana.bat</executable>
-    <autoGetSource>NOT_A_BOOLEAN</autoGetSource>
-</sourceControl>";
-            NetReflector.Read(invalidXml, externalSC);
-		}
-
-        [Test, ExpectedException(typeof(NetReflectorConverterException), @"Cannot convert from type System.String to System.Boolean for object with value: ""NOT_A_BOOLEAN""")]
-        public void ShouldFailToPopulateWithInvalidLabelOnSuccess()
-		{
-            ExternalSourceControl externalSC = new ExternalSourceControl();
-            const string invalidXml =
-@"<sourceControl type=""external"">
-    <executable>banana.bat</executable>
-    <labelOnSuccess>NOT_A_BOOLEAN</labelOnSuccess>
-</sourceControl>";
-            NetReflector.Read(invalidXml, externalSC);
-		}
 
 		[Test]
 		public void ShouldGetSourceIfAutoGetSourceTrue()

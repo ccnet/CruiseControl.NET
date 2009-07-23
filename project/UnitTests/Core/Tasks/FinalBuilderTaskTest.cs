@@ -149,33 +149,33 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(Path.Combine(DefaultWorkingDirectory, "FB3Cmd.exe"), _task.FBCMDPath);
 		}
 
-		[Test]
-		[ExpectedException(typeof(BuilderException),"Finalbuilder version could not be autodetected from project file name.")]
-		public void InvalidProjectFileName()
-		{
-			ExpectThatExecuteWillNotBeCalled();
-			_mockRegistry.ExpectNoCall("GetLocalMachineSubKeyValue", new Type[] { typeof(string), typeof(string) });			
-			NetReflector.Read(@"<FinalBuilder>
+        [Test]
+        public void InvalidProjectFileName()
+        {
+            ExpectThatExecuteWillNotBeCalled();
+            _mockRegistry.ExpectNoCall("GetLocalMachineSubKeyValue", new Type[] { typeof(string), typeof(string) });
+            NetReflector.Read(@"<FinalBuilder>
 				<ProjectFile>C:\Dummy\Project.txt</ProjectFile>
 			</FinalBuilder>", _task);
-			_task.Run(_result);
-		}
+            Assert.That(delegate { _task.Run(_result); },
+                        Throws.TypeOf<BuilderException>().With.Message.EqualTo("Finalbuilder version could not be autodetected from project file name."));
+        }
+
+        [Test]
+        public void FinalBuilderIsNotInstalled()
+        {
+            ExpectThatExecuteWillNotBeCalled();
+            _mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
+            _task.ProjectFile = @"C:\Dummy\Project.fbz5";
+            Assert.That(delegate { _task.Run(_result); },
+                        Throws.TypeOf<BuilderException>().With.Message.EqualTo("Path to Finalbuilder 5 command line executable could not be found."));
+        }
 
 		[Test]
-		[ExpectedException(typeof(BuilderException),"Path to Finalbuilder 5 command line executable could not be found.")]
-		public void FinalBuilderIsNotInstalled()
-		{
-			ExpectThatExecuteWillNotBeCalled();
-			_mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
-			_task.ProjectFile = @"C:\Dummy\Project.fbz5";
-			_task.Run(_result);
-		}
-
-		[Test]
-		[ExpectedException(typeof(NetReflectorException))]
 		public void RequiredPropertiesNotProvided()
 		{
-			NetReflector.Read(@"<FinalBuilder />", _task);
+            Assert.That(delegate { NetReflector.Read(@"<FinalBuilder />", _task); },
+                        Throws.TypeOf<NetReflectorException>());
 		}
 
         [Test]

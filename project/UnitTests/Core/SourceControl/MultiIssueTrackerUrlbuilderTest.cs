@@ -20,15 +20,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         private string regexIssueConfig = string.Format("<regexIssueTracker><find>{0}</find><replace>{1}</replace></regexIssueTracker>", searchString, replacementString);
 
  
-        [Test, ExpectedException(typeof(NetReflectorException), "Missing Xml node (issueTrackers) for required member (ThoughtWorks.CruiseControl.Core.Sourcecontrol.MultiIssueTrackerUrlBuilder.IssueTrackers).\r\n" + 
-            "Xml: <issueUrlBuilder type=\"multiIssueTracker\"></issueUrlBuilder>")]
+        [Test]
         public void ValuePopulation_BadEmptySet()
         {
             string configFile = "<issueUrlBuilder type=\"multiIssueTracker\"></issueUrlBuilder>";
             
             MultiIssueTrackerUrlBuilder multiIssue = new MultiIssueTrackerUrlBuilder();
-            NetReflector.Read(configFile, multiIssue);
-            
+            Assert.That(delegate { NetReflector.Read(configFile, multiIssue); },
+                        Throws.TypeOf<NetReflectorException>().With.Message.EqualTo(
+                            "Missing Xml node (issueTrackers) for required member (ThoughtWorks.CruiseControl.Core.Sourcecontrol.MultiIssueTrackerUrlBuilder.IssueTrackers).\r\nXml: <issueUrlBuilder type=\"multiIssueTracker\"></issueUrlBuilder>")); 
         }
 
 

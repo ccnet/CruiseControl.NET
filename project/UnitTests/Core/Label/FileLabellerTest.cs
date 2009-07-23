@@ -41,18 +41,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
             Assert.AreEqual(true, labeller.AllowDuplicateSubsequentLabels);
         }
 
-        [Test, ExpectedException(
-                    typeof(NetReflectorException),
-                   "Missing Xml node (labelFilePath) for required member (ThoughtWorks.CruiseControl.Core.Label.FileLabeller.LabelFilePath).\r\n" + 
-                   "Xml: <fileLabeller prefix=\"foo\" allowDuplicateSubsequentLabels=\"false\" />"
-                )
-        ]
+        [Test]
         public void ShouldFailToPopulateFromConfigurationMissingRequiredFields()
         {
             FileLabeller labeller = new FileLabeller(new TestFileReader("001"));
             string xml = @"<fileLabeller prefix=""foo"" allowDuplicateSubsequentLabels=""false"" />";
-            NetReflector.Read(xml, labeller);
-            Assert.Fail("Should have received a NetReflectorException");
+            Assert.That(delegate { NetReflector.Read(xml, labeller); },
+                        Throws.TypeOf<NetReflectorException>());
         }
 
         [Test]

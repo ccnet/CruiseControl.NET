@@ -56,21 +56,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
             mocks.VerifyAll();
 		}
 
-        [Test]
-        [ExpectedException(typeof(CCTrayLibException), "Unable to find extension 'Extension.Unknown,Extension'")]
+        [Test(Description = "Unable to find extension 'Extension.Unknown,Extension'")]
         public void WhenRequestingACruiseServerManagerWithAnExtensionProtocolCannotFindExtension()
         {
             var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
             var factory = new CruiseServerManagerFactory(mockCruiseManagerFactory);
 
-            var server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "Extension.Unknown,Extension", string.Empty);
+            var server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension,
+                                         "Extension.Unknown,Extension", string.Empty);
 
             mocks.ReplayAll();
-            var manager = factory.Create(server);
+            Assert.That(delegate { factory.Create(server); }, Throws.TypeOf<CCTrayLibException>());
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void WhenRequestingACruiseServerManagerWithAnExtensionProtocolEmptyExtension()
         {
             var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
@@ -80,23 +79,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
             server.ExtensionName = null;
 
             mocks.ReplayAll();
-            var manager = factory.Create(server);
+            Assert.That(delegate { factory.Create(server); },
+                        Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("name"));
         }
 
-        [Test]
-        [ExpectedException(typeof(CCTrayLibException), "Extension 'CruiseServerManagerFactoryTest'does not implement ITransportExtension")]
+        [Test(Description = "Extension 'CruiseServerManagerFactoryTest'does not implement ITransportExtension")]
         public void WhenRequestingACruiseServerManagerWithAnExtensionProtocolCannotInvalidExtension()
         {
             var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();
             var factory = new CruiseServerManagerFactory(mockCruiseManagerFactory);
 
-            var server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension, "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.CruiseServerManagerFactoryTest,ThoughtWorks.CruiseControl.UnitTests", string.Empty);
+            var server = new BuildServer("http://somethingOrOther", BuildServerTransport.Extension,
+                                         "ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring.CruiseServerManagerFactoryTest,ThoughtWorks.CruiseControl.UnitTests",
+                                         string.Empty);
 
             mocks.ReplayAll();
-            var manager = factory.Create(server);
+            Assert.That(delegate { factory.Create(server); }, Throws.TypeOf<CCTrayLibException>());
         }
 
-        [Test]
+	    [Test]
         public void WhenRequestingACruiseServerManagerWithAnExtensionProtocolValidExtension()
         {
             var mockCruiseManagerFactory = mocks.StrictMock<ICruiseServerClientFactory>();

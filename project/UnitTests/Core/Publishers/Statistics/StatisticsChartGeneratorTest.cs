@@ -188,13 +188,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 		}
 
 		[Test]
-		[ExpectedException(typeof(UnavailableStatisticsException))]
 		public void ShouldThrowExceptionIfAskedToPlotUnavailableStatistics()
 		{
 			mockPlotter.ExpectNoCall("DrawGraph", typeof(IList), typeof(IList), typeof(string));
 			mockPlotter.ExpectNoCall("WriteToStream", typeof(IList), typeof(IList), typeof(Stream));
 			chartGenerator.RelevantStats = new string[]{"Unavailable"};
-			chartGenerator.Process(statistics, "dummy");
+            Assert.That(delegate { chartGenerator.Process(statistics, "dummy"); }, Throws.TypeOf<UnavailableStatisticsException>());
 		}
 
 		[Test]

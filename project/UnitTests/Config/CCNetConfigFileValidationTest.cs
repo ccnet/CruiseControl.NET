@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Config
 			}
 		}
 		
-		[Test, ExpectedException(typeof(ConfigurationException))]
+		[Test]
 		public void InvalidTaskXmlShouldThrowNetReflectorException()
 		{
 			NetReflectorConfigurationReader reader = new NetReflectorConfigurationReader();
@@ -48,7 +48,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Config
        </project>
 </cruisecontrol>
 ");
-			reader.Read(xml, null);
+		    Assert.That(delegate { reader.Read(xml, null); },
+                        Throws.TypeOf<ConfigurationException>());
 		}
 
 		private XmlDocument LoadConfigXml()

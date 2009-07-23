@@ -33,10 +33,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         }
 
         [Test]
-        [ExpectedException(typeof(ApplicationException))]
         public void GenerateClientThrowsExceptionOnUnknown()
         {
-            CruiseServerClient client = new CruiseServerClientFactory().GenerateClient("ftp://somewhere") as CruiseServerClient;
+            Assert.That(delegate { new CruiseServerClientFactory().GenerateClient("ftp://somewhere"); },
+                        Throws.TypeOf<ApplicationException>());
         }
 
         [Test]

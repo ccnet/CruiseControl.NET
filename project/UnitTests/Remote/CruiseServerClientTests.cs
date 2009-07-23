@@ -18,7 +18,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
         #region Test methods
         #region GetProjectStatus()
         [Test]
-        [ExpectedException(typeof(CommunicationsException))]
         public void GetProjectStatusThrowsExceptionOnFailure()
         {
             ProjectStatusResponse response = new ProjectStatusResponse();
@@ -29,7 +28,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             mocks.ReplayAll();
 
             CruiseServerClient client = new CruiseServerClient(connection);
-            client.GetProjectStatus();
+            Assert.That(delegate { client.GetProjectStatus(); },
+                        Throws.TypeOf<CommunicationsException>());
         }
 
         [Test]

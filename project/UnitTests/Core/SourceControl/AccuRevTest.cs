@@ -33,27 +33,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(@"C:\DOES NOT\EXIST", accurev.Workspace);
 		}
 
-		[Test, ExpectedException(typeof (NetReflectorConverterException), @"Cannot convert from type System.String to System.Boolean for object with value: ""NOT_A_BOOLEAN""")]
-		public void CanCatchConfigInvalidAutoGetSource()
-		{
-			AccuRev accurev = new AccuRev();
-			const string invalidXml = 
+        [Test]
+        public void CanCatchConfigInvalidAutoGetSource()
+        {
+            AccuRev accurev = new AccuRev();
+            const string invalidXml =
 @"<sourcecontrol type=""accurev"">
     <autoGetSource>NOT_A_BOOLEAN</autoGetSource>
 </sourcecontrol>";
-			NetReflector.Read(invalidXml, accurev);
-		}
+            Assert.That(delegate { NetReflector.Read(invalidXml, accurev); },
+                        Throws.TypeOf<NetReflectorConverterException>());
+        }
 
-        [Test, ExpectedException(typeof(NetReflectorConverterException), @"Cannot convert from type System.String to System.Boolean for object with value: ""NOT_A_BOOLEAN""")]
-		public void CanCatchConfigInvalidLabelOnSuccess()
-		{
-			AccuRev accurev = new AccuRev();
-			const string invalidXml = 
+        [Test]
+        public void CanCatchConfigInvalidLabelOnSuccess()
+        {
+            AccuRev accurev = new AccuRev();
+            const string invalidXml =
 @"<sourcecontrol type=""accurev"">
     <labelOnSuccess>NOT_A_BOOLEAN</labelOnSuccess>
 </sourcecontrol>";
-			NetReflector.Read(invalidXml, accurev);
-		}
+            Assert.That(delegate { NetReflector.Read(invalidXml, accurev); },
+                        Throws.TypeOf<NetReflectorConverterException>());
+        }
 
 		[Test]
 		public void ShouldGetSourceIfAutoGetSourceTrue()

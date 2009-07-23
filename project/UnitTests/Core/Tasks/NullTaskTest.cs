@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -23,15 +24,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.IsTrue(result.Succeeded);
 		}
 
-        [Test, ExpectedException("System.Exception", "Simulating a failure")]
+        [Test]
         public void ShouldThrowExceptionWhenSimulateFailureIsTrue()
         {
             IntegrationResult result = new IntegrationResult();
             task.SimulateFailure = true;
-            task.Run(result);
-            
-        }
+            Assert.That(delegate { task.Run(result); }, Throws.TypeOf<Exception>());
 
-    
+        }
     }
 }

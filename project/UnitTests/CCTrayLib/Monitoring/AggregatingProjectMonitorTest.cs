@@ -53,13 +53,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			aggregator.Poll();
 		}
 
-		[Test, ExpectedException(typeof (InvalidOperationException))]
+		[Test]
 		public void ThrowsWhenAttemptingToRetrieveSingleProjectDetail()
 		{
-			ISingleProjectDetail detail = aggregator.Detail;
-
-			// this line just here to stop resharper complaining
-			Assert.IsNotNull(detail);
+		    Assert.That(delegate { ISingleProjectDetail detail = aggregator.Detail; },
+		                Throws.TypeOf<InvalidOperationException>());
 		}
 
 		private int buildOccurredCount;
@@ -232,28 +230,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			return aggregator.IntegrationStatus;
 		}
 
-        [Test]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void ForceBuildThrowsAnNotImplementedException()
-        {
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            aggregator.ForceBuild(parameters);
-        }
+        //[Test]
+        //[ExpectedException(typeof(NotImplementedException))]
+        //public void ForceBuildThrowsAnNotImplementedException()
+        //{
+        //    Dictionary<string, string> parameters = new Dictionary<string, string>();
+        //    aggregator.ForceBuild(parameters);
+        //}
 
-        [Test]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void FixBuildThrowsAnNotImplementedException()
-        {
-            aggregator.FixBuild("JoeSmith");
-        }
+        //[Test]
+        //[ExpectedException(typeof(NotImplementedException))]
+        //public void FixBuildThrowsAnNotImplementedException()
+        //{
+        //    aggregator.FixBuild("JoeSmith");
+        //}
 
-        [Test]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void CancelPendingThrowsAnNotImplementedException()
-        {
-            aggregator.CancelPending();
-        }        
-
-
+        //[Test]
+        //[ExpectedException(typeof(NotImplementedException))]
+        //public void CancelPendingThrowsAnNotImplementedException()
+        //{
+        //    aggregator.CancelPending();
+        //}        
     }
 }

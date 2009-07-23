@@ -30,27 +30,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			sourceControl.LabelSourceControl(null);
 		}
 
-        [Test, ExpectedException("System.Exception", "Failing GetModifications")]
+        [Test]
         public void ShouldFailGetModsWhenFailModsIsTrue()
         {
             sourceControl.FailGetModifications = true;
-            sourceControl.GetModifications(null,null);
+            Assert.That(delegate { sourceControl.GetModifications(null, null); },
+                        Throws.TypeOf<Exception>().With.Message.EqualTo("Failing GetModifications"));
         }
 
-        [Test, ExpectedException("System.Exception", "Failing getting the source")]
+        [Test]
         public void ShouldFailGetSourceWhenFailGetSourceIsTrue()
         {
             sourceControl.FailGetSource = true;
-            sourceControl.GetSource(null);
+            Assert.That(delegate { sourceControl.GetSource(null); },
+                        Throws.TypeOf<Exception>().With.Message.EqualTo("Failing getting the source"));
         }
 
-        [Test, ExpectedException("System.Exception", "Failing label source control")]
+        [Test]
         public void ShouldFailLabelSourceWhenFailLabelSourceIsTrue()
         {
             sourceControl.FailLabelSourceControl = true;
-            sourceControl.LabelSourceControl(null);
+            Assert.That(delegate { sourceControl.LabelSourceControl(null); },
+                        Throws.TypeOf<Exception>().With.Message.EqualTo("Failing label source control"));
         }
-  
     }
-
 }

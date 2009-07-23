@@ -7,10 +7,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 	[TestFixture]
 	public class EmailGroupTest
 	{
-		[Test, ExpectedException(typeof (NetReflectorException))]
+		[Test]
 		public void ReadEmailGroupFromXmlUsingInvalidNotificationType()
 		{
-            NetReflector.Read(@"<group> name=""foo"" <notifications><NotificationType>bar</NotificationType></notifications>  </group>");
+            Assert.That(delegate { NetReflector.Read(@"<group> name=""foo"" <notifications><NotificationType>bar</NotificationType></notifications>  </group>"); },
+                        Throws.TypeOf<NetReflectorException>());
 		}
 
 		[Test]

@@ -57,13 +57,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.IsNotNull(actual);
 			// mainly want to make sure that the exception is caught, and return is not null. 
 		}
-			
+
         [Test]
-        [ExpectedException(typeof(NotImplementedException), "Cancel pending not currently supported on servers monitored via HTTP")]
         public void CancelPendingRequestThrowsAnNotImplementedException()
         {
-            manager.CancelPendingRequest("myproject");
+            Assert.That(delegate { manager.CancelPendingRequest("myproject"); },
+                        Throws.TypeOf<NotImplementedException>().With.Message.EqualTo("Cancel pending not currently supported on servers monitored via HTTP"));
         }
-
 	}
 }

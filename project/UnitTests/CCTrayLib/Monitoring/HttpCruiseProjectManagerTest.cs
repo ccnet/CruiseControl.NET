@@ -116,19 +116,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
             mocks.VerifyAll();
 		}
 
-        [Test]
-        [ExpectedException(typeof(NotImplementedException), "Fix build not currently supported on projects monitored via HTTP")]
+        [Test(Description="Fix build not currently supported on projects monitored via HTTP")]
         public void FixBuildThrowsAnNotImplementedException()
         {
-            manager.FixBuild(null, "John Do");
+            Assert.That(delegate { manager.FixBuild(null, "John Do"); },
+                        Throws.TypeOf<NotImplementedException>());
         }
 
-
-        [Test]
-        [ExpectedException(typeof(NotImplementedException), "Cancel pending not currently supported on projects monitored via HTTP")]
+        [Test(Description="Cancel pending not currently supported on projects monitored via HTTP")]
         public void CancelPendingRequestThrowsAnNotImplementedException()
         {
-            manager.CancelPendingRequest(null);
+            Assert.That(delegate { manager.CancelPendingRequest(null); },
+                        Throws.TypeOf<NotImplementedException>());
         }
 	}
 }
