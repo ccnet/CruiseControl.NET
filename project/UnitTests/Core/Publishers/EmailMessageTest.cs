@@ -63,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         public void VerifyRecipientListForExceptionBuild()
         {
             IIntegrationResult result = AddModification(IntegrationResultMother.CreateExceptioned());
-            Assert.AreEqual(ExpectedRecipients(always, changed, failed, modifier), new EmailMessage(result, publisher).Recipients);
+            Assert.AreEqual(ExpectedRecipients(always, changed, modifier), new EmailMessage(result, publisher).Recipients);
         }
 
         [Test]

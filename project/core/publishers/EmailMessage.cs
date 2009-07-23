@@ -81,14 +81,19 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
                 // Add users who are explicity intended to get the message we're going to send.
                 AddRecipients(recipients, EmailGroup.NotificationType.Always);
+                
                 if (BuildStateChanged())
                     AddRecipients(recipients, EmailGroup.NotificationType.Change);
-                if ((result.Status == IntegrationStatus.Failure) || (result.Status == IntegrationStatus.Exception))
+                
+                if (result.Status == IntegrationStatus.Failure) 
                     AddRecipients(recipients, EmailGroup.NotificationType.Failed);
+                
                 if (result.Status == IntegrationStatus.Success)
                     AddRecipients(recipients, EmailGroup.NotificationType.Success);
+                
                 if (result.Fixed)
                     AddRecipients(recipients, EmailGroup.NotificationType.Fixed);
+                
                 if (result.Status == IntegrationStatus.Exception)
                     AddRecipients(recipients, EmailGroup.NotificationType.Exception);
 

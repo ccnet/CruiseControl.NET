@@ -76,19 +76,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             mockGateway.Verify();
         }
 
-        [Test]
-        public void ShouldSendFailureMessageIfBuildException()
-        {
-            mockGateway.Expect("Send", new MailMessageRecipientValidator(1));
-
-            publisher = new EmailPublisher();
-            publisher.FromAddress = "from@foo.com";
-            publisher.EmailGateway = (EmailGateway) mockGateway.MockInstance;
-            publisher.EmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
-            publisher.EmailGroups.Add("foo", new EmailGroup("foo", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Failed }));
-            publisher.Run(IntegrationResultMother.CreateExceptioned());
-            mockGateway.Verify();
-        }
 
         [Test]
 		public void ShouldSendMessageIfBuildFailedAndPreviousFailed()
