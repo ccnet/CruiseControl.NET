@@ -206,18 +206,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(Convert.ToBoolean(false), alienbrain.LabelOnSuccess);
 		}
 
-		[Test, ExpectedException(typeof (NetReflectorException))]
+		[Test]
 		public void CanCatchInvalidGetSourceFlagConfiguration()
 		{
 			const string invalidXml = "<sourcecontrol type=\"alienbrain\"><autoGetSource>NOT_A_BOOLEAN</autoGetSource></sourcecontrol>";
-			NetReflector.Read(invalidXml);
+			Assert.That(delegate { NetReflector.Read(invalidXml); },
+                        Throws.TypeOf<NetReflectorException>());
 		}
 
-		[Test, ExpectedException(typeof (NetReflectorException))]
+		[Test]
 		public void CanCatchInvalidLabelOnSuccessConfiguration()
 		{
 			const string invalidXml = "<sourcecontrol type=\"alienbrain\"><labelOnSuccess>NOT_A_BOOLEAN</labelOnSuccess></sourcecontrol>";
-			NetReflector.Read(invalidXml);
+            Assert.That(delegate { NetReflector.Read(invalidXml); },
+                        Throws.TypeOf<NetReflectorException>());
 		}
 
 // Actions tests

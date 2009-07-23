@@ -34,11 +34,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			tempRoot.DeleteDirectory();
 		}
 
-		[Test, ExpectedException(typeof (DirectoryNotFoundException))]
+		[Test]
 		public void MissingDirectoryThrowsException()
 		{
 			Assert.IsFalse(tempRoot.Exists(), "Temporary directory should not exist: " + tempRoot.ToString());
-			sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
+            Assert.That(delegate { sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue)); },
+                        Throws.TypeOf<DirectoryNotFoundException>());
 		}
 
 		[Test]

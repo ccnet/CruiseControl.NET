@@ -211,13 +211,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			cvs.GetSource(IntegrationResult());
 		}
 
-		[Test, ExpectedException(typeof(ConfigurationException))]
+		[Test]
 		public void ShouldThrowExceptionIfCVSRootIsNotSpecifiedAndCVSFoldersDoNotExist()
 		{
 			ExpectCvsDirectoryExists(false);
 			
 			cvs.AutoGetSource = true;
-			cvs.GetSource(IntegrationResult());
+            Assert.That(delegate { cvs.GetSource(IntegrationResult()); },
+                        Throws.TypeOf<ConfigurationException>());
 		}
 
 		[Test]

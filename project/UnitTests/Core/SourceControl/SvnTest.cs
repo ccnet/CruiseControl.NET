@@ -300,7 +300,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			svn.GetSource(IntegrationResult());
 		}
 
-		[Test, ExpectedException(typeof(ConfigurationException))]
+		[Test]
 		public void ShouldThrowExceptionIfTrunkUrlIsNotSpecifiedAndSVNFoldersDoNotExist()
 		{
 			ExpectSvnDirectoryExists(false);
@@ -309,7 +309,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			svn.TrunkUrl = string.Empty;
 			svn.AutoGetSource = true;
 			svn.WorkingDirectory = DefaultWorkingDirectory;
-			svn.GetSource(IntegrationResult());
+            Assert.That(delegate { svn.GetSource(IntegrationResult()); },
+                        Throws.TypeOf<ConfigurationException>());
 		}
 
 	    [Test]

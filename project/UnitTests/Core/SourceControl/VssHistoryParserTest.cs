@@ -92,13 +92,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(new DateTime(2002, 9, 16, 22, 40, 0), mod.ModifiedTime);
 		}
 
-		[Test, ExpectedException(typeof(CruiseControlException))]
+		[Test]
 		public void ShouldThrowCruiseControlExceptionShowingDateStringIfCannotParseDate()
 		{
 			Modification mod = new Modification();
 			string line = "foo\r\nUser: Admin        Date:  16/24/02   Time:  22:40\r\n";
             CheckInParser myParser = new CheckInParser(line, new VssLocale(CultureInfo.InvariantCulture));
-            myParser.ParseUsernameAndDate(mod);
+            Assert.That(delegate { myParser.ParseUsernameAndDate(mod); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
 		[Test]
@@ -158,11 +159,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(expectedDate, mod.ModifiedTime);
 		}
 
-		[Test, ExpectedException(typeof(CruiseControlException))]
+		[Test]
 		public void ParseInvalidUsernameLine()
 		{
 			string line = "foo\r\nbar\r\n";
-			new CheckInParser(line, new VssLocale(new CultureInfo("en-US"))).ParseUsernameAndDate(new Modification());
+            Assert.That(delegate { new CheckInParser(line, new VssLocale(new CultureInfo("en-US"))).ParseUsernameAndDate(new Modification()); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
 		[Test]

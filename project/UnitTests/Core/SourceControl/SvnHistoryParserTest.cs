@@ -79,10 +79,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(3, modifications.Length);
 		}
 
-		[Test, ExpectedException(typeof(CruiseControlException))]
+		[Test]
 		public void HandleInvalidXml()
 		{
-			svn.Parse(new StringReader("<foo/><bar/>"), DateTime.Now, DateTime.Now);
+            Assert.That(delegate { svn.Parse(new StringReader("<foo/><bar/>"), DateTime.Now, DateTime.Now); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
 		[Test]

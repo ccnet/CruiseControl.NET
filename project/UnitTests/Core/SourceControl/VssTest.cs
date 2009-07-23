@@ -163,11 +163,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vss.GetModifications(IntegrationResult(yesterday), IntegrationResult(today));
 		}
 
-		[Test, ExpectedException(typeof(CruiseControlException))]
+		[Test]
 		public void ShouldFailIfProcessTimesOut()
 		{
 			ExpectToExecuteAndReturn(new ProcessResult("x", null, ProcessResult.TIMED_OUT_EXIT_CODE, true));
-			vss.GetModifications(IntegrationResult(yesterday), IntegrationResult(today));
+            Assert.That(delegate { vss.GetModifications(IntegrationResult(yesterday), IntegrationResult(today)); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
 		// GetSource tests

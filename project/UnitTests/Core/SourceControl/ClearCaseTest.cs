@@ -97,46 +97,52 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(BRANCH, clearCase.Branch);
 		}
 
-		[Test, ExpectedException(typeof (NetReflectorConverterException))]
+		[Test]
 		public void CanCatchInvalidBaselineConfiguration()
 		{
 			ClearCase clearCase = new ClearCase();
 			const string invalidXml = "<sourcecontrol type=\"ClearCase\"><useBaseline>NOT_A_BOOLEAN</useBaseline></sourcecontrol>";
-			NetReflector.Read(invalidXml, clearCase);
+			Assert.That(delegate { NetReflector.Read(invalidXml, clearCase); },
+                        Throws.TypeOf<NetReflectorConverterException>());
 		}
 
-        [Test, ExpectedException(typeof(NetReflectorConverterException))]
+        [Test]
 		public void CanCatchInvalidLabelConfiguration()
 		{
 			ClearCase clearCase = new ClearCase();
 			const string invalidXml = "<sourcecontrol type=\"ClearCase\"><useLabel>NOT_A_BOOLEAN</useLabel></sourcecontrol>";
-			NetReflector.Read(invalidXml, clearCase);
+			Assert.That(delegate { NetReflector.Read(invalidXml, clearCase); },
+                        Throws.TypeOf<NetReflectorConverterException>());
 		}
 
-		[Test, ExpectedException(typeof (CruiseControlException))]
+		[Test]
 		public void ValidateBaselineNameFailsForEmptyString()
 		{
-			clearCase.ValidateBaselineName("");
+			Assert.That(delegate { clearCase.ValidateBaselineName(""); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
-		[Test, ExpectedException(typeof (CruiseControlException))]
+		[Test]
 		public void ValidateBaselineNameFailsForNull()
 		{
-			clearCase.ValidateBaselineName(null);
+			Assert.That(delegate { clearCase.ValidateBaselineName(null); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
-		[Test, ExpectedException(typeof (CruiseControlException))]
+		[Test]
 		public void ValidateBaselineNameFailsForNameWithSpaces()
 		{
-			clearCase.ValidateBaselineName("name with spaces");
+			Assert.That(delegate { clearCase.ValidateBaselineName("name with spaces"); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
-		[Test, ExpectedException(typeof (CruiseControlException))]
+		[Test]
 		public void CanEnforceProjectVobSetIfBaselineTrue()
 		{
 			clearCase.UseBaseline = true;
 			clearCase.ProjectVobName = null;
-			clearCase.LabelSourceControl(IntegrationResultMother.CreateSuccessful());
+            Assert.That(delegate { clearCase.LabelSourceControl(IntegrationResultMother.CreateSuccessful()); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
 		[Test]
