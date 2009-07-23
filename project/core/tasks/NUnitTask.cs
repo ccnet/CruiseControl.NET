@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			string outputFile = result.BaseFromArtifactsDirectory(OutputFile);
 
 			ProcessResult nunitResult = executor.Execute(NewProcessInfo(outputFile, result));
-			result.AddTaskResult(new ProcessTaskResult(nunitResult));
+		    result.AddTaskResult(new ProcessTaskResult(nunitResult, true));
 			if (File.Exists(outputFile))
 			{
 				result.AddTaskResult(new FileTaskResult(outputFile));				

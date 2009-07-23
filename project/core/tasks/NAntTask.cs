@@ -75,13 +75,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			ProcessResult processResult = TryToRun(CreateProcessInfo(result), result);
             
             if (File.Exists(nantOutputFile))
-            {
                 result.AddTaskResult(new FileTaskResult(nantOutputFile));
-            }
-            else
-            {
-                result.AddTaskResult(new ProcessTaskResult(processResult));
-            }
+
+		    result.AddTaskResult(new ProcessTaskResult(processResult, true));
 
 		    // is this right?? or should this break the build
 			if (processResult.TimedOut)

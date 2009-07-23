@@ -7,10 +7,23 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	public class ProcessTaskResult : ITaskResult
 	{
 		protected readonly ProcessResult result;
+	    protected bool ignoreStandardOutputOnSuccess;
 
-		public ProcessTaskResult(ProcessResult result)
+        public ProcessTaskResult(ProcessResult result)
+            : this(result, false)
+        {
+        }
+
+        /// <summary>
+        /// Constructor of ProcessTaskResult
+        /// </summary>
+        /// <param name="result">Process result data.</param>
+        /// <param name="ignoreStandardOutputOnSuccess">Set this to true if you do not want the standard output (stdout) of the process to be merged in the build log; otherwise false.</param>
+	    public ProcessTaskResult(ProcessResult result, bool ignoreStandardOutputOnSuccess)
 		{
 			this.result = result;
+	        this.ignoreStandardOutputOnSuccess = ignoreStandardOutputOnSuccess;
+
 			if (Failed())
 			{
 				Log.Info("Task execution failed");
@@ -23,7 +36,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		public virtual string Data
 		{
-			get { return StringUtil.Join(Environment.NewLine, result.StandardOutput, result.StandardError); }
+			get 
+            {
+                if (!ignoreStandardOutputOnSuccess || result.Failed)
+                {
+                    return StringUtil.Join(Environment.NewLine, result.StandardOutput, result.StandardError);
+                }
+                else
+                {
+                    return result.StandardError;
+                }
+            }
 		}
 
 		public virtual void WriteTo(XmlWriter writer)
@@ -35,7 +58,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			if (result.TimedOut) 
 				writer.WriteAttributeString("timedout", true.ToString());
 
-			writer.WriteElementString("standardOutput", result.StandardOutput);
+            if (!ignoreStandardOutputOnSuccess || result.Failed)
+                writer.WriteElementString("standardOutput", result.StandardOutput);
+
 			writer.WriteElementString("standardError", result.StandardError);
 			writer.WriteEndElement();
 		}

@@ -169,7 +169,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             // Run the executable
 			var processResult = TryToRun(CreateProcessInfo(result), result);
-            result.AddTaskResult(new ProcessTaskResult(processResult));
+            result.AddTaskResult(new ProcessTaskResult(processResult, true));
 
             if (Publish && !processResult.Failed)
             {

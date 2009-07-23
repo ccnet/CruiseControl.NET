@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			if (File.Exists(buildOutputFile))
 				result.AddTaskResult(new FileTaskResult(buildOutputFile));
 
-			result.AddTaskResult(new ProcessTaskResult(processResult));
+            result.AddTaskResult(new ProcessTaskResult(processResult, true));
 
 			if (processResult.TimedOut)
 				throw new BuilderException(this, "MSBuild process timed out (after " + Timeout + " seconds)");
