@@ -15,7 +15,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         private MockRepository mocks = new MockRepository();
 
         [Test]
-        [ExpectedException(typeof(BadReferenceException), ExpectedMessage="Reference 'doesNotExist' is either incorrect or missing.")]
         public void CheckUserWithInvalidReference()
         {
             string userName = "johndoe";
@@ -26,7 +25,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             mocks.ReplayAll();
             UserPermission assertion = new UserPermission();
             assertion.RefId = badReference;
-            assertion.CheckUser(manager, userName);
+            Assert.That(delegate { assertion.CheckUser(manager, userName); },
+                        Throws.TypeOf<BadReferenceException>().With.Message.EqualTo("Reference 'doesNotExist' is either incorrect or missing."));
         }
 
         [Test]
@@ -48,7 +48,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         }
 
         [Test]
-        [ExpectedException(typeof(BadReferenceException), ExpectedMessage = "Reference 'doesNotExist' is either incorrect or missing.")]
         public void CheckPermissionWithInvalidReference()
         {
             SecurityPermission permission = SecurityPermission.ForceAbortBuild;
@@ -59,7 +58,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             mocks.ReplayAll();
             UserPermission assertion = new UserPermission();
             assertion.RefId = badReference;
-            assertion.CheckPermission(manager, permission);
+            Assert.That(delegate { assertion.CheckPermission(manager, permission); },
+                        Throws.TypeOf<BadReferenceException>().With.Message.EqualTo("Reference 'doesNotExist' is either incorrect or missing."));
         }
 
         [Test]

@@ -49,21 +49,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         }
 
         [Test]
-        [ExpectedException(typeof(SessionInvalidException))]
         public void ChangePasswordForUnknownSession()
         {
             ExternalFileSecurityManager manager = new ExternalFileSecurityManager();
             string session = InitialiseManagerAndLogin(manager);
-            manager.ChangePassword("unknown", "whoareyou", "whoami");
+            Assert.That(delegate { manager.ChangePassword("unknown", "whoareyou", "whoami"); },
+                        Throws.TypeOf<SessionInvalidException>());
         }
 
         [Test]
-        [ExpectedException(typeof(SecurityException))]
         public void ChangePasswordWithWrongPassword()
         {
             ExternalFileSecurityManager manager = new ExternalFileSecurityManager();
             string session = InitialiseManagerAndLogin(manager);
-            manager.ChangePassword(session, "wrong", "whoami");
+            Assert.That(delegate { manager.ChangePassword(session, "wrong", "whoami"); },
+                        Throws.TypeOf<SecurityException>());
         }
 
         [Test]
@@ -79,21 +79,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         }
 
         [Test]
-        [ExpectedException(typeof(SessionInvalidException))]
         public void ResetPasswordForUnknownSession()
         {
             ExternalFileSecurityManager manager = new ExternalFileSecurityManager();
             string session = InitialiseManagerAndLogin(manager);
-            manager.ResetPassword("unknown", "johndoe", "whoami");
+            Assert.That(delegate { manager.ResetPassword("unknown", "johndoe", "whoami"); },
+                        Throws.TypeOf<SessionInvalidException>());
         }
 
         [Test]
-        [ExpectedException(typeof(PermissionDeniedException))]
         public void ResetPasswordWithoutPermission()
         {
             ExternalFileSecurityManager manager = new ExternalFileSecurityManager();
             string session = InitialiseManagerAndLogin(manager);
-            manager.ResetPassword(session, "johndoe", "whoami");
+            Assert.That(delegate { manager.ResetPassword(session, "johndoe", "whoami"); },
+                        Throws.TypeOf<PermissionDeniedException>());
         }
 
         private string TrimWhitespace(string xml)

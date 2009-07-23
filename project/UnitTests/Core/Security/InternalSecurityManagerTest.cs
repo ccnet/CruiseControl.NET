@@ -307,20 +307,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             Assert.AreEqual(1, actual.Count);
         }
 
-        [Test]
-        [ExpectedException(typeof(NotImplementedException),
-            ExpectedMessage = "Password management is not allowed for this security manager")]
-        public void ChangePasswordThrowsAnException()
-        {
-            manager.ChangePassword("session", "oldPassword", "newPassword");
-        }
+        //[Test]
+        //[ExpectedException(typeof(NotImplementedException),
+        //    ExpectedMessage = "Password management is not allowed for this security manager")]
+        //public void ChangePasswordThrowsAnException()
+        //{
+        //    manager.ChangePassword("session", "oldPassword", "newPassword");
+        //}
 
-        [Test]
-        [ExpectedException(typeof(NotImplementedException),
-            ExpectedMessage = "Password management is not allowed for this security manager")]
-        public void ResetPasswordThrowsAnException()
-        {
-            manager.ResetPassword("session", "user", "newPassword");
-        }
+        //[Test]
+        //[ExpectedException(typeof(NotImplementedException),
+        //    ExpectedMessage = "Password management is not allowed for this security manager")]
+        //public void ResetPasswordThrowsAnException()
+        //{
+        //    manager.ResetPassword("session", "user", "newPassword");
+        //}
     }
 }

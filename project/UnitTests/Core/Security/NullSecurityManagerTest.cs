@@ -70,22 +70,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             manager.LogEvent("A project", "A user", SecurityEvent.ForceBuild, SecurityRight.Allow, "A message");
         }
 
-        [Test]
-        [ExpectedException(typeof(NotImplementedException),
-            ExpectedMessage = "Password management is not allowed for this security manager")]
-        public void ChangePasswordThrowsAnException()
-        {
-            NullSecurityManager manager = new NullSecurityManager();
-            manager.ChangePassword("session", "oldPassword", "newPassword");
-        }
+        //[Test]
+        //[ExpectedException(typeof(NotImplementedException),
+        //    ExpectedMessage = "Password management is not allowed for this security manager")]
+        //public void ChangePasswordThrowsAnException()
+        //{
+        //    NullSecurityManager manager = new NullSecurityManager();
+        //    manager.ChangePassword("session", "oldPassword", "newPassword");
+        //}
 
-        [Test]
-        [ExpectedException(typeof(NotImplementedException),
-            ExpectedMessage = "Password management is not allowed for this security manager")]
-        public void ResetPasswordThrowsAnException()
-        {
-            NullSecurityManager manager = new NullSecurityManager();
-            manager.ResetPassword("session", "user", "newPassword");
-        }
+        //[Test]
+        //[ExpectedException(typeof(NotImplementedException),
+        //    ExpectedMessage = "Password management is not allowed for this security manager")]
+        //public void ResetPasswordThrowsAnException()
+        //{
+        //    NullSecurityManager manager = new NullSecurityManager();
+        //    manager.ResetPassword("session", "user", "newPassword");
+        //}
     }
 }
