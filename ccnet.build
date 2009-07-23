@@ -28,7 +28,7 @@
 	<property name="gendarme.executable"	readonly="true"		value="${path::combine( path::combine(tools.dir, 'Gendarme'), 'gendarme.exe')}" />
 	<property name="ndepend.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NDepend'), 'NDepend.Console.exe')}" />
 	<property name="fxcop.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'FxCop'), 'FxCopCmd.exe')}" />
-	<property name="nunit.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'nunit'), 'nunit-console.exe')}" />
+	<property name="nunit.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NUnit'), 'nunit-console.exe')}" />
 	<property name="nsis.executable"		readonly="true"		value="${path::combine( path::combine(tools.dir, 'NSIS'), 'makensis.exe')}" />
 
 	<!-- common assembly info properties -->
@@ -152,7 +152,7 @@
 				</fileset>
 			</copy>
 			<copy todir ="${path::combine(build.dir, 'UnitTests')}" overwrite="true" verbose="${nant.verbosity}">
-				<fileset basedir="${path::combine(tools.dir, 'nunit')}" failonempty="true">
+				<fileset basedir="${path::combine(tools.dir, 'NUnit')}" failonempty="true">
 					<include name="nunit.framework.dll" />
 				</fileset>
 			</copy>
