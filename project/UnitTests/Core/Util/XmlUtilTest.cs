@@ -36,11 +36,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			Assert.AreEqual(elementTwo, XmlUtil.GetFirstElement(doc, TWO_SUCH_ELEMENTS));
 		}
 
-		[Test, ExpectedException(typeof(CruiseControlException))]
+		[Test]
 		public void GetSingleElement()
 		{
-			XmlUtil.GetSingleElement(doc, ONE_SUCH_ELEMENT);
-			XmlUtil.GetSingleElement(doc, TWO_SUCH_ELEMENTS);
+			Assert.That(delegate { XmlUtil.GetSingleElement(doc, ONE_SUCH_ELEMENT); },
+                        Throws.Nothing);
+			Assert.That(delegate { XmlUtil.GetSingleElement(doc, TWO_SUCH_ELEMENTS); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
 		[Test]
@@ -78,18 +80,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			Assert.AreEqual("andersen", XmlUtil.SelectRequiredValue(document, "/configuration/martin"));			
 		}
 
-		[Test, ExpectedException(typeof(CruiseControlException))]
+		[Test]
 		public void SelectRequiredValueWithMissingValue()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><martin></martin></configuration>");
-			XmlUtil.SelectRequiredValue(document, "/configuration/martin");
+            Assert.That(delegate { XmlUtil.SelectRequiredValue(document, "/configuration/martin"); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
-		[Test, ExpectedException(typeof(CruiseControlException))]
+		[Test]
 		public void SelectRequiredValueWithMissingElement()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><martin></martin></configuration>");
-			XmlUtil.SelectRequiredValue(document, "/configuration/larry");
+			Assert.That(delegate { XmlUtil.SelectRequiredValue(document, "/configuration/larry"); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
 		[Test]

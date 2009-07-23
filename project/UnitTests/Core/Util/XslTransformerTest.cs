@@ -47,30 +47,33 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			Assert.IsTrue(output.IndexOf("myValue") > 0);
 		}
 
-		[Test, ExpectedException(typeof (CruiseControlException))]
+		[Test]
 		public void ShouldFailWhenInputInvalid()
 		{
 			string input = @"<This is some invalid xml";
 			string xslfile = TempFileUtil.CreateTempXmlFile(TestFolder, "samplestylesheet.xsl", TestData.StyleSheetContents);
 
-			new XslTransformer().Transform(input, xslfile, null);
+			Assert.That(delegate { new XslTransformer().Transform(input, xslfile, null); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
-		[Test, ExpectedException(typeof (CruiseControlException))]
+		[Test]
 		public void ShouldFailWhenXslFileMissing()
 		{
 			string logfile = TestData.LogFileContents;
 			string xslfile = "nosuchstylefile";
 
-			new XslTransformer().Transform(logfile, xslfile, null);
+			Assert.That(delegate { new XslTransformer().Transform(logfile, xslfile, null); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
-		[Test, ExpectedException(typeof (CruiseControlException))]
+		[Test]
 		public void ShouldFailWhenXslInvalid()
 		{
 			string logfile = TestData.LogFileContents;
 			string xslfile = XslFileBadFormat;
-			new XslTransformer().Transform(logfile, xslfile, null);
+            Assert.That(delegate { new XslTransformer().Transform(logfile, xslfile, null); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
 		private static string XslFileBadFormat
