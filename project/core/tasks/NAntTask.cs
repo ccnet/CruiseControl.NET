@@ -16,6 +16,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public const string DefaultListener = "NAnt.Core.DefaultLogger";
 		public const bool DefaultNoLogo = true;
 
+	    private readonly IFileDirectoryDeleter fileDirectoryDeleter = new IoService();
+
 		public NAntTask(): 
 			this(new ProcessExecutor()){}
 
@@ -63,17 +65,25 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		/// <param name="result">For storing build output.</param>
         protected override bool Execute(IIntegrationResult result)
 		{
+            string nantOutputFile = GetNantOutputFile(result);
+            //delete old nant output logfile, if exist
+		    fileDirectoryDeleter.DeleteIncludingReadOnlyObjects(nantOutputFile);
+
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : 
                 string.Format("Executing Nant :BuildFile: {0} Targets: {1} ", BuildFile, string.Join(", ", Targets)));
 
 			ProcessResult processResult = TryToRun(CreateProcessInfo(result), result);
+            
+            if (File.Exists(nantOutputFile))
+            {
+                result.AddTaskResult(new FileTaskResult(nantOutputFile));
+            }
+            else
+            {
+                result.AddTaskResult(new ProcessTaskResult(processResult));
+            }
 
-			string nantOutputFile = GetNantOutputFile(result);
-			if (File.Exists(nantOutputFile))
-				result.AddTaskResult(new FileTaskResult(nantOutputFile));
-
-			result.AddTaskResult(new ProcessTaskResult(processResult));
-			// is this right?? or should this break the build
+		    // is this right?? or should this break the build
 			if (processResult.TimedOut)
 				throw new BuilderException(this, "NAnt process timed out (after " + BuildTimeoutSeconds + " seconds)");
 
