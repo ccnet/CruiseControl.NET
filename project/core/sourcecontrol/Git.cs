@@ -124,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private BuildProgressInformation GetBuildProgressInformation(IIntegrationResult result)
 		{
 			if (_buildProgressInformation == null)
-				_buildProgressInformation = new BuildProgressInformation(result.ArtifactDirectory, result.ProjectName);
+                _buildProgressInformation = result.BuildProgressInformation;
 
 			return _buildProgressInformation;
 		}
