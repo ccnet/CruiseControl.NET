@@ -85,7 +85,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void InitialiseThrowsAnErrorForUnknownUnit()
         {
             var server = mocks.DynamicMock<ICruiseServer>();
@@ -94,11 +93,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
             configuration.Items = new XmlElement[] {
                 CreateSizeElement("garbage", 100, "C:\\")
             };
-            extension.Initialise(server, configuration);
+            Assert.That(delegate { extension.Initialise(server, configuration); },
+                        Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void InitialiseThrowsAnErrorForUnknownElement()
         {
             var server = mocks.DynamicMock<ICruiseServer>();
@@ -108,11 +107,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
             configuration.Items = new XmlElement[] {
                 document.CreateElement("garbage")
             };
-            extension.Initialise(server, configuration);
+            Assert.That(delegate { extension.Initialise(server, configuration); },
+                        Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void InitialiseThrowsAnErrorWithNoDrives()
         {
             var server = mocks.DynamicMock<ICruiseServer>();
@@ -120,7 +119,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
             var configuration = new ExtensionConfiguration();
             configuration.Items = new XmlElement[] {
             };
-            extension.Initialise(server, configuration);
+            Assert.That(delegate { extension.Initialise(server, configuration); },
+                        Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]

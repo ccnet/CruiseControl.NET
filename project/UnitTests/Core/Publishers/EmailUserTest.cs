@@ -11,8 +11,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         public void ShouldFailToReadWithoutAddress()
         {
             Assert.That(delegate { NetReflector.Read(@"<user name=""username""/>"); },
-                        Throws.TypeOf<NetReflectorException>().With.Message.EqualTo(
-                            "No loaded type is marked up with a ReflectorType attribute that matches the Xml node (user).  Xml Source: <user name=\"username\" />"));
+                        Throws.TypeOf<NetReflectorException>());
         }
 
         [Test]

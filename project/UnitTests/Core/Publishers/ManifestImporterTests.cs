@@ -89,11 +89,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         /// Import a manifest without setting the filename.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ImportWithoutAFilename()
         {
             ManifestImporter generator = new ManifestImporter();
-            generator.Generate(null, null);
+            Assert.That(delegate { generator.Generate(null, null); },
+                        Throws.TypeOf<ArgumentOutOfRangeException>().With.Property("ParamName").EqualTo("FileName"));
         }
         #endregion
         #endregion
