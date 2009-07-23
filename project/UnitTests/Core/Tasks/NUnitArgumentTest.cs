@@ -7,10 +7,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 	[TestFixture]
 	public class NUnitArgumentTest : CustomAssertion
 	{
-		[Test, ExpectedException(typeof(CruiseControlException))]
+		[Test]
 		public void IfNoAssembliesAreSpecifiedThenTheArgumentIsInvalid()
 		{
-			new NUnitArgument(null, null);
+            Assert.That(delegate { new NUnitArgument(null, null); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
 		[Test]

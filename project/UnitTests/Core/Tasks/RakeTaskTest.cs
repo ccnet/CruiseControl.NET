@@ -98,18 +98,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(StringUtil.MakeBuildResult(FailedProcessResult().StandardOutput, ""), result.TaskOutput);
 		}
 
-		[Test, ExpectedException(typeof (BuilderException))]
+		[Test]
 		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
 			ExpectToExecuteAndReturn(TimedOutProcessResult());
-			builder.Run(result);
+			Assert.That(delegate { builder.Run(result); },
+                        Throws.TypeOf<BuilderException>());
 		}
 		
-		[Test, ExpectedException(typeof (BuilderException))]
+		[Test]
 		public void ShouldThrowBuilderExceptionIfProcessThrowsException()
 		{
 			ExpectToExecuteAndThrow();
-			builder.Run(result);
+            Assert.That(delegate { builder.Run(result); },
+                        Throws.TypeOf<BuilderException>());
 		}
 
 		[Test]

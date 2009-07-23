@@ -29,10 +29,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual("<invalid xml>", result.Data);
 		}
 
-		[Test, ExpectedException(typeof (CruiseControlException))]
+		[Test]
 		public void ShouldThrowReadableExceptionIfFileDoesNotExist()
 		{
-			new FileTaskResult("unknown.file");
+            Assert.That(delegate { new FileTaskResult("unknown.file"); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 	}
 }

@@ -79,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.Run(result);
 
 			Assert.AreEqual(1, result.TaskResults.Count);
-			Assert.AreEqual(ProcessResultOutput, result.TaskOutput);
+		    Assert.That(result.TaskOutput, Is.Empty);
 			Verify();
 		}
 	}

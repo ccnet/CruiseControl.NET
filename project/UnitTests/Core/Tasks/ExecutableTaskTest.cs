@@ -112,12 +112,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		}
 
 		// TODO - Timeout?
-		[Test, ExpectedException(typeof (BuilderException))]
+		[Test]
 		public void ShouldThrowBuilderExceptionIfProcessThrowsException()
 		{
 			ExpectToExecuteAndThrow();
 
-			task.Run(IntegrationResult());
+            Assert.That(delegate { task.Run(IntegrationResult()); },
+                        Throws.TypeOf<BuilderException>());
 			Verify();
 		}
 
@@ -231,10 +232,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		}
 
 		[Test]
-		[ExpectedException(typeof(System.FormatException))]
 		public void ShouldThrowExceptionOnInvalidSuccessExitCodes()
 		{
-			task.SuccessExitCodes = "0, 1, GOOD";
+			Assert.That(delegate { task.SuccessExitCodes = "0, 1, GOOD"; },
+                        Throws.TypeOf<System.FormatException>());
 		}
 
 		[Test]

@@ -84,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			
 			Assert.IsTrue(result.Succeeded);
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
-			Assert.AreEqual(SuccessfulProcessResult().StandardOutput, result.TaskOutput);
+		    Assert.That(result.TaskOutput, Is.Empty);
 		}
 
 		[Test]
@@ -99,18 +99,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(FailedProcessResult().StandardOutput, result.TaskOutput);
 		}
 
-		[Test, ExpectedException(typeof (BuilderException))]
+		[Test]
 		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
 			ExpectToExecuteAndReturn(TimedOutProcessResult());
-			builder.Run(result);
+			Assert.That(delegate { builder.Run(result); },
+                        Throws.TypeOf<BuilderException>());
 		}
 		
-		[Test, ExpectedException(typeof (BuilderException))]
+		[Test]
 		public void ShouldThrowBuilderExceptionIfProcessThrowsException()
 		{
 			ExpectToExecuteAndThrow();
-			builder.Run(result);
+            Assert.That(delegate { builder.Run(result); },
+                        Throws.TypeOf<BuilderException>());
 		}
 
 		[Test]

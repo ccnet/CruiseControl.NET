@@ -54,13 +54,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			executorMock.Verify();
 		}
 
-		[Test, ExpectedException(typeof(CruiseControlException))]
+		[Test]
 		public void ShouldThrowExceptionIfTestsFailed()
 		{
 			executorMock.ExpectAndReturn("Execute", ProcessResultFixture.CreateNonZeroExitCodeResult(), new object[] { new IsAnything() });
 
 			task = new NUnitTask((ProcessExecutor) executorMock.MockInstance);
-			task.Run(result);
+            Assert.That(delegate { task.Run(result); },
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
         /// <summary>
