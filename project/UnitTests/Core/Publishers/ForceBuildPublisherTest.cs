@@ -47,8 +47,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             SetupResult.For(factory.GenerateClient("tcp://localhost:21234/CruiseManager.rem"))
                 .Return(client);
             Expect.Call(() => client.ForceBuild("project", null))
-                .Constraints(Is.Equal("project"),
-                    Is.TypeOf<List<NameValuePair>>());
+                .Constraints(Rhino.Mocks.Constraints.Is.Equal("project"),
+                    Rhino.Mocks.Constraints.Is.TypeOf<List<NameValuePair>>());
             mocks.ReplayAll();
 
 			ForceBuildPublisher publisher = new ForceBuildPublisher(factory);
