@@ -182,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		{
             Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
 			Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); });
-            Expect.Call(() => fileSystem.AtomicSave(string.Empty, string.Empty)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull(), Rhino.Mocks.Constraints.Is.Anything()).Throw(new SystemException());
+            Expect.Call(() => fileSystem.AtomicSave(string.Empty, string.Empty)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull(), Rhino.Mocks.Constraints.Is.Anything()).Throw(new CruiseControlException());
 			mocks.ReplayAll();
 
 			state = new FileStateManager(fileSystem, executionEnvironment);
@@ -195,7 +195,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		{
             Expect.Call(executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Return(applicationDataPath);
 			Expect.Call(delegate { fileSystem.EnsureFolderExists(applicationDataPath); });
-            Expect.Call(fileSystem.Load(null)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Throw(new SystemException());
+            Expect.Call(fileSystem.Load(null)).IgnoreArguments().Constraints(Rhino.Mocks.Constraints.Is.NotNull()).Throw(new CruiseControlException());
 			mocks.ReplayAll();
 
 			state = new FileStateManager(fileSystem, executionEnvironment);
