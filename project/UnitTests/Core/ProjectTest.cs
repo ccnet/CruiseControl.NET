@@ -425,13 +425,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			VerifyAll();
 		}
 
-		[Test, ExpectedException(typeof (CruiseControlException))]
+		[Test]
 		public void RethrowExceptionIfLoadingStateFileThrowsException()
 		{
 			mockStateManager.ExpectAndReturn("HasPreviousState", true, ProjectName);
 			mockStateManager.ExpectAndThrow("LoadState", new CruiseControlException("expected exception"), ProjectName);
 
-			project.Integrate(ModificationExistRequest());
+            Assert.That(delegate { project.Integrate(ModificationExistRequest()); },
+                        Throws.TypeOf<CruiseControlException>());
 			VerifyAll();
 		}
 

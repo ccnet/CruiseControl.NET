@@ -89,14 +89,14 @@ namespace ThoughtWorks.CruiseControl.Core
 			if (filename == null)
 				throw new ArgumentNullException("filename");
 
-			if (!filename.StartsWith(FilenamePrefix))
-				throw new ArgumentException(string.Format(
-					"{0} does not start with {1}.", filename, FilenamePrefix));
+            if (!filename.StartsWith(FilenamePrefix))
+                throw new ArgumentException(string.Format(
+                                                "{0} does not start with {1}.", filename, FilenamePrefix), "filename");
 
 			if (filename.Length < FilenamePrefix.Length + FilenameDateFormat.Length)
 				throw new ArgumentException(string.Format(
 					"{0} does not start with {1} followed by a date in {2} format",
-					filename, FilenamePrefix, FilenameDateFormat));
+                    filename, FilenamePrefix, FilenameDateFormat), "filename");
 		}
 
 		private DateTime ParseDate(string filename)

@@ -113,11 +113,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 			Assert.AreEqual(first, second, "Error reading file twice with same reader");
 		}
 
-		[Test, ExpectedException(typeof (FileNotFoundException))]
+		[Test]
 		public void ReadUnknownFile()
 		{
 			ServerLogFileReader reader = new ServerLogFileReader("BogusFileName", 10);
-			Assert.AreEqual("Error reading unknown file",string.Empty, reader.Read());
+			Assert.That(delegate { reader.Read(); },
+                        Throws.TypeOf<FileNotFoundException>());
 		}
 
 		[Test]

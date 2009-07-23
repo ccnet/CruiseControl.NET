@@ -178,21 +178,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		}
 
 
-        [Test, ExpectedException(typeof(ThoughtWorks.CruiseControl.Core.Config.ConfigurationException))]
+        [Test]
         public void RandomOffSetInMinutesFromTimeShouldBePositive()
         {
-            trigger.RandomOffSetInMinutesFromTime = -10;
+            Assert.That(delegate { trigger.RandomOffSetInMinutesFromTime = -10; },
+                        Throws.TypeOf<ThoughtWorks.CruiseControl.Core.Config.ConfigurationException>());
 
         }
 
-        [Test, ExpectedException(typeof(ThoughtWorks.CruiseControl.Core.Config.ConfigurationException))]
+        [Test]
         public void RandomOffSetInMinutesFromTimeMayNotExceedMidnight()
         {
             mockDateTime.SetupResult("Now", new DateTime(2005, 2, 4, 9, 0, 1));
          //whatever random time is choosen, the resulted time will still be after midnight
             trigger.Time = "23:59";
             trigger.RandomOffSetInMinutesFromTime = 1;
-            DateTime x = trigger.NextBuild;
+            Assert.That(delegate { DateTime x = trigger.NextBuild; },
+                        Throws.TypeOf<ThoughtWorks.CruiseControl.Core.Config.ConfigurationException>());
 
         }
 

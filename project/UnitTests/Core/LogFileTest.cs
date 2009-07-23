@@ -162,13 +162,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test, ExpectedException(typeof(ArgumentException))]
 		public void AttemptToCreateLogFileForFilenameWithWrongPrefix()
 		{
-			new LogFile("garbage.txt");
+            Assert.That(delegate { new LogFile("garbage.txt"); },
+                        Throws.TypeOf<ArgumentException>().With.Property("ParamName").EqualTo("filename"));
 		}
 		
 		[Test, ExpectedException(typeof(ArgumentException))]
 		public void AttemptToCreateLogFileForFilenameWithoutDate()
 		{
-			new LogFile("log3.xml");
+			Assert.That(delegate { new LogFile("log3.xml"); },
+                        Throws.TypeOf<ArgumentException>().With.Property("ParamName").EqualTo("filename"));
 		}
 		
 		[Test]
