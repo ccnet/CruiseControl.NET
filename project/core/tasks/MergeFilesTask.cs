@@ -71,6 +71,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                             case MergeFileInfo.MergeActionType.CData:
                                 // Add the file to the merge list
                                 actualLogger.Info("Merging file '{0}'", fileInfo);
+                                result.BuildProgressInformation.AddTaskInformation(string.Format("Merging file '{0}'", fileInfo));
                                 var useCData = (mergeFile.MergeAction == MergeFileInfo.MergeActionType.CData);
                                 result.AddTaskResultFromFile(fileInfo.FullName, useCData);
                                 break;
@@ -78,6 +79,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                                 // Copy the file to the target folder
                                 actualFileSystem.EnsureFolderExists(targetFolder);
                                 actualLogger.Info("Copying file '{0}' to '{1}'", fileInfo.Name, targetFolder);
+                                result.BuildProgressInformation.AddTaskInformation(string.Format("Copying file '{0}' to '{1}'", fileInfo.Name, targetFolder));
                                 actualFileSystem.Copy(fileInfo.FullName, Path.Combine(targetFolder, fileInfo.Name));
                                 break;
                             default:
