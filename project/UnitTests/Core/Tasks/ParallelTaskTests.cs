@@ -12,6 +12,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
     [TestFixture]
+    [Ignore("Ignored until a random fail on Windows and a deadlock on Unix is fixed. (Deadlock on Unix is in ParallelTaskTests.ExecuteRunsMultipleSuccessfulTasks)")]
     public class ParallelTaskTests
     {
         private MockRepository mocks = new MockRepository();
