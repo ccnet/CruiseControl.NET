@@ -14,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public const string DefaultCvsExecutable = "cvs";
 		public const string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
 		private readonly IFileSystem fileSystem;
+        private BuildProgressInformation _buildProgressInformation;
 
 		public Cvs() : this(new CvsHistoryParser(), new ProcessExecutor(), new SystemIoFileSystem())
 		{
@@ -89,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void GetSource(IIntegrationResult result)
 		{
-            result.BuildProgressInformation.SignalStartRunTask("Getting source from CVS");
+            GetBuildProgressInformation(result).SignalStartRunTask("Getting source from CVS");
 
 			if (!AutoGetSource) return;
 
@@ -103,6 +104,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+        private BuildProgressInformation GetBuildProgressInformation(IIntegrationResult result)
+        {
+            if (_buildProgressInformation == null)
+                _buildProgressInformation = result.BuildProgressInformation;
+
+            return _buildProgressInformation;
+        }
+
+        private void ProcessExecutor_ProcessOutput(object sender, ProcessOutputEventArgs e)
+        {
+            if (_buildProgressInformation == null)
+                return;
+
+            // ignore error output in the progress information
+            if (e.OutputType == ProcessOutputType.ErrorOutput)
+                return;
+
+            _buildProgressInformation.AddTaskInformation(e.Data);
+        }
+
 		private bool DoesCvsDirectoryExist(IIntegrationResult result)
 		{
 			string cvsDirectory = Path.Combine(result.BaseFromWorkingDirectory(WorkingDirectory), "CVS");
@@ -113,7 +134,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
             if (string.IsNullOrEmpty(CvsRoot))
 				throw new ConfigurationException("<cvsroot> configuration element must be specified in order to automatically checkout source from CVS.");
+
+            // enable Stdout monitoring
+            ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+
 			Execute(NewCheckoutProcessInfo(result));
+
+            // remove Stdout monitoring
+            ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
 		}
 
 		private ProcessInfo NewCheckoutProcessInfo(IIntegrationResult result)
@@ -132,7 +160,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private void UpdateSource(IIntegrationResult result)
 		{
+            // enable Stdout monitoring
+            ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+
 			Execute(NewGetSourceProcessInfo(result));
+
+            // remove Stdout monitoring
+            ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
 		}
 
 		private ProcessInfo NewGetSourceProcessInfo(IIntegrationResult result)
