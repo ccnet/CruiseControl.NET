@@ -174,7 +174,7 @@
 			<copy file="${path::combine( path::combine(src.dir, 'UnitTests'), 'test.config')}" tofile="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll.config')}" verbose="${nant.verbosity}" />
 		</if>
 
-		<nunitTest executable="${nunit.executable}" workingDirectory="${path::combine(build.dir, 'UnitTests')}" outputFile="${path::combine(build.metrics.dir, 'nunit-result.xml')}" commandLineParameterFlag="/" showLabels="true">
+		<nunitTest executable="${nunit.executable}" workingDirectory="${path::combine(build.dir, 'UnitTests')}" outputFile="${path::combine(build.metrics.dir, 'nunit-result.xml')}" commandLineParameterFlag="-" showLabels="true" verbose="${nant.verbosity}">
 			<assemblies>
 				<include name="${path::combine( path::combine(build.dir, 'UnitTests'), 'ThoughtWorks.CruiseControl.UnitTests.dll')}" />
 			</assemblies>
