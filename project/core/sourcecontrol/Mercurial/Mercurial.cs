@@ -15,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         public const string HistoryTemplate = "<modification><node>{node|short}</node><author>{author|user}</author><date>{date|rfc822date}</date><desc>{desc|escape}</desc><rev>{rev}</rev><email>{author|email|obfuscate}</email><files>{files}</files></modification>";
 
         private readonly IFileSystem _fileSystem;
+        private BuildProgressInformation _buildProgressInformation;
 
         [ReflectorProperty("autoGetSource", Required = false)] public bool AutoGetSource = true;
 
@@ -41,6 +42,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
+            GetBuildProgressInformation(to).SignalStartRunTask("Checking modifications from Mercurial");
+
+            // enable Stdout monitoring
+            ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+
             string workingDirectory = to.BaseFromWorkingDirectory(WorkingDirectory);
             EnsureWorkingDirectoryExists(workingDirectory);
             InitializeLocalRepository(workingDirectory);
@@ -54,11 +60,34 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
             ProcessResult modificationResults = Execute(GetModificationsFlowGetLog(revisionId + 1, tipId, workingDirectory));
             Modification[] modifications = ParseModifications(modificationResults, from.StartTime, to.StartTime);
 
+            // remove Stdout monitoring
+            ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
+
             if (UrlBuilder != null)
             {
                 UrlBuilder.SetupModification(modifications);
             }
             return modifications;
+        }
+
+        private BuildProgressInformation GetBuildProgressInformation(IIntegrationResult result)
+        {
+            if (_buildProgressInformation == null)
+                _buildProgressInformation = result.BuildProgressInformation;
+
+            return _buildProgressInformation;
+        }
+
+        private void ProcessExecutor_ProcessOutput(object sender, ProcessOutputEventArgs e)
+        {
+            if (_buildProgressInformation == null)
+                return;
+
+            // ignore error output in the progress information
+            if (e.OutputType == ProcessOutputType.ErrorOutput)
+                return;
+
+            _buildProgressInformation.AddTaskInformation(e.Data);
         }
 
         private ProcessInfo GetModificationsFlowGetLog(int revisionId, int tipId, string workingDirectory)
@@ -120,20 +149,35 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 
         public override void LabelSourceControl(IIntegrationResult result)
         {
+            GetBuildProgressInformation(result).SignalStartRunTask("Mercurial: tag current build");
+
             if (!TagOnSuccess || result.Failed)
             {
                 return;
             }
+
+            // enable Stdout monitoring
+            ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+
             Execute(LabelFlowCreateTagProccessInfo(result));
             Execute(LabelFlowCreatePushProcessInfo(result));
+
+            // remove Stdout monitoring
+            ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
         }
 
         public override void GetSource(IIntegrationResult result)
         {
+            GetBuildProgressInformation(result).SignalStartRunTask("Getting source from Mercurial");
+
             if (!AutoGetSource)
             {
                 return;
             }
+
+            // enable Stdout monitoring
+            ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+
             if (MultipleHeadsFail)
             {
                 ProcessResult headsfound = Execute(GetSourceFlowGetHeadsProcessInfo(result.BaseFromWorkingDirectory(WorkingDirectory)));
@@ -144,6 +188,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
                 }
             }
             Execute(GetSourceFlowPerformUpdateProcessInfo(result.BaseFromWorkingDirectory(WorkingDirectory)));
+
+            // remove Stdout monitoring
+            ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
         }
 
         private ProcessInfo GetModificationsFlowCreateInitProcessInfo(string workingDirectory)
