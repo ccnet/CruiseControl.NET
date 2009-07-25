@@ -76,9 +76,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="result"></param>
         protected virtual void RunTask(ITask task, IIntegrationResult result)
         {
-            if (task is IParamatisedTask)
+            if (task is IParamatisedItem)
             {
-                (task as IParamatisedTask).ApplyParameters(parameters, parameterDefinitions);
+                (task as IParamatisedItem).ApplyParameters(parameters, parameterDefinitions);
             }
 
             task.Run(result);

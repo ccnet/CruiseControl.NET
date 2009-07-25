@@ -309,7 +309,6 @@
     <Compile Include="label\ILabeller.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="label\IParamatisedLabeller.cs" />
     <Compile Include="label\IterationLabeller.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -681,6 +680,7 @@
     <Compile Include="sourcecontrol\RegExIssueTrackerUrlBuilder.cs" />
     <Compile Include="sourcecontrol\RobocopyHistoryParser.cs" />
     <Compile Include="sourcecontrol\RobocopySourceControl.cs" />
+    <Compile Include="sourcecontrol\SourceControlBase.cs" />
     <Compile Include="sourcecontrol\StarTeam.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -803,7 +803,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="tasks\IDynamicValue.cs" />
-    <Compile Include="tasks\IParamatisedTask.cs" />
+    <Compile Include="IParamatisedItem.cs" />
     <Compile Include="tasks\GendarmeTask.cs" />
     <Compile Include="tasks\MergeFilesTask.cs">
       <SubType>Code</SubType>

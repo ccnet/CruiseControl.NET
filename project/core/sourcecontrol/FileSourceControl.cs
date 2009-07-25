@@ -7,7 +7,8 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
     [ReflectorType("filesystem")]
-    public class FileSourceControl : ISourceControl
+    public class FileSourceControl 
+        : SourceControlBase
     {
         private readonly IFileSystem fileSystem;
 
@@ -29,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("autoGetSource", Required = false)]
         public bool AutoGetSource = false;
 
-        public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
+        public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
             DirectoryInfo root = new DirectoryInfo(from.BaseFromWorkingDirectory(RepositoryRoot));
             var modifications = GetMods(root, from.StartTime);
@@ -93,10 +94,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return result;
         }
 
-        public void LabelSourceControl(IIntegrationResult result)
+        public override void LabelSourceControl(IIntegrationResult result)
         { }
 
-        public void GetSource(IIntegrationResult result)
+        public override void GetSource(IIntegrationResult result)
         {
             result.BuildProgressInformation.SignalStartRunTask("Getting source from FileSourceControl");
 
@@ -104,10 +105,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 fileSystem.Copy(RepositoryRoot, result.WorkingDirectory);
         }
 
-        public void Initialize(IProject project)
+        public override void Initialize(IProject project)
         { }
 
-        public void Purge(IProject project)
+        public override void Purge(IProject project)
         { }
     }
 }

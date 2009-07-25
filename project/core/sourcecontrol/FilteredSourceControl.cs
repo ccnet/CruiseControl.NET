@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core.Tasks;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("filtered")]
-	public class FilteredSourceControl : ISourceControl
+	public class FilteredSourceControl 
+        : SourceControlBase
 	{
 		private ISourceControl _realScProvider;
         private IModificationFilter[] _inclusionFilters = new IModificationFilter[0];
@@ -47,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// A modification survives filtering if it is accepted by the inclusion filters and not accepted
         /// by the exclusion filters.
         /// </remarks>
-		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
+        public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			Modification[] allModifications = _realScProvider.GetModifications(from, to);
             var acceptedModifications = new List<Modification>();
@@ -69,22 +72,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return acceptedModifications.ToArray();
 		}
 
-		public void LabelSourceControl(IIntegrationResult result)
+        public override void LabelSourceControl(IIntegrationResult result)
 		{
 			_realScProvider.LabelSourceControl(result);
 		}
 
-		public void GetSource(IIntegrationResult result)
+        public override void GetSource(IIntegrationResult result)
 		{
 			_realScProvider.GetSource(result);
 		}
 
-		public void Initialize(IProject project)
+        public override void Initialize(IProject project)
 		{
             _realScProvider.Initialize(project);
 		}
 
-		public void Purge(IProject project)
+        public override void Purge(IProject project)
 		{
              _realScProvider.Purge(project);
 		}
@@ -142,5 +145,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			return false;
 		}
-	}
+
+        #region ApplyParameters()
+        /// <summary>
+        /// Applies the input parameters to the task.
+        /// </summary>
+        /// <param name="parameters">The parameters to apply.</param>
+        /// <param name="parameterDefinitions">The original parameter definitions.</param>
+        public override void ApplyParameters(Dictionary<string, string> parameters, IEnumerable<ParameterBase> parameterDefinitions)
+        {
+            base.ApplyParameters(parameters, parameterDefinitions);
+            var dynamicChild = _realScProvider as IParamatisedItem;
+            if (dynamicChild != null) dynamicChild.ApplyParameters(parameters, parameterDefinitions);
+        }
+        #endregion
+    }
 }

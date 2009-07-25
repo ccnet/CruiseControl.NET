@@ -275,6 +275,8 @@ namespace ThoughtWorks.CruiseControl.Core
             try
             {
                 if (Impersonation != null) impersonation = Impersonation.Impersonate();
+                var dynamicSourceControl = sourceControl as IParamatisedItem;
+                if (dynamicSourceControl != null) dynamicSourceControl.ApplyParameters(request.BuildValues, parameters);
                 result = integratable.Integrate(request);
             }
             catch (Exception error)
@@ -461,9 +463,9 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             foreach (ITask task in tasksToRun)
             {
-                if (task is IParamatisedTask)
+                if (task is IParamatisedItem)
                 {
-                    (task as IParamatisedTask).ApplyParameters(parameterValues, parameters);
+                    (task as IParamatisedItem).ApplyParameters(parameterValues, parameters);
                 }
 
                 RunTask(task, result);
@@ -492,9 +494,9 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 try
                 {
-                    if (publisher is IParamatisedTask)
+                    if (publisher is IParamatisedItem)
                     {
-                        (publisher as IParamatisedTask).ApplyParameters(parameterValues, parameters);
+                        (publisher as IParamatisedItem).ApplyParameters(parameterValues, parameters);
                     }
 
                     RunTask(publisher, result);
@@ -843,9 +845,9 @@ namespace ThoughtWorks.CruiseControl.Core
         
         public void CreateLabel(IIntegrationResult result)
         {
-            if (Labeller is IParamatisedLabeller)
+            if (Labeller is IParamatisedItem)
             {
-                (Labeller as IParamatisedLabeller).ApplyParameters(result.IntegrationRequest.BuildValues, 
+                (Labeller as IParamatisedItem).ApplyParameters(result.IntegrationRequest.BuildValues, 
                     parameters);
             }
             result.Label = Labeller.Generate(result);

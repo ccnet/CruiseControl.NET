@@ -10,7 +10,8 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 {
 	[ReflectorType("p4")]
-	public class P4 : ISourceControl
+	public class P4 
+        : SourceControlBase
 	{
 		private readonly IP4Purger p4Purger;
 		internal static readonly string COMMAND_DATE_FORMAT = "yyyy/MM/dd:HH:mm:ss";
@@ -134,7 +135,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			return processInfoCreator.CreateProcessInfo(this, "describe -s " + changes);
 		}
 
-		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
+        public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			P4HistoryParser parser = new P4HistoryParser();
 			ProcessInfo process = CreateChangeListProcess(from.StartTime, to.StartTime);
@@ -167,7 +168,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		/// checked out on the client (In theory this could be refined by using the timeStamp, but it would be better
 		/// to wait until CCNet has proper support for atomic-commit change groups, and use that instead)
 		/// </summary>
-		public void LabelSourceControl(IIntegrationResult result)
+        public override void LabelSourceControl(IIntegrationResult result)
 		{
 			if (ApplyLabel && result.Succeeded)
 			{
@@ -297,7 +298,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			return processInfoCreator.CreateProcessInfo(this, "labelsync -l " + label);
 		}
 
-		public void GetSource(IIntegrationResult result)
+        public override void GetSource(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask("Getting source from Perforce");
 
@@ -338,7 +339,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
             return result.StandardOutput.Trim() + Environment.NewLine + result.StandardError.Trim();
 		}
 
-		public void Initialize(IProject project)
+        public override void Initialize(IProject project)
 		{
             if (string.IsNullOrEmpty(WorkingDirectory))
 			{
@@ -350,7 +351,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			}
 		}
 
-		public void Purge(IProject project)
+        public override void Purge(IProject project)
 		{
             if (string.IsNullOrEmpty(WorkingDirectory))
 			{

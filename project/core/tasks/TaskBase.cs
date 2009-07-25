@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// An abstract base class to add parameters to a task
     /// </summary>
     public abstract class TaskBase
-        : IParamatisedTask, IStatusSnapshotGenerator, ITask
+        : IParamatisedItem, IStatusSnapshotGenerator, ITask
     {
         #region Private fields
         private IDynamicValue[] myDynamicValues = new IDynamicValue[0];

@@ -6,7 +6,8 @@ using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	public abstract class ProcessSourceControl : ISourceControl
+	public abstract class ProcessSourceControl 
+        : SourceControlBase
 	{
 		protected ProcessExecutor executor;
 		protected IHistoryParser historyParser;
@@ -33,10 +34,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			get { return timeout; }
 			set { timeout = (value == null) ? Timeout.DefaultTimeout : value; }
 		}
-
-		public abstract Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to);
-
-		public abstract void LabelSourceControl(IIntegrationResult result);
 
 		protected Modification[] GetModifications(ProcessInfo info, DateTime from, DateTime to)
 		{
@@ -90,23 +87,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return historyParser.Parse(reader, from, to);
 		}
 
-		public virtual void GetSource(IIntegrationResult result)
+		public override void GetSource(IIntegrationResult result)
 		{
 		}
 
-		public virtual void Initialize(IProject project)
+        public override void Initialize(IProject project)
 		{
 		}
 
-		public void Purge(IProject project)
+        public override void Purge(IProject project)
 		{
 		}
-
 
         // rw issue
         [ReflectorProperty("issueUrlBuilder", InstanceTypeKey = "type", Required = false)]
         public IModificationUrlBuilder IssueUrlBuilder;
-
 
         protected void FillIssueUrl(Modification[] modifications)
         {
@@ -115,6 +110,5 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 IssueUrlBuilder.SetupModification(modifications);
             }
         }
-
 	}
 }

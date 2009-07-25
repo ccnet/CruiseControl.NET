@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
     /// Abstract base class to provide common functionality for the labellers.
     /// </summary>
     public abstract class LabellerBase
-        : ILabeller, IParamatisedLabeller
+        : ILabeller, IParamatisedItem
     {
         #region Public properties
         #region DynamicValues

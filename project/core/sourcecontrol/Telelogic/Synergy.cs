@@ -20,7 +20,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 	/// </remarks>
 	/// <include file="example.xml" path="/example" />
 	[ReflectorType("synergy")]
-	public class Synergy : ISourceControl, IDisposable
+	public class Synergy 
+        : SourceControlBase, IDisposable
 	{
 		/// <summary>The execution client for the Synergy process.</summary>
 		private ISynergyCommand command;
@@ -130,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 			command.Dispose();
 		}
 
-		public void Initialize(IProject project)
+        public override void Initialize(IProject project)
 		{}
 
 		/// <summary>
@@ -142,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// </remarks>
 		/// <param name="integration">Not used.</param>
 		/// <url>element://model:project::CCNet.Synergy.Plugin/design:view:::ax60xur0dt7rg6h_v</url>
-		public void GetSource(IIntegrationResult integration)
+        public override void GetSource(IIntegrationResult integration)
 		{
             integration.BuildProgressInformation.SignalStartRunTask("Getting source from Telelogic Synergy");
 
@@ -163,7 +164,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		///     No implmentation.
 		/// </summary>
 		/// <param name="project">Not used.</param>
-		public void Purge(IProject project)
+        public override void Purge(IProject project)
 		{}
 
 		/// <summary>
@@ -188,7 +189,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <url>element://model:project::CCNet.Synergy.Plugin/design:view:::qmbr0gle9x4bzse_v</url>
 		/// <url>element://model:project::CCNet.Synergy.Plugin/design:view:::zs45gn0dmb8iufh_v</url>
 		/// <url>element://model:project::CCNet.Synergy.Plugin/design:view:::vt4zadwko_v</url>
-		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
+        public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			return GetModifications(from.LastModificationDate);
 		}
@@ -256,7 +257,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// </exception>
 		/// <param name="result">Not used.</param>
 		/// <url>element://model:project::CCNet.Synergy.Plugin/design:view:::ow43bejw6wm4was_v</url>
-		public void LabelSourceControl(IIntegrationResult result)
+        public override void LabelSourceControl(IIntegrationResult result)
 		{
 			DateTime currentReconfigureTime = GetReconfigureTime();
 			if (currentReconfigureTime != project.LastReconfigureTime)

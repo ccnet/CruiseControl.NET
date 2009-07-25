@@ -183,7 +183,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         }
 
         private class MockTask
-            : ITask, IConfigurationValidation, IStatusSnapshotGenerator, IParamatisedTask
+            : ITask, IConfigurationValidation, IStatusSnapshotGenerator, IParamatisedItem
         {
             public bool Executed { get; set; }
             public bool IsValided { get; set; }

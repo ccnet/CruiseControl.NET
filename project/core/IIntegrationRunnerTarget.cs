@@ -20,5 +20,5 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <param name="operation">The operation to record.</param>
         /// <param name="status">The status of the operation.</param>
         void RecordSourceControlOperation(SourceControlOperation operation, ItemBuildStatus status);
-	}
+    }
 }

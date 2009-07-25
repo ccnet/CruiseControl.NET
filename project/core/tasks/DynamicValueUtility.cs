@@ -291,9 +291,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Check for and convert inline XML dynamic value notation into <see cref="IDynamicValue"/> definitions.
         /// </summary>
-        /// <param name="inputNode"></param>
+        /// <param name="inputNode">The node to process.</param>
+        /// <param name="exclusions">Any elements to exclude.</param>
         /// <returns></returns>
-        public static XmlNode ConvertXmlToDynamicValues(XmlNode inputNode)
+        public static XmlNode ConvertXmlToDynamicValues(XmlNode inputNode, params string[] exclusions)
         {
             var resultNode = inputNode;
             var doc = inputNode.OwnerDocument;
@@ -302,7 +303,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             foreach (XmlNode nodeWithParam in inputNode.SelectNodes("descendant::text()|descendant-or-self::*[@*]/@*"))
             {
                 var text = nodeWithParam.Value;
-                if (parameterRegex.Match(text).Success)
+                var isExcluded = CheckForExclusion(nodeWithParam, exclusions);
+                if (!isExcluded && parameterRegex.Match(text).Success)
                 {
                     // Generate the format string
                     var parametersEl = doc.CreateElement("parameters");
@@ -420,6 +422,32 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             var element = parent.OwnerDocument.CreateElement(name);
             element.InnerText = value;
             parent.AppendChild(element);
+        }
+        #endregion
+
+        #region CheckForExclusion()
+        /// <summary>
+        /// Check to see if the node should be excluded.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="exclusions"></param>
+        /// <returns></returns>
+        private static bool CheckForExclusion(XmlNode node, string[] exclusions)
+        {
+            var isExcluded = false;
+            if ((exclusions != null) && (exclusions.Length > 0))
+            {
+                foreach (var exclusion in exclusions)
+                {
+                    var ancestor = node.SelectSingleNode("ancestor::" + exclusion + "[1]");
+                    if (ancestor != null)
+                    {
+                        isExcluded = true;
+                        break;
+                    }
+                }
+            }
+            return isExcluded;
         }
         #endregion
         #endregion

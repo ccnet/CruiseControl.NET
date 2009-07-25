@@ -7,7 +7,8 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
     [ReflectorType("ftpSourceControl")]
-    public class FtpSourceControl : ISourceControl
+    public class FtpSourceControl 
+        : SourceControlBase
     {
         private FtpLib ftp;
 
@@ -32,10 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("recursiveCopy", Required = true)]
         public bool RecursiveCopy = true;
 
-
-        #region ISourceControl Members
-
-        public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
+        public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
             ftp = new FtpLib(to.BuildProgressInformation);
             string remoteFolder = FtpFolderName;
@@ -54,11 +52,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return mods;
         }
 
-        public void LabelSourceControl(IIntegrationResult result)
+        public override void LabelSourceControl(IIntegrationResult result)
         {
         }
 
-        public void GetSource(IIntegrationResult result)
+        public override void GetSource(IIntegrationResult result)
         {
             Util.Log.Info(result.HasModifications().ToString());
 
@@ -80,14 +78,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         }
 
-        public void Initialize(IProject project)
+        public override void Initialize(IProject project)
         {
         }
 
-        public void Purge(IProject project)
+        public override void Purge(IProject project)
         {
         }
-
-        #endregion
     }
 }

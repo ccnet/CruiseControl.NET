@@ -6,7 +6,8 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
 
 	[ReflectorType("vault")]
-	public class VaultVersionChecker : ISourceControl
+	public class VaultVersionChecker 
+        : SourceControlBase
 	{
 		private	Timeout timeout = Timeout.DefaultTimeout;
 
@@ -138,31 +139,31 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
 			}
 		}
 
-		public void Initialize(IProject project)
+		public override void Initialize(IProject project)
 		{
 			GetCorrectVaultInstance();
 			VaultSourceControl.Initialize(project);
 		}
-		
-		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
+
+        public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			GetCorrectVaultInstance();
 			return VaultSourceControl.GetModifications(from, to);
 		}
 
-		public void LabelSourceControl(IIntegrationResult result)
+        public override void LabelSourceControl(IIntegrationResult result)
 		{
 			GetCorrectVaultInstance();
 			VaultSourceControl.LabelSourceControl(result);
 		}
 
-		public void GetSource(IIntegrationResult result)
+        public override void GetSource(IIntegrationResult result)
 		{
 			GetCorrectVaultInstance();
 			VaultSourceControl.GetSource(result);
 		}
 
-		public void Purge(IProject project)
+        public override void Purge(IProject project)
 		{
 			GetCorrectVaultInstance();
 			VaultSourceControl.Purge(project);
