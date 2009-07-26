@@ -716,6 +716,18 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Processes a message.
         /// </summary>
         /// <param name="action">The action to use.</param>
+        /// <param name="message">The request message.</param>
+        /// <returns>The response message.</returns>
+        public override Response ProcessMessage(string action, ServerRequest message)
+        {
+            Response response = connection.SendMessage(action, message);
+            return response;
+        }
+
+        /// <summary>
+        /// Processes a message.
+        /// </summary>
+        /// <param name="action">The action to use.</param>
         /// <param name="message">The request message in an XML format.</param>
         /// <returns>The response message in an XML format.</returns>
         public override string ProcessMessage(string action, string message)

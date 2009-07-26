@@ -121,6 +121,24 @@ namespace ThoughtWorks.CruiseControl.Remote
             return messageObj;
         }
         #endregion
+
+        #region ConvertXmlToRequest()
+        /// <summary>
+        /// Converts a message string into a request.
+        /// </summary>
+        /// <param name="message">The XML of the message.</param>
+        /// <returns>The converted <see cref="ServerRequest"/>.</returns>
+        public static ServerRequest ConvertXmlToRequest(string message)
+        {
+            var messageXml = new XmlDocument();
+            messageXml.LoadXml(message);
+            var messageType = XmlConversionUtil.FindMessageType(messageXml.DocumentElement.Name);
+            if (messageType == null) throw new CommunicationsException("Unknown message type");
+
+            var request = ConvertXmlToObject(messageType, message) as ServerRequest;
+            return request;
+        }
+        #endregion
         #endregion
     }
 }

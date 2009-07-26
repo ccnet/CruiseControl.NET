@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -539,6 +540,17 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="message">The request message in an XML format.</param>
         /// <returns>The response message in an XML format.</returns>
         public virtual string ProcessMessage(string action, string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Processes a message.
+        /// </summary>
+        /// <param name="action">The action to use.</param>
+        /// <param name="message">The request message.</param>
+        /// <returns>The response message.</returns>
+        public virtual Response ProcessMessage(string action, ServerRequest message)
         {
             throw new NotImplementedException();
         }
