@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Remote.Monitor
 {
@@ -28,6 +29,16 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             this.name = buildName;
             this.project = project;
             this.client = client;
+
+            // Parse the name for the details
+            BuildDate = DateTime.ParseExact(name.Substring(3, 14), "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+            IsSuccessful = (name.Substring(17, 1) == "L");
+            if (IsSuccessful)
+            {
+                var startPos = name.IndexOf("Build.") + 6;
+                var endPos = name.LastIndexOf('.');
+                Label = name.Substring(startPos, endPos - startPos);
+            }
         }
         #endregion
 
@@ -63,6 +74,27 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
                 return log;
             }
         }
+        #endregion
+
+        #region BuildDate
+        /// <summary>
+        /// The date and time of the build.
+        /// </summary>
+        public DateTime BuildDate { get; private set; }
+        #endregion
+
+        #region Label
+        /// <summary>
+        /// The label of the build.
+        /// </summary>
+        public string Label { get; private set; }
+        #endregion
+
+        #region IsSuccessful
+        /// <summary>
+        /// Was the build successful or not.
+        /// </summary>
+        public bool IsSuccessful { get; private set; }
         #endregion
         #endregion
     }
