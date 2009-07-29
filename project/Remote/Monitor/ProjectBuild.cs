@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             IsSuccessful = (name.Substring(17, 1) == "L");
             if (IsSuccessful)
             {
-                var startPos = name.IndexOf("Build.") + 6;
+                var startPos = name.IndexOf("build.", StringComparison.InvariantCultureIgnoreCase) + 6;
                 var endPos = name.LastIndexOf('.');
                 Label = name.Substring(startPos, endPos - startPos);
             }
