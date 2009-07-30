@@ -82,6 +82,14 @@ namespace ThoughtWorks.CruiseControl.Remote
             return string.Equals(this.Text, m.Text);
         }
 
+        /// <summary>
+        /// Retrieves the hash code for this message.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Text.GetHashCode();
+        }
         #endregion
         #endregion
     }

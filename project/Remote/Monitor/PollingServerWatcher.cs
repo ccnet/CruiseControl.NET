@@ -11,8 +11,10 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
     {
         #region Private fields
         private readonly CruiseServerClientBase client;
-        private Timer timer;
-        private long interval = 5000;
+        private Thread pollingThread;
+        private long interval = 5;
+        private DateTime nextRefresh;
+        private bool disposing;
         #endregion
 
         #region Constructors
@@ -25,8 +27,9 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             if (client == null) throw new ArgumentNullException("client");
             this.client = client;
 
-            timer = new Timer(RetrieveSnapshot);
-            timer.Change(interval, interval);
+            nextRefresh = DateTime.Now.AddSeconds(interval);
+            pollingThread = new Thread(Poll);
+            pollingThread.Start();
         }
         #endregion
 
@@ -40,8 +43,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             get { return interval; }
             set
             {
-                interval = value * 1000;
-                timer.Change(interval, interval);
+                interval = value;
+                nextRefresh = DateTime.Now.AddSeconds(interval);
             }
         }
         #endregion
@@ -54,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         /// </summary>
         public virtual void Refresh()
         {
-            RetrieveSnapshot(null);
+            nextRefresh = DateTime.Now;
         }
         #endregion
 
@@ -64,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         /// </summary>
         public void Dispose()
         {
-            timer.Dispose();
+            disposing = true;
         }
         #endregion
         #endregion
@@ -79,12 +82,26 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         #endregion
 
         #region Private methods
+        #region Poll()
+        /// <summary>
+        /// Checks to see if the server should be checked.
+        /// </summary>
+        private void Poll()
+        {
+            Thread.CurrentThread.Name = "Server watcher: " + client.Address;
+            while (!disposing)
+            {
+                Thread.Sleep(500);
+                if (DateTime.Now > nextRefresh) RetrieveSnapshot();
+            }
+        }
+        #endregion
+
         #region RetrieveSnapshot()
         /// <summary>
         /// Attempt to retrieve a snapshot from the remote server.
         /// </summary>
-        /// <param name="state"></param>
-        private void RetrieveSnapshot(object state)
+        private void RetrieveSnapshot()
         {
             // Retrieve the snapshot
             ServerUpdateArgs args;

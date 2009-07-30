@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading;
 
 namespace ThoughtWorks.CruiseControl.Remote.Monitor
 {
@@ -13,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         #region Private fields
         private Dictionary<string, Project> projects = new Dictionary<string, Project>();
         private Dictionary<string, BuildQueue> buildQueues = new Dictionary<string, BuildQueue>();
-        private object syncLock = new object();
+        private ReaderWriterLock syncLock = new ReaderWriterLock();
         private IServerWatcher watcher;
         private CruiseServerClientBase client;
         private Exception exception;
@@ -88,7 +89,15 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         {
             get
             {
-                lock (syncLock) { return projects.Values; }
+                syncLock.AcquireReaderLock(5000);
+                try
+                {
+                    return projects.Values;
+                }
+                finally
+                {
+                    syncLock.ReleaseReaderLock();
+                }
             }
         }
         #endregion
@@ -101,7 +110,15 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         {
             get
             {
-                lock (syncLock) { return buildQueues.Values; }
+                syncLock.AcquireReaderLock(5000);
+                try
+                {
+                    return buildQueues.Values;
+                }
+                finally
+                {
+                    syncLock.ReleaseReaderLock();
+                }
             }
         }
         #endregion
@@ -338,7 +355,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             var oldProjects = new List<Project>();
             var newQueues = new List<BuildQueue>();
             var oldQueues = new List<BuildQueue>();
-            lock (syncLock)
+            syncLock.AcquireWriterLock(10000);
+            try
             {
                 Exception = e.Exception;
                 if (e.Exception == null)
@@ -421,6 +439,10 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
                         value.Key.Update(value.Value);
                     }
                 }
+            }
+            finally
+            {
+                syncLock.ReleaseWriterLock();
             }
 
             // Tell any listeners about any changes
