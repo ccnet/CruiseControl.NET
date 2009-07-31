@@ -92,7 +92,11 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             while (!disposing)
             {
                 Thread.Sleep(500);
-                if (DateTime.Now > nextRefresh) RetrieveSnapshot();
+                if (DateTime.Now > nextRefresh)
+                {
+                    RetrieveSnapshot();
+                    nextRefresh = DateTime.Now.AddSeconds(interval);
+                }
             }
         }
         #endregion
