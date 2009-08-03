@@ -18,6 +18,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         private Dictionary<string, ProjectBuild> builds = new Dictionary<string, ProjectBuild>();
         private bool buildsLoaded;
         private object lockObject = new object();
+        private object snapshotLock = new object();
+        private ProjectStatusSnapshot statusSnapshot;
         #endregion
 
         #region Constructors
@@ -291,6 +293,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
 
             // Make the actual change
             project = value;
+            statusSnapshot = null;
 
             // Fire any change notifications
             foreach (var change in changes)
@@ -371,12 +374,20 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         /// <returns>The current status snapshot.</returns>
         public ProjectStatusSnapshot RetrieveCurrentStatus()
         {
-            ProjectStatusSnapshot snapshot = null;
-            client.ProcessSingleAction(p =>
+            if (statusSnapshot == null)
             {
-                snapshot = client.TakeStatusSnapshot(p.Name);
-            }, InnerProject);
-            return snapshot;
+                lock (snapshotLock)
+                {
+                    if (statusSnapshot == null)
+                    {
+                        client.ProcessSingleAction(p =>
+                        {
+                            statusSnapshot = client.TakeStatusSnapshot(p.Name);
+                        }, InnerProject);
+                    }
+                }
+            }
+            return statusSnapshot;
         }
         #endregion
         #endregion

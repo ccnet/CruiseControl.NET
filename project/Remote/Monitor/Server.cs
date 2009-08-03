@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.Remote.Monitor
 {
@@ -176,6 +177,16 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             get { return version; }
         }
         #endregion
+
+        #region IsLoggedIn
+        /// <summary>
+        /// Is there a user logged in (i.e. does the client has a valid session.)
+        /// </summary>
+        public bool IsLoggedIn
+        {
+            get { return !string.IsNullOrEmpty(client.SessionToken); }
+        }
+        #endregion
         #endregion
 
         #region Public methods
@@ -228,6 +239,60 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             return null;
         }
         #endregion
+
+        #region Login()
+        /// <summary>
+        /// Attempt to login a user.
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public bool Login(string userName, string password)
+        {
+            // Generate the credentials
+            var credentials = new List<NameValuePair>();
+            if (!string.IsNullOrEmpty(userName))
+            {
+                credentials.Add(
+                    new NameValuePair(
+                        LoginRequest.UserNameCredential,
+                        userName));
+            }
+            if (!string.IsNullOrEmpty(password))
+            {
+                credentials.Add(
+                    new NameValuePair(
+                        LoginRequest.PasswordCredential,
+                        password));
+            }
+
+            // Send the login request
+            try
+            {
+                var result = client.Login(credentials);
+                if (result) FireLoginChanged();
+                return result;
+            }
+            catch (Exception error)
+            {
+                throw new CommunicationsException("An unexpected error has occurred", error);
+            }
+        }
+        #endregion
+
+        #region Logout
+        /// <summary>
+        /// Logout the current user.
+        /// </summary>
+        public void Logout()
+        {
+            if (IsLoggedIn)
+            {
+                Client.Logout();
+                FireLoginChanged();
+            }
+        }
+        #endregion
         #endregion
 
         #region Public events
@@ -264,6 +329,13 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         /// A property has been changed on this project.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
+
+        #region LoginChanged
+        /// <summary>
+        /// The login status for the underlying client has changed.
+        /// </summary>
+        public event EventHandler LoginChanged;
         #endregion
         #endregion
 
@@ -343,6 +415,19 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         }
         #endregion
 
+        #region FireLoginChanged()
+        /// <summary>
+        /// Fire the <see cref="LoginChanged"/> event.
+        /// </summary>
+        protected void FireLoginChanged()
+        {
+            if (LoginChanged != null)
+            {
+                LoginChanged(this, EventArgs.Empty);
+            }
+        }
+        #endregion
+
         #region OnWatcherUpdate()
         /// <summary>
         /// Update the status based on the latest snapshot.
@@ -355,6 +440,9 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             var oldProjects = new List<Project>();
             var newQueues = new List<BuildQueue>();
             var oldQueues = new List<BuildQueue>();
+            var projectValues = new Dictionary<Project, ProjectStatus>();
+            var queueValues = new Dictionary<BuildQueue, QueueSnapshot>();
+
             syncLock.AcquireWriterLock(10000);
             try
             {
@@ -362,7 +450,6 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
                 if (e.Exception == null)
                 {
                     // Check for any project differences
-                    var projectValues = new Dictionary<Project, ProjectStatus>();
                     var oldProjectNames = new List<string>(projects.Keys);
                     foreach (var project in e.Snapshot.ProjectStatuses)
                     {
@@ -382,7 +469,6 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
                     }
 
                     // Check for any queue differences
-                    var queueValues = new Dictionary<BuildQueue, QueueSnapshot>();
                     var oldQueueNames = new List<string>(buildQueues.Keys);
                     foreach (var queue in e.Snapshot.QueueSetSnapshot.Queues)
                     {
@@ -428,21 +514,21 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
                     {
                         buildQueues.Add(queue.Name, queue);
                     }
-
-                    // Update all the projects and queues
-                    foreach (var value in projectValues)
-                    {
-                        value.Key.Update(value.Value);
-                    }
-                    foreach (var value in queueValues)
-                    {
-                        value.Key.Update(value.Value);
-                    }
                 }
             }
             finally
             {
                 syncLock.ReleaseWriterLock();
+            }
+
+            // Update all the projects and queues
+            foreach (var value in projectValues)
+            {
+                value.Key.Update(value.Value);
+            }
+            foreach (var value in queueValues)
+            {
+                value.Key.Update(value.Value);
             }
 
             // Tell any listeners about any changes

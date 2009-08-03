@@ -189,6 +189,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
 
             MessageRequest request = new MessageRequest();
+            request.SessionToken = SessionToken;
             request.ProjectName = projectName;
             request.Message = message.Text;
             Response resp = connection.SendMessage("SendMessage", request);
@@ -266,7 +267,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
 
-            BuildListRequest request = new BuildListRequest(null, projectName);
+            BuildListRequest request = new BuildListRequest(SessionToken, projectName);
             request.NumberOfBuilds = buildCount;
             DataListResponse resp = ValidateResponse(
                 connection.SendMessage("GetMostRecentBuildNames", request))
@@ -283,7 +284,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
 
-            BuildRequest request = new BuildRequest(null, projectName);
+            BuildRequest request = new BuildRequest(SessionToken, projectName);
             request.BuildName = buildName;
             DataResponse resp = ValidateResponse(
                 connection.SendMessage("GetLog", request))
@@ -336,6 +337,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         public override void AddProject(string serializedProject)
         {
             ChangeConfigurationRequest request = new ChangeConfigurationRequest();
+            request.SessionToken = SessionToken;
             request.ProjectDefinition = serializedProject;
             Response resp = connection.SendMessage("AddProject", request);
             ValidateResponse(resp);
@@ -350,7 +352,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
 
-            ChangeConfigurationRequest request = new ChangeConfigurationRequest(null, projectName);
+            ChangeConfigurationRequest request = new ChangeConfigurationRequest(SessionToken, projectName);
             request.PurgeWorkingDirectory = purgeWorkingDirectory;
             request.PurgeArtifactDirectory = purgeArtifactDirectory;
             request.PurgeSourceControlEnvironment = purgeSourceControlEnvironment;
@@ -380,7 +382,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
 
-            ChangeConfigurationRequest request = new ChangeConfigurationRequest(null, projectName);
+            ChangeConfigurationRequest request = new ChangeConfigurationRequest(SessionToken, projectName);
             request.ProjectDefinition = serializedProject;
             Response resp = connection.SendMessage("UpdateProject", request);
             ValidateResponse(resp);
@@ -547,6 +549,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         public override List<SecurityCheckDiagnostics> DiagnoseSecurityPermissions(string userName, params string[] projects)
         {
             DiagnoseSecurityRequest request = new DiagnoseSecurityRequest();
+            request.SessionToken = SessionToken;
             request.ServerName = TargetServer;
             request.UserName = userName;
             if (projects != null) request.Projects.AddRange(projects);
@@ -574,6 +577,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         public override List<AuditRecord> ReadAuditRecords(int startRecord, int numberOfRecords, AuditFilterBase filter)
         {
             ReadAuditRequest request = new ReadAuditRequest();
+            request.SessionToken = SessionToken;
             request.ServerName = TargetServer;
             request.StartRecord = startRecord;
             request.NumberOfRecords = numberOfRecords;
@@ -607,6 +611,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         public override void ChangePassword(string oldPassword, string newPassword)
         {
             ChangePasswordRequest request = new ChangePasswordRequest();
+            request.SessionToken = SessionToken;
             request.ServerName = TargetServer;
             request.OldPassword = oldPassword;
             request.NewPassword = newPassword;
@@ -622,6 +627,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         public override void ResetPassword(string userName, string newPassword)
         {
             ChangePasswordRequest request = new ChangePasswordRequest();
+            request.SessionToken = SessionToken;
             request.ServerName = TargetServer;
             request.UserName = userName;
             request.NewPassword = newPassword;
