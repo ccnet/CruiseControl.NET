@@ -24,8 +24,6 @@ namespace ThoughtWorks.CruiseControl.Core
             IIntegrationResult result = resultManager.StartNewIntegration(request);
             IIntegrationResult lastResult = resultManager.LastIntegrationResult;
 
-            GenerateSystemParameterValues(result);
-
             CreateDirectoryIfItDoesntExist(result.WorkingDirectory);
             CreateDirectoryIfItDoesntExist(result.ArtifactDirectory);
 
@@ -36,6 +34,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     NameValuePair.FromDictionary(request.BuildValues));
             }
             result.MarkStartTime();
+            GenerateSystemParameterValues(result);
             
             bool RunBuild = false;
 
