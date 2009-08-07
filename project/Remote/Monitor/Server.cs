@@ -195,7 +195,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         /// </summary>
         public DataBag Data
         {
-            get { return Data; }
+            get { return data; }
         }
         #endregion
         #endregion
