@@ -672,7 +672,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 null,
                 delegate(ServerRequest arg)
                 {
-                    Log.Info("Returning version number");
+                    Log.Debug("Returning version number");
                     try
                     {
                         data = Assembly.GetExecutingAssembly().GetName().Version.ToString();
