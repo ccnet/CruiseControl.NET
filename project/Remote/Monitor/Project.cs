@@ -311,6 +311,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             {
                 FirePropertyChanged(change);
             }
+            FireUpdated();
         }
         #endregion
 
@@ -446,6 +447,17 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
+
+        #region Updated
+        /// <summary>
+        /// The project has been updated.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="PropertyChanged"/> will be fired when any properties change, this event will be fired whether or
+        /// not any properties change.
+        /// </remarks>
+        public event EventHandler Updated;
+        #endregion
         #endregion
 
         #region Protected properties
@@ -472,6 +484,19 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             {
                 var args = new PropertyChangedEventArgs(propertyName);
                 PropertyChanged(this, args);
+            }
+        }
+        #endregion
+
+        #region FireUpdated()
+        /// <summary>
+        /// Fire the <see cref="Updated"/> event.
+        /// </summary>
+        protected void FireUpdated()
+        {
+            if (Updated != null)
+            {
+                Updated(this, EventArgs.Empty);
             }
         }
         #endregion
