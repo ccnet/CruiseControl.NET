@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
     /// A project that is being monitored on a remote server.
     /// </summary>
     public class Project
-        : INotifyPropertyChanged
+        : INotifyPropertyChanged, IEquatable<Project>
     {
         #region Private fields
         private readonly CruiseServerClientBase client;
@@ -20,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         private object lockObject = new object();
         private object snapshotLock = new object();
         private ProjectStatusSnapshot statusSnapshot;
+        private DataBag data = new DataBag();
         #endregion
 
         #region Constructors
@@ -245,6 +246,16 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             }
         }
         #endregion
+
+        #region Data
+        /// <summary>
+        /// Gets the data bag.
+        /// </summary>
+        public DataBag Data
+        {
+            get { return Data; }
+        }
+        #endregion
         #endregion
 
         #region Public methods
@@ -388,6 +399,42 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
                 }
             }
             return statusSnapshot;
+        }
+        #endregion
+
+        #region Equals()
+        /// <summary>
+        /// Compare if two projects are the same.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Project);
+        }
+
+        /// <summary>
+        /// Compare if two projects are the same.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public virtual bool Equals(Project obj)
+        {
+            if (obj == null) return false;
+            return obj.Server.Equals(Server) &&
+                (obj.Name == Name);
+        }
+        #endregion
+
+        #region GetHashCode()
+        /// <summary>
+        /// Return the hash code for this project.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Server.GetHashCode() +
+                Name.GetHashCode();
         }
         #endregion
         #endregion

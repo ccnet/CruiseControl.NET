@@ -163,6 +163,7 @@
     <Compile Include="Monitor\BuildQueueChangedArgs.cs" />
     <Compile Include="Monitor\BuildQueueRequest.cs" />
     <Compile Include="Monitor\BuildQueueRequestChangedArgs.cs" />
+    <Compile Include="Monitor\DataBag.cs" />
     <Compile Include="Monitor\IServerWatcher.cs" />
     <Compile Include="Monitor\ManualServerWatcher.cs" />
     <Compile Include="Monitor\PollingServerWatcher.cs" />

@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
     /// A monitor to watch a remote server.
     /// </summary>
     public class Server
-        : IDisposable, INotifyPropertyChanged
+        : IDisposable, INotifyPropertyChanged, IEquatable<Server>
     {
         #region Private fields
         private Dictionary<string, Project> projects = new Dictionary<string, Project>();
@@ -20,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         private CruiseServerClientBase client;
         private Exception exception;
         private Version version;
+        private DataBag data = new DataBag();
         #endregion
 
         #region Constructors
@@ -187,6 +188,16 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             get { return !string.IsNullOrEmpty(client.SessionToken); }
         }
         #endregion
+
+        #region Data
+        /// <summary>
+        /// Gets the data bag.
+        /// </summary>
+        public DataBag Data
+        {
+            get { return Data; }
+        }
+        #endregion
         #endregion
 
         #region Public methods
@@ -291,6 +302,42 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
                 Client.Logout();
                 FireLoginChanged();
             }
+        }
+        #endregion
+
+        #region Equals()
+        /// <summary>
+        /// Compare if two servers are the same.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Server);
+        }
+
+        /// <summary>
+        /// Compare if two servers are the same.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public virtual bool Equals(Server obj)
+        {
+            if (obj == null) return false;
+            return (obj.Client.Address == Client.Address) &&
+                (obj.Client.TargetServer == Client.TargetServer);
+        }
+        #endregion
+
+        #region GetHashCode()
+        /// <summary>
+        /// Return the hash code for this server.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Client.TargetServer.GetHashCode() + 
+                Client.Address.GetHashCode();
         }
         #endregion
         #endregion

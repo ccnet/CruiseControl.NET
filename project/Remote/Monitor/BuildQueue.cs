@@ -17,6 +17,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         private QueueSnapshot buildQueue;
         private Exception exception;
         private object syncLock = new object();
+        private DataBag data = new DataBag();
         #endregion
 
         #region Constructors
@@ -89,6 +90,16 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
                     FirePropertyChanged("Exception");
                 }
             }
+        }
+        #endregion
+
+        #region Data
+        /// <summary>
+        /// Gets the data bag.
+        /// </summary>
+        public DataBag Data
+        {
+            get { return Data; }
         }
         #endregion
         #endregion
@@ -171,6 +182,42 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             {
                 FirePropertyChanged(change);
             }
+        }
+        #endregion
+
+        #region Equals()
+        /// <summary>
+        /// Compare if two queues are the same.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as BuildQueue);
+        }
+
+        /// <summary>
+        /// Compare if two queues are the same.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public virtual bool Equals(BuildQueue obj)
+        {
+            if (obj == null) return false;
+            return obj.Server.Equals(Server) &&
+                (obj.Name == Name);
+        }
+        #endregion
+
+        #region GetHashCode()
+        /// <summary>
+        /// Return the hash code for this queue.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Server.GetHashCode() +
+                Name.GetHashCode();
         }
         #endregion
         #endregion

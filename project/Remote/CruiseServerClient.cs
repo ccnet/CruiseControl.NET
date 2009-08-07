@@ -120,6 +120,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 
             BuildIntegrationRequest request = new BuildIntegrationRequest(SessionToken, projectName);
             request.BuildValues = parameters;
+            request.ServerName = TargetServer;
             Response resp = connection.SendMessage("ForceBuild", request);
             ValidateResponse(resp);
         }
@@ -149,6 +150,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 
             BuildIntegrationRequest request = new BuildIntegrationRequest(SessionToken, projectName);
             request.BuildCondition = integrationRequest.BuildCondition;
+            request.ServerName = TargetServer;
             Response resp = connection.SendMessage("ForceBuild", request);
             ValidateResponse(resp);
         }
@@ -192,6 +194,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             request.SessionToken = SessionToken;
             request.ProjectName = projectName;
             request.Message = message.Text;
+            request.ServerName = TargetServer;
             Response resp = connection.SendMessage("SendMessage", request);
             ValidateResponse(resp);
         }
@@ -269,6 +272,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 
             BuildListRequest request = new BuildListRequest(SessionToken, projectName);
             request.NumberOfBuilds = buildCount;
+            request.ServerName = TargetServer;
             DataListResponse resp = ValidateResponse(
                 connection.SendMessage("GetMostRecentBuildNames", request))
                 as DataListResponse;
@@ -286,6 +290,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 
             BuildRequest request = new BuildRequest(SessionToken, projectName);
             request.BuildName = buildName;
+            request.ServerName = TargetServer;
             DataResponse resp = ValidateResponse(
                 connection.SendMessage("GetLog", request))
                 as DataResponse;
@@ -339,6 +344,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             ChangeConfigurationRequest request = new ChangeConfigurationRequest();
             request.SessionToken = SessionToken;
             request.ProjectDefinition = serializedProject;
+            request.ServerName = TargetServer;
             Response resp = connection.SendMessage("AddProject", request);
             ValidateResponse(resp);
         }
@@ -356,6 +362,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             request.PurgeWorkingDirectory = purgeWorkingDirectory;
             request.PurgeArtifactDirectory = purgeArtifactDirectory;
             request.PurgeSourceControlEnvironment = purgeSourceControlEnvironment;
+            request.ServerName = TargetServer;
             Response resp = connection.SendMessage("DeleteProject", request);
             ValidateResponse(resp);
         }
@@ -384,6 +391,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 
             ChangeConfigurationRequest request = new ChangeConfigurationRequest(SessionToken, projectName);
             request.ProjectDefinition = serializedProject;
+            request.ServerName = TargetServer;
             Response resp = connection.SendMessage("UpdateProject", request);
             ValidateResponse(resp);
         }
@@ -552,6 +560,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             request.SessionToken = SessionToken;
             request.ServerName = TargetServer;
             request.UserName = userName;
+            request.ServerName = TargetServer;
             if (projects != null) request.Projects.AddRange(projects);
             DiagnoseSecurityResponse resp = ValidateResponse(
                 connection.SendMessage("DiagnoseSecurityPermissions", request))
@@ -678,6 +687,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
 
             var request = new FileTransferRequest(SessionToken, projectName, fileName);
+            request.ServerName = TargetServer;
             var response = connection.SendMessage("RetrieveFileTransfer", request);
             ValidateResponse(response);
             return (response as FileTransferResponse).FileTransfer;
@@ -711,6 +721,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 
             var request = new ProjectItemRequest(SessionToken, projectName);
             request.ItemName = siteName;
+            request.ServerName = TargetServer;
             var response = connection.SendMessage("GetLinkedSiteId", request);
             ValidateResponse(response);
             return (response as DataResponse).Data;
