@@ -34,6 +34,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
             mockConfiguration.SetupResult("GetProjectStatusMonitors", new IProjectMonitor[0], typeof(ISingleServerMonitor[]));
 			mockConfiguration.SetupResult("Icons", new Icons());
             mockConfiguration.SetupResult("FixUserName", "John");
+            GrowlConfiguration growlConfig = new GrowlConfiguration();
+            mockConfiguration.SetupResult("Growl", growlConfig);            
 
 			eventCount = 0;
 
