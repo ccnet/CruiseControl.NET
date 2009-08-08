@@ -225,6 +225,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			get { return persistentConfiguration.X10; }
 		}
 
+		public GrowlConfiguration Growl
+		{
+			get { return persistentConfiguration.Growl; }
+		}
+ 
 		public ICruiseServerManagerFactory CruiseServerManagerFactory
 		{
 			get { return cruiseServerManagerFactory; }

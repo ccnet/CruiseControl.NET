@@ -11,6 +11,7 @@ using ThoughtWorks.CruiseControl.CCTrayLib.Speech;
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using System.Text;
+using ThoughtWorks.CruiseControl.CCTrayLib.Growl;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -29,6 +30,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private readonly IIntegrationQueueIconProvider queueIconProvider;
 		private BuildTransitionSoundPlayer soundPlayer;
         private X10Controller x10Controller;
+		private GrowlController growlController;
         private MainForm mainForm;
         private Dictionary<string, ServerSnapshotChangedEventArgs> changeList = new Dictionary<string, ServerSnapshotChangedEventArgs>();
 #if !DISABLE_COM
@@ -59,6 +61,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			soundPlayer = new BuildTransitionSoundPlayer(aggregatedProjectMonitor, new AudioPlayer(), configuration.Audio);
 			LampController lampController = new LampController(configuration.X10,null);
 			x10Controller = new X10Controller(aggregatedProjectMonitor,new DateTimeProvider(),configuration.X10,lampController);
+			
+			growlController = new GrowlController(aggregatedProjectMonitor, configuration.Growl);
 
 			IBalloonMessageProvider balloonMessageProvider = new ConfigurableBalloonMessageProvider(configuration.BalloonMessages);
 #if !DISABLE_COM

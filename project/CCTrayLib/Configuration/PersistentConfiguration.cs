@@ -12,6 +12,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		public Icons Icons = new Icons();
 		public X10Configuration X10 = new X10Configuration();
 		public SpeechConfiguration Speech = new SpeechConfiguration();
+		public GrowlConfiguration Growl = new GrowlConfiguration();
         public bool AlwaysOnTop = false;
 		public bool ShowInTaskbar = false;
         public bool ReportProjectChanges = true;
