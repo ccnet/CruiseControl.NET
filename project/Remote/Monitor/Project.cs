@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.Remote.Monitor
 {
@@ -21,6 +22,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         private object snapshotLock = new object();
         private ProjectStatusSnapshot statusSnapshot;
         private DataBag data = new DataBag();
+        private IEnumerable<ParameterBase> parameters;
         #endregion
 
         #region Constructors
@@ -400,6 +402,21 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
                 }
             }
             return statusSnapshot;
+        }
+        #endregion
+
+        #region RetrieveParameters()
+        /// <summary>
+        /// Retrieve the parameters for this project.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ParameterBase> RetrieveParameters()
+        {
+            if (parameters == null)
+            {
+                parameters = client.ListBuildParameters(project.Name);
+            }
+            return parameters;
         }
         #endregion
 
