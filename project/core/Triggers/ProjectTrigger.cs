@@ -35,6 +35,9 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		[ReflectorProperty("innerTrigger", InstanceTypeKey="type", Required=false)]
 		public ITrigger InnerTrigger = NewIntervalTrigger();
 
+		[ReflectorProperty("triggerFirstTime", Required = false)]
+		public bool TriggerFirstTime = false;
+
 		public void IntegrationCompleted()
 		{
 			lastStatus = currentStatus;
@@ -73,6 +76,10 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			if (lastStatus == null)
 			{
 				lastStatus = currentStatus;
+				if (TriggerFirstTime && currentStatus.BuildStatus == TriggerStatus)
+				{
+					return request;
+				}
 				return null;
 			}
 			if (currentStatus.LastBuildDate > lastStatus.LastBuildDate && currentStatus.BuildStatus == TriggerStatus)
