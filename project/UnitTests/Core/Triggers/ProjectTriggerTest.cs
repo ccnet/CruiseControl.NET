@@ -52,6 +52,36 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		}
 
 		[Test]
+		public void ShouldTriggerOnFirstIntegrationIfDependentProjectBuildSucceededAndTriggerFirstTimeIsSet()
+		{
+			mockInnerTrigger.ExpectAndReturn("Fire", ModificationExistRequest());
+			mockInnerTrigger.Expect("IntegrationCompleted");
+			mockFactory.ExpectAndReturn("GetCruiseManager", mockCruiseManager.MockInstance, ProjectTrigger.DefaultServerUri);
+			mockCruiseManager.ExpectAndReturn("GetProjectStatus", new ProjectStatus[]
+				{
+					NewProjectStatus("project", IntegrationStatus.Success, now)
+				});
+			trigger.TriggerFirstTime = true;
+			Assert.AreEqual(ModificationExistRequest(), trigger.Fire());
+			Verify();
+		}
+
+		[Test]
+		public void ShouldNotTriggerOnFirstIntegrationIfDependentProjectBuildFailedAndTriggerFirstTimeIsSet()
+		{
+			mockInnerTrigger.ExpectAndReturn("Fire", ModificationExistRequest());
+			mockInnerTrigger.Expect("IntegrationCompleted");
+			mockFactory.ExpectAndReturn("GetCruiseManager", mockCruiseManager.MockInstance, ProjectTrigger.DefaultServerUri);
+			mockCruiseManager.ExpectAndReturn("GetProjectStatus", new ProjectStatus[]
+				{
+					NewProjectStatus("project", IntegrationStatus.Failure, now)
+				});
+			trigger.TriggerFirstTime = true;
+			Assert.IsNull(trigger.Fire());
+			Verify();
+		}
+
+		[Test]
 		public void TriggerWhenDependentProjectBuildsSuccessfully()
 		{
 			ShouldNotTriggerOnFirstIntegration();
@@ -134,6 +164,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 	<serverUri>http://fooserver:12342/CruiseManager.rem</serverUri>
 	<project>Foo</project>
 	<triggerStatus>Failure</triggerStatus>
+	<triggerFirstTime>True</triggerFirstTime>
 	<innerTrigger type=""intervalTrigger"">
 		<buildCondition>ForceBuild</buildCondition>
 		<seconds>10</seconds>
@@ -144,6 +175,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			Assert.AreEqual("Foo", trigger.Project);
 			Assert.IsNotNull(trigger.InnerTrigger);
 			Assert.AreEqual(IntegrationStatus.Failure, trigger.TriggerStatus);
+			Assert.IsTrue(trigger.TriggerFirstTime);
 		}
 
 		[Test]
@@ -155,6 +187,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			Assert.AreEqual("Foo", trigger.Project);
 			Assert.IsNotNull(trigger.InnerTrigger);
 			Assert.AreEqual(IntegrationStatus.Success, trigger.TriggerStatus);
+			Assert.IsFalse(trigger.TriggerFirstTime);
 		}
 
 		[Test, Ignore("not implemented yet.")]
