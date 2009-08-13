@@ -1,14 +1,14 @@
-﻿
-using System.ComponentModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+
 namespace ThoughtWorks.CruiseControl.Remote.Monitor
 {
     /// <summary>
     /// A build queue request that is being monitored on a remote server.
     /// </summary>
     public class BuildQueueRequest
-        : INotifyPropertyChanged
+        : INotifyPropertyChanged, IEquatable<BuildQueueRequest>
     {
         #region Private fields
         private readonly CruiseServerClientBase client;
@@ -111,6 +111,42 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             {
                 FirePropertyChanged(change);
             }
+        }
+        #endregion
+
+        #region Equals()
+        /// <summary>
+        /// Compares if two objects are the same.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as BuildQueueRequest);
+        }
+
+        /// <summary>
+        /// Compares if two build requests are the same.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public bool Equals(BuildQueueRequest obj)
+        {
+            if (obj == null) return false;
+            return (obj.Project.Equals(Project) &&
+                obj.RequestTime.Equals(RequestTime));
+        }
+        #endregion
+
+        #region GetHashCode()
+        /// <summary>
+        /// Get the hash code for this request.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Project.GetHashCode() +
+                RequestTime.GetHashCode();
         }
         #endregion
         #endregion
