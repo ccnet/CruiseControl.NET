@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Remote
     /// A server connection using Windows Communications Foundation.
     /// </summary>
     public class WcfConnection
-        : IServerConnection, IDisposable
+        : ServerConnectionBase, IServerConnection, IDisposable
     {
         #region Private fields
         private Uri serverAddress;
@@ -90,7 +90,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             // Initialise the connection and send the message
             InitialiseClient();
+            FireRequestSending(action, request);
             var result = client.ProcessMessage(action, request);
+            FireResponseReceived(action, result);
             return result;
         }
         #endregion

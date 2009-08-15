@@ -104,6 +104,7 @@
     <Compile Include="BuildCondition.cs" />
     <Compile Include="ClientStartUpSettings.cs" />
     <Compile Include="CommunicationsAssemblyInfo.cs" />
+    <Compile Include="CommunicationsEventArgs.cs" />
     <Compile Include="CommunicationsException.cs" />
     <Compile Include="CruiseServerClient.cs" />
     <Compile Include="CruiseServerClientBase.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Security\UserDetails.cs" />
     <Compile Include="SerializableDateTime.cs" />
     <Compile Include="Monitor\Server.cs" />
+    <Compile Include="ServerConnectionBase.cs" />
     <Compile Include="XmlConversionUtil.cs" />
   </ItemGroup>
   <ItemGroup>

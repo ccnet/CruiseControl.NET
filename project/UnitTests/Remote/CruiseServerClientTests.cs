@@ -601,6 +601,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
 
             public event EventHandler<MessageReceivedEventArgs> SendMessageCompleted;
 
+            public event EventHandler<CommunicationsEventArgs> RequestSending;
+
+            public event EventHandler<CommunicationsEventArgs> ResponseReceived;
+
             #endregion
         }
         #endregion

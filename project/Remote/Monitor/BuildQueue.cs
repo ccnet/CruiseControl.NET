@@ -216,8 +216,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return Server.GetHashCode() +
-                Name.GetHashCode();
+            return (this.Server == null ? 0 : this.Server.GetHashCode()) +
+                (this.Name ?? string.Empty).GetHashCode();
         }
         #endregion
         #endregion

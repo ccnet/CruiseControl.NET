@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Remote
     /// A client connection to a remote CruiseControl.Net server.
     /// </summary>
     public class CruiseServerClient
-        : CruiseServerClientBase
+        : CruiseServerClientBase, IDisposable
     {
         #region Private fields
         private readonly IServerConnection connection;
@@ -779,6 +779,20 @@ namespace ThoughtWorks.CruiseControl.Remote
             }
 
             return response.ToString();
+        }
+        #endregion
+
+        #region Dispose()
+        /// <summary>
+        /// Disposes the .NET remoting client.
+        /// </summary>
+        public virtual void Dispose()
+        {
+            var disposable = connection as IDisposable;
+            if (disposable != null)
+            {
+                disposable.Dispose();
+            }
         }
         #endregion
         #endregion

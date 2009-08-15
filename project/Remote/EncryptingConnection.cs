@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Remote
     /// A server connection that will encrypt any transmitted data.
     /// </summary>
     public class EncryptingConnection
-        : IServerConnection
+        : ServerConnectionBase, IServerConnection, IDisposable
     {
         #region Private fields
         private IServerConnection innerConnection;
@@ -27,13 +27,9 @@ namespace ThoughtWorks.CruiseControl.Remote
         public EncryptingConnection(IServerConnection innerConnection)
         {
             this.innerConnection = innerConnection;
-            innerConnection.SendMessageCompleted += (o, e) =>
-            {
-                if (SendMessageCompleted != null)
-                {
-                    SendMessageCompleted(this, e);
-                }
-            };
+            innerConnection.SendMessageCompleted += PassOnSendMessageCompleted;
+            innerConnection.RequestSending += PassOnRequestSending;
+            innerConnection.ResponseReceived += PassOnResponseReceived;
         }
         #endregion
 
@@ -155,6 +151,20 @@ namespace ThoughtWorks.CruiseControl.Remote
             innerConnection.CancelAsync(userState);
         }
         #endregion
+
+        #region Dispose()
+        /// <summary>
+        /// Disposes the .NET remoting client.
+        /// </summary>
+        public virtual void Dispose()
+        {
+            var disposable = innerConnection as IDisposable;
+            if (disposable != null)
+            {
+                disposable.Dispose();
+            }
+        }
+        #endregion
         #endregion
 
         #region Public events
@@ -255,6 +265,45 @@ namespace ThoughtWorks.CruiseControl.Remote
                 }
             }
             return data;
+        }
+        #endregion
+
+        #region PassOnSendMessageCompleted()
+        /// <summary>
+        /// Passes on the <see cref="SendMessageCompleted"/> event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void PassOnSendMessageCompleted(object sender, MessageReceivedEventArgs args)
+        {
+            if (SendMessageCompleted != null)
+            {
+                SendMessageCompleted(this, args);
+            }
+        }
+        #endregion
+
+        #region PassOnRequestSending()
+        /// <summary>
+        /// Passes on the RequestSending event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void PassOnRequestSending(object sender, CommunicationsEventArgs args)
+        {
+            FireRequestSending(args.Action, args.Message as ServerRequest);
+        }
+        #endregion
+
+        #region PassOnResponseReceived()
+        /// <summary>
+        /// Passes on the ResponseReceived event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void PassOnResponseReceived(object sender, CommunicationsEventArgs args)
+        {
+            FireResponseReceived(args.Action, args.Message as Response);
         }
         #endregion
         #endregion

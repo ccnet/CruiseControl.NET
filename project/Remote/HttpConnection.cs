@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.Remote
     /// A server connection over HTTP.
     /// </summary>
     public class HttpConnection
-        : IServerConnection
+        : ServerConnectionBase, IServerConnection, IDisposable
     {
         #region Private fields
         private readonly Uri serverAddress;
@@ -104,10 +104,12 @@ namespace ThoughtWorks.CruiseControl.Remote
             NameValueCollection formData = new NameValueCollection();
             formData.Add("action", action);
             formData.Add("message", request.ToString());
+            FireRequestSending(action, request);
             string response = Encoding.UTF8.GetString(client.UploadValues(targetAddress, "POST", formData));
 
             // Convert the response into a response object
             Response result = XmlConversionUtil.ProcessResponse(response);
+            FireResponseReceived(action, result);
             return result;
         }
         #endregion
@@ -218,6 +220,15 @@ namespace ThoughtWorks.CruiseControl.Remote
                     asyncOperations[userState ?? string.Empty].CancelAsync();
                 }
             }
+        }
+        #endregion
+
+        #region Dispose()
+        /// <summary>
+        /// Disposes the .NET remoting client.
+        /// </summary>
+        public virtual void Dispose()
+        {
         }
         #endregion
         #endregion

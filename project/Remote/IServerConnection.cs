@@ -89,6 +89,20 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         event EventHandler<MessageReceivedEventArgs> SendMessageCompleted;
         #endregion
+
+        #region RequestSending
+        /// <summary>
+        /// A request message is being sent.
+        /// </summary>
+        event EventHandler<CommunicationsEventArgs> RequestSending;
+        #endregion
+
+        #region ResponseReceived
+        /// <summary>
+        /// A response message has been received.
+        /// </summary>
+        event EventHandler<CommunicationsEventArgs> ResponseReceived;
+        #endregion
         #endregion
     }
 }

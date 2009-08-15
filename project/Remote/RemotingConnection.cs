@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Remote
     /// A server connection using .NET remoting.
     /// </summary>
     public class RemotingConnection
-        : IServerConnection, IDisposable
+        : ServerConnectionBase, IServerConnection, IDisposable
     {
         #region Private fields
         private const string managerUri = "CruiseManager.rem";
@@ -96,7 +96,9 @@ namespace ThoughtWorks.CruiseControl.Remote
             try
             {
                 InitialiseRemoting();
+                FireRequestSending(action, request);
                 Response result = client.ProcessMessage(action, request);
+                FireResponseReceived(action, result);
                 return result;
             }
             catch (Exception error)
