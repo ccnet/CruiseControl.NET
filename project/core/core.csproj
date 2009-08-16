@@ -922,6 +922,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="util\KillUtil.cs" />
+    <Compile Include="util\Log4NetTrace\ITraceLog.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\Log4NetTrace\TraceLogImpl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\Log4NetTrace\TraceLogManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="util\LogFileTraceListener.cs">
       <SubType>Code</SubType>
     </Compile>

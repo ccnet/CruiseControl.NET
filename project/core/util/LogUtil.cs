@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading;
 using log4net;
 using log4net.Config;
+using ThoughtWorks.CruiseControl.Core.Util.Log4NetTrace;
 
 // This attribute tells log4net to use the settings in the app.config file for configuration
 [assembly: XmlConfigurator()]
@@ -12,11 +13,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
     // TODO: Replace using this class with the ILogger interface and the IoC container.
 	public static class Log
 	{
-		private static ILog logger = LogManager.GetLogger("CruiseControl.NET");
+		private static ITraceLog logger = TraceLogManager.GetLogger("CruiseControl.NET");
+        
         private static bool loggingEnabled = true;
 
 		static Log()
 		{
+
 			if (logger.IsDebugEnabled)
 			{
 				logger.DebugFormat("The trace level is currently set to debug.  "
@@ -24,7 +27,17 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				+ "Once your server is running smoothly, we recommend changing this setting in {0} to a lower level.",
 					AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
 			}
-		}
+            
+            if (logger.IsTraceEnabled)
+            {
+                logger.WarnFormat("! ! Tracing is enabled ! !"
+                    + "It allows you to sent the developpers of CCNet very detailed information of the program flow. "
+                    + "This setting should only be enabled if you want to report a bug with the extra information. "
+                    + "When bug reporting is done, it is advised to set the trace setting off. "
+                    + "Adjust the setting in {0}", AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
+            }
+        
+        }
 
         public static void DisableLogging()
         {
@@ -87,7 +100,53 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public static void Error(Exception ex)
 		{
             logger.Error(CreateExceptionMessage(ex));
+
 		}
+
+        public static void Trace()
+        {
+            if (loggingEnabled && logger.IsTraceEnabled) logger.TraceFormat(string.Concat(GetCallingClassName(), "Entering"));
+        }
+
+
+        public static void Trace(string message)
+        {
+            if (loggingEnabled && logger.IsTraceEnabled)  logger.TraceFormat(string.Concat(GetCallingClassName() ,message));
+        }
+
+
+        public static void Trace(string message, params object[] args)
+        {
+            if (loggingEnabled && logger.IsTraceEnabled) logger.TraceFormat(string.Concat(GetCallingClassName(), message), args);
+        }
+
+
+        private static string GetCallingClassName()
+        {
+
+            System.Diagnostics.StackTrace Stack = default(System.Diagnostics.StackTrace);
+            System.Diagnostics.StackFrame CurrentFrame = default(System.Diagnostics.StackFrame);
+            string myAssemblyName = null;
+            string myClassName = null;
+            string myMethodName = null;
+
+            try
+            {
+                Stack = new System.Diagnostics.StackTrace();
+                CurrentFrame = Stack.GetFrame(2);
+                myAssemblyName = CurrentFrame.GetMethod().ReflectedType.Assembly.FullName.Split(',')[0];
+                myClassName = CurrentFrame.GetMethod().ReflectedType.ToString();
+                myMethodName = CurrentFrame.GetMethod().Name;
+            }
+            catch
+            {
+                myClassName = "";
+                myMethodName = "";
+            }
+
+            return string.Format("{0} - {1}.{2} : ", myAssemblyName, myClassName, myMethodName);
+        }
+
 
 		private static string CreateExceptionMessage(Exception ex)
 		{

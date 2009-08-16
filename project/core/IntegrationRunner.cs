@@ -21,6 +21,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public IIntegrationResult Integrate(IntegrationRequest request)
         {
+            Log.Trace();
+
             IIntegrationResult result = resultManager.StartNewIntegration(request);
             IIntegrationResult lastResult = resultManager.LastIntegrationResult;
 
@@ -37,6 +39,8 @@ namespace ThoughtWorks.CruiseControl.Core
             GenerateSystemParameterValues(result);
             
             bool RunBuild = false;
+
+            Log.Trace("Getting Modifications for project {0}",result.ProjectName);
 
             try
             {
@@ -66,7 +70,9 @@ namespace ThoughtWorks.CruiseControl.Core
                     // labelers only increase version if PREVIOUS result was ok
                     // they should also increase version if previous was exception, and the new
                     // build got past the getmodifications
-                    
+
+                    Log.Trace("Creating Label for project {0}",result.ProjectName);
+
                     if (result.LastIntegrationStatus == IntegrationStatus.Exception)
                     {
                         IntegrationSummary isExceptionFix = new IntegrationSummary(IntegrationStatus.Success, result.LastIntegration.Label, result.LastIntegration.LastSuccessfulIntegrationLabel , result.LastIntegration.StartTime);
@@ -81,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.Core
                         target.CreateLabel(result);
                     }
 
-                    
+                    Log.Trace("Running tasks of project {0}", result.ProjectName);
                     Build(result);
                 }
 

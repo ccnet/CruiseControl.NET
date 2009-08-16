@@ -57,12 +57,12 @@
 
                 if (activeConnectionMode)
                 {
-                    Log.Debug("Active mode enabled");
+                    Log.Trace("Active mode enabled");
                     this.FtpServer.ConnectMode = EnterpriseDT.Net.Ftp.FTPConnectMode.ACTIVE;
                 }
                 else
                 {
-                    Log.Debug("Passive mode enabled");
+                    Log.Trace("Passive mode enabled");
                     this.FtpServer.ConnectMode = EnterpriseDT.Net.Ftp.FTPConnectMode.PASV;
                 }
 
@@ -85,7 +85,7 @@
 
             if (!System.IO.Directory.Exists(localFolder))
             {
-                Log.Debug("creating {0}", localFolder);
+                Log.Trace("creating {0}", localFolder);
                 System.IO.Directory.CreateDirectory(localFolder);
             }
 
@@ -101,7 +101,7 @@
 
                         if (!System.IO.Directory.Exists(LocalTargetFolder))
                         {
-                            Log.Debug("creating {0}", LocalTargetFolder);
+                            Log.Trace("creating {0}", LocalTargetFolder);
                             System.IO.Directory.CreateDirectory(LocalTargetFolder);
                         }
 
@@ -148,7 +148,7 @@
 
                     if (DownloadFile)
                     {
-                        Log.Debug("Downloading {0}", CurrentFileOrDirectory.Name);
+                        Log.Trace("Downloading {0}", CurrentFileOrDirectory.Name);
                         this.FtpServer.DownloadFile(localFolder, CurrentFileOrDirectory.Name);
 
                         fi = new System.IO.FileInfo(LocalFile);
@@ -275,7 +275,7 @@
 
             if (!System.IO.Directory.Exists(localFolder))
             {
-                Log.Debug("creating {0}", localFolder);
+                Log.Trace("creating {0}", localFolder);
                 System.IO.Directory.CreateDirectory(localFolder);
             }
 
@@ -291,7 +291,7 @@
 
                         if (!System.IO.Directory.Exists(LocalTargetFolder))
                         {
-                            Log.Debug("creating {0}", LocalTargetFolder);
+                            Log.Trace("creating {0}", LocalTargetFolder);
                             System.IO.Directory.CreateDirectory(LocalTargetFolder);
                         }
 
@@ -345,10 +345,7 @@
                         mods.Add(m);
                     }
                 }
-
             }
-
-
         }
 
         private bool FileExistsAtFtp(EnterpriseDT.Net.Ftp.FTPFile[] ftpServerFileInfo, string localFileName)
@@ -419,7 +416,7 @@
         {
             bpi.AddTaskInformation(e.Message);
 
-            Log.Debug(e.Message);
+            Log.Trace(e.Message);
         }
 
         private void FtpServer_Uploaded(object sender, EnterpriseDT.Net.Ftp.FTPFileTransferEventArgs e)

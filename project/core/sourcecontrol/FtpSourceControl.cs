@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             ftp = new FtpLib(to.BuildProgressInformation);
             string remoteFolder = FtpFolderName;
-            
+
             ftp.LogIn(ServerName,UserName,Password,UseActiveConnectionMode);
 
             if (!FtpFolderName.StartsWith("/"))

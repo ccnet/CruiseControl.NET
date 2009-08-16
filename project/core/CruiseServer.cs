@@ -54,6 +54,8 @@ namespace ThoughtWorks.CruiseControl.Core
 							IExecutionEnvironment executionEnvironment,
                             List<ExtensionConfiguration> extensionList)
         {
+            Log.Trace();
+
             this.configurationService = configurationService;
             this.projectSerializer = projectSerializer;
 			this.fileSystem = fileSystem;
@@ -672,7 +674,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 null,
                 delegate(ServerRequest arg)
                 {
-                    Log.Debug("Returning version number");
+                    Log.Trace("Returning version number");
                     try
                     {
                         data = Assembly.GetExecutingAssembly().GetName().Version.ToString();
