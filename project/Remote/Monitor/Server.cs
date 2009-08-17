@@ -21,6 +21,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         private Exception exception;
         private Version version;
         private DataBag data = new DataBag();
+        private string displayName;
         #endregion
 
         #region Constructors
@@ -73,6 +74,21 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         #endregion
 
         #region Public properties
+        #region DisplayName
+        /// <summary>
+        /// The display name of the server.
+        /// </summary>
+        public string DisplayName
+        {
+            get { return displayName; }
+            set
+            {
+                displayName = value;
+                FirePropertyChanged("DisplayName");
+            }
+        }
+        #endregion
+
         #region Name
         /// <summary>
         /// The name of the server.
@@ -80,6 +96,29 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         public string Name
         {
             get { return client.TargetServer; }
+        }
+        #endregion
+
+        #region TargetAddress
+        /// <summary>
+        /// Gets the target plus address for the server.
+        /// </summary>
+        public string TargetAddress
+        {
+            get
+            {
+                var value = string.Empty;
+                if (string.IsNullOrEmpty(client.TargetServer))
+                {
+                    value = client.Address;
+                }
+                else
+                {
+                    value = string.Format("{0}->{1}", client.TargetServer, client.Address);
+                }
+
+                return value;
+            }
         }
         #endregion
 
@@ -201,6 +240,39 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         #endregion
 
         #region Public methods
+        #region GetDisplayName()
+        /// <summary>
+        /// Gets the display name for the server.
+        /// </summary>
+        /// <returns>The user-set display name (if set) or the target server/address combination.</returns>
+        public virtual string GetDisplayName()
+        {
+            var name = displayName;
+            if (string.IsNullOrEmpty(name))
+            {
+                name = TargetAddress;
+            }
+
+            return name;
+        }
+
+        /// <summary>
+        /// Gets the display name for the server.
+        /// </summary>
+        /// <param name="includeAddress">Should the address be included?</param>
+        /// <returns>The user-set display name (if set) or the target server/address combination.</returns>
+        public virtual string GetDisplayName(bool includeAddress)
+        {
+            var name = GetDisplayName();
+            if (!string.IsNullOrEmpty(name) && includeAddress)
+            {
+                name += " [" + TargetAddress + "]";
+            }
+
+            return name;
+        }
+        #endregion
+
         #region Refresh()
         /// <summary>
         /// Force a refresh of the server status.
