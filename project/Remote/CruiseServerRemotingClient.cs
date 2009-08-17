@@ -24,10 +24,13 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Initialises a new <see cref="CruiseServerRemotingClient"/>.
         /// </summary>
-        /// <param name="serverUri">The address of the server.</param>
-        public CruiseServerRemotingClient(string serverUri)
+        /// <param name="serverAddress">The address of the server.</param>
+        public CruiseServerRemotingClient(string serverAddress)
         {
-            this.serverUri = serverUri;
+            UriBuilder builder = new UriBuilder(serverAddress);
+            if (builder.Port == -1) builder.Port = 21234;
+            var uri = new Uri(builder.Uri, "/CruiseManager.rem");
+            this.serverUri = uri.AbsoluteUri;
             this.manager = (ICruiseManager)RemotingServices.Connect(typeof(ICruiseManager), serverUri);
         }
         #endregion
