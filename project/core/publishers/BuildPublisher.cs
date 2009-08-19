@@ -52,13 +52,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             {
                 DirectoryInfo srcDir = new DirectoryInfo(result.BaseFromWorkingDirectory(SourceDir));
                 DirectoryInfo pubDir = new DirectoryInfo(result.BaseFromArtifactsDirectory(PublishDir));
+                               
                 if (!pubDir.Exists)
                 {
                     pubDir.Create();
                 }
                 else
                 {
-                    if (CleanPublishDirPriorToCopy) DeleteFolder(pubDir.FullName);
+                    if (CleanPublishDirPriorToCopy)
+                    {
+                        DeleteFolder(pubDir.FullName);
+                        pubDir.Create();
+                    }
                 }
 
                 if (UseLabelSubDirectory)
