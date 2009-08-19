@@ -5,7 +5,7 @@ using ThoughtWorks.CruiseControl.Core.Tasks;
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
     [ReflectorType("buildpublisher")]
-    public class BuildPublisher 
+    public class BuildPublisher
         : TaskBase
     {
         public enum CleanupPolicy
@@ -29,6 +29,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         [ReflectorProperty("alwaysPublish", Required = false)]
         public bool AlwaysPublish = false;
 
+        [ReflectorProperty("cleanPublishDirPriorToCopy", Required = false)]
+        public bool CleanPublishDirPriorToCopy = false;
+
+
         [ReflectorProperty("cleanUpMethod", Required = false)]
         public CleanupPolicy CleanUpMethod = CleanupPolicy.NoCleaning;
 
@@ -48,7 +52,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             {
                 DirectoryInfo srcDir = new DirectoryInfo(result.BaseFromWorkingDirectory(SourceDir));
                 DirectoryInfo pubDir = new DirectoryInfo(result.BaseFromArtifactsDirectory(PublishDir));
-                if (!pubDir.Exists) pubDir.Create();
+                if (!pubDir.Exists)
+                {
+                    pubDir.Create();
+                }
+                else
+                {
+                    if (CleanPublishDirPriorToCopy) DeleteFolder(pubDir.FullName);
+                }
 
                 if (UseLabelSubDirectory)
                     pubDir = pubDir.CreateSubdirectory(result.Label);
@@ -78,6 +89,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return true;
         }
 
+
+        /// <summary>
+        /// Copies all files and folders from srcDir to pubDir
+        /// </summary>
+        /// <param name="srcDir"></param>
+        /// <param name="pubDir"></param>
         private void RecurseSubDirectories(DirectoryInfo srcDir, DirectoryInfo pubDir)
         {
             FileInfo[] files = srcDir.GetFiles();
@@ -100,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private void KeepLastXSubDirs(string targetFolder, int amountToKeep, string buildLogDirectory)
         {
-            Util.Log.Debug("Deleting Subdirs of {0}",targetFolder);
+            Util.Log.Trace("Deleting Subdirs of {0}", targetFolder);
 
             System.Collections.Generic.List<string> sortNames = new System.Collections.Generic.List<string>();
             const string dateFormat = "yyyyMMddHHmmssffffff";
@@ -123,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private void DeleteSubDirsOlderThanXDays(string targetFolder, int daysToKeep, string buildLogDirectory)
         {
-            Util.Log.Debug("Deleting Subdirs of {0}", targetFolder);
+            Util.Log.Trace("Deleting Subdirs of {0}", targetFolder);
 
             System.DateTime cutoffDate = System.DateTime.Now.Date.AddDays(-daysToKeep);
 
@@ -137,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private void DeleteFolder(string folderName)
         {
-            Util.Log.Debug("    Deleting {0}", folderName);
+            Util.Log.Trace("    Deleting {0}", folderName);
 
             SetFilesToNormalAttributeAndDelete(folderName);
             Directory.Delete(folderName);

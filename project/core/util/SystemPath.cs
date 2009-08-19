@@ -52,7 +52,17 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			try { Directory.Delete(path, true); }
 			catch (Exception e) { throw new IOException("Unable to delete directory: " + path, e); }
 		}
-		
+
+        public void DeleteFile()
+        {
+            if (!File.Exists(path)) return;
+            
+            try { File.Delete(path); }
+            catch (Exception e) { throw new IOException("Unable to delete file : " + path, e); }
+            
+        }
+
+
 		public static SystemPath UniqueTempPath()
 		{
 			return Temp.Combine(Guid.NewGuid().ToString());
@@ -99,6 +109,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			return Combine(filename).CreateTextFile(content);
 		}
+
 	}
 	
 	public class TempDirectory : SystemPath, IDisposable

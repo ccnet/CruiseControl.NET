@@ -48,6 +48,32 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			Assert.IsTrue(subPubDir.Combine("SubSubDir").Combine(fileName).Exists(), "File not found in sub sub directory");
 		}
 
+
+        [Test]
+        public void DeleteFilesAtPublishFolderWhenCleanPublishDirPriorToCopyIsTrue()
+        {            
+            SystemPath rootFile = srcRoot.CreateDirectory().CreateTextFile(fileName, fileContents);
+                                    
+            publisher.UseLabelSubDirectory = false;
+            publisher.Run(result);
+
+            Assert.IsTrue(pubRoot.Combine(fileName).Exists(), "File not found in publish folder");
+
+            // simulate deletion of a file
+            rootFile.DeleteFile();
+            Assert.IsFalse(srcRoot.Combine(fileName).Exists(), "File found in root folder");
+
+
+            // publish again
+            publisher.CleanPublishDirPriorToCopy = true;
+            publisher.Run(result);
+
+
+            Assert.IsFalse(pubRoot.Combine(fileName).Exists(), "File found in publish folder");
+
+        }
+
+
         [Test]
         public void ShouldNotCopyFilesIfBuildBrokenAndAlwaysCopyIsSetToFalse()
         {
