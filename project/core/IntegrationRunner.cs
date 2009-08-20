@@ -179,6 +179,8 @@ namespace ThoughtWorks.CruiseControl.Core
         public virtual void PostBuild(IIntegrationResult result)
         {
             resultManager.FinishIntegration();
+
+            Log.Trace("Running publishers");
             target.PublishResults(result);
         }
 

@@ -33,6 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			XslTransformer transformer = new XslTransformer();
 			foreach (string xslFile in xslFiles)
 			{
+                Log.Trace("Transforming using file : {0}",xslFile);
 				builder.Append(transformer.TransformToXml(xslFile, document));
 			}
 			return builder.ToString();
