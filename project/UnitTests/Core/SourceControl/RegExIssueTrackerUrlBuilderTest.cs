@@ -43,6 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             return regexIssue;
         }
 
+
         [Test]
         public void ValuePopulation()
         {
@@ -171,6 +172,33 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             regexIssue.SetupModification(mods);
 
             Assert.IsNull(mods[0].IssueUrl);
+        }
+
+
+
+        [Test,Ignore("CCNET 1589 can not get the test to work")]
+        public void MultilineCommentFirstLineContainsBugIdNextContainLogMessage()
+        {
+            System.Text.StringBuilder commentBuilder = new System.Text.StringBuilder();
+
+            commentBuilder.AppendLine("FS#1234");
+            commentBuilder.AppendLine("fixed typo");
+
+            Modification[] mods = new Modification[1];
+            mods[0] = new Modification();
+            mods[0].FolderName = "/trunk";
+            mods[0].FileName = "nant.bat";
+            mods[0].ChangeNumber = "3";
+            mods[0].Comment = commentBuilder.ToString();
+
+
+            RegExIssueTrackerUrlBuilder regexIssue = new RegExIssueTrackerUrlBuilder();
+            regexIssue.Find = @"FS#(\d+)";
+            regexIssue.Replace = @"http://flyspray.internal/index.php?do=details&task_id=$1";
+
+            regexIssue.SetupModification(mods);
+
+            Assert.AreEqual("http://flyspray.internal/index.php?do=details&task_id=1234", mods[0].IssueUrl);
         }
 
 
