@@ -325,6 +325,25 @@ namespace ThoughtWorks.CruiseControl.Remote
             return connection;
         }
         #endregion
+
+        #region ResetCache()
+        /// <summary>
+        /// Resets the entire client cache.
+        /// </summary>
+        public virtual void ResetCache()
+        {
+            clients.Clear();
+        }
+
+        /// <summary>
+        /// Resets the cache for a client address.
+        /// </summary>
+        /// <param name="address">The address to reset.</param>
+        public virtual void ResetCache(string address)
+        {
+            clients.Remove(address);
+        }
+        #endregion
         #endregion
 
         #region Public delegates

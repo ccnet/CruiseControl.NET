@@ -535,7 +535,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void ValidateConnection(BuildServer server)
 		{
-			cruiseProjectManagerFactory.GetProjectList(server);
+			cruiseProjectManagerFactory.GetProjectList(server, true);
 		}
 
 		private BuildServer ConstructBuildServerFromSelectedOptions()

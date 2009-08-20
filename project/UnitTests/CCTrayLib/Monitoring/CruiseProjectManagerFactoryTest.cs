@@ -92,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
             var factory = new CruiseProjectManagerFactory(mockCruiseManagerFactory);
 
             mocks.ReplayAll();
-            CCTrayProject[] projectList = factory.GetProjectList(server);
+            CCTrayProject[] projectList = factory.GetProjectList(server, false);
             Assert.AreNotEqual(0, projectList.Length);
 
             mocks.VerifyAll();

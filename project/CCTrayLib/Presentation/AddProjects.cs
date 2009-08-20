@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			{
 				lbProject.Items.Clear();
 
-				CCTrayProject[] projectList = cruiseProjectManagerFactory.GetProjectList(server);
+				CCTrayProject[] projectList = cruiseProjectManagerFactory.GetProjectList(server, false);
 
 				foreach (CCTrayProject project in projectList)
 				{

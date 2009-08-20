@@ -121,6 +121,19 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns>A <see cref="CruiseServerClientBase"/> instance.</returns>
         CruiseServerClientBase GenerateRemotingClient(string address, string targetServer);
         #endregion
+
+        #region ResetCache()
+        /// <summary>
+        /// Resets the entire client cache.
+        /// </summary>
+        void ResetCache();
+
+        /// <summary>
+        /// Resets the cache for a client address.
+        /// </summary>
+        /// <param name="address">The address to reset.</param>
+        void ResetCache(string address);
+        #endregion
         #endregion
     }
 }

@@ -36,8 +36,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             }
         }
 
-        public CCTrayProject[] GetProjectList(BuildServer server)
+        public CCTrayProject[] GetProjectList(BuildServer server, bool newServer)
         {
+            if (newServer)
+            {
+                // Clear the cache when adding a new server
+                clientFactory.ResetCache(server.Url);
+            }
+
             switch (server.Transport)
             {
                 case BuildServerTransport.Remoting:
