@@ -16,6 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #region Private fields
         private IDynamicValue[] myDynamicValues = new IDynamicValue[0];
         private ItemStatus currentStatus;
+        private List<TimeSpan> elapsedTimes = new List<TimeSpan>();
         #endregion
 
         #region Public properties
@@ -69,8 +70,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         public virtual void Run(IIntegrationResult result)
         {
             // Initialise the task
-            if (currentStatus == null) InitialiseStatus();
+            InitialiseStatus();
             currentStatus.Status = ItemBuildStatus.Running;
+            currentStatus.TimeOfEstimatedCompletion = CalculateEstimatedTime();
             currentStatus.TimeStarted = DateTime.Now;
 
             // Perform the actual run
@@ -91,6 +93,27 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 currentStatus.Status = (taskSuccess) ? ItemBuildStatus.CompletedSuccess : ItemBuildStatus.CompletedFailed;
                 currentStatus.TimeCompleted = DateTime.Now;
             }
+        }
+        #endregion
+
+        #region CalculateEstimatedTime()
+        /// <summary>
+        /// Calculate the estimated time of completion.
+        /// </summary>
+        /// <returns></returns>
+        public virtual DateTime? CalculateEstimatedTime()
+        {
+            // Calculate the estimated completion time
+            double seconds = 0;
+            if (elapsedTimes.Count > 0)
+            {
+                for (var loop = 0; loop < elapsedTimes.Count; loop++)
+                {
+                    seconds += elapsedTimes[loop].TotalSeconds;
+                }
+                seconds /= elapsedTimes.Count;
+            }
+            return seconds > 0 ? (DateTime?)DateTime.Now.AddSeconds(seconds) : null;
         }
         #endregion
 
@@ -148,24 +171,28 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             return value;
         }
         #endregion
-        #endregion
-
-        #region Protected methods
-        #region Execute()
-        /// <summary>
-        /// Execute the actual task functionality.
-        /// </summary>
-        /// <param name="result"></param>
-        /// <returns>True if the task was successful, false otherwise.</returns>
-        protected abstract bool Execute(IIntegrationResult result);
-        #endregion
 
         #region InitialiseStatus()
         /// <summary>
         /// Initialise an <see cref="ItemStatus"/>.
         /// </summary>
-        protected virtual void InitialiseStatus()
+        public virtual void InitialiseStatus()
         {
+            // Store the last elapsed time
+            if (currentStatus != null)
+            {
+                var elapsedTime = currentStatus.TimeCompleted - currentStatus.TimeStarted;
+                if (elapsedTime.HasValue)
+                {
+                    if (elapsedTimes.Count >= 8)
+                    {
+                        elapsedTimes.RemoveAt(8);
+                    }
+                    elapsedTimes.Insert(0, elapsedTime.Value);
+                }
+            }
+
+            // Initialise the status with the default value
             currentStatus = new ItemStatus
             {
                 Name = Name,
@@ -176,6 +203,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 TimeStarted = null
             };
         }
+        #endregion
+        #endregion
+
+        #region Protected methods
+        #region Execute()
+        /// <summary>
+        /// Execute the actual task functionality.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns>True if the task was successful, false otherwise.</returns>
+        protected abstract bool Execute(IIntegrationResult result);
         #endregion
         #endregion
     }

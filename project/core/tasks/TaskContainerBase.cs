@@ -65,32 +65,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
         }
         #endregion
-        #endregion
-
-        #region Protected methods
-        #region RunTask()
-        /// <summary>
-        /// Runs a task.
-        /// </summary>
-        /// <param name="task"></param>
-        /// <param name="result"></param>
-        protected virtual void RunTask(ITask task, IIntegrationResult result)
-        {
-            if (task is IParamatisedItem)
-            {
-                (task as IParamatisedItem).ApplyParameters(parameters, parameterDefinitions);
-            }
-
-            task.Run(result);
-        }
-        #endregion
 
         #region InitialiseStatus()
         /// <summary>
         /// Initialise an <see cref="ItemStatus"/>.
         /// </summary>
         /// <param name="tasks"></param>
-        protected override void InitialiseStatus()
+        public override void InitialiseStatus()
         {
             // This needs to be called first, otherwise the status is not set up
             base.InitialiseStatus();
@@ -101,6 +82,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 foreach (ITask task in Tasks)
                 {
                     ItemStatus taskItem = null;
+                    if (task is TaskBase)
+                    {
+                        // Reset the status for the task
+                        (task as TaskBase).InitialiseStatus();
+                    }
+
                     if (task is IStatusSnapshotGenerator)
                     {
                         taskItem = (task as IStatusSnapshotGenerator).GenerateSnapshot();
@@ -119,6 +106,25 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     }
                 }
             }
+        }
+        #endregion
+        #endregion
+
+        #region Protected methods
+        #region RunTask()
+        /// <summary>
+        /// Runs a task.
+        /// </summary>
+        /// <param name="task"></param>
+        /// <param name="result"></param>
+        protected virtual void RunTask(ITask task, IIntegrationResult result)
+        {
+            if (task is IParamatisedItem)
+            {
+                (task as IParamatisedItem).ApplyParameters(parameters, parameterDefinitions);
+            }
+
+            task.Run(result);
         }
         #endregion
         #endregion

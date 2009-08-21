@@ -378,6 +378,11 @@ namespace ThoughtWorks.CruiseControl.Core
             foreach (ITask task in tasks)
             {
                 ItemStatus taskItem = null;
+                if (task is TaskBase)
+                {
+                    (task as TaskBase).InitialiseStatus();
+                }
+
                 if (task is IStatusSnapshotGenerator)
                 {
                     taskItem = (task as IStatusSnapshotGenerator).GenerateSnapshot();
@@ -531,6 +536,12 @@ namespace ThoughtWorks.CruiseControl.Core
             // If there is a status, update it
             if (status != null)
             {
+                var baseTask = task as TaskBase;
+                if (baseTask != null)
+                {
+                    status.TimeOfEstimatedCompletion = baseTask.CalculateEstimatedTime();
+                }
+
                 status.TimeStarted = DateTime.Now;
                 status.Status = ItemBuildStatus.Running;
                 if ((status.Parent != null) && (status.Parent.Status == ItemBuildStatus.Pending))
