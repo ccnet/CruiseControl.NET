@@ -29,6 +29,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
 
             nextRefresh = DateTime.Now.AddSeconds(interval);
             pollingThread = new Thread(Poll);
+            pollingThread.IsBackground = true;
             pollingThread.Start();
         }
         #endregion
