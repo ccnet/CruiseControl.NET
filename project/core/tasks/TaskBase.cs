@@ -186,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 {
                     if (elapsedTimes.Count >= 8)
                     {
-                        elapsedTimes.RemoveAt(8);
+                        elapsedTimes.RemoveAt(7);
                     }
                     elapsedTimes.Insert(0, elapsedTime.Value);
                 }

@@ -74,6 +74,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         public override void InitialiseStatus()
         {
             // This needs to be called first, otherwise the status is not set up
+            taskStatuses.Clear();
             base.InitialiseStatus();
 
             // Add each status
