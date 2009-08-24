@@ -14,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         private DateTimeProvider dtProvider;
         private TimeSpan integrationTime;
         private DateTime nextBuild;
+        private DateTime previousBuild;
         private bool triggered;
         private Int32 randomOffSetInMinutesFromTime = 0;
         Random randomizer = new Random();
@@ -53,8 +54,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
             set
             {
                 randomOffSetInMinutesFromTime = value;
-                if (randomOffSetInMinutesFromTime < 0)
-                    throw new ConfigurationException("randomOffSetInMinutesFromTime may not be negative");
+                if (randomOffSetInMinutesFromTime < 0 || randomOffSetInMinutesFromTime >= 60)
+                    throw new ConfigurationException("randomOffSetInMinutesFromTime must be in the range 0 - 59");
             }
         }
 
@@ -78,22 +79,20 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 
         private void SetNextIntegrationDateTime()
         {
+
+            if (integrationTime.Minutes + RandomOffSetInMinutesFromTime >= 60)
+                throw new ConfigurationException(String.Format("randomOffSetInMinutesFromTime {0} + {1} would exceed the hour, this is not allowed", RandomOffSetInMinutesFromTime, integrationTime.Minutes));
+
             DateTime now = dtProvider.Now;
             nextBuild = new DateTime(now.Year, now.Month, now.Day, integrationTime.Hours, integrationTime.Minutes, 0, 0);
 
             if (randomOffSetInMinutesFromTime > 0)
             {
-                if (integrationTime.Add(new TimeSpan(0,randomOffSetInMinutesFromTime,0)).Days >= 1 )
-                {
-                    throw new ConfigurationException(string.Format("randomOffSetInMinutesFromTime {0} + {1} would exceed midnight, this is not allowed", randomOffSetInMinutesFromTime, Time));
-                }
-
                 Int32 randomNumber = randomizer.Next(randomOffSetInMinutesFromTime);
-                integrationTime = integrationTime.Add(new TimeSpan(0, randomNumber, 0));
                 nextBuild = nextBuild.AddMinutes(randomNumber);
             }
 
-            if (now >= nextBuild)
+            if (now >= nextBuild || now.Date == previousBuild.Date)
             {
                 nextBuild = nextBuild.AddDays(1);
             }
@@ -119,7 +118,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 
         public virtual void IntegrationCompleted()
         {
-            if (triggered) SetNextIntegrationDateTime();
+            if (triggered)
+            {
+                previousBuild = dtProvider.Now;
+                SetNextIntegrationDateTime();
+            }
             triggered = false;
         }
 
