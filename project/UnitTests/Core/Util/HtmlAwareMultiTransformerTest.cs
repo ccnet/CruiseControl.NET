@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			delegateMock.ExpectAndReturn("Transform", @"<p>MyFirstOutput<p>",  input, "xslFile1", null);
 			delegateMock.ExpectAndReturn("Transform", @"<p>MySecondOutput<p>",  input, "xslFile2", null);
 
-			Assert.AreEqual(@"<p>MyFirstOutput<p><br/><p>MySecondOutput<p><br/>", transformer.Transform(input, new string[] { "xslFile1", "xslFile2" }, null));
+			Assert.AreEqual(@"<p>MyFirstOutput<p><p>MySecondOutput<p>", transformer.Transform(input, new string[] { "xslFile1", "xslFile2" }, null));
 			delegateMock.Verify();
 		}
 	}
