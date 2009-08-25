@@ -269,12 +269,39 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		public void UnitTestResultsShouldBeIncludedInEmailMessageWhenIncludesDetailsIsTrue()
 		{
 			IntegrationResult result = IntegrationResultMother.CreateStillSuccessful();
-			string results = "<test-results name=\"foo\" total=\"10\" failures=\"0\" not-run=\"0\"><test-suite></test-suite></test-results>";
+
+            System.IO.StreamReader reader = System.IO.File.OpenText("UnitTestResults.xml");
+            string results = reader.ReadToEnd();
+            reader.Close();
+
 			result.AddTaskResult(results);
 			publisher.IncludeDetails = true;
+
 			string message = publisher.CreateMessage(result);
 			Assert.IsTrue(message.IndexOf("Tests run") >= 0);
 		}
+
+        [Test]
+        public void UnitTestResultsShouldNotBeIncludedInEmailMessageWhenIncludesDetailsIsTrueAndNoUnitTestXslIsDefined()
+        {
+            IntegrationResult result = IntegrationResultMother.CreateStillSuccessful();
+
+            System.IO.StreamReader reader = System.IO.File.OpenText("UnitTestResults.xml");
+            string results = reader.ReadToEnd();
+            reader.Close();
+
+            result.AddTaskResult(results);
+            publisher.IncludeDetails = true;
+
+            string[] xslFiles = { @"xsl\NCover.xsl" };
+
+            publisher.XslFiles = xslFiles;
+
+            string message = publisher.CreateMessage(result);
+            Assert.IsFalse(message.IndexOf("Tests run") >= 0);
+        }
+
+
 
 		[Test]
 		public void Publish_UnknownIntegrationStatus()

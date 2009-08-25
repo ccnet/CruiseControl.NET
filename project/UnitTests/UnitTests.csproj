@@ -1227,6 +1227,7 @@
     <Content Include="resources\CCNet.git.log.txt" />
     <Content Include="resources\failedbuildlog.xml" />
     <Content Include="resources\statistics.xml" />
+    <Content Include="resources\UnitTestResults.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="WebDashboard\Cache\" />
