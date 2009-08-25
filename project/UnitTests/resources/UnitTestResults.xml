@@ -1,0 +1,561 @@
+﻿<test-results name="e:\sourcecontrols\sourceforge\netreflector\build\NetReflector.Test.dll"
+              total="75"
+              failures="0"
+              not-run="3"
+              date="3/20/2006"
+              time="1:30 PM">
+  <test-suite name="e:\sourcecontrols\sourceforge\netreflector\build\NetReflector.Test.dll"
+              success="True"
+              time="3.3125"
+              asserts="0">
+    <results>
+      <test-suite name="Exortech"
+                  success="True"
+                  time="3.296875"
+                  asserts="0">
+        <results>
+          <test-suite name="NetReflector"
+                      success="True"
+                      time="3.265625"
+                      asserts="0">
+            <results>
+              <test-suite name="Test"
+                          success="True"
+                          time="3.234375"
+                          asserts="0">
+                <results>
+                  <test-suite name="Attributes"
+                              success="True"
+                              time="0.4375"
+                              asserts="0">
+                    <results>
+                      <test-suite name="ReflectorPropertyTest"
+                                  success="True"
+                                  time="0.421875"
+                                  asserts="0">
+                        <results>
+                          <test-case name="Exortech.NetReflector.Test.Attributes.ReflectorPropertyTest.ShouldUseCustomSerialiserFactory"
+                                     executed="True"
+                                     success="True"
+                                     time="0.391"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Attributes.ReflectorPropertyTest.ShouldUseDefaultSerialiserFactory"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="1" />
+                        </results>
+                      </test-suite>
+                    </results>
+                  </test-suite>
+                  <test-suite name="Generators"
+                              success="True"
+                              time="0.640625"
+                              asserts="0">
+                    <results>
+                      <test-suite name="XmlDocumentationGeneratorTest"
+                                  success="True"
+                                  time="0.0625"
+                                  asserts="0">
+                        <results>
+                          <test-case name="Exortech.NetReflector.Test.Generators.XmlDocumentationGeneratorTest.ShouldProduceXmlDocumentationOfReflectorTypes"
+                                     executed="True"
+                                     success="True"
+                                     time="0.031"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Generators.XmlDocumentationGeneratorTest.ShouldProduceXmlDocumentationOfReflectorTypesButNotIncludeEmptyDescriptions"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Generators.XmlDocumentationGeneratorTest.ShouldProduceDocumentationForTypeMembers"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite name="XsdGeneratorTest"
+                                  success="True"
+                                  time="0.578125"
+                                  asserts="0">
+                        <results>
+                          <test-case name="Exortech.NetReflector.Test.Generators.XsdGeneratorTest.ShouldGenerateASchemaToValidateTestClassXml"
+                                     executed="True"
+                                     success="True"
+                                     time="0.563"
+                                     asserts="0" />
+                          <test-case name="Exortech.NetReflector.Test.Generators.XsdGeneratorTest.ShouldGenerateASchemaToValidateTestSubClassXml"
+                                     executed="False">
+                            <reason>
+                              <message><![CDATA[Work on schema generation is still in progress.]]></message>
+                            </reason>
+                          </test-case>
+                        </results>
+                      </test-suite>
+                    </results>
+                  </test-suite>
+                  <test-suite name="Serialisers"
+                              success="True"
+                              time="0.9375"
+                              asserts="0">
+                    <results>
+                      <test-suite name="DefaultSerialiserFactoryTest"
+                                  success="True"
+                                  time="0"
+                                  asserts="0">
+                        <results>
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.DefaultSerialiserFactoryTest.ShouldCreateArraySerialiserWhenArrayPropertyIsPassed"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.DefaultSerialiserFactoryTest.ShouldCreateCollectionSerialiserWhenCollectionPropertyIsPassed"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite name="XmlArraySerialiserTest"
+                                  success="True"
+                                  time="0.28125"
+                                  asserts="0">
+                        <results>
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlArraySerialiserTest.WriteArrayTestClass"
+                                     executed="True"
+                                     success="True"
+                                     time="0.016"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlArraySerialiserTest.ReadArrayTestClass"
+                                     executed="True"
+                                     success="True"
+                                     time="0.016"
+                                     asserts="9" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlArraySerialiserTest.ReadArrayTestClassContainingEncodedMarkup"
+                                     executed="True"
+                                     success="True"
+                                     time="0.016"
+                                     asserts="2" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlArraySerialiserTest.ReadArrayTestClassWithEnums"
+                                     executed="True"
+                                     success="True"
+                                     time="0.031"
+                                     asserts="6" />
+                        </results>
+                      </test-suite>
+                      <test-suite name="XmlCollectionSerialiserTest"
+                                  success="True"
+                                  time="0.1875"
+                                  asserts="0">
+                        <results>
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlCollectionSerialiserTest.WriteCollectionTestClass"
+                                     executed="True"
+                                     success="True"
+                                     time="0.047"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlCollectionSerialiserTest.WriteCollectionTestClassContainingNulls"
+                                     executed="True"
+                                     success="True"
+                                     time="0.031"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlCollectionSerialiserTest.ReadCollectionTestClass"
+                                     executed="True"
+                                     success="True"
+                                     time="0.031"
+                                     asserts="8" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlCollectionSerialiserTest.ShouldUseInstantiatorThatHasBeenSet"
+                                     executed="True"
+                                     success="True"
+                                     time="0.063"
+                                     asserts="9" />
+                        </results>
+                      </test-suite>
+                      <test-suite name="XmlDictionarySerialiserTest"
+                                  success="True"
+                                  time="0.234375"
+                                  asserts="0">
+                        <results>
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlDictionarySerialiserTest.WriteTestHashClassContainingElementTestClasses"
+                                     executed="True"
+                                     success="True"
+                                     time="0.047"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlDictionarySerialiserTest.WriteTestHashClassContainingStrings"
+                                     executed="True"
+                                     success="True"
+                                     time="0.031"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlDictionarySerialiserTest.ReadTestHashClassContainingStrings"
+                                     executed="True"
+                                     success="True"
+                                     time="0.047"
+                                     asserts="7" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlDictionarySerialiserTest.ReadTestHashClassContainingElements"
+                                     executed="True"
+                                     success="True"
+                                     time="0.047"
+                                     asserts="7" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlDictionarySerialiserTest.ShouldUseInstantiatorThatHasBeenSet"
+                                     executed="True"
+                                     success="True"
+                                     time="0.063"
+                                     asserts="8" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlDictionarySerialiserTest.UnspecifiedKeyIsElementName"
+                                     executed="False">
+                            <reason>
+                              <message><![CDATA[not done yet]]></message>
+                            </reason>
+                          </test-case>
+                        </results>
+                      </test-suite>
+                      <test-suite name="XmlMemberSerialiserTest"
+                                  success="True"
+                                  time="0.21875"
+                                  asserts="0">
+                        <results>
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlMemberSerialiserTest.WriteTestInnerClass"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlMemberSerialiserTest.WriteTestClass"
+                                     executed="True"
+                                     success="True"
+                                     time="0.016"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlMemberSerialiserTest.WriteSubClass"
+                                     executed="True"
+                                     success="True"
+                                     time="0.016"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlMemberSerialiserTest.WriteSubClassWithXmlMarkupInProperty"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlMemberSerialiserTest.ReadTestInnerClass"
+                                     executed="True"
+                                     success="True"
+                                     time="0.016"
+                                     asserts="3" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlMemberSerialiserTest.ReadTestClass"
+                                     executed="True"
+                                     success="True"
+                                     time="0.016"
+                                     asserts="5" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlMemberSerialiserTest.ReadInnerClassWithComment"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="3" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlMemberSerialiserTest.ReadSubClass"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="3" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlMemberSerialiserTest.ReadSubClassWithEncodedXmlInProperty"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlMemberSerialiserTest.ReadSubClassWhereTypeIsInvalid"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="0" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlMemberSerialiserTest.ReadTestInnerClassThatIsMissingRequiredName"
+                                     executed="True"
+                                     success="True"
+                                     time="0.016"
+                                     asserts="0" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlMemberSerialiserTest.ReadShouldNotOverwriteDefaultValues"
+                                     executed="True"
+                                     success="True"
+                                     time="0.031"
+                                     asserts="2" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlMemberSerialiserTest.OnWriteCheckRequiredKeyword"
+                                     executed="False">
+                            <reason>
+                              <message><![CDATA[yet to be implemented]]></message>
+                            </reason>
+                          </test-case>
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlMemberSerialiserTest.ReadXmlWithMissingTypeOnAPropertyShouldThrowNetReflectorException"
+                                     executed="True"
+                                     success="True"
+                                     time="0.016"
+                                     asserts="0" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlMemberSerialiserTest.ReadXmlWithEnum"
+                                     executed="True"
+                                     success="True"
+                                     time="0.031"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlMemberSerialiserTest.ShouldIgnoreAnyMembersWithInstanceTypesThatAreNotSetToANetReflectorType"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="1" />
+                        </results>
+                      </test-suite>
+                      <test-suite name="XmlTypeSerialiserTest"
+                                  success="True"
+                                  time="0"
+                                  asserts="0">
+                        <results>
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlTypeSerialiserTest.GetReflectorTypeAttribute"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="2" />
+                          <test-case name="Exortech.NetReflector.Test.Serialisers.XmlTypeSerialiserTest.ShouldReturnNullForTypeWithoutNetReflectorAttribute"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="1" />
+                        </results>
+                      </test-suite>
+                    </results>
+                  </test-suite>
+                  <test-suite name="Util"
+                              success="True"
+                              time="0.09375"
+                              asserts="0">
+                    <results>
+                      <test-suite name="DefaultInstantiatorTest"
+                                  success="True"
+                                  time="0.015625"
+                                  asserts="0">
+                        <results>
+                          <test-case name="Exortech.NetReflector.Test.Util.DefaultInstantiatorTest.CreateInstance"
+                                     executed="True"
+                                     success="True"
+                                     time="0.016"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Util.DefaultInstantiatorTest.CreateInstanceWithUnknownType"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="0" />
+                        </results>
+                      </test-suite>
+                      <test-suite name="ReflectorMemberTest"
+                                  success="True"
+                                  time="0.0625"
+                                  asserts="0">
+                        <results>
+                          <test-case name="Exortech.NetReflector.Test.Util.ReflectorMemberTest.SetValue"
+                                     executed="True"
+                                     success="True"
+                                     time="0.016"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Util.ReflectorMemberTest.SetValueWithTypeConversion"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Util.ReflectorMemberTest.SetValueWithTypeConversionForInconvertibleTypes"
+                                     executed="True"
+                                     success="True"
+                                     time="0.016"
+                                     asserts="0" />
+                          <test-case name="Exortech.NetReflector.Test.Util.ReflectorMemberTest.SetValueOfSubClass"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="2" />
+                          <test-case name="Exortech.NetReflector.Test.Util.ReflectorMemberTest.SetValueToNull"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="1" />
+                          <test-case name="Exortech.NetReflector.Test.Util.ReflectorMemberTest.SettingValueThrowsException"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="0" />
+                          <test-case name="Exortech.NetReflector.Test.Util.ReflectorMemberTest.AutomaticallyParseStringIntoEnum"
+                                     executed="True"
+                                     success="True"
+                                     time="0.016"
+                                     asserts="5" />
+                        </results>
+                      </test-suite>
+                      <test-suite name="XmlElementListTest"
+                                  success="True"
+                                  time="0.015625"
+                                  asserts="0">
+                        <results>
+                          <test-case name="Exortech.NetReflector.Test.Util.XmlElementListTest.EnsureNodeListHandlesComments"
+                                     executed="True"
+                                     success="True"
+                                     time="0.016"
+                                     asserts="4" />
+                          <test-case name="Exortech.NetReflector.Test.Util.XmlElementListTest.VerifyEnumeration"
+                                     executed="True"
+                                     success="True"
+                                     time="0.000"
+                                     asserts="2" />
+                        </results>
+                      </test-suite>
+                    </results>
+                  </test-suite>
+                  <test-suite name="NetReflectorTest"
+                              success="True"
+                              time="0.140625"
+                              asserts="0">
+                    <results>
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTest.WriteWithNullTextWriter"
+                                 executed="True"
+                                 success="True"
+                                 time="0.000"
+                                 asserts="0" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTest.WriteWithNullXmlWriter"
+                                 executed="True"
+                                 success="True"
+                                 time="0.000"
+                                 asserts="0" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTest.WriteWithNullTarget"
+                                 executed="True"
+                                 success="True"
+                                 time="0.016"
+                                 asserts="0" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTest.WriteWithUnknownType"
+                                 executed="True"
+                                 success="True"
+                                 time="0.000"
+                                 asserts="0" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTest.ReadXmlWhereRootNodeDoesNotMatchReflectorType"
+                                 executed="True"
+                                 success="True"
+                                 time="0.000"
+                                 asserts="0" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTest.ReadNullXmlString"
+                                 executed="True"
+                                 success="True"
+                                 time="0.000"
+                                 asserts="0" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTest.ReadNullTextReader"
+                                 executed="True"
+                                 success="True"
+                                 time="0.000"
+                                 asserts="0" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTest.ReadNullXmlReader"
+                                 executed="True"
+                                 success="True"
+                                 time="0.016"
+                                 asserts="0" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTest.ReadNullXmlNode"
+                                 executed="True"
+                                 success="True"
+                                 time="0.000"
+                                 asserts="0" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTest.ReadNullReflectorTypeTable"
+                                 executed="True"
+                                 success="True"
+                                 time="0.031"
+                                 asserts="0" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTest.ReadMembers"
+                                 executed="True"
+                                 success="True"
+                                 time="0.031"
+                                 asserts="1" />
+                    </results>
+                  </test-suite>
+                  <test-suite name="NetReflectorTypeTableTest"
+                              success="True"
+                              time="0.859375"
+                              asserts="0">
+                    <results>
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTypeTableTest.AddTypeToTypeTable"
+                                 executed="True"
+                                 success="True"
+                                 time="0.000"
+                                 asserts="2" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTypeTableTest.AddAssemblyToTypeTable"
+                                 executed="True"
+                                 success="True"
+                                 time="0.000"
+                                 asserts="8" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTypeTableTest.AddAssemblyTwice"
+                                 executed="True"
+                                 success="True"
+                                 time="0.000"
+                                 asserts="1" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTypeTableTest.AddAllAssembliesInAppDomain"
+                                 executed="True"
+                                 success="True"
+                                 time="0.031"
+                                 asserts="1" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTypeTableTest.AddAssemblyFromFilename"
+                                 executed="True"
+                                 success="True"
+                                 time="0.547"
+                                 asserts="2" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTypeTableTest.LoadReflectorTypesByFilename_UnknownAssembly"
+                                 executed="True"
+                                 success="True"
+                                 time="0.000"
+                                 asserts="0" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTypeTableTest.LoadReflectorTypesByFilenameFilter"
+                                 executed="True"
+                                 success="True"
+                                 time="0.047"
+                                 asserts="3" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTypeTableTest.AddMismatchingTypes"
+                                 executed="True"
+                                 success="True"
+                                 time="0.031"
+                                 asserts="0" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTypeTableTest.VerifyNetReflectorTypeLoadExceptionMessage"
+                                 executed="True"
+                                 success="True"
+                                 time="0.016"
+                                 asserts="3" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTypeTableTest.ShouldUseCustomInstantiatorIfUsed"
+                                 executed="True"
+                                 success="True"
+                                 time="0.000"
+                                 asserts="1" />
+                    </results>
+                  </test-suite>
+                  <test-suite name="NetReflectorTypeTableUnusedNodeTest"
+                              success="True"
+                              time="0.0625"
+                              asserts="0">
+                    <results>
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTypeTableUnusedNodeTest.RaiseEventIfXmlContainsUnnecessaryNodes"
+                                 executed="True"
+                                 success="True"
+                                 time="0.016"
+                                 asserts="4" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTypeTableUnusedNodeTest.RaiseEventIfXmlContainsDuplicateNodes"
+                                 executed="True"
+                                 success="True"
+                                 time="0.016"
+                                 asserts="3" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTypeTableUnusedNodeTest.DoNotRaiseEventIfXmlContainsComments"
+                                 executed="True"
+                                 success="True"
+                                 time="0.000"
+                                 asserts="1" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTypeTableUnusedNodeTest.DoNotRaiseEventIfXmlDoesNotContainUnnecessaryNodes"
+                                 executed="True"
+                                 success="True"
+                                 time="0.016"
+                                 asserts="1" />
+                      <test-case name="Exortech.NetReflector.Test.NetReflectorTypeTableUnusedNodeTest.ShouldHandleRaisingEventsIfNoHandlerHasBeenRegistered"
+                                 executed="True"
+                                 success="True"
+                                 time="0.000"
+                                 asserts="0" />
+                    </results>
+                  </test-suite>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>
