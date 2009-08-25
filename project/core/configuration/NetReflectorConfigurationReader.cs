@@ -224,12 +224,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 
             public void ProcessError(string message, params object[] args)
             {
-                throw new NotImplementedException();
+                throw new ConfigurationException(string.Format(message,args)) ;
             }
 
             public void ProcessWarning(string message, params object[] args)
             {
-                throw new NotImplementedException();
+                Log.Warning(message, args) ;
             }
         }
 	}

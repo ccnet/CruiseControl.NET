@@ -907,6 +907,10 @@ namespace ThoughtWorks.CruiseControl.Core
             ValidateItems(publishers, configuration, errorProcesser);
             ValidateItem(state, configuration, errorProcesser);
             ValidateItem(security, configuration, errorProcesser);
+
+            Core.Triggers.MultipleTrigger mt = (Core.Triggers.MultipleTrigger) this.Triggers;
+            ValidateItems(mt.Triggers, configuration, errorProcesser);
+
         }
 
         /// <summary>
