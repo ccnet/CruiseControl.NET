@@ -8,7 +8,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Triggers
 {
     [ReflectorType("scheduleTrigger")]
-    public class ScheduleTrigger : ITrigger
+    public class ScheduleTrigger : ITrigger, IConfigurationValidation
     {
         private string name;
         private DateTimeProvider dtProvider;
@@ -79,9 +79,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 
         private void SetNextIntegrationDateTime()
         {
-
             if (integrationTime.Minutes + RandomOffSetInMinutesFromTime >= 60)
-                throw new ConfigurationException(String.Format("randomOffSetInMinutesFromTime {0} + {1} would exceed the hour, this is not allowed", RandomOffSetInMinutesFromTime, integrationTime.Minutes));
+                throw new CruiseControlException(string.Format("Scheduled time {0}:{1} + randomOffSetInMinutesFromTime {2} would exceed the hour, this is not allowed", integrationTime.Hours, integrationTime.Minutes, RandomOffSetInMinutesFromTime));
 
             DateTime now = dtProvider.Now;
             nextBuild = new DateTime(now.Year, now.Month, now.Day, integrationTime.Hours, integrationTime.Minutes, 0, 0);
@@ -148,5 +147,24 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
             }
             return null;
         }
+
+
+
+        public void Validate(IConfiguration configuration, object parent)
+        {
+             string projectName = "(Unknown)";
+
+            if (parent is Project)
+            {
+                Project parentProject = parent as Project;
+
+                projectName = parentProject.Name;
+            }
+
+            if (integrationTime.Minutes + RandomOffSetInMinutesFromTime >= 60)
+                throw new CruiseControlException(string.Format("Scheduled time {0}:{1} + randomOffSetInMinutesFromTime {2} would exceed the hour, this is not allowed. Conflicting project {3}", integrationTime.Hours, integrationTime.Minutes, RandomOffSetInMinutesFromTime, projectName));
+
+        }
+
     }
 }

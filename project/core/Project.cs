@@ -484,6 +484,10 @@ namespace ThoughtWorks.CruiseControl.Core
             ValidateItems(tasks, configuration);
             ValidateItems(publishers, configuration);
             ValidateItem(state, configuration);
+            
+            Core.Triggers.MultipleTrigger mt = (Core.Triggers.MultipleTrigger)this.Triggers;
+            ValidateItems(mt.Triggers, configuration);
+
         }
 
 
