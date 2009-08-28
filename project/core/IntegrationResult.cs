@@ -470,8 +470,20 @@ namespace ThoughtWorks.CruiseControl.Core
         public Exception SourceControlError
         {
             get { return sourceControlError; }
-            set { sourceControlError = value; }
+            set
+            {
+                sourceControlError = value;
+                HasSourceControlError = (value != null);
+            }
         }
+
+        #region HasSourceControlError
+        /// <summary>
+        /// Gets or sets a value indicating whether there was a source control error.
+        /// </summary>
+        [XmlAttribute("scmError")]
+        public bool HasSourceControlError { get; set; }
+        #endregion
 
         private ArrayList GetModifiers()
         {

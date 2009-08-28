@@ -67,7 +67,14 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </remarks>
         Exception SourceControlError { get; set; }
 
-		IDictionary IntegrationProperties { get; }
+        #region HasSourceControlError
+        /// <summary>
+        /// Gets or sets a value indicating whether there was a source control error.
+        /// </summary>
+        bool HasSourceControlError { get; }
+        #endregion
+
+        IDictionary IntegrationProperties { get; }
         Util.BuildProgressInformation BuildProgressInformation { get; }
 
         #region Clone()

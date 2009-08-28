@@ -1,11 +1,20 @@
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
 	public interface IIntegrationRunnerTarget : ITask
 	{
 		ISourceControl SourceControl { get; }
-		void Prebuild(IIntegrationResult result);
+
+        #region SourceExceptionResolution
+        /// <summary>
+        /// Gets or sets the action to perform after a source control exception has been resolved.
+        /// </summary>
+        Common.SourceExceptionResolutionAction SourceExceptionResolution { get; }
+        #endregion
+
+        void Prebuild(IIntegrationResult result);
 
 		void PublishResults(IIntegrationResult result);
 
