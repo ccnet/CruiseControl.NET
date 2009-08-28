@@ -4,6 +4,7 @@ using System.Threading;
 using log4net;
 using log4net.Config;
 using ThoughtWorks.CruiseControl.Core.Util.Log4NetTrace;
+using System.Diagnostics;
 
 // This attribute tells log4net to use the settings in the app.config file for configuration
 [assembly: XmlConfigurator()]
@@ -100,7 +101,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public static void Error(Exception ex)
 		{
             logger.Error(CreateExceptionMessage(ex));
-
 		}
 
         public static void Trace()
@@ -108,31 +108,37 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             if (loggingEnabled && logger.IsTraceEnabled) logger.TraceFormat(string.Concat(GetCallingClassName(), "Entering"));
         }
 
-
         public static void Trace(string message)
         {
             if (loggingEnabled && logger.IsTraceEnabled)  logger.TraceFormat(string.Concat(GetCallingClassName() ,message));
         }
-
 
         public static void Trace(string message, params object[] args)
         {
             if (loggingEnabled && logger.IsTraceEnabled) logger.TraceFormat(string.Concat(GetCallingClassName(), message), args);
         }
 
+        public static TraceBlock StartTrace()
+        {
+            return new TraceBlock(logger, GetCallingClassName());
+        }
+
+        public static TraceBlock StartTrace(string message, params object[] args)
+        {
+            return new TraceBlock(logger, GetCallingClassName(), string.Format(message, args));
+        }
 
         private static string GetCallingClassName()
         {
-
-            System.Diagnostics.StackTrace Stack = default(System.Diagnostics.StackTrace);
-            System.Diagnostics.StackFrame CurrentFrame = default(System.Diagnostics.StackFrame);
+            StackTrace Stack = default(StackTrace);
+            StackFrame CurrentFrame = default(StackFrame);
             string myAssemblyName = null;
             string myClassName = null;
             string myMethodName = null;
 
             try
             {
-                Stack = new System.Diagnostics.StackTrace();
+                Stack = new StackTrace();
                 CurrentFrame = Stack.GetFrame(2);
                 myAssemblyName = CurrentFrame.GetMethod().ReflectedType.Assembly.FullName.Split(',')[0];
                 myClassName = CurrentFrame.GetMethod().ReflectedType.ToString();
@@ -146,7 +152,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
             return string.Format("{0} - {1}.{2} : ", myAssemblyName, myClassName, myMethodName);
         }
-
 
 		private static string CreateExceptionMessage(Exception ex)
 		{
@@ -168,5 +173,56 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			return (ex is CruiseControlException) ? "Exception: " : "INTERNAL ERROR: ";
 		}
+
+        /// <summary>
+        /// A class for putting a trace call in a block.
+        /// </summary>
+        public class TraceBlock
+            : IDisposable
+        {
+            private string methodName;
+            private ITraceLog logger;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="TraceBlock"/> class.
+            /// </summary>
+            /// <param name="logger">The underlying logger to use.</param>
+            /// <param name="methodName">The name of the method that is being traced;</param>
+            public TraceBlock(ITraceLog logger, string methodName)
+            {
+                this.logger = logger;
+                this.methodName = methodName;
+                if (this.logger.IsTraceEnabled)
+                {
+                    this.logger.TraceFormat("Entering {0}", methodName);
+                }
+            }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="TraceBlock"/> class.
+            /// </summary>
+            /// <param name="logger">The underlying logger to use.</param>
+            /// <param name="methodName">The name of the method that is being traced;</param>
+            public TraceBlock(ITraceLog logger, string methodName, string message)
+            {
+                this.logger = logger;
+                this.methodName = methodName;
+                if (this.logger.IsTraceEnabled)
+                {
+                    this.logger.TraceFormat("Entering {0}: {1}", methodName, message);
+                }
+            }
+
+            /// <summary>
+            /// Disposes of the trace block.
+            /// </summary>
+            public void Dispose()
+            {
+                if (this.logger.IsTraceEnabled)
+                {
+                    this.logger.TraceFormat("Exiting {0}", methodName);
+                }
+            }
+        }
 	}
 }
