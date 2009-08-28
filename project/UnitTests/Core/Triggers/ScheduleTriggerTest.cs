@@ -185,7 +185,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 
         }
 
-        [Test, ExpectedException(typeof(ThoughtWorks.CruiseControl.Core.Config.ConfigurationException))]
+        [Test, ExpectedException(typeof(ThoughtWorks.CruiseControl.Core.CruiseControlException))]
         public void RandomOffSetInMinutesFromTimeMayNotExceedMidnight()
         {
             mockDateTime.SetupResult("Now", new DateTime(2005, 2, 4, 9, 0, 1));

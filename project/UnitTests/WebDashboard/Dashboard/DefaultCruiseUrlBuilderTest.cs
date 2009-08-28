@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldUrlEncodeProjectWithSpaces()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "", "server/myserver/project/myproject+2");
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "", "server/myserver/project/myproject%202");
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myproject 2");
 
 			// Execute

@@ -230,5 +230,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			Assert.AreEqual(new string[0], StringUtil.NewLineSeparatedStringToArray(null));
 			Assert.AreEqual(new string[1] { "" }, StringUtil.NewLineSeparatedStringToArray(Environment.NewLine));
 		}
-	}
+
+        [Test]
+        public void UrlEncodeNameCorrectlyEncodesNames()
+        {
+            Assert.AreEqual("cc.net%20rocks", StringUtil.UrlEncodeName("cc.net rocks"));
+            Assert.AreEqual("http%3a%2f%2fserver%2fcc%20net", StringUtil.UrlEncodeName("http://server/cc net"));
+            Assert.AreEqual("abcdefHIJKLMNopqrstUVWXYZ0123456789-_.~", StringUtil.UrlEncodeName("abcdefHIJKLMNopqrstUVWXYZ0123456789-_.~"));
+            Assert.AreEqual("%60%21%40%23%24%25%5e%26%2a%28%29%3d%2b%3c%3e%3f%2f%5c%7c%7b%7d%5b%5d%3a%3b%22%27", StringUtil.UrlEncodeName("`!@#$%^&*()=+<>?/\\|{}[]:;\"'"));
+            Assert.AreEqual("\x100\x200\x300\x400", StringUtil.UrlEncodeName("\x100\x200\x300\x400"));
+        }
+    
+    }
 }

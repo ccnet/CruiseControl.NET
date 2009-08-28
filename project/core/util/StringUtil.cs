@@ -10,8 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
     public class StringUtil
     {
         private static readonly Regex NullStringRegex = new Regex("\0");
-
-
+        private static readonly Regex urlEncodeRegex = new Regex("[^a-zA-Z0-9\\.\\-_~]", RegexOptions.Compiled);
 
         // public for testing only
         public const string DEFAULT_DELIMITER = ",";
@@ -226,6 +225,65 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             }
 
             return targets.ToArray();
+        }
+
+
+
+        /// <summary>
+        /// returns the elements of the array as a string, delimited with the default delimitor
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public static string GetArrayContents(Array x)
+        {
+            System.Text.StringBuilder result = new System.Text.StringBuilder();
+
+            foreach (object o in x)
+            {
+                result.AppendFormat("{0}{1} ", o.ToString(),DEFAULT_DELIMITER );
+            }
+
+            if (result.Length > 0)
+            {
+                result.Length -= 2;
+            }
+
+            return result.ToString();
+
+        }
+
+        /// <summary>
+        /// Correctly encode a name for a URL.
+        /// </summary>
+        /// <param name="name">The name to encode.</param>
+        /// <returns>The encoded name.</returns>
+        /// <remarks>
+        /// <para>
+        /// HttpUtility.UrlEncode does not correctly encode for a URL, spaces get converted into 
+        /// pluses, which can cause security errors.
+        /// </para>
+        /// <para>
+        /// This method will encode characters according to RFC 3986. This means only the following 
+        /// characters are allowed un-encoded:
+        /// </para>
+        /// <para>
+        /// A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s 
+        /// t u v w x y z 0 1 2 3 4 5 6 7 8 9 - _ . ~
+        /// </para>
+        /// <para>
+        /// However, since the encoding only uses two-hex digits, it is not possible to encode non-ASCII
+        /// characters using this approach. Therefore we are using the RFC 3986 recommendation and assuming
+        /// the string will be using UTF-8 encoding and leaving the characters as they are.
+        /// </para>
+        /// </remarks>
+        public static string UrlEncodeName(string name)
+        {
+            var encodedName = urlEncodeRegex.Replace(name, (match) => {
+                var charValue = (int)match.Value[0];
+                var value = charValue >= 255 ? match.Value : "%" + string.Format("{0:x2}", charValue);
+                return value;
+            });
+            return encodedName;
         }
     }
 }
