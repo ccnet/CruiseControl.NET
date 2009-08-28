@@ -31,6 +31,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             x10Settings.BindX10Controls(configuration.X10);
             speechSettings.BindSpeechControls(configuration.Speech);
 			growlSettings.BindGrowlControls(configuration.Growl);
+            execSettingsControl1.BindExecControls(configuration);
         }
 
 		private void HookPersistentWindowState()
@@ -64,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			x10Settings.PersistX10TabSettings(configuration.X10);
             speechSettings.PersistSpeechTabSettings(configuration.Speech);
 			growlSettings.PersistGrowlTabSettings(configuration.Growl);
-
+            execSettingsControl1.PersistExecTabSettings(configuration);
 			configuration.Persist();
 		}
 

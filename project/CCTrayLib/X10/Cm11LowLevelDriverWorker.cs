@@ -83,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
                         {
                             comm.Close();
                         }
-                        catch (System.IO.IOException ex)
+                        catch (System.IO.IOException)
                         {
                             // Cannot shutwdown IO port
                             // doesnt really matter now, we are shutting down.

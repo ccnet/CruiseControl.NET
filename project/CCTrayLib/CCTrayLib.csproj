@@ -171,6 +171,7 @@
     <Compile Include="Configuration\CCTrayProject.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\ExecCommands.cs" />
     <Compile Include="Configuration\ExtensionAttribute.cs" />
     <Compile Include="Configuration\GrowlConfiguration.cs" />
     <Compile Include="Configuration\ICCTrayMultiConfiguration.cs">
@@ -361,6 +362,7 @@
     <Compile Include="Presentation\BuildProjectsControl.Designer.cs">
       <DependentUpon>BuildProjectsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presentation\BuildTransitionExecRunner.cs" />
     <Compile Include="Presentation\BuildTransitionSoundPlayer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -393,6 +395,12 @@
     </Compile>
     <Compile Include="Presentation\DisplayChangedProjects.Designer.cs">
       <DependentUpon>DisplayChangedProjects.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\ExecSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\ExecSettingsControl.Designer.cs">
+      <DependentUpon>ExecSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Presentation\Func.cs" />
     <Compile Include="Presentation\GrowlSettingsControl.cs">
@@ -634,6 +642,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\DisplayChangedProjects.resx">
       <DependentUpon>DisplayChangedProjects.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\ExecSettingsControl.resx">
+      <DependentUpon>ExecSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\GrowlSettingsControl.resx">
       <DependentUpon>GrowlSettingsControl.cs</DependentUpon>

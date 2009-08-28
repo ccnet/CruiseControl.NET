@@ -15,5 +15,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
         [XmlAttribute(AttributeName = "minimumNotificationLevel")]
         public NotifyInfoFlags MinimumNotificationLevel = NotifyInfoFlags.Info;
+
+        [XmlElement(ElementName = "Exec")]
+		public ExecCommands Exec = new ExecCommands();
 	}
 }

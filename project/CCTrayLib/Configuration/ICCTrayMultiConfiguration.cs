@@ -18,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		BalloonMessages BalloonMessages { get; }
         NotifyInfoFlags MinimumNotificationLevel { get; set; }
 		Icons Icons { get; }
+        ExecCommands Execs { get; }
 		X10Configuration X10 { get; }
 		SpeechConfiguration Speech { get; }
 		GrowlConfiguration Growl { get; }

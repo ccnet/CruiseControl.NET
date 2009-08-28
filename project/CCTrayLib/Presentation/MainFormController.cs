@@ -31,6 +31,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private BuildTransitionSoundPlayer soundPlayer;
         private X10Controller x10Controller;
 		private GrowlController growlController;
+        private BuildTransitionExecRunner execRunner;
         private MainForm mainForm;
         private Dictionary<string, ServerSnapshotChangedEventArgs> changeList = new Dictionary<string, ServerSnapshotChangedEventArgs>();
 #if !DISABLE_COM
@@ -59,6 +60,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			projectStateIconProvider = new ConfigurableProjectStateIconProvider(configuration.Icons);
 			projectStateIconAdaptor = new ProjectStateIconAdaptor(aggregatedProjectMonitor, projectStateIconProvider);
 			soundPlayer = new BuildTransitionSoundPlayer(aggregatedProjectMonitor, new AudioPlayer(), configuration.Audio);
+            execRunner = new BuildTransitionExecRunner(aggregatedProjectMonitor, configuration.Execs);
 			LampController lampController = new LampController(configuration.X10,null);
 			x10Controller = new X10Controller(aggregatedProjectMonitor,new DateTimeProvider(),configuration.X10,lampController);
 			
