@@ -93,9 +93,6 @@ namespace ThoughtWorks.CruiseControl.Core
                         break;
                 }
             };
-
-            // Set the default properties
-            this.SourceExceptionResolution = Common.SourceExceptionResolutionAction.None;
         }
 
         public Project(IIntegratable integratable)
@@ -166,14 +163,6 @@ namespace ThoughtWorks.CruiseControl.Core
             get { return sourceControlErrorHandling; }
             set { sourceControlErrorHandling = value; }
         }
-
-        #region SourceExceptionResolution
-        /// <summary>
-        /// Gets or sets the action to perform after a source control exception has been resolved.
-        /// </summary>
-        [ReflectorProperty("sourceExceptionResolution", Required = false)]
-        public Common.SourceExceptionResolutionAction SourceExceptionResolution { get; set; }
-        #endregion
 
         [ReflectorProperty("queue", Required = false)]
         public string QueueName

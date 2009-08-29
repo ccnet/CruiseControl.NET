@@ -485,6 +485,14 @@ namespace ThoughtWorks.CruiseControl.Core
         public bool HasSourceControlError { get; set; }
         #endregion
 
+        #region LastBuildStatus
+        /// <summary>
+        /// The last status from a build that progressed pass any source control checks.
+        /// </summary>
+        [XmlElement("lastBuild")]
+        public IntegrationStatus LastBuildStatus { get; set; }
+        #endregion
+
         private ArrayList GetModifiers()
         {
             ArrayList Result = new ArrayList();

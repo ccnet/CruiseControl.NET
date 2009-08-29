@@ -74,6 +74,13 @@ namespace ThoughtWorks.CruiseControl.Core
         bool HasSourceControlError { get; }
         #endregion
 
+        #region LastBuildStatus
+        /// <summary>
+        /// The last status from a build that progressed pass any source control checks.
+        /// </summary>
+        IntegrationStatus LastBuildStatus { get; set; }
+        #endregion
+
         IDictionary IntegrationProperties { get; }
         Util.BuildProgressInformation BuildProgressInformation { get; }
 

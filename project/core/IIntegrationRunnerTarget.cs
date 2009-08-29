@@ -7,13 +7,6 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		ISourceControl SourceControl { get; }
 
-        #region SourceExceptionResolution
-        /// <summary>
-        /// Gets or sets the action to perform after a source control exception has been resolved.
-        /// </summary>
-        Common.SourceExceptionResolutionAction SourceExceptionResolution { get; }
-        #endregion
-
         void Prebuild(IIntegrationResult result);
 
 		void PublishResults(IIntegrationResult result);

@@ -46,6 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core
             catch (Exception error)
             {
                 result.SourceControlError = error;
+                result.LastBuildStatus = lastResult.HasSourceControlError ? lastResult.LastBuildStatus : lastResult.Status;
                 Log.Warning(string.Format("Source control failure (GetModifications): {0}", error.Message));
                 if (request.PublishOnSourceControlException)
                 {
@@ -58,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Core
             try
             {
                 // Check whether a build should be performed
-                runBuild = CheckIfBuildShouldRun(result, lastResult.HasSourceControlError);
+                runBuild = (result.SourceControlError == null) && result.ShouldRunBuild();
 
                 if (runBuild)
                 {
@@ -88,7 +89,12 @@ namespace ThoughtWorks.CruiseControl.Core
                     Log.Trace("Running tasks of project {0}", result.ProjectName);
                     Build(result);
                 }
-
+                else if (lastResult.HasSourceControlError)
+                {
+                    // Reset to the last valid status
+                    result.Status = lastResult.LastBuildStatus;
+                    resultManager.FinishIntegration();
+                }
             }
             catch (Exception ex)
             {                
@@ -105,38 +111,6 @@ namespace ThoughtWorks.CruiseControl.Core
             this.target.Activity = ProjectActivity.Sleeping;
             return result;
         }
-
-        #region CheckIfBuildShouldRun()
-        /// <summary>
-        /// Checks if a build should run.
-        /// </summary>
-        /// <param name="result">The current result.</param>
-        /// <param name="hasError">Whether the previous source control operation had an error or not.</param>
-        /// <returns>True if a build should be performed, false otherwise.</returns>
-        private bool CheckIfBuildShouldRun(IIntegrationResult result, bool hasError)
-        {
-            using (Log.StartTrace("Checking if build should run"))
-            {
-                var runBuild = (result.SourceControlError == null) && result.ShouldRunBuild();
-                if (!runBuild && hasError && (result.SourceControlError == null))
-                {
-                    switch (this.target.SourceExceptionResolution)
-                    {
-                        case Common.SourceExceptionResolutionAction.ForceBuild:
-                            Log.Info("Forcing a build due to source control exception resolution");
-                            runBuild = true;
-                            break;
-                        case Common.SourceExceptionResolutionAction.MarkSuccess:
-                            Log.Info("Marking as success due to source control exception resolution");
-                            result.Status = IntegrationStatus.Success;
-                            resultManager.FinishIntegration();
-                            break;
-                    }
-                }
-                return runBuild;
-            }
-        }
-        #endregion
 
         /// <summary>
         /// Generates parameter values from the incoming request values.
