@@ -32,15 +32,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "objection", "objection\obje
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validator", "Validator\Validator.csproj", "{CBB2F759-46EB-42DB-BCAD-D7E596A4BC41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communications", "Remote\Communications.csproj", "{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCCmd", "CCCmd\CCCmd.csproj", "{A943CE44-82B8-4000-A0A0-A86FE0051240}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Extensions", "Core.Extensions\Core.Extensions.csproj", "{F5896F45-B5BB-4A7B-AD1A-279CE12A0650}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communications.Extensions", "Communications.Extensions\Communications.Extensions.csproj", "{A1B0C773-4779-4A1B-AE4E-8A53D73A8BE5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MigrationWizard", "MigrationWizard\MigrationWizard.csproj", "{04FB3476-5761-45C8-A053-9E7CF0DE2794}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuildLogger", "MSBuildLogger\MSBuildLogger.csproj", "{E9D3235E-2268-4846-B9EC-DFE24AAA438D}"
 EndProject
@@ -111,12 +107,6 @@ Global
 		{CBB2F759-46EB-42DB-BCAD-D7E596A4BC41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBB2F759-46EB-42DB-BCAD-D7E596A4BC41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBB2F759-46EB-42DB-BCAD-D7E596A4BC41}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}.Build|Any CPU.ActiveCfg = Build|Any CPU
-		{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}.Build|Any CPU.Build.0 = Build|Any CPU
-		{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A943CE44-82B8-4000-A0A0-A86FE0051240}.Build|Any CPU.ActiveCfg = Build|Any CPU
 		{A943CE44-82B8-4000-A0A0-A86FE0051240}.Build|Any CPU.Build.0 = Build|Any CPU
 		{A943CE44-82B8-4000-A0A0-A86FE0051240}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -135,12 +125,6 @@ Global
 		{A1B0C773-4779-4A1B-AE4E-8A53D73A8BE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1B0C773-4779-4A1B-AE4E-8A53D73A8BE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1B0C773-4779-4A1B-AE4E-8A53D73A8BE5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{04FB3476-5761-45C8-A053-9E7CF0DE2794}.Build|Any CPU.ActiveCfg = Build|Any CPU
-		{04FB3476-5761-45C8-A053-9E7CF0DE2794}.Build|Any CPU.Build.0 = Build|Any CPU
-		{04FB3476-5761-45C8-A053-9E7CF0DE2794}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{04FB3476-5761-45C8-A053-9E7CF0DE2794}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{04FB3476-5761-45C8-A053-9E7CF0DE2794}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{04FB3476-5761-45C8-A053-9E7CF0DE2794}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E9D3235E-2268-4846-B9EC-DFE24AAA438D}.Build|Any CPU.ActiveCfg = Release|Any CPU
 		{E9D3235E-2268-4846-B9EC-DFE24AAA438D}.Build|Any CPU.Build.0 = Release|Any CPU
 		{E9D3235E-2268-4846-B9EC-DFE24AAA438D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

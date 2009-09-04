@@ -72,9 +72,9 @@
     <Compile Include="WcfConnection.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Remote\Communications.csproj">
-      <Project>{8BF0C594-8A49-4E77-BDEE-907FBCA837EF}</Project>
-      <Name>Communications</Name>
+    <ProjectReference Include="..\Remote\Remote.csproj">
+      <Project>{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}</Project>
+      <Name>Remote</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

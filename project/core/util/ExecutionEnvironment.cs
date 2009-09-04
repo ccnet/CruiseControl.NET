@@ -56,16 +56,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		/// <returns>The location of the CruiseControl.NET data files.</returns>
 		public string GetDefaultProgramDataFolder(ApplicationType application)
 		{
-			if (application == ApplicationType.Unknown)
-				throw new ArgumentOutOfRangeException("application");
+            if (application == ApplicationType.Unknown)
+            {
+                throw new ArgumentOutOfRangeException("application");
+            }
 
-			string pgfPath;
-			if (IsRunningOnWindows)
-				pgfPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-			else
-				pgfPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-
-			return Path.Combine(pgfPath, Path.Combine("CruiseControl.NET", application.ToString()));
+            var pgfPath = AppDomain.CurrentDomain.BaseDirectory;
+            return pgfPath;
 		}
 
 		/// <summary>
