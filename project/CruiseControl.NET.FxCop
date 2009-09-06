@@ -26,9 +26,7 @@
   <Target Name="$(ProjectDir)/../Build/CCTray/ThoughtWorks.CruiseControl.CCTrayLib.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../Build/Core/ThoughtWorks.CruiseControl.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../Build/Core/ThoughtWorks.CruiseControl.Core.Extensions.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../Build/Migration/CCNetMigrationWizard.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../Build/Objection/Objection.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/../Build/Remote/ThoughtWorks.CruiseControl.Communications.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../Build/Remote/ThoughtWorks.CruiseControl.Remote.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../Build/Remote/ThoughtWorks.CruiseControl.Remote.Extensions.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/../Build/Server/ccnet.exe" Analyze="True" AnalyzeAllChildren="True" />
