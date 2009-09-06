@@ -104,16 +104,16 @@ Section "Web Dashboard" SEC02
   Call CreateVirtualDirectory
 SectionEnd
 
-Section "Migration Wizard" SEC03
-  SetOutPath "$INSTDIR\Server"
-  SetOverwrite ifnewer
-  File /r "Dist\Migration\*"
-
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-  CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\CCMigration.lnk" "$INSTDIR\server\CCNetMigrationWizard.exe"
-  !insertmacro MUI_STARTMENU_WRITE_END
-SectionEnd
+;Section "Migration Wizard" SEC03
+;  SetOutPath "$INSTDIR\Server"
+;  SetOverwrite ifnewer
+;  File /r "Dist\Migration\*"
+;
+;  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+;  CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
+;  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\CCMigration.lnk" "$INSTDIR\server\CCNetMigrationWizard.exe"
+;  !insertmacro MUI_STARTMENU_WRITE_END
+;SectionEnd
 
 Section "Examples" SEC04
   SetOutPath "$INSTDIR\Examples"
@@ -150,7 +150,7 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "The core CruiseControl.NET server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "The ASP.NET Web Dashboard for configuring and monitoring builds managed by CruiseControl.NET."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Migration wizard for upgrading from 1.4.4 or older to 1.5.0."
+;  !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Migration wizard for upgrading from 1.4.4 or older to 1.5.0."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Documentation for the CruiseControl.NET Product Suite"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
