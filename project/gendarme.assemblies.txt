@@ -4,7 +4,6 @@ CCTray/ThoughtWorks.CruiseControl.CCTrayLib.dll
 Core/ThoughtWorks.CruiseControl.Core.dll
 Core/ThoughtWorks.CruiseControl.Core.Extensions.dll
 Objection/Objection.dll
-Remote/ThoughtWorks.CruiseControl.Communications.dll
 Remote/ThoughtWorks.CruiseControl.Remote.dll
 Remote/ThoughtWorks.CruiseControl.Remote.Extensions.dll
 Server/ccnet.exe
