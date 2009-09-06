@@ -103,12 +103,12 @@
 				<exclude name="*.mdb" />
 			</fileset>
 		</copy>
-    <copy todir="${path::combine(dist.dir, 'Migration')}" verbose="${nant.verbosity}">
+  <!--   <copy todir="${path::combine(dist.dir, 'Migration')}" verbose="${nant.verbosity}">
       <fileset basedir="${path::combine(build.dir, 'Migration')}" failonempty="true">
         <include name="*/**" />
         <exclude name="*.pdb" />
       </fileset>
-    </copy>
+    </copy> -->
     <copy todir="${path::combine(dist.dir, 'Server')}" verbose="${nant.verbosity}">
 			<fileset basedir="${src.dir}" failonempty="true">
 				<include name="xsl/**" />
