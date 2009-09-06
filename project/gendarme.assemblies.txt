@@ -3,7 +3,6 @@ CCTray/cctray.exe
 CCTray/ThoughtWorks.CruiseControl.CCTrayLib.dll
 Core/ThoughtWorks.CruiseControl.Core.dll
 Core/ThoughtWorks.CruiseControl.Core.Extensions.dll
-Migration/CCNetMigrationWizard.exe
 Objection/Objection.dll
 Remote/ThoughtWorks.CruiseControl.Communications.dll
 Remote/ThoughtWorks.CruiseControl.Remote.dll
