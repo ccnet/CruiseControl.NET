@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -105,8 +106,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			SetConfiguredEnvironmentVariables(info.EnvironmentVariables, EnvironmentVariables);
 
 			ProcessResult processResult = TryToRun(info, result);
-            
-			if (!StringUtil.IsWhitespace(processResult.StandardOutput + processResult.StandardError))
+
+            if (!StringUtil.IsWhitespace(processResult.StandardOutput) || !StringUtil.IsWhitespace(processResult.StandardError))
             {
                 // The executable produced some output.  We need to transform it into an XML build report 
                 // fragment so the rest of CC.Net can process it.

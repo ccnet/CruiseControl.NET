@@ -53,7 +53,25 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         public static bool IsWhitespace(string input)
         {
-            return (input == null || input.Trim().Length == 0);
+            if (string.IsNullOrEmpty(input))
+            {
+                return true;
+            }
+            else
+            {
+                // Check each character to see if it is whitespace or not
+                var isWhiteSpace = true;
+                for (var loop = 0; loop < input.Length; loop++)
+                {
+                    if (!char.IsWhiteSpace(input[loop]))
+                    {
+                        isWhiteSpace = false;
+                        break;
+                    }
+                }
+
+                return isWhiteSpace;
+            }
         }
 
         public static string Strip(string input, params string[] removals)
@@ -100,30 +118,30 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         {
             return Strip(fileName, "\\", "/", ":", "*", "?", "\"", "<", ">", "|");
         }
- 
-		/// <summary>
-		/// Add leading and trailing double quotes to the provided string if required.
-		/// If the string contains a trailing backslash, that escape the added double quote,
-		/// escape it also with another backslash.
-		/// </summary>
-		/// <param name="value">The string to double quote.</param>
-		/// <returns>A double quoted string.</returns>
+
+        /// <summary>
+        /// Add leading and trailing double quotes to the provided string if required.
+        /// If the string contains a trailing backslash, that escape the added double quote,
+        /// escape it also with another backslash.
+        /// </summary>
+        /// <param name="value">The string to double quote.</param>
+        /// <returns>A double quoted string.</returns>
         public static string AutoDoubleQuoteString(string value)
         {
-			if (!string.IsNullOrEmpty(value) && (value.IndexOf(' ') > -1) && (value.IndexOf('"') == -1))
-			{
-				if (value.EndsWith(@"\"))
-					value = string.Concat(value, @"\");
+            if (!string.IsNullOrEmpty(value) && (value.IndexOf(' ') > -1) && (value.IndexOf('"') == -1))
+            {
+                if (value.EndsWith(@"\"))
+                    value = string.Concat(value, @"\");
 
-				return string.Concat('"', value, '"');
-			}
+                return string.Concat('"', value, '"');
+            }
 
-			return value;
+            return value;
         }
 
         public static string RemoveTrailingPathDelimeter(string directory)
         {
-            return string.IsNullOrEmpty(directory) ?string.Empty : directory.TrimEnd(new char[] { Path.DirectorySeparatorChar });
+            return string.IsNullOrEmpty(directory) ? string.Empty : directory.TrimEnd(new char[] { Path.DirectorySeparatorChar });
         }
 
         public static string IntegrationPropertyToString(object value)
@@ -184,7 +202,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 foreach (Match line in lines)
                 {
                     sb.Append("  <message");
-                    if (msgLevel !=string.Empty)
+                    if (msgLevel != string.Empty)
                         sb.AppendFormat(" level=\"{0}\"", msgLevel);
                     sb.Append(">");
                     sb.Append(XmlUtil.EncodePCDATA(line.ToString()));
@@ -242,7 +260,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
             foreach (object o in x)
             {
-                result.AppendFormat("{0}{1} ", o.ToString(),DEFAULT_DELIMITER );
+                result.AppendFormat("{0}{1} ", o.ToString(), DEFAULT_DELIMITER);
             }
 
             if (result.Length > 0)
@@ -280,7 +298,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// </remarks>
         public static string UrlEncodeName(string name)
         {
-            var encodedName = urlEncodeRegex.Replace(name, (match) => {
+            var encodedName = urlEncodeRegex.Replace(name, (match) =>
+            {
                 var charValue = (int)match.Value[0];
                 var value = charValue >= 255 ? match.Value : "%" + string.Format("{0:x2}", charValue);
                 return value;

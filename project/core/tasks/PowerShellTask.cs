@@ -132,8 +132,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			ProcessInfo processInfo = NewProcessInfoFrom(result);
 
 			ProcessResult processResult = AttemptToExecute(processInfo);
-            
-			if (!StringUtil.IsWhitespace(processResult.StandardOutput + processResult.StandardError))
+
+            if (!StringUtil.IsWhitespace(processResult.StandardOutput) || !StringUtil.IsWhitespace(processResult.StandardError))
             {
                 // The PowerShell produced some output.  We need to transform it into an XML build report 
                 // fragment so the rest of CC.Net can process it.

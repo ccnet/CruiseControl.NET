@@ -13,27 +13,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		private StringWriter writer;
 
 		[Test]
-		public void SucceededIfProcessResultSucceeded()
+		public void CheckIfSuccessIfProcessResultSucceeded()
 		{
 			ProcessTaskResult result = new ProcessTaskResult(ProcessResultFixture.CreateSuccessfulResult());
-			Assert.IsTrue(result.Succeeded());
-			Assert.IsFalse(result.Failed());
+			Assert.IsTrue(result.CheckIfSuccess());
 		}
 
 		[Test]
 		public void FailedIfProcessResultFailed()
 		{
 			ProcessTaskResult result = new ProcessTaskResult(ProcessResultFixture.CreateNonZeroExitCodeResult());
-			Assert.IsFalse(result.Succeeded());
-			Assert.IsTrue(result.Failed());
+			Assert.IsFalse(result.CheckIfSuccess());
 		}
 
 		[Test]
 		public void FailedIfProcessResultTimedout()
 		{
 			ProcessTaskResult result = new ProcessTaskResult(ProcessResultFixture.CreateTimedOutResult());
-			Assert.IsFalse(result.Succeeded());
-			Assert.IsTrue(result.Failed());
+			Assert.IsFalse(result.CheckIfSuccess());
 		}
 
 		[Test]

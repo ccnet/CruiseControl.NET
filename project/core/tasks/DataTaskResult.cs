@@ -14,14 +14,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			get { return data; }
 		}
 
-		public bool Succeeded()
-		{
-			return true;
-		}
-
-		public bool Failed()
-		{
-			return false;
-		}
-	}
+        #region Public methods
+        #region CheckIfSuccess()
+        /// <summary>
+        /// Checks whether the result was successful.
+        /// </summary>
+        /// <returns><c>true</c> if the result was successful, <c>false</c> otherwise.</returns>
+        public bool CheckIfSuccess()
+        {
+            return true;
+        }
+        #endregion
+        #endregion
+    }
 }

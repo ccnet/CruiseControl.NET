@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format("Executing Rake: {0}", processInfo.SafeArguments));
 			ProcessResult processResult = TryToRun(processInfo, result);
 
-			if (!StringUtil.IsWhitespace(processResult.StandardOutput + processResult.StandardError))
+            if (!StringUtil.IsWhitespace(processResult.StandardOutput) || !StringUtil.IsWhitespace(processResult.StandardError))
 			{
 				// The executable produced some output.  We need to transform it into an XML build report 
 				// fragment so the rest of CC.Net can process it.

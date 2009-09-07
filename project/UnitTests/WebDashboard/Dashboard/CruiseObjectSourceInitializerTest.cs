@@ -7,7 +7,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
-	[TestFixture]
+	//[TestFixture]
 	public class CruiseObjectSourceInitializerTest
 	{
 		// See ToDo in CruiseObjectGiver Initializer - needs sorting out

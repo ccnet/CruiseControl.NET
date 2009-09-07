@@ -2,6 +2,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {

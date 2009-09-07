@@ -7,6 +7,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 	[TestFixture]
 	public class ReflectionUtilTest : CustomAssertion
 	{
+        [Test]
 		public void TestReflectionEquals()
 		{
 			ReflectTest o1 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));

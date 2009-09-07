@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			this.result = result;
 	        this.ignoreStandardOutputOnSuccess = ignoreStandardOutputOnSuccess;
 
-			if (Failed())
+			if (this.CheckIfSuccess())
 			{
 				Log.Info("Task execution failed");
 				Log.Info("Task output: " + result.StandardOutput);
@@ -65,14 +65,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			writer.WriteEndElement();
 		}
 
-		public bool Succeeded()
-		{
-			return !result.Failed;
-		}
-
-		public bool Failed()
-		{
-			return result.Failed;
-		}
+        #region Public methods
+        #region CheckIfSuccess()
+        /// <summary>
+        /// Checks whether the result was successful.
+        /// </summary>
+        /// <returns><c>true</c> if the result was successful, <c>false</c> otherwise.</returns>
+        public bool CheckIfSuccess()
+        {
+            return !result.Failed;
+        }
+        #endregion
+        #endregion
 	}
 }

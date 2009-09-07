@@ -4,6 +4,7 @@ using System.IO;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 {
@@ -30,8 +31,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		{
 			Assert.IsTrue(StringUtil.IsWhitespace(null));
 			Assert.IsTrue(StringUtil.IsWhitespace(string.Empty));
-			Assert.IsTrue(StringUtil.IsWhitespace(" "));
-			Assert.IsFalse(StringUtil.IsWhitespace("foo"));
+            Assert.IsTrue(StringUtil.IsWhitespace(" "));
+            Assert.IsTrue(StringUtil.IsWhitespace(Environment.NewLine));
+            Assert.IsTrue(StringUtil.IsWhitespace("\t\r\v "));
+            Assert.IsFalse(StringUtil.IsWhitespace("foo"));
+            Assert.IsFalse(StringUtil.IsWhitespace("\t\r\v foo \t\r\v "));
 		}
 
 		[Test]

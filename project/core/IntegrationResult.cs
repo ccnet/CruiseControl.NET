@@ -303,7 +303,7 @@ namespace ThoughtWorks.CruiseControl.Core
             if (Failed || Status == IntegrationStatus.Exception)
                 return;
 
-            Status = result.Succeeded() ? IntegrationStatus.Success : IntegrationStatus.Failure;
+            Status = result.CheckIfSuccess() ? IntegrationStatus.Success : IntegrationStatus.Failure;
         }
 
         public void AddTaskResultFromFile(string filename)

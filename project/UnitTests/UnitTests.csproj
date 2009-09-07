@@ -221,9 +221,6 @@
     <Compile Include="CCTrayLib\Monitoring\HttpCruiseServerManagerTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CCTrayLib\Monitoring\PollerTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CCTrayLib\Monitoring\PollIntervalReporterTest.cs">
       <SubType>Code</SubType>
     </Compile>
