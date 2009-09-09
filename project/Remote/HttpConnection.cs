@@ -269,10 +269,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         private Uri GenerateTargetUri(ServerRequest request)
         {
-            Uri targetAddress = new Uri(
-                string.Format("{1}server/{0}/RawXmlMessage.aspx", 
-                    request.ServerName,
-                    serverAddress.AbsoluteUri));
+            Uri targetAddress =
+                new Uri(string.Concat(serverAddress.AbsoluteUri, "/server/", request.ServerName, "/RawXmlMessage.aspx"));
             return targetAddress;
         }
         #endregion
