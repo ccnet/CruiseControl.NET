@@ -577,7 +577,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Lists the servers that this client connection exposes.
         /// </summary>
         /// <returns>The list of available servers.</returns>
-        public virtual string[] ListServers()
+        public virtual IEnumerable<string> ListServers()
         {
             throw new NotImplementedException();
         }

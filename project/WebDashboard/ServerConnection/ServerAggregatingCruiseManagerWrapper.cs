@@ -450,15 +450,36 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <summary>
         /// Processes a message for a server.
         /// </summary>
-        /// <param name="serverSpecifer">The server.</param>
-        /// <param name="action">The action.</param>
-        /// <param name="message">The message.</param>
-        /// <returns>The response.</returns>
+        /// <param name="serverSpecifer">The server the request is for.</param>
+        /// <param name="action">The action to process.</param>
+        /// <param name="message">The message containing the details of the request.</param>
+        /// <returns>The response to the request.</returns>
         public string ProcessMessage(IServerSpecifier serverSpecifer, string action, string message)
         {
-            var client = GetCruiseManager(serverSpecifer, null);
-            var response = client.ProcessMessage(action, message);
-            return response;
+            // Normally this method just passes the request onto the remote server, but some messages
+            // need to be intercepted and handled at the web dashboard level
+            switch (action)
+            {
+                case "ListServers":
+                    // Generate the list of available servers - this is from the dashboard level
+                    var serverList = new DataListResponse
+                    {
+                        Data = new List<string>()
+                    };
+                    foreach (var serverLocation in this.ServerLocations)
+                    {
+                        serverList.Data.Add(serverLocation.Name);
+                    }
+
+                    // Return the XML of the list
+                    return serverList.ToString();
+
+                default:
+                    // Pass the request on
+                    var client = this.GetCruiseManager(serverSpecifer, null);
+                    var response = client.ProcessMessage(action, message);
+                    return response;
+            }
         }
 
         /// <summary>

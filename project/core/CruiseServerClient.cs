@@ -641,6 +641,28 @@ namespace ThoughtWorks.CruiseControl.Core
             return response;
         }
         #endregion
+
+        #region ListServers()
+        /// <summary>
+        /// Lists the available servers that can be monitored.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>
+        /// A list containing one server - local.
+        /// </returns>
+        /// <remarks>
+        /// This message is not secured at all.
+        /// </remarks>
+        public DataListResponse ListServers(ServerRequest request)
+        {
+            return new DataListResponse
+            {
+                Data = new List<string>{
+                    "local"
+                }
+            };
+        }
+        #endregion
         #endregion
 
         #region Private methods

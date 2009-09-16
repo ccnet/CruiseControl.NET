@@ -795,6 +795,20 @@ namespace ThoughtWorks.CruiseControl.Remote
             }
         }
         #endregion
+
+        #region ListServers()
+        /// <summary>
+        /// Lists the servers that this client connection exposes.
+        /// </summary>
+        /// <returns>The list of available servers.</returns>
+        public override IEnumerable<string> ListServers()
+        {
+            var response = ValidateResponse(
+                connection.SendMessage("ListServers", GenerateServerRequest()))
+                as DataListResponse;
+            return response.Data;
+        }
+        #endregion
         #endregion
 
         #region Private methods
