@@ -140,10 +140,14 @@
      <td COLSPAN="10">
       <table  cellspacing="0" cellpadding="0"  border="0" width="100%" >
         <tr height=5 title="Percentage of successfull builds : $OKPercentToolTip%">
-            <td width=$OKPercent% bgcolor="#33CC00"> </td>
+          #if ($OKPercent == 50)
+             <td width=100% bgcolor="#33CC00"></td>
+          #else
+            <td width=$OKPercent% bgcolor="#33CC00"></td>
             <td width=$NOKPercent% bgcolor="#FF0000"></td>
             <td width=$NOKPercent% bgcolor="#FF0000"></td>
-            <td width=$OKPercent% bgcolor="#33CC00"> </td>
+            <td width=$OKPercent% bgcolor="#33CC00"></td>
+          #end
         </tr>
       </table>
      </td>
