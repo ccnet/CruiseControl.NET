@@ -26,6 +26,13 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </remarks>
         public bool UseEncryption { get; set; }
         #endregion
+
+        #region FetchVersionOnStartUp
+        /// <summary>
+        /// Gets or sets a value indicating whether the version will be fetched on start-up.
+        /// </summary>
+        public bool FetchVersionOnStartUp { get; set; }
+        #endregion
         #endregion
     }
 }

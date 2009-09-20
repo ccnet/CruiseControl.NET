@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             if (string.IsNullOrEmpty(address)) throw new ArgumentNullException("address");
             var factory = new CruiseServerClientFactory();
             var client = factory.GenerateClient(address);
-            InitialiseServer(client, new ManualServerWatcher(client));
+            InitialiseServer(client, new ManualServerWatcher(client), true);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
             if (string.IsNullOrEmpty(address)) throw new ArgumentNullException("address");
             var factory = new CruiseServerClientFactory();
             var client = factory.GenerateClient(address, settings);
-            InitialiseServer(client, new ManualServerWatcher(client));
+            InitialiseServer(client, new ManualServerWatcher(client), settings.FetchVersionOnStartUp);
         }
 
         /// <summary>
@@ -57,7 +57,18 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         public Server(CruiseServerClientBase client)
         {
             if (client == null) throw new ArgumentNullException("client");
-            InitialiseServer(client, new ManualServerWatcher(client));
+            InitialiseServer(client, new ManualServerWatcher(client), true);
+        }
+
+        /// <summary>
+        /// Initialise a new <see cref="Server"/> with the default watcher.
+        /// </summary>
+        /// <param name="client">The underlying client.</param>
+        /// <param name="settings">The start-up settings to use.</param>
+        public Server(CruiseServerClientBase client, ClientStartUpSettings settings)
+        {
+            if (client == null) throw new ArgumentNullException("client");
+            InitialiseServer(client, new ManualServerWatcher(client), settings.FetchVersionOnStartUp);
         }
 
         /// <summary>
@@ -69,7 +80,20 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         {
             if (client == null) throw new ArgumentNullException("client");
             if (watcher == null) throw new ArgumentNullException("watcher");
-            InitialiseServer(client, watcher);
+            InitialiseServer(client, watcher, true);
+        }
+
+        /// <summary>
+        /// Initialise a new <see cref="Server"/> with a watcher and a client.
+        /// </summary>
+        /// <param name="client">The underlying client.</param>
+        /// <param name="watcher">The watcher to use.</param>
+        /// <param name="settings">The start-up settings to use.</param>
+        public Server(CruiseServerClientBase client, IServerWatcher watcher, ClientStartUpSettings settings)
+        {
+            if (client == null) throw new ArgumentNullException("client");
+            if (watcher == null) throw new ArgumentNullException("watcher");
+            InitialiseServer(client, watcher, settings.FetchVersionOnStartUp);
         }
         #endregion
 
@@ -678,22 +702,26 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
         /// </summary>
         /// <param name="client"></param>
         /// <param name="watcher"></param>
-        private void InitialiseServer(CruiseServerClientBase client, IServerWatcher watcher)
+        /// <param name="fetchVersion">Whether the version number should be fetched or not.</param>
+        private void InitialiseServer(CruiseServerClientBase client, IServerWatcher watcher, bool fetchVersion)
         {
             this.watcher = watcher;
             this.watcher.Update += OnWatcherUpdate;
             this.client = client;
 
-            try
+            if (fetchVersion)
             {
-                client.ProcessSingleAction(s =>
+                try
                 {
-                    version = new Version(client.GetServerVersion());
-                }, client);
-            }
-            catch
-            {
-                // This means there will be no version for the server
+                    client.ProcessSingleAction(s =>
+                    {
+                        version = new Version(client.GetServerVersion());
+                    }, client);
+                }
+                catch
+                {
+                    // This means there will be no version for the server
+                }
             }
         }
         #endregion

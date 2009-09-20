@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Monitor
             mocks.ReplayAll();
             try
             {
-                var monitor = new Server(client, null);
+                var monitor = new Server(client, (IServerWatcher)null);
                 Assert.Fail("ArgumentNullException was expected");
             }
             catch (ArgumentNullException) { }
