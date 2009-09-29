@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Parallel Task</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Parallel Task
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jun 26, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h3><a name="ParallelTask-ParallelTask"></a>Parallel Task</h3>
+
+<p>Runs a set of child tasks in parallel. Each task will run at the same time as the other tasks.</p>
+
+<p>To run a set of tasks in sequential order within this task, use the <a href="Sequential Task.html" title="Sequential Task">Sequential Task</a>.</p>
+
+<h3><a name="ParallelTask-Version"></a>Version</h3>
+
+<p>This task is available from version 1.5.0.</p>
+
+<h3><a name="ParallelTask-Examples"></a>Examples</h3>
+
+<p>Minimalist example:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;parallel&gt;</span>
+  <span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Tasks defined here --&gt;</span></span>
+  <span class="code-tag">&lt;/tasks&gt;</span>
+<span class="code-tag">&lt;/parallel&gt;</span></pre>
+</div></div>
+
+<p>Full example:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;parallel&gt;</span>
+  <span class="code-tag">&lt;description&gt;</span>Example of how to run multiple tasks in parallel.<span class="code-tag">&lt;/description&gt;</span>
+  <span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Tasks defined here --&gt;</span></span>
+  <span class="code-tag">&lt;/tasks&gt;</span>
+<span class="code-tag">&lt;/parallel&gt;</span></pre>
+</div></div>
+
+<h3><a name="ParallelTask-ConfigurationElements"></a>Configuration Elements</h3>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> tasks </td>
+<td class='confluenceTd'> The child tasks to run in parallel. </td>
+<td class='confluenceTd'> Task array - see <a href="Task Blocks.html" title="Task Blocks">Task Blocks</a> </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> A description of this task. </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5.0 </td>
+</tr>
+</tbody></table>
+
+<h3><a name="ParallelTask-Notes"></a>Notes</h3>
+
+<p>Sometimes it may be necessary to have a sequence of tasks running at the same time as a single parallel task. The <a href="Sequential Task.html" title="Sequential Task">Sequential Task</a> used together with this task will achieve this.</p>
+
+<p>This is an example of how this can be done:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;parallel&gt;</span>
+  <span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag">&lt;exec&gt;</span>
+      <span class="code-tag"><span class="code-comment">&lt;!-- Executable task that will run on its own --&gt;</span></span>
+    <span class="code-tag">&lt;/exec&gt;</span>
+    <span class="code-tag">&lt;sequential&gt;</span>
+      <span class="code-tag">&lt;tasks&gt;</span>
+        <span class="code-tag">&lt;exec&gt;</span>
+          <span class="code-tag"><span class="code-comment">&lt;!-- Executable task that will run before the next task --&gt;</span></span>
+        <span class="code-tag">&lt;/exec&gt;</span>
+        <span class="code-tag">&lt;exec&gt;</span>
+          <span class="code-tag"><span class="code-comment">&lt;!-- Executable task that will run after the previous task --&gt;</span></span>
+        <span class="code-tag">&lt;/exec&gt;</span>
+      <span class="code-tag">&lt;/tasks&gt;</span>
+    <span class="code-tag">&lt;/sequential&gt;</span>
+  <span class="code-tag">&lt;/tasks&gt;</span>
+<span class="code-tag">&lt;/parallel&gt;</span></pre>
+</div></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

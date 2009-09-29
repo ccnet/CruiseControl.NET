@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Mar 14, 2009 by <font color="#0050B2">dcameron</font>.
+					    This page last changed on Jun 15, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
 				    <p>A <tt>&lt;project&gt;</tt> block defines all the configuration for one project running in a CruiseControl.NET server</p>
@@ -37,7 +37,8 @@
     <span class="code-tag">&lt;webURL&gt;</span>http://server1/ccnet/server/local/project/testProject/ViewLatestBuildReport.aspx<span class="code-tag">&lt;/webURL&gt;</span>
     <span class="code-tag">&lt;modificationDelaySeconds&gt;</span>2<span class="code-tag">&lt;/modificationDelaySeconds&gt;</span>
     <span class="code-tag">&lt;maxSourceControlRetries&gt;</span>5<span class="code-tag">&lt;/maxSourceControlRetries&gt;</span>
-    <span class="code-tag">&lt;startupState&gt;</span>Stopped<span class="code-tag">&lt;/startupState&gt;</span>
+    <span class="code-tag">&lt;initialState&gt;</span>Stopped<span class="code-tag">&lt;/initialState&gt;</span>
+    <span class="code-tag">&lt;startupMode&gt;</span>UseInitialState<span class="code-tag">&lt;/startupMode&gt;</span>
     <span class="code-tag">&lt;triggers&gt;</span>
         <span class="code-tag">&lt;yourFirstTriggerType ../&gt;</span>
         <span class="code-tag">&lt;yourOtherTriggerType ../&gt;</span>
@@ -61,6 +62,9 @@
         <span class="code-tag">&lt;externalLink name=<span class="code-quote">"My First Link"</span> url=<span class="code-quote">"http://somewhere/"</span> /&gt;</span>
         <span class="code-tag">&lt;externalLink name=<span class="code-quote">"My Other Link"</span> url=<span class="code-quote">"http://somewhere.else/"</span> /&gt;</span>
     <span class="code-tag">&lt;/externalLinks&gt;</span>
+    <span class="code-tag">&lt;parameters&gt;</span>
+        <span class="code-tag">&lt;textParameter name=<span class="code-quote">"Build Name"</span> default=<span class="code-quote">"Unknown"</span> /&gt;</span>
+    <span class="code-tag">&lt;/parameters&gt;</span>
 <span class="code-tag">&lt;/project&gt;</span></pre>
 </div></div>
 
@@ -190,14 +194,14 @@ This feature is in CruiseControl.NET for Source Control systems, like CVS, that 
 </tr>
 <tr>
 <td class='confluenceTd'> <a name="ProjectConfigurationBlock-maxSourceControlRetries"></a> maxSourceControlRetries <br clear="all" /> </td>
-<td class='confluenceTd'> The maximum amount of source control exceptions in a row that may occur, before the project goes to the stopped state. <br clear="all" /> </td>
+<td class='confluenceTd'> The maximum amount of source control exceptions in a row that may occur, before the project goes to the stopped state(when stopProjectOnReachingMaxSourceControlRetries is set to true). <br clear="all" /> </td>
 <td class='confluenceTd'> int </td>
 <td class='confluenceTd'> no </td>
 <td class='confluenceTd'> 5 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> <a name="ProjectConfigurationBlock-startupState"></a> startupState <br clear="all" /> </td>
-<td class='confluenceTd'> Sets the state of the project when CCNet service/Console starts. Stopped can be handy when you are adding a lot of projects which are depending on other projects (via the project trigger) and these may not be build right away. <br clear="all" /> </td>
+<td class='confluenceTd'> <a name="ProjectConfigurationBlock-initialState"></a> initialState<br clear="all" /> </td>
+<td class='confluenceTd'> Sets the state of the project when CCNet service/Console starts. Stopped can be handy when you are adding a lot of projects which are depending on other projects (via the project trigger) and these may not be build right away. This value is only used when startupMode is set to UseInitialState. <br clear="all" /> </td>
 <td class='confluenceTd'> enum </td>
 <td class='confluenceTd'> no <br clear="all" /> </td>
 <td class='confluenceTd'> Started. <br clear="all" />
@@ -205,22 +209,62 @@ Possible values are : <br clear="all" />
 &nbsp; Stopped <br clear="all" />
 &nbsp; Started <br clear="all" /> </td>
 </tr>
+<tr>
+<td class='confluenceTd'> <a name="ProjectConfigurationBlock-startupMode"></a> startupMode<br clear="all" /> </td>
+<td class='confluenceTd'> The start-up mode to use. <br clear="all" /> </td>
+<td class='confluenceTd'> enum </td>
+<td class='confluenceTd'> no <br clear="all" /> </td>
+<td class='confluenceTd'> UseLastState. <br clear="all" />
+Possible values are : <br clear="all" />
+&nbsp; UseInitialState <br clear="all" />
+&nbsp; UseLastState <br clear="all" /> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> stopProjectOnReachingMaxSourceControlRetries<br clear="all" /> </td>
+<td class='confluenceTd'> Stops the project on reaching maxSourceControlRetries or not. When set to true, the project will be stopped when the amount of consecutive source control errors is equal to maxSourceControlRetries.<br clear="all" /> </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> sourceControlErrorHandling<br clear="all" /> </td>
+<td class='confluenceTd'> What action to take when a source control error occurs (during GetModifications). These are the possible values :<br clear="all" />
+<ul>
+	<li>ReportEveryFailure : runs the publisher section whenever there is an error</li>
+	<li>ReportOnRetryAmount : only runs the publisher section when maxSourceControlRetries has been reached,<br clear="all" />
+ &nbsp;&nbsp;&nbsp; the publisher section will only be run once.</li>
+	<li>ReportOnEveryRetryAmount : runs the publisher section whenever the maxSourceControlRetries has been&nbsp;&nbsp; reached. When maxSourceControlRetries has been reached and the publisher section has ran, the counter is set back to 0.</li>
+</ul>
+</td>
+<td class='confluenceTd'> enum </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> ReportEveryFailure </td>
+</tr>
+<tr>
+<td class='confluenceTd'> parameters </td>
+<td class='confluenceTd'> Dynamic build parameters - these are parameters that are set at build time instead of being hard-coded within the configuration file </td>
+<td class='confluenceTd'> Array of parameters - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+</tr>
 </tbody></table>
 
 <h3><a name="ProjectConfigurationBlock-SettingtheWebURL"></a>Setting the WebURL</h3>
 
-<p>The current format of the url for a project, as specified in the &lt;webURL&gt; element is:<br/>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<p>The current format of the url for a project, as specified in the &lt;webURL&gt; element is:</p>
+
+<p><div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">http:<span class="code-comment">//&lt;dashboardserver&gt;/&lt;vdir&gt;/server/&lt;ccnetserver&gt;/project/&lt;projectname&gt;/ViewLatestBuildReport.aspx</span></pre>
 </div></div><br clear="all" />
-For example, if the dashboard was deployed on the server <b>webserver</b> to virtual directory <b>ccnet</b>, and if the project to monitor is called <b>test</b> on server <b>cruise</b>, the URL would be:</p>
+For example, if the dashboard was deployed on the server <b>webserver</b> to virtual directory <b>ccnet</b>, and if the project to monitor is called <b>test</b> on server <b>cruise</b>, the URL would be:
+<br clear="all" /></p>
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">http:<span class="code-comment">//webserver/ccnet/server/cruise/project/test/ViewLatestBuildReport.aspx</span></pre>
 </div></div>
 
 <h3><a name="ProjectConfigurationBlock-Subsectiontypes"></a>Sub-section types</h3>
 
-<ul><li><a href="ExternalLinks.html" title="ExternalLinks">ExternalLinks</a></li><li><a href="Labeller Blocks.html" title="Labeller Blocks">Labeller Blocks</a></li><li><a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a></li><li><a href="State Manager Blocks.html" title="State Manager Blocks">State Manager Blocks</a></li><li><a href="Task Blocks.html" title="Task Blocks">Task Blocks</a></li><li><a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a></li><li><a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a></li></ul>
+<ul><li><a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a></li><li><a href="ExternalLinks.html" title="ExternalLinks">ExternalLinks</a></li><li><a href="Labeller Blocks.html" title="Labeller Blocks">Labeller Blocks</a></li><li><a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a></li><li><a href="State Manager Blocks.html" title="State Manager Blocks">State Manager Blocks</a></li><li><a href="Task Blocks.html" title="Task Blocks">Task Blocks</a></li><li><a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a></li><li><a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a></li></ul>
 
 				    
                     			    </td>
@@ -231,7 +275,7 @@ For example, if the dashboard was deployed on the server <b>webserver</b> to vir
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Mar 14, 2009 02:55</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
 		    </tr>
 	    </table>
     </body>

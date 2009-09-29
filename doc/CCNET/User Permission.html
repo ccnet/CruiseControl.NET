@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : User Permission</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : User Permission
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jun 29, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h3><a name="UserPermission-UserPermission"></a>User Permission</h3>
+
+<p>Defines the permissions for a user.</p>
+
+<h4><a name="UserPermission-Version"></a>Version</h4>
+
+<p>This security item is available from version 1.5.0.</p>
+
+<h4><a name="UserPermission-Examples"></a>Examples</h4>
+
+<p>Definition of a role:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;userPermission name=<span class="code-quote">"johndoe"</span> forceBuild=<span class="code-quote">"Allow"</span> startProject=<span class="code-quote">"Deny"</span> defaultRight=<span class="code-quote">"Inherit"</span>/&gt;</span></pre>
+</div></div>
+
+<p>Referenced role:</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;userPermission name=<span class="code-quote">"johndoe"</span> ref=<span class="code-quote">"johndoe"</span>/&gt;</span></pre>
+</div></div>
+
+<h4><a name="UserPermission-ConfigurationElements"></a>Configuration Elements</h4>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> name </td>
+<td class='confluenceTd'> The name of the role. </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> ref </td>
+<td class='confluenceTd'> A reference to a role authorisation stored in the server settings. </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5.0 </td>
+</tr>
+</tbody></table>
+
+ <h4><a name="UserPermission-GeneralSecurityPermissions"></a>General Security Permissions</h4>
+
+<p>The following are the general security permissions:</p>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> defaultRight </td>
+<td class='confluenceTd'> This is the permission that will be used if no other permission has been specified. See notes below for how this works. </td>
+<td class='confluenceTd'> Permission </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 1.5.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> forceBuild </td>
+<td class='confluenceTd'> The force/abort build permission. </td>
+<td class='confluenceTd'> Permission </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 1.5.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> sendMessage </td>
+<td class='confluenceTd'> The send message permission. </td>
+<td class='confluenceTd'> Permission </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 1.5.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> startProject </td>
+<td class='confluenceTd'> The start/stop project permission. </td>
+<td class='confluenceTd'> Permission </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 1.5.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> changeProject </td>
+<td class='confluenceTd'> The permission to change a project, e.g. add/modify/delete. </td>
+<td class='confluenceTd'> Permission </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 1.5.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> viewSecurity </td>
+<td class='confluenceTd'> The permission to view security information. </td>
+<td class='confluenceTd'> Permission </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 1.5.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> modifySecurity </td>
+<td class='confluenceTd'> The permission to modify security settings (via a client). </td>
+<td class='confluenceTd'> Permission </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 1.5.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> viewProject </td>
+<td class='confluenceTd'> The view project permission. </td>
+<td class='confluenceTd'> Permission </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 1.5.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> viewConfiguration </td>
+<td class='confluenceTd'> The permission to view configuration information. </td>
+<td class='confluenceTd'> Permission </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 1.5.0 </td>
+</tr>
+</tbody></table>
+
+<h4><a name="UserPermission-Permission"></a>Permission</h4>
+
+<p>Each permission can be one of the following values:</p>
+<ul>
+	<li>Allow: the permission has been granted</li>
+	<li>Deny: the permission has been disallowed</li>
+	<li>Inherit: The next level of permissions will be checked to see if it is allowed or denied. If the permission has not been set at any other level, then the default permission will be returned.</li>
+</ul>
+
+
+<p>The default permission for an omitted permission attribute is "Inherit".</p>
+
+<h4><a name="UserPermission-PermissionInheritance"></a>Permission Inheritance</h4>
+
+<p>Permissions can be set in multiple places, at both server and project level. When checking for a permission, the security manager will start at the project level and check each permission definition to see if it is valid for the user. </p>
+
+<p>When a valid permission is found, it will then see if the specific permission has been set (i.e. not inherit). The specific permission is decided by the action, e.g force or abort build, start or stop a project, etc. If the specific permission is not set, then it will check the default permission. If neither is set, then it will continue on through the permissions until it finds another valid permission. This will continue until all the permissions have been checked, or a permission has been found (e.g. allow or deny).</p>
+
+<p>If no permissions are found at the project level, it will then use the permissions defined at the server level. Again, it will first check for a specific permission, and then the default permission. If no permissions has been found after this, then it will return denied as the permission.</p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

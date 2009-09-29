@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Sep 29, 2008 by <font color="#0050B2">williams</font>.
+					    This page last changed on May 25, 2009 by <font color="#0050B2">williams</font>.
 				    </div>
 
 				    <p>This addition to the sourcecontrol provider allows easy linking with an issue tracking system like Jira, Gemini, Bugzilla, ...<br/>
@@ -92,29 +92,43 @@ This will use regular expressions to convert the comment into an url.<br/>
 <br clear="all" /></p>
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">&lt;issueUrlBuilder type=<span class="code-quote">"regexIssueTracker"</span>&gt;
-   &lt;find&gt;^.*(CCNET-\d*).*$&lt;/find&gt;
+   &lt;find&gt;^.*(CCNET.?\d*).*$&lt;/find&gt;
    &lt;replace&gt;http:<span class="code-comment">//jira.<span class="code-keyword">public</span>.thoughtworks.org/browse/$1&lt;/replace&gt;
 </span>&lt;/issueUrlBuilder&gt;</pre>
 </div></div>
 <p>For the ones not familiar with regular expressions :</p>
 
+
 <p> <em><ins>find</ins></em> statement :</p>
 
-<p>Assert position at the beginning of the string <b>«^»</b><br/>
-Match any single character that is not a line break character <b>«.</b>»&#42;<br/>
-&nbsp;&nbsp; Between zero and unlimited times, as many times as possible, giving back as needed (greedy) <b>«</b>»&#42;<br/>
-Match the regular expression below and capture its match into backreference number 1 <b>«(CCNET-\d</b>)»&#42;<br/>
-&nbsp;&nbsp; Match the characters "CCNET-" literally <b>«CCNET-»</b><br/>
-&nbsp;&nbsp; Match a single digit 0..9 <b>«\d</b>»&#42;<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Between zero and unlimited times, as many times as possible, giving back as needed (greedy) <b>«</b>»&#42;<br/>
-Match any single character that is not a line break character <b>«.</b>»&#42;<br/>
-&nbsp;&nbsp; Between zero and unlimited times, as many times as possible, giving back as needed (greedy) <b>«</b>»&#42;<br/>
-Assert position at the end of the string (or before the line break at the end of the string, if any) <b>«$»</b></p>
+<p>Assert position at the beginning of a line (at beginning of the string or after a line break character)&nbsp;&nbsp; <b>«^»</b><br/>
+Match any single character that is not a line break character <b>«.</b>»*<br/>
+&nbsp;&nbsp; Between zero and unlimited times, as many times as possible, giving back as needed (greedy) <b>«</b>»*<br/>
+Match the regular expression below and capture its match into backreference number 1 <b>«(CCNET.?\d</b>)»*<br/>
+&nbsp;&nbsp; Match the characters "CCNET" literally <b>«CCNET»</b><br/>
+&nbsp;&nbsp; Match any single character that is not a line break character <b>«.?»</b><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Between zero and one times, as many times as possible, giving back as needed (greedy) <b>«?»</b><br/>
+&nbsp;&nbsp; Match a single digit 0..9 <b>«\d</b>»*<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Between zero and unlimited times, as many times as possible, giving back as needed (greedy) <b>«</b>»*<br/>
+Match any single character that is not a line break character <b>«.</b>»*<br/>
+&nbsp;&nbsp; Between zero and unlimited times, as many times as possible, giving back as needed (greedy) <b>«</b>»*<br/>
+Assert position at the end of a line (at the end of the string or before a line break character) <b>«$»</b><br/>
+&nbsp;</p>
 
 <p><em><ins>replace</ins></em> statement:</p>
 
-<p>replace with&nbsp; <a href="http://jira.public.thoughtworks.org/browse/backreference1">http://jira.public.thoughtworks.org/browse/backreference1</a>; <b>«$1»</b>
-<br clear="all" /></p>
+<p>replace with&nbsp; <a href="http://jira.public.thoughtworks.org/browse/backreference1">http://jira.public.thoughtworks.org/browse/backreference1</a>; <b>«$1»</b></p>
+
+<p>another tip for the ones who ar not familiar with RegEx statements :<br/>
+you can add  (?i)  for checking case insensitive<br/>
+So the setup would be :</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;issueUrlBuilder type=<span class="code-quote">"regexIssueTracker"</span>&gt;
+   &lt;find&gt;^.*((?i)CCNET.?\d*).*$&lt;/find&gt;
+   &lt;replace&gt;http:<span class="code-comment">//jira.<span class="code-keyword">public</span>.thoughtworks.org/browse/$1&lt;/replace&gt;
+</span>&lt;/issueUrlBuilder&gt;</pre>
+</div></div>
+<p><br clear="all" /></p>
 
 <h4><a name="IssueUrlBuilder-multiIssueTracker"></a>multiIssueTracker</h4>
 
@@ -135,6 +149,7 @@ This is an array of other issuetrackers.
         &lt;find&gt;^.*(CCNET-\d*).*$&lt;/find&gt;
         &lt;replace&gt;http:<span class="code-comment">//jira.<span class="code-keyword">public</span>.thoughtworks.org/browse/$1&lt;/replace&gt;
 </span>     &lt;/regexIssueTracker&gt;
+   &lt;/issueTrackers&gt;
 &lt;/issueUrlBuilder&gt;</pre>
 </div></div>
 <p>This will first apply the default issueTracker on the comment, and afterwards the regexIssueTracker, overwriting a previous result.
@@ -152,7 +167,7 @@ This is an array of other issuetrackers.
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Mar 14, 2009 02:55</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
 		    </tr>
 	    </table>
     </body>

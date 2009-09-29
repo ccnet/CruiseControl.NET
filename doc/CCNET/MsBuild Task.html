@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Mar 14, 2009 by <font color="#0050B2">dcameron</font>.
+					    This page last changed on Jul 05, 2009 by <font color="#0050B2">dna</font>.
 				    </div>
 
 				    <p>The <tt>&lt;msbuild&gt;</tt> task is used to execute MsBuild projects, which are the default project format for Visual Studio 2005 projects and can also be compiled by using the MSBuild application that ships with the .NET 2 Framework.</p>
@@ -25,15 +25,18 @@
 
 <p>Many thanks to Szymon Kobalczyk for helping out with this part of CruiseControl.NET.</p>
 
+<h3><a name="MsBuildTask-Version"></a>Version</h3>
+
+<p>This task is available from version 0.9.2.</p>
+
 <h3><a name="MsBuildTask-Examples"></a>Examples</h3>
 
-<p>Minimalist Example:</p>
-
-<p><div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<p>Minimalist Example:<br/>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;msbuild /&gt;</span></pre>
-</div></div><br clear="all" /> Full example:</p>
-
-<p><div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+</div></div><br clear="all" />
+Full example:<br/>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;msbuild&gt;</span>
   <span class="code-tag">&lt;executable&gt;</span>C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe<span class="code-tag">&lt;/executable&gt;</span>
   <span class="code-tag">&lt;workingDirectory&gt;</span>C:\dev\ccnet<span class="code-tag">&lt;/workingDirectory&gt;</span>
@@ -53,13 +56,15 @@
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
 <th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
 </tr>
 <tr>
 <td class='confluenceTd'> executable </td>
 <td class='confluenceTd'> The location of the MSBuild.exe executable </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
-<td class='confluenceTd'> C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe </td>
+<td class='confluenceTd'> MSBuild.exe in the .NET Framework path used by CCNet or "xbuild" on Unix with Mono. </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> workingDirectory </td>
@@ -67,6 +72,7 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a> </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> projectFile </td>
@@ -74,12 +80,14 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> the build file MSBuild uses by default </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> buildArgs </td>
 <td class='confluenceTd'> Any extra arguments to pass through to MSBuild </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
+<td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
@@ -88,6 +96,7 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> the default project target </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> logger </td>
@@ -96,6 +105,7 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> ThoughtWorks.CruiseControl.MsBuild.XmlLogger,ThoughtWorks.CruiseControl.MsBuild.dll </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> timeout </td>
@@ -103,105 +113,133 @@
 <td class='confluenceTd'> int </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> 600 (10 minutes) </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> description </td>
-<td class='confluenceTd'> If filled in, this will be shown in the buildstage as the process name<br clear="all" /> </td>
+<td class='confluenceTd'> If filled in, this will be shown in the buildstage as the process name <br clear="all" /> </td>
 <td class='confluenceTd'> string <br clear="all" /> </td>
 <td class='confluenceTd'> false <br clear="all" /> </td>
 <td class='confluenceTd'> n/a </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5.0 </td>
 </tr>
 </tbody></table>
 
 <h3><a name="MsBuildTask-IntegrationProperties"></a>Integration Properties</h3>
 
-<p>The following parameters are passed to MSBuild as command-line arguments:</p>
-
-<p><table class='confluenceTable'><tbody>
+<p>The following parameters are passed to MSBuild as command-line arguments:<br/>
+<table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Label </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Example </th>
+<th class='confluenceTh'> Version </th>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetBuildCondition </td>
 <td class='confluenceTd'> The condition used to trigger the build, indicating if the build was triggered by new modifications or if it was forced.  Legal values are: "IfModificationExists" or "ForceBuild" </td>
 <td class='confluenceTd'> ForceBuild </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetIntegrationStatus </td>
 <td class='confluenceTd'> The status of the current integration. Could be Success, Failure, Exception or Unknown </td>
 <td class='confluenceTd'> Success </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetLabel </td>
 <td class='confluenceTd'> The label used to identify the CCNet build.  This label is generated by the CCNet labeller. </td>
 <td class='confluenceTd'> 1.0.2.120 </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetLastIntegrationStatus </td>
 <td class='confluenceTd'> The status of the previous integration. Could be Success, Failure, Exception or Unknown </td>
 <td class='confluenceTd'> Success </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetProject </td>
 <td class='confluenceTd'> The name of the CCNet project that is being integrated. </td>
 <td class='confluenceTd'> MyProject </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetBuildDate </td>
 <td class='confluenceTd'> The date of the build (in yyyy-MM-dd format) </td>
 <td class='confluenceTd'> 2005-08-10 </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetBuildTime </td>
 <td class='confluenceTd'> The time of the start of the build (in HH:mm:ss format) </td>
 <td class='confluenceTd'> 08:45:12 </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetArtifactDirectory </td>
 <td class='confluenceTd'> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-artifactDirectory">project artifact directory</a> (as an absolute path) </td>
 <td class='confluenceTd'> <tt>c:\program files\CruiseControl.NET\Server\MyProject\Artifacts</tt> </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetWorkingDirectory </td>
 <td class='confluenceTd'> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">project working directory</a> (as an absolute path) </td>
 <td class='confluenceTd'> <tt>c:\program files\CruiseControl.NET\Server\MyProject\WorkingDirectory</tt> </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetRequestSource </td>
-<td class='confluenceTd'> The source of the integration request; this will generally be the name of the trigger that raised the request. (Added in CCNet 1.1) </td>
+<td class='confluenceTd'> The source of the integration request; this will generally be the name of the trigger that raised the request. </td>
 <td class='confluenceTd'> IntervalTrigger </td>
+<td class='confluenceTd'> 1.1.0 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetFailureUsers </td>
 <td class='confluenceTd'> The list of users who have contributed modifications to a sequence of builds that has failed. </td>
 <td class='confluenceTd'> John, Smith<br clear="all" /> </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetListenerFile </td>
-<td class='confluenceTd'> <a href="http://confluence.public.thoughtworks.org/display/CCNETCOMM/Viewing+build+progress+with+Nant+and+MSBuild">Viewing build progress with Nant and MSBuild</a> (Added in CCNet 1.4) </td>
+<td class='confluenceTd'> <a href="http://confluence.public.thoughtworks.org/display/CCNETCOMM/Viewing+build+progress+with+Nant+and+MSBuild">Viewing build progress with Nant and MSBuild</a> </td>
 <td class='confluenceTd'> c:\Project\Artifact\listener.xml </td>
+<td class='confluenceTd'> 1.4.0 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetProjectUrl </td>
 <td class='confluenceTd'> The URL where the project is located </td>
 <td class='confluenceTd'> <a href="http://myhost/ccnet/server/">http://myhost/ccnet/server/</a> </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetNumericLabel </td>
 <td class='confluenceTd'> Contains the label as an integer if conversion is possible, otherwise zero. </td>
 <td class='confluenceTd'> 1 </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetModifyingUsers <br clear="all" /> </td>
 <td class='confluenceTd'> The list of users who have contributed to the current build only <br clear="all" /> </td>
 <td class='confluenceTd'> Smith </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetUser </td>
+<td class='confluenceTd'> The user who forced the build. If security is off, or the build is not forced, then this will not be set. </td>
+<td class='confluenceTd'> John Doe </td>
+<td class='confluenceTd'> 1.5.0 </td>
 </tr>
 </tbody></table><br clear="all" /></p>
-<h3><a name="MsBuildTask-Availability"></a>Availability</h3>
-
-<p>The MsBuild plugin is available in builds more recent than 0.9.2.1059.</p>
 
 				    
                     			    </td>
@@ -212,7 +250,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Mar 14, 2009 02:55</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
 		    </tr>
 	    </table>
     </body>

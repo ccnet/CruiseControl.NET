@@ -16,15 +16,16 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Mar 14, 2009 by <font color="#0050B2">dcameron</font>.
+					    This page last changed on Jun 26, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
 				    <p>Then Gendarme task is used to run a static code analysis over your assemblies.</p>
 
 <p><img class="emoticon" src="images/icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> See <a href="Using CruiseControl.NET with Gendarme.html" title="Using CruiseControl.NET with Gendarme">Using CruiseControl.NET with Gendarme</a> for more details.</p>
 
-<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>The Gendarme task will be available after the 1.4.3 release.</b><br />
-<p>You can also apply the patch from <a href="http://jira.public.thoughtworks.org/browse/CCNET-1401">http://jira.public.thoughtworks.org/browse/CCNET-1401</a></p></td></tr></table></div>
+<h3><a name="GendarmeTask-Version"></a>Version</h3>
+
+<p>This task is available from version 1.4.3.</p>
 
 <h3><a name="GendarmeTask-Examples"></a>Examples</h3>
 
@@ -67,6 +68,7 @@
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
 <th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
 </tr>
 <tr>
 <td class='confluenceTd'> executable </td>
@@ -74,6 +76,7 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> gendarme.exe </td>
+<td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> baseDirectory </td>
@@ -81,6 +84,7 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a> </td>
+<td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> configFile </td>
@@ -88,6 +92,7 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> Default is 'rules.xml' </td>
+<td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> ruleSet </td>
@@ -95,6 +100,7 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> Default is '*' </td>
+<td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> ignoreFile </td>
@@ -102,6 +108,7 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> limit </td>
@@ -109,6 +116,7 @@
 <td class='confluenceTd'> int </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> severity </td>
@@ -116,6 +124,7 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> Default is 'medium+' (i.e. low and audit levels are ignored) </td>
+<td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> confidence </td>
@@ -123,6 +132,7 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> Default is 'normal+' (i.e. low level is ignored) </td>
+<td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> quiet </td>
@@ -130,6 +140,7 @@
 <td class='confluenceTd'> bool </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> verbose </td>
@@ -137,6 +148,7 @@
 <td class='confluenceTd'> bool </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> failBuildOnFoundDefects </td>
@@ -144,6 +156,7 @@
 <td class='confluenceTd'> bool </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> assemblies </td>
@@ -151,6 +164,7 @@
 <td class='confluenceTd'> complex </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> assemblyListFile </td>
@@ -158,6 +172,7 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> verifyTimeoutSeconds </td>
@@ -165,6 +180,7 @@
 <td class='confluenceTd'> int </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> 0 (disabled) </td>
+<td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> description </td>
@@ -172,6 +188,15 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> 1.4.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5.0 </td>
 </tr>
 </tbody></table>
 
@@ -211,7 +236,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Mar 14, 2009 02:55</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
 		    </tr>
 	    </table>
     </body>

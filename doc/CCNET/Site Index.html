@@ -31,34 +31,34 @@
         <td colspan="2">
          <table width="100%">
            <tr>                <td><a href="#index-0-9">0-9</a> ... 0</td>
-                                                                      <td><a href="#index-A">A</a> ... 3</td>
-                                                                      <td><a href="#index-B">B</a> ... 5</td>
-                                                                      <td><a href="#index-C">C</a> ... 37</td>
-                                                                      <td><a href="#index-D">D</a> ... 9</td>
-                                                                      <td><a href="#index-E">E</a> ... 6</td>
+                                                                      <td><a href="#index-A">A</a> ... 4</td>
+                                                                      <td><a href="#index-B">B</a> ... 7</td>
+                                                                      <td><a href="#index-C">C</a> ... 44</td>
+                                                                      <td><a href="#index-D">D</a> ... 16</td>
+                                                                      <td><a href="#index-E">E</a> ... 7</td>
                                                               </tr><tr>
-                                                   <td><a href="#index-F">F</a> ... 10</td>
-                                                                      <td><a href="#index-G">G</a> ... 1</td>
+                                                   <td><a href="#index-F">F</a> ... 13</td>
+                                                                      <td><a href="#index-G">G</a> ... 4</td>
                                                                       <td><a href="#index-H">H</a> ... 1</td>
-                                                                      <td><a href="#index-I">I</a> ... 8</td>
+                                                                      <td><a href="#index-I">I</a> ... 11</td>
                                                                       <td><a href="#index-J">J</a> ... 0</td>
                                                                       <td><a href="#index-K">K</a> ... 0</td>
                                                               </tr><tr>
-                                                   <td><a href="#index-L">L</a> ... 4</td>
-                                                                      <td><a href="#index-M">M</a> ... 11</td>
-                                                                      <td><a href="#index-N">N</a> ... 6</td>
+                                                   <td><a href="#index-L">L</a> ... 5</td>
+                                                                      <td><a href="#index-M">M</a> ... 14</td>
+                                                                      <td><a href="#index-N">N</a> ... 12</td>
                                                                       <td><a href="#index-O">O</a> ... 0</td>
-                                                                      <td><a href="#index-P">P</a> ... 13</td>
+                                                                      <td><a href="#index-P">P</a> ... 18</td>
                                                                       <td><a href="#index-Q">Q</a> ... 1</td>
                                                               </tr><tr>
-                                                   <td><a href="#index-R">R</a> ... 7</td>
-                                                                      <td><a href="#index-S">S</a> ... 22</td>
-                                                                      <td><a href="#index-T">T</a> ... 8</td>
-                                                                      <td><a href="#index-U">U</a> ... 36</td>
+                                                   <td><a href="#index-R">R</a> ... 10</td>
+                                                                      <td><a href="#index-S">S</a> ... 35</td>
+                                                                      <td><a href="#index-T">T</a> ... 9</td>
+                                                                      <td><a href="#index-U">U</a> ... 40</td>
                                                                       <td><a href="#index-V">V</a> ... 6</td>
-                                                                      <td><a href="#index-W">W</a> ... 5</td>
+                                                                      <td><a href="#index-W">W</a> ... 6</td>
                                                               </tr><tr>
-                                                   <td><a href="#index-X">X</a> ... 4</td>
+                                                   <td><a href="#index-X">X</a> ... 6</td>
                                                                       <td><a href="#index-Y">Y</a> ... 0</td>
                                                                       <td><a href="#index-Z">Z</a> ... 0</td>
                                                                       <td><a href="#index-%21@%23%24">!@#$</a> ... 0</td>
@@ -83,6 +83,10 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Artifact+Cleanup+Publisher">Artifact Cleanup Publisher</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">artifact CleanUp publisher allows for automatic removal of the buildlogs according to the choosen setting. It relies on the build log folder, so the XML publisher must be specified before this publisher can run. For technical reasons this publisher MUST reside in the publisher section ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Assembly Version Labeller"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Assembly+Version+Labeller">Assembly Version Labeller</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Assembly Version Labeller  Provides a valid System.Version label for your .NET assemblies that could be used to set the AssemblyVersionAttribute(). It increments the build number on every successful integration and uses the CruiseControl.NET change number, provided by source control systems like Subversion ... </div>
         </td>
                                       </tr><tr valign="top">
                            <td><h4 style="margin-top: 0px"><a name="index-B"></a>B</h4>
@@ -94,6 +98,10 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/BitKeeper+Source+Control+Block">BitKeeper Source Control Block</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">BitKeeper Configuration Examples  example using bkd   <sourcecontrol type="bitkeeper">   <workingDirectory>c:\build\dev1.0</workingDirectory>   <autoGetSource>true</autoGetSource>   <cloneTo>..\Source</cloneTo> </sourcecontrol>     Configuration Elements    Node  Description  Type  Required  Default    executable  Absolute ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Boolean Parameter"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Boolean+Parameter">Boolean Parameter</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Boolean Parameter  This will prompt the user to enter a boolean value when a force build is requested.  This parameter can then be used by a dynamic value in a task.   Version  This parameter is available from version 1.5.0.   Examples  Minimal example:   <booleanParameter>  <name>Target</name ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Build Log Build Plugin"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Build+Log+Build+Plugin">Build Log Build Plugin</a>
         <br />
@@ -101,11 +109,15 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Build Publisher"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Build+Publisher">Build Publisher</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Build Publisher lets you copy any arbitrary files on a successful build. You can set alwaysPublish to true, if you want the copy always to happen.   Example  \\   <buildpublisher>    <sourceDir>C:\myprojects\project1</sourceDir>    <publishDir>\\myfileserver\project1 ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Build Publisher lets you copy any arbitrary files on a successful build. You can set alwaysPublish to true, if you want the copy always to happen.  Example \\  <buildpublisher>   <sourceDir>C:\myprojects\project1</sourceDir>   <publishDir>\\myfileserver\project1 ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Build Report Build Plugin"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Build+Report+Build+Plugin">Build Report Build Plugin</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Build Report Build Plugin shows detailed output for a specific build. This report is generated by applying a list of XSL transforms to the build's log file. See XSL Files for a list of available XSL transforms. This is a Project Configurable Build Plugin.  Example ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Building Packages"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Building+Packages">Building Packages</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Building Packages   Introduction  As part of the 1.4.4 release the concept of packages was introduced to the web dashboard. A package is a ZIP file that contains all the necessary files for a plugin, plus instructions on installing the files.  Examples of files that can be in a package are:  NVelocity templates  XSLT ... </div>
         </td>
                                       <td><h4 style="margin-top: 0px"><a name="index-C"></a>C</h4>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="CCNet 0.6 Final Release Notes"/>
@@ -195,7 +207,27 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="CCNet 1.4.3 Release Notes"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/CCNet+1.4.3+Release+Notes">CCNet 1.4.3 Release Notes</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Upgrading to CCNet 1.4.3   In earlier versions of CCNet, an empty trigger block was interpreted as an <intervalTrigger>. This is no longer the case. An empty trigger block will produce a project with no triggers that will only build if it is forced.  See the release notes for the CCNet 1.4.2 ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Upgrading to CCNet 1.4.3    In earlier versions of CCNet, an empty trigger block was interpreted as an <intervalTrigger>. This is no longer the case. An empty trigger block will produce a project with no triggers that will only build if it is forced.   The statistics publisher is improved for speed reasons ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="CCNet 1.4.4 RC1 Release Notes"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/CCNet+1.4.4+RC1+Release+Notes">CCNet 1.4.4 RC1 Release Notes</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Highlights of the CCNet 1.4.4 (RC1) release   Dashboard administration A new plugin has been added to simplify the maintenance of the dashboard. Dashboard Administration Plugin contains all the details on this new plugin. Note: This plugin is not enabled by default, it will need to be manually configured ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="CCNet 1.4.4 RC2 Release Notes"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/CCNet+1.4.4+RC2+Release+Notes">CCNet 1.4.4 RC2 Release Notes</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Highlights of the CCNet 1.4.4 RC2 release  This is the second Release Candidate for CruiseControl.NET 1.4.4. It incorporates a number of bug fixes and enhancements based on the feedback that we have received after releasing the first release candidate. We welcome futher feedback on this candidate ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="CCNet 1.4.4 Release Notes"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/CCNet+1.4.4+Release+Notes">CCNet 1.4.4 Release Notes</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Upgrading to CCNet 1.4.4  There are no breaking changes for people coming from 1.4.4 RC2, 1.4.4 RC1, or 1.4.3   There is a small issue with msbuild, since the adding of the hotswap, the default logger can not be found anymore automatically. You'll have to specify it's location explicitely ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="CCNet 1.4.4 SP1 Release Notes"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/CCNet+1.4.4+SP1+Release+Notes">CCNet 1.4.4 SP1 Release Notes</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Highlights of the CCNet 1.4.4 SP1 release  This is mainly an update to the 1.4.4 release to address the issue of the wrong NetReflector version. That gave problems with the existing plugins, also the msbuild logger problem with the hotswap has been fixed.   Release Notes CruiseControl ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="CCNet 1.5 CTP Release Notes"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/CCNet+1.5+CTP+Release+Notes">CCNet 1.5 CTP Release Notes</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">nbsp;Read this first  This is CTP release of CCNet 1.5. We're doing a CTP release to give you a testable preview of the new features in the upcoming release. Since this is a CTP release, we do not advise to run it in a production environment, but the more tests ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="CCTray"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/CCTray">CCTray</a>
         <br />
@@ -216,10 +248,14 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Commit+Process">Commit Process</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Please adhere to the following process when commiting changes to the repository:  # check to make sure that the build is currently passing on ccnetlive http://ccnetlive.thoughtworks.com/ccnet/. # validate that your changes work by running 'b.bat' in the root folder # check to see if a jira issue ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Conditional Publisher"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Conditional+Publisher">Conditional Publisher</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Conditional Publisher  Runs the child publishers only if the condition is met.  Currently the only available condition that can be checked is the state of the build.   Version  This task is available from version 1.5.0.   Examples  Minimalist example:   <conditionalPublisher>  <conditions>   <condition>Success</condition ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Configuration Preprocessor"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Configuration+Preprocessor">Configuration Preprocessor</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">CCNet configuration preprocessor acts on the ccnet.config file. Preprocessor directives are specified in the XML namespace "urn:ccnet.config.builder" to distinguish them from ordinary configuration markup. Any markup not in the preprocessor's namespace are passed through unchanged.   Preparing to Use the Preprocessor The configuration ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">CCNet configuration preprocessor acts on the ccnet.config file. Preprocessor directives are specified in the XML namespace "urn:ccnet.config.builder" to distinguish them from ordinary configuration markup. Any markup not in the preprocessor's namespace are passed through unchanged.  Preparing to Use the Preprocessor The configuration ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Configure CruiseControl.Net to Automatically Update its Config File"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Configure+CruiseControl.Net+to+Automatically+Update+its+Config+File">Configure CruiseControl.Net to Automatically Update its Config File</a>
         <br />
@@ -244,6 +280,10 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/CruiseControl.NET+Server">CruiseControl.NET Server</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Server Quick Start  # Check you have the Installation Prerequisites. # Download and Install. The Basic Installation page describes the types of kits that are available. # Add a Project Configuration Block to ccnet.config with the following sub blocks (you'll want at least these for most usages ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="CruiseServer Control Task"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/CruiseServer+Control+Task">CruiseServer Control Task</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">CruiseServer Control Task  Sends a management task to a CruiseServer instance.   Version  This task is available from version 1.5.0.   Examples  Minimalist example:   <cruiseServerControl>  <actions>   <controlAction type="StartProject" project="CCNet" />  </actions> </cruiseServerControl>    Full example:   <cruiseServerControl>  <actions ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Custom Builder Plug-in"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Custom+Builder+Plug-in">Custom Builder Plug-in</a>
         <br />
@@ -259,6 +299,10 @@
         </td>
                                       </tr><tr valign="top">
                            <td><h4 style="margin-top: 0px"><a name="index-D"></a>D</h4>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Dashboard Administration Plugin"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Dashboard+Administration+Plugin">Dashboard Administration Plugin</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Dashboard Administration Plugin  The Dashboard Administration Plugin (DAP) provides an alternate way to administer the dashboard. The DAP allows the maintenance of remote servers and "packages".  The remote server administration allows an administrator to add, modify and delete remote servers ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Dashboard Configuration Block"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Dashboard+Configuration+Block">Dashboard Configuration Block</a>
         <br />
@@ -266,11 +310,23 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Date Labeller"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Date+Labeller">Date Labeller</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Date Labeller is used to generate labels in the format "yyyy.mm.dd.build". Using the Date Labeller makes it easy for the user to identify and communicate the date that a particular build occurred.  <project>  <labeller type="dateLabeller" />  <! Other project configuration to go here > </project>  This labeller ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Date Labeller is used to generate labels in the format "yyyy.mm.dd.build". Using the Date Labeller makes it easy for the user to identify and communicate the date that a particular build occurred.   <project>   <labeller type="dateLabeller" />   <! Other project configuration to go here > </project>     Configuration ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Date Parameter"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Date+Parameter">Date Parameter</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Date Parameter  This will prompt the user to enter a date value when a force build is requested.  This parameter can then be used by a dynamic value in a task.   Version  This parameter is available from version 1.5.0.   Examples  Minimal example:   <dateParameter>  <name>CutOffDate</name ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Default Labeller"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Default+Labeller">Default Labeller</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Default Labeller By default, CCNet uses a plain incrementing build number as a build label. Some source controls (e.g. Perforce Source Control Block) require you to use a different naming scheme if you want CCNet to apply labels ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Default Labeller  By default, CCNet uses a plain incrementing build number as a build label. Some source controls (e.g. Perforce Source Control Block) require you to use a different naming scheme if you want CCNet to apply labels ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Default Manifest Generator"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Default+Manifest+Generator">Default Manifest Generator</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Default Manifest Generator  Generates a basic manifest to be included in the package.    This generator is available from release 1.4.4 onwards.     Examples    <manifest type="defaultManifestGenerator" />     Configuration Elements:    Node  Description  Type  Required  Default    type  The type of generator. This must be "defaultManifestGenerator ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Default Project Security"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Default+Project+Security">Default Project Security</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Default Project Security  The projectspecific settings include a list of permissions. These permissions associate the users, roles, etc. from the serverlevel security with the actions.  The security settings for a project are stored as a child element under the <project> tag.   Version  This security item is available ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Developer Guidelines"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Developer+Guidelines">Developer Guidelines</a>
         <br />
@@ -283,6 +339,10 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Developing+Web+Dashboard+Plugins">Developing Web Dashboard Plugins</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Web Dashboard Plugin API is not yet stabilised. If you do write your own plugins it is recommended that you subscribe to the CCNet Checkins Mailing list http://lists.sourceforge.net/mailman/listinfo/ccnetcheckins and watch for changes to the Dashboard project  The Web Dashboard ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Direct Dynamic Value"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Direct+Dynamic+Value">Direct Dynamic Value</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Direct Dynamic Value  This will replace the value of a property with the value from a parameter. If the user does not enter a parameter value, then the default will be used (when set).  This dynamic value does not perform any formatting, it just directly puts the value into the property.   Version ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Documentation"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Documentation">Documentation</a>
         <br />
@@ -295,12 +355,20 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Download">Download</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Release Distributions  CruiseControl.NET release distributions are available from SourceForge  http://sourceforge.net/project/showfiles.php?groupid=71179&packageid=83198. If your company does not let you access SourceForge, please download the build number corresponding to the release from ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Dynamic Parameters"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Dynamic+Parameters">Dynamic Parameters</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Dynamic Parameters  Starting with CruiseControl.NET 1.5.0, it is possible to define dynamic parameters for a project. These parameters are values that are set at build time, as opposed to being hardcoded within the configuration file.   Defining Parameters  Parameters are defined at the projectlevel. Each parameter must be defined ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Dynamic Values"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Dynamic+Values">Dynamic Values</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">following dynamic values are defined</div>
         </td>
                                       <td><h4 style="margin-top: 0px"><a name="index-E"></a>E</h4>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Email Publisher"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Email+Publisher">Email Publisher</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">email publisher can be used to send email to any number of users. It is common to include one user who gets an email for every build and then also send email to every developer who checked code in for this build.  (i) People ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">email publisher can be used to send email to any number of users. It is common to include one user who gets an email for every build and then also send email to every developer who checked code in for this build. (i) People ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Enterprise Continuous Integration with Binary Dependencies example"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Enterprise+Continuous+Integration+with+Binary+Dependencies+example">Enterprise Continuous Integration with Binary Dependencies example</a>
         <br />
@@ -313,6 +381,10 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Executable+Task">Executable Task</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Executable Task lets you invoke any command line executable. It doesn't offer as much specific integration as (for example) the NAnt Task, but does allow you to hook almost anything up as a build process to CCNet. CCNet will examine the exit ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="External File Server Security"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/External+File+Server+Security">External File Server Security</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">External File Server Security  This defines the security settings in external XML files. The external files use the same format as the internal server security configuration (e.g. <users> and <permissions> elements).   Version  This security item is available from version 1.5.0 ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="External Source Control"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/External+Source+Control">External Source Control</a>
         <br />
@@ -327,15 +399,15 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="FAQ"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/FAQ">FAQ</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">CruiseControl.NET Frequently Asked Questions (FAQ) This FAQ is not meant to be a complete reference to CruiseControl.NET, but does provide some quick ideas about how to get various things done. If you want to add questions, answers, or both, please use the ccnetuser ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">CruiseControl.NET Frequently Asked Questions (FAQ)  This FAQ is not meant to be a complete reference to CruiseControl.NET, but does provide some quick ideas about how to get various things done.  If you want to add questions, answers, or both, please use the ccnetuser ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Farm Report Farm Plugin"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Farm+Report+Farm+Plugin">Farm Report Farm Plugin</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Farm Report Farm Plugin shows you status information for all projects on all servers. If the Dashboard cannot connect to any specific server then an errors table is shown detailing the problems.  Example  <farmReportFarmPlugin />   Configuration Elements There is no configuration for this plugin</div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Farm Report Farm Plugin shows you status information for all projects on all servers. If the Dashboard cannot connect to any specific server then an errors table is shown detailing the problems.   Example  Minimalist example:   <farmReportFarmPlugin />   Full example ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="File Labeller"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/File+Labeller">File Labeller</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">File Labeller  The File Labeller is used to generate labels based on the content of a disk file. The labeller is configured with the location of the file, and it reads the file content to generate the label for CCNet. The file is read just before the first prebuild task is executed.  The following ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">File Labeller  The File Labeller is used to generate labels based on the content of a disk file. The labeller is configured with the location of the file, and it reads the file content to generate the label for CCNet. The file is read just before the first prebuild task is executed.   Version ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="File Merge Task"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/File+Merge+Task">File Merge Task</a>
         <br />
@@ -344,6 +416,10 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/File+State+Manager">File State Manager</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">File State Manager is a State Manager State Manager Blocks that saves the state for one project to a file. The filename should be stored in either the working directory for the project or in the explicitly specified directory. The filename will match the project name, but will have the extension .state ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="File-based Security Cache"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/File-based+Security+Cache">File-based Security Cache</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Filebased Security Cache  Provides an inmemory cache for sessions that is backed by a store on disk.  This cache will store the sessions details in memory for quickaccess. Whenever a session is changed it also writes a copy of the details to a file on the disk. Then when the security manager is restarted ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Filesystem Source Control Block"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Filesystem+Source+Control+Block">Filesystem Source Control Block</a>
         <br />
@@ -364,12 +440,32 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/ForceBuildPublisher">ForceBuildPublisher</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">ForceBuildPublisher forces a build on a local or remote build server. It uses .NET Remoting to invoke a forced build on the CruiseControl.NET server at the specified URI. The forced build runs asynchronously, i.e. the ForceBuildPublisher does not wait for the forced build to finish. The ForceBuildPublisher is a great ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="FTp Source control"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/FTp+Source+control">FTp Source control</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Ftp Soure control block allows to detect new and changed files at an Ftp site, deleted files are NOT detected.  Full configuration example:  <sourcecontrol type="ftpSourceControl">  <serverName>ftp.isp.com</serverName>  <userName>john</userName>  <password>doe</password ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Ftp task - Publisher"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Ftp+task+-+Publisher">Ftp task - Publisher</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">ftp task / publisher allows to download or upload files/ folders, for example, uploading a new version of a web page to ftp site of an ISP. available from 1.5 onwards.  Examples  <ftp> 	<serverName>ftp.isp.com</serverName> 	<userName>john</userName ... </div>
         </td>
                                       <td><h4 style="margin-top: 0px"><a name="index-G"></a>G</h4>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Gendarme Task"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Gendarme+Task">Gendarme Task</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Gendarme task is used to run a static code analysis over your assemblies.  (i) See Using CruiseControl.NET with Gendarme for more details.    You can also apply the patch from http://jira.public.thoughtworks.org/browse/CCNET1401     Examples  Minimalist Example:   <gendarme ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Gendarme task is used to run a static code analysis over your assemblies.  (i) See Using CruiseControl.NET with Gendarme for more details.   Version  This task is available from version 1.4.3.   Examples  Minimalist Example:   <gendarme> 	<assemblies> 		<assemblyMatch expr ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="General Security"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/General+Security">General Security</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">General Security  The following are general security items, or elements that can be used at both the server and project levels</div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="General Security Permissions"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/General+Security+Permissions">General Security Permissions</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">General Security Permissions  The following are the general security permissions:    Element  Description  Type  Required  Version    defaultRight  This is the permission that will be used if no other permission has been specified. See notes below for how this works.  Permission  No  1.5.0   forceBuild  The force/abort ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Git Source Control Block"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Git+Source+Control+Block">Git Source Control Block</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">JIRA Issue for progress tracking: http://jira.public.thoughtworks.org/browse/CCNET1554   CruiseControl.NET from version 1.5 on provide support for the Git Distributed Version Control System.  Homepage: http://www.gitscm.com   How does this work?    Local repository initialization  The Git Source Control ... </div>
         </td>
                                       </tr><tr valign="top">
                            <td><h4 style="margin-top: 0px"><a name="index-H"></a>H</h4>
@@ -379,6 +475,14 @@
              <div class="smalltext" style="margin: 0 0 0 36px">Sometimes (eg: if you want to build a list of projects in sequence) it can be convenient to trigger builds from a NAnt script. For that purpose one can use the launchccnetbuild NAnt task (source available here: LaunchCruiseControlBuildTask.cs).  Example:  <launchccnetbuild serverurl="tcp ... </div>
         </td>
                                       <td><h4 style="margin-top: 0px"><a name="index-I"></a>I</h4>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="In Memory Security Cache"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/In+Memory+Security+Cache">In Memory Security Cache</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Memory Security Cache  Provides an inmemory cache for sessions.   This cache stores sessions in the current instance of CruiseControl.Net. When CruiseControl.Net is restarted the sessions will be lost.   Version  This security item is available from version 1.5.0.   Examples    <cache type="inMemoryCache ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Inherited Project Security"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Inherited+Project+Security">Inherited Project Security</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Inherited Project Security  Inherit the security settings for a project from the server settings.  The security settings for a project are stored as a child element under the <project> tag.   Version  This security item is available from version 1.5.0.   Examples    <security type="inheritedProjectSecurity ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Installation Prerequisites"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Installation+Prerequisites">Installation Prerequisites</a>
         <br />
@@ -390,11 +494,15 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Integration Properties"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Integration+Properties">Integration Properties</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Label  Description  Example   CCNetBuildCondition  The condition used to trigger the build, indicating if the build was triggered by new modifications or if it was forced. Legal values are: "IfModificationExists" or "ForceBuild"  ForceBuild   CCNetIntegrationStatus  The status of the current integration. Could be Success, Failure, Exception or Unknown  Success   CCNetLabel ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Label  Description  Example  Version    CCNetBuildCondition  The condition used to trigger the build, indicating if the build was triggered by new modifications or if it was forced. Legal values are: "IfModificationExists" or "ForceBuild"  ForceBuild    CCNetIntegrationStatus  The status of the current integration. Could be Success, Failure, Exception or Unknown  Success ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Integration Queues"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Integration+Queues">Integration Queues</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Integration Queues   Concurrent and Serialised Builds  The default behaviour of CruiseControl.Net is that each project defined in the configuration is given its own integration thread, thereby allowing differently named projects to build concurrently.  Note however that a single project can never ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Internal Server Security"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Internal+Server+Security">Internal Server Security</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Internal Server Security  This defines the security settings in internally in ccnet.config.   Version  This security item is available from version 1.5.0.   Examples    <internalSecurity>  <cache type="inMemoryCache" duration="10" mode="sliding"/>  <users>   <passwordUser name="johndoe" password="letmein ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Interval Trigger"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Interval+Trigger">Interval Trigger</a>
         <br />
@@ -410,7 +518,7 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Iteration Labeller"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Iteration+Labeller">Iteration Labeller</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Iteration Labeller The Iteration Labeller is similar to the Default Labeller; however, it maintains a revision number that is incremented by one for each iteration from the release start date. For example, if the release start date was June 1, 2005 and the iteration duration was 2 weeks ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Iteration Labeller  The Iteration Labeller is similar to the Default Labeller; however, it maintains a revision number that is incremented by one for each iteration from the release start date. For example, if the release start date was June 1, 2005 and the iteration duration was 2 weeks ... </div>
         </td>
                                       </tr><tr valign="top">
                            <td><h4 style="margin-top: 0px"><a name="index-J"></a>J</h4>
@@ -431,6 +539,10 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Latest+Build+Report+Project+Plugin">Latest Build Report Project Plugin</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Latest Build Report Project Plugin lists all available builds for a project.  Example  <latestBuildReportProjectPlugin/>   Configuration Elements There is no configuration for this plugin</div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="LDAP User Authentication"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/LDAP+User+Authentication">LDAP User Authentication</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">LDAP User Authentication  Authenticates a user against an LDAP domain.   Version  This security item is available from version 1.5.0.   Examples  Simple example:	   <ldapUser name="johndoe" domain="somewhere.com"/>    Wildcard example:   <ldapUser name="" domain="somewhere.com ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="License"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/License">License</a>
         <br />
@@ -441,6 +553,18 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Mailing+Lists">Mailing Lists</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">We use Google Groups http://groups.google.com to host public mailing lists. To subscribe to lists, or read their archives, click the appropriate link below. You will need a (free) Google account to subscribe to these lists, and you must subscribe if you wish ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Manifest Generators"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Manifest+Generators">Manifest Generators</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Manifest Generators  Manifest generators generate a "manifest" to be included in a package. A manifest contains additional details on the package, both at a general level and at a file level, and can be used by external systems.  The following generators are available</div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Manifest Importer"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Manifest+Importer">Manifest Importer</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Manifest Importer  Imports an existing manifest file into the package.    This generator is available from release 1.4.4 onwards.     Examples    <manifest type="importManifest">  <filename>ExistingManifest.xml</filename> </manifest>     Configuration Elements:    Node  Description  Type  Required  Default    type ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Mercurial Source Control Block"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Mercurial+Source+Control+Block">Mercurial Source Control Block</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Mercurial Source Control Block  CruiseControl.NET provides basic support for Mercurial repositories. Checking for changes, checking out or updating sources, and tagging are supported.  To configure the CruiseControl.NET server to monitor a Mercurial repository, edit ccnet.config and configure sourcecontrol to point at your ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="MKS Source Integrity Source Control Block"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/MKS+Source+Integrity+Source+Control+Block">MKS Source Integrity Source Control Block</a>
         <br />
@@ -448,7 +572,7 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Modification Reader Task"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Modification+Reader+Task">Modification Reader Task</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">tasks makes it possible to read back modifications made by the Modification Writer Task CCNET:Modification Writer Task.   Example :  2 projects in CCNet 1) is a project that does the compile, test, ... stuff, and also writes the modifications using the ModificationWriterTask &nbsp ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">tasks makes it possible to read back modifications made by the Modification Writer Task CCNET:Modification Writer Task. Available from 1.4 onwards.  Example : 2 projects in CCNet 1) is a project that does the compile, test, ... stuff, and also writes ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Modification Writer Task"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Modification+Writer+Task">Modification Writer Task</a>
         <br />
@@ -456,7 +580,7 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="ModificationHistory Publisher"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/ModificationHistory+Publisher">ModificationHistory Publisher</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">publisher logs all modifications for each build in a file. These modifications can be viewed in the Dashboard with the modificationHistoryProjectPlugin plugin enabled.   Minimal Configuration:&nbsp;    <publishers>   <modificationHistory /> </publishers>   This is available from build 1.3.0.2981 onwards   Full&nbsp; Configuration    <publishers>   <modificationHistory onlyLogWhenChangesFound ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">publisher logs all modifications for each build in a file. These modifications can be viewed in the Dashboard with the modificationHistoryProjectPlugin plugin enabled.   Version  This task is available from version 1.3.0.   Minimal Configuration:&nbsp;    <publishers>   <modificationHistory /> </publishers>     Full&nbsp; Configuration    <publishers>   <modificationHistory ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="modificationHistoryProjectPlugin"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/modificationHistoryProjectPlugin">modificationHistoryProjectPlugin</a>
         <br />
@@ -488,6 +612,18 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/NAnt+Task">NAnt Task</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Examples  Minimalist Example:   <nant />   Full example:   <nant>  <executable>c:\fromcvs\myrepo\myproject\tools\nant\nant.exe</executable>  <baseDirectory>c:\fromcvs\myrepo\myproject</baseDirectory>  <buildArgs>D:cvs.executable=c:\putty\cvswithplinkrsh.bat</buildArgs>  <nologo ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="NCover Profiler Task"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/NCover+Profiler+Task">NCover Profiler Task</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">NCover Profiler Task  Perform a code coverage profile using NCover.  NCover is a commerical application that will profile code while unit tests are running. The tool is available from http://www.ncover.com/.  Note: CruiseControl.NET currently support NCover 3.0.   Version ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="NCover Reporting Task"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/NCover+Reporting+Task">NCover Reporting Task</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">NCover Reporting Task  Generate a code coverage report using NCover.  NCover is a commerical application that will profile code while unit tests are running. The tool is available from http://www.ncover.com/.  Note: CruiseControl.NET currently support NCover 3.0.   Version ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="NDepend Task"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/NDepend+Task">NDepend Task</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">NDepend Task  Runs an NDepend analysis.    NDepend is a tool that simplifies managing a complex .NET code base. Architects and developers can analyze code structure, specify design rules, plan massive refactoring, do effective code reviews ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="NetReflector"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/NetReflector">NetReflector</a>
         <br />
@@ -496,6 +632,14 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/News">News</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">CCNet Blog</div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Null Project Security"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Null+Project+Security">Null Project Security</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Null Project Security  This element turns off security at the project level. A project with this security will give all rights to all users.   Version  This security item is available from version 1.5.0.   Examples    <security type="nullProjectSecurity"/>     Configuration Elements    Node ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Null Server Security"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Null+Server+Security">Null Server Security</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Null Server Security  This element turns off security at the server level.    Version  This security item is available from version 1.5.0.   Examples    <nullSecurity/ >     Configuration Elements  None</div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Null Source Control Block"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Null+Source+Control+Block">Null Source Control Block</a>
         <br />
@@ -503,7 +647,11 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Null Task"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Null+Task">Null Task</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Null Task is a task that doesn't do anything it simply returns successfully. This is useful for projects that simply monitor the source control system for changes but don't need to do anything.  Configuration Example  <nullTask</div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Null Task is a task that doesn't do anything it simply returns successfully. This is useful for projects that simply monitor the source control system for changes but don't need to do anything.  Configuration Example  <nullTask />  Options :  Node  Description  Type  Required  Default ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Numeric Parameter"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Numeric+Parameter">Numeric Parameter</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Numeric Parameter  This will prompt the user to enter a numeric value when a force build is requested.  This parameter can then be used by a dynamic value in a task.   Version  This parameter is available from version 1.5.0.   Examples  Minimal example:   <numericParameter>  <name>MaxAllowedErrors</name ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="NUnit Task"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/NUnit+Task">NUnit Task</a>
         <br />
@@ -513,10 +661,22 @@
         </td>
                                       </tr><tr valign="top">
                            <td><h4 style="margin-top: 0px"><a name="index-P"></a>P</h4>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Package Publisher"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Package+Publisher">Package Publisher</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Package Publisher  Generates a ZIP file package containing the specified files.  This publisher also allows the generation of a "manifest" to include in the package. A manifest contains additional details on the package, both at a general level and at a file level.   Version  This publisher is available from ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Packaging a Release"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Packaging+a+Release">Packaging a Release</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">process of producing a new stable release of CruiseControl.NET is as follows (note that some steps require nondefault permissions): # Choose the release number "x.y". In most cases, x will remain the same and y will increase by 1 from the previous release. # Rename the release ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Some points for saving time : Create the release notes a few days before the actual release, giving other devs also the chance to complete it, read it over, ... Prepare the mail to be sent to the dev and user list in advance, and save it as a draft. So ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Parallel Task"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Parallel+Task">Parallel Task</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Parallel Task  Runs a set of child tasks in parallel. Each task will run at the same time as the other tasks.  To run a set of tasks in sequential order within this task, use the Sequential Task.   Version  This task is available from version 1.5.0 ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Parameters"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Parameters">Parameters</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">following parameters are defined</div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Perforce Source Control Block"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Perforce+Source+Control+Block">Perforce Source Control Block</a>
         <br />
@@ -529,6 +689,10 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Plugins+Configuration+Block">Plugins Configuration Block</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Web Dashboard comes preconfigured to use a default set of plugins. To change what plugins you want to use for your CruiseControl.NET deployment, use the {{<plugins>}} section of the Dashboard configuration.  The section is split up into 4 parts, representing the Farm, Server ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="PowerShell Task"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/PowerShell+Task">PowerShell Task</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">PowerShell Task  Runs a PowerShell script.   Version  This task is available from version 1.5.0.   Examples  Minimalist example:   <powershell>  <script>dosomething.ps</script> </powershell>    Full example:   <powershell>  <script>dosomething.ps</script>  <executable>C:\program Files\PowerShell ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Project Configurable Build Plugin"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Project+Configurable+Build+Plugin">Project Configurable Build Plugin</a>
         <br />
@@ -541,6 +705,10 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Project+Details">Project Details</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Open Source  CruiseControl.NET is an Open Source project. This means it is free to use, and the source code is also available and distributable under a few conditions. Our License is very similar to the Apache & BSD licenses.   Project Management  The CruiseControl.NET source trees ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Project Level Security"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Project+Level+Security">Project Level Security</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Project Level Security  The following elements are defined at the project level for security</div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Project Report Project Plugin"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Project+Report+Project+Plugin">Project Report Project Plugin</a>
         <br />
@@ -552,7 +720,7 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Project Team"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Project+Team">Project Team</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">people are committers to CruiseControl.NET:  cbrown  Bill Caputo  Ajey Gore  Daniel Hommel  Manuel Paul Joseph  Ashish Kumar  nmallick  mgm  Ryan Moffat  darren  Ross Patterson  mroberts  orogers  Mike Royle  Garrett Smith  svadagir@thoughtworks.com  Jeremy ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">people are committers to CruiseControl.NET: cbrown Bill Caputo Ajey Gore Daniel Hommel Manuel Paul Joseph Ashish Kumar nmallick mgm Ryan Moffat darren Daniel Nauck Ross Patterson mroberts orogers Mike Royle Garrett Smith ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Project Trigger"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Project+Trigger">Project Trigger</a>
         <br />
@@ -585,25 +753,41 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Remote Project Labeller"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Remote+Project+Labeller">Remote Project Labeller</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Remote Project Labeller This labeller retrieves the last successful integration label for a project on a remote server. You can use this labeller if you have split your build across multiple projects on different servers and you want to use a consistent ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Remote Project Labeller  This labeller retrieves the last successful integration label for a project on a remote server. You can use this labeller if you have split your build across multiple projects on different servers and you want to use a consistent ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Remote Services Configuration Block"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Remote+Services+Configuration+Block">Remote Services Configuration Block</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">time the {{<remoteServices>}} tag just contains a {{<servers>}} Servers Configuration Block section. This section contains all the build servers that the Dashboard will visualize.  Example:  <remoteServices>   <servers>   .   .   </servers> </remoteServices</div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Replacement Dynamic Value"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Replacement+Dynamic+Value">Replacement Dynamic Value</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Replacement Dynamic Value  This will replace any number of parameters into a format string. The format string can also include formats for each parameter.   Version  This dynamic value is available from version 1.5.0.   Examples  Basic example:   <nant>  <! Omitted for brevity ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Resources"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Resources">Resources</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Useful links   CruiseControl.NET Community Site CCNETCOMM:  Report a bug or request a feature (JIRA)  http://jira.public.thoughtworks.org/secure/BrowseProject.jspa?id=10000  CCNet Sourceforge Project Page http://www.sf.net/projects/ccnet/  CCNetLive http://ccnetlive.thoughtworks.com/  CruiseControl for Java ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Roadmap"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Roadmap">Roadmap</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Current plans for new features in CruiseControl.Net.   What's Coming?  This page is currently a work in progress. We are still in the process of looking at what to add in future releases.  Here are some of the things that we are planning for upcoming releases of CruiseControl.Net.  Release 1.5 Version ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Role Permission"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Role+Permission">Role Permission</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Role Permission  Defines the permissions for a role (a group of users).   Version  This security item is available from version 1.5.0.   Examples  Definition of a role:   <rolePermission name="admin" forceBuild="Allow" startProject="Deny" defaultRight="Inherit">  <users>   <userName name="johndoe ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="RSS Publisher"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/RSS+Publisher">RSS Publisher</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">publisher generates an RSS file reporting the latest results for a Project. The RSS feed is available via the Dasboard in the Project Report. There needs to be 1 build done with this publisher for the icon to show up.  Minimal Configuration  <publishers>  <rss/> </publishers> \\ This is available ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">publisher generates an RSS file reporting the latest results for a Project. The RSS feed is available via the Dasboard in the Project Report. There needs to be 1 build done with this publisher for the icon to show up.   Version  This publisher is available from version 1.3.0 ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="RSSFeedProjectPlugin"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/RSSFeedProjectPlugin">RSSFeedProjectPlugin</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">publisher generates an RSS feed reporting the builds for a project. The project must use the RSS Publisher to produce the data for the feed. This is available from build 1.3.0.3011 onwards. The RSS icon will be displayed on the project page, whenever a build is done with the RSS ... </div>
         </td>
                                       <td><h4 style="margin-top: 0px"><a name="index-S"></a>S</h4>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Scenario One"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Scenario+One">Scenario One</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Small Inhouse Development Team    Scenario #1: Small Inhouse Development Team   Background	  The company is Acme Insurance, the company that provides development insurance for software houses. Bob leads a team of six people three developers, a business analyst (BA ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Schedule Trigger"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Schedule+Trigger">Schedule Trigger</a>
         <br />
@@ -616,14 +800,62 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Seapine+Surround+Source+Control+Block">Seapine Surround Source Control Block</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Surround SCM Configuration Example    The Seapine Surround provider is designed to work with Surround 4.1. It may not work with earlier versions of Surround.   For Surround SCM you must specify the executable, branch, repository, working directory, and login. You may also ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Security"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Security">Security</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Security  Starting with CruiseControl.NET 1.5.0, it is possible to add security to a CruiseControl.NET instance.   This page provides an overview of security for CruiseControl.Net on the server side. It includes how security works and why it might be needed. This includes defining the different parts of security and how ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Security Audit Loggers"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Security+Audit+Loggers">Security Audit Loggers</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Security Audit Loggers  A security audit logger will log audit events to a log.   There can be multiple audit loggers for a server, but there can only be one primary audit log. The primary audit log is the log that is read and used for retrieving records for a client ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Security Audit Readers"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Security+Audit+Readers">Security Audit Readers</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Security Audit Readers  A security audit reader will read the primary audit log and return the audit records.  While there can be multiple audit logs, there can only be one primary log. It is called the primary log because it is the source of information for any ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Security Caches"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Security+Caches">Security Caches</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Security Caches  A security cache is used to hold the session details.   When a user is authenticated a new session token will be generated and returned to the client. All future requests then use this token to validate the user. The security cache is what holds these tokens and allows ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Security Configuration"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Security+Configuration">Security Configuration</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Security Configuration  This section defines how to configure the security at both a server and a project level</div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Security Extension Points"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Security+Extension+Points">Security Extension Points</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Security Extension Points  Nearly every item in security can be extended or replaced. This page will cover some of the key points for extending security.   Server Extensions  Security at the server level implements {{ISecurityManager}} . This interface handles the core functionality of security including ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Security Scenarios"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Security+Scenarios">Security Scenarios</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Security Scenarios  These scenarios describe some ways of using security. They include a fictional scenario with some requirements, an analysis of the security requirements and a description of how to apply security to satisfy the requirements</div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Security Users"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Security+Users">Security Users</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Security Users  In order for security to be usable, one or more users must be defined.  Currently, the following types of users can be defined</div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Select Parameter"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Select+Parameter">Select Parameter</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Select Parameter  This will prompt the user to select a value from a list of values when a force build is requested.  This parameter can then be used by a dynamic value in a task.   Version  This parameter is available from version 1.5.0.   Examples  Minimal example:   <selectParameter>  <name ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Sequential Task"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Sequential+Task">Sequential Task</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Sequential Task  Runs a set of child tasks in order.  This task is primarily designed for scenarios where execution can take more than more path (e.g. Parallel Task). This is normally not required for tasks directly under the prebuild, tasks or publishers ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Server Application Config File"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Server+Application+Config+File">Server Application Config File</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Various aspects of the CruiseControl.NET Server are configured in the application configuration file. The name of this file depends on how you are running the server: If you are running the Console Application, the application config file is called {{ccnet.exe.config}}. If you are running the Windows Service Application, the application ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Various aspects of the CruiseControl.NET Server are configured in the application configuration file. The name of this file depends on how you are running the server:  If you are running the Console Application, the application config file is called {{ccnet.exe.config}}.  If you are running the Windows Service Application, the application ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Server Extensions"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Server+Extensions">Server Extensions</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Server Extensions    This documentation is in the process of being developed. As such it may omit details or be incomplete in areas.     Introduction  As of release 1.4.4, it is possible to build server extensions for both the console and the Windows service.   An extension is different from a plugin. A plugin must be referenced ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Server Information Server Plugin"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Server+Information+Server+Plugin">Server Information Server Plugin</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Server Information Server Plugin gives you information about a build server, for example the version of CruiseControl.NET the build server is running.   Example  <serverInformationServerPlugin />   Configuration Elements There is no configuration for this plugin</div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Server Information Server Plugin gives you information about a build server, for example the version of CruiseControl.NET the build server is running.    Example    <serverInformationServerPlugin />     Configuration Elements    Node  Description  Type  Required  Default    minFreeSpace  The minimum required amount of free ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Server Level Security"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Server+Level+Security">Server Level Security</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Server Level Security  The following elements are defined at the server level for security</div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Server Log Project Plugin"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Server+Log+Project+Plugin">Server Log Project Plugin</a>
         <br />
@@ -635,7 +867,7 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Server Report Server Plugin"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Server+Report+Server+Plugin">Server Report Server Plugin</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Server Report Server Plugin shows you status information for all projects on a specific server. If the Dashboard cannot connect to the server then an errors table is shown detailing the problem.  Example  <serverReportServerPlugin />   Configuration Elements There is no configuration for this plugin</div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Server Report Server Plugin shows you status information for all projects on a specific server. If the Dashboard cannot connect to the server then an errors table is shown detailing the problem.   Example  There is no configuration for this plugin.  Minimalist example:   <serverReportServerPlugin />   Full example ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Servers Configuration Block"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Servers+Configuration+Block">Servers Configuration Block</a>
         <br />
@@ -675,7 +907,7 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="State File Labeller"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/State+File+Labeller">State File Labeller</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">State File Labeller This labeller retrieves the last successful integration label for a project using the project's state file. You can use this labeller if you have split your build across multiple projects and you want to use a consistent ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">State File Labeller  This labeller retrieves the last successful integration label for a project using the project's state file. You can use this labeller if you have split your build across multiple projects and you want to use a consistent ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="State Manager Blocks"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/State+Manager+Blocks">State Manager Blocks</a>
         <br />
@@ -683,7 +915,7 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Statistics Publisher"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Statistics+Publisher">Statistics Publisher</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">publisher can be used to collect and update statistics for each build in a file. Some of the statistics which would be collected are build durations and test count. At the minimal, the publisher can be configured with just an empty <statistics /> element in the publishers section. This would ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">publisher can be used to collect and update statistics for each build in a file. Some of the statistics which would be collected are build durations and test count.  At the minimal, the publisher can be configured with just an empty <statistics /> element in the publishers section. This would ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Subversion Source Control Block"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Subversion+Source+Control+Block">Subversion Source Control Block</a>
         <br />
@@ -703,6 +935,10 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Telelogic+Synergy">Telelogic Synergy</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Abstract  This page describes integration of CruiseControl.NET with Telelogic's Synergy SCM product suite, specifically CM Synergy as well as ChangeSynergy. Detection of modifications is entirely task based rather than object based, which may present problems for pre6.3 lifecycles ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Text Parameter"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Text+Parameter">Text Parameter</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Text Parameter  This will prompt the user to enter a text value when a force build is requested.  This parameter can then be used by a dynamic value in a task.   Version  This parameter is available from version 1.5.0.   Examples  Minimal example:   <textParameter>  <name>Target</name ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="The CruiseControl Configuration Block"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/The+CruiseControl+Configuration+Block">The CruiseControl Configuration Block</a>
         <br />
@@ -737,6 +973,18 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Url+Trigger">Url Trigger</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Url Trigger is used to trigger a CCNet build when the page at a particular url changes. The Url Trigger will poll the specified url according to a configured polling interval to detect if the last modified date of the page has changed since the last integration ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="User Name Authentication"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/User+Name+Authentication">User Name Authentication</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">User Name Authentication  User name authentication checks that just the user name is valid.	  Note: This authentication performs no checks other than the user name is valid   Version  This security item is available from version 1.5.0.   Examples  Simple example ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="User Password Authentication"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/User+Password+Authentication">User Password Authentication</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">User Password Authentication  User password authentication checks that the user name and password combination is valid.   Version  This security item is available from version 1.5.0.   Examples  Simple example:	   <passwordUser name="johndoe" password="whoareyou" display="John Doe ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="User Permission"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/User+Permission">User Permission</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">User Permission  Defines the permissions for a user.   Version  This security item is available from version 1.5.0.   Examples  Definition of a role:   <userPermission name="johndoe" forceBuild="Allow" startProject="Deny" defaultRight="Inherit"/>    Referenced role:   <userPermission name="johndoe" ref ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Using CruiseControl.NET with AccuRev"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Using+CruiseControl.NET+with+AccuRev">Using CruiseControl.NET with AccuRev</a>
         <br />
@@ -768,7 +1016,11 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Using CruiseControl.NET with Gendarme"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Using+CruiseControl.NET+with+Gendarme">Using CruiseControl.NET with Gendarme</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Run Mono's Gendarme as part of your integration  Gendarme is a extensible rulebased tool to find problems in .NET applications and libraries. Gendarme inspects programs and libraries that contain code in ECMA CIL format (Mono and .NET) and looks for common problems with the code ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Run Mono's Gendarme as part of your integration Gendarme is a extensible rulebased tool to find problems in .NET applications and libraries. Gendarme inspects programs and libraries that contain code in ECMA CIL format (Mono and .NET) and looks for common problems with the code ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Using CruiseControl.NET with Git"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Using+CruiseControl.NET+with+Git">Using CruiseControl.NET with Git</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">See Git Source Control Block</div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Using CruiseControl.NET with InstallShield"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Using+CruiseControl.NET+with+InstallShield">Using CruiseControl.NET with InstallShield</a>
         <br />
@@ -804,7 +1056,7 @@
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Using CruiseControl.NET with NDepend"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Using+CruiseControl.NET+with+NDepend">Using CruiseControl.NET with NDepend</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Run NDepend as part of your integration    Run NDepend as part of your NAnt build  In order to get the results of NDepend included in the CruiseControl.NET build results, you will need to setup a NDepend project file that includes information about which Assemblies ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Run NDepend as part of your integration   Initial NDepend setup  In order to get the results of NDepend included in the CruiseControl.NET build results, you will need to setup a NDepend project file that includes information about which Assemblies to analyse and which types ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Using CruiseControl.NET with NUnit"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Using+CruiseControl.NET+with+NUnit">Using CruiseControl.NET with NUnit</a>
         <br />
@@ -922,13 +1174,25 @@
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Why+CruiseControl.NET">Why CruiseControl.NET</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">CruiseControl.NET is based on the original Java implementation of CruiseControl http://cruisecontrol.sourceforge.net, we are frequently asked why we bothered to reimplement it for the .NET platform. Surely, it would be easier to just use the NAnt builder in CruiseControl to handle the build process for .NET projects ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Wildcards in User Names"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/Wildcards+in+User+Names">Wildcards in User Names</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Wildcards in User Names  It is possible to use wild cards for the user name. To use a wild card simply use an ''. Wild cards can either be the whole name (in which case everything will be matched) or just part of a name.  Some examples ... </div>
         </td>
                                       </tr><tr valign="top">
                            <td><h4 style="margin-top: 0px"><a name="index-X"></a>X</h4>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="XML File Audit Logger"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/XML+File+Audit+Logger">XML File Audit Logger</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">XML File Audit Logger  Sends audit logging information to a file. The information will be stored in an XML format.   The actual file will not be correct XML as it will not have a single root element instead each line will be directly written to the file.   Version  This security ... </div>
+                                 <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="XML File Audit Reader"/>
+                         <a href="http://confluence.public.thoughtworks.org//display/CCNET/XML+File+Audit+Reader">XML File Audit Reader</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">XML File Audit Reader  Reads audit logging information from a file. The information must be stored in an XML format.   This reader handles reading audit information that has been written by the XML File Audit logger.   Version  This security ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Xml Log Publisher"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/Xml+Log+Publisher">Xml Log Publisher</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Xml Log Publisher is used to create the log files used by the CruiseControl.NET Web Dashboard, so if you don't define an <xmllogger /> section the Dashboard will not function correctly.  You should place the <xmllogger /> in the <publishers /> section, after any File ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Xml Log Publisher is used to create the log files used by the CruiseControl.NET Web Dashboard, so if you don't define an <xmllogger /> section the Dashboard will not function correctly.   You should place the <xmllogger /> in the <publishers /> section, after any File ... </div>
                                  <img src="images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="XSL Files"/>
                          <a href="http://confluence.public.thoughtworks.org//display/CCNET/XSL+Files">XSL Files</a>
         <br />
@@ -963,7 +1227,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Mar 14, 2009 02:55</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
 		    </tr>
 	    </table>
     </body>

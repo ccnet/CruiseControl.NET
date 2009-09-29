@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Mar 14, 2009 by <font color="#0050B2">dcameron</font>.
+					    This page last changed on Aug 19, 2009 by <font color="#0050B2">williams</font>.
 				    </div>
 
 				    <p>The <b>Build Publisher</b> lets you copy any arbitrary files on a <b>successful</b> build.<br/>
@@ -33,13 +33,19 @@ You can set alwaysPublish to true, if you want the copy always to happen.</p>
      <span class="code-tag">&lt;alwaysPublish&gt;</span>false<span class="code-tag">&lt;/alwaysPublish&gt;</span>
 <span class="code-tag">&lt;/buildpublisher&gt;</span></pre>
 </div></div><br clear="all" />
-<br clear="all" /> This will copy the contents of <b>C:\myprojects\project1</b> to the network share <b>\\myfileserver\project1</b>.</p>
+<br clear="all" />
+This will copy the contents of <b>C:\myprojects\project1</b> to the network share <b>\\myfileserver\project1</b>.
+<br clear="all" />
+<br clear="all" /></p>
 
-<p><b>Minimal Configuration Example</b><br/>
+<p><b>Minimal Configuration Example</b><br clear="all" />
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;buildpublisher /&gt;</span></pre>
 </div></div><br clear="all" />
-<br clear="all" /> This will copy the contents of the project's working directory to a new label subdirectory under the project's artifact directory (i.e. &lt;artifact_dir&gt;\&lt;label_dir&gt;)</p>
+<br clear="all" />
+This will copy the contents of the project's working directory to a new label subdirectory under the project's artifact directory (i.e. &lt;artifact_dir&gt;\&lt;label_dir&gt;)
+<br clear="all" />
+<br clear="all" /></p>
 
 <h4><a name="BuildPublisher-ConfigurationElements%3A"></a>Configuration Elements:</h4>
 
@@ -50,6 +56,7 @@ You can set alwaysPublish to true, if you want the copy always to happen.</p>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
 <th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
 </tr>
 <tr>
 <td class='confluenceTd'> sourceDir </td>
@@ -57,6 +64,7 @@ You can set alwaysPublish to true, if you want the copy always to happen.</p>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> n/a </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> publishDir </td>
@@ -64,6 +72,7 @@ You can set alwaysPublish to true, if you want the copy always to happen.</p>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> n/a </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> useLabelSubDirectory </td>
@@ -71,6 +80,7 @@ You can set alwaysPublish to true, if you want the copy always to happen.</p>
 <td class='confluenceTd'> bool </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> true </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> alwaysPublish </td>
@@ -78,6 +88,7 @@ You can set alwaysPublish to true, if you want the copy always to happen.</p>
 <td class='confluenceTd'> bool <br clear="all" /> </td>
 <td class='confluenceTd'> false <br clear="all" /> </td>
 <td class='confluenceTd'> false <br clear="all" /> </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> description </td>
@@ -85,6 +96,42 @@ You can set alwaysPublish to true, if you want the copy always to happen.</p>
 <td class='confluenceTd'> string <br clear="all" /> </td>
 <td class='confluenceTd'> false <br clear="all" /> </td>
 <td class='confluenceTd'> n/a </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> cleanUpMethod </td>
+<td class='confluenceTd'> Defines a way to clean up published builds, possible values : <br clear="all" />
+° NoCleaning <br clear="all" />
+° KeepLastXBuilds <br clear="all" />
+° DeleteBuildsOlderThanXDays <br clear="all" /> </td>
+<td class='confluenceTd'> CleanupPolicy </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> NoClean </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> cleanUpValue <br clear="all" /> </td>
+<td class='confluenceTd'> The value used for the cleaning method <br clear="all" /> </td>
+<td class='confluenceTd'> int </td>
+<td class='confluenceTd'> false <br clear="all" /> </td>
+<td class='confluenceTd'> 5 </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> cleanPublishDirPriorToCopy <br clear="all" /> </td>
+<td class='confluenceTd'> Cleans the publishDir if it exists, so that you will always have an exact copy of the sourceDir<br clear="all" /> </td>
+<td class='confluenceTd'> bool <br clear="all" /> </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false <br clear="all" /> </td>
+<td class='confluenceTd'> 1.5.0 <br clear="all" /> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5.0 </td>
 </tr>
 </tbody></table>
 <p><img class="emoticon" src="images/icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> This block used to support an 'additionalDir' attribute. This feature has been removed - just use multiple <tt>&lt;buildpublisher&gt;</tt> blocks to achieve the same job.<br/>
@@ -99,7 +146,7 @@ You can set alwaysPublish to true, if you want the copy always to happen.</p>
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Mar 14, 2009 02:55</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
 		    </tr>
 	    </table>
     </body>

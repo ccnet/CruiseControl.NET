@@ -16,10 +16,26 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Nov 18, 2008 by <font color="#0050B2">dcameron</font>.
+					    This page last changed on Jun 17, 2009 by <font color="#0050B2">williams</font>.
 				    </div>
 
-				    <p>The process of producing a new stable release of CruiseControl.NET is as follows (note that some steps require non-default permissions):</p>
+				    <div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Some points for saving time :</p>
+<ul>
+	<li>Create the release notes a few days before the actual release, giving other devs also the chance to complete it, read it over, ...</li>
+	<li>Prepare the mail to be sent to the dev and user list in advance, and save it as a draft. So you do not have to do a quick write on the release itself</li>
+	<li>When the release is a RC, state in the mail that an RC means it has to be tested with as much users as possible, include the points below :
+	<ul>
+		<li>use your existing config on a spare / virtual PC</li>
+		<li>test it with a couple of CCNet projects, one of every kind you have (CI, deploy, ...)</li>
+		<li>remove the labelling part of the scm so you do not interfere with the life/ production system&nbsp;</li>
+		<li>use the null task to simulate different build results (succeed, failed), eg.: for new publishers</li>
+		<li>use the null source control to simulate errors on source control operations, eg.: for new publishers</li>
+	</ul>
+	</li>
+</ul>
+</td></tr></table></div>
+<p>The process of producing a new stable release of CruiseControl.NET is as follows (note that some steps require non-default permissions):</p>
 <ol>
 	<li>Choose the release number "<em>x.y</em>". In most cases, <em>x</em> will remain the same and <em>y</em> will increase by 1 from the previous release.</li>
 	<li>Rename the release in Jira to be a valid release name (requires ccnet_administrator group membership on Jira)
@@ -124,7 +140,7 @@ This is a list of [Jira Issues resolved by this release|_the Release Notes URL f
 		</li>
 	</ol>
 	</li>
-	<li>Update version number in the ccnet.nsi and cctray.nsi installer files.
+	<li>Update version number in the nsi files(ccnet.nsi, cctray.nsi, ccvalidator.nsi) installer files.
 	<ol>
 		<li>&#33;define PRODUCT_VERSION "<em>x</em>.<em>y</em>"</li>
 	</ol>
@@ -193,10 +209,11 @@ This is a list of [Jira Issues resolved by this release|_the Release Notes URL f
 	</ol>
 	</li>
 	<li>Wait for <a href="http://ccnetlive.thoughtworks.com/ccnet">CCNetLive</a> to run a successful build.</li>
-	<li>Download the four source and binary distribution files from <a href="http://ccnetlive.thoughtworks.com/CCNet-builds/">CCNetLive </a> that contain the newly packaged documentation</li>
-	<li>Upload the source and binary distributions to <a href="ftp://upload.sourceforge.net/incoming">SourceForge</a> and go through the SourceForge release process. Rename the distribution files to include the version number&#33; (Distributions with the same filenames can cause problems for SourceForge mirrors).
+	<li>Download the five source and binary distribution files from <a href="http://ccnetlive.thoughtworks.com/CCNet-builds/">CCNetLive</a> that contain the newly packaged documentation.</li>
+	<li>Upload the source and binary distributions to <a href="ftp://upload.sourceforge.net/incoming">SourceForge</a> and go through the SourceForge release process.
 	<ol>
 		<li>See the <a href="http://alexandria.wiki.sourceforge.net/File+Release+System+-+Offering+Files+for+Download">SourceForge "Offering Files for Download" page</a> for a list of options and instructions. For this example, we will use the <b>SFTP</b> option using <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty">Putty's</a> <b>psftp</b>:</li>
+		<li>If you're doing a RC (Release Candidate), rename all the exe's to&nbsp; ...-RCX-Setup.exe, where X is the number of the release candidate. (to prevent duplicate names in sourceforge releases)</li>
 		<li>Upload the files:
 		<ol>
 			<li>Open psftp.</li>
@@ -211,12 +228,17 @@ This is a list of [Jira Issues resolved by this release|_the Release Notes URL f
 		<ol>
 			<li>Login to the <a href="http://sourceforge.net">SourceForge.net website</a>.</li>
 			<li>Select the project to administer from the <b>My Projects</b> listing on the <b>My Page</b>.</li>
-			<li>Select <b>File Releases</b> from the Admin pulldown. If you don't have an Admin pulldown, you don't have the necessary privileges to continue the process.</li>
+			<li>Select <b>Downloads</b> from the Admin pulldown. If you don't have an Admin pulldown, you don't have the necessary privileges to continue the process.</li>
 			<li>Click on the <b>Add Release</b> link next to the "<b>CruiseControl.NET Releases</b>" Package Name.</li>
 			<li>Enter the release name for the release into the <b>New release name:</b> field (<em>i.e.</em>, "CruiseControl.NET <em>x.y</em>") and click the <b>Create This Release</b> button.</li>
 			<li>Paste the Change Log and Release notes for the release, in plain text format, from the Release Notes page you created above.</li>
 			<li>Check the checkbox next to the filename of each file to be added to the release in <b>Section 2</b> of the form, and click on the <b>Add Files and/or Refresh View</b> button</li>
 			<li>Go to Step 3 of the form, modifying the value in each field for each file, as necessary. Click on the 'Update/Refresh' button after each change to a file.</li>
+			<li>Click on the <b>Create / Edit Download Page</b>&nbsp; on the top left of the screen</li>
+			<li>Delete any files that may exists in the primary download file / secondary file&nbsp; sections</li>
+			<li>Add <b>CruiseControl X.Y Setup.exe</b> as the primary download file</li>
+			<li>Add the other files as secondary download files</li>
+			<li>Press <b>Save</b></li>
 		</ol>
 		</li>
 	</ol>
@@ -227,9 +249,11 @@ This is a list of [Jira Issues resolved by this release|_the Release Notes URL f
 		<ol>
 			<li>Login to the <a href="http://sourceforge.net">SourceForge.net website</a>.</li>
 			<li>Select the project to administer from the <b>My Projects</b> listing on the <b>My Page</b>.</li>
-			<li>Select <b>News</b> from the Admin pulldown. If you don't have an Admin pulldown, you don't have the necessary privileges to continue the process.</li>
+			<li>Select <b>Summary - News</b> from the pulldown. If you don't have an Admin pulldown, you don't have the necessary privileges to continue the process.</li>
 			<li>Click on the <b>Submit</b> link near the top of the list.</li>
-			<li>Fill in the fields and submit the news item.</li>
+			<li>Fill in the fields and submit the news item.<br/>
+Summary : CruiseControl.NET <em>x.y released</em><br/>
+Details : paste the release Notes</li>
 		</ol>
 		</li>
 		<li>Confluence:
@@ -271,7 +295,7 @@ CCNet 1.4.1 is the equivalent to build 1.4.1.3795 from [ccnetlive|http:<span cla
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Mar 14, 2009 02:55</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
 		    </tr>
 	    </table>
     </body>

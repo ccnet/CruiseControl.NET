@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Mar 14, 2009 by <font color="#0050B2">dcameron</font>.
+					    This page last changed on Sep 21, 2009 by <font color="#0050B2">williams</font>.
 				    </div>
 
 				    <p>The email publisher can be used to send email to any number of users. It is common to include one user who gets an email for every build and then also send email to every developer who checked code in for this build.</p>
@@ -36,8 +36,17 @@ So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never
     <span class="code-tag">&lt;/users&gt;</span>
 
     <span class="code-tag">&lt;groups&gt;</span>
-        <span class="code-tag">&lt;group name=<span class="code-quote">"developers"</span> notification=<span class="code-quote">"change"</span>/&gt;</span>
-        <span class="code-tag">&lt;group name=<span class="code-quote">"buildmaster"</span> notification=<span class="code-quote">"always"</span>/&gt;</span>
+        <span class="code-tag">&lt;group name=<span class="code-quote">"developers"</span>&gt;</span>
+           <span class="code-tag">&lt;notifications&gt;</span>
+	       <span class="code-tag">&lt;notificationType&gt;</span>Failed<span class="code-tag">&lt;/notificationType&gt;</span>
+	       <span class="code-tag">&lt;notificationType&gt;</span>Fixed<span class="code-tag">&lt;/notificationType&gt;</span>
+	   <span class="code-tag">&lt;/notifications&gt;</span>
+        <span class="code-tag">&lt;/group&gt;</span>
+        <span class="code-tag">&lt;group name=<span class="code-quote">"buildmaster"</span> &gt;</span>
+           <span class="code-tag">&lt;notifications&gt;</span>
+	       <span class="code-tag">&lt;notificationType&gt;</span>Always<span class="code-tag">&lt;/notificationType&gt;</span>
+           <span class="code-tag">&lt;/notifications&gt;</span>
+        <span class="code-tag">&lt;/group&gt;</span>
     <span class="code-tag">&lt;/groups&gt;</span>
 
     <span class="code-tag">&lt;converters&gt;</span>
@@ -50,9 +59,20 @@ So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never
     <span class="code-tag">&lt;/modifierNotificationTypes&gt;</span>
 
     <span class="code-tag">&lt;subjectSettings&gt;</span>
-       <span class="code-tag">&lt;subject buildResult=<span class="code-quote">"StillBroken"</span> value="Build is still broken for {CCNetProject} /&gt;</span>
+       <span class="code-tag">&lt;subject buildResult=<span class="code-quote">"StillBroken"</span> value=<span class="code-quote">"Build is still broken for {CCNetProject}"</span> /&gt;</span>
     <span class="code-tag">&lt;/subjectSettings&gt;</span>
 
+    <span class="code-tag">&lt;xslFiles&gt;</span>
+       <span class="code-tag">&lt;file&gt;</span>xsl\header.xsl<span class="code-tag">&lt;/file&gt;</span>
+       <span class="code-tag">&lt;file&gt;</span>xsl\compile.xsl<span class="code-tag">&lt;/file&gt;</span>
+       <span class="code-tag">&lt;file&gt;</span>xsl\unittests.xsl<span class="code-tag">&lt;/file&gt;</span>
+       <span class="code-tag">&lt;file&gt;</span>xsl\modifications.xsl<span class="code-tag">&lt;/file&gt;</span>
+    <span class="code-tag">&lt;/xslFiles&gt;</span>
+
+    <span class="code-tag">&lt;attachments&gt;</span>
+        <span class="code-tag">&lt;file&gt;</span>C:\Data\AFile.txt<span class="code-tag">&lt;/file&gt;</span>
+        <span class="code-tag">&lt;file&gt;</span>Relative.txt<span class="code-tag">&lt;/file&gt;</span>
+    <span class="code-tag">&lt;/attachments&gt;</span>
 <span class="code-tag">&lt;/email&gt;</span></pre>
 </div></div>
 
@@ -66,6 +86,7 @@ So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
 <th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
 </tr>
 <tr>
 <td class='confluenceTd'> mailhost </td>
@@ -73,6 +94,7 @@ So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> true </td>
 <td class='confluenceTd'> n/a </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> mailport </td>
@@ -80,6 +102,7 @@ So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never
 <td class='confluenceTd'> int </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> 25 </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> mailhostUsername </td>
@@ -87,6 +110,7 @@ So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> "" </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> mailhostPassword </td>
@@ -94,6 +118,7 @@ So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> "" </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> useSSL </td>
@@ -101,6 +126,7 @@ So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never
 <td class='confluenceTd'> boolean <br clear="all" /> </td>
 <td class='confluenceTd'> false <br clear="all" /> </td>
 <td class='confluenceTd'> false <br clear="all" /> </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> from </td>
@@ -108,6 +134,7 @@ So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> true </td>
 <td class='confluenceTd'> n/a </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> modifierNotificationTypes </td>
@@ -115,6 +142,7 @@ So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never
 <td class='confluenceTd'> complex </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> Always </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> includeDetails </td>
@@ -122,6 +150,7 @@ So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never
 <td class='confluenceTd'> boolean </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> false </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> users </td>
@@ -129,6 +158,7 @@ So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never
 <td class='confluenceTd'> complex </td>
 <td class='confluenceTd'> true </td>
 <td class='confluenceTd'> n/a </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> groups </td>
@@ -136,6 +166,7 @@ So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never
 <td class='confluenceTd'> complex </td>
 <td class='confluenceTd'> true </td>
 <td class='confluenceTd'> n/a </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> converters </td>
@@ -144,6 +175,7 @@ The converters will be used when the name of the modifier is not set in the user
 <td class='confluenceTd'> complex </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> n/a </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> subjectPrefix <br clear="all" /> </td>
@@ -151,6 +183,7 @@ The converters will be used when the name of the modifier is not set in the user
 <td class='confluenceTd'> string <br clear="all" /> </td>
 <td class='confluenceTd'> false <br clear="all" /> </td>
 <td class='confluenceTd'> "" </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> subjectSettings </td>
@@ -158,6 +191,7 @@ The converters will be used when the name of the modifier is not set in the user
 <td class='confluenceTd'> complex <br clear="all" /> </td>
 <td class='confluenceTd'> false <br clear="all" /> </td>
 <td class='confluenceTd'> n/a <br clear="all" /> </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> description </td>
@@ -165,10 +199,38 @@ The converters will be used when the name of the modifier is not set in the user
 <td class='confluenceTd'> string <br clear="all" /> </td>
 <td class='confluenceTd'> false <br clear="all" /> </td>
 <td class='confluenceTd'> n/a </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> xslFiles </td>
+<td class='confluenceTd'> A list of xsl files that will be used to fill up the message body, if left blank the list will be taken from ccnet.exe.config or ccservice.exe.config <br clear="all" /> </td>
+<td class='confluenceTd'> list <br clear="all" /> </td>
+<td class='confluenceTd'> false <br clear="all" /> </td>
+<td class='confluenceTd'> empty <br clear="all" /> </td>
+<td class='confluenceTd'> 1.5.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> attachments </td>
+<td class='confluenceTd'> A list of files to attach to the e-mail. If the full path is not specified, then it will be relative to the project working directory. </td>
+<td class='confluenceTd'> string array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Empty </td>
+<td class='confluenceTd'> 1.5.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5.0 </td>
 </tr>
 </tbody></table>
 <div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>When includedDetails = True, the message body will contain more information. This detailed information is constructed from xsl transformations on the build log.<br/>
-These xls files are defined in the ccnet.exe.config in the xslFiles section. (see also : <a href="Server Application Config File.html" title="Server Application Config File">Server Application Config File</a>). when adjustig this, restart the console/service.</td></tr></table></div>
+If the xslFiles section is filled these files will be used, if not defined the xls files are defined in the ccnet.exe.config in the xslFiles section. (see also : <a href="Server Application Config File.html" title="Server Application Config File">Server Application Config File</a>). when adjusting one of these, restart the console/service.<br/>
+The benefits of defining the xsl files in the email publisher :<br/>
+° the xsl files are automatically the same for the console as for the service (no more keeping these 2 in sync)<br/>
+° it is possible to give projects different xsl transformations</td></tr></table></div>
 <div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>The groups node may be empty, but the group section must exist.</td></tr></table></div>
 <div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
 <p>For sending mail via gmail :<br/>
@@ -203,7 +265,7 @@ useSSL="TRUE"</p></td></tr></table></div>
 <td class='confluenceTd'> address </td>
 <td class='confluenceTd'> The Internet-style email address of the user (<em>e.g.</em>, "joe@example.com"). </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> true </td>
 </tr>
 </tbody></table>
 <p>Users do not need to belong to a group.  If they are not in a group then they may still receive emails when they have committed changes that are part of the current build, depending on the setting of "modifierNotificationTypes" and the state of the build.</p>
@@ -227,8 +289,8 @@ useSSL="TRUE"</p></td></tr></table></div>
 <td class='confluenceTd'> true </td>
 </tr>
 <tr>
-<td class='confluenceTd'> notification </td>
-<td class='confluenceTd'> Determines when to send email to this group.  The possible notification types are:
+<td class='confluenceTd'> notifications </td>
+<td class='confluenceTd'> A list of notification types, determining when to send email to this group.  The possible notification types are:
 <ul>
 	<li>"Always" - send email when any build occurs</li>
 	<li>"Change" - send email when the status of the build changes (e.g. from 'success' to 'failed').</li>
@@ -238,11 +300,13 @@ useSSL="TRUE"</p></td></tr></table></div>
 	<li><font color="black">"Exception" - send a mail when the build has state Exception, (e.g. error during getting the modifications)</font></li>
 </ul>
 </td>
-<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> group </td>
 <td class='confluenceTd'> true </td>
 </tr>
 </tbody></table>
 <div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>The ability to configure notifications for successful builds is available starting in CCNet 1.3.</td></tr></table></div>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Up to CC.NET version 1.4.4, notification is a single attribute on the group. Starting with CC.NET 1.5.0, this has been changed to an array of notification types.</td></tr></table></div>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>From 1.5.0 onwards, the Failed notification type, is just failed, it does not include the Exception anymore. Making it possible to mail Exception to the buildmaster, and Failed to the developpers. Developers will not get Exception mails, unless configured so.</td></tr></table></div>
 
 <h4><a name="EmailPublisher-ConvertersConfigurationElement%3A"></a>Converters Configuration Element:</h4>
 
@@ -283,8 +347,8 @@ useSSL="TRUE"</p></td></tr></table></div>
     &lt;regexConverter find=<span class="code-quote">"$"</span> replace=<span class="code-quote">"@TheCompany.com"</span> /&gt;
 &lt;/converters&gt;</pre>
 </div></div>
-
 <p><a name="EmailPublisher-LdapConverter"></a></p>
+
 <h5><a name="EmailPublisher-LdapConverterElement"></a>Ldap Converter Element</h5>
 
 <p>The &lt;ldapConverter&gt; element looks up the email address via LDAP. (available from 1.4.1.3843)</p>
@@ -373,9 +437,8 @@ against a field from the LDAP service <br clear="all" /> </td>
 <td class='confluenceTd'> Send mail when the status of the build changes from "Failed" to "Success". </td>
 </tr>
 </tbody></table>
-<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Users who contribute modifications to a failed build are "sticky".  As long as the builds continue to fail, CruiseControl.Net remembers each user who contributed a change to any of the builds.  When a build finally succeeds, this list of "failure modifiers" is cleared.</td></tr></table></div>
+<p><div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Users who contribute modifications to a failed build are "sticky".  As long as the builds continue to fail, CruiseControl.Net remembers each user who contributed a change to any of the builds.  When a build finally succeeds, this list of "failure modifiers" is cleared.</td></tr></table></div><a name="EmailPublisher-SubjectSettings"></a></p>
 
-<p><a name="EmailPublisher-SubjectSettings"></a> </p>
 <h4><a name="EmailPublisher-SubjectSettingsConfigurationElement"></a>SubjectSettings Configuration Element</h4>
 
 <p>This element&nbsp; allows to set specific subject messages according to the state of the build. When a certain state is not specified, a default will be entered.</p>
@@ -432,81 +495,103 @@ against a field from the LDAP service <br clear="all" /> </td>
 <th class='confluenceTh'> Label </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Example </th>
+<th class='confluenceTh'> Version </th>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetBuildCondition </td>
 <td class='confluenceTd'> The condition used to trigger the build, indicating if the build was triggered by new modifications or if it was forced.  Legal values are: "IfModificationExists" or "ForceBuild" </td>
 <td class='confluenceTd'> ForceBuild </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetIntegrationStatus </td>
 <td class='confluenceTd'> The status of the current integration. Could be Success, Failure, Exception or Unknown </td>
 <td class='confluenceTd'> Success </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetLabel </td>
 <td class='confluenceTd'> The label used to identify the CCNet build.  This label is generated by the CCNet labeller. </td>
 <td class='confluenceTd'> 1.0.2.120 </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetLastIntegrationStatus </td>
 <td class='confluenceTd'> The status of the previous integration. Could be Success, Failure, Exception or Unknown </td>
 <td class='confluenceTd'> Success </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetProject </td>
 <td class='confluenceTd'> The name of the CCNet project that is being integrated. </td>
 <td class='confluenceTd'> MyProject </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetBuildDate </td>
 <td class='confluenceTd'> The date of the build (in yyyy-MM-dd format) </td>
 <td class='confluenceTd'> 2005-08-10 </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetBuildTime </td>
 <td class='confluenceTd'> The time of the start of the build (in HH:mm:ss format) </td>
 <td class='confluenceTd'> 08:45:12 </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetArtifactDirectory </td>
 <td class='confluenceTd'> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-artifactDirectory">project artifact directory</a> (as an absolute path) </td>
 <td class='confluenceTd'> <tt>c:\program files\CruiseControl.NET\Server\MyProject\Artifacts</tt> </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetWorkingDirectory </td>
 <td class='confluenceTd'> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">project working directory</a> (as an absolute path) </td>
 <td class='confluenceTd'> <tt>c:\program files\CruiseControl.NET\Server\MyProject\WorkingDirectory</tt> </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetRequestSource </td>
-<td class='confluenceTd'> The source of the integration request; this will generally be the name of the trigger that raised the request. (Added in CCNet 1.1) </td>
+<td class='confluenceTd'> The source of the integration request; this will generally be the name of the trigger that raised the request. </td>
 <td class='confluenceTd'> IntervalTrigger </td>
+<td class='confluenceTd'> 1.1.0 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetFailureUsers </td>
 <td class='confluenceTd'> The list of users who have contributed modifications to a sequence of builds that has failed. </td>
 <td class='confluenceTd'> John, Smith<br clear="all" /> </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetListenerFile </td>
-<td class='confluenceTd'> <a href="http://confluence.public.thoughtworks.org/display/CCNETCOMM/Viewing+build+progress+with+Nant+and+MSBuild">Viewing build progress with Nant and MSBuild</a> (Added in CCNet 1.4) </td>
+<td class='confluenceTd'> <a href="http://confluence.public.thoughtworks.org/display/CCNETCOMM/Viewing+build+progress+with+Nant+and+MSBuild">Viewing build progress with Nant and MSBuild</a> </td>
 <td class='confluenceTd'> c:\Project\Artifact\listener.xml </td>
+<td class='confluenceTd'> 1.4.0 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetProjectUrl </td>
 <td class='confluenceTd'> The URL where the project is located </td>
 <td class='confluenceTd'> <a href="http://myhost/ccnet/server/">http://myhost/ccnet/server/</a> </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetNumericLabel </td>
 <td class='confluenceTd'> Contains the label as an integer if conversion is possible, otherwise zero. </td>
 <td class='confluenceTd'> 1 </td>
+<td class='confluenceTd'>&nbsp;</td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetModifyingUsers <br clear="all" /> </td>
 <td class='confluenceTd'> The list of users who have contributed to the current build only <br clear="all" /> </td>
 <td class='confluenceTd'> Smith </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetUser </td>
+<td class='confluenceTd'> The user who forced the build. If security is off, or the build is not forced, then this will not be set. </td>
+<td class='confluenceTd'> John Doe </td>
+<td class='confluenceTd'> 1.5.0 </td>
 </tr>
 </tbody></table>
 <p>This makes it possible to set up subjects like following :</p>
@@ -538,7 +623,7 @@ against a field from the LDAP service <br clear="all" /> </td>
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Mar 14, 2009 02:55</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
 		    </tr>
 	    </table>
     </body>

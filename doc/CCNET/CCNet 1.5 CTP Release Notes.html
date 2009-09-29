@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 1.5 CTP Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 1.5 CTP Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Sep 29, 2009 by <font color="#0050B2">williams</font>.
+				    </div>
+
+				    <h2><a name="CCNet1.5CTPReleaseNotes-%26nbsp%3BReadthisfirst"></a>&nbsp;Read this first</h2>
+
+<p>This is CTP release of CCNet 1.5. We're doing a CTP release to give you a testable preview of the new features in the upcoming release.<br/>
+Since this is a CTP release, we do not advise to run it in a production environment, but the more tests the better <img class="emoticon" src="images/icons/emoticons/smile.gif" height="20" width="20" align="absmiddle" alt="" border="0"/> , and there are already people using this in a production environment<br/>
+For example, one of the devs runs the 1.5 for several months, take a look at <a href="http://build.nauck-it.de/ViewFarmReport.aspx">Dna's build server</a><br/>
+This is a breaking release : read below for the items known to be broken, other items may also be affected.</p>
+
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Breaking Changes</b><br />
+<ul>
+	<li>The email publisher config is NOT compatible if you used the group element, check the new configuration in the documentation.</li>
+	<li>With the new windows 2008 and vista, program files is not writable anymore (standard) so some files are moved to program data<br/>
+use the convertion tool to update to the new configuration. It is advised to create a Windows/linux user to run CCNet as a service<br/>
+there are differences in program data throughout the windows versions (XP - 2003 vs Vista - 2008)</li>
+	<li>Some internal interfaces are changed, so 3rd party plugins <b>could</b> be broken</li>
+</ul>
+</td></tr></table></div>
+<p><br clear="all" /></p>
+
+<h2><a name="CCNet1.5CTPReleaseNotes-HighlightsoftheCCNet1.5CTPrelease"></a>Highlights of the CCNet 1.5 CTP release</h2>
+
+
+<h4><a name="CCNet1.5CTPReleaseNotes-Security"></a>Security</h4>
+
+<p>It is now possible to secure parts of CruiseControl.NET. Security is all based on the server-side, and is set in ccnet.config.</p>
+
+<p>Currently it is possible to lock down the following items:</p>
+<ul>
+	<li>Viewing projects</li>
+	<li>Forcing/aborting builds</li>
+	<li>Starting/stopping projects</li>
+	<li>Viewing security settings</li>
+	<li>Modifying security settings</li>
+	<li>Viewing configuration</li>
+	<li>Changing configuration</li>
+</ul>
+
+
+<h4><a name="CCNet1.5CTPReleaseNotes-Clientsidetablesforthedashboard"></a>Client-side tables for the dashboard</h4>
+
+<p>The projects list in the web dashboard is now interactive - you can now sort on any column, even multi column sorting is possible.</p>
+
+<h4><a name="CCNet1.5CTPReleaseNotes-Afewnewsourcecontrolsystems"></a>A few new source control systems</h4>
+
+<p>RoboCopy, VSTS, <a href="FTp Source control.html" title="FTp Source control">Ftp</a>, <a href="Git Source Control Block.html" title="Git Source Control Block">Git</a>and <a href="Mercurial Source Control Block.html" title="Mercurial Source Control Block">Mercurial</a>. The last 2 are DVCS, so an entire new kind of source control&#33;</p>
+
+<h4><a name="CCNet1.5CTPReleaseNotes-NewTasks%2FPublishers"></a>New Tasks/Publishers</h4>
+
+<p>A number of new tasks have been added:</p>
+<ul>
+	<li><a href="Parallel Task.html" title="Parallel Task">Parallel Task</a> and <a href="Sequential Task.html" title="Sequential Task">Sequential Task</a> &#45; allow running tasks in parallel or in sequence, or any combination of the two. While this can speed things up, be careful of using too much parallelism as each parallel task uses its own thread and there is only a limited thread pool.</li>
+	<li>NCover tasks - perform NCover analysis and reporting within CC.NET itself (no need to run it in a build script).</li>
+	<li><a href="PowerShell Task.html" title="PowerShell Task">PowerShell Task</a> &#45; run a PowerShell script.</li>
+	<li><a href="Conditional Publisher.html" title="Conditional Publisher">Conditional Publisher</a> &#45; this provides a standard way of only running publishers for certain build states.</li>
+	<li><a href="CruiseServer Control Task.html" title="CruiseServer Control Task">CruiseServer Control Task</a> &#45; send control commands to a local or remote instance of CruiseControl.NET.</li>
+	<li><a href="Ftp task - Publisher.html" title="Ftp task - Publisher">Ftp task - Publisher</a>&#45; upload / download files from a server</li>
+</ul>
+
+
+<h4><a name="CCNet1.5CTPReleaseNotes-DynamicParameters"></a>Dynamic Parameters</h4>
+
+<p>This allows to ask the user for input on forcing a build, so reducing the amount of CCNet projects.<br/>
+eg.: ask which branch to build<br/>
+See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> for details.</p>
+
+<h4><a name="CCNet1.5CTPReleaseNotes-TaskBreakdown"></a>Task Breakdown</h4>
+
+<p>There is now a task breakdown of what is happening inside a project build. This provides information down to the level of the individual task.</p>
+
+<p>The last project build is stored until the next trigger check, so this also provides a mechanism for seeing which task within a build has failed.</p>
+
+<h4><a name="CCNet1.5CTPReleaseNotes-CCTrayImprovements"></a>CCTray Improvements</h4>
+
+<p>There have been a number of improvements to CCTray including:</p>
+<ul>
+	<li>Enhanced X10</li>
+	<li>Can load/save CCTray configurations</li>
+	<li>CCTray will automatically notify the user of any added or removed projects</li>
+	<li>Download packages - this will list the packages generated by the package publisher and allow people to directly download them</li>
+</ul>
+
+
+<p>This is a list of <a href="http://jira.public.thoughtworks.org/secure/IssueNavigator.jspa?reset=true&amp;mode=hide&amp;sorter/order=DESC&amp;sorter/field=priority&amp;resolution=-1&amp;pid=10000&amp;fixfor=10372">Jira Issues resolved by this release</a> :</p>
+
+<h4><a name="CCNet1.5CTPReleaseNotes-Bug"></a>Bug</h4>
+<ul>
+	<li>CCNET\-844 - SvnSource doesn't update and write to state the LastChangeNumber.</li>
+	<li>CCNET\-852 - environment of the calling process is passed to a new process created instead of the current environment</li>
+	<li>CCNET\-865 - XmlReader exception loses all nunit logging</li>
+	<li>CCNET\-1118 - svn's tagOnSuccess behavior is broken if &lt;trunkUrl&gt; is missing</li>
+	<li>CCNET\-1220 - Configuration problem : entering empty sourcecontrol tag in ccnet.config results into crash iso reporting an error that is meaningfull</li>
+	<li>CCNET\-1266 - Grouping by date failes on Summarised Data (statistics) tab on german system</li>
+	<li>CCNET\-1325 - Build server is not sensitive to changes in svn</li>
+	<li>CCNET\-1355 - Unit test exceptions when building 1.4.2 source code on Vista x64</li>
+	<li>CCNET\-1403 - Changing X10 settings for CM11 controller causes Access to COM port was denied exception</li>
+	<li>CCNET\-1404 - Communication with some CM11 controllers times out.</li>
+	<li>CCNET\-1446 - Pages not found when project names contain spaces</li>
+	<li>CCNET\-1464 - fix designer of mainform of cctraylib</li>
+	<li>CCNET\-1469 - ExternalSourceControlHistoryParser.Parse() is not locale aware</li>
+	<li>CCNET\-1481 - Hide sensitive data / plugins / messages</li>
+	<li>CCNET\-1509 - project with a space in the name gives an error in the dashboard (ViewProjectReport)  when viewed with IIS7 (Visa)</li>
+	<li>CCNET\-1513 - Dynamic Parameters: Prompt for input not displayed</li>
+	<li>CCNET\-1521 - Propertyinjection in MergeFilesTask does not work</li>
+	<li>CCNET\-1522 - RetrieveFile.aspx throws a Socket time out exception</li>
+	<li>CCNET\-1523 - Documentation problem with Email Publisher</li>
+	<li>CCNET\-1527 - Preprocessor include file change not reloading projects</li>
+	<li>CCNET\-1530 - NDepend 2.12.1 results transformation broken</li>
+	<li>CCNET\-1532 - Configuration File will not reload after auto update with Team Foundation Server</li>
+	<li>CCNET\-1547 - Build detailed statistics shows incorrent FxCop warnings/errors count</li>
+	<li>CCNET\-1550 - package publisher failes sometimes due to a lock</li>
+	<li>CCNET\-1553 - Exceptions not serialising</li>
+	<li>CCNET\-1562 - dashboard in ccnet 1.5 does not work anymore with firefox <img class="emoticon" src="images/icons/emoticons/sad.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></li>
+	<li>CCNET\-1565 - Program files has greater security in newer versions of Windows and doesn't allow modifications</li>
+	<li>CCNET\-1566 - Gendarme Task dies because of a PathTooLongException in gendarme.exe</li>
+	<li>CCNET\-1579 - 1.5.0.4364: Unable to build email "XSL stylesheet file not found"</li>
+	<li>CCNET\-1591 - Git plugin repeats modifications in build log for each file</li>
+	<li>CCNET\-1592 - CCTray Balloon notification for broken build only shows Breakers, not which build is broken</li>
+	<li>CCNET\-1595 - Zips created by the package publisher can not be opened by Windows XP built in zip handling</li>
+	<li>CCNET\-1597 - After a fresh installation the Webdash does not work.</li>
+	<li>CCNET\-1600 - SECURITY: Logout functionality does not work.</li>
+	<li>CCNET\-1602 - SECURITY: Security blocks the Force Build Publisher</li>
+	<li>CCNET\-1621 - BUILD 1.5.0.4439: Server Error in '/ccnet' Application.</li>
+	<li>CCNET\-1623 - SECURITY  (1.5.0.4439):  Exception when trying to access project reports</li>
+	<li>CCNET\-1630 - NullReferenceException in CCValidator</li>
+	<li>CCNET\-1640 - EMAIL PUBLISHER: Attachement file remains locked after being sent.</li>
+	<li>CCNET\-1646 - Get the XmlFragmentWriter to work on Mono</li>
+	<li>CCNET\-1658 -  Email Publishing error in CCNET v 1.5.0.6067 <div class="error"><span class="error">Unknown macro: {Unable to build email message}</span> </div></li>
+	<li>CCNET\-1659 - Crash when log file is big</li>
+	<li>CCNET\-1666 - (1.5.0.6092) Dynamic Parameters/Integration Properties - CCNetBuildDate &amp; CCNetBuildTime  incorrect.</li>
+	<li>CCNET\-1669 - Publishers don't clean target directory prior to copy</li>
+	<li>CCNET\-1688 - Build failure due to loss of network connection to VSS does not clear away when network is restored</li>
+	<li>CCNET\-1706 - Bug in XslReportBuildPlugin, Parameters collection is not loaded properly</li>
+</ul>
+
+
+<h4><a name="CCNet1.5CTPReleaseNotes-Improvement"></a>Improvement</h4>
+<ul>
+	<li>CCNET\-153 - better management when publishers are executed</li>
+	<li>CCNET\-398 - Subversion should check for modifications by revision number instead of by date.</li>
+	<li>CCNET\-452 - Improve Dashboard Project Grid Sorting</li>
+	<li>CCNET\-519 - CCTray should allow definition of a default project</li>
+	<li>CCNET\-727 - MsBuildTask: Read .NET Framework path from the registry by default</li>
+	<li>CCNET\-867 - Authorised actions</li>
+	<li>CCNET\-883 - API that will allow control remote File System from Dashboard.</li>
+	<li>CCNET\-1091 - RoboCopy source control system</li>
+	<li>CCNET\-1123 - Double clicking CCTray icon should toggle status window</li>
+	<li>CCNET\-1197 - &lt;merge&gt; task should support non-XML files cleanly</li>
+	<li>CCNET\-1230 - CCNET should support source control systems that have non-numeric change "numbers"</li>
+	<li>CCNET\-1232 - provide user name if forced build started by dashboard</li>
+	<li>CCNET\-1290 - CCTray should show Category in Detail view</li>
+	<li>CCNET\-1302 - Run CruiseControl.Net tests on mono (first Windows, then Linux)</li>
+	<li>CCNET\-1378 - "Source Control" code normalization</li>
+	<li>CCNET\-1423 - groups in the email publisher must be able to be set to multiple build types, like the modifiernotificationtype</li>
+	<li>CCNET\-1426 - move configuration of the xsl files used for the email publisher in the email publisher itself</li>
+	<li>CCNET\-1445 - update tests so that non english locals do not fail some tests</li>
+	<li>CCNET\-1455 - CCValidator must also support warnings, and not only exeptions to identify problems in the config</li>
+	<li>CCNET\-1491 - Make NAnt master build script platform independent</li>
+	<li>CCNET\-1504 - Implement messaging-type communications with the server</li>
+	<li>CCNET\-1510 - foresee overloaded method for processwarning and processerror in the validator, (string, args)</li>
+	<li>CCNET\-1517 - Dynamic Parameters: Suggest renaming range parameter.</li>
+	<li>CCNET\-1518 - Dynamic Parameters: Actual use of a retrieved value seems overly complex.</li>
+	<li>CCNET\-1519 - Package publisher should allow an output location</li>
+	<li>CCNET\-1537 - weird error when the / closing tag in the build publisher</li>
+	<li>CCNET\-1540 - urls should be case insensitive</li>
+	<li>CCNET\-1544 -  Dynamic Parameters: Select Parameter when using &lt;sourceFile&gt; should update on every 'Force' build.</li>
+	<li>CCNET\-1551 - Add  a new extension to allow throttling the total number of concurrent builds on a server</li>
+	<li>CCNET\-1552 - create an  NCover task</li>
+	<li>CCNET\-1567 - Replace custom commadline arguments parsing code with Mono's Options.cs</li>
+	<li>CCNET\-1569 - add support for 3 light X10 systems.</li>
+	<li>CCNET\-1570 - speech enhancements cctray</li>
+	<li>CCNET\-1571 - refactor tasks to a common task base</li>
+	<li>CCNET\-1572 - null task should have a parameter for letting the build fail if desired</li>
+	<li>CCNET\-1573 - null source control should have settings for simulating failures in the different stages</li>
+	<li>CCNET\-1575 - add a  LOT more debug logging :</li>
+	<li>CCNET\-1576 - add FTP publisher / task / source control</li>
+	<li>CCNET\-1608 - Implement support for getting process output line by line with an event from ProcessExecutor</li>
+	<li>CCNET\-1610 - Implement BuildProgressInformation support to Subversion Source Control Block</li>
+	<li>CCNET\-1612 - Implement BuildProgressInformation support to the Gendarme Task</li>
+	<li>CCNET\-1613 - Implement BuildProgressInformation support to the NAnt Task</li>
+	<li>CCNET\-1614 - Implement BuildProgressInformation support to the MSBuild Task</li>
+	<li>CCNET\-1615 - Implement BuildProgressInformation support to the BaseExecutableTask</li>
+	<li>CCNET\-1617 - Add support for "-listener" switch in NAnt task</li>
+	<li>CCNET\-1618 - Allow Dynamic Properties to be applied to Source Control Blocks</li>
+	<li>CCNET\-1650 - failed integration and exception during integration must be split in the email publisher</li>
+	<li>CCNET\-1651 - Implement BuildProgressInformation support to CVS Source Control Block</li>
+	<li>CCNET\-1652 - Implement BuildProgressInformation support to Mercurial Source Control Block</li>
+	<li>CCNET\-1654 - Exception thrown due to bad configuration is not indicative of such</li>
+	<li>CCNET\-1686 - Allow validation on triggers</li>
+</ul>
+
+
+<h4><a name="CCNet1.5CTPReleaseNotes-NewFeature"></a>New Feature</h4>
+<ul>
+	<li>CCNET\-200 - Forced  builds - adding comment to build results</li>
+	<li>CCNET\-263 - Subversion should use LastChangeNumber of previous build when checking for modifications</li>
+	<li>CCNET\-339 - CCNET Security</li>
+	<li>CCNET\-403 - Add user input to dashboard</li>
+	<li>CCNET\-513 - CCTray should automatically recognise and add new projects on a connected server</li>
+	<li>CCNET\-514 - Report which task failed through CCTray</li>
+	<li>CCNET\-612 - Default Labeller should allow an initial build number, so you don't have to start at 1</li>
+	<li>CCNET\-752 - It would be nice to be able to have a drive letter mapped in Service environment</li>
+	<li>CCNET\-964 - Parallel Execution of Tasks</li>
+	<li>CCNET\-1014 - Add User Rights Management To CCTray</li>
+	<li>CCNET\-1188 - Mercurial support</li>
+	<li>CCNET\-1254 - Command line interface to CruiseControl.Net server</li>
+	<li>CCNET\-1316 - PowerShell Task</li>
+	<li>CCNET\-1411 - Build Status Breakdown</li>
+	<li>CCNET\-1484 - Implement a File Merge Task for binary files like images</li>
+	<li>CCNET\-1514 - Dynamic Parameters: Range Parameter to allow initialisation from a file.</li>
+	<li>CCNET\-1515 - Dynamic Parameters: addition of Boolean parameter (Check Box)</li>
+	<li>CCNET\-1516 - Dynamic Parameter: Range parameter should allow for return values that are not equal to the display name.</li>
+	<li>CCNET\-1554 - Implement support for Git source control system</li>
+	<li>CCNET\-1636 - Added Growl Notifications to CCTray</li>
+	<li>CCNET\-1660 - Updating from more than one source</li>
+</ul>
+
+
+<h4><a name="CCNet1.5CTPReleaseNotes-Task"></a>Task</h4>
+<ul>
+	<li>CCNET\-1385 - Inline uses of "StringUtil.IsBlank"</li>
+	<li>CCNET\-1459 - update docs on email publisher concerning groups element after 1.4.4 release</li>
+	<li>CCNET\-1463 - update docs on email publisher concerning xslfiles element after 1.4.4 release</li>
+</ul>
+
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>
