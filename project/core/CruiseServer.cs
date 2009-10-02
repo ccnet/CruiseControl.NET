@@ -15,6 +15,8 @@ using ThoughtWorks.CruiseControl.Remote.Events;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Security;
+using System.Web;
+using System.Web.Caching;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -43,6 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core
         // TODO: Replace this with a proper IoC container
         private Dictionary<Type, object> services = new Dictionary<Type,object>();
     	private readonly string programmDataFolder;
+        private object logCacheLock = new object();
         #endregion
 
         #region Constructors
@@ -509,9 +512,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 null,
                 delegate(ProjectRequest arg)
                 {
-                    data = GetIntegrator(request.ProjectName)
-                        .IntegrationRepository
-                        .GetBuildLog(request.BuildName);
+                    data = this.RetrieveLogData(request.ProjectName, request.BuildName);
                 }));
             response.Data = data;
             return response;
@@ -1718,6 +1719,72 @@ namespace ThoughtWorks.CruiseControl.Core
                 }));
             response.Data = data;
             return response;
+        }
+        #endregion
+
+        #region RetrieveLogData()
+        /// <summary>
+        /// Retrieves the log data.
+        /// </summary>
+        /// <param name="projectName">The name of the project.</param>
+        /// <param name="buildName">The name of the build.</param>
+        /// <returns>The data for the log.</returns>
+        /// <exception cref="ApplicationException">Thrown if the data for the log could not be retrieved.</exception>
+        private string RetrieveLogData(string projectName, string buildName)
+        {
+            var cache = HttpRuntime.Cache;
+
+            // Generate the log and report keys
+            var logKey = projectName +
+                buildName;
+
+            // Check if the log has already been cached
+            var loadData = false;
+            SynchronisedData logData;
+            lock (logCacheLock)
+            {
+                logData = cache[logKey] as SynchronisedData;
+                if (logData == null)
+                {
+                    // Add the new log data and load it
+                    logData = new SynchronisedData();
+                    cache.Add(
+                        logKey,
+                        logData,
+                        null,
+                        Cache.NoAbsoluteExpiration,
+                        new TimeSpan(1, 0, 0),
+                        CacheItemPriority.AboveNormal,
+                        null);
+                    loadData = true;
+                }
+            }
+
+            // Load the data if required
+            if (loadData)
+            {
+                logData.LoadData(() =>
+                {
+                    var buildLog = this.GetIntegrator(projectName)
+                        .IntegrationRepository
+                        .GetBuildLog(buildName);
+                    return buildLog;
+                });
+            }
+            else
+            {
+                // Wait for the data to load
+                logData.WaitForLoad(10000);
+            }
+
+            // Raise an error if there is no log data
+            if (logData.Data == null)
+            {
+                cache.Remove(logKey);
+                throw new ApplicationException("Unable to retrieve log data");
+            }
+
+            return logData.Data as string;
         }
         #endregion
         #endregion
