@@ -967,6 +967,7 @@
     <Compile Include="util\StringUtil.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="util\SynchronisedData.cs" />
     <Compile Include="util\SystemIoFileSystem.cs">
       <SubType>Code</SubType>
     </Compile>
