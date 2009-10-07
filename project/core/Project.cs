@@ -64,6 +64,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private ProjectStatusSnapshot currentProjectStatus;
         private Dictionary<ITask, ItemStatus> currentProjectItems = new Dictionary<ITask, ItemStatus>();
         private Dictionary<SourceControlOperation, ItemStatus> sourceControlOperations = new Dictionary<SourceControlOperation, ItemStatus>();
+        private TaskContext context;
 
         [ReflectorProperty("prebuild", Required = false)]
         public ITask[] PrebuildTasks = new ITask[0];
@@ -1136,5 +1137,29 @@ namespace ThoughtWorks.CruiseControl.Core
             }
             return parameterList;
         }
+
+        #region Start()
+        /// <summary>
+        /// Starts this instance.
+        /// </summary>
+        /// <param name="result">The result.</param>
+        public void Start(IIntegrationResult result)
+        {
+            var ioSystem = new SystemIoFileSystem();
+            var folder = Path.Combine(this.ArtifactDirectory, result.Label);
+            ioSystem.EnsureFolderExists(Path.Combine(folder, "temp"));
+            this.context = new TaskContext(ioSystem, folder);
+        }
+        #endregion
+
+        #region Finish()
+        /// <summary>
+        /// Finishes this instance.
+        /// </summary>
+        public void Finish()
+        {
+            this.context.Finialise();
+        }
+        #endregion
     }
 }

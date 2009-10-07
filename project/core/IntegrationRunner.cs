@@ -135,6 +135,7 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             result.MarkEndTime();
             PostBuild(result);
+            target.Finish();
             Log.Info(string.Format("Integration complete: {0} - {1}", result.Status, result.EndTime));
         }
 
@@ -159,6 +160,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
         private void Build(IIntegrationResult result)
         {
+            target.Start(result);
             target.Activity = ProjectActivity.Building;
             target.Prebuild(result);
             if (!result.Failed)
@@ -167,7 +169,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 target.RecordSourceControlOperation(SourceControlOperation.GetSource, ItemBuildStatus.Running);
                 try
                 {
-                target.SourceControl.GetSource(result);
+                    target.SourceControl.GetSource(result);
                     success=true;
                 }
                 finally

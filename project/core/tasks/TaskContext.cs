@@ -172,7 +172,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             // Generate the new folder for the child artifacts
             var childFolder = Path.Combine(this.ArtifactFolder, childId.ToString());
-            this.fileSystem.EnsureFolderExists(childFolder);
+            this.fileSystem.EnsureFolderExists(Path.Combine(childFolder, "temp"));
 
             // Start the new context
             var child = new TaskContext(this.fileSystem, childFolder, this, childId);
@@ -252,6 +252,34 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     document.Flush();
                     document.Close();
                 }
+            }
+        }
+        #endregion
+
+        #region RunTask()
+        /// <summary>
+        /// Runs a task in a child context.
+        /// </summary>
+        /// <param name="task">The task to run.</param>
+        /// <param name="result">The result to use.</param>
+        public void RunTask(TaskBase task, IIntegrationResult result)
+        {
+            if (task == null)
+            {
+                throw new ArgumentNullException("task", "task is null.");
+            }
+
+            // Start a new child context and associate it with the task
+            var child = this.StartChildContext();
+            try
+            {
+                task.AssociateContext(this);
+                task.Run(result);
+            }
+            finally
+            {
+                // Clean up
+                this.MergeChildContext(child);
             }
         }
         #endregion

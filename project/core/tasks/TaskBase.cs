@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
-
-namespace ThoughtWorks.CruiseControl.Core.Tasks
+﻿namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Xml;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.Remote.Parameters;
+
     /// <summary>
     /// An abstract base class to add parameters to a task
     /// </summary>
@@ -58,6 +58,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         {
             get { return currentStatus; }
         }
+        #endregion
+
+        #region Context
+        /// <summary>
+        /// Gets the context for the task..
+        /// </summary>
+        /// <value>The context.</value>
+        public TaskContext Context { get; private set; }
         #endregion
         #endregion
 
@@ -202,6 +210,22 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 TimeOfEstimatedCompletion = null,
                 TimeStarted = null
             };
+        }
+        #endregion
+
+        #region AssociateContext()
+        /// <summary>
+        /// Associates the context for the task.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        public void AssociateContext(TaskContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context", "context is null.");
+            }
+
+            this.Context = context;
         }
         #endregion
         #endregion

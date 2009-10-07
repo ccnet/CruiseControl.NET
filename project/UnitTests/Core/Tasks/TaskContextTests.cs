@@ -13,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
     using ThoughtWorks.CruiseControl.Core.Tasks;
     using ThoughtWorks.CruiseControl.Core.Util;
     using Constraints = Rhino.Mocks.Constraints;
+    using ThoughtWorks.CruiseControl.Core;
 
     /// <summary>
     /// Unit tests for <see cref="TaskContext"/>.
@@ -313,6 +314,44 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             }
 
             Assert.AreEqual(expectedIndex, xmlIndex);
+        }
+        #endregion
+
+        #region RunTask() tests
+        /// <summary>
+        /// RunTask() should validate that the task is not null.
+        /// </summary>
+        [Test]
+        public void RunTaskValidatesTheTask()
+        {
+            var basePath = Path.GetTempPath();
+            var ioSystem = this.mocks.StrictMock<IFileSystem>();
+            var context = new TaskContext(ioSystem, basePath);
+            var error = Assert.Throws<ArgumentNullException>(() =>
+            {
+                context.RunTask(null, null);
+            });
+            Assert.AreEqual("task", error.ParamName);
+        }
+
+        /// <summary>
+        /// RunTask() should associate a context and run the task.
+        /// </summary>
+        [Test]
+        public void RunTaskRunsTheTask()
+        {
+            var basePath = Path.GetTempPath();
+            var ioSystem = this.mocks.StrictMock<IFileSystem>();
+            var context = new TaskContext(ioSystem, basePath);
+            var task = mocks.StrictMock<TaskBase>();
+            var result = mocks.StrictMock<IIntegrationResult>();
+
+            Expect.Call(() => ioSystem.EnsureFolderExists(null)).IgnoreArguments();
+            Expect.Call(() => task.Run(result));
+
+            mocks.ReplayAll();
+            context.RunTask(task, result);
+            mocks.VerifyAll();
         }
         #endregion
         #endregion
