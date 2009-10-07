@@ -62,5 +62,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="fileName"></param>
         /// <returns></returns>
         Stream OpenInputStream(string fileName);
+
+        /// <summary>
+        /// Moves the file.
+        /// </summary>
+        /// <param name="oldFilePath">The old file path.</param>
+        /// <param name="newFilePath">The new file path.</param>
+        void MoveFile(string oldFilePath, string newFilePath);
     }
 }

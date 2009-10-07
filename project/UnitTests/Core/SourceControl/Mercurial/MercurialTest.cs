@@ -43,6 +43,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
             public Stream OpenOutputStream(string fileName) { return null;}
 
             public Stream OpenInputStream(string fileName) { return null; }
+
+            public void MoveFile(string oldFile, string newFile) { }
         }
 
         [Test]

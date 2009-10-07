@@ -838,6 +838,8 @@
     <Compile Include="tasks\SequentialTask.cs" />
     <Compile Include="tasks\TaskBase.cs" />
     <Compile Include="tasks\TaskContainerBase.cs" />
+    <Compile Include="tasks\TaskContext.cs" />
+    <Compile Include="tasks\TaskResultDetails.cs" />
     <Compile Include="Triggers\FilterTrigger.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -263,5 +263,17 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return stream;
         }
         #endregion
+
+        #region MoveFile()
+        /// <summary>
+        /// Moves the file.
+        /// </summary>
+        /// <param name="oldFilePath">The old file path.</param>
+        /// <param name="newFilePath">The new file path.</param>
+        public void MoveFile(string oldFilePath, string newFilePath)
+        {
+            File.Move(oldFilePath, newFilePath);
+        }
+        #endregion
     }
 }
