@@ -49,6 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                     process.StartInfo.Arguments = "-s";
                     process.StartInfo.CreateNoWindow = true;
                     process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.UseShellExecute = false;
 
                     process.Start();
                     process.WaitForExit();
