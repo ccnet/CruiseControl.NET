@@ -903,6 +903,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="util\IFtpLib.cs" />
+    <Compile Include="util\ILdapService.cs" />
     <Compile Include="util\ILogger.cs" />
     <Compile Include="util\Impersonation.cs" />
     <Compile Include="util\IMultiTransformer.cs">
@@ -922,6 +923,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="util\KillUtil.cs" />
+    <Compile Include="util\LdapHelper.cs" />
+    <Compile Include="util\LdapUserInfo.cs" />
     <Compile Include="util\Log4NetTrace\ITraceLog.cs">
       <SubType>Code</SubType>
     </Compile>
