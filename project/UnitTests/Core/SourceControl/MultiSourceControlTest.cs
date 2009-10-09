@@ -165,7 +165,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			//// EXECUTE
 			ArrayList returnedMods = new ArrayList(multiSourceControl.GetModifications(from, to));
-			Assert.AreEqual(2, returnedMods.Count);
+			Assert.AreEqual(1, returnedMods.Count);
 
 			//// VERIFY
 			foreach (DynamicMock mock in mocks)
