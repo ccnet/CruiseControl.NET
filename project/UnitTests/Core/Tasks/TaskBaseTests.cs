@@ -1,17 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Tasks;
-using ThoughtWorks.CruiseControl.Core;
-//using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
-using Rhino.Mocks;
-using ThoughtWorks.CruiseControl.Remote;
-using System.Xml;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
+﻿//-----------------------------------------------------------------------
+// <copyright file="TaskBaseTests.cs" company="Craig Sutherland">
+//     Copyright (c) 2009 CruiseControl.NET. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Xml;
+    using NUnit.Framework;
+    using Rhino.Mocks;
+    using ThoughtWorks.CruiseControl.Core;
+    using ThoughtWorks.CruiseControl.Core.Tasks;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.Remote.Parameters;
+
     [TestFixture]
     public class TaskBaseTests
     {
@@ -532,6 +538,33 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             mocks.ReplayAll();
             task.ApplyParameters(parameters, definitions);
             mocks.VerifyAll();
+        }
+        #endregion
+
+        #region AssociateContext()
+        /// <summary>
+        /// AssociateContext() should validate its arguments.
+        /// </summary>
+        [Test]
+        public void AssociateContextValidatesArguments()
+        {
+            var task = new TestTask();
+            var error = Assert.Throws<ArgumentNullException>(() => task.AssociateContext(null));
+            Assert.AreEqual("context", error.ParamName);
+        }
+
+        /// <summary>
+        /// AssociateContext() sets the context.
+        /// </summary>
+        [Test]
+        public void AssociateContextStoresContext()
+        {
+            var basePath = Path.GetTempPath();
+            var ioSystem = this.mocks.StrictMock<IFileSystem>();
+            var context = new TaskContext(ioSystem, basePath);
+            var task = new TestTask();
+            task.AssociateContext(context);
+            Assert.AreSame(context, task.Context);
         }
         #endregion
         #endregion

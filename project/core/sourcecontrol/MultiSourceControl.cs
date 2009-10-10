@@ -31,22 +31,27 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-            var modifications = new List<Modification>();
-			foreach (ISourceControl sourceControl in SourceControls)
-			{
-				Modification[] mods = sourceControl.GetModifications(from, to);
-				if (mods != null && mods.Length > 0)
-				{
-					modifications.AddRange(mods);
-				}
-				else if (RequireChangesFromAll)
-				{
-					modifications.Clear();
-					break;
-				}
-			}
-
-			return modifications.ToArray();
+            var modificationSet = new Dictionary<Modification, bool>();
+            foreach (ISourceControl sourceControl in SourceControls)
+            {
+                Modification[] mods = sourceControl.GetModifications(from, to);
+                if (mods != null && mods.Length > 0)
+                {
+                    foreach (var mod in mods)
+                    {
+                        modificationSet[mod] = true;
+                    }
+                }
+                else if (RequireChangesFromAll)
+                {
+                    modificationSet.Clear();
+                    break;
+                }
+            }
+ 
+            var modArray = new Modification[modificationSet.Count];
+            modificationSet.Keys.CopyTo(modArray, 0);
+            return modArray; 
 		}
 
         public override void LabelSourceControl(IIntegrationResult result)

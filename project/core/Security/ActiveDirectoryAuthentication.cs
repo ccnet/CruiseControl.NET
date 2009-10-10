@@ -18,19 +18,25 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         private string userName;
         private string domainName;
         private ISecurityManager manager;
+        private Util.ILdapService ldapService;
+
 
         /// <summary>
         /// Start a new blank authentication.
         /// </summary>
-        public ActiveDirectoryAuthentication() { }
+        public ActiveDirectoryAuthentication() 
+        {
+            ldapService = new Util.LdapHelper();
+        }
 
         /// <summary>
         /// Start a new authentication with a user name.
         /// </summary>
         /// <param name="userName"></param>
-        public ActiveDirectoryAuthentication(string userName)
+        public ActiveDirectoryAuthentication(string userName, Util.ILdapService ldap)
         {
-            this.userName = userName;
+            this.UserName = userName;
+            ldapService = ldap;
         }
 
         /// <summary>
@@ -95,15 +101,15 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <returns>True if the credentials are valid, false otherwise.</returns>
         public bool Authenticate(LoginRequest credentials)
         {
-            // Check that the user name matches
-            string userName = GetUserName(credentials);
-            bool isValid = !string.IsNullOrEmpty(userName);
-            if (isValid)
-            {
-                string displayName = FindUser(userName);
-                isValid = (displayName != null);
-            }
-            return isValid;
+            string retrievedUserName = GetUserName(credentials);
+            string retrievedPassword = GetPassword(credentials);
+
+            // We can't authenticate a user that does not exist.
+            if (string.IsNullOrEmpty(retrievedUserName))
+                return false;
+
+            return ldapService.Authenticate(retrievedUserName, retrievedPassword, DomainName);
+
         }
 
         /// <summary>
@@ -114,9 +120,23 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// then null will be returned.</returns>
         public string GetUserName(LoginRequest credentials)
         {
-            string userName = NameValuePair.FindNamedValue(credentials.Credentials,
-                LoginRequest.UserNameCredential);
-            return userName;
+            Util.Log.Trace("Getting username from credentials"); 
+            string dummy = NameValuePair.FindNamedValue(credentials.Credentials, LoginRequest.UserNameCredential);
+            
+            Util.Log.Trace("found username {0}", dummy);             
+            return dummy;
+        }
+
+
+        /// <summary>                                                                                          
+        /// Retrieves the password from the credentials.                                                       
+        /// </summary>                                                                                         
+        /// <param name="credentials">The credentials.</param>                                                 
+        /// <returns>The users password from the credentials. If the credentials do not exist in the system    
+        /// then null will be returned.</returns>                                                              
+        public string GetPassword(LoginRequest credentials)
+        {
+            return NameValuePair.FindNamedValue(credentials.Credentials, LoginRequest.PasswordCredential);
         }
 
         /// <summary>
@@ -127,9 +147,19 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// then null will be returned.</returns>
         public string GetDisplayName(LoginRequest credentials)
         {
+            
             string userName = GetUserName(credentials);
-            string nameToReturn = FindUser(userName);
-            if (string.IsNullOrEmpty(nameToReturn)) nameToReturn = userName;
+            string nameToReturn = userName;
+
+            ldapService.DomainName = DomainName;
+            Util.LdapUserInfo lu = ldapService.RetrieveUserInformation(userName);
+
+
+            if (!string.IsNullOrEmpty(lu.DisplayName))
+            {
+                nameToReturn = lu.DisplayName;
+            }
+
             return nameToReturn;
         }
 
@@ -139,44 +169,9 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <param name="newPassword"></param>
         public void ChangePassword(string newPassword)
         {
-            // Do nothing since this authentication does not have a password
+            // We do not allow the user to change LDAP passwords.
         }
 
-        /// <summary>
-        /// Attempts to find a user.
-        /// </summary>
-        /// <param name="userName"></param>
-        /// <returns></returns>
-        private string FindUser(string userName)
-        {
-            if (string.IsNullOrEmpty(userName)) return null;
 
-            // Setup the domain connection
-            DirectoryEntry domain = new DirectoryEntry("LDAP://OU=Domain,DC=" + domainName);
-            domain.AuthenticationType = AuthenticationTypes.Secure;
-
-            // Attempt to find the user
-            DirectorySearcher searcher = new DirectorySearcher(domain);
-            searcher.Filter = "(SAMAccountName=" + userName + ")";
-            searcher.PropertiesToLoad.Add("displayName");
-            try
-            {
-                SearchResult result = searcher.FindOne();
-
-                // Check the result
-                if (result != null)
-                {
-                    return result.Properties["displayname"][0].ToString();
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (COMException)
-            {
-                return null;
-            }
-        }
     }
 }

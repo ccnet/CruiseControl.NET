@@ -10,10 +10,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
     using System.IO;
     using NUnit.Framework;
     using Rhino.Mocks;
+    using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.Core.Tasks;
     using ThoughtWorks.CruiseControl.Core.Util;
     using Constraints = Rhino.Mocks.Constraints;
-    using ThoughtWorks.CruiseControl.Core;
 
     /// <summary>
     /// Unit tests for <see cref="TaskContext"/>.
@@ -54,8 +54,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             var context = new TaskContext(ioSystem, basePath);
 
             this.mocks.ReplayAll();
-            var error1 = Assert.Throws<ArgumentException>(() => context.CreateResultStream(null, "type")) as ArgumentException;
-            var error2 = Assert.Throws<ArgumentException>(() => context.CreateResultStream(string.Empty, "type")) as ArgumentException;
+            var error1 = Assert.Throws<ArgumentException>(() => context.CreateResultStream(null, "type"));
+            var error2 = Assert.Throws<ArgumentException>(() => context.CreateResultStream(string.Empty, "type"));
             this.mocks.VerifyAll();
 
             Assert.AreEqual("taskName", error1.ParamName);
@@ -289,6 +289,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                     this.mocks.ReplayAll();
                     var stream = context.CreateResultStream("Test", "Type");
                     context.Finialise();
+
+                    var error = Assert.Throws<ApplicationException>(() => context.CreateResultStream(null, null));
+                    Assert.AreEqual("Context has been finialised - no further actions can be performed using it", error.Message);
 
                     this.mocks.VerifyAll();
                     Assert.IsTrue(context.IsFinialised);

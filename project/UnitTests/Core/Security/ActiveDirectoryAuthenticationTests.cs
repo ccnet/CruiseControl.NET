@@ -25,7 +25,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Ignore("This requires a valid DomainName - which cannot be set in a generic way.")]
         public void TestValidUserName()
         {
-            ActiveDirectoryAuthentication authentication = new ActiveDirectoryAuthentication(userName);
+            //todo pass in a stub/mock ldap service so we can test
+            ActiveDirectoryAuthentication authentication = new ActiveDirectoryAuthentication(userName, null);
             authentication.DomainName = domainName;
             LoginRequest credentials = new LoginRequest(userName);
             bool isValid = authentication.Authenticate(credentials);
@@ -36,7 +37,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Ignore("This requires a valid DomainName - which cannot be set in a generic way.")]
         public void TestInvalidUserName()
         {
-            ActiveDirectoryAuthentication authentication = new ActiveDirectoryAuthentication("janedoe");
+            //todo pass in a stub/mock ldap service so we can test
+            ActiveDirectoryAuthentication authentication = new ActiveDirectoryAuthentication("janedoe",null);
             authentication.DomainName = domainName;
             LoginRequest credentials = new LoginRequest(userName);
             bool isValid = authentication.Authenticate(credentials);
@@ -46,7 +48,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void TestMissingUserName()
         {
-            ActiveDirectoryAuthentication authentication = new ActiveDirectoryAuthentication("janedoe");
+            //todo pass in a stub/mock ldap service so we can test
+            ActiveDirectoryAuthentication authentication = new ActiveDirectoryAuthentication("janedoe",null);
             LoginRequest credentials = new LoginRequest();
             bool isValid = authentication.Authenticate(credentials);
             Assert.IsFalse(isValid);
