@@ -26,7 +26,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 			if (this.CheckIfSuccess())
 			{
-				Log.Info("Task execution failed");
 				Log.Info("Task output: " + result.StandardOutput);
 				string input = result.StandardError;
 				if (!string.IsNullOrEmpty(input)) 
