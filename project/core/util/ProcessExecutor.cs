@@ -1,16 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Threading;
-using System.Text.RegularExpressions;
-
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
-	/// <summary>
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Runtime.CompilerServices;
+    using System.Text;
+    using System.Threading;
+
+    /// <summary>
 	/// The ProcessExecutor serves as a simple, injectable facade for executing external processes.  The ProcessExecutor
 	/// spawns a new <see cref="RunnableProcess" /> using the properties specified in the input <see cref="ProcessInfo" />.
 	/// All output from the executed process is contained within the returned <see cref="ProcessResult" />.
@@ -19,18 +18,71 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	{
 		public event EventHandler<ProcessOutputEventArgs> ProcessOutput;
 
-		public virtual ProcessResult Execute(ProcessInfo processInfo)
+        /// <summary>
+        /// Runs the executable and saves the standard output and error to streams.
+        /// </summary>
+        /// <param name="processInfo">The information about the process to execute.</param>
+        /// <returns>The result of the execution.</returns>
+        [Obsolete("Use the stream override instead")]
+        public virtual ProcessResult Execute(ProcessInfo processInfo)
+        {
+            string projectName = Thread.CurrentThread.Name;
+            using (var outputWriter = new StringWriter())
+            {
+                using (var errorWriter = new StringWriter())
+                {
+                    using (RunnableProcess p = new RunnableProcess(processInfo, projectName, outputWriter, errorWriter))
+                    {
+                        p.ProcessOutput += ((sender, e) => OnProcessOutput(e));
+
+                        ProcessMonitor.MonitorProcessForProject(p.Process, projectName);
+                        ProcessResult run = p.Run();
+                        ProcessMonitor.RemoveMonitorForProject(projectName);
+
+                        run = new ProcessResult(
+                            outputWriter.GetStringBuilder().ToString(),
+                            errorWriter.GetStringBuilder().ToString(),
+                            run.ExitCode,
+                            run.TimedOut,
+                            run.Failed);
+
+                        outputWriter.Flush();
+                        errorWriter.Flush();
+                        return run;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Runs the executable and saves the standard output and error to streams.
+        /// </summary>
+        /// <param name="processInfo">The information about the process to execute.</param>
+        /// <param name="outputStream">The stream to receive standard output.</param>
+        /// <param name="errorStream">The stream to receive standard error.</param>
+        /// <returns>The result of the execution.</returns>
+		public virtual ProcessResult Execute(ProcessInfo processInfo, Stream outputStream, Stream errorStream)
 		{
 			string projectName = Thread.CurrentThread.Name;
-			using (RunnableProcess p = new RunnableProcess(processInfo, projectName))
-			{
-				p.ProcessOutput += ((sender, e) => OnProcessOutput(e));
+            using (var outputWriter = new StreamWriter(outputStream, UTF8Encoding.UTF8))
+            {
+                using (var errorWriter = new StreamWriter(errorStream, UTF8Encoding.UTF8))
+                {
+                    using (RunnableProcess p = new RunnableProcess(processInfo, projectName, outputWriter, errorWriter))
+                    {
+                        p.ProcessOutput += ((sender, e) => OnProcessOutput(e));
 
-				ProcessMonitor.MonitorProcessForProject(p.Process, projectName);
-				ProcessResult run = p.Run();
-				ProcessMonitor.RemoveMonitorForProject(projectName);
-				return run;
-			}
+                        ProcessMonitor.MonitorProcessForProject(p.Process, projectName);
+                        ProcessResult run = p.Run();
+                        ProcessMonitor.RemoveMonitorForProject(projectName);
+
+                        outputWriter.Flush();
+                        errorWriter.Flush();
+
+                        return run;
+                    }
+                }
+            }
 		}
 
 		public static void KillProcessCurrentlyRunningForProject(string name)
@@ -63,19 +115,21 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			private readonly ProcessInfo processInfo;
 			private readonly Process process;
 			// TODO: Move towards injecting WaitHandles.
-			private readonly StringBuilder stdOutput = new StringBuilder();
+			private readonly TextWriter stdOutput;
 			private readonly EventWaitHandle outputStreamClosed = new ManualResetEvent(false);
-			private readonly StringBuilder stdError = new StringBuilder();
+            private readonly TextWriter stdError;
 			private readonly EventWaitHandle errorStreamClosed = new ManualResetEvent(false);
 			private readonly EventWaitHandle processExited = new ManualResetEvent(false);
 			private Thread supervisingThread;
 
 
-			public RunnableProcess(ProcessInfo processInfo, string projectName)
+			public RunnableProcess(ProcessInfo processInfo, string projectName, TextWriter outputWriter, TextWriter errorWriter)
 			{
 				this.projectName = projectName;
 				this.processInfo = processInfo;
 				process = processInfo.CreateProcess();
+                this.stdOutput = outputWriter;
+                this.stdError = errorWriter;
 			}
 
 			public ProcessResult Run()
@@ -126,7 +180,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				int exitcode = process.ExitCode;
 				bool failed = !processInfo.ProcessSuccessful(exitcode);
 
-				return new ProcessResult(stdOutput.ToString(), stdError.ToString(), exitcode, hasTimedOut, failed);
+                return new ProcessResult(string.Empty, string.Empty, exitcode, hasTimedOut, failed);
 			}
 
 			private void StartProcess()
@@ -241,7 +295,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				}
 			}
 
-			private void CollectOutput(string output, StringBuilder collector, EventWaitHandle streamReadComplete)
+			private void CollectOutput(string output, TextWriter collector, EventWaitHandle streamReadComplete)
 			{
 				if (output == null)
 				{
@@ -250,7 +304,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					return;
 				}
 
-				collector.AppendLine(output);
+				collector.WriteLine(output);
 				Log.Debug(string.Format("[{0} {1}] {2}", projectName, processInfo.FileName, output));
 			}
 

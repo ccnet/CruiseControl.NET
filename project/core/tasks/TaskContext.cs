@@ -95,7 +95,125 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
         #endregion
 
+        #region Public delegates
+        #region MergeHandler()
+        /// <summary>
+        /// A handler for merging streams.
+        /// </summary>
+        public delegate void MergeHandler(Stream outputStream, Stream[] inputStreams);
+        #endregion
+        #endregion
+
         #region Public methods
+        #region MergeResultStreams()
+        /// <summary>
+        /// Merges multiple result streams.
+        /// </summary>
+        /// <param name="taskName">Name of the task.</param>
+        /// <param name="taskType">Type of the task.</param>
+        /// <param name="streamsToMerge">The streams to merge.</param>
+        public void MergeResultStreams(string taskName, string taskType, params Stream[] streamsToMerge)
+        {
+            this.MergeResultStreams(taskName, taskType, null, streamsToMerge);
+        }
+
+        /// <summary>
+        /// Merges multiple result streams.
+        /// </summary>
+        /// <param name="taskName">Name of the task.</param>
+        /// <param name="taskType">Type of the task.</param>
+        /// <param name="mergeHandler">The merge handler to use. If null, a plain binary merge will be used.</param>
+        /// <param name="streamsToMerge">The streams to merge.</param>
+        public void MergeResultStreams(string taskName, string taskType, MergeHandler mergeHandler, params Stream[] streamsToMerge)
+        {
+            // Make sure this context has not been finialised
+            if (this.IsFinialised)
+            {
+                throw new ApplicationException("Context has been finialised - no further actions can be performed using it");
+            }
+
+            // Validate the task name
+            if (String.IsNullOrEmpty(taskName))
+            {
+                throw new ArgumentException("taskName is null or empty.", "taskName");
+            }
+
+            // Validate the task type
+            if (String.IsNullOrEmpty(taskType))
+            {
+                throw new ArgumentException("taskType is null or empty.", "taskType");
+            }
+
+            // Validate the streams to merge
+            if (streamsToMerge.Length == 0)
+            {
+                throw new ArgumentException("There must be at least one stream to merge");
+            }
+
+            // Make sure there is a merge handler
+            var actualHandler = mergeHandler ?? new MergeHandler((output, input) =>
+            {
+                var blockSize = 32768;
+                var dataBlock = new byte[blockSize];
+                int len;
+                foreach (var stream in input)
+                {
+                    while ((len = stream.Read(dataBlock, 0, blockSize)) > 0)
+                    {
+                        output.Write(dataBlock, 0, len);
+                    }
+                }
+            });
+
+            // Reopen the streams so they can be merged
+            var inputStreams = new List<Stream>();
+            try
+            {
+                // This only works if the user has not opened a result stream externally - need to
+                // figure out some way of checking this
+                foreach (FileStream streamToMerge in streamsToMerge)
+                {
+                    inputStreams.Add(this.fileSystem.OpenInputStream(streamToMerge.Name));
+                }
+
+                // Generate the output stream
+                using (var outputStream = this.CreateResultStream(taskName, taskType))
+                {
+                    actualHandler(outputStream, inputStreams.ToArray());
+                }
+            }
+            finally
+            {
+                // Clean up
+                foreach (var inputStream in inputStreams)
+                {
+                    inputStream.Dispose();
+                }
+            }
+
+            // Finally remove the references to the old results
+            foreach (FileStream streamToMerge in streamsToMerge)
+            {
+                // Search from the end - this is based on the assumption that we will be
+                // merging recent results
+                int position = -1;
+                for (var loop = this.resultDetails.Count - 1; loop >= 0; loop--)
+                {
+                    if (this.resultDetails[loop].FileName == streamToMerge.Name)
+                    {
+                        position = loop;
+                        break;
+                    }
+                }
+
+                if (position >= 0)
+                {
+                    this.resultDetails.RemoveAt(position);
+                }
+            }
+        }
+        #endregion
+
         #region CreateResultStream()
         /// <summary>
         /// Opens a new result stream for a task.

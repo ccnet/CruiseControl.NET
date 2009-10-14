@@ -1,13 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-using System.Diagnostics;
+//-----------------------------------------------------------------------
+// <copyright file="SynchronisationTask.cs" company="CruiseControl.NET">
+//     Copyright (c) 2009 CruiseControl.NET. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
-	/// <summary>
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
+    /// <summary>
 	/// This is a builder that can run any command line process. We capture standard out and standard error
 	/// and include them in the Integration Result. We use the process exit code to set whether the build has failed.
 	/// TODO: Passing through build label

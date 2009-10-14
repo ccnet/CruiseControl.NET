@@ -532,9 +532,9 @@ namespace ThoughtWorks.CruiseControl.Core
             if (currentProjectItems.ContainsKey(task)) status = currentProjectItems[task];
 
             // If there is a status, update it
+            var baseTask = task as TaskBase;
             if (status != null)
             {
-                var baseTask = task as TaskBase;
                 if (baseTask != null)
                 {
                     status.TimeOfEstimatedCompletion = baseTask.CalculateEstimatedTime();
@@ -551,6 +551,12 @@ namespace ThoughtWorks.CruiseControl.Core
 
             try
             {
+                // Make sure the context is set
+                if (baseTask != null)
+                {
+                    baseTask.AssociateContext(this.context);
+                }
+
                 // Run the actual task
                 task.Run(result);
                 if (status != null)
