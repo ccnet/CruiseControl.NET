@@ -836,6 +836,7 @@
     <Compile Include="tasks\RakeTask.cs" />
     <Compile Include="tasks\ReplacementDynamicValue.cs" />
     <Compile Include="tasks\SequentialTask.cs" />
+    <Compile Include="tasks\SynchronisationTask.cs" />
     <Compile Include="tasks\TaskBase.cs" />
     <Compile Include="tasks\TaskContainerBase.cs" />
     <Compile Include="tasks\TaskContext.cs" />

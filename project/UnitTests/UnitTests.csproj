@@ -359,6 +359,7 @@
     <Compile Include="Core\Tasks\NDependTaskTests.cs" />
     <Compile Include="Core\Tasks\ParallelTaskTests.cs" />
     <Compile Include="Core\Tasks\SequentialTaskTests.cs" />
+    <Compile Include="Core\Tasks\SynchronisationTaskTests.cs" />
     <Compile Include="Core\Tasks\TaskBaseTests.cs" />
     <Compile Include="Core\Tasks\TaskContainerBaseTests.cs" />
     <Compile Include="Core\Tasks\TaskContextTests.cs" />
