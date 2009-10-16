@@ -1,13 +1,18 @@
-using System;
-using System.Collections;
-using System.IO;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-using System.Collections.Generic;
+//-----------------------------------------------------------------------
+// <copyright file="Mks.cs" company="CruiseControl.NET">
+//     Copyright (c) 2009 CruiseControl.NET. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	[ReflectorType("mks")]
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
+    [ReflectorType("mks")]
 	public class Mks : ProcessSourceControl
 	{
 		public const string DefaultExecutable = "si.exe";
@@ -51,30 +56,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			ProcessInfo info = NewProcessInfoWithArgs(BuildModsCommand());
-			Log.Info(string.Format("Getting Modifications: {0} {1}", info.FileName, info.SafeArguments));
-			Modification[] modifications = GetModifications(info, from.StartTime, to.StartTime);
-			AddMemberInfoToModifiedOrAddedModifications(modifications);
-            base.FillIssueUrl(modifications);
-			return ValidModifications(modifications, from.StartTime, to.StartTime);
-		}
+            // Modifications (includes adds and deletes!)
+            ProcessInfo info = NewProcessInfoWithArgs(BuildSandboxModsCommand());
+            Log.Info(string.Format("Getting Modifications (mods): {0} {1}", info.FileName, info.Arguments));
+            Modification[] modifications = GetModifications(info, from.StartTime, to.StartTime);
 
-		/* as the "mods" command gets modifications to a project between checkpoints on the working project,
-		 * if CheckpointOnSuccess is set to false the modifications are filtered according to the modified time of the files
-		 * */
+            AddMemberInfoToModifiedOrAddedModifications(modifications);
 
-		private Modification[] ValidModifications(Modification[] modifications, DateTime from, DateTime to)
-		{
-			if (CheckpointOnSuccess) return modifications;
-            var validModifications = new List<Modification>();
-			for (int i = 0; i < modifications.Length; i++)
-			{
-				if (from <= modifications[i].ModifiedTime && to >= modifications[i].ModifiedTime)
-				{
-					validModifications.Add(modifications[i]);
-				}
-			}
-			return validModifications.ToArray();
+            if (!this.CheckpointOnSuccess)
+            {
+                modifications = FilterOnTimeframe(modifications, from.StartTime, to.StartTime);
+            }
+
+		    return modifications;
 		}
 
 		public override void LabelSourceControl(IIntegrationResult result)
@@ -88,12 +82,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void GetSource(IIntegrationResult result)
 		{
-            result.BuildProgressInformation.SignalStartRunTask("Getting source from MKS");
-
 			if (AutoGetSource)
 			{
 				ProcessInfo resynchProcess = NewProcessInfoWithArgs(BuildResyncCommand());
-				ExecuteWithLogging(resynchProcess, "Resynchronising source");
+				ExecuteWithLogging(resynchProcess, "Resynchronizing source");
 				RemoveReadOnlyAttribute();
 			}
 		}
@@ -110,9 +102,25 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+        private Modification[] FilterOnTimeframe(Modification[] modifications, DateTime from, DateTime to)
+        {
+            List<Modification> mods = new List<Modification>();
+
+            for (int index = 0; index < modifications.Length; index++)
+            {
+                Modification modification = modifications[index];
+                if ( modification.ModifiedTime >= from && modification.ModifiedTime <= to )
+                {
+                    mods.Add(modification);
+                }
+            }
+
+            return mods.ToArray();
+        }
+
 		private void AddMemberInfo(Modification modification)
 		{
-			ProcessInfo memberInfoProcess = NewProcessInfoWithArgs(BuildMemberInfoCommand(modification));
+            ProcessInfo memberInfoProcess = NewProcessInfoWithArgs(BuildMemberInfoCommandXml(modification));
 			ProcessResult result = Execute(memberInfoProcess);
 			((MksHistoryParser) historyParser).ParseMemberInfoAndAddToModification(modification, new StringReader(result.StandardOutput));
 		}
@@ -130,6 +138,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AppendArgument("resync");
 			buffer.AppendArgument("--overwriteChanged");
 			buffer.AppendArgument("--restoreTimestamp");
+            buffer.AppendArgument("--forceConfirm=yes");
 			AppendCommonArguments(buffer, true);
 			return buffer.ToString();
 		}
@@ -145,37 +154,47 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return buffer.ToString();
 		}
 
-		//MODS_TEMPLATE = "mods -R -S {SandboxRoot\SandboxFile} --user={user} --password={password} --quiet"
-		private string BuildModsCommand()
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AppendArgument("mods");
-			AppendCommonArguments(buffer, true);
-			return buffer.ToString();
-		}
+	    //VIEEWSANDBOX_TEMPLATE = "viewsandbox -R {SandboxRoot\SandboxFile} --user={user} --password={password} --quiet --xmlapi"
+        private string BuildSandboxModsCommand()
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AppendArgument("viewsandbox --nopersist --filter=changed:all --xmlapi");
+            AppendCommonArguments(buffer, true);
+            return buffer.ToString();
+        }
 
-		//MEMBER_INFO_TEMPLATE = "memberinfo -S {SandboxRoot\SandboxFile} --user={user} --password={password} {member}"
-		private string BuildMemberInfoCommand(Modification modification)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AppendArgument("memberinfo");
-			AppendCommonArguments(buffer, false);
-			string modificationPath = (modification.FolderName == null) ? SandboxRoot : Path.Combine(SandboxRoot, modification.FolderName);
-			buffer.AddArgument(Path.Combine(modificationPath, modification.FileName));
-			return buffer.ToString();
-		}
+	    //MEMBER_INFO_TEMPLATE = "memberinfo -S {SandboxRoot\SandboxFile} --user={user} --password={password} {member}"
+        private string BuildMemberInfoCommandXml(Modification modification)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AppendArgument("memberinfo --xmlapi");
+            AppendCommonArguments(buffer, false, true);
+            string modificationPath = (modification.FolderName == null) ? SandboxRoot : Path.Combine(SandboxRoot, modification.FolderName);
+            buffer.AddArgument(Path.Combine(modificationPath, modification.FileName));
+            return buffer.ToString();
+        }
 
 		private void AppendCommonArguments(ProcessArgumentBuilder buffer, bool recurse)
 		{
-			if (recurse)
-			{
-				buffer.AppendArgument("-R");
-			}
-			buffer.AddArgument("-S", Path.Combine(SandboxRoot, SandboxFile));
-			buffer.AppendArgument("--user={0}", User);
-			buffer.AppendHiddenArgument("--password={0}", Password);
-			buffer.AppendArgument("--quiet");
+            AppendCommonArguments(buffer, recurse, false);
 		}
+
+        private void AppendCommonArguments(ProcessArgumentBuilder buffer, bool recurse, bool omitSandbox)
+        {
+            if (recurse)
+            {
+                buffer.AppendArgument("-R");
+            }
+
+            if (!omitSandbox)
+            {
+                buffer.AddArgument("-S", Path.Combine(SandboxRoot, SandboxFile));
+            }
+
+            buffer.AppendArgument("--user={0}", User);
+            buffer.AppendArgument("--password={0}", Password);
+            buffer.AppendArgument("--quiet");
+        }
 
 		private void RemoveReadOnlyAttribute()
 		{

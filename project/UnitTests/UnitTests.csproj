@@ -1220,6 +1220,8 @@
     <EmbeddedResource Include="Core\Publishers\Rss.BeyondLimits.xml" />
     <EmbeddedResource Include="Core\Publishers\Rss.NewFeed.xml" />
     <EmbeddedResource Include="Core\Publishers\Rss.WithinLimits.xml" />
+    <EmbeddedResource Include="Core\SourceControl\MksHistoryParserTestDataMemberInfo.xml" />
+    <EmbeddedResource Include="Core\SourceControl\MksHistoryParserTestData.xml" />
     <Content Include="resources\buildlog.xml" />
     <Content Include="resources\CCNet.git.log.txt" />
     <Content Include="resources\failedbuildlog.xml" />
