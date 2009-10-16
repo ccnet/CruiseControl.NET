@@ -775,6 +775,9 @@
     <Compile Include="tasks\DirectDynamicValue.cs" />
     <Compile Include="tasks\DynamicValueUtility.cs" />
     <Compile Include="tasks\FtpTask.cs" />
+    <Compile Include="tasks\HttpRequestHeader.cs" />
+    <Compile Include="tasks\HttpRequestSettings.cs" />
+    <Compile Include="tasks\HttpStatusTask.cs" />
     <Compile Include="tasks\MergeFileSerialiser.cs" />
     <Compile Include="tasks\MergeFileSerialiserFactory.cs" />
     <Compile Include="tasks\MergeFileInfo.cs" />
@@ -815,6 +818,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="tasks\NDependTask.cs" />
+    <Compile Include="tasks\XmlTaskResult.cs" />
+    <Compile Include="util\UriSerializer.cs" />
+    <Compile Include="util\UriSerializerFactory.cs" />
+    <Compile Include="util\NetworkCredentialSerializerFactory.cs" />
+    <Compile Include="util\NetworkCredentialsSerializer.cs" />
     <Compile Include="tasks\NullTask.cs">
       <SubType>Code</SubType>
     </Compile>

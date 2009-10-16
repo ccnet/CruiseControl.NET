@@ -24,7 +24,6 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         #endregion
 
         #region Private fields
-        private SecurityRight defaultRight = SecurityRight.Deny;
         private ISessionCache sessionCache = new InMemorySessionCache();
         private IAuditLogger[] loggers = new IAuditLogger[0];
         private IAuditReader reader;

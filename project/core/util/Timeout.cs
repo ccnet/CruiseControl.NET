@@ -9,6 +9,28 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		private int timeout;
 		private TimeUnits unit = TimeUnits.MILLIS;
 
+      public void Normalize()
+      {
+         int millisecs = this.Millis;
+         if (millisecs % 1000 == 0)
+         {
+            unit = TimeUnits.SECONDS;
+            timeout = millisecs / 1000;
+
+            if (timeout % 60 == 0)
+            {
+               unit = TimeUnits.MINUTES;
+               timeout /= 60;
+
+               if (timeout % 60 == 0)
+               {
+                  unit = TimeUnits.HOURS;
+                  timeout /= 60;
+               }
+            }
+         }
+      }
+
 		public Timeout(int periodInMillis) : this(periodInMillis, TimeUnits.MILLIS)
 		{}
 
