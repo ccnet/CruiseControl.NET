@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Response command="memberinfo=" app="si=" version="4.10.0 0-0 5350">
+  <App-Connection port="7003=" userID="Test=" server="test.test.com"></App-Connection>
+  <WorkItems selectionType="IMemberSelection">
+    <WorkItem id="TestFile1.txt=" context="/Personal/Test/project.pj" displayId="TestFile1.txt" modelType="si.Member">
+    <Field name="membername">
+      <Value dataType="string">TestFile1.txt</Value>
+    </Field>
+    <Field name="sandboxname">
+      <Value dataType="string">c:\Sandboxes\Personal2\project.pj</Value>
+    </Field>
+    <Field name="frozen">
+      <Value dataType="boolean">false</Value>
+    </Field>
+    <Field name="developmentbranch">
+      <Value dataType="string">1</Value>
+    </Field>
+    <Field name="memberrevision">
+      <Value dataType="string">1.4</Value>
+    </Field>
+    <Field name="author">
+      <Value dataType="string">Test</Value>
+    </Field>
+    <Field name="date">
+      <Value dataType="datetime">2009-10-16T18:07:08</Value>
+    </Field>
+    <Field name="locker">
+      <Value></Value>
+    </Field>
+    <Field name="locktimestamp">
+      <Value></Value>
+    </Field>
+    <Field name="locksandbox">
+      <Value></Value>
+    </Field>
+    <Field name="lockhost">
+      <Value></Value>
+    </Field>
+    <Field name="state">
+      <Value dataType="string">Exp</Value>
+    </Field>
+    <Field name="description">
+      <Value dataType="string">Test Comment</Value>
+    </Field>
+    <Field name="labels">
+      <List elementType="item">
+      </List>
+    </Field>
+    <Field name="cpid">
+      <Value></Value>
+    </Field>
+    <Field name="cpsummary">
+      <Value></Value>
+    </Field>
+    <Field name="merge">
+      <List elementType="item">
+      </List>
+    </Field>
+    <Field name="revisionrule">
+      <Value></Value>
+    </Field>
+    <Field name="attributes">
+      <List elementType="item">
+      </List>
+    </Field>
+    </WorkItem>
+  </WorkItems>
+</Response>

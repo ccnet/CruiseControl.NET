@@ -1,71 +1,92 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Text.RegularExpressions;
+//-----------------------------------------------------------------------
+// <copyright file="MksHistoryParser.cs" company="CruiseControl.NET">
+//     Copyright (c) 2009 CruiseControl.NET. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Reflection;
+    using System.Text;
+    using System.Xml;
+    using System.Xml.Xsl;
+    using System.Xml.XPath;
+
 	public class MksHistoryParser : IHistoryParser
 	{
-		private static Regex MODIFICATION_SEARCH_REGEX = new Regex(@"^(?<ModificationType>(Revision|Added|Deleted))\s(changed|member):\s+(?<Filename>.*?)(was|now).*\s(to|at)\s(?<NewRevision>\d+(\.\d+)*)(\r\n|$)", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase | RegexOptions.Multiline);
-		private static Regex MEMBER_INFO_REGEX = new Regex(@".*?\s+Created\sBy:\s(?<UserName>\w+)\son\s(?<ModifiedTime>.*?)\r\n(.|\r\n)*?\s+Revision\sDescription:\r\n(?<Comment>(.|\r\n)*?)\s+Labels:(.|\r\n|$)*?", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
-
 		public virtual Modification[] Parse(TextReader history, DateTime from, DateTime to)
 		{
-            var result = new List<Modification>();
-			MatchCollection revisionMatches = MODIFICATION_SEARCH_REGEX.Matches(history.ReadToEnd());
-			foreach (Match revisionMatch in revisionMatches)
-			{
-				result.Add(CreateModification(revisionMatch));
-			}
+            XPathDocument doc = new XPathDocument(history);
+		    XmlReader reader;
 
-			return result.ToArray();
+            // Transform xml output
+		    try
+		    {
+		        Assembly execAssem = Assembly.GetExecutingAssembly();
+		        Stream s =
+		            execAssem.GetManifestResourceStream(
+		                "ThoughtWorks.CruiseControl.Core.sourcecontrol.MksHistory-viewsandbox-mods.xsl");
+
+                if (s != null)
+                {
+                    reader = XmlReader.Create(s);
+                }
+                else
+                {
+                    throw new CruiseControlException("Exception encountered while retrieving MksHistory-viewsandbox-mods.xsl");
+                }
+		    }
+		    catch (Exception e)
+		    {
+		        throw new CruiseControlException("Exception encountered while retrieving MksHistory-viewsandbox-mods.xsl", e);
+		    }
+
+            XslCompiledTransform tran = new XslCompiledTransform();
+            tran.Load(reader);
+
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+            StringBuilder transformed = new StringBuilder(1024);
+            XmlWriter writer = XmlWriter.Create(transformed, settings);
+
+            if (writer != null)
+            {
+                tran.Transform(doc.CreateNavigator(), new XsltArgumentList(), writer);
+                writer.Close();
+
+                List<Modification> result = new List<Modification>();
+                StringReader sr = new StringReader(transformed.ToString());
+                XmlReader rdr = XmlReader.Create(sr);
+                doc = new XPathDocument(rdr);
+                XPathNavigator nav = doc.CreateNavigator();
+                XPathNodeIterator nodes = nav.Select("//modification");
+                while (nodes.MoveNext())
+                {
+                    Modification mod = new Modification();
+                    FileInfo info = new FileInfo(nodes.Current.SelectSingleNode("fullname").Value);
+                    mod.FileName = info.Name;
+                    mod.FolderName = info.DirectoryName;
+                    mod.Type = nodes.Current.SelectSingleNode("modificationtype").Value;
+                    mod.Version = nodes.Current.SelectSingleNode("memberrev").Value;
+                    result.Add(mod);
+                }
+
+                return result.ToArray();
+            }
+		    throw new CruiseControlException("Failed to create XmlWriter for transforming MKS modifications report.");
 		}
 
 		public virtual void ParseMemberInfoAndAddToModification(Modification modification, StringReader reader)
 		{
-			MatchCollection memberInfoMatches = MEMBER_INFO_REGEX.Matches(reader.ReadToEnd());
-			foreach (Match match in memberInfoMatches)
-			{
-				modification.UserName = match.Groups["UserName"].Value.Trim();
-				modification.ModifiedTime = ParseDate(match.Groups["ModifiedTime"].Value.Trim());
-				modification.Comment = match.Groups["Comment"].Value.Trim();
-			}			
-		}
-
-        // Dates returned from MKS seem to be in format Aug 26, 2005 - 5:32 AM but I haven't been able to verify this for all locales
-        // This format is not supported by DateTime.Parse under .NET 2.0. So we TryParseExact to see if just this format can be read.
-	    private static DateTime ParseDate(string dateString)
-	    {
-	        DateTime date;
-            if (DateTime.TryParseExact(dateString, "MMM d, yyyy - h:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out date))
-                return date;
-	        return Convert.ToDateTime(dateString);
-	    }
-
-	    private static Modification CreateModification(Match match)
-		{
-			Modification modification = new Modification();
-			ParseFileAndFolderName(match.Groups["Filename"].Value.Trim(), modification);
-			modification.Version = match.Groups["NewRevision"].Value.Trim();
-			modification.Type = ParseModificationType(match.Groups["ModificationType"].Value.Trim());
-			return modification;
-		}
-
-		private static string ParseModificationType(string modificationType)
-		{
-			return ("Revision" == modificationType) ? "Modified" : modificationType;
-		}
-
-		private static void ParseFileAndFolderName(string file, Modification modification)
-		{
-			int lastIndexOfFrontSlash = file.LastIndexOf("/");
-			modification.FileName = file.Substring(lastIndexOfFrontSlash + 1);
-			if (lastIndexOfFrontSlash > 0)
-			{
-				modification.FolderName = file.Substring(0, lastIndexOfFrontSlash);
-			}
+            XPathDocument doc = new XPathDocument(reader);
+            XPathNavigator nav = doc.CreateNavigator();
+            XPathNavigator node = nav.SelectSingleNode("Response/WorkItems/WorkItem");
+            modification.UserName = node.SelectSingleNode("Field[@name='author']/Value").Value;
+            modification.ModifiedTime = XmlConvert.ToDateTime(node.SelectSingleNode("Field[@name='date']/Value").Value, XmlDateTimeSerializationMode.Local);
+            modification.Comment = node.SelectSingleNode("Field[@name='description']/Value").Value;		
 		}
 	}
 }

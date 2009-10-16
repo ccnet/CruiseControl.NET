@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Response command="viewsandbox" app="si" version="4.10.0 0-0 5350">
+  <App-Connection port="7003" userID="test" server="test.test.com"></App-Connection>
+  <WorkItems>
+    <WorkItem id="TestNew.txt" context="/Personal/Test/project.pj" displayId="TestNew.txt" modelType="si.Member">
+    <Field name="name">
+      <Value dataType="string">c:/Sandboxes/Personal2/TestNew.txt</Value>
+    </Field>
+    <Field name="parent">
+      <Value dataType="string">c:/Sandboxes/Personal2/project.pj</Value>
+    </Field>
+    <Field name="type">
+      <Value dataType="string">archived</Value>
+    </Field>
+    <Field name="memberrev">
+      <Item id="1.1" displayId="1.1" modelType="si.Revision">
+      </Item>
+    </Field>
+    <Field name="memberrevlockedbyme">
+      <Value dataType="boolean">false</Value>
+    </Field>
+    <Field name="workingrevlockedbyme">
+      <Value dataType="boolean">false</Value>
+    </Field>
+    <Field name="lockrecord">
+      <List elementType="item">
+      </List>
+    </Field>
+    <Field name="wfdelta">
+      <Item id="delta" displayId="delta" modelType="si.Delta">
+        <Field name="isDelta">
+          <Value dataType="boolean">true</Value>
+        </Field>
+        <Field name="noWorkingFile">
+          <Value dataType="boolean">true</Value>
+        </Field>
+        <Field name="newWorkingFile">
+          <Value dataType="boolean">false</Value>
+        </Field>
+        <Field name="workingFileSize">
+          <Value dataType="long">0</Value>
+        </Field>
+        <Field name="cachedFileSize">
+          <Value dataType="long">0</Value>
+        </Field>
+        <Field name="workingFileTimeStamp">
+          <Value></Value>
+        </Field>
+        <Field name="cachedTimeStamp">
+          <Value></Value>
+        </Field>
+      </Item>
+    </Field>
+    <Field name="revsyncdelta">
+      <Item id="delta" displayId="delta" modelType="si.Delta">
+        <Field name="isDelta">
+          <Value dataType="boolean">true</Value>
+        </Field>
+        <Field name="isWorkingRevUnknown">
+          <Value dataType="boolean">true</Value>
+        </Field>
+        <Field name="isWorkingRevPending">
+          <Value dataType="boolean">false</Value>
+        </Field>
+        <Field name="workingRev">
+          <Value></Value>
+        </Field>
+        <Field name="memberRev">
+          <Item id="1.1" displayId="1.1" modelType="si.Revision">
+          </Item>
+        </Field>
+        <Field name="workingArchive">
+          <Value></Value>
+        </Field>
+        <Field name="memberArchive">
+          <Item id="/Personal/Test/TestNew.txt" context="/Personal/Test/TestNew.txt" displayId="/Personal/Test/TestNew.txt" modelType="si.Archive.Default">
+        </Item>
+    </Field>
+    </Item>
+    </Field>
+    <Field name="newrevdelta">
+      <Item id="delta" displayId="delta" modelType="si.Delta">
+        <Field name="isDelta">
+          <Value dataType="boolean">false</Value>
+        </Field>
+        <Field name="newRevision">
+          <Item id="1.1" displayId="1.1" modelType="si.Revision">
+          </Item>
+        </Field>
+      </Item>
+    </Field>
+    <Field name="merge">
+      <List elementType="item">
+      </List>
+    </Field>
+    <Field name="canonicalSandbox">
+      <Value dataType="string">c:/Sandboxes/Personal2/project.pj</Value>
+    </Field>
+    <Field name="canonicalMember">
+      <Value dataType="string">TestNew.txt</Value>
+    </Field>
+    </WorkItem>
+    <WorkItem id="TestFile2.txt" displayId="TestFile2.txt" modelType="si.FormerMember">
+      <Field name="name">
+        <Value dataType="string">c:/Sandboxes/Personal2/TestFile2.txt</Value>
+      </Field>
+      <Field name="parent">
+        <Value dataType="string">c:/Sandboxes/Personal2/project.pj</Value>
+      </Field>
+      <Field name="type">
+        <Value dataType="string">dropped</Value>
+      </Field>
+      <Field name="memberrev">
+        <Value></Value>
+      </Field>
+      <Field name="memberrevlockedbyme">
+        <Value></Value>
+      </Field>
+      <Field name="workingrevlockedbyme">
+        <Value></Value>
+      </Field>
+      <Field name="lockrecord">
+        <Value></Value>
+      </Field>
+      <Field name="wfdelta">
+        <Item id="delta" displayId="delta" modelType="si.Delta">
+          <Field name="isDelta">
+            <Value dataType="boolean">false</Value>
+          </Field>
+          <Field name="noWorkingFile">
+            <Value dataType="boolean">false</Value>
+          </Field>
+          <Field name="newWorkingFile">
+            <Value dataType="boolean">false</Value>
+          </Field>
+          <Field name="workingFileSize">
+            <Value dataType="long">6</Value>
+          </Field>
+          <Field name="cachedFileSize">
+            <Value dataType="long">6</Value>
+          </Field>
+          <Field name="workingFileTimeStamp">
+            <Value dataType="datetime">2009-10-16T18:00:10</Value>
+          </Field>
+          <Field name="cachedTimeStamp">
+            <Value dataType="datetime">2009-10-16T18:00:10</Value>
+          </Field>
+        </Item>
+      </Field>
+      <Field name="revsyncdelta">
+        <Value></Value>
+      </Field>
+      <Field name="newrevdelta">
+        <Value></Value>
+      </Field>
+      <Field name="merge">
+        <List elementType="item">
+        </List>
+      </Field>
+      <Field name="canonicalSandbox">
+        <Value dataType="string">c:/Sandboxes/Personal2/project.pj</Value>
+      </Field>
+      <Field name="canonicalMember">
+        <Value dataType="string">TestFile2.txt</Value>
+      </Field>
+    </WorkItem>
+    <WorkItem id="TestFile1.txt" context="/Personal/Test/project.pj" displayId="TestFile1.txt" modelType="si.Member">
+    <Field name="name">
+      <Value dataType="string">c:/Sandboxes/Personal2/TestFile1.txt</Value>
+    </Field>
+    <Field name="parent">
+      <Value dataType="string">c:/Sandboxes/Personal2/project.pj</Value>
+    </Field>
+    <Field name="type">
+      <Value dataType="string">archived</Value>
+    </Field>
+    <Field name="memberrev">
+      <Item id="1.3" displayId="1.3" modelType="si.Revision">
+      </Item>
+    </Field>
+    <Field name="memberrevlockedbyme">
+      <Value dataType="boolean">false</Value>
+    </Field>
+    <Field name="workingrevlockedbyme">
+      <Value dataType="boolean">false</Value>
+    </Field>
+    <Field name="lockrecord">
+      <List elementType="item">
+      </List>
+    </Field>
+    <Field name="wfdelta">
+      <Item id="delta" displayId="delta" modelType="si.Delta">
+        <Field name="isDelta">
+          <Value dataType="boolean">false</Value>
+        </Field>
+        <Field name="noWorkingFile">
+          <Value dataType="boolean">false</Value>
+        </Field>
+        <Field name="newWorkingFile">
+          <Value dataType="boolean">false</Value>
+        </Field>
+        <Field name="workingFileSize">
+          <Value dataType="long">3</Value>
+        </Field>
+        <Field name="cachedFileSize">
+          <Value dataType="long">3</Value>
+        </Field>
+        <Field name="workingFileTimeStamp">
+          <Value dataType="datetime">2009-10-16T18:00:10</Value>
+        </Field>
+        <Field name="cachedTimeStamp">
+          <Value dataType="datetime">2009-10-16T18:00:10</Value>
+        </Field>
+      </Item>
+    </Field>
+    <Field name="revsyncdelta">
+      <Item id="delta" displayId="delta" modelType="si.Delta">
+        <Field name="isDelta">
+          <Value dataType="boolean">true</Value>
+        </Field>
+        <Field name="isWorkingRevUnknown">
+          <Value dataType="boolean">false</Value>
+        </Field>
+        <Field name="isWorkingRevPending">
+          <Value dataType="boolean">false</Value>
+        </Field>
+        <Field name="workingRev">
+          <Item id="1.2" displayId="1.2" modelType="si.Revision">
+          </Item>
+        </Field>
+        <Field name="memberRev">
+          <Item id="1.3" displayId="1.3" modelType="si.Revision">
+          </Item>
+        </Field>
+        <Field name="workingArchive">
+          <Item id="/Personal/Test/TestFile1.txt" context="/Personal/Test/TestFile1.txt" displayId="/Personal/Test/TestFile1.txt" modelType="si.Archive.Default">
+        </Item>
+    </Field>
+    <Field name="memberArchive">
+      <Item id="/Personal/Test/TestFile1.txt" context="/Personal/Test/TestFile1.txt" displayId="/Personal/Test/TestFile1.txt" modelType="si.Archive.Default">
+      </Item>
+    </Field>
+    </Item>
+    </Field>
+    <Field name="newrevdelta">
+      <Item id="delta" displayId="delta" modelType="si.Delta">
+        <Field name="isDelta">
+          <Value dataType="boolean">false</Value>
+        </Field>
+        <Field name="newRevision">
+          <Item id="1.3" displayId="1.3" modelType="si.Revision">
+          </Item>
+        </Field>
+      </Item>
+    </Field>
+    <Field name="merge">
+      <List elementType="item">
+      </List>
+    </Field>
+    <Field name="canonicalSandbox">
+      <Value dataType="string">c:/Sandboxes/Personal2/project.pj</Value>
+    </Field>
+    <Field name="canonicalMember">
+      <Value dataType="string">TestFile1.txt</Value>
+    </Field>
+    </WorkItem>
+  </WorkItems>
+</Response>
