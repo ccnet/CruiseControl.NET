@@ -194,6 +194,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             request.SessionToken = SessionToken;
             request.ProjectName = projectName;
             request.Message = message.Text;
+            request.Kind = message.Kind;
             request.ServerName = TargetServer;
             Response resp = connection.SendMessage("SendMessage", request);
             ValidateResponse(resp);

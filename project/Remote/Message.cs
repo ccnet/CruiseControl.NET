@@ -10,17 +10,22 @@ namespace ThoughtWorks.CruiseControl.Remote
     [XmlRoot("message")]
     public class Message
     {
-        #region Private fields
-        private string message;
-        #endregion
+        public enum MessageKind
+        {
+            NotDefined = 0,
+            Breakers = 1,
+            Fixer = 2,
+            FailingTasks = 3
+        }
 
-        #region Constructors
+        private string message;
+        private MessageKind messageKind;
+
         /// <summary>
         /// Initialise a new blank <see cref="Message"/>.
         /// </summary>
         public Message()
-        {
-        }
+        { }
 
         /// <summary>
         /// Initialise a new <see cref="Message"/> with a message.
@@ -29,11 +34,20 @@ namespace ThoughtWorks.CruiseControl.Remote
         public Message(string message)
         {
             this.message = message;
+            this.Kind = MessageKind.NotDefined;
         }
-        #endregion
 
-        #region Public properties
-        #region Text
+        /// <summary>
+        /// Initialise a new <see cref="Message"/> with a message.
+        /// </summary>
+        /// <param name="message">The message</param>
+        /// <param name="kind">the message kind</param>
+        public Message(string message, MessageKind kind)
+        {
+            this.message = message;
+            this.Kind = kind;
+        }
+
         /// <summary>
         /// The text of the message.
         /// </summary>
@@ -43,13 +57,19 @@ namespace ThoughtWorks.CruiseControl.Remote
             get { return message; }
             set { message = value; }
         }
-        #endregion
-        #endregion
 
-        #region Public methods
-        #region ToString()
         /// <summary>
-        /// Returns the message text.
+        /// The type of message
+        /// </summary>
+        ///[XmlText]
+        public MessageKind Kind
+        {
+            get { return messageKind; }
+            set { messageKind = value; }
+        }
+
+        /// <summary>
+        /// Returns the kind and the message text.
         /// </summary>
         /// <returns>The text of the message.</returns>
         public override string ToString()
@@ -79,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             }
 
             //compare the values 
-            return string.Equals(this.Text, m.Text);
+            return string.Equals(this.Text, m.Text) && (this.Kind == m.Kind);
         }
 
         /// <summary>
@@ -88,9 +108,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return Text.GetHashCode();
+            return this.ToString().GetHashCode();
         }
-        #endregion
-        #endregion
     }
 }

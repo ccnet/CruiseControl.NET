@@ -80,6 +80,7 @@ namespace ThoughtWorks.CruiseControl.Core
             MessageRequest request = new MessageRequest();
             request.ProjectName = projectName;
             request.Message = message.Text;
+            request.Kind = message.Kind;
             Response resp = cruiseServer.SendMessage(request);
             ValidateResponse(resp);
         }

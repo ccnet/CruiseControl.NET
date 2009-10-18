@@ -1,41 +1,45 @@
 <!-- ProjectGrid.vm: Start -->
 <script type="text/javascript">
   $(document).ready(function(){
-    $('#parameterCheck').dialog({
-        autoOpen:false,
-        modal:true,
-        title:'Project Parameters',
-        width:400,
-        height:300,
-        overlay:{
-            opacity:0.5,
-            background:'black'
-          }
-        });
-      $('#StatusGrid').tablesorter({
-          #if ($wholeFarm)
-          sortList:[[0,0],[1,0]]
-          #else
-          sortList:[[0,0]]
-          #end
-        });
-      #set ($RowId = 0)
-      #foreach ($projectGridRow in $projectGrid)
-      #set ($RowId = $RowId + 1)
-      #if ($projectGridRow.BuildStage.Length > 0)
-      $('#projectData$RowId').tipsy();
-      #end
-      #end
-    });
+  $('#parameterCheck').dialog({
+  autoOpen:false,
+  modal:true,
+  title:'Project Parameters',
+  width:400,
+  height:300,
+  overlay:{
+  opacity:0.5,
+  background:'black'
+  }
+  });
+  $('#StatusGrid').tablesorter({
+  #if ($wholeFarm)
+  sortList:[[0,0],[1,0]]
+  #else
+  sortList:[[0,0]]
+  #end
+  });
+  #set ($RowId = 0)
+  #foreach ($projectGridRow in $projectGrid)
+  #set ($RowId = $RowId + 1)
+  #if ($projectGridRow.BuildStage.Length > 0)
+  $('#projectData$RowId').tipsy();
+  #end
+  #end
+  });
 </script>
 <div id="parameterCheck">
   <div id="parameterEditor">Loading parameters, please wait...</div>
 </div>
-<form id="RefreshForm" method="post">
+<form id="RefreshForm"
+      method="post">
   <table width="100%">
     <tr>
       <td align="right">
-        <input type="submit" align="right" name="Refresh" value="Refresh status" />
+        <input type="submit"
+               align="right"
+               name="Refresh"
+               value="Refresh status" />
       </td>
     </tr>
   </table>
@@ -52,7 +56,8 @@
 #end
 
 #if ($projectGrid.Length > 0)
-<table id="StatusGrid" class="SortableGrid">
+<table id="StatusGrid"
+       class="SortableGrid">
   <thead>
     <tr class="ProjectGridHeader">
       #if ($wholeFarm)
@@ -84,49 +89,76 @@
     #end
 
     #if ($projectGridRow.BuildStage.Length > 0)
-    <tr id="projectData$RowId" title="$projectGridRow.BuildStage">
-    #else
-    <tr id="projectData$RowId">
-    #end
-      #if ($wholeFarm)
-      <td class="Black left">$projectGridRow.ServerName</td>
-      #end
-      <td class="left">
-        <a href="$projectGridRow.Url">$projectGridRow.Name</a>
-      </td>
-      <td class="$projectGridRow.BuildStatusHtmlColor">$projectGridRow.BuildStatus</td>
-      <td>$projectGridRow.LastBuildDate</td>
-      <td>$projectGridRow.NextBuildTime</td>
-      <td>$projectGridRow.LastBuildLabel</td>
-      <td>$projectGridRow.Status</td>
-      #if ($projectGridRow.Activity == "Building")
-      <td class="Red">$projectGridRow.Activity</td>
+    <tr id="projectData$RowId"
+        title="$projectGridRow.BuildStage">
       #else
-      <td class="Black" style="font-weight:normal;">$projectGridRow.Activity</td>
-      #end
-      <td class="left">$projectGridRow.CurrentMessage</td>
-      <td>
-        <form method="post" style="margin-bottom:0px;">
-          <input type="hidden" name="projectName" value="$projectGridRow.Name" />
-          <input type="hidden" name="serverName" value="$projectGridRow.ServerName" />
-          <font color="Black">
-            #if ($projectGridRow.allowForceBuild)
-            #if($projectGridRow.ForceAbortBuildButtonValue == "Force")
-            <input type="button" name="$projectGridRow.ForceAbortBuildButtonName" value="$projectGridRow.ForceAbortBuildButtonValue" onclick="checkForParams(this, '$projectGridRow.ParametersUrl')"/>
-            #else
-            <input type="submit" name="$projectGridRow.ForceAbortBuildButtonName" value="$projectGridRow.ForceAbortBuildButtonValue"/>
+      <tr id="projectData$RowId">
+        #end
+        #if ($wholeFarm)
+        <td class="Black left">$projectGridRow.ServerName</td>
+        #end
+        <td class="left">
+          <a href="$projectGridRow.Url">$projectGridRow.Name</a>
+        </td>
+        <td class="$projectGridRow.BuildStatusHtmlColor">$projectGridRow.BuildStatus</td>
+        <td>$projectGridRow.LastBuildDate</td>
+        <td>$projectGridRow.NextBuildTime</td>
+        <td>$projectGridRow.LastBuildLabel</td>
+        <td>$projectGridRow.Status</td>
+        #if ($projectGridRow.Activity == "Building")
+        <td class="Red">$projectGridRow.Activity</td>
+        #else
+        <td class="Black"
+            style="font-weight:normal;">$projectGridRow.Activity</td>
+        #end
+        <td class="left">
+          <ul>
+            #if ($projectGridRow.Breakers.Length > 0)
+            <li>Breakers : $projectGridRow.Breakers</li>
             #end
+            #if ($projectGridRow.Fixer.Length > 0)
+            <li>$projectGridRow.Fixer</li>
             #end
-            #if ($projectGridRow.AllowStartStopBuild)
-            <input type="submit" name="$projectGridRow.StartStopButtonName" value="$projectGridRow.StartStopButtonValue"/>
+            #if ($projectGridRow.FailingTasks.Length > 0)
+            <li>Failing Tasks : $projectGridRow.FailingTasks</li>
             #end
-          </font>
-        </form>
-      </td>
-    </tr>
+          </ul>
+        </td>
 
-    #end
-  </tbody>
+        <td>
+          <form method="post"
+                style="margin-bottom:0px;">
+            <input type="hidden"
+                   name="projectName"
+                   value="$projectGridRow.Name" />
+            <input type="hidden"
+                   name="serverName"
+                   value="$projectGridRow.ServerName" />
+            <font color="Black">
+              #if ($projectGridRow.allowForceBuild)
+              #if($projectGridRow.ForceAbortBuildButtonValue == "Force")
+              <input type="button"
+                     name="$projectGridRow.ForceAbortBuildButtonName"
+                     value="$projectGridRow.ForceAbortBuildButtonValue"
+                     onclick="checkForParams(this, '$projectGridRow.ParametersUrl')"/>
+              #else
+              <input type="submit"
+                     name="$projectGridRow.ForceAbortBuildButtonName"
+                     value="$projectGridRow.ForceAbortBuildButtonValue"/>
+              #end
+              #end
+              #if ($projectGridRow.AllowStartStopBuild)
+              <input type="submit"
+                     name="$projectGridRow.StartStopButtonName"
+                     value="$projectGridRow.StartStopButtonValue"/>
+              #end
+            </font>
+          </form>
+        </td>
+      </tr>
+
+      #end
+    </tbody>
   <tfoot>
     #set ($ProjectCounter = $ProjectOKCounter + $ProjectNOKCounter)
     #if ($ProjectCounter == 0)
@@ -141,14 +173,19 @@
       <td colspan="10">
         <table  id="BuildPercentage">
           <tr title="Percentage of successfull builds : $OKPercentToolTip%">
-          #if ($OKPercent == 50)
-             <td width=100% bgcolor="#33CC00"></td>
-          #else
-            <td width=$OKPercent% bgcolor="#33CC00"></td>
-            <td width=$NOKPercent% bgcolor="#FF0000"></td>
-            <td width=$NOKPercent% bgcolor="#FF0000"></td>
-            <td width=$OKPercent% bgcolor="#33CC00"></td>
-          #end
+            #if ($OKPercent == 50)
+            <td width="100"
+                bgcolor="#33CC00"></td>
+            #else
+            <td width=$"OKPercent"
+                bgcolor="#33CC00"></td>
+            <td width=$"NOKPercent"
+                bgcolor="#FF0000"></td>
+            <td width=$"NOKPercent"
+                bgcolor="#FF0000"></td>
+            <td width=$"OKPercent"
+                bgcolor="#33CC00"></td>
+            #end
           </tr>
         </table>
       </td>
@@ -164,7 +201,14 @@
 <P>
   <span id="ExceptionTitleLabel">There were exceptions connecting to the following servers:</span>
 </P>
-<table cellspacing="0" cellpadding="4" rules="all" bordercolor="#CC9966" border="1" id="ExceptionGrid" bgcolor="White" width="100%">
+<table cellspacing="0"
+       cellpadding="4"
+       rules="all"
+       bordercolor="#CC9966"
+       border="1"
+       id="ExceptionGrid"
+       bgcolor="White"
+       width="100%">
   <tr bgcolor="#990000">
     <th>
       <font color="#FFFFCC">

@@ -107,9 +107,13 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		void AbortRunningBuild();
 		
+        /// <summary>
+        /// adds a message 
+        /// </summary>
+        /// <param name="message"></param>
 		void AddMessage(Message message);
 
-		
+    	
 		/// <summary>
 		/// Notification that project should enter a pending state due to being queued.
 		/// </summary>

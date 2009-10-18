@@ -263,6 +263,8 @@ namespace ThoughtWorks.CruiseControl.Core
                 GenerateSourceControlOperation(SourceControlOperation.GetSource);
                 GenerateTaskStatuses("Build tasks", Tasks);
                 GenerateTaskStatuses("Publisher tasks", Publishers);
+                ClearMessages(Message.MessageKind.Breakers);
+                ClearMessages(Message.MessageKind.FailingTasks);
             }
 
             // Start the integration
@@ -312,6 +314,22 @@ namespace ThoughtWorks.CruiseControl.Core
 
             // Finally, return the actual result
             return result;
+        }
+
+        /// <summary>
+        /// Clears the message array of the messages of the specified kind
+        /// </summary>
+        /// <param name="kind"></param>
+        private void ClearMessages(Message.MessageKind kind)
+        {
+            for (Int32 i = messages.Count - 1; i >= 0; i--)
+            {
+                Message m = (Message)messages[i];
+                if (m.Kind == kind)
+                {
+                    messages.RemoveAt(i);
+                }
+            }
         }
 
         /// <summary>
@@ -470,7 +488,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     (task as IParamatisedItem).ApplyParameters(parameterValues, parameters);
                 }
 
-                RunTask(task, result);
+                RunTask(task, result,false);
                 if (result.Failed) break;
             }
             CancelTasks(tasksToRun);
@@ -501,7 +519,7 @@ namespace ThoughtWorks.CruiseControl.Core
                         (publisher as IParamatisedItem).ApplyParameters(parameterValues, parameters);
                     }
 
-                    RunTask(publisher, result);
+                    RunTask(publisher, result, true);
                 }
                 catch (Exception e)
                 {
@@ -524,7 +542,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <param name="task"></param>
         /// <param name="result"></param>
-        private void RunTask(ITask task, IIntegrationResult result)
+        private void RunTask(ITask task, IIntegrationResult result, bool isPublisher)
         {
             // Load the status details
             ItemStatus status = null;
@@ -551,8 +569,10 @@ namespace ThoughtWorks.CruiseControl.Core
             try
             {
                 // Run the actual task
+                // publishers do not get the overall status, as they are also ran for failed builds
+                // a pulisher must have the failed status if itself failed, not if a build failed
                 task.Run(result);
-                if (status != null)
+                if (status != null && !isPublisher)
                 {
                     // Only need to update the status if it is not already set
                     switch (status.Status)
@@ -655,7 +675,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
             if (breakers.Count > 0)
             {
-                breakingusers = "Breakers : ";
+                breakingusers = string.Empty;
 
                 foreach (string user in breakers)
                 {
@@ -665,7 +685,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 breakingusers = breakingusers.Remove(breakingusers.Length - 2, 2); // remove the last comma and space
             }
 
-            AddMessage(new Message(breakingusers));
+            AddMessage(new Message(breakingusers, Message.MessageKind.Breakers));
         }
 
         private void AddFailedTaskToMessages()
@@ -679,9 +699,9 @@ namespace ThoughtWorks.CruiseControl.Core
                 // Add a message containing the failed tasks
                 AddMessage(
                     new Message(
-                        "Failed task(s): " + string.Join(
+                         string.Join(
                             ", ",
-                            failedTasks.ToArray())));
+                            failedTasks.ToArray()), Message.MessageKind.FailingTasks) );               
             }
         }
 
@@ -1136,5 +1156,6 @@ namespace ThoughtWorks.CruiseControl.Core
             }
             return parameterList;
         }
+
     }
 }

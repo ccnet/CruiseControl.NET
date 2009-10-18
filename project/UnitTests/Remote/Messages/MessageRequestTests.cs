@@ -21,10 +21,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             MessageRequest request = new MessageRequest();
             string actual = request.ToString();
             string expected = string.Format("<messageMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-                "timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" source=\"{1}\" />",
+                "timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" source=\"{1}\">{3}</messageMessage>",
                 request.Identifier,
                 request.SourceName,
-                request.Timestamp);
+                request.Timestamp,
+                "<kind>NotDefined</kind>");
             Assert.AreEqual(expected, actual);
         }
 
@@ -43,6 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             string expected = string.Format("<messageMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
                 "timestamp=\"{4:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" server=\"{1}\" source=\"{2}\" session=\"{3}\" project=\"{5}\">" + 
                 "<message>{6}</message>" +
+                "<kind>NotDefined</kind>" +
                 "</messageMessage>",
                 request.Identifier,
                 request.ServerName,

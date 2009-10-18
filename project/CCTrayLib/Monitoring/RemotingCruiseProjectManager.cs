@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			{
                 string message = string.Format("{0} is fixing the build.", Fixer);
                 manager.SessionToken = sessionToken;
-                manager.SendMessage(projectName, new Message(message));
+                manager.SendMessage(projectName, new Message(message, Message.MessageKind.Fixer));
 			}
 			// Silently ignore exceptions that occur due to connection problems
 			catch (System.Net.Sockets.SocketException)

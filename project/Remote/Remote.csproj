@@ -129,6 +129,7 @@
     <Compile Include="Messages\CommunicationsMessage.cs" />
     <Compile Include="Messages\EncryptedRequest.cs" />
     <Compile Include="Messages\EncryptedResponse.cs" />
+    <Compile Include="Messages\MessageResponse.cs" />
     <Compile Include="Messages\ProjectItemRequest.cs" />
     <Compile Include="Monitor\BuildQueue.cs" />
     <Compile Include="Monitor\BuildQueueChangedArgs.cs" />

@@ -37,8 +37,8 @@ namespace ThoughtWorks.CruiseControl.Core
             }
             result.MarkStartTime();
             GenerateSystemParameterValues(result);
-            
-            Log.Trace("Getting Modifications for project {0}",result.ProjectName);
+
+            Log.Trace("Getting Modifications for project {0}", result.ProjectName);
             try
             {
                 result.Modifications = GetModifications(lastResult, result);
@@ -70,11 +70,11 @@ namespace ThoughtWorks.CruiseControl.Core
                     // they should also increase version if previous was exception, and the new
                     // build got past the getmodifications
 
-                    Log.Trace("Creating Label for project {0}",result.ProjectName);
+                    Log.Trace("Creating Label for project {0}", result.ProjectName);
 
                     if (result.LastIntegrationStatus == IntegrationStatus.Exception)
                     {
-                        IntegrationSummary isExceptionFix = new IntegrationSummary(IntegrationStatus.Success, result.LastIntegration.Label, result.LastIntegration.LastSuccessfulIntegrationLabel , result.LastIntegration.StartTime);
+                        IntegrationSummary isExceptionFix = new IntegrationSummary(IntegrationStatus.Success, result.LastIntegration.Label, result.LastIntegration.LastSuccessfulIntegrationLabel, result.LastIntegration.StartTime);
                         IIntegrationResult irExceptionFix = new IntegrationResult(result.ProjectName, result.WorkingDirectory, result.ArtifactDirectory, result.IntegrationRequest, isExceptionFix);
                         irExceptionFix.Modifications = result.Modifications;
 
@@ -82,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.Core
                         result.Label = irExceptionFix.Label;
                     }
                     else
-                    {                        
+                    {
                         target.CreateLabel(result);
                     }
 
@@ -97,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 }
             }
             catch (Exception ex)
-            {                
+            {
                 result.ExceptionResult = ex;
             }
             finally
@@ -142,8 +142,11 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             target.Activity = ProjectActivity.CheckingModifications;
             to.BuildProgressInformation.SignalStartRunTask("Getting source ... ");
+
             target.RecordSourceControlOperation(SourceControlOperation.CheckForModifications, ItemBuildStatus.Running);
-            bool success=false;
+
+            bool success = false;
+
             try
             {
                 Modification[] modifications = quietPeriod.GetModifications(target.SourceControl, from, to);
@@ -163,19 +166,23 @@ namespace ThoughtWorks.CruiseControl.Core
             target.Prebuild(result);
             if (!result.Failed)
             {
-                bool success=false;
+                bool success = false;
+
                 target.RecordSourceControlOperation(SourceControlOperation.GetSource, ItemBuildStatus.Running);
+
                 try
                 {
-                target.SourceControl.GetSource(result);
-                    success=true;
+                    target.SourceControl.GetSource(result);
+                    success = true;
                 }
                 finally
                 {
                     target.RecordSourceControlOperation(SourceControlOperation.GetSource,
                         success ? ItemBuildStatus.CompletedSuccess : ItemBuildStatus.CompletedFailed);
                 }
+
                 target.Run(result);
+
                 target.SourceControl.LabelSourceControl(result);
             }
         }

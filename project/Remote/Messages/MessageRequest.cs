@@ -12,13 +12,10 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
     [Serializable]
     public class MessageRequest
         : ProjectRequest
-    {
-        #region Private fields
+    {       
         private string message;
-        #endregion
+        private Message.MessageKind kind ;
 
-        #region Public properties
-        #region Message
         /// <summary>
         /// The message being passed.
         /// </summary>
@@ -28,7 +25,15 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
             get { return message; }
             set { message = value; }
         }
-        #endregion
-        #endregion
+
+        /// <summary>
+        /// The kind of message
+        /// </summary>
+        [XmlElement("kind")]
+        public Message.MessageKind Kind
+        {
+            get { return kind; }
+            set { kind = value; }
+        }
     }
 }
