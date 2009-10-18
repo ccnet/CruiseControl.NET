@@ -421,7 +421,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <returns></returns>
         public virtual Response SendMessage(MessageRequest request)
         {
-            MessageResponse response = new MessageResponse(RunProjectRequest(request,
+            Response response = RunProjectRequest(request,
                 SecurityPermission.SendMessage,
                 SecurityEvent.SendMessage,
                 delegate(ProjectRequest arg)
@@ -434,7 +434,7 @@ namespace ThoughtWorks.CruiseControl.Core
                         LookupProject(arg.ProjectName).AddMessage(message);
                         FireSendMessageProcessed(arg.ProjectName, message);
                     }
-                }));
+                });
             return response;
         }
         #endregion
