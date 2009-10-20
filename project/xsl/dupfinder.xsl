@@ -22,19 +22,25 @@
       </xsl:for-each>
       <div>
         <xsl:value-of select="@FileCount"/> files processed
-      </div>
-      <div>
+        -
         <xsl:value-of select="@DuplicateCount"/> duplicates found
       </div>
+      <hr/>
       <xsl:for-each select="Duplicates">
         <div>
           Duplicate of length <xsl:value-of select="@Length"/> at:
         </div>
-        <xsl:for-each select="Duplicate">
-          <div>
-            Line starting <xsl:value-of select="@LineNumber"/> in <xsl:value-of select="@FileName"/>
-          </div>
+        <ul>
+          <xsl:for-each select="Duplicate">
+            <li>
+              Line starting <xsl:value-of select="@LineNumber"/> in <xsl:value-of select="@FileName"/>
+            </li>
+          </xsl:for-each>
+        </ul>
+        <xsl:for-each select="code/line">
+          <div style="white-space:pre;"><xsl:value-of select="."/></div>
         </xsl:for-each>
+        <hr/>
       </xsl:for-each>
     </div>
   </xsl:template>
