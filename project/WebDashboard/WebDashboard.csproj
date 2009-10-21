@@ -747,6 +747,7 @@
     <Content Include="javascript\theme\ui.progressbar.css" />
     <Content Include="javascript\theme\ui.resizable.css" />
     <Content Include="javascript\theme\ui.theme.css" />
+    <Content Include="packages\DupFinder\Manifest.xml" />
     <Content Include="packages\MSTest\Manifest.xml" />
     <Content Include="packages\OhlohStats\Manifest.xml" />
     <Content Include="packages\PackageList\Manifest.xml" />
