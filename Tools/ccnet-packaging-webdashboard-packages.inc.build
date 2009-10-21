@@ -165,7 +165,7 @@
   </target>
 
   <target name="build.level.packages" description="Generate the build level packages"
-          depends="build.nunit.package,build.ndepend.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.msTest.package">
+          depends="build.nunit.package,build.ndepend.package,build.dupfinder.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.msTest.package">
 	</target>
 
 	<target name="build.nunit.package" description="Generates the NUnit package">
@@ -194,7 +194,20 @@
 		</zip>
 	</target>
 
-	<target name="build.nant.package" description="Generates the NAnt package">
+  <target name="build.dupfinder.package" description="Generates the duplicate finder package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/DupFinder.zip">
+      <fileset basedir="${src.dir}/WebDashboard/packages/DupFinder">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}/Xsl">
+        <include name="dupfinder.xsl"/>
+        <include name="dupfinder-summary.xsl"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.nant.package" description="Generates the NAnt package">
 		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
 		<zip zipfile="${build.dir}/WebDashboard/packages/NAnt.zip">
 			<fileset basedir="${src.dir}/WebDashboard/packages/NAnt">
