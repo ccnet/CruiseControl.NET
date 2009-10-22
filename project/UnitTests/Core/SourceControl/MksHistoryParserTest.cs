@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using NUnit.Framework;
@@ -125,15 +126,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(3, modifications.Length);
 		}
 
-		[Test]
-		public void ParseMemberInfo()
-		{
-			Modification modification = new Modification();
-			MksHistoryParser parser = new MksHistoryParser();
-			parser.ParseMemberInfoAndAddToModification(modification, new StringReader(MEMBER_INFO));
-			Assert.AreEqual("Test", modification.UserName);
-			Assert.AreEqual(new DateTime(2009, 10, 16, 18, 07, 08), modification.ModifiedTime);
-			Assert.AreEqual("Test Comment", modification.Comment);
-		}
+        [Test]
+        public void ParseMemberInfo()
+        {
+            Modification modification = new Modification();
+            MksHistoryParser parser = new MksHistoryParser();
+            parser.ParseMemberInfoAndAddToModification(modification, new StringReader(MEMBER_INFO));
+
+
+            TimeZone localZone = TimeZone.CurrentTimeZone;
+            
+            TimeSpan localOffset = localZone.GetUtcOffset(DateTime.Now);
+            DateTime testDate = DateTime.Parse("2009-10-16T18:07:08");
+
+
+            TimeSpan testOffset = modification.ModifiedTime.Subtract(testDate);
+
+            Assert.AreEqual("Test", modification.UserName);
+            Assert.That(localOffset.CompareTo(testOffset) == 0, "Offsets do not match.");
+            Assert.AreEqual("Test Comment", modification.Comment);
+        }
 	}
 }

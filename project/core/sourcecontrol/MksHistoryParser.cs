@@ -14,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     using System.Xml;
     using System.Xml.Xsl;
     using System.Xml.XPath;
+    using ThoughtWorks.CruiseControl.Core.Util;
 
     public class MksHistoryParser : IHistoryParser
 	{
@@ -57,6 +58,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 tran.Transform(doc.CreateNavigator(), new XsltArgumentList(), writer);
                 writer.Close();
 
+                Log.Debug(string.Format("Transformed MKS Mods:\n{0}\n", transformed.ToString()));
+
                 List<Modification> result = new List<Modification>();
                 StringReader sr = new StringReader(transformed.ToString());
                 XmlReader rdr = XmlReader.Create(sr);
@@ -79,14 +82,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		    throw new CruiseControlException("Failed to create XmlWriter for transforming MKS modifications report.");
 		}
 
-		public virtual void ParseMemberInfoAndAddToModification(Modification modification, StringReader reader)
-		{
+        public virtual void ParseMemberInfoAndAddToModification(Modification modification, StringReader reader)
+        {
             XPathDocument doc = new XPathDocument(reader);
             XPathNavigator nav = doc.CreateNavigator();
             XPathNavigator node = nav.SelectSingleNode("Response/WorkItems/WorkItem");
             modification.UserName = node.SelectSingleNode("Field[@name='author']/Value").Value;
-            modification.ModifiedTime = XmlConvert.ToDateTime(node.SelectSingleNode("Field[@name='date']/Value").Value, XmlDateTimeSerializationMode.Local);
-            modification.Comment = node.SelectSingleNode("Field[@name='description']/Value").Value;		
-		}
+            modification.ModifiedTime = DateTime.Parse(node.SelectSingleNode("Field[@name='date']/Value").Value, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal);
+            modification.Comment = node.SelectSingleNode("Field[@name='description']/Value").Value;
+        }
 	}
 }

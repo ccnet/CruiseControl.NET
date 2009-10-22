@@ -95,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			for (int index = 0; index < modifications.Length; index++)
 			{
 				Modification modification = modifications[index];
-				if ("Deleted" != modification.Type)
+				if ("deleted" != modification.Type)
 				{
 					AddMemberInfo(modification);
 				}
@@ -110,6 +110,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             {
                 Modification modification = modifications[index];
                 if ( modification.ModifiedTime >= from && modification.ModifiedTime <= to )
+                {
+                    mods.Add(modification);
+                }
+                else if (modification.Type == "deleted")
                 {
                     mods.Add(modification);
                 }
@@ -139,6 +143,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AppendArgument("--overwriteChanged");
 			buffer.AppendArgument("--restoreTimestamp");
             buffer.AppendArgument("--forceConfirm=yes");
+            buffer.AppendArgument("--includeDropped");
 			AppendCommonArguments(buffer, true);
 			return buffer.ToString();
 		}

@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void GetSource()
 		{
-            string expectedResyncCommand = string.Format(@"resync --overwriteChanged --restoreTimestamp --forceConfirm=yes -R -S {0} --user=CCNetUser --password=CCNetPassword --quiet", 
+            string expectedResyncCommand = string.Format(@"resync --overwriteChanged --restoreTimestamp --forceConfirm=yes --includeDropped -R -S {0} --user=CCNetUser --password=CCNetPassword --quiet", 
                 GeneratePath(@"{0}\myproject.pj", sandboxRoot));
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), ExpectedProcessInfo(expectedResyncCommand));
 			string expectedAttribCommand = string.Format(@"-R /s {0}", 
@@ -116,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void GetSourceWithSpacesInSandbox()
 		{
 			sandboxRoot = TempFileUtil.GetTempPath("Mks Sand Box");
-            string expectedResyncCommand = string.Format(@"resync --overwriteChanged --restoreTimestamp --forceConfirm=yes -R -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot);
+            string expectedResyncCommand = string.Format(@"resync --overwriteChanged --restoreTimestamp --forceConfirm=yes --includeDropped -R -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot);
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), ExpectedProcessInfo(expectedResyncCommand));
 			string expectedAttribCommand = string.Format(@"-R /s ""{0}\*""", sandboxRoot);
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), ExpectedProcessInfo("attrib", expectedAttribCommand));
@@ -221,6 +221,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mksHistoryParserWrapper.ExpectAndReturn("Parse", new Modification[] {addedModification, modifiedModification, deletedModification}, new IsTypeOf(typeof (TextReader)), FROM, TO);
 			mksHistoryParserWrapper.ExpectAndReturn("ParseMemberInfoAndAddToModification", null, addedModification, new IsTypeOf(typeof(StringReader)));
 			mksHistoryParserWrapper.ExpectAndReturn("ParseMemberInfoAndAddToModification", null, modifiedModification, new IsTypeOf(typeof(StringReader)));
+            mksHistoryParserWrapper.ExpectAndReturn("ParseMemberInfoAndAddToModification", null, deletedModification, new IsTypeOf(typeof(StringReader)));
 			mockExecutorWrapper.SetupResult("Execute", new ProcessResult("", null, 0, false), new Type[]{typeof (ProcessInfo)});
 
 			mks = CreateMks(CreateSourceControlXml(), mksHistoryParser, mockProcessExecutor);

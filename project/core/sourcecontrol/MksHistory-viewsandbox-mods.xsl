@@ -55,6 +55,22 @@
           </xsl:if>
         </modificationtype>
       </modification>
-    </xsl:if>      
+    </xsl:if>
+    <xsl:if test="@modelType='si.FormerSandbox'">
+      <modification>
+        <project>
+          <xsl:value-of select="@context"/>
+        </project>
+        <name>
+          <xsl:value-of select="Field[@name='canonicalMember']/Value"/>
+        </name>
+        <fullname>
+          <xsl:value-of select="Field[@name='name']/Value"/>
+        </fullname>
+        <workingrev>NA</workingrev>
+        <memberrev>NA</memberrev>
+        <modificationtype>deleted</modificationtype>
+      </modification>
+    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
