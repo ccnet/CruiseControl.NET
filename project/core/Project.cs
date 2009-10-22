@@ -432,7 +432,9 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public void Prebuild(IIntegrationResult result)
         {
-            Prebuild(result, new Dictionary<string, string>());
+            var parameters = new Dictionary<string, string>();
+            if (result.Parameters != null) parameters = NameValuePair.ToDictionary(result.Parameters);
+            Prebuild(result, parameters);
         }
 
         public void Prebuild(IIntegrationResult result, Dictionary<string, string> parameterValues)
@@ -501,7 +503,9 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public void PublishResults(IIntegrationResult result)
         {
-            PublishResults(result, new Dictionary<string, string>());
+            var parameters = new Dictionary<string, string>();
+            if (result.Parameters != null) parameters = NameValuePair.ToDictionary(result.Parameters);
+            PublishResults(result, parameters);
         }
 
 		public void PublishResults(IIntegrationResult result, Dictionary<string, string> parameterValues)
