@@ -65,6 +65,9 @@ namespace ThoughtWorks.CruiseControl.Core
                 {
                     Log.Info("Building: " + request);
 
+                    target.ClearNotNeededMessages();
+
+
                     // hack : otherwise all labellers(CCnet and custom) should be altered, better do this in 1 place
                     // labelers only increase version if PREVIOUS result was ok
                     // they should also increase version if previous was exception, and the new

@@ -247,6 +247,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public IIntegrationResult Integrate(IntegrationRequest request)
         {
+            Log.Trace("Integrating {0}", Name);
+
             lock (currentProjectStatus)
             {
                 // Build up all the child items
@@ -263,8 +265,6 @@ namespace ThoughtWorks.CruiseControl.Core
                 GenerateSourceControlOperation(SourceControlOperation.GetSource);
                 GenerateTaskStatuses("Build tasks", Tasks);
                 GenerateTaskStatuses("Publisher tasks", Publishers);
-                ClearMessages(Message.MessageKind.Breakers);
-                ClearMessages(Message.MessageKind.FailingTasks);
             }
 
             // Start the integration
@@ -1160,6 +1160,15 @@ namespace ThoughtWorks.CruiseControl.Core
             }
             return parameterList;
         }
+
+
+
+        public void ClearNotNeededMessages()
+        {
+            ClearMessages(Message.MessageKind.Breakers);
+            ClearMessages(Message.MessageKind.FailingTasks);
+        }
+
 
     }
 }
