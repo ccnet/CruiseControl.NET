@@ -133,17 +133,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             MksHistoryParser parser = new MksHistoryParser();
             parser.ParseMemberInfoAndAddToModification(modification, new StringReader(MEMBER_INFO));
 
+            DateTime modifiedTimeWithLocalTimeZone = DateTime.Parse("2009-10-16T18:07:08");
+            DateTime modifiedTimeWithCorrectTimeZoneInformation = modification.ModifiedTime;
+            TimeSpan actualOffsetAtModifiedTime = modifiedTimeWithCorrectTimeZoneInformation.Subtract(modifiedTimeWithLocalTimeZone);
 
-            TimeZone localZone = TimeZone.CurrentTimeZone;
-            
-            TimeSpan localOffset = localZone.GetUtcOffset(DateTime.Now);
-            DateTime testDate = DateTime.Parse("2009-10-16T18:07:08");
-
-
-            TimeSpan testOffset = modification.ModifiedTime.Subtract(testDate);
+            TimeSpan expectedOffsetAtModifiedTime = TimeZone.CurrentTimeZone.GetUtcOffset(modifiedTimeWithLocalTimeZone);
 
             Assert.AreEqual("Test", modification.UserName);
-            Assert.AreEqual(localOffset, testOffset, "Date was not parsed with correct time zone offset.");
+            Assert.AreEqual(expectedOffsetAtModifiedTime, actualOffsetAtModifiedTime, "Date was not parsed with correct time zone offset.");
             Assert.AreEqual("Test Comment", modification.Comment);
         }
 	}
