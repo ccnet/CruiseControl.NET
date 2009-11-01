@@ -143,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             TimeSpan testOffset = modification.ModifiedTime.Subtract(testDate);
 
             Assert.AreEqual("Test", modification.UserName);
-            Assert.That(localOffset.CompareTo(testOffset) == 0, "Offsets do not match.");
+            Assert.AreEqual(localOffset, testOffset, "Date was not parsed with correct time zone offset.");
             Assert.AreEqual("Test Comment", modification.Comment);
         }
 	}
