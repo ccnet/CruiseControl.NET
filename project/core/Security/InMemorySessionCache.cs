@@ -1,7 +1,4 @@
 ﻿using Exortech.NetReflector;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
@@ -12,5 +9,12 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     public class InMemorySessionCache
         : SessionCacheBase
     {
+        public InMemorySessionCache() : this(new SystemClock())
+        {
+        }
+
+        public InMemorySessionCache(IClock clock) : base(clock)
+        {
+        }
     }
 }

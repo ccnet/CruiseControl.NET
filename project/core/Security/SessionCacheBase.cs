@@ -1,7 +1,6 @@
 ﻿using Exortech.NetReflector;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
@@ -11,9 +10,15 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     public abstract class SessionCacheBase
         : ISessionCache
     {
-        private Dictionary<string, SessionDetails> cache = new Dictionary<string, SessionDetails>();
+        private readonly IClock clock;
+        private readonly Dictionary<string, SessionDetails> cache = new Dictionary<string, SessionDetails>();
         private int durationInMinutes = 10;
         private SessionExpiryMode expiryMode = SessionExpiryMode.Sliding;
+
+        protected SessionCacheBase(IClock clock)
+        {
+            this.clock = clock;
+        }
 
         /// <summary>
         /// How long a session is valid before it expires.
@@ -50,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         public virtual string AddToCache(string userName)
         {
             string sessionToken = Guid.NewGuid().ToString();
-            SessionDetails session = new SessionDetails(userName, DateTime.Now.AddMinutes(durationInMinutes));
+            SessionDetails session = new SessionDetails(userName, clock.Now.AddMinutes(durationInMinutes));
             AddToCacheInternal(sessionToken, session);
             return sessionToken;
         }
@@ -141,13 +146,13 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             if (cache.ContainsKey(sessionToken))
             {
                 SessionDetails session = cache[sessionToken];
-                if (DateTime.Now < session.ExpiryTime)
+                if (clock.Now < session.ExpiryTime)
                 {
                     if (expiryMode == SessionExpiryMode.Sliding)
                     {
                         lock (this)
                         {
-                            cache[sessionToken].ExpiryTime = DateTime.Now.AddMinutes(durationInMinutes);
+                            cache[sessionToken].ExpiryTime = clock.Now.AddMinutes(durationInMinutes);
                         }
                     }
                     return session;

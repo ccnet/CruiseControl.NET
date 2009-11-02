@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -628,6 +628,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\BuildParameters.resx">
       <DependentUpon>BuildParameters.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\BuildProjectsControl.resx">
       <SubType>Designer</SubType>
@@ -639,18 +640,23 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\CurrentStatusWindow.resx">
       <DependentUpon>CurrentStatusWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\DisplayChangedProjects.resx">
       <DependentUpon>DisplayChangedProjects.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\ExecSettingsControl.resx">
       <DependentUpon>ExecSettingsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\GrowlSettingsControl.resx">
       <DependentUpon>GrowlSettingsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\PackagesListForm.resx">
       <DependentUpon>PackagesListForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\x10SettingsControl.resx">
       <DependentUpon>X10SettingsControl.cs</DependentUpon>
@@ -667,6 +673,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Security\ConfigureUserName.resx">
       <DependentUpon>ConfigureUserName.cs</DependentUpon>

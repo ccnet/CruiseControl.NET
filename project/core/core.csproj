@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F8113DB9-6C47-4FD1-8A01-655FCF151747}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -502,11 +502,13 @@
     </Compile>
     <Compile Include="Security\ChannelSecurityInformation.cs" />
     <Compile Include="Security\IChannelSecurity.cs" />
+    <Compile Include="IClock.cs" />
     <Compile Include="Security\ImpersonationDetails.cs" />
     <Compile Include="Security\InheritedProjectAuthorisation.cs" />
     <Compile Include="Security\Permissions.cs" />
     <Compile Include="Security\RemotingChannelSecurityInformation.cs" />
     <Compile Include="Security\SecureMessagesChannel.cs" />
+    <Compile Include="SystemClock.cs" />
     <Compile Include="SourceControlOperation.cs" />
     <Compile Include="Security\ActiveDirectoryAuthentication.cs" />
     <Compile Include="Security\Auditing\AuditLoggerBase.cs" />

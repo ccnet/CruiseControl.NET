@@ -19,10 +19,10 @@ namespace ThoughtWorks.CruiseControl.Core.Security
 		private readonly IExecutionEnvironment executionEnvironment;
         private string storeLocation;
 
-		public FileBasedSessionCache() : this(new SystemIoFileSystem(), new ExecutionEnvironment())
+		public FileBasedSessionCache() : this(new SystemIoFileSystem(), new ExecutionEnvironment(), new SystemClock())
 		{ }
 
-		public FileBasedSessionCache(IFileSystem fileSystem, IExecutionEnvironment executionEnvironment)
+		public FileBasedSessionCache(IFileSystem fileSystem, IExecutionEnvironment executionEnvironment, IClock clock) : base(clock)
 		{
 			this.fileSystem = fileSystem;
 			this.executionEnvironment = executionEnvironment;

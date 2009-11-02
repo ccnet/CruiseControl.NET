@@ -1,8 +1,6 @@
 ﻿using Exortech.NetReflector;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using ThoughtWorks.CruiseControl.Core.Security;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
@@ -40,11 +38,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void FixedExpiryTimeExpires()
         {
-            InMemorySessionCache cache = new InMemorySessionCache();
+            TestClock clock = new TestClock {Now = DateTime.Now};
+            InMemorySessionCache cache = new InMemorySessionCache(clock);
             cache.Duration = 1;
             cache.ExpiryMode = SessionExpiryMode.Fixed;
             string sessionToken = cache.AddToCache("johndoe");
-            System.Threading.Thread.Sleep(61000);
+            clock.TimePasses(TimeSpan.FromSeconds(61));
             string userName = cache.RetrieveFromCache(sessionToken);
             Assert.IsNull(userName);
         }
@@ -52,14 +51,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         [Test]
         public void SlidingExpiryTimeDoesntExpire()
         {
-            InMemorySessionCache cache = new InMemorySessionCache();
+            TestClock clock = new TestClock {Now = DateTime.Now};
+            InMemorySessionCache cache = new InMemorySessionCache(clock);
             cache.Duration = 1;
             cache.ExpiryMode = SessionExpiryMode.Sliding;
             string sessionToken = cache.AddToCache("johndoe");
-            System.Threading.Thread.Sleep(31000);
+            clock.TimePasses(TimeSpan.FromSeconds(31));
             string userName = cache.RetrieveFromCache(sessionToken);
             Assert.AreEqual("johndoe", userName);
-            System.Threading.Thread.Sleep(31000);
+            clock.TimePasses(TimeSpan.FromSeconds(31));
             userName = cache.RetrieveFromCache(sessionToken);
             Assert.AreEqual("johndoe", userName);
         }
