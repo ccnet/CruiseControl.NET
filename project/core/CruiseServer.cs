@@ -515,6 +515,9 @@ namespace ThoughtWorks.CruiseControl.Core
                     data = this.RetrieveLogData(request.ProjectName, request.BuildName);
                 }));
             response.Data = data;
+
+            // Perform a garbage collection to reduce the amount of memory held
+            GC.Collect();
             return response;
         }
         #endregion
