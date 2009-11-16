@@ -416,10 +416,13 @@
 				<exclude name="build\**" />
 				<exclude name="deployed\**" />
 				<exclude name="dist\**" />
-				<exclude name="**\bin\**" />
-				<exclude name="**\obj\**" />
-				<exclude name="**\CVS\**" />
-				<exclude name="**\_Resharper*\**" />
+				<exclude name="${src.dir}/*/bin/**"/>
+				<exclude name="${src.dir}/*/obj/**"/>
+				<exclude name="${src.dir}/_Resharper*/**"/>
+				<exclude name="${src.dir}/**/*.user"/>
+				<exclude name="${src.dir}/**/*.suo"/>
+				<exclude name="${src.dir}/*.sln.cache"/>
+				<exclude name="${src.dir}/*.sln.proj"/>
 			</fileset>
 		</zip>
     <exec program="tools\NSIS\makensis.exe" commandline="ccvalidator.nsi" />
