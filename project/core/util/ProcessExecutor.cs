@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -204,6 +203,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 			private void ExitedHandler(object sender, EventArgs e)
 			{
+                Log.Debug("[{0} {1}] process exited event received", projectName, processInfo.FileName);
 				processExited.Set();
 			}
 
@@ -211,7 +211,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			{
 				try
 				{
-					CollectOutput(outLine.Data, stdOutput, outputStreamClosed);
+					CollectOutput(outLine.Data, stdOutput, outputStreamClosed, "standard-output");
 
 					if (!string.IsNullOrEmpty(outLine.Data))
 						OnProcessOutput(new ProcessOutputEventArgs(ProcessOutputType.StandardOutput, outLine.Data));
@@ -228,7 +228,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			{
 				try
 				{
-					CollectOutput(outLine.Data, stdError, errorStreamClosed);
+					CollectOutput(outLine.Data, stdError, errorStreamClosed, "standard-error");
 
 					if (!string.IsNullOrEmpty(outLine.Data))
 						OnProcessOutput(new ProcessOutputEventArgs(ProcessOutputType.ErrorOutput, outLine.Data));
@@ -241,11 +241,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				}
 			}
 
-			private void CollectOutput(string output, StringBuilder collector, EventWaitHandle streamReadComplete)
+			private void CollectOutput(string output, StringBuilder collector, EventWaitHandle streamReadComplete, string streamLabel)
 			{
 				if (output == null)
 				{
-					// Null indicates the process has closed the stream
+                    Log.Debug("[{0} {1}] {2} stream closed -- null received in event", projectName, processInfo.FileName, streamLabel);
 					streamReadComplete.Set();
 					return;
 				}
