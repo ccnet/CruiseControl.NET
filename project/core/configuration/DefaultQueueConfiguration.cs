@@ -4,8 +4,74 @@ using System;
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
     /// <summary>
-    /// Provides a default implementation of the queue functionality.
+    /// Configure the behaviour of the build queues.
     /// </summary>
+    /// <title>Queue Configuration Element</title>
+    /// <version>1.4.2</version>
+    /// <example>
+    /// <code title="Full Example">
+    /// &lt;queue name="Q1" duplicates="UseFirst" lockqueues="Q2,Q3" /&gt;
+    /// </code>
+    /// <para>See the notes for additional examples.</para>
+    /// </example>
+    /// <remarks>
+    /// <heading>Duplicate Handling</heading>
+    /// <para>
+    /// There are three different settings that can be used to specify how force build requests should be handled.
+    /// </para>
+    /// <para>
+    /// The default behaviour is to not allow force build requests to update the queue and use the first request that was added.
+    /// </para>
+    /// <para>
+    /// The following example shows how to explicitly configure the default behavior.
+    /// </para>
+    /// <code>
+    /// &lt;cruisecontrol&gt;
+    ///   &lt;queue name="Q1" duplicates="UseFirst"/&gt;
+    ///   &lt;project name="MyFirstProject" queue="Q1" queuePriority="1"&gt;
+    ///     ...
+    ///   &lt;/project&gt;
+    /// &lt;/cruisecontrol&gt;
+    /// </code>
+    /// <para>
+    /// The following example shows how to configure a queue so that force build requests will replace existing requests of the interval trigger without changing the position of the request in the queue.
+    /// </para>
+    /// <code>
+    /// &lt;cruisecontrol&gt;
+    ///   &lt;queue name="Q1" duplicates="ApplyForceBuildsReplace"/&gt;
+    ///   &lt;project name="MyFirstProject" queue="Q1" queuePriority="1"&gt;
+    ///     ...
+    ///   &lt;/project&gt;
+    /// &lt;/cruisecontrol&gt;
+    /// </code>
+    /// <para>
+    /// The following example shows how to configure a queue so that force build requests will remove existing requests of the interval trigger and re-add a force build request. This is changing the position of the request in the queue.
+    /// </para>
+    /// <code>
+    /// &lt;cruisecontrol&gt;
+    ///   &lt;queue name="Q1" duplicates="ApplyForceBuildsReAdd"/&gt;
+    ///   &lt;project name="MyFirstProject" queue="Q1" queuePriority="1"&gt;
+    ///     ...
+    ///   &lt;/project&gt;
+    /// &lt;/cruisecontrol&gt;
+    /// </code>
+    /// <heading>Locking</heading>
+    /// <para>
+    /// The following example shows how to configure two queues, Q1 and Q2, that acquire a lock against each other. That means that while the queue Q1 is building a project the queue Q2 is locked. While Q2 is building Q1 is locked. To specify more than one queue that should be locked use commas to separate the queue names within the lockqueues attribute. Of course the lockqueues attribute can be used together with the duplicates attribute explained above.
+    /// </para>
+    /// <code>
+    /// &lt;cruisecontrol&gt;
+    ///   &lt;queue name="Q1" lockqueues="Q2"/&gt;
+    ///   &lt;queue name="Q2" lockqueues="Q1"/&gt;
+    ///   &lt;project name="MyFirstProject" queue="Q1" queuePriority="1"&gt;
+    ///     ...
+    ///   &lt;/project&gt;
+    ///   &lt;project name="MySecondProject" queue="Q2" queuePriority="1"&gt;
+    ///     ...
+    ///   &lt;/project&gt;
+    /// &lt;/cruisecontrol&gt;
+    /// </code>
+    /// </remarks>
     [ReflectorType("queue")]
     public class DefaultQueueConfiguration
         : IQueueConfiguration, IConfigurationValidation
@@ -31,6 +97,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// <summary>
         /// The name of the queue.
         /// </summary>
+        /// <default>n/a</default>
+        /// <version>1.4.2</version>
         [ReflectorProperty("name", Required = true)]
         public virtual string Name
         {
@@ -41,6 +109,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// <summary>
         /// Defines how duplicates should be handled.
         /// </summary>
+        /// <default>UseFirst</default>
+        /// <version>1.4.2</version>
         [ReflectorProperty("duplicates", Required = false)]
         public virtual QueueDuplicateHandlingMode HandlingMode
         {
@@ -48,6 +118,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             set { handlingMode = value; }
         }
 
+        /// <summary>
+        /// A comma sperated list of queue names that the queue should acquire a lock against.
+        /// </summary>
+        /// <default>none</default>
+        /// <version>1.4.2</version>
         [ReflectorProperty("lockqueues", Required = false)]
         public virtual string LockQueueNames
         {

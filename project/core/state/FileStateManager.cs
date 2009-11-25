@@ -8,8 +8,23 @@ using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.State
 {
-	[ReflectorType("state")]
-	public class FileStateManager : IStateManager
+    /// <summary>
+    /// The File State Manager is a State Manager that saves the state for one project to a file. The 
+    /// filename should be stored in either the working directory for the project or in the explicitly
+    /// specified directory. The filename will match the project name, but will have the extension .state.
+    /// </summary>
+    /// <title>File State Manager</title>
+    /// <version>1.0</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;state type="state" /&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;state type="state" directory="C:\CCNetState" /&gt;
+    /// </code>
+    /// </example>
+    [ReflectorType("state")]
+    public class FileStateManager : IStateManager
 	{
 		private readonly IFileSystem fileSystem;
 		private readonly IExecutionEnvironment executionEnvironment;
@@ -27,8 +42,13 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			fileSystem.EnsureFolderExists(stateFileDirectory);
 		}
 
-		[ReflectorProperty("directory", Required=false)]
-		public string StateFileDirectory
+        /// <summary>
+        /// The directory to save the state file to.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>The directory CCNet was launched from.</default>
+        [ReflectorProperty("directory", Required=false)]
+        public string StateFileDirectory
 		{
 			get { return stateFileDirectory; }
 			set
