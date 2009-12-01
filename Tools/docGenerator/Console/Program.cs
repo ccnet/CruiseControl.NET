@@ -9,6 +9,7 @@
     using System.Text;
     using System.Xml.Linq;
     using Exortech.NetReflector;
+    using System.Text.RegularExpressions;
 
     public class Program
     {
@@ -31,8 +32,16 @@
             try
             {
                 var baseFolder = Path.Combine(Environment.CurrentDirectory, DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture));
-                Directory.CreateDirectory(baseFolder);
+                if (args.Length > 1)
+                {
+                    baseFolder = args[1];
+                    if (!Path.IsPathRooted(baseFolder))
+                    {
+                        baseFolder = Path.Combine(Environment.CurrentDirectory, baseFolder);
+                    }
+                }
 
+                Directory.CreateDirectory(baseFolder);
                 var assembly = Assembly.LoadFrom(assemblyName);
                 var types = assembly.GetExportedTypes();
                 foreach (var type in types)
@@ -44,6 +53,10 @@
                         var attribute = attributes[0] as ReflectorTypeAttribute;
                         var fileName = Path.Combine(baseFolder, attribute.Name + ".wiki");
                         WriteToConsole("Generating " + attribute.Name + ".wiki", ConsoleColor.White);
+                        if (File.Exists(fileName))
+                        {
+                            File.Delete(fileName);
+                        }
 
                         var typeElement = (from element in documentation.Descendants("member")
                                            where element.Attribute("name").Value == "T:" + type.FullName
@@ -137,47 +150,108 @@
         {
             foreach (var tagElement in typeElement.Elements(tagName))
             {
-                if (tagElement.Elements().Count() == 0)
+                output.WriteLine(ParseElement(tagElement));
+            }
+        }
+
+        private static string ParseElement(XElement element)
+        {
+            var builder = new StringBuilder();
+
+            foreach (var node in element.Nodes())
+            {
+                if (node is XText)
                 {
-                    output.WriteLine(tagElement.Value.Trim());
+                    builder.Append(TrimValue((node as XText).Value));
                 }
-                else
+                else if (node is XElement)
                 {
-                    foreach (var subElement in tagElement.Elements())
+                    var childElement = node as XElement;
+                    switch (childElement.Name.LocalName)
                     {
-                        switch (subElement.Name.LocalName)
-                        {
-                            case "code":
-                                var title = subElement.Attribute("title");
-                                var options = "borderStyle=solid" +
-                                    (title == null ? string.Empty : "|titleBGColor=#ADD6FF|title=" + title.Value);
-                                try
+                        case "code":
+                            var codeTitle = childElement.Attribute("title");
+                            var options = "borderStyle=solid" +
+                                (codeTitle == null ? string.Empty : "|titleBGColor=#ADD6FF|title=" + codeTitle.Value);
+                            try
+                            {
+                                var xmlCode = XDocument.Parse(childElement.Value);
+                                builder.AppendLine("{code:xml|" + options + "}");
+                                builder.AppendLine(xmlCode.ToString(SaveOptions.None));
+                            }
+                            catch
+                            {
+                                builder.AppendLine("{code:" + options + "}");
+                                builder.AppendLine(TrimValue(childElement.Value));
+                            }
+
+                            builder.AppendLine("{code}");
+                            break;
+
+                        case "heading":
+                            builder.AppendLine("h4. " + TrimValue(childElement.Value));
+                            break;
+
+                        case "b":
+                            var boldValue = TrimValue(childElement.Value);
+                            builder.Append((boldValue.StartsWith(" ") ? " *" : "*") + boldValue.Trim() + (boldValue.EndsWith(" ") ? "* " : "*"));
+                            break;
+
+                        case "para":
+                            var paraType = childElement.Attribute("type");
+                            var paraChild = new XElement(childElement);
+                            if (paraType != null)
+                            {
+                                builder.Append("{" + paraType.Value);
+                                var paraTitle = paraChild.Element("title");
+                                if (paraTitle != null)
                                 {
-                                    var xmlCode = XDocument.Parse(subElement.Value);
-                                    output.WriteLine("{code:xml|" + options + "}");
-                                    output.WriteLine(xmlCode.ToString(SaveOptions.None));
-                                }
-                                catch
-                                {
-                                    output.WriteLine("{code:" + options + "}");
-                                    output.WriteLine(subElement.Value.Trim());
+                                    builder.Append(":title=" + TrimValue(paraTitle.Value));
+                                    paraTitle.Remove();
                                 }
 
-                                output.WriteLine("{code}");
-                                break;
+                                builder.AppendLine("}");
+                            }
 
-                            case "heading":
-                                output.WriteLine("h4. " + subElement.Value.Trim());
-                                output.WriteLine();
-                                break;
+                            builder.AppendLine(ParseElement(paraChild));
+                            if (paraType != null)
+                            {
+                                builder.AppendLine("{" + paraType.Value + "}");
+                            }
+                            break;
 
-                            default:
-                                output.WriteLine(subElement.Value.Trim());
-                                break;
-                        }
+                        case "link":
+                            builder.Append("[" + TrimValue(childElement.Value) + "]");
+                            break;
+
+                        default:
+                            builder.Append(ParseElement(childElement));
+                            break;
                     }
                 }
             }
+
+            return builder.ToString();
+        }
+
+        private static string TrimValue(string value)
+        {
+            var builder = new StringBuilder();
+
+            var lines = value.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            for (var loop = 0; loop < lines.Length; loop++)
+            {
+                if (loop > 0)
+                {
+                    builder.Append(" ");
+                }
+
+                builder.Append(lines[loop].Trim());
+            }
+
+            // Add start and end spaces if the value has these - saves having to check if a space needs to be added later
+            var output = (value.StartsWith(" ") ? " " : string.Empty) + builder.ToString() + (value.EndsWith(" ") ? " " : string.Empty);
+            return output;
         }
 
         private static void WriteElements(Type type, StreamWriter output, XDocument documentation)
@@ -198,7 +272,7 @@
                                     orderby item.Key.Name
                                     select item)
             {
-                var memberName = (element.Key is FieldInfo ? "F:" : "P:") + type.FullName + "." + element.Key.Name;
+                var memberName = (element.Key is FieldInfo ? "F:" : "P:") + element.Key.DeclaringType.FullName + "." + element.Key.Name;
                 var description = string.Empty;
                 var dataType = element.Key is FieldInfo ? (element.Key as FieldInfo).FieldType : (element.Key as PropertyInfo).PropertyType;
                 var dataTypeName = dataType.Name;
@@ -256,7 +330,7 @@
             {
                 foreach (var element in memberElement.Elements(tag))
                 {
-                    var value = element.Value.Trim();
+                    var value = ParseElement(element);
                     if (value.Length > 0)
                     {
                         if (count++ > 0)

@@ -30,9 +30,17 @@ namespace ThoughtWorks.CruiseControl.Core.State
 		private readonly IExecutionEnvironment executionEnvironment;
 		private string stateFileDirectory;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileStateManager"/> class.
+        /// </summary>
 		public FileStateManager() : this(new SystemIoFileSystem(), new ExecutionEnvironment())
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileStateManager"/> class.
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="executionEnvironment">The execution environment.</param>
 		public FileStateManager(IFileSystem fileSystem, IExecutionEnvironment executionEnvironment)
 		{
 			this.fileSystem = fileSystem;
@@ -60,11 +68,23 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			}
 		}
 
+        /// <summary>
+        /// Determines whether the project has previous state.
+        /// </summary>
+        /// <param name="project">The name of project.</param>
+        /// <returns>
+        /// <c>true</c> if the project has previous state; otherwise, <c>false</c>.
+        /// </returns>
 		public bool HasPreviousState(string project)
 		{
 			return fileSystem.FileExists(GetFilePath(project));
 		}
-		
+
+        /// <summary>
+        /// Loads the state of the project.
+        /// </summary>
+        /// <param name="project">The name of the project.</param>
+        /// <returns>An <see cref="IIntegrationResult"/> containing the current state.</returns>
 		public IIntegrationResult LoadState(string project)
 		{
 			var stateFile = LoadStateIntoDocument(project);
@@ -81,12 +101,22 @@ namespace ThoughtWorks.CruiseControl.Core.State
             }
 		}
 
-		public IIntegrationResult LoadState(TextReader stateFileReader)
+        /// <summary>
+        /// Loads the state from a <see cref="TextReader"/>.
+        /// </summary>
+        /// <param name="stateFileReader">The state file reader.</param>
+        /// <returns>An <see cref="IIntegrationResult"/> containing the current state.</returns>
+        public IIntegrationResult LoadState(TextReader stateFileReader)
 		{
 			XmlSerializer serializer = new XmlSerializer(typeof (IntegrationResult));
 			return (IntegrationResult) serializer.Deserialize(stateFileReader);
 		}
 
+        /// <summary>
+        /// Loads the state into an <see cref="XmlDocument"/>.
+        /// </summary>
+        /// <param name="project">The name of the project.</param>
+        /// <returns>An <see cref="XmlDocument"/> containing the state.</returns>
 		private XmlDocument LoadStateIntoDocument(string project)
 		{
             var document = new XmlDocument();
@@ -127,11 +157,21 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			}
 		}
 
+        /// <summary>
+        /// Gets the file path.
+        /// </summary>
+        /// <param name="project">The name of project.</param>
+        /// <returns>The file path to a state file.</returns>
 		private string GetFilePath(string project)
 		{
 			return Path.Combine(StateFileDirectory, StateFilename(project));
 		}
 
+        /// <summary>
+        /// Generates the state filename for a project.
+        /// </summary>
+        /// <param name="project">The name of project.</param>
+        /// <returns>The name of the state file for the project.</returns>
 		private string StateFilename(string project)
 		{
 			StringBuilder strBuilder = new StringBuilder();
