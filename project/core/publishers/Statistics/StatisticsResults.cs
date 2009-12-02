@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// the existing content of the file.  If statistics are added or removed
         /// over time, the headings and values may not match up correctly.
         /// </remarks>
-        internal void AppendCsv(string fileName, List<Statistic> statistics)
+        internal void AppendCsv(string fileName, List<StatisticBase> statistics)
         {
             bool isNew = !File.Exists(fileName);
             StreamWriter text = null;
@@ -66,11 +66,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="statistics">The statistics.</param>
-        internal static void WriteHeadings(TextWriter writer, List<Statistic> statistics)
+        internal static void WriteHeadings(TextWriter writer, List<StatisticBase> statistics)
         {
             for (int i = 0; i < statistics.Count; i++)
             {
-                Statistic statistic = statistics[i];
+                var statistic = statistics[i];
                 if (i > 0) writer.Write(", ");
                 writer.Write('"' + statistic.Name + '"');
             }

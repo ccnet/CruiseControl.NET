@@ -416,6 +416,8 @@
     <Compile Include="publishers\Statistics\Statistic.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="publishers\Statistics\StatisticBase.cs" />
+    <Compile Include="publishers\Statistics\StatisticResult.cs" />
     <Compile Include="publishers\Statistics\StatisticsBuilder.cs">
       <SubType>Code</SubType>
     </Compile>

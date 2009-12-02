@@ -4,10 +4,13 @@ using Exortech.NetReflector;
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
     /// <summary>
-    /// Data object for a statistic that extracts the first item that matches the specifed XML XPath.
+    /// A statistic that extracts the first item that matches the specifed XML XPath.
     /// </summary>
-	[ReflectorType("firstMatch")]
-	public class FirstMatch : Statistic
+    /// <title>FirstMatch</title>
+    /// <version>1.0</version>
+    [ReflectorType("firstMatch")]
+    public class FirstMatch 
+        : StatisticBase
 	{
 		public FirstMatch()
 		{

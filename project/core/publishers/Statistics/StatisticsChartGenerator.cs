@@ -9,7 +9,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
     /// <summary>
-    /// A charting tool for <see cref="Statistic"/>s.
+    /// A charting tool for <see cref="StatisticBase"/>s.
     /// </summary>
     public class StatisticsChartGenerator
     {

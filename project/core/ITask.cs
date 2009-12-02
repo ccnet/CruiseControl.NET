@@ -5,7 +5,8 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// <summary>
 	/// Defines a task that may be run.
 	/// </summary>
-	[TypeConverter(typeof(ExpandableObjectConverter))]
+    /// <title>Task Blocks</title>
+    [TypeConverter(typeof(ExpandableObjectConverter))]
 	public interface ITask
 	{
 		/// <summary>

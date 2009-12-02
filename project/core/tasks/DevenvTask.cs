@@ -1,13 +1,54 @@
-using System;
-using System.Collections;
-using System.IO;
-using System.Text;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
-	[ReflectorType("devenv")]
+    using System;
+    using System.Collections;
+    using System.IO;
+    using System.Text;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
+    /// <summary>
+    /// <para>
+    /// Most complex build processes use <link>NAnt Task</link> or <link>MSBuild Task</link> to script the build. However, for simple
+    /// projects that just need to build a Visual Studio.NET solution, the Visual Studio task &lt;devenv&gt; provides an easier method.
+    /// </para>
+    /// </summary>
+    /// <title>Visual Studio Task</title>
+    /// <version>1.0</version>
+    /// <remarks>
+    /// <para>
+    /// If executable and version are not specified, CC.NET will search the registry for VS.NET 2008, 2005, 2003, and 2002 in that order.
+    /// If you need to use a specific version when a newer version is installed, you should specify the version property to identify it,
+    /// or specify the executable property to point to the location of correct version of devenv.com.
+    /// </para>
+    /// <para type="warning">
+    /// This task requires you to have Visual Studio .NET installed on your integration server.
+    /// </para>
+    /// <para>
+    /// Often programmers like to use a centralised project to build an entire software system. They define specific dependencies and the
+    /// build order on that specific project to reproduce the behaviours of an nmake build.
+    /// </para>
+    /// </remarks>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;devenv&gt;
+    /// &lt;solutionfile&gt;src\MyProject.sln&lt;/solutionfile&gt;
+    /// &lt;configuration&gt;Debug&lt;/configuration&gt;
+    /// &lt;/devenv&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;devenv&gt;
+    /// &lt;solutionfile&gt;src\MyProject.sln&lt;/solutionfile&gt;
+    /// &lt;configuration&gt;Debug&lt;/configuration&gt;
+    /// &lt;buildtype&gt;Build&lt;/buildtype&gt;
+    /// &lt;project&gt;MyProject&lt;/project&gt;
+    /// &lt;executable&gt;c:\program files\Microsoft Visual Studio .NET\Common7\IDE\devenv.com&lt;/executable&gt;
+    /// &lt;buildTimeoutSeconds&gt;600&lt;/buildTimeoutSeconds&gt;
+    /// &lt;version&gt;VS2002&lt;/version&gt;
+    /// &lt;/devenv&gt;
+    /// </code>
+    /// </example>
+    [ReflectorType("devenv")]
 	public class DevenvTask
         : TaskBase
 	{
@@ -48,6 +89,21 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 					VS2008_REGISTRY_PATH, VS2005_REGISTRY_PATH, VS2003_REGISTRY_PATH, VS2002_REGISTRY_PATH
 				};
 
+        /// <summary>
+        /// The version of Visual Studio.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>See below</default>
+        /// <values>
+        /// <value>VS2002</value>
+        /// <value>VS2003</value>
+        /// <value>VS2005</value>
+        /// <value>VS2008</value>
+        /// <value>7.0</value>
+        /// <value>7.1</value>
+        /// <value>8.0</value>
+        /// <value>9.0</value>
+        /// </values>
 		[ReflectorProperty("version", Required = false)]
 		public string Version
 		{
@@ -63,6 +119,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}
 		}
 
+        /// <summary>
+        /// The path to devenv.com.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>See below</default>
 		[ReflectorProperty("executable", Required=false)]
 		public string Executable
 		{
@@ -125,18 +186,48 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			throw new Exception("Unknown version of Visual Studio, or no version found.");
 		}
 
+        /// <summary>
+        /// The path of the solution file to build. If relative, it is relative to the Project Working Directory. 
+        /// </summary>
+        /// <default>n/a</default>
+        /// <version>1.0</version>
 		[ReflectorProperty("solutionfile")]
 		public string SolutionFile;
 	
-		[ReflectorProperty("configuration")]
+        /// <summary>
+        /// The solution configuration to use (not case sensitive). 
+        /// </summary>
+        /// <default>n/a</default>
+        /// <version>1.0</version>
+        [ReflectorProperty("configuration")]
 		public string Configuration;
 
-		[ReflectorProperty("buildTimeoutSeconds", Required = false)] 
+        /// <summary>
+        /// Number of seconds to wait before assuming that the process has hung and should be killed. 
+        /// </summary>
+        /// <default>600 (10 minutes)</default>
+        /// <version>1.0</version>
+        [ReflectorProperty("buildTimeoutSeconds", Required = false)] 
 		public int BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
 
+        /// <summary>
+        /// The type of build.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>rebuild</default>
+        /// <values>
+        /// <value>Rebuild</value>
+        /// <value>Build</value>
+        /// <value>Clean</value>
+        /// </values>
 		[ReflectorProperty("buildtype", Required = false)]
 		public string BuildType = DEFAULT_BUILDTYPE;
 
+        /// <summary>
+        /// A specific project in the solution, if you only want to build one project (not case sensitive). 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>All projects</default>
 		[ReflectorProperty("project", Required = false)]
 		public string Project  = DEFAULT_PROJECT;
 

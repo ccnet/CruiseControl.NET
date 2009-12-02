@@ -7,6 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// <summary>
     /// Defines a dynamic value.
     /// </summary>
+    /// <title>Dynamic Values</title>
     public interface IDynamicValue
     {
         /// <summary>

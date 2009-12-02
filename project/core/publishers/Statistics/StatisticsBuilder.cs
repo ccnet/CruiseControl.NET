@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// <summary>
         /// The statistics this builder works with.
         /// </summary>
-        private readonly List<Statistic> logStatistics = new List<Statistic>();
+        private readonly List<StatisticBase> logStatistics = new List<StatisticBase>();
 
         /// <summary>
         /// Create a StatisticsBuilder with the default set of statistics, all included.
@@ -74,10 +74,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// </summary>
         /// <param name="statistic">The name of the statistic.</param>
         /// <remarks>
-        /// If the statistic's <see cref="Statistic.Include"/> property
+        /// If the statistic's <see cref="StatisticBase.Include"/> property
         /// is false, this method may actually remove it from the list!
         /// </remarks>
-        internal void Add(Statistic statistic)
+        internal void Add(StatisticBase statistic)
         {
             if (!logStatistics.Contains(statistic))
             {
@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         {
             XPathNavigator nav = doc.CreateNavigator();
             StatisticsResults statisticResults = new StatisticsResults();
-            foreach (Statistic s in logStatistics)
+            foreach (StatisticBase s in logStatistics)
             {
                 statisticResults.Add(s.Apply(nav));
             }
@@ -113,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// <summary>
         /// The statistics this builder works with.
         /// </summary>
-        public List<Statistic> Statistics
+        public List<StatisticBase> Statistics
         {
             get { return logStatistics; }
         }

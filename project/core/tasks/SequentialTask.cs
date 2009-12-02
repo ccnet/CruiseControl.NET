@@ -6,8 +6,31 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     /// <summary>
-    /// Runs a number of tasks in sequence.
+    /// <para>
+    /// Runs a set of child tasks in order.
+    /// This task is primarily designed for scenarios where execution can take more than more path (e.g. <link>Parallel Task</link>). This
+    /// is normally not required for tasks directly under the prebuild, tasks or publishers element in a project.
+    /// </para>
     /// </summary>
+    /// <title> Sequential Task </title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;sequential&gt;
+    /// &lt;tasks&gt;
+    /// &lt;!-- Tasks defined here --&gt;
+    /// &lt;/tasks&gt;
+    /// &lt;/sequential&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;sequential continueOnFailure="true"&gt;
+    /// &lt;description&gt;Example of how to run multiple tasks in sequence.&lt;/description&gt;
+    /// &lt;tasks&gt;
+    /// &lt;!-- Tasks defined here --&gt;
+    /// &lt;/tasks&gt;
+    /// &lt;/sequential&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("sequential")]
     public class SequentialTask
         : TaskContainerBase
@@ -17,6 +40,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The tasks to run in sequence.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("tasks")]
         public override ITask[] Tasks
         {
@@ -29,6 +54,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Should the tasks continue to run, even if there is a failure?
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("continueOnFailure", Required = false)]
         public bool ContinueOnFailure { get; set; }
         #endregion

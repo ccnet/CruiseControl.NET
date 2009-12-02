@@ -1,15 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using Exortech.NetReflector;
-using System.Xml;
-using ThoughtWorks.CruiseControl.Core.Tasks;
-
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using Exortech.NetReflector;
+    using System.Xml;
+    using ThoughtWorks.CruiseControl.Core.Tasks;
+
     /// <summary>
-    /// Publishes the results in an RSS feed.
+    /// <para>
+    /// This publisher generates an RSS file reporting the latest results for a Project.
+    /// </para>
+    /// <para>
+    /// The RSS feed is available via the Dasboard in the Project Report. There needs to be 1 build done with this publisher for the icon
+    /// to show up.
+    /// </para>
     /// </summary>
+    /// <title>RSS Publisher</title>
+    /// <version>1.3</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;rss /&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;rss items="30" /&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("rss")]
     public class RssPublisher 
         : TaskBase
@@ -21,6 +37,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <summary>
         /// The number of items to be displayed.
         /// </summary>
+        /// <default>20</default>
+        /// <version>1.4.4</version>
         [ReflectorProperty("items", Required = false)]
         public int NumberOfItems
         {

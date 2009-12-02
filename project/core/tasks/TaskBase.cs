@@ -24,6 +24,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The dynamic values to use for the task.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("dynamicValues", Required = false)]
         public IDynamicValue[] DynamicValues
         {
@@ -44,8 +46,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         #region Description
         /// <summary>
-        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown
+        /// Description used for the visualisation of the buildstage, if left empty the process name will be shown.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>The task/publisher name.</default>
         [ReflectorProperty("description", Required = false)]
         public string Description { get; set; }
         #endregion

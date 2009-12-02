@@ -1,14 +1,67 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Xml;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Core.Tasks;
-
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Xml;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.Core.Tasks;
+
+    /// <summary>
+    /// <para>
+    /// The publisher can be used to collect and update statistics for each build in a file. Some of the statistics which would be collected
+    /// are build durations and test count.
+    /// At the minimal, the publisher can be configured with just an empty &lt;statistics /&gt; element in the publishers section. This would
+    /// pick up some default statistics for capturing during the build process.
+    /// </para>
+    /// <para type="info">
+    /// Statistics publisher must come after any File Merge tasks in the publishers section, in case you want to collect statistics from
+    /// merged files.
+    /// </para>
+    /// <para>
+    /// The task will generate a statistics.csv and report.xml file in the artifact directory.
+    /// </para>
+    /// </summary>
+    /// <title> Statistics Publisher </title>
+    /// <version>1.0</version>
+    /// <remarks>
+    /// <para>
+    /// If you want to specify your own, or override the default statistics, it is possible to do so by supplying the name and xpath for the
+    /// statistics and the corresponding location in the build log to pick the data from.
+    /// </para>
+    /// <code>
+    /// &lt;statistics&gt;
+    /// &lt;statisticList&gt;
+    /// &lt;statistic name="metric_name" xpath="xpath expression"/&gt;
+    /// &lt;firstMatch name="metric_name" xpath="xpath expression" /&gt;
+    /// &lt;/statisticList&gt;
+    /// &lt;/statistics&gt;
+    /// </code>
+    /// <para>
+    /// It is also possible to optionally configure the statistics publisher to generate charts for any metric against different builds, and
+    /// to even remove them altogether. This feature has been added in version 1.3:
+    /// </para>
+    /// <code>
+    /// &lt;statistics&gt;
+    /// &lt;statisticList&gt;
+    /// &lt;statistic name="metric_name" xpath="xpath expression" generateGraph="true" include="true"/&gt;
+    /// &lt;firstMatch name="metric_name" xpath="xpath expression" include="false"/&gt;
+    /// &lt;/statisticList&gt;
+    /// &lt;/statistics&gt;
+    /// </code>
+    /// <para>
+    /// For the statistics configured with 'generateGraph="true"', a graph is generated with different builds on x-axis and the configured
+    /// metric on y-axis in the artifacts directory named as &lt;statistic name&gt;.png. This chart would still be a very basic representation.
+    /// For now at least, exporting the report to Excel for charting/analyis might be a better option.
+    /// </para>
+    /// </remarks>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;statistics /&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("statistics")]
     public class StatisticsPublisher 
         : TaskBase
@@ -28,11 +81,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// <remarks>
         /// There is a default list of statistics to be included, and this list
         /// adds additional statistics to the build.  Any statistic defined with
-        /// <code>include=false</code> will be omitted, even if it is in the
+        /// <b>include=false</b> will be omitted, even if it is in the
         /// default list.
         /// </remarks>
+        /// <default>None</default>
+        /// <version>1.0</version>
         [ReflectorArray("statisticList", Required=false)]
-        public Statistic[] ConfiguredStatistics = new Statistic[0];
+        public StatisticBase[] ConfiguredStatistics = new Statistic[0];
 
         #region ITask Members
 
@@ -45,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             StatisticsBuilder builder = new StatisticsBuilder();
             for (int i = 0; i < ConfiguredStatistics.Length; i++)
             {
-                Statistic statistic = ConfiguredStatistics[i];
+                StatisticBase statistic = ConfiguredStatistics[i];
                 builder.Add(statistic);     // Note: This may actually remove the statistic if include=false.
             }
             StatisticsResults stats = builder.ProcessBuildResults(integrationResult);
@@ -68,11 +123,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// <param name="statistics">The statistics to include, checking their
         /// <see cref="Statistic.GenerateGraph"/> property</param>
         /// <returns>The chart generator.</returns>
-        private static StatisticsChartGenerator ChartGenerator(List<Statistic> statistics)
+        private static StatisticsChartGenerator ChartGenerator(List<StatisticBase> statistics)
         {
             StatisticsChartGenerator chartGenerator = new StatisticsChartGenerator();
             List<string> list = new List<String>();
-            statistics.ForEach(delegate(Statistic statistic)
+            statistics.ForEach(delegate(StatisticBase statistic)
                                    {
                                        if (statistic.GenerateGraph)
                                        {
@@ -198,7 +253,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// the file.  If statistics are added or removed over time, the headings
         /// and values may not match up correctly.
         /// </remarks>
-        private static void UpdateCsvFile(StatisticsResults statisticsResults, List<Statistic> statistics,
+        private static void UpdateCsvFile(StatisticsResults statisticsResults, List<StatisticBase> statistics,
                                           IIntegrationResult integrationResult)
         {
             string csvFile = CsvStatisticsFile(integrationResult);
