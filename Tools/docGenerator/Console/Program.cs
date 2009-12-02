@@ -215,6 +215,18 @@
                             builder.AppendLine("h4. " + TrimValue(childElement.Value));
                             break;
 
+                        case "list":
+                            foreach (XElement itemElement in childElement.Elements("item"))
+                            {
+                                if (!builder.ToString().EndsWith(Environment.NewLine))
+                                {
+                                    builder.AppendLine();
+                                }
+
+                                builder.Append("* " + TrimValue(itemElement.Value));
+                            }
+                            break;
+
                         case "b":
                             var boldValue = TrimValue(childElement.Value);
                             builder.Append((boldValue.StartsWith(" ") ? " *" : "*") + boldValue.Trim() + (boldValue.EndsWith(" ") ? "* " : "*"));
@@ -346,6 +358,24 @@
                     description = RetrieveXmlData(memberElement, "summary", "remarks");
                     defaultValue = RetrieveXmlData(memberElement, "default");
                     version = RetrieveXmlData(memberElement, "version");
+                    var values = memberElement.Element("values");
+                    if (values != null)
+                    {
+                        // If values are defined, then this must be a string value
+                        if (dataType.IsArray)
+                        {
+                            dataTypeName = "String array\\\\The following values are valid:";
+                        }
+                        else
+                        {
+                            dataTypeName = "String - one of:";
+                        }
+
+                        foreach (var valueElement in values.Elements("value"))
+                        {
+                            dataTypeName += Environment.NewLine + "* " + TrimValue(valueElement.Value);
+                        }
+                    }
                 }
 
                 // Handle any special keywords
