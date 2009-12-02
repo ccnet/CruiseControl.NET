@@ -357,6 +357,8 @@
     <Compile Include="Core\SourceControl\RobocopyHistoryParserTest.cs" />
     <Compile Include="Core\SourceControl\VstsHistoryParserTest.cs" />
     <Compile Include="Core\State\XmlProjectStateManagerTest.cs" />
+    <Compile Include="Core\Tasks\HttpRequestSettingsTest.cs" />
+    <Compile Include="Core\Tasks\HttpStatusTaskTest.cs" />
     <Compile Include="Core\Tasks\NDependTaskTests.cs" />
     <Compile Include="Core\Tasks\ParallelTaskTests.cs" />
     <Compile Include="Core\Tasks\SequentialTaskTests.cs" />

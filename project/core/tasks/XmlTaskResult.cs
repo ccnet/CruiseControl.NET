@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <returns>A new <see cref="XmlWriter"/>.</returns>
         public XmlWriter GetWriter()
         {
-            if (this.Data != null)
+            if (this.CachedData != null)
             {
                 throw new InvalidOperationException("Result already written.");
             }

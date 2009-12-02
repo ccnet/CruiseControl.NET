@@ -25,10 +25,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     {
         #region Private fields
         #region successStatusCodes
+
         /// <summary>
         /// The successful status codes.
         /// </summary>
-        private int[] successStatusCodes = new int[] { (int)HttpStatusCode.OK };
+        private int[] successStatusCodes;
         #endregion
         #endregion
 
@@ -39,6 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         public HttpStatusTask()
         {
             this.Retries = 3;
+            this.successStatusCodes = new[] { (int)HttpStatusCode.OK };
         }
         #endregion
 
@@ -62,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                             result = result + ",";
                         }
 
-                        result = result + code;
+                        result = result + code.ToString();
                     }
                 }
 
@@ -255,6 +257,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             XmlWriter writer = taskResult.GetWriter();
             writer.WriteStartElement("httpStatus");
             writer.WriteAttributeString("uri", this.RequestSettings.Uri.ToString());
+            writer.WriteAttributeString("success", XmlConvert.ToString(taskResult.Success));
             if (!String.IsNullOrEmpty(this.Description))
             {
                 writer.WriteElementString("description", this.Description);

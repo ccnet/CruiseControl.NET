@@ -21,6 +21,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public override object Read(XmlNode node, NetReflectorTypeTable types)
 		{
+         if (node == null) // Why am I asked to parse a null node?
+            return null;
+
 			Timeout timeout = Timeout.DefaultTimeout;
 			if (node is XmlAttribute)
 			{

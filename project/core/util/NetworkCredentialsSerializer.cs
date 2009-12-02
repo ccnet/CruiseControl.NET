@@ -59,11 +59,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
                 if (elem.HasAttribute("domain") && !String.IsNullOrEmpty(elem.GetAttribute("domain").Trim()))
                 {
-                    ret = new NetworkCredential(elem.GetAttribute("userName").Trim(), elem.GetAttribute("userName").Trim(), elem.GetAttribute("domain").Trim());
+                    ret = new NetworkCredential(elem.GetAttribute("userName").Trim(), elem.GetAttribute("password").Trim(), elem.GetAttribute("domain").Trim());
                 }
                 else
                 {
-                    ret = new NetworkCredential(elem.GetAttribute("userName").Trim(), elem.GetAttribute("userName").Trim());
+                   ret = new NetworkCredential(elem.GetAttribute("userName").Trim(), elem.GetAttribute("password").Trim());
                 }
             }
 
