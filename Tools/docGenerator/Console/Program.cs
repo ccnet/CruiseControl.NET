@@ -43,6 +43,9 @@
 
                 Directory.CreateDirectory(baseFolder);
                 var assembly = Assembly.LoadFrom(assemblyName);
+
+                // Load the documentation for any dependencies
+                LoadDependencyDocumentation(Path.GetDirectoryName(assemblyName), assembly, documentation);
                 var types = assembly.GetExportedTypes();
                 foreach (var type in types)
                 {
@@ -111,7 +114,7 @@
                             output.WriteLine("{info:title=Automatically Generated}");
                             output.WriteLine(
                                 "Documentation generated on " +
-                                DateTime.Now.ToUniversalTime().ToString("dddd, d MMM yyyy", CultureInfo.InvariantCulture) + 
+                                DateTime.Now.ToUniversalTime().ToString("dddd, d MMM yyyy", CultureInfo.InvariantCulture) +
                                 " at " +
                                 DateTime.Now.ToUniversalTime().ToString("h:mm:ss tt", CultureInfo.InvariantCulture));
                             output.WriteLine("{info}");
@@ -123,6 +126,26 @@
             catch (Exception error)
             {
                 WriteToConsole(error.Message, ConsoleColor.Red);
+            }
+        }
+
+        private static void LoadDependencyDocumentation(string baseFolder, Assembly assembly, XDocument documentation)
+        {
+            foreach (var dependency in assembly.GetReferencedAssemblies())
+            {
+                var dependencyData = Path.Combine(baseFolder, dependency.Name + ".xml");
+                if (File.Exists(dependencyData))
+                {
+                    var dependencyXml = XDocument.Load(dependencyData);
+                    if (documentation.Root != null)
+                    {
+                        documentation.Root.Add(dependencyXml.Root.Elements());
+                    }
+                    else
+                    {
+                        documentation.Add(dependencyXml.Root);
+                    }
+                }
             }
         }
 
@@ -303,6 +326,14 @@
 
                         dataTypeName = builder.ToString();
                     }
+                    else
+                    {
+                        dataTypeName = RetrieveTypeName(itemType, documentation) + " array";
+                    }
+                }
+                else
+                {
+                    dataTypeName = RetrieveTypeName(dataType, documentation);
                 }
 
                 var defaultValue = string.Empty;
@@ -360,6 +391,21 @@
             }
 
             return builder.ToString();
+        }
+        private static string RetrieveTypeName(Type dataType, XDocument documentation)
+        {
+            var typeElement = (from element in documentation.Descendants("member")
+                               where element.Attribute("name").Value == "T:" + dataType.FullName
+                               select element).SingleOrDefault();
+            var titleAttribute = typeElement != null ? typeElement.Element("title") : null;
+            if (titleAttribute != null)
+            {
+                return "[" + titleAttribute.Value.Trim() + "]";
+            }
+            else
+            {
+                return dataType.Name;
+            }
         }
     }
 }
