@@ -288,6 +288,22 @@
 
                     dataTypeName = builder.ToString();
                 }
+                else if (dataType.IsArray)
+                {
+                    var itemType = dataType.GetElementType();
+                    if (itemType.IsEnum)
+                    {
+                        var names = Enum.GetNames(itemType);
+                        var builder = new StringBuilder();
+                        builder.Append("String array\\\\The following values are valid:");
+                        foreach (var name in names)
+                        {
+                            builder.Append(Environment.NewLine + "* " + name);
+                        }
+
+                        dataTypeName = builder.ToString();
+                    }
+                }
 
                 var defaultValue = string.Empty;
                 var version = string.Empty;
