@@ -7,6 +7,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 	/// Interface of all integration trigger used by CruiseControl.NET.
 	/// A trigger applies to a particular project.
 	/// </summary>
+    /// <title>Trigger Blocks</title>
 	[TypeConverter(typeof (ExpandableObjectConverter))]
 	public interface ITrigger
 	{
