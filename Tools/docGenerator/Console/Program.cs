@@ -193,19 +193,37 @@
                     switch (childElement.Name.LocalName)
                     {
                         case "code":
+                            var isXmlAttribute = childElement.Attribute("type");
+                            var isXml = (isXmlAttribute == null) || string.Equals("xml", isXmlAttribute.Value, StringComparison.InvariantCultureIgnoreCase);
                             var codeTitle = childElement.Attribute("title");
                             var options = "borderStyle=solid" +
                                 (codeTitle == null ? string.Empty : "|titleBGColor=#ADD6FF|title=" + codeTitle.Value);
-                            try
+
+                            if (isXml)
                             {
-                                var xmlCode = XDocument.Parse(childElement.Value);
-                                builder.AppendLine("{code:xml|" + options + "}");
-                                builder.AppendLine(xmlCode.ToString(SaveOptions.None));
+                                try
+                                {
+                                    var xmlCode = XDocument.Parse(childElement.Value);
+                                    builder.AppendLine("{code:xml|" + options + "}");
+                                    builder.AppendLine(xmlCode.ToString(SaveOptions.None));
+                                }
+                                catch
+                                {
+                                    isXml = false;
+                                }
                             }
-                            catch
+                            
+                            if (!isXml)
                             {
-                                builder.AppendLine("{code:" + options + "}");
-                                builder.AppendLine(TrimValue(childElement.Value));
+                                if ((isXmlAttribute != null) && (isXmlAttribute.Value.Length > 0))
+                                {
+                                    builder.AppendLine("{code:" + isXmlAttribute.Value + "|" + options + "}");
+                                }
+                                else
+                                {
+                                    builder.AppendLine("{code:" + options + "}");
+                                }
+                                builder.AppendLine(childElement.Value);
                             }
 
                             builder.AppendLine("{code}");
@@ -383,6 +401,7 @@
                 {
                     case "n/a":
                     case "none":
+                    case "None":
                         defaultValue = "_" + defaultValue + "_";
                         break;
                 }
@@ -424,6 +443,14 @@
         }
         private static string RetrieveTypeName(Type dataType, XDocument documentation)
         {
+            if (dataType.IsGenericType)
+            {
+                if (dataType.GetGenericTypeDefinition().Name == "Nullable`1")
+                {
+                    dataType = dataType.GetGenericArguments()[0];
+                }
+            }
+
             var typeElement = (from element in documentation.Descendants("member")
                                where element.Attribute("name").Value == "T:" + dataType.FullName
                                select element).SingleOrDefault();
