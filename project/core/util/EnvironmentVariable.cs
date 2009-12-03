@@ -5,6 +5,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
     /// <summary>
     /// A class to represent an environment variable.
     /// </summary>
+    /// <title>Environment Variable</title>
     [ReflectorType("variable")]
     public class EnvironmentVariable
     {

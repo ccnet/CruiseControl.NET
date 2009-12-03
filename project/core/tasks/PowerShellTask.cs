@@ -1,18 +1,43 @@
-using System;
-using System.Collections;
-using System.Collections.Specialized;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
-	/// <summary>
-	/// This is a specialized Exec for PowerShell
-	/// </summary>
-	[ReflectorType("powershell")]
+    using System;
+    using System.Collections;
+    using System.Collections.Specialized;
+    using System.IO;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
+    /// <summary>
+    /// <para>
+    /// Runs a PowerShell script.
+    /// </para>
+    /// </summary>
+    /// <title>  PowerShell Task </title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;powershell&gt;
+    /// &lt;script&gt;dosomething.ps&lt;/script&gt;
+    /// &lt;/powershell&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;powershell&gt;
+    /// &lt;script&gt;dosomething.ps&lt;/script&gt;
+    /// &lt;executable&gt;C:\program Files\PowerShell\PowerShell.exe&lt;/executable&gt;
+    /// &lt;scriptsDirectory&gt;C:\Scripts&lt;/scriptsDirectory&gt;
+    /// &lt;buildArgs&gt;-level=1&lt;/buildArgs&gt;
+    /// &lt;environment&gt;
+    /// &lt;variable name="EnvVar1" value="Some data" /&gt;
+    /// &lt;/environment&gt;
+    /// &lt;successExitCodes&gt;1,2,3&lt;/successExitCodes&gt;
+    /// &lt;buildTimeoutSeconds&gt;10&lt;/buildTimeoutSeconds&gt;
+    /// &lt;description&gt;Example of how to run a PowerShell script.&lt;/description&gt;
+    /// &lt;/powershell&gt;
+    /// </code>
+    /// </example>
+    [ReflectorType("powershell")]
 	public class PowerShellTask 
         : TaskBase
 	{
@@ -39,10 +64,20 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         public IRegistry Registry { get; set; }
 
+        /// <summary>
+        /// The PowerShell script to run.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("script", Required = true)]
         public string Script;
 
-		[ReflectorProperty("executable", Required = false)]
+        /// <summary>
+        /// The PowerShell executable.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>PowerShell.exe</default>
+        [ReflectorProperty("executable", Required = false)]
         public string Executable
         {
             get 
@@ -56,27 +91,38 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			set { executable = value; }
 		}
 
-		[ReflectorProperty("scriptsDirectory", Required = false)]
+        /// <summary>
+        /// The directory that the PowerShell scripts are stored in. 
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>%Documents%\WindowsPowerShell</default>
+        [ReflectorProperty("scriptsDirectory", Required = false)]
         public string ConfiguredScriptsDirectory = DefaultScriptsDirectory;
 
+        /// <summary>
+        /// Any arguments to pass into the script. 
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("buildArgs", Required = false)]
 		public string BuildArgs = string.Empty;
 
 		/// <summary>
-		/// A set of environment variables set for commands that are executed.
+        /// Any environment variables to pass into the script. 
 		/// </summary>
-		/// <remarks>
-		/// Each variable should be specified as <code>&lt;variable name="name" value="value"/&gt;</code>.
-		/// </remarks>
-		[ReflectorArray("environment", Required = false)]
+        /// <version>1.5</version>
+        /// <default>None</default>
+        [ReflectorArray("environment", Required = false)]
 		public EnvironmentVariable[] EnvironmentVariables = new EnvironmentVariable[0];
 
 		private int[] successExitCodes = null;
 
         /// <summary>
-        /// The list of exit codes that indicate success, separated by commas.
+        /// The exit codes that mark the script as being successful. 
         /// </summary>
-		[ReflectorProperty("successExitCodes", Required = false)]
+        /// <version>1.5</version>
+        /// <default>0</default>
+        [ReflectorProperty("successExitCodes", Required = false)]
 		public string SuccessExitCodes
 		{
 			get 
@@ -115,10 +161,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		}
 		
 		/// <summary>
-		/// Gets and sets the maximum number of seconds that the build may take.  If the build process takes longer than
+        /// The maximum number of seconds the build can take. If the build process takes longer than
 		/// this period, it will be killed.  Specify this value as zero to disable process timeouts.
 		/// </summary>
-		[ReflectorProperty("buildTimeoutSeconds", Required = false)]
+        /// <version>1.5</version>
+        /// <default>600</default>
+        [ReflectorProperty("buildTimeoutSeconds", Required = false)]
 		public int BuildTimeoutSeconds = DefaultBuildTimeOut;
 
         /// <summary>

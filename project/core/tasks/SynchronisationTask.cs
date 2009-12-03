@@ -15,9 +15,34 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     using ThoughtWorks.CruiseControl.Remote;
 
     /// <summary>
-    /// A task that provides a synchronisation context across projects.
+    /// <para>
+    /// A sychronisation context across multiple tasks or projects.
+    /// </para>
+    /// <para>
+    /// Only one task can be in a synchronisation context at any time. This provides a mechanism for locking, either within a project or
+    /// inbetween projects.
+    /// </para>
     /// </summary>
-    [ReflectorType("synchonised")]
+    /// <title> Synchronisation Context Task </title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;sequential&gt;
+    /// &lt;tasks&gt;
+    /// &lt;!-- Tasks defined here --&gt;
+    /// &lt;/tasks&gt;
+    /// &lt;/sequential&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;sequential continueOnFailure="true" context="thereCanBeOnlyOne" timeout="1200"&gt;
+    /// &lt;description&gt;Example of how to run multiple tasks in a synchronisation context.&lt;/description&gt;
+    /// &lt;tasks&gt;
+    /// &lt;!-- Tasks defined here --&gt;
+    /// &lt;/tasks&gt;
+    /// &lt;/sequential&gt;
+    /// </code>
+    /// </example>
+    [ReflectorType("synchronised")]
     public class SynchronisationTask
         : TaskContainerBase
     {
@@ -40,9 +65,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #region Public properties
         #region Tasks
         /// <summary>
-        /// Gets or sets the child tasks.
+        /// The tasks to run within the synchronisation context. These tasks will be run in the order they are defined.
         /// </summary>
-        /// <value>An array of <see cref="ITask"/> instances.</value>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("tasks")]
         public override ITask[] Tasks
         {
@@ -55,6 +81,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Should the tasks continue to run, even if there is a failure?
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("continueOnFailure", Required = false)]
         public bool ContinueOnFailure { get; set; }
         #endregion
@@ -69,18 +97,24 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         #region ContextName
         /// <summary>
-        /// Gets or sets the name of the context.
+        /// The name of the synchronisation context. This is only needed if multiple synchronisation contexts are desired.
         /// </summary>
-        /// <value>The name of the context.</value>
+        /// <version>1.5</version>
+        /// <default>DefaultSynchronisationContext</default>
         [ReflectorProperty("context", Required = false)]
         public string ContextName { get; set; }
         #endregion
 
         #region TimeoutPeriod
         /// <summary>
-        /// Gets or sets the timeout period.
+        /// The timeout period (in seconds).
         /// </summary>
-        /// <value>The timeout period (in seconds).</value>
+        /// <remarks>
+        /// The time-out is only used for attempting to aquire the context. If the task cannot acquire the context within this period, it
+        /// will time out and throw an error. Once the context has been acquired, there is no time limit on how long it can be held.
+        /// </remarks>
+        /// <version>1.5</version>
+        /// <default>300</default>
         [ReflectorProperty("timeout", Required = false)]
         public int? TimeoutPeriod { get; set; }
         #endregion
