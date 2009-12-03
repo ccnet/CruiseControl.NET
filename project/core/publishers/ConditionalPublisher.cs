@@ -16,6 +16,25 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// A container publisher that only executes the child publishers when the 
     /// condition (e.g. build status) is met.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Currently the only available condition that can be checked is the state of the build.
+    /// </para>
+    /// </remarks>
+    /// <title>Conditional Publisher</title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code>
+    /// &lt;conditionalPublisher&gt;
+    /// &lt;conditions&gt;
+    /// &lt;condition&gt;Success&lt;/condition&gt;
+    /// &lt;/conditions&gt;
+    /// &lt;publishers&gt;
+    /// &lt;!-- Add publishers here --&gt;
+    /// &lt;/publishers&gt;
+    /// &lt;/conditionalPublisher&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("conditionalPublisher")]
     public class ConditionalPublisher
         : TaskContainerBase
@@ -23,8 +42,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         #region Public properties
         #region Publishers
         /// <summary>
-        /// Gets or sets the publishers to run if the condition is met.
+        /// The publishers to run if the conditions are met.
         /// </summary>
+        /// <default>n/a</default>
+        /// <version>1.5</version>
         [ReflectorProperty("publishers")]
         public override ITask[] Tasks
         {
@@ -35,8 +56,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         #region Conditions
         /// <summary>
-        /// Gets or sets the conditions to test for.
+        /// A list of conditions of which at least one must be met in order to run the publishers.
         /// </summary>
+        /// <default>n/a</default>
+        /// <version>1.5</version>
         [ReflectorProperty("conditions", Required = true)]
         public IntegrationStatus[] Conditions { get; set; }
         #endregion

@@ -7,8 +7,19 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     /// <summary>
-    /// A task for controlling a CruiseControl.NET server.
+    /// Sends a management task to a CruiseControl.NET server.
     /// </summary>
+    /// <title>CruiseServer Control Task</title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code>
+    /// &lt;cruiseServerControl&gt;
+    /// &lt;actions&gt;
+    /// &lt;controlAction type="StartProject" project="CCNet" /&gt;
+    /// &lt;/actions&gt;
+    /// &lt;/cruiseServerControl&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("cruiseServerControl")]
     public class CruiseServerControlTask
         : TaskBase
@@ -18,6 +29,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The server to send the commands to.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("server", Required = false)]
         public string Server { get; set; }
         #endregion
@@ -26,6 +39,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The actions to perform.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("actions", Required = true)]
         public CruiseServerControlTaskAction[] Actions { get; set; }
         #endregion

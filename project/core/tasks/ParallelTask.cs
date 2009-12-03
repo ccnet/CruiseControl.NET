@@ -11,8 +11,48 @@ using ThoughtWorks.CruiseControl.Remote.Parameters;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     /// <summary>
-    /// Runs a number of tasks in parallel.
+    /// <para>
+    /// Runs a set of child tasks in parallel. Each task will run at the same time as the other tasks.
+    /// </para>
+    /// <para>
+    /// To run a set of tasks in sequential order within this task, use the <link>Sequential Task</link>.
+    /// </para>
     /// </summary>
+    /// <title>Parallel Task</title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code>
+    /// &lt;parallel&gt;
+    /// &lt;tasks&gt;
+    /// &lt;!-- Tasks defined here --&gt;
+    /// &lt;/tasks&gt;
+    /// &lt;/parallel&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para>
+    /// The following is an example of how to combine this task together to the <link>Sequential Task</link> to
+    /// run multiple 'streams' of tasks in parallel:
+    /// </para>
+    /// <code>
+    /// &lt;parallel&gt;
+    /// &lt;tasks&gt;
+    /// &lt;sequential&gt;
+    /// &lt;description&gt;First parallel stream.&lt;/description&gt;
+    /// &lt;tasks&gt;
+    /// &lt;!-- First sequence of tasks--&gt;
+    /// &lt;/tasks&gt;
+    /// &lt;/sequential&gt;
+    /// &lt;sequential&gt;
+    /// &lt;description&gt;First parallel stream.&lt;/description&gt;
+    /// &lt;tasks&gt;
+    /// &lt;!-- Second sequence of tasks--&gt;
+    /// &lt;/tasks&gt;
+    /// &lt;/sequential&gt;
+    /// &lt;/tasks&gt;
+    /// &lt;/parallel&gt;
+    /// </code>
+    /// </remarks>
     [ReflectorType("parallel")]
     public class ParallelTask
         : TaskContainerBase
@@ -22,6 +62,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The tasks to run in parallel.
         /// </summary>
+        /// <default>n/a</default>
+        /// <version>1.5</version>
         [ReflectorProperty("tasks")]
         public override ITask[] Tasks
         {
