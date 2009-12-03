@@ -1,9 +1,40 @@
-using System.IO;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Tasks;
-
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    using System.IO;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Tasks;
+
+    /// <summary>
+    /// <para>
+    /// The Build Publisher lets you copy any arbitrary files on a <b>successful</b> build.
+    /// </para>
+    /// <para>
+    /// You can set alwaysPublish to true, if you want the copy always to happen.
+    /// </para>
+    /// </summary>
+    /// <title>Build Publisher</title>
+    /// <version>1.0</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;buildpublisher /&gt;
+    /// </code>
+    /// <para>
+    /// This will copy the contents of the project's working directory to a new label subdirectory under the
+    /// project's artifact directory (i.e. &lt;artifact_dir&gt;\&lt;label_dir&gt;) 
+    /// </para>
+    /// <code title="Full example">
+    /// &lt;buildpublisher&gt;
+    /// &lt;sourceDir&gt;C:\myprojects\project1&lt;/sourceDir&gt;
+    /// &lt;publishDir&gt;\\myfileserver\project1&lt;/publishDir&gt;
+    /// &lt;useLabelSubDirectory&gt;false&lt;/useLabelSubDirectory&gt;
+    /// &lt;alwaysPublish&gt;false&lt;/alwaysPublish&gt;
+    /// &lt;/buildpublisher&gt;
+    /// </code>
+    /// <para>
+    /// This will copy the contents of <b>C:\myprojects\project1</b> to the network share 
+    /// <b>\\myfileserver\project1</b>. 
+    /// </para>
+    /// </example>
     [ReflectorType("buildpublisher")]
     public class BuildPublisher
         : TaskBase
@@ -15,30 +46,65 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             DeleteBuildsOlderThanXDays
         }
 
-
-
+        /// <summary>
+        /// The directory to copy the files to. This path can be absolute or can be relative to the project's
+        /// artifact directory. If <b>useLabelSubDirectory</b> is true (default) a subdirectory with the
+        /// current build's label will be created, and the contents of sourceDir will be copied to it. If
+        /// unspecified, the project's artifact directory will be used as the publish directory.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
         [ReflectorProperty("publishDir", Required = false)]
         public string PublishDir;
 
+        /// <summary>
+        /// The source directory to copy files from. This path can be absolute or can be relative to the
+        /// project's working directory. If unspecified, the project's working directory will be used as the
+        /// source directory.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
         [ReflectorProperty("sourceDir", Required = false)]
         public string SourceDir;
 
+        /// <summary>
+        /// If set to true (the default value), files will be copied to subdirectory under the publishDir which
+        /// will be named with the label for the current integration.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>true</default>
         [ReflectorProperty("useLabelSubDirectory", Required = false)]
         public bool UseLabelSubDirectory = true;
 
+        /// <summary>
+        /// Always copies the files, regardless of the state of the build.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>false</default>
         [ReflectorProperty("alwaysPublish", Required = false)]
         public bool AlwaysPublish = false;
 
+        /// <summary>
+        /// Cleans the publishDir if it exists, so that you will always have an exact copy of the sourceDir.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("cleanPublishDirPriorToCopy", Required = false)]
         public bool CleanPublishDirPriorToCopy = false;
 
-
+        /// <summary>
+        /// Defines a way to clean up published builds.
+        /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>NoClean</default>
         [ReflectorProperty("cleanUpMethod", Required = false)]
         public CleanupPolicy CleanUpMethod = CleanupPolicy.NoCleaning;
 
         /// <summary>
-        /// Defines the value for the cleanup procedure
+        /// The value used for the cleaning method.
         /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>5</default>
         [ReflectorProperty("cleanUpValue", Required = false)]
         public int CleanUpValue = 5;
 

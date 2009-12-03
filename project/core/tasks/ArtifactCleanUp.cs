@@ -1,19 +1,57 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Xml;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Publishers;
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
-	/// <summary>
-	/// Purges the artifact folder according to the settings. 
-	/// This allows to clean up the artifacts by ccnet itself, which is more neat. 
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Xml;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Publishers;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
+    /// <summary>
+    /// The artifact CleanUp publisher allows for automatic removal of the buildlogs according to the choosen
+    /// setting. It relies on the build log folder, so the XML publisher must be specified before this
+    /// publisher can run. For technical reasons this publisher MUST reside in the publisher section, it will
+    /// not work in the tasks section. Be sure to specify the <link>Xml Log Publisher</link> before this one.
 	/// </summary>
-	[ReflectorType("artifactcleanup")]
-    internal class ArtifactCleanUpTask
+    /// <title> Artifact Cleanup Publisher </title>
+    /// <version>1.0</version>
+    /// <remarks>
+    /// <para>
+    /// Supported cleaning up methods :
+    /// </para>
+    /// <list type="1">
+    /// <item>
+    /// KeepLastXBuilds : keeps the last specified amount of builds
+    /// </item>
+    /// <item>
+    /// DeleteBuildsOlderThanXDays  : Deletes the builds older than the specifed amount of days
+    /// </item>
+    /// <item>
+    /// KeepMaximumXHistoryDataEntries : Clears the History Data file (for the ModificationHistory), keeping
+    /// maximum the specified amount of builds.
+    /// </item>
+    /// <item>
+    /// DeleteSubDirsOlderThanXDays : Deletes subfolders of the artifact folder if they are older than the
+    /// specified amount of days. (Buildlogfolder excluded)
+    /// </item>
+    /// <item>
+    /// KeepLastXSubDirs : Keeps the last specified amount of subfolders in the artifacts folder, sorting is
+    /// done on creation time of the folder (Buildlogfolder excluded) 
+    /// </item>
+    /// </list>
+    /// <para type="warning">
+    /// <b>DeleteSubDirsOlderThanXDays</b> and <b>KeepLastXSubDirs</b> are mainly meant for cleaning up
+    /// published builds (done via the <link>Build Publisher</link>).
+    /// </para>
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// &lt;artifactcleanup cleanUpMethod="KeepLastXBuilds" cleanUpValue="50" /&gt;
+    /// </code>
+    /// </example>
+    [ReflectorType("artifactcleanup")]
+    public class ArtifactCleanUpTask
         : TaskBase
 	{
 		/// <summary>
@@ -32,8 +70,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		private int cleanUpValue;
 
 		/// <summary>
-		/// Defines the procedure to use for cleaning up the artifact folder
+        /// Defines the procedure to use for cleaning up the artifact folder.
 		/// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
 		[ReflectorProperty("cleanUpMethod", Required = true)]
 		public CleanUpMethod CleaningUpMethod
 		{
@@ -42,9 +82,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		}
 
 		/// <summary>
-		/// Defines the value for the cleanup procedure
+        /// Defines the value for the cleanup procedure.
 		/// </summary>
-		[ReflectorProperty("cleanUpValue", Required = true)]
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("cleanUpValue", Required = true)]
 		public int CleaningUpValue
 		{
 			get { return cleanUpValue; }
