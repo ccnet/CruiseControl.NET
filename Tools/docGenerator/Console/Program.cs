@@ -257,7 +257,7 @@
 
                         case "b":
                             var boldValue = TrimValue(childElement.Value);
-                            builder.Append((boldValue.StartsWith(" ") ? " *" : "*") + boldValue.Trim() + (boldValue.EndsWith(" ") ? "* " : "*"));
+                            builder.Append(" *" + boldValue.Trim() + (boldValue.EndsWith(" ") ? "* " : "*"));
                             break;
 
                         case "para":
