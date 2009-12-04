@@ -13,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.Remote
     /// <summary>
     /// Define a name/value pair.
     /// </summary>
+    /// <title>Named Value</title>
     [Serializable]
 #if !NoReflector
     [ReflectorType("namedValue")]

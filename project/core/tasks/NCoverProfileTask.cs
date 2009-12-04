@@ -8,8 +8,37 @@ using System.IO;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     /// <summary>
-    /// Perform an analysis using NCover 3.0.
+    /// <para>
+    /// Perform a code coverage profile using NCover.
+    /// </para>
+    /// <para type="tip">
+    /// NCover is a commerical application that will profile code while unit tests are running. The tool is available from
+    /// http://www.ncover.com/.
+    /// </para>
+    /// <para type="info">
+    /// <title>Supported Versions</title>
+    /// CruiseControl.NET only supports NCover 3.x currently.
+    /// </para>
     /// </summary>
+    /// <title>NCover Profiler Task</title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code>
+    /// &lt;ncoverProfile&gt;
+    /// &lt;executable&gt;C:\Program Files\NCover\NCover.Console.exe&lt;/executable&gt;
+    /// &lt;program&gt;tools\nunit\nunit-console.exe&lt;/program&gt;
+    /// &lt;testProject&gt;myproject.test.dll&lt;/testProject&gt;
+    /// &lt;workingDir&gt;build\unittests&lt;/workingDir&gt;
+    /// &lt;includedAssemblies&gt;myproject.*.dll&lt;/includedAssemblies&gt;
+    /// &lt;/ncoverProfile&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para>
+    /// This task calls NCover.Console to perform the profiling. Full details on this tool is available at
+    /// http://docs.ncover.com/ref/3-0/ncover-console/. Additional details on the mapped arguments can be found there.
+    /// </para>
+    /// </remarks>
     [ReflectorType("ncoverProfile")]
     public class NCoverProfileTask
         : BaseExecutableTask
@@ -49,14 +78,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The program to execute and collect coverage stats from.
         /// </summary>
-        [ReflectorProperty("program", Required = false)]
+        /// <version>1.5</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("program")]
         public string ProgramToCover { get; set; }
         #endregion
 
         #region TestProject
         /// <summary>
-        /// The project that contains the tests.
+        /// The project that contains the tests. If relative, this will be relative to baseDir. 
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("testProject", Required = false)]
         public string TestProject { get; set; }
         #endregion
@@ -65,6 +98,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The parameters to pass to the program.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("programParameters", Required = false)]
         public string ProgramParameters { get; set; }
         #endregion
@@ -73,30 +108,41 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The executable to use.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Ncover.Console</default>
         [ReflectorProperty("executable", Required = false)]
         public string Executable { get; set; }
         #endregion
 
         #region TimeOut
         /// <summary>
-        /// The time-out period in seconds.
+        /// The time-out period in seconds. If the task does no finish running in this time it will be terminated. 
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>600</default>
         [ReflectorProperty("timeout", Required = false)]
         public int TimeOut { get; set; }
         #endregion
 
         #region BaseDirectory
         /// <summary>
-        /// The base directory to use.
+        /// The base directory to use. All relative parameters will be relative to this parameter. 
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Project Working Directory</default>
         [ReflectorProperty("baseDir", Required = false)]
         public string BaseDirectory { get; set; }
         #endregion
 
         #region WorkingDirectory
         /// <summary>
-        /// The working directory to use.
+        /// The working directory to use. If relative, this will be relative to baseDir.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //w</b>
+        /// </remarks>
         [ReflectorProperty("workingDir", Required = false)]
         public string WorkingDirectory { get; set; }
         #endregion
@@ -105,14 +151,21 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Whether to publish the output files or not.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>true</default>
         [ReflectorProperty("publish", Required = false)]
         public bool Publish { get; set; }
         #endregion
 
         #region LogFile
         /// <summary>
-        /// The location of the NCover log file.
+        /// The location of the NCover log file. If relative, this will be relative to baseDir.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //l</b>
+        /// </remarks>
         [ReflectorProperty("logFile", Required = false)]
         public string LogFile { get; set; }
         #endregion
@@ -121,6 +174,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The profiler log level.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Default</default>
+        /// <remarks>
+        /// <b>Maps to //ll</b>
+        /// </remarks>
         [ReflectorProperty("logLevel", Required = false)]
         public NCoverLogLevel LogLevel { get; set; }
         #endregion
@@ -129,14 +187,24 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The name of the project (used in the HTML report).
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //p</b>
+        /// </remarks>
         [ReflectorProperty("projectName", Required = false)]
         public string ProjectName { get; set; }
         #endregion
 
         #region CoverageFile
         /// <summary>
-        /// The location to write the coverage file to.
+        /// The location to write the coverage file to. If relative, this will be relative to baseDir.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Coverage.xml</default>
+        /// <remarks>
+        /// <b>Maps to //x</b>
+        /// </remarks>
         [ReflectorProperty("coverageFile", Required = false)]
         public string CoverageFile { get; set; }
         #endregion
@@ -145,6 +213,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The coverage metric to use.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //ct</b>
+        /// </remarks>
         [ReflectorProperty("coverageMetric", Required = false)]
         public string CoverageMetric { get; set; }
         #endregion
@@ -153,6 +226,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The attributes to exclude.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //ea</b>
+        /// </remarks>
         [ReflectorProperty("excludedAttributes", Required = false)]
         public string ExcludedAttributes { get; set; }
         #endregion
@@ -161,6 +239,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The assemblies to exclude.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //eas</b>
+        /// </remarks>
         [ReflectorProperty("excludedAssemblies", Required = false)]
         public string ExcludedAssemblies { get; set; }
         #endregion
@@ -169,6 +252,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The files to exclude.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //ef</b>
+        /// </remarks>
         [ReflectorProperty("excludedFiles", Required = false)]
         public string ExcludedFiles { get; set; }
         #endregion
@@ -177,6 +265,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The methods to exclude.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //em</b>
+        /// </remarks>
         [ReflectorProperty("excludedMethods", Required = false)]
         public string ExcludedMethods { get; set; }
         #endregion
@@ -185,6 +278,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The types to exclude.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //et</b>
+        /// </remarks>
         [ReflectorProperty("excludedTypes", Required = false)]
         public string ExcludedTypes { get; set; }
         #endregion
@@ -193,6 +291,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The attributes to include.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //ia</b>
+        /// </remarks>
         [ReflectorProperty("includedAttributes", Required = false)]
         public string IncludedAttributes { get; set; }
         #endregion
@@ -201,6 +304,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The assemblies to include.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //ias</b>
+        /// </remarks>
         [ReflectorProperty("includedAssemblies", Required = false)]
         public string IncludedAssemblies { get; set; }
         #endregion
@@ -209,6 +317,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The files to include.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //if</b>
+        /// </remarks>
         [ReflectorProperty("includedFiles", Required = false)]
         public string IncludedFiles { get; set; }
         #endregion
@@ -217,6 +330,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The types to include.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //it</b>
+        /// </remarks>
         [ReflectorProperty("includedTypes", Required = false)]
         public string IncludedTypes { get; set; }
         #endregion
@@ -225,6 +343,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Whether to turn off autoexclusion or not.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
+        /// <remarks>
+        /// <b>Maps to //na</b>
+        /// </remarks>
         [ReflectorProperty("disableAutoexclusion", Required = false)]
         public bool DisableAutoexclusion { get; set; }
         #endregion
@@ -233,6 +356,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The module to process.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //pm</b>
+        /// </remarks>
         [ReflectorProperty("processModule", Required = false)]
         public string ProcessModule { get; set; }
         #endregion
@@ -241,6 +369,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The symbol search policy to use.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //ssp</b>
+        /// </remarks>
         [ReflectorProperty("symbolSearch", Required = false)]
         public string SymbolSearch { get; set; }
         #endregion
@@ -249,6 +382,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The location to write the trend file to.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //at</b>
+        /// </remarks>
         [ReflectorProperty("trendFile", Required = false)]
         public string TrendFile { get; set; }
         #endregion
@@ -257,14 +395,24 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// A custom build id to attach.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>The build label</default>
+        /// <remarks>
+        /// <b>Maps to //bi</b>
+        /// </remarks>
         [ReflectorProperty("buildId", Required = false)]
         public string BuildId { get; set; }
         #endregion
 
         #region SettingsFile
         /// <summary>
-        /// The location to read the settings from.
+        /// The location to read the settings from. If relative, this will be relative to baseDir.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //cr</b>
+        /// </remarks>
         [ReflectorProperty("settingsFile", Required = false)]
         public string SettingsFile { get; set; }
         #endregion
@@ -273,6 +421,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Temporarily enable NCover.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
+        /// <remarks>
+        /// <b>Maps to //reg</b>
+        /// </remarks>
         [ReflectorProperty("register", Required = false)]
         public bool Register { get; set; }
         #endregion
@@ -281,6 +434,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The amount of time that NCover will wait for the application to start up.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //wal</b>
+        /// </remarks>
         [ReflectorProperty("applicationLoadWait", Required = false)]
         public int ApplicationLoadWait { get; set; }
         #endregion
@@ -289,6 +447,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Whether to cover IIS or not.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
+        /// <remarks>
+        /// <b>Maps to //iis</b>
+        /// </remarks>
         [ReflectorProperty("iis", Required = false)]
         public bool CoverIis { get; set; }
         #endregion
@@ -297,6 +460,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The timeout period for covering a service.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //st</b>
+        /// </remarks>
         [ReflectorProperty("serviceTimeout", Required = false)]
         public int ServiceTimeout { get; set; }
         #endregion
@@ -305,6 +473,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The windows service to cover.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //svc</b>
+        /// </remarks>
         [ReflectorProperty("windowsService", Required = false)]
         public string WindowsService { get; set; }
         #endregion

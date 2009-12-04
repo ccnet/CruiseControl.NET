@@ -8,8 +8,40 @@ using System.IO;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     /// <summary>
-    /// Generate an analysis report from NCover 3.0.
+    /// <para>
+    /// Generate a code coverage report using NCover.
+    /// </para>
+    /// <para type="tip">
+    /// NCover is a commerical application that will profile code while unit tests are running. The tool is available from
+    /// http://www.ncover.com/.
+    /// </para>
+    /// <para type="info">
+    /// <title>Supported Versions</title>
+    /// CruiseControl.NET only supports NCover 3.x currently.
+    /// </para>
     /// </summary>
+    /// <title>NCover Profiler Task</title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code>
+    /// &lt;ncoverProfile&gt;
+    /// &lt;executable&gt;C:\Program Files\NCover\NCover.Console.exe&lt;/executable&gt;
+    /// &lt;program&gt;tools\nunit\nunit-console.exe&lt;/program&gt;
+    /// &lt;testProject&gt;myproject.test.dll&lt;/testProject&gt;
+    /// &lt;workingDir&gt;build\unittests&lt;/workingDir&gt;
+    /// &lt;includedAssemblies&gt;myproject.*.dll&lt;/includedAssemblies&gt;
+    /// &lt;/ncoverProfile&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para>
+    /// This task requires a profile to be completed before running. See the <link>NCover Profiler Task</link>.
+    /// </para>
+    /// <para>
+    /// This task calls NCover.Reporting to generate the reports. Full details on this tool is available at
+    /// http://docs.ncover.com/ref/3-0/ncover-reporting/. Additional details on the mapped arguments can be found there.
+    /// </para>
+    /// </remarks>
     [ReflectorType("ncoverReport")]
     public class NCoverReportTask
         : BaseExecutableTask
@@ -51,38 +83,51 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The executable to use.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>NCover.Reporting</default>
         [ReflectorProperty("executable", Required = false)]
         public string Executable { get; set; }
         #endregion
 
         #region TimeOut
         /// <summary>
-        /// The time-out period in seconds.
+        /// The time-out period in seconds. If the task does no finish running in this time it will be terminated. 
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>600</default>
         [ReflectorProperty("timeout", Required = false)]
         public int TimeOut { get; set; }
         #endregion
 
         #region BaseDirectory
         /// <summary>
-        /// The base directory to use.
+        /// The base directory to use. All relative parameters will be relative to this parameter. 
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Project Working Directory</default>
         [ReflectorProperty("baseDir", Required = false)]
         public string BaseDirectory { get; set; }
         #endregion
 
         #region WorkingDirectory
         /// <summary>
-        /// The working directory to use.
+        /// The working directory for the executable. If relative, this will be relative to baseDir.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //w</b>
+        /// </remarks>
         [ReflectorProperty("workingDir", Required = false)]
         public string WorkingDirectory { get; set; }
         #endregion
 
         #region CoverageFile
         /// <summary>
-        /// The location to read the coverage file from.
+        /// The location to read the coverage date from. If relative, this will be relative to baseDir.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>coverage.xml</default>
         [ReflectorProperty("coverageFile", Required = false)]
         public string CoverageFile { get; set; }
         #endregion
@@ -91,6 +136,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Should the coverage filters be cleared.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
+        /// <remarks>
+        /// <b>Maps to //ccf</b>
+        /// </remarks>
         [ReflectorProperty("clearFilters", Required = false)]
         public bool ClearCoverageFilters { get; set; }
         #endregion
@@ -99,6 +149,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The filters to apply.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //cf</b>
+        /// </remarks>
         [ReflectorProperty("filters", Required = false)]
         public CoverageFilter[] CoverageFilters { get; set; }
         #endregion
@@ -107,6 +162,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The minimum coverage thresholds.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //mc</b>
+        /// </remarks>
         [ReflectorProperty("minimumThresholds", Required = false)]
         public CoverageThreshold[] MinimumThresholds { get; set; }
         #endregion
@@ -115,6 +175,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Whether to use minimum coverage or not.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
+        /// <remarks>
+        /// <b>Maps to //mcsc</b>
+        /// </remarks>
         [ReflectorProperty("minimumCoverage", Required = false)]
         public bool UseMinimumCoverage { get; set; }
         #endregion
@@ -123,6 +188,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The type of report filtering to use.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Default</default>
+        /// <remarks>
+        /// <b>Maps to //rdf</b>
+        /// </remarks>
         [ReflectorProperty("xmlReportFilter", Required = false)]
         public NCoverReportFilter XmlReportFilter { get; set; }
         #endregion
@@ -131,6 +201,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The satisfactory coverage thresholds.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //sct</b>
+        /// </remarks>
         [ReflectorProperty("satisfactory", Required = false)]
         public CoverageThreshold[] SatisfactoryThresholds { get; set; }
         #endregion
@@ -139,6 +214,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The maximum number of items to report.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>-1</default>
+        /// <remarks>
+        /// <b>Maps to //smf</b>
+        /// </remarks>
         [ReflectorProperty("numberToReport", Required = false)]
         public int NumberToReport { get; set; }
         #endregion
@@ -147,6 +227,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The file to append the trend to.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //at</b>
+        /// </remarks>
         [ReflectorProperty("trendOutput", Required = false)]
         public string TrendOutputFile { get; set; }
         #endregion
@@ -155,6 +240,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The file to import the trend from.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //lt</b>
+        /// </remarks>
         [ReflectorProperty("trendInput", Required = false)]
         public string TrendInputFile { get; set; }
         #endregion
@@ -163,6 +253,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// A custom build id to attach.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>The build label</default>
+        /// <remarks>
+        /// <b>Maps to //bi</b>
+        /// </remarks>
         [ReflectorProperty("buildId", Required = false)]
         public string BuildId { get; set; }
         #endregion
@@ -171,14 +266,21 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The elements to hide.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //hi</b>
+        /// </remarks>
         [ReflectorProperty("hide", Required = false)]
         public string HideElements { get; set; }
         #endregion
 
         #region OutputDir
         /// <summary>
-        /// The directory to output the reports to.
+        /// The directory to output the reports to. If relative, this will be relative to baseDir. 
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("outputDir", Required = false)]
         public string OutputDir { get; set; }
         #endregion
@@ -187,6 +289,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The type of report to generate.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>FullCoverageReport</default>
+        /// <remarks>
+        /// <b>Maps to //or</b>
+        /// </remarks>
         [ReflectorProperty("reports", Required = false)]
         public NCoverReportType[] Reports { get; set; }
         #endregion
@@ -195,6 +302,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The project name to use.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //p</b>
+        /// </remarks>
         [ReflectorProperty("projectName", Required = false)]
         public string ProjectName { get; set; }
         #endregion
@@ -203,6 +315,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The sort order to use.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //so</b>
+        /// </remarks>
         [ReflectorProperty("sortBy", Required = false)]
         public NCoverSortBy SortBy { get; set; }
         #endregion
@@ -211,6 +328,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The amount of uncovered items to cover.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //tu</b>
+        /// </remarks>
         [ReflectorProperty("uncoveredAmount", Required = false)]
         public int TopUncoveredAmount { get; set; }
         #endregion
@@ -219,14 +341,24 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The merge mode to use.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Default</default>
+        /// <remarks>
+        /// <b>Maps to //mfm</b>
+        /// </remarks>
         [ReflectorProperty("mergeMode", Required = false)]
         public NCoverMergeMode MergeMode { get; set; }
         #endregion
 
         #region MergeFile
         /// <summary>
-        /// The file to store the merged data in.
+        /// The file to store the merged data in. If relative, this will be relative to baseDir. 
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to //s</b>
+        /// </remarks>
         [ReflectorProperty("mergeFile", Required = false)]
         public string MergeFile { get; set; }
         #endregion

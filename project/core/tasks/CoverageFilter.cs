@@ -8,6 +8,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// <summary>
     /// A filter for a coverage report.
     /// </summary>
+    /// <title>Coverage Filter</title>
+    /// <version>1.5</version>
     [ReflectorType("coverageFilter")]
     public class CoverageFilter
     {
@@ -26,6 +28,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The pattern to use for matching elements.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("data")]
         public string Data { get; set; }
         #endregion
@@ -34,6 +38,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The type of item.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Default</default>
         [ReflectorProperty("type", Required = false)]
         public NCoverItemType ItemType { get; set; }
         #endregion
@@ -42,6 +48,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Whether this is a regex or not.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("regex", Required = false)]
         public bool IsRegex { get; set; }
         #endregion
@@ -50,6 +58,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Whether to include or exclude items.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("include", Required = false)]
         public bool IsInclude { get; set; }
         #endregion

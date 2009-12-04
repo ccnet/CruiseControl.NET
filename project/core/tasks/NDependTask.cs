@@ -8,8 +8,71 @@ using System.IO;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     /// <summary>
-    /// Perform an analysis using NDepend.
+    /// <para>
+    /// Runs an NDepend analysis.
+    /// </para>
+    /// <para>
+    /// NDepend is a tool that simplifies managing a complex .NET code base. Architects and developers can analyze code structure, specify
+    /// design rules, plan massive refactoring, do effective code reviews and master evolution by comparing different versions of the code.
+    /// </para>
+    /// <para>
+    /// This application is available from www.ndepend.com. There is both an open source/academic/evaluation version and a professional
+    /// version.
+    /// </para>
     /// </summary>
+    /// <title>NDepend Task</title>
+    /// <version>1.4.4</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;ndepend&gt;
+    /// &lt;project&gt;NDepend-Project.xml&lt;/project&gt;
+    /// &lt;/ndepend&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;ndepend&gt;
+    /// &lt;project&gt;NDepend-Project.xml&lt;/project&gt;
+    /// &lt;executable&gt;tools\NDepend.Console.exe&lt;/executable&gt;
+    /// &lt;description&gt;Run the NDepend analysis.&lt;/description&gt;
+    /// &lt;emitXml&gt;true&lt;/emitXml&gt;
+    /// &lt;outputDir&gt;NDepend-Reports&lt;/outputDir&gt;
+    /// &lt;inputDirs&gt;
+    /// &lt;inputDir&gt;bin\&lt;/inputDir&gt;
+    /// &lt;inputDir&gt;deploy\&lt;/inputDir&gt;
+    /// &lt;/inputDirs&gt;
+    /// &lt;silent&gt;false&lt;/silent&gt;
+    /// &lt;reportXslt&gt;custom-report.xsl&lt;/reportXslt&gt;
+    /// &lt;timeout&gt;120&lt;/timeout&gt;
+    /// &lt;baseDir&gt;project\&lt;/baseDir&gt;
+    /// &lt;publish&gt;true&lt;/publish&gt;
+    /// &lt;/ndepend&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para>
+    /// This task works in two stages:
+    /// </para>
+    /// <para>
+    /// 1. Run the NDepend executable
+    /// </para>
+    /// <para>
+    /// 2. Publish the results
+    /// </para>
+    /// <para>
+    /// Running the NDepend executable is what generates the actual analysis, and as such cannot be skipped (otherwise there is no point to
+    /// this task.) The results of the analysis will be saved in the folder specified by outputDir. If this parameter is omitted, then the
+    /// results will be stored in a folder called NDependResults under the baseDir.
+    /// </para>
+    /// <para>
+    /// In order for these results to be displayed in the dashboard they must be stored in a folder in the artefacts directory. To achieve
+    /// this, this task will publish the results. This involves copying all the results files from the output directory to a folder in the
+    /// artefacts directory. This folder will have the same name as the build label. Additionally any XML files will be merged with the build
+    /// log (this makes them available for the dashboard plugins).
+    /// </para>
+    /// <para>
+    /// If the publishing behaviour is not required it can be turned off by setting the publish property to false. By default this is set to
+    /// true so the results can be displayed in the dashboard.
+    /// </para>
+    /// </remarks>
     [ReflectorType("ndepend")]
     public class NDependTask
         : BaseExecutableTask
@@ -50,8 +113,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #region Public properties
         #region ProjectFile
         /// <summary>
-        /// The NDepend project file.
+        /// The NDepend project file. This is generated from VisualNDepend. 
         /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>n/a</default>
         [ReflectorProperty("project")]
         public string ProjectFile { get; set; }
         #endregion
@@ -60,6 +125,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The executable to use.
         /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>NDepend.Console</default>
         [ReflectorProperty("executable", Required = false)]
         public string Executable { get; set; }
         #endregion
@@ -68,6 +135,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Whether to emit the XML report data or not.
         /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>false</default>
         [ReflectorProperty("emitXml", Required = false)]
         public bool EmitXml { get; set; }
         #endregion
@@ -76,6 +145,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The output directory to use.
         /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>NDependResults</default>
         [ReflectorProperty("outputDir", Required = false)]
         public string OutputDir { get; set; }
         #endregion
@@ -84,6 +155,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The input directories to use.
         /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>None</default>
         [ReflectorProperty("inputDirs", Required = false)]
         public string[] InputDirs { get; set; }
         #endregion
@@ -92,14 +165,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Whether to hide any output or not.
         /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>false</default>
         [ReflectorProperty("silent", Required = false)]
         public bool Silent { get; set; }
         #endregion
 
         #region ReportXslt
         /// <summary>
-        /// The location of a report XSL-T.
+        /// The location of a custom report XSL-T.
         /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>None</default>
         [ReflectorProperty("reportXslt", Required = false)]
         public string ReportXslt { get; set; }
         #endregion
@@ -108,14 +185,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The time-out period in seconds.
         /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>false</default>
         [ReflectorProperty("timeout", Required = false)]
         public int TimeOut { get; set; }
         #endregion
 
         #region BaseDirectory
         /// <summary>
-        /// The base directory to use.
+        /// The base directory to use. If omitted this will default to the working directory of the project. 
         /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>Project Working Directory</default>
         [ReflectorProperty("baseDir", Required = false)]
         public string BaseDirectory { get; set; }
         #endregion
@@ -124,6 +205,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Whether to publish the output files or not.
         /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>true</default>
         [ReflectorProperty("publish", Required = false)]
         public bool Publish { get; set; }
         #endregion

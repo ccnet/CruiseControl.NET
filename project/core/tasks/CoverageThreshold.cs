@@ -8,6 +8,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// <summary>
     /// A threshold for a coverage report.
     /// </summary>
+    /// <title>Coverage Threshold</title>
+    /// <version>1.5</version>
     [ReflectorType("coverageThreshold")]
     public class CoverageThreshold
     {
@@ -26,6 +28,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The coverage metric.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("metric")]
         public NCoverMetric Metric { get; set; }
         #endregion
@@ -34,6 +38,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The minimum coverage value.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("value", Required = false)]
         public int MinValue { get; set; }
         #endregion
@@ -42,6 +48,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The type of item.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("type", Required = false)]
         public NCoverItemType ItemType { get; set; }
         #endregion
@@ -50,6 +58,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The matching pattern to use.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("pattern", Required = false)]
         public string Pattern { get; set; }
         #endregion
