@@ -22,12 +22,20 @@
             }
 
             var assemblyName = args[0];
+            if (!File.Exists(assemblyName))
+            {
+                WriteToConsole("Cannot find assembly: " + assemblyName, ConsoleColor.Red);
+                return;
+            }
+
             var documentation = new XDocument();
             var documentationPath = Path.ChangeExtension(assemblyName, "xml");
             if (File.Exists(documentationPath))
             {
                 documentation = XDocument.Load(documentationPath);
             }
+
+            WriteToConsole("Starting documentation generation for " + Path.GetFileName(assemblyName), ConsoleColor.Gray);
 
             try
             {
@@ -127,6 +135,8 @@
             {
                 WriteToConsole(error.Message, ConsoleColor.Red);
             }
+
+            WriteToConsole("Documentation generation finished", ConsoleColor.Gray);
         }
 
         private static void LoadDependencyDocumentation(string baseFolder, Assembly assembly, XDocument documentation)
