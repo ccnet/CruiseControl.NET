@@ -109,7 +109,7 @@
                             output.WriteLine("h2. Configuration Elements");
                             output.WriteLine();
                             output.WriteLine("|| Element || Description || Type || Required || Default || Version ||");
-                            WriteElements(type, output, documentation);
+                            WriteElements(type, output, documentation, typeElement);
                             output.WriteLine();
 
                             if (HasTag(typeElement, "remarks"))
@@ -317,7 +317,7 @@
             return output;
         }
 
-        private static void WriteElements(Type type, StreamWriter output, XDocument documentation)
+        private static void WriteElements(Type type, StreamWriter output, XDocument documentation, XElement typeElement)
         {
             // Put all the elements into a dictionary since they can be either fields or properties :-(
             var elements = new Dictionary<MemberInfo, ReflectorPropertyAttribute>();
@@ -327,6 +327,20 @@
                 if (attributes.Length > 0)
                 {
                     elements.Add(field, attributes[0] as ReflectorPropertyAttribute);
+                }
+            }
+
+            if (typeElement != null)
+            {
+                // Check if this item has a required key
+                var keyElement = typeElement.Element("key");
+                if (keyElement != null)
+                {
+                    output.Write("| " + (keyElement.Attribute("name") == null ? string.Empty : TrimValue(keyElement.Attribute("name").Value)));
+                    output.Write(" | " + (keyElement.Element("description") == null ? string.Empty : TrimValue(keyElement.Element("description").Value)));
+                    output.Write(" | String - must be " + (keyElement.Element("value") == null ? string.Empty : TrimValue(keyElement.Element("value").Value)));
+                    output.Write(" | Yes | _n/a_ | " + (typeElement.Element("version") == null ? string.Empty : TrimValue(typeElement.Element("version").Value)));
+                    output.WriteLine(" |");
                 }
             }
 
