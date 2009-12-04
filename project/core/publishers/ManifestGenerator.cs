@@ -7,6 +7,37 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// <summary>
     /// Generate a default manifest for a package.
     /// </summary>
+    /// <title>Default Manifest Generator</title>
+    /// <version>1.4.4</version>
+    /// <remarks>
+    /// <para>
+    /// The default manifest lists all the files that are included in the package, plus a list of all the modifications for the build.
+    /// </para>
+    /// <para>
+    /// The following is an example of the type of manifest generated:
+    /// </para>
+    /// <code>
+    /// &lt;manifest&gt;
+    /// &lt;header project="Test project" label="A Label" build="ForceBuild" status="Unknown"&gt;
+    /// &lt;modification user="johnDoe" changeNumber="1" time="2009-01-01T00:00:00"&gt;
+    /// &lt;comment&gt;A comment&lt;/comment&gt;
+    /// &lt;file name="first file" type="Add" /&gt;
+    /// &lt;file name="second file" type="Modify" /&gt;
+    /// &lt;/modification&gt;
+    /// &lt;/header&gt;
+    /// &lt;file name="first file" /&gt;
+    /// &lt;/manifest&gt;
+    /// </code>
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// &lt;manifest type="defaultManifestGenerator" /&gt;
+    /// </code>
+    /// </example>
+    /// <key name="type">
+    /// <description>The type of generator.</description>
+    /// <value>defaultManifestGenerator</value>
+    /// </key>
     [ReflectorType("defaultManifestGenerator")]
     public class ManifestGenerator
         : IManifestGenerator

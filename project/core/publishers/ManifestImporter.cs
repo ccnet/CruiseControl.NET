@@ -8,10 +8,21 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// <summary>
     /// Imports a manifest from an existing file.
     /// </summary>
+    /// <title>Manifest Importer</title>
+    /// <version>1.4.4</version>
     /// <remarks>
     /// This "generator" is not a true generator, instead it will import an existing file to use as the package
     /// manifest.
     /// </remarks>
+    /// <example>
+    /// <code>
+    /// &lt;manifest type="importManifest" file="ExistingManifest.xml" /&gt;
+    /// </code>
+    /// </example>
+    /// <key name="type">
+    /// <description>The type of generator.</description>
+    /// <value>importManifest</value>
+    /// </key>
     [ReflectorType("importManifest")]
     public class ManifestImporter
         : IManifestGenerator
@@ -28,6 +39,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <remarks>
         /// If this is a relative file, it will be based relative to the working directory of the project.
         /// </remarks>
+        /// <version>1.4.4</version>
+        /// <default>n/a</default>
         [ReflectorProperty("filename")]
         public string FileName
         {

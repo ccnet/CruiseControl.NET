@@ -12,12 +12,43 @@ using System.Threading;
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
     /// <summary>
-    /// Publisher to generate a ZIP package.
+    /// <para>
+    /// Generates a ZIP file package containing the specified files.
+    /// </para>
+    /// <para>
+    /// This will generate a "package" of files in a compressed format. The files must be specified, plus an optional manifest can be included.
+    /// </para>
+    /// <para>
+    /// This publisher also allows the generation of a "manifest" to include in the package. A manifest contains additional details on the
+    /// package, both at a general level and at a file level.
+    /// </para>
     /// </summary>
-    /// <remarks>
-    /// This will generate a "package" of files in a compressed format. The files must be
-    /// specified, plus an optional manifest can be included.
-    /// </remarks>
+    /// <title>Package Publisher</title>
+    /// <version>1.4.4</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;package&gt;
+    /// &lt;name&gt;Example&lt;/name&gt;
+    /// &lt;files&gt;
+    /// &lt;file&gt;Results.txt&lt;/file&gt;
+    /// &lt;/files&gt;
+    /// &lt;/package&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;package&gt;
+    /// &lt;name&gt;Example&lt;/name&gt;
+    /// &lt;compression&gt;9&lt;/compression&gt;
+    /// &lt;always&gt;true&lt;/always&gt;
+    /// &lt;flatten&gt;true&lt;/flatten&gt;
+    /// &lt;single&gt;true&lt;/single&gt;
+    /// &lt;baseDirectory&gt;C:\Builds\CC.Net&lt;/baseDirectory&gt;
+    /// &lt;manifest type="defaultManifestGenerator" /&gt;
+    /// &lt;files&gt;
+    /// &lt;file&gt;Results.txt&lt;/file&gt;
+    /// &lt;/files&gt;
+    /// &lt;/package&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("package")]
     public class PackagePublisher
         : TaskBase
@@ -39,9 +70,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// The name of the package file.
         /// </summary>
         /// <remarks>
-        /// This will be the filename of the package. If the extension zip is omitted, it
-        /// will be added automatically.
+        /// This will be the filename of the package. If the extension zip is omitted, it will be added automatically.
         /// </remarks>
+        /// <version>1.4.4</version>
+        /// <default>n/a</default>
         [ReflectorProperty("name")]
         public string PackageName
         {
@@ -52,11 +84,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         #region CompressionLevel
         /// <summary>
-        /// The level of compression to use.
+        /// The level of compression to use. The valid range is from zero to nine, zero is no compression and nine is maximum compression.
         /// </summary>
-        /// <remarks>
-        /// The default compression level is 5. This is an optional setting.
-        /// </remarks>
+        /// <version>1.4.4</version>
+        /// <default>5</default>
         [ReflectorProperty("compression", Required = false)]
         public int CompressionLevel
         {
@@ -78,6 +109,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// to true, and including it in the publishers section means the package will always be 
         /// generated, irrespective of the outcome of the build.
         /// </remarks>
+        /// <version>1.4.4</version>
+        /// <default>false</default>
         [ReflectorProperty("always", Required = false)]
         public bool AlwaysPackage
         {
@@ -94,6 +127,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// By default, the folder structure will also be included in the package. Setting this property
         /// to true will flatten (omit) the folder information.
         /// </remarks>
+        /// <version>1.4.4</version>
+        /// <default>false</default>
         [ReflectorProperty("flatten", Required = false)]
         public bool Flatten
         {
@@ -111,6 +146,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// sub-folder. This means there will be a history of all the packages produced. If there is
         /// no need for a history this property can be set to true to stop this behaviour.
         /// </remarks>
+        /// <version>1.4.4</version>
+        /// <default>false</default>
         [ReflectorProperty("single", Required = false)]
         public bool SingleInstance
         {
@@ -123,9 +160,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <summary>
         /// The directory to base all the file locations from.
         /// </summary>
-        /// <remarks>
-        /// If this property is not set, the base location will default to the working directory.
-        /// </remarks>
+        /// <version>1.4.4</version>
+        /// <default>Project working directory</default>
         [ReflectorProperty("baseDirectory", Required = false)]
         public string BaseDirectory
         {
@@ -141,6 +177,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <remarks>
         /// If this property is not set no manifest will be generated.
         /// </remarks>
+        /// <version>1.4.4</version>
+        /// <default>None</default>
         [ReflectorProperty("manifest", Required = false, InstanceTypeKey = "type")]
         public IManifestGenerator ManifestGenerator
         {
@@ -154,8 +192,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// The files to include in the package.
         /// </summary>
         /// <remarks>
-        /// All relative files will be relative to the <see cref="BaseDirectory"/>.
+        /// All relative files will be relative to the baseDirectory.
         /// </remarks>
+        /// <version>1.4.4</version>
+        /// <default>n/a</default>
         [ReflectorArray("files")]
         public string[] Files
         {
@@ -168,6 +208,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <summary>
         /// The location to output the package to.
         /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>Project Artifact Directory</default>
         [ReflectorProperty("outputDir", Required = false)]
         public string OutputDirectory { get; set; }
         #endregion

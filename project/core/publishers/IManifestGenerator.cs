@@ -5,6 +5,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// <summary>
     /// Defines a manifest generator for packages.
     /// </summary>
+    /// <title>Manifest Generators</title>
     public interface IManifestGenerator
     {
         #region Methods

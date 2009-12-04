@@ -3,25 +3,33 @@ using Exortech.NetReflector;
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
     /// <summary>
-    /// A class to represent an environment variable.
+    /// An environment variable.
     /// </summary>
     /// <title>Environment Variable</title>
+    /// <version>1.0</version>
+    /// <example>
+    /// <code>
+    /// &lt;variable name="TestVar" value="TextValue" /&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("variable")]
     public class EnvironmentVariable
     {
+        private string my_value = null;
+
         /// <summary>
         /// The name of the environment variable.
         /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
         [ReflectorProperty("name", Required = true)]
         public string name;
 
         /// <summary>
         /// The value of the environment variable.
         /// </summary>
-        /// <remarks>
-        /// If not set or if set to null, the value is "".
-        /// </remarks>
-        private string my_value = null;
+        /// <version>1.0</version>
+        /// <default>None</default>
         [ReflectorProperty("value", Required = false)]
         public string value
         {
