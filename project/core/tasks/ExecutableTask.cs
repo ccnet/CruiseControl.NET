@@ -7,13 +7,72 @@ using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
-	/// <summary>
-	/// This is a builder that can run any command line process. We capture standard out and standard error
-	/// and include them in the Integration Result. We use the process exit code to set whether the build has failed.
-	/// TODO: Passing through build label
-	/// TODO: This is very similar to the NAntBuilder, so refactoring required (can we have subclasses with reflector properties?)
-	/// </summary>
-	[ReflectorType("exec")]
+    /// <summary>
+    /// <para>
+    /// The Executable Task lets you invoke any command line executable. It doesn't offer as much specific
+    /// integration as (for example) the <link>NAnt Task</link>, but does allow you to hook almost anything
+    /// up as a build process to CCNet. CCNet will examine the exit code when the executable ends and act
+    /// accordingly.
+    /// </para>
+    /// </summary>
+    /// <title>Executable Task</title>
+    /// <version>1.0</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;exec executable="c:\projects\myproject\build.bat" /&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;exec&gt;
+    /// &lt;executable&gt;make&lt;/executable&gt;
+    /// &lt;baseDirectory&gt;D:\dev\MyProject&lt;/baseDirectory&gt;
+    /// &lt;buildArgs&gt;all&lt;/buildArgs&gt;
+    /// &lt;buildTimeoutSeconds&gt;10&lt;/buildTimeoutSeconds&gt;
+    /// &lt;successExitCodes&gt;0,1,3,5&lt;/successExitCodes&gt;
+    /// &lt;environment&gt;
+    /// &lt;variable&gt;
+    /// &lt;name&gt;MyVar1&lt;/name&gt;
+    /// &lt;value&gt;Var1Value&lt;/value&gt;
+    /// &lt;/variable&gt;
+    /// &lt;variable name="MyVar2" value="Var2Value"/&gt;
+    /// &lt;/environment&gt;
+    /// &lt;/exec&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para type="note">
+    /// An exit code of -1 is always treated as the operation has timed out. This will fail the build.
+    /// </para>
+    /// <para type="warning">
+    /// Windows seems to change the case of environment variables occasionally. If your task target doesn't
+    /// find one of these properties, try using all upper case or all lower case versions of these properties.
+    /// </para>
+    /// <heading>Frequently Asked Questions</heading>
+    /// <para>
+    /// <b>Does the exec task pass the integration properties via the command line?</b>
+    /// </para>
+    /// <para>
+    /// No. The integration properties are only available as environment variables. As there is no way of
+    /// knowing the way in which the external program expects these properties to be formatted as command line
+    /// arguments, environment variables are a simple, common medium for making these values accessible. To
+    /// pass these environment variables into an external program, have the exec task call a batch file instead
+    /// that will pick up the environment variables, format them and pass them as command line arguments to the
+    /// external program.
+    /// </para>
+    /// <para>
+    /// <b>Using built in shell commands</b>
+    /// </para>
+    /// <para>
+    /// In Windows use cmd.exe as the executable, and pass the wanted command as an argument, preceded with /c.
+    /// This allows to execute del *.* and the like. For example :
+    /// </para>
+    /// <code>
+    /// &lt;exec&gt;
+    /// &lt;executable&gt;c:\Windows\System32\cmd.exe&lt;/executable&gt;
+    /// &lt;buildArgs&gt;/C NET STOP "Service name"&lt;/buildArgs&gt;
+    /// &lt;/exec&gt;
+    /// </code>
+    /// </remarks>
+    [ReflectorType("exec")]
 	public class ExecutableTask
         : BaseExecutableTask
 	{
@@ -27,22 +86,39 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			this.executor = executor;
 		}
 
+        /// <summary>
+        /// The path of the program to run. If this is relative, then must be relative to either (a) the base
+        /// directory, (b) the CCNet Server application, or (c) if the path doesn't contain any directory
+        /// details then can be available in the system or application's 'path' environment variable.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
 		[ReflectorProperty("executable", Required = true)]
 		public string Executable = string.Empty;
 
-		[ReflectorProperty("baseDirectory", Required = false)]
+        /// <summary>
+        /// The directory to run the process in. If relative, is a subdirectory of the Project Working
+        /// Directory.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>Project working directory</default>
+        [ReflectorProperty("baseDirectory", Required = false)]
 		public string ConfiguredBaseDirectory = string.Empty;
 
-		[ReflectorProperty("buildArgs", Required = false)]
+        /// <summary>
+        /// Any command line arguments to pass in.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("buildArgs", Required = false)]
 		public string BuildArgs = string.Empty;
 
 		/// <summary>
 		/// A set of environment variables set for commands that are executed.
 		/// </summary>
-		/// <remarks>
-		/// Each variable should be specified as <code>&lt;variable name="name" value="value"/&gt;</code>.
-		/// </remarks>
-		[ReflectorArray("environment", Required = false)]
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorArray("environment", Required = false)]
 		public EnvironmentVariable[] EnvironmentVariables = new EnvironmentVariable[0];
 
 		private int[] successExitCodes;
@@ -50,7 +126,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The list of exit codes that indicate success, separated by commas.
         /// </summary>
-		[ReflectorProperty("successExitCodes", Required = false)]
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("successExitCodes", Required = false)]
 		public string SuccessExitCodes
 		{
 			get 
@@ -88,10 +166,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		}
 		
 		/// <summary>
-		/// Gets and sets the maximum number of seconds that the build may take.  If the build process takes longer than
-		/// this period, it will be killed.  Specify this value as zero to disable process timeouts.
+        /// Number of seconds to wait before assuming that the process has hung and should be killed.  If the 
+        /// build process takes longer than this period, it will be killed.  Specify this value as zero to 
+        /// disable process timeouts.
 		/// </summary>
-		[ReflectorProperty("buildTimeoutSeconds", Required = false)]
+        /// <version>1.0</version>
+        /// <default>600</default>
+        [ReflectorProperty("buildTimeoutSeconds", Required = false)]
 		public int BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
 
         /// <summary>
