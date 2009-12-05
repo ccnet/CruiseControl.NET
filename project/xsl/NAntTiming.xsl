@@ -25,7 +25,7 @@
 		<div id="NAntTimingReport">
 			<h1>NAnt Build Timing Report</h1>
 
-			<xsl:variable name="buildresults" select="//build/buildresults" />
+			<xsl:variable name="buildresults" select="/cruisecontrol/build/buildresults" />
 			<xsl:choose>
 				<xsl:when test="count($buildresults) > 0">
 					<xsl:apply-templates select="$buildresults" />
