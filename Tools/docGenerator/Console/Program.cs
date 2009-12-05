@@ -15,128 +15,136 @@
     {
         public static void Main(string[] args)
         {
-            if (args.Length == 0)
-            {
-                WriteToConsole("No assembly specified", ConsoleColor.Red);
-                return;
-            }
-
-            var assemblyName = args[0];
-            if (!File.Exists(assemblyName))
-            {
-                WriteToConsole("Cannot find assembly: " + assemblyName, ConsoleColor.Red);
-                return;
-            }
-
-            var documentation = new XDocument();
-            var documentationPath = Path.ChangeExtension(assemblyName, "xml");
-            if (File.Exists(documentationPath))
-            {
-                documentation = XDocument.Load(documentationPath);
-            }
-
-            WriteToConsole("Starting documentation generation for " + Path.GetFileName(assemblyName), ConsoleColor.Gray);
-
             try
             {
-                var baseFolder = Path.Combine(Environment.CurrentDirectory, DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture));
-                if (args.Length > 1)
+                if (args.Length == 0)
                 {
-                    baseFolder = args[1];
-                    if (!Path.IsPathRooted(baseFolder))
-                    {
-                        baseFolder = Path.Combine(Environment.CurrentDirectory, baseFolder);
-                    }
+                    WriteToConsole("No assembly specified", ConsoleColor.Red);
+                    return;
                 }
 
-                Directory.CreateDirectory(baseFolder);
-                var assembly = Assembly.LoadFrom(assemblyName);
-
-                // Load the documentation for any dependencies
-                LoadDependencyDocumentation(Path.GetDirectoryName(assemblyName), assembly, documentation);
-                var types = assembly.GetExportedTypes();
-                foreach (var type in types)
+                var assemblyName = args[0];
+                if (!File.Exists(assemblyName))
                 {
-                    var attributes = type.GetCustomAttributes(typeof(ReflectorTypeAttribute), true);
-                    if (attributes.Length > 0)
+                    WriteToConsole("Cannot find assembly: " + assemblyName, ConsoleColor.Red);
+                    return;
+                }
+
+                var documentation = new XDocument();
+                var documentationPath = Path.ChangeExtension(assemblyName, "xml");
+                if (File.Exists(documentationPath))
+                {
+                    documentation = XDocument.Load(documentationPath);
+                }
+
+                WriteToConsole("Starting documentation generation for " + Path.GetFileName(assemblyName), ConsoleColor.Gray);
+
+                try
+                {
+                    var baseFolder = Path.Combine(Environment.CurrentDirectory, DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture));
+                    if (args.Length > 1)
                     {
-                        // There can be only one!
-                        var attribute = attributes[0] as ReflectorTypeAttribute;
-                        var fileName = Path.Combine(baseFolder, attribute.Name + ".wiki");
-                        WriteToConsole("Generating " + attribute.Name + ".wiki", ConsoleColor.White);
-                        if (File.Exists(fileName))
+                        baseFolder = args[1];
+                        if (!Path.IsPathRooted(baseFolder))
                         {
-                            File.Delete(fileName);
+                            baseFolder = Path.Combine(Environment.CurrentDirectory, baseFolder);
                         }
+                    }
 
-                        var typeElement = (from element in documentation.Descendants("member")
-                                           where element.Attribute("name").Value == "T:" + type.FullName
-                                           select element).SingleOrDefault();
+                    Directory.CreateDirectory(baseFolder);
+                    var assembly = Assembly.LoadFrom(assemblyName);
 
-                        using (var output = new StreamWriter(fileName))
+                    // Load the documentation for any dependencies
+                    LoadDependencyDocumentation(Path.GetDirectoryName(assemblyName), assembly, documentation);
+                    var types = assembly.GetExportedTypes();
+                    foreach (var type in types)
+                    {
+                        var attributes = type.GetCustomAttributes(typeof(ReflectorTypeAttribute), true);
+                        if (attributes.Length > 0)
                         {
-                            var elementName = attribute.Name;
-                            if (HasTag(typeElement, "title"))
+                            // There can be only one!
+                            var attribute = attributes[0] as ReflectorTypeAttribute;
+                            var fileName = Path.Combine(baseFolder, attribute.Name + ".wiki");
+                            WriteToConsole("Generating " + attribute.Name + ".wiki", ConsoleColor.White);
+                            if (File.Exists(fileName))
                             {
-                                elementName = typeElement.Element("title").Value;
+                                File.Delete(fileName);
                             }
 
-                            output.WriteLine("h1. " + elementName);
-                            output.WriteLine();
-                            if (HasTag(typeElement, "summary"))
-                            {
-                                WriteDocumentation(typeElement, "summary", output, documentation);
-                                output.WriteLine();
-                            }
+                            var typeElement = (from element in documentation.Descendants("member")
+                                               where element.Attribute("name").Value == "T:" + type.FullName
+                                               select element).SingleOrDefault();
 
-                            if (HasTag(typeElement, "version"))
+                            using (var output = new StreamWriter(fileName))
                             {
-                                output.WriteLine("h2. Version");
-                                output.WriteLine();
-                                output.Write("Available from version ");
-                                WriteDocumentation(typeElement, "version", output, documentation);
-                                output.WriteLine();
-                            }
+                                var elementName = attribute.Name;
+                                if (HasTag(typeElement, "title"))
+                                {
+                                    elementName = typeElement.Element("title").Value;
+                                }
 
-                            if (HasTag(typeElement, "example"))
-                            {
-                                output.WriteLine("h2. Examples");
+                                output.WriteLine("h1. " + elementName);
                                 output.WriteLine();
-                                WriteDocumentation(typeElement, "example", output, documentation);
-                                output.WriteLine();
-                            }
+                                if (HasTag(typeElement, "summary"))
+                                {
+                                    WriteDocumentation(typeElement, "summary", output, documentation);
+                                    output.WriteLine();
+                                }
 
-                            output.WriteLine("h2. Configuration Elements");
-                            output.WriteLine();
-                            output.WriteLine("|| Element || Description || Type || Required || Default || Version ||");
-                            WriteElements(type, output, documentation, typeElement);
-                            output.WriteLine();
+                                if (HasTag(typeElement, "version"))
+                                {
+                                    output.WriteLine("h2. Version");
+                                    output.WriteLine();
+                                    output.Write("Available from version ");
+                                    WriteDocumentation(typeElement, "version", output, documentation);
+                                    output.WriteLine();
+                                }
 
-                            if (HasTag(typeElement, "remarks"))
-                            {
-                                output.WriteLine("h2. Notes");
+                                if (HasTag(typeElement, "example"))
+                                {
+                                    output.WriteLine("h2. Examples");
+                                    output.WriteLine();
+                                    WriteDocumentation(typeElement, "example", output, documentation);
+                                    output.WriteLine();
+                                }
+
+                                output.WriteLine("h2. Configuration Elements");
                                 output.WriteLine();
-                                WriteDocumentation(typeElement, "remarks", output, documentation);
+                                output.WriteLine("|| Element || Description || Type || Required || Default || Version ||");
+                                WriteElements(type, output, documentation, typeElement);
                                 output.WriteLine();
+
+                                if (HasTag(typeElement, "remarks"))
+                                {
+                                    output.WriteLine("h2. Notes");
+                                    output.WriteLine();
+                                    WriteDocumentation(typeElement, "remarks", output, documentation);
+                                    output.WriteLine();
+                                }
+                                output.WriteLine("{info:title=Automatically Generated}");
+                                output.WriteLine(
+                                    "Documentation generated on " +
+                                    DateTime.Now.ToUniversalTime().ToString("dddd, d MMM yyyy", CultureInfo.InvariantCulture) +
+                                    " at " +
+                                    DateTime.Now.ToUniversalTime().ToString("h:mm:ss tt", CultureInfo.InvariantCulture));
+                                output.WriteLine("{info}");
+                                output.Flush();
                             }
-                            output.WriteLine("{info:title=Automatically Generated}");
-                            output.WriteLine(
-                                "Documentation generated on " +
-                                DateTime.Now.ToUniversalTime().ToString("dddd, d MMM yyyy", CultureInfo.InvariantCulture) +
-                                " at " +
-                                DateTime.Now.ToUniversalTime().ToString("h:mm:ss tt", CultureInfo.InvariantCulture));
-                            output.WriteLine("{info}");
-                            output.Flush();
                         }
                     }
                 }
+                catch (Exception error)
+                {
+                    WriteToConsole(error.Message, ConsoleColor.Red);
+                    throw;
+                }
+
+                WriteToConsole("Documentation generation finished", ConsoleColor.Gray);
             }
-            catch (Exception error)
+            catch
             {
-                WriteToConsole(error.Message, ConsoleColor.Red);
+                Console.ReadKey();
             }
-
-            WriteToConsole("Documentation generation finished", ConsoleColor.Gray);
         }
 
         private static void LoadDependencyDocumentation(string baseFolder, Assembly assembly, XDocument documentation)
