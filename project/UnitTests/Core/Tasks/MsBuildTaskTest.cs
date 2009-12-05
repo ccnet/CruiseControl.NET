@@ -11,7 +11,6 @@ using Rhino.Mocks;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
 	[TestFixture]
-    [Ignore("Ignored until we have a easy way to test only static execution arguments.")]
 	public class MsBuildTaskTest : ProcessExecutorTestFixtureBase
 	{
 		private const string defaultLogger = "ThoughtWorks.CruiseControl.MsBuild.dll";
@@ -149,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldAutomaticallyMergeTheBuildOutputFile()
 		{
-			TempFileUtil.CreateTempXmlFile(logfile, "<output/>");
+            TempFileUtil.CreateTempXmlFile(string.Format(logfile, task.LogFileId), "<output/>");
 			ExpectToExecuteAndReturn(SuccessfulProcessResult());
 			task.Run(result);
 			Assert.AreEqual(2, result.TaskResults.Count);
@@ -160,7 +159,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldFailOnFailedProcessResult()
 		{
-			TempFileUtil.CreateTempXmlFile(logfile, "<output/>");
+            TempFileUtil.CreateTempXmlFile(string.Format(logfile, task.LogFileId), "<output/>");
 			ExpectToExecuteAndReturn(FailedProcessResult());
 			task.Run(result);
 			Assert.AreEqual(2, result.TaskResults.Count);
@@ -202,7 +201,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		private string GetLoggerArgument()
 		{
 			var logger = string.IsNullOrEmpty(task.Logger) ? defaultLogger : task.Logger;
-			return string.Format(@" /l:{0};{1}", StringUtil.AutoDoubleQuoteString(logger), StringUtil.AutoDoubleQuoteString(logfile));
+            return string.Format(@" /l:{0};{1}", StringUtil.AutoDoubleQuoteString(logger), StringUtil.AutoDoubleQuoteString(string.Format(logfile, task.LogFileId)));
 		}
 
 		private string IntegrationProperties()
