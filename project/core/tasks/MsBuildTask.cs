@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     public class MsBuildTask
         : BaseExecutableTask
 	{
-		public const string LogFilename = "msbuild-results.xml";
+		public const string LogFilename = "msbuild-results-{0}.xml";
 		public const int DefaultTimeout = 600;
         private IShadowCopier shadowCopier;
 		private readonly IExecutionEnvironment executionEnvironment;
@@ -151,7 +151,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private static string MsBuildOutputFile(IIntegrationResult result)
 		{
-			return Path.Combine(result.ArtifactDirectory, LogFilename);
+            return Path.Combine(result.ArtifactDirectory, string.Format(LogFilename, Guid.NewGuid()));
 		}
 
 		private static string CheckAndQuoteLoggerSetting(string logger)
