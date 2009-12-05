@@ -7,8 +7,49 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     /// <summary>
-    /// Reads modifications from file back into the current integration result
+    /// <para>
+    /// This tasks makes it possible to read back modifications made by the <link>Modification Writer Task</link>.
+    /// </para>
     /// </summary>
+    /// <title>Modification Reader Task</title>
+    /// <version>1.4</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;rss /&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;rss items="30" /&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para>
+    /// 2 projects in CCNet
+    /// </para>
+    /// <para>
+    /// 1) is a project that does the compile, test, ... stuff, and also writes the modifications using the ModificationWriterTask be sure to
+    /// set the appendTimeStamp of the modificationWriter to true
+    /// </para>
+    /// <para>
+    /// 2) is a project that deploys the result of project 1
+    /// </para>
+    /// <para>
+    /// --&gt; copies it to other servers, updates source control (binary references like a framework), ...
+    /// </para>
+    /// <para>
+    /// The reason for a second project is that this can be done on releases of milestones of project 1
+    /// </para>
+    /// <para>
+    /// The ModificationReaderTask can now easily read the modification file(s) made by project one, into it's own integration, making it
+    /// possible that these can be used by the existing tasks/publishers of ccnet for project 2
+    /// </para>
+    /// <para>
+    /// It is best to place the modificationreader in the prebuild section, so all the other tasks / publisers know the read modifications
+    /// also. 
+    /// </para>
+    /// <para>
+    /// It is adivisable to keep these configuration elements of the modificationWriter and the modificationReader the same.  
+    /// </para>
+    /// </remarks>
     [ReflectorType("modificationReader")]
     public class ModificationReaderTask
         : TaskBase
@@ -24,6 +65,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             this.fileSystem = fileSystem;
         }
 
+        /// <summary>
+        /// Delete the files after they have been read. 
+        /// </summary>
+        /// <version>1.4</version>
+        /// <default>false</default>
         [ReflectorProperty("deleteAfterRead", Required = false)]
         public bool DeleteAfterRead
         {
@@ -97,14 +143,20 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         }
 
         /// <summary>
-        /// The fileName to use to store the modifications
+        /// The filename pattern for the file containing the modifications. CCnet with search in the path for files starting with this
+        /// filename, and having the same extention. For example when filename is set to modifications.xml, ccnet will search for files
+        /// like so: modifications*.xml 
         /// </summary>
+        /// <version>1.4</version>
+        /// <default>modifications.xml</default>
         [ReflectorProperty("filename", Required = false)]
         public string Filename = "modifications.xml";
 
         /// <summary>
-        /// Path of the file
+        /// The directory to search the xml file(s) in. 
         /// </summary>
+        /// <version>1.4</version>
+        /// <default>Project Artefact Directory</default>
         [ReflectorProperty("path", Required = false)]
         public string OutputPath;
     }

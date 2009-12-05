@@ -6,9 +6,72 @@ using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    /// <title>Replacement Dynamic Value</title>
+    /// <version>1.5</version>
     /// <summary>
-    /// Sets a dynamic value using a format string.
+    /// <para>
+    /// This will replace any number of parameters into a format string. The format string can also include formats for each parameter.
+    /// </para>
     /// </summary>
+    /// <example>
+    /// <code title="Basic example">
+    /// &lt;nant&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;buildArgs&gt;-t:Help&lt;/buildArgs&gt;
+    /// &lt;dynamicValues&gt;
+    /// &lt;replacementValue property="buildArgs"&gt;
+    /// &lt;format&gt;-t:{0}&lt;/format&gt;
+    /// &lt;parameters&gt;
+    /// &lt;namedValue name="CommandToRun" value="Help"/&gt;
+    /// &lt;/parameters&gt;
+    /// &lt;/replacementValue&gt;
+    /// &lt;/dynamicValues&gt;
+    /// &lt;/nant&gt;
+    /// </code>
+    /// <code title="Shorthand example">
+    /// &lt;nant&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;buildArgs&gt;-t:$[CommandToRun|Help]&lt;/buildArgs&gt;
+    /// &lt;/nant&gt;
+    /// </code>
+    /// <code title="Example in context">
+    /// &lt;project name="Test Project"&gt;
+    /// &lt;sourcecontrol type="svn"&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// &lt;triggers&gt;
+    /// &lt;intervalTrigger /&gt;
+    /// &lt;/triggers&gt;
+    /// &lt;tasks&gt;
+    /// &lt;nant&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;buildArgs&gt;-t:Help&lt;/buildArgs&gt;
+    /// &lt;dynamicValues&gt;
+    /// &lt;replacementValue property="buildArgs"&gt;
+    /// &lt;format&gt;-t:{0}&lt;/format&gt;
+    /// &lt;parameters&gt;
+    /// &lt;namedValue name="CommandToRun" value="Help"/&gt;
+    /// &lt;/parameters&gt;
+    /// &lt;/replacementValue&gt;
+    /// &lt;/dynamicValues&gt;
+    /// &lt;/nant&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/tasks&gt;
+    /// &lt;publishers&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/publishers&gt;
+    /// &lt;parameters&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/parameters&gt;
+    /// &lt;/project&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para>
+    /// The format string is any standard .NET format string that can be used with string.Format(). The parameters will be replaced in
+    /// the order that they are defined in the parameters property.
+    /// </para>
+    /// </remarks>
     [ReflectorType("replacementValue")]
     public class ReplacementDynamicValue
         : IDynamicValue
@@ -28,6 +91,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The name of the property to set.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("property")]
         public string PropertyName
         {
@@ -38,6 +103,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The parameters to use.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorArray("parameters")]
         public NameValuePair[] Parameters
         {
@@ -48,6 +115,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The default value to use if nothing is set in the parameters.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("format")]
         public string FormatValue
         {

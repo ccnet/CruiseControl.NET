@@ -7,10 +7,24 @@ using ThoughtWorks.CruiseControl.Core.Tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    /// <title>Modification History Publisher</title>
+    /// <version>1.3</version>
     /// <summary>
-    /// This publisher logs all modifications detected by the integration to a separate file.
-    /// So retrieving the modifications across builds is very easy. (Timeline, ... )
+    /// <para>
+    /// This publisher logs all modifications for each build in a file.
+    /// </para>
+    /// <para>
+    /// These modifications can be viewed in the Dashboard with the <link>modificationHistoryProjectPlugin</link> plugin enabled.
+    /// </para>
     /// </summary>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;modificationHistory /&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;modificationHistory  onlyLogWhenChangesFound="true" /&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("modificationHistory")]
     public class ModificationHistoryPublisher 
         : TaskBase
@@ -20,10 +34,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 
         /// <summary>
-        /// When true, the history file will only be updated when the build contains modifications
-        /// This setting is mainly for keeping the file small when there are a lot builds without modifications
-        /// For example : like CCNet, there is a public website where everybody can force a build
+        /// When true, the history file will only be updated when the build contains modifications. This setting is mainly for keeping the
+        /// file small when there are a lot builds without modifications. For example: like CCNet, there is a public website where everybody
+        /// can force a build.
         /// </summary>
+        /// <version>1.3</version>
+        /// <default>false</default>
         [ReflectorProperty("onlyLogWhenChangesFound", Required = false)]
         public bool OnlyLogWhenChangesFound
         {
