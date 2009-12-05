@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.IO;
 using Exortech.NetReflector;
@@ -112,7 +113,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         : BaseExecutableTask
 	{
 		public const int DefaultBuildTimeout = 600;
-		public const string logFilename = "nant-results.xml";
+		public const string logFilename = "nant-results-{0}.xml";
+        public readonly Guid LogFileId = Guid.NewGuid();
 		public const string defaultExecutable = "nant";
 		public const string DefaultLogger = "NAnt.Core.XmlLogger";
 		public const string DefaultListener = "NAnt.Core.DefaultLogger";
@@ -321,9 +323,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}
 		}
 
-		private static string GetNantOutputFile(IIntegrationResult result)
+		private string GetNantOutputFile(IIntegrationResult result)
 		{
-			return Path.Combine(result.ArtifactDirectory, logFilename);
+            return Path.Combine(result.ArtifactDirectory, string.Format(logFilename, LogFileId));
 		}
 	}
 }

@@ -122,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			result.WorkingDirectory = DefaultWorkingDirectory;
 			result.ArtifactDirectory = DefaultWorkingDirectory;
 
-			string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger -logfile:" + StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, "nant-results.xml")) + " -listener:NAnt.Core.DefaultLogger myArgs " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory) + " target1 target2";
+            string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger -logfile:" + StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, string.Format(NAntTask.logFilename, builder.LogFileId))) + " -listener:NAnt.Core.DefaultLogger myArgs " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory) + " target1 target2";
 			ProcessInfo info = NewProcessInfo(args, DefaultWorkingDirectory);
 			info.TimeOut = 2000;
 			ExpectToExecute(info);
@@ -140,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			result.ArtifactDirectory = DefaultWorkingDirectory;
 			result.WorkingDirectory = DefaultWorkingDirectory;
-			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -logfile:" + StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, "nant-results.xml")) + " -listener:NAnt.Core.DefaultLogger " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory));
+            ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -logfile:" + StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, string.Format(NAntTask.logFilename, builder.LogFileId))) + " -listener:NAnt.Core.DefaultLogger " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory));
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
 			builder.Run(result);
 		}
@@ -150,7 +150,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			result.ArtifactDirectory = DefaultWorkingDirectory;
 			result.WorkingDirectory = DefaultWorkingDirectory;
-			ExpectToExecuteArguments(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger -logfile:" + StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, "nant-results.xml")) + " -listener:NAnt.Core.DefaultLogger " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory));
+            ExpectToExecuteArguments(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger -logfile:" + StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, string.Format(NAntTask.logFilename, builder.LogFileId))) + " -listener:NAnt.Core.DefaultLogger " + IntegrationProperties(DefaultWorkingDirectory, DefaultWorkingDirectory));
 
 			builder.BuildFile = "my project.build";
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
@@ -163,7 +163,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			result.ArtifactDirectory = DefaultWorkingDirectoryWithSpaces;
 			result.WorkingDirectory = DefaultWorkingDirectoryWithSpaces;
 
-			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -logfile:" + StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, "nant-results.xml")) + " -listener:NAnt.Core.DefaultLogger " + IntegrationProperties(DefaultWorkingDirectoryWithSpaces, DefaultWorkingDirectoryWithSpaces), DefaultWorkingDirectoryWithSpaces);
+            ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -logfile:" + StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, string.Format(NAntTask.logFilename, builder.LogFileId))) + " -listener:NAnt.Core.DefaultLogger " + IntegrationProperties(DefaultWorkingDirectoryWithSpaces, DefaultWorkingDirectoryWithSpaces), DefaultWorkingDirectoryWithSpaces);
 
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectoryWithSpaces;
 			builder.Run(result);
