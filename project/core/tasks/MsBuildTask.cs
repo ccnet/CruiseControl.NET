@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         : BaseExecutableTask
 	{
 		public const string LogFilename = "msbuild-results-{0}.xml";
-	    public Guid LogFileId = Guid.NewGuid();
+        public readonly Guid LogFileId = Guid.NewGuid();
 		public const int DefaultTimeout = 600;
         private IShadowCopier shadowCopier;
 		private readonly IExecutionEnvironment executionEnvironment;
