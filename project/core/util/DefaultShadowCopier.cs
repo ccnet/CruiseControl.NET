@@ -38,9 +38,15 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         private class ShadowStore
             : IDisposable
         {
-            private string tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            private readonly string tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             private List<string> copiedFiles = new List<string>();
-            private object lockObject = new object();
+            private readonly object lockObject = new object();
+
+            public ShadowStore()
+            {
+                if (!Directory.Exists(tempPath))
+                    Directory.CreateDirectory(tempPath);
+            }
 
             /// <summary>
             /// Checks if a file already exists, if not, it attempts to copy it over.
