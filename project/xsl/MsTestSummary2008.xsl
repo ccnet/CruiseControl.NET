@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
 <xsl:stylesheet
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-    <xsl:output method="html"/>
-    
-    <xsl:template match="/">
-    			<xsl:variable name="pass_count" select="sum(/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='ResultSummary']/*[local-name()='Counters']/@passed)"/>
-    			<xsl:variable name="inconclusive_count" select="sum(/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='ResultSummary']/*[local-name()='Counters']/@inconclusive)"/>
-    			<xsl:variable name="failed_count" select="sum(/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='ResultSummary']/*[local-name()='Counters']/@failed)"/>
+	<xsl:output method="html"/>
+	
+	<xsl:template match="/">
+				<xsl:variable name="pass_count" select="sum(/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='ResultSummary']/*[local-name()='Counters']/@passed)"/>
+				<xsl:variable name="inconclusive_count" select="sum(/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='ResultSummary']/*[local-name()='Counters']/@inconclusive)"/>
+				<xsl:variable name="failed_count" select="sum(/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='ResultSummary']/*[local-name()='Counters']/@failed)"/>
 				<xsl:variable name="total_count" select="sum(/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='ResultSummary']/*[local-name()='Counters']/@total)"/>
 
-			<xsl:if test="$total_count != 0">
+			<xsl:if test="$total_count > 0">
 				<table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
 					<tr>
-						<td class="sectionheader" colspan="3">
+						<td class="sectionheader" colspan="6">
 							Tests run: <xsl:value-of select="$total_count"/>
 							Failures: <xsl:value-of select="$failed_count" />
 							Inconclusive: <xsl:value-of select="$inconclusive_count" />
@@ -33,9 +33,9 @@
 					</xsl:choose>
 				</table>
 			</xsl:if>
-    </xsl:template>
-    
-    <xsl:template match="*[local-name()='UnitTestResult']">
+	</xsl:template>
+	
+	<xsl:template match="*[local-name()='UnitTestResult']">
 			<tr>
 				<xsl:choose>
 					<xsl:when test="@outcome = 'Failed'">
@@ -55,5 +55,5 @@
 					<xsl:value-of select="./*[local-name()='Output']/*[local-name()='ErrorInfo']/*[local-name()='Message']"/>
 				</td>
 			</tr>
-    </xsl:template>
+	</xsl:template>
 </xsl:stylesheet>
