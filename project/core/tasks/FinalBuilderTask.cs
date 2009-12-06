@@ -1,31 +1,59 @@
-using System;
-using System.Text;
-using System.IO;
-using ThoughtWorks.CruiseControl.Core.Util;
-using Exortech.NetReflector;
-
-/* FinalbuilderTask   
- * 
- * Syntax : (inside tasks block):
- * 
- * <FinalBuilder>
- *		<ProjectFile>C:\TEMP\Project.fbz3</ProjectFile>						 <!-- Required -->
- *		<ShowBanner>false</ShowBanner>										 <!-- Optional, default = true -->
- *		<FBVariables>														 <!-- Optional -->
- *			<FBVariable name="MyVariable" value="SomeValue" />
- *		</FBVariables>
- *		<FBVersion>3</FBVersion>											 <!-- Optional, used to find executable. Default uses extension from project file -->
- *		<FBCMDPath>C:\Program Files\MyFinalBuilderPath\FBCMD.EXE</FBCMDPath> <!-- Optional, overrides FBVersion to provide absolute path to FBCMD.EXE -->
- *		<DontWriteToLog>true</DontWriteToLog>                                <!-- Optional, default = false -->
- *      <UseTemporaryLogFile>true</UseTemporaryLogFile>                      <!-- Optional, default = false, overrides DontWriteToLog -->
- *		<Timeout>100</Timeout>                                               <!-- Optional, in seconds, default = no timeout -->
- * </FinalBuilder>
- *		
- * */
-
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
-	[ReflectorType("FinalBuilder")]
+    using System;
+    using System.Text;
+    using System.IO;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using Exortech.NetReflector;
+
+    /// <summary>
+    /// <para>
+    /// The FinalBuilder Task allows you to invoke FinalBuilder build projects as part of a CruiseControl.NET
+    /// integration project. FinalBuilder is a commercial build and release management solution for Windows software
+    /// developers and SCM professionals, developed and marketed by VSoft Technologies 
+    /// (http://www.finalbuilder.com/finalbuilder.aspx).
+    /// </para>
+    /// </summary>
+    /// <title>FinalBuilder Task</title>
+    /// <version>1.3</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;FinalBuilder&gt;
+    /// &lt;ProjectFile&gt;C:\Projects\BuildProject\Build Process.fbz5&lt;/ProjectFile&gt;
+    /// &lt;/FinalBuilder&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;FinalBuilder&gt;
+    /// &lt;ProjectFile&gt;C:\Projects\BuildProject\Build Process.fbz5&lt;/ProjectFile&gt;
+    /// &lt;FBVersion&gt;5&lt;/FBVersion&gt;
+    /// &lt;ShowBanner&gt;false&lt;/ShowBanner&gt;
+    /// &lt;FBVariables&gt;
+    /// &lt;FBVariable name="IsContinuousIntegrationBuild" value="True" /&gt;
+    /// &lt;/FBVariables&gt;
+    /// &lt;Timeout&gt;3600&lt;/Timeout&gt;
+    /// &lt;DontWriteToLog&gt;true&lt;/DontWriteToLog&gt;
+    /// &lt;/FinalBuilder&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <heading>Frequently Asked Questions</heading>
+    /// <para>
+    /// <b>Can I format output to the CruiseControl.NET web dashboard?</b>
+    /// </para>
+    /// <para>
+    /// At the moment, output from the FinalBuilder Task is plain text. We are planning to change this so that the task
+    /// outputs XML which can be easily used with the various CruiseControl.NET publishers. In the meantime, it is
+    /// possible to use the FinalBuilder Export Log Action to export an XML file, which can then be incorporated via
+    /// the File Merge Task.
+    /// </para>
+    /// <b>Which FinalBuilder version do I need?</b>
+    /// <para>
+    /// The task will work with FinalBuilder versions 3, 4, and 5. However, because the task uses the FBCMD command
+    /// line utility, users of FinalBuilder 3 and 4 will need the Professional Edition. FinalBuilder 5 users can use
+    /// either the Standard or Professional editions. A free 30 day trial download is available.
+    /// </para>
+    /// </remarks>
+    [ReflectorType("FinalBuilder")]
 	public class FinalBuilderTask
         : TaskBase
 	{
@@ -54,17 +82,41 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		#endregion
 
 		#region Properties		
-
+        /// <summary>
+        /// The full path of the FinalBuilder project to run.
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>n/a</default>
 		[ReflectorProperty("ProjectFile", Required = true)]
 		public string ProjectFile = string.Empty;
 
-		[ReflectorProperty("ShowBanner", Required = false)]
+        /// <summary>
+        /// Specify 'true' to enable the "banner" at the top of the FinalBuilder console output.
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>false</default>
+        [ReflectorProperty("ShowBanner", Required = false)]
 		public bool ShowBanner;
 
-		[ReflectorArray("FBVariables", Required= false)] 
+        /// <summary>
+        /// One or more FBVariable elements to pass to FinalBuilder. 
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>None</default>
+        [ReflectorArray("FBVariables", Required = false)] 
 		public FBVariable[] FBVariables;
-			
-		[ReflectorProperty("FBVersion", Required = false)]
+
+        /// <summary>
+        /// Use this element to explicitly specify a version of FinalBuilder to run (for instance, you could force
+        /// a FinalBuilder 4 project to run in FinalBuilder 5.)
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>Generated</default>
+        /// <remarks>
+        /// If this element is not specified, the FinalBuilder version is determined automatically from the project
+        /// file name (recommended.)
+        /// </remarks>
+        [ReflectorProperty("FBVersion", Required = false)]
 		public int FBVersion 
 		{
 			get
@@ -88,20 +140,47 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				_fbversion = (FinalBuilderVersion)value;
 			}
 		}
-		
-		[ReflectorProperty("FBCMDPath", Required = false)]
+
+        /// <summary>
+        /// The absolute path to FBCMD.EXE.
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>Generated</default>
+        /// <remarks>
+        /// If this value is not set, then the value will be generated using either FBVersion or the project file.
+        /// </remarks>
+        [ReflectorProperty("FBCMDPath", Required = false)]
 		public string FBCMDPath
 		{
             get { return string.IsNullOrEmpty(_fbcmdpath) ? GetFBPath() : _fbcmdpath; }
 			set {	_fbcmdpath = value;		}
 		}
 
-		[ReflectorProperty("DontWriteToLog", Required = false)]
+        /// <summary>
+        /// Disable output to the FinalBuilder project log file.
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>false</default>
+        [ReflectorProperty("DontWriteToLog", Required = false)]
 		public bool DontWriteToLog;
 
+        /// <summary>
+        /// Log to a temporary log file which is deleted when the project closes. Overrides DontWriteToLog.
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>false</default>
+        /// <remarks>
+        /// Use this option instead of DontWriteToLog if you still want to be able to use the Export Log action, but
+        /// don't want the log file to be updated.
+        /// </remarks>
         [ReflectorProperty("UseTemporaryLogFile", Required = false)]
         public bool UseTemporaryLogFile;
 
+        /// <summary>
+        /// The number of seconds to wait before assuming that the FinalBuilder project has hung and should be killed. 
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>0</default>
         [ReflectorProperty("Timeout", Required = false)]
 		public int Timeout;
 
@@ -217,46 +296,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return Path.GetDirectoryName(executableDir) + @"\FBCmd.exe";
 		}
 	
-		#endregion
-
-		#region FBVariable nested class
-
-		// Nested class for FBVariable entries
-		[ReflectorType("FBVariable")]
-		public class FBVariable
-		{
-			private string _name;
-			private string _value;
-
-			[ReflectorProperty("name")]
-			public string Name
-			{
-				get { return _name; }
-				set { _name = value; }
-			}
-
-			[ReflectorProperty("value")]
-			public string Value
-			{
-				get { return _value; }
-				set { _value = value; }
-			}
-
-			public override string ToString()
-			{
-				return string.Format("FB Variable: {0} = {1}", Name, Value);
-			}
-
-			public FBVariable(string name, string avalue)
-			{
-				_name = name;
-				_value = avalue;
-			}
-
-			public FBVariable() { }
-
-		}
-
 		#endregion
 
 		private enum FinalBuilderVersion

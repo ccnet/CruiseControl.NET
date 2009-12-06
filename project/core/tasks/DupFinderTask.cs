@@ -15,8 +15,53 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     using System.Collections.Generic;
 
     /// <summary>
+    /// <para>
     /// Check for duplicates using dupfinder (http://duplicatefinder.codeplex.com/).
+    /// </para>
     /// </summary>
+    /// <title>Duplicate Finder Task</title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;dupfinder&gt;
+    /// &lt;fileMask&gt;*.cs&lt;/fileMask&gt;
+    /// &lt;inputDir&gt;Code&lt;/inputDir&gt;
+    /// &lt;/dupfinder&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;dupfinder&gt;
+    /// &lt;dynamicValues /&gt;
+    /// &lt;fileMask&gt;*.cs&lt;/fileMask&gt;
+    /// &lt;includeCode&gt;False&lt;/includeCode&gt;
+    /// &lt;inputDir&gt;Code&lt;/inputDir&gt;
+    /// &lt;recurse&gt;False&lt;/recurse&gt;
+    /// &lt;shortenNames&gt;False&lt;/shortenNames&gt;
+    /// &lt;threshold&gt;5&lt;/threshold&gt;
+    /// &lt;timeout&gt;600&lt;/timeout&gt;
+    /// &lt;width&gt;2&lt;/width&gt;
+    /// &lt;/dupfinder&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <heading>Extended Functionality</heading>
+    /// <para>
+    /// This task offers some extended functionality over what the base dupfinder executable offers. This extended
+    /// functionality is primarily intended to add extra value to the web dashboard display. The extended options are:
+    /// </para>
+    /// <para>
+    /// <b>&lt;shortenNames&gt;</b>: This will remove the &lt;inputDir&gt; value from the file names. This means the
+    /// filenames only contain the relative path to the file, which makes it easier to see where the file is.
+    /// </para>
+    /// <para>
+    /// <b>&lt;includeCode&gt;</b>: This will include the lines of code that were duplicated into the output. These can
+    /// then be seen in the web dashboard. This meakes it easy to see the code that has been duplicated.
+    /// </para>
+    /// <para>
+    /// These features work by post-processing the XML output from dupfinder. That is, once dupfinder has finished, the
+    /// task loads the XML file, finds all the elements that need changing and changes them as required. For the code
+    /// inclusion, it will also open the relevant code files and extract the lines of code as needed.
+    /// </para>
+    /// </remarks>
     [ReflectorType("dupfinder")]
     public class DupFinderTask
         : BaseExecutableTask
@@ -56,100 +101,121 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #region Public properties
         #region Executable
         /// <summary>
-        /// Gets or sets the executable to use.
+        /// The executable to use.
         /// </summary>
-        /// <value>The executable.</value>
+        /// <version>1.5</version>
+        /// <default>dupfinder</default>
         [ReflectorProperty("executable", Required = false)]
         public string Executable { get; set; }
         #endregion
 
         #region InputDir
         /// <summary>
-        /// Gets or sets the input directory to scan.
+        /// The input directory to scan. If relative, this will be relative to the project working directory.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("inputDir", Required = true)]
         public string InputDir { get; set; }
         #endregion
 
         #region FileMask
         /// <summary>
-        /// Gets or sets the file mask to use.
+        /// The file mask to use.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("fileMask", Required = true)]
         public string FileMask { get; set; }
         #endregion
 
         #region Focus
         /// <summary>
-        /// Gets or sets the name of the file to focus on.
+        /// The name of the file to focus on.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("focus", Required = false)]
         public string Focus { get; set; }
         #endregion
 
         #region TimeOut
         /// <summary>
-        /// Gets or sets the time-out period in seconds.
+        /// The time-out period in seconds.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>600</default>
         [ReflectorProperty("timeout", Required = false)]
         public int TimeOut { get; set; }
         #endregion
 
         #region Threshold
         /// <summary>
-        /// Gets or sets the threshold is the number of consecutive lines that have to be the same before it is considered a duplicate.
+        /// The threshold is the number of consecutive lines that have to be the same before it is considered a
+        /// duplicate.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>5</default>
         [ReflectorProperty("threshold", Required = false)]
         public int Threshold { get; set; }
         #endregion
 
         #region Width
         /// <summary>
-        /// Gets or sets the first line of a duplicate must contain at least this many non-white-space characters.
+        /// The first line of a duplicate must contain at least this many non-white-space characters.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>2</default>
         [ReflectorProperty("width", Required = false)]
         public int Width { get; set; }
         #endregion
 
         #region Recurse
         /// <summary>
-        /// Gets or sets a value indicating whether to find files that match the filemask in current directory and subdirectories.
+        /// To find files that match the filemask in current directory and subdirectories.
         /// </summary>
-        /// <value><c>true</c> if recurse; otherwise, <c>false</c>.</value>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("recurse", Required = false)]
         public bool Recurse { get; set; }
         #endregion
 
         #region ShortenFileNames
         /// <summary>
-        /// Gets or sets a value indicating whether to shorten filenames.
+        /// Whether to shorten filenames.
         /// </summary>
-        /// <value><c>true</c> if shortening is required; otherwise, <c>false</c>.</value>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("shortenNames", Required = false)]
         public bool ShortenFileNames { get; set; }
         #endregion
 
         #region IncludeCode
         /// <summary>
-        /// Gets or sets a value indicating whether to include the code that has been duplicated.
+        /// Whether to include the code that has been duplicated.
         /// </summary>
-        /// <value><c>true</c> if code is to be included; otherwise, <c>false</c>.</value>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("includeCode", Required = false)]
         public bool IncludeCode { get; set; }
         #endregion
 
         #region LinesToExclude
         /// <summary>
-        /// Gets or sets the lines to exclude.
+        /// The lines to exclude.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("excludeLines", Required = false)]
         public string[] LinesToExclude { get; set; }
         #endregion
 
         #region FilesToExclude
         /// <summary>
-        /// Gets or sets the files to exclude.
+        /// The files to exclude.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("excludeFiles", Required = false)]
         public string[] FilesToExclude { get; set; }
         #endregion
