@@ -45,6 +45,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// &lt;/checkHttpStatus&gt;
     /// </code>
     /// </example>
+    /// <remarks>
+    /// <para>
+    /// Task supplied by Patrik Husfloen.
+    /// </para>
+    /// </remarks>
     [ReflectorType("checkHttpStatus")]
     public class HttpStatusTask 
         : TaskBase

@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			get { return executor; }
 		}
 
-		[ReflectorProperty("timeout", typeof (TimeoutSerializerFactory))]
+		[ReflectorProperty("timeout", typeof (TimeoutSerializerFactory), Required = false)]
 		public Timeout Timeout
 		{
 			get { return timeout; }
