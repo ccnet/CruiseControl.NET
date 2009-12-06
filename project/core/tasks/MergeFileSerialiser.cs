@@ -107,11 +107,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="target"></param>
         public override void Write(XmlWriter writer, object target)
         {
-            var list = target as MergeFileInfo[];
+            var list = target as MergeFilesTask;
             if (list != null)
             {
                 writer.WriteStartElement(base.Attribute.Name);
-                foreach (var file in list)
+                foreach (var file in list.MergeFiles)
                 {
                     writer.WriteStartElement("file");
                     writer.WriteAttributeString("action", file.MergeAction.ToString());

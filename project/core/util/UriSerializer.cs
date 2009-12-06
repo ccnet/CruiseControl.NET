@@ -36,9 +36,22 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// </summary>
         /// <param name="node">The node containing the URI.</param>
         /// <param name="table">The serialiser table.</param>
-        /// <returns>A new instance of a <see cref="URI"/> if the node is valid; null otherwise.</returns>
+        /// <returns>A new instance of a <see cref="Uri"/> if the node is valid; null otherwise.</returns>
         public override object Read(XmlNode node, NetReflectorTypeTable table)
         {
+            if (node == null)
+            {
+                // NetReflector should do this check, but doesn't
+                if (this.Attribute.Required)
+                {
+                    throw new NetReflectorItemRequiredException(Attribute.Name + " is required");
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
             Uri ret;
             if (node is XmlAttribute)
             {
@@ -61,7 +74,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="target">The URI to write.</param>
         public override void Write(XmlWriter writer, object target)
         {
-            Uri uri = target as Uri;
+            if (!(target is Uri)) target = ReflectorMember.GetValue(target);
+            var uri = target as Uri;
             if (uri != null)
             {
                 writer.WriteElementString("uri", uri.ToString());

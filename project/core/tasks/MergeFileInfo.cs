@@ -1,9 +1,25 @@
-﻿
-namespace ThoughtWorks.CruiseControl.Core.Tasks
+﻿namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    using Exortech.NetReflector;
+
     /// <summary>
     /// Details on a file to merge.
     /// </summary>
+    /// <title>Merge File</title>
+    /// <version>1.0</version>
+    /// <example>
+    /// <code title="Minimalist Example">
+    /// &lt;file&gt;&lt;!-- path to file --&gt;&lt;/file&gt;
+    /// </code>
+    /// <code title="Full Example">
+    /// &lt;file action="Copy"&gt;
+    /// &lt;path&gt;
+    /// &lt;!-- path to file --&gt;
+    /// &lt;/path&gt;
+    /// &lt;/file&gt;
+    /// </code>
+    /// </example>
+    [ReflectorType("fileToMerge")]
     public class MergeFileInfo
     {
         #region Public properties
@@ -11,6 +27,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The name of the file to merge.
         /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("path")]
         public string FileName { get; set; }
         #endregion
 
@@ -18,6 +37,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// The type of the file to merge.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Merge</default>
+        [ReflectorProperty("action", Required = false)]
         public MergeActionType MergeAction { get; set; }
         #endregion
         #endregion

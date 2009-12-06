@@ -17,8 +17,34 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     using ThoughtWorks.CruiseControl.Core.Util;
 
     /// <summary>
-    /// A task to check an HTTP call.
+    /// <para>
+    /// Sends an HTTP request to the specified URL.
+    /// </para>
     /// </summary>
+    /// <title>HTTP Status Task</title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;checkHttpStatus&gt;
+    /// &lt;httpRequest&gt;
+    /// &lt;uri&gt;http://somewhere.com&lt;/uri&gt;
+    /// &lt;/httpRequest&gt;
+    /// &lt;/checkHttpStatus&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;checkHttpStatus&gt;
+    /// &lt;dynamicValues /&gt;
+    /// &lt;includeContent&gt;False&lt;/includeContent&gt;
+    /// &lt;httpRequest&gt;
+    /// &lt;method&gt;GET&lt;/method&gt;
+    /// &lt;uri&gt;http://somewhere.com/&lt;/uri&gt;
+    /// &lt;useDefaultCredentials&gt;false&lt;/useDefaultCredentials&gt;
+    /// &lt;/httpRequest&gt;
+    /// &lt;retries&gt;3&lt;/retries&gt;
+    /// &lt;successStatusCodes&gt;200&lt;/successStatusCodes&gt;
+    /// &lt;/checkHttpStatus&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("checkHttpStatus")]
     public class HttpStatusTask 
         : TaskBase
@@ -47,8 +73,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #region Public properties
         #region SuccessStatusCodes
         /// <summary>
-        /// Gets or sets the list of exit codes that indicate success, separated by commas.
+        /// The list of exit codes that indicate success, separated by commas.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>200</default>
         [ReflectorProperty("successStatusCodes", Required = false)]
         public string SuccessStatusCodes
         {
@@ -93,37 +121,41 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         #region RequestSettings
         /// <summary>
-        /// Gets or sets the request settings.
+        /// The request settings.
         /// </summary>
-        /// <value>The request settings.</value>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("httpRequest", Required = true)]
         public HttpRequestSettings RequestSettings { get; set; }
         #endregion
 
         #region Retries
         /// <summary>
-        /// Gets or sets the retries.
+        /// The number of retries to allow.
         /// </summary>
-        /// <value>The retries.</value>
+        /// <version>1.5</version>
+        /// <default>3</default>
         [ReflectorProperty("retries", Required = false)]
         public int Retries { get; set; }
         #endregion
 
         #region IncludeContent
         /// <summary>
-        /// Gets or sets a value indicating whether [include content].
+        /// Whether to include the content of the call in the log.
         /// </summary>
-        /// <value><c>true</c> if [include content]; otherwise, <c>false</c>.</value>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("includeContent", Required = false)]
         public bool IncludeContent { get; set; }
         #endregion
 
         #region Timeout
         /// <summary>
-        /// Gets or sets the timeout.
+        /// The timeout period to allow.
         /// </summary>
-        /// <value>The timeout.</value>
-        [ReflectorProperty("taskTimeout", typeof(TimeoutSerializerFactory))]
+        /// <version>1.5</version>
+        /// <default>5 seconds</default>
+        [ReflectorProperty("taskTimeout", typeof(TimeoutSerializerFactory), Required = false)]
         public Timeout Timeout { get; set; }
         #endregion
 
@@ -145,7 +177,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Gets or sets the retry delay.
         /// </summary>
         /// <value>The retry delay.</value>
-        [ReflectorProperty("retryDelay", typeof(TimeoutSerializerFactory))]
+        [ReflectorProperty("retryDelay", typeof(TimeoutSerializerFactory), Required = false)]
         public Timeout RetryDelay { get; set; }
         #endregion
         #endregion
@@ -234,11 +266,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
                 if (keepTrying)
                 {
-                    if (this.RetryDelay.Millis > 0)
+                    var delay = this.RetryDelay ?? new Timeout(5000);
+                    if (delay.Millis > 0)
                     {
-                        this.RetryDelay.Normalize();
-                        Log.Debug("Retrying in {0}...", this.RetryDelay.ToString());
-                        System.Threading.Thread.Sleep(this.RetryDelay.Millis);
+                        delay.Normalize();
+                        Log.Debug("Retrying in {0}...", delay.ToString());
+                        System.Threading.Thread.Sleep(delay.Millis);
                     }
                     else
                     {

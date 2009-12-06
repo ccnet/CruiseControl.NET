@@ -1,15 +1,47 @@
-using System.Collections;
-using System.IO;
-using System.Text;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-using System.Reflection;
-using System;
-
-
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
-	[ReflectorType("msbuild")]
+    using System.Collections;
+    using System.IO;
+    using System.Text;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using System.Reflection;
+    using System;
+
+    /// <summary>
+    /// <para>
+    /// The &lt;msbuild&gt; task is used to execute MsBuild projects, which are the default project format for Visual Studio 2005 projects
+    /// and can also be compiled by using the MSBuild application that ships with the .NET 2 Framework.
+    /// </para>
+    /// <para>
+    /// In order to work with the results of MsBuild it is important to use a custom xml logger to format the build results. For details on
+    /// this, and a tutorial on how to use the task, see <link>Using CruiseControl.NET with MSBuild</link>.
+    /// </para>
+    /// </summary>
+    /// <title>MSBuild Task</title>
+    /// <version>1.0</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;msbuild /&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;msbuild&gt;
+    /// &lt;executable&gt;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe&lt;/executable&gt;
+    /// &lt;workingDirectory&gt;C:\dev\ccnet&lt;/workingDirectory&gt;
+    /// &lt;projectFile&gt;CCNet.sln&lt;/projectFile&gt;
+    /// &lt;buildArgs&gt;/noconsolelogger /p:Configuration=Debug /v:diag&lt;/buildArgs&gt;
+    /// &lt;targets&gt;Build;Test&lt;/targets&gt;
+    /// &lt;timeout&gt;900&lt;/timeout&gt;
+    /// &lt;logger&gt;C:\Program Files\CruiseControl.NET\server\ThoughtWorks.CruiseControl.MsBuild.dll&lt;/logger&gt;
+    /// &lt;/msbuild&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para>
+    /// Many thanks to Szymon Kobalczyk for helping out with this part of CruiseControl.NET.
+    /// </para>
+    /// </remarks>
+    [ReflectorType("msbuild")]
     public class MsBuildTask
         : BaseExecutableTask
 	{
@@ -29,30 +61,84 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			this.shadowCopier = shadowCopier;
 
 			Executable = GetDefaultExecutable();
-		}
+        }
 
-		[ReflectorProperty("executable", Required=false)]
+        #region Public fields
+        #region Executable
+        /// <summary>
+        /// The location of the MSBuild.exe executable.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>MSBuild with .NET Framework, xbuild on Unix with Mono.</default>
+        [ReflectorProperty("executable", Required=false)]
 		public string Executable;
+        #endregion
 
-		[ReflectorProperty("workingDirectory", Required=false)]
+        #region WorkingDirectory
+        /// <summary>
+        /// The directory to run MSBuild in - this is generally the directory containing your build project. If relative, is a
+        /// subdirectory of the Project Working Directory.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>Project Working Directory</default>
+        [ReflectorProperty("workingDirectory", Required = false)]
 		public string WorkingDirectory;
+        #endregion
 
-		[ReflectorProperty("projectFile", Required=false)]
+        #region ProjectFile
+        /// <summary>
+        /// The name of the build project to run, relative to the workingDirectory. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>Default MSBuild file.</default>
+        [ReflectorProperty("projectFile", Required = false)]
 		public string ProjectFile;
+        #endregion
 
-		[ReflectorProperty("buildArgs", Required=false)]
+        #region BuildArgs
+        /// <summary>
+        /// Any extra arguments to pass through to MSBuild.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("buildArgs", Required = false)]
 		public string BuildArgs;
+        #endregion
 
-		[ReflectorProperty("targets", Required=false)]
+        #region Targets
+        /// <summary>
+        /// A semicolon-separated list of the targets to run.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>Default project target.</default>
+        [ReflectorProperty("targets", Required = false)]
 		public string Targets;
+        #endregion
 
-		[ReflectorProperty("logger", Required=false)]
+        #region Logger
+        /// <summary>
+        /// The full path to the assembly containing the custom logger to use. Arguments can be passed to the logger by appending them
+        /// after the logger name separated by a semicolon. Only if the assembly contains more than one logger implementation you need to
+        /// specify the logger class (see MSBuild reference): [LoggerClass,]LoggerAssembly[;LoggerParameters] 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>ThoughtWorks.CruiseControl.MsBuild.XmlLogger, ThoughtWorks.CruiseControl.MsBuild.dll</default>
+        [ReflectorProperty("logger", Required = false)]
 		public string Logger;
+        #endregion
 
-		[ReflectorProperty("timeout", Required=false)]
+        #region Timeout
+        /// <summary>
+        /// Number of seconds to wait before assuming that the process has hung and should be killed. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>600</default>
+        [ReflectorProperty("timeout", Required = false)]
 		public int Timeout = DefaultTimeout;
+        #endregion
+        #endregion
 
-		protected override string GetProcessFilename()
+        protected override string GetProcessFilename()
 		{
 			return string.IsNullOrEmpty(Executable) ? GetDefaultExecutable() : Executable;
 		}

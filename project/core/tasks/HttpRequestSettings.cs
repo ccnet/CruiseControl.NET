@@ -12,8 +12,26 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     using ThoughtWorks.CruiseControl.Core.Util;
 
     /// <summary>
-    /// Settings for an HTTP request.
+    /// <para>
+    /// The settings for an HTTP request.
+    /// </para>
     /// </summary>
+    /// <title>HTTP Settings</title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;httpRequest&gt;
+    /// &lt;uri&gt;http://somewhere.com&lt;/uri&gt;
+    /// &lt;/httpRequest&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;httpRequest&gt;
+    /// &lt;method&gt;GET&lt;/method&gt;
+    /// &lt;uri&gt;http://somewhere.com/&lt;/uri&gt;
+    /// &lt;useDefaultCredentials&gt;false&lt;/useDefaultCredentials&gt;
+    /// &lt;/httpRequest&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("httpRequest")]
     public class HttpRequestSettings
     {
@@ -30,9 +48,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #region Public properties
         #region Method
         /// <summary>
-        /// Gets or sets the method.
+        /// The method to use.
         /// </summary>
-        /// <value>The method.</value>
+        /// <version>1.5</version>
+        /// <default>GET</default>
+        /// <remarks>
+        /// This can be any valid HTTP method, e.g. GET, POST, etc.
+        /// </remarks>
         [ReflectorProperty("method", Required = false)]
         public string Method { get; set; }
         #endregion
@@ -55,18 +77,20 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         #region Headers
         /// <summary>
-        /// Gets or sets the headers.
+        /// The HTTP headers to send.
         /// </summary>
-        /// <value>The headers.</value>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorArray("headers", Required = false)]
         public HttpRequestHeader[] Headers { get; set; }
         #endregion
 
         #region Body
         /// <summary>
-        /// Gets or sets the body.
+        /// The body of the request to send.
         /// </summary>
-        /// <value>The body of the request.</value>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("body", Required = false)]
         public string Body { get; set; }
         #endregion
@@ -103,27 +127,30 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         #region SendFile
         /// <summary>
-        /// Gets or sets the send file.
+        /// A file to send in the request.
         /// </summary>
-        /// <value>The send file.</value>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("sendFile", Required = false)]
         public string SendFile { get; set; }
         #endregion
 
         #region Uri
         /// <summary>
-        /// Gets or sets the URI.
+        /// The URL to make the request to.
         /// </summary>
-        /// <value>The URI to send to.</value>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("uri", typeof(UriSerializerFactory), Required = true)]
         public Uri Uri { get; set; }
         #endregion
 
         #region Timeout
         /// <summary>
-        /// Gets or sets the timeout.
+        /// The timeout period before cancelling the request.
         /// </summary>
-        /// <value>The timeout.</value>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("timeout", typeof(TimeoutSerializerFactory), Required = false)]
         public Timeout Timeout { get; set; }
         #endregion
@@ -151,9 +178,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         #region ReadWriteTimeout
         /// <summary>
-        /// Gets or sets the read write timeout.
+        /// The read/write timeout period.
         /// </summary>
-        /// <value>The read write timeout.</value>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("readWriteTimeout", typeof(TimeoutSerializerFactory), Required = false)]
         public Timeout ReadWriteTimeout { get; set; }
         #endregion
@@ -173,9 +201,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         #region Credentials
         /// <summary>
-        /// Gets or sets the credentials.
+        /// The credentials to use in the request.
         /// </summary>
-        /// <value>The credentials.</value>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("credentials", typeof(NetworkCredentialSerializerFactory), Required = false)]
         public NetworkCredential Credentials { get; set; }
         #endregion
@@ -208,11 +237,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         #region UseDefaultCredentials
         /// <summary>
-        /// Gets or sets a value indicating whether [use default credentials].
+        /// Whether to use the default credentials or not.
         /// </summary>
-        /// <value>
-        /// <c>true</c> if [use default credentials]; otherwise, <c>false</c>.
-        /// </value>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("useDefaultCredentials", Required = false)]
         public bool UseDefaultCredentials { get; set; }
         #endregion
