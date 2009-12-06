@@ -13,10 +13,13 @@
 
     public class Program
     {
+        private static Regex specialChars;
+
         public static void Main(string[] args)
         {
             try
             {
+                specialChars = new Regex(@"[\[\]\*_+-]", RegexOptions.Compiled);
                 if (args.Length == 0)
                 {
                     WriteToConsole("No assembly specified", ConsoleColor.Red);
@@ -317,7 +320,7 @@
                     builder.Append(" ");
                 }
 
-                builder.Append(lines[loop].Trim());
+                builder.Append(specialChars.Replace(lines[loop].Trim(), r => "\\" + r.Value));
             }
 
             // Add start and end spaces if the value has these - saves having to check if a space needs to be added later
