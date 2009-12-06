@@ -6,14 +6,46 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
-	/// <summary>
-	/// Gendarme is a extensible rule-based tool to find problems in .NET applications and libraries.
-	/// Gendarme inspects programs and libraries that contain code in ECMA CIL format (Mono and .NET)
-	/// and looks for common problems with the code, problems that compiler do not typically
-	/// check or have not historically checked.
-	/// 
-	/// Website: http://mono-project.com/Gendarme
-	/// </summary>
+    /// <summary>
+    /// <para>
+    /// Gendarme is a extensible rule-based tool to find problems in .NET applications and libraries. Gendarme inspects programs and libraries
+    /// that contain code in ECMA CIL format (Mono and .NET) and looks for common problems with the code, problems that compiler do not
+    /// typically check or have not historically checked. Website: http://mono-project.com/Gendarme
+    /// </para>
+    /// <para type="tip">
+    /// See <link>Using CruiseControl.NET with Gendarme</link> for more details.
+    /// </para>
+    /// </summary>
+    /// <title>Gendarme Task</title>
+    /// <version>1.4.3</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;gendarme&gt;
+    /// &lt;assemblies&gt;
+    /// &lt;assemblyMatch expr='*.dll' /&gt;
+    /// &lt;assemblyMatch expr='*.exe' /&gt;
+    /// &lt;/assemblies&gt;
+    /// &lt;/gendarme&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;gendarme&gt;
+    /// &lt;executable&gt;Tools\gendarme.exe&lt;/executable&gt;
+    /// &lt;baseDirectory&gt;C:\Build\Project1\Bin\Debug\&lt;/baseDirectory&gt;
+    /// &lt;configFile&gt;rules.xml&lt;/configFile&gt;
+    /// &lt;ruleSet&gt;*&lt;/ruleSet&gt;
+    /// &lt;ignoreFile&gt;C:\Build\Project1\gendarme.ignore.list.txt&lt;/ignoreFile&gt;
+    /// &lt;limit&gt;200&lt;/limit&gt;
+    /// &lt;severity&gt;medium+&lt;/severity&gt;
+    /// &lt;confidence&gt;normal+&lt;/confidence&gt;
+    /// &lt;quiet&gt;FALSE&lt;/quiet&gt;
+    /// &lt;verbose&gt;TRUE&lt;/verbose&gt;
+    /// &lt;failBuildOnFoundDefects&gt;TRUE&lt;/failBuildOnFoundDefects&gt;
+    /// &lt;verifyTimeoutSeconds&gt;600&lt;/verifyTimeoutSeconds&gt;
+    /// &lt;assemblyListFile&gt;C:\Build\Project1\gendarme.assembly.list.txt&lt;/assemblyListFile&gt;
+    /// &lt;description&gt;Test description&lt;/description&gt;
+    /// &lt;/gendarme&gt;
+    /// </code>
+    /// </example>
 	[ReflectorType("gendarme")]
 	public class GendarmeTask : BaseExecutableTask
 	{
@@ -38,100 +70,133 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		#region public properties
 
 		/// <summary>
-		/// Specify the gedarme console executable path.
+        /// The location of the Gendarme executable.
 		/// </summary>
+        /// <version>1.4.3</version>
+        /// <default>gendarme</default>
 		[ReflectorProperty("executable", Required = false)]
 		public string Executable = defaultExecutable;
 
 		/// <summary>
-		/// Specify the gedarme working dictionary.
+        /// The directory to run Gendarme in.
 		/// </summary>
-		[ReflectorProperty("baseDirectory", Required = false)]
+        /// <version>1.4.3</version>
+        /// <default>Project Working Directory</default>
+        [ReflectorProperty("baseDirectory", Required = false)]
 		public string ConfiguredBaseDirectory = string.Empty;
 
 		/// <summary>
-		/// "--config configfile"
-		/// Specify the configuration file. Default is 'rules.xml'.
+        /// Specify the configuration file.
 		/// </summary>
-		[ReflectorProperty("configFile", Required = false)]
+        /// <version>1.4.3</version>
+        /// <default>rules.xml</default>
+        /// <remarks>
+        /// <b>Maps to "--config configfile"</b>
+        /// </remarks>
+        [ReflectorProperty("configFile", Required = false)]
 		public string ConfigFile = string.Empty;
 
 		/// <summary>
-		/// "--set ruleset"
-		/// Specify the set of rules to verify. Default is '*'.
+		/// Specify the set of rules to verify.
 		/// </summary>
-		[ReflectorProperty("ruleSet", Required = false)]
+        /// <version>1.4.3</version>
+        /// <default>*</default>
+        /// <remarks>
+        /// <b>Maps to "--set ruleset"</b>
+        /// </remarks>
+        [ReflectorProperty("ruleSet", Required = false)]
 		public string RuleSet = string.Empty;
 
 		/// <summary>
-		/// "--ignore ignore-file"
 		/// Do not report the known defects that are part of the specified file.
 		/// </summary>
-		[ReflectorProperty("ignoreFile", Required = false)]
+        /// <version>1.4.3</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// <b>Maps to "--ignore ignore-file"</b>
+        /// </remarks>
+        [ReflectorProperty("ignoreFile", Required = false)]
 		public string IgnoreFile = string.Empty;
 
 		/// <summary>
-		/// "--limit N"
 		/// Stop reporting after N defects are found.
 		/// </summary>
-		[ReflectorProperty("limit", Required = false)]
+        /// <version>1.4.3</version>
+        /// <default>-1</default>
+        /// <remarks>
+        /// <b>Maps to "--limit N"</b>
+        /// </remarks>
+        [ReflectorProperty("limit", Required = false)]
 		public int Limit = defaultLimit;
 
 		/// <summary>
-		/// "--severity [all | audit[+] | low[+|-] | medium[+|-] | high[+|-] | critical[-]],..."
 		/// Filter the reported defects to include the specified severity levels.
-		/// Default is 'medium+' (i.e. low and audit levels are ignored).
 		/// </summary>
-		[ReflectorProperty("severity", Required = false)]
+        /// <version>1.4.3</version>
+        /// <default>Medium+</default>
+        /// <remarks>
+        /// <b>Maps to "--severity [all | audit[+] | low[+|-] | medium[+|-] | high[+|-] | critical[-]],..."</b>
+        /// </remarks>
+        [ReflectorProperty("severity", Required = false)]
 		public string Severity = string.Empty;
 
 		/// <summary>
-		/// "--confidence [all | low[+] | normal[+|-] | high[+|-] | total[-]],..."
 		/// Filter the reported defects to include the specified confidence levels.
-		/// Default is 'normal+' (i.e. low level is ignored).
 		/// </summary>
-		[ReflectorProperty("confidence", Required = false)]
+        /// <version>1.4.3</version>
+        /// <default>normal+</default>
+        /// <remarks>
+        /// <b>"--confidence [all | low[+] | normal[+|-] | high[+|-] | total[-]],..."</b>
+        /// </remarks>
+        [ReflectorProperty("confidence", Required = false)]
 		public string Confidence = string.Empty;
 
 		/// <summary>
 		/// If true, display minimal output (results) from the runner.
 		/// </summary>
-		[ReflectorProperty("quiet", Required = false)]
+        /// <version>1.4.3</version>
+        /// <default>false</default>
+        [ReflectorProperty("quiet", Required = false)]
 		public bool Quiet = defaultQuiet;
 
 		/// <summary>
-		/// Enable debugging output. You can supply several -v to augment debugging verbosity.
+		/// Enable debugging output.
 		/// </summary>
-		[ReflectorProperty("verbose", Required = false)]
+        /// <version>1.4.3</version>
+        /// <default>false</default>
+        [ReflectorProperty("verbose", Required = false)]
 		public bool Verbose = defaultVerbose;
 
 		/// <summary>
 		/// Specify whenver the build should fail if some defects are found by Gendarme.
-		/// Default is false.
 		/// </summary>
-		[ReflectorProperty("failBuildOnFoundDefects", Required = false)]
+        /// <version>1.4.3</version>
+        /// <default>false</default>
+        [ReflectorProperty("failBuildOnFoundDefects", Required = false)]
 		public bool FailBuildOnFoundDefects = defaultFailBuildOnFoundDefects;
 
 		/// <summary>
-		/// Specify the assemblies to verify. You can specify multiple filenames,
-		/// including masks (? and *).
+		/// Specify the assemblies to verify. You can specify multiple filenames, including masks (? and *).
 		/// </summary>
-		[ReflectorArray("assemblies", Required = false)]
+        /// <version>1.4.3</version>
+        /// <default>None</default>
+        [ReflectorArray("assemblies", Required = false)]
 		public AssemblyMatch[] Assemblies = new AssemblyMatch[0];
 
 		/// <summary>
-		/// Specify a file that contains the assemblies to verify.
-		/// You can specify multiple filenames, including masks (? and *),
-		/// one by line.
+		/// Specify a file that contains the assemblies to verify. You can specify multiple filenames, including masks (? and *), one by line.
 		/// </summary>
-		[ReflectorProperty("assemblyListFile", Required = false)]
+        /// <version>1.4.3</version>
+        /// <default>None</default>
+        [ReflectorProperty("assemblyListFile", Required = false)]
 		public string AssemblyListFile = string.Empty;
 
 		/// <summary>
-		/// Gets and sets the maximum number of seconds that the build may take.  If the build process takes longer than
-		/// this period, it will be killed.  Specify this value as zero to disable process timeouts.
+		/// The maximum number of seconds that the build may take.  If the build process takes longer than this period, it will be killed.  Specify this value as zero to disable process timeouts.
 		/// </summary>
-		[ReflectorProperty("verifyTimeoutSeconds", Required = false)]
+        /// <version>1.4.3</version>
+        /// <default>0</default>
+        [ReflectorProperty("verifyTimeoutSeconds", Required = false)]
 		public int VerifyTimeoutSeconds = defaultVerifyTimeout;
 		#endregion
 
