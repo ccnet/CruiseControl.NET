@@ -47,9 +47,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			_mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe"), @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
 
-			_task.FBVariables = new FinalBuilderTask.FBVariable[2];
-			_task.FBVariables[0] = new FinalBuilderTask.FBVariable("var1", "value1");
-			_task.FBVariables[1] = new FinalBuilderTask.FBVariable("var2", "value 2");
+			_task.FBVariables = new FBVariable[2];
+			_task.FBVariables[0] = new FBVariable("var1", "value1");
+			_task.FBVariables[1] = new FBVariable("var2", "value 2");
 			_task.ProjectFile = Path.Combine(DefaultWorkingDirectory, "TestProject.fbz5");
 			_task.ShowBanner = false;
 			_task.DontWriteToLog = true;

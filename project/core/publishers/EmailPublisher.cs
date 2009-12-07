@@ -11,10 +11,108 @@ using System.IO;
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
     /// <summary>
-    /// Publishes results of integrations via email.  This implementation supports
-    /// plain-text, and Html email formats.  Rules regarding who receives email
-    /// are configurable.
+    /// <para>
+    /// Publishes results of integrations via email.  This implementation supports plain-text, and Html email formats.
+    /// Rules regarding who receives email are configurable.
+    /// </para>
+    /// <para>
+    /// The email publisher can be used to send email to any number of users. It is common to include one user who gets
+    /// an email for every build and then also send email to every developer who checked code in for this build.
+    /// </para>
+    /// <para type="tip">
+    /// People tend to prefer to use <link>CCTray</link> rather than email for instant notification these days.
+    /// </para>
+    /// <para type="warning">
+    /// Make sure that all of the Merge Publishers, along with the <link>Xml Log Publisher</link> task are done before
+    /// the &lt;email&gt; publisher, or else you won't be able to include output from the build in the email. A common
+    /// mistake is to put the email task in the &lt;tasks&gt; section instead of the &lt;publishers&gt; section. If an
+    /// error occurs in the &lt;tasks&gt; section, the remaining tasks in that section are skipped, and CC.Net goes
+    /// right to the &lt;publishers&gt; section. So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, 
+    /// you'll never get any failure messages.
+    /// </para>
     /// </summary>
+    /// <title>Email Publisher</title>
+    /// <version>1.0</version>
+    /// <example>
+    /// <code>
+    /// &lt;email mailport="25" includeDetails="TRUE" mailhostUsername="smtpuser" mailhostPassword="smtppassword" useSSL="FALSE"&gt;
+    /// &lt;from&gt;buildmaster@mycompany.com&lt;/from&gt;
+    /// &lt;mailhost&gt;smtp.mycompany.com&lt;/mailhost&gt;
+    /// &lt;users&gt;
+    /// &lt;user name="BuildGuru" group="buildmaster" address="buildguru@mycompany.com"/&gt;
+    /// &lt;user name="JoeDeveloper" group="developers" address="joedeveloper@thoughtworks.com"/&gt;
+    /// &lt;/users&gt;
+    /// &lt;groups&gt;
+    /// &lt;group name="developers"&gt;
+    /// &lt;notifications&gt;
+    /// &lt;notificationType&gt;Failed&lt;/notificationType&gt;
+    /// &lt;notificationType&gt;Fixed&lt;/notificationType&gt;
+    /// &lt;/notifications&gt;
+    /// &lt;/group&gt;
+    /// &lt;group name="buildmaster" &gt;
+    /// &lt;notifications&gt;
+    /// &lt;notificationType&gt;Always&lt;/notificationType&gt;
+    /// &lt;/notifications&gt;
+    /// &lt;/group&gt;
+    /// &lt;/groups&gt;
+    /// &lt;converters&gt;
+    /// &lt;regexConverter find="$" replace="@TheCompany.com" /&gt;
+    /// &lt;/converters&gt;
+    /// &lt;modifierNotificationTypes&gt;
+    /// &lt;NotificationType&gt;Failed&lt;/NotificationType&gt;
+    /// &lt;NotificationType&gt;Fixed&lt;/NotificationType&gt;
+    /// &lt;/modifierNotificationTypes&gt;
+    /// &lt;subjectSettings&gt;
+    /// &lt;subject buildResult="StillBroken" value="Build is still broken for {CCNetProject}" /&gt;
+    /// &lt;/subjectSettings&gt;
+    /// &lt;xslFiles&gt;
+    /// &lt;file&gt;xsl\header.xsl&lt;/file&gt;
+    /// &lt;file&gt;xsl\compile.xsl&lt;/file&gt;
+    /// &lt;file&gt;xsl\unittests.xsl&lt;/file&gt;
+    /// &lt;file&gt;xsl\modifications.xsl&lt;/file&gt;
+    /// &lt;/xslFiles&gt;
+    /// &lt;attachments&gt;
+    /// &lt;file&gt;C:\Data\AFile.txt&lt;/file&gt;
+    /// &lt;file&gt;Relative.txt&lt;/file&gt;
+    /// &lt;/attachments&gt;
+    /// &lt;/email&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <heading>HTML E-mails</heading>
+    /// <para>
+    /// When includedDetails = True, the message body will contain more information. This detailed information is
+    /// constructed from xsl transformations on the build log. If the xslFiles section is filled these files will be
+    /// used, if not defined the xls files are defined in the ccnet.exe.config in the xslFiles section. (see 
+    /// also: <link>Server Application Config File</link>). When adjusting one of these, restart the console/service.
+    /// </para>
+    /// <para>
+    /// The benefits of defining the xsl files in the email publisher: 
+    /// </para>
+    /// <list type="1">
+    /// <item>
+    /// the xsl files are automatically the same for the console as for the service (no more keeping these 2 in sync)
+    /// </item>
+    /// <item>
+    /// it is possible to give projects different xsl transformations
+    /// </item>
+    /// </list>
+    /// <para/>
+    /// <para type="warning">
+    /// The groups node may be empty, but the group section must exist.
+    /// </para>
+    /// <heading>GMail</heading>
+    /// <para>
+    /// For sending mail via gmail :
+    /// <list type="1">
+    /// <item>mailhost="smtp.gmail.com"</item>
+    /// <item>mailport="587"</item>
+    /// <item>mailhostUsername="xxx.yyy@gmail.com"</item>
+    /// <item>mailhostPassword="yourpassword"</item>
+    /// <item>useSSL="TRUE"</item>
+    /// </list>
+    /// </para>
+    /// </remarks>
     [ReflectorType("email")]
     public class EmailPublisher 
         : TaskBase, IConfigurationValidation
@@ -55,8 +153,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
         /// <summary>
-        /// The host name of the mail server.  This field is required to send email notifications.
+        /// The SMTP server that CruiseControl.NET will connect to to send email.
         /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
         [ReflectorProperty("mailhost")]
         public string MailHost
         {
@@ -65,11 +165,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
         /// <summary>
-        /// The port number of the mail server.
+        /// The SMTP server port number.
         /// </summary>
-        /// <remarks>
-        /// Optional, defaults to port 25 (via the default of System.Net.Mail.SmtpClient).
-        /// </remarks>
+        /// <version>1.0</version>
+        /// <default>25</default>
         [ReflectorProperty("mailport", Required = false)]
         public int MailPort
         {
@@ -77,6 +176,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { EmailGateway.MailPort = value; }
         }
 
+        /// <summary>
+        /// The user name to provide to the SMTP server.
+        /// </summary>
+        /// <version>1.2</version>
+        /// <default>None</default>
         [ReflectorProperty("mailhostUsername", Required = false)]
         public string MailhostUsername
         {
@@ -84,6 +188,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { EmailGateway.MailHostUsername = value; }
         }
 
+        /// <summary>
+        /// The password to provide to the SMTP server. 
+        /// </summary>
+        /// <version>1.2</version>
+        /// <default>None</default>
         [ReflectorProperty("mailhostPassword", Required = false)]
         public string MailhostPassword
         {
@@ -92,9 +201,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
         /// <summary>
-        /// The email address from which build results appear to have originated from.  This
-        /// value seems to be required for most mail servers.
+        /// The e-mail address that email will be marked as coming from. 
         /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
         [ReflectorProperty("from")]
         public string FromAddress
         {
@@ -103,8 +213,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
         /// <summary>
-        /// Use SSL or not, defaults to false
+        /// Whether to use SSL or not for sending the e-mail.
         /// </summary>
+        /// <version>1.0</version>
+        /// <default>false</default>
         [ReflectorProperty("useSSL", Required = false)]
         public bool UseSSL
         {
@@ -112,6 +224,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { EmailGateway.UseSSL = value; }
         }
 
+        /// <summary>
+        /// The e-mail address to use for replies. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
         [ReflectorProperty("replyto", Required = false)]
         public string ReplyToAddress
         {
@@ -119,7 +236,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { replytoAddress = value; }
         }
 
-
+        /// <summary>
+        /// A list of xsl files that will be used to fill up the message body, if left blank the list will be taken
+        /// from ccnet.exe.config or ccservice.exe.config.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("xslFiles", Required = false)]
         public string[] XslFiles
         {
@@ -127,13 +249,21 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { xslFiles = value; }
         }
 
+        /// <summary>
+        /// A list of files to attach to the e-mail. If the full path is not specified, then it will be relative to the
+        /// project working directory.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("attachments", Required = false)]
         public string[] Attachments { get; set; }
 
         /// <summary>
-        /// Set this property (in configuration) to enable HTML emails containing build details.
-        /// This property is deprecated and should be removed.  It should be replaced by the MessageBuilder property.
+        /// Whether to send a full report or not. If not, just sends a simple status message with a link to the build 
+        /// report.
         /// </summary>
+        /// <version>1.0</version>
+        /// <default>false</default>
         [ReflectorProperty("includeDetails", Required = false)]
         public bool IncludeDetails
         {
@@ -155,10 +285,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
         /// <summary>
-        /// Send an email to the modifiers of the build on this notification type
-        /// This allows for example to send a mail to the modifiers only when the build breaks
-        /// notification type = Failed
+        /// A set of &lt;NotificationType&gt; elements, specifying build states for which CruiseControl.Net should
+        /// send an email to the comitters of the build.
         /// </summary>
+        /// <version>1.0</version>
+        /// <default>Always</default>
         [ReflectorProperty("modifierNotificationTypes", Required = false)]
         public EmailGroup.NotificationType[] ModifierNotificationTypes
         {
@@ -166,7 +297,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { modifierNotificationTypes = value; }
         }
 
-
+        /// <summary>
+        /// A set of &lt;user&gt; elements that define who to send emails to. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        /// <dataType>ThoughtWorks.CruiseControl.Core.Publishers.EmailUser</dataType>
         [ReflectorHash("users", "name")]
         public Hashtable EmailUsers
         {
@@ -174,6 +310,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { users = value; }
         }
 
+        /// <summary>
+        /// A set of &lt;group&gt; elements that identify which the notification policy for a set of users. 
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>n/a</default>
+        /// <dataType>ThoughtWorks.CruiseControl.Core.Publishers.EmailGroup</dataType>
         [ReflectorHash("groups", "name")]
         public Hashtable EmailGroups
         {
@@ -181,7 +323,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { groups = value; }
         }
 
-
+        /// <summary>
+        /// A set of &lt;subject&gt; elements that define the subject of the email, according to the state of the build 
+        /// (broken, fixed, ...)
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        /// <dataType>ThoughtWorks.CruiseControl.Core.Publishers.EmailSubject</dataType>
         [ReflectorHash("subjectSettings", "buildResult", Required = false)]
         public Hashtable SubjectSettings
         {
@@ -190,9 +338,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
         /// <summary>
-        /// Allows transformations to be performed on the names of the modifiers for making an email address.
-        /// This way, it is not necessary to include all users on a project in the users tag of the emailpublisher.
+        /// A set of elements containing rules for creating email adresses based on the modifiers name. The converters 
+        /// will be used when the name of the modifier is not set in the users section. 
         /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
         [ReflectorArray("converters", Required = false)]
         public IEmailConverter[] Converters
         {
@@ -200,7 +350,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { converters = value; }
         }
 
-
+        /// <summary>
+        /// A string that will be the first string of the subject. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
         [ReflectorProperty("subjectPrefix", Required = false)]
         public string SubjectPrefix
         {

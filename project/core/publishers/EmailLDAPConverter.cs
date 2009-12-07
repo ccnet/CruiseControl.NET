@@ -3,6 +3,31 @@ using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    /// <summary>
+    /// <para>
+    /// Looks up the email address via LDAP.
+    /// </para>
+    /// </summary>
+    /// <title>LDAP Email Converter</title>
+    /// <version>1.4.1</version>
+    /// <example>
+    /// <para>
+    /// This will search the LDAP for source control userid "js" , using default settings.
+    /// </para>
+    /// <code>
+    /// &lt;converters&gt;
+    /// &lt;ldapConverter domainName="TheCompany" /&gt;
+    /// &lt;/converters&gt;
+    /// </code>
+    /// <para>
+    /// This will search the LDAP for source control userid "js" , specifying a user for querying the LDAP.
+    /// </para>
+    /// <code>
+    /// &lt;converters&gt;
+    /// &lt;ldapConverter domainName="TheCompany" ldapLogOnUser="LdapQuery"  ldapLogOnPassword="LdapQueryPW" /&gt;
+    /// &lt;/converters&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("ldapConverter")]
     public class EmailLDAPConverter : IEmailConverter
     {
@@ -14,8 +39,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 
         /// <summary>
-        /// The domain to query for the LDAP service
+        /// The domain to query for the LDAP service.
         /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
         [ReflectorProperty("domainName", Required = true)]
         public string DomainName
         {
@@ -24,9 +51,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
         /// <summary>
-        /// The field in the LDAP service to use for mapping the source control userid 
-        /// Defaults to MailNickName
+        /// The field in the LDAP service to use for mapping the source control userid.
         /// </summary>
+        /// <version>1.0</version>
+        /// <default>MailNickName</default>
         [ReflectorProperty("ldapQueryField", Required = false)]
         public string LdapQueryField
         {
@@ -34,11 +62,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { ldap_QueryField = value; }
         }
 
-
-
         /// <summary>
-        /// user for loggin into the ldap service
+        /// Username for logging into the LDAP service.
         /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
         [ReflectorProperty("ldapLogOnUser", Required = false)]
         public string LdapLogOnUser
         {
@@ -46,7 +74,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { ldap_LogOnUser = value; }
         }
 
-
+        /// <summary>
+        /// The password to use for connecting to the LDAP service.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
         [ReflectorProperty("ldapLogOnPassword", Required = false)]
         public string LdapLogOnPassword
         {

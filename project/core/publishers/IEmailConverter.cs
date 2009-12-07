@@ -4,6 +4,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// Interface definition for username-to-emailaddress converters in the Email publisher
     /// (<see cref="ThoughtWorks.CruiseControl.Core.Publishers.EmailPublisher"/>).
     /// </summary>
+    /// <title>Email Converter</title>
     public interface IEmailConverter
     {
         /// <summary>
