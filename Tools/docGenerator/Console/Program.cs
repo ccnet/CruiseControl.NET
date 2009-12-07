@@ -364,6 +364,9 @@
                 var description = string.Empty;
                 var dataType = element.Key is FieldInfo ? (element.Key as FieldInfo).FieldType : (element.Key as PropertyInfo).PropertyType;
                 var dataTypeName = dataType.Name;
+                var memberElement = (from xmlElement in documentation.Descendants("member")
+                                     where xmlElement.Attribute("name").Value == memberName
+                                     select xmlElement).SingleOrDefault();
                 if (dataType.IsEnum)
                 {
                     var names = Enum.GetNames(dataType);
@@ -393,19 +396,16 @@
                     }
                     else
                     {
-                        dataTypeName = RetrieveTypeName(itemType, documentation) + " array";
+                        dataTypeName = RetrieveTypeName(memberElement, itemType, documentation) + " array";
                     }
                 }
                 else
                 {
-                    dataTypeName = RetrieveTypeName(dataType, documentation);
+                    dataTypeName = RetrieveTypeName(memberElement, dataType, documentation);
                 }
 
                 var defaultValue = string.Empty;
                 var version = string.Empty;
-                var memberElement = (from xmlElement in documentation.Descendants("member")
-                                     where xmlElement.Attribute("name").Value == memberName
-                                     select xmlElement).SingleOrDefault();
                 if (memberElement != null)
                 {
                     description = RetrieveXmlData(memberElement, "summary", "remarks");
@@ -476,18 +476,24 @@
 
             return builder.ToString();
         }
-        private static string RetrieveTypeName(Type dataType, XDocument documentation)
+        private static string RetrieveTypeName(XElement memberElement, Type dataType, XDocument documentation)
         {
-            if (dataType.IsGenericType)
+            var dataTypeName = dataType.FullName;
+            var dataTypeElement = memberElement != null ? memberElement.Element("dataType") : null;
+            if (dataTypeElement != null)
+            {
+                dataTypeName = dataTypeElement.Value ?? dataTypeName;
+            }
+            else if (dataType.IsGenericType)
             {
                 if (dataType.GetGenericTypeDefinition().Name == "Nullable`1")
                 {
-                    dataType = dataType.GetGenericArguments()[0];
+                    dataTypeName = dataType.GetGenericArguments()[0].FullName;
                 }
             }
 
             var typeElement = (from element in documentation.Descendants("member")
-                               where element.Attribute("name").Value == "T:" + dataType.FullName
+                               where element.Attribute("name").Value == "T:" + dataTypeName
                                select element).SingleOrDefault();
             var titleAttribute = typeElement != null ? typeElement.Element("title") : null;
             if (titleAttribute != null)
