@@ -9,6 +9,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
     /// <summary>
     /// Abstract base class for parameters.
     /// </summary>
+    /// <title>Parameters</title>
     [Serializable]
     [XmlInclude(typeof(TextParameter))]
     [XmlInclude(typeof(SelectParameter))]
@@ -46,6 +47,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// The name of the parameter.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
 #if !NoReflector
         [ReflectorProperty("name", Required = true)]
 #endif
@@ -61,6 +64,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// The display name of the parameter.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
 #if !NoReflector
         [ReflectorProperty("display", Required = false)]
 #endif
@@ -76,6 +81,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// The description of the parameter.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
 #if !NoReflector
         [ReflectorProperty("description", Required = false)]
 #endif
@@ -91,6 +98,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// The default value to use.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
 #if !NoReflector
         [ReflectorProperty("default", Required = false)]
 #endif

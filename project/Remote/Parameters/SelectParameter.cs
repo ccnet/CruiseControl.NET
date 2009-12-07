@@ -10,9 +10,70 @@ using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Remote.Parameters
 {
+    /// <title>Select Parameter</title>
+    /// <version>1.5</version>
     /// <summary>
-    /// A parameter to select from a range of values.
+    /// <para>
+    /// This will prompt the user to select a value from a list of values when a force build is requested.
+    /// </para>
+    /// <para>
+    /// This parameter can then be used by a dynamic value in a task.
+    /// </para>
     /// </summary>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;selectParameter&gt;
+    /// &lt;name&gt;Target&lt;/name&gt;
+    /// &lt;allowedValues&gt;
+    /// &lt;value name="Development"&gt;DEV&lt;/value&gt;
+    /// &lt;value name="Test"&gt;TEST&lt;/value&gt;
+    /// &lt;value name="Production"&gt;PROD&lt;/value&gt;
+    /// &lt;/allowedValues&gt;
+    /// &lt;/selectParameter&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;selectParameter&gt;
+    /// &lt;name&gt;Target&lt;/name&gt;
+    /// &lt;display&gt;Target to Build&lt;/display&gt;
+    /// &lt;description&gt;Which target do you want to build?&lt;/description&gt;
+    /// &lt;default&gt;DEV&lt;/default&gt;
+    /// &lt;minimum&gt;3&lt;/minimum&gt;
+    /// &lt;maximum&gt;10&lt;/maximum&gt;
+    /// &lt;required&gt;false&lt;/required&gt;
+    /// &lt;sourceFile&gt;C:\Builds\Values.txt&lt;/sourceFile&gt;
+    /// &lt;/selectParameter&gt;
+    /// </code>
+    /// <code title="Example in Context">
+    /// &lt;project name="Test Project"&gt;
+    /// &lt;sourcecontrol type="svn"&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// &lt;triggers&gt;
+    /// &lt;intervalTrigger /&gt;
+    /// &lt;/triggers&gt;
+    /// &lt;tasks&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/tasks&gt;
+    /// &lt;publishers&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/publishers&gt;
+    /// &lt;parameters&gt;
+    /// &lt;selectParameter&gt;
+    /// &lt;name&gt;Target&lt;/name&gt;
+    /// &lt;allowedValues&gt;
+    /// &lt;value name="Development"&gt;DEV&lt;/value&gt;
+    /// &lt;value name="Test"&gt;TEST&lt;/value&gt;
+    /// &lt;value name="Production"&gt;PROD&lt;/value&gt;
+    /// &lt;/allowedValues&gt;
+    /// &lt;/selectParameter&gt;
+    /// &lt;/parameters&gt;
+    /// &lt;/project&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// In order for this parameter to work, either the allowed values or a source file must be set. If both are set,
+    /// the source file will be used.
+    /// </remarks>
 #if !NoReflector
     [ReflectorType("selectParameter")]
 #endif
@@ -49,6 +110,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// Is the parameter required?
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
 #if !NoReflector
         [ReflectorProperty("required", Required = false)]
 #endif
@@ -75,6 +138,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// Load the values from a file.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
 #if !NoReflector
         [ReflectorProperty("sourceFile", Required = false)]
 #endif
@@ -86,6 +151,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// An array of allowed values.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
 #if !NoReflector
         [ReflectorProperty("allowedValues", typeof(NameValuePairListSerialiserFactory), Required = false)]
 #endif
@@ -105,6 +172,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// The default value to use.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
 #if !NoReflector
         [ReflectorProperty("default", Required = false)]
 #endif

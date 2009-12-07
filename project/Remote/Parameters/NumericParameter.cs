@@ -8,9 +8,61 @@ using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote.Parameters
 {
+    /// <title>Numeric Parameter</title>
+    /// <version>1.5</version>
     /// <summary>
-    /// A numeric value parameter.
+    /// <para>
+    /// This will prompt the user to enter a numeric value when a force build is requested.
+    /// </para>
+    /// <para>
+    /// This parameter can then be used by a dynamic value in a task.
+    /// </para>
     /// </summary>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;numericParameter&gt;
+    /// &lt;name&gt;MaxAllowedErrors&lt;/name&gt;
+    /// &lt;/numericParameter&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;numericParameter&gt;
+    /// &lt;name&gt;MaxAllowedErrors&lt;/name&gt;
+    /// &lt;display&gt;Maximum Allowed Errors&lt;/display&gt;
+    /// &lt;description&gt;What is the maximum allowed number of unit test errors?&lt;/description&gt;
+    /// &lt;default&gt;5&lt;/default&gt;
+    /// &lt;minimum&gt;0&lt;/minimum&gt;
+    /// &lt;maximum&gt;10&lt;/maximum&gt;
+    /// &lt;required&gt;false&lt;/required&gt;
+    /// &lt;/numericParameter&gt;
+    /// </code>
+    /// <code title="Example in Context">
+    /// &lt;project name="Test Project"&gt;
+    /// &lt;sourcecontrol type="svn"&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// &lt;triggers&gt;
+    /// &lt;intervalTrigger /&gt;
+    /// &lt;/triggers&gt;
+    /// &lt;tasks&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/tasks&gt;
+    /// &lt;publishers&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/publishers&gt;
+    /// &lt;parameters&gt;
+    /// &lt;numericParameter&gt;
+    /// &lt;name&gt;MaxAllowedErrors&lt;/name&gt;
+    /// &lt;display&gt;Maximum Allowed Errors&lt;/display&gt;
+    /// &lt;description&gt;What is the maximum allowed number of unit test errors?&lt;/description&gt;
+    /// &lt;default&gt;5&lt;/default&gt;
+    /// &lt;minimum&gt;0&lt;/minimum&gt;
+    /// &lt;maximum&gt;10&lt;/maximum&gt;
+    /// &lt;required&gt;false&lt;/required&gt;
+    /// &lt;/numericParameter&gt;
+    /// &lt;/parameters&gt;
+    /// &lt;/project&gt;
+    /// </code>
+    /// </example>
 #if !NoReflector
     [ReflectorType("numericParameter")]
 #endif
@@ -43,6 +95,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// The mimimum allowed value of the parameter.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>-1.79769e+308</default>
 #if !NoReflector
         [ReflectorProperty("minimum", Required = false)]
 #endif
@@ -57,6 +111,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// The maximum allowed value of the parameter.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>1.79769e+308</default>
 #if !NoReflector
         [ReflectorProperty("maximum", Required = false)]
 #endif
@@ -71,6 +127,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// Is the parameter required?
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
 #if !NoReflector
         [ReflectorProperty("required", Required = false)]
 #endif

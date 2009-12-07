@@ -9,9 +9,61 @@ using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Remote.Parameters
 {
+    /// <title>Date Parameter</title>
+    /// <version>1.5</version>
     /// <summary>
-    /// A date value parameter.
+    /// <para>
+    /// This will prompt the user to enter a date value when a force build is requested.
+    /// </para>
+    /// <para>
+    /// This parameter can then be used by a dynamic value in a task.
+    /// </para>
     /// </summary>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;dateParameter&gt;
+    /// &lt;name&gt;CutOffDate&lt;/name&gt;
+    /// &lt;/dateParameter&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;dateParameter&gt;
+    /// &lt;name&gt;CutOffDate&lt;/name&gt;
+    /// &lt;display&gt;Cut Off Date&lt;/display&gt;
+    /// &lt;description&gt;What is the cut-off date for changes?&lt;/description&gt;
+    /// &lt;default&gt;today&lt;/default&gt;
+    /// &lt;minimum&gt;1-Jan-2000&lt;/minimum&gt;
+    /// &lt;maximum&gt;31-Dec-2100&lt;/maximum&gt;
+    /// &lt;required&gt;false&lt;/required&gt;
+    /// &lt;/dateParameter&gt;
+    /// </code>
+    /// <code title="Example in Context">
+    /// &lt;project name="Test Project"&gt;
+    /// &lt;sourcecontrol type="svn"&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// &lt;triggers&gt;
+    /// &lt;intervalTrigger /&gt;
+    /// &lt;/triggers&gt;
+    /// &lt;tasks&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/tasks&gt;
+    /// &lt;publishers&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/publishers&gt;
+    /// &lt;parameters&gt;
+    /// &lt;dateParameter&gt;
+    /// &lt;name&gt;CutOffDate&lt;/name&gt;
+    /// &lt;display&gt;Cut Off Date&lt;/display&gt;
+    /// &lt;description&gt;What is the cut-off date for changes?&lt;/description&gt;
+    /// &lt;default&gt;today&lt;/default&gt;
+    /// &lt;minimum&gt;1-Jan-2000&lt;/minimum&gt;
+    /// &lt;maximum&gt;31-Dec-2100&lt;/maximum&gt;
+    /// &lt;required&gt;false&lt;/required&gt;
+    /// &lt;/dateParameter&gt;
+    /// &lt;/parameters&gt;
+    /// &lt;/project&gt;
+    /// </code>
+    /// </example>
 #if !NoReflector
     [ReflectorType("dateParameter")]
 #endif
@@ -51,6 +103,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// The mimimum allowed value of the parameter.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>1-Jan-0000</default>
 #if !NoReflector
         [ReflectorProperty("minimum", Required = false)]
 #endif
@@ -66,6 +120,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// The maximum allowed value of the parameter.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>31-Dev-9999</default>
 #if !NoReflector
         [ReflectorProperty("maximum", Required = false)]
 #endif
@@ -81,6 +137,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// Is the parameter required?
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
 #if !NoReflector
         [ReflectorProperty("required", Required = false)]
 #endif

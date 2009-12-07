@@ -10,10 +10,19 @@ using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
-    /// <summary>
-    /// Define a name/value pair.
-    /// </summary>
     /// <title>Named Value</title>
+    /// <version>1.4.4</version>
+    /// <summary>
+    /// <para>
+    /// A value with an associated name. This is a generic configuration item that is used in other configuration
+    /// elements.
+    /// </para>
+    /// </summary>
+    /// <example>
+    /// <code >
+    /// &lt;namedValue name="The Name" value="something" /&gt;
+    /// </code>
+    /// </example>
     [Serializable]
 #if !NoReflector
     [ReflectorType("namedValue")]
@@ -44,8 +53,10 @@ namespace ThoughtWorks.CruiseControl.Remote
         #region Public properties
         #region Name
         /// <summary>
-        /// The name.
+        /// The name of the value.
         /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>n/a</default>
         [XmlAttribute("name")]
 #if !NoReflector
         [ReflectorProperty("name")]
@@ -59,8 +70,10 @@ namespace ThoughtWorks.CruiseControl.Remote
 
         #region Value
         /// <summary>
-        /// The value.
+        /// The actual value.
         /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>n/a</default>
         [XmlAttribute("value")]
 #if !NoReflector
         [ReflectorProperty("value")]

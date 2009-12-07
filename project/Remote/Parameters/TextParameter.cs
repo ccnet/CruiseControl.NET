@@ -8,9 +8,61 @@ using System.ComponentModel;
 
 namespace ThoughtWorks.CruiseControl.Remote.Parameters
 {
+    /// <title>Text Parameter</title>
+    /// <version>1.5</version>
     /// <summary>
-    /// A text length parameter.
+    /// <para>
+    /// This will prompt the user to enter a text value when a force build is requested.
+    /// </para>
+    /// <para>
+    /// This parameter can then be used by a dynamic value in a task.
+    /// </para>
     /// </summary>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;textParameter&gt;
+    /// &lt;name&gt;Target&lt;/name&gt;
+    /// &lt;/textParameter&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;textParameter&gt;
+    /// &lt;name&gt;Target&lt;/name&gt;
+    /// &lt;display&gt;Target to Build&lt;/display&gt;
+    /// &lt;description&gt;Which target do you want to build?&lt;/description&gt;
+    /// &lt;default&gt;DEV&lt;/default&gt;
+    /// &lt;minimum&gt;3&lt;/minimum&gt;
+    /// &lt;maximum&gt;10&lt;/maximum&gt;
+    /// &lt;required&gt;false&lt;/required&gt;
+    /// &lt;/textParameter&gt;
+    /// </code>
+    /// <code title="Example in Context">
+    /// &lt;project name="Test Project"&gt;
+    /// &lt;sourcecontrol type="svn"&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// &lt;triggers&gt;
+    /// &lt;intervalTrigger /&gt;
+    /// &lt;/triggers&gt;
+    /// &lt;tasks&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/tasks&gt;
+    /// &lt;publishers&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/publishers&gt;
+    /// &lt;parameters&gt;
+    /// &lt;textParameter&gt;
+    /// &lt;name&gt;Target&lt;/name&gt;
+    /// &lt;display&gt;Target to Build&lt;/display&gt;
+    /// &lt;description&gt;Which target do you want to build?&lt;/description&gt;
+    /// &lt;default&gt;DEV&lt;/default&gt;
+    /// &lt;minimum&gt;3&lt;/minimum&gt;
+    /// &lt;maximum&gt;10&lt;/maximum&gt;
+    /// &lt;required&gt;false&lt;/required&gt;
+    /// &lt;/textParameter&gt;
+    /// &lt;/parameters&gt;
+    /// &lt;/project&gt;
+    /// </code>
+    /// </example>
 #if !NoReflector
     [ReflectorType("textParameter")]
 #endif
@@ -44,8 +96,10 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         #endregion
 
         /// <summary>
-        /// The mimimum allowed length of the parameter.
+        /// The minimum allowed length.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>0</default>
 #if !NoReflector
         [ReflectorProperty("minimum", Required = false)]
 #endif
@@ -60,6 +114,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// The maximum allowed length of the parameter.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>2147483647</default>
 #if !NoReflector
         [ReflectorProperty("maximum", Required = false)]
 #endif
@@ -74,6 +130,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// Is the parameter required?
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
 #if !NoReflector
         [ReflectorProperty("required", Required = false)]
 #endif

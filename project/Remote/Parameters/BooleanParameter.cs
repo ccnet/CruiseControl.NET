@@ -9,9 +9,63 @@ using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Remote.Parameters
 {
+    /// <title>Boolean Parameter</title>
+    /// <version>1.5</version>
     /// <summary>
-    /// A boolean value parameter.
+    /// <para>
+    /// This will prompt the user to enter a boolean value when a force build is requested.
+    /// </para>
+    /// <para>
+    /// This parameter can then be used by a dynamic value in a task.
+    /// </para>
     /// </summary>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;booleanParameter&gt;
+    /// &lt;name&gt;Target&lt;/name&gt;
+    /// &lt;true&gt;Yes&lt;/true&gt;
+    /// &lt;false&gt;No&lt;/false&gt;
+    /// &lt;/booleanParameter&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;booleanParameter&gt;
+    /// &lt;name&gt;Target&lt;/name&gt;
+    /// &lt;true name="PROD"&gt;Yes&lt;/true&gt;
+    /// &lt;false name="DEV"&gt;No&lt;/false&gt;
+    /// &lt;display&gt;Production Build&lt;/display&gt;
+    /// &lt;description&gt;Do you want to generate a production build?&lt;/description&gt;
+    /// &lt;default&gt;DEV&lt;/default&gt;
+    /// &lt;required&gt;false&lt;/required&gt;
+    /// &lt;/booleanParameter&gt;
+    /// </code>
+    /// <code title="Example in Context">
+    /// &lt;project name="Test Project"&gt;
+    /// &lt;sourcecontrol type="svn"&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// &lt;triggers&gt;
+    /// &lt;intervalTrigger /&gt;
+    /// &lt;/triggers&gt;
+    /// &lt;tasks&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/tasks&gt;
+    /// &lt;publishers&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/publishers&gt;
+    /// &lt;parameters&gt;
+    /// &lt;booleanParameter&gt;
+    /// &lt;name&gt;Target&lt;/name&gt;
+    /// &lt;true name="PROD"&gt;Yes&lt;/true&gt;
+    /// &lt;false name="DEV"&gt;No&lt;/false&gt;
+    /// &lt;display&gt;Production Build&lt;/display&gt;
+    /// &lt;description&gt;Do you want to generate a production build?&lt;/description&gt;
+    /// &lt;default&gt;DEV&lt;/default&gt;
+    /// &lt;required&gt;false&lt;/required&gt;
+    /// &lt;/booleanParameter&gt;
+    /// &lt;/parameters&gt;
+    /// &lt;/project&gt;
+    /// </code>
+    /// </example>
 #if !NoReflector
     [ReflectorType("booleanParameter")]
 #endif
@@ -48,6 +102,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// Is the parameter required?
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>flase</default>
 #if !NoReflector
         [ReflectorProperty("required", Required = false)]
 #endif
@@ -62,8 +118,11 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
 
         #region TrueValue
         /// <summary>
-        /// The view to use when true is selected.
+        /// The value to use when the parameter is true. If the name attribute is set, then the user will see that as
+        /// the selection value. Otherwise the actual value will be displayed.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
 #if !NoReflector
         [ReflectorProperty("true", typeof(NameValuePairSerialiserFactory))]
 #endif
@@ -77,8 +136,11 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
 
         #region FalseValue
         /// <summary>
-        /// The view to use when false is selected.
+        /// The value to use when the parameter is false. If the name attribute is set, then the user will see that
+        /// as the selection value. Otherwise the actual value will be displayed.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
 #if !NoReflector
         [ReflectorProperty("false", typeof(NameValuePairSerialiserFactory))]
 #endif
