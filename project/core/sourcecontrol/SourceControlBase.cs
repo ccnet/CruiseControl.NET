@@ -21,8 +21,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         #region Public properties
         #region DynamicValues
         /// <summary>
-        /// The dynamic values to use for the task.
+        /// The dynamic values to use for the source control block.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("dynamicValues", Required = false)]
         public IDynamicValue[] DynamicValues
         {

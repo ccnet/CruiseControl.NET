@@ -2,6 +2,10 @@ using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// Timeout configuration.
+    /// </summary>
+    /// <title>Timeout Configuration</title>
 	public class Timeout
 	{
 		public static Timeout DefaultTimeout = new Timeout(600000);

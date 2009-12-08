@@ -5,7 +5,50 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	[ReflectorType("alienbrain")]
+    /// <summary>
+    /// <para>
+    /// Source control integration for the Alienbrain source control product.
+    /// </para>
+    /// </summary>
+    /// <title>Alienbrain Source Control Block</title>
+    /// <version>1.0</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;sourcecontrol type="alienbrain"&gt;
+    /// &lt;server&gt;MyServer&lt;/server&gt;
+    /// &lt;database&gt;MyDatabase&lt;/database&gt;
+    /// &lt;username&gt;Username&lt;/username&gt;
+    /// &lt;password&gt;Password&lt;/password&gt;
+    /// &lt;project&gt;ab://myprojectpath&lt;/project&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;sourcecontrol type="alienbrain"&gt;
+    /// &lt;server&gt;MyServer&lt;/server&gt;
+    /// &lt;database&gt;MyDatabase&lt;/database&gt;
+    /// &lt;username&gt;Username&lt;/username&gt;
+    /// &lt;password&gt;Password&lt;/password&gt;
+    /// &lt;project&gt;ab://myprojectpath&lt;/project&gt;
+    /// &lt;executable&gt;c:\alienbrain\ab.exe&lt;/executable&gt;
+    /// &lt;workingDirectory&gt;d:\code&lt;/workingDirectory&gt;
+    /// &lt;branch&gt;Root Branch/Branch1&lt;/branch&gt;
+    /// &lt;autoGetSource&gt;true&lt;/autoGetSource&gt;
+    /// &lt;labelOnSuccess&gt;true&lt;/labelOnSuccess&gt;
+    /// &lt;timeout units="minutes"&gt;10&lt;/timeout&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>alienbrain</value>
+    /// </key>
+    /// <remarks>
+    /// <heading>Contributions</heading>
+    /// <para>
+    /// Alienbrain support added by Francis Tremblay.
+    /// </para>
+    /// </remarks>
+    [ReflectorType("alienbrain")]
 	public class Alienbrain : ProcessSourceControl
 	{
 		public static readonly string NO_CHANGE = "No files or folders found!";
@@ -32,6 +75,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			this.registry = registry;
 		}
 
+        /// <summary>
+        /// The executable to use.
+        /// </summary>
+        /// <remarks>
+        /// If not set, then the executable location will come from the registry.
+        /// </remarks>
+        /// <version>1.0</version>
+        /// <default>None</default>
 		[ReflectorProperty("executable", Required = false)]
 		public string Executable
 		{
@@ -44,31 +95,81 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { executable = value; }
 		}
 
-		[ReflectorProperty("server")]
+        /// <summary>
+        /// Alienbrain server hostname or ip adress. The list of valid server name and ip adresses are listed in the File, Connect to
+        /// project database, Step 1, list box.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("server")]
 		public string Server = string.Empty;
 
-		[ReflectorProperty("database")]
+        /// <summary>
+        /// Alienbrain project database name. The list of valid project databases are listed in the File, Connect to project database, Step 2,
+        /// list box. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("database")]
 		public string Database = string.Empty;
 
-		[ReflectorProperty("username")]
+        /// <summary>
+        /// The name of the user you want to use to connect to the server project database.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("username")]
 		public string Username = string.Empty;
 
-		[ReflectorProperty("password")]
+        /// <summary>
+        /// The password of the user you want to use to connect to the server project database.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("password")]
 		public string Password = string.Empty;
 
-		[ReflectorProperty("branch", Required = false)]
+        /// <summary>
+        /// The path of the branch specification. to enumarate the name of the branches, use the ab enumbranch command line.
+        /// </summary>
+        /// <remarks>
+        /// If this is not set, then the root branch will be used.
+        /// </remarks>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("branch", Required = false)]
 		public string Branch = string.Empty;
 
-		[ReflectorProperty("project", Required = true)]
+        /// <summary>
+        /// This is the path of to monitor the file changes. Use alienbrain://Code or ab://Code project path format.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("project", Required = true)]
 		public string Project = string.Empty;
 
-		[ReflectorProperty("autoGetSource", Required = false)]
+        /// <summary>
+        /// Specifies whether the current version of the source should be retrieved from Alienbrain. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>true</default>
+        [ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = true;
 
-		[ReflectorProperty("workingDirectory", Required = false)]
+        /// <summary>
+        /// The path where the get latest will update the files. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>Project Working Directory</default>
+        [ReflectorProperty("workingDirectory", Required = false)]
 		public string WorkingDirectory = string.Empty;
 
-		[ReflectorProperty("labelOnSuccess", Required=false)]
+        /// <summary>
+        /// Specifies whether or not the repository should be labelled after a successful build. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>false</default>
+        [ReflectorProperty("labelOnSuccess", Required = false)]
 		public bool LabelOnSuccess = false;
 
 		// Actions

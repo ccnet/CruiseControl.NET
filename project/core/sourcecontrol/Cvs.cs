@@ -8,7 +8,39 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	[ReflectorType("cvs")]
+    /// <summary>
+    /// <para>
+    /// Please refer to <link>Using CruiseControl.NET with CVS</link> for an overview of this block.
+    /// </para>
+    /// <para>
+    /// For CVS you must define where the CVS executable (if you give a relative path, it must be relative to the ccnet.exe application) is and the working directory for checked out code.
+    /// </para>
+    /// </summary>
+    /// <title> CVS Source Control Block </title>
+    /// <version>1.2</version>
+    /// <example>
+    /// <code title="pserver authentication example">
+    /// &lt;sourcecontrol type="cvs"&gt;
+    /// &lt;executable&gt;..\tools\cvs.exe&lt;/executable&gt;
+    /// &lt;cvsroot&gt;:pserver:anonymous@cvs.sourceforge.net:/cvsroot/ccnet&lt;/cvsroot&gt;
+    /// &lt;module&gt;ccnet&lt;/module&gt;
+    /// &lt;workingDirectory&gt;c:\projects\ccnet&lt;/workingDirectory&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// <code title="SSH via putty example">
+    /// &lt;sourcecontrol type="cvs"&gt;
+    /// &lt;executable&gt;c:\putty\cvswithplinkrsh.bat&lt;/executable&gt;
+    /// &lt;cvsroot&gt;:ext:mycvsserver:/cvsroot/myrepo&lt;/cvsroot&gt;
+    /// &lt;module&gt;mymodule&lt;/module&gt;
+    /// &lt;workingDirectory&gt;c:\fromcvs\myrepo&lt;/workingDirectory&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>cvs</value>
+    /// </key>
+    [ReflectorType("cvs")]
 	public class Cvs : ProcessSourceControl
 	{
 		public const string DefaultCvsExecutable = "cvs";
@@ -25,43 +57,115 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			this.fileSystem = fileSystem;
 		}
 
+        /// <summary>
+        /// The location of the cvs.exe executable. 
+        /// </summary>
+        /// <version>1.2</version>
+        /// <default>cvs</default>
         [ReflectorProperty("executable", Required = false)]
 		public string Executable = DefaultCvsExecutable;
 
-		[ReflectorProperty("cvsroot")]
+        /// <summary>
+        /// The cvs connection string. If this is unspecified and your working directory contains a previous checkout, then the CVS client
+        /// will attempt to determine the correct root based on the CVS folder in your working directory. If the working directory does not
+        /// contain the source, then this element must be specfied.
+        /// </summary>
+        /// <version>1.2</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("cvsroot")]
 		public string CvsRoot = string.Empty;
 
-		[ReflectorProperty("module")]
+        /// <summary>
+        /// The cvs module to monitor. This element is used both when checking for modifications and when checking out the source into an
+        /// empty working directory.
+        /// </summary>
+        /// <version>1.2</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("module")]
 		public string Module;
 
-		[ReflectorProperty("workingDirectory", Required=false)]
+        /// <summary>
+        /// The folder that the source has been checked out into. 
+        /// </summary>
+        /// <version>1.2</version>
+        /// <default>Project Working Directory</default>
+        [ReflectorProperty("workingDirectory", Required = false)]
 		public string WorkingDirectory = string.Empty;
 
-		[ReflectorProperty("labelOnSuccess", Required=false)]
+        /// <summary>
+        /// Specifies whether or not the repository should be labelled after a successful build.
+        /// </summary>
+        /// <version>1.2</version>
+        /// <default>false</default>
+        [ReflectorProperty("labelOnSuccess", Required = false)]
 		public bool LabelOnSuccess = false;
 
-		[ReflectorProperty("restrictLogins", Required=false)]
+        /// <summary>
+        /// Only list modifications checked in by specified logins.
+        /// </summary>
+        /// <version>1.2</version>
+        /// <default>None</default>
+        [ReflectorProperty("restrictLogins", Required = false)]
 		public string RestrictLogins = string.Empty;
 
-		[ReflectorProperty("webUrlBuilder", InstanceTypeKey="type", Required=false)]
+        /// <summary>
+        /// Converts the comment (or parts from it) into an url pointing to the issue for this build. See <link>IssueUrlBuilder</link> for
+        /// more details 
+        /// </summary>
+        /// <version>1.2</version>
+        /// <default>false</default>
+        [ReflectorProperty("webUrlBuilder", InstanceTypeKey = "type", Required = false)]
 		public IModificationUrlBuilder UrlBuilder = new NullUrlBuilder();
 
-		[ReflectorProperty("autoGetSource", Required = false)]
+        /// <summary>
+        /// Specifies whether the current version of the source should be retrieved from CVS. 
+        /// </summary>
+        /// <version>1.2</version>
+        /// <default>true</default>
+        [ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = true;
 
-		[ReflectorProperty("cleanCopy", Required = false)]
+        /// <summary>
+        /// Specifies whether or not a clean copy should be retrieved.
+        /// </summary>
+        /// <version>1.2</version>
+        /// <default>true</default>
+        [ReflectorProperty("cleanCopy", Required = false)]
 		public bool CleanCopy = true;
 
+        /// <summary>
+        /// Specifies whether the checkout command should be used instead of update.
+        /// </summary>
+        /// <version>1.2</version>
+        /// <default>false</default>
         [ReflectorProperty("forceCheckout", Required = false)]
         public bool ForceCheckout = false;
 
-		[ReflectorProperty("branch", Required=false)]
+        /// <summary>
+        /// The branch to check for modifications on. 
+        /// </summary>
+        /// <version>1.2</version>
+        /// <default>None</default>
+        [ReflectorProperty("branch", Required = false)]
 		public string Branch = string.Empty;
 
-		[ReflectorProperty("tagPrefix", Required=false)]
+        /// <summary>
+        /// By default the CVS tag name used when labelOnSuccess is set to true is ver-BuildLabel. If you specify this property, the
+        /// prefix ver- will be replaced with the value you specify. 
+        /// </summary>
+        /// <version>1.2</version>
+        /// <default>ver-</default>
+        [ReflectorProperty("tagPrefix", Required = false)]
 		public string TagPrefix = "ver-";
 
-		[ReflectorProperty("suppressRevisionHeader", Required=false)]
+        /// <summary>
+        /// Suppresses headers that do not have revisions within the specified modification window. Setting this option to true will reduce
+        /// the time that it takes for CCNet to poll CVS for changes. Only fairly recent versions of CVS support this option. Run cvs --help
+        /// log to see if the -S option is listed.
+        /// </summary>
+        /// <version>1.2</version>
+        /// <default>false</default>
+        [ReflectorProperty("suppressRevisionHeader", Required = false)]
 		public bool SuppressRevisionHeader;
 
 		public string FormatCommandDate(DateTime date)

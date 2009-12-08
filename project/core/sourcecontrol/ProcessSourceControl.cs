@@ -28,6 +28,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			get { return executor; }
 		}
 
+        /// <summary>
+        /// Sets the timeout period for the source control operation. See <link>Timeout Configuration</link> for details. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>10 minutes</default>
 		[ReflectorProperty("timeout", typeof (TimeoutSerializerFactory), Required = false)]
 		public Timeout Timeout
 		{
@@ -100,6 +105,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 
         // rw issue
+        /// <summary>
+        /// Converts the comment (or parts from it) into an url pointing to the issue for this build. See <link>IssueUrlBuilder</link> for 
+        /// more details.
+        /// </summary>
+        /// <version>1.4</version>
+        /// <default>None</default>
         [ReflectorProperty("issueUrlBuilder", InstanceTypeKey = "type", Required = false)]
         public IModificationUrlBuilder IssueUrlBuilder;
 

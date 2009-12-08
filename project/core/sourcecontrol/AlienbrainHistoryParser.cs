@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	public class AlienbrainHistoryParser : IHistoryParser
+    public class AlienbrainHistoryParser : IHistoryParser
 	{
 		public static readonly string FILE_REGEX = ".*|.*|.*|.*|.*|.*|.*|.*";
 		public static readonly char DELIMITER = '|';

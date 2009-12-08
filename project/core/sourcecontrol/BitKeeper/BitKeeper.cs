@@ -4,7 +4,37 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 {
-	[ReflectorType("bitkeeper")]
+    /// <summary>
+    /// <para>
+    /// Source control integration for the BitKeeper source control product.
+    /// </para>
+    /// </summary>
+    /// <title>BitKeeper Source Control Block</title>
+    /// <version>1.0</version>
+    /// <example>
+    /// <code>
+    /// &lt;sourcecontrol type="bitkeeper"&gt;
+    /// &lt;workingDirectory&gt;c:\build\dev-1.0&lt;/workingDirectory&gt;
+    /// &lt;autoGetSource&gt;true&lt;/autoGetSource&gt;
+    /// &lt;cloneTo&gt;..\Source&lt;/cloneTo&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>bitkeeper</value>
+    /// </key>
+    /// <remarks>
+    /// <para type="warning">
+    /// <title>SSH Access Not Supported</title>
+    /// Your permanent BK repository must have a parent accessed via bkd or the local filesystem; ssh access is not supported at this time.
+    /// </para>
+    /// <heading>Contributions</heading>
+    /// <para>
+    /// BitKeeper support added by Harold L Hunt II of StarNet Communications Corp.
+    /// </para>
+    /// </remarks>
+    [ReflectorType("bitkeeper")]
 	public class BitKeeper : ProcessSourceControl
 	{
 		public const string DefaultExecutable = @"C:\Program Files\BitKeeper\bk.exe";
@@ -16,40 +46,52 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 		{}
 
 		/// <summary>
-		/// Absolute, DOS-style, path to bk.exe
+		/// Absolute, DOS-style, path to bk.exe.
 		/// </summary>
+        /// <version>1.0</version>
+        /// <default>c:\Program Files\BitKeeper\bk.exe</default>
 		[ReflectorProperty("executable", Required=false)]
 		public string Executable = DefaultExecutable;
 
 		/// <summary>
-		/// Absolute, DOS-style, path to permanent BK repository
+		/// Absolute, DOS-style, path to permanent BK repository.
 		/// </summary>
-		[ReflectorProperty("workingDirectory", Required=true)]
+        /// <version>1.0</version>
+        /// <default>Project Working Directory</default>
+        [ReflectorProperty("workingDirectory", Required = true)]
 		public string WorkingDirectory = string.Empty;
 
 		/// <summary>
-		/// Add BK tag on successful build
+		/// Add BK tag on successful build.
 		/// </summary>
-		[ReflectorProperty("tagOnSuccess", Required = false)]
+        /// <version>1.0</version>
+        /// <default>false</default>
+        [ReflectorProperty("tagOnSuccess", Required = false)]
 		public bool TagOnSuccess = false;
 
 		/// <summary>
-		/// Automatically pull latest source into permanent BK repository
+		/// Automatically pull latest source into permanent BK repository.
 		/// </summary>
-		[ReflectorProperty("autoGetSource", Required = false)]
+        /// <version>1.0</version>
+        /// <default>true</default>
+        [ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = true;
 
 		/// <summary>
-		/// Include history of each file, rather than just ChangeSets
+		/// Include history of each file, rather than just ChangeSets.
 		/// </summary>
-		[ReflectorProperty("fileHistory", Required = false)]
+        /// <version>1.0</version>
+        /// <default>false</default>
+        [ReflectorProperty("fileHistory", Required = false)]
 		public bool FileHistory = false;
 
 		/// <summary>
-		/// Make a clone of the permanent BK repository into the designated path
-		/// The, DOS-style, path can be relative to WorkingDirectory or absolute
+		/// Make a clone of the permanent BK repository into the designated path. The DOS-style path can be relative to WorkingDirectory or
+        /// absolute.
 		/// </summary>
-		[ReflectorProperty("cloneTo", Required = false)]
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("cloneTo", Required = false)]
 		public string CloneTo = string.Empty;
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)

@@ -8,94 +8,138 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	/// <summary>
-	/// Source control integration for (<a href="www.accurev.com">AccuRev Inc.'s</a> eponymous 
-	/// source code control product.
-	/// </summary>
-	/// <remarks>
-	/// This code is based on code\sourcecontrol\ClearCase.cs.
-	/// </remarks>
+    /// <summary>
+    /// <para>
+    /// Source control integration for Accurev's source control product (http://www.accurev.com).
+    /// </para>
+    /// </summary>
+    /// <title> AccuRev Source Control Block </title>
+    /// <version>1.3</version>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;sourcecontrol type="accurev"&gt;
+    /// &lt;autoGetSource&gt;true&lt;/autoGetSource&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;sourcecontrol type="accurev"&gt;
+    /// &lt;autoGetSource&gt;true&lt;/autoGetSource&gt;
+    /// &lt;executable&gt;accurev.exe&lt;/executable&gt;
+    /// &lt;homeDir&gt;.&lt;/homeDir&gt;
+    /// &lt;labelOnSuccess&gt;false&lt;/labelOnSuccess&gt;
+    /// &lt;login&gt;false&lt;/login&gt;
+    /// &lt;password&gt;banana&lt;/password&gt;
+    /// &lt;principal&gt;joe_user&lt;/principal&gt;
+    /// &lt;timeout units="minutes"&gt;10&lt;/timeout&gt;
+    /// &lt;workspace&gt;.&lt;/workspace&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>accurev</value>
+    /// </key>
+    /// <remarks>
+    /// <heading>Known Issues</heading>
+    /// <para>
+    /// <b>CruiseControl.NET doesn't see my changes</b>
+    /// </para>
+    /// <para>
+    /// AccuRev depends on the clocks of the server and its clients ticking together. Make sure the clock of your build server is synchronized
+    /// to the clock of your AccuRev server. See CCNET-271 for details on a similar problem with Rational ClearCase.
+    /// </para>
+    /// <para>
+    /// <b>AccuRev says I'm "unknown" or "not authenticated"</b>
+    /// </para>
+    /// <para>
+    /// AccuRev needs to know the userid that owns the workspace, and stores that information in files in the AccuRev home directory, which
+    /// defaults to %HOMEDRIVE%%HOMEPATH%\.accurev. If there isn't any such directory, or if CCNet is running under a userid that isn't an
+    /// AccuRev user, AccuRev will not be able to function correctly and the accurev info command may report that the user is unknown or not
+    /// authenticated. You can use the homeDir element to force AccuRev to look for the .accurev directory in a particular location, such as
+    /// the project's artifact directory.
+    /// </para>
+    /// </remarks>
 	[ReflectorType("accurev")]
 	public class AccuRev : ProcessSourceControl
     {
         #region Properties
         
         /// <summary>
-		/// Should we automatically obtain updated source from AccuRev or not? 
+        /// Specifies whether the current version of the source should be retrieved from AccuRev. 
 		/// </summary>
-		/// <remarks>
-		/// Optional, default is not to do so.
-		/// </remarks>
+		/// <version>1.3</version>
+        /// <default>false</default>
 		[ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = false;
 
 		/// <summary>
-		/// Name of the AccuRev CLI command.  
+        /// Specifies the path to the AccuRev command line tool. You should only have to include this element if the tool isn't in your
+        /// path. By default, the AccuRev client installation process names it accurev.exe and puts it in C:\Program Files\AccuRev\bin. 
 		/// </summary>
-		/// <remarks>
-		/// Optional, defaults to "accurev.exe".
-		/// <remarks>
-		[ReflectorProperty("executable", Required=false)]
+        /// <version>1.3</version>
+        /// <default>accurev.exe</default>
+        [ReflectorProperty("executable", Required = false)]
 		public string Executable = "accurev.exe";
 
 		/// <summary>
-		/// The location of the AccuRev home directory, either absolute or relative to the project artifact 
-		/// directory.  If not specified, AccuRev will follow its rules for determining the location.  The 
-		/// home directory itself is always called ".accurev", and AccuRev will create it if there isn't 
-		/// already one present in the home directory.
+        /// Specifies the location of the AccuRev home directory. The pathname can be either absolute or relative to the project artifact
+        /// directory. If not specified, AccuRev will follow its rules for determining the location. The home directory itself is always
+        /// named ".accurev". 
 		/// </summary>
 		/// <remarks>
 		/// Optional, default is to let AccuRev decide where the home directory is.
 		/// </remarks>
-		[ReflectorProperty("homeDir", Required=false)]
+        /// <version>1.3</version>
+        /// <default>None</default>
+        [ReflectorProperty("homeDir", Required = false)]
 		public string AccuRevHomeDir = null;
 		
 		/// <summary>
-		/// If set, the source repository will be tagged with the build label upon successful builds.
-		/// </summary>
-		/// <remarks>
-		/// Optional, default is not to tag.
-		/// <remarks>
-		[ReflectorProperty("labelOnSuccess", Required=false)]
+        /// Specifies whether or not CCNet should create an AccuRev snapshot when the build is successful. If set to true, CCNet will create
+        /// a snapshot of the workspace's basis stream as of the starting time of the build, naming it according to the build label.
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>false</default>
+        [ReflectorProperty("labelOnSuccess", Required = false)]
 		public bool LabelOnSuccess = false;
 
 		/// <summary>
-		/// If true, log in to AccuRev using the specified principal and password.
-		/// </summary>
-		/// <remarks>
-		/// Optional, default is not to log in.  If set to true, "principal" and "password" must also be set.
-		/// </remarks>
-		[ReflectorProperty("login", Required=false)]
+        /// Specifies whether or not CCNet should log in to AccuRev using the specified principal and password. If set to true, the principal
+        /// and password elements are required, and CCNet will use them to log in to AccuRev before executing any AccuRev commands. 
+        /// </summary>
+        /// <remarks>
+        /// If this is set to true, then both principal and password must be set.
+        /// </remarks>
+        /// <version>1.3</version>
+        /// <default>false</default>
+        [ReflectorProperty("login", Required = false)]
 		public bool LogIn = false;
 		
 		/// <summary>
-		/// The password for the AccuRev "principal" (userid).
-		/// </summary>
-		/// <remarks>
-		/// Optional, default is no password.  Only necessary if "login" is set to "true".
-		/// </remarks> 
-		[ReflectorProperty("password", Required=false)]
+        /// Specifies the password for the AccuRev "principal" (userid). 
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>false</default>
+        [ReflectorProperty("password", Required = false)]
 		public string AccuRevPassword = null;
 
 		/// <summary>
-		/// The AccuRev "principal" (userid) to run under.  If not specified, AccuRev will follow its rules
-		/// for determining the principal.
-		/// </summary>
-		/// <remarks>
-		/// Optional, default is to let AccuRev decide who the principal is.  Must be specified if "login" is
-		/// set to "true".
-		/// </remarks>
-		[ReflectorProperty("principal", Required=false)]
+        /// Specifies the AccuRev "principal" (userid) to run under. If not specified, AccuRev will follow its rules for determining the
+        /// principal. 
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>false</default>
+        [ReflectorProperty("principal", Required = false)]
 		public string AccuRevPrincipal = null;
 		
 		/// <summary>
-		/// Pathname of the root of the AccuRev workspace to update and/or check, either absolute or relative
-		/// to the project working directory.
-		/// </summary>
-		/// <remarks>
-		/// Optional, defaults to the project working directory.
-		/// <remarks>
-		[ReflectorProperty("workspace", Required=false)]
+        /// Specifies the location on disk of the AccuRev workspace that CCNet monitors for changes. The pathname can be either absolute or
+        /// relative to the project working directory, and must identify the top-level directory of the workspace. Note that this is not the
+        /// same as the workspace name - AccuRev will determine the workspace name from the disk pathname.
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>false</default>
+        [ReflectorProperty("workspace", Required = false)]
 		public string Workspace = string.Empty;
         
         #endregion
