@@ -19,7 +19,7 @@
         {
             try
             {
-                specialChars = new Regex(@"[\[\]\*_+-]", RegexOptions.Compiled);
+                specialChars = new Regex(@"[\|\[\]\*_+-]", RegexOptions.Compiled);
                 if (args.Length == 0)
                 {
                     WriteToConsole("No assembly specified", ConsoleColor.Red);
