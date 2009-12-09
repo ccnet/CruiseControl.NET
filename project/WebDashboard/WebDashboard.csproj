@@ -576,6 +576,8 @@
     <Compile Include="Plugins\ProjectReport\ProjectReportProjectPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\ProjectReport\ProjectTimelineAction.cs" />
+    <Compile Include="Plugins\ProjectReport\ProjectTimelinePlugin.cs" />
     <Compile Include="Plugins\ProjectReport\ServerAuditHistoryProjectPlugin.cs" />
     <Compile Include="Plugins\ProjectReport\ServerLogProjectPlugin.cs">
       <SubType>Code</SubType>
@@ -747,6 +749,80 @@
     <Content Include="javascript\theme\ui.progressbar.css" />
     <Content Include="javascript\theme\ui.resizable.css" />
     <Content Include="javascript\theme\ui.theme.css" />
+    <Content Include="javascript\Timeline\CHANGES.txt" />
+    <Content Include="javascript\Timeline\content\history.html" />
+    <Content Include="javascript\Timeline\images\blue-circle.png" />
+    <Content Include="javascript\Timeline\images\bubble-arrow-point-down.png" />
+    <Content Include="javascript\Timeline\images\bubble-arrow-point-left.png" />
+    <Content Include="javascript\Timeline\images\bubble-arrow-point-right.png" />
+    <Content Include="javascript\Timeline\images\bubble-arrow-point-up.png" />
+    <Content Include="javascript\Timeline\images\bubble-bottom-arrow.png" />
+    <Content Include="javascript\Timeline\images\bubble-bottom-left.png" />
+    <Content Include="javascript\Timeline\images\bubble-bottom-right.png" />
+    <Content Include="javascript\Timeline\images\bubble-bottom.png" />
+    <Content Include="javascript\Timeline\images\bubble-left-arrow.png" />
+    <Content Include="javascript\Timeline\images\bubble-left.png" />
+    <Content Include="javascript\Timeline\images\bubble-right-arrow.png" />
+    <Content Include="javascript\Timeline\images\bubble-right.png" />
+    <Content Include="javascript\Timeline\images\bubble-top-arrow.png" />
+    <Content Include="javascript\Timeline\images\bubble-top-left.png" />
+    <Content Include="javascript\Timeline\images\bubble-top-right.png" />
+    <Content Include="javascript\Timeline\images\bubble-top.png" />
+    <Content Include="javascript\Timeline\images\close-button.png" />
+    <Content Include="javascript\Timeline\images\copy.png" />
+    <Content Include="javascript\Timeline\images\copyright-vertical.png" />
+    <Content Include="javascript\Timeline\images\copyright.png" />
+    <Content Include="javascript\Timeline\images\dark-blue-circle.png" />
+    <Content Include="javascript\Timeline\images\dark-green-circle.png" />
+    <Content Include="javascript\Timeline\images\dark-red-circle.png" />
+    <Content Include="javascript\Timeline\images\dull-blue-circle.png" />
+    <Content Include="javascript\Timeline\images\dull-green-circle.png" />
+    <Content Include="javascript\Timeline\images\dull-red-circle.png" />
+    <Content Include="javascript\Timeline\images\gray-circle.png" />
+    <Content Include="javascript\Timeline\images\green-circle.png" />
+    <Content Include="javascript\Timeline\images\message-bottom-left.png" />
+    <Content Include="javascript\Timeline\images\message-bottom-right.png" />
+    <Content Include="javascript\Timeline\images\message-left.png" />
+    <Content Include="javascript\Timeline\images\message-right.png" />
+    <Content Include="javascript\Timeline\images\message-top-left.png" />
+    <Content Include="javascript\Timeline\images\message-top-right.png" />
+    <Content Include="javascript\Timeline\images\progress-running.gif" />
+    <Content Include="javascript\Timeline\images\red-circle.png" />
+    <Content Include="javascript\Timeline\images\top-bubble.png" />
+    <Content Include="javascript\Timeline\LICENSE.txt" />
+    <Content Include="javascript\Timeline\README.txt" />
+    <Content Include="javascript\Timeline\scripts\l10n\cs\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\cs\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\de\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\de\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\en\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\en\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\es\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\es\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\fr\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\fr\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\it\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\it\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\nl\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\nl\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\ru\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\ru\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\se\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\se\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\tr\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\tr\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\vi\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\vi\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\zh\labellers.js" />
+    <Content Include="javascript\Timeline\scripts\l10n\zh\timeline.js" />
+    <Content Include="javascript\Timeline\scripts\signal.js" />
+    <Content Include="javascript\Timeline\simile-ajax-api.js" />
+    <Content Include="javascript\Timeline\simile-ajax-bundle.js" />
+    <Content Include="javascript\Timeline\styles\graphics-ie6.css" />
+    <Content Include="javascript\Timeline\styles\graphics.css" />
+    <Content Include="javascript\Timeline\timeline-api.js" />
+    <Content Include="javascript\Timeline\timeline-bundle.css" />
+    <Content Include="javascript\Timeline\timeline-bundle.js" />
     <Content Include="packages\DupFinder\Manifest.xml" />
     <Content Include="packages\MSTest\Manifest.xml" />
     <Content Include="packages\OhlohStats\Manifest.xml" />
@@ -819,6 +895,7 @@
     <None Include="templates\ProjectServerConfiguration.vm" />
     <None Include="templates\ProjectSideBar.vm" />
     <None Include="templates\ProjectStatusReport.vm" />
+    <None Include="templates\ProjectTimeline.vm" />
     <None Include="templates\RecentBuilds.vm" />
     <None Include="templates\SecurityConfiguration.vm" />
     <None Include="templates\ServerInfo.vm" />
@@ -854,9 +931,6 @@ xcopy/y/q "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"</PostBuildEvent>
           <IISUrl>
           </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

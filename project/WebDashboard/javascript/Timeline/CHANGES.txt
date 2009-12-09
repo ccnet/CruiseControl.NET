@@ -1,0 +1,263 @@
+CHANGES.txt
+
+Version 2.3.0
+* Added test 5, really long labels, to test example page rev 1601, LarryK
+* Added tags/latest, a copy of the latest tagged release. Will be used for
+  referring to examples and other source files from the wiki. This way
+  the wiki references will not need to be updated for each release.
+* Added test example page for trying and testing event attributes
+  src/webapp/examples/test_example/test.html -- LarryK rev 1598
+* Fixed issues caused when events don't have title attribute.
+  Issue tracker #20 -- LarryK rev 1598
+* Event tape heights now use theme.event.tape.height. Better than using css since:
+  theme.event.track.height & theme.event.tape.height need to work with each other.
+  It is easier and clearer to set both in the same place (the theme), rather than
+  one in the theme and one in the css. This is a breaking change if you were 
+  setting the height in the css. People were having problems with this in the
+  mailing list.
+
+  Further note about this change since it is undoing someone's work: The tape height
+  on the screen was defined purely by css. But the tape height from the theme was
+  still being used (to some extent) in the sw. In particular, the Theme's tape height
+  is returned by function _paintEventTape in file original-painter. It doesn't make
+  sense for the theme's tape height to be returned by the function when the 
+  actual height of the tape was being controlled in the css file.
+  -- LarryK rev 1623
+* Un-commented-out 
+  div.style.background = color;
+  from Timeline.OriginalEventPainter.prototype._createHighlightDiv function
+  to re-enable event highlighting
+  See http://groups.google.com/group/simile-widgets/browse_thread/thread/acbffeaa662722f8
+  -- Hunt Culver and LarryK rev 1628
+* Bullet-proofing: Fix for issue 34. The Monet example had a latestStart date
+  after the event's earliestEnd. This caused the tape width to be negative. This
+  caused an exception when setting the width value, but only on IE. Fix: changed
+  sources.js to sanity check dates and append error messages to event title if
+  a problem is detected. Updated test example to have events with bad dates.
+  Thank you to Tim Dimsdale for noting that the example didn't run in Monet.
+  -- LarryK rev 1629
+* Tape color for overview painter now set. Uses following precedence: event's color attribute, 
+  theme.event.duration.color or css color for class timeline-small-event-tape
+  See issue 16 -- LarryK rev 1630
+* Update to send css class to computeSize. Fixes:
+  issue 13 - TIMELINE: Event labels wrap on FF 3 on Mac
+  issue 30 - TIMELINE : Event labels wrap when 'classname' attribute is added and text is bold
+  NOTE: fixes don't work unless latest Simile-Ajax library is used. Will be
+  automatically used after it is released.
+  -- LarryK rev 1638
+* Added and revised autoWidth. AutoWidth automatically calculates and sets the 'width' for 
+  the Timeline's bands and for the overall Timeline. The 'width,' for horizontal
+  Timelines, is actually the 'height' style of the various divs.
+  
+  The event painters do not calculate the tracks of all the events when they are loaded,
+  the event tracks are only calculated when they are viewed or are about to be viewed.
+  In the same way, the needed width is re-calculated whenever a new set of events
+  are viewed or are about to be viewed. If the new needed width is greater than the
+  current width, the increase is animated. See the example.
+  
+  To use autoWidth:
+  1) You will be modifying the classic theme's settings in your html file. 
+  2) Set the theme's autoWidth to true
+  3) Optionally update the theme's autoWidthAnimationTime setting.
+  4) Optionally update the autoWidthMargin settings in the Theme. The margin, per
+     band, is used to set how close the bottom of the lowest track is to the 
+     edge of the band's div. The units are total track width. There are two settings,
+     one for overview bands, the second for others.
+  5) After you have loaded your events, call tl.finishedEventLoading() where tl is the 
+     Timeline object returned from Timeline.create. 
+  Demo: examples/test_example2/test_example2.html
+  -- LarryK rev 1630, 1643
+* Updated License to refer to JQuery -- LarryK rev 1643 
+* Added License file to zip files -- LarryK rev 1643
+* Changed example files to refer to Google Simile directory. -- LarryK rev 1643
+* Fixed: autoWidth wasn't working on Safari/Windows. -- LarryK rev 1644
+* Fixed issue 33: added event attribute durationEvent. 
+  Values of isDuration and durationEvent must be true or false for JSON and
+  "true" or "false" for XML and SPARCL. Otherwise results are indeterminate.
+  This can be a breaking change for event sources that were using values
+  other than the above. -- LarryK rev 1654
+* Added event attribute trackNum for developers to specify a track number.
+  See issue 26. -- LarryK rev 1654
+* Improve autoWidth for overview bands: calculation should include overviewTrack.offset
+  -- LarryK rev 1655
+* Add English day names to en locale -- LarryK rev 1656
+* Rebuilt bundle files with new ver of Ajax lib. -- LarryK rev 1658
+* Split band.js out of timeline.js. Assign event IDs sequentially rather than using 
+  random number generator. Add formated ids to event tapes, labels, icons to
+  enable a single listener to retrieve state from the id. Added support functions
+  event-utils.js.  -- LarryK rev 1659
+* Highlighting testing using Religions example. Restored event highlight colors to theme
+  to fix.  -- LarryK rev 1659
+* New feature: When highlighting events on a Timeline, default is to highlight the event's
+  icon or tape. If theme.event.highlightLabelBackground is true, the label's background
+  will also be changed to the highlight color. See the Jewish timeline example.
+   -- LarryK rev 1659
+* Fixed issue 31, added event's classname attribute to div for icons too.
+   -- LarryK rev 1659
+* event's tape and highlight div's need index num in id since there can be more
+  than one tape div per event. -- And id must be unique. -- LarryK rev 1661
+* Added EventPaintListener hook to original-painter. Enables clients to hook into
+  painting life cycle. See original-painter.js. -- LarryK rev 1661
+* Changed calculation of labelTop for paintImpreciseInstantEvent to be same 
+  calculation as in paintPreciseDurationEvent in original-painter.
+  Problem was that label was too close to tape (and would sometimes overlap)
+  for Imprecise Instant Events. Test example 2, imprecise instant event at
+  year 4400 (with thick tape) looks much better with the change.
+  -- LarryK rev 1661
+* Added  track.offset setting to original-painter. Enables specific
+  control over top margin of band event painting. Very useful when a
+  Timeline has multiple event bands or a pseudo event band that is just
+  used for labeling above an event band.  -- LarryK rev 1661
+* Added instant.impreciseIconMargin to original-painter. Enables specific
+  control over top margin of icon (margin between bottom of tape and 
+  top of icon). Only used if the event has a tape and an icon.
+  -- LarryK rev 1661
+* Added band arg to eventPaintListener listeners -- LarryK rev 1662
+* Reworked autoWidth to stop recursive call to painter -- LarryK rev 1663
+* Further autoWidth work to have Timeline monitor scroll of bands rather
+  than having bands call up into Timeline. Eliminated sleep for 
+  smoother scrolling with autoWidth -- LarryK rev 1664
+* Use new maxHeight param from SimileAjax for setting maxHeight of 
+  bubbles. Added theme.bubble.maxHeight with default of 0 (no maximum).
+  Old theme param of bubble.height is not used within source of
+  Timeline, so removed it. -- LarryK rev 1667
+* Span decorator improvements: now can have null labels. New param of 
+  inFront. If true, then the span is in front of all layers but the events.
+  Now uses color attribute if present, else css. -- LarryK rev 1677
+* Span point decorator: Now uses color attribute if present, else css.
+   -- LarryK rev 1677
+* Timeline start and end feature: Optionally add theme.timeline_start,
+  theme.timeline_stop to disable movement of the Timeline beyond the 
+  start and/or stop. The setting affects the entire Timeline and must
+  be set in the theme of the first band. Depending on the relative
+  resolutions of the bands, different amounts of the various bands 
+  will be seen when at a start or stop edge, depending on which band
+  was being moved and by how much. In addition to setting the timeline_start
+  and _stop, you may want to add span decorators to cover up the 
+  unused parts of the Timeline. See example2. Note that the Timeline
+  will not be movable past a start/stop edge but it can be initially
+  loaded beyond the edges by using the date parameter of the Band Info.
+  -- LarryK rev 1677
+  
+* When you run run.bat, we now serve
+  http://localhost:9999/ajax/api - from src/webapp/ajax/api/
+  http://localhost:9999/timeline - from src/webapp/site/
+  http://localhost:9999/timeline/api - from src/webapp/timeline/api/
+  -- David H rev 1705
+
+* PointHighlightDecorator now uses the width parameter, not CSS.
+  Issue is that the Point Highlight Decorator is centered on the point in time
+  being decorated. So the JS needs to calculate based on the width--therefore
+  don't use CSS for width. Thanks to Christian Thiemann.
+* Revised all examples to use new directory layout. 
+  -- LarryK rev 1729
+* Added CompactPainter, which allows for large images and can render
+  image stacks. See the new compact-painter example.
+  -- David H rev 1759
+* Added Timeline.version string in timeline.js. Issue 60.
+  Added Timeline.writeVersion -- a helper that writes out the 
+  current version. Updated examples to use it.
+  Updated build.xml to include Ajax new styles directory.
+  Fixed overview painter to use event's classname attribute if present.
+  Add a test for this to test-example.
+  -- LarryK rev 1813
+* Fixed build.xml to not include .bak files.
+  Moved contents of /site up one level into /webapp -- per David H.
+  Fixed library references in all examples to match new dir layout.
+  -- LarryK rev 1814
+* Added src/misc/fix_svn_props.txt -- used to correctly set props on
+  example files. Enables them to be run in browser from svn repo. 
+  Changed timeline-api to use MIT Simile Ajax v 2.2.0.
+  Changed version to 2.3.0 in anticipation of the release.
+  -- LarryK rev 1821
+* Also need to set mime type to be text/xml for xml src files.
+  -- LarryK rev 1822
+* Bug fix: misspelled className as classname -- LarryK rev 1823
+* Fixed IE-only bug. Chokes on <span id='x' />. Changed to <span id='x'></span> and all is well.
+  Another IE only bug: double class name selectors don't work on 
+  IE. Eg <div class 'foo bar' /> should be selected with css selector .foo.bar (or .bar.foo) 
+  Works everywhere but ie. So added label-, icon-, tape- to className plus className by
+  itself in original_painter. Additional prefixes: highlight- for event-highlight,
+  small- for overview painter. Problem was caught by test-example.
+  -- LarryK rev 1824
+* Updated jetty config file to serve 
+  http://localhost:9999/timeline - from src/webapp/
+  Revised Release Notes for release.
+  -- LarryK rev 1825
+* Changed copyright link to be http://code.google.com/p/simile-widgets/
+  -- LarryK rev 1826
+
+  
+
+    
+Version 2.2.0 -- September 23, 2008
+* Prep for 2.2.0: updated RELEASE_NOTES -- LarryK rev 1593
+* Added comments per MPS in timeline-api.js that bundle=true
+  is needed unless you've installed full source
+  -- LarryK rev 1593
+* Added comments to original-painter.js -- LarryK rev 1593
+* Re-built to pick up new simile-ajax that includes jquery 1.2.6
+  -- eob rev 1589
+  
+Version 2.1.0 -- September 19, 2008
+* Prep for 2.1.0: updated examples, readme. created RELEASE_NOTES LarryK
+* Added timeline_libraries.zip to build file. Removed install.sh
+  -- LarryK rev 1579  
+* Event attribute classname is added to the classnames for the event's label
+  and tape divs. Eg classname of 'hot_event' will result in div classes of
+  'timeline-event-label hot_event' and 'timeline-event-tape hot_event' for
+  the event's Timeline label and tape, respectively. Change is that classname
+  is now added to the tape's div. -- LarryK rev 1576
+* Re-worked function Timeline.DefaultEventSource.Event in sources.js to use
+  named arguments (via a hash/anon object) rather than positional arguments.
+  19 positional arguments are too many! Now much easier and cleaner to add
+  additional event attributes.  
+  Note: this is a breaking change for anyone who calls Event directly. But since
+  the wiki page about dynamic events recommends calling loadXML, etc, I
+  hoping that this won't cause anyone much pain. And the new format is
+  MUCH easier to use as a developer.  -- LarryK rev 1576
+* New event attribute eventID is a 'cookie' attribute that is stored, not used
+  by the Timeline library. If you write a custom labeller or event bubble
+  filler, the attribute can be obtained using the getEventID() method on the
+  event object.  -- LarryK rev 1576
+* New event attribute caption superceedes hoverText. hoverText is deprecated.
+  For now, it will live on for backwards compatibility.  -- LarryK rev 1576
+* Event attributes barImage and barRepeat renamed to tapeImage and tapeRepeat.
+  No backwards compatibility. (Breaking change from previous checkin)
+   -- LarryK rev 1576
+* Fix: Event color attribute now properly sets the background color of the bar.
+  Note that events (where isDuration = true) have opacity applied. See 
+  http://code.google.com/p/simile-widgets/wiki/Timeline_EventSources (LarryK) rev 1569
+* New event attribute barImage sets the event's bar div background-image.
+  New event attribute barRepeat sets the background-repeat. Default is 'repeat'
+  Cubism example updated to demonstrate color, textColor, barImage, barRepeat and
+  hoverText attributes. For a handy stripe generator, see
+  http://www.stripegenerator.com (LarryK) rev 1569
+* Fix: Event attribute hoverText was not properly processed by JSON or SPARCL sources
+  (LarryK) rev 1569
+* Build process now creates timeline_source.zip which has source, examples and the
+  jetty web server. Enables easy access with for folks without svn. (LarryK) rev 1569
+* Added copy of JFK timeline in examples with Dutch locale set.
+  (LarryK) rev 1560
+* Added forceLocale parameter to timeline-api.js to force a locale for testing
+  (LarryK) rev 1560
+* Added Dutch localization (Marko) rev 1560
+* Added mouse-wheel scroll. Mouse-wheel acts as left and right arrow keys. Theme
+  controls whether the mouse-wheel scrolls, zooms or moves the page (if the page
+  has a scroll-bar). Docs: see webapp/docs/create-timelines.html
+  (LarryK) rev 1553
+* Additional support in timeline-api for using your own server for Timeline
+  libraries (LarryK) rev 1553
+* Separation of javascript and css (gm.marko) rev 1326
+* Added mouse-wheel zoom functionality. It operates on a per-band basis, keeping
+  the date under the mouse cursor static while the timeline around it scales. 
+  Zoom is specified as user-defined steps. Documentation and a working demo in 
+  the webapp/docs/create-timelines.html page (halcyon1981) rev 1418
+* Added support for 'hoverText' - title pop-ups on Exhibit-based timelines
+  (Vincent.Vazzo) rev 1411
+
+
+Version 2.0
+* Software changes
+* Moved svn repository to Google code
+
