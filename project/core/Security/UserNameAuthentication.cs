@@ -8,8 +8,41 @@ using ThoughtWorks.CruiseControl.Remote.Messages;
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
     /// <summary>
-    /// Stores a user name - authentication is merely that the names match.
+    /// <para>
+    /// User name authentication checks that the user name is valid.
+    /// </para>
     /// </summary>
+    /// <title>User Name Authentication</title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code title="Simple example">
+    /// &lt;simpleUser name="johndoe" display="John Doe" /&gt;
+    /// </code>
+    /// <code title="Wildcard example">
+    /// &lt;simpleUser name="*" /&gt;
+    /// </code>
+    /// <para>
+    /// The following example shows how this user definition can be used with an internal security definition.
+    /// </para>
+    /// <code title="Example in Context">
+    /// &lt;internalSecurity&gt;
+    /// &lt;users&gt;
+    /// &lt;simpleUser name="johndoe" display="John Doe"/&gt;
+    /// &lt;/users&gt;
+    /// &lt;permissions&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/permissions&gt;
+    /// &lt;/internalSecurity&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para>
+    /// This element simply stores a user name - authentication is that the user name is a valid name.
+    /// </para>
+    /// <para>
+    /// It is possible to use wildcards in this element - see <link>Wildcards in User Names</link>.
+    /// </para>
+    /// </remarks>
     [ReflectorType("simpleUser")]
     public class UserNameAuthentication
         : IAuthentication
@@ -45,6 +78,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The login name for this user.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("name")]
         public string UserName
         {
@@ -55,6 +90,11 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The display name for this user.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// If this element is not set, the name will be used for the display name.
+        /// </remarks>
         [ReflectorProperty("display", Required = false)]
         public string DisplayName
         {

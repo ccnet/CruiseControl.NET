@@ -8,8 +8,38 @@ using ThoughtWorks.CruiseControl.Remote.Messages;
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
     /// <summary>
-    /// Stores a user name and password - authentication is that the password is valid for the user name.
+    /// <para>
+    /// User password authentication checks that the user name and password combination is valid.
+    /// </para>
     /// </summary>
+    /// <title>User Password Authentication</title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code title="Simple example">
+    /// &lt;passwordUser name="johndoe" password="whoareyou" display="John Doe" /&gt;
+    /// </code>
+    /// <para>
+    /// The following example shows how this user definition can be used with an internal security definition.
+    /// </para>
+    /// <code title="Example in Context">
+    /// &lt;internalSecurity&gt;
+    /// &lt;users&gt;
+    /// &lt;passwordUser name="johndoe" password="whoareyou" display="John Doe"/&gt;
+    /// &lt;/users&gt;
+    /// &lt;permissions&gt;
+    /// &lt;!-- Omitted for brevity --&gt;
+    /// &lt;/permissions&gt;
+    /// &lt;/internalSecurity&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para>
+    /// This element simply stores a user name and password - authentication is that the password is valid for the user name.
+    /// </para>
+    /// <para>
+    /// It is possible to use wildcards in this element - see <link>Wildcards in User Names</link>.
+    /// </para>
+    /// </remarks>
     [ReflectorType("passwordUser")]
     public class UserPasswordAuthentication
         : IAuthentication
@@ -48,6 +78,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The name for this user.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("name")]
         public string UserName
         {
@@ -58,6 +90,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The password for this user.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("password")]
         public string Password
         {
@@ -76,7 +110,12 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The display name for this user.
         /// </summary>
-        [ReflectorProperty("display", Required=false)]
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// If this is not set, the name will be used as the display name.
+        /// </remarks>
+        [ReflectorProperty("display", Required = false)]
         public string DisplayName
         {
             get { return displayName; }
