@@ -107,7 +107,7 @@
 	</target>
 
 	<target name="project.level.packages" description="Generate the project level packages"
-          depends="build.projectStats.package,build.projectConfig.package,build.modificationHistory.package,build.packageList.package,build.ohlohStats.package">
+          depends="build.projectStats.package,build.projectConfig.package,build.projectTimeline.package,build.modificationHistory.package,build.packageList.package,build.ohlohStats.package">
 	</target>
 
 	<target name="build.projectStats.package" description="Generates the project statistics package">
@@ -122,16 +122,25 @@
 		</zip>
 	</target>
 
-	<target name="build.projectConfig.package" description="Generates the project configuration package">
-		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
-		<zip zipfile="${build.dir}/WebDashboard/packages/ProjectConfig.zip">
-			<fileset basedir="${src.dir}/WebDashboard/packages/ProjectConfig">
-				<include name="*.*"/>
-			</fileset>
-		</zip>
-	</target>
+  <target name="build.projectConfig.package" description="Generates the project configuration package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/ProjectConfig.zip">
+      <fileset basedir="${src.dir}/WebDashboard/packages/ProjectConfig">
+        <include name="*.*"/>
+      </fileset>
+    </zip>
+  </target>
 
-	<target name="build.modificationHistory.package" description="Generates the modification history package">
+  <target name="build.projectTimeline.package" description="Generates the project timeline package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/ProjectTimeline.zip">
+      <fileset basedir="${src.dir}/WebDashboard/packages/ProjectTimeline">
+        <include name="*.*"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.modificationHistory.package" description="Generates the modification history package">
 		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
 		<zip zipfile="${build.dir}/WebDashboard/packages/ModificationHistory.zip">
 			<fileset basedir="${src.dir}/WebDashboard/packages/ModificationHistory">

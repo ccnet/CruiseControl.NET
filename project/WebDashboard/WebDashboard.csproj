@@ -823,6 +823,7 @@
     <Content Include="javascript\Timeline\timeline-api.js" />
     <Content Include="javascript\Timeline\timeline-bundle.css" />
     <Content Include="javascript\Timeline\timeline-bundle.js" />
+    <Content Include="packages\ProjectTimeline\Manifest.xml" />
     <Content Include="packages\DupFinder\Manifest.xml" />
     <Content Include="packages\MSTest\Manifest.xml" />
     <Content Include="packages\OhlohStats\Manifest.xml" />
@@ -931,6 +932,9 @@ xcopy/y/q "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"</PostBuildEvent>
           <IISUrl>
           </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
