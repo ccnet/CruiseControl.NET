@@ -298,6 +298,10 @@
                             builder.Append("[" + TrimValue(childElement.Value) + "]");
                             break;
 
+                        case "include":
+                            builder.Append("{include:" + TrimValue(childElement.Value) + "}");
+                            break;
+
                         default:
                             builder.Append(ParseElement(childElement));
                             break;
