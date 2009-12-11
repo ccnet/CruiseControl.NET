@@ -71,6 +71,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// &lt;buildArgs&gt;/C NET STOP "Service name"&lt;/buildArgs&gt;
     /// &lt;/exec&gt;
     /// </code>
+    /// <para>
+    /// The following parameters are passed to the external program using environment variables, in addition to those you specify in
+    /// the &lt;environment&gt; element.:
+    /// </para>
+    /// <include>Integration Properties</include>
     /// </remarks>
     [ReflectorType("exec")]
 	public class ExecutableTask
