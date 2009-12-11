@@ -1,0 +1,822 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://thoughtworks.org/ccnet/1/5"
+    elementFormDefault="qualified"
+    xmlns="http://thoughtworks.org/ccnet/1/5"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="cruisecontrol">
+    <xs:annotation>
+      <xs:documentation>The root element for a CruiseControl.NET server configuration.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="project" type="project">
+          <xs:annotation>
+            <xs:documentation>A build project.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="queue" type="queue">
+          <xs:annotation>
+            <xs:documentation>
+              Configure the behaviour of the build queues.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="queue">
+    <xs:all>
+      <xs:element name="duplicates" type="QueueDuplicateHandlingMode" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Defines how duplicates should be handled.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="lockqueues" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A comma sperated list of queue names that the queue should acquire a lock against.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="String" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The name of the queue.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="project">
+    <xs:all>
+      <xs:element name="workingDirectory" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The Working Directory for the project (this is used by other blocks). Relative paths are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Working Directory is meant to contain the checked out version of the project under integration. Make sure this folder us unique per project to prevent problems with the build. You don't need to quote the Working Directory, even if it contains spaces.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="artifactDirectory" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The Artifact Directory for the project (this is used by other blocks). Relative paths are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Artifact Directory is meant to be a persistence location for anything you want saved from the results of the build, e.g. build logs, distributables, etc. Make sure this folder us unique per project to prevent problems with reporting about a build. You don't need to quote the Aftifact Directory, even if it contains spaces.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name=" webURL" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>A reporting URL for this project. This is used by CCTray and the Email Publisher. Typically you should navigate to the Project Report on the Dashboard, and use its URL.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name=" category" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>A general category for this project. This is used by the dashboard to provide groupings to the project. Categories do not span servers.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="modificationDelaySeconds" type="xs:positiveInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The minimum number of seconds allowed between the last check in and the start of a valid build.
+            If any modifications are found within this interval the system will sleep long enough so the last checkin is just outside this interval. For example if the modification delay is set to 10 seconds and the last checkin was 7 seconds ago the system will sleep for 3 seconds and check again. This process will repeat until no modifications have been found within the modification delay window.
+            This feature is in CruiseControl.NET for Source Control systems, like CVS, that do not support atomic checkins since starting a build half way through someone checking in their work could result in invalid 'logical' passes or failures. The property is optional though so if you are using a source control system with atomic checkins, leave it out (and it will default to '0').</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="sourcecontrol" type="SourceControl" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The source control system to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="triggers" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>Trigger blocks allow you to specify when CruiseControl.NET will start a new integration cycle.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="parameterTrigger" type="parameterTrigger">
+              <xs:annotation>
+                <xs:documentation>
+                  Trigger to add build parameters to an integration request.
+                  Like all triggers, the parameterTrigger must be enclosed within a triggers element in the appropriate Project Configuration Block.
+                  The configuration of the nested trigger is not the same as when using that trigger outside a filter trigger. When using the &lt;parameterTrigger&gt;
+                  element, the inner trigger must be specified with the &lt;trigger&gt;
+                  element. You could not use the &lt;intervalTrigger&gt; trigger element in this example.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="projectTrigger" type="projectTrigger">
+              <xs:annotation>
+                <xs:documentation>
+                  The Project Trigger is used to trigger a build when the specified dependent project has completed its build. This trigger can help you split your build process across projects and servers. For example, you could have a CCNet project that will trigger the regression test suite once the main development build has completed successfully. This dependent build could be running on either a local or a remote CCNet server.
+                  The Project Trigger works by using .NET remoting to poll the status of the dependent project. Whenever it detects that the dependent project has completed a build, the Project Trigger will fire. The Project Trigger can be configured to fire when the dependent project build succeeded, failed or threw an exception. In order to avoid hammering the remote project through polling, the Project Trigger is composed of an Interval Trigger  that will set a polling interval to 5 seconds. This inner trigger can be adjusted through changing the configuration.
+                  Like all triggers, the projectTrigger must be enclosed within a triggers element in the appropriate Project Configuration Block.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="scheduleTrigger" type="scheduleTrigger">
+              <xs:annotation>
+                <xs:documentation>
+                  The Schedule Trigger is used to specify that an integration should be run at a certain time on certain days. By default, an integration will only be triggered if modifications have been detected since the last integration. The trigger can be configured to force a build even if have occurred to source control. The items to watch for modifications are specified with Source Control Blocks.
+                  Like all triggers, the scheduleTrigger must be enclosed within a triggers element in the appropriate Project Configuration Block.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="urlTrigger" type="urlTrigger">
+              <xs:annotation>
+                <xs:documentation>
+                  The Url Trigger is used to trigger a CCNet build when the page at a particular url changes. The Url Trigger will poll the specified url according to a configured polling interval to detect if the last modified date of the page has changed since the last integration.
+                  This trigger is especially useful in reducing the load on your source control system caused by the polling for modifications performed by an Interval Trigger. If your source control system supports trigger scripts (such as the use of commitinfo scripts in CVS), you can use create a trigger to touch the page that is being monitored by CCNet to start a new integration.
+                  Like all triggers, the urlTrigger must be enclosed within a triggers element in the appropriate Project Configuration Block.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="tasks" type="Tasks" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A set of Tasks to run as part of the build. A failed task will fail the build and any subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="prebuild" type="Tasks" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A set of Tasks to run before the build starts and before the source is updated. A failed task will fail the build and any subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="publishers" type="Tasks" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A set of Tasks that are run after the build is complete. These tasks are used primarily to clean up after the build and to publish and report on the build results. All tasks in this section will always run regardless of whether previous tasks fail or the build is broken. You should always set an Xml Log Publisher in this section so that your Web Dashboard will be able to report results.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>The name of your project - this must be unique for any given CruiseControl.NET server.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="queue" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation>The name of the integration queue that this project will use.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="queuePriority" type="xs:positiveInteger" use="optional">
+      <xs:annotation>
+        <xs:documentation>
+          The priority of this project within the integration queue. If multiple projects have pending requests in the specified queue then these requests will be executed according to their priority. Lower priority numbers indicate that integration requests for this project will execute before other projects in the same queue, however projects with priority 0 are always executed after projects with non-zero priorities in the same queue.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:simpleType name="String">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="SourceControl" abstract="true"/>
+
+  <xs:complexType name="nullSourceControl">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:attribute name="failGetModifications" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation>Defines whether or not to fail the checking for modifications.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="failLabelSourceControl" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation>Defines whether or not to fail the labeling.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="failGetSource" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation>Defines whether or not to fail the getting of the source.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Tasks">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="nullTask" type="nullTask">
+        <xs:annotation>
+          <xs:documentation>
+            The Null Task is a task that doesn't do anything - it simply returns successfully. This is useful for projects that simply monitor the source control system for changes but don't need to do anything.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="parallel" type="parallel">
+        <xs:annotation>
+          <xs:documentation>
+            Runs a set of child tasks in parallel. Each task will run at the same time as the other tasks.
+            To run a set of tasks in sequential order within this task, use the Sequential Task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="powershell" type="powershell">
+        <xs:annotation>
+          <xs:documentation>
+            Runs a PowerShell script.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="rake" type="rake">
+        <xs:annotation>
+          <xs:documentation>
+            Executes Rake.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="rss" type="rss">
+        <xs:annotation>
+          <xs:documentation>
+            This publisher generates an RSS file reporting the latest results for a Project.
+            The RSS feed is available via the Dasboard in the Project Report. There needs to be 1 build done with this publisher for the icon to show up.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="sequential" type="sequential">
+        <xs:annotation>
+          <xs:documentation>
+            Runs a set of child tasks in order. This task is primarily designed for scenarios where execution can take more than more path (e.g. Parallel Task). This is normally not required for tasks directly under the prebuild, tasks or publishers element in a project.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="statistics" type="statistics">
+        <xs:annotation>
+          <xs:documentation>
+            The publisher can be used to collect and update statistics for each build in a file. Some of the statistics which would be collected are build durations and test count. At the minimal, the publisher can be configured with just an empty <statistics /> element in the publishers section. This would pick up some default statistics for capturing during the build process.
+            Statistics publisher must come after any File Merge tasks in the publishers section, in case you want to collect statistics from merged files.
+            The task will generate a statistics.csv and report.xml file in the artifact directory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="synchronised" type="synchronised">
+        <xs:annotation>
+          <xs:documentation>
+            A sychronisation context across multiple tasks or projects.
+            Only one task can be in a synchronisation context at any time. This provides a mechanism for locking, either within a project or inbetween projects.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="nullTask">
+    <xs:all>
+      <xs:element name="simulateFailure" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Defines whether to fail the task or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="parallel">
+    <xs:all>
+      <xs:element name="tasks" type="Tasks" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The tasks to run in parallel.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="powershell">
+    <xs:all>
+      <xs:element name="script" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The PowerShell script to run.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="scriptsDirectory" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The directory that the PowerShell scripts are stored in.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="buildArgs" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Any arguments to pass into the script.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="environment" type="EnvironmentVariables" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Any environment variables to pass into the script.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="buildTimeoutSeconds" type="xs:positiveInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The maximum number of seconds the build can take. If the build process takes longer than this period, it will be killed.  Specify this value as zero to disable process timeouts.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The PowerShell executable.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="successExitCodes" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The exit codes that mark the script as being successful.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="rake">
+    <xs:all>
+      <xs:element name="buildArgs" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Any arguments to pass through to Rake (e.g to specify build properties).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="baseDirectory" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The directory to run the Rake process in. If relative, is a subdirectory of the Project Working Directory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="buildTimeoutSeconds" type="xs:positiveInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Number of seconds to wait before assuming that the process has hung and should be killed.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="quiet" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Do not log messages to standard output.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The path of the version of Rake you want to run. If this is relative, then must be relative to either (a) the base directory, (b) the CCNet Server application, or (c) if the path doesn't contain any directory details then can be available in the system or application's 'path' environment variable.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="rakefile" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the Rakefile to run, relative to the baseDirectory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="silent" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Like quiet but also suppresses the 'in directory' announcement.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="targetList" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A list of targets to be called. CruiseControl.NET does not call Rake once for each target, it uses the Rake feature of being able to specify multiple targets.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="target" type="String">
+              <xs:annotation>
+                <xs:documentation>The name of the target.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="trace" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Turns on invoke/execute tracing and enables full backtrace.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="rss">
+    <xs:all>
+      <xs:element name="items" type="xs:positiveInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The number of items to be displayed.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="sequential">
+    <xs:all>
+      <xs:element name="tasks" type="Tasks" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The tasks to run in sequence.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="continueOnFailure" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Should the tasks continue to run, even if there is a failure?
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="statistics">
+    <xs:all>
+      <xs:element name="statisticList" type="Statistics" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The list of statistics to be included in the build.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="synchronised">
+    <xs:all>
+      <xs:element name="tasks" type="Tasks" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The tasks to run within the synchronisation context. These tasks will be run in the order they are defined.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="continueOnFailure" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Should the tasks continue to run, even if there is a failure?
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="context" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the synchronisation context. This is only needed if multiple synchronisation contexts are desired.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="timeout" type="Timeout" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The timeout period (in seconds).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="trigger" abstract="true"/>
+
+  <xs:complexType name="parameterTrigger">
+    <xs:complexContent>
+      <xs:extension base="trigger">
+        <xs:all>
+          <xs:element name="trigger" type="trigger" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The inner trigger to filter.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="parameters" type="NameValuePairs" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The parameters to pass onto the inner trigger.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="projectTrigger">
+    <xs:complexContent>
+      <xs:extension base="trigger">
+        <xs:all>
+          <xs:element name="project" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The name of the dependent project to trigger a build from.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="serverUri" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The URI for the CCNet server containing the dependent project.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="triggerStatus" type="IntegrationStatus" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The status of the dependent project that will be used to trigger the build. For example, if this value is set to Success then a build will be triggered when the dependent project completes a successful build.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="innerTrigger" type="trigger" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The trigger used to modulate the polling interval for the ProjectTrigger. By default, this is set to a ForceBuild IntervalTrigger that will cause the trigger to check the status of the dependent project every 5 seconds.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="triggerFirstTime" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Whether to trigger on the first time or not.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="scheduleTrigger">
+    <xs:complexContent>
+      <xs:extension base="trigger">
+        <xs:all>
+          <xs:element name="buildCondition" type="BuildCondition" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The condition that should be used to launch the integration. By default, this value is  *IfModificationExists*, meaning that an integration will only be triggered if modifications have been detected. Set this attribute to  *ForceBuild* in order to ensure that a build should be launched regardless of whether new modifications are detected.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="weekDays" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The week days on which the build should be run (eg. Monday, Tuesday). By default, all days of the week are set.
+              </xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:choice minOccurs="1" maxOccurs="7">
+                <xs:element name="weekDay" type="DayOfWeek">
+                  <xs:annotation>
+                    <xs:documentation>The day of the week.</xs:documentation>
+                  </xs:annotation>
+                </xs:element>
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="time" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The time of day that the build should run at. The time should be specified in a locale-specific format (ie. H:mm am/pm is acceptable for US locales.)
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="randomOffSetInMinutesFromTime" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Adds a random amount of minutes between 0 and set value to the time. This is mainly meant for spreading the load of actions to a central server. Value must be between 0 and 59.
+              </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:int">
+                <xs:minInclusive value="0"/>
+                <xs:maxInclusive value="59" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element name="name" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The name of the trigger. This name is passed to external tools as a means to identify the trigger that requested the build.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="urlTrigger">
+    <xs:complexContent>
+      <xs:extension base="trigger">
+        <xs:all>
+          <xs:element name="buildCondition" type="BuildCondition" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The condition that should be used to launch the integration. By default, this value is  *IfModificationExists*, meaning that an integration will only be triggered if modifications have been detected. Set this attribute to  *ForceBuild* in order to ensure that a build should be launched regardless of whether new modifications are detected.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="url" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The url to poll for changes.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="name" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The name of the trigger. This name is passed to external tools as a means to identify the trigger that requested the build.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="seconds" type="xs:double" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The number of seconds after an integration cycle completes before triggering the next integration cycle.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="initialSeconds" type="xs:double" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The delay (in seconds) from CCNet startup to the first check for modifications.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Statistics"></xs:complexType>
+  <xs:complexType name="Timeout"></xs:complexType>
+  <xs:complexType name="DynamicValues"></xs:complexType>
+  <xs:complexType name="EnvironmentVariables"></xs:complexType>
+  <xs:complexType name="NameValuePairs"></xs:complexType>
+
+  <xs:simpleType name="BuildCondition">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NoBuild"/>
+      <xs:enumeration value="IfModificationExists"/>
+      <xs:enumeration value="ForceBuild"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="DayOfWeek">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Monday"/>
+      <xs:enumeration value="Tuesday"/>
+      <xs:enumeration value="Wednesday"/>
+      <xs:enumeration value="Thursday"/>
+      <xs:enumeration value="Friday"/>
+      <xs:enumeration value="Saturday"/>
+      <xs:enumeration value="Sunday"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="IntegrationStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success"/>
+      <xs:enumeration value="Failure"/>
+      <xs:enumeration value="Exception"/>
+      <xs:enumeration value="Unknown"/>
+      <xs:enumeration value="Cancelled"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="QueueDuplicateHandlingMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UseFirst"/>
+      <xs:enumeration value="ApplyForceBuildsReAdd"/>
+      <xs:enumeration value="ApplyForceBuildsReplace"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

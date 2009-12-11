@@ -6,6 +6,7 @@ using ThoughtWorks.CruiseControl.Core.Security;
 using System.Collections.Generic;
 using System.Configuration;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Reflection;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
@@ -52,9 +53,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             Configuration configuration = new Configuration();
             string ConflictingXMLNode = string.Empty;
             List<string> projectNames = new List<string>();
-            VerifyDocumentHasValidRootElement(document);
 
+            // Validate the document element
             var actualErrorProcesser = errorProcesser ?? new DefaultErrorProcesser();
+            VerifyDocumentHasValidRootElement(document, actualErrorProcesser);
 
             InvalidNodeEventHandler invalidNodeHandler = (args) =>
             {
@@ -149,12 +151,31 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             configuration.AddProject(project);
         }
 
-		private void VerifyDocumentHasValidRootElement(XmlDocument configXml)
+        private void VerifyDocumentHasValidRootElement(XmlDocument configXml, IConfigurationErrorProcesser errorProcesser)
 		{
-			if (configXml.DocumentElement == null || configXml.DocumentElement.Name != ROOT_ELEMENT)
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            if (configXml.DocumentElement == null || configXml.DocumentElement.Name != ROOT_ELEMENT)
 			{
 				throw new ConfigurationException("The configuration document has an invalid root element.  Expected <cruisecontrol>.");
-			}
+            }
+            else if (string.IsNullOrEmpty(configXml.DocumentElement.NamespaceURI))
+            {
+                // Tell the user there is no version information
+                errorProcesser.ProcessWarning("Configuration does not have any version information - assuming the configuration is for version " + version.ToString(2));
+            }
+            else
+            {
+                // The last two items are the version number
+                var parts = configXml.DocumentElement.NamespaceURI.Split('/');
+                var versionNumber = parts[parts.Length - 2] + "." + parts[parts.Length - 1];
+                if (version.ToString(2) != versionNumber)
+                {
+                    // Tell the user the version does not match
+                    errorProcesser.ProcessWarning(
+                        "Version mismatch - CruiseControl.NET is version " + version.ToString(2) +
+                        ", the configuration is for version " + versionNumber);
+                }
+            }
 		}
 
         /// <summary>

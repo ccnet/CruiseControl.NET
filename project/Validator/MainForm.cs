@@ -329,7 +329,7 @@ namespace Validator
 
         private void ValidateData(XmlDocument document)
         {
-            XmlElement rootElement = document.SelectSingleNode("cruisecontrol") as XmlElement;
+            var rootElement = document.DocumentElement.Name == "cruisecontrol" ? document.DocumentElement : null;
             if (rootElement == null)
             {
                 var message = "Configuration is missing root <cruisecontrol> element";
@@ -346,6 +346,16 @@ namespace Validator
                     new HtmlAttribute("class", "results"),
                     GenerateHeader());
                 Configuration configuration = new Configuration();
+                if (!string.IsNullOrEmpty(rootElement.NamespaceURI))
+                {
+                    var parts = rootElement.NamespaceURI.Split('/');
+                    var version = parts[parts.Length - 2] + "." + parts[parts.Length - 1];
+                    myBodyEl.AppendChild(GenerateElement("div", "Target Version: " + version));
+                }
+                else
+                {
+                    myBodyEl.AppendChild(GenerateElement("div", "No version information"));
+                }
 
                 XmlNodeList nodes = rootElement.SelectNodes("*");
                 int row = 0;
