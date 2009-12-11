@@ -133,6 +133,14 @@
                                 output.WriteLine("{info}");
                                 output.Flush();
                             }
+
+                            var xsdFile = Path.Combine(baseFolder, attribute.Name + ".xsd");
+                            if (File.Exists(xsdFile))
+                            {
+                                File.Delete(xsdFile);
+                            }
+
+                            WriteXsdFile(xsdFile, attribute, type, documentation, typeElement);
                         }
                     }
                 }
@@ -147,6 +155,102 @@
             catch
             {
                 Console.ReadKey();
+            }
+        }
+
+        private static void WriteXsdFile(string xsdFile, ReflectorTypeAttribute attribute, Type type, XDocument documentation, XElement typeElement)
+        {
+            using (var output = new StreamWriter(xsdFile))
+            {
+                WriteToConsole("Generating " + attribute.Name + ".xsd", ConsoleColor.White);
+                output.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                output.WriteLine("<xs:schema targetNamespace=\"http://thoughtworks.org/ccnet/1/5\" elementFormDefault=\"qualified\" xmlns=\"http://thoughtworks.org/ccnet/1/5\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">");
+                output.WriteLine("<xs:element name=\"" + attribute.Name + "\" type=\"" + attribute.Name + "\">");
+                if (typeElement != null)
+                {
+                    var summary = RetrieveXmlData(typeElement, "summary");
+                    if (summary != null)
+                    {
+                        output.WriteLine("<xs:annotation>");
+                        output.WriteLine("<xs:documentation>");
+                        output.WriteLine(summary);
+                        output.WriteLine("</xs:documentation>");
+                        output.WriteLine("</xs:annotation>");
+                    }
+                }
+
+                output.WriteLine("</xs:element>");
+                output.WriteLine("<xs:complexType name=\"" + attribute.Name + "\">");
+
+                // Put all the elements into a dictionary since they can be either fields or properties :-(
+                var elements = new Dictionary<MemberInfo, ReflectorPropertyAttribute>();
+                foreach (var field in type.GetFields().OfType<MemberInfo>().Union(type.GetProperties()))
+                {
+                    var attributes = field.GetCustomAttributes(typeof(ReflectorPropertyAttribute), true);
+                    if (attributes.Length > 0)
+                    {
+                        elements.Add(field, attributes[0] as ReflectorPropertyAttribute);
+                    }
+                }
+
+                var enums = new List<Type>();
+                if (elements.Count > 0)
+                {
+                    output.WriteLine("<xs:all>");
+                    foreach (var element in elements)
+                    {
+                        var dataType = (element.Key is FieldInfo) ?
+                            (element.Key as FieldInfo).FieldType :
+                            (element.Key as PropertyInfo).PropertyType;
+                        output.WriteLine(
+                            "<xs:element name=\"" + element.Value.Name + 
+                            "\" type=\"" + dataType.Name + 
+                            "\" minOccurs=\"" + (element.Value.Required ? "1" : "0") +
+                            "\" maxOccurs=\"1\">");
+
+                        var memberName = (element.Key is FieldInfo ? "F:" : "P:") + element.Key.DeclaringType.FullName + "." + element.Key.Name;
+                        var memberElement = (from xmlElement in documentation.Descendants("member")
+                                             where xmlElement.Attribute("name").Value == memberName
+                                             select xmlElement).SingleOrDefault();
+
+                        if (memberElement != null)
+                        {
+                            var description = RetrieveXmlData(memberElement, "summary");
+                            if (description != null)
+                            {
+                                output.WriteLine("<xs:annotation>");
+                                output.WriteLine("<xs:documentation>");
+                                output.WriteLine(description);
+                                output.WriteLine("</xs:documentation>");
+                                output.WriteLine("</xs:annotation>");
+                            }
+                        }
+                        output.WriteLine("</xs:element>");
+                        if (dataType.IsEnum)
+                        {
+                            enums.Add(dataType);
+                        }
+                    }
+
+                    output.WriteLine("</xs:all>");
+                }
+
+                output.WriteLine("</xs:complexType>");
+
+                foreach (var enumType in enums)
+                {
+                    output.WriteLine("<xs:simpleType name=\"" + enumType.Name + "\">");
+                    output.WriteLine("<xs:restriction base=\"xs:string\">");
+                    foreach (var value in Enum.GetNames(enumType)){
+                        output.WriteLine("<xs:enumeration value=\"" + value + "\"/>");
+                    }
+
+                    output.WriteLine("</xs:restriction>");
+                    output.WriteLine("</xs:simpleType>");
+                }
+
+                output.WriteLine("</xs:schema>");
+                output.Flush();
             }
         }
 
