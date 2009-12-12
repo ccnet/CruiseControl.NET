@@ -173,7 +173,7 @@
                     {
                         output.WriteLine("<xs:annotation>");
                         output.WriteLine("<xs:documentation>");
-                        output.WriteLine(summary);
+                        output.WriteLine(MakeXmlSafe(summary));
                         output.WriteLine("</xs:documentation>");
                         output.WriteLine("</xs:annotation>");
                     }
@@ -220,7 +220,7 @@
                             {
                                 output.WriteLine("<xs:annotation>");
                                 output.WriteLine("<xs:documentation>");
-                                output.WriteLine(description);
+                                output.WriteLine(MakeXmlSafe(description));
                                 output.WriteLine("</xs:documentation>");
                                 output.WriteLine("</xs:annotation>");
                             }
@@ -252,6 +252,13 @@
                 output.WriteLine("</xs:schema>");
                 output.Flush();
             }
+        }
+
+        private static string MakeXmlSafe(string value)
+        {
+            return value.Replace("&", "&amp;")
+                .Replace("<", "&lt;")
+                .Replace(">", "&gt;");
         }
 
         private static void LoadDependencyDocumentation(string baseFolder, Assembly assembly, XDocument documentation)
