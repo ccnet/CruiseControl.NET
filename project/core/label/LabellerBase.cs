@@ -17,6 +17,8 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// <summary>
         /// The dynamic values to use for the labeller.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("dynamicValues", Required = false)]
         public IDynamicValue[] DynamicValues { get; set; }
         #endregion

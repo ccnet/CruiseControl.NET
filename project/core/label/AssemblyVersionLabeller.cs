@@ -6,9 +6,33 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
 	/// <summary>
-	/// The AssemblyVersionLabeller uses the CruiseControl.NET change number, provided by
-	/// source control systems like Subversion, to build a valid Assembly Version label.
+    /// Provides a valid System.Version label for your .NET assemblies that could be used to set the AssemblyVersionAttribute(). It increments
+    /// the build number on every successful integration and uses the CruiseControl.NET change number, provided by source control systems like
+    /// Subversion, for the revision number component.
 	/// </summary>
+    /// <title>Assembly Version Labeller</title>
+    /// <version>1.4.4</version>
+    /// <example>
+    /// <code title="Minimalist Example">
+    /// &lt;labeller type="assemblyVersionLabeller" /&gt;
+    /// </code>
+    /// <code title="Full Example (build number and revision number component are incremented automatically)">
+    /// &lt;labeller type="assemblyVersionLabeller"&gt;
+    /// &lt;major&gt;1&lt;/major&gt;
+    /// &lt;minor&gt;2&lt;/minor&gt;
+    /// &lt;incrementOnFailure&gt;false&lt;/incrementOnFailure&gt;
+    /// &lt;/labeller&gt;
+    /// </code>
+    /// <code title="Full Example (all properties)">
+    /// &lt;labeller type="assemblyVersionLabeller"&gt;
+    /// &lt;major&gt;1&lt;/major&gt;
+    /// &lt;minor&gt;2&lt;/minor&gt;
+    /// &lt;build&gt;250&lt;/build&gt;
+    /// &lt;revision&gt;1765&lt;/revision&gt;
+    /// &lt;incrementOnFailure&gt;false&lt;/incrementOnFailure&gt;
+    /// &lt;/labeller&gt;
+    /// </code>
+    /// </example>
 	[ReflectorType("assemblyVersionLabeller")]
 	public class AssemblyVersionLabeller
         : LabellerBase
@@ -16,34 +40,45 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 		#region public properties
 
 		/// <summary>
-		/// Sets the value of the major component of the version number.
+        /// Major number component of the version. 
 		/// </summary>
+        /// <version>1.4.4</version>
+        /// <default>0</default>
 		[ReflectorProperty("major", Required = false)]
 		public int Major;
 
 		/// <summary>
-		/// Sets the value of the minor component of the version number.
+        /// Minor number component of the version. 
 		/// </summary>
-		[ReflectorProperty("minor", Required = false)]
+        /// <version>1.4.4</version>
+        /// <default>0</default>
+        [ReflectorProperty("minor", Required = false)]
 		public int Minor;
 
 		/// <summary>
-		/// Sets the value of the build component of the version number.
+        /// Build number component of the version. If not specified the build number is incremented on every successful integration. 
 		/// </summary>
-		[ReflectorProperty("build", Required = false)]
+        /// <version>1.4.4</version>
+        /// <default>-1</default>
+        [ReflectorProperty("build", Required = false)]
 		public int Build = -1;
 
 		/// <summary>
-		/// Sets the value of the revision component of the version number.
+        /// Revision number component of the version. If not specified the revision number is the LastChangeNumber, provided by some VCS (e.g.
+        /// the svn revision with the Subversion task).
 		/// </summary>
-		[ReflectorProperty("revision", Required = false)]
+        /// <version>1.4.4</version>
+        /// <default>-1</default>
+        [ReflectorProperty("revision", Required = false)]
 		public int Revision = -1;
 
 		/// <summary>
-		/// If true, the label will be incremented even if the build fails.
-		/// Otherwise it will only be incremented if the build succeeds.
+        /// Whether to increase the build number component if the integration fails. By default the build number component will only increase
+        /// if the integration was successful.
 		/// </summary>
-		[ReflectorProperty("incrementOnFailure", Required = false)]
+        /// <version>1.4.4</version>
+        /// <default>false</default>
+        [ReflectorProperty("incrementOnFailure", Required = false)]
 		public bool IncrementOnFailure;
 
 		#endregion

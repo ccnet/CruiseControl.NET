@@ -251,6 +251,344 @@
 
   <xs:complexType name="Labeller" abstract="true"/>
 
+  <xs:complexType name="assemblyVersionLabeller">
+    <xs:complexContent>
+      <xs:extension base="Labeller">
+        <xs:all>
+          <xs:element name="major" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Major number component of the version.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="minor" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Minor number component of the version.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="build" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Build number component of the version. If not specified the build number is incremented on every successful integration.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="revision" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Revision number component of the version. If not specified the revision number is the LastChangeNumber, provided by some VCS (e.g. the svn revision with the Subversion task).
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="incrementOnFailure" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Whether to increase the build number component if the integration fails. By default the build number component will only increase if the integration was successful.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the labeller.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="dateLabeller">
+    <xs:complexContent>
+      <xs:extension base="Labeller">
+        <xs:all>
+          <xs:element name="yearFormat" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The format for the year part.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="monthFormat" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The format for the month part.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dayFormat" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The format for the day part.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="revisionFormat" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The format for the revision part.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the labeller.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="defaultlabeller">
+    <xs:complexContent>
+      <xs:extension base="Labeller">
+        <xs:all>
+          <xs:element name="prefix" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Any string to be put in front of all labels.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="postfix" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Any string to be put at the end of all labels.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="initialBuildLabel" type="xs:int" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Allows you to set the initial build number.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="incrementOnFailure" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                If true, the label will be incremented even if the build fails. Otherwise it will only be incremented if the build succeeds.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="labelFormat" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                A format applied to the buildnumber.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the labeller.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="fileLabeller">
+    <xs:complexContent>
+      <xs:extension base="Labeller">
+        <xs:all>
+          <xs:element name="labelFilePath" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The pathname of the file to read. This can be the absolute path or one relative to the project's working directory.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="prefix" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Any string to be put in front of all labels.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="allowDuplicateSubsequentLabels" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Controls whether duplicate labels are permitted or not.  If true, duplicate labels are left intact.  If false, the label will be suffixed with "\-n", where "n" is incremented for each successive duplication.  Defaults to "true"
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the labeller.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="iterationlabeller">
+    <xs:complexContent>
+      <xs:extension base="Labeller">
+        <xs:all>
+          <xs:element name="duration" type="xs:positiveInteger" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The duration of the iteration in weeks.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="releaseStartDate" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The start date for the release (the start date of iteration one).
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="separator" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The separator between the iteration number and the build number.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="prefix" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Any string to be put in front of all labels.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="postfix" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Any string to be put at the end of all labels.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="initialBuildLabel" type="xs:int" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Allows you to set the initial build number.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="incrementOnFailure" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                If true, the label will be incremented even if the build fails. Otherwise it will only be incremented if the build succeeds.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="labelFormat" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                A format applied to the buildnumber.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the labeller.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="lastChangeLabeller">
+    <xs:complexContent>
+      <xs:extension base="Labeller">
+        <xs:all>
+          <xs:element name="prefix" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The string to be prepended onto the last change number.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="allowDuplicateSubsequentLabels" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Controls whether duplicate subsequent labels are permitted or not. If true, duplicate labels are left intact. If false, the label will always be suffixed with ".n", where "n" is incremented for each successive duplication. Defaults to true.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the labeller.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="remoteProjectLabeller">
+    <xs:complexContent>
+      <xs:extension base="Labeller">
+        <xs:all>
+          <xs:element name="serverUri" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The URI to the remote cruise server containing the project to use (defaults to the local build server).
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="project" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The project to retrieve the label from.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the labeller.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="stateFileLabeller">
+    <xs:complexContent>
+      <xs:extension base="Labeller">
+        <xs:all>
+          <xs:element name="project" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The project to retrieve the label from.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the labeller.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
   <xs:complexType name="ProjectAuthorisation" abstract="true"/>
 
   <xs:complexType name="SourceControl" abstract="true"/>
@@ -515,7 +853,7 @@
       <xs:element name="statistics" type="statistics">
         <xs:annotation>
           <xs:documentation>
-            The publisher can be used to collect and update statistics for each build in a file. Some of the statistics which would be collected are build durations and test count. At the minimal, the publisher can be configured with just an empty <statistics /> element in the publishers section. This would pick up some default statistics for capturing during the build process.
+            The publisher can be used to collect and update statistics for each build in a file. Some of the statistics which would be collected are build durations and test count. At the minimal, the publisher can be configured with just an empty &lt;statistics /&gt; element in the publishers section. This would pick up some default statistics for capturing during the build process.
             Statistics publisher must come after any File Merge tasks in the publishers section, in case you want to collect statistics from merged files.
             The task will generate a statistics.csv and report.xml file in the artifact directory.
           </xs:documentation>
@@ -3156,7 +3494,7 @@
   </xs:complexType>
 
   <xs:complexType name="trigger" abstract="true"/>
-  
+
   <xs:complexType name="filterTrigger">
     <xs:complexContent>
       <xs:extension base="trigger">
@@ -3449,7 +3787,7 @@
       </xs:annotation>
     </xs:attribute>
   </xs:complexType>
-  
+
   <xs:complexType name="Timeout" mixed="true">
     <xs:simpleContent>
       <xs:extension base="xs:nonNegativeInteger">
@@ -3463,7 +3801,7 @@
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
-  
+
   <xs:complexType name="EnvironmentVariables">
     <xs:choice minOccurs="1" maxOccurs="unbounded">
       <xs:element name="variable">
@@ -3491,7 +3829,7 @@
       </xs:element>
     </xs:choice>
   </xs:complexType>
-  
+
   <xs:complexType name="NameValuePairs">
     <xs:choice minOccurs="1" maxOccurs="unbounded">
       <xs:element name="namedValue">

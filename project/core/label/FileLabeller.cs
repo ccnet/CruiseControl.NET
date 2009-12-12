@@ -5,10 +5,20 @@ using Exortech.NetReflector;
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
     /// <summary>
-    /// A file labeller which works on the concept of your build process generating label
-    /// stored in a file. The labeller is configured with the location of the file, and it
-    /// reads the file content to generate the label for CCNet.
+    /// The File Labeller is used to generate labels based on the content of a disk file. The labeller is configured with the location of the
+    /// file, and it reads the file content to generate the label for CCNet. The file is read just before the first pre-build task is executed.
     /// </summary>
+    /// <title>File Labeller</title>
+    /// <version>1.3</version>
+    /// <example>
+    /// <code>
+    /// &lt;labeller type="fileLabeller"&gt;
+    /// &lt;labelFilePath&gt;xxx&lt;/labelFilePath&gt;
+    /// &lt;prefix&gt;Foo-&lt;/prefix&gt;
+    /// &lt;allowDuplicateSubsequentLabels&gt;true&lt;/allowDuplicateSubsequentLabels&gt;
+    /// &lt;/labeller&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("fileLabeller")]
     public class FileLabeller 
         : LabellerBase
@@ -35,9 +45,10 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         }
 
         /// <summary>
-        /// The pathname of the file containing the label.  If the pathname is relative, it will be
-        /// interpreted relative to the proejct working directory.
+        /// The pathname of the file to read. This can be the absolute path or one relative to the project's working directory. 
         /// </summary>
+        /// <version>1.3</version>
+        /// <default>n/a</default>
         [ReflectorProperty("labelFilePath", Required = true)]
         public string LabelFilePath
         {
@@ -46,8 +57,10 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         }
 
         /// <summary>
-        /// A prefix to be added to the label read from the file.  Defaults to "".
+        /// Any string to be put in front of all labels.
         /// </summary>
+        /// <version>1.3</version>
+        /// <default>None</default>
         [ReflectorProperty("prefix", Required = false)]
         public string Prefix
         {
@@ -60,6 +73,8 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// intact.  If false, the label will be suffixed with "-n", where "n" is incremented for each
         /// successive duplication.  Defaults to "true"
         /// </summary>
+        /// <version>1.3</version>
+        /// <default>true</default>
         [ReflectorProperty("allowDuplicateSubsequentLabels", Required = false)]
         public bool AllowDuplicateSubsequentLabels
         {

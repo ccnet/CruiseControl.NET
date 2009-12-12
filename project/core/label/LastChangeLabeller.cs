@@ -6,13 +6,19 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
     /// <summary>
-    /// Labeller for use with source code control systems that have numbered changes.
-    /// This labeller uses the last change number (IIntegrationResult.LastChangeNumber) 
-    /// as the build number, with an optional prefix.
+    /// Some source control systems (e.g., AccuRev) have a concept of a "change number", which the Last Change Labeller can use to build a
+    /// label. The following configuration would prefix all labels with the string 'Foo-1-', so the build of change number 213 would be
+    /// labelled 'Foo-1-213'
     /// </summary>
-    /// <remarks>
-    /// This code is based on code\label\DefaultLabeller.cs.
-    /// </remarks> 
+    /// <title>Last Change Labeller</title>
+    /// <version>1.3</version>
+    /// <example>
+    /// <code>
+    /// &lt;labeller type="lastChangeLabeller"&gt;
+    /// &lt;prefix&gt;Foo-1-&lt;/prefix&gt;
+    /// &lt;/labeller&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("lastChangeLabeller")]
     public class LastChangeLabeller
         : LabellerBase
@@ -22,6 +28,8 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// <summary>
         /// The string to be prepended onto the last change number.
         /// </summary>
+        /// <version>1.3</version>
+        /// <default>None</default>
         [ReflectorProperty("prefix", Required = false)]
         public string LabelPrefix = string.Empty;
 
@@ -30,11 +38,11 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// intact. If false, the label will always be suffixed with ".n", where "n" is incremented for each
         /// successive duplication. Defaults to true.
         /// </summary>
+        /// <version>1.3</version>
+        /// <default>true</default>
         [ReflectorProperty("allowDuplicateSubsequentLabels", Required = false)]
         public bool AllowDuplicateSubsequentLabels = true;
-
-
-
+        
         /// <summary>
         /// Generate a label string from the last change number.
         /// If there is no valid change number (e.g. for a forced build without modifications),

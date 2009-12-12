@@ -4,22 +4,59 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
-	/// <summary>Generates label numbers according to Ccp standards.</summary>
+	/// <summary>
+    /// The Date Labeller is used to generate labels in the format "yyyy.mm.dd.build". Using the Date Labeller makes it easy for the user to identify and communicate the date that a particular build occurred.
+    /// </summary>
+    /// <title>Date Labeller</title>
+    /// <version>1.0</version>
+    /// <remarks>
+    /// <para>
+    /// The revision is increased on every build done at the same day, so if you do 2 builds on 2009/01/20, the first will be have label 2009.01.20.001,  and the second will be 2009.01.20.002 
+    /// </para>
+    /// <para>
+    /// This labeller has been contributed by Andy Johnstone
+    /// </para>
+    /// </remarks>
+    /// <example>
+    /// <code title="Minimal Example">
+    /// &lt;labeller type="dateLabeller" /&gt;
+    /// </code>
+    /// </example>
 	[ReflectorType("dateLabeller")]
 	public class DateLabeller
         : LabellerBase
 	{
 		private readonly DateTimeProvider dateTimeProvider;
 
+        /// <summary>
+        /// The format for the year part.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>0000</default>
         [ReflectorProperty("yearFormat", Required = false)]
         public string YearFormat = "0000";
 
+        /// <summary>
+        /// The format for the month part.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>00</default>
         [ReflectorProperty("monthFormat", Required = false)]
         public string MonthFormat = "00";
 
+        /// <summary>
+        /// The format for the day part.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>000</default>
         [ReflectorProperty("dayFormat", Required = false)]
         public string DayFormat = "00";
 
+        /// <summary>
+        /// The format for the revision part.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>000</default>
         [ReflectorProperty("revisionFormat", Required = false)]
         public string RevisionFormat = "000";
 
