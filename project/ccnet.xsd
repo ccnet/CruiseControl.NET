@@ -67,22 +67,23 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name=" webURL" type="String" minOccurs="0" maxOccurs="1">
+      <xs:element name="webURL" type="String" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>A reporting URL for this project. This is used by CCTray and the Email Publisher. Typically you should navigate to the Project Report on the Dashboard, and use its URL.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name=" category" type="String" minOccurs="0" maxOccurs="1">
+      <xs:element name="category" type="String" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>A general category for this project. This is used by the dashboard to provide groupings to the project. Categories do not span servers.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="modificationDelaySeconds" type="xs:positiveInteger" minOccurs="0" maxOccurs="1">
+      <xs:element name="modificationDelaySeconds" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
             The minimum number of seconds allowed between the last check in and the start of a valid build.
             If any modifications are found within this interval the system will sleep long enough so the last checkin is just outside this interval. For example if the modification delay is set to 10 seconds and the last checkin was 7 seconds ago the system will sleep for 3 seconds and check again. This process will repeat until no modifications have been found within the modification delay window.
-            This feature is in CruiseControl.NET for Source Control systems, like CVS, that do not support atomic checkins since starting a build half way through someone checking in their work could result in invalid 'logical' passes or failures. The property is optional though so if you are using a source control system with atomic checkins, leave it out (and it will default to '0').</xs:documentation>
+            This feature is in CruiseControl.NET for Source Control systems, like CVS, that do not support atomic checkins since starting a build half way through someone checking in their work could result in invalid 'logical' passes or failures. The property is optional though so if you are using a source control system with atomic checkins, leave it out (and it will default to '0').
+          </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="sourcecontrol" type="SourceControl" minOccurs="0" maxOccurs="1">
@@ -92,51 +93,17 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="triggers" minOccurs="0" maxOccurs="1">
+      <xs:element name="state" type="stateManager" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            CruiseControl.NET needs to store state about a project. This is data such as the last build label, the time of the last build, and the outcome of the build, etc. The State Manager allows you to specify how and where this data is stored.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="triggers" type="Triggers" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>Trigger blocks allow you to specify when CruiseControl.NET will start a new integration cycle.</xs:documentation>
         </xs:annotation>
-        <xs:complexType>
-          <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:element name="parameterTrigger" type="parameterTrigger">
-              <xs:annotation>
-                <xs:documentation>
-                  Trigger to add build parameters to an integration request.
-                  Like all triggers, the parameterTrigger must be enclosed within a triggers element in the appropriate Project Configuration Block.
-                  The configuration of the nested trigger is not the same as when using that trigger outside a filter trigger. When using the &lt;parameterTrigger&gt;
-                  element, the inner trigger must be specified with the &lt;trigger&gt;
-                  element. You could not use the &lt;intervalTrigger&gt; trigger element in this example.
-                </xs:documentation>
-              </xs:annotation>
-            </xs:element>
-            <xs:element name="projectTrigger" type="projectTrigger">
-              <xs:annotation>
-                <xs:documentation>
-                  The Project Trigger is used to trigger a build when the specified dependent project has completed its build. This trigger can help you split your build process across projects and servers. For example, you could have a CCNet project that will trigger the regression test suite once the main development build has completed successfully. This dependent build could be running on either a local or a remote CCNet server.
-                  The Project Trigger works by using .NET remoting to poll the status of the dependent project. Whenever it detects that the dependent project has completed a build, the Project Trigger will fire. The Project Trigger can be configured to fire when the dependent project build succeeded, failed or threw an exception. In order to avoid hammering the remote project through polling, the Project Trigger is composed of an Interval Trigger  that will set a polling interval to 5 seconds. This inner trigger can be adjusted through changing the configuration.
-                  Like all triggers, the projectTrigger must be enclosed within a triggers element in the appropriate Project Configuration Block.
-                </xs:documentation>
-              </xs:annotation>
-            </xs:element>
-            <xs:element name="scheduleTrigger" type="scheduleTrigger">
-              <xs:annotation>
-                <xs:documentation>
-                  The Schedule Trigger is used to specify that an integration should be run at a certain time on certain days. By default, an integration will only be triggered if modifications have been detected since the last integration. The trigger can be configured to force a build even if have occurred to source control. The items to watch for modifications are specified with Source Control Blocks.
-                  Like all triggers, the scheduleTrigger must be enclosed within a triggers element in the appropriate Project Configuration Block.
-                </xs:documentation>
-              </xs:annotation>
-            </xs:element>
-            <xs:element name="urlTrigger" type="urlTrigger">
-              <xs:annotation>
-                <xs:documentation>
-                  The Url Trigger is used to trigger a CCNet build when the page at a particular url changes. The Url Trigger will poll the specified url according to a configured polling interval to detect if the last modified date of the page has changed since the last integration.
-                  This trigger is especially useful in reducing the load on your source control system caused by the polling for modifications performed by an Interval Trigger. If your source control system supports trigger scripts (such as the use of commitinfo scripts in CVS), you can use create a trigger to touch the page that is being monitored by CCNet to start a new integration.
-                  Like all triggers, the urlTrigger must be enclosed within a triggers element in the appropriate Project Configuration Block.
-                </xs:documentation>
-              </xs:annotation>
-            </xs:element>
-          </xs:choice>
-        </xs:complexType>
       </xs:element>
       <xs:element name="tasks" type="Tasks" minOccurs="0" maxOccurs="1">
         <xs:annotation>
@@ -159,6 +126,13 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="impersonation" type="impersonation">
+        <xs:annotation>
+          <xs:documentation>
+            Defines the details to use for impersonating another user account.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
     </xs:all>
     <xs:attribute name="name" type="xs:string" use="required">
       <xs:annotation>
@@ -170,7 +144,7 @@
         <xs:documentation>The name of the integration queue that this project will use.</xs:documentation>
       </xs:annotation>
     </xs:attribute>
-    <xs:attribute name="queuePriority" type="xs:positiveInteger" use="optional">
+    <xs:attribute name="queuePriority" type="xs:nonNegativeInteger" use="optional">
       <xs:annotation>
         <xs:documentation>
           The priority of this project within the integration queue. If multiple projects have pending requests in the specified queue then these requests will be executed according to their priority. Lower priority numbers indicate that integration requests for this project will execute before other projects in the same queue, however projects with priority 0 are always executed after projects with non-zero priorities in the same queue.
@@ -178,12 +152,6 @@
       </xs:annotation>
     </xs:attribute>
   </xs:complexType>
-
-  <xs:simpleType name="String">
-    <xs:restriction base="xs:string">
-      <xs:minLength value="1"/>
-    </xs:restriction>
-  </xs:simpleType>
 
   <xs:complexType name="SourceControl" abstract="true"/>
 
@@ -211,10 +179,199 @@
 
   <xs:complexType name="Tasks">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="artifactcleanup" type="artifactcleanup">
+        <xs:annotation>
+          <xs:documentation>
+            The artifact CleanUp publisher allows for automatic removal of the buildlogs according to the choosen setting. It relies on the build log folder, so the XML publisher must be specified before this publisher can run. For technical reasons this publisher MUST reside in the publisher section, it will not work in the tasks section. Be sure to specify the [Xml Log Publisher] before this one.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="buildpublisher" type="buildpublisher">
+        <xs:annotation>
+          <xs:documentation>
+            The Build Publisher lets you copy any arbitrary files on a  *successful* build.
+            You can set alwaysPublish to true, if you want the copy always to happen.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="checkHttpStatus" type="checkHttpStatus">
+        <xs:annotation>
+          <xs:documentation>
+            Sends an HTTP request to the specified URL.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="conditionalPublisher" type="conditionalPublisher">
+        <xs:annotation>
+          <xs:documentation>
+            A container publisher that only executes the child publishers when the condition (e.g. build status) is met.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="cruiseServerControl" type="cruiseServerControl">
+        <xs:annotation>
+          <xs:documentation>
+            Sends a management task to a CruiseControl.NET server.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="devenv" type="devenv">
+        <xs:annotation>
+          <xs:documentation>
+            Most complex build processes use NAnt Task or MSBuild Task to script the build. However, for simple projects that just need to build a Visual Studio.NET solution, the Visual Studio task &lt;devenv&gt; provides an easier method.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dupfinder" type="dupfinder">
+        <xs:annotation>
+          <xs:documentation>
+            Check for duplicates using dupfinder (http://duplicatefinder.codeplex.com/).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="email" type="email">
+        <xs:annotation>
+          <xs:documentation>
+            Publishes results of integrations via email.  This implementation supports plain-text, and Html email formats. Rules regarding who receives email are configurable.
+            The email publisher can be used to send email to any number of users. It is common to include one user who gets an email for every build and then also send email to every developer who checked code in for this build.
+            People tend to prefer to use CCTray rather than email for instant notification these days.
+            Make sure that all of the Merge Publishers, along with the Xml Log Publisher task are done before the &lt;email&gt; publisher, or else you won't be able to include output from the build in the email. A common mistake is to put the email task in the &lt;tasks&gt; section instead of the &lt;publishers&gt; section. If an error occurs in the &lt;tasks&gt; section, the remaining tasks in that section are skipped, and CC.Net goes right to the &lt;publishers&gt; section. So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never get any failure messages.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="exec" type="exec">
+        <xs:annotation>
+          <xs:documentation>
+            The Executable Task lets you invoke any command line executable. It doesn't offer as much specific integration as (for example) the NAnt Task, but does allow you to hook almost anything up as a build process to CCNet. CCNet will examine the exit code when the executable ends and act accordingly.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="FinalBuilder" type="FinalBuilder">
+        <xs:annotation>
+          <xs:documentation>
+            The FinalBuilder Task allows you to invoke FinalBuilder build projects as part of a CruiseControl.NET integration project. FinalBuilder is a commercial build and release management solution for Windows software developers and SCM professionals, developed and marketed by VSoft Technologies (http://www.finalbuilder.com/finalbuilder.aspx).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="forcebuild" type="forcebuild">
+        <xs:annotation>
+          <xs:documentation>
+            The ForceBuildPublisher forces a build on a local or remote build server. It uses .NET Remoting to invoke a forced build on the CruiseControl.NET server at the specified URI.
+            The forced build runs asynchronously, i.e. the ForceBuildPublisher does not wait for the forced build to finish. The ForceBuildPublisher is a great way to help Splitting the build.
+            An alternative to the ForceBuildPublisher is the Project Trigger. The main difference is that the ForceBuildPublisher is placed in the configuration for the primary project, while the ProjectTrigger is is placed in the configuration for the dependent project.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ftp" type="ftp">
+        <xs:annotation>
+          <xs:documentation>
+            The ftp task/publisher allows to download or upload files/ folders, for example, uploading a new version of a web page to ftp site of an ISP.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="gendarme" type="gendarme">
+        <xs:annotation>
+          <xs:documentation>
+            Gendarme is a extensible rule-based tool to find problems in .NET applications and libraries. Gendarme inspects programs and libraries that contain code in ECMA CIL format (Mono and .NET) and looks for common problems with the code, problems that compiler do not typically check or have not historically checked. Website: http://mono-project.com/Gendarme
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="merge" type="merge">
+        <xs:annotation>
+          <xs:documentation>
+            Merges external files into the build log.
+            Most build processes interact with external tools that write their output to file (e.g. NUnit, FxCop, or NCover). To make the output of these tools available to CruiseControl.NET to be used in the build process or displayed in the CruiseControl.NET web page or included in CruiseControl.NET emails, these files need to be merged into the CruiseControl.NET integration.
+            You should place your File Merge Tasks in the &lt;publishers /&gt; section of your [Project Configuration Block] before your Xml Log Publisher.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="modificationHistory" type="modificationHistory">
+        <xs:annotation>
+          <xs:documentation>
+            This publisher logs all modifications for each build in a file.
+            These modifications can be viewed in the Dashboard with the [modificationHistoryProjectPlugin] plugin enabled.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="modificationReader" type="modificationReader">
+        <xs:annotation>
+          <xs:documentation>
+            This tasks makes it possible to read back modifications made by the Modification Writer Task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="modificationWriter" type="modificationWriter">
+        <xs:annotation>
+          <xs:documentation>
+            This task writes the detected modifications for the current integration to a file as XML. This enables the modifications to be used by external programs, such as within a NAnt build script.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="msbuild" type="msbuild">
+        <xs:annotation>
+          <xs:documentation>
+            The &lt;msbuild&gt; task is used to execute MsBuild projects, which are the default project format for Visual Studio 2005 projects and can also be compiled by using the MSBuild application that ships with the .NET 2 Framework.
+            In order to work with the results of MsBuild it is important to use a custom xml logger to format the build results.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="nant" type="nant">
+        <xs:annotation>
+          <xs:documentation>
+            Runs a NAnt script.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ncoverProfile" type="ncoverProfile">
+        <xs:annotation>
+          <xs:documentation>
+            Perform a code coverage profile using NCover.
+            NCover is a commerical application that will profile code while unit tests are running. The tool is available from http://www.ncover.com/.
+            CruiseControl.NET only supports NCover 3.x currently.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ncoverReport" type="ncoverReport">
+        <xs:annotation>
+          <xs:documentation>
+            Generate a code coverage report using NCover.
+            NCover is a commerical application that will profile code while unit tests are running. The tool is available from http://www.ncover.com/.
+            CruiseControl.NET only supports NCover 3.x currently.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ndepend" type="ndepend">
+        <xs:annotation>
+          <xs:documentation>
+            Runs an NDepend analysis.
+            NDepend is a tool that simplifies managing a complex .NET code base. Architects and developers can analyze code structure, specify design rules, plan massive refactoring, do effective code reviews and master evolution by comparing different versions of the code.
+            This application is available from www.ndepend.com. There is both an open source/academic/evaluation version and a professional version.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="nullTask" type="nullTask">
         <xs:annotation>
           <xs:documentation>
             The Null Task is a task that doesn't do anything - it simply returns successfully. This is useful for projects that simply monitor the source control system for changes but don't need to do anything.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="nunit" type="nunit">
+        <xs:annotation>
+          <xs:documentation>
+            This task enables you to instruct CCNet to run the unit tests contained within a collection of assemblies. The results of the unit tests will be automatically included in the CCNet build results. This can be useful if you have some unit tests that you want to run as part of the integration process, but you don't need as part of your developer build process. For example, if you have a set of integration tests that you want to run in a separate build process, it is easy to set up a project to use this task.
+            If you are using the Visual Studio Task and you want to run unit tests then you probably want to use this task. Alternatively you can run NUnit using post-build tasks in your Visual Studio project properties.
+            We recommend not using this task, and using your builder to run your tests if possible. This way if the tests fail and you don't know why, it is a lot easier to try and replicate the problem on another machine.
+            When using this task,do NOT merge an xml file from bin folder of your app with the merge task, or the results will be save twice in the buildlog file.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="package" type="package">
+        <xs:annotation>
+          <xs:documentation>
+            Generates a ZIP file package containing the specified files.
+            This will generate a "package" of files in a compressed format. The files must be specified, plus an optional manifest can be included.
+            This publisher also allows the generation of a "manifest" to include in the package. A manifest contains additional details on the package, both at a general level and at a file level.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -272,7 +429,1997 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="xmllogger" type="xmllogger">
+        <xs:annotation>
+          <xs:documentation>
+            The Xml Log Publisher is used to create the log files used by the CruiseControl.NET Web Dashboard, so if you don't define an &lt;xmllogger /&gt; section the Dashboard will not function correctly.
+            You should place the &lt;xmllogger /&gt; in the &lt;publishers /&gt; section, after any File Merge Tasks, in your Project Configuration Block.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
     </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="artifactcleanup">
+    <xs:all>
+      <xs:element name="cleanUpMethod" type="CleanUpMethod" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Defines the procedure to use for cleaning up the artifact folder.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="cleanUpValue" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Defines the value for the cleanup procedure.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="buildpublisher">
+    <xs:all>
+      <xs:element name="publishDir" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The directory to copy the files to. This path can be absolute or can be relative to the project's artifact directory. If  *useLabelSubDirectory* is true (default) a subdirectory with the current build's label will be created, and the contents of sourceDir will be copied to it. If unspecified, the project's artifact directory will be used as the publish directory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="sourceDir" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The source directory to copy files from. This path can be absolute or can be relative to the project's working directory. If unspecified, the project's working directory will be used as the source directory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="useLabelSubDirectory" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            If set to true (the default value), files will be copied to subdirectory under the publishDir which will be named with the label for the current integration.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="alwaysPublish" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Always copies the files, regardless of the state of the build.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="cleanPublishDirPriorToCopy" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Cleans the publishDir if it exists, so that you will always have an exact copy of the sourceDir.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="cleanUpMethod" type="CleanupPolicy" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Defines a way to clean up published builds.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="cleanUpValue" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The value used for the cleaning method.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="checkHttpStatus">
+    <xs:all>
+      <xs:element name="successStatusCodes" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The list of exit codes that indicate success, separated by commas.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="httpRequest" type="httpRequest" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The request settings.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="retries" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The number of retries to allow.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="includeContent" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to include the content of the call in the log.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="taskTimeout" type="Timeout" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The timeout period to allow.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="retryDelay" type="Timeout" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Gets or sets the retry delay.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="conditionalPublisher">
+    <xs:all>
+      <xs:element name="publishers" type="Tasks" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The publishers to run if the conditions are met.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="conditions" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A list of conditions of which at least one must be met in order to run the publishers.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="condition" type="IntegrationStatus">
+              <xs:annotation>
+                <xs:documentation>
+                  A condition to meet.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="cruiseServerControl">
+    <xs:all>
+      <xs:element name="server" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The server to send the commands to.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="actions" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The actions to perform.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="controlAction" type="controlAction">
+              <xs:annotation>
+                <xs:documentation>
+                  An action to perform on a CruiseControl.NET server.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="devenv">
+    <xs:all>
+      <xs:element name="solutionfile" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The path of the solution file to build. If relative, it is relative to the Project Working Directory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="configuration" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The solution configuration to use (not case sensitive).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="buildTimeoutSeconds" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Number of seconds to wait before assuming that the process has hung and should be killed.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="buildtype" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The type of build.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="project" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A specific project in the solution, if you only want to build one project (not case sensitive).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="version" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The version of Visual Studio.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The path to devenv.com.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="dupfinder">
+    <xs:all>
+      <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The executable to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="inputDir" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The input directory to scan. If relative, this will be relative to the project working directory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="fileMask" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The file mask to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="focus" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the file to focus on.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="timeout" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The time\-out period in seconds.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="threshold" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The threshold is the number of consecutive lines that have to be the same before it is considered a duplicate.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="width" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The first line of a duplicate must contain at least this many non\-white\-space characters.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="recurse" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            To find files that match the filemask in current directory and subdirectories.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="shortenNames" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to shorten filenames.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="includeCode" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to include the code that has been duplicated.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="excludeLines" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The lines to exclude.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="line" type="String">
+              <xs:annotation>
+                <xs:documentation>
+                  The line to exclude.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="excludeFiles" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The files to exclude.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="file" type="String">
+              <xs:annotation>
+                <xs:documentation>
+                  The name of the file.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="email">
+    <xs:all>
+      <xs:element name="mailhost" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The SMTP server that CruiseControl.NET will connect to to send email.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="mailport" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The SMTP server port number.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="mailhostUsername" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The user name to provide to the SMTP server.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="mailhostPassword" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The password to provide to the SMTP server.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="from" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The e-mail address that email will be marked as coming from.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="useSSL" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to use SSL or not for sending the e-mail.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="replyto" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The e-mail address to use for replies.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="xslFiles" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A list of xsl files that will be used to fill up the message body, if left blank the list will be taken from ccnet.exe.config or ccservice.exe.config.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="xslFile" type="String">
+              <xs:annotation>
+                <xs:documentation>
+                  The XSL file to use.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="attachments" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A list of files to attach to the e-mail. If the full path is not specified, then it will be relative to the project working directory.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="attachment" type="String">
+              <xs:annotation>
+                <xs:documentation>
+                  The attachment to send.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="includeDetails" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to send a full report or not. If not, just sends a simple status message with a link to the build report.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="modifierNotificationTypes" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A set of &lt;NotificationType&gt; elements, specifying build states for which CruiseControl.Net should send an email to the comitters of the build.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="notificationType" type="NotificationType">
+              <xs:annotation>
+                <xs:documentation>
+                  The notification type.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="users" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A set of &lt;user&gt; elements that define who to send emails to.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="user" type="user">
+              <xs:annotation>
+                <xs:documentation>
+                  Defines a user who will receive e-mails.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="groups" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A set of &lt;group&gt; elements that identify which the notification policy for a set of users.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="group" type="group">
+              <xs:annotation>
+                <xs:documentation>
+                  Defines a group of users to receive e-mails.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="subjectSettings" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A set of &lt;subject&gt; elements that define the subject of the email, according to the state of the build (broken, fixed, ...)
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="subject" type="subject">
+              <xs:annotation>
+                <xs:documentation>
+                  This element  allows to set specific subject messages according to the state of the build. When a certain state is not specified, a default will be entered.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="converters" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A set of elements containing rules for creating email adresses based on the modifiers name. The converters will be used when the name of the modifier is not set in the users section.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="ldapConverter" type="ldapConverter">
+              <xs:annotation>
+                <xs:documentation>
+                  Looks up the email address via LDAP.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="regexConverter" type="regexConverter">
+              <xs:annotation>
+                <xs:documentation>
+                  Matches the username against a regular expression pattern and modifies it according to a specified replacement. Uses the .NET regular expression language.
+                  The find attribute contains a regular expression that is matched against the source control userid. The replace attribute contains a replacement expression that is used to modify the address. Example : Appending "@TheCompany.com" to the username
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="subjectPrefix" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A string that will be the first string of the subject.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="exec">
+    <xs:all>
+      <xs:element name="executable" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The path of the program to run. If this is relative, then must be relative to either (a) the base directory, (b) the CCNet Server application, or (c) if the path doesn't contain any directory details then can be available in the system or application's 'path' environment variable.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="baseDirectory" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The directory to run the process in. If relative, is a subdirectory of the Project Working Directory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="buildArgs" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Any command line arguments to pass in.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="environment" type="EnvironmentVariables" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A set of environment variables set for commands that are executed.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="buildTimeoutSeconds" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Number of seconds to wait before assuming that the process has hung and should be killed.  If the build process takes longer than this period, it will be killed.  Specify this value as zero to disable process timeouts.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="successExitCodes" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The list of exit codes that indicate success, separated by commas.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="FinalBuilder">
+    <xs:all>
+      <xs:element name="ProjectFile" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The full path of the FinalBuilder project to run.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ShowBanner" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Specify 'true' to enable the "banner" at the top of the FinalBuilder console output.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="FBVariables" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            One or more FBVariable elements to pass to FinalBuilder.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="FBVariable">
+              <xs:annotation>
+                <xs:documentation>
+                  The variable to pass.
+                </xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:attribute name="name" type="String" use="required">
+                  <xs:annotation>
+                    <xs:documentation>
+                      The name of the variable.
+                    </xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="value" type="String" use="required">
+                  <xs:annotation>
+                    <xs:documentation>
+                      The value for the variable.
+                    </xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="DontWriteToLog" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Disable output to the FinalBuilder project log file.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="UseTemporaryLogFile" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Log to a temporary log file which is deleted when the project closes. Overrides DontWriteToLog.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Timeout" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The number of seconds to wait before assuming that the FinalBuilder project has hung and should be killed.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="FBVersion" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Use this element to explicitly specify a version of FinalBuilder to run (for instance, you could force a FinalBuilder 4 project to run in FinalBuilder 5.)
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="FBCMDPath" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The absolute path to FBCMD.EXE.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="forcebuild">
+    <xs:all>
+      <xs:element name="project" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The CCNet project to force build.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="serverUri" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The URI for the local or remote server managing the project to build. The default value is the default URI for the local build server.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="integrationStatus" type="IntegrationStatus" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The condition determining whether or not the remoting call should be made. The default value is "Success" indicating that the specified build will be forced if the current build was successful
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="enforcerName" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Identification of a ForceBuildPublisher. This value is passed to the CCNetRequestSource attribute of the forced  project's build.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="security" type="NameValuePairs" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The security credentials to pass through to the remote server.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="parameters" type="NameValuePairs" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The parameters to pass to the remote project.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="ftp">
+    <xs:all>
+      <xs:element name="serverName" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the server to connect to.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="userName" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The username to log in with.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="password" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The password to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="useActiveConnectionMode" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to use active connection mode or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="action" type="FtpAction" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The action to perform.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ftpFolderName" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The path to the folder to use on the FTP server.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="localFolderName" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The to the folder to use on the local machine.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="recursiveCopy" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to perform a recursive copy or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="gendarme">
+    <xs:all>
+      <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The location of the Gendarme executable.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="baseDirectory" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The directory to run Gendarme in.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="configFile" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Specify the configuration file.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ruleSet" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Specify the set of rules to verify.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ignoreFile" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Do not report the known defects that are part of the specified file.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="limit" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Stop reporting after N defects are found.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="severity" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Filter the reported defects to include the specified severity levels.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="confidence" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Filter the reported defects to include the specified confidence levels.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="quiet" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            If true, display minimal output (results) from the runner.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="verbose" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Enable debugging output.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="failBuildOnFoundDefects" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Specify whenver the build should fail if some defects are found by Gendarme.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="assemblies" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Specify the assemblies to verify. You can specify multiple filenames, including masks (? and \*).
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="assemblyMatch">
+              <xs:annotation>
+                <xs:documentation>
+                  An assembly match.
+                </xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="expr" type="String">
+                    <xs:annotation>
+                      <xs:documentation>
+                        The name expression of the assembly, e.g. "*.dll". Masks (? and *) are allowed.
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="assemblyListFile" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Specify a file that contains the assemblies to verify. You can specify multiple filenames, including masks (? and \*), one by line.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="verifyTimeoutSeconds" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The maximum number of seconds that the build may take.  If the build process takes longer than this period, it will be killed.  Specify this value as zero to disable process timeouts.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="merge">
+    <xs:all>
+      <xs:element name="files" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The files to merge.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="file" type="MergeFileInfo">
+              <xs:annotation>
+                <xs:documentation>
+                  The file to merge.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="target" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The folder to copy the files to.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="modificationHistory">
+    <xs:all>
+      <xs:element name="onlyLogWhenChangesFound" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            When true, the history file will only be updated when the build contains modifications. This setting is mainly for keeping the file small when there are a lot builds without modifications. For example: like CCNet, there is a public website where everybody can force a build.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="modificationReader">
+    <xs:all>
+      <xs:element name="filename" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The filename pattern for the file containing the modifications. CCnet with search in the path for files starting with this filename, and having the same extention. For example when filename is set to modifications.xml, ccnet will search for files like so: modifications\*.xml
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="path" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The directory to search the xml file(s) in.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="deleteAfterRead" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Delete the files after they have been read.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="modificationWriter">
+    <xs:all>
+      <xs:element name="filename" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The filename for the file containing the modifications.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="path" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The directory to write the xml file to.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="appendTimeStamp" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Appends the integration start time to the filename, just before the extention. Making it possible to create a modification file per integration, without overwriting existing ones. Intended to be used with the [Modification Reader Task].
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="msbuild">
+    <xs:all>
+      <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The location of the MSBuild.exe executable.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="workingDirectory" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The directory to run MSBuild in - this is generally the directory containing your build project. If relative, is a subdirectory of the Project Working Directory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="projectFile" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the build project to run, relative to the workingDirectory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="buildArgs" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Any extra arguments to pass through to MSBuild.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="targets" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A semicolon-separated list of the targets to run.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="logger" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The full path to the assembly containing the custom logger to use. Arguments can be passed to the logger by appending them after the logger name separated by a semicolon. Only if the assembly contains more than one logger implementation you need to specify the logger class (see MSBuild reference): [LoggerClass,]LoggerAssembly[;LoggerParameters]
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="timeout" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Number of seconds to wait before assuming that the process has hung and should be killed.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="nant">
+    <xs:all>
+      <xs:element name="targetList" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A list of targets to be called. CruiseControl.NET does not call NAnt once for each target, it uses the NAnt feature of being able to specify multiple targets.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="target" type="xs:string">
+              <xs:annotation>
+                <xs:documentation>
+                  The name of the target.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The path of the version of nant.exe you want to run. If this is relative, then must be relative to either (a) the base directory, (b) the CCNet Server application, or (c) if the path doesn't contain any directory details then can be available in the system or application's 'path' environment variable
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="buildFile" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the build file to run, relative to the baseDirectory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="baseDirectory" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The directory to run the NAnt process in. If relative, is a subdirectory of the Project Working Directory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="buildArgs" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Any arguments to pass through to NAnt (e.g to specify build properties).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="logger" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The NAnt logger to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="listener" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The NAnt listener to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="nologo" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to use the \-nologo argument when calling NAnt.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="buildTimeoutSeconds" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The maximum number of seconds that the build may take.  If the build process takes longer than this period, it will be killed. Specify this value as zero to disable process timeouts.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="ncoverProfile">
+    <xs:all>
+      <xs:element name="program" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The program to execute and collect coverage stats from.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="testProject" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The project that contains the tests. If relative, this will be relative to baseDir.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="programParameters" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The parameters to pass to the program.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The executable to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="timeout" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The time\-out period in seconds. If the task does no finish running in this time it will be terminated.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="baseDir" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The base directory to use. All relative parameters will be relative to this parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="workingDir" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The working directory to use. If relative, this will be relative to baseDir.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="publish" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to publish the output files or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="logFile" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The location of the NCover log file. If relative, this will be relative to baseDir.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="logLevel" type="NCoverLogLevel" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The profiler log level.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="projectName" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the project (used in the HTML report).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="coverageFile" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The location to write the coverage file to. If relative, this will be relative to baseDir.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="coverageMetric" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The coverage metric to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="excludedAttributes" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The attributes to exclude.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="excludedAssemblies" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The assemblies to exclude.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="excludedFiles" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The files to exclude.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="excludedMethods" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The methods to exclude.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="excludedTypes" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The types to exclude.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="includedAttributes" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The attributes to include.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="includedAssemblies" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The assemblies to include.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="includedFiles" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The files to include.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="includedTypes" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The types to include.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="disableAutoexclusion" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to turn off autoexclusion or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="processModule" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The module to process.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="symbolSearch" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The symbol search policy to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="trendFile" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The location to write the trend file to.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="buildId" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A custom build id to attach.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="settingsFile" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The location to read the settings from. If relative, this will be relative to baseDir.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="register" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Temporarily enable NCover.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="applicationLoadWait" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The amount of time that NCover will wait for the application to start up.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="iis" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to cover IIS or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="serviceTimeout" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The timeout period for covering a service.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="windowsService" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The windows service to cover.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="ncoverReport">
+    <xs:all>
+      <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The executable to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="timeout" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The time\-out period in seconds. If the task does no finish running in this time it will be terminated.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="baseDir" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The base directory to use. All relative parameters will be relative to this parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="workingDir" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The working directory for the executable. If relative, this will be relative to baseDir.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="coverageFile" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The location to read the coverage date from. If relative, this will be relative to baseDir.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="clearFilters" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Should the coverage filters be cleared.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="filters" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The filters to apply.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="coverageFilter" type="coverageFilter">
+              <xs:annotation>
+                <xs:documentation>
+                  A filter for a coverage report.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="minimumThresholds" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The minimum coverage thresholds.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="coverageThreshold" type="coverageThreshold">
+              <xs:annotation>
+                <xs:documentation>
+                  A threshold for a coverage report.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="minimumCoverage" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to use minimum coverage or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="xmlReportFilter" type="NCoverReportFilter" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The type of report filtering to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="satisfactory" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The satisfactory coverage thresholds.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="coverageThreshold" type="coverageThreshold">
+              <xs:annotation>
+                <xs:documentation>
+                  A threshold for a coverage report.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="numberToReport" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The maximum number of items to report.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="trendOutput" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The file to append the trend to.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="trendInput" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The file to import the trend from.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="buildId" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A custom build id to attach.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="hide" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The elements to hide.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="outputDir" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The directory to output the reports to. If relative, this will be relative to baseDir.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="reports" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The type of report to generate.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="report" type="NCoverReportType">
+              <xs:annotation>
+                <xs:documentation>
+                  The type of report.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="projectName" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The project name to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="sortBy" type="NCoverSortBy" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The sort order to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="uncoveredAmount" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The amount of uncovered items to cover.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="mergeMode" type="NCoverMergeMode" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The merge mode to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="mergeFile" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The file to store the merged data in. If relative, this will be relative to baseDir.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="ndepend">
+    <xs:all>
+      <xs:element name="project" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The NDepend project file. This is generated from VisualNDepend.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The executable to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="emitXml" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to emit the XML report data or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="outputDir" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The output directory to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="inputDirs" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The input directories to use.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="inputDir" type="xs:string">
+              <xs:annotation>
+                <xs:documentation>
+                  The input directory.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="silent" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to hide any output or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="reportXslt" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The location of a custom report XSL\-T.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="timeout" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The time\-out period in seconds.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="baseDir" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The base directory to use. If omitted this will default to the working directory of the project.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="publish" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to publish the output files or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
   </xs:complexType>
 
   <xs:complexType name="nullTask">
@@ -281,6 +2428,199 @@
         <xs:annotation>
           <xs:documentation>
             Defines whether to fail the task or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="nunit">
+    <xs:all>
+      <xs:element name="assemblies" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            List of the paths to the assemblies containing the NUnit tests to be run.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="assembly" type="String">
+              <xs:annotation>
+                <xs:documentation>
+                  The assembly to test.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="path" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Path of  *nunit\-console.exe* application.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="outputfile" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The file that NUnit will write the test results to.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="timeout" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The number of seconds that the nunit process will run before timing out.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="excludedCategories" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            List of the test categories to be excluded from the NUnit run. The tests need to have the CategoryAttribute set.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="category" type="String">
+              <xs:annotation>
+                <xs:documentation>
+                  The category to exclude.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="includedCategories" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            List of the test categories to be included in the NUnit run. The tests need to have the CategoryAttribute set.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="category" type="String">
+              <xs:annotation>
+                <xs:documentation>
+                  The category to exclude.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="package">
+    <xs:all>
+      <xs:element name="name" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the package file.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="compression" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The level of compression to use. The valid range is from zero to nine, zero is no compression and nine is maximum compression.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:int">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="9" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="always" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether the package should always be generated or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="flatten" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Should the file structure be flattened or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="single" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether there should only be one instance of this package.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="baseDirectory" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The directory to base all the file locations from.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="manifest" type="ManifestGenerator" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The manifest generator to be used.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="files" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The files to include in the package.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="file" type="String">
+              <xs:annotation>
+                <xs:documentation>
+                  The name of the file.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="outputDir" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The location to output the package to.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -343,7 +2683,7 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="buildTimeoutSeconds" type="xs:positiveInteger" minOccurs="0" maxOccurs="1">
+      <xs:element name="buildTimeoutSeconds" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
             The maximum number of seconds the build can take. If the build process takes longer than this period, it will be killed.  Specify this value as zero to disable process timeouts.
@@ -397,7 +2737,7 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="buildTimeoutSeconds" type="xs:positiveInteger" minOccurs="0" maxOccurs="1">
+      <xs:element name="buildTimeoutSeconds" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
             Number of seconds to wait before assuming that the process has hung and should be killed.
@@ -474,7 +2814,7 @@
 
   <xs:complexType name="rss">
     <xs:all>
-      <xs:element name="items" type="xs:positiveInteger" minOccurs="0" maxOccurs="1">
+      <xs:element name="items" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
             The number of items to be displayed.
@@ -604,7 +2944,231 @@
     </xs:all>
   </xs:complexType>
 
+  <xs:complexType name="xmllogger">
+    <xs:all>
+      <xs:element name="logDir" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The directory to save log files to. If relative, then relative to the Project Artifact Directory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="stateManager" abstract="true" />
+
+  <xs:complexType name="state">
+    <xs:complexContent>
+      <xs:extension base="stateManager">
+        <xs:all>
+          <xs:element name="directory" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The directory to save the state file to.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Triggers">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="filterTrigger" type="filterTrigger">
+        <xs:annotation>
+          <xs:documentation>
+            The Filter Trigger allows you to prevent builds from occurring at certain times or on certain days (such as when your source control repository is undergoing backup). It is used to decorate an existing trigger. For example, if you have set up a [Interval Trigger] to cause a new build every 5 minutes, you can use the Filter Trigger to create a window during which the build will not run. The filter will exclude modifications that occur between the start time and the end time on the days specified. If the start time is greater than the end time then the filtered time will span across midnight. For example, if the start time is 23:00 and the end time is 3:00 then builds will be suppressed from 23:00\-23:59 and 0:00\-3:00 on the days specified.
+            Like all triggers, the scheduleTrigger must be enclosed within a triggers element in the appropriate [Project Configuration Block].
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="intervalTrigger" type="intervalTrigger">
+        <xs:annotation>
+          <xs:documentation>
+            The Interval Trigger is used to specify that an integration should be run periodically, after a certain amount of time. By default, an integration will only be triggered if modifications have been detected since the last integration. The trigger can also be configured to force a build even if no changes have occurred to source control. The items to watch for modifications are specified with Source Control Blocks.
+            Like all triggers, the intervalTrigger must be enclosed within a triggers element in the appropriate Project Configuration Block.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="multiTrigger" type="multiTrigger">
+        <xs:annotation>
+          <xs:documentation>
+            The Multiple Trigger is used to support the execution of multiple nested triggers. Each trigger will be executed sequentially in the order specified in the configuration file. By default, if any of the triggers specify that a build should occur then a build will be triggered. The build condition will be ForceBuild if any trigger returns a ForceBuild condition. Otherwise, the build condition will be IfModificationsExist if any trigger returns that condition. Multiple Triggers can contain nested multiple triggers.
+            It is possible to change the logical operator applied to assessing the build conditions. If the Multiple Trigger's operator property is set to "And" then if any trigger says that a build should not happen, then the build will not happen. This is particularly useful when using multiple Filter Triggers.
+            Like all triggers, the multiTrigger must be enclosed within a triggers element in the appropriate Project Configuration Block.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="parameterTrigger" type="parameterTrigger">
+        <xs:annotation>
+          <xs:documentation>
+            Trigger to add build parameters to an integration request.
+            Like all triggers, the parameterTrigger must be enclosed within a triggers element in the appropriate Project Configuration Block.
+            The configuration of the nested trigger is not the same as when using that trigger outside a filter trigger. When using the &lt;parameterTrigger&gt;
+            element, the inner trigger must be specified with the &lt;trigger&gt;
+            element. You could not use the &lt;intervalTrigger&gt; trigger element in this example.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="projectTrigger" type="projectTrigger">
+        <xs:annotation>
+          <xs:documentation>
+            The Project Trigger is used to trigger a build when the specified dependent project has completed its build. This trigger can help you split your build process across projects and servers. For example, you could have a CCNet project that will trigger the regression test suite once the main development build has completed successfully. This dependent build could be running on either a local or a remote CCNet server.
+            The Project Trigger works by using .NET remoting to poll the status of the dependent project. Whenever it detects that the dependent project has completed a build, the Project Trigger will fire. The Project Trigger can be configured to fire when the dependent project build succeeded, failed or threw an exception. In order to avoid hammering the remote project through polling, the Project Trigger is composed of an Interval Trigger  that will set a polling interval to 5 seconds. This inner trigger can be adjusted through changing the configuration.
+            Like all triggers, the projectTrigger must be enclosed within a triggers element in the appropriate Project Configuration Block.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="scheduleTrigger" type="scheduleTrigger">
+        <xs:annotation>
+          <xs:documentation>
+            The Schedule Trigger is used to specify that an integration should be run at a certain time on certain days. By default, an integration will only be triggered if modifications have been detected since the last integration. The trigger can be configured to force a build even if have occurred to source control. The items to watch for modifications are specified with Source Control Blocks.
+            Like all triggers, the scheduleTrigger must be enclosed within a triggers element in the appropriate Project Configuration Block.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="urlTrigger" type="urlTrigger">
+        <xs:annotation>
+          <xs:documentation>
+            The Url Trigger is used to trigger a CCNet build when the page at a particular url changes. The Url Trigger will poll the specified url according to a configured polling interval to detect if the last modified date of the page has changed since the last integration.
+            This trigger is especially useful in reducing the load on your source control system caused by the polling for modifications performed by an Interval Trigger. If your source control system supports trigger scripts (such as the use of commitinfo scripts in CVS), you can use create a trigger to touch the page that is being monitored by CCNet to start a new integration.
+            Like all triggers, the urlTrigger must be enclosed within a triggers element in the appropriate Project Configuration Block.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+
   <xs:complexType name="trigger" abstract="true"/>
+  
+  <xs:complexType name="filterTrigger">
+    <xs:complexContent>
+      <xs:extension base="trigger">
+        <xs:all>
+          <xs:element name="trigger" type="trigger" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The inner trigger to filter.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="buildCondition" type="BuildCondition" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The condition that will be returned if a build is requested during the filter window. The default value is  *NoBuild*indicating that no build will be performed
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="startTime" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The start of the filter window. Builds will not occur after this time and before the end time.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="endTime" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The end of the filter window. Builds will not occur before this time and after the start time.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="weekDays" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The week days on which the filter should be applied (eg. Monday, Tuesday). By default, all days of the week are set. The filter will have no effect on other days.
+              </xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:choice minOccurs="1" maxOccurs="7">
+                <xs:element name="weekDay" type="DayOfWeek">
+                  <xs:annotation>
+                    <xs:documentation>The day of the week.</xs:documentation>
+                  </xs:annotation>
+                </xs:element>
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="intervalTrigger">
+    <xs:complexContent>
+      <xs:extension base="trigger">
+        <xs:all>
+          <xs:element name="buildCondition" type="BuildCondition" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The condition that should be used to launch the integration. By default, this value is  *IfModificationExists*, meaning that an integration will only be triggered if modifications have been detected. Set this attribute to  *ForceBuild* in order to ensure that a build should be launched regardless of whether new modifications are detected.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="name" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The name of the trigger. This name is passed to external tools as a means to identify the trigger that requested the build.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="seconds" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The number of seconds after an integration cycle completes before triggering the next integration cycle.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="initialSeconds" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The delay (in seconds) from CCNet startup to the first check for modifications.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="multiTrigger">
+    <xs:complexContent>
+      <xs:extension base="trigger">
+        <xs:all>
+          <xs:element name="operator" type="Operator" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The logical operator to apply to the results of the nested triggers (And or Or).
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="triggers" type="Triggers" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The nested triggers.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
   <xs:complexType name="parameterTrigger">
     <xs:complexContent>
@@ -776,17 +3340,665 @@
     </xs:complexContent>
   </xs:complexType>
 
-  <xs:complexType name="Statistics"></xs:complexType>
-  <xs:complexType name="Timeout"></xs:complexType>
-  <xs:complexType name="DynamicValues"></xs:complexType>
-  <xs:complexType name="EnvironmentVariables"></xs:complexType>
-  <xs:complexType name="NameValuePairs"></xs:complexType>
+  <xs:complexType name="MergeFileInfo" mixed="true">
+    <xs:attribute name="action" type="MergeActionType">
+      <xs:annotation>
+        <xs:documentation>
+          The type of the file to merge.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  
+  <xs:complexType name="Timeout" mixed="true">
+    <xs:simpleContent>
+      <xs:extension base="xs:nonNegativeInteger">
+        <xs:attribute name="units" type="TimeUnit">
+          <xs:annotation>
+            <xs:documentation>
+              The time unit to use.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  
+  <xs:complexType name="EnvironmentVariables">
+    <xs:choice minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="variable">
+        <xs:annotation>
+          <xs:documentation>
+            The variable to pass.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:attribute name="name" type="String" use="required">
+            <xs:annotation>
+              <xs:documentation>
+                The name of the environment variable.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="value" type="String" use="required">
+            <xs:annotation>
+              <xs:documentation>
+                The value of the environment variable.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  
+  <xs:complexType name="NameValuePairs">
+    <xs:choice minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="namedValue">
+        <xs:annotation>
+          <xs:documentation>
+            The value to pass.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:attribute name="name" type="String" use="required">
+            <xs:annotation>
+              <xs:documentation>
+                The name of the value.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="value" type="String" use="required">
+            <xs:annotation>
+              <xs:documentation>
+                The value of the value.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="impersonation">
+    <xs:all>
+      <xs:element name="domain" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the domain to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="user" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the user to impersonate.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="password" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The password of the user.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="ManifestGenerator" abstract="true"/>
+
+  <xs:complexType name="defaultManifestGenerator">
+    <xs:complexContent>
+      <xs:extension base="ManifestGenerator">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="importManifest">
+    <xs:complexContent>
+      <xs:extension base="ManifestGenerator">
+        <xs:all>
+          <xs:element name="filename" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The name of the file to import.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="DynamicValues">
+    <xs:choice minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="directValue" type="directValue">
+        <xs:annotation>
+          <xs:documentation>
+            This will replace the value of a property with the value from a parameter. If the user does not enter a parameter value, then the default will be used (when set).
+            This dynamic value does not perform any formatting, it just directly puts the value into the property.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="replacementValue" type="replacementValue">
+        <xs:annotation>
+          <xs:documentation>
+            This will replace any number of parameters into a format string. The format string can also include formats for each parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="directValue">
+    <xs:all>
+      <xs:element name="property" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the property to set. This must be the same name as what is in the task/publisher/trigger configuration.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="parameter" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the parameter to use. This must be the same name as what is in the parameters configuration.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="default" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The default value to use if nothing is set in the parameters.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="Statistics">
+    <xs:choice minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="firstMatch" type="firstMatch">
+        <xs:annotation>
+          <xs:documentation>
+            A statistic that extracts the first item that matches the specifed XML XPath.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="statistic" type="statistic">
+        <xs:annotation>
+          <xs:documentation>
+            A generic statistic.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="replacementValue">
+    <xs:all>
+      <xs:element name="property" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the property to set.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="parameters" type="NameValuePairs" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The parameters to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="format" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The default value to use if nothing is set in the parameters.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="statistic">
+    <xs:all>
+      <xs:element name="xpath" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The XML XPath to locate the value of this statistic.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="name" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the statistic.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="generateGraph" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Should a graph be generated for this statistic?
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="include" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Should this statistic be collected and published?
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="firstMatch">
+    <xs:all>
+      <xs:element name="xpath" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The XML XPath to locate the value of this statistic.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="name" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the statistic.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="generateGraph" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Should a graph be generated for this statistic?
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="include" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Should this statistic be collected and published?
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="ldapConverter">
+    <xs:all>
+      <xs:element name="domainName" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The domain to query for the LDAP service.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ldapQueryField" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The field in the LDAP service to use for mapping the source control userid.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ldapLogOnUser" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Username for logging into the LDAP service.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ldapLogOnPassword" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The password to use for connecting to the LDAP service.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="regexConverter">
+    <xs:all>
+      <xs:element name="find" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A regular expression to match against the username and identify parts to be replaced.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="replace" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A string to replace the matched pattern in the username.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="subject">
+    <xs:all>
+      <xs:element name="value" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The value of the subject line, the text to be used for the subject. This may contain variables, see below.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="buildResult" type="BuildResultType" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A build result state, see below for the possible values.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="group">
+    <xs:all>
+      <xs:element name="name" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the group, which corresponds to the "group" values used in the &lt;user&gt; elements.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="notifications" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A list of notification types, determining when to send email to this group.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="notificationType" type="NotificationType">
+              <xs:annotation>
+                <xs:documentation>
+                  The type of notification.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="user">
+    <xs:all>
+      <xs:element name="name" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The user name of a user. This should match the user name in Source Control.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="address" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The Internet\-style email address of the user (e.g., "joe@example.com").
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="group" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The group that the user is in. This needs to match the name of one of the &lt;group&gt; elements.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="header">
+    <xs:attribute name="name" type="String" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The name of the header.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="value" type="String" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The value of the header.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="controlAction">
+    <xs:all>
+      <xs:element name="project" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The project to run the command on.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="type" type="CruiseServerControlTaskActionType" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The type of command.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="coverageThreshold">
+    <xs:all>
+      <xs:element name="metric" type="NCoverMetric" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The coverage metric.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="value" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The minimum coverage value.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="type" type="NCoverItemType" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The type of item.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="pattern" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The matching pattern to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="coverageFilter">
+    <xs:all>
+      <xs:element name="data" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The pattern to use for matching elements.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="type" type="NCoverFilterItemType" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The type of item.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="regex" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether this is a regex or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="include" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to include or exclude items.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="httpRequest">
+    <xs:all>
+      <xs:element name="method" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The method to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="headers" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The HTTP headers to send.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="header" type="header">
+              <xs:annotation>
+                <xs:documentation>
+                  A header for an HTTP request.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="body" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The body of the request to send.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="sendFile" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A file to send in the request.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="uri" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The URL to make the request to.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="timeout" type="Timeout" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The timeout period before cancelling the request.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="readWriteTimeout" type="Timeout" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The read/write timeout period.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="credentials" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The credentials to use in the request.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:attribute name="userName" type="String">
+            <xs:annotation>
+              <xs:documentation>
+                The user name to use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="password" type="String">
+            <xs:annotation>
+              <xs:documentation>
+                The password to use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="domain" type="String">
+            <xs:annotation>
+              <xs:documentation>
+                The domain to use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="useDefaultCredentials" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to use the default credentials or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
 
   <xs:simpleType name="BuildCondition">
     <xs:restriction base="xs:string">
       <xs:enumeration value="NoBuild"/>
       <xs:enumeration value="IfModificationExists"/>
       <xs:enumeration value="ForceBuild"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="BuildResultType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success"/>
+      <xs:enumeration value="Broken"/>
+      <xs:enumeration value="StillBroken"/>
+      <xs:enumeration value="Fixed"/>
+      <xs:enumeration value="Exception"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="CleanUpMethod">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="KeepLastXBuilds"/>
+      <xs:enumeration value="DeleteBuildsOlderThanXDays"/>
+      <xs:enumeration value="KeepMaximumXHistoryDataEntries"/>
+      <xs:enumeration value="DeleteSubDirsOlderThanXDays"/>
+      <xs:enumeration value="KeepLastXSubDirs"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="CleanupPolicy">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NoCleaning"/>
+      <xs:enumeration value="KeepLastXBuilds"/>
+      <xs:enumeration value="DeleteBuildsOlderThanXDays"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="CruiseServerControlTaskActionType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="StartProject"/>
+      <xs:enumeration value="StopProject"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -802,6 +4014,13 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <xs:simpleType name="FtpAction">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UploadFolder"/>
+      <xs:enumeration value="DownloadFolder"/>
+    </xs:restriction>
+  </xs:simpleType>
+
   <xs:simpleType name="IntegrationStatus">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Success"/>
@@ -812,11 +4031,148 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <xs:simpleType name="MergeActionType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Merge"/>
+      <xs:enumeration value="Copy"/>
+      <xs:enumeration value="CData"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="NCoverFilterItemType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Default"/>
+      <xs:enumeration value="Assembly"/>
+      <xs:enumeration value="Namespace"/>
+      <xs:enumeration value="Class"/>
+      <xs:enumeration value="Method"/>
+      <xs:enumeration value="Document"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="NCoverItemType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Default"/>
+      <xs:enumeration value="View"/>
+      <xs:enumeration value="Module"/>
+      <xs:enumeration value="Namespace"/>
+      <xs:enumeration value="Class"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="NCoverLogLevel">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Default"/>
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="Normal"/>
+      <xs:enumeration value="Verbose"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="NCoverMetric">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SymbolCoverage"/>
+      <xs:enumeration value="BranchCoverage"/>
+      <xs:enumeration value="MethodCoverage"/>
+      <xs:enumeration value="CyclomaticComplexity"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="NCoverMergeMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Default"/>
+      <xs:enumeration value="KeepSourceFilters"/>
+      <xs:enumeration value="Destructive"/>
+      <xs:enumeration value="AppendFilters"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="NCoverReportType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FullCoverageReport"/>
+      <xs:enumeration value="Summary"/>
+      <xs:enumeration value="UncoveredCodeSections"/>
+      <xs:enumeration value="SymbolSourceCode"/>
+      <xs:enumeration value="SymbolSourceCodeClass"/>
+      <xs:enumeration value="SymbolSourceCodeClassMethod"/>
+      <xs:enumeration value="MethodSourceCode"/>
+      <xs:enumeration value="MethodSourceCodeClass"/>
+      <xs:enumeration value="MethodSourceCodeClassMethod"/>
+      <xs:enumeration value="SymbolModule"/>
+      <xs:enumeration value="SymbolModuleNamespace"/>
+      <xs:enumeration value="SymbolModuleNamespaceClass"/>
+      <xs:enumeration value="SymbolModuleNamespaceClassMethod"/>
+      <xs:enumeration value="SymbolCCModuleClassFailedCoverageTop"/>
+      <xs:enumeration value="SymbolCCModuleClassCoverageTop"/>
+      <xs:enumeration value="MethodModuleNamespaceClass"/>
+      <xs:enumeration value="MethodModuleNamespaceClassMethod"/>
+      <xs:enumeration value="MethodCCModuleClassFailedCoverageTop"/>
+      <xs:enumeration value="MethodCCModuleClassCoverageTop"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="NCoverReportFilter">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Default"/>
+      <xs:enumeration value="Assembly"/>
+      <xs:enumeration value="Namespace"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="NCoverSortBy">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="Name"/>
+      <xs:enumeration value="ClassLine"/>
+      <xs:enumeration value="CoveragePercentageAscending"/>
+      <xs:enumeration value="CoveragePercentageDescending"/>
+      <xs:enumeration value="UnvisitedSequencePointsAscending"/>
+      <xs:enumeration value="UnvisitedSequencePointsDescending"/>
+      <xs:enumeration value="VisitCountAscending"/>
+      <xs:enumeration value="VisitCountDescending"/>
+      <xs:enumeration value="FunctionCoverageAscending"/>
+      <xs:enumeration value="FunctionCoverageDescending"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="NotificationType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Always"/>
+      <xs:enumeration value="Changed"/>
+      <xs:enumeration value="Failed"/>
+      <xs:enumeration value="Success"/>
+      <xs:enumeration value="Fixed"/>
+      <xs:enumeration value="Exception"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Operator">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Or"/>
+      <xs:enumeration value="And"/>
+    </xs:restriction>
+  </xs:simpleType>
+
   <xs:simpleType name="QueueDuplicateHandlingMode">
     <xs:restriction base="xs:string">
       <xs:enumeration value="UseFirst"/>
       <xs:enumeration value="ApplyForceBuildsReAdd"/>
       <xs:enumeration value="ApplyForceBuildsReplace"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="String">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TimeUnit">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="millis"/>
+      <xs:enumeration value="seconds"/>
+      <xs:enumeration value="minutes"/>
+      <xs:enumeration value="hours"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>
