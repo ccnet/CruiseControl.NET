@@ -8,6 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     /// <summary>
     /// Checks the authorisation for a permission.
     /// </summary>
+    /// <title>Project Level Security</title>
     public interface IProjectAuthorisation
     {
         /// <summary>

@@ -21,22 +21,65 @@ using System.Text;
 namespace ThoughtWorks.CruiseControl.Core
 {
     /// <summary>
-    /// A project manages the workflow for 
-    /// A project is the combination of source control providers,
-    /// build tasks, publisher tasks, labellers, and state managers.
+    /// A &lt;project&gt; block defines all the configuration for one project running in a CruiseControl.NET server.
     /// </summary>
+    /// <title>Project Configuration Block</title>
+    /// <version>1.0</version>
     /// <remarks>
-    /// <code>
-    /// <![CDATA[
-    /// <project name="foo">
-    ///		<state type="state"></state>
-    ///		<sourcecontrol type="cvs" />
-    ///		<tasks><nant /></tasks>
-    ///		<publishers><xmllogger /></publishers>
-    /// </project>
-    /// ]]>
-    /// </code>
+    /// <heading>Setting the WebURL</heading>
+    /// <para>
+    /// The current format of the url for a project, as specified in the &lt;webURL&gt; element is:
+    /// </para>
+    /// <code type="None">http://{dashboardserver}/{vdir}/server/{ccnetserver}/project/{projectname}/ViewLatestBuildReport.aspx</code>
+    /// <para>
+    /// For example, if the dashboard was deployed on the server <b>webserver</b> to virtual directory 
+    /// <b>ccnet</b>, and if the project to monitor is called <b>test</b> on server cruise, the URL would be: 
+    /// </para>
+    /// <code type="None">http://webserver/ccnet/server/cruise/project/test/ViewLatestBuildReport.aspx</code>
     /// </remarks>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;project name="Project 1" /&gt;
+    /// </code>
+    /// <code title="Full Example">
+    /// &lt;project name="Project 1" queue="Q1" queuePriority="1"&gt;
+    /// &lt;workingDirectory&gt;yourWorkingDirectory&lt;/workingDirectory&gt;
+    /// &lt;artifactDirectory&gt;yourArtifactDirectory&lt;/artifactDirectory&gt;
+    /// &lt;category&gt;Category 1&lt;/category&gt;
+    /// &lt;webURL&gt;http://server1/ccnet/server/local/project/testProject/ViewLatestBuildReport.aspx&lt;/webURL&gt;
+    /// &lt;modificationDelaySeconds&gt;2&lt;/modificationDelaySeconds&gt;
+    /// &lt;maxSourceControlRetries&gt;5&lt;/maxSourceControlRetries&gt;
+    /// &lt;initialState&gt;Stopped&lt;/initialState&gt;
+    /// &lt;startupMode&gt;UseInitialState&lt;/startupMode&gt;
+    /// &lt;triggers&gt;
+    /// &lt;!--yourFirstTriggerType .. --&gt;
+    /// &lt;!--yourOtherTriggerType .. --&gt;
+    /// &lt;/triggers&gt;
+    /// &lt;!-- state type="yourStateManagerType" .. --&gt;
+    /// &lt;!-- sourcecontrol type="yourSourceControlType" .. --&gt;
+    /// &lt;!-- labeller type="yourLabellerType" .. --&gt;
+    /// &lt;prebuild&gt;
+    /// &lt;!-- yourFirstPrebuildTask .. --&gt;
+    /// &lt;!-- yourOtherPrebuildTask .. --&gt;
+    /// &lt;/prebuild&gt;
+    /// &lt;tasks&gt;
+    /// &lt;!-- yourFirstTask .. --&gt;
+    /// &lt;!-- yourOtherTask .. --&gt;
+    /// &lt;/tasks&gt;
+    /// &lt;publishers&gt;
+    /// &lt;!-- yourFirstPublisherTask .. --&gt;
+    /// &lt;!-- yourOtherPublisherTask .. --&gt;
+    /// &lt;/publishers&gt;
+    /// &lt;externalLinks&gt;
+    /// &lt;externalLink name="My First Link" url="http://somewhere/" /&gt;
+    /// &lt;externalLink name="My Other Link" url="http://somewhere.else/" /&gt;
+    /// &lt;/externalLinks&gt;
+    /// &lt;parameters&gt;
+    /// &lt;textParameter name="Build Name" default="Unknown" /&gt;
+    /// &lt;/parameters&gt;
+    /// &lt;/project&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("project")]
     public class Project : ProjectBase, IProject, IIntegrationRunnerTarget, IIntegrationRepository,
         IConfigurationValidation, IStatusSnapshotGenerator, IParamatisedProject
@@ -65,6 +108,12 @@ namespace ThoughtWorks.CruiseControl.Core
         private Dictionary<ITask, ItemStatus> currentProjectItems = new Dictionary<ITask, ItemStatus>();
         private Dictionary<SourceControlOperation, ItemStatus> sourceControlOperations = new Dictionary<SourceControlOperation, ItemStatus>();
 
+        /// <summary>
+        /// A set of Tasks to run before the build starts and before the source is updated. A failed task will fail the build and any
+        /// subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration. 
+        /// </summary>
+        /// <version>1.1</version>
+        /// <default>None</default>
         [ReflectorProperty("prebuild", Required = false)]
         public ITask[] PrebuildTasks = new ITask[0];
 
@@ -101,6 +150,11 @@ namespace ThoughtWorks.CruiseControl.Core
             this.integratable = integratable;
         }
 
+        /// <summary>
+        /// Any security for the project.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default><link>Inherited Project Security</link></default>
         [ReflectorProperty("security", InstanceTypeKey = "type", Required = false)]
         public IProjectAuthorisation Security
         {
@@ -108,7 +162,13 @@ namespace ThoughtWorks.CruiseControl.Core
             set { security = value; }
         }
 
-        [ReflectorProperty("parameters", Required=false)]
+        /// <summary>
+        /// Dynamic build parameters - these are parameters that are set at build time instead of being hard-coded within the
+        /// configuration file 
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        [ReflectorProperty("parameters", Required = false)]
         public ParameterBase[] Parameters
         {
             get { return parameters; }
@@ -117,12 +177,19 @@ namespace ThoughtWorks.CruiseControl.Core
 
         #region Links
         /// <summary>
-        /// Link this project to other sites.
+        /// Links for this project to other sites.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("linkedSites", Required = false)]
         public NameValuePair[] LinkedSites { get; set; }
         #endregion
 
+        /// <summary>
+        /// A state manager for the project.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default><link>File State Manager</link></default>
         [ReflectorProperty("state", InstanceTypeKey = "type", Required = false), Description("State")]
         public IStateManager StateManager
         {
@@ -130,6 +197,15 @@ namespace ThoughtWorks.CruiseControl.Core
             set { state = value; }
         }
 
+        /// <summary>
+        /// A reporting URL for this project. This is used by CCTray and the Email Publisher. Typically you should navigate to the
+        /// Project Report on the Dashboard, and use its URL.
+        /// </summary>
+        /// <remarks>
+        /// The default URL contains the machine name of the server.
+        /// </remarks>
+        /// <version>1.0</version>
+        /// <default>http://machineName/ccnet</default>
         [ReflectorProperty("webURL", Required = false)]
         public string WebURL
         {
@@ -140,9 +216,20 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// An optional impersonation account.
         /// </summary>
+        /// <remarks>
+        /// This is only available on Windows OSs.
+        /// </remarks>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("impersonation", InstanceType = typeof(ImpersonationDetails), Required = false)]
         public ImpersonationDetails Impersonation { get; set; }
 
+        /// <summary>
+        /// The maximum amount of source control exceptions in a row that may occur, before the project goes to the stopped state(when
+        /// stopProjectOnReachingMaxSourceControlRetries is set to true).
+        /// </summary>
+        /// <version>1.4</version>
+        /// <default>5</default>
         [ReflectorProperty("maxSourceControlRetries", Required = false)]
         public int MaxSourceControlRetries
         {
@@ -150,6 +237,12 @@ namespace ThoughtWorks.CruiseControl.Core
             set { maxSourceControlRetries = value < 0 ? 0 : value; }
         }
 
+        /// <summary>
+        /// Stops the project on reaching maxSourceControlRetries or not. When set to true, the project will be stopped when the amount of
+        /// consecutive source control errors is equal to maxSourceControlRetries.
+        /// </summary>
+        /// <version>1.4</version>
+        /// <default>false</default>
         [ReflectorProperty("stopProjectOnReachingMaxSourceControlRetries", Required = false)]
         public bool stopProjectOnReachingMaxSourceControlRetries
         {
@@ -157,6 +250,29 @@ namespace ThoughtWorks.CruiseControl.Core
             set { StopProjectOnReachingMaxSourceControlRetries = value; }
         }
         
+        /// <summary>
+        /// What action to take when a source control error occurs (during GetModifications).
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// These are the possible values :
+        /// </para>
+        /// <list type="1">
+        /// <item>
+        /// ReportEveryFailure : runs the publisher section whenever there is an error.
+        /// </item>
+        /// <item>
+        /// ReportOnRetryAmount : only runs the publisher section when maxSourceControlRetries has been reached, the publisher section will
+        /// only be run once.
+        /// </item>
+        /// <item>
+        /// ReportOnEveryRetryAmount : runs the publisher section whenever the maxSourceControlRetries has been reached. When 
+        /// maxSourceControlRetries has been reached and the publisher section has ran, the counter is set back to 0.
+        /// </item>
+        /// </list>
+        /// </remarks>
+        /// <version>1.4</version>
+        /// <default>ReportEveryFailure</default>
         [ReflectorProperty("sourceControlErrorHandling", Required = false)]
         public Common.SourceControlErrorHandlingPolicy SourceControlErrorHandling
         {
@@ -164,6 +280,11 @@ namespace ThoughtWorks.CruiseControl.Core
             set { sourceControlErrorHandling = value; }
         }
 
+        /// <summary>
+        /// The name of the integration queue that this project will use. By default, each project runs in its own queue.
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>Project name</default>
         [ReflectorProperty("queue", Required = false)]
         public string QueueName
         {
@@ -175,6 +296,14 @@ namespace ThoughtWorks.CruiseControl.Core
             set { queueName = value.Trim(); }
         }
 
+        /// <summary>
+        /// The priority of this project within the integration queue. If multiple projects have pending requests in the specified queue then
+        /// these requests will be executed according to their priority. Lower priority numbers indicate that integration requests for this
+        /// project will execute before other projects in the same queue, however projects with priority 0 are always executed after projects
+        /// with non-zero priorities in the same queue.
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>0</default>
         [ReflectorProperty("queuePriority", Required = false)]
         public int QueuePriority
         {
@@ -182,6 +311,11 @@ namespace ThoughtWorks.CruiseControl.Core
             set { queuePriority = value; }
         }
 
+        /// <summary>
+        /// The source control block to use.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default><link>Null Source Control Block</link></default>
         [ReflectorProperty("sourcecontrol", InstanceTypeKey = "type", Required = false)]
         public ISourceControl SourceControl
         {
@@ -190,9 +324,10 @@ namespace ThoughtWorks.CruiseControl.Core
         }
 
         /// <summary>
-        /// The list of build-completed publishers used by this project.  This property is
-        /// intended to be set via Xml configuration.
+        /// The list of build-completed publishers used by this project. 
         /// </summary>
+        /// <default>None</default>
+        /// <version><link>Xml Log Publisher</link></version>
         [ReflectorArray("publishers", Required = false)]
         public ITask[] Publishers
         {
@@ -201,11 +336,19 @@ namespace ThoughtWorks.CruiseControl.Core
         }
 
         /// <summary>
-        /// A period of time, in seconds.  When modifications are found within this period,
-        /// a build (which would otherwise occur) is delayed until this many seconds have
-        /// passed.  The intention is to allow a developer to complete a multi-stage
-        /// checkin.
+        /// The minimum number of seconds allowed between the last check in and the start of a valid build. 
         /// </summary>
+        /// <remarks>
+        /// If any modifications are found within this interval the system will sleep long enough so the last checkin is just outside this
+        /// interval. For example if the modification delay is set to 10 seconds and the last checkin was 7 seconds ago the system will sleep
+        /// for 3 seconds and check again. This process will repeat until no modifications have been found within the modification delay
+        /// window.
+        /// This feature is in CruiseControl.NET for Source Control systems, like CVS, that do not support atomic checkins since starting a
+        /// build half way through someone checking in their work could result in invalid 'logical' passes or failures. The property is
+        /// optional though so if you are using a source control system with atomic checkins, leave it out (and it will default to '0').
+        /// </remarks>
+        /// <version>1.0</version>
+        /// <default>0</default>
         [ReflectorProperty("modificationDelaySeconds", Required = false)]
         public double ModificationDelaySeconds
         {
@@ -213,6 +356,12 @@ namespace ThoughtWorks.CruiseControl.Core
             set { quietPeriod.ModificationDelaySeconds = value; }
         }
 
+        /// <summary>
+        /// Labellers are used to generate the label that CCNet uses to identify the specific build. The label generated by CCNet can be used
+        /// to version your assemblies or label your version control system with each build.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default><link>Default Labeller</link></default>
         [ReflectorProperty("labeller", InstanceTypeKey = "type", Required = false)]
         public ILabeller Labeller
         {
@@ -220,6 +369,12 @@ namespace ThoughtWorks.CruiseControl.Core
             set { labeller = value; }
         }
 
+        /// <summary>
+        /// A set of Tasks to run as part of the build. A failed task will fail the build and any subsequent tasks will not run. Tasks are run
+        /// sequentially, in the order they appear in the configuration.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
         [ReflectorArray("tasks", Required = false)]
         public ITask[] Tasks
         {
@@ -887,8 +1042,12 @@ namespace ThoughtWorks.CruiseControl.Core
         }
 
         /// <summary>
-        /// The initial start-up state to set.
+        /// Sets the state of the project when CCNet service/Console starts. Stopped can be handy when you are adding a lot of projects which
+        /// are depending on other projects (via the project trigger) and these may not be build right away. This value is only used when
+        /// startupMode is set to UseInitialState.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Started</default>
         [ReflectorProperty("initialState", Required = false)]
         public ProjectInitialState InitialState
         {
@@ -899,6 +1058,8 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// The start-up mode for this project.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>UseLastState</default>
         [ReflectorProperty("startupMode", Required = false)]
         public ProjectStartupMode StartupMode
         {

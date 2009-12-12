@@ -1,6 +1,7 @@
 namespace ThoughtWorks.CruiseControl.Core
 {
-	public interface ILabeller : ITask
+    /// <title>Labeller Blocks</title>
+    public interface ILabeller : ITask
 	{
 		/// <summary>
 		/// Returns the label to use for the current build.

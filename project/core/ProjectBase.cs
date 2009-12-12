@@ -30,6 +30,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			this.executionEnvironment = executionEnvironment;
 		}
 
+        /// <summary>
+        /// The name of your project - this must be unique for any given CruiseControl.NET server.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
 		[ReflectorProperty("name")]
 		public virtual string Name
 		{
@@ -44,6 +49,8 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// An optional description of the project.
         /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
         [ReflectorProperty("description", Required = false)]
         public virtual string Description
         {
@@ -55,6 +62,12 @@ namespace ThoughtWorks.CruiseControl.Core
             }
 		}
 
+        /// <summary>
+        /// A general category for this project. This is used by the dashboard to provide groupings to the project. Categories do not span
+        /// servers.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
 		[ReflectorProperty("category", Required=false)]
 		public virtual string Category
 		{
@@ -62,6 +75,17 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { category = value; }
 		}
 
+        /// <summary>
+        /// Trigger blocks allow you to specify when CruiseControl.NET will start a new integration cycle.
+        /// </summary>
+        /// <remarks>
+        /// Specifying an empty element (&lt;triggers /&gt;) means integrations are only ever forced manually (for example using CCTray or the
+        /// Web Dashboard.) Not including a &lt;triggers&gt; element at all means the project will behave like a &lt;triggers /&gt; element
+        /// (before 1.4.3 the default when not including a &lt;triggers&gt; was a single <link>Interval Trigger</link> with default
+        /// configuration).
+        /// </remarks>
+        /// <version>1.0</version>
+        /// <default>None</default>
 		[ReflectorProperty("triggers", InstanceType=typeof(MultipleTrigger), Required=false)]
 		public ITrigger Triggers
 		{
@@ -69,6 +93,14 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { triggers = value; }
 		}
 
+        /// <summary>
+        /// The Working Directory for the project (this is used by other blocks). Relative paths are relative to a directory called the project
+        /// Name in the directory where the CruiseControl.NET server was launched from. The Working Directory is meant to contain the checked
+        /// out version of the project under integration. Make sure this folder us unique per project to prevent problems with the build. You
+        /// don't need to quote the Working Directory, even if it contains spaces.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>WorkingDirectory</default>
 		[ReflectorProperty("workingDirectory", Required=false)]
 		public string ConfiguredWorkingDirectory
 		{
@@ -76,6 +108,15 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { configuredWorkingDirectory = value; }
 		}
 
+        /// <summary>
+        /// The Artifact Directory for the project (this is used by other blocks). Relative paths are relative to a directory called the
+        /// project Name in the directory where the CruiseControl.NET server was launched from. The Artifact Directory is meant to be a
+        /// persistence location for anything you want saved from the results of the build, e.g. build logs, distributables, etc. Make sure
+        /// this folder us unique per project to prevent problems with reporting about a build. You don't need to quote the Aftifact Directory,
+        /// even if it contains spaces.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>Artifacts</default>
 		[ReflectorProperty("artifactDirectory", Required=false)]
 		public string ConfiguredArtifactDirectory
 		{
@@ -83,6 +124,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { configuredArtifactDirectory = value; }
 		}
 
+        /// <summary>
+        /// Each of these are used to display project related links on the project report page of the Web Dashboard, and are meant as a
+        /// convenient shortcut to project-related web sites outside of CruiseControl.NET.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
 		[ReflectorArray("externalLinks", Required=false)]
 		public ExternalLink[] ExternalLinks
 		{
@@ -94,6 +141,8 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Should a reason be requested when a force build is triggered.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("askForForceBuildReason", Required = false)]
         public DisplayLevel AskForForceBuildReason
         {

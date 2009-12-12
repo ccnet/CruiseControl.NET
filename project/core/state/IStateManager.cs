@@ -7,6 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.State
 	/// State must be persisted between shutdown/startup of the CruiseControl.NET
 	/// server, as modification dates and label numbers must follow sequence.
 	/// </summary>
+    /// <title>State Manager Blocks</title>
 	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public interface IStateManager
 	{

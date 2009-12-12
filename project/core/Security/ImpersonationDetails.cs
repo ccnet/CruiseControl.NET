@@ -7,6 +7,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     /// <summary>
     /// Defines the details to use for impersonating another user account.
     /// </summary>
+    /// <title>Impersonation</title>
+    /// <version>1.5</version>
     [ReflectorType("impersonation")]
     public class ImpersonationDetails
     {
@@ -36,6 +38,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The name of the domain to use.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("domain")]
         public string DomainName { get; set; }
         #endregion
@@ -44,6 +48,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The name of the user to impersonate.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("user")]
         public string UserName { get; set; }
         #endregion
@@ -52,6 +58,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The password of the user.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("password")]
         public string Password { get; set; }
         #endregion

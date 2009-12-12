@@ -2,6 +2,10 @@ using System.ComponentModel;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
+    /// <summary>
+    /// Defines a source control block.
+    /// </summary>
+    /// <title>Source Control Blocks</title>
 	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public interface ISourceControl
 	{

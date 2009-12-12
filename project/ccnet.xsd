@@ -53,6 +53,160 @@
 
   <xs:complexType name="project">
     <xs:all>
+      <xs:element name="prebuild" type="Tasks" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A set of Tasks to run before the build starts and before the source is updated. A failed task will fail the build and any subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="security" type="ProjectAuthorisation" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Any security for the project.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="parameters" type="Parameters" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Dynamic build parameters - these are parameters that are set at build time instead of being hard-coded within the configuration file
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="linkedSites" type="NameValuePairs" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Links for this project to other sites.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="state" type="stateManager" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A state manager for the project.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="webURL" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A reporting URL for this project. This is used by CCTray and the Email Publisher. Typically you should navigate to the Project Report on the Dashboard, and use its URL.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="impersonation" type="impersonation" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            An optional impersonation account.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="maxSourceControlRetries" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The maximum amount of source control exceptions in a row that may occur, before the project goes to the stopped state(when stopProjectOnReachingMaxSourceControlRetries is set to true).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="stopProjectOnReachingMaxSourceControlRetries" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Stops the project on reaching maxSourceControlRetries or not. When set to true, the project will be stopped when the amount of consecutive source control errors is equal to maxSourceControlRetries.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="sourceControlErrorHandling" type="SourceControlErrorHandlingPolicy" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            What action to take when a source control error occurs (during GetModifications).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="queue" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the integration queue that this project will use. By default, each project runs in its own queue.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="queuePriority" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The priority of this project within the integration queue. If multiple projects have pending requests in the specified queue then these requests will be executed according to their priority. Lower priority numbers indicate that integration requests for this project will execute before other projects in the same queue, however projects with priority 0 are always executed after projects with non-zero priorities in the same queue.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="sourcecontrol" type="SourceControl" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The source control block to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="publishers" type="Tasks" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The list of build-completed publishers used by this project.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="modificationDelaySeconds" type="xs:double" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The minimum number of seconds allowed between the last check in and the start of a valid build.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="labeller" type="Labeller" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Labellers are used to generate the label that CCNet uses to identify the specific build. The label generated by CCNet can be used to version your assemblies or label your version control system with each build.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="tasks" type="Tasks" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A set of Tasks to run as part of the build. A failed task will fail the build and any subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="initialState" type="ProjectInitialState" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Sets the state of the project when CCNet service/Console starts. Stopped can be handy when you are adding a lot of projects which are depending on other projects (via the project trigger) and these may not be build right away. This value is only used when startupMode is set to UseInitialState.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="startupMode" type="ProjectStartupMode" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The start-up mode for this project.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            An optional description of the project.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="category" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A general category for this project. This is used by the dashboard to provide groupings to the project. Categories do not span servers.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="triggers" type="Triggers" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Trigger blocks allow you to specify when CruiseControl.NET will start a new integration cycle.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="workingDirectory" type="String" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
@@ -67,91 +221,37 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="webURL" type="String" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>A reporting URL for this project. This is used by CCTray and the Email Publisher. Typically you should navigate to the Project Report on the Dashboard, and use its URL.</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="category" type="String" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>A general category for this project. This is used by the dashboard to provide groupings to the project. Categories do not span servers.</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="modificationDelaySeconds" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+      <xs:element name="externalLinks" type="ExternalLinks" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
-            The minimum number of seconds allowed between the last check in and the start of a valid build.
-            If any modifications are found within this interval the system will sleep long enough so the last checkin is just outside this interval. For example if the modification delay is set to 10 seconds and the last checkin was 7 seconds ago the system will sleep for 3 seconds and check again. This process will repeat until no modifications have been found within the modification delay window.
-            This feature is in CruiseControl.NET for Source Control systems, like CVS, that do not support atomic checkins since starting a build half way through someone checking in their work could result in invalid 'logical' passes or failures. The property is optional though so if you are using a source control system with atomic checkins, leave it out (and it will default to '0').
+            Each of these are used to display project related links on the project report page of the Web Dashboard, and are meant as a convenient shortcut to project-related web sites outside of CruiseControl.NET.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="sourcecontrol" type="SourceControl" minOccurs="0" maxOccurs="1">
+      <xs:element name="askForForceBuildReason" type="DisplayLevel" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
-            The source control system to use.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="state" type="stateManager" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            CruiseControl.NET needs to store state about a project. This is data such as the last build label, the time of the last build, and the outcome of the build, etc. The State Manager allows you to specify how and where this data is stored.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="triggers" type="Triggers" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>Trigger blocks allow you to specify when CruiseControl.NET will start a new integration cycle.</xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="tasks" type="Tasks" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            A set of Tasks to run as part of the build. A failed task will fail the build and any subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="prebuild" type="Tasks" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            A set of Tasks to run before the build starts and before the source is updated. A failed task will fail the build and any subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="publishers" type="Tasks" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            A set of Tasks that are run after the build is complete. These tasks are used primarily to clean up after the build and to publish and report on the build results. All tasks in this section will always run regardless of whether previous tasks fail or the build is broken. You should always set an Xml Log Publisher in this section so that your Web Dashboard will be able to report results.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="impersonation" type="impersonation">
-        <xs:annotation>
-          <xs:documentation>
-            Defines the details to use for impersonating another user account.
+            Should a reason be requested when a force build is triggered.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
     </xs:all>
-    <xs:attribute name="name" type="xs:string" use="required">
-      <xs:annotation>
-        <xs:documentation>The name of your project - this must be unique for any given CruiseControl.NET server.</xs:documentation>
-      </xs:annotation>
-    </xs:attribute>
-    <xs:attribute name="queue" type="xs:string" use="optional">
-      <xs:annotation>
-        <xs:documentation>The name of the integration queue that this project will use.</xs:documentation>
-      </xs:annotation>
-    </xs:attribute>
-    <xs:attribute name="queuePriority" type="xs:nonNegativeInteger" use="optional">
+    <xs:attribute name="name" type="String" use="required">
       <xs:annotation>
         <xs:documentation>
-          The priority of this project within the integration queue. If multiple projects have pending requests in the specified queue then these requests will be executed according to their priority. Lower priority numbers indicate that integration requests for this project will execute before other projects in the same queue, however projects with priority 0 are always executed after projects with non-zero priorities in the same queue.
+          The name of your project - this must be unique for any given CruiseControl.NET server.
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
   </xs:complexType>
+
+  <xs:complexType name="ExternalLinks"></xs:complexType>
+
+  <xs:complexType name="Parameters"></xs:complexType>
+
+  <xs:complexType name="Labeller" abstract="true"/>
+
+  <xs:complexType name="ProjectAuthorisation" abstract="true"/>
 
   <xs:complexType name="SourceControl" abstract="true"/>
 
@@ -791,7 +891,7 @@
       <xs:element name="timeout" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
-            The time\-out period in seconds.
+            The time-out period in seconds.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -805,7 +905,7 @@
       <xs:element name="width" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
-            The first line of a duplicate must contain at least this many non\-white\-space characters.
+            The first line of a duplicate must contain at least this many non-white-space characters.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1820,7 +1920,7 @@
       <xs:element name="nologo" type="xs:boolean" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
-            Whether to use the \-nologo argument when calling NAnt.
+            Whether to use the -nologo argument when calling NAnt.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1881,7 +1981,7 @@
       <xs:element name="timeout" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
-            The time\-out period in seconds. If the task does no finish running in this time it will be terminated.
+            The time-out period in seconds. If the task does no finish running in this time it will be terminated.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -2110,7 +2210,7 @@
       <xs:element name="timeout" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
-            The time\-out period in seconds. If the task does no finish running in this time it will be terminated.
+            The time-out period in seconds. If the task does no finish running in this time it will be terminated.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -2380,14 +2480,14 @@
       <xs:element name="reportXslt" type="String" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
-            The location of a custom report XSL\-T.
+            The location of a custom report XSL-T.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="timeout" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
-            The time\-out period in seconds.
+            The time-out period in seconds.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -2457,7 +2557,7 @@
       <xs:element name="path" type="String" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
-            Path of  *nunit\-console.exe* application.
+            Path of  *nunit-console.exe* application.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -2993,7 +3093,7 @@
       <xs:element name="filterTrigger" type="filterTrigger">
         <xs:annotation>
           <xs:documentation>
-            The Filter Trigger allows you to prevent builds from occurring at certain times or on certain days (such as when your source control repository is undergoing backup). It is used to decorate an existing trigger. For example, if you have set up a [Interval Trigger] to cause a new build every 5 minutes, you can use the Filter Trigger to create a window during which the build will not run. The filter will exclude modifications that occur between the start time and the end time on the days specified. If the start time is greater than the end time then the filtered time will span across midnight. For example, if the start time is 23:00 and the end time is 3:00 then builds will be suppressed from 23:00\-23:59 and 0:00\-3:00 on the days specified.
+            The Filter Trigger allows you to prevent builds from occurring at certain times or on certain days (such as when your source control repository is undergoing backup). It is used to decorate an existing trigger. For example, if you have set up a [Interval Trigger] to cause a new build every 5 minutes, you can use the Filter Trigger to create a window during which the build will not run. The filter will exclude modifications that occur between the start time and the end time on the days specified. If the start time is greater than the end time then the filtered time will span across midnight. For example, if the start time is 23:00 and the end time is 3:00 then builds will be suppressed from 23:00-23:59 and 0:00-3:00 on the days specified.
             Like all triggers, the scheduleTrigger must be enclosed within a triggers element in the appropriate [Project Configuration Block].
           </xs:documentation>
         </xs:annotation>
@@ -3741,7 +3841,7 @@
       <xs:element name="address" type="String" minOccurs="1" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
-            The Internet\-style email address of the user (e.g., "joe@example.com").
+            The Internet-style email address of the user (e.g., "joe@example.com").
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -4014,6 +4114,14 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <xs:simpleType name="DisplayLevel">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="Optional"/>
+      <xs:enumeration value="Required"/>
+    </xs:restriction>
+  </xs:simpleType>
+
   <xs:simpleType name="FtpAction">
     <xs:restriction base="xs:string">
       <xs:enumeration value="UploadFolder"/>
@@ -4153,11 +4261,33 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <xs:simpleType name="ProjectInitialState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Started"/>
+      <xs:enumeration value="Stopped"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ProjectStartupMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UseLastState"/>
+      <xs:enumeration value="UseInitialState"/>
+    </xs:restriction>
+  </xs:simpleType>
+
   <xs:simpleType name="QueueDuplicateHandlingMode">
     <xs:restriction base="xs:string">
       <xs:enumeration value="UseFirst"/>
       <xs:enumeration value="ApplyForceBuildsReAdd"/>
       <xs:enumeration value="ApplyForceBuildsReplace"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="SourceControlErrorHandlingPolicy">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ReportEveryFailure"/>
+      <xs:enumeration value="ReportOnRetryAmount"/>
+      <xs:enumeration value="ReportOnEveryRetryAmount"/>
     </xs:restriction>
   </xs:simpleType>
 
