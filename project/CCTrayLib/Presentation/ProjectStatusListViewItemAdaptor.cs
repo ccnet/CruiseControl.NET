@@ -68,7 +68,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				{
 					foreach(CCTrayProject project in config.Projects)
 					{
-						if(project.ProjectName == monitor.Detail.ProjectName)
+						if ((project.ProjectName == monitor.Detail.ProjectName)
+							// add by rei , fixes issue with displaying wrong server in cctray, while multiple configured server 
+							// having project with the same project name 
+							&& (project.BuildServer.DisplayName == monitor.Detail.Configuration.BuildServer.DisplayName))
 						{
 							serverName.Text = project.BuildServer.DisplayName;
 						}
