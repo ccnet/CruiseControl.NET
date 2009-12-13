@@ -9,6 +9,7 @@ using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Remote;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
+using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
@@ -111,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             Assert.AreEqual(xml, actual.OuterXml);
         }
 
@@ -123,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"default\"><subItem>Text</subItem>" +
                 "<dynamicValues>" +
                     "<directValue>" +
@@ -143,7 +144,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"value\"><subItem>default</subItem>" +
                 "<dynamicValues>" +
                     "<directValue>" +
@@ -163,7 +164,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"\"><subItem>Text</subItem>" +
                 "<dynamicValues>" +
                     "<directValue>" +
@@ -183,7 +184,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"value\"><subItem></subItem>" +
                 "<dynamicValues>" +
                     "<directValue>" +
@@ -203,7 +204,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"\"><subItem>Text</subItem>" +
                 "<dynamicValues>" +
                     "<replacementValue>" +
@@ -225,7 +226,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"value\"><subItem></subItem>" +
                 "<dynamicValues>" +
                     "<replacementValue>" +
@@ -247,7 +248,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"\"><subItem>Text</subItem>" +
                 "<dynamicValues>" +
                     "<replacementValue>" +
@@ -269,7 +270,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"value\"><subItem></subItem>" +
                 "<dynamicValues>" +
                     "<replacementValue>" +
@@ -291,7 +292,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"\"><subItem>Text</subItem>" +
                 "<dynamicValues>" +
                     "<replacementValue>" +
@@ -313,7 +314,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"value\"><subItem></subItem>" +
                 "<dynamicValues>" +
                     "<replacementValue>" +
@@ -335,7 +336,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"\"><subItem>Text</subItem>" +
                 "<dynamicValues>" +
                     "<replacementValue>" +
@@ -358,7 +359,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"value\"><subItem></subItem>" +
                 "<dynamicValues>" +
                     "<replacementValue>" +
@@ -381,7 +382,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"\"><subItem>Text</subItem>" +
                 "<dynamicValues>" +
                     "<replacementValue>" +
@@ -404,7 +405,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"value\"><subItem></subItem>" +
                 "<dynamicValues>" +
                     "<replacementValue>" +
@@ -427,7 +428,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"\"><subItem>Text</subItem>" +
                 "<dynamicValues>" +
                     "<replacementValue>" +
@@ -450,7 +451,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"value\"><subItem></subItem>" +
                 "<dynamicValues>" +
                     "<replacementValue>" +
@@ -473,7 +474,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             document.LoadXml(xml);
 
             var task = new TestTask();
-            var actual = task.PreprocessParameters(document.DocumentElement);
+            var actual = task.PreprocessParameters(new NetReflectorTypeTable(), document.DocumentElement);
             var expected = "<item attrib=\"first|second\"><subItem>Text</subItem>" +
                 "<dynamicValues>" +
                     "<directValue>" +

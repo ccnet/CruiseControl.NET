@@ -291,16 +291,32 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Check for and convert inline XML dynamic value notation into <see cref="IDynamicValue"/> definitions.
         /// </summary>
+        /// <param name="typeTable">The type table.</param>
         /// <param name="inputNode">The node to process.</param>
         /// <param name="exclusions">Any elements to exclude.</param>
         /// <returns></returns>
-        public static XmlNode ConvertXmlToDynamicValues(XmlNode inputNode, params string[] exclusions)
+        public static XmlNode ConvertXmlToDynamicValues(NetReflectorTypeTable typeTable, XmlNode inputNode, params string[] exclusions)
         {
             var resultNode = inputNode;
             var doc = inputNode.OwnerDocument;
             var parameters = new List<XmlElement>();
 
-            foreach (XmlNode nodeWithParam in inputNode.SelectNodes("descendant::text()|descendant-or-self::*[@*]/@*"))
+            // Initialise the values from the reflection
+            var inputNodeType = typeTable.ContainsType(inputNode.Name) ? typeTable[inputNode.Name] : null;
+            var inputMembers = new Dictionary<string, XmlMemberSerialiser>();
+            if (inputNodeType != null)
+            {
+                foreach (XmlMemberSerialiser value in inputNodeType.MemberSerialisers)
+                {
+                    if (value != null)
+                    {
+                        inputMembers.Add(value.Attribute.Name, value);
+                    }
+                }
+            }
+
+            var nodes = inputNode.SelectNodes("descendant::text()|descendant-or-self::*[@*]/@*");
+            foreach (XmlNode nodeWithParam in nodes)
             {
                 var text = nodeWithParam.Value;
                 var isExcluded = CheckForExclusion(nodeWithParam, exclusions);
@@ -349,9 +365,38 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     // Generate the path
                     var propertyName = new StringBuilder();
                     var currentNode = nodeWithParam is XmlAttribute ? nodeWithParam : nodeWithParam.ParentNode;
+                    var previousNode = currentNode;
+                    var lastName = string.Empty;
                     while ((currentNode != inputNode) && (currentNode != null))
                     {
-                        propertyName.Insert(0, "/" + currentNode.Name);
+                        // Check if we are dealing with an array
+                        var nodeName = currentNode.Name;
+                        if (inputMembers.ContainsKey(nodeName) && inputMembers[nodeName].ReflectorMember.MemberType.IsArray)
+                        {
+                            // Do some convoluted processing to handle array items
+                            propertyName.Remove(0, lastName.Length + 1);    // Remove the previous name, since this is now an index position
+                            var position = 0;
+                            var indexNode = previousNode;
+
+                            // Find the index of the node
+                            while (indexNode.PreviousSibling != null)
+                            {
+                                position++;
+                                indexNode = indexNode.PreviousSibling;
+                            }
+
+                            // Add the node as an indexed node
+                            propertyName.Insert(0, "/" + nodeName + "[" + position.ToString() + "]");
+                        }
+                        else
+                        {
+                            // Just add the node name
+                            propertyName.Insert(0, "/" + nodeName);
+                        }
+
+                        // Move to the parent
+                        lastName = nodeName;
+                        previousNode = currentNode;
                         if (currentNode is XmlAttribute)
                         {
                             currentNode = (currentNode as XmlAttribute).OwnerElement;

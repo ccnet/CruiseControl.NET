@@ -155,12 +155,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Preprocesses a node prior to loading it via NetReflector.
         /// </summary>
-        /// <param name="inputNode"></param>
+        /// <param name="typeTable">The type table.</param>
+        /// <param name="inputNode">The input node.</param>
         /// <returns></returns>
         [ReflectionPreprocessor]
-        public virtual XmlNode PreprocessParameters(XmlNode inputNode)
+        public virtual XmlNode PreprocessParameters(NetReflectorTypeTable typeTable, XmlNode inputNode)
         {
-            return DynamicValueUtility.ConvertXmlToDynamicValues(inputNode);
+            return DynamicValueUtility.ConvertXmlToDynamicValues(typeTable, inputNode);
         }
         #endregion
 
