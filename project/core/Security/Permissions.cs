@@ -10,6 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     /// <summary>
     /// Defines a set of permissions.
     /// </summary>
+    /// <title>General Security Permissions</title>
     [ReflectorType("permissions")]
     public class Permissions
     {
@@ -30,6 +31,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The default right to use.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Inherit</default>
         [ReflectorProperty("defaultRight", Required = false)]
         [DefaultValue(SecurityRight.Inherit)]
         public SecurityRight DefaultRight
@@ -41,8 +44,10 @@ namespace ThoughtWorks.CruiseControl.Core.Security
 
         #region SendMessageRight
         /// <summary>
-        /// The right.
+        /// The right to send messages.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Inherit</default>
         [ReflectorProperty("sendMessage", Required = false)]
         [DefaultValue(SecurityRight.Inherit)]
         public SecurityRight SendMessageRight
@@ -54,8 +59,10 @@ namespace ThoughtWorks.CruiseControl.Core.Security
 
         #region ForceBuildRight
         /// <summary>
-        /// The right.
+        /// The right for force or abort builds.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Inherit</default>
         [ReflectorProperty("forceBuild", Required = false)]
         [DefaultValue(SecurityRight.Inherit)]
         public SecurityRight ForceBuildRight
@@ -67,8 +74,10 @@ namespace ThoughtWorks.CruiseControl.Core.Security
 
         #region StartProjectRight
         /// <summary>
-        /// The right.
+        /// The right to stop and start projects.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Inherit</default>
         [ReflectorProperty("startProject", Required = false)]
         [DefaultValue(SecurityRight.Inherit)]
         public SecurityRight StartProjectRight
@@ -80,8 +89,10 @@ namespace ThoughtWorks.CruiseControl.Core.Security
 
         #region ChangeProjectRight
         /// <summary>
-        /// The right.
+        /// The right to change the configuration of projects.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Inherit</default>
         [ReflectorProperty("changeProject", Required = false)]
         [DefaultValue(SecurityRight.Inherit)]
         public SecurityRight ChangeProjectRight
@@ -95,6 +106,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The right to view security.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Inherit</default>
         [ReflectorProperty("viewSecurity", Required = false)]
         [DefaultValue(SecurityRight.Inherit)]
         public SecurityRight ViewSecurityRight
@@ -106,8 +119,10 @@ namespace ThoughtWorks.CruiseControl.Core.Security
 
         #region ModifySecurityRight
         /// <summary>
-        /// The right to view security.
+        /// The right to modify security.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Inherit</default>
         [ReflectorProperty("modifySecurity", Required = false)]
         [DefaultValue(SecurityRight.Inherit)]
         public SecurityRight ModifySecurityRight
@@ -121,6 +136,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The right to view a project.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Inherit</default>
         [ReflectorProperty("viewProject", Required = false)]
         [DefaultValue(SecurityRight.Inherit)]
         public SecurityRight ViewProjectRight
@@ -134,6 +151,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The right to view configuration and logs.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Inherit</default>
         [ReflectorProperty("viewConfiguration", Required = false)]
         [DefaultValue(SecurityRight.Inherit)]
         public SecurityRight ViewConfigurationRight

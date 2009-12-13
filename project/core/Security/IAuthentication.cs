@@ -9,6 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     /// <summary>
     /// Defines an authentication mechanism.
     /// </summary>
+    /// <title>Security Users</title>
     public interface IAuthentication
         : ISecuritySetting
     {

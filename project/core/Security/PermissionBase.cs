@@ -21,6 +21,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The identifier of the referenced permission.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("ref", Required = false)]
         public string RefId
         {

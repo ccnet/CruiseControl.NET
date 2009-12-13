@@ -19,6 +19,31 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     /// Defines a security manager implementation that implements security with configuration
     /// in external files.
     /// </summary>
+    /// <title>External File Server Security</title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code>
+    /// &lt;externalFileSecurity&gt;
+    /// &lt;cache type="inMemoryCache" duration="10" mode="sliding"/&gt;
+    /// &lt;files&gt;
+    /// &lt;file&gt;users.xml&lt;/file&gt;
+    /// &lt;file&gt;permissions.xml&lt;/file&gt;
+    /// &lt;/files&gt;
+    /// &lt;/externalFileSecurity&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <heading>External File Format</heading>
+    /// <para>
+    /// The elementsin the external file uses the standard user (<link>Security Users</link>) and permission definitions 
+    /// (<link>Security Permissions</link>).
+    /// </para>
+    /// <para>
+    /// It is possible to define multiple external security files. Each file can define the users and/or permissions for different areas (e.g.
+    /// different departments).
+    /// </para>
+    /// <include>General Security Permissions</include>
+    /// </remarks>
     [ReflectorType("externalFileSecurity")]
     public class ExternalFileSecurityManager
         : SecurityManagerBase, IConfigurationValidation
@@ -52,6 +77,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The files to load.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("files")]
         public string[] Files
         {

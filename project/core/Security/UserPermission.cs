@@ -4,6 +4,22 @@ using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
+    /// <summary>
+    /// Defines the permissions for a user.
+    /// </summary>
+    /// <title>User Permission</title>
+    /// <version>1.5</version>
+    /// <remarks>
+    /// <include>General Security Permissions</include>
+    /// </remarks>
+    /// <example>
+    /// <code title="User Definition Example">
+    /// &lt;userPermission name="johndoe" forceBuild="Allow" startProject="Deny" defaultRight="Inherit"/&gt;
+    /// </code>
+    /// <code title="Reference Example">
+    /// &lt;userPermission name="johndoe" ref="johndoe"/&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("userPermission")]
     public class UserPermission
         : PermissionBase, IPermission
@@ -51,6 +67,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The user name.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("user", Required = true)]
         public string UserName
         {

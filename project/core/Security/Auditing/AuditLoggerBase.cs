@@ -13,8 +13,10 @@ namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
         private bool logFailureEvents = true;
 
         /// <summary>
-        /// The default logging action for successful events.
+        /// Whether to log successful events or not.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>true</default>
         [ReflectorProperty("success", Required = false)]
         public bool LogSuccessfulEvents
         {
@@ -23,8 +25,10 @@ namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
         }
 
         /// <summary>
-        /// The default logging action for failure events.
+        /// Whether to log failed events or not. 
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>true</default>
         [ReflectorProperty("failure", Required = false)]
         public bool LogFailureEvents
         {

@@ -10,8 +10,24 @@ using ThoughtWorks.CruiseControl.Remote.Security;
 namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
 {
     /// <summary>
-    /// Reads audit events from an XML file.
+    /// <para>
+    /// Reads audit logging information from a file. The information must be stored in an XML format.
+    /// </para>
+    /// <para>
+    /// This reader handles reading audit information that has been written by the <link>XML File Audit Logger</link>.
+    /// </para>
     /// </summary>
+    /// <version>1.5</version>
+    /// <title>XML File Audit Reader</title>
+    /// <example>
+    /// <code>
+    /// &lt;auditReader type="xmlFileAuditReader" location="c:\Logs\ccnet_audit.log"/&gt;
+    /// </code>
+    /// </example>
+    /// <key name="type">
+    /// <description>The type of the audit reader.</description>
+    /// <value>xmlFileAuditReader</value>
+    /// </key>
     [ReflectorType("xmlFileAuditReader")]
     public class FileXmlReader
         : IAuditReader
@@ -28,8 +44,10 @@ namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
 		}
 
         /// <summary>
-        /// The location to log the audit events.
+        /// The location of the file to read the audit events from.
         /// </summary>
+        /// <default>1.5</default>
+        /// <default>SecurityAudit.xml</default>
         [ReflectorProperty("location", Required = false)]
         public string AuditFileLocation
         {

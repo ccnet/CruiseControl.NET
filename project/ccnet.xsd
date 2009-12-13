@@ -9,6 +9,29 @@
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1">
+          <xs:element name="externalFileSecurity" type="externalFileSecurity">
+            <xs:annotation>
+              <xs:documentation>
+                Defines a security manager implementation that implements security with configuration in external files.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="internalSecurity" type="internalSecurity">
+            <xs:annotation>
+              <xs:documentation>
+                Defines a security manager implementation that implements security internally \- the security settings are stored in the same configuration file.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="nullSecurity" type="nullSecurity">
+            <xs:annotation>
+              <xs:documentation>
+                A default implementation of a security manager where there is no security (e.g. every right is allowed);
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:choice>
         <xs:element name="project" type="project">
           <xs:annotation>
             <xs:documentation>A build project.</xs:documentation>
@@ -24,6 +47,271 @@
       </xs:choice>
     </xs:complexType>
   </xs:element>
+
+  <xs:complexType name="externalFileSecurity">
+    <xs:all>
+      <xs:element name="files" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The files to load.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="file" type="String">
+              <xs:annotation>
+                <xs:documentation>
+                  The external file to import.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="cache" type="sessionCache" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The associated session cache.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="audit" type="auditLoggers" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The audit loggers.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="auditReader" type="auditReader" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The audit reader.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="defaults" type="permission" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The default permissions.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="channel" type="channelSecurity" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The channel security requirements.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="internalSecurity">
+    <xs:all>
+      <xs:element name="users" type="users" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The users for the same.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="permissions" type="permissions" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The server-level permissions.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="cache" type="sessionCache" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The associated session cache.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="audit" type="auditLoggers" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The audit loggers.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="auditReader" type="auditReader" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The audit reader.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="defaults" type="permission" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The default permissions.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="channel" type="channelSecurity" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The channel security requirements.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="nullSecurity">
+  </xs:complexType>
+
+  <xs:complexType name="users">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="ldapUser" type="ldapUser">
+        <xs:annotation>
+          <xs:documentation>
+            Stores a user name - authentication will come from Active Directory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="passwordUser" type="passwordUser">
+        <xs:annotation>
+          <xs:documentation>
+            User password authentication checks that the user name and password combination is valid.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="simpleUser" type="simpleUser">
+        <xs:annotation>
+          <xs:documentation>
+            User name authentication checks that the user name is valid.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="ldapUser">
+    <xs:all>
+      <xs:element name="domain" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The AD domain to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="String" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The user name for this user.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="passwordUser">
+    <xs:all>
+      <xs:element name="password" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The password for this user.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="display" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The display name for this user.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="String" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The name for this user.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="simpleUser">
+    <xs:all>
+      <xs:element name="display" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The display name for this user.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="String" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The login name for this user.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="sessionCache" abstract="true"/>
+
+  <xs:complexType name="auditLoggers">
+    <xs:choice minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="xmlFileAudit" type="xmlFileAudit">
+        <xs:annotation>
+          <xs:documentation>
+            Sends audit logging information to a file. The information will be stored in an XML format.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+  
+  <xs:complexType name="xmlFileAudit">
+    <xs:all>
+      <xs:element name="location" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The location to log the audit events.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="success" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to log successful events or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="failure" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to log failed events or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="auditReader" abstract="true"/>
+
+  <xs:complexType name="xmlFileAuditReader">
+    <xs:complexContent>
+      <xs:extension base="auditReader">
+        <xs:all>
+          <xs:element name="location" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The location of the file to read the audit events from.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="channelSecurity" abstract="true"/>
 
   <xs:complexType name="queue">
     <xs:all>
@@ -247,7 +535,320 @@
 
   <xs:complexType name="ExternalLinks"></xs:complexType>
 
-  <xs:complexType name="Parameters"></xs:complexType>
+  <xs:complexType name="Parameters">
+    <xs:choice minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="booleanParameter" type="booleanParameter">
+        <xs:annotation>
+          <xs:documentation>
+            This will prompt the user to enter a boolean value when a force build is requested.
+            This parameter can then be used by a dynamic value in a task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dateParameter" type="dateParameter">
+        <xs:annotation>
+          <xs:documentation>
+            This will prompt the user to enter a date value when a force build is requested.
+            This parameter can then be used by a dynamic value in a task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="numericParameter" type="numericParameter">
+        <xs:annotation>
+          <xs:documentation>
+            This will prompt the user to enter a numeric value when a force build is requested.
+            This parameter can then be used by a dynamic value in a task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="selectParameter" type="selectParameter">
+        <xs:annotation>
+          <xs:documentation>
+            This will prompt the user to select a value from a list of values when a force build is requested.
+            This parameter can then be used by a dynamic value in a task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="textParameter" type="textParameter">
+        <xs:annotation>
+          <xs:documentation>
+            This will prompt the user to enter a text value when a force build is requested.
+            This parameter can then be used by a dynamic value in a task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="booleanParameter">
+    <xs:all>
+      <xs:element name="required" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Is the parameter required?
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="true" type="NameValuePair" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The value to use when the parameter is true. If the name attribute is set, then the user will see that as the selection value. Otherwise the actual value will be displayed.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="false" type="NameValuePair" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The value to use when the parameter is false. If the name attribute is set, then the user will see that as the selection value. Otherwise the actual value will be displayed.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="display" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The display name of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The description of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="default" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The default value to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="String" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The name of the parameter.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="dateParameter">
+    <xs:all>
+      <xs:element name="minimum" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The mimimum allowed value of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="maximum" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The maximum allowed value of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="required" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Is the parameter required?
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="display" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The display name of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The description of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="default" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The default value to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="String" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The name of the parameter.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="numericParameter">
+    <xs:all>
+      <xs:element name="minimum" type="xs:double" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The mimimum allowed value of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="maximum" type="xs:double" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The maximum allowed value of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="required" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Is the parameter required?
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="display" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The display name of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The description of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="default" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The default value to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="String">
+      <xs:annotation>
+        <xs:documentation>
+          The name of the parameter.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="selectParameter">
+    <xs:all>
+      <xs:element name="required" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Is the parameter required?
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="sourceFile" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Load the values from a file.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="allowedValues" type="ValuesList" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            An array of allowed values.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="default" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The default value to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="display" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The display name of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The description of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="String" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The name of the parameter.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="textParameter">
+    <xs:all>
+      <xs:element name="minimum" type="xs:int" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The minimum allowed length.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="maximum" type="xs:int" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The maximum allowed length of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="required" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Is the parameter required?
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="display" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The display name of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The description of the parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="default" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The default value to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="String" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The name of the parameter.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
 
   <xs:complexType name="Labeller" abstract="true"/>
 
@@ -3830,32 +4431,45 @@
     </xs:choice>
   </xs:complexType>
 
-  <xs:complexType name="NameValuePairs">
+  <xs:complexType name="ValuesList">
     <xs:choice minOccurs="1" maxOccurs="unbounded">
-      <xs:element name="namedValue">
+      <xs:element name="value" type="NameValuePair">
         <xs:annotation>
           <xs:documentation>
             The value to pass.
           </xs:documentation>
         </xs:annotation>
-        <xs:complexType>
-          <xs:attribute name="name" type="String" use="required">
-            <xs:annotation>
-              <xs:documentation>
-                The name of the value.
-              </xs:documentation>
-            </xs:annotation>
-          </xs:attribute>
-          <xs:attribute name="value" type="String" use="required">
-            <xs:annotation>
-              <xs:documentation>
-                The value of the value.
-              </xs:documentation>
-            </xs:annotation>
-          </xs:attribute>
-        </xs:complexType>
       </xs:element>
     </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="NameValuePairs">
+    <xs:choice minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="namedValue" type="NameValuePair">
+        <xs:annotation>
+          <xs:documentation>
+            The value to pass.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="NameValuePair">
+    <xs:attribute name="name" type="String" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The name of the value.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="value" type="String" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The value of the value.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
   </xs:complexType>
 
   <xs:complexType name="impersonation">
@@ -4397,6 +5011,226 @@
     </xs:all>
   </xs:complexType>
 
+  <xs:complexType name="permissions">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="rolePermission" type="rolePermission">
+        <xs:annotation>
+          <xs:documentation>
+            Defines the permissions for a role (a group of users).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="userPermission" type="userPermission">
+        <xs:annotation>
+          <xs:documentation>
+            Defines the permissions for a user.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="permission">
+    <xs:all>
+      <xs:element name="defaultRight" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The default right to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="sendMessage" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The right to send messages.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="forceBuild" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The right for force or abort builds.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="startProject" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The right to stop and start projects.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="changeProject" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The right to change the configuration of projects.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="viewSecurity" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The right to view security.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="modifySecurity" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The right to modify security.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="viewProject" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The right to view a project.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="viewConfiguration" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The right to view configuration and logs.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="rolePermission">
+    <xs:all>
+      <xs:element name="users" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The users in this role.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="userName" type="userName">
+              <xs:annotation>
+                <xs:documentation>
+                  The name of a user.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="defaultRight" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The default right to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="sendMessage" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The right to send messages.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="forceBuild" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The right for force or abort builds.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="startProject" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The right to stop and start projects.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="changeProject" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The right to change the configuration of projects.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="viewSecurity" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The right to view security.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="modifySecurity" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The right to modify security.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="viewProject" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The right to view a project.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="viewConfiguration" type="SecurityRight" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The right to view configuration and logs.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+    <xs:attribute name="name" type="String" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The name of the role.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="ref" type="String" use="optional">
+      <xs:annotation>
+        <xs:documentation>
+          The identifier of the referenced permission.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="userPermission">
+    <xs:complexContent>
+      <xs:extension base="permission">
+        <xs:attribute name="user" type="String" use="required">
+          <xs:annotation>
+            <xs:documentation>
+              The user name.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="ref" type="String" use="optional">
+          <xs:annotation>
+            <xs:documentation>
+              The identifier of the referenced permission.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  
+  <xs:complexType name="userName">
+    <xs:all>
+      <xs:element name="name" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the user.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
   <xs:simpleType name="BuildCondition">
     <xs:restriction base="xs:string">
       <xs:enumeration value="NoBuild"/>
@@ -4618,6 +5452,14 @@
       <xs:enumeration value="UseFirst"/>
       <xs:enumeration value="ApplyForceBuildsReAdd"/>
       <xs:enumeration value="ApplyForceBuildsReplace"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="SecurityRight">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Allow"/>
+      <xs:enumeration value="Deny"/>
+      <xs:enumeration value="Inherit"/>
     </xs:restriction>
   </xs:simpleType>
 

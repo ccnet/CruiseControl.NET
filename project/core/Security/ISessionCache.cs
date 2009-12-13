@@ -7,6 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     /// <summary>
     /// Defines a cache for holding session details.
     /// </summary>
+    /// <title>Security Caches</title>
     public interface ISessionCache
     {
         /// <summary>

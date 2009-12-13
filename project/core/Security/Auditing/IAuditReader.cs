@@ -7,6 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
     /// <summary>
     /// Provides an interface for reading audit events.
     /// </summary>
+    /// <title>Security Audit Readers</title>
     public interface IAuditReader
     {
         /// <summary>

@@ -6,6 +6,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     /// <summary>
     /// A security assertion.
     /// </summary>
+    /// <title>Security Permissions</title>
     public interface IPermission
         : ISecuritySetting
     {

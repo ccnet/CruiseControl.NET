@@ -9,6 +9,16 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     /// <summary>
     /// Stores a user name - authentication will come from Active Directory.
     /// </summary>
+    /// <title>LDAP User Authentication</title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code title="Simple Example">
+    /// &lt;ldapUser name="johndoe" domain="somewhere.com"/&gt;
+    /// </code>
+    /// <code title="Wildcard Example">
+    /// &lt;ldapUser name="*" domain="somewhere.com"/&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("ldapUser")]
     public class ActiveDirectoryAuthentication
         : IAuthentication
@@ -50,6 +60,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The user name for this user.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("name")]
         public string UserName
         {
@@ -76,6 +88,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The AD domain to use.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("domain")]
         public string DomainName
         {

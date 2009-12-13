@@ -12,6 +12,13 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     /// <summary>
     /// A default implementation of a security manager where there is no security (e.g. every right is allowed);
     /// </summary>
+    /// <title>Null Server Security</title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code>
+    /// &lt;nullSecurity /&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("nullSecurity")]
     public class NullSecurityManager
         : ISecurityManager

@@ -35,6 +35,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The associated session cache.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default><link>In Memory Security Cache</link></default>
         [ReflectorProperty("cache", InstanceTypeKey = "type", Required = false)]
         public ISessionCache SessionCache
         {
@@ -47,6 +49,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The audit loggers.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("audit", Required=false)]
         public IAuditLogger[] AuditLoggers
         {
@@ -59,6 +63,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The audit reader.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("auditReader", InstanceTypeKey = "type", Required = false)]
         public IAuditReader AuditReader
         {
@@ -71,6 +77,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The default permissions.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("defaults", Required=false, InstanceType=typeof(Permissions))]
         public Permissions DefaultPermissions
         {
@@ -93,6 +101,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The channel security requirements.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("channel", InstanceTypeKey = "type", Required = false)]
         public virtual IChannelSecurity Channel { get; set; }
         #endregion

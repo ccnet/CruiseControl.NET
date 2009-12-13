@@ -4,6 +4,26 @@ using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
+    /// <summary>
+    /// Defines the permissions for a role (a group of users).
+    /// </summary>
+    /// <title>Role Permission</title>
+    /// <version>1.5</version>
+    /// <remarks>
+    /// <include>General Security Permissions</include>
+    /// </remarks>
+    /// <example>
+    /// <code title="Role Definition Example">
+    /// &lt;rolePermission name="admin" forceBuild="Allow" startProject="Deny" defaultRight="Inherit"&gt;
+    /// &lt;users&gt;
+    /// &lt;userName name="johndoe"/&gt;
+    /// &lt;/users&gt;
+    /// &lt;/rolePermission&gt;
+    /// </code>
+    /// <code title="Reference Example">
+    /// &lt;rolePermission name="admin" ref="admin"/&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("rolePermission")]
     public class RolePermission
         : PermissionBase, IPermission
@@ -52,8 +72,10 @@ namespace ThoughtWorks.CruiseControl.Core.Security
 
         #region RoleName
         /// <summary>
-        /// The role name.
+        /// The name of the role.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("name", Required = true)]
         public string RoleName
         {
@@ -66,6 +88,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The users in this role.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorArray("users", Required=false)]
         public UserName[] Users
         {

@@ -6,6 +6,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
     /// <summary>
     /// Provides an interface for logging security events.
     /// </summary>
+    /// <title>Security Audit Loggers</title>
     public interface IAuditLogger
     {
         /// <summary>

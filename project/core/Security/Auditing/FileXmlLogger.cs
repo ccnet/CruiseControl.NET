@@ -9,8 +9,19 @@ using ThoughtWorks.CruiseControl.Remote.Security;
 namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
 {
     /// <summary>
-    /// Stores audit events in an XML file.
+    /// Sends audit logging information to a file. The information will be stored in an XML format.
     /// </summary>
+    /// <remarks>
+    /// The actual file will not be correct XML as it will not have a single root element - instead each line will be directly written to the
+    /// file.
+    /// </remarks>
+    /// <version>1.5</version>
+    /// <title>XML File Audit Logger</title>
+    /// <example>
+    /// <code>
+    /// &lt;xmlFileAudit location="c:\Logs\ccnet_audit.log"/&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("xmlFileAudit")]
     public class FileXmlLogger
         : AuditLoggerBase, IAuditLogger
@@ -29,6 +40,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
         /// <summary>
         /// The location to log the audit events.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>SecurityAudit.xml</default>
         [ReflectorProperty("location", Required=false)]
         public string AuditFileLocation
         {

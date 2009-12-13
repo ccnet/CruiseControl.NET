@@ -13,8 +13,32 @@ using System.Globalization;
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
     /// <summary>
-    /// Defines a security manager implementation that implements security internally.
+    /// Defines a security manager implementation that implements security internally - the security settings are stored in the same 
+    /// configuration file.
     /// </summary>
+    /// <title>Internal Server Security</title>
+    /// <version>1.5</version>
+    /// <remarks>
+    /// <include>General Security Permissions</include>
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// &lt;internalSecurity&gt;
+    /// &lt;cache type="inMemoryCache" duration="10" mode="sliding"/&gt;
+    /// &lt;users&gt;
+    /// &lt;passwordUser name="johndoe" password="letmein"/&gt;
+    /// &lt;simpleUser name="*"/&gt;
+    /// &lt;/users&gt;
+    /// &lt;permissions&gt;
+    /// &lt;rolePermission name="general" forceBuild="Deny"&gt;
+    /// &lt;users&gt;
+    /// &lt;userName name="*"/&gt;
+    /// &lt;/users&gt;
+    /// &lt;/rolePermission&gt;
+    /// &lt;/permissions&gt;
+    /// &lt;/internalSecurity&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("internalSecurity")]
     public class InternalSecurityManager
         : SecurityManagerBase, IConfigurationValidation
@@ -31,8 +55,10 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         #region Public properties
         #region Users
         /// <summary>
-        /// The users.
+        /// The users for the same.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("users")]
         public IAuthentication[] Users
         {
@@ -45,6 +71,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The server-level permissions.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("permissions")]
         public IPermission[] Permissions
         {
