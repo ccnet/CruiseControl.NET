@@ -4,7 +4,7 @@
     $('#parameterCheck').dialog({
         autoOpen:false,
         modal:true,
-        title:'Project Parameters',
+        title:'$translations.Translate("Project Parameters")',
         width:400,
         height:300,
         overlay:{
@@ -29,13 +29,13 @@
     });
 </script>
 <div id="parameterCheck">
-  <div id="parameterEditor">Loading parameters, please wait...</div>
+  <div id="parameterEditor">$translations.Translate("Loading parameters, please wait...")</div>
 </div>
 <form ID="RefreshForm" method="post">
   <table width="100%">
     <tr>
       <td align="right">
-        <input type="submit" align="right" name="Refresh" value="Refresh status" />
+        <input type="submit" align="right" name="Refresh" value="$translations.Translate("Refresh status")" />
       </td>
     </tr>
   </table>
@@ -67,29 +67,29 @@
 <tr><td VALIGN="top" width="50%">
 		<table id="projectStatus">
 		  <tr>
-		     <th colspan="2">Project Status for $projectName</th>
+		     <th colspan="2">$translations.Translate("Project Status for {0}", $projectName)</th>
 		  </tr>
 		  </tr>
 		  #if ($status.Description.length > 0)
 		  <tr>
-			<th>Description:</th>
+			<th>$translations.Translate("Description")</th>
 			<td>$status.Description</td>
 		  </tr>
 		  #end
 		  <tr>
-			<th>Last Build Status:</th>
+			<th>$translations.Translate("Last Build Status")</th>
 			<td>$status.BuildStatus</td>
 		  </tr>
 		  <tr>
-			<th>Last Build Label:</th>
-			<td>$status.LastBuildLabel</td>
+			<th>$translations.Translate("Last Build Label")</th>
+			<td>$translations.Translate($status.LastBuildLabel)</td>
 		  </tr>
 		  <tr>
-			<th>CCNet Status:</th>
+			<th>$translations.Translate("CCNet Status")</th>
 			<td>$status.Status</td>
 		  </tr>
 		  <tr>
-			<th>Activity:</th>
+			<th>$translations.Translate("Activity")</th>
 			<td>$status.Activity</td>
 		  </tr>
 		  <tr>
@@ -98,13 +98,13 @@
 		            <span>
     #if ($server.AllowForceBuild)
     #if($ForceAbortBuildButtonValue == "Force")
-    <input type="button" name="$ForceAbortBuildButtonName" value="$ForceAbortBuildButtonValue" onclick="checkForParams(this, '$ParametersUrl')"/>
+    <input type="button" name="$ForceAbortBuildButtonName" value="$translations.Translate($ForceAbortBuildButtonValue)" onclick="checkForParams(this, '$ParametersUrl')"/>
     #else
-    <input type="submit" name="$ForceAbortBuildButtonName" value="$ForceAbortBuildButtonValue"/>
+    <input type="submit" name="$ForceAbortBuildButtonName" value="$translations.Translate($ForceAbortBuildButtonValue)"/>
     #end
     #end
     #if ($server.AllowStartStopBuild)
-    <input type="submit" name="$StartStopButtonName" value="$StartStopButtonValue"/>
+    <input type="submit" name="$StartStopButtonName" value="$translations.Translate($StartStopButtonValue)"/>
     #end
     </span>
   </form>
@@ -118,7 +118,7 @@
 	<div class="ui-state-highlight ui-corner-all" style="padding: 0pt 0.7em; margin-top: 20px;">
 		<p>
 			<span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
-			$StatusMessage
+			$translations.Translate($StatusMessage)
 		</p>
 	</div>
 </div>			
@@ -131,7 +131,7 @@
 		#if ($externalLinks.Length > 0)
 		<table class="ExternalLinks">
 		  <tr>
-			<th>External Links</th>
+			<th>$translations.Translate("External Links")</th>
 		  </tr>
 		  #foreach ($externalLink in $externalLinks)
 		  <tr bgcolor="Ivory">
@@ -147,10 +147,10 @@
 
 <p>
   #if ($noLogsAvailable)
-  There are currently no build logs available for this project - make sure your Build Server configuration is correct and that this Project's build is not throwing any exceptions
+  $translations.Translate("There are currently no build logs available for this project - make sure your Build Server configuration is correct and that this Project's build is not throwing any exceptions")
   #else
   #if ($pluginInfo)
-  <h3>Most Recent Build Results</h3>
+  <h3>$translations.Translate("Most Recent Build Results")</h3>
   $pluginInfo
 
   Click <a href="$mostRecentBuildUrl">here</a> for the full build report.

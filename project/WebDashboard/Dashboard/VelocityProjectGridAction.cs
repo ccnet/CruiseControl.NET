@@ -8,6 +8,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using ThoughtWorks.CruiseControl.WebDashboard.Resources;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -176,25 +177,26 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             }
 
             // Make the actual call
+            var translations = new Translations();
 			if (request.FindParameterStartingWith("StopBuild") != string.Empty)
 			{
 				farmService.Stop(ProjectSpecifier(request), sessionToken);
-				return string.Format("Stopping project {0}", SelectedProject(request));
+                return translations.Translate("Stopping project {0}", SelectedProject(request));
 			}
 			else if (request.FindParameterStartingWith("StartBuild") != string.Empty)
 			{
                 farmService.Start(ProjectSpecifier(request), sessionToken);
-				return string.Format("Starting project {0}", SelectedProject(request));				
+                return translations.Translate("Starting project {0}", SelectedProject(request));				
 			}
 			else if (request.FindParameterStartingWith("ForceBuild") != string.Empty)
 			{
 				farmService.ForceBuild(ProjectSpecifier(request), sessionToken, parameters);
-				return string.Format("Build successfully forced for {0}", SelectedProject(request));
+                return translations.Translate("Build successfully forced for {0}", SelectedProject(request));
 			}
 			else if (request.FindParameterStartingWith("AbortBuild") != string.Empty)
 			{
 				farmService.AbortBuild(ProjectSpecifier(request), sessionToken);
-				return string.Format("Abort successfully forced for {0}", SelectedProject(request));
+                return translations.Translate("Abort successfully forced for {0}", SelectedProject(request));
 			}
 			else
 			{

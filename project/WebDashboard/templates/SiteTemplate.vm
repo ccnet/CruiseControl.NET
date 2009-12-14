@@ -16,18 +16,18 @@
 		<table class="main-panel" border="0" width="100%">
 			<tr>
 				<td valign="middle" align="left">
-					<a href="http://ccnet.thoughtworks.com"><img src="$applicationPath/images/ccnet_logo.gif" border="0" alt="CruiseControl.NET Logo" /></a>
+					<a href="http://ccnet.thoughtworks.com"><img src="$applicationPath/images/ccnet_logo.gif" border="0" alt="$translations.Translate("CruiseControlNETLogo")" /></a>
 				</td>
 				<td align="right" valign="bottom">
 					$loginView
-					<a href="$applicationPath/doc/index.html">Documentation</a>
+					<a href="$applicationPath/doc/index.html">$translations.Translate("Documentation")</a>
 				</td>
 			</tr>
 		</table>
 		<table class="TopControls" border="0" width="100%" cellpadding="3" cellspacing="0">
 			<tr>
 				<td valign="middle" align="left">$breadcrumbs</td>
-				<td valign="middle" align="right"><p>version : $dashboardversion</p></td>
+				<td valign="middle" align="right"><p>$translations.Translate("Version") : $dashboardversion</p></td>
 			</tr>
 		</table>
 		<table border="0" align="center" cellpadding="0" cellspacing="0" width="100%" bgcolor="#333399">
@@ -56,7 +56,7 @@
 		<table class="Footer" width="100%">
 			<tr>
 				<td>
-					<p>This page rendered at: $renderedAt</p>
+					<p>$translations.Translate("PageRendered", $renderedAt)</p>
 				</td>
 				<td align="right">
 					<a href="http://www.thoughtworks.com/"><img src="$applicationPath/images/tw_dev_logo.gif" border="0" alt="ThoughtWorks"/></a>

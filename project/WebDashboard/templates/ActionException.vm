@@ -5,8 +5,8 @@
     <p>
       <span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span>
 		<div>
-			<b>You do not have permission for this action</b><br/>
-			Please contact your build administrator.
+			<b>$translations.Translate("You do not have permission for this action")</b><br/>
+			$translations.Translate("Please contact your build administrator.")
 		</div>
     </p>
   </div>
@@ -17,8 +17,8 @@
     <p>
       <span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span>
 		<div>
-			<b>Your session is invalid</b><br/>
-			Please login again or contact your build administrator.
+			<b>$translations.Translate("Your session is invalid")</b><br/>
+			$translations.Translate("Please login again or contact your build administrator.")
 		</div>
     </p>
   </div>
@@ -27,7 +27,7 @@
 <div class="ui-widget">
 	<div class="ui-state-error ui-corner-all"> 
 		<p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>
-		There was an exception trying to carry out your request.</p>
+		$translations.Translate("There was an exception trying to carry out your request.")</p>
 	</div>
 </div>
 

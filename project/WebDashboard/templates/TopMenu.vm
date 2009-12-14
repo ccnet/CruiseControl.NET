@@ -3,7 +3,7 @@
 	<tr>
 		<td>
 			<div>
-				<a href="$farmLink.Url">Dashboard</a>
+				<a href="$farmLink.Url">$translations.Translate("Dashboard")</a>
 				#if ( $serverName == "" )
 					#if ($categoryName != "")
 					&gt; <a href="$categoryLink.Url">$categoryLink.Text</a>

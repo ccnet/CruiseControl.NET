@@ -1,8 +1,8 @@
 ﻿<!-- LoginAction.vm: Start -->
 #if ($action != "")
-	<a href="$action.Url">$action.Text</a>
+	<a href="$action.Url">$translations.Translate($action.Text)</a>
 #end
 #if ($changePassword != "")
-	<a href="$changePassword.Url">$changePassword.Text</a>
+	<a href="$changePassword.Url">$translations.Translate($changePassword.Text)</a>
 #end
 <!-- LoginAction.vm: End -->

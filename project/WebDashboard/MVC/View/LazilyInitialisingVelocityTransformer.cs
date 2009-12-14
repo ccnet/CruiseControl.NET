@@ -8,6 +8,9 @@ using NVelocity.Runtime;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
+using System.Web;
+using ThoughtWorks.CruiseControl.WebDashboard.Resources;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 {
@@ -36,6 +39,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 
         public string Transform(string transformerFileName, Hashtable transformable)
         {
+            // Get the language to use - if there are no languages defined use a default
+            var currentLanguage = HttpContext.Current.Request.UserLanguages.Length > 0 ?
+                HttpContext.Current.Request.UserLanguages[0] :
+                "en-US";
+            var translations = new Translations();
+            transformable.Add("translations", translations);
+
             string output = string.Empty;
             using (TextWriter writer = new StringWriter())
             {

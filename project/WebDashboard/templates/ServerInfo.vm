@@ -2,9 +2,9 @@
 <table class="SortableGrid">
   <thead>
     <tr class="ProjectGridHeader">
-      <th>Server Name</th>
-      <th>Server Version</th>
-      <th>Free Disk Space</th>
+      <th>$translations.Translate("Server Name")</th>
+      <th>$translations.Translate("Server Version")</th>
+      <th>$translations.Translate("Free Disk Space")</th>
       <th></th>
     </tr>
   </thead>
@@ -13,7 +13,7 @@
       <td>$servername</td>
       <td>$serverversion</td>
       <td>$serverSpace</td>
-      <td>$spaceMessage</td>
+      <td>$translations.Translate($spaceMessage)</td>
     </tr>
   </tbody>
 </table>

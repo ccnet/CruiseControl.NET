@@ -9,9 +9,9 @@
 <table class="SortableGrid" id="QueueStatus">
   <thead>
     <tr class="ProjectGridHeader">
-      <th>Queue</th>
-      <th>Project</th>
-      <th>Status</th>
+      <th>$translations.Translate("Queue")</th>
+      <th>$translations.Translate("Project")</th>
+      <th>$translations.Translate("Status")</th>
     </tr>
   </thead>
   <tbody>
@@ -26,7 +26,7 @@
           $project.ProjectName
         </td>
         <td>
-          $project.Activity
+          $translations.Translate($project.Activity)
         </td>
       </tr>
       #end

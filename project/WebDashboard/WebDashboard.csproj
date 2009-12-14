@@ -616,6 +616,7 @@
     <Compile Include="Plugins\ViewAllBuilds\ViewAllBuildsProjectPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Resources\Translations.cs" />
     <Compile Include="ServerConnection\CruiseServerSnapshotListAndExceptions.cs" />
     <Compile Include="ServerConnection\CruiseServerSnapshotOnServer.cs" />
     <Compile Include="ServerConnection\CruiseServerException.cs">
@@ -868,6 +869,10 @@
     <Content Include="Themes\noteWorthy\Manifest.xml" />
     <Content Include="xsl\ndependreport-ccnet.v2.xsl" />
     <None Include="dashboard.config" />
+    <EmbeddedResource Include="Resources\Languages.fr.resx">
+      <LastGenOutput>Languages.fr.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="templates\ActionException.vm" />
     <None Include="templates\AddProject.vm" />
     <None Include="templates\AdministerDashboard.vm" />
@@ -914,6 +919,10 @@
     <None Include="Themes\noteWorthy\templates\TopMenu.vm" />
     <None Include="Web.config" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Languages.resx">
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
@@ -932,9 +941,6 @@ xcopy/y/q "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"</PostBuildEvent>
           <IISUrl>
           </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

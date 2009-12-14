@@ -5,7 +5,7 @@
 	#end
 </div>
 #if ($currentProject.Length > 0)
-<h2>Server Log for Project: $currentProject</h2>
+<h2>$translations.Translate("Server Log for Project: {0}", $currentProject)</h2>
 #end
 <pre class="log">$log</pre>
 <!-- ServerLog.vm: End -->

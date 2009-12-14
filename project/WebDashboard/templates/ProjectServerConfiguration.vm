@@ -9,11 +9,11 @@
 <table class="SortableGrid" id="ProjectConfig">
   <thead>
     <tr class="ProjectGridHeader">
-      <th>Queue</th>
-      <th>Queue Priority</th>
-      <th>Project</th>
-      <th>Category</th>
-      <th>Web Url</th>
+      <th>$translations.Translate("Queue")</th>
+      <th>$translations.Translate("Queue Priority")</th>
+      <th>$translations.Translate("Project")</th>
+      <th>$translations.Translate("Category")</th>
+      <th>$translations.Translate("Web Url")</th>
     </tr>
   </thead>
   <tbody>

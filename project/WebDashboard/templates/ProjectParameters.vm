@@ -30,8 +30,8 @@
     #end
   </table>
   <div>
-    <input type="button" value="Cancel" onclick="$('#parameterCheck').dialog('close')"/>
-    <input type="submit" value="Build"/>
+    <input type="button" value="$translations.Translate("Cancel")" onclick="$('#parameterCheck').dialog('close')"/>
+    <input type="submit" value="$translations.Translate("Build")"/>
   </div>
 </form>
 <!-- ProjectParameters.vm: End -->

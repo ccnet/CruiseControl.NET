@@ -5,21 +5,21 @@
   <div class="ui-state-error ui-corner-all" style="padding: 0pt 0.7em; margin-top: 20px;">
     <p>
       <span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span>
-      $errorMessage
+      $translations.Translate($errorMessage)
     </p>
   </div>
 </div>
   #end
   <table>
     <tr>
-      <td>User name:</td>
+      <td>$translations.Translate("User name:")</td>
       <td>
         <input type="text" name="userName"/>
       </td>
     </tr>
     #if (!$hidePassword)
     <tr>
-      <td>Password:</td>
+      <td>$translations.Translate("Password:")</td>
       <td>
         <input type="password" name="password"/>
       </td>
@@ -27,7 +27,7 @@
     #end
     <tr>
         <td colspan="2" align="right">
-            <input type="submit" value="Login"/>
+            <input type="submit" value="$translations.Translate("Login")"/>
         </td>
     </tr>
   </table>

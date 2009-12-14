@@ -4,7 +4,7 @@
   $('#parameterCheck').dialog({
   autoOpen:false,
   modal:true,
-  title:'Project Parameters',
+  title:'$translations.Translate("Project Parameters")',
   width:400,
   height:300,
   overlay:{
@@ -29,7 +29,7 @@
   });
 </script>
 <div id="parameterCheck">
-  <div id="parameterEditor">Loading parameters, please wait...</div>
+  <div id="parameterEditor">$translations.Translate("Loading parameters, please wait...")</div>
 </div>
 <form id="RefreshForm"
       method="post">
@@ -39,7 +39,7 @@
         <input type="submit"
                align="right"
                name="Refresh"
-               value="Refresh status" />
+               value="$translations.Translate("Refresh status")" />
       </td>
     </tr>
   </table>
@@ -49,7 +49,7 @@
 <P>
   <span id="StatusLabel">
     <b>
-      <font color="#4A3C8C">$forceBuildMessage</font>
+      <font color="#4A3C8C">$translations.Translate($forceBuildMessage)</font>
     </b>
   </span>
 </P>
@@ -61,17 +61,17 @@
   <thead>
     <tr class="ProjectGridHeader">
       #if ($wholeFarm)
-      <th class="left">Server</th>
+      <th class="left">$translations.Translate("Server")</th>
       #end
-      <th class="left">Project Name</th>
-      <th>Last Build Status</th>
-      <th>Last Build Time</th>
-      <th>Next Build Time</th>
-      <th>Last Build Label</th>
-      <th>CCNet Status</th>
-      <th>Activity</th>
-      <th class="{sorter:false}">Messages</th>
-      <th class="{sorter:false}">Admin</th>
+      <th class="left">$translations.Translate("Project Name")</th>
+      <th>$translations.Translate("Last Build Status")</th>
+      <th>$translations.Translate("Last Build Time")</th>
+      <th>$translations.Translate("Next Build Time")</th>
+      <th>$translations.Translate("Last Build Label")</th>
+      <th>$translations.Translate("CCNet Status")</th>
+      <th>$translations.Translate("Activity")</th>
+      <th class="{sorter:false}">$translations.Translate("Messages")</th>
+      <th class="{sorter:false}">$translations.Translate("Admin")</th>
     </tr>
   </thead>
   <tbody>
@@ -100,27 +100,27 @@
         <td class="left">
           <a href="$projectGridRow.Url">$projectGridRow.Name</a>
         </td>
-        <td class="$projectGridRow.BuildStatusHtmlColor">$projectGridRow.BuildStatus</td>
-        <td>$projectGridRow.LastBuildDate</td>
-        <td>$projectGridRow.NextBuildTime</td>
-        <td>$projectGridRow.LastBuildLabel</td>
-        <td>$projectGridRow.Status</td>
+        <td class="$projectGridRow.BuildStatusHtmlColor">$translations.Translate($projectGridRow.BuildStatus)</td>
+        <td>$translations.Translate("{0:f}", $projectGridRow.LastBuildDate)</td>
+        <td>$translations.Translate("{0:f}", $projectGridRow.NextBuildTime)</td>
+        <td>$translations.Translate($projectGridRow.LastBuildLabel)</td>
+        <td>$translations.Translate($projectGridRow.Status)</td>
         #if ($projectGridRow.Activity == "Building")
-        <td class="Red">$projectGridRow.Activity</td>
+        <td class="Red">$translations.Translate($projectGridRow.Activity)</td>
         #else
         <td class="Black"
-            style="font-weight:normal;">$projectGridRow.Activity</td>
+            style="font-weight:normal;">$translations.Translate($projectGridRow.Activity)</td>
         #end
         <td class="left">
           <ul>
             #if ($projectGridRow.Breakers.Length > 0)
-            <li>Breakers : $projectGridRow.Breakers</li>
+            <li>$translations.Translate("Breakers : {0}", $projectGridRow.Breakers)</li>
             #end
             #if ($projectGridRow.Fixer.Length > 0)
             <li>$projectGridRow.Fixer</li>
             #end
             #if ($projectGridRow.FailingTasks.Length > 0)
-            <li>Failing Tasks : $projectGridRow.FailingTasks</li>
+            <li>$translations.Translate("Failing Tasks : {0}", $projectGridRow.FailingTasks)</li>
             #end
           </ul>
         </td>
@@ -139,18 +139,18 @@
               #if($projectGridRow.ForceAbortBuildButtonValue == "Force")
               <input type="button"
                      name="$projectGridRow.ForceAbortBuildButtonName"
-                     value="$projectGridRow.ForceAbortBuildButtonValue"
+                     value="$translations.Translate($projectGridRow.ForceAbortBuildButtonValue)"
                      onclick="checkForParams(this, '$projectGridRow.ParametersUrl')"/>
               #else
               <input type="submit"
                      name="$projectGridRow.ForceAbortBuildButtonName"
-                     value="$projectGridRow.ForceAbortBuildButtonValue"/>
+                     value="$translations.Translate($projectGridRow.ForceAbortBuildButtonValue)"/>
               #end
               #end
               #if ($projectGridRow.AllowStartStopBuild)
               <input type="submit"
                      name="$projectGridRow.StartStopButtonName"
-                     value="$projectGridRow.StartStopButtonValue"/>
+                     value="$translations.Translate($projectGridRow.StartStopButtonValue)"/>
               #end
             </font>
           </form>
