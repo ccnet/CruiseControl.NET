@@ -3,11 +3,28 @@ using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
+    /// <summary>
+    /// Generates a URL for ViewCVS.
+    /// </summary>
+    /// <title>ViewCVS URL Builder</title>
+    /// <version>1.0</version>
+    /// <example>
+    /// <code>
+    /// &lt;issueUrlBuilder type="defaultIssueTracker"&gt;
+    /// &lt;url&gt;http://jira.public.thoughtworks.org/browse/CCNET-{0}&lt;/url&gt;
+    /// &lt;/issueUrlBuilder&gt;
+    /// </code>
+    /// </example>
 	[ReflectorType("viewcvs")]
 	public class ViewCVSUrlBuilder : IModificationUrlBuilder
 	{
 		private string _url;
 
+        /// <summary>
+        /// The base URL.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
 		[ReflectorProperty("url")] 
 		public string Url
 		{

@@ -1306,6 +1306,385 @@
 
   <xs:complexType name="SourceControl" abstract="true"/>
 
+  <xs:complexType name="alienbrain">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="server" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Alienbrain server hostname or ip adress. The list of valid server name and ip adresses are listed in the File, Connect to project database, Step 1, list box.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="database" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Alienbrain project database name. The list of valid project databases are listed in the File, Connect to project database, Step 2, list box.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="username" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The name of the user you want to use to connect to the server project database.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="password" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The password of the user you want to use to connect to the server project database.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="branch" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The path of the branch specification. to enumarate the name of the branches, use the ab enumbranch command line.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="project" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                This is the path of to monitor the file changes. Use alienbrain://Code or ab://Code project path format.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="autoGetSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies whether the current version of the source should be retrieved from Alienbrain.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="workingDirectory" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The path where the get latest will update the files.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="labelOnSuccess" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies whether or not the repository should be labelled after a successful build.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="issueUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Converts the comment (or parts from it) into an url pointing to the issue for this build. See [IssueUrlBuilder] for more details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The executable to use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="timeout" type="Timeout" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Sets the timeout period for the source control operation. See [Timeout Configuration] for details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="accurev">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="autoGetSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies whether the current version of the source should be retrieved from AccuRev.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies the path to the AccuRev command line tool. You should only have to include this element if the tool isn't in your path. By default, the AccuRev client installation process names it accurev.exe and puts it in C:\Program Files\AccuRev\bin.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="homeDir" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies the location of the AccuRev home directory. The pathname can be either absolute or relative to the project artifact directory. If not specified, AccuRev will follow its rules for determining the location. The home directory itself is always named ".accurev".
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="labelOnSuccess" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies whether or not CCNet should create an AccuRev snapshot when the build is successful. If set to true, CCNet will create a snapshot of the workspace's basis stream as of the starting time of the build, naming it according to the build label.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="login" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies whether or not CCNet should log in to AccuRev using the specified principal and password. If set to true, the principal and password elements are required, and CCNet will use them to log in to AccuRev before executing any AccuRev commands.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="password" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies the password for the AccuRev "principal" (userid).
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="principal" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies the AccuRev "principal" (userid) to run under. If not specified, AccuRev will follow its rules for determining the principal.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="workspace" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies the location on disk of the AccuRev workspace that CCNet monitors for changes. The pathname can be either absolute or relative to the project working directory, and must identify the top\-level directory of the workspace. Note that this is not the same as the workspace name \- AccuRev will determine the workspace name from the disk pathname.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="issueUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Converts the comment (or parts from it) into an url pointing to the issue for this build. See [IssueUrlBuilder] for more details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="timeout" type="Timeout" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Sets the timeout period for the source control operation. See [Timeout Configuration] for details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="bitkeeper">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Absolute, DOS\-style, path to bk.exe.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="workingDirectory" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Absolute, DOS\-style, path to permanent BK repository.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="tagOnSuccess" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Add BK tag on successful build.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="autoGetSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Automatically pull latest source into permanent BK repository.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="fileHistory" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Include history of each file, rather than just ChangeSets.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="cloneTo" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Make a clone of the permanent BK repository into the designated path. The DOS\-style path can be relative to WorkingDirectory or absolute.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="issueUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Converts the comment (or parts from it) into an url pointing to the issue for this build. See [IssueUrlBuilder] for more details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="timeout" type="Timeout" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Sets the timeout period for the source control operation. See [Timeout Configuration] for details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="cvs">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The location of the cvs.exe executable.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="cvsroot" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The cvs connection string. If this is unspecified and your working directory contains a previous checkout, then the CVS client will attempt to determine the correct root based on the CVS folder in your working directory. If the working directory does not contain the source, then this element must be specfied.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="module" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The cvs module to monitor. This element is used both when checking for modifications and when checking out the source into an empty working directory.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="workingDirectory" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The folder that the source has been checked out into.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="labelOnSuccess" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies whether or not the repository should be labelled after a successful build.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="restrictLogins" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Only list modifications checked in by specified logins.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="webUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Converts the comment (or parts from it) into an url pointing to the issue for this build. See [IssueUrlBuilder] for more details
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="autoGetSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies whether the current version of the source should be retrieved from CVS.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="cleanCopy" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies whether or not a clean copy should be retrieved.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="forceCheckout" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies whether the checkout command should be used instead of update.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="branch" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The branch to check for modifications on.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="tagPrefix" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                By default the CVS tag name used when labelOnSuccess is set to true is ver\-BuildLabel. If you specify this property, the prefix ver\- will be replaced with the value you specify.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="suppressRevisionHeader" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Suppresses headers that do not have revisions within the specified modification window. Setting this option to true will reduce the time that it takes for CCNet to poll CVS for changes. Only fairly recent versions of CVS support this option. Run cvs \-\-help log to see if the \-S option is listed.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="issueUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Converts the comment (or parts from it) into an url pointing to the issue for this build. See [IssueUrlBuilder] for more details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="timeout" type="Timeout" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Sets the timeout period for the source control operation. See [Timeout Configuration] for details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
   <xs:complexType name="nullSourceControl">
     <xs:complexContent>
       <xs:extension base="SourceControl">
@@ -1324,6 +1703,147 @@
             <xs:documentation>Defines whether or not to fail the getting of the source.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="vss">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="project" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The project in the repository to be monitored.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="username" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                VSS user ID that CCNet should use to authenticate. If the username is unspecified, the VSS client will attempt to authenticate using the NT user.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="password" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Password for the VSS user ID.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="applyLabel" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies whether the current CCNet label should be applied to all source files under the current project in VSS.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="autoGetSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies whether the current version of the source should be retrieved from VSS.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="alwaysGetLatest" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies whether the most recent version of the source should be retrieved from VSS. If not, CCNet will obtain the source as of the time the build began.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="workingDirectory" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The folder into which the source should be retrived from VSS. If this folder does not exist, it will be automatically created.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="cleanCopy" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Controls whether or not VSS gets a clean copy (overwrites modified files) when getting the latest source.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="issueUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Converts the comment (or parts from it) into an url pointing to the issue for this build. See [IssueUrlBuilder] for more details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The location of SS.EXE. If VSS is installed on the integration server, the location of VSS will be read from the registry and this element may be omitted.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ssdir" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Password for the VSS user ID.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="culture" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The culture under which VSS is running. This value must match the culture of the VSS installation for CCNet to work with VSS. Most of the time the default is OK and you may omit this item. If you are using the US version of VSS on a machine that is not set to the US culture, you should include the configuration block &lt;culture&gt;en\-US&lt;/culture&gt;.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="timeout" type="Timeout" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Sets the timeout period for the source control operation. See [Timeout Configuration] for details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="IModificationUrlBuilder" abstract="true"/>
+
+  <xs:complexType name="viewcvs">
+    <xs:complexContent>
+      <xs:extension base="IModificationUrlBuilder">
+        <xs:all>
+          <xs:element name="url" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The base URL.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="websvn">
+    <xs:complexContent>
+      <xs:extension base="IModificationUrlBuilder">
+        <xs:all>
+          <xs:element name="url" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The base URL.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>

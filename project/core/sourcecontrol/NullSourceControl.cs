@@ -2,16 +2,49 @@ using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	[ReflectorType("nullSourceControl")]
+    /// <summary>
+    /// Use the Null Source Control if you don't want to check a Source Control repository for changes. In this instance you would always want
+    /// to either use a 'Force Build' Trigger or always manually start builds, from the <link>Web Dashboard</link> or <link>CCTray</link>.
+    /// </summary>
+    /// <title>Null Source Control Block</title>
+    /// <version>1.0</version>
+    /// <remarks>
+    /// Strictly speaking, this element isn't required. The build server will behave the same way if there are no Source Control Blocks. Still,
+    /// it's useful to include this in configuration files to make it clear.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// &lt;sourcecontrol type="nullSourceControl" /&gt;
+    /// </code>
+    /// </example>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>nullSourceControl</value>
+    /// </key>
+    [ReflectorType("nullSourceControl")]
 	public class NullSourceControl : ISourceControl
 	{
-
+        /// <summary>
+        /// Defines wheter or not to fail the checking for modifications.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("failGetModifications", Required = false)]
         public bool FailGetModifications = false;
 
+        /// <summary>
+        /// Defines wheter or not to fail the labeling.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("failLabelSourceControl", Required = false)]
         public bool FailLabelSourceControl = false;
 
+        /// <summary>
+        /// Defines wheter or not to fail the getting of the source.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("failGetSource", Required = false)]
         public bool FailGetSource = false;
 

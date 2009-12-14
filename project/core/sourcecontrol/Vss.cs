@@ -7,6 +7,124 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
+    /// <summary>
+    /// For Visual Source Safe you must specify the executable, project, username and password. You may also specify the SSDIR. If SSDIR is
+    /// not set the default or the SSDIR environment variable will be used.
+    /// </summary>
+    /// <title>VSS Configuration Example</title>
+    /// <version>1.0</version>
+    /// <example>
+    /// <code title="Minimal example">
+    /// &lt;sourcecontrol type="vss" /&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;sourcecontrol type="vss"&gt;
+    /// &lt;executable&gt;C:\Program Files\Microsoft Visual Studio\VSS\win32\SS.EXE&lt;/executable&gt;
+    /// &lt;project&gt;$/CCNET&lt;/project&gt;
+    /// &lt;username&gt;buildguy&lt;/username&gt;
+    /// &lt;password&gt;buildguypw&lt;/password&gt;
+    /// &lt;ssdir&gt;c:\repos\&lt;/ssdir&gt;
+    /// &lt;applyLabel&gt;false&lt;/applyLabel&gt;
+    /// &lt;autoGetSource&gt;true&lt;/autoGetSource&gt;
+    /// &lt;alwaysGetLatest&gt;false&lt;/alwaysGetLatest&gt;
+    /// &lt;workingDirectory&gt;c:\myBuild&lt;/workingDirectory&gt;
+    /// &lt;culture&gt;fr-FR&lt;/culture&gt;
+    /// &lt;cleanCopy&gt;false&lt;/cleanCopy&gt;
+    /// &lt;timeout units="minutes"&gt;10&lt;/timeout&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>vss</value>
+    /// </key>
+    /// <remarks>
+    /// <heading>Getting the latest source with VSS</heading>
+    /// <para>
+    /// VSS does not automatically remove files from the local workspace that have been deleted from the VSS database. This does not cause a
+    /// problem if you are using the &lt;solution&gt; task or the <link>Visual Studio Task</link> to compile your project. However, if you are
+    /// packaging the source for deployment or if you are using the &lt;csc&gt; task to produce a custom build, you may end up compiling these
+    /// deleted files in your assembly. To be on the safe side, it might be a good idea to clear the contents of the local workspace after each
+    /// build.
+    /// </para>
+    /// <heading>Using a US English VSS in a non-English culture</heading>
+    /// <para>
+    /// If you use an English VSS with machines configured to use a non-English culture, it may happen that CCNet will not detect any
+    /// modifications after you check-in some code. The reason for this behaviour is that CCNet uses the selected culture on the build server
+    /// to determine the language it expects VSS will output for parsing. For example, with fr-CA, CCNet looks for French keywords in the VSS
+    /// output. Hence, if your VSS installation does not use the same language, CCNET will not be able to detect any modification.
+    /// </para>
+    /// <para>
+    /// If you're using a US VSS installation, the first step in solving this problem is to include a configuration block set to the US english
+    /// culture (&lt;culture&gt;en-US&lt;/culture&gt;). This will make CCNet look for English VSS keywords, and eventually detect
+    /// modifications.
+    /// </para>
+    /// <heading>VSS Issues</heading>
+    /// <b>
+    /// CCNet periodically reports the following error when connecting to VSS: "Unable to open user login file 
+    /// \SourceSafe\Vss60\data\loggedin\&lt;userid&gt;.log." What gives?
+    /// </b>
+    /// <para>
+    /// If you have set CCNet up to manage multiple projects that all connect to the VSS repository using the same user id then you may
+    /// sporadically receive this failure. Our analysis suggests that the root of the problem is caused by the fact that VSS will create the
+    /// &lt;userid&gt;.log file when a user logs into VSS and delete it when the user logs out again. If a second build is using the repository
+    /// concurrently with the same user, when that second build logs out it looks for &lt;userid&gt;.log, but it's gone. Hence the error.
+    /// </para>
+    /// <para>
+    /// There are three approaches that you can take to deal with this:
+    /// </para>
+    /// <list type="1">
+    /// <item>Log into VSS using different users for each CCNet project.</item>
+    /// <item>You can keep CCNet from publishing exceptions , so this exception will just get logged into the ccnet.log file.</item>
+    /// <item>Leave the VSS GUI open on the integration server. This will mean the userid.log file never gets deleted.</item>
+    /// </list>
+    /// <para></para>
+    /// <para></para>
+    /// <b>
+    /// If you're using a labeller that returns a label equal to one already applied in the repository, the old label will be deleted when the
+    /// new one is added.
+    /// </b>
+    /// <para>
+    /// This is because of a quirk in how VSS deals with labels of the same name; it should not be a problem with the default labeller.
+    /// </para>
+    /// <para>
+    /// This problem usually occurs when someone is using a custom labeller (a class that implements ILabeller) and that custom labeller returns
+    /// a constant value.
+    /// </para>
+    /// <para>
+    /// Workaround: If you use a custom labeller, make sure each label is unique.
+    /// </para>
+    /// <b>
+    /// When I try to connect to use the &lt;vss&gt; NAntContrib tasks from <link>The Server Service Application</link> I get this error: 
+    /// Failed to open database \\someserver\someshare\vssrep\srcsafe.ini
+    /// </b>
+    /// <para>
+    /// There are a number of known issues with SourceSafe 6.0c. Make sure that you upgrade to the 6.0d version.
+    /// </para>
+    /// <b>
+    /// When I try connecting to VSS when using <link>The Server Service Application</link> I get the error: No VSS database (srcsafe.ini)
+    /// found. Use the SSDIR environment variable or run netsetup.
+    /// </b>
+    /// <para>
+    /// Make sure that you are running ccservice using an account that has the necessary permissions to access the network share where your VSS
+    /// database is set up. By default ccservice will run as the LocalSystem account, which does not have the necessary priviledges to access
+    /// other machines.
+    /// </para>
+    /// <b>
+    /// When using VSS with a <link>Filtered Source Control</link> Block, newly added or removed files don't show up as modifications
+    /// </b>
+    /// <para>
+    /// VSS does not output the paths for added or deleted files. As a result, the modifications returned by CCNet do not have any specified
+    /// path information. If a Filtered Source Control Block is used with a path filter then these modifications are likely to be filtered out.
+    /// This is an outstanding issue.
+    /// </para>
+    /// <heading>Useful links</heading>
+    /// <list type="1">
+    /// <item>Visual SourceSafe Best Practices Guide - http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnvss/html/vssbest.asp</item>
+    /// <item>Using VSS With Multiple Timezones - http://support.microsoft.com/default.aspx?scid=kb;en-us;248240&amp;Product=vss</item>
+    /// <item>OLE Automation interface Get method behaves differently with VSSVersion and with VSSItem - http://support.microsoft.com/default.aspx?scid=kb;en-us;837417</item>
+    /// </list>
+    /// </remarks>
 	[ReflectorType("vss")]
 	public class Vss : ProcessSourceControl
 	{
@@ -35,6 +153,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			this.locale = locale;
 		}
 
+        /// <summary>
+        /// The location of SS.EXE. If VSS is installed on the integration server, the location of VSS will be read from the registry and this
+        /// element may be omitted.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
 		[ReflectorProperty("executable", Required = false)]
 		public string Executable
 		{
@@ -47,45 +171,99 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { executable = value; }
 		}
 
-		[ReflectorProperty("project", Required = false)]
+        /// <summary>
+        /// The project in the repository to be monitored. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>$/</default>
+        [ReflectorProperty("project", Required = false)]
 		public string Project = DefaultProject;
 
-		[ReflectorProperty("username", Required = false)]
+        /// <summary>
+        /// VSS user ID that CCNet should use to authenticate. If the username is unspecified, the VSS client will attempt to authenticate
+        /// using the NT user.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("username", Required = false)]
 		public string Username;
 
-		[ReflectorProperty("password", Required = false)]
+        /// <summary>
+        /// Password for the VSS user ID.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("password", Required = false)]
 		public string Password;
 
-		[ReflectorProperty("ssdir", Required = false)]
+        /// <summary>
+        /// Password for the VSS user ID.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("ssdir", Required = false)]
 		public string SsDir
 		{
 			get { return ssDir; }
 			set { ssDir = StringUtil.StripQuotes(value); }
 		}
 
-		/// <summary>
-		/// Gets or sets whether this repository should be labeled.
-		/// </summary>
-		[ReflectorProperty("applyLabel", Required = false)]
+        /// <summary>
+        /// Specifies whether the current CCNet label should be applied to all source files under the current project in VSS.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>false</default>
+        /// <remarks>
+        /// The specified VSS username must have write access to the repository.
+        /// </remarks>
+        [ReflectorProperty("applyLabel", Required = false)]
 		public bool ApplyLabel = false;
 
-		[ReflectorProperty("autoGetSource", Required = false)]
+        /// <summary>
+        /// Specifies whether the current version of the source should be retrieved from VSS.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>true</default>
+        [ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = true;
 
-		[ReflectorProperty("alwaysGetLatest", Required = false)]
+        /// <summary>
+        /// Specifies whether the most recent version of the source should be retrieved from VSS. If not, CCNet will obtain the source as of
+        /// the time the build began.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>false</default>
+        [ReflectorProperty("alwaysGetLatest", Required = false)]
 		public bool AlwaysGetLatest = false;
 
-		[ReflectorProperty("workingDirectory", Required = false)]
+        /// <summary>
+        /// The folder into which the source should be retrived from VSS. If this folder does not exist, it will be automatically created.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>Project Working Directory</default>
+        [ReflectorProperty("workingDirectory", Required = false)]
 		public string WorkingDirectory;
 
-		[ReflectorProperty("culture", Required = false)]
+        /// <summary>
+        /// The culture under which VSS is running. This value must match the culture of the VSS installation for CCNet to work with VSS. Most
+        /// of the time the default is OK and you may omit this item. If you are using the US version of VSS on a machine that is not set to
+        /// the US culture, you should include the configuration block &lt;culture&gt;en-US&lt;/culture&gt;.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>The culture of the VSS installation</default>
+        [ReflectorProperty("culture", Required = false)]
 		public string Culture
 		{
 			get { return locale.ServerCulture; }
 			set { locale.ServerCulture = value; }
 		}
 
-		[ReflectorProperty("cleanCopy", Required = false)]
+        /// <summary>
+        /// Controls whether or not VSS gets a clean copy (overwrites modified files) when getting the latest source. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>true</default>
+        [ReflectorProperty("cleanCopy", Required = false)]
 		public bool CleanCopy = true;
 
             
