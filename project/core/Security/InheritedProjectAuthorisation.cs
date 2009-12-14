@@ -6,8 +6,19 @@ using ThoughtWorks.CruiseControl.Remote.Security;
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
     /// <summary>
-    /// The project inherits its security settings from the server settings.
+    /// Inherit the security settings for a project from the server settings.
     /// </summary>
+    /// <title>Inherited Project Security</title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code>
+    /// &lt;security type="inheritedProjectSecurity" /&gt;
+    /// </code>
+    /// </example>
+    /// <key name="type">
+    /// <description>The type of the project security.</description>
+    /// <value>inheritedProjectSecurity</value>
+    /// </key>
     [ReflectorType("inheritedProjectSecurity")]
     public class InheritedProjectAuthorisation
         : IProjectAuthorisation
@@ -34,6 +45,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The name of the account to use for guests.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("guest", Required = false)]
         public string GuestAccountName { get; set; }
         #endregion

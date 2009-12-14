@@ -255,6 +255,59 @@
 
   <xs:complexType name="sessionCache" abstract="true"/>
 
+  <xs:complexType name="fileBasedCache">
+    <xs:complexContent>
+      <xs:extension base="sessionCache">
+        <xs:all>
+          <xs:element name="location" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The location where the backing files are stored. If this is a relative folder, it will be relative to the program data folder for CruiseControl.NET.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="duration" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The duration, in minutes, that a session is stored for.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="mode" type="SessionExpiryMode" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The type of expiration period to use. Options are either Sliding (the expiry time is moved every time a security request is made) or Fixed (expiry time never changes).
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="inMemoryCache">
+    <xs:complexContent>
+      <xs:extension base="sessionCache">
+        <xs:all>
+          <xs:element name="duration" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The duration, in minutes, that a session is stored for.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="mode" type="SessionExpiryMode" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The type of expiration period to use. Options are either Sliding (the expiry time is moved every time a security request is made) or Fixed (expiry time never changes).
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
   <xs:complexType name="auditLoggers">
     <xs:choice minOccurs="1" maxOccurs="unbounded">
       <xs:element name="xmlFileAudit" type="xmlFileAudit">
@@ -266,7 +319,7 @@
       </xs:element>
     </xs:choice>
   </xs:complexType>
-  
+
   <xs:complexType name="xmlFileAudit">
     <xs:all>
       <xs:element name="location" type="String" minOccurs="0" maxOccurs="1">
@@ -312,6 +365,12 @@
   </xs:complexType>
 
   <xs:complexType name="channelSecurity" abstract="true"/>
+
+  <xs:complexType name="encryptedChannel">
+    <xs:complexContent>
+      <xs:extension base="channelSecurity"></xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
   <xs:complexType name="queue">
     <xs:all>
@@ -1191,6 +1250,59 @@
   </xs:complexType>
 
   <xs:complexType name="ProjectAuthorisation" abstract="true"/>
+
+  <xs:complexType name="defaultProjectSecurity">
+    <xs:complexContent>
+      <xs:extension base="ProjectAuthorisation">
+        <xs:all>
+          <xs:element name="defaultRight" type="SecurityRight" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The default right to use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="permissions" type="permissions" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The allowed permissions.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="guest" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The name of the account to use for guests.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="inheritedProjectSecurity">
+    <xs:complexContent>
+      <xs:extension base="ProjectAuthorisation">
+        <xs:all>
+          <xs:element name="guest" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The name of the account to use for guests.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="nullProjectSecurity">
+    <xs:complexContent>
+      <xs:extension base="ProjectAuthorisation">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
   <xs:complexType name="SourceControl" abstract="true"/>
 
@@ -5218,7 +5330,7 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  
+
   <xs:complexType name="userName">
     <xs:all>
       <xs:element name="name" type="String" minOccurs="1" maxOccurs="1">
@@ -5460,6 +5572,13 @@
       <xs:enumeration value="Allow"/>
       <xs:enumeration value="Deny"/>
       <xs:enumeration value="Inherit"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="SessionExpiryMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Fixed"/>
+      <xs:enumeration value="Sliding"/>
     </xs:restriction>
   </xs:simpleType>
 

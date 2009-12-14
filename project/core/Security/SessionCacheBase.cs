@@ -21,8 +21,10 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         }
 
         /// <summary>
-        /// How long a session is valid before it expires.
+        /// The duration, in minutes, that a session is stored for. 
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>10</default>
         [ReflectorProperty("duration", Required = false)]
         public virtual int Duration
         {
@@ -31,8 +33,11 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         }
 
         /// <summary>
-        /// The type of expiry mode to use.
+        /// The type of expiration period to use. Options are either Sliding (the expiry time is moved every time a security request is made)
+        /// or Fixed (expiry time never changes).
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>Sliding</default>
         [ReflectorProperty("mode", Required = false)]
         public virtual SessionExpiryMode ExpiryMode
         {

@@ -4,8 +4,10 @@ using System;
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
     /// <summary>
-    /// The messages must be sent via a secure channel (i.e. the messages must be encrypted).
+    /// Messages will be encrypted using this channel.
     /// </summary>
+    /// <title>Encrypted Messages Channel</title>
+    /// <version>1.5</version>
     [ReflectorType("encryptedChannel")]
     public class SecureMessagesChannel
         : IChannelSecurity

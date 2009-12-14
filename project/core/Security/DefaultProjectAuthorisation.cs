@@ -6,8 +6,28 @@ using ThoughtWorks.CruiseControl.Remote.Security;
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
     /// <summary>
-    /// The default security for a project.
+    /// The project-specific settings include a list of permissions. These permissions associate the users, roles, etc. from the server-level
+    /// security with the actions.
     /// </summary>
+    /// <version>1.5</version>
+    /// <title>Default Project Security</title>
+    /// <remarks>
+    /// <include>General Security Permissions</include>
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// &lt;security type="defaultProjectSecurity"&gt;
+    /// &lt;permissions&gt;
+    /// &lt;rolePermission name="admin" ref="admin" /&gt;
+    /// &lt;userPermission name="johndoe" forceBuild="Allow" startProject="Deny" stopProject="Deny"/&gt;
+    /// &lt;/permissions&gt;
+    /// &lt;/security&gt;
+    /// </code>
+    /// </example>
+    /// <key name="type">
+    /// <description>The type of the project security.</description>
+    /// <value>defaultProjectSecurity</value>
+    /// </key>
     [ReflectorType("defaultProjectSecurity")]
     public class DefaultProjectAuthorisation
         : IProjectAuthorisation, IConfigurationValidation
@@ -40,7 +60,9 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The default right to use.
         /// </summary>
-        [ReflectorProperty("defaultRight", Required=false)]
+        /// <version>1.5</version>
+        /// <default>Inherit</default>
+        [ReflectorProperty("defaultRight", Required = false)]
         public SecurityRight DefaultRight
         {
             get { return defaultRight; }
@@ -52,6 +74,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The allowed permissions.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("permissions", Required = false)]
         public IPermission[] Permissions
         {
@@ -74,6 +98,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <summary>
         /// The name of the account to use for guests.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("guest", Required = false)]
         public string GuestAccountName { get; set; }
         #endregion

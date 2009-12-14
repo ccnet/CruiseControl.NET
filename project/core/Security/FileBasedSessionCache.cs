@@ -9,8 +9,25 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
     /// <summary>
-    /// A file-based session cache.
+    /// <para>
+    /// Provides an in-memory cache for sessions that is backed by a store on disk.
+    /// </para>
+    /// <para>
+    /// This cache will store the sessions details in memory for quick-access. Whenever a session is changed it also writes a copy of the
+    /// details to a file on the disk. Then when the security manager is restarted it loads all the sessions from disk.
+    /// </para>
     /// </summary>
+    /// <title>File Based Security Cache</title>
+    /// <version>1.5</version>
+    /// <key name="type">
+    /// <description>The type of security cache to use.</description>
+    /// <value>fileBasedCache</value>
+    /// </key>
+    /// <example>
+    /// <code>
+    /// &lt;cache type="fileBasedCache" duration="10" mode="sliding" location="C:\sessions\"/&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("fileBasedCache")]
     public class FileBasedSessionCache
         : SessionCacheBase
@@ -32,7 +49,11 @@ namespace ThoughtWorks.CruiseControl.Core.Security
 		}
 
         /// <summary>
-        /// The location where session files will be stored.
+        /// The location where the backing files are stored. If this is a relative folder, it will be relative to the program data folder for
+        /// CruiseControl.NET.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>Sessions</default>
         [ReflectorProperty("location", Required = false)]
         public virtual string StoreLocation
         {

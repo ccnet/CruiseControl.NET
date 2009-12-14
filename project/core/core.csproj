@@ -507,6 +507,7 @@
     <Compile Include="Security\ImpersonationDetails.cs" />
     <Compile Include="Security\InheritedProjectAuthorisation.cs" />
     <Compile Include="Security\Permissions.cs" />
+    <Compile Include="Security\ProjectSecurityConfigurationInformation.cs" />
     <Compile Include="Security\RemotingChannelSecurityInformation.cs" />
     <Compile Include="Security\SecureMessagesChannel.cs" />
     <Compile Include="SystemClock.cs" />
@@ -531,7 +532,6 @@
     <Compile Include="Security\NullProjectAuthorisation.cs" />
     <Compile Include="Security\NullSecurityManager.cs" />
     <Compile Include="Security\PermissionBase.cs" />
-    <Compile Include="Security\ProjectSecurityConfigurationInformation.cs" />
     <Compile Include="Security\RolePermission.cs" />
     <Compile Include="Security\SecurityHelpers.cs" />
     <Compile Include="Security\SecurityManagerBase.cs" />
