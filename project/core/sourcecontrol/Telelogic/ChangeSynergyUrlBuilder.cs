@@ -7,27 +7,35 @@ using Exortech.NetReflector;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 {
 	/// <summary>
-	///     A URL builder to link each modification to the ChangeSynergy task details form.
+	/// A URL builder to link each modification to the ChangeSynergy task details form.
 	/// </summary>
-	/// <remarks>
-	///     <note type="caution">
-	///         If you specify values for the optional properties <see cref="Username"/> and
-	///         <see cref="Password"/>, make sure that the user has read-only permissions within
-	///         your ChangeSynergy lifecycle definition.  This is necessary, since the Uri for 
-	///         each modification will allow anonymous access to ChangeSynergy, possibily exposing
-	///         vulnerabilities for spoofing, tampering, repudiation, information disclosure,
-	///         and/or escalation of priveledge.
-	///         <para />
-	///         That is, a STRIDE classification of "STRDE", with a possible DREAD rating as 
-	///         high as 10 if permissions are inappropriatedly assigned to the anonymous account.
-	///     </note>
-	///     If you do not specify a <see cref="Username"/>/<see cref="Password"/>, the end-user
-	///     will be prompted to ChangeSynergy to login.  However, the login screen will not correctly
-	///     populate the <c>database</c> and <c>role</c> select inputs.  This is due to a documented
-	///     bug in ChangeSynergy 4.3 SP4.  The bug case tracking number is 2067637;
-	///     the change request is R21683.
-	/// </remarks>
-	/// <include file="example.xml" path="/example" />
+    /// <title>Synergy Issue Tracker URL Builder</title>
+    /// <version>1.0</version>
+    /// <example>
+    /// <code>
+    /// &lt;changeSynergy&gt;
+    /// &lt;role&gt;User&lt;/role&gt;
+    /// &lt;url&gt;http://myserver:8060&lt;/url&gt;
+    /// &lt;username&gt;%CS_USER%&lt;/username&gt;
+    /// &lt;password&gt;%CS_PWD%&lt;/password&gt;
+    /// &lt;/changeSynergy&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para>
+    /// If you specify values for the optional properties Username> and Password, make sure that the user has read-only permissions within your ChangeSynergy lifecycle
+    /// definition.  This is necessary, since the Uri for  each modification will allow anonymous access to ChangeSynergy, possibily exposing vulnerabilities for
+    /// spoofing, tampering, repudiation, information disclosure, and/or escalation of priveledge.
+    /// </para>
+	/// <para>
+	/// That is, a STRIDE classification of "STRDE", with a possible DREAD rating as high as 10 if permissions are inappropriatedly assigned to the anonymous account.
+	/// </para>
+    /// <para>
+	/// If you do not specify a Username and Password, the end-user will be prompted to ChangeSynergy to login.  However, the login screen will not correctly populate the
+    /// database and role select inputs.  This is due to a documented bug in ChangeSynergy 4.3 SP4.  The bug case tracking number is 2067637; the change request is
+    /// R21683.
+    /// </para>
+    /// </remarks>
 	[ReflectorType("changeSynergy")]
 	public class ChangeSynergyUrlBuilder : IModificationUrlBuilder
 	{
@@ -35,27 +43,29 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		private string obfuscatedPassword;
 
 		/// <summary>
-		///     Network path to the Synergy database instance
+		/// Network path to the Synergy database instance
 		/// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
 		[ReflectorProperty("database", Required=false)]
 		public string Database;
 
 		/// <summary>
-		///     The username to use for ChangeSynergy access.
-		///     Can include environmental variables to be replaced.
+		/// The username to use for ChangeSynergy access.
+		/// Can include environmental variables to be replaced.
 		/// </summary>
 		/// <remarks>
-		///     The ChangeSynergy username should be different from the one specified for the
-		///     CM Synergy server.  Ideally, you should specify a user with read-only permissions
-		///     for ChangeSynergy.  This will prevent someone from modifying objects through
-		///     ChangeSynergy.  If you specify an impersonation account with write permissions,
-		///     a malicious user could bypass auditing in ChangeSynergy.
+		/// The ChangeSynergy username should be different from the one specified for the CM Synergy server.  Ideally, you should specify a user with read-only
+        /// permissions for ChangeSynergy.  This will prevent someone from modifying objects through ChangeSynergy.  If you specify an impersonation account with write
+        /// permissions, a malicious user could bypass auditing in ChangeSynergy.
 		/// </remarks>
 		/// <value>
 		///     Defaults to <see langword="null" />, which implies that the end-user will
 		///     be prompted for thier ChangeSynergy logon credentials.
 		/// </value>
-		[ReflectorProperty("username", Required=false)]
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("username", Required = false)]
 		public string Username
 		{
 			get { return username; }
@@ -73,16 +83,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		}
 
 		/// <summary>
-		///     The Synergy password for the associate <see cref="Username"/> value.
+		/// The Synergy password for the associate Username" value.
 		/// </summary>
 		/// <remarks>
-		///     Support environment variable expansion.
+		/// Support environment variable expansion.
 		/// </remarks>
 		/// <value>
 		///     Defaults to <see langword="null" />, which implies that the end-user will
 		///     be prompted for theIr ChangeSynergy logon credentials.
 		/// </value>
-		[ReflectorProperty("password", Required=false)]
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("password", Required = false)]
 		public string Password
 		{
 			get { return obfuscatedPassword; }
@@ -101,22 +113,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		}
 
 		/// <summary>
-		///     The role to use for the Synergy session.
+		/// The role to use for the Synergy session.
 		/// </summary>
 		/// <remarks>
-		///     <note type="caution">
-		///         If <see cref="Username"/> is specified to allow anonymous access to ChangeSynergy,
-		///         you should specify a role with minimum read-only permissions.
-		///     </note>
+		/// If Username is specified to allow anonymous access to ChangeSynergy, you should specify a role with minimum read-only permissions.
 		/// </remarks>
 		/// <value>
 		///     Defaults to <c>User</c>.
 		/// </value>
-		[ReflectorProperty("role", Required=false)]
+        /// <version>1.0</version>
+        /// <default>User</default>
+        [ReflectorProperty("role", Required = false)]
 		public string Role;
 
 		/// <summary>
-		///     The root path to the ChangeSynergy installation.
+		/// The root path to the ChangeSynergy installation.
 		/// </summary>
 		/// <example>
 		///     <c>http://myserver:8600</c>
@@ -125,7 +136,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		///     This should be the protocol scheme, server hostname, and optionally any
 		///     port number and root directory information.
 		/// </value>
-		[ReflectorProperty("url")]
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("url")]
 		public string Url;
 
 		/// <summary>

@@ -1361,6 +1361,13 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="hg" type="hg">
+        <xs:annotation>
+          <xs:documentation>
+            Provides basic support for Mercurial repositories. Checking for changes, checking out or updating sources, and tagging are supported.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="multi" type="multi">
         <xs:annotation>
           <xs:documentation>
@@ -1386,6 +1393,14 @@
         <xs:annotation>
           <xs:documentation>
             CruiseControl.NET provides basic support for Subversion repositories. Checking for changes, checking out or updating sources, and tagging\-by\-copying are supported, but more advanced features such as using Subversion revision numbers are not yet supported. Subversion support is under active development and will improve over time.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="synergy" type="synergy">
+        <xs:annotation>
+          <xs:documentation>
+            CruiseControl.NET SCM plugin for CM Synergy.
+            Detection of modifications is entirely task based rather than object based, which may present problems for pre\-6.3 lifecycles. Successful integration may be published through shared manual task folders and/or baselining.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1994,6 +2009,99 @@
     </xs:complexContent>
   </xs:complexType>
 
+  <xs:complexType name="hg">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="autoGetSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Whether to update the local working copy from the local repository for a particular build.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="branch" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Repository branch.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The location of the hg executable.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="multipleHeadsFail" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Should the build fail if the local repository has multiple heads?
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="repo" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The url for your repository (e.g., http://hgserver/myproject/).
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="tagCommitMessage" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                String format for tags in your repository.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="tagOnSuccess" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Indicates that the repository should be tagged if the build succeeds.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="workingDirectory" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The directory containing the locally checked out workspace.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="webUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Generates a web URL.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="issueUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Converts the comment (or parts from it) into an url pointing to the issue for this build. See [IssueUrlBuilder] for more details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="timeout" type="Timeout" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Sets the timeout period for the source control operation. See [Timeout Configuration] for details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
   <xs:complexType name="multi">
     <xs:complexContent>
       <xs:extension base="SourceControl">
@@ -2263,6 +2371,197 @@
     </xs:complexContent>
   </xs:complexType>
 
+  <xs:complexType name="synergy">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="issueUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The issue URL builder to use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="connection" type="synergyConnection" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Connection info to create a session.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="project" type="synergyProject" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The info for the integration testing project.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="changeSynergy" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The Web Url builder to use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="synergyConnection">
+    <xs:all>
+      <xs:element name="host" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Hostname of the Synergy server
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="database" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Network path to the Synergy database instance
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="polling" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Poll the server every minute when the ccm\_admin has protected the database for the purpose of issuing backup commands.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="role" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The role to use for the Synergy session.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="timeout" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Timeout in seconds for all Synergy commands.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="executable" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The executable filename/path for the CM Synergy command line interface.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="workingDirectory" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The directory to execute all CM Synergy commands from.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="username" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The username for the Synergy session. Can include environmental variables to be replaced.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="password" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The Synergy password for the associate  value.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="homeDirectory" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The full physical path of the home directory for the associated Username on the client machine. Can include environmental variables to be replaced.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="clientDatabaseDirectory" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Path for the remote client session to copy database information to. Can include environmental variables to be replaced.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="synergyProject">
+    <xs:all>
+      <xs:element name="release" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The configured Synergy release value for the given project.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="projectSpecification" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The configured Synergy project specification for all source control operations.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="taskFolder" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The folder specification for the shared folder which will be used to "manually" add successfully integrated tasks added to.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="baseline" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            If true, creates a new baseline for the project configuration after a successful integration.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="template" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            If true, resets the reconfigure properties for this project and all subprojects to use the reconfigure template.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="reconcile" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            If enabled, updates the work area from the database, discarding all uncontrolled files in the work area and changes to static objects.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="file" type="String">
+              <xs:annotation>
+                <xs:documentation>
+                  The file to reconcile.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="purpose" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Synergy purpose specification for the project and any created baselines.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
   <xs:complexType name="vss">
     <xs:complexContent>
       <xs:extension base="SourceControl">
@@ -2374,10 +2673,38 @@
 
   <xs:complexType name="IModificationUrlBuilders">
     <xs:choice minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="changeSynergy" type="changeSynergy">
+        <xs:annotation>
+          <xs:documentation>
+            A URL builder to link each modification to the ChangeSynergy task details form.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="defaultIssueTracker" type="defaultIssueTracker">
+        <xs:annotation>
+          <xs:documentation>
+            It contains the url of the involved project, with the issue number as a parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="hgweb" type="hgweb">
+        <xs:annotation>
+          <xs:documentation>
+            Build a Mercurial URL.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="multiIssueTracker" type="multiIssueTracker">
         <xs:annotation>
           <xs:documentation>
             This issue tracker allows a combination of the other issuetrackers.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="regexIssueTracker" type="regexIssueTracker">
+        <xs:annotation>
+          <xs:documentation>
+            This will use regular expressions to convert the comment into an url.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -2398,6 +2725,82 @@
     </xs:choice>
   </xs:complexType>
 
+  <xs:complexType name="changeSynergy">
+    <xs:complexContent>
+      <xs:extension base="IModificationUrlBuilder">
+        <xs:all>
+          <xs:element name="database" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Network path to the Synergy database instance
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="role" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The role to use for the Synergy session.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="url" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The root path to the ChangeSynergy installation.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="username" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The username to use for ChangeSynergy access. Can include environmental variables to be replaced.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="password" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The Synergy password for the associate  value.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="defaultIssueTracker">
+    <xs:complexContent>
+      <xs:extension base="IModificationUrlBuilder">
+        <xs:all>
+          <xs:element name="url" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The base URL to use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="hgweb">
+    <xs:complexContent>
+      <xs:extension base="IModificationUrlBuilder">
+        <xs:all>
+          <xs:element name="url" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The base URL to use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
   <xs:complexType name="multiIssueTracker">
     <xs:complexContent>
       <xs:extension base="IModificationUrlBuilder">
@@ -2406,6 +2809,29 @@
             <xs:annotation>
               <xs:documentation>
                 The issue trackers to combine.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="regexIssueTracker">
+    <xs:complexContent>
+      <xs:extension base="IModificationUrlBuilder">
+        <xs:all>
+          <xs:element name="find" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The string to find.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="replace" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The replacement string.
               </xs:documentation>
             </xs:annotation>
           </xs:element>

@@ -6,19 +6,129 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 {
 	/// <summary>
-	///     CruiseControl.NET SCM plugin for CM Synergy.
+    /// <para>
+    /// CruiseControl.NET SCM plugin for CM Synergy.
+    /// </para>
+    /// <para>
+    /// Detection of modifications is entirely task based rather than object based, which may present problems for pre-6.3 lifecycles. Successful integration may be
+    /// published through shared manual task folders and/or baselining.
+    /// </para>
 	/// </summary>
-	/// <remarks>
-	///     Tested against CM Synergy 6.3.  Supports integration testing of tasks.  Can use
-	///     baselines and/or a shared task folder to publish successfully integrated tasks.
-	///     <para />
-	///     <notes type="implementnotes">
-	///         This type does not subclass <see cref="ProcessSourceControl"/> because
-	///         the <see cref="SynergyParser"/> cannot be instantiated without having
-	///         the initialized/configured values for the Synergy project specification.
-	///     </notes>
+    /// <title>Telelogic Synergy  Source Control Block</title>
+    /// <version>1.0</version>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>synergy</value>
+    /// </key>
+    /// <example>
+    /// <code title="Example using Defaults">
+    /// &lt;sourcecontrol type="synergy"&gt;
+    /// &lt;connection&gt;
+    /// &lt;host&gt;myserver&lt;/host&gt;
+    /// &lt;database&gt;\\myserver\share\mydatabase&lt;/database&gt;
+    /// &lt;/connection&gt;
+    /// &lt;project&gt;
+    /// &lt;release&gt;Product/1.0&lt;/release&gt;
+    /// &lt;projectSpecification&gt;Product-1&lt;/projectSpecification&gt;
+    /// &lt;taskFolder&gt;1234&lt;/taskFolder&gt;
+    /// &lt;/project&gt;
+    /// &lt;changeSynergy&gt;
+    /// &lt;url&gt;http://myserver:8060&lt;/url&gt;
+    /// &lt;/changeSynergy&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// <code title="Full Example">
+    /// &lt;sourcecontrol type="synergy"&gt;
+    /// &lt;connection&gt;
+    /// &lt;host&gt;myserver&lt;/host&gt;
+    /// &lt;database&gt;\\myserver\share\mydatabase&lt;/database&gt;
+    /// &lt;!-- store values in an environmental variable--&gt;
+    /// &lt;username&gt;%CCM_USER%&lt;/username&gt;
+    /// &lt;password&gt;%CCM_PWD%&lt;/password&gt;
+    /// &lt;role&gt;build_mgr&lt;/role&gt;
+    /// &lt;homeDirectory&gt;D:\cmsynergy\%CCM_USER%&lt;/homeDirectory&gt;
+    /// &lt;clientDatabaseDirectory&gt;D:\cmsynergy\uidb&lt;/clientDatabaseDirectory&gt;
+    /// &lt;polling&gt;true&lt;/polling&gt;
+    /// &lt;timeout&gt;3600&lt;/timeout&gt;
+    /// &lt;/connection&gt;
+    /// &lt;project&gt;
+    /// &lt;release&gt;Product/1.0&lt;/release&gt;
+    /// &lt;projectSpecification&gt;Product-1&lt;/projectSpecification&gt;
+    /// &lt;taskFolder&gt;1234&lt;/taskFolder&gt;
+    /// &lt;baseline&gt;false&lt;/baseline&gt;
+    /// &lt;purpose&gt;Integration Testing&lt;/purpose&gt;
+    /// &lt;template&gt;true&lt;/template&gt;
+    /// &lt;/project&gt;
+    /// &lt;changeSynergy&gt;
+    /// &lt;role&gt;User&lt;/role&gt;
+    /// &lt;url&gt;http://myserver:8060&lt;/url&gt;
+    /// &lt;username&gt;%CS_USER%&lt;/username&gt;
+    /// &lt;password&gt;%CS_PWD%&lt;/password&gt;
+    /// &lt;/changeSynergy&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+	/// <para type="info">
+    /// This integration has been thoroughly tested against CM Synergy 6.3 SP4 and ChangeSynergy 4.3 SP3 Windows/Informix with the DCM option enabled. While untested, CM
+    /// Synergy installations on Unix/Informix or Unix/Oracle should function properly.
+    /// </para>
+    /// <heading>Background</heading>
+    /// <para>
+    /// CM Synergy Concepts (http://confluence.public.thoughtworks.org//display/CC/CMSynergyConcepts) is arguably one of the best conceptual explanations of CM Synergy.
+    /// Consider it a prerequisite for implementing continuous integration with CM Synergy. Robert Smith (http://confluence.public.thoughtworks.org//display/~rjmpsmith),
+    /// from the CruiseControl for Java site, deserves a great deal of credit for explaining the product better than Telelogic ever has.
+    /// </para>
+    /// <heading>Methodology of integration with CCNET</heading>
+    /// <para>
+    /// Certain assumptions have been made about the integration of CruiseControl.NET and CM Synergy. First, it is assumed that all projects use a task based reconfigure
+    /// template, rather than an object based.
+    /// </para>
+    /// <list type="1">
+    /// <item>
+    /// The reconfigure template for all projects is task based, not object status based. 
+    /// </item>
+    /// <item>
+    /// Developers have there own projects with purpose "Insulated Development" 
+    /// </item>
+    /// <item>
+    /// There's no real point to continuous integration for "Collaborative Development" purpose projects, since Synergy is not a label based system. 
+    /// </item>
+    /// <item>
+    /// Build Managers test completed tasks in a project with purpose "Integration Testing" (or similar). 
+    /// </item>
+    /// <item>
+    /// We could create a baseline in the integration project to push completed tasks to the developers; however, this is less than ideal. Baselines in Synergy are expensive and were intended for milestone events like completion of a feature, or a configuration used for a QA testing round. 
+    /// </item>
+    /// <item>
+    /// The more efficient approach is to have a shared task folder that is included in each developer's reconfigure template/properties. 
+    /// </item>
+    /// <item>
+    /// Successfully integrated tasks can be manually added to this folder. 
+    /// </item>
+    /// <item>
+    /// This will push newly completed and integrated tasks to developers when they reconfigure (i.e., "update members").
+    /// </item>
+    /// </list>
+    /// <para></para>
+    /// <para></para>
+    /// <heading>Configuration Reuse</heading>
+    /// <para>
+    /// By creating separate child nodes for the &lt;connection&gt;, &lt;project&gt;, and &lt;changeSynergy&gt; configuration elements, it is very easy to create reusable
+    /// blocks of XML. For more information on XML DTD entities and reusable configuration blocks, see JIRA issue CCNET-239 and Nithy Palanivelu's Weblog
+    /// (http://peeps.dallas.focus-technologies.com/roller/page/nithy/20040128#using_the_entity_includes_in).
+    /// </para>
+    /// <heading>The Polling Feature</heading>
+    /// <para>
+    /// The polling feature is useful if your Synergy installation routinely goes offline (i.e., "protected mode"). Long runing builds may inadventently conflict with the
+    /// routine downtime schedules. For example, polling allows your build to queue CM Synergy commands until the nightly backup completes.
+    /// </para>
+    /// <heading>Environmental Variables</heading>
+    /// <para>
+    /// Environmental variable support enables you to keep your sensitive build manager credentials out of the CCNET configuration file. This is especially important if
+    /// the configuration file is under source control, whereby it would be readable by all CM Synergy users.
+    /// </para>
 	/// </remarks>
-	/// <include file="example.xml" path="/example" />
 	[ReflectorType("synergy")]
 	public class Synergy 
         : SourceControlBase, IDisposable
@@ -63,8 +173,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		}
 
 		/// <summary>
-		///     Connection info to create a session.
+		/// Connection info to create a session.
 		/// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
 		[ReflectorProperty("connection", InstanceType=typeof (SynergyConnectionInfo))]
 		public SynergyConnectionInfo Connection
 		{
@@ -83,9 +195,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		}
 
 		/// <summary>
-		///     The info for the integration testing project.
+		/// The info for the integration testing project.
 		/// </summary>
-		[ReflectorProperty("project", InstanceType=typeof (SynergyProjectInfo))]
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("project", InstanceType = typeof(SynergyProjectInfo))]
 		public SynergyProjectInfo Project
 		{
 			get { return project; }
@@ -97,10 +211,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		}
 
 		/// <summary>
-		///     The Web Url builder to use.  Generally this should be 
-		///     a <see cref="ChangeSynergyUrlBuilder"/> instance.
+		/// The Web Url builder to use.
 		/// </summary>
-		[ReflectorProperty("changeSynergy", InstanceType=typeof (ChangeSynergyUrlBuilder), Required=false)]
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("changeSynergy", InstanceType = typeof(ChangeSynergyUrlBuilder), Required = false)]
 		public IModificationUrlBuilder UrlBuilder
 		{
 			get { return urlBuilder; }
@@ -348,6 +463,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 			}
 		}
 
+        /// <summary>
+        /// The issue URL builder to use.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
         [ReflectorProperty("issueUrlBuilder", InstanceTypeKey = "type", Required = false)]
         public IModificationUrlBuilder IssueUrlBuilder;
 

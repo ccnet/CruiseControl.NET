@@ -6,6 +6,36 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 {
+    /// <summary>
+    /// Provides basic support for Mercurial repositories. Checking for changes, checking out or updating sources, and tagging are supported.
+    /// </summary>
+    /// <title> Mercurial Source Control Block </title>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code>
+    /// &lt;sourcecontrol type="hg"&gt;
+    /// &lt;repo&gt;http://hg.mycompany.com/hgwebdir.cgi/myproject/&lt;/repo&gt;
+    /// &lt;workingDirectory&gt;c:\dev\ccnet\myproject&lt;/workingDirectory&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>hg</value>
+    /// </key>
+    /// <remarks>
+    /// <para>
+    /// You need to make sure your hg client settings are such that all authentication is automated. Typically you can do this by using anonymous access or appropriate
+    /// SSH setups if using hg over SSH.
+    /// </para>
+    /// <para>
+    /// You can link the modifications detected by CruiseControl.NET to the appropriate hgweb page by adding the following additional configuration information to the
+    /// Mercurial source control section by using the <link>Mercurial Issue Tracker URL Builder</link>.
+    /// </para>
+    /// <para>
+    /// External contributors: Kent Johnson
+    /// </para>
+    /// </remarks>
     [ReflectorType("hg")]
     public class Mercurial : ProcessSourceControl
     {
@@ -17,23 +47,80 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         private readonly IFileSystem _fileSystem;
         private BuildProgressInformation _buildProgressInformation;
 
-        [ReflectorProperty("autoGetSource", Required = false)] public bool AutoGetSource = true;
+        /// <summary>
+        /// Whether to update the local working copy from the local repository for a particular build. 
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>true</default>
+        [ReflectorProperty("autoGetSource", Required = false)] 
+        public bool AutoGetSource = true;
 
-        [ReflectorProperty("branch", Required = false)] public string Branch;
+        /// <summary>
+        /// Repository branch.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        [ReflectorProperty("branch", Required = false)]
+        public string Branch;
 
-        [ReflectorProperty("executable", Required = false)] public string Executable = DefaultExecutable;
+        /// <summary>
+        /// The location of the hg executable.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>hg</default>
+        [ReflectorProperty("executable", Required = false)]
+        public string Executable = DefaultExecutable;
 
-        [ReflectorProperty("multipleHeadsFail", Required = false)] public bool MultipleHeadsFail = true;
+        /// <summary>
+        /// Should the build fail if the local repository has multiple heads?
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>true</default>
+        [ReflectorProperty("multipleHeadsFail", Required = false)]
+        public bool MultipleHeadsFail = true;
 
-        [ReflectorProperty("repo", Required = false)] public string Repo;
+        /// <summary>
+        /// The url for your repository (e.g., http://hgserver/myproject/).
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// This is required if autoGetSource is true.
+        /// </remarks>
+        [ReflectorProperty("repo", Required = false)]
+        public string Repo;
 
-        [ReflectorProperty("tagCommitMessage", Required = false)] public string TagCommitMessage = DefaultTagCommitMessage;
+        /// <summary>
+        /// String format for tags in your repository.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>Tagging successful build \{0\}</default>
+        [ReflectorProperty("tagCommitMessage", Required = false)]
+        public string TagCommitMessage = DefaultTagCommitMessage;
 
-        [ReflectorProperty("tagOnSuccess", Required = false)] public bool TagOnSuccess = false;
+        /// <summary>
+        /// Indicates that the repository should be tagged if the build succeeds.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
+        [ReflectorProperty("tagOnSuccess", Required = false)]
+        public bool TagOnSuccess = false;
 
-        [ReflectorProperty("workingDirectory", Required = false)] public string WorkingDirectory;
+        /// <summary>
+        /// The directory containing the locally checked out workspace.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>Project Working Directory</default>
+        [ReflectorProperty("workingDirectory", Required = false)]
+        public string WorkingDirectory;
 
-        [ReflectorProperty("webUrlBuilder", InstanceTypeKey = "type", Required = false)] public IModificationUrlBuilder UrlBuilder;
+        /// <summary>
+        /// Generates a web URL.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        [ReflectorProperty("webUrlBuilder", InstanceTypeKey = "type", Required = false)]
+        public IModificationUrlBuilder UrlBuilder;
 
         public Mercurial() : this(new MercurialHistoryParser(), new ProcessExecutor(), new SystemIoFileSystem()) { }
 
