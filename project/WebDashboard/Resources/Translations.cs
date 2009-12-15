@@ -20,9 +20,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Resources
         /// </summary>
         public Translations()
         {
-            var culture = HttpContext.Current.Request.UserLanguages.Length > 0 ?
-                HttpContext.Current.Request.UserLanguages[0] :
-                "en-US";
+            var culture = "en-US";
+            if ((HttpContext.Current != null) &&
+                (HttpContext.Current.Request != null) &&
+                (HttpContext.Current.Request.UserLanguages.Length > 0))
+            {
+                culture = HttpContext.Current.Request.UserLanguages[0];
+            }
+
             this.culture = new CultureInfo(culture);
             this.resourceManager.IgnoreCase = true;
         }

@@ -39,10 +39,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 
         public string Transform(string transformerFileName, Hashtable transformable)
         {
-            // Get the language to use - if there are no languages defined use a default
-            var currentLanguage = HttpContext.Current.Request.UserLanguages.Length > 0 ?
-                HttpContext.Current.Request.UserLanguages[0] :
-                "en-US";
+            // Add a translator to all views
             var translations = new Translations();
             transformable.Add("translations", translations);
 
