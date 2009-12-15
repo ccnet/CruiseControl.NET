@@ -11,6 +11,7 @@ using System.Web;
 using System.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using System.Xml;
+using ThoughtWorks.CruiseControl.WebDashboard.Resources;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
 {
@@ -33,6 +34,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         private IRemoteServicesConfiguration servicesConfiguration;
         private readonly IPhysicalApplicationPathProvider physicalApplicationPathProvider;
         private string password;
+        private Translations translations;
         #endregion
 
         #region Constructors
@@ -45,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             IVelocityViewGenerator viewGenerator,
             IRemoteServicesConfiguration servicesConfiguration,
             IPhysicalApplicationPathProvider physicalApplicationPathProvider)
-		{
+        {
             this.manager = manager;
             this.viewGenerator = viewGenerator;
             this.servicesConfiguration = servicesConfiguration;
@@ -66,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         #endregion
 
         #endregion
-        
+
         #region Public methods
         #region Execute()
         /// <summary>
@@ -75,7 +77,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// <param name="cruiseRequest"></param>
         /// <returns></returns>
         public IResponse Execute(ICruiseRequest cruiseRequest)
-		{
+        {
+            this.translations = new Translations();
             Hashtable velocityContext = new Hashtable();
             velocityContext["Error"] = string.Empty;
             if (ValidateSession(velocityContext))
@@ -90,40 +93,47 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                 string name = cruiseRequest.Request.GetText("Name");
 
                 // Check to see if there is an action to perform
-                switch (action)
+                if (action == this.translations.Translate("Reload dashboard"))
                 {
-                    case "Reload dashboard":
-                        CachingDashboardConfigurationLoader.ClearCache();
-                        velocityContext["Result"] = "The dashboard configuration has been reloaded";
-                        break;
-                    case "":
-                        // Do nothing, the user hasn't asked for anything but this is needed so the 
-                        // default doesn't display an error
-                        break;
-                    case "Save":
-                        SaveServer(cruiseRequest.Request, velocityContext);
-                        break;
-                    case "Delete":
-                        DeleteServer(cruiseRequest.Request, velocityContext);
-                        break;
-                    case "Import":
-                        ImportPackage(HttpContext.Current, velocityContext);
-                        break;
-                    case "Install":
-                        InstallPackage(cruiseRequest, velocityContext);
-                        break;
-                    case "Uninstall":
-                        UninstallPackage(cruiseRequest, velocityContext);
-                        break;
-                    case "Remove":
-                        RemovePackage(cruiseRequest, velocityContext);
-                        break;
-                    case "Logout":
-                        Logout();
-                        break;
-                    default:
-                        velocityContext["Error"] = string.Format("Unknown action '{0}'", action);
-                        break;
+                    CachingDashboardConfigurationLoader.ClearCache();
+                    velocityContext["Result"] = this.translations.Translate("The dashboard configuration has been reloaded");
+                }
+                else if (action == string.Empty)
+                {
+                    // Do nothing, the user hasn't asked for anything but this is needed so the 
+                    // default doesn't display an error
+                }
+                else if (action == this.translations.Translate("Save"))
+                {
+                    SaveServer(cruiseRequest.Request, velocityContext);
+                }
+                else if (action == this.translations.Translate("Delete"))
+                {
+                    DeleteServer(cruiseRequest.Request, velocityContext);
+                }
+                else if (action == this.translations.Translate("Import"))
+                {
+                    ImportPackage(HttpContext.Current, velocityContext);
+                }
+                else if (action == this.translations.Translate("Install"))
+                {
+                    InstallPackage(cruiseRequest, velocityContext);
+                }
+                else if (action == this.translations.Translate("Uninstall"))
+                {
+                    UninstallPackage(cruiseRequest, velocityContext);
+                }
+                else if (action == this.translations.Translate("Remove"))
+                {
+                    RemovePackage(cruiseRequest, velocityContext);
+                }
+                else if (action == this.translations.Translate("Logout"))
+                {
+                    Logout();
+                }
+                else
+                {
+                    velocityContext["Error"] = this.translations.Translate("Unknown action '{0}'", action);
                 }
 
                 // Retrieve the services and packages
@@ -170,12 +180,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             // Validate the details
             if (string.IsNullOrEmpty(newName))
             {
-                velocityContext["Error"] = "Name is a compulsory value";
+                velocityContext["Error"] = this.translations.Translate("Name is a compulsory value");
                 return;
             }
             if (string.IsNullOrEmpty(serverUri))
             {
-                velocityContext["Error"] = "URI is a compulsory value";
+                velocityContext["Error"] = this.translations.Translate("URI is a compulsory value");
                 return;
             }
 
@@ -229,7 +239,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                 location.BackwardCompatible = backwardsCompatible;
             }
 
-            velocityContext["Result"] = "Server has been saved";
+            velocityContext["Result"] = this.translations.Translate("Server has been saved");
             CachingDashboardConfigurationLoader.ClearCache();
         }
         #endregion
@@ -247,7 +257,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             // Validate the details
             if (string.IsNullOrEmpty(serverName))
             {
-                velocityContext["Error"] = "Server has not been set";
+                velocityContext["Error"] = this.translations.Translate("Server has not been set");
                 return;
             }
 
@@ -280,12 +290,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                 serverEl.ParentNode.RemoveChild(serverEl);
                 SaveConfig(configFile);
 
-                velocityContext["Result"] = "Server has been deleted";
+                velocityContext["Result"] = this.translations.Translate("Server has been deleted");
                 CachingDashboardConfigurationLoader.ClearCache();
             }
             else
             {
-                velocityContext["Error"] = "Unable to find server";
+                velocityContext["Error"] = this.translations.Translate("Unable to find server");
                 return;
             }
         }
@@ -328,7 +338,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             HttpPostedFile file = context.Request.Files["package"];
             if (file.ContentLength == 0)
             {
-                velocityContext["Error"] = "No file selected to import!";
+                velocityContext["Error"] = this.translations.Translate("No file selected to import!");
             }
             else
             {
@@ -336,7 +346,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                 if (manifest == null)
                 {
                     // If there is no manifest, then the package is invalid
-                    velocityContext["Error"] = "Invalid package - manifest file is missing";
+                    velocityContext["Error"] = this.translations.Translate("Invalid package - manifest file is missing");
                 }
                 else
                 {
@@ -364,7 +374,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             if (events != null)
             {
                 // Pass on the details
-                velocityContext["Result"] = "Package has been installed";
+                velocityContext["Result"] = this.translations.Translate("Package has been installed");
                 velocityContext["Install"] = true;
                 velocityContext["Events"] = events;
 
@@ -373,7 +383,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             }
             else
             {
-                velocityContext["Error"] = "Package has been removed";
+                velocityContext["Error"] = this.translations.Translate("Package has been removed");
             }
         }
         #endregion
@@ -393,7 +403,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             if (events != null)
             {
                 // Pass on the details
-                velocityContext["Result"] = "Package has been uninstalled";
+                velocityContext["Result"] = this.translations.Translate("Package has been uninstalled");
                 velocityContext["Install"] = true;
                 velocityContext["Events"] = events;
 
@@ -402,7 +412,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             }
             else
             {
-                velocityContext["Error"] = "Unable to uninstall package";
+                velocityContext["Error"] = this.translations.Translate("Unable to uninstall package");
             }
         }
         #endregion
@@ -426,7 +436,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             }
             else
             {
-                velocityContext["Error"] = "Unable to remove package - has the package already been removed?";
+                velocityContext["Error"] = this.translations.Translate("Unable to remove package - has the package already been removed?");
             }
         }
         #endregion
@@ -441,7 +451,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         {
             bool isValid = false;
 
-                // See if the password needs to be checked
+            // See if the password needs to be checked
             if (!string.IsNullOrEmpty(password))
             {
                 // First see if there is a session token
@@ -464,7 +474,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                     }
                     else
                     {
-                        if (!string.IsNullOrEmpty(userPassword)) velocityContext["Error"] = "Invalid password";
+                        if (!string.IsNullOrEmpty(userPassword))
+                        {
+                            velocityContext["Error"] = this.translations.Translate("Invalid password");
+                        }
                     }
                 }
             }

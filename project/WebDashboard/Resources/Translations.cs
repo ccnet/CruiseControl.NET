@@ -54,6 +54,30 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Resources
             return translation;
         }
         #endregion
+
+        #region TranslateJson()
+        /// <summary>
+        /// Translates the specified value into JSON.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="args">The args to pass.</param>
+        /// <returns>
+        /// The translated value if found, the value otherwise.
+        /// </returns>
+        /// <remarks>
+        /// This will ensure all apostrophes and quotes are correctly encoded.
+        /// </remarks>
+        public string TranslateJson(string value, params object[] args)
+        {
+            var translation = this.resourceManager.GetString(value, this.culture) ?? value;
+            if (args.Length > 0)
+            {
+                translation = string.Format(this.culture, translation, args);
+            }
+
+            return translation.Replace("'", "\\'").Replace("\"", "\\\"");
+        }
+        #endregion
         #endregion
     }
 }

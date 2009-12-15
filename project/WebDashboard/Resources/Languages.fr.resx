@@ -120,70 +120,148 @@
   <data name="Activity" xml:space="preserve">
     <value>Activité</value>
   </data>
-  <data name="Exception" xml:space="preserve">
+  <data name="Add New Server" xml:space="preserve">
+    <value>Ajouter un nouveau serveur</value>
+  </data>
+  <data name="Allow Force/Abort Build" xml:space="preserve">
+    <value>Permettre l'annulation et l'exécution forcée des compilations</value>
+  </data>
+  <data name="Allow Start/Stop Project" xml:space="preserve">
+    <value>Permettre le démarrage et l'arrêt de projets</value>
+  </data>
+  <data name="Backwards Compatible" xml:space="preserve">
+    <value>Compatibilités</value>
+  </data>
+  <data name="Build" xml:space="preserve">
+    <value>Compiler</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Catégories</value>
+  </data>
+  <data name="CCNet Status" xml:space="preserve">
+    <value>État de CCNet</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="Commands" xml:space="preserve">
+    <value>Commandes</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Tableau de bord</value>
+  </data>
+  <data name="Dashboard Administration" xml:space="preserve">
+    <value>Tableau de bord administratif</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="Delete server" xml:space="preserve">
+    <value>Supprimer le serveur</value>
+  </data>
+  <data name="Enter" xml:space="preserve">
+    <value>Connexion</value>
+  </data>
+  <data name="Error" xml:space="preserve">
     <value>Erreur</value>
   </data>
-  <data name="Exception Full Details" xml:space="preserve">
-    <value>Détails de l'erreur</value>
+  <data name="Import" xml:space="preserve">
+    <value>Importer</value>
   </data>
-  <data name="Exception Message" xml:space="preserve">
-    <value>Message d'erreur</value>
+  <data name="Install" xml:space="preserve">
+    <value>Installer</value>
   </data>
-  <data name="Farm Report" xml:space="preserve">
-    <value>Rapport sur les fermes</value>
+  <data name="Installation Log" xml:space="preserve">
+    <value>Journal d'installation</value>
+  </data>
+  <data name="Last Build Label" xml:space="preserve">
+    <value>Dernier étiquette</value>
   </data>
   <data name="Last Build Status" xml:space="preserve">
-    <value>Dernière version État</value>
+    <value>État de la dernière compilation</value>
   </data>
   <data name="Last Build Time" xml:space="preserve">
-    <value>Dernière version Temps</value>
+    <value>Date de la dernière compilation</value>
   </data>
-  <data name="Latest" xml:space="preserve">
-    <value>Dernier</value>
+  <data name="Load Package" xml:space="preserve">
+    <value>Charger un paquetage</value>
   </data>
-  <data name="Most Recent Build Results" xml:space="preserve">
-    <value>Les plus récents résultats viennent s'ajouter</value>
+  <data name="Loading parameters, please wait..." xml:space="preserve">
+    <value>Chargement des paramètres...</value>
   </data>
-  <data name="Next" xml:space="preserve">
-    <value>Suivant</value>
+  <data name="Logout" xml:space="preserve">
+    <value>Déconnexion</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nom</value>
   </data>
   <data name="Next Build Time" xml:space="preserve">
-    <value>Réalisez des Temps</value>
+    <value>Heure de la prochaine compilation</value>
+  </data>
+  <data name="Package" xml:space="preserve">
+    <value>Paquetage</value>
+  </data>
+  <data name="Package details" xml:space="preserve">
+    <value>Détails du paquetage</value>
+  </data>
+  <data name="Packages" xml:space="preserve">
+    <value>Paquetages</value>
   </data>
   <data name="PageRendered" xml:space="preserve">
-    <value>Cette page rendue à {0}</value>
+    <value>Cette page a été généré à: {0}</value>
   </data>
-  <data name="Previous" xml:space="preserve">
-    <value>Précédent</value>
+  <data name="Please contact your build administrator." xml:space="preserve">
+    <value>Contacter l'administrateur des compilations.</value>
+  </data>
+  <data name="Please login again or contact your build administrator." xml:space="preserve">
+    <value>Veuillez vous connecter à nouveau ou contacter l'administrateur des compilations.</value>
   </data>
   <data name="Project Name" xml:space="preserve">
-    <value>Nom du projet</value>
+    <value>Nom du project</value>
   </data>
-  <data name="Recent Builds" xml:space="preserve">
-    <value>Dernières Builds</value>
+  <data name="Project Parameters" xml:space="preserve">
+    <value>Paramètres du project</value>
   </data>
   <data name="Refresh status" xml:space="preserve">
-    <value>Actualiser l'état</value>
+    <value>Rafraîchir</value>
+  </data>
+  <data name="Reload dashboard" xml:space="preserve">
+    <value>Recharder le tableau de bord</value>
+  </data>
+  <data name="Remote Servers" xml:space="preserve">
+    <value>Serveurs distant</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Enlever</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Sauvegarder</value>
   </data>
   <data name="Server" xml:space="preserve">
-    <value>Nom du serveur</value>
+    <value>Serveur</value>
   </data>
-  <data name="Sleeping" xml:space="preserve">
-    <value>Dormir</value>
+  <data name="Server details" xml:space="preserve">
+    <value>Détails du serveur</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>Démarrer</value>
+  <data name="Servers" xml:space="preserve">
+    <value>Serveurs</value>
   </data>
-  <data name="Stop" xml:space="preserve">
-    <value>Arrêter</value>
-  </data>
-  <data name="Success" xml:space="preserve">
-    <value>Réussi</value>
+  <data name="The administration console is password protected, please enter your password" xml:space="preserve">
+    <value>La console administratif est protégée par un mot de passe. Veuillez entrer votre mot de passe</value>
   </data>
   <data name="There was an exception trying to carry out your request." xml:space="preserve">
-    <value>Il y avait une exception à essayer d'exécuter votre demande.</value>
+    <value>Une exception est survenue lors de votre requête.</value>
   </data>
-  <data name="Unknown" xml:space="preserve">
-    <value>Inconnu</value>
+  <data name="View Log" xml:space="preserve">
+    <value>Visualiser journal</value>
+  </data>
+  <data name="You do not have permission for this action" xml:space="preserve">
+    <value>Vous n'avez pas les droits pour effectuer cette action.</value>
+  </data>
+  <data name="Your session is invalid" xml:space="preserve">
+    <value>Votre session est invalide</value>
   </data>
 </root>

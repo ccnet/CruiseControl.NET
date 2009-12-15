@@ -93,35 +93,35 @@ label
         var serverDialog = jQuery('#serverDialog').dialog({
             autoOpen: false,
             modal: true,
-            title: 'Server details',
+            title: '$translations.TranslateJson("Server details")',
             width: 400,
             resizable: false
         });
         var packageDialog = jQuery('#packageDialog').dialog({
             autoOpen: false,
             modal: true,
-            title: 'Package details',
+            title: '$translations.TranslateJson("Package details")',
             width: 400,
             resizable: false
         });
         var importPackageDialog = jQuery('#importPackageDialog').dialog({
             autoOpen: false,
             modal: true,
-            title: 'Package details',
+            title: '$translations.TranslateJson("Package details")',
             width: 400,
             resizable: false
         });
         var logDialog = jQuery('#logDialog').dialog({
             autoOpen: false,
             modal: true,
-            title: 'Installation Log',
+            title: '$translations.TranslateJson("Installation Log")',
             width: 600,
             height:300
         });
         var deleteServerDialog = jQuery('#deleteServerDialog').dialog({
             autoOpen: false,
             modal: true,
-            title: 'Delete server',
+            title: '$translations.TranslateJson("Delete server")',
             width: 400,
             resizable: false
         });
@@ -196,7 +196,7 @@ label
             <table>
                 <tr>
                     <td>
-                        <label for="serverName">Name:</label>
+                        <label for="serverName">$translations.Translate("Name"):</label>
                     </td>
                     <td>
                         <input type="hidden" class="text" id="oldName" name="oldName" />
@@ -216,7 +216,7 @@ label
                     </td>
                     <td>
                         <input type="checkbox" id="serverForceBuild" name="serverForceBuild" />
-                        <label for="serverForceBuild">Allow Force/Abort Build</label>
+                        <label for="serverForceBuild">$translations.Translate("Allow Force/Abort Build")</label>
                     </td>
                 </tr>
                 <tr>
@@ -224,7 +224,7 @@ label
                     </td>
                     <td>
                         <input type="checkbox" id="serverStartStop" name="serverStartStop" />
-                        <label for="serverStartStop">Allow Start/Stop Project</label>
+                        <label for="serverStartStop">$translations.Translate("Allow Start/Stop Project")</label>
                     </td>
                 </tr>
                 <tr>
@@ -232,15 +232,15 @@ label
                     </td>
                     <td>
                         <input type="checkbox" id="serverBackwardsCompatible" name="serverBackwardsCompatible" />
-                        <label for="serverBackwardsCompatible">Backwards Compatible</label>
+                        <label for="serverBackwardsCompatible">$translations.Translate("Backwards Compatible")</label>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <input type="hidden" name="type" value="server" />
-                        <input type="button" class="button" id="deleteServer" name="action" value="Delete" style="float:right;" />
-                        <input type="submit" class="button" name="action" value="Save" />
-                        <input type="button" class="button" id="cancelServer" value="Cancel" />
+                        <input type="button" class="button" id="deleteServer" name="action" value="$translations.Translate("Delete")" style="float:right;" />
+                        <input type="submit" class="button" name="action" value="$translations.Translate("Save")" />
+                        <input type="button" class="button" id="cancelServer" value="$translations.Translate("Cancel")" />
                     </td>
                 </tr>
             </table>
@@ -251,10 +251,10 @@ label
             <table>
                 <tr>
                     <td>
-                        <label for="packageName">Name:</label>
+                        <label for="packageName">$translations.Translate("Name"):</label>
                     </td>
                     <td>
-                        <span id="packageName">Name</span>
+                        <span id="packageName">$translations.Translate("Name")</span>
                     </td>
                 </tr>
                 <tr>
@@ -270,8 +270,8 @@ label
                         <input type="hidden" name="type" value="package" />
                         <input type="hidden" name="PackageName" id="nameOfPackage" />
                         <input type="submit" class="button" id="installButton" name="action" />
-                        <input type="submit" class="button" id="removeButton" name="action" value="Remove" />
-                        <input type="button" class="button" id="closePackage" value="Close" />
+                        <input type="submit" class="button" id="removeButton" name="action" value="$translations.Translate("Remove")" />
+                        <input type="button" class="button" id="closePackage" value="$translations.Translate("Close")" />
                     </td>
                 </tr>
             </table>
@@ -282,7 +282,7 @@ label
             <table>
                 <tr>
                     <td>
-                        <label for="packageLocation">Package:</label>
+                        <label for="packageLocation">$translations.Translate("Package"):</label>
                     </td>
                     <td>
                         <input type="file" name="package" id="packageLocation" />
@@ -290,8 +290,8 @@ label
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <input type="submit" class="button" name="Action" value="Import" />
-                        <input type="button" class="button" id="closeImport" value="Close" />
+                        <input type="submit" class="button" name="Action" value="$translations.Translate("Import")" />
+                        <input type="button" class="button" id="closeImport" value="$translations.Translate("Close")" />
                     </td>
                 </tr>
             </table>
@@ -307,18 +307,18 @@ label
     <div id="deleteServerDialog">
         <form method="post">
             <div>
-                Are you sure you want to delete the server '<span id="deleteServerLabel">Name</span>'?
+                Are you sure you want to delete the server '<span id="deleteServerLabel">$translations.Translate("Name")</span>'?
             </div>
             <div>
                 <input type="hidden" name="type" value="server" />
                 <input type="hidden" name="ServerName" id="deleteServerField" />
-                <input type="submit" name="Action" value="Delete" />
-                <input type="button" id="cancelDeleteServer" value="Cancel" />
+                <input type="submit" name="Action" value="$translations.Translate("Delete")" />
+                <input type="button" id="cancelDeleteServer" value="$translations.Translate("Cancel")" />
             </div>
         </form>
     </div>
 </div>
-<h3>Dashboard Administration</h3>
+<h3>$translations.Translate("Dashboard Administration")</h3>
 #if ($Result.Length > 0)
 <div class="ui-widget">
 	<div class="ui-state-highlight ui-corner-all"> 
@@ -326,11 +326,11 @@ label
 		#if ($InstallPackage.Length > 0)
 		<form method="post" style="float:right;">
 		    <input type="hidden" name="PackageName" value="$InstallPackage" />
-		    <input type="submit" name="Action" value="Install" />
+		    <input type="submit" name="Action" value="$translations.Translate("Install")" />
 		</form>
 		#end
 		#if ($Events)
-		<input type="button" value="View Log" id="viewLogButton" style="float:right;" />
+		<input type="button" value="$translations.Translate("View Log")" id="viewLogButton" style="float:right;" />
 		#end
 		$Result
 		</p>
@@ -350,7 +350,7 @@ label
     <tr valign="top">
         <td>
             <fieldset id="servers">
-                <legend>Remote Servers</legend>
+                <legend>$translations.Translate("Remote Servers")</legend>
                 #foreach ($Server in $Servers)
                 #odd
                 <div class="oddRow" name="$Server.Name" url="$Server.Url" force="$Server.AllowForceBuild" start="$Server.AllowStartStopBuild" backwards="$Server.BackwardCompatible">
@@ -365,7 +365,7 @@ label
         </td>
         <td>
             <fieldset id="packages">
-                <legend>Packages</legend>
+                <legend>$translations.Translate("Packages")</legend>
                 #foreach ($Package in $Packages)
                 #odd
                 <div class="oddRow" name="$Package.Name" desc="$Package.Description" installed="$Package.IsInstalled" file="$Package.FileName">
@@ -387,13 +387,13 @@ label
     </tr>
 </table>
 <fieldset>
-    <legend>Commands</legend>
+    <legend>$translations.Translate("Commands")</legend>
     <form method="post">
         <div>
-            <input type="button" id="addServerButton" value="Add New Server" />
-            <input type="button" id="loadPackageButton" value="Load Package" />
-            <input type="submit" value="Reload dashboard" name="Action" />
-            <input type="submit" value="Logout" name="Action" />
+            <input type="button" id="addServerButton" value="$translations.Translate("Add New Server")" />
+            <input type="button" id="loadPackageButton" value="$translations.Translate("Load Package")" />
+            <input type="submit" value="$translations.Translate("Reload dashboard")" name="Action" />
+            <input type="submit" value="$translations.Translate("Logout")" name="Action" />
         </div>
     </form>
 </fieldset>
