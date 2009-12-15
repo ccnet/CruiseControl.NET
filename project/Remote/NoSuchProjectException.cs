@@ -4,7 +4,10 @@ using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
-	[Serializable]
+ /// <summary>
+ /// Specified project does not exist on the buildserver
+ /// </summary>
+    [Serializable]
 	public class NoSuchProjectException : CruiseControlException
 	{
         private const string requestedProjectData = "REQUESTEDPROJECT_NAME";

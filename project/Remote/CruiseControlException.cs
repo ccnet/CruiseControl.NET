@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
+    /// <summary>
+    /// Base cruiseControl specific exception, inheriting from <see cref="System.ApplicationException"/>.
+    /// </summary>
 	[Serializable]
 	public class CruiseControlException : ApplicationException
 	{
