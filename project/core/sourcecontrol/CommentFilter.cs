@@ -6,12 +6,24 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// <summary>
     /// A FilteredSourceControl filter that compares modification comments to a specified regular expression.
     /// </summary>
+    /// <title>CommentFilter</title>
+    /// <version>1.3</version>
+    /// <example>
+    /// <code>
+    /// &lt;commentFilter&gt;
+    /// &lt;pattern&gt;Ignore: .*&lt;/pattern&gt;
+    /// &lt;/commentFilter&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("commentFilter")]
     public class CommentFilter : IModificationFilter
     {
         /// <summary>
-        /// The regular expression (<see cref="System.Text.RegularExpressions.Regex"/>) to compare against.
+        /// This is the pattern used to compare the modification comment against. The pattern is specified according to the rules of the .net
+        /// System.Text.RegularExpressions.Regex class. Each CommentFilter contains a single pattern element. 
         /// </summary>
+        /// <version>1.3</version>
+        /// <default>n/a</default>
         [ReflectorProperty("pattern", Required = true)]
         public string Pattern;
 

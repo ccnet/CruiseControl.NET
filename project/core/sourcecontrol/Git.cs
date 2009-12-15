@@ -7,6 +7,112 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	/// <summary>
 	///   Source Control Plugin for CruiseControl.NET that talks to git.
 	/// </summary>
+    /// <title>Git Source Control Block</title>
+    /// <version>1.5</version>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>git</value>
+    /// </key>
+    /// <example>
+    /// <code title="Minimalist Example">
+    /// &lt;sourcecontrol type="git"&gt;
+    /// &lt;repository&gt;git://github.com/rails/rails.git&lt;/repository&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// <code title="Full Example">
+    /// &lt;sourcecontrol type="git"&gt;
+    /// &lt;repository&gt;git://github.com/rails/rails.git&lt;/repository&gt;
+    /// &lt;branch&gt;master&lt;/branch&gt;
+    /// &lt;autoGetSource&gt;true&lt;/autoGetSource&gt;
+    /// &lt;executable&gt;git&lt;/executable&gt;
+    /// &lt;tagOnSuccess&gt;false&lt;/tagOnSuccess&gt;
+    /// &lt;commitBuildModifications&gt;false&lt;/commitBuildModifications&gt;
+    /// &lt;commitUntrackedFiles&gt;false&lt;/commitUntrackedFiles&gt;
+    /// &lt;tagCommitMessage&gt;CCNet Build {0}&lt;/tagCommitMessage&gt;
+    /// &lt;tagNameFormat&gt;CCNet-Build-{0}&lt;/tagNameFormat&gt;
+    /// &lt;committerName&gt;Max Mustermann&lt;/committerName&gt;
+    /// &lt;committerEMail&gt;max.mustermann@gmx.de&lt;/committerEMail&gt;
+    /// &lt;workingDirectory&gt;c:\build\rails&lt;/workingDirectory&gt;
+    /// &lt;timeout&gt;60000&lt;/timeout&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <heading>How does this work?</heading>
+    /// <para>
+    /// <b>Local repository initialization</b>
+    /// </para>
+    /// <para>
+    /// The Git Source Control Block will check whenever the specified working directory exist or not. If it does not exist a "git clone"
+    /// command is issued to create and setup the local repository. Also the configuration settings "user.name" and "user.email" for the local
+    /// repository will be set with "git config" if both are provided.
+    /// </para>
+    /// <para>
+    /// If the working directory exists but is not a git repository (e.g. the .git directory is missing) it will be deleted and the "git clone"
+    /// and configuration instructions described above will be issued.
+    /// </para>
+    /// <para>
+    /// If the working directory is already the root of an existing git repository no initialization is done.
+    /// </para>
+    /// <para>
+    /// <b>Checking for modifications</b>
+    /// </para>
+    /// <para>
+    /// One the repository is initialized the "git fetch origin" command is issued to fetch the remote changes. In the next step the sha-1 hash
+    /// of the specified remote branch and the local checkout is compared. If they're identical Cruise Control.NET will expect that there are
+    /// no changes.
+    /// </para>
+    /// <para>
+    /// If the 2 sha-1 hashes are different a "git log --name-status --before=... --after=..." command is issued to get a list of the new
+    /// commits and their changes.
+    /// </para>
+    /// <para>
+    /// <b>Getting the source</b>
+    /// </para>
+    /// <para>
+    /// Once Cruise Control.NET has modifications detected and the 'autoGetSource' property is set to 'true' the "git checkout -f
+    /// origin/$NameOfTheBranch" command is issued. Also the "git clean -f -d -x" command to get a clean working copy to start a new build.
+    /// </para>
+    /// <para>
+    /// <b>Tagging a successful build</b>
+    /// </para>
+    /// <para>
+    /// After a successful build and when the 'tagOnSuccess' property is set to 'true' the "git -a -m 'tagCommitMessage' tag 'build label'"
+    /// command is issued and a "git push origin tag 'name of the tag'" to push the tag to the remote repository.
+    /// </para>
+    /// <para>
+    /// If 'commitBuildModifications' is set to 'true' then all modified files will be committed before tagging with a "git commit --all
+    /// --allow-empty -m 'tagCommitMessage'". If you also set 'commitUntrackedFiles' to 'true' all untracked files that are not ignored by
+    /// .gitignores will be added to the git index before committing and tagging with a "git add --all" command.
+    /// </para>
+    /// <heading>Using Git on Windows</heading>
+    /// <para>
+    /// Download and install the latest version of msysgit.
+    /// </para>
+    /// <list type="1">
+    /// <item>
+    /// Point the "executable" property to the git.cmd file (e.g. C:\Program Files\Git\cmd\git.cmd)
+    /// </item>
+    /// <item>
+    /// Or set the "path" environment variable to the "bin" directory of your msysgit instalation (e.g. C:\Program Files\Git\bin), the "HOME"
+    /// environment variable to "%USERPROFILE%" and the "PLINK_PROTOCOL" environment variable to "ssh".
+    /// </item>
+    /// </list>
+    /// <para></para>
+    /// <para></para>
+    /// <para>
+    /// Homepage: http://code.google.com/p/msysgit/
+    /// </para>
+    /// <heading>Using Git on Unix (CruiseControl.NET with Mono)</heading>
+    /// <para>
+    /// Make sure that you've the latest Git installed via your distributions packet manager and that git and all its required applications are
+    /// in $PATH.
+    /// </para>
+    /// <heading>Additional Information</heading>
+    /// <para>
+    /// The default port git uses is 9418. Git over SSH uses port 22 by default. Make sure that your firewall is set up to handle this.
+    /// </para>
+    /// </remarks>
 	[ReflectorType("git")]
 	public class Git : ProcessSourceControl
 	{
@@ -16,40 +122,103 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private readonly IFileDirectoryDeleter _fileDirectoryDeleter;
 		private BuildProgressInformation _buildProgressInformation;
 
+        /// <summary>
+        /// Whether to fetch the updates from the repository and checkout the branch for a particular build. 
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>true</default>
 		[ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = true;
 
-		[ReflectorProperty("executable", Required = false)]
+        /// <summary>
+        /// The location of the Git executable. 
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>git</default>
+        [ReflectorProperty("executable", Required = false)]
 		public string Executable = "git";
 
-		[ReflectorProperty("repository", Required = true)]
+        /// <summary>
+        /// The url to the remote repository. 
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
+        [ReflectorProperty("repository", Required = true)]
 		public string Repository;
 
-		[ReflectorProperty("branch", Required = false)]
+        /// <summary>
+        /// Remote repository branch to monitor and checkout. 
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>master</default>
+        [ReflectorProperty("branch", Required = false)]
 		public string Branch = "master";
 
-		[ReflectorProperty("tagCommitMessage", Required = false)]
+        /// <summary>
+        /// Format string for the commit message of each tag. \{0\} is the placeholder for the current build label. 
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>CCNet Build \{0\}</default>
+        [ReflectorProperty("tagCommitMessage", Required = false)]
 		public string TagCommitMessage = "CCNet Build {0}";
 
-		[ReflectorProperty("tagNameFormat", Required = false)]
+        /// <summary>
+        /// Format string for the name of each tag. Make sure you're only using allowed characters. \{0\} is the placeholder for the current
+        /// build label. 
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>CCNet-Build-\{0\}</default>
+        [ReflectorProperty("tagNameFormat", Required = false)]
 		public string TagNameFormat = "CCNet-Build-{0}";
 
-		[ReflectorProperty("tagOnSuccess", Required = false)]
+        /// <summary>
+        /// Indicates that the repository should be tagged if the build succeeds.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
+        [ReflectorProperty("tagOnSuccess", Required = false)]
 		public bool TagOnSuccess;
 
-		[ReflectorProperty("commitBuildModifications", Required = false)]
+        /// <summary>
+        /// Indicates that all modifications during the build process should be committed before tagging. This requires 'tagOnSuccess ' to be
+        /// set to 'true'.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
+        [ReflectorProperty("commitBuildModifications", Required = false)]
 		public bool CommitBuildModifications;
 
-		[ReflectorProperty("commitUntrackedFiles", Required = false)]
+        /// <summary>
+        /// Indicates that files created during the build process should be committed before tagging. This requires 'commitBuildModifications'
+        /// and 'tagOnSuccess ' to be set to 'true'.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
+        [ReflectorProperty("commitUntrackedFiles", Required = false)]
 		public bool CommitUntrackedFiles;
 
-		[ReflectorProperty("committerName", Required = false)]
+        /// <summary>
+        /// Used to set the "user.name" configuration setting in the local repository. Required for the 'tagOnSuccess ' feature. 
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        [ReflectorProperty("committerName", Required = false)]
 		public string CommitterName;
 
-		[ReflectorProperty("committerEMail", Required = false)]
+        /// <summary>
+        /// Used to set the "user.email" configuration setting in the local repository. Required for the 'tagOnSuccess ' feature. 
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        [ReflectorProperty("committerEMail", Required = false)]
 		public string CommitterEMail;
 
-		[ReflectorProperty("workingDirectory", Required = false)]
+        /// <summary>
+        /// The directory containing the local git repository. 
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>Project Working Directory</default>
+        [ReflectorProperty("workingDirectory", Required = false)]
 		public string WorkingDirectory;
 
 		public Git() : this(new GitHistoryParser(), new ProcessExecutor(), new SystemIoFileSystem(), new IoService()) { }

@@ -4,6 +4,35 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
+    /// <summary>
+    /// This supports Códice Software's Plastic SCM source control system.
+    /// </summary>
+    /// <title>PlasticSCM Source Control Block</title>
+    /// <version>1.3</version>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>plasticscm</value>
+    /// </key>
+    /// <example>
+    /// <code title="Basic Example">
+    /// &lt;sourcecontrol type="plasticscm"&gt;
+    /// &lt;workingDirectory&gt;c:\workspace&lt;/workingDirectory&gt;
+    /// &lt;branch&gt;br:/main&lt;/branch&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// <code title="Full Example">
+    /// &lt;sourcecontrol type="plasticscm"&gt;
+    /// &lt;executable&gt;c:\Program Files\PlasticSCM\client\cm.exe&lt;/executable&gt;
+    /// &lt;workingDirectory&gt;c:\workspace&lt;/workingDirectory&gt;
+    /// &lt;branch&gt;br:/main&lt;/branch&gt;
+    /// &lt;repository&gt;mainrep&lt;/repository&gt;
+    /// &lt;forced&gt;true&lt;/forced&gt;
+    /// &lt;labelOnSuccess&gt;true&lt;/labelOnSuccess&gt;
+    /// &lt;labelPrefix&gt;BL&lt;/labelPrefix&gt;
+    /// &lt;timeout units="minutes"&gt;10&lt;/timeout&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
 	[ReflectorType("plasticscm")]
 	public class PlasticSCM : ProcessSourceControl
 	{
@@ -27,50 +56,65 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <summary>
         /// Should we automatically obtain updated source from PlasticSCM or not? 
         /// </summary>
-        /// <remarks>
-        /// Optional, default is not to do so.
-        /// </remarks>
+        /// <version>1.3</version>
+        /// <default>true</default>
         [ReflectorProperty("autoGetSource", Required = false)]
         public bool AutoGetSource = true;
         
         /// <summary>
         /// Name of the PlasticSCM executable.  
         /// </summary>
-        /// <remarks>
-        /// Optional, defaults to "cm".
-        /// <remarks>
-        [ReflectorProperty("executable", Required=false)]
+        /// <version>1.3</version>
+        /// <default>cm</default>
+        [ReflectorProperty("executable", Required = false)]
 		public string Executable = DefaultPlasticExecutable;
 
-		[ReflectorProperty("branch", Required=true)]
+        /// <summary>
+        /// The Plastic SCM branch to monitor. 
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("branch", Required = true)]
 		public string Branch = string.Empty;
 
-		[ReflectorProperty("repository", Required=false)]
+        /// <summary>
+        /// The Plastic SCM repository to monitor. 
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>Current in workspace</default>
+        [ReflectorProperty("repository", Required = false)]
 		public string Repository = string.Empty;
 
         /// <summary>
-        /// Pathname of the PlasticSCM working directory, either absolute or relative
-        /// to the project working directory.
+        /// Valid Plastic SCM workspace path. 
         /// </summary>
-        /// <remarks>
-        /// Optional, defaults to the project working directory.
-        /// <remarks>
+        /// <version>1.3</version>
+        /// <default>Project Working Directory</default>
         [ReflectorProperty("workingDirectory", Required = false)]
 		public string WorkingDirectory = string.Empty;
 
         /// <summary>
-        /// If set, the source repository will be tagged with the build label upon successful builds.
+        /// Specifies whether or not CCNet should create an Plastic SCM baseline when the build is successful. 
         /// </summary>
-        /// <remarks>
-        /// Optional, default is not to tag.
-        /// <remarks>
+        /// <version>1.3</version>
+        /// <default>flase</default>
         [ReflectorProperty("labelOnSuccess", Required = false)]
 		public bool LabelOnSuccess = false;
 
-		[ReflectorProperty("labelPrefix", Required=false)]
+        /// <summary>
+        /// Specifies the prefix label name. 
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>ccver-</default>
+        [ReflectorProperty("labelPrefix", Required = false)]
 		public string LabelPrefix = "ccver-";
 
-		[ReflectorProperty("forced", Required=false)]
+        /// <summary>
+        /// Do the update with the "--forced" option.
+        /// </summary>
+        /// <version>1.3</version>
+        /// <default>flase</default>
+        [ReflectorProperty("forced", Required = false)]
 		public bool Forced = false;
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)

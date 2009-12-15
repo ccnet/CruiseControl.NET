@@ -1306,6 +1306,99 @@
 
   <xs:complexType name="SourceControl" abstract="true"/>
 
+  <xs:complexType name="SourceControls">
+    <xs:choice minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="accurev" type="accurev">
+        <xs:annotation>
+          <xs:documentation>
+            Source control integration for Accurev's source control product (http://www.accurev.com).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="alienbrain" type="alienbrain">
+        <xs:annotation>
+          <xs:documentation>
+            Source control integration for the Alienbrain source control product.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="bitkeeper" type="bitkeeper">
+        <xs:annotation>
+          <xs:documentation>
+            Source control integration for the BitKeeper source control product.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="cvs" type="cvs">
+        <xs:annotation>
+          <xs:documentation>
+            Please refer to [Using CruiseControl.NET with CVS] for an overview of this block.
+            For CVS you must define where the CVS executable (if you give a relative path, it must be relative to the ccnet.exe application) is and the working directory for checked out code.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="filtered" type="filtered">
+        <xs:annotation>
+          <xs:documentation>
+            The FilteredSourceControl allows you to filter out modifications that are used to trigger a build. If for example, you have certain files (such as web pages or document files) under source control that you don't want to have trigger the build, you can use this class to ensure that their changes will keep a new build from launching.
+            The FilteredSourceControl works together with all of the source controls supported by CCNet (including the [Multi Source Control Block]). It can also be included under the [Multi Source Control Block] provider so that you could have multiple FilterSourceControls each filtering a different set of modifications from different source control providers. Essentially, it acts as a decorator (or an example of the pipes and filters pattern ), wrapping around the specific SourceControl provider that you want to use.
+            The FilteredSourceControl includes both inclusion and exclusion filters for specifying what modifications should be included/excluded. Multiple inclusion and exclusion filters can be specified or, alternately, no inclusion or exclusion filter could be specified. If a modification is matched by both the inclusion and exclusion filter, then the exclusion filter will take preference and the modification will not be included in the modification set. It is relatively straightforward to build new filters, (such as one to filter modifications based on email address).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ftpSourceControl" type="ftpSourceControl">
+        <xs:annotation>
+          <xs:documentation>
+            The Ftp Soure control block allows to detect new and changed files at an Ftp site.
+            Deleted files are  *NOT* detected.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="git" type="git">
+        <xs:annotation>
+          <xs:documentation>
+            Source Control Plugin for CruiseControl.NET that talks to git.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="multi" type="multi">
+        <xs:annotation>
+          <xs:documentation>
+            You can use the 'Multi' Source Control plugin to check for modifications from any number of source control repositories. You may want to do this if (for example) you want to build if the source for your project changes, or if the binaries your project depends on change (which may be stored on a file server).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="nullSourceControl" type="nullSourceControl">
+        <xs:annotation>
+          <xs:documentation>
+            Use the Null Source Control if you don't want to check a Source Control repository for changes. In this instance you would always want to either use a 'Force Build' Trigger or always manually start builds, from the [Web Dashboard] or [CCTray].
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="plasticscm" type="plasticscm">
+        <xs:annotation>
+          <xs:documentation>
+            This supports Códice Software's Plastic SCM source control system.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="svn" type="svn">
+        <xs:annotation>
+          <xs:documentation>
+            CruiseControl.NET provides basic support for Subversion repositories. Checking for changes, checking out or updating sources, and tagging\-by\-copying are supported, but more advanced features such as using Subversion revision numbers are not yet supported. Subversion support is under active development and will improve over time.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="vss" type="vss">
+        <xs:annotation>
+          <xs:documentation>
+            For Visual Source Safe you must specify the executable, project, username and password. You may also specify the SSDIR. If SSDIR is not set the default or the SSDIR environment variable will be used.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+
   <xs:complexType name="alienbrain">
     <xs:complexContent>
       <xs:extension base="SourceControl">
@@ -1685,6 +1778,252 @@
     </xs:complexContent>
   </xs:complexType>
 
+  <xs:complexType name="filtered">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="sourceControlProvider" type="SourceControl" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                This element is used to specify the type of source control provider to retrieve modifications from. With the exception of the element name, the configuration for this element is identical to the xml configuration for the specific source control provider you intend to use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="exclusionFilters" type="ModificationFilters" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The list of filters that decide what modifications to exclude.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="inclusionFilters" type="ModificationFilters" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The list of filters that decide what modifications to include.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ftpSourceControl">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="serverName" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The name of the server to connect to.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="userName" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The user name to log in with.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="password" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The password for the user.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="useActiveConnectionMode" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Whether to use active connection mode or not.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ftpFolderName" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The folder name of on the ftp site.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="localFolderName" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The folder name on the local system.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="recursiveCopy" type="xs:boolean" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Whether to recurse into subfolders or not.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="git">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="autoGetSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Whether to fetch the updates from the repository and checkout the branch for a particular build.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The location of the Git executable.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="repository" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The url to the remote repository.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="branch" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Remote repository branch to monitor and checkout.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="tagCommitMessage" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Format string for the commit message of each tag. \{0\} is the placeholder for the current build label.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="tagNameFormat" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Format string for the name of each tag. Make sure you're only using allowed characters. \{0\} is the placeholder for the current build label.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="tagOnSuccess" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Indicates that the repository should be tagged if the build succeeds.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="commitBuildModifications" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Indicates that all modifications during the build process should be committed before tagging. This requires 'tagOnSuccess ' to be set to 'true'.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="commitUntrackedFiles" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Indicates that files created during the build process should be committed before tagging. This requires 'commitBuildModifications' and 'tagOnSuccess ' to be set to 'true'.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="committerName" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Used to set the "user.name" configuration setting in the local repository. Required for the 'tagOnSuccess ' feature.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="committerEMail" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Used to set the "user.email" configuration setting in the local repository. Required for the 'tagOnSuccess ' feature.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="workingDirectory" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The directory containing the local git repository.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="issueUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Converts the comment (or parts from it) into an url pointing to the issue for this build. See [IssueUrlBuilder] for more details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="timeout" type="Timeout" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Sets the timeout period for the source control operation. See [Timeout Configuration] for details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="multi">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="requireChangesFromAll" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                If true, only return a list of modifications if all sourceControl sections return a non\-empty list. Note that this is short\-circuiting, i.e. if the first sourceControl returns an empty list, the next won't be called (this can be useful for situations where you have a slow source control server and you want to check a specific file first as a trigger).
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="sourceControls" type="SourceControls" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The list of other Source Control Blocks to include.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
   <xs:complexType name="nullSourceControl">
     <xs:complexContent>
       <xs:extension base="SourceControl">
@@ -1703,6 +2042,223 @@
             <xs:documentation>Defines whether or not to fail the getting of the source.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="plasticscm">
+    <xs:all>
+      <xs:element name="autoGetSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Should we automatically obtain updated source from PlasticSCM or not?
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Name of the PlasticSCM executable.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="branch" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The Plastic SCM branch to monitor.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="repository" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The Plastic SCM repository to monitor.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="workingDirectory" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Valid Plastic SCM workspace path.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="labelOnSuccess" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies whether or not CCNet should create an Plastic SCM baseline when the build is successful.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="labelPrefix" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies the prefix label name.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="forced" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Do the update with the "\-\-forced" option.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="issueUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Converts the comment (or parts from it) into an url pointing to the issue for this build. See [IssueUrlBuilder] for more details.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="timeout" type="Timeout" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Sets the timeout period for the source control operation. See [Timeout Configuration] for details.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the source control block.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="svn">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="webUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The root url for the WebSVN site.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The location of the svn executable.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="trunkUrl" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The url for your repository (e.g., svn://svnserver/).
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="workingDirectory" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The directory containing the locally checked out workspace.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="tagOnSuccess" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Indicates that the repository should be tagged if the build succeeds.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="tagBaseUrl" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The base url for tags in your repository.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="username" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The username to use for authentication when connecting to the repository.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="password" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The password to use for authentication when connecting to the repository.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="autoGetSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Whether to retrieve the updates from Subversion for a particular build.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="checkExternals" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Whether to check the paths specified in the svn:externals property for modifications.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="checkExternalsRecursive" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Whether to check for modifications of svn:externals recursively.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="cleanCopy" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Whether to delete the working copy before updating the source.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="revert" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Reverts any local changes to a file or directory and resolves any conflicted states. svn revert will not only revert the contents of an item in your working copy, but also any property changes. Finally, you can use it to undo any scheduling operations that you may have done (e.g. files scheduled for addition or deletion can be "unscheduled").
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="cleanUp" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Recursively clean up the working copy, removing locks resuming unfinished operations. If you ever get a "working copy locked" error, run this command to remove stale locks and get your working copy into a usable state again.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="issueUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Converts the comment (or parts from it) into an url pointing to the issue for this build. See [IssueUrlBuilder] for more details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="revisionNumbers" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Whether to use revision numbers for fetching the modifications.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="timeout" type="Timeout" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Sets the timeout period for the source control operation. See [Timeout Configuration] for details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1816,6 +2372,48 @@
 
   <xs:complexType name="IModificationUrlBuilder" abstract="true"/>
 
+  <xs:complexType name="IModificationUrlBuilders">
+    <xs:choice minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="multiIssueTracker" type="multiIssueTracker">
+        <xs:annotation>
+          <xs:documentation>
+            This issue tracker allows a combination of the other issuetrackers.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="viewcvs" type="viewcvs">
+        <xs:annotation>
+          <xs:documentation>
+            Generates a URL for ViewCVS.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="websvn" type="websvn">
+        <xs:annotation>
+          <xs:documentation>
+            Generates a URL for WebSVN.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="multiIssueTracker">
+    <xs:complexContent>
+      <xs:extension base="IModificationUrlBuilder">
+        <xs:all>
+          <xs:element name="issueTrackers" type="IModificationUrlBuilders" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The issue trackers to combine.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
   <xs:complexType name="viewcvs">
     <xs:complexContent>
       <xs:extension base="IModificationUrlBuilder">
@@ -1846,6 +2444,116 @@
         </xs:all>
       </xs:extension>
     </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ModificationFilters">
+    <xs:choice minOccurs="1"   maxOccurs="unbounded">
+      <xs:element name="actionFilter" type="actionFilter">
+        <xs:annotation>
+          <xs:documentation>
+            The ActionFilter can be used to filter modifications on the basis of the type of modification that was committed. Modification types are specific to each source control provider. Consult each source control provider for the list of actions to filter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="commentFilter" type="commentFilter">
+        <xs:annotation>
+          <xs:documentation>
+            A FilteredSourceControl filter that compares modification comments to a specified regular expression.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="pathFilter" type="pathFilter">
+        <xs:annotation>
+          <xs:documentation>
+            The PathFilter can be used to filter modifications on the basis of their file path.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="userFilter" type="userFilter">
+        <xs:annotation>
+          <xs:documentation>
+            The UserFilter can be used to filter modifications on the basis of the username that committed the changes.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="actionFilter">
+    <xs:all>
+      <xs:element name="actions" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The actions to filter.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="action" type="String">
+              <xs:annotation>
+                <xs:documentation>
+                  An action to filter.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="commentFilter">
+    <xs:all>
+      <xs:element name="pattern" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            This is the pattern used to compare the modification comment against. The pattern is specified according to the rules of the .net System.Text.RegularExpressions.Regex class. Each CommentFilter contains a single pattern element.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="pathFilter">
+    <xs:all>
+      <xs:element name="pattern" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            This is the pattern used to compare the modification path against. The pattern should match the path of the files in the repository (not the path of the files in the working directory). See below for examples of the syntax for this element. Each PathFilter contains a single pattern element.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="caseSensitive" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Sets casesensitive searching on or off.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="userFilter">
+    <xs:all>
+      <xs:element name="names" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The user names to filter.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="name" type="String">
+              <xs:annotation>
+                <xs:documentation>
+                  The user name to filter.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
   </xs:complexType>
 
   <xs:complexType name="Tasks">

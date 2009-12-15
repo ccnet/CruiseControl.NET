@@ -6,15 +6,84 @@ using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
+    /// <summary>
+    /// You can use the 'Multi' Source Control plugin to check for modifications from any number of source control repositories. You may want
+    /// to do this if (for example) you want to build if the source for your project changes, or if the binaries your project depends on change
+    /// (which may be stored on a file server).
+    /// </summary>
+    /// <title>Multi Source Control Block</title>
+    /// <version>1.0</version>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>multi</value>
+    /// </key>
+    /// <example>
+    /// <code>
+    /// &lt;sourcecontrol type="multi"&gt;
+    /// &lt;sourceControls&gt;
+    /// &lt;filesystem&gt;
+    /// &lt;!-- Check for changes in the latest 1.2 version of the server... --&gt;
+    /// &lt;repositoryRoot&gt;\\DistributionFileServer\Server\1.2.latest&lt;/repositoryRoot&gt;
+    /// &lt;/filesystem&gt;
+    /// &lt;cvs&gt;
+    /// &lt;!-- ...or in the source of the client project --&gt;
+    /// &lt;executable&gt;c:\tools\cvs-exe\cvswithplinkrsh.bat&lt;/executable&gt;
+    /// &lt;workingDirectory&gt;c:\localcvs\myproject\client&lt;/workingDirectory&gt;
+    /// &lt;/cvs&gt;
+    /// &lt;/sourceControls&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para>
+    /// Note that, due to the way the configuration gets parsed, if you are using a "multi" block, then the items within the 
+    /// &lt;sourceControls&gt; element should not be &lt;sourcecontrol&gt; elements (as you may expect). Instead, the name of the element 
+    /// should be the same as you would put in the "type" attribute when using a &lt;sourcecontrol&gt; element.
+    /// </para>
+    /// <para>
+    /// For example, normally you would point to a cvs repository like this:
+    /// </para>
+    /// <code>
+    /// &lt;sourcecontrol type="cvs"&gt;
+    /// &lt;executable&gt;c:\tools\cvs-exe\cvswithplinkrsh.bat&lt;/executable&gt;
+    /// &lt;workingDirectory&gt;c:\localcvs\myproject\client&lt;/workingDirectory&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// <para>
+    /// But inside a &lt;sourcecontrol type="multi"&lt; element, this becomes:
+    /// </para>
+    /// <code>
+    /// &lt;sourcecontrol type="multi"&gt;
+    /// &lt;sourceControls&gt;
+    /// &lt;cvs&gt;
+    /// &lt;executable&gt;c:\tools\cvs-exe\cvswithplinkrsh.bat&lt;/executable&gt;
+    /// &lt;workingDirectory&gt;c:\localcvs\myproject\client&lt;/workingDirectory&gt;
+    /// &lt;/cvs&gt;
+    /// &lt;/sourceControls&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </remarks>
 	[ReflectorType("multi")]
 	public class MultiSourceControl 
         : SourceControlBase
 	{
 		private ISourceControl[] _sourceControls;
 
+        /// <summary>
+        /// If true, only return a list of modifications if all sourceControl sections return a non-empty list. Note that this is
+        /// short-circuiting, i.e. if the first sourceControl returns an empty list, the next won't be called (this can be useful for
+        /// situations where you have a slow source control server and you want to check a specific file first as a trigger).
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>false</default>
 		[ReflectorProperty("requireChangesFromAll", Required=false)]
 		public bool RequireChangesFromAll = false;
 
+        /// <summary>
+        /// The list of other Source Control Blocks to include.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
 		[ReflectorArray("sourceControls", Required=true)]
 		public ISourceControl[] SourceControls 
 		{
