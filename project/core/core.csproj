@@ -953,7 +953,6 @@
     <Compile Include="util\NotifierList.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="util\Options.cs" />
     <Compile Include="util\PathUtil.cs">
       <SubType>Code</SubType>
     </Compile>

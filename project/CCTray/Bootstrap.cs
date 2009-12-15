@@ -10,7 +10,7 @@ using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
 using ThoughtWorks.CruiseControl.Remote;
-using Mono.Options;
+using ThoughtWorks.CruiseControl.Remote.Mono;
 
 namespace ThoughtWorks.CruiseControl.CCTray
 {

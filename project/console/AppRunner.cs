@@ -6,7 +6,7 @@ using System.IO;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 using System.Runtime.Remoting;
-using Mono.Options;
+using ThoughtWorks.CruiseControl.Remote.Mono;
 
 namespace ThoughtWorks.CruiseControl.Console
 {

@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
 using System.Text;
-using Mono.Options;
+using ThoughtWorks.CruiseControl.Remote.Mono;
 
 namespace Validator
 {

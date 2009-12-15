@@ -142,6 +142,7 @@
     <Compile Include="Monitor\ProjectChangedArgs.cs" />
     <Compile Include="Monitor\Server.cs" />
     <Compile Include="Monitor\ServerUpdateArgs.cs" />
+    <Compile Include="Mono\Options.cs" />
     <Compile Include="NameValuePairListSerialiserFactory.cs" />
     <Compile Include="CruiseServerClient.cs" />
     <Compile Include="CruiseServerClientBase.cs" />

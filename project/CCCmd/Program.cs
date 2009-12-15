@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Remote;
-using Mono.Options;
+using ThoughtWorks.CruiseControl.Remote.Mono;
 
 namespace ThoughtWorks.CruiseControl.CCCmd
 {
