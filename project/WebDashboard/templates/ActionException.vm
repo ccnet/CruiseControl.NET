@@ -31,9 +31,9 @@
 	</div>
 </div>
 
-<h2>Exception Message</h2>
+<h2>$translations.Translate("Exception Message")</h2>
 <p>$exception.Message</p>
-<h2>Exception Full Details</h2>
+<h2>$translations.Translate("Exception Full Details")</h2>
 <div style="white-space:pre-wrap;">$exception.ToString()</div>
 #end
 <!-- ActionException.vm: End -->

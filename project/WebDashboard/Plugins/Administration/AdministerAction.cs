@@ -257,7 +257,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             // Validate the details
             if (string.IsNullOrEmpty(serverName))
             {
-                velocityContext["Error"] = this.translations.Translate("Server has not been set");
+                velocityContext["Error"] = this.translations.Translate("Server name has not been set");
                 return;
             }
 
@@ -351,7 +351,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                 else
                 {
                     // Otherwise pass on the details to the view generator
-                    velocityContext["Result"] = string.Format("Package '{0}' has been loaded",
+                    velocityContext["Result"] = this.translations.Translate("Package '{0}' has been loaded",
                         manifest.Name);
                     velocityContext["InstallPackage"] = manifest.FileName;
                 }
