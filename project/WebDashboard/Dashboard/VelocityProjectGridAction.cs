@@ -22,6 +22,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private readonly IProjectGrid projectGrid;
         private readonly ISessionRetriever sessionRetriever;
         private ProjectGridSortColumn sortColumn = ProjectGridSortColumn.Name;
+        private Translations translations;
 
 		public VelocityProjectGridAction(IFarmService farmService, IVelocityViewGenerator viewGenerator, 
             IProjectGrid projectGrid,
@@ -56,6 +57,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		{
 			//Added code so since defaultServerSpecifier only sets the name of the server - not the actual config
 			serverSpecifier = farmService.GetServerConfiguration(serverSpecifier.ServerName);
+            this.translations = new Translations();
             return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(serverSpecifier, request.RetrieveSessionToken()), actionName, request, serverSpecifier);
 		}
 
@@ -81,8 +83,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			velocityContext["lastBuildDateSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.LastBuildDate, sortColumn, sortReverse);
 			velocityContext["serverNameSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.ServerName, sortColumn, sortReverse);
 			velocityContext["projectCategorySortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.Category, sortColumn, sortReverse);
-            
-            ProjectGridRow[] projectGridRows = projectGrid.GenerateProjectGridRows(projectStatusListAndExceptions.StatusAndServerList, actionName, sortColumn, sortReverse, category, cruiseUrlBuilder);
+
+            ProjectGridRow[] projectGridRows = projectGrid.GenerateProjectGridRows(projectStatusListAndExceptions.StatusAndServerList, actionName, sortColumn, sortReverse, category, cruiseUrlBuilder, this.translations);
 
             velocityContext["projectGrid"] = projectGridRows;
 			velocityContext["exceptions"] = projectStatusListAndExceptions.Exceptions;
@@ -177,26 +179,25 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             }
 
             // Make the actual call
-            var translations = new Translations();
 			if (request.FindParameterStartingWith("StopBuild") != string.Empty)
 			{
 				farmService.Stop(ProjectSpecifier(request), sessionToken);
-                return translations.Translate("Stopping project {0}", SelectedProject(request));
+                return this.translations.Translate("Stopping project {0}", SelectedProject(request));
 			}
 			else if (request.FindParameterStartingWith("StartBuild") != string.Empty)
 			{
                 farmService.Start(ProjectSpecifier(request), sessionToken);
-                return translations.Translate("Starting project {0}", SelectedProject(request));				
+                return this.translations.Translate("Starting project {0}", SelectedProject(request));				
 			}
 			else if (request.FindParameterStartingWith("ForceBuild") != string.Empty)
 			{
 				farmService.ForceBuild(ProjectSpecifier(request), sessionToken, parameters);
-                return translations.Translate("Build successfully forced for {0}", SelectedProject(request));
+                return this.translations.Translate("Build successfully forced for {0}", SelectedProject(request));
 			}
 			else if (request.FindParameterStartingWith("AbortBuild") != string.Empty)
 			{
 				farmService.AbortBuild(ProjectSpecifier(request), sessionToken);
-                return translations.Translate("Abort successfully forced for {0}", SelectedProject(request));
+                return this.translations.Translate("Abort successfully forced for {0}", SelectedProject(request));
 			}
 			else
 			{

@@ -3,6 +3,7 @@ using System.Collections;
 using NUnit.Framework;
 using NMock;
 using ThoughtWorks;
+using ThoughtWorks.CruiseControl.WebDashboard.Resources;
 
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.Statistics
@@ -150,7 +151,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.Statistics
             
             LinkFactory = new  CruiseControl.WebDashboard.Dashboard.DefaultLinkFactory(UrlBuilder,CruiseUrlBuilder,BuildNameFormatter);
         
-            return new CruiseControl.WebDashboard.Plugins.Statistics.BuildGraph(builds, LinkFactory);
+            return new CruiseControl.WebDashboard.Plugins.Statistics.BuildGraph(builds, LinkFactory, new Translations("en-US"));
         }
 
 	}

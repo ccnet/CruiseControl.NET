@@ -5,6 +5,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Resources;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
 {
@@ -20,12 +21,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
 
         private Int32 myOKBuildAmount;
         private Int32 myFailedBuildAmount;
-
+        private Translations translations;
             
-        public BuildGraph(IBuildSpecifier[] buildSpecifiers, ILinkFactory linkFactory)
+        public BuildGraph(IBuildSpecifier[] buildSpecifiers, ILinkFactory linkFactory, Translations translations)
         {
             mybuildSpecifiers = buildSpecifiers;
             mylinkFactory = linkFactory;
+            this.translations = translations;
         }
 
 
@@ -119,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
 
                 if (!FoundDates.Contains(CurrentBuildInfo.BuildDate()))
                 {
-                    FoundDates.Add(CurrentBuildInfo.BuildDate(), new GraphBuildDayInfo(CurrentBuildInfo) );
+                    FoundDates.Add(CurrentBuildInfo.BuildDate(), new GraphBuildDayInfo(CurrentBuildInfo, this.translations) );
                     DateSorter.Add(CurrentBuildInfo.BuildDate());
                 }
                 else
@@ -213,10 +215,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
 
             private Int32 myOKBuildAmount;
             private Int32 myFailedBuildAmount;
+            private Translations translations;
 
-
-            public GraphBuildDayInfo(GraphBuildInfo buildInfo)
+            public GraphBuildDayInfo(GraphBuildInfo buildInfo, Translations translations)
             {
+                this.translations = translations;
                 myBuildDate = buildInfo.BuildDate();
                 myBuilds = new ArrayList();
                 //myBuilds.Add(buildInfo);
@@ -237,7 +240,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
             {
                 get 
                 {
-                    return myBuildDate.Date.ToString("ddd")
+                    return myBuildDate.Date.ToString("ddd", this.translations.Culture)
                            + "<BR>" 
                            + myBuildDate.Year.ToString("0000") 
                            + "<BR>" 

@@ -2,6 +2,7 @@ using System.Drawing;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.WebDashboard.Resources;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -13,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         private readonly string parametersUrl;
 
         public ProjectGridRow(ProjectStatus status, IServerSpecifier serverSpecifier,
-            string url, string parametersUrl)
+            string url, string parametersUrl, Translations translations)
         {
             this.status = status;
             this.serverSpecifier = serverSpecifier;

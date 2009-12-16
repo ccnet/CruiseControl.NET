@@ -15,6 +15,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.WebDashboard.Resources;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
@@ -107,7 +108,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 
             GraphMaker = new BuildGraph(
                 farmService.GetMostRecentBuildSpecifiers(projectSpecifier, AmountOfBuildsToRetrieve, sessionToken),
-                this.linkFactory);
+                this.linkFactory,
+                new Translations());
 
             velocityContext["graphDayInfo"] = GraphMaker.GetBuildHistory(MaxAmountOfDaysToDisplay);
             velocityContext["highestAmountPerDay"] = GraphMaker.HighestAmountPerDay;

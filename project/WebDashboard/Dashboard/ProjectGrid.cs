@@ -3,6 +3,7 @@ using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using ThoughtWorks.CruiseControl.WebDashboard.Resources;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -10,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 	{
 		public ProjectGridRow[] GenerateProjectGridRows(ProjectStatusOnServer[] statusList, string forceBuildActionName,
 		                                                ProjectGridSortColumn sortColumn, bool sortIsAscending, string categoryFilter,
-                                                        ICruiseUrlBuilder urlBuilder)
+                                                        ICruiseUrlBuilder urlBuilder, Translations translations) 
 		{
 			ArrayList rows = new ArrayList();
 			foreach (ProjectStatusOnServer statusOnServer in statusList)
@@ -26,7 +27,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 					new ProjectGridRow(status,
 					                   serverSpecifier,
                                        urlBuilder.BuildProjectUrl(ProjectReportProjectPlugin.ACTION_NAME, projectSpecifier),
-                                       urlBuilder.BuildProjectUrl(ProjectParametersAction.ActionName, projectSpecifier)));
+                                       urlBuilder.BuildProjectUrl(ProjectParametersAction.ActionName, projectSpecifier),
+                                       translations));
 			}
 
 			rows.Sort(GetComparer(sortColumn, sortIsAscending));

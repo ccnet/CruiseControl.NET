@@ -31,6 +31,29 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Resources
             this.culture = new CultureInfo(culture);
             this.resourceManager.IgnoreCase = true;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Translations"/> class.
+        /// </summary>
+        /// <param name="culture">The name of the culture to use.</param>
+        public Translations(string culture)
+        {
+            this.culture = new CultureInfo(culture);
+            this.resourceManager.IgnoreCase = true;
+        }
+        #endregion
+
+        #region Public properties
+        #region Culture
+        /// <summary>
+        /// Gets the culture.
+        /// </summary>
+        /// <value>The user's culture.</value>
+        public CultureInfo Culture
+        {
+            get { return this.culture; }
+        }
+        #endregion
         #endregion
 
         #region Public methods

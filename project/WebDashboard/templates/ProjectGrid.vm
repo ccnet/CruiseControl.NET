@@ -101,8 +101,8 @@
           <a href="$projectGridRow.Url">$projectGridRow.Name</a>
         </td>
         <td class="$projectGridRow.BuildStatusHtmlColor">$translations.Translate($projectGridRow.BuildStatus)</td>
-        <td>$translations.Translate("{0:f}", $projectGridRow.LastBuildDate)</td>
-        <td>$translations.Translate("{0:f}", $projectGridRow.NextBuildTime)</td>
+        <td>$projectGridRow.LastBuildDate</td>
+        <td>$translations.Translate($projectGridRow.NextBuildTime)</td>
         <td>$translations.Translate($projectGridRow.LastBuildLabel)</td>
         <td>$translations.Translate($projectGridRow.Status)</td>
         #if ($projectGridRow.Activity == "Building")
