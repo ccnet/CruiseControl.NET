@@ -13,16 +13,119 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// A source control implementation for use when the source control system 
     /// doesn't integrate directly with CCNet.
     /// </summary>
+    /// <title>External Source Control Configuration</title>
+    /// <version>1.3</version>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>external</value>
+    /// </key>
+    /// <example>
+    /// <code title="Minimal Configuration">
+    /// &lt;sourcecontrol type="external"&gt;
+    /// &lt;executable&gt;path to command-line application&lt;/executable&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// <code title="Full Example">
+    /// &lt;sourcecontrol type="external"&gt;
+    /// &lt;executable&gt;path to command-line application&lt;/executable&gt;
+    /// &lt;args&gt;arguments for the command-line application&lt;/args&gt;
+    /// &lt;autoGetSource&gt;false&lt;/autoGetSource&gt;
+    /// &lt;labelOnSuccess&gt;false&lt;/labelOnSuccess&gt;
+    /// &lt;environment&gt;
+    /// &lt;var&gt;name=value&lt;/var&gt;
+    /// &lt;var&gt;name=value&lt;/var&gt;
+    /// &lt;/environment&gt;
+    /// &lt;timeout units="minutes"&gt;10&lt;/timeout&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
     /// <remarks>
-    /// This source control implementation acts as a proxy for an external system
-    /// of unspecified vintage.  The system (or more likely a batch file created
-    /// by the administrator that issues source control commands) must implement
-    /// the following commands:
-    /// <list type="u">
-    /// <item> <param>executable</param> <code>GETMODS</code> "<param>fromtimestamp</param>" "<param>totimestamp</param>" <param>argstring</param> </item>
-    /// <item>  <param>executable</param> <code>GETSOURCE</code> "<param>workingdirectory</param>" "<param>timestamp</param>" <param>argstring</param> </item>
-    /// <item>  <param>executable</param> <code>SETLABEL</code> "<param>label</param>" "<param>sourcetimestamp</param>" <param>argstring</param> </item>
+    /// <para>
+    /// Each of the three sourcecontrol operations (GetModifications(), GetSource(), and LabelSourceControl()) are passed to the source control
+    /// command as a command line.
+    /// </para>
+    /// <heading>GetModifications</heading>
+    /// <para>
+    /// The GetModifications function is invoked as the GETMODS operation, and specifying a starting and ending timestamp:
+    /// </para>
+    /// <code type="None">
+    /// executable GETMODS "fromtimestamp" "totimestamp" args
+    /// </code>
+    /// <para>
+    /// The source control command should search for modifications between these two times inclusively, write their details to the standard
+    /// output stream in the XML format used by the <link>Modification Writer Task</link>, and exit with exit status 0 (any other status
+    /// indicates an error and will fail the build). For example, the following represents two modifications, numbered 12244 and 12245.
+    /// </para>
+    /// <code>
+    /// &lt;ArrayOfModification&gt;
+    /// &lt;Modification&gt;
+    /// &lt;ChangeNumber&gt;12245&lt;/ChangeNumber&gt;
+    /// &lt;Comment&gt;New Project for testing stuff&lt;/Comment&gt;
+    /// &lt;EmailAddress&gt;JUser@Example.Com&lt;/EmailAddress&gt;
+    /// &lt;FileName&gt;AssemblyInfo.cs&lt;/FileName&gt;
+    /// &lt;FolderName&gt;Dev\Server\Interface\Properties\&lt;/FolderName&gt;
+    /// &lt;ModifiedTime&gt;2006-11-22T11:11:00-0500&lt;/ModifiedTime&gt;
+    /// &lt;Type&gt;add&lt;/Type&gt;
+    /// &lt;UserName&gt;joe_user&lt;/UserName&gt;
+    /// &lt;Url&gt;http://www.example.com/index.html&lt;/Url&gt;
+    /// &lt;Version&gt;5&lt;/Version&gt;
+    /// &lt;/Modification&gt;
+    /// &lt;Modification&gt;
+    /// &lt;ChangeNumber&gt;12244&lt;/ChangeNumber&gt;
+    /// &lt;Comment&gt;New Project for accessing web services&lt;/Comment&gt;
+    /// &lt;EmailAddress&gt;SSpade@Example.Com&lt;/EmailAddress&gt;
+    /// &lt;FileName&gt;Interface&lt;/FileName&gt;
+    /// &lt;FolderName&gt;Dev\Server\&lt;/FolderName&gt;
+    /// &lt;ModifiedTime&gt;2006-11-22T11:10:44-0500&lt;/ModifiedTime&gt;
+    /// &lt;Type&gt;add&lt;/Type&gt;
+    /// &lt;UserName&gt;sam_spade&lt;/UserName&gt;
+    /// &lt;Url&gt;http://www.example.com/index.html&lt;/Url&gt;
+    /// &lt;Version&gt;4&lt;/Version&gt;
+    /// &lt;/Modification&gt;
+    /// &lt;/ArrayOfModification&gt;
+    /// </code>
+    /// <heading>GetSource</heading>
+    /// <para>
+    /// The GetSource function is invoked as the GETSOURCE operation, and specifying a working directory path and the target timestamp:
+    /// </para>
+    /// <code type="None">
+    /// executable GETSOURCE "workingdirectory" "timestamp" args
+    /// </code>
+    /// <para>
+    /// The source control command should update the files in the specified working directory to the versions current as of the specified time
+    /// stamp and exit with exit status 0 (any other status indicates an error and will fail the build).
+    /// </para>
+    /// <heading>LabelSourceControl</heading>
+    /// <para>
+    /// The LabelSourceControl function is invoked as the SETLABEL operation, and specifying a label to be applied and the target timestamp:
+    /// </para>
+    /// <code type="None">
+    /// executable SETLABEL "label" "sourcetimestamp" args
+    /// </code>
+    /// <para>
+    /// The source control command should add the label to source repository and exit with exit status 0 (any other status indicates an error 
+    /// and will fail the build).
+    /// </para>
+    /// <para type="warning">
+    /// <para>
+    /// Watch out for the comment tag, if this contains dodgy charatecters eg.: &lt;   it will fail the getsource. Be sure to escape these
+    /// characters.  So replace these with there XML equivalents : &amp;amp;lt;
+    /// </para>
+    /// <para>
+    /// Be careful of the &lt;ModifiedTime&gt;, this MUST be more than the fromtimestamp if it is &lt;= then the modification will not be
+    /// detected.
+    /// </para>
+    /// <para>
+    /// You don't need the following parameters for this to work:
+    /// </para>
+    /// <list type="1">
+    /// <item>&lt;Type /&gt;</item>
+    /// <item>&lt;FileName /&gt;</item>
+    /// <item>&lt;FolderName /&gt;</item>
+    /// <item>&lt;Version /&gt;</item>
+    /// <item>&lt;EmailAddress /&gt;</item>
     /// </list>
+    /// </para>
     /// </remarks>
     [ReflectorType("external")]
     public class ExternalSourceControl : ProcessSourceControl
@@ -75,39 +178,40 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// quotation marks, thus allowing you to specify what the executable will see as multiple
         /// parameters.
         /// </remarks>
+        /// <version>1.3</version>
+        /// <default>None</default>
         [ReflectorProperty("args", Required = false)]
         public string ArgString = string.Empty;
 
         /// <summary>
         /// Should we automatically obtain updated source from the source control system or not? 
         /// </summary>
-        /// <remarks>
-        /// Optional, default is not to do so.
-        /// </remarks>
+        /// <version>1.3</version>
+        /// <default>false</default>
         [ReflectorProperty("autoGetSource", Required = false)]
         public bool AutoGetSource = false;
 
         /// <summary>
         /// A set of environment variables set for commands that are executed.
         /// </summary>
-        /// <remarks>
-        /// Each variable should be specified as <code>&lt;variable name="name" value="value"/&gt;</code>.
-        /// </remarks>
+        /// <version>1.3</version>
+        /// <default>None</default>
         [ReflectorArray("environment", Required = false)]
         public EnvironmentVariable[] EnvironmentVariables = new EnvironmentVariable[0];
 
         /// <summary>
         /// Name of the source control system executable to run.
         /// </summary>
+        /// <version>1.3</version>
+        /// <default>n/a</default>
         [ReflectorProperty("executable", Required = true)]
         public string Executable;
 
         /// <summary>
         /// If set, the source repository will be tagged with the build label upon successful builds.
         /// </summary>
-        /// <remarks>
-        /// Optional, default is not to tag.
-        /// <remarks>
+        /// <version>1.3</version>
+        /// <default>false</default>
         [ReflectorProperty("labelOnSuccess", Required = false)]
         public bool LabelOnSuccess = false;
 

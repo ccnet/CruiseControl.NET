@@ -1337,6 +1337,20 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="external" type="external">
+        <xs:annotation>
+          <xs:documentation>
+            A source control implementation for use when the source control system doesn't integrate directly with CCNet.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="filesystem" type="filesystem">
+        <xs:annotation>
+          <xs:documentation>
+            Use the 'Filesystem' Source Control plugin to check for modifications on a directory accessible by the build server. A file is considered modified if the file's modified time stamp is more recent than the last time CruiseControl.Net checked for modifications. You can use either directories on 'mapped' drives (local or remote), or UNC paths (remote).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="filtered" type="filtered">
         <xs:annotation>
           <xs:documentation>
@@ -1379,6 +1393,13 @@
         <xs:annotation>
           <xs:documentation>
             Use the Null Source Control if you don't want to check a Source Control repository for changes. In this instance you would always want to either use a 'Force Build' Trigger or always manually start builds, from the [Web Dashboard] or [CCTray].
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="p4" type="p4">
+        <xs:annotation>
+          <xs:documentation>
+            Perforce source control block.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -1793,6 +1814,71 @@
     </xs:complexContent>
   </xs:complexType>
 
+  <xs:complexType name="external">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="args" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                A string to be passed to the external source control program in commands.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="autoGetSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Should we automatically obtain updated source from the source control system or not?
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="environment" type="EnvironmentVariables" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                A set of environment variables set for commands that are executed.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="executable" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Name of the source control system executable to run.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="labelOnSuccess" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                If set, the source repository will be tagged with the build label upon successful builds.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="issueUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Converts the comment (or parts from it) into an url pointing to the issue for this build. See [IssueUrlBuilder] for more details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="timeout" type="Timeout" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Sets the timeout period for the source control operation. See [Timeout Configuration] for details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
   <xs:complexType name="filtered">
     <xs:complexContent>
       <xs:extension base="SourceControl">
@@ -1815,6 +1901,43 @@
             <xs:annotation>
               <xs:documentation>
                 The list of filters that decide what modifications to include.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="filesystem">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="repositoryRoot" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The directory to check for changes. This directory will be checked recursively.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ignoreMissingRoot" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Whether to automatically (recursively) copy the contents of the repositoryRoot directory to the Project Working Directory.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="autoGetSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Whether to not fail if the repository doesn't exist.
               </xs:documentation>
             </xs:annotation>
           </xs:element>
@@ -2154,86 +2277,229 @@
     </xs:complexContent>
   </xs:complexType>
 
+  <xs:complexType name="p4">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The location of the Perforce command line client executable.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="view" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The perforce 'view' to check for changes. For 'multi\-line' views, use a comma\-separated list. 'Exclusionary' view lines starting with \- cannot be used. Use a [Filtered Source Control Block] to achieve this behaviour. Note that this view is not used for syncing (see below.)
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="client" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The perforce 'client' to use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="user" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The perforce user to use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="password" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The perforce password to use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="port" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The perforce hostname and port to use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="workingDirectory" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The working directory to use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="applyLabel" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Whether to apply a label on a successful build.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="autoGetSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Whether to automatically 'sync' the latest changes from source control before performing the build. The sync target is the entire view exposed by the specified client \- the view has no effect on sycning.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="forceSync" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                If autoGetSource is set to true, then whether to use the \-f option to sync. See http://www.perforce.com/perforce/doc.042/manuals/cmdref/sync.html for more details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="p4WebURLFormat" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Creates a link to the P4Web change list page for each detected modification. The specified value is transformed using String.Format where the first argument will be the substituted change list number.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="timeZoneOffset" type="xs:double" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                How many hours ahead your Perforce Server is from your build server. E.g. if your build server is in London, and your Perforce server is in New York, this value would be '\-5'.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="errorPattern" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The error pattern to use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="useExitCode" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Whether to use exit codes.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="acceptableErrors" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The acceptable errors.
+              </xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:choice minOccurs="1" maxOccurs="unbounded">
+                <xs:element name="error" type="String">
+                  <xs:annotation>
+                    <xs:documentation>
+                      An acceptable error.
+                    </xs:documentation>
+                  </xs:annotation>
+                </xs:element>
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="issueUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Converts the comment (or parts from it) into an url pointing to the issue for this build.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
   <xs:complexType name="plasticscm">
-    <xs:all>
-      <xs:element name="autoGetSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            Should we automatically obtain updated source from PlasticSCM or not?
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            Name of the PlasticSCM executable.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="branch" type="String" minOccurs="1" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            The Plastic SCM branch to monitor.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="repository" type="String" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            The Plastic SCM repository to monitor.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="workingDirectory" type="String" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            Valid Plastic SCM workspace path.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="labelOnSuccess" type="xs:boolean" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            Specifies whether or not CCNet should create an Plastic SCM baseline when the build is successful.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="labelPrefix" type="String" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            Specifies the prefix label name.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="forced" type="xs:boolean" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            Do the update with the "\-\-forced" option.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="issueUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            Converts the comment (or parts from it) into an url pointing to the issue for this build. See [IssueUrlBuilder] for more details.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="timeout" type="Timeout" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            Sets the timeout period for the source control operation. See [Timeout Configuration] for details.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            The dynamic values to use for the source control block.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
-    </xs:all>
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="autoGetSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Should we automatically obtain updated source from PlasticSCM or not?
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Name of the PlasticSCM executable.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="branch" type="String" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The Plastic SCM branch to monitor.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="repository" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The Plastic SCM repository to monitor.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="workingDirectory" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Valid Plastic SCM workspace path.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="labelOnSuccess" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies whether or not CCNet should create an Plastic SCM baseline when the build is successful.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="labelPrefix" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies the prefix label name.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="forced" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Do the update with the "\-\-forced" option.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="issueUrlBuilder" type="IModificationUrlBuilder" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Converts the comment (or parts from it) into an url pointing to the issue for this build. See [IssueUrlBuilder] for more details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="timeout" type="Timeout" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Sets the timeout period for the source control operation. See [Timeout Configuration] for details.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="svn">

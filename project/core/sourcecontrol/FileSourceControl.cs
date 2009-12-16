@@ -6,6 +6,31 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
+    /// <summary>
+    /// Use the 'Filesystem' Source Control plugin to check for modifications on a directory accessible by the build server. A file is
+    /// considered modified if the file's modified time stamp is more recent than the last time CruiseControl.Net checked for modifications.
+    /// You can use either directories on 'mapped' drives (local or remote), or UNC paths (remote).
+    /// </summary>
+    /// <title>Filesystem Source Control Block</title>
+    /// <version>1.0</version>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>filesystem</value>
+    /// </key>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;sourcecontrol type="filesystem"&gt;
+    /// &lt;repositoryRoot&gt;c:\mycode&lt;/repositoryRoot&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;sourcecontrol type="filesystem"&gt;
+    /// &lt;repositoryRoot&gt;c:\mycode&lt;/repositoryRoot&gt;
+    /// &lt;autoGetSource&gt;true&lt;/autoGetSource&gt;
+    /// &lt;ignoreMissingRoot&gt;false&lt;/ignoreMissingRoot&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("filesystem")]
     public class FileSourceControl 
         : SourceControlBase
@@ -21,12 +46,27 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             this.fileSystem = fileSystem;
         }
 
+        /// <summary>
+        /// The directory to check for changes. This directory will be checked recursively. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
         [ReflectorProperty("repositoryRoot")]
         public string RepositoryRoot;
 
+        /// <summary>
+        /// Whether to automatically (recursively) copy the contents of the repositoryRoot directory to the Project Working Directory.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>false</default>
         [ReflectorProperty("ignoreMissingRoot", Required = false)]
         public bool IgnoreMissingRoot;
 
+        /// <summary>
+        /// Whether to not fail if the repository doesn't exist.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>false</default>
         [ReflectorProperty("autoGetSource", Required = false)]
         public bool AutoGetSource = false;
 
