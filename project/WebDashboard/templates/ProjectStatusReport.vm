@@ -110,10 +110,10 @@ function generateDetails(details, item){
         details.append('<div><label>Description:</label><span>' + item.description + '</span></div>');
     }
     if (item.started!==undefined){
-        details.append('<div><label>Time Started:</label><span>' + item.started.toLocaleString() + '</span></div>');
+        details.append('<div><label>$translations.TranslateJson("Time Started"):</label><span>' + item.started.toLocaleString() + '</span></div>');
     }
     if (item.completed!==undefined){
-        details.append('<div><label>Time Completed:</label><span>' + item.completed.toLocaleString() + '</span></div>');
+        details.append('<div><label>$translations.TranslateJson("Time Completed"):</label><span>' + item.completed.toLocaleString() + '</span></div>');
     }
 }
 function formatTime(time){
@@ -136,12 +136,12 @@ function formatTime(time){
     return output;
 }
 </script>
-<h2>Current Status for $projectName</h2>
+<h2>$translations.Translate("Current Status for {0}", $projectName)</h2>
 <div style="position:relative;">
     <div id="statusDisplay"></div>
     <div id="loadingDialog" class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" style="position:absolute;top:0;">
         <span class="ui-dialog-title" unselectable="on" style="-moz-user-select: none;">
-            Loading status data, please wait...
+            $translations.Translate("Loading status data, please wait...")
         </span>
     </div>
 </div>

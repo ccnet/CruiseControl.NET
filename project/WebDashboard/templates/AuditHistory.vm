@@ -34,20 +34,20 @@
 	#end
 </div>
 #if ($currentProject.Length > 0)
-<h2>Audit History for Project: $currentProject</h2>
+<h2>$translations.Translate("Audit History for Project: {0}", $currentProject)</h2>
 #else
-<h2>Server Audit History</h2>
+<h2>$translations.Translate("Server Audit History")</h2>
 #end
 <table class="auditHistory-table">
   <tr>
-    <th>Event Date/Time</th>
+    <th>$translations.Translate("Event Date/Time")</th>
     #if ($currentProject.Length > 0)
     #else
-    <th>Project</th>
+    <th>$translations.Translate("Project")</th>
     #end
-    <th>User</th>
-    <th>Event</th>
-    <th>Outcome</th>
+    <th>$translations.Translate("User")</th>
+    <th>$translations.Translate("Event")</th>
+    <th>$translations.Translate("Outcome")</th>
   </tr>
   #foreach ($auditRecord in $auditHistory)
   #odd
@@ -92,8 +92,8 @@
       $auditRecord.UserName
       #end
     </td>
-    <td>$auditRecord.EventType</td>
-    <td>$auditRecord.SecurityRight</td>
+    <td>$translations.Translate($auditRecord.EventType)</td>
+    <td>$translations.Translate($auditRecord.SecurityRight)</td>
   </tr>
   #if ($auditRecord.Message.Length > 0)
   <tr class="even">

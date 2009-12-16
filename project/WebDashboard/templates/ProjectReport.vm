@@ -4,7 +4,7 @@
     $('#parameterCheck').dialog({
         autoOpen:false,
         modal:true,
-        title:'$translations.Translate("Project Parameters")',
+        title:'$translations.TranslateJson("Project Parameters")',
         width:400,
         height:300,
         overlay:{
@@ -49,7 +49,7 @@
 </style>
 
 <h2>
-  Project Report for $projectName
+  $translations.Translate("Project Report for {0}", $projectName)
   #if ($rssDataPresent)
   <A HREF="$rss.url">
     <IMG SRC="$applicationPath/images/rss.png" WIDTH="16" HEIGHT="16" BORDER="0" ALT="$rss.text">
@@ -153,9 +153,9 @@
   <h3>$translations.Translate("Most Recent Build Results")</h3>
   $pluginInfo
 
-  Click <a href="$mostRecentBuildUrl">here</a> for the full build report.
+  <a href="$mostRecentBuildUrl">$translations.Translate("Click here for the full build report.")</a>
   #else
-  Click <a href="$mostRecentBuildUrl">here</a> for the most recent build report.
+  <a href="$mostRecentBuildUrl">$translations.Translate("Click here for the most recent build report.")</a>
   #end
   #end
 </p>
@@ -165,7 +165,7 @@
  #set($highestViewPerDay= $highestAmountPerDay / $dateMultiPlier)
 
 <table border="0" align="center" cellspacing="0" cellpadding="2">
-  <tr><th colspan=2>Build Overview </th></tr>
+  <tr><th colspan=2>$translations.Translate("Build Overview")</th></tr>
   <tr><td colspan=2  align=center> $OKPercent% </td></tr>
     <tr height=5> 
        <td width=$OKPercent bgcolor="#33CC00"> </td>

@@ -199,7 +199,9 @@
 
 #if ($exceptions.Length > 0)
 <P>
-  <span id="ExceptionTitleLabel">There were exceptions connecting to the following servers:</span>
+  <span id="ExceptionTitleLabel">
+        $translations.Translate("There were exceptions connecting to the following servers"):
+  </span>
 </P>
 <table cellspacing="0"
        cellpadding="4"
@@ -212,17 +214,17 @@
   <tr bgcolor="#990000">
     <th>
       <font color="#FFFFCC">
-        <b>Server Name</b>
+        <b>$translations.Translate("Server")</b>
       </font>
     </th>
     <th>
       <font color="#FFFFCC">
-        <b>Url</b>
+        <b>$translations.Translate("Url")</b>
       </font>
     </th>
     <th>
       <font color="#FFFFCC">
-        <b>Message</b>
+        <b>$translations.Translate("Message")</b>
       </font>
     </th>
   </tr>

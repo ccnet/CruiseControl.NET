@@ -12,14 +12,14 @@
   #end
   <table>
     <tr>
-      <td>$translations.Translate("User name:")</td>
+      <td>$translations.Translate("User name"):</td>
       <td>
         <input type="text" name="userName"/>
       </td>
     </tr>
     #if (!$hidePassword)
     <tr>
-      <td>$translations.Translate("Password:")</td>
+      <td>$translations.Translate("Password"):</td>
       <td>
         <input type="password" name="password"/>
       </td>

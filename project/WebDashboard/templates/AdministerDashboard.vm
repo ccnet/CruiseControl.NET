@@ -178,9 +178,9 @@ label
             jQuery('#nameOfPackage').attr({ 'value': jQuery(e.target).attr('file') });
             jQuery('#packageName').text(jQuery(e.target).attr('name'));
             jQuery('#packageDesc').text(jQuery(e.target).attr('desc'));
-            var action = 'Install';
+            var action = '$translations.TranslateJson("Install")';
             if (jQuery(e.target).attr('installed') == 'True') {
-                action = 'Uninstall';
+                action = '$translations.TranslateJson("Uninstall")';
                 jQuery('#removeButton').addClass('hidden');
             }else{
                 jQuery('#removeButton').removeClass('hidden');

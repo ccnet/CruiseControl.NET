@@ -4,7 +4,7 @@
       $('#securityPopUp').dialog({
         autoOpen:false,
         modal:true,
-        title:'$translations.Translate("Permission Diagnostics")',
+        title:'$translations.TranslateJson("Permission Diagnostics")',
         width:400,
         height:300,
         overlay:{
@@ -14,7 +14,7 @@
       });
   });
   function displayDetails(userName){
-    $('#securityPopUpContent').replaceWith('<div id="securityPopUpContent">Loading, please wait...</div>');
+    $('#securityPopUpContent').replaceWith('<div id="securityPopUpContent">$translations.TranslateJson("Loading, please wait...")</div>');
     $('#securityPopUpContent').load('$diagnosticsCall.Url',{
 #if ($currentProject.Length > 0)
       project:'$currentProject',

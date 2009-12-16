@@ -4,14 +4,14 @@
         window.open('RetrieveFile.aspx?file=' + packageName);
     }
 </script>
-<h2>Available Packages for $projectName</h2>
+<h2>$translations.Translate("Available Packages for {0}", $projectName)</h2>
 <div>
 <table class="userList-table">
   <tr>
-    <th>Package Name</th>
-    <th>Build Label</th>
-    <th>Number of Files</th>
-    <th>Package Size</th>
+    <th>$translations.Translate("Package Name")</th>
+    <th>$translations.Translate("Build Label")</th>
+    <th>$translations.Translate("Number of Files")</th>
+    <th>$translations.Translate("Package Size")</th>
   </tr>
   #foreach ($package in $packages)
   #odd
