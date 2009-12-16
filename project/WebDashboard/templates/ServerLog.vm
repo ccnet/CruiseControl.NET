@@ -1,7 +1,7 @@
 <!-- ServerLog.vm: Start -->
 <div id="serverLogProjects">
 	#foreach ($projectLink in $projectLinks)
-	<a href="$projectLink.Url" style="padding: 10px">$projectLink.Text</a>
+	<a href="$projectLink.Url" style="padding: 10px">$translations.Translate($projectLink.Text)</a>
 	#end
 </div>
 #if ($currentProject.Length > 0)

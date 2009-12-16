@@ -375,6 +375,9 @@
   <data name="Server details" xml:space="preserve">
     <value>Détails du serveur</value>
   </data>
+  <data name="Server Log" xml:space="preserve">
+    <value>Journal du serveur</value>
+  </data>
   <data name="Server Log for Project: {0}" xml:space="preserve">
     <value>Journal du serveur pour le projet: {0}</value>
   </data>
