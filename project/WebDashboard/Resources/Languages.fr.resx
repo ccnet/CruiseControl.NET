@@ -438,4 +438,190 @@
   <data name="Your session is invalid" xml:space="preserve">
     <value>Votre session est invalide</value>
   </data>
+  <data name="Abort" xml:space="preserve">
+    <value>Interrompre</value>
+  </data>
+  <data name="Abort successfully forced for {0}" xml:space="preserve">
+    <value>Interruption forcée réussi pour le projet {0}</value>
+  </data>
+  <data name="Administer Dashboard" xml:space="preserve">
+    <value>Gérer le tableau de bord</value>
+  </data>
+  <data name="Breakers" xml:space="preserve">
+    <value>Casseurs</value>
+  </data>
+  <data name="Build Report" xml:space="preserve">
+    <value>Rapport de compilation</value>
+  </data>
+  <data name="Build successfully forced for {0}" xml:space="preserve">
+    <value>Compilation forcée réussi pour le projet {0}</value>
+  </data>
+  <data name="Building" xml:space="preserve">
+    <value>Compilation en cours</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>Annulé</value>
+  </data>
+  <data name="CheckingModifications" xml:space="preserve">
+    <value>Vérification des modifications</value>
+  </data>
+  <data name="Download CCTray" xml:space="preserve">
+    <value>Télécharger CCTray</value>
+  </data>
+  <data name="Exception" xml:space="preserve">
+    <value>Exception</value>
+  </data>
+  <data name="Exception Full Details" xml:space="preserve">
+    <value>Détails de l'exception</value>
+  </data>
+  <data name="Exception Message" xml:space="preserve">
+    <value>Message de l'exception</value>
+  </data>
+  <data name="Failing Tasks" xml:space="preserve">
+    <value>Tâches en échec</value>
+  </data>
+  <data name="Failure" xml:space="preserve">
+    <value>Échec</value>
+  </data>
+  <data name="Farm Report" xml:space="preserve">
+    <value>Rapport complet</value>
+  </data>
+  <data name="Force" xml:space="preserve">
+    <value>Forcer</value>
+  </data>
+  <data name="Force Build Only" xml:space="preserve">
+    <value>Forcer la compilation seulement</value>
+  </data>
+  <data name="Invalid package - manifest file is missing" xml:space="preserve">
+    <value>Paquetage invalide - Le manifeste est introuvable</value>
+  </data>
+  <data name="Invalid password" xml:space="preserve">
+    <value>Mot de passe invalide</value>
+  </data>
+  <data name="Latest Build" xml:space="preserve">
+    <value>Dernière compilation</value>
+  </data>
+  <data name="Name is a compulsory value" xml:space="preserve">
+    <value>Le champ Nom est obligatoire</value>
+  </data>
+  <data name="No file selected to import!" xml:space="preserve">
+    <value>Aucun fichier sélectionné pour importation</value>
+  </data>
+  <data name="Package '{0}' has been loaded" xml:space="preserve">
+    <value>Paquetage '{0}' chargé</value>
+  </data>
+  <data name="Package has been installed" xml:space="preserve">
+    <value>Paquetage installé</value>
+  </data>
+  <data name="Package has been removed" xml:space="preserve">
+    <value>Paquetage supprimé</value>
+  </data>
+  <data name="Package has been uninstalled" xml:space="preserve">
+    <value>Paquetage désinstallé</value>
+  </data>
+  <data name="Package List" xml:space="preserve">
+    <value>Liste des paquetages</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>En attente</value>
+  </data>
+  <data name="Project Configuration" xml:space="preserve">
+    <value>Configuration du projet</value>
+  </data>
+  <data name="Project Report" xml:space="preserve">
+    <value>Rapport du projet</value>
+  </data>
+  <data name="Project Status" xml:space="preserve">
+    <value>État du projet</value>
+  </data>
+  <data name="Running" xml:space="preserve">
+    <value>En cours</value>
+  </data>
+  <data name="Server has been deleted" xml:space="preserve">
+    <value>Serveur supprimé</value>
+  </data>
+  <data name="Server has been saved" xml:space="preserve">
+    <value>Serveur sauvegardé</value>
+  </data>
+  <data name="Server name has not been set" xml:space="preserve">
+    <value>Le nom du serveur n'a pas été assigné</value>
+  </data>
+  <data name="Server Report" xml:space="preserve">
+    <value>Rapport du serveur</value>
+  </data>
+  <data name="Sleeping" xml:space="preserve">
+    <value>Mise en veille</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Démarrer</value>
+  </data>
+  <data name="Starting project {0}" xml:space="preserve">
+    <value>Démarrage du projet {0}</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Arrêter</value>
+  </data>
+  <data name="Stopped" xml:space="preserve">
+    <value>Arrêté</value>
+  </data>
+  <data name="Stopping" xml:space="preserve">
+    <value>Mise en arrêt</value>
+  </data>
+  <data name="Stopping project {0}" xml:space="preserve">
+    <value>Arrêt du projet {0}</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Succès</value>
+  </data>
+  <data name="The dashboard configuration has been reloaded" xml:space="preserve">
+    <value>La configuration du tableau de bord a été rechargé</value>
+  </data>
+  <data name="Unable to find server" xml:space="preserve">
+    <value>Serveur introuvable</value>
+  </data>
+  <data name="Unable to remove package - has the package already been removed?" xml:space="preserve">
+    <value>Incapable de supprimer le paquetage - Est-ce que le paquetage est déjà supprimé?</value>
+  </data>
+  <data name="Unable to uninstall package" xml:space="preserve">
+    <value>Incapable de désinstaller le paquetage</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Inconnu</value>
+  </data>
+  <data name="Unknown action '{0}'" xml:space="preserve">
+    <value>Action inconnue '{0}'</value>
+  </data>
+  <data name="URI is a compulsory value" xml:space="preserve">
+    <value>Le champ URI est obligatoire</value>
+  </data>
+  <data name="View All Builds" xml:space="preserve">
+    <value>Visualiser toutes les compilations</value>
+  </data>
+  <data name="View Build Log" xml:space="preserve">
+    <value>Visualiser le journal de la compilation</value>
+  </data>
+  <data name="View Modification History" xml:space="preserve">
+    <value>Visualiser l'historique des modifications</value>
+  </data>
+  <data name="View Project Configuration" xml:space="preserve">
+    <value>Visualiser la configuration du projet</value>
+  </data>
+  <data name="View Queue Status" xml:space="preserve">
+    <value>Visualiser l'état de la file d'attente</value>
+  </data>
+  <data name="View Security Configuration" xml:space="preserve">
+    <value>Visualiser la configuration de la sécurité</value>
+  </data>
+  <data name="View Server Info" xml:space="preserve">
+    <value>Visualiser les informations du serveur</value>
+  </data>
+  <data name="View Server Log" xml:space="preserve">
+    <value>Visualiser le journal de bord</value>
+  </data>
+  <data name="View Statistics" xml:space="preserve">
+    <value>Visualiser les statistiques</value>
+  </data>
+  <data name="View User List" xml:space="preserve">
+    <value>Visualiser la liste des utilisateurs</value>
+  </data>
 </root>
