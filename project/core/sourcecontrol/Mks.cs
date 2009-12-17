@@ -12,6 +12,30 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Util;
 
+    /// <summary>
+    /// MKS Source Integrity Source Control Block.
+    /// </summary>
+    /// <title>MKS Source Integrity Source Control Block</title>
+    /// <version>1.0</version>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>mks</value>
+    /// </key>
+    /// <example>
+    /// <code>
+    /// &lt;sourceControl type="mks"&gt;
+    /// &lt;executable&gt;C:\MKS\bin\si.exe&lt;/executable&gt;
+    /// &lt;user&gt;CCNetUser&lt;/user&gt;
+    /// &lt;password&gt;CCNetPassword&lt;/password&gt;
+    /// &lt;hostname&gt;hostname&lt;/hostname&gt;
+    /// &lt;port&gt;8722&lt;/port&gt;
+    /// &lt;sandboxroot&gt;C:\MyProject&lt;/sandboxroot&gt;
+    /// &lt;sandboxfile&gt;myproject.pj&lt;/sandboxfile&gt;
+    /// &lt;autoGetSource&gt;true&lt;/autoGetSource&gt;
+    /// &lt;timeout units="minutes"&gt;10&lt;/timeout&gt;
+    /// &lt;/sourceControl&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("mks")]
 	public class Mks : ProcessSourceControl
 	{
@@ -27,31 +51,76 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 		}
 
+        /// <summary>
+        /// The local path for the MKS source integrity command-line client (eg. c:\Mks\bin\si.exe).
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>si.exe</default>
 		[ReflectorProperty("executable")]
 		public string Executable = DefaultExecutable;
 
-		[ReflectorProperty("user", Required = false)]
+        /// <summary>
+        /// MKS Source Integrity user ID that CCNet should use.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("user", Required = false)]
 		public string User;
 
-		[ReflectorProperty("password", Required = false)]
+        /// <summary>
+        /// Password for the MKS Source Integrity user ID.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("password", Required = false)]
 		public string Password;
 
-		[ReflectorProperty("checkpointOnSuccess", Required = false)]
+        /// <summary>
+        /// Whether to set a checkpoint on success or not.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>false</default>
+        [ReflectorProperty("checkpointOnSuccess", Required = false)]
 		public bool CheckpointOnSuccess;
 
-		[ReflectorProperty("autoGetSource", Required=false)]
+        /// <summary>
+        /// Instruct CCNet whether or not you want it to automatically retrieve the latest source from the repository.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>true</default>
+        [ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = DefaultAutoGetSource;
 
-		[ReflectorProperty("hostname")]
+        /// <summary>
+        /// The IP address or machine name of the MKS Source Integrity server. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("hostname")]
 		public string Hostname;
 
-		[ReflectorProperty("port", Required=false)]
+        /// <summary>
+        /// The port on the MKS Source Integrity server to connect to. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>8722</default>
+        [ReflectorProperty("port", Required = false)]
 		public int Port = DefaultPort;
 
-		[ReflectorProperty("sandboxroot")]
+        /// <summary>
+        /// The local path MKS Source Integrity sandbox root corresponds to.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("sandboxroot")]
 		public string SandboxRoot;
 
-		[ReflectorProperty("sandboxfile")]
+        /// <summary>
+        /// The project file.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("sandboxfile")]
 		public string SandboxFile;
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)

@@ -5,10 +5,54 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	/// <summary>
-	/// Source Controller for StarTeam
-	/// </summary>	
-	[ReflectorType("starteam")]
+    /// <summary>
+    /// <para>
+    /// Source Controller for StarTeam SCM.
+    /// </para>
+    /// </summary>	
+    /// <title>StarTeam Source Control Block</title>
+    /// <version>1.0</version>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>starteam</value>
+    /// </key>
+    /// <example>
+    /// <code>
+    /// &lt;sourcecontrol type="starteam"&gt;
+    /// &lt;executable&gt;c:\starteam\stcmd.exe&lt;/executable&gt;
+    /// &lt;project&gt;ccnet&lt;/project&gt;
+    /// &lt;username&gt;buildguy&lt;/username&gt;
+    /// &lt;password&gt;buildguypw&lt;/password&gt;
+    /// &lt;host&gt;thebuildmachine&lt;/host&gt;
+    /// &lt;port&gt;49201&lt;/port&gt;
+    /// &lt;path&gt;release2.0&lt;/path&gt;
+    /// &lt;autoGetSource&gt;true&lt;/autoGetSource&gt;
+    /// &lt;folderRegEx&gt;customRegEx&lt;/folderRegEx&gt;
+    /// &lt;fileRegEx&gt;customRegEx&lt;/fileRegEx&gt;
+    /// &lt;fileHistoryRegEx&gt;customRegEx&lt;/fileHistoryRegEx&gt;
+    /// &lt;timeout units="minutes"&gt;10&lt;/timeout&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <heading>RegEx Configuration</heading>
+    /// <para>
+    /// CruiseControl.NET uses StarTeam's command line interface to find changes submitted to Source Control. 3 regular
+    /// expressions are used in doing this, as specified above. You have the option of changing these regular
+    /// expressions to choose how your instance of CruiseControl.NET parses StarTeam output. It is recommended if you do
+    /// this that you download the source version of CruiseControl.NET to see the default RegEx's and how they are used.
+    /// </para>
+    /// <para>
+    /// One suggested alternative RegEx so far is for the fileHistoryRegEx, as follows:
+    /// </para>
+    /// <code type="None">
+    /// ^Revision: (?&lt;file_revision&gt;\S+) View: (?&lt;view_name&gt;.+) Branch Revision: (?&lt;branch_revision&gt;\S+).\nAuthor: (?&lt;author_name&gt;.*) Date: (?&lt;date_string&gt;.*) \w+\r\n(?&lt;change_comment&gt;.*)
+    /// </code>
+    /// <para>
+    /// (Note that this is all one line)
+    /// </para>
+    /// </remarks>
+    [ReflectorType("starteam")]
 	public class StarTeam : ProcessSourceControl, IStarTeamRegExProvider
 	{
 		//stcmd hist -nologo -x -is -filter IO -p "userid:password@host:port/project/path" "files"		
@@ -59,6 +103,11 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 			historyParser = new StarTeamHistoryParser(this);
 		}
 
+        /// <summary>
+        /// The local path for the StarTeam command-line client (eg. c:\starteam\stcmd.exe).
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
 		[ReflectorProperty("executable")]
 		public string Executable
 		{
@@ -66,84 +115,144 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 			set{ _executable = value;}
 		}
 
-		[ReflectorProperty("project")]
+        /// <summary>
+        /// The StarTeam project (and view) to monitor (eg. project/view).
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("project")]
 		public string Project
 		{
 			get { return _project; }
 			set { _project = value; }
 		}
 
-		[ReflectorProperty("username")]
+        /// <summary>
+        /// StarTeam ID that CCNet should use.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("username")]
 		public string Username
 		{
 			get { return _username; }
 			set { _username = value; }
 		}
 
-		[ReflectorProperty("password")]
+        /// <summary>
+        /// Password for the StarTeam user ID.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("password")]
 		public string Password
 		{
 			get { return _password; }
 			set { _password = value; }
 		}
 
-		[ReflectorProperty("host", Required=false)]
+        /// <summary>
+        /// The IP address or machine name of the StarTeam server. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>127.0.0.1</default>
+        [ReflectorProperty("host", Required = false)]
 		public string Host
 		{
 			get { return _host; }
 			set { _host = value; }
 		}
 
-		[ReflectorProperty("port", Required=false)]
+        /// <summary>
+        /// The port on the StarTeam server to connect to.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>49201</default>
+        [ReflectorProperty("port", Required = false)]
 		public int Port
 		{
 			get { return _port; }
 			set { _port = value; }
 		}
 
-		[ReflectorProperty("path", Required=false)]
+        /// <summary>
+        /// The path to monitor.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("path", Required = false)]
 		public string Path
 		{
 			get { return _path; }
 			set { _path = value; }
 		}
 
-		[ReflectorProperty("autoGetSource", Required=false)]
+        /// <summary>
+        /// Instruct CCNet whether or not you want it to automatically retrieve the latest source from the repository.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>true</default>
+        [ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource
 		{
 			get { return _autoGetSource; }
 			set { _autoGetSource = value; }
 		}
 
-		[ReflectorProperty("overrideViewWorkingDir", Required=false)]
+        /// <summary>
+        /// Instruct CCNet whether or not you want it to automatically retrieve the latest source from the repository.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("overrideViewWorkingDir", Required = false)]
 		public string OverrideViewWorkingDir
 		{
 			get { return _pathOverrideViewWorkingDir; }
 			set { _pathOverrideViewWorkingDir = value; }
 		}
-		
-		[ReflectorProperty("overrideFolderWorkingDir", Required=false)]
+
+        /// <summary>
+        /// If set, use the -rp option to use a different View Working Directory.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("overrideFolderWorkingDir", Required = false)]
 		public string OverrideFolderWorkingDir
 		{
 			get { return _pathOverrideFolderWorkingDir; }
 			set { _pathOverrideFolderWorkingDir = value; }
 		}
 
-		[ReflectorProperty("folderRegEx", Required=false)]
+        /// <summary>
+        /// Allows you to use your own RegEx to parse StarTeam's folder output.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("folderRegEx", Required = false)]
 		public string FolderRegEx
 		{
 			get { return folderRegEx; }
 			set { folderRegEx = value; }
 		}
 
-		[ReflectorProperty("fileRegEx", Required=false)]
+        /// <summary>
+        /// Allows you to use your own RegEx to parse StarTeam's file output.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("fileRegEx", Required = false)]
 		public string FileRegEx
 		{
 			get { return fileRegEx; }
 			set { fileRegEx = value; }
 		}
 
-		[ReflectorProperty("fileHistoryRegEx", Required=false)]
+        /// <summary>
+        /// Allows you to use your own RegEx to parse StarTeam's file history.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("fileHistoryRegEx", Required = false)]
 		public string FileHistoryRegEx
 		{
 			get { return fileHistoryRegEx; }

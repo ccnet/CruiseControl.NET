@@ -4,10 +4,43 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	/// <summary>
-	/// Source Controller for Seapine Surround SCM
-	/// </summary>	
-	[ReflectorType("surround")]
+    /// <summary>
+    /// <para>
+    /// Source Controller for Seapine Surround SCM
+    /// </para>
+    /// <para type="info">
+    /// The Seapine Surround provider is designed to work with Surround 4.1. It may not work with earlier versions of
+    /// Surround.
+    /// </para>
+    /// </summary>	
+    /// <title>Seapine Surround Source Control Block</title>
+    /// <version>1.0</version>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>pvcs</value>
+    /// </key>
+    /// <example>
+    /// <code>
+    /// &lt;sourcecontrol type="surround"&gt;
+    /// &lt;executable&gt;C:\Program Files\Seapine\Surround SCM\sscm.exe&lt;/executable&gt;
+    /// &lt;serverconnect&gt;127.0.0.1:4900&lt;/serverconnect&gt;
+    /// &lt;serverlogin&gt;build:buildpw&lt;/serverlogin&gt;
+    /// &lt;branch&gt;mybranch&lt;/branch&gt;
+    /// &lt;repository&gt;myrepository/myproject&lt;/repository&gt;
+    /// &lt;workingDirectory&gt;C:\myproject&lt;/workingDirectory&gt;
+    /// &lt;recursive&gt;1&lt;/recursive&gt;
+    /// &lt;file&gt;*.cpp&lt;/file&gt;
+    /// &lt;searchregexp&gt;0&lt;/searchregexp&gt;
+    /// &lt;timeout units="minutes"&gt;10&lt;/timeout&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para>
+    /// Contributed by Yan Shapochnik and Pete Vasiliauskas at Seapine Software.
+    /// </para>
+    /// </remarks>
+    [ReflectorType("surround")]
 	public class Surround : ProcessSourceControl
 	{
 		public const string TO_SSCM_DATE_FORMAT = "yyyyMMddHHmmss";
@@ -17,31 +50,78 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public Surround() : base(new SurroundHistoryParser(), new ProcessExecutor())
 		{}
 
+        /// <summary>
+        /// The local path for the Surround SCM command-line client 
+        /// (eg. C:\Program Files\Seapine\Surround SCM\sscm.exe).
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>sscm</default>
 		[ReflectorProperty("executable")]
 		public string Executable = "sscm";
 
-		[ReflectorProperty("branch")]
+        /// <summary>
+        /// The Surround SCM branch to monitor. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("branch")]
 		public string Branch;
 
-		[ReflectorProperty("repository")]
+        /// <summary>
+        /// The Surround SCM repository to monitor. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("repository")]
 		public string Repository;
 
-		[ReflectorProperty("file", Required=false)]
+        /// <summary>
+        /// A filename pattern to match to monitor and retrieve files.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("file", Required = false)]
 		public string File;
 
-		[ReflectorProperty("workingDirectory")]
+        /// <summary>
+        /// The local path to get files from Surround SCM to. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("workingDirectory")]
 		public string WorkingDirectory;
 
-		[ReflectorProperty("serverconnect", Required=false)]
+        /// <summary>
+        /// The IP address or machine name and port number of the Surround SCM server. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>127.0.0.1:4900</default>
+        [ReflectorProperty("serverconnect", Required = false)]
 		public string ServerConnect = DefaultServerConnection;
 
-		[ReflectorProperty("serverlogin", Required=false)]
+        /// <summary>
+        /// Surround SCM login:password that CCNet should use. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>Administrator</default>
+        [ReflectorProperty("serverlogin", Required = false)]
 		public string ServerLogin = DefaultServerLogin;
 
-		[ReflectorProperty("searchregexp", Required=false)]
+        /// <summary>
+        /// Treat the filename pattern as a regular expression. (Value 1 = true, 0 = false) 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>0</default>
+        [ReflectorProperty("searchregexp", Required = false)]
 		public int SearchRegExp = 0;
 
-		[ReflectorProperty("recursive", Required=false)]
+        /// <summary>
+        /// Monitor and retrieve all files in child repositories of the specified repository. (Value 1 = true, 
+        /// 0 = false).
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>0</default>
+        [ReflectorProperty("recursive", Required = false)]
 		public int Recursive = 0;
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)

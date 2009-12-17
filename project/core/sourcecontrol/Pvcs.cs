@@ -9,7 +9,30 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	[ReflectorType("pvcs")]
+    /// <summary>
+    /// CruiseControl.NET supports integrating with the PVCS Source Control system via the pcli client.
+    /// </summary>
+    /// <title>PVCS Source Control Block</title>
+    /// <version>1.0</version>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>pvcs</value>
+    /// </key>
+    /// <example>
+    /// <code>
+    /// &lt;sourcecontrol type="pvcs"&gt;
+    /// &lt;executable&gt;c:\pvcs\pvcs.exe&lt;/executable&gt;
+    /// &lt;project&gt;ccnet&lt;/project&gt;
+    /// &lt;subproject&gt;ccnet1.0&lt;/subproject&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para>
+    /// Contributed by James Bolles.
+    /// </para>
+    /// </remarks>
+    [ReflectorType("pvcs")]
 	public class Pvcs : ProcessSourceControl
 	{
 		private const string DELETE_LABEL_TEMPLATE =
@@ -48,43 +71,109 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public Pvcs(IHistoryParser parser, ProcessExecutor executor) : base(parser, executor)
 		{}
 
+        /// <summary>
+        /// The PVCS client executable.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>pcli.exe</default>
 		[ReflectorProperty("executable")]
 		public string Executable = "pcli.exe";
 
-		[ReflectorProperty("project")]
+        /// <summary>
+        /// The location of the PVCS project database.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("project")]
 		public string Project;
 
-		[ReflectorProperty("subproject")]
+        /// <summary>
+        /// One ore more projects in PVCS that you wish to monitor. As long as each subproject is separated with a space
+        /// and a "/", you can monitor more than one subproject at a time.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("subproject")]
 		public string Subproject;
 
-		[ReflectorProperty("username", Required = false)]
+        /// <summary>
+        /// Username for the user account to use to connect to PVCS.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("username", Required = false)]
 		public string Username =string.Empty;
 
-		[ReflectorProperty("password", Required = false)]
+        /// <summary>
+        /// Password for the PVCS user account.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("password", Required = false)]
 		public string Password =string.Empty;
 
-		[ReflectorProperty("workingdirectory", Required = false)]
+        /// <summary>
+        /// The local directory containing the source from the repository. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>Project Working Directory</default>
+        [ReflectorProperty("workingdirectory", Required = false)]
 		public string WorkingDirectory =string.Empty;
 
-		[ReflectorProperty("workspace", Required = false)]
+        /// <summary>
+        /// The workspace to use.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>/@/RootWorkspace</default>
+        [ReflectorProperty("workspace", Required = false)]
 		public string Workspace = "/@/RootWorkspace";
 
-		[ReflectorProperty("recursive", Required = false)]
+        /// <summary>
+        /// Whether to monitor all subfolders of the specified subproject.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>true</default>
+        [ReflectorProperty("recursive", Required = false)]
 		public bool Recursive = true;
 
-		[ReflectorProperty("labelOnSuccess", Required=false)]
+        /// <summary>
+        /// Whether or not to apply a label to the repository after each successful build. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>false</default>
+        [ReflectorProperty("labelOnSuccess", Required = false)]
 		public bool LabelOnSuccess = false;
 
-		[ReflectorProperty("autoGetSource", Required=false)]
+        /// <summary>
+        /// Specifies whether the CCNet should take responsibility for retrieving the current version of the source from
+        /// the repository.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>true</default>
+        [ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = true;
 
-		[ReflectorProperty("manuallyAdjustForDaylightSavings", Required=false)]
+        /// <summary>
+        /// In PVCS 7.5.1, the client does not automatically adjust dates to accommodate daylight savings time. Setting
+        /// this flag to true will make CCNet compensate for it.
+        /// </summary>
+        /// <version>1.2.2</version>
+        /// <default>false</default>
+        [ReflectorProperty("manuallyAdjustForDaylightSavings", Required = false)]
 		public bool ManuallyAdjustForDaylightSavings = false;
 
 		//TODO: Support Promotion Groups -- [ReflectorProperty("isPromotionGroup", Required=false)]
 		public bool IsPromotionGroup = false;
 
-		[ReflectorProperty("labelOrPromotionName", Required=false)]
+        /// <summary>
+        /// The label to use as your code-base. If this is specified, this label will be called to get all code
+        /// associated with it when a get is done. When the build is successful, the good code will have this base label
+        /// associated with it in turn promoting it into the label. Label to apply to repository. If a value is
+        /// specified, labelOnSuccess will automatically be set to true. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>none</default>
+        [ReflectorProperty("labelOrPromotionName", Required = false)]
 		public string LabelOrPromotionName
 		{
 			get { return baseLabelName; }

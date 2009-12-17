@@ -11,6 +11,24 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// <summary>
     ///   Source Control Plugin for CruiseControl.NET that talks to VSTS Team Foundation Server.
     /// </summary>
+    /// <title>VSTS Team Foundation Server Source Control Block</title>
+    /// <version>1.5</version>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>vsts</value>
+    /// </key>
+    /// <example>
+    /// <code>
+    /// &lt;sourcecontrol type="vsts"&gt;
+    /// &lt;server&gt;http://vstsb2:8080&lt;/server&gt;
+    /// &lt;project&gt;$\VSTSPlugins&lt;/project&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// There is an alternate plug-in which uses the Team Foundation assemblies directly (<link>Visual Studio Team 
+    /// Foundation Server Plugin</link>).
+    /// </remarks>
     [ReflectorType("vsts")]
     public class Vsts : ProcessSourceControl
     {
@@ -50,15 +68,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         #region NetReflectored Properties
 
         /// <summary>
-        ///   The name or URL of the team foundation server.  For example http://vstsb2:8080 or vstsb2 if it
-        ///   has already been registered on the machine.
+        /// The name or URL of the team foundation server.  For example http://vstsb2:8080 or vstsb2 if it has already 
+        /// been registered on the machine.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("server")]
         public string Server;
 
         /// <summary>
-        ///   The path to the executable
+        /// The path to the executable
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>From registry</default>
         [ReflectorProperty("executable", Required = false)]
         public string Executable
         {
@@ -73,52 +95,83 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         }
 
         /// <summary>
-        ///   The path to the project in source control, for example $\VSTSPlugins
+        /// The path to the project in source control, for example $\VSTSPlugins
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("project")]
         public string ProjectPath;
 
         /// <summary>
-        /// Gets or sets whether this repository should be labeled.
+        /// Whether this repository should be labeled.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("applyLabel", Required = false)]
         public bool ApplyLabel = false;
 
+        /// <summary>
+        /// Whether to automatically get the source.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>falsea</default>
         [ReflectorProperty("autoGetSource", Required = false)]
         public bool AutoGetSource = false;
 
         /// <summary>
-        ///   Username that should be used.  Domain cannot be placed here, rather in domain property.
+        /// Username that should be used.  Domain cannot be placed here, rather in domain property.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("username", Required = false)]
         public string Username = String.Empty;
 
         /// <summary>
-        ///   The password in clear test of the domain user to be used.
+        /// The password in clear text of the domain user to be used.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("password", Required = false)]
         public string Password = String.Empty;
 
         /// <summary>
         ///  The domain of the user to be used.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("domain", Required = false)]
         public string Domain = String.Empty;
 
+        /// <summary>
+        /// The working directory to use.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>Project Working Directory</default>
         [ReflectorProperty("workingDirectory", Required = false)]
         public string WorkingDirectory = String.Empty;
 
+        /// <summary>
+        /// Whether to do a clean copy.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("cleanCopy", Required = false)]
         public bool CleanCopy = false;
 
-
+        /// <summary>
+        /// Whether to force or not.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("force", Required = false)]
         public bool Force = false;
 
         private string workspaceName;
         /// <summary>
-        ///   Name of the workspace to create.  This will revert to the DEFAULT_WORKSPACE_NAME if not passed.
+        /// Name of the workspace to create.  This will revert to the DEFAULT_WORKSPACE_NAME if not passed.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>CCNET</default>
         [ReflectorProperty("workspace", Required = false)]
         public string Workspace
         {
@@ -137,10 +190,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         }
 
         /// <summary>
-        ///   Flag indicating if workspace should be deleted every time or if it should be 
-        ///   left (the default).  Leaving the workspace will mean that subsequent gets 
-        ///   will only need to transfer the modified files, improving performance considerably.
+        /// Flag indicating if workspace should be deleted every time or if it should be left (the default).  Leaving
+        /// the workspace will mean that subsequent gets will only need to transfer the modified files, improving
+        /// performance considerably.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("deleteWorkspace", Required = false)]       
         public bool DeleteWorkspace = false;
 

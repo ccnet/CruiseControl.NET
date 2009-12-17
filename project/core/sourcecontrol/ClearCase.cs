@@ -5,7 +5,107 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	[ReflectorType("clearCase")]
+    /// <summary>
+    /// Rational ClearCase source control block.
+    /// </summary>
+    /// <title>Rational ClearCase Source Control Block</title>
+    /// <version>1.0</version>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>clearCase</value>
+    /// </key>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;sourcecontrol type="clearCase"&gt;
+    /// &lt;viewPath&gt;C:\PATH\TO\SOURCE&lt;/viewPath&gt;
+    /// &lt;autoGetSource&gt;true&lt;/autoGetSource&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;sourcecontrol type="clearCase"&gt;
+    /// &lt;viewPath&gt;C:\PATH\TO\SOURCE&lt;/viewPath&gt;
+    /// &lt;branch&gt;main&lt;/branch&gt;
+    /// &lt;autoGetSource&gt;false&lt;/autoGetSource&gt;
+    /// &lt;useLabel&gt;true&lt;/useLabel&gt;
+    /// &lt;useBaseline&gt;false&lt;/useBaseline&gt;
+    /// &lt;projectVobName&gt;PROJECT_VOB_NAME&lt;/projectVobName&gt;
+    /// &lt;viewName&gt;PROJECT_VIEW_NAME&lt;/viewName&gt;
+    /// &lt;executable&gt;cleartool.exe&lt;/executable&gt;
+    /// &lt;timeout&gt;50000&lt;/timeout&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <heading>Common Problems</heading>
+    /// <para>
+    /// <b>The build is initiated when users check in on private branches</b>
+    /// </para>
+    /// <para>
+    /// By default, ClearCase returns a history for every file in every branch, even if the config spec limits to a
+    /// single branch. You must specify &lt;branch&gt; in order to limit which changes CCNet can see.
+    /// </para>
+    /// <para>
+    /// <b>After the build is successful I get a "Baseline not found" error message.</b>
+    /// </para>
+    /// <para>
+    /// An example of this message is:
+    /// </para>
+    /// <code type="None">
+    /// ThoughtWorks.CruiseControl.Core.CruiseControlException: Source control operation failed:
+    /// cleartool: Error: Baseline not found: "CruiseControl.NETTemporaryBaseline_05-06-2004-16-34-15".
+    /// </code>
+    /// <para>
+    /// This happens when &lt;projectVobName&gt; is not set to the project VOB. Typically this happens when the user
+    /// specifies the UCM VOB instead of the project VOB.
+    /// </para>
+    /// <para>
+    /// To correct the problem, change the value in that element to the name of the project VOB.
+    /// </para>
+    /// <heading>Known Bugs</heading>
+    /// <para>
+    /// <b>When I view my baselines, I see that they're called CruiseControl.NET[something] instead of v1.0.0.4.</b>
+    /// </para>
+    /// <para>
+    /// This is a bug in ClearCase; Rational is aware of it. It only occurs if you're using baselines.
+    /// </para>
+    /// <para>
+    /// CCNet creates a temporary baseline with the prefix CruiseControl.NET before renaming it to the final value, such
+    /// as v1.5.2.3. Depending on how you view baselines in ClearCase, you may see the temporary or real name.
+    /// </para>
+    /// <para>
+    /// For example, if you use the admin console, you'll see the old, temporary value. If use use cleartool lsbl,
+    /// you'll see the correct one:
+    /// </para>
+    /// <code type="None">
+    /// M:\gsmith_GS_Project_int\GS_UCM_VOB&gt;cleartool lsbl
+    /// 06-May-04.16:28:27  v1.0.0.1  gsmith   "CruiseControlTemporaryBaseline_05-06-200
+    /// 4-16-28-26"
+    ///   stream: GS_Project_Integration@\GS_PVOB
+    ///   component: GS_UCM_VOB@\GS_PVOB
+    /// 06-May-04.16:34:16  v1.0.0.2  gsmith   "CruiseControl.NETTemporaryBaseline_05-06
+    /// -2004-16-34-15"
+    ///   stream: GS_Project_Integration@\GS_PVOB
+    ///   component: GS_UCM_VOB@\GS_PVOB
+    /// </code>
+    /// <para>
+    /// <b>CruiseControl.NET sees checkins on all branches, not just the one specified in my config spec</b>
+    /// </para>
+    /// <para>
+    /// This is due to the fact that the ClearCase history command (lshist) returns a complete history for the file, not
+    /// just the history that can be seen by the config spec.
+    /// </para>
+    /// <para>
+    /// The workaround is to make sure you include a &lt;branch&gt; element in your configuration. This will force ccnet
+    /// to just see changes on that branch.
+    /// </para>
+    /// <para>
+    /// <b>CruiseControl.NET doesn't see my changes</b>
+    /// </para>
+    /// <para>
+    /// Make sure the clock of your build server is synchronised to the clock of your ClearCase server.
+    /// </para>
+    /// </remarks>
+    [ReflectorType("clearCase")]
 	public class ClearCase : ProcessSourceControl
 	{
 		private const string _TEMPORARY_BASELINE_PREFIX = "CruiseControl.NETTemporaryBaseline_";
@@ -18,28 +118,86 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			: base(new ClearCaseHistoryParser(), executor)
 		{}
 
-		[ReflectorProperty("executable", Required=false)]
+        /// <summary>
+        /// Specifies the path to the ClearCase command line tool. You should only have to include this element if the
+        /// tool isn't in your path. By default, the ClearCase client installation puts cleartool in your path. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>cleartool.exe</default>
+        [ReflectorProperty("executable", Required = false)]
 		public string Executable = "cleartool.exe";
 
-		[ReflectorProperty("projectVobName", Required=false)]
+        /// <summary>
+        /// The name of the project VOB that the view path uses. 
+        /// </summary>
+        /// <remarks>
+        /// This is required if useBaseline="true".
+        /// </remarks>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("projectVobName", Required = false)]
 		public string ProjectVobName;
 
-		[ReflectorProperty("useBaseline", Required=false)]
+        /// <summary>
+        /// Specifies whether a baseline should be applied when the build is successful. Requires the VOB your view
+        /// references to be a UCM VOB. 
+        /// </summary>
+        /// <remarks>
+        /// Requires that you specify viewName and projectVobName. 
+        /// </remarks>
+        /// <version>1.0</version>
+        /// <default>false</default>
+        [ReflectorProperty("useBaseline", Required = false)]
 		public bool UseBaseline = false;
 
-		[ReflectorProperty("useLabel", Required=false)]
+        /// <summary>
+        /// Specifies whether a label should be applied when the build is successful. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>true</default>
+        [ReflectorProperty("useLabel", Required = false)]
 		public bool UseLabel = true;
 
-		[ReflectorProperty("viewName", Required=false)]
+        /// <summary>
+        /// The name of the view that you're using. 
+        /// </summary>
+        /// <remarks>
+        /// This is required if useBaseline="true".
+        /// </remarks>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("viewName", Required = false)]
 		public string ViewName;
 
+        /// <summary>
+        /// The path that CCNet will check for modifications and use to apply the label. 
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// Specifies a directory on your filesystem that CCNet monitors for changes. The path must be a versioned
+        /// object. CCNet checks the actual VOB for changes, not the local filesystem.
+        /// This doesn't have to be the root of the local ClearCase view. It may be any of the root's children or even
+        /// a single object.
+        /// </remarks>
 		[ReflectorProperty("viewPath", Required=false)]
 		public string ViewPath;
 
-		[ReflectorProperty("autoGetSource", Required = false)]
+        /// <summary>
+        /// Specifies whether the current version of the source should be retrieved from ClearCase.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>true</default>
+        [ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = true;
 
-		[ReflectorProperty("branch", Required = false)]
+        /// <summary>
+        /// The name of the branch that CCNet will monitor for modifications. Note that the config spec of the view
+        /// being built from must also be set up to reference this branch.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>None</default>
+        [ReflectorProperty("branch", Required = false)]
 		public string Branch;
 
 		public string TempBaseline;

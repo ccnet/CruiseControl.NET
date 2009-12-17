@@ -3,7 +3,25 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	[ReflectorType("robocopy")]
+    /// <summary>
+    /// <para>
+    /// Uses RoboCopy as Source Control.
+    /// </para>
+    /// </summary>	
+    /// <title>RoboCopy Source Control Block</title>
+    /// <version>1.4.4</version>
+    /// <key name="type">
+    /// <description>The type of source control block.</description>
+    /// <value>robocopy</value>
+    /// </key>
+    /// <example>
+    /// <code>
+    /// &lt;sourcecontrol type="repositoryRoot"&gt;
+    /// &lt;repositoryRoot&gt;C:\Somewhere&lt;/repositoryRoot&gt;
+    /// &lt;/sourcecontrol&gt;
+    /// </code>
+    /// </example>
+    [ReflectorType("robocopy")]
 	public class RobocopySourceControl : ProcessSourceControl
 	{
 		private static int[] GenerateExitCodes()
@@ -29,19 +47,44 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public RobocopySourceControl(IHistoryParser parser, ProcessExecutor executor) : base(parser, executor)
 		{}
 
-		[ReflectorProperty("executable", Required = false)]
-		public string Executable = "C:\\Windows\\System32\\robocopy.exe";	 
+        /// <summary>
+        /// The executable location.
+        /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>C:\\Windows\\System32\\robocopy.exe</default>
+        [ReflectorProperty("executable", Required = false)]
+		public string Executable = "C:\\Windows\\System32\\robocopy.exe";
 
-		[ReflectorProperty("repositoryRoot")]
+        /// <summary>
+        /// The repository root.
+        /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>n/a</default>
+        [ReflectorProperty("repositoryRoot")]
 		public string RepositoryRoot;
 
-		[ReflectorProperty("autoGetSource", Required = false)]
+        /// <summary>
+        /// Whether to automatically get the source.
+        /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>false</default>
+        [ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = false;
 
-		[ReflectorProperty("workingDirectory", Required = false)]
+        /// <summary>
+        /// The working directory to use.
+        /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>Project Working Directory</default>
+        [ReflectorProperty("workingDirectory", Required = false)]
 		public string WorkingDirectory = string.Empty;
 
-		[ReflectorProperty("additionalArguments", Required = false)]
+        /// <summary>
+        /// Any additional arguments.
+        /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>None</default>
+        [ReflectorProperty("additionalArguments", Required = false)]
 		public string AdditionalArguments = string.Empty;
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
