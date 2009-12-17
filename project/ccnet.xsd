@@ -1468,6 +1468,13 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="vault" type="vault">
+        <xs:annotation>
+          <xs:documentation>
+            SourceGear Vault Source Control Block.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="vss" type="vss">
         <xs:annotation>
           <xs:documentation>
@@ -3448,6 +3455,183 @@
         </xs:annotation>
       </xs:element>
     </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="vault">
+    <xs:complexContent>
+      <xs:extension base="SourceControl">
+        <xs:all>
+          <xs:element name="username" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Vault user id that CCNet should use to authenticate.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="password" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Password for the Vault user.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="host" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The name of the Vault server.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="repository" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The name of the Vault repository to monitor. .
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="folder" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The root folder to be monitored by CCNet.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The location of the Vault command\-line executable.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ssl" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Should SSL be used to communicate with the Vault server.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="autoGetSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies if CCNet should automatically retrieve the latest version of the source from the repository.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="applyLabel" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Specifies if CCNet should apply the build label to the repository.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="historyArgs" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Extra arguments to be included in the history commandline.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="useWorkingDirectory" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                *CC.NET 1.0*: Determines the working directory into which Vault files will be retrieved. Supply true if you want CCNet to use the Vault folder working directory created for the build user using the Vault GUI (recommended). Supply false if CCNet should use the CCNet working directory.   *CC.NET 1.1*: Determines if the source will be retrieved into a Vault Working Folder.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="workingDirectory" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The root folder where the latest source will retrieved from Vault. This path can either be absolute or it can be relative to the CCNet project working directory.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="setFileTime" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The modification date that retrieved source files will have.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="cleanCopy" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                If true, the source path will be emptied before retrieving new source.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="proxyServer" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The host name of the HTTP proxy Vault should use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="proxyPort" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The port on the HTTP proxy Vault should use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="proxyUser" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The user name for the HTTP proxy Vault should use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="proxyPassword" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The password for the HTTP proxy Vault should use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="proxyDomain" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The Windows domain of the HTTP proxy Vault should use.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="otherVaultArguments" type="String" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Any other aruuments to pass into the executable.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="pollRetryWait" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The number of seconds to wait between retries when a check for modifications fails.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="pollRetryAttempts" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The number of automatic retries when failing to check for modifications before an exception is thrown.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="timeout" type="Timeout" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Sets the timeout period for the source control operation.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The dynamic values to use for the source control block.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="vss">
