@@ -386,12 +386,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                             }
 
                             // Add the node as an indexed node
-                            propertyName.Insert(0, "/" + nodeName + "[" + position.ToString() + "]");
+                            propertyName.Insert(0, "." + nodeName + "[" + position.ToString() + "]");
                         }
                         else
                         {
                             // Just add the node name
-                            propertyName.Insert(0, "/" + nodeName);
+                            propertyName.Insert(0, "." + nodeName);
                         }
 
                         // Move to the parent
