@@ -252,8 +252,8 @@ namespace Validator
                 Exception currentError = error;
                 while (currentError != null)
                 {
-                    message.AppendFormat("{0}{1} [{2}]", Environment.NewLine, error.Message, error.GetType().Name);
-                    message.AppendFormat("{0}{1}", Environment.NewLine, error.StackTrace);
+                    message.AppendFormat("{0}{1} [{2}]", Environment.NewLine, currentError.Message, currentError.GetType().Name);
+                    message.AppendFormat("{0}{1}", Environment.NewLine, currentError.StackTrace);
                     currentError = currentError.InnerException;
                     if (currentError != null)
                     {
