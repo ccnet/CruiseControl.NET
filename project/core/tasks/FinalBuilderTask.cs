@@ -5,6 +5,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     using System.IO;
     using ThoughtWorks.CruiseControl.Core.Util;
     using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Config;
 
     /// <summary>
     /// <para>
@@ -55,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// </remarks>
     [ReflectorType("FinalBuilder")]
 	public class FinalBuilderTask
-        : TaskBase
+        : TaskBase, IConfigurationValidation
 	{
 		#region Fields
 
@@ -119,26 +120,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("FBVersion", Required = false)]
 		public int FBVersion 
 		{
-			get
-			{
-				if (_fbversion == FinalBuilderVersion.FBUnknown) // Try and autodetect FB Version from project file name
-				{
-					try
-					{
-						return Byte.Parse(ProjectFile.Substring(ProjectFile.Length - 1, 1));
-					}
-					catch
-					{
-						throw new BuilderException(this, "Finalbuilder version could not be autodetected from project file name.");
-					}
-				}
-
-				return (int)_fbversion;
-			}
-			set
-			{
-				_fbversion = (FinalBuilderVersion)value;
-			}
+			get { return (int)_fbversion; }
+			set { _fbversion = (FinalBuilderVersion)value; }
 		}
 
         /// <summary>
@@ -152,7 +135,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("FBCMDPath", Required = false)]
 		public string FBCMDPath
 		{
-            get { return string.IsNullOrEmpty(_fbcmdpath) ? GetFBPath() : _fbcmdpath; }
+            get { return _fbcmdpath; }
 			set {	_fbcmdpath = value;		}
 		}
 
@@ -218,7 +201,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private ProcessInfo NewProcessInfoFrom(IIntegrationResult result)
 		{
-			ProcessInfo info = new ProcessInfo(FBCMDPath, GetFBArgs());
+            ProcessInfo info = new ProcessInfo(GetFBPath(), GetFBArgs());
 			info.TimeOut = Timeout*1000;
             int idx = ProjectFile.LastIndexOf('\\');
             if (idx > -1)
@@ -277,21 +260,40 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			args.Append("/P");
 			args.Append(StringUtil.AutoDoubleQuoteString(ProjectFile));		    
 			return args.ToString();
-		}	
+		}
+
+        private int GetFBVersion()
+        {
+            if (_fbversion == FinalBuilderVersion.FBUnknown) // Try and autodetect FB Version from project file name
+            {
+                try
+                {
+                    return Byte.Parse(ProjectFile.Substring(ProjectFile.Length - 1, 1));
+                }
+                catch
+                {
+                    throw new BuilderException(this, "Finalbuilder version could not be autodetected from project file name.");
+                }
+            }
+
+            return (int)_fbversion;
+        }
 		
 		private string GetFBPath()
-		{			
-			int fbversion = FBVersion;			
+		{
+            int fbversion = GetFBVersion();			
 			string keyName = String.Format(@"SOFTWARE\VSoft\FinalBuilder\{0}.0", fbversion); // Works for FB 3 through 5, should work for future versions
 	
 			string executableDir = _registry.GetLocalMachineSubKeyValue(keyName, "Location");
             if (string.IsNullOrEmpty((executableDir)))
 			{
-				throw new BuilderException(this, String.Format("Path to Finalbuilder {0} command line executable could not be found.", FBVersion));				
+				throw new BuilderException(this, String.Format("Path to Finalbuilder {0} command line executable could not be found.", fbversion));				
 			}
 
-			if (fbversion == 3) // FinalBuilder 3 has a different executable name to other versions
-				return Path.GetDirectoryName(executableDir) + @"\FB3Cmd.exe";
+            if (fbversion == 3) // FinalBuilder 3 has a different executable name to other versions
+            {
+                return Path.GetDirectoryName(executableDir) + @"\FB3Cmd.exe";
+            }
 
 			return Path.GetDirectoryName(executableDir) + @"\FBCmd.exe";
 		}
@@ -305,5 +307,22 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			FB4 = 4,
 			FB5 = 5
 		}
-	}
+
+        #region IConfigurationValidation Members
+
+        public void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
+        {
+            try
+            {
+                this.GetFBVersion();
+                this.GetFBPath();
+            }
+            catch (Exception error)
+            {
+                errorProcesser.ProcessError(error);
+            }
+        }
+
+        #endregion
+    }
 }
