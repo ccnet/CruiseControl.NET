@@ -118,8 +118,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			NetReflector.Read(xmlConfig, _task);
 
 			Assert.AreEqual(@"C:\Dummy\Project.fbz5", _task.ProjectFile);
-			Assert.AreEqual(5, _task.FBVersion);
-			Assert.AreEqual(fbExecutable, _task.FBCMDPath);
+			Assert.AreEqual(5, _task.GetFBVersion());
+			Assert.AreEqual(fbExecutable, _task.GetFBPath());
 		}
 
 		[Test]
@@ -127,8 +127,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			_mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", Path.Combine(DefaultWorkingDirectory, "FinalBuilder5.exe"), @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
 			_task.ProjectFile = @"C:\Dummy\Project.fbz5";
-			Assert.AreEqual(5, _task.FBVersion);
-			Assert.AreEqual(fbExecutable, _task.FBCMDPath);
+			Assert.AreEqual(5, _task.GetFBVersion());
+            Assert.AreEqual(fbExecutable, _task.GetFBPath());
 		}
 
 		[Test]
@@ -136,8 +136,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			_mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", Path.Combine(DefaultWorkingDirectory, "FinalBuilder4.exe"), @"SOFTWARE\VSoft\FinalBuilder\4.0", "Location");
 			_task.ProjectFile = @"C:\Dummy\Project.fbz4";
-			Assert.AreEqual(4, _task.FBVersion);
-			Assert.AreEqual(fbExecutable, _task.FBCMDPath);
+			Assert.AreEqual(4, _task.GetFBVersion());
+            Assert.AreEqual(fbExecutable, _task.GetFBPath());
 		}
 
 		[Test]
@@ -145,8 +145,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			_mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", Path.Combine(DefaultWorkingDirectory, "FinalBuilder4.exe"), @"SOFTWARE\VSoft\FinalBuilder\3.0", "Location");
 			_task.ProjectFile = @"C:\Dummy\Project.fbz3";
-			Assert.AreEqual(3, _task.FBVersion);
-			Assert.AreEqual(Path.Combine(DefaultWorkingDirectory, "FB3Cmd.exe"), _task.FBCMDPath);
+			Assert.AreEqual(3, _task.GetFBVersion());
+            Assert.AreEqual(Path.Combine(DefaultWorkingDirectory, "FB3Cmd.exe"), _task.GetFBPath());
 		}
 
         [Test]

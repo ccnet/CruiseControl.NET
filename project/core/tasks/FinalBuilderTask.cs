@@ -262,7 +262,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return args.ToString();
 		}
 
-        private int GetFBVersion()
+        public int GetFBVersion()
         {
             if (_fbversion == FinalBuilderVersion.FBUnknown) // Try and autodetect FB Version from project file name
             {
@@ -279,7 +279,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             return (int)_fbversion;
         }
 		
-		private string GetFBPath()
+		public string GetFBPath()
 		{
             int fbversion = GetFBVersion();			
 			string keyName = String.Format(@"SOFTWARE\VSoft\FinalBuilder\{0}.0", fbversion); // Works for FB 3 through 5, should work for future versions
