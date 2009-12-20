@@ -87,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vault = CreateVault(ST_XML_SSL);
 			Assert.AreEqual(@"d:\program files\sourcegear\vault client\vault.exe", vault.Executable);
 			Assert.AreEqual("username", vault.Username);
-			Assert.AreEqual("password", vault.Password);
+			Assert.AreEqual("password", vault.Password.PrivateValue);
 			Assert.AreEqual("localhost", vault.Host);
 			Assert.AreEqual("repository", vault.Repository);
 			Assert.AreEqual("$\\foo", vault.Folder);
@@ -123,7 +123,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			");
 			Assert.AreEqual(VaultVersionChecker.DefaultExecutable, vault.Executable);
 			Assert.AreEqual("name", vault.Username);
-			Assert.AreEqual("password", vault.Password);
+			Assert.AreEqual("password", vault.Password.PrivateValue);
 			Assert.AreEqual("localhost", vault.Host);
 			Assert.AreEqual("repository", vault.Repository);
 			Assert.AreEqual("$", vault.Folder);

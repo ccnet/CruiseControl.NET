@@ -191,7 +191,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		// "history ""{0}"" -excludeactions label,obliterate -rowlimit 0 -begindate {1:s} -enddate {2:s}
 		// rowlimit 0 or -1 means unlimited (default is 1000 if not specified)
 		// TODO: might want to make rowlimit configurable?
-		private string BuildHistoryProcessArgs(DateTime from, DateTime to)
+		private PrivateArguments BuildHistoryProcessArgs(DateTime from, DateTime to)
 		{
             var builder = new PrivateArguments();
 			builder.Add("history ", _shim.Folder);
@@ -199,14 +199,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			builder.Add("-begindate ", from.ToString("s"));
 			builder.Add("-enddate ", to.ToString("s"));
 			AddCommonOptionalArguments(builder);
-			return builder.ToString();
+            return builder;
 		}
 
         protected void AddCommonOptionalArguments(PrivateArguments builder)
 		{
 			builder.AddIf(!string.IsNullOrEmpty(_shim.Host), "-host ", _shim.Host);
             builder.AddIf(!string.IsNullOrEmpty(_shim.Username), "-user ", _shim.Username);
-            builder.AddIf(!string.IsNullOrEmpty(_shim.Password), "-password ", _shim.Password);
+            builder.AddIf(_shim.Password != null, "-password ", _shim.Password);
             builder.AddIf(!string.IsNullOrEmpty(_shim.Repository), "-repository ", _shim.Repository, true);
 			builder.AddIf(_shim.Ssl, "-ssl");
 

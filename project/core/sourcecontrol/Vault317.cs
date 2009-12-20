@@ -126,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			builder.Add(result.Label);
 			builder.Add(_folderVersion);
 			AddCommonOptionalArguments(builder);
-			return ProcessInfoFor(builder.ToString(), result);
+            return ProcessInfoFor(builder, result);
 		}
 
 		/// <summary>
@@ -228,7 +228,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			builder.Add("-rowlimit ", "1");
 
 			AddCommonOptionalArguments(builder);
-			return ProcessInfoFor(builder.ToString(), from);
+            return ProcessInfoFor(builder, from);
 		}
 
 		private ProcessInfo GetSourceProcessInfo(IIntegrationResult result)

@@ -145,8 +145,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// </summary>
         /// <version>1.0</version>
         /// <default>None</default>
-        [ReflectorProperty("password", Required = false)]
-		public string Password;
+        [ReflectorProperty("password", typeof(PrivateStringSerialiserFactory), Required = false)]
+		public PrivateString Password;
 
         /// <summary>
         /// The name of the Vault server.
