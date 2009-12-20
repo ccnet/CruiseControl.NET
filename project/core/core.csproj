@@ -824,6 +824,12 @@
     </Compile>
     <Compile Include="tasks\NDependTask.cs" />
     <Compile Include="tasks\XmlTaskResult.cs" />
+    <Compile Include="util\IPrivateData.cs" />
+    <Compile Include="util\PrivateArguments.cs" />
+    <Compile Include="util\PrivateString.cs" />
+    <Compile Include="util\PrivateStringSerialiser.cs" />
+    <Compile Include="util\PrivateStringSerialiserFactory.cs" />
+    <Compile Include="util\SecureDataMode.cs" />
     <Compile Include="util\UriSerializer.cs" />
     <Compile Include="util\UriSerializerFactory.cs" />
     <Compile Include="util\NetworkCredentialSerializerFactory.cs" />
