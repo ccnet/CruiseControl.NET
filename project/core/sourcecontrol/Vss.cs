@@ -193,11 +193,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </summary>
         /// <version>1.0</version>
         /// <default>None</default>
-        [ReflectorProperty("password", Required = false)]
-		public string Password;
+        [ReflectorProperty("password", typeof(PrivateStringSerialiserFactory), Required = false)]
+		public PrivateString Password;
 
         /// <summary>
-        /// Password for the VSS user ID.
+        /// Directory for the source safe repository.
         /// </summary>
         /// <version>1.0</version>
         /// <default>None</default>
@@ -323,17 +323,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			Execute(NewProcessInfoWith(GetSourceArgs(result), result));
 		}
 
-		private string GetSourceArgs(IIntegrationResult result)
+        private PrivateArguments GetSourceArgs(IIntegrationResult result)
 		{
-			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AddArgument("get", Project);
-			builder.AddArgument(RecursiveCommandLineOption);
-			builder.AppendIf(ApplyLabel, "-VL" + tempLabel);
-			builder.AppendIf(!AlwaysGetLatest, "-Vd" + locale.FormatCommandDate(result.StartTime));
+            var builder = new PrivateArguments();
+			builder.Add("get ", Project, true);
+			builder.Add(RecursiveCommandLineOption);
+			builder.AddIf(ApplyLabel, "-VL", tempLabel);
+			builder.AddIf(!AlwaysGetLatest, "-Vd", locale.FormatCommandDate(result.StartTime));
 			AppendUsernameAndPassword(builder);
-			builder.AppendArgument("-I-N -W -GF- -GTM");
-			builder.AppendIf(CleanCopy, "-GWR");
-			return builder.ToString();
+			builder.Add("-I-N -W -GF- -GTM");
+			builder.AddIf(CleanCopy, "-GWR");
+			return builder;
 		}
 
 		private ProcessInfo CreateHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to, string tempOutputFileName)
@@ -341,16 +341,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return NewProcessInfoWith(HistoryProcessInfoArgs(from.StartTime, to.StartTime, tempOutputFileName), to);
 		}
 
-		private string HistoryProcessInfoArgs(DateTime from, DateTime to, string tempOutputFileName)
+        private PrivateArguments HistoryProcessInfoArgs(DateTime from, DateTime to, string tempOutputFileName)
 		{
-			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AddArgument("history", Project);
-			builder.AddArgument(RecursiveCommandLineOption);
-			builder.AddArgument(string.Format("-Vd{0}~{1}", locale.FormatCommandDate(to), locale.FormatCommandDate(from)));
+			var builder = new PrivateArguments();
+			builder.Add("history ", Project, true);
+			builder.Add(RecursiveCommandLineOption);
+			builder.Add(string.Format("-Vd{0}~{1}", locale.FormatCommandDate(to), locale.FormatCommandDate(from)));
 			AppendUsernameAndPassword(builder);
-			builder.AddArgument("-I-Y");
-            builder.AddArgument(string.Format("-O@{0}", tempOutputFileName));
-            return builder.ToString();
+			builder.Add("-I-Y");
+            builder.Add("-O@", tempOutputFileName);
+            return builder;
 		}
 
 		private void CreateTemporaryLabel(IIntegrationResult result)
@@ -367,7 +367,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			Execute(NewProcessInfoWith(LabelProcessInfoArgs(label, null), result));
 		}
 
-		private string LabelProcessInfoArgs(IIntegrationResult result)
+        private PrivateArguments LabelProcessInfoArgs(IIntegrationResult result)
 		{
 			if (result.Succeeded)
 			{
@@ -379,20 +379,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		private string DeleteLabelProcessInfoArgs()
+        private PrivateArguments DeleteLabelProcessInfoArgs()
 		{
 			return LabelProcessInfoArgs(string.Empty, tempLabel);
 		}
 
-		private string LabelProcessInfoArgs(string label, string oldLabel)
+		private PrivateArguments LabelProcessInfoArgs(string label, string oldLabel)
 		{
-			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AddArgument("label", Project);
-			builder.AddArgument("-L" + label);
-			builder.AddArgument("-VL",string.Empty, oldLabel); // only append argument if old label is specified
+            var builder = new PrivateArguments();
+			builder.Add("label ", Project, true);
+			builder.Add("-L", label);
+            builder.AddIf(!string.IsNullOrEmpty(oldLabel), "-VL", oldLabel);
 			AppendUsernameAndPassword(builder);
-			builder.AddArgument("-I-Y");
-			return builder.ToString();
+			builder.Add("-I-Y");
+            return builder;
 		}
 
 		private string CreateTemporaryLabelName(DateTime time)
@@ -406,7 +406,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return Path.Combine(Path.GetDirectoryName(comServerPath), SS_EXE);
 		}
 
-		private ProcessInfo NewProcessInfoWith(string args, IIntegrationResult result)
+		private ProcessInfo NewProcessInfoWith(PrivateArguments args, IIntegrationResult result)
 		{
 			string workingDirectory = result.BaseFromWorkingDirectory(WorkingDirectory);
 			if (! Directory.Exists(workingDirectory)) Directory.CreateDirectory(workingDirectory);
@@ -419,11 +419,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return processInfo;
 		}
 
-		private void AppendUsernameAndPassword(ProcessArgumentBuilder builder)
+        private void AppendUsernameAndPassword(PrivateArguments builder)
 		{
             if (!string.IsNullOrEmpty(Username))
             {
-                builder.AddArgument(string.Format("-Y{0},{1}", Username, Password));
+                PrivateString userPlusPass = "\"-Y" + Username + "," + Password.PrivateValue + "\"";
+                builder.Add(userPlusPass);
             }
 		}
 	}

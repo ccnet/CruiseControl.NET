@@ -71,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			NetReflector.Read(xml, vss);
 			Assert.AreEqual(@"..\tools\vss\ss.exe", vss.Executable);
-			Assert.AreEqual(@"admin", vss.Password);
+			Assert.AreEqual(@"admin", vss.Password.PrivateValue);
 			Assert.AreEqual(@"$/root", vss.Project);
 			Assert.AreEqual(@"..\tools\vss", vss.SsDir);
 			Assert.AreEqual(@"Joe Admin", vss.Username);
