@@ -349,7 +349,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			builder.Add(string.Format("-Vd{0}~{1}", locale.FormatCommandDate(to), locale.FormatCommandDate(from)));
 			AppendUsernameAndPassword(builder);
 			builder.Add("-I-Y");
-            builder.Add("-O@", tempOutputFileName);
+            builder.Add(null, "-O@" + tempOutputFileName, true);
             return builder;
 		}
 
