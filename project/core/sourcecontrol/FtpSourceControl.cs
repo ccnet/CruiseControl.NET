@@ -59,8 +59,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </summary>
         /// <version>1.4.4</version>
         /// <default>n/a</default>
-        [ReflectorProperty("password", Required = true)]
-        public string Password = string.Empty;
+        [ReflectorProperty("password", typeof(PrivateStringSerialiserFactory), Required = true)]
+        public PrivateString Password = string.Empty;
 
         /// <summary>
         /// Whether to use active connection mode or not.
@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             ftp = new FtpLib(to.BuildProgressInformation);
             string remoteFolder = FtpFolderName;
 
-            ftp.LogIn(ServerName,UserName,Password,UseActiveConnectionMode);
+            ftp.LogIn(ServerName,UserName,Password.PrivateValue,UseActiveConnectionMode);
 
             if (!FtpFolderName.StartsWith("/"))
             {
@@ -125,7 +125,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             ftp = new FtpLib(result.BuildProgressInformation);
             string remoteFolder = FtpFolderName;
 
-            ftp.LogIn(ServerName, UserName, Password, UseActiveConnectionMode);
+            ftp.LogIn(ServerName, UserName, Password.PrivateValue, UseActiveConnectionMode);
 
 
             if (!FtpFolderName.StartsWith("/"))

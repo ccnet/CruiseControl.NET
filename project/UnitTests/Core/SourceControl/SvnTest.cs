@@ -78,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(new Timeout(5), svn.Timeout);
 			Assert.AreEqual(@"c:\dev\src", svn.WorkingDirectory);
 			Assert.AreEqual("user", svn.Username);
-			Assert.AreEqual("password", svn.Password);
+			Assert.AreEqual("password", svn.Password.PrivateValue);
 			Assert.AreEqual(true, svn.TagOnSuccess);
 			Assert.AreEqual(true, svn.AutoGetSource);
 			Assert.AreEqual(true, svn.CheckExternals);

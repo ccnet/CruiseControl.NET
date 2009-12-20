@@ -60,8 +60,8 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// </summary>
         /// <version>1.5</version>
         /// <default>n/a</default>
-        [ReflectorProperty("password")]
-        public string Password { get; set; }
+        [ReflectorProperty("password", typeof(PrivateStringSerialiserFactory))]
+        public PrivateString Password { get; set; }
         #endregion
         #endregion
 
@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <returns></returns>
         public IDisposable Impersonate()
         {
-            var impersonation = new Impersonation(DomainName, UserName, Password);
+            var impersonation = new Impersonation(DomainName, UserName, Password.PrivateValue);
             impersonation.Impersonate();
             return impersonation;
         }

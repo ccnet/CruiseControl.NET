@@ -200,7 +200,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private void ExecuteWithLogging(ProcessInfo processInfo, string comment)
 		{
-			Log.Info(string.Format(comment + " : {0} {1}", processInfo.FileName, processInfo.SafeArguments));
+			Log.Info(string.Format(comment + " : {0} {1}", processInfo.FileName, processInfo.PublicArguments));
 			Execute(processInfo);
 		}
 

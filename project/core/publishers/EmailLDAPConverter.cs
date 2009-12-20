@@ -1,5 +1,6 @@
 using System;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -35,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private string ldap_Mail = "mail";
         private string ldap_QueryField = "MailNickName";
         private string ldap_LogOnUser = string.Empty;
-        private string ldap_LogOnPassword = string.Empty;
+        private PrivateString ldap_LogOnPassword = string.Empty;
 
 
         /// <summary>
@@ -79,8 +80,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </summary>
         /// <version>1.0</version>
         /// <default>None</default>
-        [ReflectorProperty("ldapLogOnPassword", Required = false)]
-        public string LdapLogOnPassword
+        [ReflectorProperty("ldapLogOnPassword", typeof(PrivateStringSerialiserFactory), Required = false)]
+        public PrivateString LdapLogOnPassword
         {
             get { return ldap_LogOnPassword; }
             set { ldap_LogOnPassword = value; }
@@ -108,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             System.DirectoryServices.DirectoryEntry domain;
             if (ldap_LogOnUser.Length > 0 )
             {
-                domain = new System.DirectoryServices.DirectoryEntry(LDAPPath,ldap_LogOnUser,ldap_LogOnPassword);
+                domain = new System.DirectoryServices.DirectoryEntry(LDAPPath,ldap_LogOnUser,ldap_LogOnPassword.PrivateValue);
             }
             else
             {

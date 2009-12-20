@@ -1,12 +1,13 @@
 using System.Net;
 using System.Net.Mail;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
     public class EmailGateway
     {
         private string mailhostUsername = null;
-        private string mailhostPassword = null;
+        private PrivateString mailhostPassword = null;
         private SmtpClient smtpServer;
 
         public EmailGateway()
@@ -38,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { mailhostUsername = value; }
         }
 
-        public string MailHostPassword
+        public PrivateString MailHostPassword
         {
             get { return mailhostPassword; }
             set { mailhostPassword = value; }
@@ -48,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         {
             if (MailHostUsername != null && MailHostPassword != null)
             {
-                smtpServer.Credentials = new NetworkCredential(mailhostUsername, mailhostPassword);
+                smtpServer.Credentials = new NetworkCredential(mailhostUsername, mailhostPassword.PrivateValue);
             }
             smtpServer.Send(mailMessage);
         }

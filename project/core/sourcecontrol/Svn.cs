@@ -245,8 +245,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </summary>
         /// <version>1.0</version>
         /// <default>None</default>
-        [ReflectorProperty("password", Required = false)]
-        public string Password;
+        [ReflectorProperty("password", typeof(PrivateStringSerialiserFactory), Required = false)]
+        public PrivateString Password;
 
         /// <summary>
         /// Whether to retrieve the updates from Subversion for a particular build. 
@@ -456,36 +456,29 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private ProcessInfo PropGetProcessInfo(IIntegrationResult result)
         {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("propget");
-            if (CheckExternalsRecursive)
-            {
-                buffer.AddArgument("-R");
-            }
+            var buffer = new PrivateArguments("propget");
+            buffer.AddIf(CheckExternalsRecursive, "-R");
             AppendCommonSwitches(buffer);
-            buffer.AddArgument("svn:externals");
-            buffer.AddArgument(TrunkUrl);
-            return NewProcessInfo(buffer.ToString(), result);
+            buffer.Add("svn:externals");
+            buffer.Add(TrunkUrl);
+            return NewProcessInfo(buffer, result);
         }
 
         private ProcessInfo RevertWorkingCopy(IIntegrationResult result)
         {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("revert");
-            buffer.AddArgument("--recursive");
-			buffer.AddArgument(StringUtil.AutoDoubleQuoteString(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory))));
+            var buffer = new PrivateArguments("revert", "--recursive");
+            buffer.Add(null, Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)), true);
 
-            return NewProcessInfo(buffer.ToString(), result);
+            return NewProcessInfo(buffer, result);
         }
 
 
         private ProcessInfo CleanupWorkingCopy(IIntegrationResult result)
         {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("cleanup");
-			buffer.AddArgument(StringUtil.AutoDoubleQuoteString(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory))));
+            var buffer = new PrivateArguments("cleanup");
+			buffer.Add(null, Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)), true);
 
-            return NewProcessInfo(buffer.ToString(), result);
+            return NewProcessInfo(buffer, result);
         }
 
 
@@ -545,12 +538,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private ProcessInfo NewCheckoutProcessInfo(IIntegrationResult result)
         {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("checkout");
-            buffer.AddArgument(TrunkUrl);
-            buffer.AddArgument(StringUtil.AutoDoubleQuoteString(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory))));
+            var buffer = new PrivateArguments("checkout");
+            buffer.Add(string.Empty, TrunkUrl, true);
+            buffer.Add(null, Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)), true);
             AppendCommonSwitches(buffer);
-            return NewProcessInfo(buffer.ToString(), result);
+            return NewProcessInfo(buffer, result);
         }
 
         private void UpdateSource(IIntegrationResult result)
@@ -577,51 +569,47 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private ProcessInfo NewGetSourceProcessInfo(IIntegrationResult result)
         {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("update");
-            buffer.AddArgument(StringUtil.AutoDoubleQuoteString(Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory))));
+            var buffer = new PrivateArguments("update");
+            buffer.Add(null, Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)), true);
             // Do not use Modification.GetLastChangeNumber() here directly.
             AppendRevision(buffer, latestRevision);
             AppendCommonSwitches(buffer);
-            return NewProcessInfo(buffer.ToString(), result);
+            return NewProcessInfo(buffer, result);
         }
 
         //		TAG_COMMAND_FORMAT = "copy --message "CCNET build label" "trunkUrl" "tagBaseUrl/label"
         private ProcessInfo NewLabelProcessInfo(IIntegrationResult result)
         {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("copy");
-            buffer.AppendArgument(TagMessage(result.Label));
-            buffer.AddArgument(TagSource(result));
-            buffer.AddArgument(TagDestination(result.Label));
+            var buffer = new PrivateArguments("copy");
+            buffer.Add(null, TagMessage(result.Label), true);
+            buffer.Add(null, TagSource(result), true);
+            buffer.Add(null, TagDestination(result.Label), true);
             // Do not use Modification.GetLastChangeNumber() here directly.
             AppendRevision(buffer, latestRevision);
             AppendCommonSwitches(buffer);
-            return NewProcessInfo(buffer.ToString(), result);
+            return NewProcessInfo(buffer, result);
         }
 
         //		HISTORY_COMMAND_FORMAT = "log url --revision \"{{{StartDate}}}:{{{EndDate}}}\" --verbose --xml --non-interactive";
         private ProcessInfo NewHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to, string url)
         {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("log");
-            buffer.AddArgument(url);
-            buffer.AppendArgument(string.Format("-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
-            buffer.AppendArgument("--verbose --xml");
+            var buffer = new PrivateArguments("log");
+            buffer.Add(null, url, true);
+            buffer.Add(string.Format("-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
+            buffer.Add("--verbose --xml");
             AppendCommonSwitches(buffer);
-            return NewProcessInfo(buffer.ToString(), to);
+            return NewProcessInfo(buffer, to);
         }
 
         //		HISTORY_COMMAND_FORMAT = "log url --revision {LastRevision}:HEAD --verbose --xml --non-interactive";
         private ProcessInfo NewHistoryProcessInfoFromRevision(string lastRevision, IIntegrationResult to, string url)
         {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("log");
-            buffer.AddArgument(url);
-            buffer.AppendArgument(string.Format("-r {0}:HEAD", string.IsNullOrEmpty(lastRevision) ? "0" : lastRevision));
-            buffer.AppendArgument("--verbose --xml");
+            var buffer = new PrivateArguments("log");
+            buffer.Add(null, url, true);
+            buffer.Add(string.Format("-r {0}:HEAD", string.IsNullOrEmpty(lastRevision) ? "0" : lastRevision));
+            buffer.Add("--verbose --xml");
             AppendCommonSwitches(buffer);
-            return NewProcessInfo(buffer.ToString(), to);
+            return NewProcessInfo(buffer, to);
         }
 
         private static List<string> ParseExternalsDirectories(ProcessResult result)
@@ -694,20 +682,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return string.Format("{0}/{1}", TagBaseUrl, label);
         }
 
-        private void AppendCommonSwitches(ProcessArgumentBuilder buffer)
+        private void AppendCommonSwitches(PrivateArguments buffer)
         {
-            buffer.AddArgument("--username", Username);
-            buffer.AddHiddenArgument("--password", Password);
-            buffer.AddArgument("--non-interactive");
-            buffer.AddArgument("--no-auth-cache");
+            buffer.AddIf(!string.IsNullOrEmpty(this.Username), "--username ", this.Username, true);
+            buffer.AddIf(this.Password != null, "--password ", this.Password, true);
+            buffer.Add("--non-interactive");
+            buffer.Add("--no-auth-cache");
         }
 
-        private static void AppendRevision(ProcessArgumentBuilder buffer, int revision)
+        private static void AppendRevision(PrivateArguments buffer, int revision)
         {
-            buffer.AppendIf(revision > 0, "--revision {0}", revision.ToString());
+            buffer.AddIf(revision > 0, "--revision ", revision.ToString());
         }
 
-        private ProcessInfo NewProcessInfo(string args, IIntegrationResult result)
+        private ProcessInfo NewProcessInfo(PrivateArguments args, IIntegrationResult result)
         {
             string workingDirectory = Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory));
             if (!Directory.Exists(workingDirectory)) Directory.CreateDirectory(workingDirectory);

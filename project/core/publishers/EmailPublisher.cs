@@ -193,8 +193,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </summary>
         /// <version>1.2</version>
         /// <default>None</default>
-        [ReflectorProperty("mailhostPassword", Required = false)]
-        public string MailhostPassword
+        [ReflectorProperty("mailhostPassword", typeof(PrivateStringSerialiserFactory), Required = false)]
+        public PrivateString MailhostPassword
         {
             get { return EmailGateway.MailHostPassword; }
             set { EmailGateway.MailHostPassword = value; }

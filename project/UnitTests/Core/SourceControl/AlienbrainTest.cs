@@ -5,6 +5,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
@@ -177,7 +178,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(SERVER, alienbrain.Server);
 			Assert.AreEqual(DATABASE, alienbrain.Database);
 			Assert.AreEqual(USER, alienbrain.Username);
-			Assert.AreEqual(PASSWORD, alienbrain.Password);
+			Assert.AreEqual(PASSWORD, alienbrain.Password.PrivateValue);
 			Assert.AreEqual(PROJECT_PATH, alienbrain.Project);
 			Assert.AreEqual(WORKDIR_PATH, alienbrain.WorkingDirectory);
 			Assert.AreEqual(BRANCH_PATH, alienbrain.Branch);
@@ -198,7 +199,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(SERVER, alienbrain.Server);
 			Assert.AreEqual(DATABASE, alienbrain.Database);
 			Assert.AreEqual(USER, alienbrain.Username);
-			Assert.AreEqual(PASSWORD, alienbrain.Password);
+			Assert.AreEqual(PASSWORD, alienbrain.Password.PrivateValue);
 			Assert.AreEqual(PROJECT_PATH, alienbrain.Project);
 			Assert.AreEqual(string.Empty, alienbrain.WorkingDirectory);
 			Assert.AreEqual(string.Empty, alienbrain.Branch);

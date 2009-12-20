@@ -487,13 +487,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 			ProcessResult result = executor.Execute(processInfo);
 			if (result.TimedOut)
 			{
-				string message = String.Format(@"Synergy source control operation has timed out after {0} seconds. Process command: ""{1}"" {2}", connection.Timeout, processInfo.FileName, processInfo.SafeArguments);
+				string message = String.Format(@"Synergy source control operation has timed out after {0} seconds. Process command: ""{1}"" {2}", connection.Timeout, processInfo.FileName, processInfo.PublicArguments);
 				throw(new CruiseControlException(message));
 			}
 
 			if (result.Failed && failOnError)
 			{
-				string message = String.Format("Synergy source control operation failed.\r\n" + "Command: \"{0}\" {1}\r\n" + "Error Code: {2}\r\n" + "Errors:\r\n{3}\r\n{4}", processInfo.FileName, processInfo.SafeArguments, result.ExitCode, result.StandardError, result.StandardOutput);
+				string message = String.Format("Synergy source control operation failed.\r\n" + "Command: \"{0}\" {1}\r\n" + "Error Code: {2}\r\n" + "Errors:\r\n{3}\r\n{4}", processInfo.FileName, processInfo.PublicArguments, result.ExitCode, result.StandardError, result.StandardOutput);
 
 				if (result.HasErrorOutput)
 				{

@@ -119,9 +119,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// Specifies the password for the AccuRev "principal" (userid). 
         /// </summary>
         /// <version>1.3</version>
-        /// <default>false</default>
-        [ReflectorProperty("password", Required = false)]
-		public string AccuRevPassword = null;
+        /// <default>None</default>
+        [ReflectorProperty("password", typeof(PrivateStringSerialiserFactory), Required = false)]
+        public PrivateString AccuRevPassword = null;
 
 		/// <summary>
         /// Specifies the AccuRev "principal" (userid) to run under. If not specified, AccuRev will follow its rules for determining the
@@ -297,7 +297,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				Log.Error("login=true requires principal= and password= to be specified.");
 				return;
 			}
-			RunCommand(string.Format("login {0} \"{1}\"", AccuRevPrincipal, AccuRevPassword), result);
+            RunCommand(new PrivateArguments("login", AccuRevPrincipal, AccuRevPassword), result);
 		}
 
 		/// <summary>
@@ -306,7 +306,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <param name="args">arguments for the "accurev" command</param>
 		/// <param name="result">IntegrationResult for which the command will be run</param>
 		/// <returns>a ProcessInfo object primed to execute the specified command</returns>
-		private ProcessInfo PrepCommand(string args, IIntegrationResult result)
+        private ProcessInfo PrepCommand(PrivateArguments args, IIntegrationResult result)
 		{
 			Log.Debug(string.Format("Preparing to run AccuRev command: {0} {1}", Executable, args));
 			ProcessInfo command = new ProcessInfo(Executable, args, result.BaseFromWorkingDirectory(Workspace));
@@ -320,7 +320,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <param name="args">arguments for the "accurev" command</param>
 		/// <param name="result">IntegrationResult for which the command is being run</param>
 		/// <returns>a ProcessResult object with the results from the command</returns>
-		private ProcessResult RunCommand(string args, IIntegrationResult result)
+		private ProcessResult RunCommand(PrivateArguments args, IIntegrationResult result)
 		{
 			ProcessInfo command = PrepCommand(args, result);
 			ProcessResult cmdResults = Execute(command);

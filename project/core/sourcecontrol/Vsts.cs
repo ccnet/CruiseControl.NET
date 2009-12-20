@@ -131,8 +131,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </summary>
         /// <version>1.5</version>
         /// <default>None</default>
-        [ReflectorProperty("password", Required = false)]
-        public string Password = String.Empty;
+        [ReflectorProperty("password", typeof(PrivateStringSerialiserFactory), Required = false)]
+        public PrivateString Password = String.Empty;
 
         /// <summary>
         ///  The domain of the user to be used.
@@ -414,13 +414,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         // [/recursive] [/folders] [/deleted] 
         private ProcessInfo CheckProjectProcessInfo(IIntegrationResult result)
         {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("dir");
-            buffer.AddArgument("/folders");
-            buffer.AppendArgument(string.Format("/server:{0}", Server));
-            buffer.AppendArgument(String.Format("\"{0}\"", ProjectPath));
+            var buffer = new PrivateArguments(
+                "dir",
+                "/folders");
+            buffer.Add("/server:", Server);
+            buffer.AddQuote(ProjectPath);
 
-            return NewProcessInfo(buffer.ToString(), result);
+            return NewProcessInfo(buffer, result);
         }
 
 
@@ -428,27 +428,27 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         //  repositoryfolder|localfolder
         private ProcessInfo MapWorkSpaceProcessInfo(IIntegrationResult result)
         {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("workfold");
-            buffer.AddArgument("/map");
-            buffer.AppendArgument(String.Format("\"{0}\"", ProjectPath ));
-            buffer.AppendArgument(String.Format("\"{0}\"", WorkingDirectory));
-            buffer.AppendArgument(string.Format("/server:{0}", Server));
-            buffer.AppendArgument(String.Format("/workspace:{0}", Workspace));            
-            return NewProcessInfo(buffer.ToString(), result);
+            var buffer = new PrivateArguments(
+                "workfold",
+                "/map");
+            buffer.AddQuote(ProjectPath);
+            buffer.AddQuote(WorkingDirectory);
+            buffer.Add("/server:", Server);
+            buffer.Add("/workspace:{0}", Workspace);
+            return NewProcessInfo(buffer, result);
         }
 
         // tf get itemspec [/version:versionspec] [/all] [/overwrite] [/force] 
         // [/preview] [/recursive] [/noprompt]
         private ProcessInfo GetWorkSpaceProcessInfo(IIntegrationResult result)
         {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("get");
-            buffer.AppendArgument("/force");
-            buffer.AppendArgument("/recursive");
-            buffer.AppendArgument("/noprompt");
-            buffer.AppendArgument(String.Format("\"{0}\"", WorkingDirectory));
-            return NewProcessInfo(buffer.ToString(), result);
+            var buffer = new PrivateArguments(
+                "get",
+                "/force",
+                "/recursive",
+                "/noprompt");
+            buffer.AddQuote(WorkingDirectory);
+            return NewProcessInfo(buffer, result);
         }
 
         // tf workspace /new [/noprompt] [/template:workspacename[;workspaceowner]]
@@ -456,39 +456,39 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         // [/s:servername] [workspacename[;workspaceowner]]
         private ProcessInfo CreateWorkSpaceProcessInfo(IIntegrationResult result)
         {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("workspace");
-            buffer.AppendArgument("/new");
-            buffer.AppendArgument(string.Format("/computer:{0}", Environment.MachineName));
-            buffer.AppendArgument(string.Format("/comment:\"{0}\"", DEFAULT_WORKSPACE_COMMENT));
-            buffer.AppendArgument(string.Format("/server:{0}", Server));
-            buffer.AppendArgument(String.Format("\"{0}\"", Workspace));
-            return NewProcessInfo(buffer.ToString(), result);
+            var buffer = new PrivateArguments(
+                "workspace",
+                "/new");
+            buffer.Add("/computer:", Environment.MachineName);
+            buffer.AddQuote("/comment:", DEFAULT_WORKSPACE_COMMENT);
+            buffer.Add("/server:{0}", Server);
+            buffer.AddQuote(Workspace);
+            return NewProcessInfo(buffer, result);
         }
 
         // tf workspaces /delete [/owner:ownername] [/computer:computername] 
         // [/server:servername] workspacename
         private ProcessInfo DeleteWorkSpaceProcessInfo(IIntegrationResult result)
         {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("workspace");
-            buffer.AppendArgument("/delete");
-            buffer.AppendArgument(string.Format("/computer:{0}", Environment.MachineName));
-            buffer.AppendArgument(string.Format("-server:{0}", Server));
-            buffer.AppendArgument(String.Format("\"{0}\"", Workspace));
-            return NewProcessInfo(buffer.ToString(), result);
+            var buffer = new PrivateArguments(
+                "workspace",
+                "/delete");
+            buffer.Add("/computer:", Environment.MachineName);
+            buffer.Add("-server:", Server);
+            buffer.AddQuote(Workspace);
+            return NewProcessInfo(buffer, result);
         }
 
         // tf workspaces [/computer:computername][/server:servername] workspacename
         private ProcessInfo CheckWorkSpaceProcessInfo(IIntegrationResult result)
         {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("workspaces");
-            buffer.AppendArgument(string.Format("/computer:{0}", Environment.MachineName));
-            buffer.AppendArgument(string.Format("-server:{0}", Server));
-            buffer.AppendArgument("/format:detailed");
-            buffer.AppendArgument(String.Format("\"{0}\"", Workspace));
-            return NewProcessInfo(buffer.ToString(), result);
+            var buffer = new PrivateArguments(
+                "workspaces");
+            buffer.Add("/computer:", Environment.MachineName);
+            buffer.Add("-server:{0}", Server);
+            buffer.Add("/format:detailed");
+            buffer.AddQuote(Workspace);
+            return NewProcessInfo(buffer, result);
         }
 
         //	LABEL_COMMAND_FORMAT = "label [/server:servername] labelname[@scope] [/owner:ownername] 
@@ -496,13 +496,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         //  [/child:(replace|merge)] [/recursive]"
         private ProcessInfo NewLabelProcessInfo(IIntegrationResult result)
         {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("label");
-            buffer.AppendArgument(string.Format("/server:{0}", Server));
-            buffer.AppendArgument(result.Label);
-            buffer.AppendArgument(String.Format("\"{0}\"", WorkingDirectory));
-            buffer.AppendArgument("/recursive");           
-            return NewProcessInfo(buffer.ToString(), result);
+            var buffer = new PrivateArguments(
+                "label");
+            buffer.Add("/server:", Server);
+            buffer.Add(result.Label);
+            buffer.AddQuote(WorkingDirectory);
+            buffer.Add("/recursive");           
+            return NewProcessInfo(buffer, result);
         }
 
         //	HISTORY_COMMAND_FORMAT = "tf history -noprompt -server:http://tfsserver:8080 $/TeamProjectName/path
@@ -510,28 +510,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         // -format:detailed -login:DOMAIN\name,password"
         private ProcessInfo NewHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to)
         {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("history");
-            buffer.AppendArgument("-noprompt");
-            buffer.AppendArgument(String.Format("-server:{0}", Server));
-            buffer.AppendArgument(String.Format("\"{0}\"", ProjectPath));
-            buffer.AppendArgument(String.Format("-version:D{0}~D{1}", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
-            buffer.AppendArgument("-recursive");
-            buffer.AppendArgument("-format:detailed");
+            var buffer = new PrivateArguments(
+                "history",
+                "-noprompt");
+            buffer.Add("-server:", Server);
+            buffer.AddQuote(ProjectPath);
+            buffer.Add(String.Format("-version:D{0}~D{1}", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
+            buffer.Add("-recursive");
+            buffer.Add("-format:detailed");
 
-            if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
+            if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password.PrivateValue))
             {
                 if (!string.IsNullOrEmpty(Domain))
                 {
                     Username = Domain + @"\" + Username;
                 }
 
-                buffer.AppendArgument(String.Format("-login:{0},{1}", 
-                    Username, 
-                    ProcessArgumentBuilder.HideArgument(Password)));
-            }           
+                buffer.Add("-login:" + this.Username, this.Password);
+            }
 
-            return NewProcessInfo(buffer.ToString(), to);
+            return NewProcessInfo(buffer, to);
         }
 
         #endregion
@@ -541,12 +539,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return date.ToUniversalTime().ToString(UtcXmlDateFormat, CultureInfo.InvariantCulture);
         }
 
-        private ProcessInfo NewProcessInfo(string args, IIntegrationResult result)
+        private ProcessInfo NewProcessInfo(PrivateArguments args, IIntegrationResult result)
         {
             string workingDirectory = Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory));
             if (!Directory.Exists(workingDirectory)) Directory.CreateDirectory(workingDirectory);
 
-            ProcessInfo processInfo = new ProcessInfo(Executable, args, workingDirectory);
+            var processInfo = new ProcessInfo(Executable, args, workingDirectory);
             processInfo.StreamEncoding = Encoding.UTF8;
             return processInfo;
         }

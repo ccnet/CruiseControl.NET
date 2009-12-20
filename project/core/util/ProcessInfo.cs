@@ -11,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public const int DefaultTimeout = 120000;
 		public const int InfiniteTimeout = 0;
 
+        private readonly PrivateArguments arguments;
 		private readonly ProcessStartInfo startInfo = new ProcessStartInfo();
 		private string standardInputContent;
 		private int timeout = DefaultTimeout;
@@ -18,18 +19,19 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         private readonly int[] successExitCodes;
 
 	    public ProcessInfo(string filename) : 
-			this(filename, null){}
+			this(filename, null, null, null){}
 
-		public ProcessInfo(string filename, string arguments) : 
-			this(filename, arguments, null){}
+		public ProcessInfo(string filename, PrivateArguments arguments) : 
+			this(filename, arguments, null, null){}
 
-		public ProcessInfo(string filename, string arguments, string workingDirectory) : 
+        public ProcessInfo(string filename, PrivateArguments arguments, string workingDirectory) : 
 			this(filename, arguments, workingDirectory, null){}
 
-		public ProcessInfo(string filename, string arguments, string workingDirectory, int[] successExitCodes)
+        public ProcessInfo(string filename, PrivateArguments arguments, string workingDirectory, int[] successExitCodes)
 		{
+            this.arguments = arguments;
 			startInfo.FileName = StringUtil.StripQuotes(filename);
-			startInfo.Arguments = arguments;
+			startInfo.Arguments = arguments == null ? null : arguments.ToString(SecureDataMode.Private);
 			startInfo.WorkingDirectory = StringUtil.StripQuotes(workingDirectory);
 			startInfo.UseShellExecute = false;
 			startInfo.CreateNoWindow = true;
@@ -67,12 +69,22 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public string Arguments
 		{
-            get { return ProcessArgumentBuilder.GenerateApplicationArguments(startInfo.Arguments); }
+            get { return startInfo.Arguments; }
 		}
 
-        public string SafeArguments
+        public string PublicArguments
         {
-            get { return ProcessArgumentBuilder.GenerateSanitisedArguments(startInfo.Arguments); }
+            get
+            {
+                if (this.arguments == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return this.arguments.ToString();
+                }
+            }
         }
 
         public string WorkingDirectory

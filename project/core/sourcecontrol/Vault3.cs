@@ -132,48 +132,48 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private ProcessInfo GetSourceProcessInfo(IIntegrationResult result, bool getByLabel)
 		{
-			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
+            var builder = new PrivateArguments();
 			if (getByLabel)
 			{
-				builder.AddArgument("getlabel", _shim.Folder);
-				builder.AddArgument(result.Label);
+				builder.Add("getlabel ", _shim.Folder, true);
+				builder.Add(result.Label);
 				if (_shim.UseVaultWorkingDirectory)
-					builder.AddArgument("-labelworkingfolder", result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
+					builder.Add("-labelworkingfolder ", result.BaseFromWorkingDirectory(_shim.WorkingDirectory), true);
 				else
-					builder.AddArgument("-destpath", result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
+					builder.Add("-destpath ", result.BaseFromWorkingDirectory(_shim.WorkingDirectory), true);
 			}
 			else
 			{
-				builder.AddArgument("get", _shim.Folder);
+				builder.Add("get ", _shim.Folder, true);
 				if (_shim.UseVaultWorkingDirectory)
-					builder.AppendArgument("-performdeletions removeworkingcopy");
+					builder.Add("-performdeletions removeworkingcopy");
 				else
-					builder.AddArgument("-destpath", result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
+					builder.Add("-destpath ", result.BaseFromWorkingDirectory(_shim.WorkingDirectory), true);
 			}
 
-			builder.AddArgument("-merge", "overwrite");
-			builder.AppendArgument("-makewritable");
-			builder.AddArgument("-setfiletime", _shim.setFileTime);
+			builder.Add("-merge ", "overwrite");
+			builder.Add("-makewritable");
+			builder.Add("-setfiletime ", _shim.setFileTime);
 			AddCommonOptionalArguments(builder);
-			return ProcessInfoFor(builder.ToString(), result);
+			return ProcessInfoFor(builder, result);
 		}
 
 		private ProcessInfo LabelProcessInfo(IIntegrationResult result)
 		{
-			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AddArgument("label", _shim.Folder);
-			builder.AddArgument(result.Label);
+            var builder = new PrivateArguments();
+			builder.Add("label ", _shim.Folder);
+			builder.Add(result.Label);
 			AddCommonOptionalArguments(builder);
-			return ProcessInfoFor(builder.ToString(), result);
+			return ProcessInfoFor(builder, result);
 		}
 
 		private ProcessInfo RemoveLabelProcessInfo(IIntegrationResult result)
 		{
-			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AddArgument("deletelabel", _shim.Folder);
-			builder.AddArgument(result.Label);
+            var builder = new PrivateArguments();
+			builder.Add("deletelabel ", _shim.Folder);
+			builder.Add(result.Label);
 			AddCommonOptionalArguments(builder);
-			return ProcessInfoFor(builder.ToString(), result);
+			return ProcessInfoFor(builder, result);
 		}
 
 		protected ProcessInfo ForHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to)
@@ -183,7 +183,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return info;
 		}
 
-		protected ProcessInfo ProcessInfoFor(string args, IIntegrationResult result)
+		protected ProcessInfo ProcessInfoFor(PrivateArguments args, IIntegrationResult result)
 		{
 			return new ProcessInfo(_shim.Executable, args, result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
 		}
@@ -193,30 +193,30 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		// TODO: might want to make rowlimit configurable?
 		private string BuildHistoryProcessArgs(DateTime from, DateTime to)
 		{
-			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AddArgument("history", _shim.Folder);
-			builder.AppendArgument(_shim.HistoryArgs);
-			builder.AddArgument("-begindate", from.ToString("s"));
-			builder.AddArgument("-enddate", to.ToString("s"));
+            var builder = new PrivateArguments();
+			builder.Add("history ", _shim.Folder);
+			builder.Add(_shim.HistoryArgs);
+			builder.Add("-begindate ", from.ToString("s"));
+			builder.Add("-enddate ", to.ToString("s"));
 			AddCommonOptionalArguments(builder);
 			return builder.ToString();
 		}
 
-		protected void AddCommonOptionalArguments(ProcessArgumentBuilder builder)
+        protected void AddCommonOptionalArguments(PrivateArguments builder)
 		{
-			builder.AddArgument("-host", _shim.Host);
-			builder.AddArgument("-user", _shim.Username);
-			builder.AddHiddenArgument("-password", _shim.Password);
-			builder.AddArgument("-repository", _shim.Repository);
-			builder.AppendIf(_shim.Ssl, "-ssl");
+			builder.AddIf(!string.IsNullOrEmpty(_shim.Host), "-host ", _shim.Host);
+            builder.AddIf(!string.IsNullOrEmpty(_shim.Username), "-user ", _shim.Username);
+            builder.AddIf(!string.IsNullOrEmpty(_shim.Password), "-password ", _shim.Password);
+            builder.AddIf(!string.IsNullOrEmpty(_shim.Repository), "-repository ", _shim.Repository, true);
+			builder.AddIf(_shim.Ssl, "-ssl");
 
-			builder.AddArgument("-proxyserver", _shim.proxyServer);
-			builder.AddArgument("-proxyport", _shim.proxyPort);
-			builder.AddArgument("-proxyuser", _shim.proxyUser);
-			builder.AddHiddenArgument("-proxypassword", _shim.proxyPassword);
-			builder.AddArgument("-proxydomain", _shim.proxyDomain);
+			builder.AddIf(!string.IsNullOrEmpty(_shim.proxyServer), "-proxyserver ", _shim.proxyServer);
+            builder.AddIf(!string.IsNullOrEmpty(_shim.proxyPort), "-proxyport ", _shim.proxyPort);
+            builder.AddIf(!string.IsNullOrEmpty(_shim.proxyUser), "-proxyuser ", _shim.proxyUser);
+            builder.AddIf(!string.IsNullOrEmpty(_shim.proxyPassword), "-proxypassword ", _shim.proxyPassword);
+            builder.AddIf(!string.IsNullOrEmpty(_shim.proxyDomain), "-proxydomain ", _shim.proxyDomain);
 
-			builder.AppendArgument(_shim.otherVaultArguments);
+			builder.Add(_shim.otherVaultArguments);
 		}
 
 		/// <summary>
@@ -229,11 +229,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <returns></returns>
 		protected string GetVaultWorkingFolder(IIntegrationResult result)
 		{
-			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AddArgument("listworkingfolders");
+			var builder = new PrivateArguments("listworkingfolders");
 			AddCommonOptionalArguments(builder);
 
-			ProcessInfo processInfo = ProcessInfoFor(builder.ToString(), result);
+			ProcessInfo processInfo = ProcessInfoFor(builder, result);
 			ProcessResult processResult = Execute(processInfo);
 
 			// parse list of working folders
@@ -264,8 +263,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			catch (XmlException)
 			{
-				throw new VaultException(string.Format(
-					"Unable to parse vault XML output for vault command: [{0}].  Vault Output: [{1}]", info.SafeArguments, result.StandardOutput));
+				var message = string.Format(
+					"Unable to parse vault XML output for vault command: [{0}].  Vault Output: [{1}]", 
+                    info.PublicArguments, 
+                    result.StandardOutput);
+                throw new VaultException(message);
 			}
 			return xml;
 		}

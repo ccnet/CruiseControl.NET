@@ -121,10 +121,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private ProcessInfo LabelProcessInfo(IIntegrationResult result)
 		{
-			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AddArgument("label", _shim.Folder);
-			builder.AddArgument(result.Label);
-			builder.AddArgument(_folderVersion.ToString());
+			var builder = new PrivateArguments();
+			builder.Add("label ", _shim.Folder);
+			builder.Add(result.Label);
+			builder.Add(_folderVersion);
 			AddCommonOptionalArguments(builder);
 			return ProcessInfoFor(builder.ToString(), result);
 		}
@@ -205,8 +205,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private ProcessInfo VersionHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to, bool bForceGetLatestVersion)
 		{
-			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AddArgument("versionhistory", _shim.Folder);
+            var builder = new PrivateArguments();
+			builder.Add("versionhistory ", _shim.Folder);
 
 			// Look only for changes, unless caller asked us to get the latest folder 
 			// version regardless of whether there's been a change.
@@ -215,17 +215,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				// use folderVersion when possible because it's faster and more accurate
 				if (_folderVersion != 0)
 				{
-					builder.AddArgument("-beginversion", (_folderVersion + 1).ToString());
+					builder.Add("-beginversion ", (_folderVersion + 1).ToString());
 				}
 				else
 				{
-					builder.AddArgument("-begindate", from.StartTime.ToString("s"));
-					builder.AddArgument("-enddate", to.StartTime.ToString("s"));
+					builder.Add("-begindate ", from.StartTime.ToString("s"));
+					builder.Add("-enddate ", to.StartTime.ToString("s"));
 				}
 			}
 
 			// we only ever need the most recent change
-			builder.AddArgument("-rowlimit", "1");
+			builder.Add("-rowlimit ", "1");
 
 			AddCommonOptionalArguments(builder);
 			return ProcessInfoFor(builder.ToString(), from);
@@ -233,24 +233,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private ProcessInfo GetSourceProcessInfo(IIntegrationResult result)
 		{
-			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
+            var builder = new PrivateArguments();
 
-			builder.AddArgument("getversion", _folderVersion.ToString());
-			builder.AddArgument(_shim.Folder);
+			builder.Add("getversion ", _folderVersion.ToString());
+			builder.Add(null, _shim.Folder, true);
 
             if (!string.IsNullOrEmpty(_shim.WorkingDirectory))
 			{
-				builder.AddArgument(result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
-				if (_shim.UseVaultWorkingDirectory)
-					builder.AppendArgument("-useworkingfolder");
+				builder.Add(null, result.BaseFromWorkingDirectory(_shim.WorkingDirectory), true);
+                if (_shim.UseVaultWorkingDirectory)
+                {
+                    builder.Add("-useworkingfolder");
+                }
 			}
 
-			builder.AddArgument("-merge", "overwrite");
-			builder.AppendArgument("-makewritable");
-			builder.AddArgument("-backup", "no");
-			builder.AddArgument("-setfiletime", _shim.setFileTime);
+			builder.Add("-merge ", "overwrite");
+			builder.Add("-makewritable");
+			builder.Add("-backup ", "no");
+			builder.Add("-setfiletime ", _shim.setFileTime);
 			AddCommonOptionalArguments(builder);
-			return ProcessInfoFor(builder.ToString(), result);
+			return ProcessInfoFor(builder, result);
 		}
 
 	}

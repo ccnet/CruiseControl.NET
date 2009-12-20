@@ -126,8 +126,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </summary>
         /// <version>1.0</version>
         /// <default>n/a</default>
-        [ReflectorProperty("password")]
-		public string Password = string.Empty;
+        [ReflectorProperty("password", typeof(PrivateStringSerialiserFactory))]
+		public PrivateString Password = string.Empty;
 
         /// <summary>
         /// The path of the branch specification. to enumarate the name of the branches, use the ab enumbranch command line.
@@ -253,13 +253,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		// Process Creations
 		public ProcessInfo CreateModificationProcess(string processCommand, DateTime from, DateTime to)
 		{
-			string arguments = String.Format(processCommand, Project, Server, Database, Username, Password, from.ToFileTime(), to.ToFileTime());
+			var arguments = String.Format(processCommand, Project, Server, Database, Username, Password.PrivateValue, from.ToFileTime(), to.ToFileTime());
 			return new ProcessInfo(Executable, arguments);
 		}
 
 		public ProcessInfo CreateLabelProcess(string processCommand, IIntegrationResult result)
 		{
-			string arguments = String.Format(processCommand, Project, Server, Database, Username, Password, result.Label);
+			string arguments = String.Format(processCommand, Project, Server, Database, Username, Password.PrivateValue, result.Label);
 			return new ProcessInfo(Executable, arguments);
 		}
 
@@ -271,20 +271,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public ProcessInfo CreateGetProcess(string filename)
 		{
 			// @"getlatest ""{0}"" -s ""{1}"" -d ""{2}"" -u ""{3}"" -p ""{4}"" -localpath ""{5}"" -overwritewritable replace -overwritecheckedout replace -response:GetLatest.PathInvalid y -response:GetLatest.Writable y -response:GetLatest.CheckedOut y"
-			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AddArgument("getlatest", filename);
-			builder.AddArgument("-s", Server);
-			builder.AddArgument("-d", Database);
-			builder.AddArgument("-u", Username);
-			builder.AddHiddenArgument("-p", Password);
-			builder.AddArgument("-localpath", WorkingDirectory);
-			builder.AppendArgument("-overwritewritable replace -overwritecheckedout replace -response:GetLatest.PathInvalid y -response:GetLatest.Writable y -response:GetLatest.CheckedOut y");
-			return new ProcessInfo(Executable, builder.ToString());
+			var args = new PrivateArguments();
+            args.Add("getlatest ", filename, true);
+            args.Add("-s ", Server, true);
+            args.Add("-d ", Database, true);
+            args.Add("-u ", Username, true);
+            args.Add("-p ", Password, true);
+            args.AddIf(!string.IsNullOrEmpty(WorkingDirectory), "-localpath ", WorkingDirectory, true);
+            args.Add("-overwritewritable replace -overwritecheckedout replace -response:GetLatest.PathInvalid y -response:GetLatest.Writable y -response:GetLatest.CheckedOut y");
+            return new ProcessInfo(Executable, args);
 		}
 
 		public ProcessInfo CreateBranchProcess(string processCommand)
 		{
-			string arguments = String.Format(processCommand, Branch, Server, Database, Username, Password);
+			string arguments = String.Format(processCommand, Branch, Server, Database, Username, Password.PrivateValue);
 			return new ProcessInfo(Executable, arguments);
 		}
 	}

@@ -256,14 +256,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				processInfo.EnvironmentVariables[key] = StringUtil.IntegrationPropertyToString(properties[key]);
 			}
 
-			Log.Info(string.Format("Starting build: {0} {1}", processInfo.FileName, processInfo.SafeArguments));
+			Log.Info(string.Format("Starting build: {0} {1}", processInfo.FileName, processInfo.PublicArguments));
 			try
 			{
 				return executor.Execute(processInfo);
 			}
 			catch (IOException ex)
 			{
-				string message = string.Format("Unable to launch the devenv process.  Please verify that you can invoke this command from the command line: {0} {1}", processInfo.FileName, processInfo.SafeArguments);
+				string message = string.Format("Unable to launch the devenv process.  Please verify that you can invoke this command from the command line: {0} {1}", processInfo.FileName, processInfo.PublicArguments);
 				throw new BuilderException(this, message, ex);
 			}
 		}

@@ -154,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		protected override bool Execute(IIntegrationResult result)
 		{
 			ProcessInfo processInfo = CreateProcessInfo(result);
-            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format("Executing Rake: {0}", processInfo.SafeArguments));
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format("Executing Rake: {0}", processInfo.PublicArguments));
 			ProcessResult processResult = TryToRun(processInfo, result);
 
             if (!StringUtil.IsWhitespace(processResult.StandardOutput) || !StringUtil.IsWhitespace(processResult.StandardError))

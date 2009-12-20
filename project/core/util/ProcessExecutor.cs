@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public virtual ProcessResult Execute(ProcessInfo processInfo)
 		{
 			string projectName = Thread.CurrentThread.Name;
-			using (RunnableProcess p = new RunnableProcess(processInfo, projectName))
+			using (RunnableProcess p = new RunnableProcess(processInfo, projectName, processInfo == null ? null : processInfo.PublicArguments))
 			{
 				p.ProcessOutput += ((sender, e) => OnProcessOutput(e));
 
@@ -61,6 +61,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			private readonly string projectName;
 			private readonly ProcessInfo processInfo;
 			private readonly Process process;
+            private readonly string publicArgs;
 			// TODO: Move towards injecting WaitHandles.
 			private readonly StringBuilder stdOutput = new StringBuilder();
 			private readonly EventWaitHandle outputStreamClosed = new ManualResetEvent(false);
@@ -70,10 +71,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			private Thread supervisingThread;
 
 
-			public RunnableProcess(ProcessInfo processInfo, string projectName)
+            public RunnableProcess(ProcessInfo processInfo, string projectName, string publicArgs)
 			{
 				this.projectName = projectName;
 				this.processInfo = processInfo;
+                this.publicArgs = publicArgs;
 				process = processInfo.CreateProcess();
 			}
 
@@ -91,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					if (hasTimedOut) Log.Warning(string.Format(
                         "Process timed out: {0} {1}.  Process id: {2}. This process will now be killed.", 
                         processInfo.FileName, 
-                        ProcessArgumentBuilder.GenerateSanitisedArguments(processInfo.Arguments), 
+                        processInfo.PublicArguments, 
                         process.Id));
 				}
 				catch (ThreadAbortException)
@@ -100,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					Log.Info(string.Format(
 						"Thread aborted while waiting for '{0} {1}' to exit. Process id: {2}. This process will now be killed.", 
                         processInfo.FileName,
-                        ProcessArgumentBuilder.GenerateSanitisedArguments(processInfo.Arguments), 
+                        processInfo.PublicArguments, 
                         process.Id));
 					throw;
 				} 
@@ -111,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					Log.Debug(string.Format(
 						"Process interrupted: {0} {1}.  Process id: {2}. This process will now be killed.", 
                         processInfo.FileName,
-                        ProcessArgumentBuilder.GenerateSanitisedArguments(processInfo.Arguments), 
+                        processInfo.PublicArguments, 
                         process.Id));
 				}
 				finally
@@ -130,12 +132,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 			private void StartProcess()
 			{
-                Log.Debug(string.Format(
-                            "Starting process [{0}] in working directory [{1}] with arguments [{2}]",
-                            process.StartInfo.FileName,
-                            process.StartInfo.WorkingDirectory,
-                            ProcessArgumentBuilder.GenerateSanitisedArguments(process.StartInfo.Arguments)));
-                process.StartInfo.Arguments = ProcessArgumentBuilder.GenerateApplicationArguments(process.StartInfo.Arguments);
+                Log.Debug("Starting process [{0}] in working directory [{1}] with arguments [{2}]",
+                    process.StartInfo.FileName,
+                    process.StartInfo.WorkingDirectory,
+                    this.publicArgs);
 				process.OutputDataReceived += StandardOutputHandler;
 				process.ErrorDataReceived += ErrorOutputHandler;
 				process.Exited += ExitedHandler;

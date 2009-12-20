@@ -320,7 +320,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			Assert.AreEqual("smtp.telus.net", publisher.MailHost);
             Assert.AreEqual(26, publisher.MailPort);
 			Assert.AreEqual("mailuser", publisher.MailhostUsername);
-			Assert.AreEqual("mailpassword", publisher.MailhostPassword);
+            Assert.IsNotNull(publisher.MailhostPassword);
+			Assert.AreEqual("mailpassword", publisher.MailhostPassword.PrivateValue);
 			Assert.AreEqual("ccnet@thoughtworks.com", publisher.FromAddress);
             Assert.AreEqual(2, publisher.ModifierNotificationTypes.Length);
             Assert.AreEqual(EmailGroup.NotificationType.Failed, publisher.ModifierNotificationTypes[0]);

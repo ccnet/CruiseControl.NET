@@ -57,8 +57,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			else if (result.Failed)
 			{
-				throw new CruiseControlException(string.Format("Source control operation failed: {0}. Process command: {1} {2}",
-				                                               result.StandardError, processInfo.FileName, processInfo.SafeArguments));
+                var message = string.Format(
+                    "Source control operation failed: {0}. Process command: {1} {2}",
+                    result.StandardError,
+                    processInfo.FileName,
+                    processInfo.PublicArguments);
+				throw new CruiseControlException(message);
 			}
 			else if (result.HasErrorOutput)
 			{
