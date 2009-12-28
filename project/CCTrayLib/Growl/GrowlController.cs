@@ -18,7 +18,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Growl
 		private GrowlConnector growl;
 		private GrowlConfiguration configuration;
 		private IProjectMonitor monitor;
-		private NotifyInfoFlags minimumNotificationLevel;
 		private GrowlMessages growlMessages = new GrowlMessages();
 
 		public GrowlController(IProjectMonitor monitor, GrowlConfiguration configuration)

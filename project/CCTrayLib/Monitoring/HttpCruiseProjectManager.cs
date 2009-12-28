@@ -12,10 +12,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		private readonly string projectName;
         private readonly CruiseServerClientBase client;
 		private readonly ICruiseServerManager serverManager;
-		private Uri dashboardUri;
-        private Uri parametersUri;
-		private Uri webUrl;
-		private string serverAlias = "local";
 
 		public HttpCruiseProjectManager(CruiseServerClientBase client, string projectName, ICruiseServerManager serverManager)
 		{

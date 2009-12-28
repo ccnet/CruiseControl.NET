@@ -7,8 +7,7 @@ using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
-using SpeechLib;
-
+using System.Speech.Synthesis;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Speech
 {
@@ -19,8 +18,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Speech
 	{
 		private IProjectMonitor monitor;
 		private IBalloonMessageProvider balloonMessageProvider;
-        private SpVoice voice = new SpVoice();
-		private IDictionary projectStates = new Hashtable();
+        //private SpVoice voice = new SpVoice();
+
+        private IDictionary projectStates = new Hashtable();
 		private bool speakBuildSucceded;
 		private bool speakBuildFailed;
 
@@ -50,8 +50,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Speech
 	
 				CaptionAndMessage captionAndMessage = balloonMessageProvider.GetCaptionAndMessageForBuildTransition(e.BuildTransition);
 				String message = String.Format("The {0} project reports {1}", projectName, captionAndMessage.Message);
-	            voice.Speak(message, SpeechVoiceSpeakFlags.SVSFDefault);
-	            Trace.WriteLine("speaking: " + message);
+                SpeechSynthesizer speaker = new SpeechSynthesizer();
+                speaker.Speak(message);	            
+                Trace.WriteLine("speaking: " + message);
 			}
 		}
 
@@ -70,8 +71,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Speech
 				if (newState == ProjectState.Building ||
 				    newState == ProjectState.BrokenAndBuilding) {
 					String message = String.Format("The {0} project has started building", projectName);
-		            voice.Speak(message, SpeechVoiceSpeakFlags.SVSFDefault);
-		            Trace.WriteLine("speaking: " + message);
+                    SpeechSynthesizer speaker = new SpeechSynthesizer();
+                    speaker.Speak(message);
+                    Trace.WriteLine("speaking: " + message);
 				}
 			}
 		}
