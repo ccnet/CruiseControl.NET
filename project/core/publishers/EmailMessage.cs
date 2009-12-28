@@ -16,6 +16,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private Hashtable SetSubjects;
 
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="emailPublisher"></param>
         public EmailMessage(IIntegrationResult result, EmailPublisher emailPublisher)
         {
             this.result = result;

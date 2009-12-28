@@ -9,10 +9,25 @@ namespace ThoughtWorks.CruiseControl.Core
 	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public interface ISourceControl
 	{
+        /// <summary>
+        /// Gets the modifications from the source control provider
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
 		Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to);
 
+        /// <summary>
+        /// Labels the source control provider with the current label
+        /// </summary>
+        /// <param name="result"></param>
 		void LabelSourceControl(IIntegrationResult result);
-		void GetSource(IIntegrationResult result);
+		
+        /// <summary>
+        /// Gets the source from the source conrol provider
+        /// </summary>
+        /// <param name="result"></param>
+        void GetSource(IIntegrationResult result);
 
 		void Initialize(IProject project);
 		void Purge(IProject project);

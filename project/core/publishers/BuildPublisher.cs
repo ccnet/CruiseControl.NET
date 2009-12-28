@@ -41,8 +41,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     {
         public enum CleanupPolicy
         {
+            /// <summary>
+            /// No cleaning done 
+            /// </summary>
             NoCleaning,
+            /// <summary>
+            /// Keep the last X published builds
+            /// </summary>
             KeepLastXBuilds,
+            /// <summary>
+            /// Delete builds older than X days
+            /// </summary>
             DeleteBuildsOlderThanXDays
         }
 

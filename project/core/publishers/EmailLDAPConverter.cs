@@ -88,7 +88,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
 
-
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public EmailLDAPConverter()
         {
 

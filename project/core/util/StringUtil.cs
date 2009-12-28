@@ -7,6 +7,9 @@ using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// Class with handy stirng routines
+    /// </summary>
     public class StringUtil
     {
         private static readonly Regex NullStringRegex = new Regex("\0");
@@ -15,11 +18,22 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         // public for testing only
         public const string DEFAULT_DELIMITER = ",";
 
+        /// <summary>
+        /// Checks if the 2 strings are equal, ignoring casing
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static bool EqualsIgnoreCase(string a, string b)
         {
             return CaseInsensitiveComparer.Default.Compare(a, b) == 0;
         }
 
+        /// <summary>
+        /// generates a hashcode for the string array
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
         public static int GenerateHashCode(params string[] values)
         {
             int hashcode = 0;
@@ -31,11 +45,22 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return hashcode;
         }
 
+        /// <summary>
+        /// returns the last word of the string, using separators space ,;!?:
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static string LastWord(string input)
         {
             return LastWord(input, " .,;!?:");
         }
 
+        /// <summary>
+        /// returns the last word of the string, using the specified separators 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="separators"></param>
+        /// <returns></returns>
         public static string LastWord(string input, string separators)
         {
             if (input == null)
@@ -51,6 +76,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return String.Empty;
         }
 
+        /// <summary>
+        /// checks if a string is null or empty or is made only of spaces 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static bool IsWhitespace(string input)
         {
             if (string.IsNullOrEmpty(input))
@@ -74,6 +104,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             }
         }
 
+        /// <summary>
+        /// removes the specified strings in the string array from the input string
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="removals"></param>
+        /// <returns></returns>
         public static string Strip(string input, params string[] removals)
         {
             string revised = input;
@@ -87,6 +123,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return revised;
         }
 
+
+        /// <summary>
+        /// joins the strings with the speficied separator.
+        /// </summary>
+        /// <param name="separator"></param>
+        /// <param name="strings"></param>
+        /// <returns></returns>
         public static string Join(string separator, params string[] strings)
         {
             StringBuilder sb = new StringBuilder();
@@ -109,11 +152,21 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return NullStringRegex.Replace(s, string.Empty).TrimStart();
         }
 
+        /// <summary>
+        /// Removes leading and trailing quotes " 
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public static string StripQuotes(string filename)
         {
             return filename == null ? null : filename.Trim('"');
         }
 
+        /// <summary>
+        /// removes invalid charactes from filenames, like the slash and backslash
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public static string RemoveInvalidCharactersFromFileName(string fileName)
         {
             return Strip(fileName, "\\", "/", ":", "*", "?", "\"", "<", ">", "|");

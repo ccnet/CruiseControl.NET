@@ -9,14 +9,27 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         //Ldap explanation
         //http://www.computerperformance.co.uk/Logon/LDAP_attributes_active_directory.htm#Hall_of_fame_LDAP_attribute_-_DN__distinguished_name_
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public LdapHelper()
             : this(null, null, null)
         { }
 
+        /// <summary>
+        /// Extented constructor
+        /// </summary>
+        /// <param name="domainName"></param>
         public LdapHelper(string domainName)
             : this(domainName, null, null)
         { }
 
+        /// <summary>
+        /// Extended constructor
+        /// </summary>
+        /// <param name="domainName"></param>
+        /// <param name="logonUser"></param>
+        /// <param name="logOnPassword"></param>
         public LdapHelper(string domainName, string logonUser, string logOnPassword)
         {
             DomainName = domainName;
@@ -55,11 +68,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <example>
         /// mail = John.Wayne@texas.com
         /// </example>
+        /// </summary>
         public string LdapFieldMailAddress { get; set; }
 
         /// <summary>
         /// This would be referred to as last name or surname.
         /// Default value : sn
+        /// </summary>
         /// <example>
         /// SN = Thomas
         /// </example>

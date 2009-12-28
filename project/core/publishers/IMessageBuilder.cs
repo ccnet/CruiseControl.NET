@@ -4,7 +4,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	{
 
         /// <summary>
-        /// the xslFiles that could be used for the transformations done by BuildMessage
+        /// The xslFiles that could be used for the transformations done by BuildMessage
         /// </summary>
         System.Collections.IList xslFiles { get; set; }
 

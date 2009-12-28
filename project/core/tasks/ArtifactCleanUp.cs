@@ -58,12 +58,29 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		/// Supported cleaning up methods
 		/// </summary>
 		public enum CleanUpMethod
-		{
+        {   
+            /// <summary>
+            /// keeps the last specified amount of builds
+            /// </summary>
 			KeepLastXBuilds,
-			DeleteBuildsOlderThanXDays,
-			KeepMaximumXHistoryDataEntries,
-			DeleteSubDirsOlderThanXDays,
-			KeepLastXSubDirs
+			/// <summary>
+            /// Deletes the builds older than the specifed amount of days
+			/// </summary>
+            DeleteBuildsOlderThanXDays,
+			/// <summary>
+            /// Clears the History Data file (for the ModificationHistory), keeping maximum the specified amount of builds.
+			/// </summary>
+            KeepMaximumXHistoryDataEntries,
+			/// <summary>
+            /// Deletes subfolders of the artifact folder if they are older than the
+            /// specified amount of days. (Buildlogfolder excluded)
+			/// </summary>
+            DeleteSubDirsOlderThanXDays,
+			/// <summary>
+            /// Keeps the last specified amount of subfolders in the artifacts folder, sorting is
+            /// done on creation time of the folder (Buildlogfolder excluded) 
+			/// </summary>
+            KeepLastXSubDirs
 		}
 
 		private CleanUpMethod cleanUpMethod;

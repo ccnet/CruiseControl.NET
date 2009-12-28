@@ -6,6 +6,9 @@ using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// Handy XMl routines
+    /// </summary>
 	public class XmlUtil
 	{
 		public static XmlDocument CreateDocument(string xml)

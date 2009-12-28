@@ -3,11 +3,6 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	public interface IQuietPeriod
-	{
-		Modification[] GetModifications(ISourceControl sourceControl, IIntegrationResult from, IIntegrationResult to);
-	}
-
 	public class QuietPeriod : IQuietPeriod
 	{
 		private readonly TimeSpan GracePeriodInWhichItIsNotWorthApplyingTheQuietPeriod = TimeSpan.FromMilliseconds(100);

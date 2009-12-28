@@ -2,21 +2,42 @@ using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// Helper class for dates
+    /// </summary>
 	public class DateUtil
 	{
 		// Format dates according to ISO 8601 format
 		public const string DateOutputFormat = "yyyy-MM-dd HH:mm:ss";
 
+
+        /// <summary>
+        /// formats the date to ISO 8601 format
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
 		public static string FormatDate(DateTime date)
 		{
 			return date.ToString(DateOutputFormat);
 		}
 
+        /// <summary>
+        /// formats the date to ISO 8601 format, using the specified formatter
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="formatter"></param>
+        /// <returns></returns>
 		public static string FormatDate(DateTime date, IFormatProvider formatter)
 		{
 			return date.ToString(DateOutputFormat, formatter);
 		}
 
+        /// <summary>
+        /// Returns the largest of the 2 passed dates
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
 		public static DateTime MaxDate(DateTime a, DateTime b)
 		{
 			return (a > b) ? a : b;

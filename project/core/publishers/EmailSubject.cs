@@ -41,9 +41,31 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         public enum BuildResultType
         {
-            Success, Broken, StillBroken, Fixed, Exception
+            /// <summary>
+            /// Build is ok
+            /// </summary>
+            Success, 
+            /// <summary>
+            /// Build has failed
+            /// </summary>
+            Broken, 
+            /// <summary>
+            /// Build has failed, and previous one was also failed
+            /// </summary>
+            StillBroken, 
+            /// <summary>
+            /// Build is ok, but previous one was failed
+            /// </summary>
+            Fixed, 
+            /// <summary>
+            /// An unforeseen exception occured during the build (source control error for example)
+            /// </summary>
+            Exception
         }
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public EmailSubject()
         {
         }

@@ -40,79 +40,138 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         
         }
 
+        /// <summary>
+        /// Disables logging
+        /// </summary>
         public static void DisableLogging()
         {
             loggingEnabled = false;
         }
 
+        /// <summary>
+        /// Enables logging
+        /// </summary>
         public static void EnableLogging()
         {
             loggingEnabled = true;
         }
 
+        /// <summary>
+        /// Logs at information level
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
         public static void Info(string message, params object[] args)
 		{
 			if (loggingEnabled) logger.Info(string.Format(message,args));
 		}
 
+        /// <summary>
+        /// Logs at information level
+        /// </summary>
+        /// <param name="message"></param>
         public static void Info(string message)
         {
             if (loggingEnabled) logger.Info(message);
         }
 
-
+        /// <summary>
+        /// Logs at debug level
+        /// </summary>
+        /// <param name="message"></param>
 		public static void Debug(string message)
 		{
             if (loggingEnabled) logger.Debug(message);
 		}
 
+        /// <summary>
+        /// Logs at debug level
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
         public static void Debug(string message, params object[] args)
         {
             if (loggingEnabled) logger.Debug(string.Format(message,args));
         }
 
+        /// <summary>
+        /// Logs at warning level
+        /// </summary>
+        /// <param name="message"></param>
 		public static void Warning(string message)
 		{
             if (loggingEnabled) logger.Warn(message);
 		}
 
+        /// <summary>
+        /// Logs at warning level
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
         public static void Warning(string message, params object[] args)
         {
             if (loggingEnabled) logger.Warn(string.Format(message,args));
         }
 
-
+        /// <summary>
+        /// Logs at warning level
+        /// </summary>
+        /// <param name="ex"></param>
 		public static void Warning(Exception ex)
 		{
             if (loggingEnabled) logger.Warn(CreateExceptionMessage(ex));
 		}
 
+        /// <summary>
+        /// Logs at Error level
+        /// </summary>
+        /// <param name="message"></param>
 		public static void Error(string message)
 		{
             logger.Error(message);
 		}
 
+        /// <summary>
+        /// Logs at error level
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
         public static void Error(string message, params object[] args)
         {
             logger.Error(string.Format(message,args));
         }
 
-
+        /// <summary>
+        /// Logs at errorlevel
+        /// </summary>
+        /// <param name="ex"></param>
 		public static void Error(Exception ex)
 		{
             logger.Error(CreateExceptionMessage(ex));
 		}
 
+        /// <summary>
+        /// Logs at trace level
+        /// </summary>
         public static void Trace()
         {
             if (loggingEnabled && logger.IsTraceEnabled) logger.TraceFormat(string.Concat(GetCallingClassName(), "Entering"));
         }
 
+        /// <summary>
+        /// Logs at trace level
+        /// </summary>
+        /// <param name="message"></param>
         public static void Trace(string message)
         {
             if (loggingEnabled && logger.IsTraceEnabled)  logger.TraceFormat(string.Concat(GetCallingClassName() ,message));
         }
 
+        /// <summary>
+        /// Logs at trace level
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
         public static void Trace(string message, params object[] args)
         {
             if (loggingEnabled && logger.IsTraceEnabled) logger.TraceFormat(string.Concat(GetCallingClassName(), message), args);

@@ -54,12 +54,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { replace = value; }
         }
 
-
+        /// <summary>
+        /// Default constructor
+        /// </summary>
 		public EmailRegexConverter()
 		{
 		}
 
-
+        /// <summary>
+        /// Extended constructor
+        /// </summary>
+        /// <param name="find"></param>
+        /// <param name="replace"></param>
 		public EmailRegexConverter(string find, string replace)
 		{
 			this.find = find;

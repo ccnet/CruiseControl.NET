@@ -510,6 +510,7 @@
     <Compile Include="Security\ProjectSecurityConfigurationInformation.cs" />
     <Compile Include="Security\RemotingChannelSecurityInformation.cs" />
     <Compile Include="Security\SecureMessagesChannel.cs" />
+    <Compile Include="sourcecontrol\IQuitePeriod.cs" />
     <Compile Include="SystemClock.cs" />
     <Compile Include="SourceControlOperation.cs" />
     <Compile Include="Security\ActiveDirectoryAuthentication.cs" />

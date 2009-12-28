@@ -32,7 +32,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     {
         public enum FtpAction
         {
+            /// <summary>
+            /// Uploads the specified folder to the ftp server
+            /// </summary>
             UploadFolder,
+            /// <summary>
+            /// Downloads the specified folder from the ftp server
+            /// </summary>
             DownloadFolder
         }
         //todo: limit number of files shown to the last 10 like in build stage : done

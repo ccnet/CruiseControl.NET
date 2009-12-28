@@ -32,8 +32,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	[ReflectorType("user")]
 	public class EmailUser
 	{
+        /// <summary>
+        /// Default constructor
+        /// </summary>
 		public EmailUser() { }
 
+        /// <summary>
+        /// Extended constructor
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="group"></param>
+        /// <param name="address"></param>
 		public EmailUser(string name, string group, string address)
 		{
 			Name = name;
