@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#pragma warning disable 1591
+using System.Collections.Generic;
 using System.Diagnostics;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -16,6 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
         /// <summary>
         /// Initialises the extension.
         /// </summary>
+        /// <param name="extensionConfig"></param>
         /// <param name="server">The server that this extension is for.</param>
         public void Initialise(ICruiseServer server, ExtensionConfiguration extensionConfig)
         {

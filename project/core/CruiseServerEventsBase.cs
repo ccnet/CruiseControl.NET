@@ -1,4 +1,5 @@
-﻿using System;
+﻿#pragma warning disable 1591
+using System;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Events;
 
@@ -243,6 +244,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// Fires the IntegrationStarted event.
         /// </summary>
         /// <param name="request">The integration request.</param>
+        /// <param name="projectName"></param>
         protected virtual IntegrationStartedEventArgs.EventResult FireIntegrationStarted(IntegrationRequest request, string projectName)
         {
             IntegrationStartedEventArgs.EventResult result = IntegrationStartedEventArgs.EventResult.Continue;

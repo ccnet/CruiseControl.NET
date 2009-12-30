@@ -1,4 +1,5 @@
-﻿namespace ThoughtWorks.CruiseControl.Core.Util
+﻿#pragma warning disable 1591
+namespace ThoughtWorks.CruiseControl.Core.Util
 {
     /// <summary>
     /// Stores a string that can be access either publicly (and is hidden) or privately (accessed normally).

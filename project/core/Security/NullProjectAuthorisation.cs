@@ -74,6 +74,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <param name="userName">The name of the user that is being checked.</param>
         /// <param name="permission">The permission to check.</param>
         /// <param name="defaultRight">The default right to use.</param>
+        /// <param name="manager"></param>
         /// <returns>True if the permission is valid, false otherwise.</returns>
         public virtual bool CheckPermission(ISecurityManager manager, 
             string userName, 

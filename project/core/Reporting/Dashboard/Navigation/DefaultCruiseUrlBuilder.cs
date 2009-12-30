@@ -1,3 +1,4 @@
+#pragma warning disable 1591
 using System.Text;
 using System.Web;
 using ThoughtWorks.CruiseControl.Core.Util;

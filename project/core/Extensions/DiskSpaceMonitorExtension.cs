@@ -24,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
         /// Initialises the extension.
         /// </summary>
         /// <param name="server">The server that this extension is for.</param>
+        /// <param name="extensionConfig"></param>
         public virtual void Initialise(ICruiseServer server, ExtensionConfiguration extensionConfig)
         {
             if (server == null)

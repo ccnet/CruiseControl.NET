@@ -1,3 +1,4 @@
+#pragma warning disable 1591
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation

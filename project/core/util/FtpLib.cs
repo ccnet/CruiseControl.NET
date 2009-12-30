@@ -1,4 +1,5 @@
-﻿namespace ThoughtWorks.CruiseControl.Core.Util
+﻿#pragma warning disable 1591
+namespace ThoughtWorks.CruiseControl.Core.Util
 {
     /// <summary>
     /// Wrapper class around the EnterpriseDT Ftp library
@@ -9,11 +10,7 @@
         private Tasks.TaskBase CallingTask;
         private Util.BuildProgressInformation bpi;
 
-        /// <summary>
-        /// Extended constructor
-        /// </summary>
-        /// <param name="callingTask"></param>
-        /// <param name="buildProgressInformation"></param>
+
         public FtpLib(Tasks.TaskBase callingTask, Util.BuildProgressInformation buildProgressInformation)
         {
             CallingTask = callingTask;
@@ -32,10 +29,6 @@
         }
 
 
-        /// <summary>
-        /// Extended constructor
-        /// </summary>
-        /// <param name="buildProgressInformation"></param>
         public FtpLib(Util.BuildProgressInformation buildProgressInformation)
         {
             bpi = buildProgressInformation;
@@ -47,9 +40,6 @@
             this.FtpServer.CommandSent += HandleMessages;
         }
 
-        /// <summary>
-        /// Default constructor
-        /// </summary>
         public FtpLib()
         {
             this.FtpServer = new EnterpriseDT.Net.Ftp.FTPConnection();

@@ -1,4 +1,5 @@
-﻿using Exortech.NetReflector;
+﻿#pragma warning disable 1591
+using Exortech.NetReflector;
 using System;
 using System.Collections.Generic;
 using System.Text;

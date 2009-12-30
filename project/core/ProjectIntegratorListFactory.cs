@@ -1,3 +1,4 @@
+#pragma warning disable 1591
 using ThoughtWorks.CruiseControl.Core.Queues;
 
 namespace ThoughtWorks.CruiseControl.Core

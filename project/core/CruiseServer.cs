@@ -1,3 +1,4 @@
+#pragma warning disable 1591
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -793,6 +794,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Retrieves the amount of free disk space.
         /// </summary>
+        /// <param name="request"></param>
         /// <returns>The amount of free space in bytes.</returns>
         public DataResponse GetFreeDiskSpace(ServerRequest request)
         {
@@ -830,7 +832,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Takes a status snapshot of a project.
         /// </summary>
-        /// <param name="projectName">The name of the project.</param>
+        /// <param name="request"></param>
         /// <returns>The snapshot of the current status.</returns>
         public virtual StatusSnapshotResponse TakeStatusSnapshot(ProjectRequest request)
         {
@@ -892,7 +894,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Retrieves the latest list of packages for a project.
         /// </summary>
-        /// <param name="projectName"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
         public virtual ListPackagesResponse RetrievePackageList(ProjectRequest request)
         {
@@ -921,6 +923,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Retrieve a file transfer object.
         /// </summary>
+        /// <param name="request"></param>
         public virtual FileTransferResponse RetrieveFileTransfer(FileTransferRequest request)
         {
             var response = new FileTransferResponse(request);
@@ -1168,7 +1171,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Lists the build parameters for a project.
         /// </summary>
-        /// <param name="projectName">The name of the project to retrieve the parameters for.</param>
+        /// <param name="request"></param>
         /// <returns>The list of parameters (if any).</returns>
         public virtual BuildParametersResponse ListBuildParameters(ProjectRequest request)
         {

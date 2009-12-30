@@ -1,4 +1,5 @@
-﻿using System;
+﻿#pragma warning disable 1591
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -19,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Events
         /// <summary>
         /// Initialise a new instance of <see cref="IntegrationStartedEventArgs"/>.
         /// </summary>
+        /// <param name="projectName"></param>
         /// <param name="request">The request to process.</param>
         public IntegrationStartedEventArgs(IntegrationRequest request, string projectName)
             : base(projectName)

@@ -1,3 +1,5 @@
+#pragma warning disable 1591
+
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
 	public class CachingConfigurationService : IConfigurationService

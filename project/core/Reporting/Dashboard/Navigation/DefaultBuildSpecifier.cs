@@ -1,3 +1,4 @@
+#pragma warning disable 1591
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
 	public class DefaultBuildSpecifier : IBuildSpecifier

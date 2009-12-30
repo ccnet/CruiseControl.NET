@@ -1,3 +1,5 @@
+#pragma warning disable 1591
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -84,6 +86,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// XSLT extension method, called to define a text constant in the 
         /// preprocessor environment.  The constant can be referred to symbolically
         /// in subsequent definitions or expansions.
+        /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
         public void define_text_constant(string name, string value)

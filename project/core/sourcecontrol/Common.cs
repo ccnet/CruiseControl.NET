@@ -6,6 +6,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// </summary>
     public class Common
     {
+        /// <summary>
+        /// Ways of handling source control errors
+        /// </summary>
         public enum SourceControlErrorHandlingPolicy
         {
             /// <summary>

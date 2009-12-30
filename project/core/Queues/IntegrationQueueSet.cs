@@ -1,3 +1,4 @@
+#pragma warning disable 1591
 using System.Collections;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Remote;

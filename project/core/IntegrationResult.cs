@@ -1,3 +1,4 @@
+#pragma warning disable 1591
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -107,11 +108,12 @@ namespace ThoughtWorks.CruiseControl.Core
             set { parameters = value; }
         }
 
+
         /// <summary>
         /// Obtain the label as an integer if possible, otherwise zero. 
         /// </summary>
         /// <remarks>
-        // "0" is better than "-1" since build numbers are non-negative
+        /// "0" is better than "-1" since build numbers are non-negative
         /// and "-" is a character frequently used to separate version components
         /// when represented in string form.  Thus "-1" might give someone
         /// "1-0--1", which might cause all sorts of havoc for them.  Best to
