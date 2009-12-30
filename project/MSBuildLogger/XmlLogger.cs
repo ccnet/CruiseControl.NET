@@ -313,7 +313,7 @@ namespace ThoughtWorks.CruiseControl.MSBuild
             public const string File = "file";
             public const string StartTime = "startTime";
             public const string ElapsedTime = "elapsedTime";
-            public const string ElapsedSeconds = "ElapsedSeconds";
+            public const string ElapsedSeconds = "elapsedSeconds";
             public const string TimeStamp = "timeStamp";
             public const string Code = "code";
             public const string LineNumber = "line";
