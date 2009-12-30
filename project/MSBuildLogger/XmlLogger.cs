@@ -123,12 +123,12 @@ namespace ThoughtWorks.CruiseControl.MSBuild
             LogStageFinished(e.Succeeded, e.Timestamp);
         }
 
-        void eventSource_WarningRaised(object sender, BuildWarningEventArgs e)
+        private void eventSource_WarningRaised(object sender, BuildWarningEventArgs e)
         {
             LogErrorOrWarning(XmlLoggerElements.Warning, e.Message, e.Code, e.File, e.LineNumber, e.ColumnNumber, e.Timestamp);
         }
 
-        void eventSource_ErrorRaised(object sender, BuildErrorEventArgs e)
+        private void eventSource_ErrorRaised(object sender, BuildErrorEventArgs e)
         {
             LogErrorOrWarning(XmlLoggerElements.Error, e.Message, e.Code, e.File, e.LineNumber, e.ColumnNumber, e.Timestamp);
         }
@@ -163,12 +163,13 @@ namespace ThoughtWorks.CruiseControl.MSBuild
 
         }
 
-        private void LogStageFinished(bool succeded, DateTime timeStamp)
+        private void LogStageFinished(bool succeeded, DateTime timeStamp)
         {
             DateTime startTime = DateTime.Parse(currentElement.GetAttribute(XmlLoggerAttributes.StartTime), DateTimeFormatInfo.InvariantInfo);
             SetAttribute(currentElement, timeStamp - startTime, XmlLoggerAttributes.ElapsedTime);
+            SetAttribute(currentElement, (int)(timeStamp - startTime).TotalSeconds, XmlLoggerAttributes.ElapsedSeconds);
 
-            SetAttribute(currentElement, succeded, XmlLoggerAttributes.Success);
+            SetAttribute(currentElement, succeeded, XmlLoggerAttributes.Success);
 
             if (this.currentElement.ParentNode is XmlElement)
             {
@@ -248,10 +249,7 @@ namespace ThoughtWorks.CruiseControl.MSBuild
             Type t = obj.GetType();
             if (t == typeof(int))
             {
-                if (Int32.Parse(obj.ToString()) > 0)	//????
-                {
-                    element.SetAttribute(name, obj.ToString());
-                }
+                element.SetAttribute(name, obj.ToString());
             }
             else if (t == typeof(DateTime))
             {
@@ -315,6 +313,7 @@ namespace ThoughtWorks.CruiseControl.MSBuild
             public const string File = "file";
             public const string StartTime = "startTime";
             public const string ElapsedTime = "elapsedTime";
+            public const string ElapsedSeconds = "ElapsedSeconds";
             public const string TimeStamp = "timeStamp";
             public const string Code = "code";
             public const string LineNumber = "line";
