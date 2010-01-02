@@ -1,4 +1,4 @@
-#pragma warning disable 1591
+
 using System.Xml;
 using System.Xml.Schema;
 

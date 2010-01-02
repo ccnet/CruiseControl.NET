@@ -1,4 +1,4 @@
-﻿#pragma warning disable 1591
+﻿
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,6 +21,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Events
         /// Initialise a new instance of <see cref="IntegrationCompletedEventArgs"/>.
         /// </summary>
         /// <param name="request">The request to process.</param>
+        /// <param name="projectName"></param>
+        /// <param name="status"></param>
         public IntegrationCompletedEventArgs(IntegrationRequest request, string projectName, IntegrationStatus status)
             : base(projectName)
         {

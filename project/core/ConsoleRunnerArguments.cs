@@ -1,4 +1,4 @@
-#pragma warning disable 1591
+
 namespace ThoughtWorks.CruiseControl.Core
 {
 	public class ConsoleRunnerArguments

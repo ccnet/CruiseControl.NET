@@ -1,4 +1,4 @@
-#pragma warning disable 1591
+
 using Microsoft.Win32;
 using System;
 

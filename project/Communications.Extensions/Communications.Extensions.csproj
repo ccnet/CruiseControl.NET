@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\ThoughtWorks.CruiseControl.Remote.Extensions.XML</DocumentationFile>
     <WarningsAsErrors>1712,1591,1573,1570,1574,1580,1581,1584,1589,1590,1592,1598</WarningsAsErrors>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

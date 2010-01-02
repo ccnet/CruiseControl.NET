@@ -357,7 +357,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Lists the build parameters for a project.
         /// </summary>
-        /// <param name="projectName">The name of the project to retrieve the parameters for.</param>
+        ///<param name="request"></param>
         /// <returns>The list of parameters (if any).</returns>
         BuildParametersResponse ListBuildParameters(ProjectRequest request);
         #endregion

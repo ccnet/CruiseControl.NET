@@ -12,6 +12,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Initialises the extension.
         /// </summary>
         /// <param name="server">The server that this extension is for.</param>
+        /// <param name="extensionConfig"></param>
         void Initialise(ICruiseServer server, ExtensionConfiguration extensionConfig);
         #endregion
 
