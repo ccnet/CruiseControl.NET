@@ -10,10 +10,13 @@
     using System.Xml.Linq;
     using Exortech.NetReflector;
     using System.Text.RegularExpressions;
+    using System.Diagnostics;
 
     public class Program
     {
         private static Regex specialChars;
+        private static List<string> problemList = new List<string>();
+
 
         public static void Main(string[] args)
         {
@@ -33,14 +36,21 @@
                     return;
                 }
 
+
                 var documentation = new XDocument();
                 var documentationPath = Path.ChangeExtension(assemblyName, "xml");
                 if (File.Exists(documentationPath))
                 {
                     documentation = XDocument.Load(documentationPath);
                 }
+                else
+                {
+                    WriteToConsole("No XML file found for assembly: " + assemblyName, ConsoleColor.Red);
+                    return;
+                }
 
                 WriteToConsole("Starting documentation generation for " + Path.GetFileName(assemblyName), ConsoleColor.Gray);
+                problemList.Clear();
 
                 try
                 {
@@ -53,18 +63,22 @@
                             baseFolder = Path.Combine(Environment.CurrentDirectory, baseFolder);
                         }
                     }
+                    Debug.WriteLine("BaseFolder : " + baseFolder);
 
                     Directory.CreateDirectory(baseFolder);
                     var assembly = Assembly.LoadFrom(assemblyName);
 
                     // Load the documentation for any dependencies
                     LoadDependencyDocumentation(Path.GetDirectoryName(assemblyName), assembly, documentation);
-                    var types = assembly.GetExportedTypes();
-                    foreach (var type in types)
+                    
+                    var publicTypesInAssembly = assembly.GetExportedTypes();
+                    foreach (var publicType in publicTypesInAssembly)
                     {
-                        var attributes = type.GetCustomAttributes(typeof(ReflectorTypeAttribute), true);
+                        var attributes = publicType.GetCustomAttributes(typeof(ReflectorTypeAttribute), true);
                         if (attributes.Length > 0)
                         {
+                            Debug.WriteLine("Found reflector attributes in " + publicType.FullName);
+
                             // There can be only one!
                             var attribute = attributes[0] as ReflectorTypeAttribute;
                             var fileName = Path.Combine(baseFolder, attribute.Name + ".wiki");
@@ -75,7 +89,7 @@
                             }
 
                             var typeElement = (from element in documentation.Descendants("member")
-                                               where element.Attribute("name").Value == "T:" + type.FullName
+                                               where element.Attribute("name").Value == "T:" + publicType.FullName
                                                select element).SingleOrDefault();
 
                             using (var output = new StreamWriter(fileName))
@@ -92,6 +106,10 @@
                                 {
                                     WriteDocumentation(typeElement, "summary", output, documentation);
                                     output.WriteLine();
+                                }
+                                else
+                                {
+                                    problemList.Add("No Summary tag for " + publicType.FullName + " file " + fileName);
                                 }
 
                                 if (HasTag(typeElement, "version"))
@@ -110,11 +128,19 @@
                                     WriteDocumentation(typeElement, "example", output, documentation);
                                     output.WriteLine();
                                 }
+                                else
+                                {
+                                    if (publicType.IsClass)
+                                    {
+                                        problemList.Add("No example tag for " + publicType.FullName + " file " + fileName);
+                                    }
+
+                                }
 
                                 output.WriteLine("h2. Configuration Elements");
                                 output.WriteLine();
                                 output.WriteLine("|| Element || Description || Type || Required || Default || Version ||");
-                                WriteElements(type, output, documentation, typeElement);
+                                WriteElements(publicType, output, documentation, typeElement);
                                 output.WriteLine();
 
                                 if (HasTag(typeElement, "remarks"))
@@ -140,7 +166,7 @@
                                 File.Delete(xsdFile);
                             }
 
-                            WriteXsdFile(xsdFile, attribute, type, documentation, typeElement);
+                            WriteXsdFile(xsdFile, attribute, publicType, documentation, typeElement);
                         }
                     }
                 }
@@ -151,6 +177,18 @@
                 }
 
                 WriteToConsole("Documentation generation finished", ConsoleColor.Gray);
+
+                if (problemList.Count > 0)
+                {
+                    WriteToConsole("Problems encountered : " + problemList.Count.ToString(), ConsoleColor.Red);
+
+                    foreach (string s in problemList)
+                    {
+                        WriteToConsole(s, ConsoleColor.Red);                    
+                    }
+                }
+
+
             }
             catch
             {
@@ -263,6 +301,8 @@
 
         private static void LoadDependencyDocumentation(string baseFolder, Assembly assembly, XDocument documentation)
         {
+            Debug.WriteLine("Loading Dependency Documentation for " + assembly.FullName);
+
             foreach (var dependency in assembly.GetReferencedAssemblies())
             {
                 var dependencyData = Path.Combine(baseFolder, dependency.Name + ".xml");
@@ -277,6 +317,13 @@
                     {
                         documentation.Add(dependencyXml.Root);
                     }
+                }
+                else
+                {
+                    if (dependency.Name.StartsWith("ThoughtWorks"))
+                    {
+                        problemList.Add("!!! No xml documentation found for " + dependency.Name + " expected  " + dependencyData);
+                    }                   
                 }
             }
         }
