@@ -93,6 +93,16 @@ namespace Validator
             {
                 myTypeTable.Add(Assembly.Load(referencedAssembly));
             }
+
+            var pluginLocation = System.Configuration.ConfigurationManager.AppSettings["PluginLocation"];
+            if (!string.IsNullOrEmpty(pluginLocation))
+            {
+                if (Directory.Exists(pluginLocation))
+                {
+                    myTypeTable.Add(pluginLocation, CONFIG_ASSEMBLY_PATTERN);
+                }
+            }
+
             myTypeTable.Add(Directory.GetCurrentDirectory(), CONFIG_ASSEMBLY_PATTERN);
             myTypeTable.InvalidNode += delegate(InvalidNodeEventArgs args)
             {
