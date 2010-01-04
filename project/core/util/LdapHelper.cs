@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.DirectoryServices;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -185,22 +186,44 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return result;
         }
 
+        /// <summary>
+        /// Attempts to authenticate the supplied user credentials using DirectoryServices.
+        /// </summary>
+        /// <param name="userName">The user name to be authenticated.</param>
+        /// <param name="password">Password, if needed, for the given user name.</param>
+        /// <param name="domainName">Domain name (path) of the domain providing the directory service.</param>
+        /// <returns>True if the supplied credentials are valid on the given domain, false otherwise.</returns>
         public bool Authenticate(string userName, string password, string domainName)
         {
-            try
-            {
-                System.DirectoryServices.DirectoryEntry Ldap = new System.DirectoryServices.DirectoryEntry("LDAP://" + DomainName, userName, password);
-
-                return true;
-            }
-            catch
-            {
+            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(domainName))
                 return false;
 
-            }
+            // Only supporting SECURE authentication for now, could later support SSL.  
+            AuthenticationTypes atAuthentType = AuthenticationTypes.Secure;  
+            
+            bool isAuthenticUser = false;
 
+            using (DirectoryEntry deDirEntry = new DirectoryEntry("LDAP://" + domainName, userName, password, atAuthentType))
+             {
+                // This seems a tad 'hacky', but is the only way I can see to validate a user. 
+                // It relies on an exception being thrown when attempting to access a data member
+                // in the DirectoryEntry instance if the user credentials were invalid.  
+
+                try
+                {
+                    if ( string.IsNullOrEmpty(deDirEntry.Name) ) // throws exception for invalid user cridentials. 
+                        isAuthenticUser = false;
+
+                    else
+                        isAuthenticUser = true;
+                }
+                catch 
+                {
+                    isAuthenticUser = false;
+                }
+             }
+            
+            return isAuthenticUser;
         }
-
-
     }
 }
