@@ -43,6 +43,35 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
             public Stream OpenOutputStream(string fileName) { return null;}
 
             public Stream OpenInputStream(string fileName) { return null; }
+
+            #region CreateDirectory()
+            /// <summary>
+            /// Creates a directory.
+            /// </summary>
+            /// <param name="folder">The name of the folder to create.</param>
+            public void CreateDirectory(string folder)
+            {
+            }
+            #endregion
+
+            #region DeleteDirectory()
+            /// <summary>
+            /// Deletes a directory.
+            /// </summary>
+            /// <param name="folder">The name of the folder to delete.</param>
+            public void DeleteDirectory(string folder)
+            {
+            }
+
+            /// <summary>
+            /// Deletes a directory, optionally deleting all sub-directories.
+            /// </summary>
+            /// <param name="folder">The name of the folder to delete.</param>
+            /// <param name="recursive">If set to <c>true</c> recursively delete folders.</param>
+            public void DeleteDirectory(string folder, bool recursive)
+            {
+            }
+            #endregion
         }
 
         [Test]

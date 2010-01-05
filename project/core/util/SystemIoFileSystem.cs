@@ -264,5 +264,37 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return stream;
         }
         #endregion
+
+        #region CreateDirectory()
+        /// <summary>
+        /// Creates a directory.
+        /// </summary>
+        /// <param name="folder">The name of the folder to create.</param>
+        public void CreateDirectory(string folder)
+        {
+            Directory.CreateDirectory(folder);
+        }
+        #endregion
+
+        #region DeleteDirectory()
+        /// <summary>
+        /// Deletes a directory.
+        /// </summary>
+        /// <param name="folder">The name of the folder to delete.</param>
+        public void DeleteDirectory(string folder)
+        {
+            Directory.Delete(folder);
+        }
+
+        /// <summary>
+        /// Deletes a directory, optionally deleting all sub-directories.
+        /// </summary>
+        /// <param name="folder">The name of the folder to delete.</param>
+        /// <param name="recursive">If set to <c>true</c> recursively delete folders.</param>
+        public void DeleteDirectory(string folder, bool recursive)
+        {
+            Directory.Delete(folder, recursive);
+        }
+        #endregion
     }
 }

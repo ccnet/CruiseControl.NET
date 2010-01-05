@@ -4,15 +4,15 @@ using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
-	public interface IFileSystem
-	{
-		void Copy(string sourcePath, string destPath);
-		void Save(string file, string content);
+    public interface IFileSystem
+    {
+        void Copy(string sourcePath, string destPath);
+        void Save(string file, string content);
         void AtomicSave(string file, string content);
         void AtomicSave(string file, string content, Encoding encoding);
         TextReader Load(string file);
-		bool FileExists(string file);
-		bool DirectoryExists(string folder);
+        bool FileExists(string file);
+        bool DirectoryExists(string folder);
 
         /// <summary>
         /// Ensures that the folder for the specified file exists.
@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <summary>
         /// Retrieves the free disk space for a drive.
         /// </summary>
-		/// <param name="driveName">The name of the drive (e.g. c:).</param>
+        /// <param name="driveName">The name of the drive (e.g. c:).</param>
         /// <returns>The amount of free space in bytes.</returns>
         long GetFreeDiskSpace(string driveName);
 
@@ -62,5 +62,24 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="fileName"></param>
         /// <returns></returns>
         Stream OpenInputStream(string fileName);
+
+        /// <summary>
+        /// Creates a directory.
+        /// </summary>
+        /// <param name="folder">The name of the folder to create.</param>
+        void CreateDirectory(string folder);
+
+        /// <summary>
+        /// Deletes a directory.
+        /// </summary>
+        /// <param name="folder">The name of the folder to delete.</param>
+        void DeleteDirectory(string folder);
+
+        /// <summary>
+        /// Deletes a directory, optionally deleting all sub-directories.
+        /// </summary>
+        /// <param name="folder">The name of the folder to delete.</param>
+        /// <param name="recursive">If set to <c>true</c> recursively delete folders.</param>
+        void DeleteDirectory(string folder, bool recursive);
     }
 }
