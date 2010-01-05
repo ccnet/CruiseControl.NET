@@ -101,14 +101,15 @@
             this.toolStripMenuItem2,
             this.exitMenuButton});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // openMenuButton
             // 
             this.openMenuButton.Image = global::Validator.Properties.Resources.folder_table;
             this.openMenuButton.Name = "openMenuButton";
-            this.openMenuButton.Size = new System.Drawing.Size(145, 22);
+            this.openMenuButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.openMenuButton.Size = new System.Drawing.Size(192, 22);
             this.openMenuButton.Text = "&Open...";
             this.openMenuButton.Click += new System.EventHandler(this.openMenuButton_Click);
             // 
@@ -116,7 +117,8 @@
             // 
             this.reloadMenuButton.Image = global::Validator.Properties.Resources.table_refresh;
             this.reloadMenuButton.Name = "reloadMenuButton";
-            this.reloadMenuButton.Size = new System.Drawing.Size(145, 22);
+            this.reloadMenuButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.reloadMenuButton.Size = new System.Drawing.Size(192, 22);
             this.reloadMenuButton.Text = "&Reload";
             this.reloadMenuButton.Click += new System.EventHandler(this.reloadMenuButton_Click);
             // 
@@ -125,38 +127,40 @@
             this.historyMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.emptyToolStripMenuItem});
             this.historyMenu.Name = "historyMenu";
-            this.historyMenu.Size = new System.Drawing.Size(145, 22);
+            this.historyMenu.Size = new System.Drawing.Size(192, 22);
             this.historyMenu.Text = "&History";
             // 
             // emptyToolStripMenuItem
             // 
             this.emptyToolStripMenuItem.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Italic);
             this.emptyToolStripMenuItem.Name = "emptyToolStripMenuItem";
-            this.emptyToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.emptyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.emptyToolStripMenuItem.Text = "<empty>";
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(142, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(189, 6);
             // 
             // printMenuButton
             // 
             this.printMenuButton.Image = global::Validator.Properties.Resources.printer;
             this.printMenuButton.Name = "printMenuButton";
-            this.printMenuButton.Size = new System.Drawing.Size(145, 22);
+            this.printMenuButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.printMenuButton.Size = new System.Drawing.Size(192, 22);
             this.printMenuButton.Text = "&Print results...";
             this.printMenuButton.Click += new System.EventHandler(this.printMenuButton_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(142, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(189, 6);
             // 
             // exitMenuButton
             // 
             this.exitMenuButton.Name = "exitMenuButton";
-            this.exitMenuButton.Size = new System.Drawing.Size(145, 22);
+            this.exitMenuButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
+            this.exitMenuButton.Size = new System.Drawing.Size(192, 22);
             this.exitMenuButton.Text = "E&xit";
             this.exitMenuButton.Click += new System.EventHandler(this.exitMenuButton_Click);
             // 
@@ -165,7 +169,7 @@
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.configurationToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.viewToolStripMenuItem.Text = "&View";
             // 
             // configurationToolStripMenuItem
@@ -176,7 +180,7 @@
             this.offToolStripMenuItem});
             this.configurationToolStripMenuItem.Image = global::Validator.Properties.Resources.table_relationship;
             this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
-            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.configurationToolStripMenuItem.Text = "Configuration";
             // 
             // vericalToolStripMenuItem
@@ -185,7 +189,8 @@
             this.vericalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.vericalToolStripMenuItem.Image = global::Validator.Properties.Resources.application_tile_horizontal;
             this.vericalToolStripMenuItem.Name = "vericalToolStripMenuItem";
-            this.vericalToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.vericalToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
+            this.vericalToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.vericalToolStripMenuItem.Text = "Verical";
             this.vericalToolStripMenuItem.Click += new System.EventHandler(this.vericalToolStripMenuItem_Click);
             // 
@@ -193,7 +198,8 @@
             // 
             this.horizontalToolStripMenuItem.Image = global::Validator.Properties.Resources.application_split;
             this.horizontalToolStripMenuItem.Name = "horizontalToolStripMenuItem";
-            this.horizontalToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.horizontalToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D2)));
+            this.horizontalToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.horizontalToolStripMenuItem.Text = "Horizontal";
             this.horizontalToolStripMenuItem.Click += new System.EventHandler(this.horizontalToolStripMenuItem_Click);
             // 
@@ -201,7 +207,8 @@
             // 
             this.offToolStripMenuItem.Image = global::Validator.Properties.Resources.application;
             this.offToolStripMenuItem.Name = "offToolStripMenuItem";
-            this.offToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.offToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D3)));
+            this.offToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.offToolStripMenuItem.Text = "Off";
             this.offToolStripMenuItem.Click += new System.EventHandler(this.offToolStripMenuItem_Click);
             // 
@@ -210,13 +217,14 @@
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.aboutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F1)));
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -367,7 +375,7 @@
             this.buttonPrint});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(118, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(85, 25);
             this.toolStrip1.TabIndex = 0;
             // 
             // buttonOpen
