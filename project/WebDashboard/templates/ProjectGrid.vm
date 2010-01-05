@@ -104,13 +104,8 @@
         <td>$projectGridRow.LastBuildDate</td>
         <td>$translations.Translate($projectGridRow.NextBuildTime)</td>
         <td>$translations.Translate($projectGridRow.LastBuildLabel)</td>
-        <td>$translations.Translate($projectGridRow.Status)</td>
-        #if ($projectGridRow.Activity == "Building")
-        <td class="Red">$translations.Translate($projectGridRow.Activity)</td>
-        #else
-        <td class="Black"
-            style="font-weight:normal;">$translations.Translate($projectGridRow.Activity)</td>
-        #end
+        <td class="status$projectGridRow.Status">$translations.Translate($projectGridRow.Status)</td>
+        <td class="activity$projectGridRow.Activity">$translations.Translate($projectGridRow.Activity)</td>
         <td class="left">
           <ul>
             #if ($projectGridRow.Breakers.Length > 0)

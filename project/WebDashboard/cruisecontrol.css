@@ -246,3 +246,11 @@ td>a.selected:hover { color:#006; }
 .tipsy { padding: 5px; font-size: 10px; opacity: 0.8; filter: alpha(opacity=80); background-repeat: no-repeat; }
 .tipsy-inner { padding: 4px 5px; background-color: black; color: white; max-width: 400px; text-align: center; }
 .tipsy-north { background-image: url(images/tipsy-north.gif); background-position: top center; }
+
+.statusStopped { color: #ff1111; font-weight: bold; }
+.statusStopping { color: #ff1111; }
+.statusUnknown { color: #881111; font-style: italic; }
+.activitySleeping { color: #888888; }
+.activityCheckingModifications { color: #11aa11; font-weight: bold; }
+.activityBuilding { color: #007700; font-weight: bold; }
+.activityPending { color: #881111; font-style: italic; }
