@@ -57,13 +57,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		{
 			//Added code so since defaultServerSpecifier only sets the name of the server - not the actual config
 			serverSpecifier = farmService.GetServerConfiguration(serverSpecifier.ServerName);
-            this.translations = new Translations();
             return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(serverSpecifier, request.RetrieveSessionToken()), actionName, request, serverSpecifier);
 		}
 
 		private HtmlFragmentResponse GenerateView(ProjectStatusListAndExceptions projectStatusListAndExceptions,
             string actionName, ICruiseRequest request, IServerSpecifier serverSpecifier)
 		{
+            this.translations = new Translations();
             cruiseUrlBuilder = request.UrlBuilder;
             urlBuilder = request.UrlBuilder.InnerBuilder;
 			Hashtable velocityContext = new Hashtable();
