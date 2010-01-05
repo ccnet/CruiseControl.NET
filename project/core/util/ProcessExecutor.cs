@@ -214,8 +214,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				{
 					CollectOutput(outLine.Data, stdOutput, outputStreamClosed, "standard-output");
 
-					if (!string.IsNullOrEmpty(outLine.Data))
-						OnProcessOutput(new ProcessOutputEventArgs(ProcessOutputType.StandardOutput, outLine.Data));
+                    if (!string.IsNullOrEmpty(outLine.Data))
+                    {
+                        OnProcessOutput(new ProcessOutputEventArgs(ProcessOutputType.StandardOutput, outLine.Data));
+                    }
 				}
 				catch (Exception e)
 				{
@@ -231,8 +233,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				{
 					CollectOutput(outLine.Data, stdError, errorStreamClosed, "standard-error");
 
-					if (!string.IsNullOrEmpty(outLine.Data))
-						OnProcessOutput(new ProcessOutputEventArgs(ProcessOutputType.ErrorOutput, outLine.Data));
+                    if (!string.IsNullOrEmpty(outLine.Data))
+                    {
+                        OnProcessOutput(new ProcessOutputEventArgs(ProcessOutputType.ErrorOutput, outLine.Data));
+                    }
 				}
 				catch (Exception e)
 				{
@@ -287,25 +291,47 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		private class ProcessMonitor
 		{
 			private static readonly IDictionary<string, ProcessMonitor> processMonitors = new Dictionary<string, ProcessMonitor>();
+            private static object lockObject = new object();
 
 			// Return an existing Processmonitor
-			[MethodImpl(MethodImplOptions.Synchronized)]
 			public static ProcessMonitor ForProject(string projectName)
 			{
-				return processMonitors.ContainsKey(projectName) ? processMonitors[projectName] : null;
+                Monitor.TryEnter(lockObject, 60000);
+                try
+                {
+                    return processMonitors.ContainsKey(projectName) ? processMonitors[projectName] : null;
+                }
+                finally
+                {
+                    Monitor.Exit(lockObject);
+                }
 			}
 
-			[MethodImpl(MethodImplOptions.Synchronized)]
-			public static void MonitorProcessForProject(Process process, string projectName)
-			{
-				processMonitors[projectName] = new ProcessMonitor(process, projectName);				
-			}
+            public static void MonitorProcessForProject(Process process, string projectName)
+            {
+                Monitor.TryEnter(lockObject, 60000);
+                try
+                {
+                    processMonitors[projectName] = new ProcessMonitor(process, projectName);
+                }
+                finally
+                {
+                    Monitor.Exit(lockObject);
+                }
+            }
 
-			[MethodImpl(MethodImplOptions.Synchronized)]
-			public static void RemoveMonitorForProject(string projectName)
-			{
-				processMonitors.Remove(projectName);
-			}
+            public static void RemoveMonitorForProject(string projectName)
+            {
+                Monitor.TryEnter(lockObject, 60000);
+                try
+                {
+                    processMonitors.Remove(projectName);
+                }
+                finally
+                {
+                    Monitor.Exit(lockObject);
+                }
+            }
 
 			private readonly Process process;
 			private readonly string projectName;
