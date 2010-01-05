@@ -1,4 +1,5 @@
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
+using System.Windows.Forms;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 {
@@ -16,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		AudioFiles Audio { get; }
 		TrayIconDoubleClickAction TrayIconDoubleClickAction { get; set; }
 		BalloonMessages BalloonMessages { get; }
-        NotifyInfoFlags MinimumNotificationLevel { get; set; }
+        ToolTipIcon MinimumNotificationLevel { get; set; }
 		Icons Icons { get; }
         ExecCommands Execs { get; }
 		X10Configuration X10 { get; }

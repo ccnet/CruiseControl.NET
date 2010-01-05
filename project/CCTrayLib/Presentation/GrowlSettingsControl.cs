@@ -41,11 +41,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			configuration.Password = textBoxPassword.Text;
 			if (comboMinNotificationLevel.SelectedIndex > -1 && comboMinNotificationLevel.SelectedIndex < comboMinNotificationLevel.Items.Count)
 			{
-				configuration.MinimumNotificationLevel = (NotifyInfoFlags)comboMinNotificationLevel.Items[comboMinNotificationLevel.SelectedIndex];
+                configuration.MinimumNotificationLevel = (ToolTipIcon)comboMinNotificationLevel.Items[comboMinNotificationLevel.SelectedIndex];
 			}
 			else
 			{
-				configuration.MinimumNotificationLevel = NotifyInfoFlags.None;
+                configuration.MinimumNotificationLevel = ToolTipIcon.None;
 			}
 
 			if (checkBoxRemoteGrowl.Checked)
@@ -71,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			for (int i = 0; i < comboMinNotificationLevel.Items.Count; ++i)
 			{
-				if (((NotifyInfoFlags)comboMinNotificationLevel.Items[i]) == configuration.MinimumNotificationLevel)
+                if (((ToolTipIcon)comboMinNotificationLevel.Items[i]) == configuration.MinimumNotificationLevel)
 				{
 					comboMinNotificationLevel.SelectedIndex = i;
 				}

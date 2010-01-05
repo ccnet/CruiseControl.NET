@@ -228,7 +228,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		}
 		}
 
-        public void BindToTrayIcon(TrayIcon trayIcon)
+        public void BindToTrayIcon(TrayIconFacade trayIcon)
         {
             trayIcon.IconProvider = ProjectStateIconAdaptor;
             trayIcon.BalloonMessageProvider = new ConfigurableBalloonMessageProvider(configuration.BalloonMessages);

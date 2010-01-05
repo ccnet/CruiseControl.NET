@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
+using System.Windows.Forms;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 {
@@ -107,7 +108,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
             set { persistentConfiguration.BuildTransitionNotification.ShowBalloon = value; }
         }
 
-        public NotifyInfoFlags MinimumNotificationLevel
+        public ToolTipIcon MinimumNotificationLevel
         {
             get { return persistentConfiguration.BuildTransitionNotification.MinimumNotificationLevel; }
             set { persistentConfiguration.BuildTransitionNotification.MinimumNotificationLevel = value; }

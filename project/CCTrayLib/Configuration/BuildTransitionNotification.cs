@@ -1,4 +1,5 @@
 using System.Xml.Serialization;
+using System.Windows.Forms;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 {
@@ -14,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		public BalloonMessages BalloonMessages = new BalloonMessages();
 
         [XmlAttribute(AttributeName = "minimumNotificationLevel")]
-        public NotifyInfoFlags MinimumNotificationLevel = NotifyInfoFlags.Info;
+        public ToolTipIcon MinimumNotificationLevel = ToolTipIcon.Info;
 
         [XmlElement(ElementName = "Exec")]
 		public ExecCommands Exec = new ExecCommands();

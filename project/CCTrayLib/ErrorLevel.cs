@@ -1,3 +1,4 @@
+using System.Windows.Forms;
 namespace ThoughtWorks.CruiseControl.CCTrayLib
 {
 	public abstract class ErrorLevel
@@ -6,9 +7,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 		private class InfoErrorLevel : ErrorLevel
 		{
-			public override NotifyInfoFlags NotifyInfo
+			public override ToolTipIcon NotifyInfo
 			{
-				get { return NotifyInfoFlags.Info; }
+				get { return ToolTipIcon.Info; }
 			}
 		}
 
@@ -16,9 +17,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 		private class WarningErrorLevel : ErrorLevel
 		{
-			public override NotifyInfoFlags NotifyInfo
+			public override ToolTipIcon NotifyInfo
 			{
-				get { return NotifyInfoFlags.Warning; }
+				get { return ToolTipIcon.Warning; }
 			}
 		}
 
@@ -26,9 +27,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 		private class ErrorErrorLevel : ErrorLevel
 		{
-			public override NotifyInfoFlags NotifyInfo
+			public override ToolTipIcon NotifyInfo
 			{
-				get { return NotifyInfoFlags.Error; }
+				get { return ToolTipIcon.Error; }
 			}
 		}
 
@@ -36,6 +37,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		{
 		}
 
-		public abstract NotifyInfoFlags NotifyInfo { get; }
+        public abstract ToolTipIcon NotifyInfo { get; }
 	}
 }

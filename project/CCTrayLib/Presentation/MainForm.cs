@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private ColumnHeader colCategory;
         private ImageList iconList;
         private MainMenu mainMenu;
-        private TrayIcon trayIcon;
+        private NotifyIcon trayIcon;
         private ContextMenu projectContextMenu;
         private MenuItem mnuForce;
         private MenuItem mnuStart;
@@ -76,10 +76,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private bool queueViewPanelVisible;
         private Button closeUpdateButton;
         private Label label1;
+        private readonly TrayIconFacade iconFacade;
 
         public MainForm(ICCTrayMultiConfiguration configuration)
         {
             InitializeComponent();
+            this.iconFacade = new TrayIconFacade(this.trayIcon);
 
             this.configuration = configuration;
             HookPersistentWindowState();
@@ -137,7 +139,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
             controller.PopulateImageList(iconList);
             controller.PopulateImageList(largeIconList);
-            controller.BindToTrayIcon(trayIcon);
+            controller.BindToTrayIcon(this.iconFacade);
             controller.BindToListView(lvProjects);
             controller.PopulateQueueImageList(queueIconList);
             controller.SetFormTopMost(this);
@@ -246,7 +248,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.updateProjectsButton = new System.Windows.Forms.Button();
             this.updateProjectsMessage = new System.Windows.Forms.Label();
             this.queueTreeView = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.QueueTreeView();
-            this.trayIcon = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.TrayIcon();
+            this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             menuItem1 = new System.Windows.Forms.MenuItem();
             this.pnlButtons.SuspendLayout();
             this.pnlViewQueues.SuspendLayout();

@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public void PersistGeneralTabSettings(ICCTrayMultiConfiguration configuration)
 		{
 			configuration.ShouldShowBalloonOnBuildTransition = chkShowBalloons.Checked;
-            configuration.MinimumNotificationLevel = (NotifyInfoFlags)comboBalloonMinNotificationLevel.Items[comboBalloonMinNotificationLevel.SelectedIndex];
+            configuration.MinimumNotificationLevel = (ToolTipIcon)comboBalloonMinNotificationLevel.Items[comboBalloonMinNotificationLevel.SelectedIndex];
 
 			configuration.AlwaysOnTop = chkAlwaysOnTop.Checked;
 			configuration.PollPeriodSeconds = (int)numPollPeriod.Value;
@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
             for (int i = 0; i < comboBalloonMinNotificationLevel.Items.Count; ++i)
             {
-                if (((NotifyInfoFlags)comboBalloonMinNotificationLevel.Items[i]) == configuration.MinimumNotificationLevel)
+                if (((ToolTipIcon)comboBalloonMinNotificationLevel.Items[i]) == configuration.MinimumNotificationLevel)
                 {
                     comboBalloonMinNotificationLevel.SelectedIndex = i;
                 }

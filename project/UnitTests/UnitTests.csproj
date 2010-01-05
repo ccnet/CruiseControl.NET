@@ -289,9 +289,6 @@
     <Compile Include="CCTrayLib\Presentation\SynchronizedServerMonitorTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CCTrayLib\Presentation\TrayIconTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CCTrayLib\Presentation\X10SettingsControlTest.cs" />
     <Compile Include="CCTrayLib\Speech\SpeechUtilTest.cs" />
     <Compile Include="CCTrayLib\StatusIconTest.cs">
