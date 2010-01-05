@@ -4,6 +4,7 @@ using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
+using System;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 {
@@ -649,45 +650,46 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
             // to test these locks before we involve projects, toggle locks on each in term and verify that the correct queues are locked
 
             // starting position
-            Assert.IsFalse(integrationQueues[queues[0]].IsLocked, "Initial state of Queue0 should be unlocked");
-            Assert.IsFalse(integrationQueues[queues[1]].IsLocked, "Initial state of Queue1 should be unlocked");
-            Assert.IsFalse(integrationQueues[queues[2]].IsLocked, "Initial state of Queue2 should be unlocked");
+            Assert.IsFalse(integrationQueues[queues[0]].IsBlocked, "Initial state of Queue0 should be unblocked");
+            Assert.IsFalse(integrationQueues[queues[1]].IsBlocked, "Initial state of Queue1 should be unblocked");
+            Assert.IsFalse(integrationQueues[queues[2]].IsBlocked, "Initial state of Queue2 should be unblocked");
 
             // Toggle locks on #0 (acquire)
-            integrationQueues[queues[0]].ToggleQueueLocks(true);
-            Assert.IsFalse(integrationQueues[queues[0]].IsLocked, "State of Queue0 should be unlocked");
-            Assert.IsTrue(integrationQueues[queues[1]].IsLocked, "State of Queue1 should be locked");
-            Assert.IsTrue(integrationQueues[queues[2]].IsLocked, "State of Queue2 should be locked");
+            IDisposable lock1, lock2;
+            Assert.IsTrue(integrationQueues[queues[0]].TryLock(out lock1));
+            Assert.IsFalse(integrationQueues[queues[0]].IsBlocked, "State of Queue0 should be unlocked");
+            Assert.IsTrue(integrationQueues[queues[1]].IsBlocked, "State of Queue1 should be locked");
+            Assert.IsTrue(integrationQueues[queues[2]].IsBlocked, "State of Queue2 should be locked");
 
             // Toggle locks on #0 (release)
-            integrationQueues[queues[0]].ToggleQueueLocks(false);
-            Assert.IsFalse(integrationQueues[queues[0]].IsLocked, "State of Queue0 should be unlocked");
-            Assert.IsFalse(integrationQueues[queues[1]].IsLocked, "State of Queue1 should be unlocked");
-            Assert.IsFalse(integrationQueues[queues[2]].IsLocked, "State of Queue2 should be unlocked");
+            lock1.Dispose();
+            Assert.IsFalse(integrationQueues[queues[0]].IsBlocked, "State of Queue0 should be unlocked");
+            Assert.IsFalse(integrationQueues[queues[1]].IsBlocked, "State of Queue1 should be unlocked");
+            Assert.IsFalse(integrationQueues[queues[2]].IsBlocked, "State of Queue2 should be unlocked");
 
             // Toggle locks on #1 (acquire)
-            integrationQueues[queues[1]].ToggleQueueLocks(true);
-            Assert.IsTrue(integrationQueues[queues[0]].IsLocked, "State of Queue0 should be locked");
-            Assert.IsFalse(integrationQueues[queues[1]].IsLocked, "State of Queue1 should be unlocked");
-            Assert.IsFalse(integrationQueues[queues[2]].IsLocked, "State of Queue2 should be unlocked");
+            Assert.IsTrue(integrationQueues[queues[1]].TryLock(out lock1));
+            Assert.IsTrue(integrationQueues[queues[0]].IsBlocked, "State of Queue0 should be locked");
+            Assert.IsFalse(integrationQueues[queues[1]].IsBlocked, "State of Queue1 should be unlocked");
+            Assert.IsFalse(integrationQueues[queues[2]].IsBlocked, "State of Queue2 should be unlocked");
 
             // Toggle locks on #2 (acquire) - this means 2 queues have a lock on #0, therefore both must be released
-            integrationQueues[queues[2]].ToggleQueueLocks(true);
-            Assert.IsTrue(integrationQueues[queues[0]].IsLocked, "State of Queue0 should be locked");
-            Assert.IsFalse(integrationQueues[queues[1]].IsLocked, "State of Queue1 should be unlocked");
-            Assert.IsFalse(integrationQueues[queues[2]].IsLocked, "State of Queue2 should be unlocked");
+            Assert.IsTrue(integrationQueues[queues[2]].TryLock(out lock2));
+            Assert.IsTrue(integrationQueues[queues[0]].IsBlocked, "State of Queue0 should be locked");
+            Assert.IsFalse(integrationQueues[queues[1]].IsBlocked, "State of Queue1 should be unlocked");
+            Assert.IsFalse(integrationQueues[queues[2]].IsBlocked, "State of Queue2 should be unlocked");
 
             // Toggle locks on #1 (release) - #0 should remain locked
-            integrationQueues[queues[1]].ToggleQueueLocks(false);
-            Assert.IsTrue(integrationQueues[queues[0]].IsLocked, "State of Queue0 should be locked");
-            Assert.IsFalse(integrationQueues[queues[1]].IsLocked, "State of Queue1 should be unlocked");
-            Assert.IsFalse(integrationQueues[queues[2]].IsLocked, "State of Queue2 should be unlocked");
+            lock1.Dispose();
+            Assert.IsTrue(integrationQueues[queues[0]].IsBlocked, "State of Queue0 should be locked");
+            Assert.IsFalse(integrationQueues[queues[1]].IsBlocked, "State of Queue1 should be unlocked");
+            Assert.IsFalse(integrationQueues[queues[2]].IsBlocked, "State of Queue2 should be unlocked");
 
             // Toggle locks on #2 (release) - #0 should remain locked
-            integrationQueues[queues[2]].ToggleQueueLocks(false);
-            Assert.IsFalse(integrationQueues[queues[0]].IsLocked, "State of Queue0 should be unlocked");
-            Assert.IsFalse(integrationQueues[queues[1]].IsLocked, "State of Queue1 should be unlocked");
-            Assert.IsFalse(integrationQueues[queues[2]].IsLocked, "State of Queue2 should be unlocked");
+            lock2.Dispose();
+            Assert.IsFalse(integrationQueues[queues[0]].IsBlocked, "State of Queue0 should be unlocked");
+            Assert.IsFalse(integrationQueues[queues[1]].IsBlocked, "State of Queue1 should be unlocked");
+            Assert.IsFalse(integrationQueues[queues[2]].IsBlocked, "State of Queue2 should be unlocked");
         }
 
         [Test]
@@ -700,7 +702,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
             integrationQueues[queues[2]].Configuration.LockQueueNames = queues[0];
 
             // now lock one of the queues and add projects to it
-            integrationQueues[queues[0]].ToggleQueueLocks(true);
+            IDisposable lock1;
+            Assert.IsTrue(integrationQueues[queues[0]].TryLock(out lock1));
 
             project1Mock.SetupResult("QueueName", queues[1]);
             project1Mock.SetupResult("QueuePriority", 1);
@@ -709,7 +712,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 
             Assert.IsNull(integrationQueueReplace.GetNextRequest((IProject)project1Mock.MockInstance), "Expected no next request, as queue is locked");
 
-            integrationQueues[queues[0]].ToggleQueueLocks(false);
+            lock1.Dispose();
 
             IntegrationRequest next = integrationQueueReplace.GetNextRequest((IProject)project1Mock.MockInstance);
             Assert.IsNotNull(next, "Expected next request as queue lock has been released");

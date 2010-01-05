@@ -1,6 +1,7 @@
 using System.Collections;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Remote;
+using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Queues
 {
@@ -12,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	{
 		string Name { get; }
 
-        bool IsLocked { get; }
+        bool IsBlocked { get; }
 
         /// <summary>
         /// The configuration settings for this queue.
@@ -59,24 +60,29 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		bool HasItemPendingOnQueue(IProject project);
 
         /// <summary>
-        /// Toggle Locks. This instructs the queue that it should acquire (or release) locks upon the other queues which it is configured 
-        /// to lock when integrating.
-        /// </summary>
-        /// <param name="acquire">Should the queue acquire locks or release them?</param>
-        void ToggleQueueLocks(bool acquire);
-
-        /// <summary>
-        /// Lock this queue, based upon a request from another queue.
-        /// Acquires a fresh lock for the queue making the request (assuming none exists).
+        /// Try to block this queue, based upon a request from another queue.
+        /// While blocked, no projects in this queue can integrate.
         /// </summary>
         /// <param name="requestingQueue">Queue requesting that a lock be taken out</param>
-        void LockQueue(IIntegrationQueue requestingQueue);
+        /// <returns>True if the queue is now blocked, false if the queue could
+        /// not be blocked due to being in-use.</returns>
+        bool BlockQueue(IIntegrationQueue requestingQueue);
 
         /// <summary>
-        /// Unlock this queue, based upon a request from another queue.
-        /// Releases any locks currently held by the queue making the request.
+        /// Unblock this queue.
         /// </summary>
         /// <param name="requestingQueue">Queue requesting that a lock be released</param>
-        void UnlockQueue(IIntegrationQueue requestingQueue);
+        void UnblockQueue(IIntegrationQueue requestingQueue);
+
+        /// <summary>
+        /// Attempt to acquire a lock on the queue to mark it as in-use.
+        /// </summary>
+        /// <param name="lockObject">If locking the queue for use was
+        /// successful (returned true), lockObject is an IDisposable that
+        /// will discard the lock when disposed.</param>
+        /// <returns>True if the queue is now marked as in-use, false if the
+        /// queue could not be marked as in-use due to being blocked (or
+        /// one of its lockqueues was in-use).</returns>
+        bool TryLock(out IDisposable queueLock);
 	}
 }

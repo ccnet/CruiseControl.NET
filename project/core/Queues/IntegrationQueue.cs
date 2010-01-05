@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Threading;
 
 namespace ThoughtWorks.CruiseControl.Core.Queues
 {
@@ -14,10 +15,16 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	/// </summary>
 	public class IntegrationQueue : ArrayList, IIntegrationQueue
 	{
-		private readonly string name;
+        // TryLockInUse serialized to prevent two integration queues from
+        // partially locking their LockQueues, running into each other, and
+        // aborting; that could cause a functional deadlock.
+        private static object blockingLockObject = new object();
+        
+        private readonly string name;
         private readonly IQueueConfiguration configuration;
-        private readonly List<string> lockingQueueNames;
+        private readonly List<string> blockingQueueNames;
         private readonly IntegrationQueueSet parentQueueSet;
+        private bool inUse = false;
 
         private static readonly object queueLockSync = new object();
 
@@ -27,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
             this.configuration = configuration;
             this.parentQueueSet = parentQueueSet;
 
-            this.lockingQueueNames = new List<string>();
+            this.blockingQueueNames = new List<string>();
 		}
 
 		public string Name
@@ -38,13 +45,13 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
         /// <summary>
         /// Is this Queue locked by another (N) Queue(s)?
         /// </summary>
-        public virtual bool IsLocked
+        public virtual bool IsBlocked
         {
             get
             {
                 lock (queueLockSync) 
                 { 
-                    return lockingQueueNames.Count != 0; 
+                    return blockingQueueNames.Count != 0; 
                 }
             }
         }
@@ -214,7 +221,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
             {
                 if (Count == 0) return null;
 
-                if (IsLocked) return null;
+                if (IsBlocked) return null;
 
                 IIntegrationQueueItem item = GetIntegrationQueueItem(0);
 
@@ -320,58 +327,125 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
             RemoveAt(index);
 		}
 
-        /// <summary>
-        /// Toggle Locks. This instructs the queue that it should acquire (or release) locks upon the other queues which it is configured 
-        /// to lock when integrating.
-        /// </summary>
-        /// <param name="acquire">Should the queue acquire locks or release them?</param>
-        public void ToggleQueueLocks(bool acquire)
+        private IEnumerable<IIntegrationQueue> LockQueues
         {
-            if (!string.IsNullOrEmpty(configuration.LockQueueNames) && parentQueueSet != null)
+            get
             {
-                string[] queues = configuration.LockQueueNames.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                List<string> actualQueues = new List<string>(parentQueueSet.GetQueueNames());
-
-                for (int i = 0; i < queues.Length; i++)
+                if (!string.IsNullOrEmpty(configuration.LockQueueNames) && parentQueueSet != null)
                 {
-                    string queueToLock = queues[i].Trim();
-                    if (actualQueues.Contains(queueToLock))
+                    string[] queues = configuration.LockQueueNames.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    List<string> actualQueues = new List<string>(parentQueueSet.GetQueueNames());
+
+                    for (int i = 0; i < queues.Length; i++)
                     {
-                        if (acquire)
-                        {
-                            // find queue and lock it
-                            parentQueueSet[queueToLock].LockQueue(this);
-	                        Log.Info(string.Format("Queue: '{0}' has acquired a lock against queue '{1}'", Name, queueToLock));
-						}
+                        string queueToLock = queues[i].Trim();
+                        if (actualQueues.Contains(queueToLock))
+                            yield return parentQueueSet[queueToLock];
                         else
-                        {
-                            // find queue and lock it
-                            parentQueueSet[queueToLock].UnlockQueue(this);
-	                        Log.Info(string.Format("Queue: '{0}' has released a lock against queue '{1}'", Name, queueToLock));
-						}
-					}
-                    else
-                    {
-                        Log.Warning(string.Format("Unknown queue found: '{0}'", queueToLock));
+                            Log.Warning(string.Format("Unknown queue found: '{0}'", queueToLock));
                     }
                 }
             }
         }
 
         /// <summary>
+        /// Attempt to acquire a lock on the queue to mark it as in-use.
+        /// </summary>
+        /// <param name="lockObject">If locking the queue for use was
+        /// successful (returned true), lockObject is an IDisposable that
+        /// will discard the lock when disposed.</param>
+        /// <returns>True if the queue is now marked as in-use, false if the
+        /// queue could not be marked as in-use due to being blocked (or
+        /// one of its lockqueues was in-use).</returns>
+        public bool TryLock(out IDisposable lockObject)
+        {
+            Log.Info(string.Format("Queue: '{0}' is attempting to be in-use, trying to lock related queues", Name));
+
+            lockObject = null;
+            lock (blockingLockObject)
+            {
+                if (IsBlocked)
+                {
+                    Log.Info(string.Format("Queue: '{0}' is locked and cannot be in-use", Name));
+                    return false;
+                }
+
+                IList<IIntegrationQueue> lockedQueues = new List<IIntegrationQueue>();
+                bool failed = false;
+
+                foreach (IIntegrationQueue queue in LockQueues)
+                {
+                    if (queue.BlockQueue(this))
+                    {
+                        Log.Info(string.Format("Queue: '{0}' has acquired a lock against queue '{1}'", Name, queue.Name));
+                        lockedQueues.Add(queue);
+                    }
+                    else
+                    {
+                        Log.Info(string.Format("Queue: '{0}' has FAILED to acquire a lock against queue '{1}'", Name, queue.Name));
+                        failed = true;
+                        break;
+                    }
+                }
+
+                if (failed)
+                {
+                    foreach (IIntegrationQueue queue in lockedQueues)
+                    {
+                        Log.Info(string.Format("Queue: '{0}' has released a lock against queue '{1}'", Name, queue.Name));
+                        queue.UnblockQueue(this);
+                        return false;
+                    }
+                }
+
+                lockObject = new LockHolder(this, lockedQueues);
+                inUse = true;
+                return true;
+            }
+        }
+
+        private sealed class LockHolder : IDisposable
+        {
+            private IntegrationQueue lockingQueue;
+            private IList<IIntegrationQueue> lockedQueues;
+
+            public LockHolder(IntegrationQueue lockingQueue, IList<IIntegrationQueue> lockedQueues)
+            {
+                this.lockingQueue = lockingQueue;
+                this.lockedQueues = lockedQueues;
+            }
+
+            public void Dispose()
+            {
+                foreach (IIntegrationQueue queue in lockedQueues)
+                {
+                    Log.Info(string.Format("Queue: '{0}' has released a lock against queue '{1}'", lockingQueue.Name, queue.Name));
+                    queue.UnblockQueue(lockingQueue);
+                }
+                lockingQueue.inUse = false;
+            }
+        }
+
+
+        /// <summary>
         /// Lock this queue, based upon a request from another queue.
         /// Acquires a fresh lock for the queue making the request (assuming none exists).
         /// </summary>
         /// <param name="requestingQueue">Queue requesting that a lock be taken out</param>
-        public void LockQueue(IIntegrationQueue requestingQueue)
+        public bool BlockQueue(IIntegrationQueue requestingQueue)
         {
+            if (inUse)
+                return false;
+
             lock (queueLockSync)
             {
-                if (!lockingQueueNames.Contains(requestingQueue.Name))
+                if (!blockingQueueNames.Contains(requestingQueue.Name))
                 {
-                    lockingQueueNames.Add(requestingQueue.Name);
+                    blockingQueueNames.Add(requestingQueue.Name);
                 }
             }
+
+            return true;
         }
 
         /// <summary>
@@ -379,11 +453,11 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
         /// Releases any locks currently held by the queue making the request.
         /// </summary>
         /// <param name="requestingQueue">Queue requesting that a lock be released</param>
-        public void UnlockQueue(IIntegrationQueue requestingQueue)
+        public void UnblockQueue(IIntegrationQueue requestingQueue)
         {
             lock (queueLockSync)
             {
-                lockingQueueNames.Remove(requestingQueue.Name);
+                blockingQueueNames.Remove(requestingQueue.Name);
             }
         }
     }
