@@ -3170,6 +3170,13 @@
               </xs:documentation>
             </xs:annotation>
           </xs:element>
+          <xs:element name="deleteObstructions" type="xs:boolean" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                Should any detected obstructions be deleted prior to getting modifications?
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
           <xs:element name="tagBaseUrl" type="String" minOccurs="0" maxOccurs="1">
             <xs:annotation>
               <xs:documentation>

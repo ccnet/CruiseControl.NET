@@ -157,13 +157,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public bool DirectoryExists(string folder)
 		{
 			return Directory.Exists(folder);
-		}
+        }
 
+        #region DeleteFile()
         /// <summary>
         /// Delete a file if it exists.
         /// </summary>
         /// <param name="filePath">The filepath to delete.</param>
-        private static void DeleteFile(string filePath)
+        public void DeleteFile(string filePath)
         {
             FileInfo fileInfo = new FileInfo(filePath);
             if (fileInfo.Exists)
@@ -173,6 +174,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 fileInfo.Delete();
             }
         }
+        #endregion
 
         #region EnsureFolderExists()
         /// <summary>

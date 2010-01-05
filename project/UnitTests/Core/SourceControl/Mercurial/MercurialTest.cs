@@ -54,6 +54,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
             }
             #endregion
 
+            public void DeleteFile(string filePath)
+            {
+            }
+
             #region DeleteDirectory()
             /// <summary>
             /// Deletes a directory.

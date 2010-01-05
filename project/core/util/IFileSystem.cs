@@ -70,6 +70,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         void CreateDirectory(string folder);
 
         /// <summary>
+        /// Deletes a file.
+        /// </summary>
+        /// <param name="path">The path of the file to delete.</param>
+        void DeleteFile(string path);
+
+        /// <summary>
         /// Deletes a directory.
         /// </summary>
         /// <param name="folder">The name of the folder to delete.</param>

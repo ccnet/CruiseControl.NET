@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -225,6 +226,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         public bool TagOnSuccess = false;
 
         /// <summary>
+        /// Should any detected obstructions be deleted prior to getting modifications?
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
+        [ReflectorProperty("deleteObstructions", Required = false)]
+        public bool DeleteObstructions = false;
+
+        /// <summary>
         /// The base url for tags in your repository. 
         /// </summary>
         /// <version>1.0</version>
@@ -335,7 +344,55 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                    Directory.GetDirectories(workingDirectory, "_svn").Length != 0;
         }
 
+        /// <summary>
+        /// Lists any obstructed files or folders.
+        /// </summary>
+        /// <param name="result">The current result.</param>
+        private IList<string> ListObstructions(IIntegrationResult result)
+        {
+            var args = new PrivateArguments("status", "--xml");
+            var info = this.NewProcessInfo(args, result);
+            var processResult = Execute(info);
 
+            var obstructions = new List<string>();
+            var svnData = new XmlDocument();
+            svnData.LoadXml(processResult.StandardOutput);
+            var nodes = svnData.SelectNodes("//entry[wc-status/@item=\"obstructed\"]");
+            foreach (XmlElement node in nodes)
+            {
+                obstructions.Add(node.GetAttribute("path"));
+            }
+
+            return obstructions;
+        }
+
+        /// <summary>
+        /// Deletes any obstructions from the working directory.
+        /// </summary>
+        /// <param name="result">The current result.</param>
+        private void DeleteObstructionsFromWorking(IIntegrationResult result)
+        {
+            // Check if there are any obstructions
+            Log.Info("Retrieving obstructions");
+            var obstructions = this.ListObstructions(result);
+            if (obstructions.Count == 0)
+            {
+                Log.Info("No obstructions found");
+            }
+            else
+            {
+                // Delete the obstructions
+                Log.Info(obstructions.Count.ToString() + " obstruction(s) found - deleting");
+                var basePath = Path.GetFullPath(result.BaseFromWorkingDirectory(this.WorkingDirectory)); ;
+                foreach (var obstruction in obstructions)
+                {
+                    // Get the full path to the folder
+                    var path = Path.Combine(basePath, obstruction);
+                    Log.Info("Deleting folder " + path);
+                    this.fileSystem.DeleteDirectory(path, true);
+                }
+            }
+        }
 
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
@@ -351,10 +408,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             if (WorkingFolderIsKnownAsSvnWorkingFolder(wd) )
             {
                 if (CleanUp)
+                {
                     Execute(CleanupWorkingCopy(to));
+                }
 
                 if (Revert)
+                {
                     Execute(RevertWorkingCopy(to));
+                }
+
+                if (this.DeleteObstructions)
+                {
+                    this.DeleteObstructionsFromWorking(to);
+                }
             }
             else
             {
