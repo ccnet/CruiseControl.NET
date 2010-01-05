@@ -32,7 +32,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
             response.AppendHeader("Cache-Control", "private, max-age=0");
             if (!string.IsNullOrEmpty(fileName))
             {
-                response.AppendHeader("fileTransfer-Disposition",
+                response.AppendHeader(
+                    "Content-Disposition",
                     string.Format("filename=\"{0}\"", fileName));
             }
             if (!string.IsNullOrEmpty(type))
