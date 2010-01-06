@@ -849,7 +849,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="response"></param>
         private Response ValidateResponse(Response response)
         {
-            if (response.Result == ResponseResult.Failure)
+            // If the result has not been set (i.e is Unknown) then assume we have a failure
+            if ((response.Result == ResponseResult.Failure) || (response.Result == ResponseResult.Unknown))
             {
                 string message = "Request processing has failed on the remote server:" + Environment.NewLine +
                     response.ConcatenateErrors();

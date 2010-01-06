@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
         {
             DateTime now = DateTime.Now;
             ReadAuditResponse response = new ReadAuditResponse();
-            Assert.AreEqual(ResponseResult.Failure, response.Result, "Result wasn't set to failure");
+            Assert.AreEqual(ResponseResult.Unknown, response.Result, "Result wasn't set to failure");
             Assert.IsTrue((now <= response.Timestamp), "Timestamp was not set");
         }
 
@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             DateTime now = DateTime.Now;
             ServerRequest request = new ServerRequest();
             ReadAuditResponse response = new ReadAuditResponse(request);
-            Assert.AreEqual(ResponseResult.Failure, response.Result, "Result wasn't set to failure");
+            Assert.AreEqual(ResponseResult.Unknown, response.Result, "Result wasn't set to failure");
             Assert.AreEqual(request.Identifier, response.RequestIdentifier, "RequestIdentifier wasn't set to the identifier of the request");
             Assert.IsTrue((now <= response.Timestamp), "Timestamp was not set");
         }

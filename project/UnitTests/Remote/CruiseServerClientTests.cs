@@ -5,6 +5,7 @@ using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Security;
+using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Remote
 {
