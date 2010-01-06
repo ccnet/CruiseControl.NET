@@ -1,4 +1,5 @@
 using System;
+using System.Net.Sockets;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -142,21 +143,29 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			if (request == null) return null;
 			InnerTrigger.IntegrationCompleted(); // reset inner trigger (timer)
 
-			currentStatus = GetCurrentProjectStatus();
-			if (lastStatus == null)
-			{
-				lastStatus = currentStatus;
-				if (TriggerFirstTime && currentStatus.BuildStatus == TriggerStatus)
-				{
-					return request;
-				}
-				return null;
-			}
-			if (currentStatus.LastBuildDate > lastStatus.LastBuildDate && currentStatus.BuildStatus == TriggerStatus)
-			{
-				return request;
-			}
-			return null;		
+            try
+            {
+                currentStatus = GetCurrentProjectStatus();
+                if (lastStatus == null)
+                {
+                    lastStatus = currentStatus;
+                    if (TriggerFirstTime && currentStatus.BuildStatus == TriggerStatus)
+                    {
+                        return request;
+                    }
+                    return null;
+                }
+                if (currentStatus.LastBuildDate > lastStatus.LastBuildDate && currentStatus.BuildStatus == TriggerStatus)
+                {
+                    return request;
+                }
+            }
+            catch (SocketException)
+            {
+                Log.Warning("Skipping Fire() because ServerUri " + ServerUri + " was not found.");
+            }
+
+            return null;		
 		}
 
 		private static ITrigger NewIntervalTrigger()
