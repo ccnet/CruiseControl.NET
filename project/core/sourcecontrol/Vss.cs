@@ -326,7 +326,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         private PrivateArguments GetSourceArgs(IIntegrationResult result)
 		{
             var builder = new PrivateArguments();
-			builder.Add("get ", Project, true);
+			builder.Add("get ", Project + "/*?*", true);
 			builder.Add(RecursiveCommandLineOption);
 			builder.AddIf(ApplyLabel, "-VL", tempLabel);
 			builder.AddIf(!AlwaysGetLatest, "-Vd", locale.FormatCommandDate(result.StartTime));
