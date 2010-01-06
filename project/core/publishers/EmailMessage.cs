@@ -120,7 +120,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                             }
                             break;
                         case EmailGroup.NotificationType.Failed:
-                            if ((result.Status == IntegrationStatus.Failure) || (result.Status == IntegrationStatus.Exception))
+                            if (result.Status == IntegrationStatus.Failure)
+                            {
+                                AddModifiers(recipients);
+                                AddFailureUsers(recipients);
+                            }
+                            break;
+                        case EmailGroup.NotificationType.Exception:
+                            if (result.Status == IntegrationStatus.Exception)
                             {
                                 AddModifiers(recipients);
                                 AddFailureUsers(recipients);
@@ -141,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                             }
                             break;
                         default:
-                            throw new CruiseControlException("Unknown notification type" + notificationType);
+                            throw new CruiseControlException("Unknown notification type: '" + notificationType + "'");
                     }
                 }
 
