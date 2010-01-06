@@ -61,6 +61,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         public virtual string GetBuildProgressInformation()
         {
+            lock (lockObject)
+            {
             if (DateTime.Now.AddSeconds(-buildStageCheckIntervalInSeconds) <= this._lastTimeQueried)
                 return this._buildInformation;
 
@@ -83,6 +85,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
             this._lastTimeQueried = DateTime.Now;
             return this._buildInformation;
+            }
         }
 
 
