@@ -1,5 +1,6 @@
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    using System.Diagnostics;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -61,6 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	{
 		public const int DefaultBuildTimeout = 600;
 		public const string DefaultExecutable = @"rake";
+        public const ProcessPriorityClass DefaultPriority = ProcessPriorityClass.Normal;
 
         /// <summary>
         /// Any arguments to pass through to Rake (e.g to specify build properties).
@@ -103,6 +105,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.4</version>
         [ReflectorProperty("executable", Required = false)]
 		public string Executable = DefaultExecutable;
+
+        /// <summary>
+        /// The priority class of the spawned process.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>Normal</default>
+        [ReflectorProperty("priority", Required = false)]
+        public ProcessPriorityClass Priority = DefaultPriority;
 
         /// <summary>
         /// The name of the Rakefile to run, relative to the baseDirectory. 
@@ -214,6 +224,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			return Executable;
 		}
+
+        protected override ProcessPriorityClass GetProcessPriorityClass()
+        {
+            return this.Priority;
+        }
 
 		public string TargetsForPresentation
 		{

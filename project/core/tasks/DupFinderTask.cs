@@ -7,12 +7,13 @@ using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
+    using System.Xml;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Util;
-    using System.Xml;
-    using System.Collections.Generic;
 
     /// <summary>
     /// <para>
@@ -69,6 +70,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #region Private consts
         [SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "Private constant")]
         private const string DefaultExecutable = "dupfinder";
+
+        /// <summary>Default priority class</summary>
+        private const ProcessPriorityClass DefaultPriority = ProcessPriorityClass.Normal;
         #endregion
 
         #region Private fields
@@ -107,6 +111,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <default>dupfinder</default>
         [ReflectorProperty("executable", Required = false)]
         public string Executable { get; set; }
+        #endregion
+
+        #region Priority
+        /// <summary>
+        /// The priority class of the spawned process.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>Normal</default>
+        [ReflectorProperty("priority", Required = false)]
+        public ProcessPriorityClass Priority = ProcessPriorityClass.Normal;
         #endregion
 
         #region InputDir
@@ -366,6 +380,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             buffer.AppendArgument(this.FileMask);
             return buffer.ToString();
+        }
+        #endregion
+
+        #region GetProcessPriorityClass()
+        /// <summary>
+        /// Gets the requested priority class value for this Task.
+        /// </summary>
+        protected override ProcessPriorityClass GetProcessPriorityClass()
+        {
+            return this.Priority;
         }
         #endregion
 

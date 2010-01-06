@@ -1,12 +1,13 @@
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    using System;
     using System.Collections;
+    using System.Diagnostics;
     using System.IO;
+    using System.Reflection;
     using System.Text;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Util;
-    using System.Reflection;
-    using System;
 
     /// <summary>
     /// <para>
@@ -136,6 +137,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("timeout", Required = false)]
 		public int Timeout = DefaultTimeout;
         #endregion
+
+        #region Priority
+        /// <summary>
+        /// The priority class of the spawned process.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>Normal</default>
+        [ReflectorProperty("priority", Required = false)]
+        public ProcessPriorityClass Priority = ProcessPriorityClass.Normal;
+        #endregion
+
         #endregion
 
         protected override string GetProcessFilename()
@@ -178,6 +190,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			return Timeout * 1000;
 		}
+
+        /// <summary>
+        /// Gets the requested priority class value for this Task.
+        /// </summary>
+        protected override ProcessPriorityClass GetProcessPriorityClass()
+        {
+            return this.Priority;
+        }
 
         protected override bool Execute(IIntegrationResult result)
 		{

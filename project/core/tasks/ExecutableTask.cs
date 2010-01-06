@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
-using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -82,6 +82,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         : BaseExecutableTask
 	{
 		public const int DEFAULT_BUILD_TIMEOUT = 600;
+        public const ProcessPriorityClass DEFAULT_PRIORITY = ProcessPriorityClass.Normal;
 
 		public ExecutableTask() : this(new ProcessExecutor())
 		{}
@@ -100,6 +101,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <default>n/a</default>
 		[ReflectorProperty("executable", Required = true)]
 		public string Executable = string.Empty;
+
+        /// <summary>
+        /// The priority class of the spawned process.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>Normal</default>
+        [ReflectorProperty("priority", Required = false)]
+        public ProcessPriorityClass Priority = DEFAULT_PRIORITY;
 
         /// <summary>
         /// The directory to run the process in. If relative, is a subdirectory of the Project Working
@@ -238,6 +247,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			return BuildTimeoutSeconds*1000;
 		}
+
+        protected override ProcessPriorityClass GetProcessPriorityClass()
+        {
+            return this.Priority;
+        }
 
 		public override string ToString()
 		{

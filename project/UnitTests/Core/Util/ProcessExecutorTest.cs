@@ -184,28 +184,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		{
 			int[] successExitCodes = { 1, 3, 5 };
 
-			ProcessInfo processInfo1 = new ProcessInfo("cmd.exe", "/C @echo Hello World & exit 1", null, successExitCodes);
+			ProcessInfo processInfo1 = new ProcessInfo("cmd.exe", "/C @echo Hello World & exit 1", null, ProcessPriorityClass.AboveNormal, successExitCodes);
 
 			ProcessResult result1 = executor.Execute(processInfo1);
 			Assert.AreEqual("Hello World", result1.StandardOutput.Trim());
 			Assert.AreEqual(1, result1.ExitCode, "Process did not exit successfully");
 			AssertFalse("process should not return an error", result1.Failed);
 
-			ProcessInfo processInfo2 = new ProcessInfo("cmd.exe", "/C @echo Hello World & exit 3", null, successExitCodes);
+            ProcessInfo processInfo2 = new ProcessInfo("cmd.exe", "/C @echo Hello World & exit 3", null, ProcessPriorityClass.AboveNormal, successExitCodes);
 
 			ProcessResult result2 = executor.Execute(processInfo2);
 			Assert.AreEqual("Hello World", result2.StandardOutput.Trim());
 			Assert.AreEqual(3, result2.ExitCode, "Process did not exit successfully");
 			AssertFalse("process should not return an error", result2.Failed);
 
-			ProcessInfo processInfo3 = new ProcessInfo("cmd.exe", "/C @echo Hello World & exit 5", null, successExitCodes);
+            ProcessInfo processInfo3 = new ProcessInfo("cmd.exe", "/C @echo Hello World & exit 5", null, ProcessPriorityClass.AboveNormal, successExitCodes);
 
 			ProcessResult result3 = executor.Execute(processInfo3);
 			Assert.AreEqual("Hello World", result3.StandardOutput.Trim());
 			Assert.AreEqual(5, result3.ExitCode, "Process did not exit successfully");
 			AssertFalse("process should not return an error", result3.Failed);
 
-			ProcessInfo processInfo4 = new ProcessInfo("cmd.exe", "/C @echo Hello World", null, successExitCodes);
+            ProcessInfo processInfo4 = new ProcessInfo("cmd.exe", "/C @echo Hello World", null, ProcessPriorityClass.AboveNormal, successExitCodes);
 
 			ProcessResult result4 = executor.Execute(processInfo4);
 			Assert.AreEqual("Hello World", result4.StandardOutput.Trim());

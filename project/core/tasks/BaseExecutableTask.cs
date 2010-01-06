@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics;
 using System.IO;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -12,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		protected abstract string GetProcessFilename();
 		protected abstract string GetProcessArguments(IIntegrationResult result);
 		protected abstract string GetProcessBaseDirectory(IIntegrationResult result);
+        protected abstract ProcessPriorityClass GetProcessPriorityClass();
 		protected abstract int GetProcessTimeout();
 
 		protected virtual int[] GetProcessSuccessCodes()
@@ -21,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		protected virtual ProcessInfo CreateProcessInfo(IIntegrationResult result)
 		{
-			ProcessInfo info = new ProcessInfo(GetProcessFilename(), GetProcessArguments(result), GetProcessBaseDirectory(result), GetProcessSuccessCodes());
+			ProcessInfo info = new ProcessInfo(GetProcessFilename(), GetProcessArguments(result), GetProcessBaseDirectory(result),GetProcessPriorityClass(), GetProcessSuccessCodes());
 			info.TimeOut = GetProcessTimeout();
 
 			IDictionary properties = result.IntegrationProperties;

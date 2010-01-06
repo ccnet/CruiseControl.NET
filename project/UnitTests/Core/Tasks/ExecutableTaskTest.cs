@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 using Exortech.NetReflector;
 using NMock.Constraints;
@@ -42,6 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		<variable><name>name2</name></variable>
 		<variable name=""name3""><value>value3</value></variable>
 	</environment>
+    <priority>BelowNormal</priority>
 	<successExitCodes>0,1,3,5</successExitCodes>
     </exec>";
 
@@ -58,6 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual("name3", task.EnvironmentVariables[2].name, "Checking name3 environment variable.");
 			Assert.AreEqual("value3", task.EnvironmentVariables[2].value, "Checking name3 environment value.");
 			Assert.AreEqual("0,1,3,5", task.SuccessExitCodes);
+            Assert.AreEqual(ProcessPriorityClass.BelowNormal, task.Priority);
 			Verify();
 		}
 
@@ -75,6 +78,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Assert.AreEqual("", task.BuildArgs, "Checking BuildArgs property.");
             Assert.AreEqual(0, task.EnvironmentVariables.Length, "Checking environment variable array size.");
 			Assert.AreEqual("", task.SuccessExitCodes);
+            Assert.AreEqual(ProcessPriorityClass.Normal, task.Priority);
 			Verify();
 		}
 

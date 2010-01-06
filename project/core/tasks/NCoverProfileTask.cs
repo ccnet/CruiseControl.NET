@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
-using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -112,6 +113,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <default>Ncover.Console</default>
         [ReflectorProperty("executable", Required = false)]
         public string Executable { get; set; }
+        #endregion
+
+        #region Priority
+        /// <summary>
+        /// The priority class of the spawned process.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>Normal</default>
+        [ReflectorProperty("priority", Required = false)]
+        public ProcessPriorityClass Priority = ProcessPriorityClass.Normal;
         #endregion
 
         #region TimeOut
@@ -611,6 +622,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             buffer.AppendIf(!string.IsNullOrEmpty(WindowsService), "//svc {0}", WindowsService);
 
             return buffer.ToString();
+        }
+        #endregion
+
+        #region GetProcessPriorityClass()
+        /// <summary>
+        /// Gets the requested priority class value for this Task.
+        /// </summary>
+        protected override ProcessPriorityClass GetProcessPriorityClass()
+        {
+            return this.Priority;
         }
         #endregion
         #endregion

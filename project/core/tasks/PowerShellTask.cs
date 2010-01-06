@@ -3,6 +3,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     using System;
     using System.Collections;
     using System.Collections.Specialized;
+    using System.Diagnostics;
     using System.IO;
     using System.Text;
     using System.Text.RegularExpressions;
@@ -90,6 +91,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}	
 			set { executable = value; }
 		}
+
+        /// <summary>
+        /// The priority class of the spawned process.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>Normal</default>
+        [ReflectorProperty("priority", Required = false)]
+        public ProcessPriorityClass Priority = ProcessPriorityClass.Normal;
 
         /// <summary>
         /// The directory that the PowerShell scripts are stored in. 
@@ -206,7 +215,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private ProcessInfo NewProcessInfoFrom(IIntegrationResult result)
 		{
-            ProcessInfo info = new ProcessInfo( executable, Args(result), BaseDirectory(result), successExitCodes);
+            ProcessInfo info = new ProcessInfo( executable, Args(result), BaseDirectory(result), this.Priority, successExitCodes);
 			info.TimeOut = BuildTimeoutSeconds*1000;
             SetConfiguredEnvironmentVariables(info.EnvironmentVariables, this.EnvironmentVariables);
             IDictionary properties = result.IntegrationProperties;

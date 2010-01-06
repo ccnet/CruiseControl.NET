@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -101,6 +102,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public int Timeout = DefaultTimeout;
         #endregion
 
+        #region Priority
+        /// <summary>
+        /// The priority class of the spawned process.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>Normal</default>
+        [ReflectorProperty("priority", Required = false)]
+        public ProcessPriorityClass Priority = ProcessPriorityClass.Normal;
+        #endregion
+
         #region ExcludedCategories
         /// <summary>
         /// List of the test categories to be excluded from the NUnit run. The tests need to have the CategoryAttribute set. 
@@ -150,7 +161,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 			Log.Debug(string.Format("Running unit tests: {0} {1}", NUnitPath, args));
 	
-			ProcessInfo info = new ProcessInfo(NUnitPath, args, result.WorkingDirectory);
+			ProcessInfo info = new ProcessInfo(NUnitPath, args, result.WorkingDirectory, Priority);
 			info.TimeOut = Timeout * 1000;
 			return info;
 		}

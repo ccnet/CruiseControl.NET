@@ -2,6 +2,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     using System;
     using System.Collections;
+    using System.Diagnostics;
     using System.IO;
     using System.Text;
     using Exortech.NetReflector;
@@ -61,6 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public const int DEFAULT_BUILD_TIMEOUT = 600;
 		public const string DEFAULT_BUILDTYPE = "rebuild";
 		public const string DEFAULT_PROJECT = "";
+        public const ProcessPriorityClass DEFAULT_PRIORITY = ProcessPriorityClass.Normal;
 
 		private readonly IRegistry registry;
 		private readonly ProcessExecutor executor;
@@ -231,6 +233,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("project", Required = false)]
 		public string Project  = DEFAULT_PROJECT;
 
+        /// <summary>
+        /// The priority class of the spawned process.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>Normal</default>
+        [ReflectorProperty("priority", Required = false)]
+        public ProcessPriorityClass Priority = DEFAULT_PRIORITY;
+
         protected override bool Execute(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format("Executing Devenv :{0}", GetArguments()));
@@ -246,7 +256,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private ProcessResult TryToRun(IIntegrationResult result)
 		{
-			ProcessInfo processInfo = new ProcessInfo(Executable, GetArguments(), result.WorkingDirectory);
+			ProcessInfo processInfo = new ProcessInfo(Executable, GetArguments(), result.WorkingDirectory, Priority);
 			processInfo.TimeOut = BuildTimeoutSeconds * 1000;
 			IDictionary properties = result.IntegrationProperties;
 

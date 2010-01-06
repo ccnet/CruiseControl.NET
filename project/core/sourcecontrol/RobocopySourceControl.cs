@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -97,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			builder.AddArgument("/L");
 
-			Modification[] modifications = GetModifications(new ProcessInfo(Executable, builder.ToString(), null, successExitCodes), from.StartTime, to.StartTime);
+			Modification[] modifications = GetModifications(new ProcessInfo(Executable, builder.ToString(), null, ProcessPriorityClass.Normal, successExitCodes), from.StartTime, to.StartTime);
 
 			return modifications;
 		}
@@ -115,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 				AddStandardArguments(builder, destinationDirectory);
 
-				Execute(new ProcessInfo(Executable, builder.ToString(), null, successExitCodes));
+                Execute(new ProcessInfo(Executable, builder.ToString(), null, ProcessPriorityClass.Normal, successExitCodes));
 			}
 		}
 

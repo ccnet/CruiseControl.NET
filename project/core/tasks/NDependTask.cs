@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
-using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -79,6 +80,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     {
         #region Private consts
         private const string defaultExecutable = "NDepend.Console";
+
+        /// <summary>Default priority class</summary>
+        private const ProcessPriorityClass DefaultPriority = ProcessPriorityClass.Normal;
         #endregion
 
         #region Private fields
@@ -129,6 +133,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <default>NDepend.Console</default>
         [ReflectorProperty("executable", Required = false)]
         public string Executable { get; set; }
+        #endregion
+
+        #region Priority
+        /// <summary>
+        /// The priority class of the spawned process.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>Normal</default>
+        [ReflectorProperty("priority", Required = false)]
+        public ProcessPriorityClass Priority = ProcessPriorityClass.Normal;
         #endregion
 
         #region EmitXml
@@ -356,6 +370,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 buffer.AppendArgument("/XslForReport  {0}", RootPath(ReportXslt, true));
             }
             return buffer.ToString();
+        }
+        #endregion
+
+        #region GetProcessPriorityClass()
+        /// <summary>
+        /// Gets the requested priority class value for this Task.
+        /// </summary>
+        protected override ProcessPriorityClass GetProcessPriorityClass()
+        {
+            return this.Priority;
         }
         #endregion
         #endregion

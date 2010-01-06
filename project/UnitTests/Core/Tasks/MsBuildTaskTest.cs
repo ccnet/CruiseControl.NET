@@ -1,12 +1,13 @@
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using Exortech.NetReflector;
 using NUnit.Framework;
+using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using Rhino.Mocks;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
@@ -178,6 +179,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 	<targets>Build;Test</targets>
 	<timeout>15</timeout>
 	<logger>Kobush.Build.Logging.XmlLogger,Kobush.MSBuild.dll;buildresult.xml</logger>
+    <priority>BelowNormal</priority>
 </msbuild>";
 			task = (MsBuildTask) NetReflector.Read(xml);
 			Assert.AreEqual(@"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50215\MSBuild.exe", task.Executable);
@@ -187,6 +189,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual("/p:Configuration=Debug /v:diag", task.BuildArgs);
 			Assert.AreEqual(15, task.Timeout);
 			Assert.AreEqual("Kobush.Build.Logging.XmlLogger,Kobush.MSBuild.dll;buildresult.xml", task.Logger);
+            Assert.AreEqual(ProcessPriorityClass.BelowNormal, task.Priority);
 		}
 
 		[Test]

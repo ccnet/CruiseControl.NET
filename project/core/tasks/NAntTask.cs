@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -119,6 +120,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public const string DefaultLogger = "NAnt.Core.XmlLogger";
 		public const string DefaultListener = "NAnt.Core.DefaultLogger";
 		public const bool DefaultNoLogo = true;
+        public const ProcessPriorityClass DefaultPriority = ProcessPriorityClass.Normal;
 
 	    private readonly IFileDirectoryDeleter fileDirectoryDeleter = new IoService();
 
@@ -152,6 +154,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <default>nant</default>
         [ReflectorProperty("executable", Required = false)]
 		public string Executable = defaultExecutable;
+        #endregion
+
+        #region Priority
+        /// <summary>
+        /// The priority class of the spawned process.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>Normal</default>
+        [ReflectorProperty("priority", Required = false)]
+        public ProcessPriorityClass Priority = DefaultPriority;
         #endregion
 
         #region BuildFile
@@ -283,6 +295,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
 		}
+
+        protected override ProcessPriorityClass GetProcessPriorityClass()
+        {
+            return this.Priority;
+        }
 
 		private static void AppendIntegrationResultProperties(ProcessArgumentBuilder buffer, IIntegrationResult result)
 		{

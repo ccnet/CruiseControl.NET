@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using Exortech.NetReflector;
@@ -56,6 +57,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public const bool defaultVerbose = false;
 		public const bool defaultFailBuildOnFoundDefects = false;
 		public const int defaultVerifyTimeout = 0;
+        public const ProcessPriorityClass defaultPriority = ProcessPriorityClass.Normal;
 
         private readonly IFileDirectoryDeleter fileDirectoryDeleter = new IoService();
 
@@ -84,6 +86,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <default>Project Working Directory</default>
         [ReflectorProperty("baseDirectory", Required = false)]
 		public string ConfiguredBaseDirectory = string.Empty;
+
+		/// <summary>
+        /// The priority class of the spawned process.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>Normal</default>
+        [ReflectorProperty("priority", Required = false)]
+        public ProcessPriorityClass Priority = defaultPriority;
 
 		/// <summary>
         /// Specify the configuration file.
@@ -237,6 +247,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			return VerifyTimeoutSeconds * 1000;
 		}
+
+        protected override ProcessPriorityClass GetProcessPriorityClass()
+        {
+            return this.Priority;
+        }
 
         protected override bool Execute(IIntegrationResult result)
 		{

@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		{
 			int[] successExitCodes = { 1, 3, 5 };
 
-			ProcessInfo info = new ProcessInfo(@"""c:\nant\nant.exe""", null, string.Format(@"""{0}""", Path.GetTempPath()), successExitCodes);
+			ProcessInfo info = new ProcessInfo(@"""c:\nant\nant.exe""", null, string.Format(@"""{0}""", Path.GetTempPath()), ProcessPriorityClass.Normal, successExitCodes);
 
 			Assert.IsFalse(info.ProcessSuccessful(0));
 			Assert.IsTrue(info.ProcessSuccessful(1));

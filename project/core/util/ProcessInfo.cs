@@ -12,6 +12,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public const int DefaultTimeout = 120000;
 		public const int InfiniteTimeout = 0;
 
+        public const ProcessPriorityClass DEFAULT_PRIORITY = ProcessPriorityClass.Normal;
+        public ProcessPriorityClass Priority;
+
         private readonly PrivateArguments arguments;
 		private readonly ProcessStartInfo startInfo = new ProcessStartInfo();
 		private string standardInputContent;
@@ -20,17 +23,21 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         private readonly int[] successExitCodes;
 
 	    public ProcessInfo(string filename) : 
-			this(filename, null, null, null){}
+            this(filename, null){}
 
 		public ProcessInfo(string filename, PrivateArguments arguments) : 
-			this(filename, arguments, null, null){}
+            this(filename, arguments, null){}
 
         public ProcessInfo(string filename, PrivateArguments arguments, string workingDirectory) : 
-			this(filename, arguments, workingDirectory, null){}
+            this(filename, arguments, workingDirectory, DEFAULT_PRIORITY){}
 
-        public ProcessInfo(string filename, PrivateArguments arguments, string workingDirectory, int[] successExitCodes)
+        public ProcessInfo(string filename, PrivateArguments arguments, string workingDirectory, ProcessPriorityClass priority) :
+            this(filename, arguments, workingDirectory, priority, null){}
+
+        public ProcessInfo(string filename, PrivateArguments arguments, string workingDirectory, ProcessPriorityClass priority, int[] successExitCodes)
 		{
             this.arguments = arguments;
+            this.Priority = priority;
 			startInfo.FileName = StringUtil.StripQuotes(filename);
 			startInfo.Arguments = arguments == null ? null : arguments.ToString(SecureDataMode.Private);
 			startInfo.WorkingDirectory = StringUtil.StripQuotes(workingDirectory);

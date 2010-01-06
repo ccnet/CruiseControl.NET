@@ -143,14 +143,36 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				process.EnableRaisingEvents = true;
 				supervisingThread = Thread.CurrentThread;
 
+                string filename = Path.Combine(process.StartInfo.WorkingDirectory, process.StartInfo.FileName);
+
 				try
 				{
 					bool isNewProcess = process.Start();
 					if (!isNewProcess) Log.Warning("Reusing existing process...");
+
+                    // avoid useless setting of the default
+                    if (processInfo.Priority != System.Diagnostics.Process.GetCurrentProcess().PriorityClass)
+                    {
+                        try
+                        {
+                            Log.Debug(string.Format("Setting PriorityClass on [{0}] to {1}", filename, processInfo.Priority));
+                            process.PriorityClass = processInfo.Priority;
+                        }
+                        catch (Exception ex)
+                        {
+                            if (!process.HasExited)
+                            {
+                                Log.Info(string.Format("Unable to set PriorityClass on [{0}]: {1}", filename, ex.ToString()));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Log.Debug(string.Format("Not setting PriorityClass on [{0}] to default {1}", filename, processInfo.Priority));
+                    }
 				}
 				catch (Win32Exception e)
 				{
-					string filename = Path.Combine(process.StartInfo.WorkingDirectory, process.StartInfo.FileName);
 					string msg = string.Format("Unable to execute file [{0}].  The file may not exist or may not be executable.", filename);
 					throw new IOException(msg, e);
 				}
