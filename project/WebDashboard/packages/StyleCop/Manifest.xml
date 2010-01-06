@@ -1,0 +1,25 @@
+﻿<package>
+  <name>StyleCop Results</name>
+  <description>Display the results of a StyleCop report.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>StyleCopReport.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\StyleCopReport.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="StyleCop Report"/>
+        <attribute name="actionName" value="StyleCopBuildReport"/>
+        <attribute name="xslFileName" value="xsl\StyleCopReport.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>

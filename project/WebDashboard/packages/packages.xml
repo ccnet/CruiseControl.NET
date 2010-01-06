@@ -25,4 +25,5 @@
   <package name="Note worthy Theme" description="The note worthy theme." type="Plugin" file="noteWorthy.zip" installed="no" />
   <package name="Duplicate Finder Results" description="Display the results of a duplicate finder analysis." type="Plugin" file="DupFinder.zip" installed="no" />
   <package name="Project Timeline" description="Display a timeline of project builds." type="Plugin" file="ProjectTimeline.zip" installed="no" />
+  <package name="StyleCop Results" description="Display the results of a StyleCop report." type="Plugin" file="StyleCop.zip" installed="no" />
 </packages>

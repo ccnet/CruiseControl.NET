@@ -828,6 +828,7 @@
     <Content Include="packages\MSTest\Manifest.xml" />
     <Content Include="packages\OhlohStats\Manifest.xml" />
     <Content Include="packages\PackageList\Manifest.xml" />
+    <Content Include="packages\StyleCop\Manifest.xml" />
     <Content Include="packages\UserList\Manifest.xml" />
     <Content Include="packages\SecurityConfig\Manifest.xml" />
     <Content Include="packages\NCover\Manifest.xml" />
@@ -919,6 +920,7 @@
     <None Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Languages.de.resx" />
     <EmbeddedResource Include="Resources\Languages.resx">
     </EmbeddedResource>
   </ItemGroup>

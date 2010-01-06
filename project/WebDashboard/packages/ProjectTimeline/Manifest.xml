@@ -1,0 +1,12 @@
+﻿<package>
+  <name>Project Timeline</name>
+  <description>Display the builds on a timeline.</description>
+  <type>Plugin</type>
+  <folders />
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/projectPlugins</path>
+      <name>projectTimelinePlugin</name>
+    </setting>
+  </configuration>
+</package>
