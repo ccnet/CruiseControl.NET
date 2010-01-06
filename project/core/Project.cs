@@ -981,10 +981,17 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             string logDirectory = GetLogDirectory();
             if (string.IsNullOrEmpty(logDirectory)) return new string[0];
-            string[] logFileNames = LogFileUtil.GetLogFileNames(logDirectory);
-            Array.Sort(logFileNames);       // Sort the list of filenames since not all *nix systems return a sorted list
-            Array.Reverse(logFileNames);
-            return logFileNames;
+            try
+            {
+                string[] logFileNames = LogFileUtil.GetLogFileNames(logDirectory);
+                Array.Sort(logFileNames);       // Sort the list of filenames since not all *nix systems return a sorted list
+                Array.Reverse(logFileNames);
+                return logFileNames;
+            }
+            catch (DirectoryNotFoundException error)
+            {
+                throw new CruiseControlException("Log directory does not exist. This normally occurs because there are no builds for this project.", error);
+            }
         }
 
         public string[] GetMostRecentBuildNames(int buildCount)

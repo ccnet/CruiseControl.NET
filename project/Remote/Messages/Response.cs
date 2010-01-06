@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
         #region Private fields
         private List<ErrorMessage> errorMessages;
         private string requestIdentifier;
-        private ResponseResult result = ResponseResult.Failure;
+        private ResponseResult result = ResponseResult.Unknown;
         #endregion
 
         #region Constructors

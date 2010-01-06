@@ -176,7 +176,7 @@ namespace ThoughtWorks.CruiseControl.Core
             Response response = RunProjectRequest(request,
                 SecurityPermission.StartStopProject,
                 SecurityEvent.StartProject,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     // Perform the actual project start
                     if (!FireProjectStarting(arg.ProjectName))
@@ -217,7 +217,7 @@ namespace ThoughtWorks.CruiseControl.Core
             Response response = RunProjectRequest(request,
                 SecurityPermission.StartStopProject,
                 SecurityEvent.StopProject,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     // Perform the actual project start
                     if (!FireProjectStopping(arg.ProjectName))
@@ -282,7 +282,7 @@ namespace ThoughtWorks.CruiseControl.Core
             Response response = RunProjectRequest(request,
                 null,
                 null,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     integrationQueueManager.WaitForExit(arg.ProjectName);
                 });
@@ -301,7 +301,7 @@ namespace ThoughtWorks.CruiseControl.Core
             Response response = RunProjectRequest(request,
                 SecurityPermission.ForceAbortBuild,
                 SecurityEvent.ForceBuild,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     // Perform the actual force build
                     string userName = securityManager.GetDisplayName(arg.SessionToken);
@@ -340,7 +340,7 @@ namespace ThoughtWorks.CruiseControl.Core
             Response response = RunProjectRequest(request,
                 SecurityPermission.ForceAbortBuild,
                 SecurityEvent.AbortBuild,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     // Perform the actual abort build
                     string userName = securityManager.GetDisplayName(arg.SessionToken);
@@ -363,7 +363,7 @@ namespace ThoughtWorks.CruiseControl.Core
             Response response = RunProjectRequest(request,
                 SecurityPermission.ForceAbortBuild,
                 SecurityEvent.CancelRequest,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     // Perform the actual cancel request
                     integrationQueueManager.CancelPendingRequest(arg.ProjectName);
@@ -425,7 +425,7 @@ namespace ThoughtWorks.CruiseControl.Core
             Response response = RunProjectRequest(request,
                 SecurityPermission.SendMessage,
                 SecurityEvent.SendMessage,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     // Perform the actual send message
                     Log.Info("New message received: " + request.Message);
@@ -450,7 +450,7 @@ namespace ThoughtWorks.CruiseControl.Core
             DataResponse response = new DataResponse(RunProjectRequest(request,
                 SecurityPermission.ViewProject,
                 null,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     data = GetIntegrator(arg.ProjectName).IntegrationRepository.GetLatestBuildName();
                 }));
@@ -469,7 +469,7 @@ namespace ThoughtWorks.CruiseControl.Core
             DataListResponse response = new DataListResponse(RunProjectRequest(request,
                 SecurityPermission.ViewProject,
                 null,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     data = GetIntegrator(request.ProjectName)
                         .IntegrationRepository
@@ -490,7 +490,7 @@ namespace ThoughtWorks.CruiseControl.Core
             DataListResponse response = new DataListResponse(RunProjectRequest(request,
                 SecurityPermission.ViewProject,
                 null,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     data.AddRange(GetIntegrator(arg.ProjectName).
                         IntegrationRepository.
@@ -511,7 +511,7 @@ namespace ThoughtWorks.CruiseControl.Core
             DataResponse response = new DataResponse(RunProjectRequest(request,
                 SecurityPermission.ViewProject,
                 null,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     data = this.RetrieveLogData(request.ProjectName, request.BuildName);
                 }));
@@ -538,7 +538,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 response = new DataResponse(RunProjectRequest(request as ProjectRequest,
                     SecurityPermission.ViewConfiguration,
                     null,
-                    delegate(ProjectRequest arg)
+                    delegate(ProjectRequest arg, Response resp)
                     {
                         data = new ServerLogFileReader().Read((arg as ProjectRequest).ProjectName);
                     }));
@@ -567,7 +567,7 @@ namespace ThoughtWorks.CruiseControl.Core
             Response response = RunProjectRequest(request,
                 SecurityPermission.ChangeProjectConfiguration,
                 SecurityEvent.AddProject,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     Log.Info("Adding project - " + request.ProjectDefinition);
                     try
@@ -597,7 +597,7 @@ namespace ThoughtWorks.CruiseControl.Core
             Response response = RunProjectRequest(request,
                 SecurityPermission.ChangeProjectConfiguration,
                 SecurityEvent.DeleteProject,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     Log.Info("Deleting project - " + request.ProjectName);
                     try
@@ -613,7 +613,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     catch (Exception e)
                     {
                         Log.Warning(e);
-                        throw new CruiseControlException("Failed to add project. Exception was - " + e.Message, e);
+                        throw new CruiseControlException("Failed to delete project. Exception was - " + e.Message, e);
                     }
                 });
             return response;
@@ -629,7 +629,7 @@ namespace ThoughtWorks.CruiseControl.Core
             Response response = RunProjectRequest(request,
                 SecurityPermission.ChangeProjectConfiguration,
                 SecurityEvent.UpdateProject,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     Log.Info("Updating project - " + request.ProjectName);
                     try
@@ -659,7 +659,7 @@ namespace ThoughtWorks.CruiseControl.Core
             DataResponse response = new DataResponse(RunProjectRequest(request,
                 SecurityPermission.ViewConfiguration,
                 null,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     Log.Info("Getting project - " + request.ProjectName);
                     data = new NetReflectorProjectSerializer()
@@ -702,7 +702,7 @@ namespace ThoughtWorks.CruiseControl.Core
             ExternalLinksListResponse response = new ExternalLinksListResponse(RunProjectRequest(request,
                 SecurityPermission.ViewProject,
                 null,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     data.AddRange(LookupProject(arg.ProjectName).ExternalLinks);
                 }));
@@ -718,7 +718,7 @@ namespace ThoughtWorks.CruiseControl.Core
             DataResponse response = new DataResponse(RunProjectRequest(request,
                 SecurityPermission.ViewProject,
                 null,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     data = GetIntegrator(arg.ProjectName).Project.ArtifactDirectory;
                 }));
@@ -734,7 +734,7 @@ namespace ThoughtWorks.CruiseControl.Core
             DataResponse response = new DataResponse(RunProjectRequest(request,
                 SecurityPermission.ViewProject,
                 null,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     data = GetIntegrator(arg.ProjectName).Project.Statistics;
                 }));
@@ -750,7 +750,7 @@ namespace ThoughtWorks.CruiseControl.Core
             DataResponse response = new DataResponse(RunProjectRequest(request,
                 SecurityPermission.ViewProject,
                 null,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     data = GetIntegrator(arg.ProjectName).Project.ModificationHistory;
                 }));
@@ -766,7 +766,7 @@ namespace ThoughtWorks.CruiseControl.Core
             DataResponse response = new DataResponse(RunProjectRequest(request,
                 SecurityPermission.ViewProject,
                 null,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     data = GetIntegrator(arg.ProjectName).Project.RSSFeed;
                 }));
@@ -840,7 +840,7 @@ namespace ThoughtWorks.CruiseControl.Core
             StatusSnapshotResponse response = new StatusSnapshotResponse(RunProjectRequest(request,
                 SecurityPermission.ViewProject,
                 null,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     IProjectIntegrator integrator = GetIntegrator(request.ProjectName);
                     if (integrator != null)
@@ -902,7 +902,7 @@ namespace ThoughtWorks.CruiseControl.Core
             ListPackagesResponse response = new ListPackagesResponse(RunProjectRequest(request,
                 SecurityPermission.ViewProject,
                 null,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     if (request is BuildRequest)
                     {
@@ -1179,7 +1179,7 @@ namespace ThoughtWorks.CruiseControl.Core
             BuildParametersResponse response = new BuildParametersResponse(RunProjectRequest(request,
                 SecurityPermission.ViewProject,
                 null,
-                delegate(ProjectRequest arg)
+                delegate(ProjectRequest arg, Response resp)
                 {
                     IProjectIntegrator projectIntegrator = GetIntegrator(arg.ProjectName);
                     if (projectIntegrator == null) throw new NoSuchProjectException(arg.ProjectName);
@@ -1288,9 +1288,9 @@ namespace ThoughtWorks.CruiseControl.Core
         private Response RunProjectRequest(ProjectRequest request,
             SecurityPermission? permission,
             SecurityEvent? eventType,
-            Action<ProjectRequest> action)
+            ProjectRequestAction action)
         {
-            Response response = new Response(request);
+            var response = new Response(request);
             try
             {
                 // Validate the request and check the security token
@@ -1304,8 +1304,11 @@ namespace ThoughtWorks.CruiseControl.Core
                 }
 
                 // Perform the actual action
-                action(request);
-                response.Result = ResponseResult.Success;
+                action(request, response);
+                if (response.Result == ResponseResult.Unknown)
+                {
+                    response.Result = ResponseResult.Success;
+                }
             }
             catch (Exception error)
             {
@@ -1705,7 +1708,7 @@ namespace ThoughtWorks.CruiseControl.Core
             DataResponse response = new DataResponse(RunProjectRequest(request,
                 SecurityPermission.ViewProject,
                 null,
-                (arg) => 
+                (arg, resp) => 
                 {
                     // Retrieve the project configuration
                     var project = GetIntegrator(arg.ProjectName).Project;
@@ -1792,6 +1795,17 @@ namespace ThoughtWorks.CruiseControl.Core
 
             return logData.Data as string;
         }
+        #endregion
+        #endregion
+
+        #region Private delegates
+        #region ProjectRequestAction
+        /// <summary>
+        /// Processes a project request.
+        /// </summary>
+        /// <param name="request">The request to process.</param>
+        /// <param name="response">The response to use.</param>
+        private delegate void ProjectRequestAction(ProjectRequest request, Response response);
         #endregion
         #endregion
     }
