@@ -128,6 +128,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 var key = string.Format("${0}", property);
                 var value = (props[property] ?? string.Empty).ToString();
                 result.IntegrationRequest.BuildValues[key] = value;
+                result.Parameters.Add(new NameValuePair(key, value));
             }
         }
 

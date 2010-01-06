@@ -430,7 +430,10 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 if (Impersonation != null) impersonation = Impersonation.Impersonate();
                 var dynamicSourceControl = sourceControl as IParamatisedItem;
-                if (dynamicSourceControl != null) dynamicSourceControl.ApplyParameters(request.BuildValues, parameters);
+                if (dynamicSourceControl != null)
+                {
+                    dynamicSourceControl.ApplyParameters(request.BuildValues, parameters);
+                }
                 result = integratable.Integrate(request);
             }
             catch (Exception error)
