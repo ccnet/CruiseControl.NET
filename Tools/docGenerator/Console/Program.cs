@@ -11,188 +11,452 @@
     using Exortech.NetReflector;
     using System.Text.RegularExpressions;
     using System.Diagnostics;
+    using System.ServiceModel;
+    using Console.ConfluenceApi;
 
     public class Program
     {
         private static Regex specialChars;
         private static List<string> problemList = new List<string>();
 
-
         public static void Main(string[] args)
         {
-            try
+            var cmdArgs = new List<string>(args);
+
+            if (args.Length == 0)
             {
-                specialChars = new Regex(@"[\|\[\]\*_+-]", RegexOptions.Compiled);
-                if (args.Length == 0)
+                WriteToConsole("No command specified", ConsoleColor.Red);
+            }
+            else
+            {
+                var cmd = cmdArgs[0];
+                cmdArgs.RemoveAt(0);
+                switch (cmd.ToLowerInvariant())
                 {
-                    WriteToConsole("No assembly specified", ConsoleColor.Red);
-                    return;
-                }
+                    case "generate":
+                        GenerateDocumentation(cmdArgs);
+                        break;
 
-                var assemblyName = args[0];
-                if (!File.Exists(assemblyName))
+                    case "list":
+                        ListConfluenceItems(cmdArgs);
+                        break;
+
+                    case "publish":
+                        PublishConfluenceItems(cmdArgs);
+                        break;
+
+                    default:
+                        WriteToConsole("Unknown command: " + cmd, ConsoleColor.Red);
+                        break;
+                }
+            }
+
+            // Pause when running within Visual Studio
+            if (Debugger.IsAttached)
+            {
+                Console.ReadKey(true);
+            }
+        }
+
+        /// <summary>
+        /// Lists the confluence items.
+        /// </summary>
+        /// <param name="cmdArgs">The command-line args.</param>
+        private static void ListConfluenceItems(List<String> cmdArgs)
+        {
+            var isValid = false;
+            var url = string.Empty;
+            var user = string.Empty;
+            var pwd = string.Empty;
+            var output = string.Empty;
+            if (cmdArgs.Count == 0)
+            {
+                WriteToConsole("Confluence URL not specified", ConsoleColor.Red);
+            }
+            else if (cmdArgs.Count == 1)
+            {
+                WriteToConsole("Username not specified", ConsoleColor.Red);
+            }
+            else if (cmdArgs.Count == 2)
+            {
+                WriteToConsole("Password not specified", ConsoleColor.Red);
+            }
+            else if (cmdArgs.Count == 3)
+            {
+                WriteToConsole("Output path not specified", ConsoleColor.Red);
+            }
+            else
+            {
+                isValid = true;
+                url = cmdArgs[0];
+                user = cmdArgs[1];
+                pwd = cmdArgs[2];
+                output = cmdArgs[3];
+                if (!Path.IsPathRooted(output))
                 {
-                    WriteToConsole("Cannot find assembly: " + assemblyName, ConsoleColor.Red);
-                    return;
+                    output = Path.Combine(Environment.CurrentDirectory, output);
                 }
+            }
 
-
-                var documentation = new XDocument();
-                var documentationPath = Path.ChangeExtension(assemblyName, "xml");
-                if (File.Exists(documentationPath))
-                {
-                    documentation = XDocument.Load(documentationPath);
-                }
-                else
-                {
-                    WriteToConsole("No XML file found for assembly: " + assemblyName, ConsoleColor.Red);
-                    return;
-                }
-
-                WriteToConsole("Starting documentation generation for " + Path.GetFileName(assemblyName), ConsoleColor.Gray);
-                problemList.Clear();
+            if (isValid)
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                WriteToConsole("Retrieving Confluence items from " + url, ConsoleColor.Gray);
+                var count = 0;
 
                 try
                 {
-                    var baseFolder = Path.Combine(Environment.CurrentDirectory, DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture));
-                    if (args.Length > 1)
+                    var binding = new BasicHttpBinding();
+                    binding.MaxReceivedMessageSize = int.MaxValue;
+                    var client = new ConfluenceSoapServiceClient(
+                        binding, 
+                        new EndpointAddress(url));
+
+                    try
                     {
-                        baseFolder = args[1];
-                        if (!Path.IsPathRooted(baseFolder))
+                        var session = client.login(user, pwd);
+                        try
                         {
-                            baseFolder = Path.Combine(Environment.CurrentDirectory, baseFolder);
+                            var pages = client.getPages(session, "CCNET");
+                            var document = new XDocument();
+                            var rootEl = new XElement(
+                                "confluence",
+                                new XAttribute("space", "CCNET"));
+                            document.Add(rootEl);
+                            foreach (var page in pages)
+                            {
+                                var pageEl = new XElement(
+                                    "page",
+                                    new XAttribute("title", page.title),
+                                    new XAttribute("id", page.id.ToString()),
+                                    new XAttribute("url", page.url),
+                                    new XAttribute("parentId", page.parentId.ToString()));
+                                rootEl.Add(pageEl);
+                                count++;
+                            }
+
+                            document.Save(output);
+                        }
+                        finally
+                        {
+                            client.logout(session);
                         }
                     }
-                    Debug.WriteLine("BaseFolder : " + baseFolder);
-
-                    Directory.CreateDirectory(baseFolder);
-                    var assembly = Assembly.LoadFrom(assemblyName);
-
-                    // Load the documentation for any dependencies
-                    LoadDependencyDocumentation(Path.GetDirectoryName(assemblyName), assembly, documentation);
-                    
-                    var publicTypesInAssembly = assembly.GetExportedTypes();
-                    foreach (var publicType in publicTypesInAssembly)
+                    catch (Exception error)
                     {
-                        var attributes = publicType.GetCustomAttributes(typeof(ReflectorTypeAttribute), true);
-                        if (attributes.Length > 0)
-                        {
-                            Debug.WriteLine("Found reflector attributes in " + publicType.FullName);
-
-                            // There can be only one!
-                            var attribute = attributes[0] as ReflectorTypeAttribute;
-                            var fileName = Path.Combine(baseFolder, attribute.Name + ".wiki");
-                            WriteToConsole("Generating " + attribute.Name + ".wiki", ConsoleColor.White);
-                            if (File.Exists(fileName))
-                            {
-                                File.Delete(fileName);
-                            }
-
-                            var typeElement = (from element in documentation.Descendants("member")
-                                               where element.Attribute("name").Value == "T:" + publicType.FullName
-                                               select element).SingleOrDefault();
-
-                            using (var output = new StreamWriter(fileName))
-                            {
-                                var elementName = attribute.Name;
-                                if (HasTag(typeElement, "title"))
-                                {
-                                    elementName = typeElement.Element("title").Value;
-                                }
-
-                                output.WriteLine("h1. " + elementName);
-                                output.WriteLine();
-                                if (HasTag(typeElement, "summary"))
-                                {
-                                    WriteDocumentation(typeElement, "summary", output, documentation);
-                                    output.WriteLine();
-                                }
-                                else
-                                {
-                                    problemList.Add("No Summary tag for " + publicType.FullName + " file " + fileName);
-                                }
-
-                                if (HasTag(typeElement, "version"))
-                                {
-                                    output.WriteLine("h2. Version");
-                                    output.WriteLine();
-                                    output.Write("Available from version ");
-                                    WriteDocumentation(typeElement, "version", output, documentation);
-                                    output.WriteLine();
-                                }
-
-                                if (HasTag(typeElement, "example"))
-                                {
-                                    output.WriteLine("h2. Examples");
-                                    output.WriteLine();
-                                    WriteDocumentation(typeElement, "example", output, documentation);
-                                    output.WriteLine();
-                                }
-                                else
-                                {
-                                    if (publicType.IsClass)
-                                    {
-                                        problemList.Add("No example tag for " + publicType.FullName + " file " + fileName);
-                                    }
-
-                                }
-
-                                output.WriteLine("h2. Configuration Elements");
-                                output.WriteLine();
-                                output.WriteLine("|| Element || Description || Type || Required || Default || Version ||");
-                                WriteElements(publicType, output, documentation, typeElement);
-                                output.WriteLine();
-
-                                if (HasTag(typeElement, "remarks"))
-                                {
-                                    output.WriteLine("h2. Notes");
-                                    output.WriteLine();
-                                    WriteDocumentation(typeElement, "remarks", output, documentation);
-                                    output.WriteLine();
-                                }
-                                output.WriteLine("{info:title=Automatically Generated}");
-                                output.WriteLine(
-                                    "Documentation generated on " +
-                                    DateTime.Now.ToUniversalTime().ToString("dddd, d MMM yyyy", CultureInfo.InvariantCulture) +
-                                    " at " +
-                                    DateTime.Now.ToUniversalTime().ToString("h:mm:ss tt", CultureInfo.InvariantCulture));
-                                output.WriteLine("{info}");
-                                output.Flush();
-                            }
-
-                            var xsdFile = Path.Combine(baseFolder, attribute.Name + ".xsd");
-                            if (File.Exists(xsdFile))
-                            {
-                                File.Delete(xsdFile);
-                            }
-
-                            WriteXsdFile(xsdFile, attribute, publicType, documentation, typeElement);
-                        }
+                        WriteToConsole("ERROR: " + error.Message, ConsoleColor.Red);
                     }
                 }
                 catch (Exception error)
                 {
-                    WriteToConsole(error.Message, ConsoleColor.Red);
-                    throw;
+                    WriteToConsole("ERROR: " + error.Message, ConsoleColor.Red);
                 }
 
-                WriteToConsole("Documentation generation finished", ConsoleColor.Gray);
+                stopwatch.Stop();
+                WriteToConsole(
+                    count.ToString() + " confluence items retrieved in " + stopwatch.Elapsed.TotalSeconds.ToString("#,##0.00") + "s",
+                    ConsoleColor.Gray);
+            }
+        }
 
-                if (problemList.Count > 0)
+        /// <summary>
+        /// Publishes items to Confluence.
+        /// </summary>
+        /// <param name="cmdArgs">The command-line args.</param>
+        private static void PublishConfluenceItems(List<String> cmdArgs)
+        {
+            var isValid = false;
+            var url = string.Empty;
+            var user = string.Empty;
+            var pwd = string.Empty;
+            var input = string.Empty;
+            if (cmdArgs.Count == 0)
+            {
+                WriteToConsole("Confluence URL not specified", ConsoleColor.Red);
+            }
+            else if (cmdArgs.Count == 1)
+            {
+                WriteToConsole("Username not specified", ConsoleColor.Red);
+            }
+            else if (cmdArgs.Count == 2)
+            {
+                WriteToConsole("Password not specified", ConsoleColor.Red);
+            }
+            else if (cmdArgs.Count == 3)
+            {
+                WriteToConsole("Input path not specified", ConsoleColor.Red);
+            }
+            else
+            {
+                isValid = true;
+                url = cmdArgs[0];
+                user = cmdArgs[1];
+                pwd = cmdArgs[2];
+                input = cmdArgs[3];
+                if (!Path.IsPathRooted(input))
                 {
-                    WriteToConsole("Problems encountered : " + problemList.Count.ToString(), ConsoleColor.Red);
+                    input = Path.Combine(Environment.CurrentDirectory, input);
+                }
+            }
 
-                    foreach (string s in problemList)
+            if (isValid)
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                WriteToConsole("Publishing Confluence items from " + url, ConsoleColor.Gray);
+                var count = 0;
+
+                try
+                {
+                    var binding = new BasicHttpBinding();
+                    binding.MaxReceivedMessageSize = int.MaxValue;
+                    binding.ReaderQuotas.MaxStringContentLength = int.MaxValue;
+                    var client = new ConfluenceSoapServiceClient(
+                        binding,
+                        new EndpointAddress(url));
+
+                    try
                     {
-                        WriteToConsole(s, ConsoleColor.Red);                    
+                        var session = client.login(user, pwd);
+                        try
+                        {
+                            var inputDir = Path.GetDirectoryName(input);
+                            var inputDoc = XDocument.Load(input);
+                            foreach (var pageEl in inputDoc.Root.Elements())
+                            {
+                                var sourceAttr = pageEl.Attribute("source");
+                                var titleAttr = pageEl.Attribute("title");
+                                var idAttr = pageEl.Attribute("id");
+                                var parentAttr = pageEl.Attribute("parentId");
+                                if (sourceAttr != null)
+                                {
+                                    WriteToConsole(
+                                        "Publishing " + sourceAttr.Value + " to " + titleAttr.Value + "[" + idAttr.Value + "]",
+                                        ConsoleColor.White);
+
+                                    var sourcePath = sourceAttr.Value;
+                                    if (!Path.IsPathRooted(sourcePath))
+                                    {
+                                        sourcePath = Path.Combine(inputDir, sourcePath);
+                                    }
+
+                                    if (!File.Exists(sourcePath))
+                                    {
+                                        WriteToConsole("Unable to find file " + sourcePath, ConsoleColor.Yellow);
+                                    }
+                                    else
+                                    {
+                                        var page = client.getPage(session, "CCNET", titleAttr.Value);
+                                        var newContent = File.ReadAllText(sourcePath).Replace("\r\n", "\n");
+                                        var autoPos = newContent.LastIndexOf("{info:title=Automatically Generated}");
+                                        if (string.Compare(page.content, 0, newContent, 0, autoPos == -1 ? newContent.Length : autoPos) != 0)
+                                        {
+                                            page.content = newContent;
+                                            client.storePage(session, page);
+                                            WriteToConsole(titleAttr.Value + " updated", ConsoleColor.Gray);
+                                            count++;
+                                        }
+                                        else
+                                        {
+                                            WriteToConsole(titleAttr.Value + " unchanged, publish skipped", ConsoleColor.Gray);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            client.logout(session);
+                        }
+                    }
+                    catch (Exception error)
+                    {
+                        WriteToConsole("ERROR: " + error.Message, ConsoleColor.Red);
                     }
                 }
+                catch (Exception error)
+                {
+                    WriteToConsole("ERROR: " + error.Message, ConsoleColor.Red);
+                }
 
-
+                stopwatch.Stop();
+                WriteToConsole(
+                    count.ToString() + " confluence items updated in " + stopwatch.Elapsed.TotalSeconds.ToString("#,##0.00") + "s",
+                    ConsoleColor.Gray);
             }
-            catch
+        }
+
+        public static void GenerateDocumentation(List<string> args)
+        {
+            specialChars = new Regex(@"[\|\[\]\*_+-]", RegexOptions.Compiled);
+            if (args.Count == 0)
             {
-                Console.ReadKey();
+                WriteToConsole("No assembly specified", ConsoleColor.Red);
+                return;
+            }
+
+            var assemblyName = args[0];
+            if (!File.Exists(assemblyName))
+            {
+                WriteToConsole("Cannot find assembly: " + assemblyName, ConsoleColor.Red);
+                return;
+            }
+
+            var documentation = new XDocument();
+            var documentationPath = Path.ChangeExtension(assemblyName, "xml");
+            if (File.Exists(documentationPath))
+            {
+                documentation = XDocument.Load(documentationPath);
+            }
+            else
+            {
+                WriteToConsole("No XML file found for assembly: " + assemblyName, ConsoleColor.Red);
+                return;
+            }
+
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            WriteToConsole("Starting documentation generation for " + Path.GetFileName(assemblyName), ConsoleColor.Gray);
+            problemList.Clear();
+
+            try
+            {
+                var baseFolder = Path.Combine(Environment.CurrentDirectory, DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture));
+                if (args.Count > 1)
+                {
+                    baseFolder = args[1];
+                    if (!Path.IsPathRooted(baseFolder))
+                    {
+                        baseFolder = Path.Combine(Environment.CurrentDirectory, baseFolder);
+                    }
+                }
+                Debug.WriteLine("BaseFolder : " + baseFolder);
+
+                Directory.CreateDirectory(baseFolder);
+                var assembly = Assembly.LoadFrom(assemblyName);
+
+                // Load the documentation for any dependencies
+                LoadDependencyDocumentation(Path.GetDirectoryName(assemblyName), assembly, documentation);
+
+                var publicTypesInAssembly = assembly.GetExportedTypes();
+                foreach (var publicType in publicTypesInAssembly)
+                {
+                    var attributes = publicType.GetCustomAttributes(typeof(ReflectorTypeAttribute), true);
+                    if (attributes.Length > 0)
+                    {
+                        Debug.WriteLine("Found reflector attributes in " + publicType.FullName);
+
+                        // There can be only one!
+                        var attribute = attributes[0] as ReflectorTypeAttribute;
+                        var fileName = Path.Combine(baseFolder, attribute.Name + ".wiki");
+                        WriteToConsole("Generating " + attribute.Name + ".wiki", ConsoleColor.White);
+                        if (File.Exists(fileName))
+                        {
+                            File.Delete(fileName);
+                        }
+
+                        var typeElement = (from element in documentation.Descendants("member")
+                                           where element.Attribute("name").Value == "T:" + publicType.FullName
+                                           select element).SingleOrDefault();
+
+                        using (var output = new StreamWriter(fileName))
+                        {
+                            var elementName = attribute.Name;
+                            if (HasTag(typeElement, "title"))
+                            {
+                                elementName = typeElement.Element("title").Value;
+                            }
+
+                            output.WriteLine("h1. " + elementName);
+                            output.WriteLine();
+                            if (HasTag(typeElement, "summary"))
+                            {
+                                WriteDocumentation(typeElement, "summary", output, documentation);
+                                output.WriteLine();
+                            }
+                            else
+                            {
+                                problemList.Add("No Summary tag for " + publicType.FullName + " file " + fileName);
+                            }
+
+                            if (HasTag(typeElement, "version"))
+                            {
+                                output.WriteLine("h2. Version");
+                                output.WriteLine();
+                                output.Write("Available from version ");
+                                WriteDocumentation(typeElement, "version", output, documentation);
+                                output.WriteLine();
+                            }
+
+                            if (HasTag(typeElement, "example"))
+                            {
+                                output.WriteLine("h2. Examples");
+                                output.WriteLine();
+                                WriteDocumentation(typeElement, "example", output, documentation);
+                                output.WriteLine();
+                            }
+                            else
+                            {
+                                if (publicType.IsClass)
+                                {
+                                    problemList.Add("No example tag for " + publicType.FullName + " file " + fileName);
+                                }
+
+                            }
+
+                            output.WriteLine("h2. Configuration Elements");
+                            output.WriteLine();
+                            output.WriteLine("|| Element || Description || Type || Required || Default || Version ||");
+                            WriteElements(publicType, output, documentation, typeElement);
+                            output.WriteLine();
+
+                            if (HasTag(typeElement, "remarks"))
+                            {
+                                output.WriteLine("h2. Notes");
+                                output.WriteLine();
+                                WriteDocumentation(typeElement, "remarks", output, documentation);
+                                output.WriteLine();
+                            }
+                            output.WriteLine("{info:title=Automatically Generated}");
+                            output.WriteLine(
+                                "Documentation generated on " +
+                                DateTime.Now.ToUniversalTime().ToString("dddd, d MMM yyyy", CultureInfo.InvariantCulture) +
+                                " at " +
+                                DateTime.Now.ToUniversalTime().ToString("h:mm:ss tt", CultureInfo.InvariantCulture));
+                            output.WriteLine("{info}");
+                            output.Flush();
+                        }
+
+                        var xsdFile = Path.Combine(baseFolder, attribute.Name + ".xsd");
+                        if (File.Exists(xsdFile))
+                        {
+                            File.Delete(xsdFile);
+                        }
+
+                        WriteXsdFile(xsdFile, attribute, publicType, documentation, typeElement);
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                WriteToConsole(error.Message, ConsoleColor.Red);
+                throw;
+            }
+
+            stopwatch.Stop();
+            WriteToConsole(
+                "Documentation generation finished in " + stopwatch.Elapsed.TotalSeconds.ToString("#,##0.00") + "s", 
+                ConsoleColor.Gray);
+
+            if (problemList.Count > 0)
+            {
+                WriteToConsole("Problems encountered : " + problemList.Count.ToString(), ConsoleColor.Yellow);
+
+                foreach (string s in problemList)
+                {
+                    WriteToConsole(s, ConsoleColor.Yellow);
+                }
             }
         }
 
