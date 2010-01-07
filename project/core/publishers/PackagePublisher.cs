@@ -398,7 +398,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 listXml.DocumentElement.AppendChild(packageElement);
                 packageElement.SetAttribute("name", name);
             }
-            FileInfo packageFile = new FileInfo(fileName);
+
+            // Ensure the folder exists
+            var packageFile = new FileInfo(fileName);
+            if (!packageFile.Directory.Exists)
+            {
+                packageFile.Directory.Create();
+            }
 
             // Add the properties for the package
             packageElement.SetAttribute("file", fileName);
