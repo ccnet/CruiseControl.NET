@@ -18,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 
         #region Private fields
         private byte[] fileData = { };
+        private int fileLength = 0;
         #endregion
 
         #region Constructors
@@ -39,7 +40,8 @@ namespace ThoughtWorks.CruiseControl.Remote
                 }
 
                 // Store the data so it will be transferred
-                fileData = memoryStream.GetBuffer();
+                this.fileData = memoryStream.GetBuffer();
+                this.fileLength = Convert.ToInt32(source.Length);
             }
         }
         #endregion
@@ -52,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="destination">The destination to download the file to.</param>
         public void Download(Stream destination)
         {
-            destination.Write(fileData, 0, fileData.Length);
+            destination.Write(fileData, 0, this.fileLength);
         }
         #endregion
         #endregion
