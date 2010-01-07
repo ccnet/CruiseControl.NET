@@ -83,9 +83,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void Monitor_Polled(object sender, MonitorPolledEventArgs args)
 		{
             var message = monitor.SummaryStatusString;
-            if (message.Length > 64)
+            if (message.Length > 63)
             {
-                message = message.Substring(0, 61) + "...";
+                message = message.Substring(0, 60) + "...";
             }
 
             trayIcon.Text = message;
