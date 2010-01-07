@@ -8,6 +8,7 @@ using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core;
 using System.IO;
 using System.Xml;
+using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
@@ -128,8 +129,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             publisher.Files = new string[] { dataFilePath };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
-            Assert.IsTrue(File.Exists(Path.Combine(Path.GetTempPath(), "Test project-packages.xml")), "Project package list not generated");
-            Assert.IsTrue(File.Exists(Path.Combine(Path.GetTempPath(), "A Label\\Test project-packages.xml")), "Build package list not generated");
+            Assert.IsTrue(
+                File.Exists(Path.Combine(Path.GetTempPath(), Path.Combine("A Label", "Test project-packages.xml"))), 
+                "Project package list not generated");
         }
         #endregion
 
@@ -158,8 +160,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             publisher.Files = new string[] { dataFilePath };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
-            Assert.IsTrue(File.Exists(Path.Combine(Path.GetTempPath(), "Test project-packages.xml")), "Project package list not generated");
-            Assert.IsTrue(File.Exists(Path.Combine(Path.GetTempPath(), "A Label\\Test project-packages.xml")), "Build package list not generated");
+            Assert.IsTrue(
+                File.Exists(Path.Combine(Path.GetTempPath(), Path.Combine("A Label", "Test project-packages.xml"))),
+                "Project package list not generated");
         }
         #endregion
 
@@ -189,8 +192,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             publisher.Files = new string[] { "datafile.txt" };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
-            Assert.IsTrue(File.Exists(Path.Combine(Path.GetTempPath(), "Test project-packages.xml")), "Project package list not generated");
-            Assert.IsTrue(File.Exists(Path.Combine(Path.GetTempPath(), "A Label\\Test project-packages.xml")), "Build package list not generated");
+            Assert.IsTrue(
+                File.Exists(Path.Combine(Path.GetTempPath(), Path.Combine("A Label", "Test project-packages.xml"))),
+                "Project package list not generated");
         }
         #endregion
 
@@ -218,8 +222,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             publisher.Files = new string[] { Path.GetTempFileName() };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
-            Assert.IsTrue(File.Exists(Path.Combine(Path.GetTempPath(), "Test project-packages.xml")), "Project package list not generated");
-            Assert.IsTrue(File.Exists(Path.Combine(Path.GetTempPath(), "A Label\\Test project-packages.xml")), "Build package list not generated");
+            Assert.IsTrue(
+                File.Exists(Path.Combine(Path.GetTempPath(), Path.Combine("A Label", "Test project-packages.xml"))),
+                "Project package list not generated");
         }
         #endregion
 
@@ -255,8 +260,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             publisher.Files = new string[] { Path.Combine(tempPath, "*.txt") };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
-            Assert.IsTrue(File.Exists(Path.Combine(Path.GetTempPath(), "Test project-packages.xml")), "Project package list not generated");
-            Assert.IsTrue(File.Exists(Path.Combine(Path.GetTempPath(), "A Label\\Test project-packages.xml")), "Build package list not generated");
+            Assert.IsTrue(
+                File.Exists(Path.Combine(Path.GetTempPath(), Path.Combine("A Label", "Test project-packages.xml"))),
+                "Project package list not generated");
         }
         #endregion
 
@@ -284,8 +290,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             publisher.Files = new string[] { Path.Combine(Path.GetTempPath(), "**\\datafile.txt") };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
-            Assert.IsTrue(File.Exists(Path.Combine(Path.GetTempPath(), "Test project-packages.xml")), "Project package list not generated");
-            Assert.IsTrue(File.Exists(Path.Combine(Path.GetTempPath(), "A Label\\Test project-packages.xml")), "Build package list not generated");
+            Assert.IsTrue(
+                File.Exists(Path.Combine(Path.GetTempPath(), Path.Combine("A Label", "Test project-packages.xml"))),
+                "Project package list not generated");
         }
         #endregion
 
@@ -321,8 +328,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             publisher.Files = new string[] { dataFilePath };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
-            Assert.IsTrue(File.Exists(Path.Combine(Path.GetTempPath(), "Test project-packages.xml")), "Project package list not generated");
-            Assert.IsTrue(File.Exists(Path.Combine(Path.GetTempPath(), "A Label\\Test project-packages.xml")), "Build package list not generated");
+            Assert.IsTrue(
+                File.Exists(Path.Combine(Path.GetTempPath(), Path.Combine("A Label", "Test project-packages.xml"))),
+                "Project package list not generated");
             generatorMock.Verify();
         }
         #endregion

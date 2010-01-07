@@ -399,14 +399,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 packageElement.SetAttribute("name", name);
             }
 
-            // Ensure the folder exists
-            var packageFile = new FileInfo(fileName);
-            if (!packageFile.Directory.Exists)
-            {
-                packageFile.Directory.Create();
-            }
 
             // Add the properties for the package
+            var packageFile = new FileInfo(fileName);
             packageElement.SetAttribute("file", fileName);
             packageElement.SetAttribute("label", result.Label);
             packageElement.SetAttribute("time", DateTime.Now.ToString("s"));
@@ -414,6 +409,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             packageElement.SetAttribute("size", packageFile.Length.ToString());
 
             // Save the updated list
+            var listDir = Path.GetDirectoryName(listFile);
+            if (!Directory.Exists(listDir))
+            {
+                Directory.CreateDirectory(listDir);
+            }
+
             listXml.Save(listFile);
         }
         #endregion
