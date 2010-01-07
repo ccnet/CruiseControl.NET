@@ -178,11 +178,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             : base(parser, executor)
         {
             this.fileSystem = fileSystem;
+            this.InitialiseDefaults();
         }
 
         public Svn()
             : this(new ProcessExecutor(), new SvnHistoryParser(), new SystemIoFileSystem())
         {
+            this.InitialiseDefaults();
+        }
+
+        /// <summary>
+        /// Initialises the defaults.
+        /// </summary>
+        private void InitialiseDefaults()
+        {
+            this.AuthCaching = AuthCachingMode.None;
         }
 
         /// <summary>
@@ -315,6 +325,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <default>false</default>
         [ReflectorProperty("revisionNumbers", Required = false)]
         public bool UserRevsionNumbers { get; set; }
+
+        /// <summary>
+        /// Defines the auth caching mode to use.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        [ReflectorProperty("authCaching", Required = false)]
+        public AuthCachingMode AuthCaching { get; set; }
 
         private readonly IFileSystem fileSystem;
 
@@ -663,7 +681,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.Add(null, url, true);
             buffer.Add(string.Format("-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
             buffer.Add("--verbose --xml");
-            AppendCommonSwitches(buffer);
+            AppendCommonSwitches(buffer, url != this.TrunkUrl);
             return NewProcessInfo(buffer, to);
         }
 
@@ -674,7 +692,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.Add(null, url, true);
             buffer.Add(string.Format("-r {0}:HEAD", string.IsNullOrEmpty(lastRevision) ? "0" : lastRevision));
             buffer.Add("--verbose --xml");
-            AppendCommonSwitches(buffer);
+            AppendCommonSwitches(buffer, url != this.TrunkUrl);
             return NewProcessInfo(buffer, to);
         }
 
@@ -750,10 +768,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private void AppendCommonSwitches(PrivateArguments buffer)
         {
+            this.AppendCommonSwitches(buffer, false);
+        }
+
+        private void AppendCommonSwitches(PrivateArguments buffer, bool isExternal)
+        {
             buffer.AddIf(!string.IsNullOrEmpty(this.Username), "--username ", this.Username, true);
             buffer.AddIf(this.Password != null, "--password ", this.Password, true);
             buffer.Add("--non-interactive");
-            buffer.Add("--no-auth-cache");
+            if (!isExternal || (this.AuthCaching == AuthCachingMode.None))
+            {
+                buffer.Add("--no-auth-cache");
+            }
         }
 
         private static void AppendRevision(PrivateArguments buffer, int revision)
@@ -769,6 +795,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             ProcessInfo processInfo = new ProcessInfo(Executable, args, workingDirectory);
             processInfo.StreamEncoding = Encoding.UTF8;
             return processInfo;
+        }
+
+        /// <summary>
+        /// Defies the type of auth caching to use.
+        /// </summary>
+        public enum AuthCachingMode
+        {
+            /// <summary>
+            /// No auth caching.
+            /// </summary>
+            None,
+
+            /// <summary>
+            /// Use auth caching for externals.
+            /// </summary>
+            ExternalsOnly
         }
     }
 }
