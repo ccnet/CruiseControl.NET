@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
             {
                 response.AppendHeader(
                     "Content-Disposition",
-                    string.Format("filename=\"{0}\"", fileName));
+                    "attachment; filename=\"" + Path.GetFileName(fileName) + "\"");
             }
             if (!string.IsNullOrEmpty(type))
             {
@@ -43,8 +43,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
             else if (!string.IsNullOrEmpty(fileName))
             {
                 var mimeType = GetMimeType(fileName);
-                response.ContentType = type;
+                response.ContentType = mimeType;
             }
+            else
+            {
+                response.ContentType = "application/octetstream";
+            }
+
             fileTransfer.Download(response.OutputStream);
         }
 
