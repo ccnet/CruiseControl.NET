@@ -40,7 +40,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// &lt;compression&gt;9&lt;/compression&gt;
     /// &lt;always&gt;true&lt;/always&gt;
     /// &lt;flatten&gt;true&lt;/flatten&gt;
-    /// &lt;single&gt;true&lt;/single&gt;
     /// &lt;baseDirectory&gt;C:\Builds\CC.Net&lt;/baseDirectory&gt;
     /// &lt;manifest type="defaultManifestGenerator" /&gt;
     /// &lt;files&gt;
@@ -49,6 +48,28 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// &lt;/package&gt;
     /// </code>
     /// </example>
+    /// <remarks>
+    /// <heading>Sub-folders</heading>
+    /// <para>
+    /// Sub-folders can be added using a combination of relative paths in the filename and a base directory. When a file
+    /// is added, the publisher checks if the filename is relative to the base directory and strips the base directory
+    /// from the file name.
+    /// </para>
+    /// <para>
+    /// For example, the following configuration will add two files, logo.gif in the root and AdminIcon.gif in a 
+    /// sub-folder.
+    /// </para>
+    /// <code>
+    /// &lt;package&gt;
+    /// &lt;baseDirectory&gt;temp&lt;/baseDirectory&gt;
+    /// &lt;files&gt;
+    /// &lt;file&gt;logo.gif&lt;/file&gt;
+    /// &lt;file&gt;images\AdminIcon.gif&lt;/file&gt;
+    /// &lt;/files&gt;
+    /// &lt;name&gt;output&lt;/name&gt;
+    /// &lt;/package&gt;
+    /// </code>
+    /// </remarks>
     [ReflectorType("package")]
     public class PackagePublisher
         : TaskBase

@@ -6569,13 +6569,6 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="single" type="xs:boolean" minOccurs="0" maxOccurs="1">
-        <xs:annotation>
-          <xs:documentation>
-            Whether there should only be one instance of this package.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:element>
       <xs:element name="baseDirectory" type="String" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>

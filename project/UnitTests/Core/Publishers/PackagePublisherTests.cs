@@ -63,8 +63,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             Assert.AreSame(generator, publisher.ManifestGenerator);
             publisher.PackageName = "Package name";
             Assert.AreEqual("Package name", publisher.PackageName);
-            publisher.SingleInstance = true;
-            Assert.AreEqual(true, publisher.SingleInstance);
             publisher.Files = new string[] { "filename" };
             Assert.AreEqual(1, publisher.Files.Length);
             Assert.AreEqual("filename", publisher.Files[0]);
