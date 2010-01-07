@@ -1235,10 +1235,19 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <returns></returns>
         public virtual List<PackageDetails> RetrievePackageList()
         {
-            string listFile = Name + "-packages.xml";
-            listFile = Path.Combine(ArtifactDirectory, listFile);
-            List<PackageDetails> packages = LoadPackageList(listFile);
-            return packages;
+            var lastBuild = this.GetLatestBuildName();
+            if (!string.IsNullOrEmpty(lastBuild))
+            {
+                var logDetails = new LogFile(lastBuild);
+                var listFile = Path.Combine(logDetails.Label, Name + "-packages.xml");
+                listFile = Path.Combine(ArtifactDirectory, listFile);
+                var packages = LoadPackageList(listFile);
+                return packages;
+            }
+            else
+            {
+                return new List<PackageDetails>();
+            }
         }
 
         /// <summary>
@@ -1248,28 +1257,16 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <returns></returns>
         public virtual List<PackageDetails> RetrievePackageList(string buildLabel)
         {
-            string listFile = Path.Combine(buildLabel, Name + "-packages.xml");
+            var listFile = Path.Combine(buildLabel, Name + "-packages.xml");
             listFile = Path.Combine(ArtifactDirectory, listFile);
             if (File.Exists(listFile))
             {
-                List<PackageDetails> packages = LoadPackageList(listFile);
+                var packages = LoadPackageList(listFile);
                 return packages;
             }
             else
             {
-                List<PackageDetails> packages = RetrievePackageList();
-                for (int loop = 0; loop < packages.Count; )
-                {
-                    if (!string.Equals(packages[loop].BuildLabel, buildLabel, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        packages.RemoveAt(loop);
-                    }
-                    else
-                    {
-                        loop++;
-                    }
-                }
-                return packages;
+                return new List<PackageDetails>();
             }
         }
         #endregion

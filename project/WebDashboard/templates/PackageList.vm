@@ -1,7 +1,7 @@
 ﻿<!-- PackageList.vm: Start -->
 <script type="text/javascript">
     function downloadPackage(packageName) {
-        window.open('RetrieveFile.aspx?file=' + packageName);
+        location.assign('RetrieveFile.aspx?file=' + packageName);
     }
 </script>
 <h2>$translations.Translate("Available Packages for {0}", $projectName)</h2>
