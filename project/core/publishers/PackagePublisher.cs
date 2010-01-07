@@ -55,7 +55,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     {
         #region Private fields
         private int compressionLevel = 5;
-        private bool singleInstance;
         private bool alwaysPackage;
         private bool flatten;
         private IManifestGenerator manifestGenerator;
@@ -134,25 +133,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         {
             get { return flatten; }
             set { flatten = value; }
-        }
-        #endregion
-
-        #region SingleInstance
-        /// <summary>
-        /// Whether there should only be one instance of this package.
-        /// </summary>
-        /// <remarks>
-        /// By default this publisher will generate the package and store a back-up copy of it in a
-        /// sub-folder. This means there will be a history of all the packages produced. If there is
-        /// no need for a history this property can be set to true to stop this behaviour.
-        /// </remarks>
-        /// <version>1.4.4</version>
-        /// <default>false</default>
-        [ReflectorProperty("single", Required = false)]
-        public bool SingleInstance
-        {
-            get { return singleInstance; }
-            set { singleInstance = value; }
         }
         #endregion
 
@@ -271,26 +251,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
                     // Add a list entry
                     Log.Debug("Adding to package list(s)");
-                    string listFile = result.ProjectName + "-packages.xml";
+                    string listFile = Path.Combine(result.Label, result.ProjectName + "-packages.xml");
                     AddToPackageList(result, listFile, actualFile, fileList.Count);
-                    if (!singleInstance)
-                    {
-                        listFile = Path.Combine(result.Label, listFile);
-                        var buildCopy = Path.Combine(
-                            Path.Combine(
-                                Path.GetDirectoryName(actualFile),
-                                result.Label),
-                                Path.GetFileName(actualFile));
-
-                        // Make sure the folder name exists
-                        string folderName = Path.GetDirectoryName(buildCopy);
-                        if (!Directory.Exists(folderName)) Directory.CreateDirectory(folderName);
-
-                        // Copy over the file and add it to the list
-                        if (File.Exists(buildCopy)) DeleteFileWithRetry(buildCopy);
-                        File.Copy(actualFile, buildCopy);
-                        AddToPackageList(result, listFile, buildCopy, fileList.Count);
-                    }
                 }
                 finally
                 {
@@ -441,9 +403,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </remarks>
         private string MoveFile(IIntegrationResult result, string tempFile)
         {
-            string actualFile = name;
+            string actualFile = Path.Combine(result.Label, name);
             if (!actualFile.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase)) actualFile += ".zip";
-            if (!singleInstance) actualFile = Path.Combine(result.Label, actualFile);
             actualFile = result.BaseFromArtifactsDirectory(actualFile);
             if (File.Exists(actualFile)) DeleteFileWithRetry(actualFile);
             string actualFolder = Path.GetDirectoryName(actualFile);
@@ -529,7 +490,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         {
             // Generate the full path to the file and make sure it exists
             var baseFolder = string.IsNullOrEmpty(baseDirectory) ? result.WorkingDirectory : baseDirectory;
-            var fullName = Path.IsPathRooted(file) ? file : Path.Combine(baseFolder, file);
+            if (!Path.IsPathRooted(baseFolder))
+            {
+                baseFolder = result.BaseFromWorkingDirectory(baseFolder);
+            }
+
+            // Generate the full path to the file
+            var fullName = Path.IsPathRooted(file) ? file : result.BaseFromWorkingDirectory(file);
             var fileInfo = new FileInfo(fullName);
             if (fileInfo.Exists)
             {
@@ -543,9 +510,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 else
                 {
                     // For non-flattened packages, store the full path, except when it is relative to the base directory, 
-                    if (fileName.StartsWith(baseFolder, StringComparison.InvariantCultureIgnoreCase))
+                    if (fullName.StartsWith(baseFolder, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        fileName = fileName.Substring(baseFolder.Length);
+                        fileName = fullName.Substring(baseFolder.Length);
                     }
                     if (fileName.StartsWith(Path.DirectorySeparatorChar + string.Empty)) fileName = fileName.Substring(1);
                 }
