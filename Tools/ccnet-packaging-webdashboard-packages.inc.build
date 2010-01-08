@@ -174,7 +174,7 @@
   </target>
 
   <target name="build.level.packages" description="Generate the build level packages"
-          depends="build.nunit.package,build.ndepend.package,build.dupfinder.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.msTest.package">
+          depends="build.nunit.package,build.ndepend.package,build.dupfinder.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.stylecop.package,build.msTest.package">
 	</target>
 
 	<target name="build.nunit.package" description="Generates the NUnit package">
@@ -306,18 +306,30 @@
 		</zip>
 	</target>
 
-	<target name="build.gendarme.package" description="Generates the Gendarme package">
-		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
-		<zip zipfile="${build.dir}/WebDashboard/packages/Gendarme.zip">
-			<fileset basedir="${src.dir}/WebDashboard/packages/Gendarme">
-				<include name="*.*"/>
-			</fileset>
-			<fileset basedir="${src.dir}/Xsl">
-				<include name="gendarme-summary-ccnet.xsl"/>
-				<include name="gendarme-report-ccnet.xsl"/>
-			</fileset>
-		</zip>
-	</target>
+  <target name="build.gendarme.package" description="Generates the Gendarme package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/Gendarme.zip">
+      <fileset basedir="${src.dir}/WebDashboard/packages/Gendarme">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}/Xsl">
+        <include name="gendarme-summary-ccnet.xsl"/>
+        <include name="gendarme-report-ccnet.xsl"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.stylecop.package" description="Generates the StyleCop package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/StyleCop.zip">
+      <fileset basedir="${src.dir}/WebDashboard/packages/StyleCop">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}/Xsl">
+        <include name="StyleCopReport.xsl"/>
+      </fileset>
+    </zip>
+  </target>
 
   <target name="theme.packages" description="Generate the theme packages"
         depends="noteWorthy.theme.package,liquidBlue.theme.package">
