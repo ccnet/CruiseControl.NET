@@ -28,6 +28,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 			}
 		}
 
+        /// <summary>
+        /// The projects to include in this plug-in.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// This is currently not implemented.
+        /// </remarks>
 		[ReflectorArray("includedProjects", Required=false)]
 		public string[] IncludedProjects
 		{
@@ -39,7 +47,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 			}
 		}
 
-		[ReflectorArray("excludedProjects", Required=false)]
+        /// <summary>
+        /// The projects to exclude from this plug-in.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// This is currently not implemented.
+        /// </remarks>
+        [ReflectorArray("excludedProjects", Required = false)]
 		public string[] ExcludedProjects
 		{
 			get { return (string[]) excludedProjects.ToArray(typeof (string)); }

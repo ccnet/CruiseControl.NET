@@ -3,6 +3,8 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 {
+    /// <title>HTML Report Plugin</title>
+    /// <version>1.5</version>
     /// <summary>
     /// A generic plug-in to display a report from an HTML file.
     /// </summary>
@@ -32,9 +34,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
         /// <summary>
         /// The description of the plug-in.
         /// </summary>
-        /// <remarks>
-        /// These 2 are separate due to inheritence / property monkey-ness.
-        /// </remarks>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("description")]
         public string ConfiguredLinkDescription
         {
@@ -58,8 +59,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 
         #region ActionName
         /// <summary>
-        /// The name of the action.
+        /// The name of the action - this will be used in the URL for the plug-in.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("actionName")]
         public string ActionName
         {
@@ -72,6 +75,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
         /// <summary>
         /// The name of the file to display.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>n/a</default>
         [ReflectorProperty("htmlFileName")]
         public string HtmlFileName { get; set; }
         #endregion
