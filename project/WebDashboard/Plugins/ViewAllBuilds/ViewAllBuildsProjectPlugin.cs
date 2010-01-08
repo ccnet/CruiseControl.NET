@@ -6,7 +6,16 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds
 {
-	// ToDo - Test!
+    /// <title>View All Builds Project Plugin</title>
+    /// <version>1.0</version>
+	/// <summary>
+    /// The View All Builds Project Plugin lists all available builds for a project.
+	/// </summary>
+    /// <example>
+    /// <code>
+    /// &lt;viewAllBuildsProjectPlugin /&gt;
+    /// </code>
+    /// </example>
 	[ReflectorType("viewAllBuildsProjectPlugin")]
 	public class ViewAllBuildsProjectPlugin : ICruiseAction, IPlugin
 	{
