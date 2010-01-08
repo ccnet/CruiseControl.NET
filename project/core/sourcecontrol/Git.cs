@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -385,11 +386,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private ProcessInfo NewProcessInfo(string args, IIntegrationResult result)
 		{
-			Log.Info(string.Concat("[Git] Calling git ", args));
-			ProcessInfo processInfo = new ProcessInfo(Executable, args, BaseWorkingDirectory(result));
-			//processInfo.StreamEncoding = Encoding.UTF8;
-			return processInfo;
+		    return NewProcessInfo(args, result, ProcessPriorityClass.Normal, new int[] {0});
 		}
+
+        private ProcessInfo NewProcessInfo(string args, IIntegrationResult result, ProcessPriorityClass priority, int[] successExitCodes)
+        {
+            Log.Info(string.Concat("[Git] Calling git ", args));
+            var processInfo = new ProcessInfo(Executable, args, BaseWorkingDirectory(result), priority,
+                                                      successExitCodes);
+            //processInfo.StreamEncoding = Encoding.UTF8;
+            return processInfo;
+        }
 
 		#region "git commands"
 
@@ -504,20 +511,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		/// <summary>
 		/// Call "git config --get 'name'" to get the value of a local repository property.
+        /// The command returns error code 1 if the key was not found and error code 2 if multiple key values were found. 
 		/// </summary>
 		/// <param name="name">Name of the config parameter.</param>
 		/// <param name="result">IIntegrationResult of the current build.</param>
 		/// <returns>Result of the "git config --get 'name'" command.</returns>
-		private string GitConfigGet(string name, IIntegrationResult result)
+        private string GitConfigGet(string name, IIntegrationResult result)
 		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AddArgument("config");
-			buffer.AddArgument("--get");
-			buffer.AddArgument(name);
-			return Execute(NewProcessInfo(buffer.ToString(), result)).StandardOutput.Trim();
+		    ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+		    buffer.AddArgument("config");
+		    buffer.AddArgument("--get");
+		    buffer.AddArgument(name);
+		    return
+		        Execute(NewProcessInfo(buffer.ToString(), result, ProcessPriorityClass.Normal, new int[] {0, 1, 2})).
+		            StandardOutput.Trim();
 		}
 
-		/// <summary>
+	    /// <summary>
 		/// Download objects and refs from another repository via the
 		/// "git fetch origin" command.
 		/// </summary>
