@@ -30,9 +30,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 
 		private void AddHeadersToEnable403Cacheing(HttpResponse response)
 		{
-			response.AppendHeader("Last-Modified", serverFingerprint.LastModifiedTime.ToString("r"));
-			response.AppendHeader("ETag", serverFingerprint.ETag);
-			response.AppendHeader("Cache-Control", "private, max-age=0");
+            var browser = HttpContext.Current.Request.Browser;
+            if (browser.IsBrowser("IE") && (browser.MajorVersion <= 6))
+            {
+                // Turn off caching due to issues with IE 6.0
+                response.Cache.SetCacheability(HttpCacheability.NoCache);
+                response.Cache.SetNoStore();
+            }
+            else
+            {
+                response.AppendHeader("Last-Modified", serverFingerprint.LastModifiedTime.ToString("r"));
+                response.AppendHeader("ETag", serverFingerprint.ETag);
+                response.AppendHeader("Cache-Control", "no-store");
+            }
 		}
 
 		private bool IsClientSideCacheable()
