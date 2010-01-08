@@ -133,7 +133,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 
 
 			// Execute
-			plugin.DashPlugins = null;
 			IResponse returnedResponse = plugin.Execute(cruiseRequest);
 
 			// Verify
@@ -267,9 +266,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
                        
             
             // Execute
-			plugin.DashPlugins = new IBuildPlugin[1] {new TestPlugin()};
-			Assert.IsNotNull(plugin.DashPlugins, "DashPlugins are null");
-			Assert.IsInstanceOfType(typeof(IBuildPlugin[]), plugin.DashPlugins);
 			IResponse returnedResponse = plugin.Execute(cruiseRequest);
 
 			// Verify
