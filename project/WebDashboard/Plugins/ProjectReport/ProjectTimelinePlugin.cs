@@ -3,9 +3,21 @@
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
+    /// <title>Project Timeline Plugin</title>
+    /// <version>1.5</version>
     /// <summary>
-    /// A plugin to show the project build history in a timeline.
+    /// Displays a timeline of all the builds for a project.
     /// </summary>
+    /// <example>
+    /// <code>
+    /// &lt;projectTimelinePlugin /&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para type="tip">
+    /// This can be installed using the "Project Timeline" package.
+    /// </para>
+    /// </remarks>
     [ReflectorType("projectTimelinePlugin")]
     public class ProjectTimelinePlugin
         : IPlugin

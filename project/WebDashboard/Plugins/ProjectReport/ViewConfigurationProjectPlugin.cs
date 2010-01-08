@@ -11,6 +11,24 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
+    /// <title>View Configuration Project Plugin</title>
+    /// <version>1.3.0</version>
+    /// <summary>
+    /// The View Configuration Project Plugin shows the configuration for a project.
+    /// </summary>
+    /// <example>
+    /// <code title="Minimalist Example">
+    /// &lt;viewConfigurationProjectPlugin /&gt;
+    /// </code>
+    /// <code title="Full Example">
+    /// &lt;viewConfigurationProjectPlugin hidePasswords="false" /&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para type="tip">
+    /// This can be installed using the "Project Configuration Display" package.
+    /// </para>
+    /// </remarks>
     [ReflectorType("viewConfigurationProjectPlugin")]
     public class ViewConfigurationProjectPlugin : ICruiseAction, IPlugin
     {
@@ -18,6 +36,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 
         private bool hidePasswords = true;
 
+        /// <summary>
+        /// Whether to hide the passwords.
+        /// </summary>
+        /// <version>1.4.0</version>
+        /// <default>true</default>
+        /// <remarks>
+        /// From version 1.4.0 the passwords are masked by default. Use this setting if you need to see the passwords.
+        /// </remarks>
         [ReflectorProperty("hidePasswords", Required = false)]
         public bool HidePasswords
         {

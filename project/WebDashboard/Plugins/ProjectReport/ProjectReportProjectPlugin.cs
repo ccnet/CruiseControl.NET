@@ -19,6 +19,17 @@ using ThoughtWorks.CruiseControl.WebDashboard.Resources;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
+    /// <title>Project Report Project Plugin</title>
+    /// <version>1.0</version>
+    /// <summary>
+    /// The Project Report Project Plugin shows you summary details for a specific project. Part of these details are any <link>External
+    /// Links</link> you have specified in the project configuration.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// &lt;projectReportProjectPlugin /&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("projectReportProjectPlugin")]
     public class ProjectReportProjectPlugin : ICruiseAction, IPlugin
     {
@@ -32,13 +43,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         
         // retrieve at most this amount of builds                             
         public static readonly Int32 AmountOfBuildsToRetrieve = 100;
-
-        [ReflectorArray("reportPlugins", Required = false)]
-        public IBuildPlugin[] DashPlugins
-        {
-            get { return pluginNames; }
-            set { pluginNames = value; }
-        }
 
         public ProjectReportProjectPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator, ILinkFactory linkFactory,
             IRemoteServicesConfiguration configuration, ICruiseUrlBuilder urlBuilder)

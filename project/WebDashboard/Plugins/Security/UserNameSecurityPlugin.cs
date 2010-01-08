@@ -14,6 +14,21 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
 {
+    /// <title>Simple Security Plugin</title>
+    /// <version>1.5</version>
+    /// <summary>
+    /// Allows the user to send a user name and password to the server for authentication.
+    /// </summary>
+    /// <example>
+    /// <code title="Minimalist Example">
+    /// &lt;simpleSecurity /&gt;
+    /// </code>
+    /// <code title="Full Example">
+    /// &lt;simpleSecurity hidePassword="true" /&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// </remarks>
     [ReflectorType("simpleSecurity")]
     public class UserNameSecurityPlugin
         : ISecurityPlugin
@@ -59,6 +74,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
         /// <summary>
         /// Whether to hide the password field or not.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
         [ReflectorProperty("hidePassword", Required = false)]
         public bool HidePassword
         {

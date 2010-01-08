@@ -16,6 +16,21 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
+    /// <title>Server Security Configuration Server Plugin</title>
+    /// <version>1.5</version>
+    /// <summary>
+    /// Displays the security configuration for a build server.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// &lt;serverSecurityConfigurationServerPlugin /&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para type="tip">
+    /// This can be installed using the "Security Configuration Display" package.
+    /// </para>
+    /// </remarks>
     [ReflectorType("serverSecurityConfigurationServerPlugin")]
     public class ServerSecurityConfigurationServerPlugin : ICruiseAction, IPlugin
     {

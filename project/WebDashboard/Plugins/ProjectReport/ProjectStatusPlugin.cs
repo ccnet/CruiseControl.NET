@@ -11,6 +11,16 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
+    /// <title>Project Status Plugin</title>
+    /// <version>1.0</version>
+    /// <summary>
+    /// Displays the status of a project.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// &lt;viewProjectStatusPlugin /&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("viewProjectStatusPlugin")]
     public class ProjectStatusPlugin : ICruiseAction, IPlugin
     {

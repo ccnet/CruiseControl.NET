@@ -19,6 +19,24 @@ using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
+    /// <title>User List Server Plugin</title>
+    /// <version>1.5</version>
+    /// <summary>
+    /// Displays all the users in the system, plus the security rights they have on the server.
+    /// </summary>
+    /// <example>
+    /// <code title="Minimalist Example">
+    /// &lt;serverUserListServerPlugin /&gt;
+    /// </code>
+    /// <code title="Full Example">
+    /// &lt;serverUserListServerPlugin resetPassword="anewpassword" /&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para type="tip">
+    /// This can be installed using the "User List" package.
+    /// </para>
+    /// </remarks>
     [ReflectorType("serverUserListServerPlugin")]
     public class ServerUserListServerPlugin : ICruiseAction, IPlugin
     {
@@ -67,6 +85,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
         /// <summary>
         /// The password to use when reseting the password.
         /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
         [ReflectorProperty("resetPassword", Required = false)]
         public string ResetPassword
         {

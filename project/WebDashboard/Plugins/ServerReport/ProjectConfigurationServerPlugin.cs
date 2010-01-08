@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
     /// </example>
     /// <remarks>
     /// <para type="tip">
-    /// This can be installed using the "Project Configuration Display" package.
+    /// This can be installed using the "Server Configuration Display" package.
     /// </para>
     /// </remarks>
     [ReflectorType("projectConfigurationServerPlugin")]
