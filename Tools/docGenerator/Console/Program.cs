@@ -120,23 +120,54 @@
                         {
                             var pages = client.getPages(session, "CCNET");
                             var document = new XDocument();
-                            var rootEl = new XElement(
-                                "confluence",
-                                new XAttribute("space", "CCNET"));
-                            document.Add(rootEl);
-                            foreach (var page in pages)
+                            if (File.Exists(output))
                             {
-                                var pageEl = new XElement(
-                                    "page",
-                                    new XAttribute("title", page.title),
-                                    new XAttribute("id", page.id.ToString()),
-                                    new XAttribute("url", page.url),
-                                    new XAttribute("parentId", page.parentId.ToString()));
-                                rootEl.Add(pageEl);
-                                count++;
+                                document = XDocument.Load(output);
                             }
 
-                            document.Save(output);
+                            // Make sure there is a root element
+                            var rootEl = document.Root;
+                            if (rootEl == null)
+                            {
+                                rootEl = new XElement(
+                                    "confluence",
+                                    new XAttribute("space", "CCNET"));
+                                document.Add(rootEl);
+                            }
+
+                            foreach (var page in pages)
+                            {
+                                // Attempt to find each page
+                                var pageId = page.id.ToString();
+                                var pageEl = (from element in rootEl.Elements("page")
+                                              where element.Attribute("id").Value == pageId
+                                              select element).SingleOrDefault();
+                                if (pageEl == null)
+                                {
+                                    // If the page does not exist, add it
+                                    pageEl = new XElement(
+                                        "page",
+                                        new XAttribute("title", page.title),
+                                        new XAttribute("id", pageId),
+                                        new XAttribute("url", page.url),
+                                        new XAttribute("parentId", page.parentId.ToString()));
+                                    rootEl.Add(pageEl);
+                                    count++;
+                                }
+                            }
+
+                            if (count > 0)
+                            {
+                                // Order all the elements
+                                var newDoc = new XDocument(
+                                    new XElement("confluence",
+                                        new XAttribute("space", "CCNET")));
+                                newDoc.Root.Add(from element in document.Root.Elements()
+                                                orderby element.Attribute("title").Value
+                                                select element);
+                                newDoc.Save(output);
+                                WriteToConsole("Document updated", ConsoleColor.White);
+                            }
                         }
                         finally
                         {
@@ -155,7 +186,7 @@
 
                 stopwatch.Stop();
                 WriteToConsole(
-                    count.ToString() + " confluence items retrieved in " + stopwatch.Elapsed.TotalSeconds.ToString("#,##0.00") + "s",
+                    count.ToString() + " new confluence items retrieved in " + stopwatch.Elapsed.TotalSeconds.ToString("#,##0.00") + "s",
                     ConsoleColor.Gray);
             }
         }
@@ -407,8 +438,17 @@
 
                             output.WriteLine("h2. Configuration Elements");
                             output.WriteLine();
-                            output.WriteLine("|| Element || Description || Type || Required || Default || Version ||");
-                            WriteElements(publicType, output, documentation, typeElement);
+                            var elements = ListElements(publicType);
+                            var keyElement = typeElement != null ? typeElement.Element("key") : null;
+                            if ((elements.Count > 0) || (keyElement != null))
+                            {
+                                output.WriteLine("|| Element || Description || Type || Required || Default || Version ||");
+                                WriteElements(elements, output, documentation, typeElement);
+                            }
+                            else
+                            {
+                                output.WriteLine("There is no configuration for this plugin.");
+                            }
                             output.WriteLine();
 
                             if (HasTag(typeElement, "remarks"))
@@ -754,7 +794,7 @@
             return output;
         }
 
-        private static void WriteElements(Type type, StreamWriter output, XDocument documentation, XElement typeElement)
+        private static Dictionary<MemberInfo, ReflectorPropertyAttribute> ListElements(Type type)
         {
             // Put all the elements into a dictionary since they can be either fields or properties :-(
             var elements = new Dictionary<MemberInfo, ReflectorPropertyAttribute>();
@@ -766,7 +806,11 @@
                     elements.Add(field, attributes[0] as ReflectorPropertyAttribute);
                 }
             }
+            return elements;
+        }
 
+        private static void WriteElements(Dictionary<MemberInfo, ReflectorPropertyAttribute> elements, StreamWriter output, XDocument documentation, XElement typeElement)
+        {
             if (typeElement != null)
             {
                 // Check if this item has a required key
