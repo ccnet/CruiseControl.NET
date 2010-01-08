@@ -285,7 +285,7 @@
                                         {
                                             page.content = newContent;
                                             client.storePage(session, page);
-                                            WriteToConsole(titleAttr.Value + " updated", ConsoleColor.Gray);
+                                            WriteToConsole(titleAttr.Value + " updated", ConsoleColor.DarkYellow);
                                             count++;
                                         }
                                         else
