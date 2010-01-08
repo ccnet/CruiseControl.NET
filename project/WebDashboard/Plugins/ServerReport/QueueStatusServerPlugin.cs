@@ -11,9 +11,21 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
-	/// <summary>
-	/// The status of the queues on a server.
-	/// </summary>
+    /// <title>Queue Status Server Plugin</title>
+    /// <version>1.4.3</version>
+    /// <summary>
+    /// The Queue Status Server Plugin displays the status of the queues on the specified server.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// &lt;queueStatusServerPlugin /&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para type="tip">
+    /// This can be installed using the "Queue Status Display" package.
+    /// </para>
+    /// </remarks>
     [ReflectorType("queueStatusServerPlugin")]
     public class QueueStatusServerPlugin : ICruiseAction, IPlugin
 	{

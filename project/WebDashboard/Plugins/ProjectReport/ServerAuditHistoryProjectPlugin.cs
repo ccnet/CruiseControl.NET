@@ -10,6 +10,20 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
+    /// <title>Server Audit History Project Plugin</title>
+    /// <version>1.5</version>
+    /// <summary>
+    /// The Server Audit History Project Plugin displays the audit log from the server.
+    /// server is running.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// &lt;serverAuditHistoryProjectPlugin /&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// This requires that the currently logged in user has the required permissions on the server.
+    /// </remarks>
     [ReflectorType("serverAuditHistoryProjectPlugin")]
 	public class ServerAuditHistoryProjectPlugin : ICruiseAction, IPlugin
 	{

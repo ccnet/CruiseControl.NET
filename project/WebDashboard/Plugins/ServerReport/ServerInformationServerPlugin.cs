@@ -9,10 +9,21 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
-	/// <summary>
-	/// General information about a CCNet server
-	/// </summary>
-	[ReflectorType("serverInformationServerPlugin")]
+    /// <title>Server Information Server Plugin</title>
+    /// <version>1.4.4</version>
+    /// <summary>
+    /// The Server Information Server Plugin gives you information about a build server, for example the version of CruiseControl.NET the build
+    /// server is running.
+    /// </summary>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;serverInformationServerPlugin /&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;serverInformationServerPlugin minFreeSpace="524288" /&gt;
+    /// </code>
+    /// </example>
+    [ReflectorType("serverInformationServerPlugin")]
 	public class ServerInformationServerPlugin : ICruiseAction, IPlugin
 	{
 		private readonly IFarmService farmService;
@@ -25,6 +36,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 			this.viewGenerator = viewGenerator;
 		}
 
+        /// <summary>
+        /// The minimum required amount of free disk space in bytes. If the free disk space is less than this a warning will be displayed.
+        /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>1048576</default>
         [ReflectorProperty("minFreeSpace", Required = false)]
 		public long MinFreeSpace
         {

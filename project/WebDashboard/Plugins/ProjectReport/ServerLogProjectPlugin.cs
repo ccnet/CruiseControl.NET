@@ -10,7 +10,20 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
-	[ReflectorType("serverLogProjectPlugin")]
+    /// <title>Server Log Project Plugin</title>
+    /// <version>1.0</version>
+    /// <summary>
+    /// The Server Log Project Plugin shows you recent activity that has been output to the server log for a specific project. 
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// &lt;serverLogProjectPlugin /&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// Read the <link>Server Application Config File</link> page for more help on build server logging.
+    /// </remarks>
+    [ReflectorType("serverLogProjectPlugin")]
 	public class ServerLogProjectPlugin : ICruiseAction, IPlugin
 	{
 		public const string ActionName = "ViewServerProjectLog";

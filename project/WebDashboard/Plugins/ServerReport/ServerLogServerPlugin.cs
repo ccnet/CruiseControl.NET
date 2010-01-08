@@ -13,6 +13,19 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
+    /// <title>Server Log Server Plugin</title>
+    /// <version>1.0</version>
+    /// <summary>
+    /// The Server Log Server Plugin shows you recent activity that has been output to the server log for a specific build server. 
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// &lt;serverLogServerPlugin /&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// Read the <link>Server Application Config File</link> page for more help on build server logging.
+    /// </remarks>
 	[ReflectorType("serverLogServerPlugin")]
 	public class ServerLogServerPlugin : ICruiseAction, IPlugin
 	{

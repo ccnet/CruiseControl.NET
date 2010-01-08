@@ -18,6 +18,20 @@ using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
+    /// <title>Server Audit History Server Plugin</title>
+    /// <version>1.5</version>
+    /// <summary>
+    /// The Server Audit History Server Plugin displays the audit log from the server.
+    /// server is running.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// &lt;serverAuditHistoryServerPlugin /&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// This requires that the currently logged in user has the required permissions on the server.
+    /// </remarks>
     [ReflectorType("serverAuditHistoryServerPlugin")]
     public class ServerAuditHistoryServerPlugin : ICruiseAction, IPlugin
     {

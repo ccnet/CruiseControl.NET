@@ -8,35 +8,40 @@ using System;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
-	// ToDo - Test!
-	[ReflectorType("serverReportServerPlugin")]
+    /// <title>Server Report Server Plugin</title>
+    /// <version>1.0</version>
+    /// <summary>
+    /// The Server Report Server Plugin shows you status information for all projects on a specific server. If the Dashboard cannot connect to
+    /// the server then an errors table is shown detailing the problem.. 
+    /// </summary>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;serverReportServerPlugin /&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;serverReportServerPlugin defaultSort="Name" /&gt;
+    /// </code>
+    /// </example>
+    [ReflectorType("serverReportServerPlugin")]
 	public class ServerReportServerPlugin : ICruiseAction, IPlugin
 	{
 		public static readonly string ACTION_NAME = "ViewServerReport";
 
 		private readonly IProjectGridAction projectGridAction;
-        private ProjectGridSortColumn? sortColumn;
+        private ProjectGridSortColumn sortColumn = ProjectGridSortColumn.Name;
 
         #region Public properties
         #region DefaultSortColumn
         /// <summary>
         /// The default column to sort by.
         /// </summary>
+        /// <version>1.4.4</version>
+        /// <default>Name</default>
         [ReflectorProperty("defaultSort", Required = false)]
-        public string DefaultSortColumn
+        public ProjectGridSortColumn DefaultSortColumn
         {
-            get { return sortColumn.GetValueOrDefault(ProjectGridSortColumn.Name).ToString(); }
-            set
-            {
-                if (string.IsNullOrEmpty(value))
-                {
-                    sortColumn = null;
-                }
-                else
-                {
-                    sortColumn = (ProjectGridSortColumn)Enum.Parse(typeof(ProjectGridSortColumn), value);
-                }
-            }
+            get { return this.sortColumn; }
+            set { this.sortColumn = value; }
         }
         #endregion
         #endregion
@@ -48,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 
 		public IResponse Execute(ICruiseRequest request)
 		{
-            if (sortColumn.HasValue) projectGridAction.DefaultSortColumn = sortColumn.Value;
+            projectGridAction.DefaultSortColumn = sortColumn;
             return projectGridAction.Execute(ACTION_NAME, request.ServerSpecifier, request);
 		}
 

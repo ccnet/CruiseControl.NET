@@ -12,7 +12,22 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
-
+    /// <title>Project Configuration Server Plugin</title>
+    /// <version>1.4.0</version>
+    /// <summary>
+    /// This plugin shows the basic configuration of the projects on this buildserver, such as project name, category, queue and queue
+    /// priority, making it easier to spot conflicts in the queue setup for this buildserver.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// &lt;projectConfigurationServerPlugin /&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para type="tip">
+    /// This can be installed using the "Project Configuration Display" package.
+    /// </para>
+    /// </remarks>
     [ReflectorType("projectConfigurationServerPlugin")]
     public class ProjectConfigurationServerPlugin : ICruiseAction, IPlugin
     {
