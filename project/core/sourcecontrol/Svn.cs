@@ -773,13 +773,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private void AppendCommonSwitches(PrivateArguments buffer, bool isExternal)
         {
-            buffer.AddIf(!string.IsNullOrEmpty(this.Username), "--username ", this.Username, true);
-            buffer.AddIf(this.Password != null, "--password ", this.Password, true);
-            buffer.Add("--non-interactive");
-            if (!isExternal || (this.AuthCaching == AuthCachingMode.None))
+            if ((this.AuthCaching != AuthCachingMode.Always) && (!isExternal || (this.AuthCaching == AuthCachingMode.None)))
             {
+                buffer.AddIf(!string.IsNullOrEmpty(this.Username), "--username ", this.Username, true);
+                buffer.AddIf(this.Password != null, "--password ", this.Password, true);
                 buffer.Add("--no-auth-cache");
             }
+            buffer.Add("--non-interactive");
+
         }
 
         private static void AppendRevision(PrivateArguments buffer, int revision)
@@ -810,7 +811,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             /// <summary>
             /// Use auth caching for externals.
             /// </summary>
-            ExternalsOnly
+            ExternalsOnly,
+
+            /// <summary>
+            /// use auth caching
+            /// </summary>
+            Always,
         }
     }
 }
