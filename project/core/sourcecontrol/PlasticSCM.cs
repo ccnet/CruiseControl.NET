@@ -97,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// Specifies whether or not CCNet should create an Plastic SCM baseline when the build is successful. 
         /// </summary>
         /// <version>1.3</version>
-        /// <default>flase</default>
+        /// <default>false</default>
         [ReflectorProperty("labelOnSuccess", Required = false)]
 		public bool LabelOnSuccess = false;
 
@@ -113,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// Do the update with the "--forced" option.
         /// </summary>
         /// <version>1.3</version>
-        /// <default>flase</default>
+        /// <default>false</default>
         [ReflectorProperty("forced", Required = false)]
 		public bool Forced = false;
 

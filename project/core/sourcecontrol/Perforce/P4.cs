@@ -150,7 +150,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// Whether to apply a label on a successful build.
         /// </summary>
         /// <version>1.0</version>
-        /// <default>flase</default>
+        /// <default>false</default>
         [ReflectorProperty("applyLabel", Required = false)]
 		public bool ApplyLabel = false;
 
