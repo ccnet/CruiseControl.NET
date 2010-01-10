@@ -132,8 +132,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             
             foreach( BuildProgressInformationData bpi in Progress)
             {
-                ListenData.AppendLine(string.Format("<Item Time=\"{0}\" Data=\"{1}\" />",
-                            bpi.At, bpi.Information ));
+                ListenData.AppendLine(
+                    string.Format("<Item Time=\"{0}\" Data=\"{1}\" />", bpi.At ?? string.Empty, bpi.Information ?? string.Empty));
             }
 
             ListenData.AppendLine("</data>");
