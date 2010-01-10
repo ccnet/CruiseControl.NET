@@ -24,12 +24,23 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// <title>Force Builder Publisher</title>
     /// <version>1.0</version>
     /// <example>
-    /// <code>
+    /// <code title="Simple Example">
     /// &lt;forcebuild&gt;
     /// &lt;project&gt;AcceptanceTestProject&lt;/project&gt;
     /// &lt;serverUri&gt;tcp://buildserver2:21234/CruiseManager.rem&lt;/serverUri&gt;
     /// &lt;integrationStatus&gt;Success&lt;/integrationStatus&gt;
     /// &lt;enforcerName&gt;Forcer&lt;/enforcerName&gt;
+    /// &lt;/forcebuild&gt;
+    /// </code>
+    /// <code title="Example with Security">
+    /// &lt;forcebuild&gt;
+    /// &lt;project&gt;AcceptanceTestProject&lt;/project&gt;
+    /// &lt;serverUri&gt;tcp://buildserver2:21234/CruiseManager.rem&lt;/serverUri&gt;
+    /// &lt;integrationStatus&gt;Success&lt;/integrationStatus&gt;
+    /// &lt;security&gt;
+    /// &lt;namedValue name="username" value="autobuild" /&gt;
+    /// &lt;namedValue name="password" value="autobuild" /&gt;
+    /// &lt;/security&gt;
     /// &lt;/forcebuild&gt;
     /// </code>
     /// </example>
@@ -99,6 +110,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <remarks>
         /// These are only needed if the remote project has security applied. If credentials are passed to the remote
         /// server, then the enforcerName will be ignored.
+        /// Valid security tokens are: "username" and "password" (this list may be expanded in future).
         /// </remarks>
         [ReflectorProperty("security", Required = false)]
         public NameValuePair[] SecurityCredentials { get; set; }
@@ -129,9 +141,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             if ((SecurityCredentials != null) && (SecurityCredentials.Length > 0))
             {
                 logger.Debug("Logging in");
-                client.Login(new List<NameValuePair>(SecurityCredentials));
-                loggedIn = true;
+                if (client.Login(new List<NameValuePair>(SecurityCredentials)))
+                {
+                    loggedIn = true;
+                    logger.Debug("Logged on server, session token is " + client.SessionToken);
+                }
+                else
+                {
+                    logger.Warning("Unable to login to remote server");
+                }
             }
+
             logger.Info("Sending ForceBuild request to '{0}' on '{1}'", Project, ServerUri);
             client.ForceBuild(Project, new List<NameValuePair>(Parameters ?? new NameValuePair[0]));
             if (loggedIn)
