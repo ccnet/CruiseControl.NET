@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test, Explicit]
 		public void ShowDialogForInteractiveTesting()
 		{
-			AddProjects addProjects = new AddProjects(null, new CCTrayProject[0]);
+			AddProjects addProjects = new AddProjects(null, null, new CCTrayProject[0]);
 			addProjects.GetListOfNewProjects(null);
 		}
 
@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			                     	new CCTrayProject("tcp://otherserver:456/blah", "proj2"),
 			                     };
 
-			AddProjects addProjects = new AddProjects(null, projects);
+            AddProjects addProjects = new AddProjects(null, null, projects);
 		}
 
 		[Test]
@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			                     	new CCTrayProject("tcp://a:123/blah", "proj2"),
 			                     };
 
-			AddProjects addProjects = new AddProjects(null, projects);
+            AddProjects addProjects = new AddProjects(null, null, projects);
 		}
 
 		[Test]
@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			                     	new CCTrayProject("tcp://localhost:123/blah", "proj2"),
 			                     };
 
-			AddProjects addProjects = new AddProjects(null, projects);
+            AddProjects addProjects = new AddProjects(null, null, projects);
 		}
 
 		[Test]
@@ -67,7 +67,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 
 			DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof (ICruiseProjectManagerFactory));
 			mockCruiseManagerFactory.ExpectAndReturn("GetProjectList", allProjects, allProjects[0].BuildServer, false);
-			AddProjects addProjects = new AddProjects((ICruiseProjectManagerFactory) mockCruiseManagerFactory.MockInstance, selectedProjects);
+			AddProjects addProjects = new AddProjects(
+                (ICruiseProjectManagerFactory)mockCruiseManagerFactory.MockInstance,
+                null, 
+                selectedProjects);
 		}
 	}
 }

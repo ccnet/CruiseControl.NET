@@ -91,8 +91,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void btnAdd_Click(object sender, EventArgs e)
 		{
-			AddProjects addProjectDialog =
-				new AddProjects(configuration.CruiseProjectManagerFactory, BuildProjectListFromListView());
+			AddProjects addProjectDialog = new AddProjects(
+                configuration.CruiseProjectManagerFactory, 
+                configuration.CruiseServerManagerFactory,
+                BuildProjectListFromListView());
 			CCTrayProject[] projects = addProjectDialog.GetListOfNewProjects(this);
 
 			if (projects != null)

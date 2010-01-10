@@ -44,21 +44,32 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
                 clientFactory.ResetCache(server.Url);
             }
 
+            ICruiseServerManager manager;
             switch (server.Transport)
             {
                 case BuildServerTransport.Remoting:
                     {
                         var client = GenerateRemotingClient(server);
-                        return new RemotingProjectListRetriever(client).GetProjectList(server);
+                        manager = new RemotingCruiseServerManager(client, server);
+                        break;
                     }
+
                 case BuildServerTransport.Extension:
                     return new ExtensionTransportProjectListRetriever(server.ExtensionName).GetProjectList(server);
                 default:
                     {
                         var client = GenerateHttpClient(server);
-                        return new HttpProjectListRetriever(client).GetProjectList(server);
+                        manager = new HttpCruiseServerManager(client, server);
+                        break;
                     }
             }
+
+            if (!string.IsNullOrEmpty(server.SecurityType))
+            {
+                manager.Login();
+            }
+
+            return manager.GetProjectList();
         }
 
         private CruiseServerClientBase GenerateRemotingClient(BuildServer server)

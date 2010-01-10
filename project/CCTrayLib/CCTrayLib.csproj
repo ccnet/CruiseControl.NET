@@ -245,9 +245,6 @@
     <Compile Include="Monitoring\HttpCruiseServerManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Monitoring\HttpProjectListRetriever.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Monitoring\IAuthenticationMode.cs" />
     <Compile Include="Monitoring\ICache.cs" />
     <Compile Include="Monitoring\ICruiseProjectManager.cs">
@@ -316,9 +313,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Monitoring\RemotingCruiseServerManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Monitoring\RemotingProjectListRetriever.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Monitoring\ServerMonitor.cs">

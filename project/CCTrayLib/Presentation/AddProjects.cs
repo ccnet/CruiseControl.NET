@@ -13,14 +13,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private BuildServer selectedServer;
 
 		private readonly ICruiseProjectManagerFactory cruiseProjectManagerFactory;
+        private readonly ICruiseServerManagerFactory cruiseServerManagerFactory;
         private Button butConfigure;
         private ColumnHeader columnHeader1;
         private ImageList imlSmall;
 		private readonly CCTrayProject[] currentProjectList;
 
-		public AddProjects(ICruiseProjectManagerFactory cruiseProjectManagerFactory, CCTrayProject[] currentProjectList)
+		public AddProjects(ICruiseProjectManagerFactory cruiseProjectManagerFactory,
+            ICruiseServerManagerFactory cruiseServerManagerFactory,
+            CCTrayProject[] currentProjectList)
 		{
 			this.cruiseProjectManagerFactory = cruiseProjectManagerFactory;
+            this.cruiseServerManagerFactory = cruiseServerManagerFactory;
 			this.currentProjectList = currentProjectList;
 
 			InitializeComponent();
@@ -178,6 +182,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             {
                 if (ConfigureServer.Configure(this, selectedServer))
                 {
+                    var server = this.cruiseServerManagerFactory.Create(selectedServer);
+                    server.Logout();
+                    RetrieveListOfProjects(selectedServer);
                     SetSecurityIcon(lbServer.SelectedItems[0], selectedServer);
                 }
             }

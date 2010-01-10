@@ -22,6 +22,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		/// </summary>
         CruiseServerSnapshot GetCruiseServerSnapshot();
 
+        /// <summary>
+        /// Gets the list of projects.
+        /// </summary>
+        /// <returns>The available projects on the server.</returns>
+        CCTrayProject[] GetProjectList();
+
         bool Login();
         void Logout();
      }

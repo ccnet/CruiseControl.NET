@@ -108,6 +108,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                         ExtensionDetails details = (ExtensionDetails)cmbAuthMode.Items[cmbAuthMode.SelectedIndex];
                         server.SecurityType = details.TypeName;
                         server.SecuritySettings = authMode.Settings;
+
                         this.DialogResult = DialogResult.OK;
                         this.Close();
                     }

@@ -50,6 +50,24 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             return snapshot;
 		}
 
+        /// <summary>
+        /// Gets the list of projects.
+        /// </summary>
+        /// <returns>The available projects on the server.</returns>
+        public CCTrayProject[] GetProjectList()
+        {
+            ProjectStatus[] statuses = manager.GetProjectStatus();
+            CCTrayProject[] projects = new CCTrayProject[statuses.Length];
+
+            for (int i = 0; i < statuses.Length; i++)
+            {
+                ProjectStatus status = statuses[i];
+                projects[i] = new CCTrayProject(this.configuration, status.Name);
+            }
+
+            return projects;
+        }
+
         public bool Login()
         {
             if (configuration.SecurityType != null)

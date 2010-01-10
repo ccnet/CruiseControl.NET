@@ -43,6 +43,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			return cachedSnapshot;
 		}
 
+        /// <summary>
+        /// Gets the list of projects.
+        /// </summary>
+        /// <returns>The available projects on the server.</returns>
+        public CCTrayProject[] GetProjectList()
+        {
+            return this.wrappedManager.GetProjectList();
+        }
+
 		public void InvalidateCache()
 		{
 			cachedSnapshot = null;
