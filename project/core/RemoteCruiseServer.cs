@@ -14,7 +14,8 @@ namespace ThoughtWorks.CruiseControl.Core
     /// <summary>
     /// Connects to a remote CruiseControl.NET server.
     /// </summary>
-    public class RemoteCruiseServer : CruiseServerEventsBase, ICruiseServer
+    public class RemoteCruiseServer 
+        : CruiseServerEventsBase, ICruiseServer, IDisposable
     {
         public const string ManagerUri = "CruiseManager.rem";
         public const string DefaultManagerUri = "tcp://localhost:21234/" + ManagerUri;
@@ -79,7 +80,21 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
-        void IDisposable.Dispose()
+        ~RemoteCruiseServer()
+        {
+            // If for some reason CC.NET crashes and Dispose() is not called, this will hopefully clean up the port
+            // (eventually). Since this relies on GC, we cannot guarentee when it will be called!
+            try
+            {
+                this.Dispose();
+            }
+            catch
+            {
+                // Ignore any exceptions here - the application will be well and truly finished
+            }
+        }
+
+        public void Dispose()
         {
             lock (this)
             {
