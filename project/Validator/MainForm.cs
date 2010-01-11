@@ -18,7 +18,7 @@ using ThoughtWorks.CruiseControl.Core.Config.Preprocessor;
 
 namespace Validator
 {
-    public partial class MainForm 
+    public partial class MainForm
         : Form, INetReflectorConfigurationReader
     {
         private string myFileName;
@@ -30,7 +30,7 @@ namespace Validator
         private PersistWindowState myWindowState;
         private List<string> myFileHistory = new List<string>();
         private bool isConfigValid = true;
-        
+
         public MainForm()
         {
             InitializeComponent();
@@ -41,39 +41,47 @@ namespace Validator
 
         private void InitialiseDocuments()
         {
-            InitialiseBrowser(validationResults, "Validator.Template.htm");            
+            InitialiseBrowser(validationResults, "Validator.Template.htm");
         }
 
         private void InitialiseBrowser(WebBrowser browser, string template)
         {
             browser.AllowNavigation = false;
             browser.AllowWebBrowserDrop = false;
-            using (Stream xmlStream = this.GetType().Assembly.GetManifestResourceStream(template)) {
+            using (Stream xmlStream = this.GetType().Assembly.GetManifestResourceStream(template))
+            {
                 CompletionClosure.LoadSynchronously(browser, xmlStream);
             }
         }
 
-        private class CompletionClosure {
+        private class CompletionClosure
+        {
             public WebBrowserDocumentCompletedEventHandler Handler;
             public volatile bool done;
-            public CompletionClosure() {
+            public CompletionClosure()
+            {
                 done = false;
                 Handler = new WebBrowserDocumentCompletedEventHandler(b_DocumentCompleted);
             }
-            void b_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e) {
+            void b_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+            {
                 done = true;
             }
-            public static void LoadSynchronously(WebBrowser b, Stream page) {
+            public static void LoadSynchronously(WebBrowser b, Stream page)
+            {
                 CompletionClosure cc = new CompletionClosure();
                 b.DocumentCompleted += cc.Handler;
-                try {
+                try
+                {
                     b.DocumentStream = page;
-                    while (!cc.done) {
+                    while (!cc.done)
+                    {
                         Application.DoEvents();
                         System.Threading.Thread.Sleep(0);
                     }
                 }
-                finally {
+                finally
+                {
                     b.DocumentCompleted -= cc.Handler;
                 }
             }
@@ -123,7 +131,7 @@ namespace Validator
 
         private void OnLoadState(object sender, WindowStateEventArgs e)
         {
-            SetConfigView((ConfigViewMode)Enum.Parse(typeof(ConfigViewMode), 
+            SetConfigView((ConfigViewMode)Enum.Parse(typeof(ConfigViewMode),
                 (string)e.Key.GetValue("ConfigViewMode", ConfigViewMode.Vertical.ToString())));
 
             for (int loop = 0; loop < 5; loop++)
@@ -222,9 +230,10 @@ namespace Validator
             DisplayProgressMessage("Loading configuration, please wait...", 0);
             myStopwatch.Reset();
             myStopwatch.Start();
-            DefaultConfigurationFileLoader loader = new DefaultConfigurationFileLoader(this);
+            var loader = new DefaultConfigurationFileLoader(this);
             myBodyEl = validationResults.Document.Body;
             myBodyEl.InnerHtml = string.Empty;
+            this.configurationHierarchy.Initialise(myFileName);
             try
             {
                 // Attempt to load the configuration
@@ -257,7 +266,7 @@ namespace Validator
                 // Catch-all exception block
                 StringBuilder message = new StringBuilder();
                 message.Append("An unexpected error has occurred while loading the configuration!" +
-                    Environment.NewLine + 
+                    Environment.NewLine +
                     "Please report this error to the CCNet user group (http://groups.google.com/group/ccnet-user). This will help us to improve this application.");
                 Exception currentError = error;
                 while (currentError != null)
@@ -276,7 +285,7 @@ namespace Validator
         }
         private void DisplayFileName()
         {
-            HtmlElement nameEl = GenerateElement("div", 
+            HtmlElement nameEl = GenerateElement("div",
                 new HtmlAttribute("class", "fileName"),
                 GenerateElement("b", "Configuration file: "),
                 myFileName);
@@ -389,6 +398,7 @@ namespace Validator
                 isConfigValid &= InternalValidation(configuration);
 
                 DisplayProcessedConfiguration(items);
+                this.configurationHierarchy.Finalise();
             }
         }
 
@@ -417,6 +427,7 @@ namespace Validator
             try
             {
                 loadedItem = myConfigReader.Read(node);
+                this.configurationHierarchy.Add(loadedItem);
                 if (loadedItem is IProject)
                 {
                     IProject project = loadedItem as IProject;
@@ -484,7 +495,7 @@ namespace Validator
                         rowClass,
                         GenerateElement("td",
                             new HtmlAttribute("colspan", "3"),
-                            GenerateElement("div", 
+                            GenerateElement("div",
                                 new HtmlAttribute("class", "error"),
                                 errorMsg))));
                 isConfigValid = false;

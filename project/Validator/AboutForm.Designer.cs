@@ -35,6 +35,7 @@
             this.officalLink = new System.Windows.Forms.LinkLabel();
             this.blogLink = new System.Windows.Forms.LinkLabel();
             this.famfamfamLink = new System.Windows.Forms.LinkLabel();
+            this.fugueLink = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // label1
@@ -97,6 +98,17 @@
             this.famfamfamLink.Text = "Some images provided by FamFamFam";
             this.famfamfamLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.famfamfamLink_LinkClicked);
             // 
+            // fugueLink
+            // 
+            this.fugueLink.Location = new System.Drawing.Point(106, 250);
+            this.fugueLink.Name = "fugueLink";
+            this.fugueLink.Size = new System.Drawing.Size(381, 29);
+            this.fugueLink.TabIndex = 6;
+            this.fugueLink.TabStop = true;
+            this.fugueLink.Text = "Other images provided by Yusuke Kamiyamane under a Creative Commons Attribution 3" +
+                ".0 License";
+            this.fugueLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.fugueLink_LinkClicked);
+            // 
             // AboutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -105,6 +117,7 @@
             this.BackgroundImage = global::Validator.Properties.Resources.dialog;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(499, 320);
+            this.Controls.Add(this.fugueLink);
             this.Controls.Add(this.famfamfamLink);
             this.Controls.Add(this.blogLink);
             this.Controls.Add(this.officalLink);
@@ -132,6 +145,7 @@
         private System.Windows.Forms.LinkLabel officalLink;
         private System.Windows.Forms.LinkLabel blogLink;
         private System.Windows.Forms.LinkLabel famfamfamLink;
+        private System.Windows.Forms.LinkLabel fugueLink;
 
     }
 }

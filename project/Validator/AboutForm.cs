@@ -35,5 +35,10 @@ namespace Validator
         {
             Process.Start("http://www.famfamfam.com/");
         }
+
+        private void fugueLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("http://www.pinvoke.com/");
+        }
     }
 }
