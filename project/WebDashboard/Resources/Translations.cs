@@ -23,6 +23,7 @@
         private Translations()
         {
             var context = HttpContext.Current;
+
                 // Get the user's preferred language - this comes from the browser so we are assuming that the user has choosen their preferred languages
             if ((context != null) &&
                 (context.Request != null) &&
@@ -121,17 +122,25 @@
         public static Translations RetrieveCurrent()
         {
             var context = HttpContext.Current;
-            if (context.Items.Contains("translations"))
+            if ((context == null) || (context.Items == null))
             {
-                // Return the existing translations instance
-                return context.Items["translations"] as Translations;
+                // Bypass for unit testing
+                return new Translations();
             }
             else
             {
-                // Start a new instance
-                var value = new Translations();
-                context.Items.Add("translations", value);
-                return value;
+                if (context.Items.Contains("translations"))
+                {
+                    // Return the existing translations instance
+                    return context.Items["translations"] as Translations;
+                }
+                else
+                {
+                    // Start a new instance
+                    var value = new Translations();
+                    context.Items.Add("translations", value);
+                    return value;
+                }
             }
         }
         #endregion
