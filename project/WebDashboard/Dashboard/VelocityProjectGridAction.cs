@@ -63,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private HtmlFragmentResponse GenerateView(ProjectStatusListAndExceptions projectStatusListAndExceptions,
             string actionName, ICruiseRequest request, IServerSpecifier serverSpecifier)
 		{
-            this.translations = new Translations();
+            this.translations = Translations.RetrieveCurrent();
             cruiseUrlBuilder = request.UrlBuilder;
             urlBuilder = request.UrlBuilder.InnerBuilder;
 			Hashtable velocityContext = new Hashtable();

@@ -113,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             GraphMaker = new BuildGraph(
                 farmService.GetMostRecentBuildSpecifiers(projectSpecifier, AmountOfBuildsToRetrieve, sessionToken),
                 this.linkFactory,
-                new Translations());
+                Translations.RetrieveCurrent());
 
             velocityContext["graphDayInfo"] = GraphMaker.GetBuildHistory(MaxAmountOfDaysToDisplay);
             velocityContext["highestAmountPerDay"] = GraphMaker.HighestAmountPerDay;

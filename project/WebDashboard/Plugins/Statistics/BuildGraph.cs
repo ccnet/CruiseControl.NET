@@ -240,7 +240,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
             {
                 get 
                 {
-                    return myBuildDate.Date.ToString("ddd", this.translations.Culture)
+                    return myBuildDate.Date.ToString("ddd", this.translations.UICulture)
                            + "<BR>" 
                            + myBuildDate.Year.ToString("0000") 
                            + "<BR>" 

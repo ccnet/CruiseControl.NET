@@ -78,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// <returns></returns>
         public IResponse Execute(ICruiseRequest cruiseRequest)
         {
-            this.translations = new Translations();
+            this.translations = Translations.RetrieveCurrent();
             Hashtable velocityContext = new Hashtable();
             velocityContext["Error"] = string.Empty;
             if (ValidateSession(velocityContext))

@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
         public string Transform(string transformerFileName, Hashtable transformable)
         {
             // Add a translator to all views
-            var translations = new Translations();
+            var translations = Translations.RetrieveCurrent();
             transformable.Add("translations", translations);
 
             string output = string.Empty;
