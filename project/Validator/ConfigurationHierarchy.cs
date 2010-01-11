@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Threading;
+using System.Windows.Forms;
+using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Security;
-using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Triggers;
-using System.Threading;
 
 namespace Validator
 {
@@ -409,7 +406,14 @@ namespace Validator
         /// <param name="e">The <see cref="TreeViewEventArgs"/> instance containing the event data.</param>
         private void hierarchy_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            this.itemDetails.SelectedObject = e.Node.Tag;
+            if (e.Node.Tag == null)
+            {
+                this.itemDetails.SelectedObject = null;
+            }
+            else
+            {
+                this.itemDetails.SelectedObject = new ConfigurationTypeDescriptor(e.Node.Tag);
+            }
         }
         #endregion
 

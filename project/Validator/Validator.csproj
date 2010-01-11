@@ -78,6 +78,7 @@
     <Compile Include="ConfigurationHierarchy.Designer.cs">
       <DependentUpon>ConfigurationHierarchy.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigurationTypeDescriptor.cs" />
     <Compile Include="ConfigViewMode.cs" />
     <Compile Include="HtmlAttribute.cs" />
     <Compile Include="MainForm.cs">
