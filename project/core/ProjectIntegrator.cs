@@ -330,7 +330,16 @@ namespace ThoughtWorks.CruiseControl.Core
                     Log.Info(string.Format("WaitForExit requested for non stopping project '{0}' - stopping project", Name));
                     Stop();
                 }
-                thread.Join();
+
+                try
+                {
+                    thread.Join();
+                }
+                catch (NullReferenceException)
+                {
+                    // if the process stops quickly, the reference to thread may be disposed by the time we get here,
+                    // therefore ignore any NullReferenceExceptions
+                }
             }
         }
 
