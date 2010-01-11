@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.Console
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public int Run(string[] args)
+        public int Run(string[] args, bool usesShadowCopying)
         {
         	ConsoleRunnerArguments consoleArgs = new ConsoleRunnerArguments();
         	List<string> extra = new List<string>();
@@ -59,6 +59,11 @@ namespace ThoughtWorks.CruiseControl.Console
             try
             {
                 runner = new ConsoleRunner(consoleArgs, new CruiseServerFactory());
+                if (!usesShadowCopying)
+                {
+                    Log.Warning("Shadow-copying has been turned off - hot-swapping will not work!");
+                }
+
                 runner.Run();
                 return 0;
             }

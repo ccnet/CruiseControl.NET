@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Runtime.Remoting;
+using System.Configuration;
 
 namespace ThoughtWorks.CruiseControl.Console
 {
@@ -49,15 +50,25 @@ namespace ThoughtWorks.CruiseControl.Console
                     restart = false;
 
                     // Load the domain and start the runner
-                    AppDomain newDomain = AppDomain.CreateDomain("CC.Net",
-                        null,
-                        AppDomain.CurrentDomain.BaseDirectory,
-                        AppDomain.CurrentDomain.RelativeSearchPath,
-                        true);
-                    runner = newDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().Location,
+                    // Allow the user to turn shadow-copying off
+                    var setting = ConfigurationManager.AppSettings["ShadowCopy"] ?? string.Empty;
+                    var useShadowCopying = !(string.Equals(setting, "off", StringComparison.InvariantCultureIgnoreCase) ||
+                        !string.Equals(setting, "false", StringComparison.InvariantCultureIgnoreCase));
+                    AppDomain runnerDomain;
+                    try
+                    {
+                        runnerDomain = CreateNewDomain(useShadowCopying);
+                    }
+                    catch (FileLoadException)
+                    {
+                        // Unable to use shadow-copying (no user profile?), therefore turn off shadow-copying
+                        useShadowCopying = false;
+                        runnerDomain = CreateNewDomain(useShadowCopying);
+                    }
+                    runner = runnerDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().Location,
                         typeof(AppRunner).FullName) as AppRunner;
-                    result = runner.Run(args);
-                    AppDomain.Unload(newDomain);
+                    result = runner.Run(args, useShadowCopying);
+                    AppDomain.Unload(runnerDomain);
 
                     // Allow any change events to finish (i.e. if multiple files are copied)
                     while (DateTime.Now < restartTime)
@@ -68,5 +79,20 @@ namespace ThoughtWorks.CruiseControl.Console
             }
             return result;
         }
-	}
+
+        /// <summary>
+        /// Creates the new runner domain.
+        /// </summary>
+        /// <param name="useShadowCopying">If set to <c>true</c> shadow copying will be used.</param>
+        /// <returns>The new <see cref="AppDomain"/>.</returns>
+        private static AppDomain CreateNewDomain(bool useShadowCopying)
+        {
+            return AppDomain.CreateDomain(
+                "CC.Net",
+                null,
+                AppDomain.CurrentDomain.BaseDirectory,
+                AppDomain.CurrentDomain.RelativeSearchPath,
+                useShadowCopying);
+        }
+    }
 }

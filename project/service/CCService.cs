@@ -57,16 +57,25 @@ namespace ThoughtWorks.CruiseControl.Service
                 watcher.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.Size;
             }
 
-            runnerDomain = AppDomain.CreateDomain("CC.Net",
-                null,
-                AppDomain.CurrentDomain.BaseDirectory,
-                AppDomain.CurrentDomain.RelativeSearchPath,
-                true);
+            // Allow the user to turn shadow-copying off
+            var setting = ConfigurationManager.AppSettings["ShadowCopy"] ?? string.Empty;
+            var useShadowCopying = !(string.Equals(setting, "off", StringComparison.InvariantCultureIgnoreCase) ||
+                !string.Equals(setting, "false", StringComparison.InvariantCultureIgnoreCase));
+            try
+            {
+                this.runnerDomain = CreateNewDomain(useShadowCopying);
+            }
+            catch (FileLoadException)
+            {
+                // Unable to use shadow-copying (no user profile?), therefore turn off shadow-copying
+                useShadowCopying = false;
+                this.runnerDomain = CreateNewDomain(useShadowCopying);
+            }
             runner = runnerDomain.CreateInstanceFromAndUnwrap(Assembly.GetExecutingAssembly().Location,
                 typeof(AppRunner).FullName) as AppRunner;
             try
             {
-                runner.Run(action);
+                runner.Run(action, useShadowCopying);
             }
             catch (SerializationException)
             {
@@ -75,6 +84,21 @@ namespace ThoughtWorks.CruiseControl.Service
                 throw new ApplicationException(
                     string.Format("A fatal error has occurred while starting CCService. Please check '{0}' for any details.", configFilename));
             }
+        }
+
+        /// <summary>
+        /// Creates the new runner domain.
+        /// </summary>
+        /// <param name="useShadowCopying">If set to <c>true</c> shadow copying will be used.</param>
+        /// <returns>The new <see cref="AppDomain"/>.</returns>
+        private AppDomain CreateNewDomain(bool useShadowCopying)
+        {
+            return AppDomain.CreateDomain(
+                "CC.Net",
+                null,
+                AppDomain.CurrentDomain.BaseDirectory,
+                AppDomain.CurrentDomain.RelativeSearchPath,
+                useShadowCopying);
         }
 
         // Should this be stop or abort?

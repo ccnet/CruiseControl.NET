@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.Service
             get { return ConfigurationManager.AppSettings["remoting"]; }
         }
 
-        public void Run(string action)
+        public void Run(string action, bool usesShadowCopying)
         {
             try
             {
@@ -61,7 +61,15 @@ namespace ThoughtWorks.CruiseControl.Service
                 }
                 Log.Info(string.Format(".NET Runtime Version: {0}{2}\tImage Runtime Version: {1}", Environment.Version, Assembly.GetExecutingAssembly().ImageRuntimeVersion, GetRuntime()));
                 Log.Info(string.Format("OS Version: {0}\tServer locale: {1}", Environment.OSVersion, CultureInfo.CurrentUICulture.NativeName));
-                if (!string.IsNullOrEmpty(action)) Log.Info(string.Format("Reason: {0}", action));
+                if (!string.IsNullOrEmpty(action))
+                {
+                    Log.Info(string.Format("Reason: {0}", action));
+                }
+
+                if (!usesShadowCopying)
+                {
+                    Log.Warning("Shadow-copying has been turned off - hot-swapping will not work!");
+                }
 
                 VerifyConfigFileExists();
                 CreateAndStartCruiseServer();
