@@ -278,13 +278,29 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 {
                     if (parameter.Name == parameterName)
                     {
-                        if (inputValue == null)
+                        try
                         {
-                            actualValue = parameter.Convert(parameter.DefaultValue);
+                            if (inputValue == null)
+                            {
+                                actualValue = parameter.Convert(parameter.DefaultValue);
+                            }
+                            else
+                            {
+                                actualValue = parameter.Convert(inputValue);
+                            }
                         }
-                        else
+                        catch (InvalidCastException)
                         {
-                            actualValue = parameter.Convert(inputValue);
+                            if (actualValue == null)
+                            {
+                                throw new CruiseControlException(
+                                    "Unable to set dynamic value for " + parameterName + ", unable to find a valid default value");
+                            }
+                            else
+                            {
+                                throw new CruiseControlException(
+                                    "Unable to set dynamic value for " + parameterName + ", unable to convert value");
+                            }
                         }
                         break;
                     }
@@ -368,8 +384,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     {
                         replacementEl = doc.CreateElement("directValue");
                         AddElement(replacementEl, "parameter", parametersEl.SelectSingleNode("namedValue/@name").InnerText);
-                        replacementValue = parametersEl.SelectSingleNode("namedValue/@value").InnerText;
-                        AddElement(replacementEl, "default", replacementValue);
+                        var innerValue = parametersEl.SelectSingleNode("namedValue/@value");
+                        if (innerValue != null)
+                        {
+                            replacementValue = innerValue.InnerText;
+                            AddElement(replacementEl, "default", replacementValue);
+                        }
                     }
                     parameters.Add(replacementEl);
 

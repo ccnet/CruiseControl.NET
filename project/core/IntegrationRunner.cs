@@ -102,6 +102,7 @@ namespace ThoughtWorks.CruiseControl.Core
             }
             catch (Exception ex)
             {
+                Log.Debug("Exception caught: " + ex.Message);
                 result.ExceptionResult = ex;
             }
             finally
