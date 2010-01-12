@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <default>n/a</default>
         [XmlAttribute("value")]
 #if !NoReflector
-        [ReflectorProperty("value")]
+        [ReflectorProperty("value", Required = false)]
 #endif
         public string Value
         {

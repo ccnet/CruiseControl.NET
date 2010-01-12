@@ -106,7 +106,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <version>1.5</version>
         /// <default>n/a</default>
-        [ReflectorProperty("default")]
+        [ReflectorProperty("default", Required = false)]
         public string DefaultValue
         {
             get { return defaultValue; }
@@ -125,7 +125,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             if (property != null)
             {
                 string parameterValue = defaultValue;
-                if (parameters.ContainsKey(parameterName)) parameterValue = parameters[parameterName];
+                if (parameters.ContainsKey(parameterName))
+                {
+                    parameterValue = parameters[parameterName];
+                }
+
                 var actualValue = DynamicValueUtility.ConvertValue(parameterName, parameterValue, parameterDefinitions);
                 property.ChangeProperty(actualValue);
             }

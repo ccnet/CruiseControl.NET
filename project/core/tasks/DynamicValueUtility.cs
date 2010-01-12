@@ -278,7 +278,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 {
                     if (parameter.Name == parameterName)
                     {
-                        actualValue = parameter.Convert(inputValue);
+                        if (inputValue == null)
+                        {
+                            actualValue = parameter.Convert(parameter.DefaultValue);
+                        }
+                        else
+                        {
+                            actualValue = parameter.Convert(inputValue);
+                        }
                         break;
                     }
                 }
@@ -334,7 +341,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                         // Generate the value element
                         var dynamicValueEl = doc.CreateElement("namedValue");
                         dynamicValueEl.SetAttribute("name", parts[0].Replace("\\|", "|"));
-                        dynamicValueEl.SetAttribute("value", parts.Length > 1 ? parts[1].Replace("\\|", "|") : string.Empty);
+                        if (parts.Length > 1)
+                        {
+                            dynamicValueEl.SetAttribute("value", parts[1].Replace("\\|", "|"));
+                        }
+
                         parametersEl.AppendChild(dynamicValueEl);
 
                         // Generate the replacement
