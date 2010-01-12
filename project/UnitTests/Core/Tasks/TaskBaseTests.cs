@@ -169,7 +169,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 "<dynamicValues>" +
                     "<directValue>" +
                         "<parameter>value</parameter>" +
-                        "<default></default>" +
                         "<property>attrib</property>" +
                     "</directValue>" +
                 "</dynamicValues></item>";
@@ -189,7 +188,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 "<dynamicValues>" +
                     "<directValue>" +
                         "<parameter>value</parameter>" +
-                        "<default></default>" +
                         "<property>subItem</property>" +
                     "</directValue>" +
                 "</dynamicValues></item>";
@@ -254,7 +252,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                     "<replacementValue>" +
                         "<format>({0})</format>" +
                         "<parameters>" +
-                            "<namedValue name=\"value1\" value=\"\" />" +
+                            "<namedValue name=\"value1\" />" +
                         "</parameters>" +
                         "<property>attrib</property>" +
                     "</replacementValue>" +
@@ -276,7 +274,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                     "<replacementValue>" +
                         "<format>({0})</format>" +
                         "<parameters>" +
-                            "<namedValue name=\"value1\" value=\"\" />" +
+                            "<namedValue name=\"value1\" />" +
                         "</parameters>" +
                         "<property>subItem</property>" +
                     "</replacementValue>" +
@@ -388,8 +386,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                     "<replacementValue>" +
                         "<format>{0} {1}</format>" +
                         "<parameters>" +
-                            "<namedValue name=\"value1\" value=\"\" />" +
-                            "<namedValue name=\"value2\" value=\"\" />" +
+                            "<namedValue name=\"value1\" />" +
+                            "<namedValue name=\"value2\" />" +
                         "</parameters>" +
                         "<property>attrib</property>" +
                     "</replacementValue>" +
@@ -411,8 +409,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                     "<replacementValue>" +
                         "<format>{0} {1}</format>" +
                         "<parameters>" +
-                            "<namedValue name=\"value1\" value=\"\" />" +
-                            "<namedValue name=\"value2\" value=\"\" />" +
+                            "<namedValue name=\"value1\" />" +
+                            "<namedValue name=\"value2\" />" +
                         "</parameters>" +
                         "<property>subItem</property>" +
                     "</replacementValue>" +
