@@ -18,6 +18,7 @@ using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using System.Web;
 using System.Web.Caching;
+using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -1756,6 +1757,9 @@ namespace ThoughtWorks.CruiseControl.Core
                 logData = cache[logKey] as SynchronisedData;
                 if (logData == null)
                 {
+                    Log.Debug("Adding new cache entry, current cache size is " + cache.Count);
+                    Log.Debug("Current memory in use by GC is " + GC.GetTotalMemory(false));
+
                     // Add the new log data and load it
                     logData = new SynchronisedData();
                     cache.Add(

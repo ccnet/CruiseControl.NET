@@ -2,6 +2,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     using System;
     using System.IO;
+    using System.Runtime;
 
     /// <summary>
     /// A <see cref="ITaskResult"/> that reads the data directly from a file.
@@ -64,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 var data = this.ReadFileContents();
                 if (WrapInCData)
                 {
-                    return string.Format("<![CDATA[{0}]]>", data);
+                    return "<![CDATA[" + data + "]]>";
                 }
                 else
                 {
@@ -98,6 +99,28 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         {
             try
             {
+                if (this.dataSource.Length > 1048576)
+                {
+                    // Since the file is over one Mb, check if there is enough free memory to load the data
+                    // Note: We are actually checking to see if there is twice the amount of memory required, this is because often the 
+                    // data will need to be copied somewhere else, which means the string will exist in memory at least twice (hopefully
+                    // GC will clean up if it is needed more than twice)
+                    var fileSizeInMB = Convert.ToInt32(this.dataSource.Length / 524288);
+                    try
+                    {
+                        using (new MemoryFailPoint(fileSizeInMB))
+                        {
+                        }
+                    }
+                    catch (InsufficientMemoryException error)
+                    {
+                        // Much nicer to handle an InsufficientMemoryException exception than an OutOfMemoryException - OOM tends to kill
+                        // things!
+                        throw new CruiseControlException("Insufficient memory to import file results: " + error.Message, error);
+                    }
+                }
+
+                // Load the data from the file
                 using (StreamReader reader = this.dataSource.OpenText())
                 {
                     return reader.ReadToEnd();
