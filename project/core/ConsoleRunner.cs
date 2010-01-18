@@ -118,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 string message = "Request has failed on the server:" + Environment.NewLine +
                     value.ConcatenateErrors();
                 throw new CruiseControlException(message);
-	}
+            }
         }
     }
 }

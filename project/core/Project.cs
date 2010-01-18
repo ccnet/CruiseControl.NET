@@ -17,6 +17,7 @@ using ThoughtWorks.CruiseControl.Remote;
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using System.Text;
+using System.Runtime;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -971,7 +972,32 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             string logDirectory = GetLogDirectory();
             if (string.IsNullOrEmpty(logDirectory)) return string.Empty;
-            using (StreamReader sr = new StreamReader(Path.Combine(logDirectory, buildName)))
+
+            // Check that there is sufficient memory to load the log into memory
+            var filepath = Path.Combine(logDirectory, buildName);
+            var fileInfo = new FileInfo(filepath);
+            if (fileInfo.Length > 1048576)
+            {
+                // Since the file is over one Mb, check if there is enough free memory to load the data
+                // Note: We are actually checking to see if there is twice the amount of memory required, this is because often the 
+                // data will need to be copied somewhere else, which means the string will exist in memory at least twice (hopefully
+                // GC will clean up if it is needed more than twice)
+                var fileSizeInMB = Convert.ToInt32(fileInfo.Length / 524288);
+                try
+                {
+                    using (new MemoryFailPoint(fileSizeInMB))
+                    {
+                    }
+                }
+                catch (InsufficientMemoryException error)
+                {
+                    // Much nicer to handle an InsufficientMemoryException exception than an OutOfMemoryException - OOM tends to kill
+                    // things!
+                    throw new CruiseControlException("Insufficient memory to retrieve log: " + error.Message, error);
+                }
+            }
+
+            using (StreamReader sr = new StreamReader(filepath))
             {
                 return sr.ReadToEnd();
             }

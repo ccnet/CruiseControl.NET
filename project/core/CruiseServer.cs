@@ -1801,6 +1801,7 @@ namespace ThoughtWorks.CruiseControl.Core
             // Load the data if required
             if (loadData)
             {
+                Log.Debug("Loading log for " + logKey + " into cache");
                 logData.LoadData(() =>
                 {
                     var buildLog = this.GetIntegrator(projectName)
@@ -1808,10 +1809,12 @@ namespace ThoughtWorks.CruiseControl.Core
                         .GetBuildLog(buildName);
                     return buildLog;
                 });
+                Log.Debug("Current memory in use by GC is " + GC.GetTotalMemory(false));
             }
             else
             {
                 // Wait for the data to load
+                Log.Debug("Retrieving log for " + logKey + " from cache");
                 logData.WaitForLoad(10000);
             }
 
