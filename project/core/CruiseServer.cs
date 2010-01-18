@@ -48,6 +48,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private Dictionary<Type, object> services = new Dictionary<Type,object>();
     	private readonly string programmDataFolder;
         private object logCacheLock = new object();
+        private TimeSpan cacheTime;
         #endregion
 
         #region Constructors
@@ -91,6 +92,26 @@ namespace ThoughtWorks.CruiseControl.Core
             this.configurationService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(Restart));
 
         	programmDataFolder = this.executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server);
+
+            // Initialise the cache time
+            var cacheTimeInConfig = ConfigurationManager.AppSettings["cacheTime"];
+            if (string.IsNullOrEmpty(cacheTimeInConfig))
+            {
+                // Set the default cache time to five minutes
+                this.cacheTime = new TimeSpan(0, 5, 0);
+                Log.Info("Log cache time set to 5 minutes");
+            }
+            else
+            {
+                this.cacheTime = TimeSpan.FromSeconds(Convert.ToDouble(cacheTimeInConfig));
+                if (this.cacheTime.TotalSeconds < 10)
+                {
+                    // Set the minimum cache time to ten seconds to prevent too much cache churn
+                    this.cacheTime = new TimeSpan(0, 0, 10);
+                }
+
+                Log.Info("Log cache time set to " + this.cacheTime.TotalSeconds.ToString() + " seconds");
+            }
         }
         #endregion
 
@@ -1767,9 +1788,12 @@ namespace ThoughtWorks.CruiseControl.Core
                         logData,
                         null,
                         Cache.NoAbsoluteExpiration,
-                        new TimeSpan(1, 0, 0),
-                        CacheItemPriority.AboveNormal,
-                        null);
+                        this.cacheTime,
+                        CacheItemPriority.BelowNormal,
+                        (key, value, reason) =>
+                        {
+                            Log.Debug("Log for " + key + " has been removed from the cache - " + reason.ToString());
+                        });
                     loadData = true;
                 }
             }
