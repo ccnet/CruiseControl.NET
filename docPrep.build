@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="docGenerator" default="all" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
+  <property name="tools.dir" readonly="true" value="${path::get-full-path('Tools')}" />
+  <property name="docGen.dir" readonly="true" value="${path::combine(tools.dir, 'docGenerator')}" />
+  <property name="build.project" overwrite="false" value="${path::combine(docGen.dir, 'CCNetDocumentGenerator.sln')}" />
+  <property name="nauckit.nant.assembly" readonly="true" value="${path::combine( path::combine(tools.dir, 'NAnt'), 'NauckIT.NAnt.dll')}" />
+
+  <target name="all" depends="clean, compile"/>
+  
+  <target name="compile">
+    <loadtasks assembly="${nauckit.nant.assembly}" />
+    <echo message="Build Project: ${build.project}" />
+
+    <msbuild projectFile="${build.project}" verbosity="Minimal">
+    </msbuild>
+  </target>
+
+  <target name="clean">
+    <delete>
+      <fileset basedir="." failonempty="false">
+        <include name="doc-*.log"/>
+      </fileset>
+    </delete>
+    <copy file="${path::get-full-path('pages.xml')}" tofile="${path::combine( path::get-full-path('wiki'), 'pages.xml')}" overwrite="true"/>
+  </target>
+</project>
