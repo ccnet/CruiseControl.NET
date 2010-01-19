@@ -144,7 +144,7 @@
   <page title="Merge File" id="31097585" url="http://confluence.public.thoughtworks.org//display/CCNET/Merge+File" parentId="271" />
   <page title="MKS Source Integrity Source Control Block" id="2869" url="http://confluence.public.thoughtworks.org//display/CCNET/MKS+Source+Integrity+Source+Control+Block" parentId="1753" />
   <page title="Modification Filters" id="31686678" url="http://confluence.public.thoughtworks.org//display/CCNET/Modification+Filters" parentId="1068" />
-  <page title="Modification Reader Task" id="21626918" url="http://confluence.public.thoughtworks.org//display/CCNET/Modification+Reader+Task" parentId="1756" />
+  <page title="Modification Reader Task" id="21626918" url="http://confluence.public.thoughtworks.org//display/CCNET/Modification+Reader+Task" parentId="1756" source="modificationReader.wiki" />
   <page title="Modification Writer Task" id="3797" url="http://confluence.public.thoughtworks.org//display/CCNET/Modification+Writer+Task" parentId="1756" />
   <page title="ModificationHistory Publisher" id="3997789" url="http://confluence.public.thoughtworks.org//display/CCNET/ModificationHistory+Publisher" parentId="1756" />
   <page title="modificationHistoryProjectPlugin" id="3997792" url="http://confluence.public.thoughtworks.org//display/CCNET/modificationHistoryProjectPlugin" parentId="2973" />
