@@ -228,7 +228,7 @@
                 stopwatch.Stop();
                 WriteToOutput(
                     count.ToString() + " new confluence items retrieved in " + stopwatch.Elapsed.TotalSeconds.ToString("#,##0.00") + "s",
-                    OutputType.Debug);
+                    OutputType.Info);
             }
 
             return exitCode;
@@ -306,7 +306,7 @@
                                 {
                                     WriteToOutput(
                                         "Publishing " + sourceAttr.Value + " to " + titleAttr.Value + "[" + idAttr.Value + "]",
-                                        OutputType.Info);
+                                        OutputType.Debug);
 
                                     var sourcePath = sourceAttr.Value;
                                     if (!Path.IsPathRooted(sourcePath))
@@ -358,7 +358,7 @@
                 stopwatch.Stop();
                 WriteToOutput(
                     count.ToString() + " confluence items updated in " + stopwatch.Elapsed.TotalSeconds.ToString("#,##0.00") + "s",
-                    OutputType.Debug);
+                    OutputType.Info);
             }
 
             return exitCode;
@@ -422,6 +422,12 @@
 
                 Directory.CreateDirectory(baseFolder);
                 var assembly = Assembly.LoadFrom(assemblyName);
+                string versionNumber = null;
+                var version = assembly.GetName().Version;
+                if ((version.Major != 0) && (version.Minor != 0))
+                {
+                    versionNumber = version.ToString(4);
+                }
 
                 // Load the documentation for any dependencies
                 LoadDependencyDocumentation(Path.GetDirectoryName(assemblyName), assembly, documentation);
@@ -437,7 +443,7 @@
                         // There can be only one!
                         var attribute = attributes[0] as ReflectorTypeAttribute;
                         var fileName = Path.Combine(baseFolder, attribute.Name + ".wiki");
-                        WriteToOutput("Generating " + attribute.Name + ".wiki", OutputType.Info);
+                        WriteToOutput("Generating " + attribute.Name + ".wiki for " + publicType.FullName, OutputType.Info);
                         var itemStopwatch = new Stopwatch();
                         itemStopwatch.Start();
                         if (File.Exists(fileName))
@@ -491,7 +497,6 @@
                                 {
                                     problemList.Add("No example tag for " + publicType.FullName + " file " + fileName);
                                 }
-
                             }
 
                             output.WriteLine("h2. Configuration Elements");
@@ -522,6 +527,11 @@
                                 DateTime.Now.ToUniversalTime().ToString("dddd, d MMM yyyy", CultureInfo.InvariantCulture) +
                                 " at " +
                                 DateTime.Now.ToUniversalTime().ToString("h:mm:ss tt", CultureInfo.InvariantCulture));
+                            if (versionNumber != null)
+                            {
+                                output.WriteLine("Using assembly version " + versionNumber);
+                            }
+
                             output.WriteLine("{info}");
                             output.Flush();
                         }
@@ -558,7 +568,7 @@
             stopwatch.Stop();
             WriteToOutput(
                 "Documentation generation finished in " + stopwatch.Elapsed.TotalSeconds.ToString("#,##0.00") + "s",
-                OutputType.Debug);
+                OutputType.Info);
 
             if (problemList.Count > 0)
             {
