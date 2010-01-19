@@ -15,10 +15,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// <version>1.4</version>
     /// <example>
     /// <code title="Minimalist example">
-    /// &lt;rss /&gt;
+    /// &lt;modificationReader /&gt;
     /// </code>
     /// <code title="Full example">
-    /// &lt;rss items="30" /&gt;
+    /// &lt;modificationReader&gt;
+    /// &lt;deleteAfterRead&gt;true&lt;/deleteAfterRead&gt;
+    /// &lt;filename&gt;last-mods.xml&lt;/filename&gt;
+    /// &lt;path&gt;mods-path&lt;/path&gt;
+    /// &lt;/modificationReader&gt;
     /// </code>
     /// </example>
     /// <remarks>
