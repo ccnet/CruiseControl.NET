@@ -328,6 +328,11 @@
             }
 
             var assemblyName = args[0];
+            if (!Path.IsPathRooted(assemblyName))
+            {
+                assemblyName = Path.Combine(Environment.CurrentDirectory, assemblyName);
+            }
+
             if (!File.Exists(assemblyName))
             {
                 WriteToConsole("Cannot find assembly: " + assemblyName, ConsoleColor.Red);
