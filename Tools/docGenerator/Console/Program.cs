@@ -18,80 +18,118 @@
     {
         private static Regex specialChars;
         private static List<string> problemList = new List<string>();
+        private static TextWriter xmlLog = null;
 
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
-            var cmdArgs = new List<string>(args);
+            var consoleArgs = new ConsoleArgs();
+            var options = new OptionSet();
+            options.Add("c|cmd=", "The command to run", v => { consoleArgs.Command = v; })
+                .Add("s|src=", "The source for the command", v => { consoleArgs.Source = v; })
+                .Add("o|out=", "The output destination for the command", v => { consoleArgs.Destination = v; })
+                .Add("l|log=", "The log file to write any output to", v => { consoleArgs.LogFile = v; })
+                .Add("u|usr=", "The username to use", v => { consoleArgs.User = v; })
+                .Add("p|pwd=", "The password", v => { consoleArgs.Password = v; })
+                .Add("xsd", "Generate XSD files", v => { consoleArgs.GenerateXsd = v != null; });
+            options.Parse(args);
 
-            if (args.Length == 0)
+            var cmd = consoleArgs.Command ?? string.Empty;
+            if (!string.IsNullOrEmpty(consoleArgs.LogFile))
             {
-                WriteToConsole("No command specified", ConsoleColor.Red);
+                var logPath = consoleArgs.LogFile;
+                if (!Path.IsPathRooted(logPath))
+                {
+                    logPath = Path.Combine(Environment.CurrentDirectory, logPath);
+                }
+
+                if (File.Exists(logPath))
+                {
+                    File.Delete(logPath);
+                }
+
+                xmlLog = new StreamWriter(logPath);
+                xmlLog.WriteLine("<docGen command=\"" + cmd + "\" time=\"" + DateTime.Now.ToString("o") + "\">");
+            }
+
+            var exitCode = 0;
+            if (cmd.Length == 0)
+            {
+                WriteToOutput("No command specified", OutputType.Error);
+                exitCode = 11;
             }
             else
             {
-                var cmd = cmdArgs[0];
-                cmdArgs.RemoveAt(0);
                 switch (cmd.ToLowerInvariant())
                 {
                     case "generate":
-                        GenerateDocumentation(cmdArgs);
+                        exitCode = GenerateDocumentation(consoleArgs);
                         break;
 
                     case "list":
-                        ListConfluenceItems(cmdArgs);
+                        exitCode = ListConfluenceItems(consoleArgs);
                         break;
 
                     case "publish":
-                        PublishConfluenceItems(cmdArgs);
+                        exitCode = PublishConfluenceItems(consoleArgs);
                         break;
 
                     default:
-                        WriteToConsole("Unknown command: " + cmd, ConsoleColor.Red);
+                        exitCode = 1;
+                        WriteToOutput("Unknown command: " + cmd, OutputType.Error);
                         break;
                 }
+            }
+
+            if (xmlLog != null)
+            {
+                xmlLog.WriteLine("</docGen>");
+                xmlLog.Close();
+                xmlLog.Dispose();
             }
 
             // Pause when running within Visual Studio
             if (Debugger.IsAttached)
             {
+                Console.WriteLine("Application finished, press any key to continue");
                 Console.ReadKey(true);
             }
+
+            return exitCode;
         }
 
         /// <summary>
         /// Lists the confluence items.
         /// </summary>
         /// <param name="cmdArgs">The command-line args.</param>
-        private static void ListConfluenceItems(List<String> cmdArgs)
+        private static int ListConfluenceItems(ConsoleArgs cmdArgs)
         {
+            var exitCode = 0;
             var isValid = false;
-            var url = string.Empty;
-            var user = string.Empty;
-            var pwd = string.Empty;
             var output = string.Empty;
-            if (cmdArgs.Count == 0)
+            if (string.IsNullOrEmpty(cmdArgs.Source))
             {
-                WriteToConsole("Confluence URL not specified", ConsoleColor.Red);
+                WriteToOutput("Confluence URL not specified", OutputType.Error);
+                exitCode = 2;
             }
-            else if (cmdArgs.Count == 1)
+            else if (string.IsNullOrEmpty(cmdArgs.User))
             {
-                WriteToConsole("Username not specified", ConsoleColor.Red);
+                WriteToOutput("Username not specified", OutputType.Error);
+                exitCode = 3;
             }
-            else if (cmdArgs.Count == 2)
+            else if (string.IsNullOrEmpty(cmdArgs.Password))
             {
-                WriteToConsole("Password not specified", ConsoleColor.Red);
+                WriteToOutput("Password not specified", OutputType.Error);
+                exitCode = 4;
             }
-            else if (cmdArgs.Count == 3)
+            else if (string.IsNullOrEmpty(cmdArgs.Destination))
             {
-                WriteToConsole("Output path not specified", ConsoleColor.Red);
+                WriteToOutput("Output path not specified", OutputType.Error);
+                exitCode = 5;
             }
             else
             {
                 isValid = true;
-                url = cmdArgs[0];
-                user = cmdArgs[1];
-                pwd = cmdArgs[2];
-                output = cmdArgs[3];
+                output = cmdArgs.Destination;
                 if (!Path.IsPathRooted(output))
                 {
                     output = Path.Combine(Environment.CurrentDirectory, output);
@@ -102,7 +140,7 @@
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-                WriteToConsole("Retrieving Confluence items from " + url, ConsoleColor.Gray);
+                WriteToOutput("Retrieving Confluence items from " + cmdArgs.Source, OutputType.Info);
                 var count = 0;
 
                 try
@@ -111,11 +149,11 @@
                     binding.MaxReceivedMessageSize = int.MaxValue;
                     var client = new ConfluenceSoapServiceClient(
                         binding, 
-                        new EndpointAddress(url));
+                        new EndpointAddress(cmdArgs.Source));
 
                     try
                     {
-                        var session = client.login(user, pwd);
+                        var session = client.login(cmdArgs.User, cmdArgs.Password);
                         try
                         {
                             var pages = client.getPages(session, "CCNET");
@@ -153,6 +191,7 @@
                                         new XAttribute("parentId", page.parentId.ToString()));
                                     rootEl.Add(pageEl);
                                     count++;
+                                    WriteToOutput("New item added: " + page.title, OutputType.Info);
                                 }
                             }
 
@@ -166,7 +205,7 @@
                                                 orderby element.Attribute("title").Value
                                                 select element);
                                 newDoc.Save(output);
-                                WriteToConsole("Document updated", ConsoleColor.White);
+                                WriteToOutput("Document updated", OutputType.Info);
                             }
                         }
                         finally
@@ -176,55 +215,58 @@
                     }
                     catch (Exception error)
                     {
-                        WriteToConsole("ERROR: " + error.Message, ConsoleColor.Red);
+                        WriteToOutput("ERROR: " + error.Message, OutputType.Error);
+                        exitCode = 10;
                     }
                 }
                 catch (Exception error)
                 {
-                    WriteToConsole("ERROR: " + error.Message, ConsoleColor.Red);
+                    WriteToOutput("ERROR: " + error.Message, OutputType.Error);
+                    exitCode = 10;
                 }
 
                 stopwatch.Stop();
-                WriteToConsole(
+                WriteToOutput(
                     count.ToString() + " new confluence items retrieved in " + stopwatch.Elapsed.TotalSeconds.ToString("#,##0.00") + "s",
-                    ConsoleColor.Gray);
+                    OutputType.Debug);
             }
+
+            return exitCode;
         }
 
         /// <summary>
         /// Publishes items to Confluence.
         /// </summary>
         /// <param name="cmdArgs">The command-line args.</param>
-        private static void PublishConfluenceItems(List<String> cmdArgs)
+        private static int PublishConfluenceItems(ConsoleArgs cmdArgs)
         {
+            var exitCode = 0;
             var isValid = false;
-            var url = string.Empty;
-            var user = string.Empty;
-            var pwd = string.Empty;
             var input = string.Empty;
-            if (cmdArgs.Count == 0)
+            if (string.IsNullOrEmpty(cmdArgs.Destination))
             {
-                WriteToConsole("Confluence URL not specified", ConsoleColor.Red);
+                WriteToOutput("Confluence URL not specified", OutputType.Error);
+                exitCode = 2;
             }
-            else if (cmdArgs.Count == 1)
+            else if (string.IsNullOrEmpty(cmdArgs.User))
             {
-                WriteToConsole("Username not specified", ConsoleColor.Red);
+                WriteToOutput("Username not specified", OutputType.Error);
+                exitCode = 3;
             }
-            else if (cmdArgs.Count == 2)
+            else if (string.IsNullOrEmpty(cmdArgs.Password))
             {
-                WriteToConsole("Password not specified", ConsoleColor.Red);
+                WriteToOutput("Password not specified", OutputType.Error);
+                exitCode = 4;
             }
-            else if (cmdArgs.Count == 3)
+            else if (string.IsNullOrEmpty(cmdArgs.Source))
             {
-                WriteToConsole("Input path not specified", ConsoleColor.Red);
+                WriteToOutput("Input path not specified", OutputType.Error);
+                exitCode = 6;
             }
             else
             {
                 isValid = true;
-                url = cmdArgs[0];
-                user = cmdArgs[1];
-                pwd = cmdArgs[2];
-                input = cmdArgs[3];
+                input = cmdArgs.Source;
                 if (!Path.IsPathRooted(input))
                 {
                     input = Path.Combine(Environment.CurrentDirectory, input);
@@ -235,7 +277,7 @@
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-                WriteToConsole("Publishing Confluence items from " + url, ConsoleColor.Gray);
+                WriteToOutput("Publishing Confluence items to " + cmdArgs.Destination, OutputType.Info);
                 var count = 0;
 
                 try
@@ -245,11 +287,11 @@
                     binding.ReaderQuotas.MaxStringContentLength = int.MaxValue;
                     var client = new ConfluenceSoapServiceClient(
                         binding,
-                        new EndpointAddress(url));
+                        new EndpointAddress(cmdArgs.Destination));
 
                     try
                     {
-                        var session = client.login(user, pwd);
+                        var session = client.login(cmdArgs.User, cmdArgs.Password);
                         try
                         {
                             var inputDir = Path.GetDirectoryName(input);
@@ -262,9 +304,9 @@
                                 var parentAttr = pageEl.Attribute("parentId");
                                 if (sourceAttr != null)
                                 {
-                                    WriteToConsole(
+                                    WriteToOutput(
                                         "Publishing " + sourceAttr.Value + " to " + titleAttr.Value + "[" + idAttr.Value + "]",
-                                        ConsoleColor.White);
+                                        OutputType.Info);
 
                                     var sourcePath = sourceAttr.Value;
                                     if (!Path.IsPathRooted(sourcePath))
@@ -274,7 +316,7 @@
 
                                     if (!File.Exists(sourcePath))
                                     {
-                                        WriteToConsole("Unable to find file " + sourcePath, ConsoleColor.Yellow);
+                                        WriteToOutput("Unable to find file " + sourcePath, OutputType.Warning);
                                     }
                                     else
                                     {
@@ -285,12 +327,12 @@
                                         {
                                             page.content = newContent;
                                             client.storePage(session, page);
-                                            WriteToConsole(titleAttr.Value + " updated", ConsoleColor.DarkYellow);
+                                            WriteToOutput(titleAttr.Value + " updated", OutputType.Info);
                                             count++;
                                         }
                                         else
                                         {
-                                            WriteToConsole(titleAttr.Value + " unchanged, publish skipped", ConsoleColor.Gray);
+                                            WriteToOutput(titleAttr.Value + " unchanged, publish skipped", OutputType.Debug);
                                         }
                                     }
                                 }
@@ -303,31 +345,35 @@
                     }
                     catch (Exception error)
                     {
-                        WriteToConsole("ERROR: " + error.Message, ConsoleColor.Red);
+                        WriteToOutput("ERROR: " + error.Message, OutputType.Error);
+                        exitCode = 10;
                     }
                 }
                 catch (Exception error)
                 {
-                    WriteToConsole("ERROR: " + error.Message, ConsoleColor.Red);
+                    WriteToOutput("ERROR: " + error.Message, OutputType.Error);
+                    exitCode = 10;
                 }
 
                 stopwatch.Stop();
-                WriteToConsole(
+                WriteToOutput(
                     count.ToString() + " confluence items updated in " + stopwatch.Elapsed.TotalSeconds.ToString("#,##0.00") + "s",
-                    ConsoleColor.Gray);
+                    OutputType.Debug);
             }
+
+            return exitCode;
         }
 
-        public static void GenerateDocumentation(List<string> args)
+        public static int GenerateDocumentation(ConsoleArgs args)
         {
             specialChars = new Regex(@"[\|\[\]\*_+-]", RegexOptions.Compiled);
-            if (args.Count == 0)
+            if (string.IsNullOrEmpty(args.Source))
             {
-                WriteToConsole("No assembly specified", ConsoleColor.Red);
-                return;
+                WriteToOutput("No assembly specified", OutputType.Error);
+                return 21;
             }
 
-            var assemblyName = args[0];
+            var assemblyName = args.Source;
             if (!Path.IsPathRooted(assemblyName))
             {
                 assemblyName = Path.Combine(Environment.CurrentDirectory, assemblyName);
@@ -335,8 +381,8 @@
 
             if (!File.Exists(assemblyName))
             {
-                WriteToConsole("Cannot find assembly: " + assemblyName, ConsoleColor.Red);
-                return;
+                WriteToOutput("Cannot find assembly: " + assemblyName, OutputType.Error);
+                return 22;
             }
 
             var documentation = new XDocument();
@@ -347,21 +393,26 @@
             }
             else
             {
-                WriteToConsole("No XML file found for assembly: " + assemblyName, ConsoleColor.Red);
-                return;
+                WriteToOutput("No XML file found for assembly: " + assemblyName, OutputType.Error);
+                return 23;
             }
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            WriteToConsole("Starting documentation generation for " + Path.GetFileName(assemblyName), ConsoleColor.Gray);
+            WriteToOutput("Starting documentation generation for " + Path.GetFileName(assemblyName), OutputType.Info);
             problemList.Clear();
+
+            if (args.GenerateXsd)
+            {
+                WriteToOutput("Generating XSD files", OutputType.Debug);
+            }
 
             try
             {
                 var baseFolder = Path.Combine(Environment.CurrentDirectory, DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture));
-                if (args.Count > 1)
+                if (!string.IsNullOrEmpty(args.Destination))
                 {
-                    baseFolder = args[1];
+                    baseFolder = args.Destination;
                     if (!Path.IsPathRooted(baseFolder))
                     {
                         baseFolder = Path.Combine(Environment.CurrentDirectory, baseFolder);
@@ -386,7 +437,9 @@
                         // There can be only one!
                         var attribute = attributes[0] as ReflectorTypeAttribute;
                         var fileName = Path.Combine(baseFolder, attribute.Name + ".wiki");
-                        WriteToConsole("Generating " + attribute.Name + ".wiki", ConsoleColor.White);
+                        WriteToOutput("Generating " + attribute.Name + ".wiki", OutputType.Info);
+                        var itemStopwatch = new Stopwatch();
+                        itemStopwatch.Start();
                         if (File.Exists(fileName))
                         {
                             File.Delete(fileName);
@@ -473,43 +526,58 @@
                             output.Flush();
                         }
 
-                        var xsdFile = Path.Combine(baseFolder, attribute.Name + ".xsd");
-                        if (File.Exists(xsdFile))
-                        {
-                            File.Delete(xsdFile);
-                        }
+                        itemStopwatch.Stop();
+                        WriteToOutput(
+                            "Documentation generated for " + attribute.Name + " in " + itemStopwatch.Elapsed.TotalSeconds.ToString("#,##0.00") + "s",
+                            OutputType.Debug);
 
-                        WriteXsdFile(xsdFile, attribute, publicType, documentation, typeElement);
+                        if (args.GenerateXsd)
+                        {
+                            itemStopwatch.Reset();
+                            itemStopwatch.Start();
+                            var xsdFile = Path.Combine(baseFolder, attribute.Name + ".xsd");
+                            if (File.Exists(xsdFile))
+                            {
+                                File.Delete(xsdFile);
+                            }
+
+                            WriteXsdFile(xsdFile, attribute, publicType, documentation, typeElement);
+                            WriteToOutput(
+                                "XSD generated for " + attribute.Name + " in " + itemStopwatch.Elapsed.TotalSeconds.ToString("#,##0.00") + "s",
+                                OutputType.Debug);
+                        }
                     }
                 }
             }
             catch (Exception error)
             {
-                WriteToConsole(error.Message, ConsoleColor.Red);
-                throw;
+                WriteToOutput(error.Message, OutputType.Error);
+                return 24;
             }
 
             stopwatch.Stop();
-            WriteToConsole(
-                "Documentation generation finished in " + stopwatch.Elapsed.TotalSeconds.ToString("#,##0.00") + "s", 
-                ConsoleColor.Gray);
+            WriteToOutput(
+                "Documentation generation finished in " + stopwatch.Elapsed.TotalSeconds.ToString("#,##0.00") + "s",
+                OutputType.Debug);
 
             if (problemList.Count > 0)
             {
-                WriteToConsole("Problems encountered : " + problemList.Count.ToString(), ConsoleColor.Yellow);
+                WriteToOutput("Problems encountered : " + problemList.Count.ToString(), OutputType.Warning);
 
                 foreach (string s in problemList)
                 {
-                    WriteToConsole(s, ConsoleColor.Yellow);
+                    WriteToOutput(s, OutputType.Warning);
                 }
             }
+
+            return 0;
         }
 
         private static void WriteXsdFile(string xsdFile, ReflectorTypeAttribute attribute, Type type, XDocument documentation, XElement typeElement)
         {
             using (var output = new StreamWriter(xsdFile))
             {
-                WriteToConsole("Generating " + attribute.Name + ".xsd", ConsoleColor.White);
+                WriteToOutput("Generating " + attribute.Name + ".xsd", OutputType.Info);
                 output.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                 output.WriteLine("<xs:schema targetNamespace=\"http://thoughtworks.org/ccnet/1/5\" elementFormDefault=\"qualified\" xmlns=\"http://thoughtworks.org/ccnet/1/5\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">");
                 output.WriteLine("<xs:element name=\"" + attribute.Name + "\" type=\"" + attribute.Name + "\">");
@@ -637,12 +705,39 @@
             }
         }
 
-        private static void WriteToConsole(string message, ConsoleColor colour)
+        private static void WriteToOutput(string message, OutputType type)
         {
-            var current = System.Console.ForegroundColor;
-            System.Console.ForegroundColor = colour;
-            System.Console.WriteLine(message);
-            System.Console.ForegroundColor = current;
+            if (xmlLog == null)
+            {
+                var current = System.Console.ForegroundColor;
+                switch (type)
+                {
+                    case OutputType.Debug:
+                        System.Console.ForegroundColor = ConsoleColor.Gray;
+                        break;
+
+                    case OutputType.Info:
+                        System.Console.ForegroundColor = ConsoleColor.White;
+                        break;
+
+                    case OutputType.Warning:
+                        System.Console.ForegroundColor = ConsoleColor.Yellow;
+                        break;
+
+                    case OutputType.Error:
+                        System.Console.ForegroundColor = ConsoleColor.Red;
+                        break;
+                }
+
+                System.Console.WriteLine(message);
+                System.Console.ForegroundColor = current;
+            }
+            else
+            {
+                xmlLog.WriteLine("<message type=\"" + type.ToString() + "\" time=\"" + DateTime.Now.ToString("o") + "\">");
+                xmlLog.WriteLine("<![CDATA[" + message + "]]>");
+                xmlLog.WriteLine("</message>");
+            }
         }
 
         private static bool HasTag(XElement typeElement, string tagName)
