@@ -744,7 +744,7 @@
             }
             else
             {
-                xmlLog.WriteLine("<message type=\"" + type.ToString() + "\" time=\"" + DateTime.Now.ToString("o") + "\">");
+                xmlLog.WriteLine("<message type=\"" + type.ToString() + "\" time=\"" + DateTime.Now.ToString("r") + "\">");
                 xmlLog.WriteLine("<![CDATA[" + message + "]]>");
                 xmlLog.WriteLine("</message>");
             }
