@@ -4,21 +4,23 @@
 
   <xsl:template match="/">
     <style type="text/css">
-      .info
+      .doc-Info
       {
       color: #000000;
       }
-      .debug
+      .doc-Debug
       {
       color: #666666;
+      font-style: italic;
       }
-      .warning
+      .doc-Warning
       {
       color: #FF6600;
       }
-      .error
+      .doc-Error
       {
       color: #FF3333;
+      font-weight: bold;
       }
       .header
       {
@@ -37,9 +39,7 @@
       </div>
       <xsl:for-each select="message">
         <div>
-          <xsl:attribute name="class">
-            <xsl:value-of select="@type"/>
-          </xsl:attribute>
+          <xsl:attribute name="class">doc-<xsl:value-of select="@type"/></xsl:attribute>
           <xsl:value-of select="@time"/>: <xsl:value-of select="."/>
         </div>
       </xsl:for-each>

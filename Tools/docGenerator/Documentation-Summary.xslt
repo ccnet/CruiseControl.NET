@@ -8,15 +8,15 @@
   <xsl:template match="/">
     <xsl:if test="//docGen">
       <style type="text/css">
-        .info
+        .doc-Info
         {
         color: #000000;
         }
-        .warning
+        .doc-Warning
         {
         color: #FF6600;
         }
-        .error
+        .doc-Error
         {
         color: #FF3333;
         }
@@ -37,23 +37,23 @@
         </div>
         <xsl:for-each select="message[@type='Info']">
           <xsl:if test="position()=1">
-            <div class="info">
+            <div class="doc-Info">
               <xsl:value-of select="@time"/>: <xsl:value-of select="."/>
             </div>
           </xsl:if>
           <xsl:if test="position()=last()">
-            <div class="info">
+            <div class="doc-Info">
               <xsl:value-of select="@time"/>: <xsl:value-of select="."/>
             </div>
           </xsl:if>
         </xsl:for-each>
         <xsl:if test="message[@type='Error']">
-          <div class="error">
+          <div class="doc-Error">
             <xsl:value-of select="count(message[@type='Error'])"/> error(s)
           </div>
         </xsl:if>
         <xsl:if test="message[@type='Warning']">
-          <div class="warning">
+          <div class="doc-Warning">
             <xsl:value-of select="count(message[@type='Warning'])"/> warning(s)
           </div>
         </xsl:if>
