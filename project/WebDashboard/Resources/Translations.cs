@@ -23,39 +23,46 @@
         private Translations()
         {
             var context = HttpContext.Current;
-
-                // Get the user's preferred language - this comes from the browser so we are assuming that the user has choosen their preferred languages
-            if ((context != null) &&
-                (context.Request != null) &&
-                (context.Request.UserLanguages.Length > 0))
+            try
             {
-                foreach (var language in context.Request.UserLanguages)
+                // Get the user's preferred language - this comes from the browser so we are assuming that the user has choosen their preferred languages
+                if ((context != null) &&
+                    (context.Request != null) &&
+                    (context.Request.UserLanguages.Length > 0))
                 {
-                    try
+                    foreach (var language in context.Request.UserLanguages)
                     {
-                        this.culture = new CultureInfo(language);
-
-                        // Stop on the first non-neutral language
-                        if (!this.culture.IsNeutralCulture)
+                        try
                         {
-                            break;
+                            this.culture = new CultureInfo(language);
+
+                            // Stop on the first non-neutral language
+                            if (!this.culture.IsNeutralCulture)
+                            {
+                                break;
+                            }
+                        }
+                        catch (ArgumentException)
+                        {
+                            // This means that the language has invalid characters in it - normally because .NET has incorrectly parsed the user agent string
+                        }
+
+                        if (this.culture.IsNeutralCulture)
+                        {
+                            // Revert to the first culture since there are no non-neutral cultures defined
+                            this.culture = new CultureInfo(context.Request.UserLanguages[0]);
                         }
                     }
-                    catch (ArgumentException)
-                    {
-                        // This means that the language has invalid characters in it - normally because .NET has incorrectly parsed the user agent string
-                    }
-
-                    if (this.culture.IsNeutralCulture)
-                    {
-                        // Revert to the first culture since there are no non-neutral cultures defined
-                        this.culture = new CultureInfo(context.Request.UserLanguages[0]);
-                    }
+                }
+                else
+                {
+                    // Use the default culture from the server
+                    this.culture = CultureInfo.CurrentUICulture;
                 }
             }
-            else
+            catch
             {
-                // Use the default culture from the server
+                // If all else fails, use the current UI culture
                 this.culture = CultureInfo.CurrentUICulture;
             }
 
