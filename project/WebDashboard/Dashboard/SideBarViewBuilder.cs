@@ -139,7 +139,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                     velocityContext["links"] = pluginLinkCalculator.GetServerPluginLinks(serverSpecifier);
                     velocityContext["serverlink"] = linkFactory.CreateServerLink(serverSpecifier, "ViewServerReport");
 
-                    IAbsoluteLink[] categoryLinks = GetCategoryLinks(serverSpecifier);
+                    IAbsoluteLink[] categoryLinks = new IAbsoluteLink[0];
+                    try
+                    {
+                        categoryLinks = GetCategoryLinks(serverSpecifier);
+                    }
+                    catch
+                    {
+                        // Ignore any error here - this is normally because the URL is incorrect, the error will be displayed in the main content
+                    }
+
                     velocityContext["showCategories"] = (categoryLinks != null) ? true : false;
                     velocityContext["categorylinks"] = categoryLinks;
 

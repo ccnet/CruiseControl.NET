@@ -12,6 +12,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		}
 
 		public UnknownServerException(string requestedServer)
+            : base("Unknown server (" + requestedServer + ") - please check the URL is correct")
 		{
 			this.requestedServer = requestedServer;
 		}
