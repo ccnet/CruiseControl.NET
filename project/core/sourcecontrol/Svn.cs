@@ -324,7 +324,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.4.4</version>
         /// <default>false</default>
         [ReflectorProperty("revisionNumbers", Required = false)]
-        public bool UserRevsionNumbers { get; set; }
+        public bool UseRevsionNumbers { get; set; }
 
         /// <summary>
         /// Defines the auth caching mode to use.
@@ -464,7 +464,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 var lastRepositoryRevisionName = "SVN:LastRevision:" + repositoryUrl;
                 Modification[] modsInRepository;
                 string lastRepositoryRevision = null;
-                if (UserRevsionNumbers)
+                if (UseRevsionNumbers)
                 {
                     // Since we are using the last revision number, see if there is any number stored to use
                     lastRepositoryRevision = revisionData.ContainsKey(lastRepositoryRevisionName)
