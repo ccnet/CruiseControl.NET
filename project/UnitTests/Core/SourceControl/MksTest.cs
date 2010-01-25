@@ -69,6 +69,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 						  <sandboxfile>myproject.pj</sandboxfile>
 						  <autoGetSource>true</autoGetSource>
 						  <checkpointOnSuccess>true</checkpointOnSuccess>
+						  <autoDisconnect>true</autoDisconnect>
 					  </sourceControl>
 				 ", sandboxRoot);
 		}
@@ -81,6 +82,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(8722, defalutMks.Port);
 			Assert.AreEqual(true, defalutMks.AutoGetSource);
 			Assert.AreEqual(false, defalutMks.CheckpointOnSuccess);
+			Assert.AreEqual(false, defalutMks.AutoDisconnect);
 		}
 
 		[Test]
@@ -97,6 +99,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(@"myproject.pj", mks.SandboxFile);
 			Assert.AreEqual(true, mks.AutoGetSource);
 			Assert.AreEqual(true, mks.CheckpointOnSuccess);
+			Assert.AreEqual(true, mks.AutoDisconnect);
 		}
 
 		[Test]
@@ -109,6 +112,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                 GeneratePath(@"{0}\*", sandboxRoot));
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), ExpectedProcessInfo("attrib", expectedAttribCommand));
 
+			string expectedDisconnectCommand = string.Format(@"disconnect --user=CCNetUser --password=CCNetPassword --quiet --forceConfirm=yes");
+			ProcessInfo expectedDisconnectProcessInfo = ExpectedProcessInfo(expectedDisconnectCommand);
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedDisconnectProcessInfo);
+			
 			mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
             mks.GetSource(new IntegrationResult());
 		}
@@ -119,9 +126,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			sandboxRoot = TempFileUtil.GetTempPath("Mks Sand Box");
             string expectedResyncCommand = string.Format(@"resync --overwriteChanged --restoreTimestamp --forceConfirm=yes --includeDropped -R -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot);
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), ExpectedProcessInfo(expectedResyncCommand));
+			
 			string expectedAttribCommand = string.Format(@"-R /s ""{0}\*""", sandboxRoot);
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), ExpectedProcessInfo("attrib", expectedAttribCommand));
-
+			
+			string expectedDisconnectCommand = string.Format(@"disconnect --user=CCNetUser --password=CCNetPassword --quiet --forceConfirm=yes");
+			ProcessInfo expectedDisconnectProcessInfo = ExpectedProcessInfo(expectedDisconnectCommand);
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedDisconnectProcessInfo);
+			
 			mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
             mks.GetSource(new IntegrationResult());
 		}
@@ -133,9 +145,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			string expectedCommand = string.Format(@"checkpoint -d ""Cruise Control.Net Build - 20"" -L ""Build - 20"" -R -S {0} --user=CCNetUser --password=CCNetPassword --quiet", path);
 			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
+			
+			string expectedDisconnectCommand = string.Format(@"disconnect --user=CCNetUser --password=CCNetPassword --quiet --forceConfirm=yes");
+			ProcessInfo expectedDisconnectProcessInfo = ExpectedProcessInfo(expectedDisconnectCommand);
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedDisconnectProcessInfo);
+			
 			mockIntegrationResult.ExpectAndReturn("Succeeded", true);
 			mockIntegrationResult.ExpectAndReturn("Label", "20");
-
+			
 			mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
 			mks.LabelSourceControl(integrationResult);
 		}
@@ -143,10 +160,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CheckpointSourceOnUnSuccessfulBuild()
 		{
-			mockExecutorWrapper.ExpectNoCall("Execute", typeof (ProcessInfo));
+			string expectedDisconnectCommand = string.Format(@"disconnect --user=CCNetUser --password=CCNetPassword --quiet --forceConfirm=yes");
+			ProcessInfo expectedDisconnectProcessInfo = ExpectedProcessInfo(expectedDisconnectCommand);
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedDisconnectProcessInfo);
+			
 			mockIntegrationResult.ExpectAndReturn("Succeeded", false);
 			mockIntegrationResult.ExpectNoCall("Label", typeof (string));
-
+			
 			mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
 			mks.LabelSourceControl(integrationResult);
 		}
@@ -156,10 +176,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			mksHistoryParserWrapper.ExpectAndReturn("Parse", new Modification[0], new IsTypeOf(typeof (TextReader)), FROM, TO);
 			mksHistoryParserWrapper.ExpectNoCall("ParseMemberInfoAndAddToModification", new Type[] {(typeof (Modification)), typeof (StringReader)});
+			
             ProcessInfo expectedProcessInfo = ExpectedProcessInfo(string.Format(@"viewsandbox --nopersist --filter=changed:all --xmlapi -R -S {0} --user=CCNetUser --password=CCNetPassword --quiet", 
                 GeneratePath(@"{0}\myproject.pj", sandboxRoot)));
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
-
+			
+			string expectedDisconnectCommand = string.Format(@"disconnect --user=CCNetUser --password=CCNetPassword --quiet --forceConfirm=yes");
+			ProcessInfo expectedDisconnectProcessInfo = ExpectedProcessInfo(expectedDisconnectCommand);
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedDisconnectProcessInfo);
+			
 			mks = CreateMks(CreateSourceControlXml(), mksHistoryParser, mockProcessExecutor);
 			Modification[] modifications = mks.GetModifications(IntegrationResultMother.CreateSuccessful(FROM), IntegrationResultMother.CreateSuccessful(TO));
 			Assert.AreEqual(0, modifications.Length);
@@ -179,7 +204,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                 GeneratePath(@"{0}\MyFolder\myFile.file", sandboxRoot));
 			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
-
+			
+			string expectedDisconnectCommand = string.Format(@"disconnect --user=CCNetUser --password=CCNetPassword --quiet --forceConfirm=yes");
+			ProcessInfo expectedDisconnectProcessInfo = ExpectedProcessInfo(expectedDisconnectCommand);
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedDisconnectProcessInfo);
+			
 			mks = CreateMks(CreateSourceControlXml(), mksHistoryParser, mockProcessExecutor);
 			Modification[] modifications = mks.GetModifications(IntegrationResultMother.CreateSuccessful(FROM), IntegrationResultMother.CreateSuccessful(TO));
 			Assert.AreEqual(1, modifications.Length);
@@ -202,6 +231,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
 
+			string expectedDisconnectCommand = string.Format(@"disconnect --user=CCNetUser --password=CCNetPassword --quiet --forceConfirm=yes");
+			ProcessInfo expectedDisconnectProcessInfo = ExpectedProcessInfo(expectedDisconnectCommand);
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedDisconnectProcessInfo);
+			
 			mks = CreateMks(CreateSourceControlXml(), mksHistoryParser, mockProcessExecutor);
 			Modification[] modifications = mks.GetModifications(IntegrationResultMother.CreateSuccessful(FROM), IntegrationResultMother.CreateSuccessful(TO));
 			Assert.AreEqual(1, modifications.Length);

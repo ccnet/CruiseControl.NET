@@ -42,6 +42,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public const string DefaultExecutable = "si.exe";
 		public const int DefaultPort = 8722;
 		public const bool DefaultAutoGetSource = true;
+		public const bool DefaultAutoDisconnect = false;
+		
+		private static int usageCount = 0;
+		private static object usageCountLock = new object();
 
 		public Mks() : this(new MksHistoryParser(), new ProcessExecutor())
 		{
@@ -90,6 +94,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <default>true</default>
         [ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = DefaultAutoGetSource;
+		
+		/// <summary>
+        /// Whether or not CCNet should automatically disconnect after the sourcecontrol operation has finished.
+        /// </summary>
+        /// <version>1.0</version>
+        /// <default>false</default>
+        [ReflectorProperty("autoDisconnect", Required = false)]
+		public bool AutoDisconnect = DefaultAutoDisconnect;
 
         /// <summary>
         /// The IP address or machine name of the MKS Source Integrity server. 
@@ -125,6 +137,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
+			IncreaseUsageCount();
+			
             // Modifications (includes adds and deletes!)
             ProcessInfo info = NewProcessInfoWithArgs(BuildSandboxModsCommand());
             Log.Info(string.Format("Getting Modifications (mods): {0} {1}", info.FileName, info.Arguments));
@@ -136,27 +150,37 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             {
                 modifications = FilterOnTimeframe(modifications, from.StartTime, to.StartTime);
             }
-
-		    return modifications;
+ 
+            DecreaseUsageCount();
+		    
+		    return modifications;		   
 		}
 
 		public override void LabelSourceControl(IIntegrationResult result)
 		{
+			IncreaseUsageCount();
+			
 			if (CheckpointOnSuccess && result.Succeeded)
 			{
 				ProcessInfo checkpointProcess = NewProcessInfoWithArgs(BuildCheckpointCommand(result.Label));
 				ExecuteWithLogging(checkpointProcess, "Adding Checkpoint");
 			}
+			
+			DecreaseUsageCount();
 		}
 
 		public override void GetSource(IIntegrationResult result)
 		{
+			IncreaseUsageCount();
+			
 			if (AutoGetSource)
 			{
 				ProcessInfo resynchProcess = NewProcessInfoWithArgs(BuildResyncCommand());
 				ExecuteWithLogging(resynchProcess, "Resynchronizing source");
 				RemoveReadOnlyAttribute();
 			}
+			
+			DecreaseUsageCount();
 		}
 
 		private void AddMemberInfoToModifiedOrAddedModifications(Modification[] modifications)
@@ -281,6 +305,39 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private ProcessInfo NewProcessInfoWithArgs(string args)
 		{
 			return new ProcessInfo(Executable, args);
+		}
+		
+		private void IncreaseUsageCount()
+		{
+			lock(usageCountLock)
+			{
+				usageCount++;
+			}
+		}
+		
+		private void DecreaseUsageCount()
+		{
+			lock(usageCountLock)
+			{
+				usageCount--;
+				
+				if(AutoDisconnect && (usageCount == 0))
+				{
+						ProcessInfo info = NewProcessInfoWithArgs(BuildDisconnectCommand());
+						ExecuteWithLogging(info, "Disconnecting from server");
+				}
+			}			
+		}		
+		
+		private string BuildDisconnectCommand()
+		{
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+			buffer.AppendArgument("disconnect");
+			buffer.AppendArgument("--user={0}", User);
+			buffer.AppendArgument("--password={0}", Password);
+			buffer.AppendArgument("--quiet");
+			buffer.AppendArgument("--forceConfirm=yes");
+			return buffer.ToString();
 		}
 	}
 }
