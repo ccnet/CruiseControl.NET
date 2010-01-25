@@ -493,6 +493,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 if (repositoryUrl == TrunkUrl)
                 {
                     latestRevision = int.Parse(lastRepositoryRevision ?? "0");
+                    revisionData[lastRepositoryRevisionName] = lastRepositoryRevision;
                 }
             }
 
