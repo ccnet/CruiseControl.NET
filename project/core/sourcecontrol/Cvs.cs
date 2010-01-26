@@ -260,7 +260,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			builder.AddArgument("-R");
 			builder.AddArgument("-P");
 			builder.AddArgument("-r", Branch);
-			builder.AddArgument("-d", StringUtil.AutoDoubleQuoteString(result.BaseFromWorkingDirectory(WorkingDirectory)));
 			builder.AddArgument(Module);
 			return NewProcessInfoWithArgs(result, builder.ToString());
 		}
@@ -307,7 +306,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private ProcessInfo NewProcessInfoWithArgs(IIntegrationResult result, string args)
 		{
-			var pi = new ProcessInfo(Executable, args, result.BaseFromWorkingDirectory(WorkingDirectory));
+		    var wd = result.BaseFromWorkingDirectory(WorkingDirectory);
+            // ensure working directory exists
+		    fileSystem.EnsureFolderExists(wd);
+
+            var pi = new ProcessInfo(Executable, args, wd);
             SetEnvironmentVariables(pi, result);
             return pi;
 		}
@@ -321,8 +324,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             if(executionEnvironment.IsRunningOnWindows)
             {
+                var cvsHomePath = result.ArtifactDirectory.TrimEnd(Path.DirectorySeparatorChar);
+
                 // set %HOME% env var (see http://jira.public.thoughtworks.org/browse/CCNET-1793)
-                pi.EnvironmentVariables["HOME"] = result.ArtifactDirectory;
+                pi.EnvironmentVariables["HOME"] = cvsHomePath;
+
+                //ensure %HOME%\.cvspass file exists (see http://jira.public.thoughtworks.org/browse/CCNET-1795)
+                fileSystem.EnsureFileExists(Path.Combine(cvsHomePath, ".cvspass"));
+                Log.Debug("[CVS] Set %HOME% environment variable to '{0}'.", cvsHomePath);
             }
         }
 
