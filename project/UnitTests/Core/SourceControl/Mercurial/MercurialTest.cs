@@ -32,6 +32,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
             public bool DirectoryExists(string folder) { return true; }
 
             public void EnsureFolderExists(string fileName) { }
+
+            /// <summary>
+            /// Ensures that the specified file exists.
+            /// </summary>
+            /// <param name="fileName">The name of the file.</param>
+            public void EnsureFileExists(string fileName)
+            {
+                throw new NotImplementedException();
+            }
+
             public long GetFreeDiskSpace(string driveName) { return int.MaxValue; }
 
             public string[] GetFilesInDirectory(string directory) { return new string[0];}
