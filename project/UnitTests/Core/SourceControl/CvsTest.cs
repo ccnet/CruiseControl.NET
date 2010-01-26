@@ -20,14 +20,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		private DateTime from;
 		private DateTime to;
 		private IMock mockFileSystem;
+        private IExecutionEnvironment executionEnv;
 
 		[SetUp]
 		protected void CreateCvs()
 		{
 			mockHistoryParser = new DynamicMock(typeof (IHistoryParser));
 			mockFileSystem = new DynamicMock(typeof (IFileSystem));
+            executionEnv = new ExecutionEnvironment();
 			CreateProcessExecutorMock(Cvs.DefaultCvsExecutable);
-			cvs = new Cvs((IHistoryParser) mockHistoryParser.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance, (IFileSystem)mockFileSystem.MockInstance);
+            cvs = new Cvs((IHistoryParser)mockHistoryParser.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance, (IFileSystem)mockFileSystem.MockInstance, executionEnv);
 			from = new DateTime(2001, 1, 21, 20, 0, 0);
 			to = from.AddDays(1);
 		}

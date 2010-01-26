@@ -46,15 +46,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public const string DefaultCvsExecutable = "cvs";
 		public const string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
 		private readonly IFileSystem fileSystem;
+        private readonly IExecutionEnvironment executionEnvironment;
         private BuildProgressInformation _buildProgressInformation;
 
-		public Cvs() : this(new CvsHistoryParser(), new ProcessExecutor(), new SystemIoFileSystem())
+		public Cvs() : this(new CvsHistoryParser(), new ProcessExecutor(), new SystemIoFileSystem(), new ExecutionEnvironment())
 		{
 		}
 
-		public Cvs(IHistoryParser parser, ProcessExecutor executor, IFileSystem fileSystem) : base(parser, executor)
+        public Cvs(IHistoryParser parser, ProcessExecutor executor, IFileSystem fileSystem, IExecutionEnvironment executionEnvironment)
+            : base(parser, executor)
 		{
 			this.fileSystem = fileSystem;
+            this.executionEnvironment = executionEnvironment;
 		}
 
         /// <summary>
@@ -304,8 +307,24 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private ProcessInfo NewProcessInfoWithArgs(IIntegrationResult result, string args)
 		{
-			return new ProcessInfo(Executable, args, result.BaseFromWorkingDirectory(WorkingDirectory));
+			var pi = new ProcessInfo(Executable, args, result.BaseFromWorkingDirectory(WorkingDirectory));
+            SetEnvironmentVariables(pi, result);
+            return pi;
 		}
+
+        /// <summary>
+        /// Set default environment variables for CVS
+        /// </summary>
+        /// <param name="pi">The command.</param>
+        /// <param name="result">IntegrationResult for which the command is being run.</param>
+        private void SetEnvironmentVariables(ProcessInfo pi, IIntegrationResult result)
+        {
+            if(executionEnvironment.IsRunningOnWindows)
+            {
+                // set %HOME% env var (see http://jira.public.thoughtworks.org/browse/CCNET-1793)
+                pi.EnvironmentVariables["HOME"] = result.ArtifactDirectory;
+            }
+        }
 
 		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -N "-d>2004-12-24 12:00:00 GMT" -rmy_branch (with branch)
 		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -Nb "-d>2004-12-24 12:00:00 GMT" (without branch)
