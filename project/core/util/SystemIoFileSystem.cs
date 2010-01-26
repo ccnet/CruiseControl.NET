@@ -188,6 +188,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         }
         #endregion
 
+        /// <summary>
+        /// Ensures that the specified file exists.
+        /// </summary>
+        /// <param name="fileName">The name of the file.</param>
+        public void EnsureFileExists(string fileName)
+        {
+            EnsureFolderExists(fileName);
+            using (File.Create(fileName)) { }
+        }
+
         #region GetFreeDiskSpace()
         /// <summary>
         /// Retrieves the free disk space for a drive.

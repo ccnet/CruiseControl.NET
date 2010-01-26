@@ -22,6 +22,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         void EnsureFolderExists(string fileName);
 
         /// <summary>
+        /// Ensures that the specified file exists.
+        /// </summary>
+        /// <param name="fileName">The name of the file.</param>
+        void EnsureFileExists(string fileName);
+
+        /// <summary>
         /// Retrieves the free disk space for a drive.
         /// </summary>
         /// <param name="driveName">The name of the drive (e.g. c:).</param>
