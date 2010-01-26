@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		public void GenerateLabelFromNoMods()
 		{
 			IntegrationResult result = CreateIntegrationResult();
-			Assert.AreEqual(new Version(0, 0, 0, 0).ToString(), labeller.Generate(result));
+			Assert.AreEqual(new Version(0, 0, 1, 0).ToString(), labeller.Generate(result));
 		}
 
 		[Test]
@@ -93,11 +93,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		[Test]
 		public void GenerateLabelIterative()
 		{
-			Assert.AreEqual(new Version(0, 0, 0, 0).ToString(), labeller.Generate(SuccessfulResult("unknown")));
+			Assert.AreEqual(new Version(0, 0, 1, 0).ToString(), labeller.Generate(SuccessfulResult("unknown")));
 
 			IntegrationResult result = SuccessfulResult(new Version(0, 0, 1, 30).ToString());
 			AddModifications(result);
-			Assert.AreEqual(new Version(0, 0, 1, 30).ToString(), labeller.Generate(result));
+			Assert.AreEqual(new Version(0, 0, 2, 30).ToString(), labeller.Generate(result));
 
 			result.BuildCondition = BuildCondition.ForceBuild;
 			Assert.AreEqual(new Version(0, 0, 2, 30).ToString(), labeller.Generate(result));

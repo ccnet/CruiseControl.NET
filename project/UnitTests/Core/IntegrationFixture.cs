@@ -30,7 +30,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		public IntegrationResult SuccessfulResult(string previousLabel)
 		{
-			return IntegrationResultMother.Create(new IntegrationSummary(IntegrationStatus.Success, previousLabel, previousLabel, DateTime.MinValue));
+		    var result =
+		        IntegrationResultMother.Create(new IntegrationSummary(IntegrationStatus.Success, previousLabel, previousLabel,
+		                                                              DateTime.MinValue));
+
+            result.Status = IntegrationStatus.Success;
+            return result;
 		}
 
 		public IntegrationResult FailedResult(string previousLabel)

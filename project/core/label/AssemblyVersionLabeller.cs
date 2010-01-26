@@ -92,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			// try getting old version
 			try
 			{
-				Log.Debug(string.Concat("Old build label is: ", integrationResult.LastIntegration.Label));
+                Log.Debug(string.Concat("[assemblyVersionLabeller] Old build label is: ", integrationResult.LastIntegration.Label));
 				oldVersion = new Version(integrationResult.LastIntegration.Label);
 			}
 			catch (Exception)
@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 				oldVersion = new Version(0, 0, 0, 0);
 			}
 
-			Log.Debug(string.Concat("Old version is: ", oldVersion.ToString()));
+            Log.Debug(string.Concat("[assemblyVersionLabeller] Old version is: ", oldVersion.ToString()));
 
 			// get current change number
 			int currentRevision = 0;
@@ -114,12 +114,12 @@ namespace ThoughtWorks.CruiseControl.Core.Label
                 if (int.TryParse(integrationResult.LastChangeNumber, out currentRevision))
                 {
                     Log.Debug(
-                        string.Format("LastChangeNumber retrieved - {0}", 
+                        string.Format("[assemblyVersionLabeller] LastChangeNumber retrieved: {0}", 
                         currentRevision));
                 }
                 else
                 {
-                    Log.Debug("LastChangeNumber defaulted to 0");
+                    Log.Debug("[assemblyVersionLabeller] LastChangeNumber defaulted to '0'.");
                 }
 
 				// use the revision from last build,
@@ -133,29 +133,30 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			if (Build > -1)
 			{
 				currentBuild = Build;
+                Log.Debug("[assemblyVersionLabeller] Build number ist set to '{0}' via configuration.", Build);
 			}
 			else
 			{
 				currentBuild = oldVersion.Build;
 
-				// check whenever the version has changed or build forced and if the
-				// integration is success or incrementOnFailure is true
+                // check whenever the integration is succeeded or incrementOnFailure is true
 				// to increase the build number
-				if ((Major != oldVersion.Major ||
-					Minor != oldVersion.Minor ||
-					currentRevision != oldVersion.Revision ||
-					integrationResult.BuildCondition == BuildCondition.ForceBuild) &&
-					(integrationResult.LastIntegrationStatus == IntegrationStatus.Success || IncrementOnFailure))
+				if (integrationResult.Succeeded || IncrementOnFailure)
 				{
 					currentBuild++;
+				}
+                else
+				{
+				    Log.Debug(
+				        "[assemblyVersionLabeller] Not increasing build number because the integration is not succeeded and 'incrementOnFailure' property is set to 'false'.");
 				}
 			}
 
 			Log.Debug(string.Format(System.Globalization.CultureInfo.InvariantCulture,
-									"Major: {0} Minor: {1} Build: {2} Revision: {3}", Major, Minor, currentBuild, currentRevision));
+                                    "[assemblyVersionLabeller] Major: {0} Minor: {1} Build: {2} Revision: {3}", Major, Minor, currentBuild, currentRevision));
 
 			Version newVersion = new Version(Major, Minor, currentBuild, currentRevision);
-			Log.Debug(string.Concat("New version is: ", newVersion.ToString()));
+            Log.Debug(string.Concat("[assemblyVersionLabeller] New version is: ", newVersion.ToString()));
 
 			// return new version string
 			return newVersion.ToString();
