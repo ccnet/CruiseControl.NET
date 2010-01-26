@@ -202,7 +202,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			if (Trace)
 				args.AddArgument("--trace");
 
-			args.AddArgument(BuildArgs);
+			args.AppendArgument(BuildArgs);
 
 			foreach (string t in Targets)
 				args.AppendArgument(t);
