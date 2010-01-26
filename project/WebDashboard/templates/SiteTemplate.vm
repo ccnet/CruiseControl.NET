@@ -10,7 +10,7 @@
 		<script src="$applicationPath/javascript/jquery-ui.js" type="text/javascript"></script>
 		<script src="$applicationPath/javascript/jquery.metadata.js" type="text/javascript"></script>
 		<script src="$applicationPath/javascript/jquery.tablesorter.js" type="text/javascript"></script>
-		<script src="$applicationPath/javascript/jquery.tipsy.js" type="text/javascript"></script>
+		<script src="$applicationPath/javascript/jQuery.ccnet.js" type="text/javascript"></script>
 	</head>
 	<body class="wholepage">
 		<table class="main-panel" border="0" width="100%">

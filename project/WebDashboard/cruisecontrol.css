@@ -242,11 +242,7 @@ td>a.selected:hover { color:#006; }
 .SortableGrid thead tr .headerSortDown, .SortableGrid thead tr .headerSortUp {
 	background-color: #3333FF;
 }
-/* Tipsy */
-.tipsy { padding: 5px; font-size: 10px; opacity: 0.8; filter: alpha(opacity=80); background-repeat: no-repeat; }
-.tipsy-inner { padding: 4px 5px; background-color: black; color: white; max-width: 400px; text-align: center; }
-.tipsy-north { background-image: url(images/tipsy-north.gif); background-position: top center; }
-
+/* Project grid */
 .statusStopped { color: #ff1111; font-weight: bold; }
 .statusStopping { color: #ff1111; }
 .statusUnknown { color: #881111; font-style: italic; }
@@ -254,3 +250,13 @@ td>a.selected:hover { color:#006; }
 .activityCheckingModifications { color: #11aa11; font-weight: bold; }
 .activityBuilding { color: #007700; font-weight: bold; }
 .activityPending { color: #881111; font-style: italic; }
+tr.buildStatus table
+{
+	margin-left: 20px;
+}
+tr.buildStatus td
+{
+	font-style: italic;
+	border: none;
+	text-align: left;
+}
