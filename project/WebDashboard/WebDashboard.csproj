@@ -718,7 +718,7 @@
     <Content Include="images\fxcop-warning.gif" />
     <Content Include="images\rss.png" />
     <Content Include="images\shim.gif" />
-    <Content Include="images\tw_dev_logo.gif" />
+    <Content Include="images\tw_open_source_small.png" />
     <Content Include="javascript\ccnet.js" />
     <Content Include="javascript\jquery-ui.js" />
     <Content Include="javascript\jQuery.ccnet.js" />

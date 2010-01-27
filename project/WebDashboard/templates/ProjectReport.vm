@@ -176,7 +176,7 @@
 <table border="2" align="center"  >
   <tr>
     <td>
-      <table border="0" cellspacing="0" cellpadding="2" bgcolor="#99CCFF">
+      <table border="0" cellspacing="0" cellpadding="2" bgcolor="#eeeedd">
         #foreach ($dayBuildCounter in [1..$highestViewPerDay])
          <tr align="center">
            <td></td>
@@ -202,7 +202,7 @@
         <tr align="center">
           <td></td>
           #foreach ($currentDayInfo in $graphDayInfo)
-              <TD bgcolor="#3366FF" colspan="$dateMultiPlier">$currentDayInfo.BuildDateFormatted</TD>
+              <TD bgcolor="#99CC66" colspan="$dateMultiPlier">$currentDayInfo.BuildDateFormatted</TD>
               <td></td>
           #end
         </tr>
