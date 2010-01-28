@@ -1,10 +1,11 @@
-
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.Web;
+using System.Web.Caching;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Logging;
 using ThoughtWorks.CruiseControl.Core.Queues;
@@ -16,9 +17,6 @@ using ThoughtWorks.CruiseControl.Remote.Events;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Security;
-using System.Web;
-using System.Web.Caching;
-using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -104,13 +102,16 @@ namespace ThoughtWorks.CruiseControl.Core
             else
             {
                 this.cacheTime = TimeSpan.FromSeconds(Convert.ToDouble(cacheTimeInConfig));
-                if (this.cacheTime.TotalSeconds < 10)
+                if (this.cacheTime.TotalSeconds < 5)
                 {
-                    // Set the minimum cache time to ten seconds to prevent too much cache churn
-                    this.cacheTime = new TimeSpan(0, 0, 10);
+                    // If the cache time is less then 5s then turn off caching
+                    this.cacheTime = TimeSpan.MinValue;
+                    Log.Info("Log cache has been turned off");
                 }
-
-                Log.Info("Log cache time set to " + this.cacheTime.TotalSeconds.ToString() + " seconds");
+                else
+                {
+                    Log.Info("Log cache time set to " + this.cacheTime.TotalSeconds.ToString() + " seconds");
+                }
             }
         }
         #endregion
@@ -1773,35 +1774,44 @@ namespace ThoughtWorks.CruiseControl.Core
             // Check if the log has already been cached
             var loadData = false;
             SynchronisedData logData;
-            lock (logCacheLock)
+            if (this.cacheTime != TimeSpan.MinValue)
             {
-                logData = cache[logKey] as SynchronisedData;
-                if (logData == null)
+                lock (logCacheLock)
                 {
-                    Log.Debug("Adding new cache entry, current cache size is " + cache.Count);
-                    Log.Debug("Current memory in use by GC is " + GC.GetTotalMemory(false));
+                    logData = cache[logKey] as SynchronisedData;
+                    if (logData == null)
+                    {
+                        Log.Debug("Adding new cache entry, current cache size is " + cache.Count);
+                        Log.Debug("Current memory in use by GC is " + GC.GetTotalMemory(false));
 
-                    // Add the new log data and load it
-                    logData = new SynchronisedData();
-                    cache.Add(
-                        logKey,
-                        logData,
-                        null,
-                        Cache.NoAbsoluteExpiration,
-                        this.cacheTime,
-                        CacheItemPriority.BelowNormal,
-                        (key, value, reason) =>
-                        {
-                            Log.Debug("Log for " + key + " has been removed from the cache - " + reason.ToString());
-                        });
-                    loadData = true;
+                        // Add the new log data and load it
+                        logData = new SynchronisedData();
+                        cache.Add(
+                            logKey,
+                            logData,
+                            null,
+                            Cache.NoAbsoluteExpiration,
+                            this.cacheTime,
+                            CacheItemPriority.BelowNormal,
+                            (key, value, reason) =>
+                            {
+                                Log.Debug("Log for " + key + " has been removed from the cache - " + reason.ToString());
+                            });
+                        loadData = true;
+                    }
                 }
+            }
+            else
+            {
+                // Initialise the structures, but do not store them in the cache
+                logData = new SynchronisedData();
+                loadData = true;
             }
 
             // Load the data if required
             if (loadData)
             {
-                Log.Debug("Loading log for " + logKey + " into cache");
+                Log.Debug("Loading log for " + logKey + (this.cacheTime != TimeSpan.MinValue ? " into cache" : string.Empty));
                 logData.LoadData(() =>
                 {
                     var buildLog = this.GetIntegrator(projectName)
