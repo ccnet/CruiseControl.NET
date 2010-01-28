@@ -285,13 +285,18 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns the build log contents for requested project and build name
         /// </summary>
-        public override string GetLog(string projectName, string buildName)
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="buildName">Name of the build.</param>
+        /// <param name="compress">If set to <c>true</c> the log will be compressed.</param>
+        /// <returns>The log file for the build.</returns>
+        public override string GetLog(string projectName, string buildName, bool compress)
         {
             if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
 
             BuildRequest request = new BuildRequest(SessionToken, projectName);
             request.BuildName = buildName;
             request.ServerName = TargetServer;
+            request.CompressData = compress;
             DataResponse resp = ValidateResponse(
                 connection.SendMessage("GetLog", request))
                 as DataResponse;

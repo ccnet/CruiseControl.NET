@@ -216,7 +216,22 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// Returns the build log contents for requested project and build name
         /// </summary>
-        public virtual string GetLog(string projectName, string buildName)
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="buildName">Name of the build.</param>
+        /// <returns>The log file for the build.</returns>
+        public string GetLog(string projectName, string buildName)
+        {
+            return this.GetLog(projectName, buildName, false);
+        }
+
+        /// <summary>
+        /// Returns the build log contents for requested project and build name optionally using compression.
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="buildName">Name of the build.</param>
+        /// <param name="compress">If set to <c>true</c> the log will be compressed.</param>
+        /// <returns>The log file for the build.</returns>
+        public virtual string GetLog(string projectName, string buildName, bool compress)
         {
             throw new NotImplementedException();
         }

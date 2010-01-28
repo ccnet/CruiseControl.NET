@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Remote.Messages
@@ -11,10 +12,6 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
     public class ProjectRequest
         : ServerRequest
     {
-        #region Private fields
-        private string projectName;
-        #endregion
-
         #region Constructors
         /// <summary>
         /// Initialise a new empty <see cref="ProjectRequest"/>.
@@ -40,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
         public ProjectRequest(string sessionToken, string projectName)
             : base(sessionToken)
         {
-            this.projectName = projectName;
+            this.ProjectName = projectName;
         }
         #endregion
 
@@ -50,11 +47,17 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
         /// The name of the project that this message is for.
         /// </summary>
         [XmlAttribute("project")]
-        public string ProjectName
-        {
-            get { return projectName; }
-            set { projectName = value; }
-        }
+        public string ProjectName { get; set; }
+        #endregion
+
+        #region CompressData
+        /// <summary>
+        /// Gets or sets a value indicating whether the data should be compressed.
+        /// </summary>
+        /// <value><c>true</c> if the data should be compressed; otherwise, <c>false</c>.</value>
+        [XmlAttribute("compress")]
+        [DefaultValue(false)]
+        public bool CompressData { get; set; }
         #endregion
         #endregion
     }

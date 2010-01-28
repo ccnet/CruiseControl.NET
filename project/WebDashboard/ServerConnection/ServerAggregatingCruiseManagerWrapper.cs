@@ -6,10 +6,10 @@ using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Security;
-using ThoughtWorks.CruiseControl.Remote.Messages;
+using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
@@ -29,14 +29,43 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
             var response = GetCruiseManager(projectSpecifier.ServerSpecifier, sessionToken)
                 .GetLatestBuildName(projectSpecifier.ProjectName);
 			return new DefaultBuildSpecifier(projectSpecifier, response);
-		}
+        }
 
+        #region GetLog()
+        /// <summary>
+        /// Gets the log.
+        /// </summary>
+        /// <param name="buildSpecifier">The build specifier.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns>The log data.</returns>
         public string GetLog(IBuildSpecifier buildSpecifier, string sessionToken)
-		{
+        {
+            // Validate the arguments
+            if (buildSpecifier == null)
+            {
+                throw new ArgumentNullException("buildSpecifier", "buildSpecifier is null.");
+            }
+            if (String.IsNullOrEmpty(sessionToken))
+            {
+                throw new ArgumentException("sessionToken is null or empty.", "sessionToken");
+            }
+
+            // Retrieve the server configuration - this is needed to check for compression
+            var serverConfig = this.GetServerUrl(buildSpecifier.ProjectSpecifier.ServerSpecifier);
+            var useCompression = serverConfig.TransferLogsCompressed;
+
+            // Retrieve the actual log
             var response = GetCruiseManager(buildSpecifier, sessionToken)
-                .GetLog(buildSpecifier.ProjectSpecifier.ProjectName, buildSpecifier.BuildName);
+                .GetLog(buildSpecifier.ProjectSpecifier.ProjectName, buildSpecifier.BuildName, useCompression);
+
+            if (useCompression)
+            {
+                // Uncompress the log
+            }
+
             return response;
-		}
+        }
+        #endregion
 
         public IBuildSpecifier[] GetBuildSpecifiers(IProjectSpecifier projectSpecifier, string sessionToken)
 		{

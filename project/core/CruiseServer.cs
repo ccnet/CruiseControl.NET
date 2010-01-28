@@ -536,7 +536,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 null,
                 delegate(ProjectRequest arg, Response resp)
                 {
-                    data = this.RetrieveLogData(request.ProjectName, request.BuildName);
+                    data = this.RetrieveLogData(request.ProjectName, request.BuildName, request.CompressData);
                 }));
             response.Data = data;
 
@@ -1761,15 +1761,17 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <param name="projectName">The name of the project.</param>
         /// <param name="buildName">The name of the build.</param>
+        /// <param name="compress">If set to <c>true</c> then compress the log data.</param>
         /// <returns>The data for the log.</returns>
         /// <exception cref="ApplicationException">Thrown if the data for the log could not be retrieved.</exception>
-        private string RetrieveLogData(string projectName, string buildName)
+        private string RetrieveLogData(string projectName, string buildName, bool compress)
         {
             var cache = HttpRuntime.Cache;
 
             // Generate the log and report keys
             var logKey = projectName +
-                buildName;
+                buildName + 
+                (compress ? "-c" : string.Empty);
 
             // Check if the log has already been cached
             var loadData = false;
@@ -1817,6 +1819,11 @@ namespace ThoughtWorks.CruiseControl.Core
                     var buildLog = this.GetIntegrator(projectName)
                         .IntegrationRepository
                         .GetBuildLog(buildName);
+                    if (compress)
+                    {
+                        buildLog = this.CompressLogData(buildLog);
+                    }
+
                     return buildLog;
                 });
                 Log.Debug("Current memory in use by GC is " + GC.GetTotalMemory(false));
@@ -1836,6 +1843,18 @@ namespace ThoughtWorks.CruiseControl.Core
             }
 
             return logData.Data as string;
+        }
+        #endregion
+
+        #region CompressLogData()
+        /// <summary>
+        /// Compresses the log data.
+        /// </summary>
+        /// <param name="logData">The log data to compress.</param>
+        /// <returns>The compressed log data.</returns>
+        private string CompressLogData(string logData)
+        {
+            throw new NotImplementedException();
         }
         #endregion
         #endregion
