@@ -119,7 +119,10 @@ namespace ThoughtWorks.CruiseControl.Core.Label
                 }
                 else
                 {
-                    Log.Debug("[assemblyVersionLabeller] LastChangeNumber defaulted to '0'.");
+                    Log.Debug("[assemblyVersionLabeller] LastChangeNumber of source control is '{0}', set revision number to '0'.",
+                              string.IsNullOrEmpty(integrationResult.LastChangeNumber)
+                                  ? "N/A"
+                                  : integrationResult.LastChangeNumber);
                 }
 
 				// use the revision from last build,
@@ -141,7 +144,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 
                 // check whenever the integration is succeeded or incrementOnFailure is true
 				// to increase the build number
-				if (integrationResult.Succeeded || IncrementOnFailure)
+                if (integrationResult.LastIntegration.Status == IntegrationStatus.Success || IncrementOnFailure)
 				{
 					currentBuild++;
 				}
