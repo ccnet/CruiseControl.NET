@@ -57,6 +57,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
             if (useCompression)
             {
                 // Uncompress the log
+                var compressionService = new ZipCompressionService();
+                response = compressionService.ExpandString(response);
             }
 
             return response;

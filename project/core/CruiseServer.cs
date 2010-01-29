@@ -147,6 +147,14 @@ namespace ThoughtWorks.CruiseControl.Core
             get { return securityManager; }
         }
         #endregion
+
+        #region CompressionService
+        /// <summary>
+        /// Gets or sets the compression service.
+        /// </summary>
+        /// <value>The compression service.</value>
+        public ICompressionService CompressionService { get; set; }
+        #endregion
         #endregion
 
         #region Public methods
@@ -1821,7 +1829,9 @@ namespace ThoughtWorks.CruiseControl.Core
                         .GetBuildLog(buildName);
                     if (compress)
                     {
+                        var size = buildLog.Length;
                         buildLog = this.CompressLogData(buildLog);
+                        Log.Debug("Build log compressed - from " + size.ToString() + " to " + buildLog.Length.ToString());
                     }
 
                     return buildLog;
@@ -1854,7 +1864,8 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <returns>The compressed log data.</returns>
         private string CompressLogData(string logData)
         {
-            throw new NotImplementedException();
+            var compressionService = this.CompressionService ?? new ZipCompressionService();
+            return compressionService.CompressString(logData);
         }
         #endregion
         #endregion
