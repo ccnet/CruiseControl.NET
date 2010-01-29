@@ -823,6 +823,7 @@
     </Compile>
     <Compile Include="tasks\NDependTask.cs" />
     <Compile Include="tasks\XmlTaskResult.cs" />
+    <Compile Include="util\ICompressionService.cs" />
     <Compile Include="util\IPrivateData.cs" />
     <Compile Include="util\PrivateArguments.cs" />
     <Compile Include="util\PrivateString.cs" />
@@ -1024,6 +1025,7 @@
     <Compile Include="util\XslTransformer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="util\ZipCompressionService.cs" />
     <Compile Include="Workflow.cs">
       <SubType>Code</SubType>
     </Compile>

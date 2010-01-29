@@ -346,6 +346,7 @@
     <Compile Include="Core\Util\PrivateArgumentsTests.cs" />
     <Compile Include="Core\Util\PrivateStringSerialiserTests.cs" />
     <Compile Include="Core\Util\PrivateStringTests.cs" />
+    <Compile Include="Core\Util\ZipCompressionServiceTests.cs" />
     <Compile Include="TestClock.cs" />
     <Compile Include="Core\SourceControl\GitHistoryParserTest.cs" />
     <Compile Include="Core\SourceControl\GitTest.cs" />
