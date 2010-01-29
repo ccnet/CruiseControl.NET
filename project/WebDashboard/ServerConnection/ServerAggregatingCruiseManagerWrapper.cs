@@ -45,10 +45,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
             {
                 throw new ArgumentNullException("buildSpecifier", "buildSpecifier is null.");
             }
-            if (String.IsNullOrEmpty(sessionToken))
-            {
-                throw new ArgumentException("sessionToken is null or empty.", "sessionToken");
-            }
 
             // Retrieve the server configuration - this is needed to check for compression
             var serverConfig = this.GetServerUrl(buildSpecifier.ProjectSpecifier.ServerSpecifier);
