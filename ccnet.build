@@ -53,6 +53,20 @@
 	<!-- Targets -->
 	<target name="all" depends="clean, init, build, runTests, runCodeMetrics, package" description="" />
 
+
+	<target name="ClearDocFolders" description="Clearing doc folder of all existing files.">
+		<echo message="Clearing doc folder of all existing files ... " />
+		<delete includeemptydirs="false" >
+            <fileset>
+                <patternset >
+                    <include name="doc/CCNET/**"  />
+                    <exclude name="**/.svn/**"  />
+					<exclude name="**/_svn/**"  />
+				</patternset>
+            </fileset>
+        </delete>
+	</target>
+
 	<target name="clean" description="Clean up">
 		<delete dir="${build.dir}" if="${directory::exists(build.dir)}" verbose="${nant.verbosity}" />
 		<delete dir="${publish.dir}" if="${directory::exists(publish.dir)}" verbose="${nant.verbosity}" />
