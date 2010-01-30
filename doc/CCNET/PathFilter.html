@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : PathFilter</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : PathFilter
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 15, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="PathFilter-PathFilter"></a>PathFilter</h1>
+
+<p>The PathFilter can be used to filter modifications on the basis of their file path.  </p>
+
+<h2><a name="PathFilter-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="PathFilter-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;pathFilter&gt;</span>
+  <span class="code-tag">&lt;pattern&gt;</span>$/Kunigunda/ServiceLocator/Sources/Kunigunda.ServiceLocator/AssemblyInfo.cs<span class="code-tag">&lt;/pattern&gt;</span>
+<span class="code-tag">&lt;/pathFilter&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="PathFilter-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> caseSensitive </td>
+<td class='confluenceTd'> Sets casesensitive searching on or off.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> pattern </td>
+<td class='confluenceTd'> This is the pattern used to compare the modification path against. The pattern should match the path of the files in the repository (not the path of the files in the working directory). See below for examples of the syntax for this element. Each PathFilter contains a single pattern element.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="PathFilter-Notes"></a>Notes</h2>
+
+<p>Using the PathFilter:</p>
+
+<p>PathFilter supports following wildcards:</p>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Wildcard </th>
+<th class='confluenceTh'> Used as </th>
+<th class='confluenceTh'> Matches </th>
+<th class='confluenceTh'> Example </th>
+</tr>
+<tr>
+<td class='confluenceTd'> &#42;" </td>
+<td class='confluenceTd'> part of the path </td>
+<td class='confluenceTd'> none or exactly one subfolder </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/<b>/Sources/</b>.<b>" matches "/Kunigunda/Sources/</b>.<b>", "/Kunigunda/Service/Sources/</b>.<b>", and "/Kunigunda/Web/Sources/</b>.*" </td>
+</tr>
+<tr>
+<td class='confluenceTd'> "*" </td>
+<td class='confluenceTd'> part of the folder name </td>
+<td class='confluenceTd'> zero or more characters that can appear in the folder name </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/Test*/<b>.</b>" matches "/Kunigunda/Sources/Test/<b>.</b>" and "/Kunigunda/Sources/Tests/<b>.</b>" </td>
+</tr>
+<tr>
+<td class='confluenceTd'> "*" </td>
+<td class='confluenceTd'> part of the filename </td>
+<td class='confluenceTd'> zero or more characters that can appear in the file name </td>
+<td class='confluenceTd'> Pattern<br clear="all" />
+ "/Kunigunda/Sources/*.cs" matches all filenames in the "/Kunigunda/Sources" folder ending in ".cs". Pattern "/Kunigunda/Sources/*Test.cs", matches all filenames in the "/Kunigunda/Sources/" folder that end with "Test.cs". </td>
+</tr>
+<tr>
+<td class='confluenceTd'> "*" </td>
+<td class='confluenceTd'> part of the extension </td>
+<td class='confluenceTd'> zero or more characters that can appear in the extension. </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/Build.*" matches all files in "/Kunigunda/Sources" folder starting with "Build.". </td>
+</tr>
+<tr>
+<td class='confluenceTd'> "*" </td>
+<td class='confluenceTd'> filename </td>
+<td class='confluenceTd'> any file name and extension </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/*" matches all files in "/Kunigunda/Sources" folder. </td>
+</tr>
+<tr>
+<td class='confluenceTd'> "<b>.</b>" </td>
+<td class='confluenceTd'> filename </td>
+<td class='confluenceTd'> any file name and extension </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/<b>.</b>" matches all files in "/Kunigunda/Sources" folder. Note: "<b>.</b>" is exactly the same as "*" as a filename. </td>
+</tr>
+<tr>
+<td class='confluenceTd'> "**" </td>
+<td class='confluenceTd'> part of the path </td>
+<td class='confluenceTd'> zero or more subfolders. </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/*<b>/Test/</b>.<b>" matches all files stored in any "Test" subfolder anywhere below the "/Kunigunda/Sources" tree (<em>e.g.</em>, "/Kunigunda/Sources/Test/</b>.<b>", "/Kunigunda/Sources/Core/Test/</b>.*"). </td>
+</tr>
+<tr>
+<td class='confluenceTd'> ? </td>
+<td class='confluenceTd'> anywhere </td>
+<td class='confluenceTd'> any single character </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/Test?.cs" matches all files in "/Kunigunda/Sources" are named "Test" followed by one more character and that end in ".cs". </td>
+</tr>
+</tbody></table>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Paths do not include the roots</b><br />Paths do not include the root server identifiers. For example, if you are using subversion source control on server "myserver" and trying to exclude path "svn://myserver/project1/excludedir/<b>.</b>" your node should be "/project1/excludedir/<b>.</b>".</td></tr></table></div>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Path separators are not characters</b><br />Path separators are not compared as characters, but rather as separations between path elements.  The separators "\", "/" and the .Net System.IO.Path.DirectorySeparatorChar are all treated interchangably.  This means that the patterns "/Kunigunda/Sources/Test.cs" and "\Kunigunda\Sources\Test.cs" both match the file named "Test.cs" in the folder named "Sources" under the folder named "Kunigunda".</td></tr></table></div>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>StarTeam needs the full path</b><br />With StarTeam, use the entire file path as recognized by StarTeam, such<br/>
+as what is displayed when clicking File/Properties/Working File within<br/>
+StarTeam.<br/>
+Examples:
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">c:\project\module1\**
+c:\project\module2\**\filethatdoesntaffectbuild.txt</pre>
+</div></div></td></tr></table></div>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 15 Dec 2009 at 2:48:11 AM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

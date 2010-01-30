@@ -16,62 +16,88 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 28, 2008 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on Dec 16, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <p>Use the 'Filesystem' Source Control plugin to check for modifications on a directory accessible by the build server. A file is considered modified if the file's modified time stamp is more recent than the last time CruiseControl.Net checked for modifications. You can use either directories on 'mapped' drives (local or remote), or UNC paths (remote).</p>
+				    <h1><a name="FilesystemSourceControlBlock-FilesystemSourceControlBlock"></a>Filesystem Source Control Block</h1>
 
-<h4><a name="FilesystemSourceControlBlock-Examples"></a>Examples</h4>
+<p>Use the 'Filesystem' Source Control plugin to check for modifications on a directory accessible by the build server. A file is considered modified if the file's modified time stamp is more recent than the last time CruiseControl.Net checked for modifications. You can use either directories on 'mapped' drives (local or remote), or UNC paths (remote).  </p>
 
-<p>Minimalist example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<h2><a name="FilesystemSourceControlBlock-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="FilesystemSourceControlBlock-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"filesystem"</span>&gt;</span>
-	<span class="code-tag">&lt;repositoryRoot&gt;</span>c:\mycode<span class="code-tag">&lt;/repositoryRoot&gt;</span>
+  <span class="code-tag">&lt;repositoryRoot&gt;</span>c:\mycode<span class="code-tag">&lt;/repositoryRoot&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
-<p>Full example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"filesystem"</span>&gt;</span>
-	<span class="code-tag">&lt;repositoryRoot&gt;</span>c:\mycode<span class="code-tag">&lt;/repositoryRoot&gt;</span>
-	<span class="code-tag">&lt;autoGetSource&gt;</span>true<span class="code-tag">&lt;/autoGetSource&gt;</span>
-	<span class="code-tag">&lt;ignoreMissingRoot&gt;</span>false<span class="code-tag">&lt;/ignoreMissingRoot&gt;</span>
+  <span class="code-tag">&lt;repositoryRoot&gt;</span>c:\mycode<span class="code-tag">&lt;/repositoryRoot&gt;</span>
+  <span class="code-tag">&lt;autoGetSource&gt;</span>true<span class="code-tag">&lt;/autoGetSource&gt;</span>
+  <span class="code-tag">&lt;ignoreMissingRoot&gt;</span>false<span class="code-tag">&lt;/ignoreMissingRoot&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
 
-<h4><a name="FilesystemSourceControlBlock-ConfigurationElements%3A"></a>Configuration Elements:</h4>
+
+<h2><a name="FilesystemSourceControlBlock-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
 <th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> repositoryRoot </td>
-<td class='confluenceTd'> The directory to check for changes. This directory will be checked recursively. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true </td>
-<td class='confluenceTd'> n/a </td>
+<td class='confluenceTd'> type </td>
+<td class='confluenceTd'> The type of source control block. </td>
+<td class='confluenceTd'> String - must be filesystem </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> autoGetSource </td>
-<td class='confluenceTd'> Whether to automatically (recursively) copy the contents of the repositoryRoot directory to the <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a> </td>
-<td class='confluenceTd'> boolean </td>
+<td class='confluenceTd'> Whether to not fail if the repository doesn't exist.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> false </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the source control block.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> ignoreMissingRoot </td>
-<td class='confluenceTd'> Whether to not fail if the repository doesn't exist </td>
-<td class='confluenceTd'> boolean </td>
+<td class='confluenceTd'> Whether to automatically (recursively) copy the contents of the repositoryRoot directory to the Project Working Directory.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> false </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> repositoryRoot </td>
+<td class='confluenceTd'> The directory to check for changes. This directory will be checked recursively.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 </tbody></table>
 
-<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Unlike most source control blocks, this one does not support the <b>timeout</b> configuration element</td></tr></table></div>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Wednesday, 16 Dec 2009 at 9:51:45 PM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -82,7 +108,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -16,23 +16,20 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 26, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Jan 30, 2010 by <font color="#0050B2">williams</font>.
 				    </div>
 
-				    <h3><a name="ConditionalPublisher-ConditionalPublisher"></a>Conditional Publisher</h3>
+				    <h1><a name="ConditionalPublisher-ConditionalPublisher"></a>Conditional Publisher</h1>
 
-<p>Runs the child publishers only if the condition is met.</p>
+<p>A container publisher that only executes the child publishers when the condition (e.g. build status) is met.  </p>
 
-<p>Currently the only available condition that can be checked is the state of the build.</p>
+<h2><a name="ConditionalPublisher-Version"></a>Version</h2>
 
-<h3><a name="ConditionalPublisher-Version"></a>Version</h3>
+<p>Available from version 1.5</p>
 
-<p>This task is available from version 1.5.0.</p>
+<h2><a name="ConditionalPublisher-Examples"></a>Examples</h2>
 
-<h3><a name="ConditionalPublisher-Examples"></a>Examples</h3>
-
-<p>Minimalist example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;conditionalPublisher&gt;</span>
   <span class="code-tag">&lt;conditions&gt;</span>
     <span class="code-tag">&lt;condition&gt;</span>Success<span class="code-tag">&lt;/condition&gt;</span>
@@ -43,24 +40,12 @@
 <span class="code-tag">&lt;/conditionalPublisher&gt;</span></pre>
 </div></div>
 
-<p>Full example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;powershell&gt;</span>
-  <span class="code-tag">&lt;conditions&gt;</span>
-    <span class="code-tag">&lt;condition&gt;</span>Success<span class="code-tag">&lt;/condition&gt;</span>
-  <span class="code-tag">&lt;/conditions&gt;</span>
-  <span class="code-tag">&lt;publishers&gt;</span>
-    <span class="code-tag"><span class="code-comment">&lt;!-- Add publishers here --&gt;</span></span>
-  <span class="code-tag">&lt;/publishers&gt;</span>
-  <span class="code-tag">&lt;description&gt;</span>Example of how to include a conditional publisher.<span class="code-tag">&lt;/description&gt;</span>
-<span class="code-tag">&lt;/powershell&gt;</span></pre>
-</div></div>
 
-<h3><a name="ConditionalPublisher-ConfigurationElements"></a>Configuration Elements</h3>
+<h2><a name="ConditionalPublisher-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -68,17 +53,9 @@
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> publishers </td>
-<td class='confluenceTd'> The publishers to run if the conditions are met. </td>
-<td class='confluenceTd'> Publisher array - see <a href="Task Blocks.html" title="Task Blocks">Task Blocks</a> </td>
-<td class='confluenceTd'> Yes </td>
-<td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
-</tr>
-<tr>
 <td class='confluenceTd'> conditions </td>
-<td class='confluenceTd'> A list of conditions, or which one must be met in order to run the publishers. </td>
-<td class='confluenceTd'> Status list:
+<td class='confluenceTd'> A list of conditions of which at least one must be met in order to run the publishers.   </td>
+<td class='confluenceTd'> String array<br clear="all" />The following values are valid:
 <ul>
 	<li>Success</li>
 	<li>Failure</li>
@@ -89,25 +66,41 @@
 </td>
 <td class='confluenceTd'> Yes </td>
 <td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> description </td>
-<td class='confluenceTd'> A description of this task. </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
 <td class='confluenceTd'> String </td>
 <td class='confluenceTd'> No </td>
-<td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> dynamicValues </td>
-<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
-<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> publishers </td>
+<td class='confluenceTd'> The publishers to run if the conditions are met.   </td>
+<td class='confluenceTd'> <a href="Task And Publisher Blocks.html" title="Task And Publisher Blocks">Task And Publisher Blocks</a> array </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 </tbody></table>
+
+<h2><a name="ConditionalPublisher-Notes"></a>Notes</h2>
+
+<p>Currently the only available condition that can be checked is the state of the build.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Thursday, 3 Dec 2009 at 7:27:45 PM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -118,7 +111,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

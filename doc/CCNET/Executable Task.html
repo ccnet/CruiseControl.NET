@@ -16,41 +16,46 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 26, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Jan 07, 2010 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <p>The Executable Task lets you invoke any command line executable. It doesn't offer as much specific integration as (for example) the <a href="NAnt Task.html" title="NAnt Task">NAnt Task</a>, but does allow you to hook almost anything up as a build process to CCNet.  CCNet will examine the exit code when the executable ends and act accordingly.</p>
+				    <h1><a name="ExecutableTask-ExecutableTask"></a>Executable Task</h1>
 
-<h4><a name="ExecutableTask-Examples"></a>Examples</h4>
+<p>The Executable Task lets you invoke any command line executable. It doesn't offer as much specific integration as (for example) the <a href="NAnt Task.html" title="NAnt Task">NAnt Task</a>, but does allow you to hook almost anything up as a build process to CCNet. CCNet will examine the exit code when the executable ends and act accordingly.  </p>
 
-<p>Minimalist example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;exec executable=<span class="code-quote">"c:\projects\myproject\build.bat"</span>/&gt;</span></pre>
+
+<h2><a name="ExecutableTask-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="ExecutableTask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;exec executable=<span class="code-quote">"c:\projects\myproject\build.bat"</span> /&gt;</span></pre>
 </div></div>
-<p>Full example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;exec&gt;</span>
-    <span class="code-tag">&lt;executable&gt;</span>make<span class="code-tag">&lt;/executable&gt;</span>
-    <span class="code-tag">&lt;baseDirectory&gt;</span>D:\dev\MyProject<span class="code-tag">&lt;/baseDirectory&gt;</span>
-    <span class="code-tag">&lt;buildArgs&gt;</span>all<span class="code-tag">&lt;/buildArgs&gt;</span>
-    <span class="code-tag">&lt;buildTimeoutSeconds&gt;</span>10<span class="code-tag">&lt;/buildTimeoutSeconds&gt;</span>
-    <span class="code-tag">&lt;successExitCodes&gt;</span>0,1,3,5<span class="code-tag">&lt;/successExitCodes&gt;</span>
-    <span class="code-tag">&lt;environment&gt;</span>
-        <span class="code-tag">&lt;variable&gt;</span>
-            <span class="code-tag">&lt;name&gt;</span>MyVar1<span class="code-tag">&lt;/name&gt;</span>
-            <span class="code-tag">&lt;value&gt;</span>Var1Value<span class="code-tag">&lt;/value&gt;</span>
-        <span class="code-tag">&lt;/variable&gt;</span>
-        <span class="code-tag">&lt;variable name=<span class="code-quote">"MyVar2"</span> value=<span class="code-quote">"Var2Value"</span>/&gt;</span>
-        ...
-    <span class="code-tag">&lt;/environment&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>make<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;baseDirectory&gt;</span>D:\dev\MyProject<span class="code-tag">&lt;/baseDirectory&gt;</span>
+  <span class="code-tag">&lt;buildArgs&gt;</span>all<span class="code-tag">&lt;/buildArgs&gt;</span>
+  <span class="code-tag">&lt;buildTimeoutSeconds&gt;</span>10<span class="code-tag">&lt;/buildTimeoutSeconds&gt;</span>
+  <span class="code-tag">&lt;successExitCodes&gt;</span>0,1,3,5<span class="code-tag">&lt;/successExitCodes&gt;</span>
+  <span class="code-tag">&lt;environment&gt;</span>
+    <span class="code-tag">&lt;variable&gt;</span>
+      <span class="code-tag">&lt;name&gt;</span>MyVar1<span class="code-tag">&lt;/name&gt;</span>
+      <span class="code-tag">&lt;value&gt;</span>Var1Value<span class="code-tag">&lt;/value&gt;</span>
+    <span class="code-tag">&lt;/variable&gt;</span>
+    <span class="code-tag">&lt;variable name=<span class="code-quote">"MyVar2"</span> value=<span class="code-quote">"Var2Value"</span> /&gt;</span>
+  <span class="code-tag">&lt;/environment&gt;</span>
 <span class="code-tag">&lt;/exec&gt;</span></pre>
 </div></div>
 
-<h4><a name="ExecutableTask-ConfigurationElements%3A"></a>Configuration Elements:</h4>
+
+<h2><a name="ExecutableTask-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -58,74 +63,106 @@
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> executable </td>
-<td class='confluenceTd'> The path of the program to run. If this is relative, then must be relative to either (a) the base directory, (b) the CCNet Server application, or (c) if the path doesn't contain any directory details then can be available in the system or application's 'path' environment variable </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true </td>
-<td class='confluenceTd'> n/a </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> baseDirectory </td>
-<td class='confluenceTd'> The directory to run the process in. If relative, is a subdirectory of the <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a> </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a> </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
 <td class='confluenceTd'> buildArgs </td>
-<td class='confluenceTd'> Any command line arguments to pass in </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> no arguments </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> Any command line arguments to pass in.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> buildTimeoutSeconds </td>
-<td class='confluenceTd'> Number of seconds to wait before assuming that the process has hung and should be killed. </td>
-<td class='confluenceTd'> int </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> 600 (10 minutes) </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> Number of seconds to wait before assuming that the process has hung and should be killed.  If the build process takes longer than this period, it will be killed.  Specify this value as zero to disable process timeouts.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 600 </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> successExitCodes </td>
-<td class='confluenceTd'> A comma-separated list of exit codes that indicate success. </td>
-<td class='confluenceTd'> list of ints </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> 0 </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> environment </td>
-<td class='confluenceTd'> Specifies any environment variables to set for the executable. </td>
-<td class='confluenceTd'> complex </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
-<td class='confluenceTd'> (none) </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> baseDirectory </td>
+<td class='confluenceTd'> The directory to run the process in. If relative, is a subdirectory of the Project Working Directory.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project working directory </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> description </td>
-<td class='confluenceTd'> If filled in, this will be shown in the buildstage as the process name <br clear="all" /> </td>
-<td class='confluenceTd'> string <br clear="all" /> </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
-<td class='confluenceTd'> n/a </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> dynamicValues </td>
-<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
-<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> environment </td>
+<td class='confluenceTd'> A set of environment variables set for commands that are executed.   </td>
+<td class='confluenceTd'> <a href="Environment Variable.html" title="Environment Variable">Environment Variable</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The path of the program to run. If this is relative, then must be relative to either (a) the base directory, (b) the CCNet Server application, or (c) if the path doesn't contain any directory details then can be available in the system or application's 'path' environment variable.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> priority </td>
+<td class='confluenceTd'> The priority class of the spawned process.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Normal</li>
+	<li>Idle</li>
+	<li>High</li>
+	<li>RealTime</li>
+	<li>BelowNormal</li>
+	<li>AboveNormal</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Normal </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> successExitCodes </td>
+<td class='confluenceTd'> The list of exit codes that indicate success, separated by commas.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 </tbody></table>
 
-<h3><a name="ExecutableTask-IntegrationProperties"></a>Integration Properties</h3>
+<h2><a name="ExecutableTask-Notes"></a>Notes</h2>
 
-<p>The following parameters are passed to the external program using environment variables, in addition to those you specify in the &lt;environment&gt; element.:</p>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>An exit code of &#45;1 is always treated as the operation has timed out. This will fail the build.  </p></td></tr></table></div>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Windows seems to change the case of environment variables occasionally. If your task target doesn't find one of these properties, try using all upper case or all lower case versions of these properties.  </p></td></tr></table></div>
+<h4><a name="ExecutableTask-FrequentlyAskedQuestions"></a>Frequently Asked Questions</h4>
+<p> <b>Does the exec task pass the integration properties via the command line?</b><br/>
+No. The integration properties are only available as environment variables. As there is no way of knowing the way in which the external program expects these properties to be formatted as command line arguments, environment variables are a simple, common medium for making these values accessible. To pass these environment variables into an external program, have the exec task call a batch file instead that will pick up the environment variables, format them and pass them as command line arguments to the external program.  <br/>
+ <b>Using built in shell commands</b><br/>
+In Windows use cmd.exe as the executable, and pass the wanted command as an argument, preceded with /c. This allows to execute del &#42;.&#42; and the like. For example :  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;exec&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>c:\Windows\System32\cmd.exe<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;buildArgs&gt;</span>/C NET STOP <span class="code-quote">"Service name"</span><span class="code-tag">&lt;/buildArgs&gt;</span>
+<span class="code-tag">&lt;/exec&gt;</span></pre>
+</div></div>
+<p>The following parameters are passed to the external program using environment variables, in addition to those you specify in the &lt;environment&gt; element.:  </p>
 <table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Label </th>
@@ -230,51 +267,9 @@
 <td class='confluenceTd'> 1.5.0 </td>
 </tr>
 </tbody></table>
-<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Windows seems to change the case of environment variables occasionally. If your task target doesn't find one of these properties, try using all upper case or all lower case versions of these properties.</td></tr></table></div>
 
-<h3><a name="ExecutableTask-Exitcodes"></a>Exit codes</h3>
-
-<table class='confluenceTable'><tbody>
-<tr>
-<th class='confluenceTh'> Code </th>
-<th class='confluenceTh'> Description </th>
-<th class='confluenceTh'> CCNet Behavior </th>
-</tr>
-<tr>
-<td class='confluenceTd'> a code in &lt;successExitCodes&gt; </td>
-<td class='confluenceTd'> Success </td>
-<td class='confluenceTd'> The build continues </td>
-</tr>
-<tr>
-<td class='confluenceTd'> &#45;1 </td>
-<td class='confluenceTd'> Timed out </td>
-<td class='confluenceTd'> The operation timed out and the build fails </td>
-</tr>
-<tr>
-<td class='confluenceTd'> other </td>
-<td class='confluenceTd'> Failure </td>
-<td class='confluenceTd'> The build fails </td>
-</tr>
-</tbody></table>
-
-<h3><a name="ExecutableTask-FrequentlyAskedQuestions"></a>Frequently Asked Questions</h3>
-
-<p><b>Does the exec task pass the integration properties via the command line?</b></p>
-
-<p>No.  The integration properties are only available as environment variables.  As there is no way of knowing the way in which the external program expects these properties to be formatted as command line arguments, environment variables are a simple, common medium for making these values accessible.  To pass these environment variables into an external program, have the exec task call a batch file instead that will pick up the environment variables, format them and pass them as command line arguments to the external program.</p>
-
-<p><b>Using built in shell commands</b><br/>
-In Windows use <em>cmd.exe</em> as the executable, and pass the wanted command as an argument, preceded with <em>/c</em> This allows to execute del &#42;.&#42; and the like.<br/>
-see also <a href="http://www.ss64.com/nt/cmd.html">Command help</a></p>
-
-<p>example :</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;exec&gt;</span>
-     <span class="code-tag">&lt;executable&gt;</span>c:\Windows\System32\cmd.exe<span class="code-tag">&lt;/executable&gt;</span>
-     <span class="code-tag">&lt;buildArgs&gt;</span>/C NET STOP <span class="code-quote">"Service name"</span><span class="code-tag">&lt;/buildArgs&gt;</span>
-  <span class="code-tag">&lt;/exec&gt;</span></pre>
-</div></div>
-<p><br clear="all" /></p>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Thursday, 7 Jan 2010 at 6:06:11 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -285,7 +280,7 @@ see also <a href="http://www.ss64.com/nt/cmd.html">Command help</a></p>
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

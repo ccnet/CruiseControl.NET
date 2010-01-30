@@ -16,28 +16,26 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 26, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Dec 03, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <h3><a name="PowerShellTask-PowerShellTask"></a>PowerShell Task</h3>
+				    <h1><a name="PowerShellTask-PowerShellTask"></a>PowerShell Task </h1>
 
-<p>Runs a PowerShell script.</p>
+<p>Runs a PowerShell script.  </p>
 
-<h3><a name="PowerShellTask-Version"></a>Version</h3>
 
-<p>This task is available from version 1.5.0.</p>
+<h2><a name="PowerShellTask-Version"></a>Version</h2>
 
-<h3><a name="PowerShellTask-Examples"></a>Examples</h3>
+<p>Available from version 1.5</p>
 
-<p>Minimalist example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<h2><a name="PowerShellTask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;powershell&gt;</span>
   <span class="code-tag">&lt;script&gt;</span>dosomething.ps<span class="code-tag">&lt;/script&gt;</span>
 <span class="code-tag">&lt;/powershell&gt;</span></pre>
 </div></div>
-
-<p>Full example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;powershell&gt;</span>
   <span class="code-tag">&lt;script&gt;</span>dosomething.ps<span class="code-tag">&lt;/script&gt;</span>
   <span class="code-tag">&lt;executable&gt;</span>C:\program Files\PowerShell\PowerShell.exe<span class="code-tag">&lt;/executable&gt;</span>
@@ -52,11 +50,12 @@
 <span class="code-tag">&lt;/powershell&gt;</span></pre>
 </div></div>
 
-<h3><a name="PowerShellTask-ConfigurationElements"></a>Configuration Elements</h3>
+
+<h2><a name="PowerShellTask-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -64,78 +63,81 @@
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> script </td>
-<td class='confluenceTd'> The PowerShell script to run. </td>
-<td class='confluenceTd'> String </td>
-<td class='confluenceTd'> Yes </td>
-<td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> executable </td>
-<td class='confluenceTd'> The PowerShell executable. </td>
-<td class='confluenceTd'> String </td>
-<td class='confluenceTd'> No </td>
-<td class='confluenceTd'> PowerShell.exe </td>
-<td class='confluenceTd'> 1.5.0 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> scriptsDirectory </td>
-<td class='confluenceTd'> The directory that the PowerShell scripts are stored in. </td>
-<td class='confluenceTd'> String </td>
-<td class='confluenceTd'> No </td>
-<td class='confluenceTd'> %Documents%\WindowsPowerShell </td>
-<td class='confluenceTd'> 1.5.0 </td>
-</tr>
-<tr>
 <td class='confluenceTd'> buildArgs </td>
-<td class='confluenceTd'> Any arguments to pass into the script. </td>
+<td class='confluenceTd'> Any arguments to pass into the script.   </td>
 <td class='confluenceTd'> String </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> environment </td>
-<td class='confluenceTd'> Any environment variables to pass into the script. </td>
-<td class='confluenceTd'> Array of environment variables </td>
-<td class='confluenceTd'> No </td>
-<td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> successExitCodes </td>
-<td class='confluenceTd'> The exit codes that mark the script as being successful. </td>
-<td class='confluenceTd'> String </td>
-<td class='confluenceTd'> No </td>
-<td class='confluenceTd'> 0 </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> buildTimeoutSeconds </td>
-<td class='confluenceTd'> The maximum number of seconds the build can take. </td>
-<td class='confluenceTd'> Integer </td>
+<td class='confluenceTd'> The maximum number of seconds the build can take. If the build process takes longer than this period, it will be killed.  Specify this value as zero to disable process timeouts.   </td>
+<td class='confluenceTd'> Int32 </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> 600 </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> scriptsDirectory </td>
+<td class='confluenceTd'> The directory that the PowerShell scripts are stored in.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> %Documents%\WindowsPowerShell </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> description </td>
-<td class='confluenceTd'> A description of this task. </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
 <td class='confluenceTd'> String </td>
 <td class='confluenceTd'> No </td>
-<td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> dynamicValues </td>
-<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
-<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> environment </td>
+<td class='confluenceTd'> Any environment variables to pass into the script.   </td>
+<td class='confluenceTd'> <a href="Environment Variable.html" title="Environment Variable">Environment Variable</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The PowerShell executable.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> PowerShell.exe </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> script </td>
+<td class='confluenceTd'> The PowerShell script to run.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> successExitCodes </td>
+<td class='confluenceTd'> The exit codes that mark the script as being successful.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 0 </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 </tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Thursday, 3 Dec 2009 at 9:05:15 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -146,7 +148,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

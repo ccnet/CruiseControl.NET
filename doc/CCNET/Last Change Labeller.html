@@ -16,31 +16,31 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jul 01, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Dec 12, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <p>Some source control systems (<em>e.g.</em>, <a href="Using CruiseControl.NET with AccuRev.html" title="Using CruiseControl.NET with AccuRev">AccuRev</a>) have a concept of a "change number", which the Last Change Labeller can use to build a label. The following configuration would prefix all labels with the string 'Foo-1-', so the build of change number 213 would be labelled 'Foo-1-213'</p>
+				    <h1><a name="LastChangeLabeller-LastChangeLabeller"></a>Last Change Labeller</h1>
 
-<h4><a name="LastChangeLabeller-Version"></a>Version</h4>
+<p>Some source control systems (e.g., AccuRev) have a concept of a "change number", which the Last Change Labeller can use to build a label. The following configuration would prefix all labels with the string 'Foo&#45;1&#45;', so the build of change number 213 would be labelled 'Foo&#45;1&#45;213'  </p>
 
-<p>This labeller is available from release 1.3.0</p>
+<h2><a name="LastChangeLabeller-Version"></a>Version</h2>
 
-<h4><a name="LastChangeLabeller-Example"></a>Example</h4>
+<p>Available from version 1.3</p>
 
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;project&gt;</span>
-   <span class="code-tag">&lt;labeller type=<span class="code-quote">"lastChangeLabeller"</span>&gt;</span>
-     <span class="code-tag">&lt;prefix&gt;</span>Foo-1-<span class="code-tag">&lt;/prefix&gt;</span>
-   <span class="code-tag">&lt;/labeller&gt;</span>
-   <span class="code-tag"><span class="code-comment">&lt;!-- Other project configuration to go here --&gt;</span></span>
-<span class="code-tag">&lt;/project&gt;</span></pre>
+<h2><a name="LastChangeLabeller-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;labeller type=<span class="code-quote">"lastChangeLabeller"</span>&gt;</span>
+  <span class="code-tag">&lt;prefix&gt;</span>Foo-1-<span class="code-tag">&lt;/prefix&gt;</span>
+<span class="code-tag">&lt;/labeller&gt;</span></pre>
 </div></div>
 
-<h3><a name="LastChangeLabeller-ConfigurationElements%3A"></a>Configuration Elements:</h3>
+
+<h2><a name="LastChangeLabeller-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -48,32 +48,33 @@
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> prefix </td>
-<td class='confluenceTd'> Any string to be put in front of the change number. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> "" </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
 <td class='confluenceTd'> allowDuplicateSubsequentLabels </td>
-<td class='confluenceTd'> Controls whether duplicate subsequent labels are permitted or not. If true, duplicate labels are left<br clear="all" />
- intact. If false, the label will always be suffixed with ".n", where "n" is incremented for each<br clear="all" />
- successive duplication. </td>
-<td class='confluenceTd'> bool </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
-<td class='confluenceTd'> true <br clear="all" /> </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> Controls whether duplicate subsequent labels are permitted or not. If true, duplicate labels are left intact. If false, the label will always be suffixed with ".n", where "n" is incremented for each successive duplication. Defaults to true.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> dynamicValues </td>
-<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
-<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> The dynamic values to use for the labeller.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> prefix </td>
+<td class='confluenceTd'> The string to be prepended onto the last change number.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.3 </td>
 </tr>
 </tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Saturday, 12 Dec 2009 at 8:37:24 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -84,7 +85,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

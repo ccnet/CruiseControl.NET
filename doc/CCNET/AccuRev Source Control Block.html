@@ -16,44 +16,42 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Sep 11, 2008 by <font color="#0050B2">williams</font>.
+					    This page last changed on Dec 08, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <h3><a name="AccuRevSourceControlBlock-AccuRevConfiguration"></a>AccuRev Configuration</h3>
+				    <h1><a name="AccuRevSourceControlBlock-AccuRevSourceControlBlock"></a>AccuRev Source Control Block </h1>
 
-<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Note: The AccuRev source control block is available in CCNet 1.3 and later.</td></tr></table></div>
+<p>Source control integration for Accurev's source control product (<a href="http://www.accurev.com">http://www.accurev.com</a>).  </p>
 
-<h4><a name="AccuRevSourceControlBlock-Typical%2FMinimalConfiguration"></a>Typical / Minimal Configuration</h4>
 
-<p>For most uses the following is all you'll need in your <a href="Configuring the Server.html" title="Configuring the Server"><tt>ccnet.config</tt></a>:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<h2><a name="AccuRevSourceControlBlock-Version"></a>Version</h2>
+
+<p>Available from version 1.3</p>
+
+<h2><a name="AccuRevSourceControlBlock-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"accurev"</span>&gt;</span>
-    <span class="code-tag">&lt;autoGetSource&gt;</span>true<span class="code-tag">&lt;/autoGetSource&gt;</span>
+  <span class="code-tag">&lt;autoGetSource&gt;</span>true<span class="code-tag">&lt;/autoGetSource&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
-<p>This will:</p>
-<ul>
-	<li>monitor AccuRev for any changes in the workspace located at the project working directory</li>
-	<li>retrieve the lastest source from AccuRev when any changes are detected</li>
-	<li>apply a label to (<em>i.e.</em>, make a snapshot of) the built files at the end of each successful build</li>
-</ul>
-
-
-<h4><a name="AccuRevSourceControlBlock-FullConfiguration"></a>Full Configuration</h4>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"accurev"</span>&gt;</span>
-    <span class="code-tag">&lt;autoGetSource&gt;</span>true<span class="code-tag">&lt;/autoGetSource&gt;</span>
-    <span class="code-tag">&lt;executable&gt;</span>accurev.exe<span class="code-tag">&lt;/executable&gt;</span>
-    <span class="code-tag">&lt;homeDir&gt;</span>.<span class="code-tag">&lt;/homeDir&gt;</span>
-    <span class="code-tag">&lt;labelOnSuccess&gt;</span>false<span class="code-tag">&lt;/labelOnSuccess&gt;</span>
-    <span class="code-tag">&lt;login&gt;</span>false<span class="code-tag">&lt;/login&gt;</span>
-    <span class="code-tag">&lt;password&gt;</span>banana<span class="code-tag">&lt;/password&gt;</span>
-    <span class="code-tag">&lt;principal&gt;</span>joe_user<span class="code-tag">&lt;/principal&gt;</span>
-    <span class="code-tag">&lt;timeout units=<span class="code-quote">"minutes"</span>&gt;</span>10<span class="code-tag">&lt;/timeout&gt;</span>
-    <span class="code-tag">&lt;workspace&gt;</span>.<span class="code-tag">&lt;/workspace&gt;</span>
+  <span class="code-tag">&lt;autoGetSource&gt;</span>true<span class="code-tag">&lt;/autoGetSource&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>accurev.exe<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;homeDir&gt;</span>.<span class="code-tag">&lt;/homeDir&gt;</span>
+  <span class="code-tag">&lt;labelOnSuccess&gt;</span>false<span class="code-tag">&lt;/labelOnSuccess&gt;</span>
+  <span class="code-tag">&lt;login&gt;</span>false<span class="code-tag">&lt;/login&gt;</span>
+  <span class="code-tag">&lt;password&gt;</span>banana<span class="code-tag">&lt;/password&gt;</span>
+  <span class="code-tag">&lt;principal&gt;</span>joe_user<span class="code-tag">&lt;/principal&gt;</span>
+  <span class="code-tag">&lt;timeout units=<span class="code-quote">"minutes"</span>&gt;</span>10<span class="code-tag">&lt;/timeout&gt;</span>
+  <span class="code-tag">&lt;workspace&gt;</span>.<span class="code-tag">&lt;/workspace&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
+
+
+<h2><a name="AccuRevSourceControlBlock-ConfigurationElements"></a>Configuration Elements</h2>
+
 <table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Element </th>
@@ -61,89 +59,117 @@
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
 <th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> autoGetSource </td>
-<td class='confluenceTd'> Specifies whether the current version of the source should be retrieved from AccuRev. </td>
-<td class='confluenceTd'> bool </td>
-<td class='confluenceTd'> no </td>
-<td class='confluenceTd'> false </td>
-</tr>
-<tr>
-<td class='confluenceTd'> executable </td>
-<td class='confluenceTd'> Specifies the path to the AccuRev command line tool.  You should only have to include this element if the tool isn't in your path.  By default, the AccuRev client installation process names it <tt>accurev.exe</tt> and puts it in <tt>C:\Program Files\AccuRev\bin</tt>. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> no </td>
-<td class='confluenceTd'> <tt>accurev.exe</tt> </td>
+<td class='confluenceTd'> type </td>
+<td class='confluenceTd'> The type of source control block. </td>
+<td class='confluenceTd'> String - must be accurev </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> homeDir </td>
-<td class='confluenceTd'> Specifies the location of the AccuRev home directory.  The pathname can be either absolute or relative to the project artifact directory.  If not specified, AccuRev will follow its rules for determining the location. The home directory itself is always named "<tt>.accurev</tt>". </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> no </td>
-<td class='confluenceTd'> none </td>
-</tr>
-<tr>
-<td class='confluenceTd'> labelOnSuccess </td>
-<td class='confluenceTd'> Specifies whether or not CCNet should create an AccuRev snapshot when the build is successful.  If set to <tt>true</tt>, CCNet will create a snapshot of the workspace's basis stream as of the starting time of the build, naming it according to the build label. </td>
-<td class='confluenceTd'> bool </td>
-<td class='confluenceTd'> no </td>
-<td class='confluenceTd'> false </td>
-</tr>
-<tr>
-<td class='confluenceTd'> login </td>
-<td class='confluenceTd'> Specifies whether or not CCNet should log in to AccuRev using the specified principal and password. If set to <tt>true</tt>, the <tt>principal</tt> and <tt>password</tt> elements are required, and CCNet will use them to log in to AccuRev before executing any AccuRev commands. </td>
-<td class='confluenceTd'> bool </td>
-<td class='confluenceTd'> no </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> Specifies the location of the AccuRev home directory. The pathname can be either absolute or relative to the project artifact directory. If not specified, AccuRev will follow its rules for determining the location. The home directory itself is always named ".accurev".  <br clear="all" />Optional, default is to let AccuRev decide where the home directory is.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> password </td>
-<td class='confluenceTd'> Specifies the password for the AccuRev "principal" (userid). </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> only if <tt>login</tt>=<tt>true</tt> </td>
-<td class='confluenceTd'> none </td>
+<td class='confluenceTd'> Specifies the password for the AccuRev "principal" (userid).   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> principal </td>
-<td class='confluenceTd'> Specifies the AccuRev "principal" (userid) to run under.  If not specified, AccuRev will follow its rules for determining the principal. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> only if <tt>login</tt>=<tt>true</tt> </td>
-<td class='confluenceTd'> none </td>
+<td class='confluenceTd'> Specifies the AccuRev "principal" (userid) to run under. If not specified, AccuRev will follow its rules for determining the principal.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.3 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> timeout </td>
-<td class='confluenceTd'> Sets the timeout period for the source control operation. See <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> for details. </td>
-<td class='confluenceTd'> Timeout </td>
-<td class='confluenceTd'> no </td>
-<td class='confluenceTd'> 10 minutes </td>
+<td class='confluenceTd'> autoGetSource </td>
+<td class='confluenceTd'> Specifies whether the current version of the source should be retrieved from AccuRev.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.3 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> workspace </td>
-<td class='confluenceTd'> Specifies the location on disk of the AccuRev workspace that CCNet monitors for changes.  The pathname can be either absolute or relative to the project working directory, and must identify the top-level directory of the workspace.  Note that this is not the same as the workspace name - AccuRev will determine the workspace name from the disk pathname. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> no </td>
-<td class='confluenceTd'> project working directory </td>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the source control block.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> Specifies the path to the AccuRev command line tool. You should only have to include this element if the tool isn't in your path. By default, the AccuRev client installation process names it accurev.exe and puts it in C:\Program Files\AccuRev\bin.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> accurev.exe </td>
+<td class='confluenceTd'> 1.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> issueUrlBuilder </td>
-<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. See&nbsp;<a href="IssueUrlBuilder.html" title="IssueUrlBuilder">Issue Builder </a> for more details </td>
-<td class='confluenceTd'> Group </td>
-<td class='confluenceTd'> N/A <br clear="all" /> </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
+<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> for more details.   </td>
+<td class='confluenceTd'> <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> labelOnSuccess </td>
+<td class='confluenceTd'> Specifies whether or not CCNet should create an AccuRev snapshot when the build is successful. If set to true, CCNet will create a snapshot of the workspace's basis stream as of the starting time of the build, naming it according to the build label.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> login </td>
+<td class='confluenceTd'> Specifies whether or not CCNet should log in to AccuRev using the specified principal and password. If set to true, the principal and password elements are required, and CCNet will use them to log in to AccuRev before executing any AccuRev commands.  <br clear="all" />If this is set to true, then both principal and password must be set.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> Sets the timeout period for the source control operation. See <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> for details.   </td>
+<td class='confluenceTd'> <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 10 minutes </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> workspace </td>
+<td class='confluenceTd'> Specifies the location on disk of the AccuRev workspace that CCNet monitors for changes. The pathname can be either absolute or relative to the project working directory, and must identify the top&#45;level directory of the workspace. Note that this is not the same as the workspace name &#45; AccuRev will determine the workspace name from the disk pathname.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.3 </td>
 </tr>
 </tbody></table>
 
+<h2><a name="AccuRevSourceControlBlock-Notes"></a>Notes</h2>
+
 <h4><a name="AccuRevSourceControlBlock-KnownIssues"></a>Known Issues</h4>
+<p> <b>CruiseControl.NET doesn't see my changes</b><br/>
+AccuRev depends on the clocks of the server and its clients ticking together. Make sure the clock of your build server is synchronized to the clock of your AccuRev server. See CCNET&#45;271 for details on a similar problem with Rational ClearCase.  <br/>
+ <b>AccuRev says I'm "unknown" or "not authenticated"</b><br/>
+AccuRev needs to know the userid that owns the workspace, and stores that information in files in the AccuRev home directory, which defaults to %HOMEDRIVE%%HOMEPATH%\.accurev. If there isn't any such directory, or if CCNet is running under a userid that isn't an AccuRev user, AccuRev will not be able to function correctly and the accurev info command may report that the user is unknown or not authenticated. You can use the homeDir element to force AccuRev to look for the .accurev directory in a particular location, such as the project's artifact directory.  </p>
 
 
-<h5><a name="AccuRevSourceControlBlock-CruiseControl.NETdoesn%27tseemychanges"></a>CruiseControl.NET doesn't see my changes</h5>
-
-<p>AccuRev depends on the clocks of the server and its clients ticking together.  Make sure the clock of your build server is synchronized to the clock of your AccuRev server.  See <a href="http://jira.public.thoughtworks.org/browse/CCNET-271">CCNET-271</a> for details on a similar problem with Rational ClearCase.</p>
-
-<h5><a name="AccuRevSourceControlBlock-AccuRevsaysI%27m%22unknown%22or%22notauthenticated%22"></a>AccuRev says I'm "unknown" or "not authenticated"</h5>
-
-<p>AccuRev needs to know the userid that owns the workspace, and stores that information in files in the AccuRev home directory, which defaults to <tt>%HOMEDRIVE%%HOMEPATH%\.accurev</tt>.  If there isn't any such directory, or if CCNet is running under a userid that isn't an AccuRev user, AccuRev will not be able to function correctly and the <tt>accurev info</tt> command may report that the user is unknown or not authenticated.  You can use the <tt>homeDir</tt> element to force AccuRev to look for the <tt>.accurev</tt> directory in a particular location, such as the project's artifact directory.</p>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 8 Dec 2009 at 9:18:40 PM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -154,7 +180,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

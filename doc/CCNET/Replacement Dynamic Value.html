@@ -16,21 +16,21 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jul 25, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Dec 05, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <h3><a name="ReplacementDynamicValue-ReplacementDynamicValue"></a>Replacement Dynamic Value</h3>
+				    <h1><a name="ReplacementDynamicValue-ReplacementDynamicValue"></a>Replacement Dynamic Value</h1>
 
-<p>This will replace any number of parameters into a format string. The format string can also include formats for each parameter.</p>
+<p>This will replace any number of parameters into a format string. The format string can also include formats for each parameter.  </p>
 
-<h3><a name="ReplacementDynamicValue-Version"></a>Version</h3>
 
-<p>This dynamic value is available from version 1.5.0.</p>
+<h2><a name="ReplacementDynamicValue-Version"></a>Version</h2>
 
-<h3><a name="ReplacementDynamicValue-Examples"></a>Examples</h3>
+<p>Available from version 1.5</p>
 
-<p>Basic example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<h2><a name="ReplacementDynamicValue-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Basic example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;nant&gt;</span>
   <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
   <span class="code-tag">&lt;buildArgs&gt;</span>-t:Help<span class="code-tag">&lt;/buildArgs&gt;</span>
@@ -38,23 +38,19 @@
     <span class="code-tag">&lt;replacementValue property=<span class="code-quote">"buildArgs"</span>&gt;</span>
       <span class="code-tag">&lt;format&gt;</span>-t:{0}<span class="code-tag">&lt;/format&gt;</span>
       <span class="code-tag">&lt;parameters&gt;</span>
-        <span class="code-tag">&lt;namedValue name=<span class="code-quote">"CommandToRun"</span> value=<span class="code-quote">"Help"</span>/&gt;</span>
+        <span class="code-tag">&lt;namedValue name=<span class="code-quote">"CommandToRun"</span> value=<span class="code-quote">"Help"</span> /&gt;</span>
       <span class="code-tag">&lt;/parameters&gt;</span>
     <span class="code-tag">&lt;/replacementValue&gt;</span>
   <span class="code-tag">&lt;/dynamicValues&gt;</span>
 <span class="code-tag">&lt;/nant&gt;</span></pre>
 </div></div>
-
-<p>Shorthand example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Shorthand example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;nant&gt;</span>
   <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
   <span class="code-tag">&lt;buildArgs&gt;</span>-t:$[CommandToRun|Help]<span class="code-tag">&lt;/buildArgs&gt;</span>
 <span class="code-tag">&lt;/nant&gt;</span></pre>
 </div></div>
-
-<p>Example in context:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Example in context</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Test Project"</span>&gt;</span>
   <span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"svn"</span>&gt;</span>
     <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
@@ -70,7 +66,7 @@
         <span class="code-tag">&lt;replacementValue property=<span class="code-quote">"buildArgs"</span>&gt;</span>
           <span class="code-tag">&lt;format&gt;</span>-t:{0}<span class="code-tag">&lt;/format&gt;</span>
           <span class="code-tag">&lt;parameters&gt;</span>
-            <span class="code-tag">&lt;namedValue name=<span class="code-quote">"CommandToRun"</span> value=<span class="code-quote">"Help"</span>/&gt;</span>
+            <span class="code-tag">&lt;namedValue name=<span class="code-quote">"CommandToRun"</span> value=<span class="code-quote">"Help"</span> /&gt;</span>
           <span class="code-tag">&lt;/parameters&gt;</span>
         <span class="code-tag">&lt;/replacementValue&gt;</span>
       <span class="code-tag">&lt;/dynamicValues&gt;</span>
@@ -86,11 +82,12 @@
 <span class="code-tag">&lt;/project&gt;</span></pre>
 </div></div>
 
-<h3><a name="ReplacementDynamicValue-ConfigurationElements%3A"></a>Configuration Elements:</h3>
+
+<h2><a name="ReplacementDynamicValue-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -98,34 +95,38 @@
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> property </td>
-<td class='confluenceTd'> The name of the property to set. This is the same name as what is in the configuration. </td>
-<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> format </td>
+<td class='confluenceTd'> The default value to use if nothing is set in the parameters.   </td>
+<td class='confluenceTd'> String </td>
 <td class='confluenceTd'> Yes </td>
 <td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> parameters </td>
-<td class='confluenceTd'> The parameters to use. Name is the name of the parameter, while value is the default value to use if the parameter has not been set. </td>
-<td class='confluenceTd'> List of NamedValues </td>
+<td class='confluenceTd'> The parameters to use.   </td>
+<td class='confluenceTd'> <a href="Named Value.html" title="Named Value">Named Value</a> array </td>
 <td class='confluenceTd'> Yes </td>
 <td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> format </td>
-<td class='confluenceTd'> The format string to use. </td>
-<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> property </td>
+<td class='confluenceTd'> The name of the property to set.   </td>
+<td class='confluenceTd'> String </td>
 <td class='confluenceTd'> Yes </td>
 <td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 </tbody></table>
 
-<h3><a name="ReplacementDynamicValue-Notes"></a>Notes</h3>
+<h2><a name="ReplacementDynamicValue-Notes"></a>Notes</h2>
 
-<p>The format string is any standard .NET format string that can be used with string.Format(). The parameters will be replaced in the order that they are defined in the parameters property.</p>
+<p>The format string is any standard .NET format string that can be used with string.Format(). The parameters will be replaced in the order that they are defined in the parameters property.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Saturday, 5 Dec 2009 at 5:23:58 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -136,7 +137,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

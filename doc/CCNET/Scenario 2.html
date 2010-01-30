@@ -1,0 +1,309 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Scenario 2</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Scenario 2
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 11, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    
+
+<h1><a name="Scenario2-Scenario%232%3ALargeInhouseDevelopmentTeam"></a>Scenario #2: Large In-house Development Team</h1>
+
+<h2><a name="Scenario2-Background"></a>Background	</h2>
+
+<p>The company Acme Banking, a large multi-national bank. Lu is the manager of the lending application software development department and has a staff of 19 people working for him. He has charged his system admin, Peter, with securing CruiseControl.Net.</p>
+
+<p>Some background, Lu is responsible for three applications: lending applications system (LAS), load approval and tracking system (LATS) and bad debt analysis and recovery system (BARS). Each system is an independent web application with a complex set of business rules and a backing database. To allow interactions between the system each application exposes web services. Finally each application has a number of support tools that are Windows-based.</p>
+
+<p>However, to simplify things, Lu's department is only responsible for development. The QA department is responsible for all testing (including deployments) and the Server department is responsible for the actual deployment to PROD. All of these deployments are done via hand-overs, with the receiving department responsible for getting the binaries from the build server.</p>
+
+<p>As for department structure, each team has a team leader and a senior developer. There are also between two and six junior developers in each team. Peter is not included in any of the teams as his full-time role is supporting the developers. All staff are on the same network and have windows logins.</p>
+
+<p>Lu wants to limit access for project to the team that is responsible for it. No team is allowed access to any project that belongs to another team. Additionally only the team leader and senior developer are allowed to start/stop the projects, although the junior developers can force builds. Everything done in the system must be audited.</p>
+
+<h2><a name="Scenario2-TheBuildSetup"></a>The Build Setup</h2>
+
+<p>Each application has two projects - main and tools. Main includes the actual web application, plus the web services, while tools contains all the support tools. This makes a total of six projects.</p>
+
+<p>Each project contains everything required to build the binaries and deploy them to the build server (for the other departments). These are triggered on an interval basis, plus every night at 3am.</p>
+
+<p>Since the hand-over process is manual, there is no impact on other environments. However considering the team size and low-level of trust they want everything locked down.</p>
+
+<h2><a name="Scenario2-TheGoals"></a>The Goals</h2>
+
+<p>There will be three security zones: low, medium and high. The following table shows these zones:</p>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Zone </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Projects </th>
+<th class='confluenceTh'> People </th>
+</tr>
+<tr>
+<td class='confluenceTd'> Low </td>
+<td class='confluenceTd'> Permission to force/abort builds. </td>
+<td class='confluenceTd'> All </td>
+<td class='confluenceTd'> Junior developers </td>
+</tr>
+<tr>
+<td class='confluenceTd'> Medium </td>
+<td class='confluenceTd'> As above, plus permission to start/stop projects. </td>
+<td class='confluenceTd'> All </td>
+<td class='confluenceTd'> Team leaders and senior developers </td>
+</tr>
+<tr>
+<td class='confluenceTd'> High </td>
+<td class='confluenceTd'> As above, plus access to security information. </td>
+<td class='confluenceTd'> n/a </td>
+<td class='confluenceTd'> Lu &amp; Peter </td>
+</tr>
+</tbody></table>
+
+<p>Each application will be divided into low and medium zones. The high level security zone is generic to the system rather than application-specific.</p>
+
+<h2><a name="Scenario2-ThePlan"></a>The Plan</h2>
+
+<p>These goals give a total of seven security groups - low and medium for each application plus a high security group. Everybody within the department will belong to one of these seven groups.</p>
+
+<p>This actual model is a little more complex, but I've put together a diagram as follows:<br/>
+<img src="download/attachments/31490071/Scenario2Overview.jpg" align="absmiddle" border="0"/></p>
+
+<h2><a name="Scenario2-TheConfiguration"></a>The Configuration</h2>
+
+<p>Since I'm looking at the security, not the actual projects, I'm going to use the following general configuration for each project:</p>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"LAS-Main"</span>&gt;</span>
+  <span class="code-tag">&lt;workingDirectory&gt;</span>C:\Build\LAS-Main<span class="code-tag">&lt;/workingDirectory&gt;</span>
+  <span class="code-tag">&lt;artifactDirectory&gt;</span>C:\Build\LAS-Main\Deploy<span class="code-tag">&lt;/artifactDirectory&gt;</span>
+  <span class="code-tag">&lt;webURL&gt;</span>http://localhost/server/local/project/LAS-Main/ViewProjectReport.aspx<span class="code-tag">&lt;/webURL&gt;</span>
+  <span class="code-tag"><span class="code-comment">&lt;!-- Source control block defined here --&gt;</span></span>
+  <span class="code-tag">&lt;triggers&gt;</span>
+    <span class="code-tag">&lt;intervalTrigger buildCondition=<span class="code-quote">"IfModificationExists"</span> seconds=<span class="code-quote">"300"</span> /&gt;</span>
+  <span class="code-tag">&lt;/triggers&gt;</span>
+  <span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Tasks defined here --&gt;</span></span>
+  <span class="code-tag">&lt;/tasks&gt;</span>
+  <span class="code-tag">&lt;publishers&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Publishers defined here --&gt;</span></span>
+  <span class="code-tag">&lt;/publishers&gt;</span>
+<span class="code-tag">&lt;/project&gt;</span></pre>
+</div></div>
+
+<p>The project name (i.e. LAS-Main) will be changed for each project - a total of six projects.</p>
+
+<p>Again the first step is turning on security - just added the internalSecurity element, plus the required children.</p>
+
+<h2><a name="Scenario2-TurningOnSecurity"></a>Turning On Security</h2>
+
+<p>First, I'm going to turn on security for the server. This involves adding a security block to the config file. Since the security will be defined internally, I'm going to use the &lt;internalSecurity&gt; definition:</p>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;cruisecontrol&gt;</span>
+  <span class="code-tag">&lt;internalSecurity&gt;</span>
+    <span class="code-tag">&lt;users&gt;</span>
+    <span class="code-tag">&lt;/users&gt;</span>
+    <span class="code-tag">&lt;permissions&gt;</span>
+    <span class="code-tag">&lt;/permissions&gt;</span>
+  <span class="code-tag">&lt;/internalSecurity&gt;</span>
+  <span class="code-tag"><span class="code-comment">&lt;!-- Projects defined here --&gt;</span></span>
+<span class="code-tag">&lt;/cruisecontrol&gt;</span></pre>
+</div></div>
+
+<p>Now the config file passes validation and security has been turned on for the server. But, all this has done is completely lock down the server, so no one can do anything!</p>
+
+<h2><a name="Scenario2-AddingSomeRolesandUsers"></a>Adding Some Roles and Users</h2>
+
+<p>Next, I added the users. Since everyone is on the network I added them with ldapUser elements. This is defined as follows:</p>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;internalSecurity&gt;</span>
+  <span class="code-tag">&lt;users&gt;</span>
+    <span class="code-tag">&lt;ldapUser name=<span class="code-quote">"lu.jones"</span> domain=<span class="code-quote">"localhost"</span>/&gt;</span> <span class="code-tag"><span class="code-comment">&lt;!-- Manager --&gt;</span></span>
+    <span class="code-tag">&lt;ldapUser name=<span class="code-quote">"peter.smith"</span> domain=<span class="code-quote">"localhost"</span>/&gt;</span> <span class="code-tag"><span class="code-comment">&lt;!-- SysAdmin --&gt;</span></span>
+    <span class="code-tag">&lt;ldapUser name=<span class="code-quote">"mark.doulos"</span> domain=<span class="code-quote">"localhost"</span>/&gt;</span> <span class="code-tag"><span class="code-comment">&lt;!-- LAS Team leader --&gt;</span></span>
+    <span class="code-tag">&lt;ldapUser name=<span class="code-quote">"jill.white"</span> domain=<span class="code-quote">"localhost"</span>/&gt;</span> <span class="code-tag"><span class="code-comment">&lt;!-- LAS Senior developer --&gt;</span></span>
+    <span class="code-tag">&lt;ldapUser name=<span class="code-quote">"john.asher"</span> domain=<span class="code-quote">"localhost"</span>/&gt;</span> <span class="code-tag"><span class="code-comment">&lt;!-- LAS Junior developer --&gt;</span></span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Remaining users omitted --&gt;</span></span>
+  <span class="code-tag">&lt;/users&gt;</span>
+  <span class="code-tag">&lt;permissions&gt;</span>
+  <span class="code-tag">&lt;/permissions&gt;</span>
+<span class="code-tag">&lt;/internalSecurity&gt;</span></pre>
+</div></div>
+
+<p>Note there is a domain in here - I've just changed it to localhost for this example. Without the domain the active directory authentication will fail as the authenticator won't know where to look.</p>
+
+<p>I've also added a server-level permission for the high-security permissions:</p>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;internalSecurity&gt;</span>
+  <span class="code-tag">&lt;users&gt;</span>
+    <span class="code-tag">&lt;ldapUser name=<span class="code-quote">"lu.jones"</span> domain=<span class="code-quote">"localhost"</span>/&gt;</span> <span class="code-tag"><span class="code-comment">&lt;!-- Manager --&gt;</span></span>
+    <span class="code-tag">&lt;ldapUser name=<span class="code-quote">"peter.smith"</span> domain=<span class="code-quote">"localhost"</span>/&gt;</span> <span class="code-tag"><span class="code-comment">&lt;!-- SysAdmin --&gt;</span></span>
+    <span class="code-tag">&lt;ldapUser name=<span class="code-quote">"mark.doulos"</span> domain=<span class="code-quote">"localhost"</span>/&gt;</span> <span class="code-tag"><span class="code-comment">&lt;!-- LAS Team leader --&gt;</span></span>
+    <span class="code-tag">&lt;ldapUser name=<span class="code-quote">"jill.white"</span> domain=<span class="code-quote">"localhost"</span>/&gt;</span> <span class="code-tag"><span class="code-comment">&lt;!-- LAS Senior developer --&gt;</span></span>
+    <span class="code-tag">&lt;ldapUser name=<span class="code-quote">"john.asher"</span> domain=<span class="code-quote">"localhost"</span>/&gt;</span> <span class="code-tag"><span class="code-comment">&lt;!-- LAS Junior developer --&gt;</span></span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Remaining users omitted --&gt;</span></span>
+  <span class="code-tag">&lt;/users&gt;</span>
+  <span class="code-tag">&lt;permissions&gt;</span>
+    <span class="code-tag">&lt;rolePermission name=<span class="code-quote">"Admin"</span> defaultRight=<span class="code-quote">"Allow"</span>&gt;</span>
+      <span class="code-tag">&lt;users&gt;</span>
+        <span class="code-tag">&lt;userName name=<span class="code-quote">"lu.jones"</span>/&gt;</span>
+        <span class="code-tag">&lt;userName name=<span class="code-quote">"peter.smith"</span>/&gt;</span>
+      <span class="code-tag">&lt;/users&gt;</span>
+    <span class="code-tag">&lt;/rolePermission&gt;</span>
+  <span class="code-tag">&lt;/permissions&gt;</span>
+<span class="code-tag">&lt;/internalSecurity&gt;</span></pre>
+</div></div>
+
+<p>This just says that Lu and Peter have full access to everything.</p>
+
+<h2><a name="Scenario2-LockingDownProjects"></a>Locking Down Projects</h2>
+
+<p>The final step is to lock down the projects. This is where there is slightly more work than scenario one. Since each project needs to be secured, every project will need to be modified.</p>
+
+<p>There are two ways this can be done. One way would be to add the security to each project, the second is to define roles and then link each project to them. Since there are two projects for each application, with identical permissions I'm going to use the second approach.</p>
+
+<p>In the internalSecurity element I define each application role. The following shows an example:</p>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;internalSecurity&gt;</span>
+  <span class="code-tag">&lt;users&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;/users&gt;</span>
+  <span class="code-tag">&lt;permissions&gt;</span>
+    <span class="code-tag">&lt;rolePermission name=<span class="code-quote">"Admin"</span> defaultRight=<span class="code-quote">"Allow"</span>&gt;</span>
+      <span class="code-tag">&lt;users&gt;</span>
+        <span class="code-tag">&lt;userName name=<span class="code-quote">"lu.jones"</span>/&gt;</span>
+        <span class="code-tag">&lt;userName name=<span class="code-quote">"peter.smith"</span>/&gt;</span>
+      <span class="code-tag">&lt;/users&gt;</span>
+    <span class="code-tag">&lt;/rolePermission&gt;</span>
+    <span class="code-tag">&lt;rolePermission name=<span class="code-quote">"LAS-Developers"</span> forceBuild=<span class="code-quote">"Allow"</span> defaultRight=<span class="code-quote">"Deny"</span>&gt;</span>
+      <span class="code-tag">&lt;users&gt;</span>
+        <span class="code-tag">&lt;userName name=<span class="code-quote">"john.asher"</span>/&gt;</span>
+        <span class="code-tag"><span class="code-comment">&lt;!-- Remaining users omitted --&gt;</span></span>
+      <span class="code-tag">&lt;/users&gt;</span>
+    <span class="code-tag">&lt;/rolePermission&gt;</span>
+    <span class="code-tag">&lt;rolePermission name=<span class="code-quote">"LAS-Admin"</span> forceBuild=<span class="code-quote">"Allow"</span> startProject=<span class="code-quote">"Allow"</span> defaultRight=<span class="code-quote">"Deny"</span>&gt;</span>
+      <span class="code-tag">&lt;users&gt;</span>
+        <span class="code-tag">&lt;userName name=<span class="code-quote">"mark.doulos"</span>/&gt;</span>
+        <span class="code-tag">&lt;userName name=<span class="code-quote">"jill.white"</span>/&gt;</span>
+      <span class="code-tag">&lt;/users&gt;</span>
+    <span class="code-tag">&lt;/rolePermission&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Remaining roles omitted --&gt;</span></span>
+  <span class="code-tag">&lt;/permissions&gt;</span>
+<span class="code-tag">&lt;/internalSecurity&gt;</span></pre>
+</div></div>
+
+<p>Then, in each project I add a security section like the following:</p>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"LAS-Main"</span>&gt;</span>
+  <span class="code-tag">&lt;workingDirectory&gt;</span>C:\Build\LAS-Main<span class="code-tag">&lt;/workingDirectory&gt;</span>
+  <span class="code-tag">&lt;artifactDirectory&gt;</span>C:\Build\LAS-Main\Deploy<span class="code-tag">&lt;/artifactDirectory&gt;</span>
+  <span class="code-tag">&lt;webURL&gt;</span>http://localhost/server/local/project/LAS-Main/ViewProjectReport.aspx<span class="code-tag">&lt;/webURL&gt;</span>
+  <span class="code-tag"><span class="code-comment">&lt;!-- Source control block defined here --&gt;</span></span>
+  <span class="code-tag">&lt;triggers&gt;</span>
+    <span class="code-tag">&lt;intervalTrigger buildCondition=<span class="code-quote">"IfModificationExists"</span> seconds=<span class="code-quote">"300"</span> /&gt;</span>
+  <span class="code-tag">&lt;/triggers&gt;</span>
+  <span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Tasks defined here --&gt;</span></span>
+  <span class="code-tag">&lt;/tasks&gt;</span>
+  <span class="code-tag">&lt;publishers&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Publishers defined here --&gt;</span></span>
+  <span class="code-tag">&lt;/publishers&gt;</span>
+  <span class="code-tag">&lt;security type=<span class="code-quote">"defaultProjectSecurity"</span> defaultRight=<span class="code-quote">"Deny"</span>&gt;</span>
+    <span class="code-tag">&lt;permissions&gt;</span>
+      <span class="code-tag">&lt;rolePermission name=<span class="code-quote">"LAS-Developers"</span> ref=<span class="code-quote">"LAS-Developers"</span>/&gt;</span>
+      <span class="code-tag">&lt;rolePermission name=<span class="code-quote">"LAS-Admin"</span> ref=<span class="code-quote">"LAS-Admin"</span>/&gt;</span>
+      <span class="code-tag">&lt;rolePermission name=<span class="code-quote">"Admin"</span> ref=<span class="code-quote">"Admin"</span>/&gt;</span>
+    <span class="code-tag">&lt;/permissions&gt;</span>
+  <span class="code-tag">&lt;/security&gt;</span>
+<span class="code-tag">&lt;/project&gt;</span></pre>
+</div></div>
+
+<p>The first two permissions will change to match the application each project is for, while the last one is the same for all projects (gives Peter &amp; Lu access to the projects).</p>
+
+<h2><a name="Scenario2-AuditLogging"></a>Audit Logging</h2>
+
+<p>Finally Lu wants everything audited. This is very simple to do, just add an audit logger and an audit reader. This is done in the internalSecurity element by adding the following elements:</p>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;internalSecurity&gt;</span>
+  <span class="code-tag">&lt;audit&gt;</span>
+    <span class="code-tag">&lt;xmlFileAudit/&gt;</span>
+  <span class="code-tag">&lt;/audit&gt;</span>
+  <span class="code-tag">&lt;auditReader type=<span class="code-quote">"xmlFileAuditReader"</span>/&gt;</span>
+  <span class="code-tag">&lt;users&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;/users&gt;</span>
+  <span class="code-tag">&lt;permissions&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;/permissions&gt;</span>
+<span class="code-tag">&lt;/internalSecurity&gt;</span></pre>
+</div></div>
+
+<p>By default these will use an audit log called SecurityAudit.xml in the same directory as the executables. This can be changed by added a location attribute as follows:</p>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;internalSecurity&gt;</span>
+  <span class="code-tag">&lt;audit&gt;</span>
+    <span class="code-tag">&lt;xmlFileAudit location=<span class="code-quote">"C:\Logs\CCNet_Audit.xml"</span>/&gt;</span>
+  <span class="code-tag">&lt;/audit&gt;</span>
+  <span class="code-tag">&lt;auditReader type=<span class="code-quote">"xmlFileAuditReader"</span> location=<span class="code-quote">"C:\Logs\CCNet_Audit.xml"</span>/&gt;</span>
+  <span class="code-tag">&lt;users&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;/users&gt;</span>
+  <span class="code-tag">&lt;permissions&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
+  <span class="code-tag">&lt;/permissions&gt;</span>
+<span class="code-tag">&lt;/internalSecurity&gt;</span></pre>
+</div></div>
+
+<p>Note that the location must be on both elements and they point to the same location. This is because the two items work independently of each other and it is possible to have multiple audit loggers.</p>
+
+<p>And that's the security settings for this scenario - the full example is available <a href="Scenario 2 - Full Example.html" title="Scenario 2 - Full Example">here</a>.</p>
+
+<h2><a name="Scenario2-Credits"></a>Credits</h2>
+
+<p>This scenario was originally posted on <a href="http://csut017.wordpress.com">Automated Coder</a></p>
+
+				    					    <br/>
+                        <div class="tabletitle">
+                            <a name="attachments">Attachments:</a>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="images/icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="download/attachments/31490071/Scenario2Overview.jpg">Scenario2Overview.jpg</a> (image/jpeg)
+                                <br/>
+                                                    </div>
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

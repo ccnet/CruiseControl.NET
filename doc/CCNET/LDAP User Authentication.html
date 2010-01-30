@@ -16,34 +16,32 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 27, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Dec 13, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <h3><a name="LDAPUserAuthentication-LDAPUserAuthentication"></a>LDAP User Authentication</h3>
+				    <h1><a name="LDAPUserAuthentication-LDAPUserAuthentication"></a>LDAP User Authentication</h1>
 
-<p>Authenticates a user against an LDAP domain.</p>
+<p>Stores a user name &#45; authentication will come from Active Directory.  </p>
 
-<h4><a name="LDAPUserAuthentication-Version"></a>Version</h4>
+<h2><a name="LDAPUserAuthentication-Version"></a>Version</h2>
 
-<p>This security item is available from version 1.5.0.</p>
+<p>Available from version 1.5</p>
 
-<h4><a name="LDAPUserAuthentication-Examples"></a>Examples</h4>
+<h2><a name="LDAPUserAuthentication-Examples"></a>Examples</h2>
 
-<p>Simple example:	</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;ldapUser name=<span class="code-quote">"johndoe"</span> domain=<span class="code-quote">"somewhere.com"</span>/&gt;</span></pre>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Simple Example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;ldapUser name=<span class="code-quote">"johndoe"</span> domain=<span class="code-quote">"somewhere.com"</span> /&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Wildcard Example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;ldapUser name=<span class="code-quote">"*"</span> domain=<span class="code-quote">"somewhere.com"</span> /&gt;</span></pre>
 </div></div>
 
-<p>Wildcard example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;ldapUser name=<span class="code-quote">"*"</span> domain=<span class="code-quote">"somewhere.com"</span>/&gt;</span></pre>
-</div></div>
 
-<h4><a name="LDAPUserAuthentication-ConfigurationElements"></a>Configuration Elements</h4>
+<h2><a name="LDAPUserAuthentication-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -51,42 +49,25 @@
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> name </td>
-<td class='confluenceTd'> The name of the user. See note on wild cards below. </td>
-<td class='confluenceTd'> String </td>
-<td class='confluenceTd'> Yes </td>
-<td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
-</tr>
-<tr>
 <td class='confluenceTd'> domain </td>
-<td class='confluenceTd'> The domain to use for authentication. </td>
+<td class='confluenceTd'> The AD domain to use.   </td>
 <td class='confluenceTd'> String </td>
 <td class='confluenceTd'> Yes </td>
 <td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> name </td>
+<td class='confluenceTd'> The user name for this user.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 </tbody></table>
 
-<h4><a name="LDAPUserAuthentication-WildcardsinUserNames"></a>Wildcards in User Names</h4>
-
-<p>It is possible to use wild cards for the user name. To use a wild card simply use an '*'. Wild cards can either be the whole name (in which case everything will be matched) or just part of a name.</p>
-
-<p>Some examples are:</p>
-<table class='confluenceTable'><tbody>
-<tr>
-<td class='confluenceTd'> &#42; </td>
-<td class='confluenceTd'> matches everything </td>
-</tr>
-<tr>
-<td class='confluenceTd'> local/* </td>
-<td class='confluenceTd'> matches every name from the local domain </td>
-</tr>
-<tr>
-<td class='confluenceTd'> &#42;@local.com </td>
-<td class='confluenceTd'> matches all the names with e-mail addresses from local.com </td>
-</tr>
-</tbody></table>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Sunday, 13 Dec 2009 at 8:39:29 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -97,7 +78,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

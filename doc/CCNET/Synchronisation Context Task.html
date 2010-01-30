@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Synchronisation Context Task</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Synchronisation Context Task
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jan 30, 2010 by <font color="#0050B2">williams</font>.
+				    </div>
+
+				    <h1><a name="SynchronisationContextTask-SynchronisationContextTask"></a>Synchronisation Context Task </h1>
+
+<p>A sychronisation context across multiple tasks or projects.  <br/>
+Only one task can be in a synchronisation context at any time. This provides a mechanism for locking, either within a project or inbetween projects.  </p>
+
+
+<h2><a name="SynchronisationContextTask-Version"></a>Version</h2>
+
+<p>Available from version 1.5</p>
+
+<h2><a name="SynchronisationContextTask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sequential&gt;</span>
+  <span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Tasks defined here --&gt;</span></span>
+  <span class="code-tag">&lt;/tasks&gt;</span>
+<span class="code-tag">&lt;/sequential&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sequential continueOnFailure=<span class="code-quote">"true"</span> context=<span class="code-quote">"thereCanBeOnlyOne"</span> timeout=<span class="code-quote">"1200"</span>&gt;</span>
+  <span class="code-tag">&lt;description&gt;</span>Example of how to run multiple tasks in a synchronisation context.<span class="code-tag">&lt;/description&gt;</span>
+  <span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Tasks defined here --&gt;</span></span>
+  <span class="code-tag">&lt;/tasks&gt;</span>
+<span class="code-tag">&lt;/sequential&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="SynchronisationContextTask-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> context </td>
+<td class='confluenceTd'> The name of the synchronisation context. This is only needed if multiple synchronisation contexts are desired.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> DefaultSynchronisationContext </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> continueOnFailure </td>
+<td class='confluenceTd'> Should the tasks continue to run, even if there is a failure?   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> None </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> tasks </td>
+<td class='confluenceTd'> The tasks to run within the synchronisation context. These tasks will be run in the order they are defined.   </td>
+<td class='confluenceTd'> <a href="Task And Publisher Blocks.html" title="Task And Publisher Blocks">Task And Publisher Blocks</a> array </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> The timeout period (in seconds).  <br clear="all" />The time-out is only used for attempting to aquire the context. If the task cannot acquire the context within this period, it will time out and throw an error. Once the context has been acquired, there is no time limit on how long it can be held.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 300 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+</tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Thursday, 3 Dec 2009 at 8:18:21 AM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : HTTP Status Task</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : HTTP Status Task
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 06, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="HTTPStatusTask-HTTPStatusTask"></a>HTTP Status Task</h1>
+
+<p>Sends an HTTP request to the specified URL.  </p>
+
+
+<h2><a name="HTTPStatusTask-Version"></a>Version</h2>
+
+<p>Available from version 1.5</p>
+
+<h2><a name="HTTPStatusTask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;checkHttpStatus&gt;</span>
+  <span class="code-tag">&lt;httpRequest&gt;</span>
+    <span class="code-tag">&lt;uri&gt;</span>http://somewhere.com<span class="code-tag">&lt;/uri&gt;</span>
+  <span class="code-tag">&lt;/httpRequest&gt;</span>
+<span class="code-tag">&lt;/checkHttpStatus&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;checkHttpStatus&gt;</span>
+  <span class="code-tag">&lt;dynamicValues /&gt;</span>
+  <span class="code-tag">&lt;includeContent&gt;</span>False<span class="code-tag">&lt;/includeContent&gt;</span>
+  <span class="code-tag">&lt;httpRequest&gt;</span>
+    <span class="code-tag">&lt;method&gt;</span>GET<span class="code-tag">&lt;/method&gt;</span>
+    <span class="code-tag">&lt;uri&gt;</span>http://somewhere.com/<span class="code-tag">&lt;/uri&gt;</span>
+    <span class="code-tag">&lt;useDefaultCredentials&gt;</span>false<span class="code-tag">&lt;/useDefaultCredentials&gt;</span>
+  <span class="code-tag">&lt;/httpRequest&gt;</span>
+  <span class="code-tag">&lt;retries&gt;</span>3<span class="code-tag">&lt;/retries&gt;</span>
+  <span class="code-tag">&lt;successStatusCodes&gt;</span>200<span class="code-tag">&lt;/successStatusCodes&gt;</span>
+<span class="code-tag">&lt;/checkHttpStatus&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="HTTPStatusTask-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> includeContent </td>
+<td class='confluenceTd'> Whether to include the content of the call in the log.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> httpRequest </td>
+<td class='confluenceTd'> The request settings.   </td>
+<td class='confluenceTd'> <a href="HTTP Settings.html" title="HTTP Settings">HTTP Settings</a> </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> retries </td>
+<td class='confluenceTd'> The number of retries to allow.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 3 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> retryDelay </td>
+<td class='confluenceTd'> Gets or sets the retry delay.   </td>
+<td class='confluenceTd'> Timeout </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> successStatusCodes </td>
+<td class='confluenceTd'> The list of exit codes that indicate success, separated by commas.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 200 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> taskTimeout </td>
+<td class='confluenceTd'> The timeout period to allow.   </td>
+<td class='confluenceTd'> Timeout </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 5 seconds </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="HTTPStatusTask-Notes"></a>Notes</h2>
+
+<p>Task supplied by Patrik Husfloen.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Sunday, 6 Dec 2009 at 8:15:10 AM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

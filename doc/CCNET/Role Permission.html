@@ -16,38 +16,36 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 29, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Jan 07, 2010 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <h3><a name="RolePermission-RolePermission"></a>Role Permission</h3>
+				    <h1><a name="RolePermission-RolePermission"></a>Role Permission</h1>
 
-<p>Defines the permissions for a role (a group of users).</p>
+<p>Defines the permissions for a role (a group of users).  </p>
 
-<h4><a name="RolePermission-Version"></a>Version</h4>
+<h2><a name="RolePermission-Version"></a>Version</h2>
 
-<p>This security item is available from version 1.5.0.</p>
+<p>Available from version 1.5</p>
 
-<h4><a name="RolePermission-Examples"></a>Examples</h4>
+<h2><a name="RolePermission-Examples"></a>Examples</h2>
 
-<p>Definition of a role:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Role Definition Example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;rolePermission name=<span class="code-quote">"admin"</span> forceBuild=<span class="code-quote">"Allow"</span> startProject=<span class="code-quote">"Deny"</span> defaultRight=<span class="code-quote">"Inherit"</span>&gt;</span>
   <span class="code-tag">&lt;users&gt;</span>
-    <span class="code-tag">&lt;userName name=<span class="code-quote">"johndoe"</span>/&gt;</span>
+    <span class="code-tag">&lt;userName name=<span class="code-quote">"johndoe"</span> /&gt;</span>
   <span class="code-tag">&lt;/users&gt;</span>
 <span class="code-tag">&lt;/rolePermission&gt;</span></pre>
 </div></div>
-
-<p>Referenced role:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;rolePermission name=<span class="code-quote">"admin"</span> ref=<span class="code-quote">"admin"</span>/&gt;</span></pre>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Reference Example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;rolePermission name=<span class="code-quote">"admin"</span> ref=<span class="code-quote">"admin"</span> /&gt;</span></pre>
 </div></div>
 
-<h4><a name="RolePermission-ConfigurationElements"></a>Configuration Elements</h4>
+
+<h2><a name="RolePermission-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -55,53 +53,160 @@
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> name </td>
-<td class='confluenceTd'> The name of the role. </td>
-<td class='confluenceTd'> String </td>
-<td class='confluenceTd'> Yes </td>
-<td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> changeProject </td>
+<td class='confluenceTd'> The right to change the configuration of projects.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Allow</li>
+	<li>Deny</li>
+	<li>Inherit</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Inherit </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> defaultRight </td>
+<td class='confluenceTd'> The default right to use.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Allow</li>
+	<li>Deny</li>
+	<li>Inherit</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Inherit </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> forceBuild </td>
+<td class='confluenceTd'> The right for force or abort builds.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Allow</li>
+	<li>Deny</li>
+	<li>Inherit</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Inherit </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> modifySecurity </td>
+<td class='confluenceTd'> The right to modify security.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Allow</li>
+	<li>Deny</li>
+	<li>Inherit</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Inherit </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> ref </td>
-<td class='confluenceTd'> A reference to a role authorisation stored in the server settings. </td>
+<td class='confluenceTd'> The identifier of the referenced permission.   </td>
 <td class='confluenceTd'> String </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> roles </td>
-<td class='confluenceTd'> A list of the users who are in the role. </td>
-<td class='confluenceTd'> Array of user references (see below) </td>
-<td class='confluenceTd'> Yes </td>
-<td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
-</tr>
-</tbody></table>
-
-<h4><a name="RolePermission-UserReferences"></a>User References</h4>
-
-<table class='confluenceTable'><tbody>
-<tr>
-<th class='confluenceTh'> Node </th>
-<th class='confluenceTh'> Description </th>
-<th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Required </th>
-<th class='confluenceTh'> Default </th>
-<th class='confluenceTh'> Version </th>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> name </td>
-<td class='confluenceTd'> The name of the user. </td>
+<td class='confluenceTd'> The name of the role.   </td>
 <td class='confluenceTd'> String </td>
 <td class='confluenceTd'> Yes </td>
 <td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> sendMessage </td>
+<td class='confluenceTd'> The right to send messages.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Allow</li>
+	<li>Deny</li>
+	<li>Inherit</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Inherit </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> startProject </td>
+<td class='confluenceTd'> The right to stop and start projects.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Allow</li>
+	<li>Deny</li>
+	<li>Inherit</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Inherit </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> users </td>
+<td class='confluenceTd'> The users in this role.   </td>
+<td class='confluenceTd'> <a href="User Name.html" title="User Name">User Name</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> viewConfiguration </td>
+<td class='confluenceTd'> The right to view configuration and logs.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Allow</li>
+	<li>Deny</li>
+	<li>Inherit</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Inherit </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> viewProject </td>
+<td class='confluenceTd'> The right to view a project.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Allow</li>
+	<li>Deny</li>
+	<li>Inherit</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Inherit </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> viewSecurity </td>
+<td class='confluenceTd'> The right to view security.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Allow</li>
+	<li>Deny</li>
+	<li>Inherit</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Inherit </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 </tbody></table>
 
- <h4><a name="RolePermission-GeneralSecurityPermissions"></a>General Security Permissions</h4>
+<h2><a name="RolePermission-Notes"></a>Notes</h2>
+
+<h4><a name="RolePermission-GeneralSecurityPermissions"></a>General Security Permissions</h4>
 
 <p>The following are the general security permissions:</p>
 
@@ -198,6 +303,9 @@
 
 <p>If no permissions are found at the project level, it will then use the permissions defined at the server level. Again, it will first check for a specific permission, and then the default permission. If no permissions has been found after this, then it will return denied as the permission.</p>
 
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Thursday, 7 Jan 2010 at 6:06:07 AM</p></td></tr></table></div>
+
 				    
                     			    </td>
 		    </tr>
@@ -207,7 +315,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

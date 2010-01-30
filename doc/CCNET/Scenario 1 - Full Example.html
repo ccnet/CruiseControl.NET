@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Scenario 1 - Full Example</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Scenario 1 - Full Example
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 10, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="Scenario1-FullExample-FullExample"></a>Full Example</h1>
+
+<p>Here is the full configuration for the example. I have omitted the duplicate projects since this scenario is focusing on the security:</p>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;cruisecontrol&gt;</span>
+  <span class="code-tag">&lt;internalSecurity&gt;</span>
+    <span class="code-tag">&lt;users&gt;</span>
+      <span class="code-tag"><span class="code-comment">&lt;!-- Authenticated users --&gt;</span></span>
+      <span class="code-tag">&lt;passwordUser name=<span class="code-quote">"bob"</span> display=<span class="code-quote">"Bob (Team Lead)"</span> password=<span class="code-quote">"bob1"</span>/&gt;</span>
+      <span class="code-tag">&lt;passwordUser name=<span class="code-quote">"jane"</span> display=<span class="code-quote">"Jane (BA)"</span> password=<span class="code-quote">"jane2"</span>/&gt;</span>
+      <span class="code-tag">&lt;passwordUser name=<span class="code-quote">"john"</span> display=<span class="code-quote">"John (QA)"</span> password=<span class="code-quote">"john3"</span>/&gt;</span>
+      <span class="code-tag">&lt;passwordUser name=<span class="code-quote">"joe"</span> display=<span class="code-quote">"Joe (QA)"</span> password=<span class="code-quote">"joe4"</span>/&gt;</span>
+      <span class="code-tag"><span class="code-comment">&lt;!-- Generic role --&gt;</span></span>
+      <span class="code-tag">&lt;simpleUser name=<span class="code-quote">"*"</span>/&gt;</span>
+    <span class="code-tag">&lt;/users&gt;</span>
+    <span class="code-tag">&lt;permissions&gt;</span>
+      <span class="code-tag"><span class="code-comment">&lt;!-- Roles --&gt;</span></span>
+      <span class="code-tag">&lt;rolePermission name=<span class="code-quote">"Testers"</span> forceBuild=<span class="code-quote">"Allow"</span> defaultRight=<span class="code-quote">"Deny"</span>&gt;</span>
+        <span class="code-tag">&lt;users&gt;</span>
+          <span class="code-tag">&lt;userName name=<span class="code-quote">"john"</span>/&gt;</span>
+          <span class="code-tag">&lt;userName name=<span class="code-quote">"joe"</span>/&gt;</span>
+        <span class="code-tag">&lt;/users&gt;</span>
+      <span class="code-tag">&lt;/rolePermission&gt;</span>
+      <span class="code-tag">&lt;rolePermission name=<span class="code-quote">"Releasers"</span> forceBuild=<span class="code-quote">"Allow"</span> defaultRight=<span class="code-quote">"Deny"</span>&gt;</span>
+        <span class="code-tag">&lt;users&gt;</span>
+          <span class="code-tag">&lt;userName name=<span class="code-quote">"bob"</span>/&gt;</span>
+          <span class="code-tag">&lt;userName name=<span class="code-quote">"jane"</span>/&gt;</span>
+        <span class="code-tag">&lt;/users&gt;</span>
+      <span class="code-tag">&lt;/rolePermission&gt;</span>
+    <span class="code-tag">&lt;/permissions&gt;</span>
+  <span class="code-tag">&lt;/internalSecurity&gt;</span>
+  <span class="code-tag">&lt;project name=<span class="code-quote">"WinApp1-QA"</span>&gt;</span>
+    <span class="code-tag">&lt;workingDirectory&gt;</span>C:\Build\WinApp1-QA<span class="code-tag">&lt;/workingDirectory&gt;</span>
+    <span class="code-tag">&lt;artifactDirectory&gt;</span>C:\Build\WinApp1-QA\Deploy<span class="code-tag">&lt;/artifactDirectory&gt;</span>
+    <span class="code-tag">&lt;webURL&gt;</span>http://localhost/server/local/project/WinApp1-QA/ViewProjectReport.aspx<span class="code-tag">&lt;/webURL&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Source control block defined here --&gt;</span></span>
+    <span class="code-tag">&lt;triggers&gt;</span>
+      <span class="code-tag">&lt;intervalTrigger buildCondition=<span class="code-quote">"IfModificationExists"</span> seconds=<span class="code-quote">"300"</span>/&gt;</span>
+    <span class="code-tag">&lt;/triggers&gt;</span>
+    <span class="code-tag">&lt;tasks&gt;</span>
+      <span class="code-tag"><span class="code-comment">&lt;!-- Tasks defined here --&gt;</span></span>
+    <span class="code-tag">&lt;/tasks&gt;</span>
+    <span class="code-tag">&lt;publishers&gt;</span>
+      <span class="code-tag"><span class="code-comment">&lt;!-- Publishers defined here --&gt;</span></span>
+      <span class="code-tag">&lt;xmllogger/&gt;</span>
+    <span class="code-tag">&lt;/publishers&gt;</span>
+    <span class="code-tag">&lt;security type=<span class="code-quote">"defaultProjectSecurity"</span> defaultRight=<span class="code-quote">"Deny"</span>&gt;</span>
+      <span class="code-tag">&lt;permissions&gt;</span>
+        <span class="code-tag"><span class="code-comment">&lt;!-- Grant permissions to this project --&gt;</span></span>
+        <span class="code-tag">&lt;rolePermission name=<span class="code-quote">"Testers"</span> ref=<span class="code-quote">"Testers"</span>/&gt;</span>
+        <span class="code-tag">&lt;rolePermission name=<span class="code-quote">"Releasers"</span> ref=<span class="code-quote">"Releasers"</span>/&gt;</span>
+      <span class="code-tag">&lt;/permissions&gt;</span>
+    <span class="code-tag">&lt;/security&gt;</span>
+  <span class="code-tag">&lt;/project&gt;</span>
+  <span class="code-tag"><span class="code-comment">&lt;!-- Other projects defined here --&gt;</span></span>
+<span class="code-tag">&lt;/cruisecontrol&gt;</span></pre>
+</div></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

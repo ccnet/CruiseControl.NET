@@ -16,55 +16,75 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 26, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Dec 02, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <p>The Xml Log Publisher is used to create the log files used by the CruiseControl.NET Web Dashboard, so if you don't define an &lt;xmllogger /&gt;  section the Dashboard will not function correctly. </p>
+				    <h1><a name="XmlLogPublisher-XMLLogPublisher"></a>XML Log Publisher</h1>
 
-<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>You should place the &lt;xmllogger /&gt; in the &lt;publishers /&gt; section, <b>after</b> any <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>s, in your <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a>.</td></tr></table></div>
+<p>The Xml Log Publisher is used to create the log files used by the CruiseControl.NET Web Dashboard, so if you don't define an &lt;xmllogger /&gt; section the Dashboard will not function correctly.  </p>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>You should place the &lt;xmllogger /&gt; in the &lt;publishers /&gt; section, after any <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>s, in your  <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a>.  </p></td></tr></table></div>
 
-<h4><a name="XmlLogPublisher-Examples"></a>Examples</h4>
 
-<p>Minimalist example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<h2><a name="XmlLogPublisher-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="XmlLogPublisher-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;xmllogger /&gt;</span></pre>
 </div></div>
-
-<p>Full example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;xmllogger logDir=<span class="code-quote">"c:\myproject\buildlogs"</span> /&gt;</span></pre>
 </div></div>
 
-<h4><a name="XmlLogPublisher-ConfigurationElements%3A"></a>Configuration Elements:</h4>
+
+<h2><a name="XmlLogPublisher-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Required </th>
 <th class='confluenceTh'> Default </th>
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> <a name="XmlLogPublisher-logDir"></a> logDir </td>
-<td class='confluenceTd'> The directory to save log files to. If relative, then relative to the <a href="Project Configuration Block.html#ProjectConfigurationBlock-artifactDirectory">Project Artifact Directory</a> </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> <tt>buildlogs</tt> </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> logDir </td>
+<td class='confluenceTd'> The directory to save log files to. If relative, then relative to the Project Artifact Directory.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> buildlogs </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> dynamicValues </td>
-<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
-<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
 <td class='confluenceTd'> No </td>
-<td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> None </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 </tbody></table>
 
-<p><img class="emoticon" src="images/icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> XML Log Publisher used to support the 'mergeFiles' option. This functionality is now removed and you should use <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a> instead.</p>
+<h2><a name="XmlLogPublisher-Notes"></a>Notes</h2>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>XML Log Publisher used to support the 'mergeFiles' option. This functionality is now removed and you should use <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a> instead.  </p></td></tr></table></div>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Wednesday, 2 Dec 2009 at 3:16:21 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -75,7 +95,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

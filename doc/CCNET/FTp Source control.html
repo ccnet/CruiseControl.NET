@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <title>CruiseControl.NET : FTp Source control</title>
+        <title>CruiseControl.NET : FTP Source control</title>
 	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
         <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
     </head>
@@ -12,18 +12,27 @@
 			    <td valign="top" class="pagebody">
 				    <div class="pageheader">
 					    <span class="pagetitle">
-                            CruiseControl.NET : FTp Source control
+                            CruiseControl.NET : FTP Source control
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 28, 2009 by <font color="#0050B2">williams</font>.
+					    This page last changed on Dec 15, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <p>The Ftp Soure control block allows to detect new and changed files at an Ftp site, deleted files are NOT detected.</p>
+				    <h1><a name="FTPSourcecontrol-FTPSourcecontrol"></a>FTP Source control</h1>
 
-<h4><a name="FTpSourcecontrol-Fullconfigurationexample%3A"></a>Full configuration example:</h4>
+<p>The Ftp Soure control block allows to detect new and changed files at an Ftp site.  </p>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Deleted files are  <b>NOT</b> detected.  </p></td></tr></table></div>
 
-<p><div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+
+<h2><a name="FTPSourcecontrol-Version"></a>Version</h2>
+
+<p>Available from version 1.4.4</p>
+
+<h2><a name="FTPSourcecontrol-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"ftpSourceControl"</span>&gt;</span>
   <span class="code-tag">&lt;serverName&gt;</span>ftp.isp.com<span class="code-tag">&lt;/serverName&gt;</span>
   <span class="code-tag">&lt;userName&gt;</span>john<span class="code-tag">&lt;/userName&gt;</span>
@@ -32,58 +41,96 @@
   <span class="code-tag">&lt;localFolderName&gt;</span>d:\temp\config<span class="code-tag">&lt;/localFolderName&gt;</span>
   <span class="code-tag">&lt;recursiveCopy&gt;</span>true<span class="code-tag">&lt;/recursiveCopy&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
-</div></div><br clear="all" /></p>
+</div></div>
+
+
+<h2><a name="FTPSourcecontrol-ConfigurationElements"></a>Configuration Elements</h2>
+
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
 <th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> serverName </td>
-<td class='confluenceTd'> the name of the server to connect to </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true <br clear="all" /> </td>
-<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> type </td>
+<td class='confluenceTd'> The type of source control block. </td>
+<td class='confluenceTd'> String - must be ftpSourceControl </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.4.4 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> userName </td>
-<td class='confluenceTd'> the user to log in with </td>
-<td class='confluenceTd'> string <br clear="all" /> </td>
-<td class='confluenceTd'> true <br clear="all" /> </td>
-<td class='confluenceTd'> N/A <br clear="all" /> </td>
-</tr>
-<tr>
-<td class='confluenceTd'> password </td>
-<td class='confluenceTd'> password of the user <br clear="all" /> </td>
-<td class='confluenceTd'> string <br clear="all" /> </td>
-<td class='confluenceTd'> true <br clear="all" /> </td>
-<td class='confluenceTd'> n/a </td>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the source control block.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> ftpFolderName </td>
-<td class='confluenceTd'> the folder name of at the ftp site </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true </td>
-<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> The folder name of on the ftp site.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.4.4 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> localFolderName </td>
-<td class='confluenceTd'> the folder name at the local system </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true </td>
-<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> The folder name on the local system.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> password </td>
+<td class='confluenceTd'> The password for the user.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.4.4 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> recursiveCopy </td>
-<td class='confluenceTd'> recurse into subfolders or not </td>
-<td class='confluenceTd'> bool </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
-<td class='confluenceTd'> <em>true</em> </td>
+<td class='confluenceTd'> Whether to recurse into subfolders or not.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> serverName </td>
+<td class='confluenceTd'> The name of the server to connect to.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> useActiveConnectionMode </td>
+<td class='confluenceTd'> Whether to use active connection mode or not.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> userName </td>
+<td class='confluenceTd'> The user name to log in with.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.4.4 </td>
 </tr>
 </tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 15 Dec 2009 at 2:10:55 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -94,7 +141,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -16,23 +16,23 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 26, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Jan 07, 2010 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <h3><a name="PackagePublisher-PackagePublisher"></a>Package Publisher</h3>
+				    <h1><a name="PackagePublisher-PackagePublisher"></a>Package Publisher</h1>
 
-<p>Generates a ZIP file package containing the specified files.</p>
+<p>Generates a ZIP file package containing the specified files.  <br/>
+This will generate a "package" of files in a compressed format. The files must be specified, plus an optional manifest can be included.  <br/>
+This publisher also allows the generation of a "manifest" to include in the package. A manifest contains additional details on the package, both at a general level and at a file level.  </p>
 
-<p>This publisher also allows the generation of a "manifest" to include in the package. A manifest contains additional details on the package, both at a general level and at a file level.</p>
 
-<h3><a name="PackagePublisher-Version"></a>Version</h3>
+<h2><a name="PackagePublisher-Version"></a>Version</h2>
 
-<p>This publisher is available from version 1.4.4.</p>
+<p>Available from version 1.4.4</p>
 
-<h3><a name="PackagePublisher-Examples"></a>Examples</h3>
+<h2><a name="PackagePublisher-Examples"></a>Examples</h2>
 
-<p>Minimalist Example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;package&gt;</span>
   <span class="code-tag">&lt;name&gt;</span>Example<span class="code-tag">&lt;/name&gt;</span>
   <span class="code-tag">&lt;files&gt;</span>
@@ -40,14 +40,12 @@
   <span class="code-tag">&lt;/files&gt;</span>
 <span class="code-tag">&lt;/package&gt;</span></pre>
 </div></div>
-<p>Full example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;package&gt;</span>
   <span class="code-tag">&lt;name&gt;</span>Example<span class="code-tag">&lt;/name&gt;</span>
   <span class="code-tag">&lt;compression&gt;</span>9<span class="code-tag">&lt;/compression&gt;</span>
   <span class="code-tag">&lt;always&gt;</span>true<span class="code-tag">&lt;/always&gt;</span>
   <span class="code-tag">&lt;flatten&gt;</span>true<span class="code-tag">&lt;/flatten&gt;</span>
-  <span class="code-tag">&lt;single&gt;</span>true<span class="code-tag">&lt;/single&gt;</span>
   <span class="code-tag">&lt;baseDirectory&gt;</span>C:\Builds\CC.Net<span class="code-tag">&lt;/baseDirectory&gt;</span>
   <span class="code-tag">&lt;manifest type=<span class="code-quote">"defaultManifestGenerator"</span> /&gt;</span>
   <span class="code-tag">&lt;files&gt;</span>
@@ -56,11 +54,12 @@
 <span class="code-tag">&lt;/package&gt;</span></pre>
 </div></div>
 
-<h3><a name="PackagePublisher-ConfigurationElements%3A"></a>Configuration Elements:</h3>
+
+<h2><a name="PackagePublisher-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -68,78 +67,106 @@
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> name </td>
-<td class='confluenceTd'> The name of the package file. If the extension .zip is omitted, it will be automatically appended. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> Yes </td>
-<td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> compression </td>
-<td class='confluenceTd'> The level of compression to use. The valid range is zero to nine, with nine being the most compression. </td>
-<td class='confluenceTd'> int </td>
-<td class='confluenceTd'> No </td>
-<td class='confluenceTd'> 5 </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
 <td class='confluenceTd'> always </td>
-<td class='confluenceTd'> Always generate the package. By default the package will only be generated on a successful build. </td>
-<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> Whether the package should always be generated or not.  <br clear="all" />By default a package will only be generated for a successful build. Setting this property to true, and including it in the publishers section means the package will always be generated, irrespective of the outcome of the build.   </td>
+<td class='confluenceTd'> Boolean </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> false </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> flatten </td>
-<td class='confluenceTd'> Whether to include the file structure or not. By default the file structure will be included (based from base directory). If the structure is not needed, then setting this property will remove it. </td>
-<td class='confluenceTd'> bool </td>
-<td class='confluenceTd'> No </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> single </td>
-<td class='confluenceTd'> This publisher also generates a list of packages generated. By default a list is generated in the artefacts folder, plus in an archive folder (one folder per build). Setting this property will only generate the main list and not generate per-build lists. </td>
-<td class='confluenceTd'> bool </td>
-<td class='confluenceTd'> No </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> 1.4.4 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> baseDirectory </td>
-<td class='confluenceTd'> The base directory to retrieve the files from. By default this will be the working directory. </td>
-<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> The directory to base all the file locations from.   </td>
+<td class='confluenceTd'> String </td>
 <td class='confluenceTd'> No </td>
-<td class='confluenceTd'> <em>Working dir</em> </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> Project working directory </td>
+<td class='confluenceTd'> 1.4.4 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> manifest </td>
-<td class='confluenceTd'> The manifest generator to use. </td>
-<td class='confluenceTd'> See <a href="Manifest Generators.html" title="Manifest Generators">Manifest Generators</a> </td>
+<td class='confluenceTd'> compression </td>
+<td class='confluenceTd'> The level of compression to use. The valid range is from zero to nine, zero is no compression and nine is maximum compression.   </td>
+<td class='confluenceTd'> Int32 </td>
 <td class='confluenceTd'> No </td>
-<td class='confluenceTd'> None </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> 5 </td>
+<td class='confluenceTd'> 1.4.4 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> files </td>
-<td class='confluenceTd'> The files to include in the package. These can be either absolute or relative paths - if relative it will be relative to the base directory </td>
-<td class='confluenceTd'> Array of string </td>
-<td class='confluenceTd'> Yes </td>
-<td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> dynamicValues </td>
-<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
-<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> files </td>
+<td class='confluenceTd'> The files to include in the package.  <br clear="all" />All relative files will be relative to the baseDirectory.   </td>
+<td class='confluenceTd'> String array </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> flatten </td>
+<td class='confluenceTd'> Should the file structure be flattened or not.  <br clear="all" />By default, the folder structure will also be included in the package. Setting this property to true will flatten (omit) the folder information.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> manifest </td>
+<td class='confluenceTd'> The manifest generator to be used.  <br clear="all" />If this property is not set no manifest will be generated.   </td>
+<td class='confluenceTd'> <a href="Manifest Generators.html" title="Manifest Generators">Manifest Generators</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> outputDir </td>
+<td class='confluenceTd'> The location to output the package to.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project Artifact Directory </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> name </td>
+<td class='confluenceTd'> The name of the package file.  <br clear="all" />This will be the filename of the package. If the extension zip is omitted, it will be added automatically.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.4.4 </td>
 </tr>
 </tbody></table>
+
+<h2><a name="PackagePublisher-Notes"></a>Notes</h2>
+
+<h4><a name="PackagePublisher-Sub%5Cfolders"></a>Sub&#45;folders</h4>
+<p>Sub&#45;folders can be added using a combination of relative paths in the filename and a base directory. When a file is added, the publisher checks if the filename is relative to the base directory and strips the base directory from the file name.  <br/>
+For example, the following configuration will add two files, logo.gif in the root and AdminIcon.gif in a sub&#45;folder.  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;package&gt;</span>
+  <span class="code-tag">&lt;baseDirectory&gt;</span>temp<span class="code-tag">&lt;/baseDirectory&gt;</span>
+  <span class="code-tag">&lt;files&gt;</span>
+    <span class="code-tag">&lt;file&gt;</span>logo.gif<span class="code-tag">&lt;/file&gt;</span>
+    <span class="code-tag">&lt;file&gt;</span>images\AdminIcon.gif<span class="code-tag">&lt;/file&gt;</span>
+  <span class="code-tag">&lt;/files&gt;</span>
+  <span class="code-tag">&lt;name&gt;</span>output<span class="code-tag">&lt;/name&gt;</span>
+<span class="code-tag">&lt;/package&gt;</span></pre>
+</div></div>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Thursday, 7 Jan 2010 at 10:07:16 PM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -150,7 +177,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -16,41 +16,42 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 27, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Dec 13, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <h3><a name="InternalServerSecurity-InternalServerSecurity"></a>Internal Server Security</h3>
+				    <h1><a name="InternalServerSecurity-InternalServerSecurity"></a>Internal Server Security</h1>
 
-<p>This defines the security settings in internally in ccnet.config.</p>
+<p>Defines a security manager implementation that implements security internally &#45; the security settings are stored in the same configuration file.  </p>
 
-<h4><a name="InternalServerSecurity-Version"></a>Version</h4>
+<h2><a name="InternalServerSecurity-Version"></a>Version</h2>
 
-<p>This security item is available from version 1.5.0.</p>
+<p>Available from version 1.5</p>
 
-<h4><a name="InternalServerSecurity-Examples"></a>Examples</h4>
+<h2><a name="InternalServerSecurity-Examples"></a>Examples</h2>
 
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;internalSecurity&gt;</span>
-  <span class="code-tag">&lt;cache type=<span class="code-quote">"inMemoryCache"</span> duration=<span class="code-quote">"10"</span> mode=<span class="code-quote">"sliding"</span>/&gt;</span>
+  <span class="code-tag">&lt;cache type=<span class="code-quote">"inMemoryCache"</span> duration=<span class="code-quote">"10"</span> mode=<span class="code-quote">"sliding"</span> /&gt;</span>
   <span class="code-tag">&lt;users&gt;</span>
-    <span class="code-tag">&lt;passwordUser name=<span class="code-quote">"johndoe"</span> password=<span class="code-quote">"letmein"</span>/&gt;</span>
-    <span class="code-tag">&lt;simpleUser name=<span class="code-quote">"*"</span>/&gt;</span>
+    <span class="code-tag">&lt;passwordUser name=<span class="code-quote">"johndoe"</span> password=<span class="code-quote">"letmein"</span> /&gt;</span>
+    <span class="code-tag">&lt;simpleUser name=<span class="code-quote">"*"</span> /&gt;</span>
   <span class="code-tag">&lt;/users&gt;</span>
   <span class="code-tag">&lt;permissions&gt;</span>
     <span class="code-tag">&lt;rolePermission name=<span class="code-quote">"general"</span> forceBuild=<span class="code-quote">"Deny"</span>&gt;</span>
       <span class="code-tag">&lt;users&gt;</span>
-        <span class="code-tag">&lt;userName name=<span class="code-quote">"*"</span>/&gt;</span>
+        <span class="code-tag">&lt;userName name=<span class="code-quote">"*"</span> /&gt;</span>
       <span class="code-tag">&lt;/users&gt;</span>
     <span class="code-tag">&lt;/rolePermission&gt;</span>
   <span class="code-tag">&lt;/permissions&gt;</span>
 <span class="code-tag">&lt;/internalSecurity&gt;</span></pre>
 </div></div>
 
-<h4><a name="InternalServerSecurity-ConfigurationElements"></a>Configuration Elements</h4>
+
+<h2><a name="InternalServerSecurity-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -58,54 +59,64 @@
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> cache </td>
-<td class='confluenceTd'> The type of caching to use. </td>
-<td class='confluenceTd'> Single <a href="Security Caches.html" title="Security Caches">Security Cache</a> </td>
-<td class='confluenceTd'> No </td>
-<td class='confluenceTd'> inMemoryCache </td>
-<td class='confluenceTd'> 1.5.0 </td>
-</tr>
-<tr>
 <td class='confluenceTd'> audit </td>
-<td class='confluenceTd'> The audit loggers to use. </td>
-<td class='confluenceTd'> Array of <a href="Security Audit Loggers.html" title="Security Audit Loggers">Security Audit Loggers</a> </td>
+<td class='confluenceTd'> The audit loggers.   </td>
+<td class='confluenceTd'> <a href="Security Audit Loggers.html" title="Security Audit Loggers">Security Audit Loggers</a> array </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> auditReader </td>
-<td class='confluenceTd'> The audit reader to use. </td>
-<td class='confluenceTd'> Single <a href="Security Audit Readers.html" title="Security Audit Readers">Security Audit Reader</a> </td>
+<td class='confluenceTd'> The audit reader.   </td>
+<td class='confluenceTd'> <a href="Security Audit Readers.html" title="Security Audit Readers">Security Audit Readers</a> </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> channel </td>
+<td class='confluenceTd'> The channel security requirements.   </td>
+<td class='confluenceTd'> <a href="Channel Security.html" title="Channel Security">Channel Security</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> defaults </td>
-<td class='confluenceTd'> The default permissions to apply if no other permissions have been found </td>
-<td class='confluenceTd'> See below </td>
+<td class='confluenceTd'> The default permissions.   </td>
+<td class='confluenceTd'> <a href="General Security Permissions.html" title="General Security Permissions">General Security Permissions</a> </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> users </td>
-<td class='confluenceTd'> The users who can use the system. </td>
-<td class='confluenceTd'> Array of <a href="Security Users.html" title="Security Users">Security Users</a> </td>
-<td class='confluenceTd'> Yes </td>
-<td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> permissions </td>
-<td class='confluenceTd'> Any server level permissions. </td>
-<td class='confluenceTd'> Array of <a href="General Security Permissions.html" title="General Security Permissions">General Security Permissions</a></td>
+<td class='confluenceTd'> The server&#45;level permissions.   </td>
+<td class='confluenceTd'> <a href="Security Permissions.html" title="Security Permissions">Security Permissions</a> array </td>
 <td class='confluenceTd'> Yes </td>
 <td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> cache </td>
+<td class='confluenceTd'> The associated session cache.   </td>
+<td class='confluenceTd'> <a href="Security Caches.html" title="Security Caches">Security Caches</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <a href="In Memory Security Cache.html" title="In Memory Security Cache">In Memory Security Cache</a> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> users </td>
+<td class='confluenceTd'> The users for the same.   </td>
+<td class='confluenceTd'> <a href="Security Users.html" title="Security Users">Security Users</a> array </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 </tbody></table>
+
+<h2><a name="InternalServerSecurity-Notes"></a>Notes</h2>
 
 <h4><a name="InternalServerSecurity-GeneralSecurityPermissions"></a>General Security Permissions</h4>
 
@@ -204,6 +215,9 @@
 
 <p>If no permissions are found at the project level, it will then use the permissions defined at the server level. Again, it will first check for a specific permission, and then the default permission. If no permissions has been found after this, then it will return denied as the permission.</p>
 
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Sunday, 13 Dec 2009 at 8:11:10 AM</p></td></tr></table></div>
+
 				    
                     			    </td>
 		    </tr>
@@ -213,7 +227,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

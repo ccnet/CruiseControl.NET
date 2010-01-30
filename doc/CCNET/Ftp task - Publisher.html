@@ -16,29 +16,38 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 28, 2009 by <font color="#0050B2">williams</font>.
+					    This page last changed on Dec 06, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <p>The ftp task / publisher allows to download or upload files/ folders, for example, uploading a new version of a web page to ftp site of an ISP.<br/>
-available from 1.5 onwards.</p>
+				    <h1><a name="Ftptask-Publisher-FTPTask%2FPublisher"></a>FTP Task / Publisher </h1>
 
-<h4><a name="Ftptask-Publisher-Examples"></a>Examples</h4>
+<p>The ftp task / publisher allows to download or upload files/ folders, for example, uploading a new version of a web page to ftp site of an ISP.  </p>
 
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-java">&lt;ftp&gt;
-	&lt;serverName&gt;ftp.isp.com&lt;/serverName&gt;
-	&lt;userName&gt;john&lt;/userName&gt;
-	&lt;password&gt;doe&lt;/password&gt;
-	&lt;action&gt;UploadFolder&lt;/action&gt;
-	&lt;ftpFolderName&gt;site/config&lt;/ftpFolderName&gt;
-	&lt;localFolderName&gt;d:\website\config&lt;/localFolderName&gt;
-	&lt;recursiveCopy&gt;<span class="code-keyword">true</span>&lt;/recursiveCopy&gt;
-&lt;/ftp&gt;</pre>
+
+<h2><a name="Ftptask-Publisher-Version"></a>Version</h2>
+
+<p>Available from version 1.5</p>
+
+<h2><a name="Ftptask-Publisher-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;ftp&gt;</span>
+  <span class="code-tag">&lt;serverName&gt;</span>ftp.isp.com<span class="code-tag">&lt;/serverName&gt;</span>
+  <span class="code-tag">&lt;userName&gt;</span>john<span class="code-tag">&lt;/userName&gt;</span>
+  <span class="code-tag">&lt;password&gt;</span>doe<span class="code-tag">&lt;/password&gt;</span>
+  <span class="code-tag">&lt;action&gt;</span>UploadFolder<span class="code-tag">&lt;/action&gt;</span>
+  <span class="code-tag">&lt;ftpFolderName&gt;</span>site/config<span class="code-tag">&lt;/ftpFolderName&gt;</span>
+  <span class="code-tag">&lt;localFolderName&gt;</span>d:\website\config<span class="code-tag">&lt;/localFolderName&gt;</span>
+  <span class="code-tag">&lt;recursiveCopy&gt;</span>true<span class="code-tag">&lt;/recursiveCopy&gt;</span>
+<span class="code-tag">&lt;/ftp&gt;</span></pre>
 </div></div>
-<p>This will upload all files and folders from d:\website\config to  ftp.isp.com/&lt;user log in folder&gt;/site/config .</p>
+
+
+<h2><a name="Ftptask-Publisher-ConfigurationElements"></a>Configuration Elements</h2>
+
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -46,70 +55,94 @@ available from 1.5 onwards.</p>
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> serverName </td>
-<td class='confluenceTd'> the name of the server to connect to </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true <br clear="all" /> </td>
-<td class='confluenceTd'> N/A </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> userName </td>
-<td class='confluenceTd'> the user to log in with </td>
-<td class='confluenceTd'> string <br clear="all" /> </td>
-<td class='confluenceTd'> true <br clear="all" /> </td>
-<td class='confluenceTd'> N/A <br clear="all" /> </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> password </td>
-<td class='confluenceTd'> password of the user <br clear="all" /> </td>
-<td class='confluenceTd'> string <br clear="all" /> </td>
-<td class='confluenceTd'> true <br clear="all" /> </td>
-<td class='confluenceTd'> n/a </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
 <td class='confluenceTd'> action </td>
-<td class='confluenceTd'> upload or download(UploadFolder/DownloadFolder) </td>
-<td class='confluenceTd'> enum </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> The action to perform.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>UploadFolder</li>
+	<li>DownloadFolder</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> DownloadFolder </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> ftpFolderName </td>
-<td class='confluenceTd'> the folder name of at the ftp site </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true </td>
-<td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> localFolderName </td>
-<td class='confluenceTd'> the folder name at the local system </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true </td>
-<td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> recursiveCopy </td>
-<td class='confluenceTd'> recurse into subfolders or not </td>
-<td class='confluenceTd'> bool </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
-<td class='confluenceTd'> <em>true</em> </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> dynamicValues </td>
-<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
-<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> ftpFolderName </td>
+<td class='confluenceTd'> The path to the folder to use on the FTP server.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> localFolderName </td>
+<td class='confluenceTd'> The to the folder to use on the local machine.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> password </td>
+<td class='confluenceTd'> The password to use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> recursiveCopy </td>
+<td class='confluenceTd'> Whether to perform a recursive copy or not.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> serverName </td>
+<td class='confluenceTd'> The name of the server to connect to.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> useActiveConnectionMode </td>
+<td class='confluenceTd'> Whether to use active connection mode or not.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> userName </td>
+<td class='confluenceTd'> The username to log in with.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 </tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Sunday, 6 Dec 2009 at 9:02:38 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -120,7 +153,7 @@ available from 1.5 onwards.</p>
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

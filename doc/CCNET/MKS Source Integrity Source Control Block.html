@@ -16,110 +16,153 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Sep 11, 2008 by <font color="#0050B2">williams</font>.
+					    This page last changed on Dec 17, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <h3><a name="MKSSourceIntegritySourceControlBlock-MKSSourceIntegrityExample"></a>MKS Source Integrity Example</h3>
+				    <h1><a name="MKSSourceIntegritySourceControlBlock-MKSSourceIntegritySourceControlBlock"></a>MKS Source Integrity Source Control Block</h1>
 
-<p>For MKS Source Integrity you must specify the executable, user, password, hostname, sandboxroot and sandboxfile. You may also specify the port.</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;sourceControl type=<span class="code-quote">""mks"</span>"&gt;</span>
-	<span class="code-tag">&lt;executable&gt;</span>C:\MKS\bin\si.exe<span class="code-tag">&lt;/executable&gt;</span>
-	<span class="code-tag">&lt;user&gt;</span>CCNetUser<span class="code-tag">&lt;/user&gt;</span>
-	<span class="code-tag">&lt;password&gt;</span>CCNetPassword<span class="code-tag">&lt;/password&gt;</span>
-	<span class="code-tag">&lt;hostname&gt;</span>hostname<span class="code-tag">&lt;/hostname&gt;</span>
-	<span class="code-tag">&lt;port&gt;</span>8722<span class="code-tag">&lt;/port&gt;</span>
-	<span class="code-tag">&lt;sandboxroot&gt;</span>C:\MyProject<span class="code-tag">&lt;/sandboxroot&gt;</span>
-	<span class="code-tag">&lt;sandboxfile&gt;</span>myproject.pj<span class="code-tag">&lt;/sandboxfile&gt;</span>
-	<span class="code-tag">&lt;autoGetSource&gt;</span>true<span class="code-tag">&lt;/autoGetSource&gt;</span>
-	<span class="code-tag">&lt;timeout units=<span class="code-quote">"minutes"</span>&gt;</span>10<span class="code-tag">&lt;/timeout&gt;</span>
+<p>MKS Source Integrity Source Control Block.  </p>
+
+<h2><a name="MKSSourceIntegritySourceControlBlock-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="MKSSourceIntegritySourceControlBlock-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourceControl type=<span class="code-quote">"mks"</span>&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>C:\MKS\bin\si.exe<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;user&gt;</span>CCNetUser<span class="code-tag">&lt;/user&gt;</span>
+  <span class="code-tag">&lt;password&gt;</span>CCNetPassword<span class="code-tag">&lt;/password&gt;</span>
+  <span class="code-tag">&lt;hostname&gt;</span>hostname<span class="code-tag">&lt;/hostname&gt;</span>
+  <span class="code-tag">&lt;port&gt;</span>8722<span class="code-tag">&lt;/port&gt;</span>
+  <span class="code-tag">&lt;sandboxroot&gt;</span>C:\MyProject<span class="code-tag">&lt;/sandboxroot&gt;</span>
+  <span class="code-tag">&lt;sandboxfile&gt;</span>myproject.pj<span class="code-tag">&lt;/sandboxfile&gt;</span>
+  <span class="code-tag">&lt;autoGetSource&gt;</span>true<span class="code-tag">&lt;/autoGetSource&gt;</span>
+  <span class="code-tag">&lt;timeout units=<span class="code-quote">"minutes"</span>&gt;</span>10<span class="code-tag">&lt;/timeout&gt;</span>
 <span class="code-tag">&lt;/sourceControl&gt;</span></pre>
 </div></div>
 
-<h3><a name="MKSSourceIntegritySourceControlBlock-ConfigurationElements%3A"></a>Configuration Elements:</h3>
+
+<h2><a name="MKSSourceIntegritySourceControlBlock-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Default </th>
 <th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> executable </td>
-<td class='confluenceTd'> The local path for the MKS source integrity command-line client (eg. c:\Mks\bin\si.exe) </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> "si.exe" </td>
-<td class='confluenceTd'> true </td>
-</tr>
-<tr>
-<td class='confluenceTd'> username </td>
-<td class='confluenceTd'> MKS Source Integrity user ID that CCNet should use </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> N/A </td>
-<td class='confluenceTd'> true </td>
-</tr>
-<tr>
-<td class='confluenceTd'> password </td>
-<td class='confluenceTd'> Password for the MKS Source Integrity user ID </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> N/A </td>
-<td class='confluenceTd'> true </td>
-</tr>
-<tr>
-<td class='confluenceTd'> hostname </td>
-<td class='confluenceTd'> The IP address or machine name of the MKS Source Integrity server. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> N/A </td>
-<td class='confluenceTd'> true </td>
-</tr>
-<tr>
-<td class='confluenceTd'> port </td>
-<td class='confluenceTd'> The port on the MKS Source Integrity server to connect to. </td>
-<td class='confluenceTd'> integer </td>
-<td class='confluenceTd'> 8722 </td>
-<td class='confluenceTd'> false </td>
-</tr>
-<tr>
-<td class='confluenceTd'> sandboxroot </td>
-<td class='confluenceTd'> The local path MKS Source Integrity sandbox root corresponds to </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> N/A </td>
-<td class='confluenceTd'> true </td>
-</tr>
-<tr>
-<td class='confluenceTd'> sandboxfile </td>
-<td class='confluenceTd'> The project file </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> N/A </td>
-<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> type </td>
+<td class='confluenceTd'> The type of source control block. </td>
+<td class='confluenceTd'> String - must be mks </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> autoGetSource </td>
-<td class='confluenceTd'> Instruct CCNet whether or not you want it to automatically retrieve the latest source from the repository. </td>
-<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> Instruct CCNet whether or not you want it to automatically retrieve the latest source from the repository.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> true </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> timeout </td>
-<td class='confluenceTd'> Sets the timeout period for the source control operation. See <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> for details. </td>
-<td class='confluenceTd'> Timeout </td>
-<td class='confluenceTd'> 10 minutes </td>
+<td class='confluenceTd'> checkpointOnSuccess </td>
+<td class='confluenceTd'> Whether to set a checkpoint on success or not.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the source control block.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The local path for the MKS source integrity command&#45;line client (eg. c:\Mks\bin\si.exe).   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> si.exe </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> hostname </td>
+<td class='confluenceTd'> The IP address or machine name of the MKS Source Integrity server.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> issueUrlBuilder </td>
-<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. <br clear="all" />
-See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">Issue Builder</a> for more details <br clear="all" /> </td>
-<td class='confluenceTd'> Group </td>
-<td class='confluenceTd'> N/A </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
+<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> for more details.   </td>
+<td class='confluenceTd'> <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> password </td>
+<td class='confluenceTd'> Password for the MKS Source Integrity user ID.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> port </td>
+<td class='confluenceTd'> The port on the MKS Source Integrity server to connect to.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 8722 </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> sandboxfile </td>
+<td class='confluenceTd'> The project file.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> sandboxroot </td>
+<td class='confluenceTd'> The local path MKS Source Integrity sandbox root corresponds to.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> Sets the timeout period for the source control operation. See <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> for details.   </td>
+<td class='confluenceTd'> <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 10 minutes </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> user </td>
+<td class='confluenceTd'> MKS Source Integrity user ID that CCNet should use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 </tbody></table>
 
-<p>This addresses JIRA Issue # 222.</p>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Thursday, 17 Dec 2009 at 1:46:44 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -130,7 +173,7 @@ See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">Issue Builder</a> for
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

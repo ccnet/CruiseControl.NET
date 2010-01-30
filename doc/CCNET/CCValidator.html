@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jul 06, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Jan 26, 2010 by <font color="#0050B2">dhommel</font>.
 				    </div>
 
 				    <p>CCValidator is a GUI tool for validating the contents of a ccnet.config file. It uses the same underlying rules engine as both the service and the console to check all the rules around what is valid in the configuration.</p>
@@ -32,44 +32,90 @@
 	<li>The display on the left shows the results of the validation. If there are any validation errors they will be displayed underneath the project or queue where the error occurred.</li>
 	<li>The display on the right shows the configuration that was validated. This provides two views: original and processed.</li>
 	<li>The original view is the view of the actual file. This is the config file on the file system, before any pre-processing or default values.</li>
-	<li>The processed view is how CruiseControl.Net sees the file. This includes any pre-processing and default values. If there is a validation error then this view is likely to be incorrect.</li>
+	<li>The processed view is how CruiseControl.Net sees the file. This includes any pre-processing and default values. If there is a validation error then this view is likely to be incorrect.
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Both views will show the full details of the configuration file, including any passwords and user names.</td></tr></table></div></li>
 </ul>
 
-
-<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Both views will show the full details of the configuration file, including any passwords and user names.</td></tr></table></div>
 
 <h2><a name="CCValidator-CommandlineInterface"></a>Command-line Interface</h2>
 
 <p>It is also possible to use CCValidator as a command-line tool.</p>
 
 <h4><a name="CCValidator-Syntax"></a>Syntax</h4>
+
 <p><em>CCValidator [Configuration File] [Options]</em></p>
 
-<p>The configuration file (if used) must be the first argument.</p>
+<p>The configuration file (if used) must be the first argument. <img class="emoticon" src="images/icons/emoticons/help_16.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></p>
 
-<p>The following options are available:</p>
+<p>The command line arguments are implemented using the Mono.Options class,<br/>
+which allows short and long options as well as different "well known" ways of writing arguments.</p>
 
+<p>Example:<br/>
+<tt>CCValidator.exe &#45;-help</tt><br/>
+<tt>CCValidator.exe /help</tt><br/>
+<tt>CCValidator.exe &#45;-logfile=log.txt</tt><br/>
+<tt>CCValidator.exe /logfile:log.txt</tt></p>
+
+<p>The following long options are available:</p>
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Command </th>
+<th class='confluenceTh'> Command (Long) </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Required </th>
 <th class='confluenceTh'> Default </th>
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> -l </td>
+<td class='confluenceTd'> &#45;-logfile </td>
 <td class='confluenceTd'> Set the log file. This is the location where all validation messages will be written to. </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
 <td class='confluenceTd'> 1.4.4 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> -nui </td>
+<td class='confluenceTd'> &#45;-nogui </td>
 <td class='confluenceTd'> Hide the GUI interface. </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> False </td>
 <td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> &#45;-help </td>
+<td class='confluenceTd'> Display command line help. </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> False </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+</tbody></table>
+<p>The following short options are available:</p>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Command (Short) </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> &#45;l </td>
+<td class='confluenceTd'> Set the log file. This is the location where all validation messages will be written to. </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> &#45;n </td>
+<td class='confluenceTd'> Hide the GUI interface. </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> False </td>
+<td class='confluenceTd'> 1.4.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> &#45;h&#124;-? </td>
+<td class='confluenceTd'> Display command line help. </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> False </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 </tbody></table>
 
@@ -79,7 +125,7 @@
 <em>CCValidator "C:\Program Files\CruiseControl.NET\Server\ccnet.config"</em></p>
 
 <p>Run the validator without a GUI and write the messages to a log file:<br/>
-<em>CCValidator "C:\Program Files\CruiseControl.NET\Server\ccnet.config" -nui -l "C:\Logs\ccnet.log"</em></p>
+<em>CCValidator "C:\Program Files\CruiseControl.NET\Server\ccnet.config" &#45;-nogui &#45;-logfile="C:\Logs\ccnet.log"</em></p>
 
 				    					    <br/>
                         <div class="tabletitle">
@@ -103,7 +149,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

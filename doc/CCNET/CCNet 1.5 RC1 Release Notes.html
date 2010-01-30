@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 1.5 RC1 Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 1.5 RC1 Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jan 30, 2010 by <font color="#0050B2">williams</font>.
+				    </div>
+
+				    <h2><a name="CCNet1.5RC1ReleaseNotes-HighlightsoftheCCNet1.5RC1release"></a>Highlights of the CCNet 1.5 RC1 release</h2>
+
+<p>The RC1 is mainly a bug fix of the CTP, which had more than enough new features.<br/>
+Smaller improvements are off course also done. The documentation also got a complete overhaul.<br/>
+Craig wrote a Documentation Generator, which makes all the pages more consitent.<br/>
+This release is alreay used in production environments by many users <img class="emoticon" src="images/icons/emoticons/smile.gif" height="20" width="20" align="absmiddle" alt="" border="0"/>, but as always : take a backup. <img class="emoticon" src="images/icons/emoticons/wink.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></p>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>A word of thank</b><br />
+<p>Most (if not all) of the new stuff comes from Craig, so many thanks to him for his great work and devotion.<br/>
+You can read his blog at : <a href="http://csut017.wordpress.com/">Automated Coder</a></p></td></tr></table></div>
+<p>The main extra Items on the CTP</p>
+
+<h4><a name="CCNet1.5RC1ReleaseNotes-TimeLinechart"></a>Time Line chart</h4>
+
+<p>This shows the a build overview as a chart.</p>
+
+<h4><a name="CCNet1.5RC1ReleaseNotes-TranslationofthewebDashboard"></a>Translation of the webDashboard</h4>
+
+<p>Current translation involve French and German.</p>
+
+<h4><a name="CCNet1.5RC1ReleaseNotes-Aduplicatefinder"></a>A duplicate finder</h4>
+
+<p>This task scans files for duplicates, just a task, no merging needed.<br/>
+<a href="Duplicate Finder Task.html" title="Duplicate Finder Task">Duplicate Finder Task</a></p>
+
+<h4><a name="CCNet1.5RC1ReleaseNotes-AndoffcourseallthebenefitsoftheCCNet1.5CTPReleaseCCNET%3ACCNet1.5CTPReleaseNotes%3A%29"></a>And off course all the benefits of the <a href="CCNet 1.5 CTP Release Notes.html" title="CCNet 1.5 CTP Release Notes">CCNet 1.5 CTP Release</a> <img class="emoticon" src="images/icons/emoticons/smile.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></h4>
+
+<p>which includes :<br/>
+° Security<br/>
+° Client-side tables for the dashboard<br/>
+° A few new source control systems (RoboCopy, VSTS, Ftp, Git and Mercurial.)<br/>
+° Dynamic Parameters<br/>
+° CCTray Improvements</p>
+
+<h2><a name="CCNet1.5RC1ReleaseNotes-ReleaseNotesCruiseControl.NETVersion1.5.0RC1"></a>Release Notes - CruiseControl .NET - Version 1.5.0 RC1</h2>
+
+<p>Release Notes - CruiseControl .NET - Version 1.5.0 RC1</p>
+
+<h4><a name="CCNet1.5RC1ReleaseNotes-Bug"></a>Bug</h4>
+
+<ul>
+	<li>CCNET\-149 &#45; Perforce Auto Get Source should not fail silently</li>
+	<li>CCNET\-451 &#45; There should be posibility to set Activity column style base on actual status of project</li>
+	<li>CCNET\-474 &#45; Hide passwords in email build notifications</li>
+	<li>CCNET\-485 &#45; VSS "Version not found" error</li>
+	<li>CCNET\-528 &#45; Error Message: ThoughtWorks.CruiseControl.Core.CruiseControlException: Source control operation failed:</li>
+	<li>CCNET\-627 &#45; StarTeam provider fails to parse dates for <b>modified</b> files</li>
+	<li>CCNET\-637 &#45; MSBuild XMLLogger outputs wrong build duration</li>
+	<li>CCNET\-750 &#45; Schedule trigger does not build at specified time</li>
+	<li>CCNET\-801 &#45; Modification set always empty for MKS source control</li>
+	<li>CCNET\-808 &#45; Xml publisher is throwing an exception</li>
+	<li>CCNET\-809 &#45; State file not created</li>
+	<li>CCNET\-816 &#45; Vault source control exception during checking modification does not result in a build failure</li>
+	<li>CCNET\-848 &#45; MSBuild task truncates output</li>
+	<li>CCNET\-863 &#45; Date String Format Exception with MKS</li>
+	<li>CCNET\-864 &#45; Build fails even though msbuild return 0 errors</li>
+	<li>CCNET\-885 &#45; WebDashboard gives FileIOPermission exception when handling requests</li>
+	<li>CCNET\-892 &#45; CVS checkout fails with "Server attempted to update a file via an invalid pathname" error</li>
+	<li>CCNET\-911 &#45; Projects with + in title produce invalid URLs in web dashboard</li>
+	<li>CCNET\-929 &#45; Source Control Operation Failed: cvs rlog: cannot find module 'ccnet'</li>
+	<li>CCNET\-1051 &#45; Triggers is not working fully</li>
+	<li>CCNET\-1052 &#45; Modifications to files in subprojects in MKS 2005 are not detected.</li>
+	<li>CCNET\-1055 &#45; CCNet triggers builds when there are no build triggers</li>
+	<li>CCNET\-1063 &#45; Dashboard Refresh</li>
+	<li>CCNET\-1192 &#45; Problem MSBuild XML Logger</li>
+	<li>CCNET\-1196 &#45; If ForceBuild is turned off CCTray circumvents this setting</li>
+	<li>CCNET\-1204 &#45; No modifications detected. Could not detect modification by MKS. Hence IfModificationExists of intervalTrigger  doesn't work for MKS source control</li>
+	<li>CCNET\-1243 &#45; Changes are not detected</li>
+	<li>CCNET\-1265 &#45; ForceBuild should not wait for the period specified in modification delay</li>
+	<li>CCNET\-1277 &#45; Windows service hangs when console succeeds.</li>
+	<li>CCNET\-1287 &#45; Unable to create autobuilds using TFS plugin and CCNet (latest release)</li>
+	<li>CCNET\-1315 &#45; Out of memory exception in ccnet.exe still causes ccnet.exe to crash</li>
+	<li>CCNET\-1319 &#45; cc.net chokes on a non-existent publisher with an obscure Exortech.NetReflector.NetReflectorException error</li>
+	<li>CCNET\-1438 &#45; Wrong merging of NUnit-results.xml with &lt;&#33;[CDATA ....</li>
+	<li>CCNET\-1480 &#45; Drop the P/Invoke for the TrayIcon support in CCTray App</li>
+	<li>CCNET\-1486 &#45; VSTS Plugin</li>
+	<li>CCNET\-1496 &#45; CCNet service throws error for notification node in Email publishers group node.</li>
+	<li>CCNET\-1499 &#45; Team Foundation Server Plug-In no longer works with latest version of CCNet</li>
+	<li>CCNET\-1501 &#45; sometimes a null reference exception is thrown on changing  ccnet.config  by a copying over a new one</li>
+	<li>CCNET\-1543 &#45; Dashboard Administration: Fails to install packages 'Access to the path is denied'</li>
+	<li>CCNET\-1556 &#45; CCService does not start when running as LOCALSYSTEM</li>
+	<li>CCNET\-1598 &#45; Default packages done seem to be installed out the box.</li>
+	<li>CCNET\-1603 &#45; SECURITY: LDAP user does not work.</li>
+	<li>CCNET\-1648 &#45; RakeTask only a single entry in buildArgs is supported</li>
+	<li>CCNET\-1663 &#45; CCTray is only connecting...</li>
+	<li>CCNET\-1674 &#45; Build Parameters Window Property Grid</li>
+	<li>CCNET\-1692 &#45;  INTERNAL ERROR: Collection was modified; enumeration operation may not execute.</li>
+	<li>CCNET\-1694 &#45; Error Message: ThoughtWorks.CruiseControl.Core.CruiseControlException: Source control operation has timed out.</li>
+	<li>CCNET\-1716 &#45; MsBuild task shows error about missing file</li>
+	<li>CCNET\-1717 &#45; showing task execution failed in log, but build is ok</li>
+	<li>CCNET\-1718 &#45; breakers are no longer exposed into the message in the dashboard, or in the xmlstatusreport, breaking bvc2 <img class="emoticon" src="images/icons/emoticons/sad.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></li>
+	<li>CCNET\-1720 &#45; cctray shows wrong servername when having multiple buildservers</li>
+	<li>CCNET\-1721 &#45; Race condition prevents lockqueues from guarenteed correct locking</li>
+	<li>CCNET\-1723 &#45; ConditionalPublisher does not execute all tasks</li>
+	<li>CCNET\-1724 &#45; Only last MSBuild task merged</li>
+	<li>CCNET\-1725 &#45; CCTRay Server Column displays wrong build server name</li>
+	<li>CCNET\-1727 &#45; Package download does not download the file complete.</li>
+	<li>CCNET\-1730 &#45; Merging the build logs of multiple nant tasks results in a log containing the log of the last nant task multiple times</li>
+	<li>CCNET\-1731 &#45; checkpointOnSucces is not available for  MKS source contol</li>
+	<li>CCNET\-1732 &#45; Specifying a user defined log file for the nant task does not work any more</li>
+	<li>CCNET\-1733 &#45; Package Publisher: Empty package when the property baseDirectory is a relative path.</li>
+	<li>CCNET\-1738 &#45; cnet.exe &#45;noerrorpause &#45;config:check.config &#45;validate &#45;nologging  not behaving correctly</li>
+	<li>CCNET\-1742 &#45; CLONE &#45;CCTray showing the wrong server when the same project is on multiple servers.</li>
+	<li>CCNET\-1744 &#45; CCTray showing the wrong server when the same project is on multiple servers</li>
+	<li>CCNET\-1748 &#45; Page refresh should not trigger a forced build</li>
+	<li>CCNET\-1752 &#45; Getting Error when i am doing Email publisher using Cruise Control.net 1.5 version</li>
+	<li>CCNET\-1755 &#45; Exception when click on the project name in the dashboard</li>
+	<li>CCNET\-1756 &#45; ScheduleTrigger introduces infinite loop</li>
+	<li>CCNET\-1762 &#45; Assembly Version Labeller does not increment on a triggered build</li>
+	<li>CCNET\-1764 &#45; CC.NET under Linux/Ubuntu with Mono: &lt;exec&gt; task does not return</li>
+	<li>CCNET\-1765 &#45; LDAP authentication does not works</li>
+	<li>CCNET\-1767 &#45; HTML Report Linking</li>
+	<li>CCNET\-1769 &#45; Wrong filename when downloading from PackageList</li>
+	<li>CCNET\-1779 &#45; when getting source from svn with externals; cannot read cached credentials</li>
+	<li>CCNET\-1782 &#45; Exception on showing the build graph in german language</li>
+	<li>CCNET\-1783 &#45; Svn does not save LastRepositoryRevision if not triggered by modification</li>
+	<li>CCNET\-1785 &#45; Out of memory exception on viewing build summaries</li>
+	<li>CCNET\-1788 &#45; Entering an invalid URL gives a runtime error.</li>
+	<li>CCNET\-1791 &#45; ProjectGrid.vm percentage status bar is broken since revision 6287</li>
+	<li>CCNET\-1793 &#45; CVS Set %HOME% environment variable on windows</li>
+	<li>CCNET\-1795 &#45; CVS cvs.exe cannot find ".cvspass"</li>
+	<li>CCNET\-1796 &#45; CVS cvs.exe checkout: cannot open CVS/Entries for reading: No such file or directory</li>
+</ul>
+
+
+<h4><a name="CCNet1.5RC1ReleaseNotes-Improvement"></a>Improvement</h4>
+
+<ul>
+	<li>CCNET\-224 &#45; Perforce: separate view for changes from view to sync</li>
+	<li>CCNET\-529 &#45; Clarify and refactor or merge CruiseServer and CruiseManager</li>
+	<li>CCNET\-542 &#45; NAntTiming stylesheet should not repeatedly show results if nested &lt;nant&gt; tasks are used.  Also improve precision of duration.</li>
+	<li>CCNET\-773 &#45; CCTray should allow user to select targets on a project</li>
+	<li>CCNET\-802 &#45; Add the ability to disconnect from an MKS session</li>
+	<li>CCNET\-818 &#45; XML Build logs are not generally in a readable format.</li>
+	<li>CCNET\-942 &#45; Improve the MKS history parser's regex to search for modifications in the new log format for MKS Integrity 2006</li>
+	<li>CCNET\-1083 &#45; IFileSystem -  Add CreateDirectory and DeleteDirectory.</li>
+	<li>CCNET\-1444 &#45; Custom plugings should still be loaded when the config file is not located in the server folder</li>
+	<li>CCNET\-1609 &#45; Implement BuildProgressInformation support to Git Source Control Block</li>
+	<li>CCNET\-1611 &#45; build progress information with the current tooltip is not that usable</li>
+	<li>CCNET\-1680 &#45; Parameters should be available to publishers</li>
+	<li>CCNET\-1681 &#45; IntegrationProperties should be accessible as Parameters</li>
+	<li>CCNET\-1695 &#45; MSTest xsl updates</li>
+	<li>CCNET\-1696 &#45; Security errors (not logged in, not authorized) show up as exceptions rather than friendly message</li>
+	<li>CCNET\-1728 &#45; Colour codes for Activity and CCNet Status colums on Project Grid</li>
+	<li>CCNET\-1734 &#45; Package Publisher: duplicated history when the property single is false.</li>
+	<li>CCNET\-1743 &#45; Validator - add menu accelarators</li>
+	<li>CCNET\-1761 &#45; StyleCop suport</li>
+	<li>CCNET\-1776 &#45; Timestamps in msbuild logger</li>
+	<li>CCNET\-1778 &#45; german translations for dashboard</li>
+</ul>
+
+
+<h4><a name="CCNet1.5RC1ReleaseNotes-NewFeature"></a>New Feature</h4>
+
+<ul>
+	<li>CCNET\-415 &#45; Add labelling support for MKS</li>
+	<li>CCNET\-504 &#45; Process Priority setting for tasks</li>
+	<li>CCNET\-707 &#45; View diff info of the items listed in the "Modifications since last build" from Build Reports</li>
+	<li>CCNET\-834 &#45; Custom Triggers</li>
+	<li>CCNET\-849 &#45; property Read-only property "CCNetLabel" cannot be overwritten.</li>
+	<li>CCNET\-1106 &#45; Add project option "Ask for confirmation"</li>
+	<li>CCNET\-1163 &#45; Serve published articles on project page</li>
+	<li>CCNET\-1298 &#45; display duration statistics for source control block in dashboard</li>
+	<li>CCNET\-1479 &#45; Viewing build progress with Nant and MSBuild</li>
+	<li>CCNET\-1535 &#45; Auto refresh</li>
+</ul>
+
+
+<h4><a name="CCNet1.5RC1ReleaseNotes-Task"></a>Task</h4>
+
+<ul>
+	<li>CCNET\-439 &#45; Document process of creating a custom project workflow</li>
+	<li>CCNET\-1578 &#45; Labeller problem :version : 1.4.3.4023</li>
+	<li>CCNET\-1751 &#45; How can we access most.recent.logfile (MOST_RECENT_LOGFILE_KEY) from nant script ?</li>
+</ul>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:07</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

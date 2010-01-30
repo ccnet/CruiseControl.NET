@@ -16,34 +16,32 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jul 25, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Dec 06, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <h3><a name="DirectDynamicValue-DirectDynamicValue"></a>Direct Dynamic Value</h3>
+				    <h1><a name="DirectDynamicValue-DirectDynamicValue"></a>Direct Dynamic Value</h1>
 
-<p>This will replace the value of a property with the value from a parameter. If the user does not enter a parameter value, then the default will be used (when set).</p>
+<p>This will replace the value of a property with the value from a parameter. If the user does not enter a parameter value, then the default will be used (when set).  </p>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>This dynamic value does not perform any formatting, it just directly puts the value into the property.  </p></td></tr></table></div>
 
-<p>This dynamic value does not perform any formatting, it just directly puts the value into the property.</p>
 
-<h3><a name="DirectDynamicValue-Version"></a>Version</h3>
+<h2><a name="DirectDynamicValue-Version"></a>Version</h2>
 
-<p>This dynamic value is available from version 1.5.0.</p>
+<p>Available from version 1.5</p>
 
-<h3><a name="DirectDynamicValue-Examples"></a>Examples</h3>
+<h2><a name="DirectDynamicValue-Examples"></a>Examples</h2>
 
-<p>Basic example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Basic example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;nant&gt;</span>
   <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
   <span class="code-tag">&lt;dynamicValues&gt;</span>
     <span class="code-tag">&lt;buildArgs&gt;</span>Help<span class="code-tag">&lt;/buildArgs&gt;</span>
-    <span class="code-tag">&lt;directValue property=<span class="code-quote">"buildArgs"</span> parameter=<span class="code-quote">"CommandToRun"</span> default=<span class="code-quote">"Help"</span>/&gt;</span>
+    <span class="code-tag">&lt;directValue property=<span class="code-quote">"buildArgs"</span> parameter=<span class="code-quote">"CommandToRun"</span> default=<span class="code-quote">"Help"</span> /&gt;</span>
   <span class="code-tag">&lt;/dynamicValues&gt;</span>
 <span class="code-tag">&lt;/nant&gt;</span></pre>
 </div></div>
-
-<p>Shorthand example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Shorthand example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;nant&gt;</span>
   <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
   <span class="code-tag">&lt;dynamicValues&gt;</span>
@@ -51,9 +49,7 @@
   <span class="code-tag">&lt;/dynamicValues&gt;</span>
 <span class="code-tag">&lt;/nant&gt;</span></pre>
 </div></div>
-
-<p>Example in context:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Example in context</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Test Project"</span>&gt;</span>
   <span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"svn"</span>&gt;</span>
     <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
@@ -66,7 +62,7 @@
       <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
       <span class="code-tag">&lt;buildArgs&gt;</span>Help<span class="code-tag">&lt;/buildArgs&gt;</span>
       <span class="code-tag">&lt;dynamicValues&gt;</span>
-        <span class="code-tag">&lt;directValue property=<span class="code-quote">"buildArgs"</span> parameter=<span class="code-quote">"CommandToRun"</span> default=<span class="code-quote">"Help"</span>/&gt;</span>
+        <span class="code-tag">&lt;directValue property=<span class="code-quote">"buildArgs"</span> parameter=<span class="code-quote">"CommandToRun"</span> default=<span class="code-quote">"Help"</span> /&gt;</span>
       <span class="code-tag">&lt;/dynamicValues&gt;</span>
     <span class="code-tag">&lt;/nant&gt;</span>
     <span class="code-tag"><span class="code-comment">&lt;!-- Omitted for brevity --&gt;</span></span>
@@ -80,11 +76,12 @@
 <span class="code-tag">&lt;/project&gt;</span></pre>
 </div></div>
 
-<h3><a name="DirectDynamicValue-ConfigurationElements%3A"></a>Configuration Elements:</h3>
+
+<h2><a name="DirectDynamicValue-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -92,29 +89,33 @@
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> property </td>
-<td class='confluenceTd'> The name of the property to set. This is the same name as what is in the configuration. </td>
-<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> default </td>
+<td class='confluenceTd'> The default value to use if nothing is set in the parameters.   </td>
+<td class='confluenceTd'> String </td>
 <td class='confluenceTd'> Yes </td>
 <td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> parameter </td>
-<td class='confluenceTd'> The name of the parameter to use. </td>
-<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> The name of the parameter to use. This must be the same name as what is in the parameters configuration.   </td>
+<td class='confluenceTd'> String </td>
 <td class='confluenceTd'> Yes </td>
 <td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> default </td>
-<td class='confluenceTd'> The default value to use if the parameter was not set. </td>
-<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> property </td>
+<td class='confluenceTd'> The name of the property to set. This must be the same name as what is in the task/publisher/trigger configuration.   </td>
+<td class='confluenceTd'> String </td>
 <td class='confluenceTd'> Yes </td>
 <td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 </tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Sunday, 6 Dec 2009 at 7:29:51 PM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -125,7 +126,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

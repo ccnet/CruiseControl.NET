@@ -16,38 +16,44 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 26, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Dec 02, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <p>Most complex build processes use <a href="http://nant.sourceforge.net">NAnt </a> or <a href="http://msdn2.microsoft.com/en-us/library/ms171452.aspx">MSBuild </a> to script the build.  However, for simple projects that just need to build a Visual Studio.NET solution, the Visual Studio task <tt>&lt;devenv&gt;</tt> provides an easier method.</p>
+				    <h1><a name="VisualStudioTask-VisualStudioTask"></a>Visual Studio Task</h1>
 
-<h4><a name="VisualStudioTask-Examples"></a>Examples</h4>
+<p>Most complex build processes use <a href="NAnt Task.html" title="NAnt Task">NAnt Task</a> or <a href="MsBuild Task.html" title="MsBuild Task">MsBuild Task</a> to script the build. However, for simple projects that just need to build a Visual Studio.NET solution, the Visual Studio task &lt;devenv&gt; provides an easier method.  </p>
 
-<p>Minimalist example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+
+<h2><a name="VisualStudioTask-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="VisualStudioTask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;devenv&gt;</span>
-    <span class="code-tag">&lt;solutionfile&gt;</span>src\MyProject.sln<span class="code-tag">&lt;/solutionfile&gt;</span>
-    <span class="code-tag">&lt;configuration&gt;</span>Debug<span class="code-tag">&lt;/configuration&gt;</span>
+  <span class="code-tag">&lt;solutionfile&gt;</span>src\MyProject.sln<span class="code-tag">&lt;/solutionfile&gt;</span>
+  <span class="code-tag">&lt;configuration&gt;</span>Debug<span class="code-tag">&lt;/configuration&gt;</span>
 <span class="code-tag">&lt;/devenv&gt;</span></pre>
 </div></div>
-<p>Full example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;devenv&gt;</span>
-    <span class="code-tag">&lt;solutionfile&gt;</span>src\MyProject.sln<span class="code-tag">&lt;/solutionfile&gt;</span>
-    <span class="code-tag">&lt;configuration&gt;</span>Debug<span class="code-tag">&lt;/configuration&gt;</span>
-    <span class="code-tag">&lt;buildtype&gt;</span>Build<span class="code-tag">&lt;/buildtype&gt;</span>
-    <span class="code-tag">&lt;project&gt;</span>MyProject<span class="code-tag">&lt;/project&gt;</span>
-    <span class="code-tag">&lt;executable&gt;</span>c:\program files\Microsoft Visual Studio .NET\Common7\IDE\devenv.com<span class="code-tag">&lt;/executable&gt;</span>
-    <span class="code-tag">&lt;buildTimeoutSeconds&gt;</span>600<span class="code-tag">&lt;/buildTimeoutSeconds&gt;</span>
-    <span class="code-tag">&lt;version&gt;</span>VS2002<span class="code-tag">&lt;/version&gt;</span>
+  <span class="code-tag">&lt;solutionfile&gt;</span>src\MyProject.sln<span class="code-tag">&lt;/solutionfile&gt;</span>
+  <span class="code-tag">&lt;configuration&gt;</span>Debug<span class="code-tag">&lt;/configuration&gt;</span>
+  <span class="code-tag">&lt;buildtype&gt;</span>Build<span class="code-tag">&lt;/buildtype&gt;</span>
+  <span class="code-tag">&lt;project&gt;</span>MyProject<span class="code-tag">&lt;/project&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>c:\program files\Microsoft Visual Studio .NET\Common7\IDE\devenv.com<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;buildTimeoutSeconds&gt;</span>600<span class="code-tag">&lt;/buildTimeoutSeconds&gt;</span>
+  <span class="code-tag">&lt;version&gt;</span>VS2002<span class="code-tag">&lt;/version&gt;</span>
 <span class="code-tag">&lt;/devenv&gt;</span></pre>
 </div></div>
 
-<h4><a name="VisualStudioTask-ConfigurationElements%3A"></a>Configuration Elements:</h4>
+
+<h2><a name="VisualStudioTask-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -55,83 +61,106 @@
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> solutionfile </td>
-<td class='confluenceTd'> The path of the solution file to build. If relative, it is relative to the <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a>. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true </td>
-<td class='confluenceTd'> n/a </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> configuration </td>
-<td class='confluenceTd'> The solution configuration to use (not case sensitive). </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true </td>
-<td class='confluenceTd'> n/a </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> buildTimeoutSeconds </td>
+<td class='confluenceTd'> Number of seconds to wait before assuming that the process has hung and should be killed.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 600 (10 minutes) </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> buildtype </td>
-<td class='confluenceTd'> The type of build.  Valid values are <b>Rebuild</b>, <b>Build</b> or <b>Clean</b> (not case sensitive). </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> The type of build.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Rebuild</li>
+	<li>Build</li>
+	<li>Clean</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> rebuild </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> project </td>
-<td class='confluenceTd'> A specific project in the solution, if you only want to build one project (not case sensitive). </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> The default is to build all projects selected by the configuration. </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> executable </td>
-<td class='confluenceTd'> The path to <tt>devenv.com</tt>. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> (see below) </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> buildTimeoutSeconds </td>
-<td class='confluenceTd'> Number of seconds to wait before assuming that the process has hung and should be killed. </td>
-<td class='confluenceTd'> int </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> 600 (10 minutes) </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> version </td>
-<td class='confluenceTd'> The version of Visual Studio. </td>
-<td class='confluenceTd'> One of VS2002, VS2003, VS2005, VS2008, 7.0, 7.1, 8.0, or 9.0 </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> (see below) </td>
+<td class='confluenceTd'> configuration </td>
+<td class='confluenceTd'> The solution configuration to use (not case sensitive).   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> description </td>
-<td class='confluenceTd'> If filled in, this will be shown in the buildstage as the process name<br clear="all" /> </td>
-<td class='confluenceTd'> string <br clear="all" /> </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
-<td class='confluenceTd'> n/a </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> dynamicValues </td>
-<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
-<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
 <td class='confluenceTd'> No </td>
-<td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> None </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The path to devenv.com.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> See below </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> project </td>
+<td class='confluenceTd'> A specific project in the solution, if you only want to build one project (not case sensitive).   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> All projects </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> solutionfile </td>
+<td class='confluenceTd'> The path of the solution file to build. If relative, it is relative to the Project Working Directory.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> version </td>
+<td class='confluenceTd'> The version of Visual Studio.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>VS2002</li>
+	<li>VS2003</li>
+	<li>VS2005</li>
+	<li>VS2008</li>
+	<li>7.0</li>
+	<li>7.1</li>
+	<li>8.0</li>
+	<li>9.0</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> See below </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 </tbody></table>
 
-<h3><a name="VisualStudioTask-Notes"></a>Notes</h3>
-<p>If executable and version are not specified, CC.NET will search the registry for VS.NET 2008, 2005, 2003, and 2002 in that order.  If you need to use a specific version when a newer version is installed, you should specify the version property to identify it, or specify the executable property to point to the location of correct version of <tt>devenv.com</tt>.</p>
+<h2><a name="VisualStudioTask-Notes"></a>Notes</h2>
 
-<p><img class="emoticon" src="images/icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Note: this task requires you to have Visual Studio .NET installed on your integration server.</p>
-<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Often programmers like to use a centralised project to build an entire software system.  They define specific dependencies and the build order on that specific project to reproduce the behaviours of an nmake build.</td></tr></table></div>
+<p>If executable and version are not specified, CC.NET will search the registry for VS.NET 2008, 2005, 2003, and 2002 in that order. If you need to use a specific version when a newer version is installed, you should specify the version property to identify it, or specify the executable property to point to the location of correct version of devenv.com.  </p>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>This task requires you to have Visual Studio .NET installed on your integration server.  </p></td></tr></table></div>
+<p>Often programmers like to use a centralised project to build an entire software system. They define specific dependencies and the build order on that specific project to reproduce the behaviours of an nmake build.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Wednesday, 2 Dec 2009 at 3:41:49 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -142,7 +171,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

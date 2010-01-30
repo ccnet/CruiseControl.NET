@@ -16,72 +16,101 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 26, 2007 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on Dec 02, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <p>The Url Trigger is used to trigger a CCNet build when the page at a particular url changes.  The Url Trigger will poll the specified url according to a configured polling interval to detect if the last modified date of the page has changed since the last integration.</p>
+				    <h1><a name="UrlTrigger-URLTrigger"></a>URL Trigger</h1>
 
-<p>This trigger is especially useful in reducing the load on your source control system caused by the polling for modifications performed by an Interval Trigger.  If your source control system supports trigger scripts (such as the use of commitinfo scripts in CVS), you can use create a trigger to touch the page that is being monitored by CCNet to start a new integration.</p>
+<p>The Url Trigger is used to trigger a CCNet build when the page at a particular url changes. The Url Trigger will poll the specified url according to a configured polling interval to detect if the last modified date of the page has changed since the last integration.  <br/>
+This trigger is especially useful in reducing the load on your source control system caused by the polling for modifications performed by an Interval Trigger. If your source control system supports trigger scripts (such as the use of commitinfo scripts in CVS), you can use create a trigger to touch the page that is being monitored by CCNet to start a new integration.  </p>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Like all triggers, the urlTrigger must be enclosed within a triggers element in the appropriate <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a>.  </p></td></tr></table></div>
 
-<h4><a name="UrlTrigger-Examples"></a>Examples</h4>
-<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>NOTE: Like all triggers, the urlTrigger must be enclosed within a triggers element in the appropriate <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a></td></tr></table></div>
 
-<p>Minimalist example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;urlTrigger url=<span class="code-quote">"http://server/page.html"</span>  /&gt;</span></pre>
+<h2><a name="UrlTrigger-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="UrlTrigger-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;urlTrigger url=<span class="code-quote">"http://server/page.html"</span> /&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;urlTrigger url=<span class="code-quote">"http://server/page.html"</span> seconds=<span class="code-quote">"30"</span> buildCondition=<span class="code-quote">"ForceBuild"</span> /&gt;</span></pre>
 </div></div>
 
-<p>Full example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;urlTrigger url=<span class="code-quote">"http://server/page.html"</span> seconds=<span class="code-quote">"30"</span> buildCondition=<span class="code-quote">"ForceBuild"</span>/&gt;</span></pre>
-</div></div>
 
-<h4><a name="UrlTrigger-ConfigurationElements%3A"></a>Configuration Elements:</h4>
+<h2><a name="UrlTrigger-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Required </th>
 <th class='confluenceTh'> Default </th>
-</tr>
-<tr>
-<td class='confluenceTd'> url </td>
-<td class='confluenceTd'> The url to poll for changes. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true </td>
-<td class='confluenceTd'> N/A </td>
-</tr>
-<tr>
-<td class='confluenceTd'> seconds </td>
-<td class='confluenceTd'> The number of seconds after an integration cycle completes before triggering the next integration cycle. </td>
-<td class='confluenceTd'> int </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> 60 </td>
+<th class='confluenceTh'> Version </th>
 </tr>
 <tr>
 <td class='confluenceTd'> buildCondition </td>
-<td class='confluenceTd'> The condition that should be used to launch the integration.  By default, this value is <b>IfModificationExists</b>, meaning that an integration will only be triggered if modifications have been detected. Set this attribute to <b>ForceBuild</b> in order to ensure that a build should be launched regardless of whether new modifications are detected. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> The condition that should be used to launch the integration. By default, this value is <b>IfModificationExists</b>, meaning that an integration will only be triggered if modifications have been detected. Set this attribute to <b>ForceBuild</b> in order to ensure that a build should be launched regardless of whether new modifications are detected.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>NoBuild</li>
+	<li>IfModificationExists</li>
+	<li>ForceBuild</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> IfModificationExists </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> initialSeconds </td>
+<td class='confluenceTd'> The delay (in seconds) from CCNet startup to the first check for modifications.   </td>
+<td class='confluenceTd'> Double </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Defaults to the IntervalSettings value. </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> seconds </td>
+<td class='confluenceTd'> The number of seconds after an integration cycle completes before triggering the next integration cycle.   </td>
+<td class='confluenceTd'> Double </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 60 </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> name </td>
-<td class='confluenceTd'> The name of the trigger.  This name is passed to external tools as a means to identify the trigger that requested the build. (Added in CCNet 1.1)</td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> UrlTrigger</td>
+<td class='confluenceTd'> The name of the trigger. This name is passed to external tools as a means to identify the trigger that requested the build.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> IntervalTrigger </td>
+<td class='confluenceTd'> 1.1 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> url </td>
+<td class='confluenceTd'> The url to poll for changes.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 </tbody></table>
 
-<p><img class="emoticon" src="images/icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: there is currently a limitation in this trigger such that it will not persist the url's last modified date when the server restarts.  This means that the trigger will always attempt to start a new integration when the first interval expires after the server starts up.</p>
+<h2><a name="UrlTrigger-Notes"></a>Notes</h2>
 
-<p><img class="emoticon" src="images/icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: The UrlTrigger will only work with pages that return a reliable LastModified date HTTP Header, such as static html pages or well-behaved dynamic pages.  Using static html pages is the most reliable way to use this trigger.</p>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>There is currently a limitation in this trigger such that it will not persist the url's last modified date when the server restarts. This means that the trigger will always attempt to start a new integration when the first interval expires after the server starts up.  </p></td></tr></table></div>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>The UrlTrigger will only work with pages that return a reliable LastModified date HTTP Header, such as static html pages or well-behaved dynamic pages. Using static html pages is the most reliable way to use this trigger.  </p></td></tr></table></div>
+<p>This trigger has been contributed by Steve Norman.  </p>
 
 
-<p><b>This trigger has been contributed by Steve Norman</b></p>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 1 Dec 2009 at 8:19:19 PM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -92,7 +121,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

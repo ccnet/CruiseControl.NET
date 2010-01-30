@@ -16,24 +16,46 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 26, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Dec 05, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <p><img class="emoticon" src="images/icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> See <a href="Using CruiseControl.NET with NUnit.html" title="Using CruiseControl.NET with NUnit">Using CruiseControl.NET with NUnit</a> for more details.</p>
+				    <h1><a name="NUnitTask-NUnitTask"></a>NUnit Task</h1>
 
-<p>This task enables you to instruct CCNet to run the unit tests contained within a collection of assemblies.  The results of the unit tests will be automatically included in the CCNet build results.  This can be useful if you have some unit tests that you want to run as part of the integration process, but you don't need as part of your developer build process.  For example, if you have a set of integration tests that you want to run in a separate build process, it is easy to set up a project to use this task.</p>
+<div class='panelMacro'><table class='tipMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/check.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>See <a href="Using CruiseControl.NET with NUnit.html" title="Using CruiseControl.NET with NUnit">Using CruiseControl.NET with NUnit</a> for more details.  </p></td></tr></table></div>
+<p>This task enables you to instruct CCNet to run the unit tests contained within a collection of assemblies. The results of the unit tests will be automatically included in the CCNet build results. This can be useful if you have some unit tests that you want to run as part of the integration process, but you don't need as part of your developer build process. For example, if you have a set of integration tests that you want to run in a separate build process, it is easy to set up a project to use this task.  <br/>
+If you are using the <a href="Visual Studio Task.html" title="Visual Studio Task">Visual Studio Task</a> and you want to run unit tests then you probably want to use this task. Alternatively you can run NUnit using post-build tasks in your Visual Studio project properties.  </p>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>We recommend not using this task, and using your builder to run your tests if possible. This way if the tests fail and you don't know why, it is a lot easier to try and replicate the problem on another machine.  </p></td></tr></table></div>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>When using this task,do NOT merge an xml file from bin folder of your app with the merge task, or the results will be save twice in the buildlog file.  </p></td></tr></table></div>
 
-<p>If you are using the <a href="Visual Studio Task.html" title="Visual Studio Task">Visual Studio Task</a> and you want to run unit tests then you probably want to use this task. Alternatively you can run NUnit using post-build tasks in your Visual Studio project properties.</p>
 
-<p><img class="emoticon" src="images/icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> We recommend <b>not</b> using this task, and using your builder to run your tests if possible. This way if the tests fail and you don't know why, it is a lot easier to try and replicate the problem on another machine.</p>
+<h2><a name="NUnitTask-Version"></a>Version</h2>
 
-<p><img class="emoticon" src="images/icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> When using this task,do NOT merge an xml file from bin folder of your app with the merge task, or the results will be save twice in the buildlog file.</p>
+<p>Available from version 1.0</p>
 
-<h3><a name="NUnitTask-ConfigurationElements"></a>Configuration Elements</h3>
+<h2><a name="NUnitTask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;nunit&gt;</span>
+  <span class="code-tag">&lt;path&gt;</span>D:\dev\ccnet\ccnet\tools\nunit\nunit-console.exe<span class="code-tag">&lt;/path&gt;</span>
+  <span class="code-tag">&lt;assemblies&gt;</span>
+    <span class="code-tag">&lt;assembly&gt;</span>D:\dev\Refactoring\bin\Debug\Refactoring.exe<span class="code-tag">&lt;/assembly&gt;</span>
+    <span class="code-tag">&lt;assembly&gt;</span>D:\dev\Refactoring\bin\Debug\Refactoring.Core.dll<span class="code-tag">&lt;/assembly&gt;</span>
+  <span class="code-tag">&lt;/assemblies&gt;</span>
+  <span class="code-tag">&lt;excludedCategories&gt;</span>
+    <span class="code-tag">&lt;excludedCategory&gt;</span>LongRunning<span class="code-tag">&lt;/excludedCategory&gt;</span>
+  <span class="code-tag">&lt;/excludedCategories&gt;</span>
+<span class="code-tag">&lt;/nunit&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="NUnitTask-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -42,89 +64,72 @@
 </tr>
 <tr>
 <td class='confluenceTd'> assemblies </td>
-<td class='confluenceTd'> List of the paths to the assemblies containing the NUnit tests to be run.<b><a href="#NUnitTask-limitation"><b>&#42;</b></a></b> </td>
-<td class='confluenceTd'> string[] </td>
-<td class='confluenceTd'> true </td>
-<td class='confluenceTd'>&nbsp;</td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> path </td>
-<td class='confluenceTd'> Path of <b>nunit-console.exe</b> application. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> C:\Program Files\NUnit 2.2\bin\nunit-console.exe </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> outputfile </td>
-<td class='confluenceTd'> The file that NUnit will write the test results to </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> nunit-results.xml </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> timeout </td>
-<td class='confluenceTd'> The number of seconds that the nunit process will run before timing out </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> 600 </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> includedCategories </td>
-<td class='confluenceTd'> List of the test categories to be included in the NUnit run. The tests need to have the CategoryAttribute set. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'>&nbsp;</td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> excludedCategories </td>
-<td class='confluenceTd'> List of the test categories to be excluded from the NUnit run. The tests need to have the CategoryAttribute set. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'>&nbsp;</td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> List of the paths to the assemblies containing the NUnit tests to be run.   </td>
+<td class='confluenceTd'> String array </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> description </td>
-<td class='confluenceTd'> If filled in, this will be shown in the buildstage as the process name <br clear="all" /> </td>
-<td class='confluenceTd'> string <br clear="all" /> </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
-<td class='confluenceTd'> n/a </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> dynamicValues </td>
-<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
-<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> excludedCategories </td>
+<td class='confluenceTd'> List of the test categories to be excluded from the NUnit run. The tests need to have the CategoryAttribute set.   </td>
+<td class='confluenceTd'> String array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> includedCategories </td>
+<td class='confluenceTd'> List of the test categories to be included in the NUnit run. The tests need to have the CategoryAttribute set.   </td>
+<td class='confluenceTd'> String array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> path </td>
+<td class='confluenceTd'> Path of  <b>nunit-console.exe</b> application.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> nunit-console </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> outputfile </td>
+<td class='confluenceTd'> The file that NUnit will write the test results to.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> nunit-results.xml </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> The number of seconds that the nunit process will run before timing out.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 600 </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 </tbody></table>
 
-<p><a name="NUnitTask-limitation"></a> &#42; Due to a limitation in the 2.2.x version of the nunit console, all test assemblies must be located in the same directory.  The problem is that the nunit-console does not change the working directory before executing each assembly.  As a result, dependencies for the subsequent assemblies will not be located by nunit.  The options are to either a) include all assemblies to test in the same directory or b) to use separate <a href="" title="NUnit Task">NUnit Task</a>s for each assembly.</p>
-
-<h3><a name="NUnitTask-ConfigurationExample"></a>Configuration Example</h3>
-
-<p>The configuration for the NUnitTask should be placed in the <b>&lt;tasks&gt;</b> section of the <a href="Configuring the Server.html" title="Configuring the Server">Configuring the Server</a> file.</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;tasks&gt;</span>
-    	<span class="code-tag">&lt;nunit&gt;</span>
-    		<span class="code-tag">&lt;path&gt;</span>D:\dev\ccnet\ccnet\tools\nunit\nunit-console.exe<span class="code-tag">&lt;/path&gt;</span>
-    		<span class="code-tag">&lt;assemblies&gt;</span>
-    			<span class="code-tag">&lt;assembly&gt;</span>D:\dev\Refactoring\bin\Debug\Refactoring.exe<span class="code-tag">&lt;/assembly&gt;</span>
-    			<span class="code-tag">&lt;assembly&gt;</span>D:\dev\Refactoring\bin\Debug\Refactoring.Core.dll<span class="code-tag">&lt;/assembly&gt;</span>
-    		<span class="code-tag">&lt;/assemblies&gt;</span>
-                <span class="code-tag">&lt;excludedCategories&gt;</span>
-			<span class="code-tag">&lt;excludedCategory&gt;</span>LongRunning<span class="code-tag">&lt;/excludedCategory&gt;</span>
-		<span class="code-tag">&lt;/excludedCategories&gt;</span>
-    	<span class="code-tag">&lt;/nunit&gt;</span>
-    <span class="code-tag">&lt;/tasks&gt;</span></pre>
-</div></div>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Saturday, 5 Dec 2009 at 5:34:53 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -135,7 +140,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

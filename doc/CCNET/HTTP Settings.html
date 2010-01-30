@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : HTTP Settings</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : HTTP Settings
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 06, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="HTTPSettings-HTTPSettings"></a>HTTP Settings</h1>
+
+<p>The settings for an HTTP request.  </p>
+
+
+<h2><a name="HTTPSettings-Version"></a>Version</h2>
+
+<p>Available from version 1.5</p>
+
+<h2><a name="HTTPSettings-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;httpRequest&gt;</span>
+  <span class="code-tag">&lt;uri&gt;</span>http://somewhere.com<span class="code-tag">&lt;/uri&gt;</span>
+<span class="code-tag">&lt;/httpRequest&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;httpRequest&gt;</span>
+  <span class="code-tag">&lt;method&gt;</span>GET<span class="code-tag">&lt;/method&gt;</span>
+  <span class="code-tag">&lt;uri&gt;</span>http://somewhere.com/<span class="code-tag">&lt;/uri&gt;</span>
+  <span class="code-tag">&lt;useDefaultCredentials&gt;</span>false<span class="code-tag">&lt;/useDefaultCredentials&gt;</span>
+<span class="code-tag">&lt;/httpRequest&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="HTTPSettings-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> body </td>
+<td class='confluenceTd'> The body of the request to send.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> credentials </td>
+<td class='confluenceTd'> The credentials to use in the request.   </td>
+<td class='confluenceTd'> NetworkCredential </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> headers </td>
+<td class='confluenceTd'> The HTTP headers to send.   </td>
+<td class='confluenceTd'> <a href="HTTP Request Header.html" title="HTTP Request Header">HTTP Request Header</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> method </td>
+<td class='confluenceTd'> The method to use.  <br clear="all" />This can be any valid HTTP method, e.g. GET, POST, etc.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> GET </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> readWriteTimeout </td>
+<td class='confluenceTd'> The read/write timeout period.   </td>
+<td class='confluenceTd'> Timeout </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> sendFile </td>
+<td class='confluenceTd'> A file to send in the request.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> The timeout period before cancelling the request.   </td>
+<td class='confluenceTd'> Timeout </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> uri </td>
+<td class='confluenceTd'> The URL to make the request to.   </td>
+<td class='confluenceTd'> Uri </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> useDefaultCredentials </td>
+<td class='confluenceTd'> Whether to use the default credentials or not.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+</tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Sunday, 6 Dec 2009 at 6:39:30 AM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:07</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 08, 2009 by <font color="#0050B2">williams</font>.
+					    This page last changed on Oct 14, 2009 by <font color="#0050B2">williams</font>.
 				    </div>
 
 				    <p>The CCNet configuration preprocessor acts on the ccnet.config file.  Preprocessor directives are specified in the XML namespace "urn:ccnet.config.builder" to distinguish them from ordinary configuration markup.  Any markup not in the preprocessor's namespace are passed through unchanged.</p>
@@ -195,6 +195,76 @@
 <div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-java">&lt;test attr=<span class="code-quote">"a_val"</span> att2=<span class="code-quote">"b_val"</span>/&gt;
 &lt;test attr=<span class="code-quote">"a_val_redefined"</span> att2=<span class="code-quote">"b_val"</span>/&gt;</pre>
+</div></div>
+<p>The scope can be used to set the projectname in a variable, making copy and paste of projects less error prone.<br/>
+Changing a certain folder is also more easy / safe.</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cruisecontrol xmlns:cb=<span class="code-quote">"urn:ccnet.config.builder"</span>&gt;
+  &lt;cb:define WorkingMainDir=<span class="code-quote">"C:\Integration\"</span>/&gt;
+  &lt;cb:define WorkingDir=<span class="code-quote">"\WorkingDirectory"</span>/&gt;
+  &lt;cb:define ArtifactsDir=<span class="code-quote">"\Artifacts"</span>/&gt;
+
+  &lt;cb:scope ProjectName=<span class="code-quote">"Alpha"</span>&gt;
+    &lt;project name=<span class="code-quote">"$(ProjectName)"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;
+      &lt;workingDirectory&gt;$(WorkingMainDir)$(ProjectName)$(WorkingDir)&lt;/workingDirectory&gt;
+      &lt;artifactDirectory&gt;$(WorkingMainDir)$(ProjectName)$(ArtifactsDir)&lt;/artifactDirectory&gt;
+
+    &lt;/project&gt;
+  &lt;/cb:scope&gt;
+
+  &lt;cb:scope ProjectName=<span class="code-quote">"Beta"</span>&gt;
+    &lt;project name=<span class="code-quote">"$(ProjectName)"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;
+      &lt;workingDirectory&gt;$(WorkingMainDir)$(ProjectName)$(WorkingDir)&lt;/workingDirectory&gt;
+      &lt;artifactDirectory&gt;$(WorkingMainDir)$(ProjectName)$(ArtifactsDir)&lt;/artifactDirectory&gt;
+
+    &lt;/project&gt;
+  &lt;/cb:scope&gt;
+
+
+
+&lt;/cruisecontrol&gt;</pre>
+</div></div>
+<p>expands to :</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cruisecontrol&gt;
+
+    &lt;project name=<span class="code-quote">"Alpha"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;
+      &lt;workingDirectory&gt;C:\Integration\Alpha\WorkingDirectory&lt;/workingDirectory&gt;
+      &lt;artifactDirectory&gt;C:\Integration\Alpha\Artifacts&lt;/artifactDirectory&gt;
+
+    &lt;/project&gt;
+
+
+    &lt;project name=<span class="code-quote">"Beta"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;
+      &lt;workingDirectory&gt;C:\Integration\Beta\WorkingDirectory&lt;/workingDirectory&gt;
+      &lt;artifactDirectory&gt;C:\Integration\Beta\Artifacts&lt;/artifactDirectory&gt;
+
+    &lt;/project&gt;
+
+&lt;/cruisecontrol&gt;</pre>
+</div></div>
+<p>Or an even more advanced one (thanks to Arieh Schneier) :</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cruisecontrol xmlns:cb=<span class="code-quote">"urn:ccnet.config.builder"</span>&gt;
+ &lt;cb:define WorkingMainDir=<span class="code-quote">"C:\Integration\"</span>/&gt;
+ &lt;cb:define WorkingDir=<span class="code-quote">"\WorkingDirectory"</span>/&gt;
+ &lt;cb:define ArtifactsDir=<span class="code-quote">"\Artifacts"</span>/&gt;
+
+ &lt;cb:define name=<span class="code-quote">"OurProject"</span>&gt;
+   &lt;project name=<span class="code-quote">"$(ProjectName)"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;
+     &lt;workingDirectory&gt;$(WorkingMainDir)$(ProjectName)$(WorkingDir)&lt;/workingDirectory&gt;
+     &lt;artifactDirectory&gt;$(WorkingMainDir)$(ProjectName)$(ArtifactsDir)&lt;/artifactDirectory&gt;
+   &lt;/project&gt;
+ &lt;/cb:define&gt;
+
+ &lt;cb:scope ProjectName=<span class="code-quote">"Alpha"</span>&gt;
+   &lt;cb:OurProject/&gt;
+ &lt;/cb:scope&gt;
+
+ &lt;cb:scope ProjectName=<span class="code-quote">"Beta"</span>&gt;
+   &lt;cb:OurProject/&gt;
+ &lt;/cb:scope&gt;
+&lt;/cruisecontrol&gt;</pre>
 </div></div>
 
 <h2><a name="ConfigurationPreprocessor-Comments"></a>Comments</h2>
@@ -397,7 +467,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

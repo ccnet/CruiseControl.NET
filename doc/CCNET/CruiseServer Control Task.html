@@ -16,21 +16,20 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 26, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Dec 03, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <h3><a name="CruiseServerControlTask-CruiseServerControlTask"></a>CruiseServer Control Task</h3>
+				    <h1><a name="CruiseServerControlTask-CruiseServerControlTask"></a>CruiseServer Control Task</h1>
 
-<p>Sends a management task to a CruiseServer instance.</p>
+<p>Sends a management task to a CruiseControl.NET server.  </p>
 
-<h3><a name="CruiseServerControlTask-Version"></a>Version</h3>
+<h2><a name="CruiseServerControlTask-Version"></a>Version</h2>
 
-<p>This task is available from version 1.5.0.</p>
+<p>Available from version 1.5</p>
 
-<h3><a name="CruiseServerControlTask-Examples"></a>Examples</h3>
+<h2><a name="CruiseServerControlTask-Examples"></a>Examples</h2>
 
-<p>Minimalist example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;cruiseServerControl&gt;</span>
   <span class="code-tag">&lt;actions&gt;</span>
     <span class="code-tag">&lt;controlAction type=<span class="code-quote">"StartProject"</span> project=<span class="code-quote">"CCNet"</span> /&gt;</span>
@@ -38,21 +37,12 @@
 <span class="code-tag">&lt;/cruiseServerControl&gt;</span></pre>
 </div></div>
 
-<p>Full example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;cruiseServerControl&gt;</span>
-  <span class="code-tag">&lt;actions&gt;</span>
-    <span class="code-tag">&lt;controlAction type=<span class="code-quote">"StartProject"</span> project=<span class="code-quote">"CCNet"</span> /&gt;</span>
-  <span class="code-tag">&lt;/actions&gt;</span>
-  <span class="code-tag">&lt;description&gt;</span>Example of how to send a CruiseServer command.<span class="code-tag">&lt;/description&gt;</span>
-<span class="code-tag">&lt;/cruiseServerControl&gt;</span></pre>
-</div></div>
 
-<h3><a name="CruiseServerControlTask-ConfigurationElements"></a>Configuration Elements</h3>
+<h2><a name="CruiseServerControlTask-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -61,65 +51,40 @@
 </tr>
 <tr>
 <td class='confluenceTd'> actions </td>
-<td class='confluenceTd'> The actions to send. </td>
-<td class='confluenceTd'> ControlAction (see below) </td>
+<td class='confluenceTd'> The actions to perform.   </td>
+<td class='confluenceTd'> <a href="CruiseServer Control Action.html" title="CruiseServer Control Action">CruiseServer Control Action</a> array </td>
 <td class='confluenceTd'> Yes </td>
 <td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> description </td>
-<td class='confluenceTd'> A description of this task. </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
 <td class='confluenceTd'> String </td>
 <td class='confluenceTd'> No </td>
-<td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> dynamicValues </td>
-<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
-<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
-</tr>
-</tbody></table>
-
-<h3><a name="CruiseServerControlTask-ControlActionElements"></a>Control Action Elements</h3>
-
-<p>There must be one or more control actions to send to the server. The will consist of the project name and the action to perform.</p>
-
-<table class='confluenceTable'><tbody>
-<tr>
-<th class='confluenceTh'> Node </th>
-<th class='confluenceTh'> Description </th>
-<th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Required </th>
-<th class='confluenceTh'> Default </th>
-<th class='confluenceTh'> Version </th>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> type </td>
-<td class='confluenceTd'> The type of action to send. </td>
-<td class='confluenceTd'> One of the following values:
-<ul>
-	<li>StartProject</li>
-	<li>StopProject</li>
-</ul>
-</td>
-<td class='confluenceTd'> Yes </td>
-<td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> project </td>
-<td class='confluenceTd'> The project the command is for. </td>
+<td class='confluenceTd'> server </td>
+<td class='confluenceTd'> The server to send the commands to.   </td>
 <td class='confluenceTd'> String </td>
-<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>n/a</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 </tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Thursday, 3 Dec 2009 at 7:34:22 PM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -130,7 +95,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

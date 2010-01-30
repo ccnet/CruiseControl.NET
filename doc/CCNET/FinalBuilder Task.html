@@ -16,53 +16,44 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 26, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Dec 06, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <p>The FinalBuilder Task allows you to invoke FinalBuilder build projects as part of a CruiseControl.NET integration project.</p>
+				    <h1><a name="FinalBuilderTask-FinalBuilderTask"></a>FinalBuilder Task</h1>
 
-<p><a href="http://www.finalbuilder.com/finalbuilder.aspx">FinalBuilder</a> is a commercial build and release management solution for Windows software developers and SCM professionals, developed and marketed by <a href="http://www.finalbuilder.com/">VSoft Technologies</a>.</p>
+<p>The FinalBuilder Task allows you to invoke FinalBuilder build projects as part of a CruiseControl.NET integration project. FinalBuilder is a commercial build and release management solution for Windows software developers and SCM professionals, developed and marketed by VSoft Technologies (<a href="http://www.finalbuilder.com/finalbuilder.aspx">http://www.finalbuilder.com/finalbuilder.aspx</a>).  </p>
 
-<h3><a name="FinalBuilderTask-Configuration"></a>Configuration</h3>
 
-<p>In order to use the FinalBuilder Task, you will need a FinalBuilder installation co-existing on the same server as a CruiseControl.NET installation.</p>
+<h2><a name="FinalBuilderTask-Version"></a>Version</h2>
 
-<p>(Note: The FinalBuilder Task is only available as of CruiseControl.NET version 1.3.)</p>
+<p>Available from version 1.3</p>
 
-<h3><a name="FinalBuilderTask-Examples"></a>Examples</h3>
+<h2><a name="FinalBuilderTask-Examples"></a>Examples</h2>
 
-<p>Minimalist example:
-<br clear="all" />
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;FinalBuilder&gt;</span>
-	<span class="code-tag">&lt;ProjectFile&gt;</span>C:\Projects\BuildProject\Build Process.fbz5<span class="code-tag">&lt;/ProjectFile&gt;</span>
+  <span class="code-tag">&lt;ProjectFile&gt;</span>C:\Projects\BuildProject\Build Process.fbz5<span class="code-tag">&lt;/ProjectFile&gt;</span>
 <span class="code-tag">&lt;/FinalBuilder&gt;</span></pre>
-</div></div><br clear="all" />
-<br clear="all" />
-<br clear="all" />
-<br clear="all" />
-Full example (all available options):<br/>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;FinalBuilder&gt;</span>
-	<span class="code-tag">&lt;ProjectFile&gt;</span>C:\Projects\BuildProject\Build Process.fbz5<span class="code-tag">&lt;/ProjectFile&gt;</span>
-	<span class="code-tag">&lt;FBVersion&gt;</span>5<span class="code-tag">&lt;/FBVersion&gt;</span>
-	<span class="code-tag">&lt;ShowBanner&gt;</span>false<span class="code-tag">&lt;/ShowBanner&gt;</span>
-	<span class="code-tag">&lt;FBVariables&gt;</span>
-		<span class="code-tag">&lt;FBVariable name=<span class="code-quote">"IsContinuousIntegrationBuild"</span> value=<span class="code-quote">"True"</span> /&gt;</span>
-	<span class="code-tag">&lt;/FBVariables&gt;</span>
-	<span class="code-tag">&lt;Timeout&gt;</span>3600<span class="code-tag">&lt;/Timeout&gt;</span>
-	<span class="code-tag">&lt;DontWriteToLog&gt;</span>true<span class="code-tag">&lt;/DontWriteToLog&gt;</span>
+  <span class="code-tag">&lt;ProjectFile&gt;</span>C:\Projects\BuildProject\Build Process.fbz5<span class="code-tag">&lt;/ProjectFile&gt;</span>
+  <span class="code-tag">&lt;FBVersion&gt;</span>5<span class="code-tag">&lt;/FBVersion&gt;</span>
+  <span class="code-tag">&lt;ShowBanner&gt;</span>false<span class="code-tag">&lt;/ShowBanner&gt;</span>
+  <span class="code-tag">&lt;FBVariables&gt;</span>
+    <span class="code-tag">&lt;FBVariable name=<span class="code-quote">"IsContinuousIntegrationBuild"</span> value=<span class="code-quote">"True"</span> /&gt;</span>
+  <span class="code-tag">&lt;/FBVariables&gt;</span>
+  <span class="code-tag">&lt;Timeout&gt;</span>3600<span class="code-tag">&lt;/Timeout&gt;</span>
+  <span class="code-tag">&lt;DontWriteToLog&gt;</span>true<span class="code-tag">&lt;/DontWriteToLog&gt;</span>
 <span class="code-tag">&lt;/FinalBuilder&gt;</span></pre>
-</div></div><br clear="all" />
-<br clear="all" />
-<br clear="all" />
-<br clear="all" />
-<br clear="all" /></p>
-<h3><a name="FinalBuilderTask-ConfigurationElements%3A"></a>Configuration Elements:</h3>
+</div></div>
+
+
+<h2><a name="FinalBuilderTask-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -70,213 +61,98 @@ Full example (all available options):<br/>
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> ProjectFile </td>
-<td class='confluenceTd'> The full path of the FinalBuilder project to run. This is the only required element. <br clear="all" /> </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true </td>
-<td class='confluenceTd'> n/a </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> FBVariables <br clear="all" /> </td>
-<td class='confluenceTd'> A parent element for one or more FBVariable elements. <br clear="all" /> </td>
-<td class='confluenceTd'> element <br clear="all" /> </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
-<td class='confluenceTd'>&nbsp;</td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> FBVariable </td>
-<td class='confluenceTd'> Specify a variable to set inside the FinalBuilder project at runtime ("name"), and a value to set ("value"). <br clear="all" />
-The variable should be defined in the project. </td>
-<td class='confluenceTd'> element <br clear="all" /> </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
-<td class='confluenceTd'>&nbsp;</td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> ShowBanner </td>
-<td class='confluenceTd'> Specify 'true' to enable the "banner" at the top of the FinalBuilder console output. <br clear="all" /> </td>
-<td class='confluenceTd'> boolean <br clear="all" /> </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> False. <br clear="all" /> </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> Timeout </td>
-<td class='confluenceTd'> The number of seconds to wait before assuming that the FinalBuilder project has hung and should be killed. </td>
-<td class='confluenceTd'> int </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> 0 (no timeout.) <br clear="all" /> </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> DontWriteToLog </td>
-<td class='confluenceTd'> Disable output to the FinalBuilder project log file. <br clear="all" /> </td>
-<td class='confluenceTd'> boolean </td>
+<td class='confluenceTd'> Disable output to the FinalBuilder project log file.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> false </td>
-<td class='confluenceTd'> False. </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> UseTemporaryLogFile </td>
-<td class='confluenceTd'> Log to a temporary log file which is deleted when the project closes. Overrides DontWriteToLog. <img class="emoticon" src="images/icons/emoticons/star_yellow.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> <br clear="all" /> </td>
-<td class='confluenceTd'> boolean </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> False. <br clear="all" /> </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> FBVersion <br clear="all" /> </td>
-<td class='confluenceTd'> Use this element to explicitly specify a version of FinalBuilder to run (for instance, you could force a FinalBuilder 4 project to run in FinalBuilder 5.) <br clear="all" /> </td>
-<td class='confluenceTd'> int </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> If this element is not specified, the FinalBuilder version is determined automatically from the project file name (recommended.) </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> description </td>
-<td class='confluenceTd'> If filled in, this will be shown in the buildstage as the process name<br clear="all" /> </td>
-<td class='confluenceTd'> string <br clear="all" /> </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
-<td class='confluenceTd'> n/a </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> 1.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> dynamicValues </td>
-<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
-<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> FBCMDPath </td>
+<td class='confluenceTd'> The absolute path to FBCMD.EXE.  <br clear="all" />If this value is not set, then the value will be generated using either FBVersion or the project file.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Generated </td>
+<td class='confluenceTd'> 1.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> FBVariables </td>
+<td class='confluenceTd'> One or more FBVariable elements to pass to FinalBuilder.   </td>
+<td class='confluenceTd'> <a href="FBVariable.html" title="FBVariable">FBVariable</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> FBVersion </td>
+<td class='confluenceTd'> Use this element to explicitly specify a version of FinalBuilder to run (for instance, you could force a FinalBuilder 4 project to run in FinalBuilder 5.)  <br clear="all" />If this element is not specified, the FinalBuilder version is determined automatically from the project file name (recommended.)   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Generated </td>
+<td class='confluenceTd'> 1.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> ProjectFile </td>
+<td class='confluenceTd'> The full path of the FinalBuilder project to run.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> ShowBanner </td>
+<td class='confluenceTd'> Specify 'true' to enable the "banner" at the top of the FinalBuilder console output.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> Timeout </td>
+<td class='confluenceTd'> The number of seconds to wait before assuming that the FinalBuilder project has hung and should be killed.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 0 </td>
+<td class='confluenceTd'> 1.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> UseTemporaryLogFile </td>
+<td class='confluenceTd'> Log to a temporary log file which is deleted when the project closes. Overrides DontWriteToLog.  <br clear="all" />Use this option instead of DontWriteToLog if you still want to be able to use the Export Log action, but don't want the log file to be updated.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.3 </td>
 </tr>
 </tbody></table>
 
-<p><img class="emoticon" src="images/icons/emoticons/star_yellow.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Use this option instead of DontWriteToLog if you still want to be able to use the Export Log action, but don't want the log file to be updated. This element is only available in CC.Net build 1.3.0.2800 and newer.</p>
+<h2><a name="FinalBuilderTask-Notes"></a>Notes</h2>
 
-<h3><a name="FinalBuilderTask-IntegrationProperties"></a>Integration Properties</h3>
+<h4><a name="FinalBuilderTask-FrequentlyAskedQuestions"></a>Frequently Asked Questions</h4>
+<p> <b>Can I format output to the CruiseControl.NET web dashboard?</b><br/>
+At the moment, output from the FinalBuilder Task is plain text. We are planning to change this so that the task outputs XML which can be easily used with the various CruiseControl.NET publishers. In the meantime, it is possible to use the FinalBuilder Export Log Action to export an XML file, which can then be incorporated via the File Merge Task.  <br/>
+ <b>Which FinalBuilder version do I need?</b><br/>
+The task will work with FinalBuilder versions 3, 4, and 5. However, because the task uses the FBCMD command line utility, users of FinalBuilder 3 and 4 will need the Professional Edition. FinalBuilder 5 users can use either the Standard or Professional editions. A free 30 day trial download is available.  </p>
 
-<p>The following integration properties are passed to FinalBuilder as <a href="http://www.finalbuilder.com/finalbuilder/Help/HTML/hs200.htm">environment variables</a>:
-<br clear="all" />
-<table class='confluenceTable'><tbody>
-<tr>
-<th class='confluenceTh'> Label </th>
-<th class='confluenceTh'> Description </th>
-<th class='confluenceTh'> Example </th>
-<th class='confluenceTh'> Version </th>
-</tr>
-<tr>
-<td class='confluenceTd'> CCNetBuildCondition </td>
-<td class='confluenceTd'> The condition used to trigger the build, indicating if the build was triggered by new modifications or if it was forced.  Legal values are: "IfModificationExists" or "ForceBuild" </td>
-<td class='confluenceTd'> ForceBuild </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> CCNetIntegrationStatus </td>
-<td class='confluenceTd'> The status of the current integration. Could be Success, Failure, Exception or Unknown </td>
-<td class='confluenceTd'> Success </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> CCNetLabel </td>
-<td class='confluenceTd'> The label used to identify the CCNet build.  This label is generated by the CCNet labeller. </td>
-<td class='confluenceTd'> 1.0.2.120 </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> CCNetLastIntegrationStatus </td>
-<td class='confluenceTd'> The status of the previous integration. Could be Success, Failure, Exception or Unknown </td>
-<td class='confluenceTd'> Success </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> CCNetProject </td>
-<td class='confluenceTd'> The name of the CCNet project that is being integrated. </td>
-<td class='confluenceTd'> MyProject </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> CCNetBuildDate </td>
-<td class='confluenceTd'> The date of the build (in yyyy-MM-dd format) </td>
-<td class='confluenceTd'> 2005-08-10 </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> CCNetBuildTime </td>
-<td class='confluenceTd'> The time of the start of the build (in HH:mm:ss format) </td>
-<td class='confluenceTd'> 08:45:12 </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> CCNetArtifactDirectory </td>
-<td class='confluenceTd'> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-artifactDirectory">project artifact directory</a> (as an absolute path) </td>
-<td class='confluenceTd'> <tt>c:\program files\CruiseControl.NET\Server\MyProject\Artifacts</tt> </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> CCNetWorkingDirectory </td>
-<td class='confluenceTd'> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">project working directory</a> (as an absolute path) </td>
-<td class='confluenceTd'> <tt>c:\program files\CruiseControl.NET\Server\MyProject\WorkingDirectory</tt> </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> CCNetRequestSource </td>
-<td class='confluenceTd'> The source of the integration request; this will generally be the name of the trigger that raised the request. </td>
-<td class='confluenceTd'> IntervalTrigger </td>
-<td class='confluenceTd'> 1.1.0 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> CCNetFailureUsers </td>
-<td class='confluenceTd'> The list of users who have contributed modifications to a sequence of builds that has failed. </td>
-<td class='confluenceTd'> John, Smith<br clear="all" /> </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> CCNetListenerFile </td>
-<td class='confluenceTd'> <a href="http://confluence.public.thoughtworks.org/display/CCNETCOMM/Viewing+build+progress+with+Nant+and+MSBuild">Viewing build progress with Nant and MSBuild</a> </td>
-<td class='confluenceTd'> c:\Project\Artifact\listener.xml </td>
-<td class='confluenceTd'> 1.4.0 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> CCNetProjectUrl </td>
-<td class='confluenceTd'> The URL where the project is located </td>
-<td class='confluenceTd'> <a href="http://myhost/ccnet/server/">http://myhost/ccnet/server/</a> </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> CCNetNumericLabel </td>
-<td class='confluenceTd'> Contains the label as an integer if conversion is possible, otherwise zero. </td>
-<td class='confluenceTd'> 1 </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> CCNetModifyingUsers <br clear="all" /> </td>
-<td class='confluenceTd'> The list of users who have contributed to the current build only <br clear="all" /> </td>
-<td class='confluenceTd'> Smith </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> CCNetUser </td>
-<td class='confluenceTd'> The user who forced the build. If security is off, or the build is not forced, then this will not be set. </td>
-<td class='confluenceTd'> John Doe </td>
-<td class='confluenceTd'> 1.5.0 </td>
-</tr>
-</tbody></table><br clear="all" />
-<br clear="all" />
-<br clear="all" />
-<br clear="all" />
-<br clear="all" /></p>
-<h3><a name="FinalBuilderTask-FrequentlyAskedQuestions"></a>Frequently Asked Questions</h3>
 
-<p><b>Can I format output to the CruiseControl.NET web dashboard?</b></p>
-
-<p>At the moment, output from the FinalBuilder Task is plain text. We are planning to change this so that the task outputs XML which can be easily used with the various CruiseControl.NET publishers.</p>
-
-<p>In the meantime, it is possible to use the <a href="http://www.finalbuilder.com/finalbuilder/Help/HTML/exportlogaction.htm">FinalBuilder Export Log Action</a> to export an XML file, which can then be incorporated via the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>.</p>
-
-<p><b>Which FinalBuilder version do I need?</b></p>
-
-<p>The task will work with FinalBuilder versions 3, 4, and 5. However, because the task uses the FBCMD command line utility, users of FinalBuilder 3 &amp; 4 will need the Professional Edition. FinalBuilder 5 users can use either the Standard or Professional editions. A free 30 day trial download is available.</p>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Sunday, 6 Dec 2009 at 7:04:00 PM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -287,7 +163,7 @@ The variable should be defined in the project. </td>
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

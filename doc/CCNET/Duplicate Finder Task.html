@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Duplicate Finder Task</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Duplicate Finder Task
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 06, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="DuplicateFinderTask-DuplicateFinderTask"></a>Duplicate Finder Task</h1>
+
+<p>Check for duplicates using dupfinder (<a href="http://duplicatefinder.codeplex.com/">http://duplicatefinder.codeplex.com/</a>).  </p>
+
+
+<h2><a name="DuplicateFinderTask-Version"></a>Version</h2>
+
+<p>Available from version 1.5</p>
+
+<h2><a name="DuplicateFinderTask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;dupfinder&gt;</span>
+  <span class="code-tag">&lt;fileMask&gt;</span>*.cs<span class="code-tag">&lt;/fileMask&gt;</span>
+  <span class="code-tag">&lt;inputDir&gt;</span>Code<span class="code-tag">&lt;/inputDir&gt;</span>
+<span class="code-tag">&lt;/dupfinder&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;dupfinder&gt;</span>
+  <span class="code-tag">&lt;dynamicValues /&gt;</span>
+  <span class="code-tag">&lt;fileMask&gt;</span>*.cs<span class="code-tag">&lt;/fileMask&gt;</span>
+  <span class="code-tag">&lt;includeCode&gt;</span>False<span class="code-tag">&lt;/includeCode&gt;</span>
+  <span class="code-tag">&lt;inputDir&gt;</span>Code<span class="code-tag">&lt;/inputDir&gt;</span>
+  <span class="code-tag">&lt;recurse&gt;</span>False<span class="code-tag">&lt;/recurse&gt;</span>
+  <span class="code-tag">&lt;shortenNames&gt;</span>False<span class="code-tag">&lt;/shortenNames&gt;</span>
+  <span class="code-tag">&lt;threshold&gt;</span>5<span class="code-tag">&lt;/threshold&gt;</span>
+  <span class="code-tag">&lt;timeout&gt;</span>600<span class="code-tag">&lt;/timeout&gt;</span>
+  <span class="code-tag">&lt;width&gt;</span>2<span class="code-tag">&lt;/width&gt;</span>
+<span class="code-tag">&lt;/dupfinder&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="DuplicateFinderTask-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The executable to use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> dupfinder </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> fileMask </td>
+<td class='confluenceTd'> The file mask to use.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> excludeFiles </td>
+<td class='confluenceTd'> The files to exclude.   </td>
+<td class='confluenceTd'> String array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> focus </td>
+<td class='confluenceTd'> The name of the file to focus on.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> includeCode </td>
+<td class='confluenceTd'> Whether to include the code that has been duplicated.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> inputDir </td>
+<td class='confluenceTd'> The input directory to scan. If relative, this will be relative to the project working directory.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> excludeLines </td>
+<td class='confluenceTd'> The lines to exclude.   </td>
+<td class='confluenceTd'> String array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> recurse </td>
+<td class='confluenceTd'> To find files that match the filemask in current directory and subdirectories.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> shortenNames </td>
+<td class='confluenceTd'> Whether to shorten filenames.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> threshold </td>
+<td class='confluenceTd'> The threshold is the number of consecutive lines that have to be the same before it is considered a duplicate.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 5 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> The time&#45;out period in seconds.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 600 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> width </td>
+<td class='confluenceTd'> The first line of a duplicate must contain at least this many non&#45;white&#45;space characters.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 2 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="DuplicateFinderTask-Notes"></a>Notes</h2>
+
+<h4><a name="DuplicateFinderTask-ExtendedFunctionality"></a>Extended Functionality</h4>
+<p>This task offers some extended functionality over what the base dupfinder executable offers. This extended functionality is primarily intended to add extra value to the web dashboard display. The extended options are:  <br/>
+ <b>&lt;shortenNames&gt;</b>: This will remove the &lt;inputDir&gt; value from the file names. This means the filenames only contain the relative path to the file, which makes it easier to see where the file is.  <br/>
+ <b>&lt;includeCode&gt;</b>: This will include the lines of code that were duplicated into the output. These can then be seen in the web dashboard. This meakes it easy to see the code that has been duplicated.  <br/>
+These features work by post&#45;processing the XML output from dupfinder. That is, once dupfinder has finished, the task loads the XML file, finds all the elements that need changing and changes them as required. For the code inclusion, it will also open the relevant code files and extract the lines of code as needed.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Sunday, 6 Dec 2009 at 7:19:02 PM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

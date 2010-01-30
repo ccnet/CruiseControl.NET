@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Synergy Project</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Synergy Project
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 15, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="SynergyProject-SynergyProject"></a>Synergy Project</h1>
+
+<p>A CM Synergy project (which is similar to a "view" in other SCM packages).  </p>
+
+<h2><a name="SynergyProject-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="SynergyProject-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;project&gt;</span>
+  <span class="code-tag">&lt;release&gt;</span>Product/1.0<span class="code-tag">&lt;/release&gt;</span>
+  <span class="code-tag">&lt;projectSpecification&gt;</span>Product-1<span class="code-tag">&lt;/projectSpecification&gt;</span>
+  <span class="code-tag">&lt;taskFolder&gt;</span>1234<span class="code-tag">&lt;/taskFolder&gt;</span>
+  <span class="code-tag">&lt;baseline&gt;</span>false<span class="code-tag">&lt;/baseline&gt;</span>
+  <span class="code-tag">&lt;purpose&gt;</span>Integration Testing<span class="code-tag">&lt;/purpose&gt;</span>
+  <span class="code-tag">&lt;template&gt;</span>true<span class="code-tag">&lt;/template&gt;</span>
+<span class="code-tag">&lt;/project&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="SynergyProject-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> baseline </td>
+<td class='confluenceTd'> If true, creates a new baseline for the project configuration after a successful integration.  <br clear="all" />Realistically, a successful continuous integration does not justify creation of a baseline.  Baselines should be used to create a snapshot of a configuration, so that anyone can  usually based on a project mileston   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 0 </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> projectSpecification </td>
+<td class='confluenceTd'> The configured Synergy project specification for all source control operations.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> purpose </td>
+<td class='confluenceTd'> Synergy purpose specification for the project and any created baselines.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Integration Testing </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> reconcile </td>
+<td class='confluenceTd'> If enabled, updates the work area from the database, discarding all uncontrolled files in the work area and changes to static objects.  <br clear="all" />Useful if your build process adds or modifies files in the source tree.   </td>
+<td class='confluenceTd'> String array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> release </td>
+<td class='confluenceTd'> The configured Synergy release value for the given project.  <br clear="all" />The component &#43; version specification.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> taskFolder </td>
+<td class='confluenceTd'> The folder specification for the shared folder which will be used to "manually" add successfully integrated tasks added to.  <br clear="all" />This should be a shared folder added to the reconfigure template/properties for all developer's projects (i.e., projects for purpose "Insulated Development" or "Colloborative Development").  The easiset way to do this is by creating a "folder template", which is then added to the "Default Release" reconfigure templates "Default Release:Insulated Development" or "Default Release:Colloborative Development". Adding integrated tasks to a shared task folder is an alternative to creating a new baseline for every successful integration build.  Most source control providers implemented by CruiseControl.NET use labels for grouping change sets.  However, Synergy is an activity based SCM tool that groups changes by ...   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 0 </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> template </td>
+<td class='confluenceTd'> If true, resets the reconfigure properties for this project and all subprojects to use the reconfigure template.  <br clear="all" />Do not set to true if you have manually set the template to reconfigure with specific settings (e.g., reconfigure by object status, with a manually added set of tasks, etc).   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+</tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 15 Dec 2009 at 8:12:07 PM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

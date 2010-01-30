@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jul 25, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Jan 27, 2010 by <font color="#0050B2">csut017</font>.
 				    </div>
 
 				    <h3><a name="DynamicParameters-DynamicParameters"></a>Dynamic Parameters</h3>
@@ -141,11 +141,15 @@
 
 <h3><a name="DynamicParameters-UsingParameters"></a>Using Parameters</h3>
 
-<p>Parameters are used at the task/publisher level. They cannot be used in any other project elements.</p>
+<p>Parameters can be used for tasks/publishers, source control blocks and labellers.</p>
 
 <p>Using parameters can be done in one of two ways: configuration definition or implied replacement.</p>
 
-<p><b>Note:</b> Not all tasks/publishers allow the use of dynamic parameters. To be able to use the parameters a task must expose a dynamicValues element.</p>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Not all items allow the use of dynamic parameters. To be able to use the parameters a task must expose a dynamicValues element.</p></td></tr></table></div>
+
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>With CruiseControl.NET 1.5 dynamic values are constants. These are initialised at the start of a build and cannot be changed for that build. They provide a mechanism for getting values from an external source, not a mechanism for storing values internally.</p></td></tr></table></div>
 
 <h4><a name="DynamicParameters-ConfigurationDefinition"></a>Configuration Definition</h4>
 
@@ -169,6 +173,8 @@
 <p>In this approach the parameters are defined inline in the properties. When the configuration is loaded, CruiseControl.NET reads these parameters and converts them into dynamicValues (as above).</p>
 
 <p>An inline definition is contained with a $[...] block and can consist of one or more parts seperated by pipe characters. The first part is the parameter name, the second part is the default value and the third part is the format (only used when a replacementValue is generated).</p>
+
+<p>If an integration property is being used, this will need to have both the $ sign for the implied replacement, plus for the integration property, e.g. $[$CCNetUser].</p>
 
 <p>Some examples are:</p>
 <ul>
@@ -465,6 +471,44 @@
 <span class="code-tag">&lt;/project&gt;</span></pre>
 </div></div>
 
+<h4><a name="DynamicParameters-InaSourceControlBlock"></a>In a Source Control Block</h4>
+
+<p>Parameters can be used within a source control block in the same way as in a task. Just remember, parameters are static within a build, they do not change after the build has been started.</p>
+
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Test Project"</span>&gt;</span>
+  <span class="code-tag">&lt;description&gt;</span>A demonstration project to show the features of the dynamic build parameters.<span class="code-tag">&lt;/description&gt;</span>
+  <span class="code-tag">&lt;sourcecontrol xsi:type=<span class="code-quote">"svn"</span>&gt;</span>
+    <span class="code-tag">&lt;trunkUrl&gt;</span>svn://svn.mycompany.com/firstproject/$[branch|trunk]<span class="code-tag">&lt;/trunkUrl&gt;</span>
+    <span class="code-tag">&lt;workingDirectory&gt;</span>C:\SourceControl\FirstProject\<span class="code-tag">&lt;/workingDirectory&gt;</span>
+    <span class="code-tag">&lt;username&gt;</span>$[$CCNetUser|system]<span class="code-tag">&lt;/username&gt;</span>
+  <span class="code-tag">&lt;/sourcecontrol&gt;</span>
+  <span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag">&lt;nant&gt;</span>
+      <span class="code-tag">&lt;buildFile&gt;</span>App.build<span class="code-tag">&lt;/buildFile&gt;</span>
+      <span class="code-tag">&lt;targetList&gt;</span>
+        <span class="code-tag">&lt;target&gt;</span>Dev<span class="code-tag">&lt;/target&gt;</span>
+      <span class="code-tag">&lt;/targetList&gt;</span>
+      <span class="code-tag">&lt;buildArgs&gt;</span>-D:reason=testing<span class="code-tag">&lt;/buildArgs&gt;</span>
+    <span class="code-tag">&lt;/nant&gt;</span>
+  <span class="code-tag">&lt;/tasks&gt;</span>
+  <span class="code-tag">&lt;publishers&gt;</span>
+    <span class="code-tag">&lt;rss /&gt;</span>
+    <span class="code-tag">&lt;xmllogger /&gt;</span>
+  <span class="code-tag">&lt;/publishers&gt;</span>
+  <span class="code-tag">&lt;parameters&gt;</span>
+    <span class="code-tag">&lt;selectParameter name=<span class="code-quote">"branch"</span>&gt;</span>
+      <span class="code-tag">&lt;allowedValues&gt;</span>
+        <span class="code-tag">&lt;value name=<span class="code-quote">"trunk"</span>&gt;</span>trunk<span class="code-tag">&lt;/value&gt;</span>
+        <span class="code-tag">&lt;value name=<span class="code-quote">"prototype"</span>&gt;</span>branches/prototype<span class="code-tag">&lt;/value&gt;</span>
+        <span class="code-tag">&lt;value name=<span class="code-quote">"previous"</span>&gt;</span>branches/previous<span class="code-tag">&lt;/value&gt;</span>
+      <span class="code-tag">&lt;/allowedValues&gt;</span>
+      <span class="code-tag">&lt;default&gt;</span>trunk<span class="code-tag">&lt;/default&gt;</span>
+    <span class="code-tag">&lt;/selectParameter&gt;</span>
+  <span class="code-tag">&lt;/parameters&gt;</span>
+<span class="code-tag">&lt;/project&gt;</span></pre>
+</div></div>
+
 				    
                     			    </td>
 		    </tr>
@@ -474,7 +518,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

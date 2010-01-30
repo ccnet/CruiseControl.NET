@@ -16,89 +16,124 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Mar 13, 2008 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on Dec 02, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <p>The <a href="" title="Filter Trigger">Filter Trigger</a> allows you to prevent builds from occurring at certain times or on certain days (such as when your source control repository is undergoing backup).  It is used to decorate an existing trigger.  For example, if you have set up a <a href="Interval Trigger.html" title="Interval Trigger">Interval Trigger</a> to cause a new build every 5 minutes, you can use the Filter Trigger to create a window during which the build will not run.  </p>
+				    <h1><a name="FilterTrigger-FilterTrigger"></a>Filter Trigger</h1>
 
-<p>The filter will exclude modifications that occur between the start time and the end time on the days specified. If the start time is greater than the end time then the filtered time will span across midnight.  For example, if the start time is 23:00 and the end time is 3:00 then builds will be suppressed from 23:00-23:59 and 0:00-3:00 on the days specified.</p>
-
+<p>The Filter Trigger allows you to prevent builds from occurring at certain times or on certain days (such as when your source control repository is undergoing backup). It is used to decorate an existing trigger. For example, if you have set up a <a href="Interval Trigger.html" title="Interval Trigger">Interval Trigger</a> to cause a new build every 5 minutes, you can use the Filter Trigger to create a window during which the build will not run. The filter will exclude modifications that occur between the start time and the end time on the days specified. If the start time is greater than the end time then the filtered time will span across midnight. For example, if the start time is 23:00 and the end time is 3:00 then builds will be suppressed from 23:00-23:59 and 0:00-3:00 on the days specified.  </p>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Like all triggers, the scheduleTrigger must be enclosed within a triggers element in the appropriate <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a>.  </p></td></tr></table></div>
 <div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Nested trigger syntax is different</b><br />
-<p>As shown below, the configuration of the nested trigger is not the same as when using that trigger outside a filter trigger.  When using the <tt>&lt;filterTrigger&gt;</tt> element, the inner trigger <em>must</em> be specified with the <tt>&lt;trigger&gt;</tt> element.  You could <em>not</em> use the <tt>&lt;intervalTrigger&gt;</tt> trigger element in this example.</p></td></tr></table></div>
+<p>As shown below, the configuration of the nested trigger is not the same as when using that trigger outside a filter trigger. When using the &lt;filterTrigger&gt; element, the inner trigger must be specified with the &lt;trigger&gt; element. You could not use the &lt;intervalTrigger&gt; trigger element in this example.  </p></td></tr></table></div>
 
-<h4><a name="FilterTrigger-Example"></a>Example</h4>
-<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>NOTE: Like all triggers, the filterTrigger must be enclosed within a triggers element in the appropriate <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a></td></tr></table></div>
 
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<h2><a name="FilterTrigger-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="FilterTrigger-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;filterTrigger startTime=<span class="code-quote">"23:30"</span> endTime=<span class="code-quote">"23:45"</span>&gt;</span>
-    <span class="code-tag">&lt;trigger type=<span class="code-quote">"intervalTrigger"</span> seconds=<span class="code-quote">"60"</span> /&gt;</span>
-    <span class="code-tag">&lt;weekDays&gt;</span>
-        <span class="code-tag">&lt;weekDay&gt;</span>Sunday<span class="code-tag">&lt;/weekDay&gt;</span>
-    <span class="code-tag">&lt;/weekDays&gt;</span>
+  <span class="code-tag">&lt;trigger type=<span class="code-quote">"intervalTrigger"</span> seconds=<span class="code-quote">"60"</span> /&gt;</span>
+  <span class="code-tag">&lt;weekDays&gt;</span>
+    <span class="code-tag">&lt;weekDay&gt;</span>Sunday<span class="code-tag">&lt;/weekDay&gt;</span>
+  <span class="code-tag">&lt;/weekDays&gt;</span>
 <span class="code-tag">&lt;/filterTrigger&gt;</span></pre>
 </div></div>
 
-<p>This trigger suppresses builds if any modifications are made between 23:30 and 23:45 on Sunday nights.</p>
 
-<h4><a name="FilterTrigger-ConfigurationElements%3A"></a>Configuration Elements:</h4>
+<h2><a name="FilterTrigger-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Required </th>
 <th class='confluenceTh'> Default </th>
-</tr>
-<tr>
-<td class='confluenceTd'> startTime </td>
-<td class='confluenceTd'> The start of the filter window.  Builds will not occur after this time and before the end time. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> 00:00:00 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> endTime </td>
-<td class='confluenceTd'> The end of the filter window.  Builds will not occur before this time and after the start time. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> 23:59:59 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> weekDays </td>
-<td class='confluenceTd'> The week days on which the filter should be applied (eg. Monday, Tuesday).  By default, all days of the week are set. The filter will have no effect on other days</td>
-<td class='confluenceTd'> elements </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> Monday-Sunday </td>
+<th class='confluenceTh'> Version </th>
 </tr>
 <tr>
 <td class='confluenceTd'> buildCondition </td>
-<td class='confluenceTd'> The condition that will be returned if a build is requested during the filter window. The default value is <b>NoBuild</b> indicating that no build will be performed. Legal values are <b>IfModificationExists</b>, <b>ForceBuild</b>, <b>NoBuild</b>. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> The condition that will be returned if a build is requested during the filter window. The default value is *NoBuild*indicating that no build will be performed   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>NoBuild</li>
+	<li>IfModificationExists</li>
+	<li>ForceBuild</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> NoBuild </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> endTime </td>
+<td class='confluenceTd'> The end of the filter window. Builds will not occur before this time and after the start time.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 23:59:59 </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> trigger </td>
+<td class='confluenceTd'> The inner trigger to filter.   </td>
+<td class='confluenceTd'> <a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a> </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> startTime </td>
+<td class='confluenceTd'> The start of the filter window. Builds will not occur after this time and before the end time.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 00:00:00 </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> weekDays </td>
+<td class='confluenceTd'> The week days on which the filter should be applied (eg. Monday, Tuesday). By default, all days of the week are set. The filter will have no effect on other days.   </td>
+<td class='confluenceTd'> String array<br clear="all" />The following values are valid:
+<ul>
+	<li>Sunday</li>
+	<li>Monday</li>
+	<li>Tuesday</li>
+	<li>Wednesday</li>
+	<li>Thursday</li>
+	<li>Friday</li>
+	<li>Saturday</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Monday-Sunday </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 </tbody></table>
 
-<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>NOTE: Times should be specified in hh:mm or hh:mm:ss 24 hour format (i.e., ranging from 00:00:00 to 23:59:59).</td></tr></table></div>
+<h2><a name="FilterTrigger-Notes"></a>Notes</h2>
 
-<h4><a name="FilterTrigger-NestedFilterTriggers%3A"></a>Nested Filter Triggers:</h4>
-
-<p>Sometimes you would like to suppress builds that occur either between certain times or on certain days or in multiple combinations of dates and times.  To acheive this, you can nest multiple filter triggers.  For example, the following xml configures a trigger to filter builds between 7pm and 7am on weekdays and at any time on Saturdays and Sundays.</p>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Times should be specified in hh:mm or hh:mm:ss 24 hour format (i.e., ranging from 00:00:00 to 23:59:59).  </p></td></tr></table></div>
+<h4><a name="FilterTrigger-NestedFilterTriggers"></a>Nested Filter Triggers</h4>
+<p>Sometimes you would like to suppress builds that occur either between certain times or on certain days or in multiple combinations of dates and times. To acheive this, you can nest multiple filter triggers. For example, the following xml configures a trigger to filter builds between 7pm and 7am on weekdays and at any time on Saturdays and Sundays.  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;filterTrigger startTime=<span class="code-quote">"19:00"</span> endTime=<span class="code-quote">"07:00"</span>&gt;</span>
-    <span class="code-tag">&lt;trigger type=<span class="code-quote">"filterTrigger"</span> startTime=<span class="code-quote">"0:00"</span> endTime=<span class="code-quote">"23:59:59"</span>&gt;</span>
-        <span class="code-tag">&lt;trigger type=<span class="code-quote">"intervalTrigger"</span> name=<span class="code-quote">"continuous"</span> seconds=<span class="code-quote">"900"</span> buildCondition=<span class="code-quote">"ForceBuild"</span>/&gt;</span>
-        <span class="code-tag">&lt;weekDays&gt;</span>
-            <span class="code-tag">&lt;weekDay&gt;</span>Saturday<span class="code-tag">&lt;/weekDay&gt;</span>
-            <span class="code-tag">&lt;weekDay&gt;</span>Sunday<span class="code-tag">&lt;/weekDay&gt;</span>
-        <span class="code-tag">&lt;/weekDays&gt;</span>
-    <span class="code-tag">&lt;/trigger&gt;</span>
+  <span class="code-tag">&lt;trigger type=<span class="code-quote">"filterTrigger"</span> startTime=<span class="code-quote">"0:00"</span> endTime=<span class="code-quote">"23:59:59"</span>&gt;</span>
+    <span class="code-tag">&lt;trigger type=<span class="code-quote">"intervalTrigger"</span> name=<span class="code-quote">"continuous"</span> seconds=<span class="code-quote">"900"</span> buildCondition=<span class="code-quote">"ForceBuild"</span> /&gt;</span>
+    <span class="code-tag">&lt;weekDays&gt;</span>
+      <span class="code-tag">&lt;weekDay&gt;</span>Saturday<span class="code-tag">&lt;/weekDay&gt;</span>
+      <span class="code-tag">&lt;weekDay&gt;</span>Sunday<span class="code-tag">&lt;/weekDay&gt;</span>
+    <span class="code-tag">&lt;/weekDays&gt;</span>
+  <span class="code-tag">&lt;/trigger&gt;</span>
 <span class="code-tag">&lt;/filterTrigger&gt;</span></pre>
 </div></div>
 
-<p><b>With contributions from</b>: Oane Stienstra</p>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Wednesday, 2 Dec 2009 at 3:05:47 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -109,7 +144,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

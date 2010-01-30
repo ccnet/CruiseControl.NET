@@ -16,33 +16,36 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jul 01, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Dec 12, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <h3><a name="DefaultLabeller-DefaultLabeller"></a>Default Labeller</h3>
+				    <h1><a name="DefaultLabeller-DefaultLabeller"></a>Default Labeller</h1>
 
-<p>By default, CCNet uses a plain incrementing build number as a build label. Some source controls (e.g. <a href="Perforce Source Control Block.html" title="Perforce Source Control Block">Perforce Source Control Block</a>) require you to use a different naming scheme if you want CCNet to apply labels to source control on successful builds.<br/>
-You can do this by specifying your own configuration of the default labeller in your project.<br/>
-The following configuration would prefix all labels with the string 'Foo-1-', so the 213th build would be labelled 'Foo-1-00213'.<br/>
-The 2 leading zeros come from the labelFormat, this is set to a length of 5.
-<br clear="all" />
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;project&gt;</span>
-   <span class="code-tag">&lt;labeller type=<span class="code-quote">"defaultlabeller"</span>&gt;</span>
-     <span class="code-tag">&lt;initialBuildLabel&gt;</span>1<span class="code-tag">&lt;/initialBuildLabel&gt;</span>
-     <span class="code-tag">&lt;prefix&gt;</span>Foo-1-<span class="code-tag">&lt;/prefix&gt;</span>
-     <span class="code-tag">&lt;incrementOnFailure&gt;</span>true<span class="code-tag">&lt;/incrementOnFailure&gt;</span>
-     <span class="code-tag">&lt;labelFormat&gt;</span>00000<span class="code-tag">&lt;/labelFormat&gt;</span>
-   <span class="code-tag">&lt;/labeller&gt;</span>
-   <span class="code-tag"><span class="code-comment">&lt;!-- Other project configuration to go here --&gt;</span></span>
-<span class="code-tag">&lt;/project&gt;</span></pre>
-</div></div><br clear="all" />
-<br clear="all" /></p>
-<h3><a name="DefaultLabeller-ConfigurationElements%3A"></a>Configuration Elements:</h3>
+<p>By default, CCNet uses a plain incrementing build number as a build label. Some source controls (e.g. <a href="Perforce Source Control Block.html" title="Perforce Source Control Block">Perforce Source Control Block</a>) require you to use a different naming scheme if you want CCNet to apply labels to source control on successful builds.  <br/>
+You can do this by specifying your own configuration of the default labeller in your project.  </p>
+
+
+<h2><a name="DefaultLabeller-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="DefaultLabeller-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;labeller type=<span class="code-quote">"defaultlabeller"</span>&gt;</span>
+  <span class="code-tag">&lt;initialBuildLabel&gt;</span>1<span class="code-tag">&lt;/initialBuildLabel&gt;</span>
+  <span class="code-tag">&lt;prefix&gt;</span>Foo-1-<span class="code-tag">&lt;/prefix&gt;</span>
+  <span class="code-tag">&lt;incrementOnFailure&gt;</span>true<span class="code-tag">&lt;/incrementOnFailure&gt;</span>
+  <span class="code-tag">&lt;labelFormat&gt;</span>00000<span class="code-tag">&lt;/labelFormat&gt;</span>
+<span class="code-tag">&lt;/labeller&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="DefaultLabeller-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -50,54 +53,57 @@ The 2 leading zeros come from the labelFormat, this is set to a length of 5.
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> initialBuildLabel </td>
-<td class='confluenceTd'> Allows you to set the initial build number. (Added in CCNet 1.5) </td>
-<td class='confluenceTd'> integer </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> 1 </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> prefix </td>
-<td class='confluenceTd'> Any string to be put in front of all labels </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> "" </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> postfix <br clear="all" /> </td>
-<td class='confluenceTd'> Any string to be put at the end of all labels </td>
-<td class='confluenceTd'> string <br clear="all" /> </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
-<td class='confluenceTd'> "" <br clear="all" /> </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the labeller.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> incrementOnFailure </td>
-<td class='confluenceTd'> If true, the label will be incremented even if the build fails.  Otherwise it will only be incremented if the build succeeds. </td>
-<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> If true, the label will be incremented even if the build fails. Otherwise it will only be incremented if the build succeeds.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> false </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> initialBuildLabel </td>
+<td class='confluenceTd'> Allows you to set the initial build number.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 1 </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> labelFormat </td>
-<td class='confluenceTd'> A format applied to the buildnumber. </td>
-<td class='confluenceTd'> string <br clear="all" /> </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> 0 <br clear="all" /> </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> A format applied to the buildnumber.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 0 </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> dynamicValues </td>
-<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
-<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> postfix </td>
+<td class='confluenceTd'> Any string to be put at the end of all labels.   </td>
+<td class='confluenceTd'> String </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> prefix </td>
+<td class='confluenceTd'> Any string to be put in front of all labels.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 </tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Saturday, 12 Dec 2009 at 7:41:43 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -108,7 +114,7 @@ The 2 leading zeros come from the labelFormat, this is set to a length of 5.
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

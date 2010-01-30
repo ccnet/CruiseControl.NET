@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Task And Publisher Blocks</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Task And Publisher Blocks
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jan 30, 2010 by <font color="#0050B2">williams</font>.
+				    </div>
+
+				    <p><em>Task Blocks</em> are the action elements of CruiseControl.Net.  They're the elements that do things, like executing a program, running tests, or send email results.</p>
+
+<p>Task blocks must appear in the <tt>&lt;prebuild&gt;</tt> section, the <tt>&lt;tasks&gt;</tt> section or the <tt>&lt;publishers&gt;</tt> section.  The <tt>&lt;tasks&gt;</tt> section is always run before the <tt>&lt;publishers&gt;</tt> section, regardless of the order in which they appear.  However, within each of these sections, the tasks are run in the order they appear.</p>
+
+<p>The types of Task Block are:</p>
+<ul><li><a href="Artifact Cleanup Publisher.html" title="Artifact Cleanup Publisher">Artifact Cleanup Publisher</a></li><li><a href="Build Publisher.html" title="Build Publisher">Build Publisher</a></li><li><a href="Conditional Publisher.html" title="Conditional Publisher">Conditional Publisher</a></li><li><a href="CruiseServer Control Task.html" title="CruiseServer Control Task">CruiseServer Control Task</a></li><li><a href="Duplicate Finder Task.html" title="Duplicate Finder Task">Duplicate Finder Task</a></li><li><a href="Email Publisher.html" title="Email Publisher">Email Publisher</a></li><li><a href="Executable Task.html" title="Executable Task">Executable Task</a></li><li><a href="File Merge Task.html" title="File Merge Task">File Merge Task</a></li><li><a href="FinalBuilder Task.html" title="FinalBuilder Task">FinalBuilder Task</a></li><li><a href="ForceBuildPublisher.html" title="ForceBuildPublisher">ForceBuildPublisher</a></li><li><a href="Ftp task - Publisher.html" title="Ftp task - Publisher">Ftp task - Publisher</a></li><li><a href="Gendarme Task.html" title="Gendarme Task">Gendarme Task</a></li><li><a href="HTTP Status Task.html" title="HTTP Status Task">HTTP Status Task</a></li><li><a href="Modification Reader Task.html" title="Modification Reader Task">Modification Reader Task</a></li><li><a href="Modification Writer Task.html" title="Modification Writer Task">Modification Writer Task</a></li><li><a href="ModificationHistory Publisher.html" title="ModificationHistory Publisher">ModificationHistory Publisher</a></li><li><a href="MsBuild Task.html" title="MsBuild Task">MsBuild Task</a></li><li><a href="NAnt Task.html" title="NAnt Task">NAnt Task</a></li><li><a href="NCover Profiler Task.html" title="NCover Profiler Task">NCover Profiler Task</a></li><li><a href="NCover Reporting Task.html" title="NCover Reporting Task">NCover Reporting Task</a></li><li><a href="NDepend Task.html" title="NDepend Task">NDepend Task</a></li><li><a href="Null Task.html" title="Null Task">Null Task</a></li><li><a href="NUnit Task.html" title="NUnit Task">NUnit Task</a></li><li><a href="Package Publisher.html" title="Package Publisher">Package Publisher</a></li><li><a href="Parallel Task.html" title="Parallel Task">Parallel Task</a></li><li><a href="PowerShell Task.html" title="PowerShell Task">PowerShell Task</a></li><li><a href="Rake Task.html" title="Rake Task">Rake Task</a></li><li><a href="RSS Publisher.html" title="RSS Publisher">RSS Publisher</a></li><li><a href="Sequential Task.html" title="Sequential Task">Sequential Task</a></li><li><a href="Statistics Publisher.html" title="Statistics Publisher">Statistics Publisher</a></li><li><a href="Synchronisation Context Task.html" title="Synchronisation Context Task">Synchronisation Context Task</a></li><li><a href="Visual Studio Task.html" title="Visual Studio Task">Visual Studio Task</a></li><li><a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publisher</a></li></ul>
+<p>The <tt>&lt;prebuild&gt;</tt> section is intended for tasks which need to be run before the build starts, including the sourcecontrol operation.</p>
+
+<p>The <tt>&lt;tasks&gt;</tt> section is intended for build tasks, such as a <a href="NAnt Task.html" title="NAnt Task">NAnt Task</a> or <a href="MsBuild Task.html" title="MsBuild Task">MsBuild Task</a>. If any of these build tasks fail, no further tasks in this section will be executed.  Instead, CruiseControl.Net will skip to the <tt>&lt;publishers&gt;</tt> section.  Thus the task that publish the results of the build should usually be placed in the <tt>&lt;publishers&gt;</tt> section.</p>
+
+<p>The <tt>&lt;publishers&gt;</tt> section is run after the build completes (whether it passes or fails). This is where you aggregate and publish the build results.  The <tt>&lt;publishers&gt;</tt> section typically starts with a <tt>&lt;merge&gt;</tt> task to collect any output from other tools, so that the results can be shown on the dashboard.  Next, the <a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publisher</a> task is required to include the CruiseControl.Net XML output.  Finally you might have one or more <a href="Email Publisher.html" title="Email Publisher">Email Publisher</a> tasks.  Note that you can still use any of the other tasks here.  For example, you might run a <a href="NAnt Task.html" title="NAnt Task">NAnt Task</a> that preprocesses the output files before merging them into CruiseControl's output stream.</p>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Historical Note</b><br /> Publishers and Tasks were different objects in earlier version of ccnet. Now they are interchangeable, and can appear either in the <tt>&lt;prebuild&gt;</tt> section, the <tt>&lt;tasks&gt;</tt> section, or the <tt>&lt;publishers&gt;</tt> section of the <b>ccnet.config</b> file depending on whether they should be run before, during or after the build.</td></tr></table></div>
+<p>Starting with CruiseControl.NET 1.5.0, it is possible to define dynamic parameters for most tasks. The full details on how to do this is available in <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a>. <b>Note:</b> Not all tasks allow dynamic parameters. A task that can use dynamic parameters will have a dynamicValues element in the task.</p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

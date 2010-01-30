@@ -16,32 +16,37 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 26, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Dec 05, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <p>This task writes the detected modifications for the current integration to a file as XML.  This enables the modifications to be used by external programs, such as within a NAnt build script.</p>
+				    <h1><a name="ModificationWriterTask-ModificationWriterTask"></a>Modification Writer Task</h1>
 
-<h4><a name="ModificationWriterTask-Minimalconfigurationexample%3A"></a>Minimal configuration example:</h4>
+<p>This task writes the detected modifications for the current integration to a file as XML. This enables the modifications to be used by external programs, such as within a NAnt build script.  </p>
 
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+
+<h2><a name="ModificationWriterTask-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="ModificationWriterTask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;modificationWriter /&gt;</span></pre>
 </div></div>
-
-<h4><a name="ModificationWriterTask-Fullconfigurationexample%3A"></a>Full configuration example:</h4>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;modificationWriter&gt;</span>
-     <span class="code-tag">&lt;filename&gt;</span>mods.xml<span class="code-tag">&lt;/filename&gt;</span>
-     <span class="code-tag">&lt;path&gt;</span><span class="code-tag">&lt;/path&gt;</span>
-     <span class="code-tag">&lt;appendTimeStamp&gt;</span>False<span class="code-tag">&lt;/appendTimeStamp&gt;</span>
+  <span class="code-tag">&lt;filename&gt;</span>mods.xml<span class="code-tag">&lt;/filename&gt;</span>
+  <span class="code-tag">&lt;path&gt;</span><span class="code-tag">&lt;/path&gt;</span>
+  <span class="code-tag">&lt;appendTimeStamp&gt;</span>False<span class="code-tag">&lt;/appendTimeStamp&gt;</span>
 <span class="code-tag">&lt;/modificationWriter&gt;</span></pre>
 </div></div>
 
-<h4><a name="ModificationWriterTask-ConfigurationElements%3A"></a>Configuration Elements:</h4>
+
+<h2><a name="ModificationWriterTask-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -49,174 +54,114 @@
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> filename </td>
-<td class='confluenceTd'> The filename for the file containing the modifications. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> modifications.xml </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
-<td class='confluenceTd'> path </td>
-<td class='confluenceTd'> The directory to write the xml file to. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> the artifact directory </td>
-<td class='confluenceTd'>&nbsp;</td>
-</tr>
-<tr>
 <td class='confluenceTd'> appendTimeStamp </td>
-<td class='confluenceTd'> Appends the integration start time to the filename, just before the extention. <br clear="all" />
-Making it possible to create a modification file per integration, without overwriting existing ones. <br clear="all" />
-Intended to be used with the <a href="Modification Reader Task.html" title="Modification Reader Task">ModificationReaderTask</a><br clear="all" /> </td>
-<td class='confluenceTd'> bool <br clear="all" /> </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> Appends the integration start time to the filename, just before the extention. Making it possible to create a modification file per integration, without overwriting existing ones. Intended to be used with the <a href="Modification Reader Task.html" title="Modification Reader Task">Modification Reader Task</a>.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> description </td>
-<td class='confluenceTd'> If filled in, this will be shown in the buildstage as the process name <br clear="all" /> </td>
-<td class='confluenceTd'> string <br clear="all" /> </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
-<td class='confluenceTd'> n/a </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> dynamicValues </td>
-<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
-<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> filename </td>
+<td class='confluenceTd'> The filename for the file containing the modifications.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> modifications.xml </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> path </td>
+<td class='confluenceTd'> The directory to write the xml file to.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project Artefact Directory </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 </tbody></table>
 
+<h2><a name="ModificationWriterTask-Notes"></a>Notes</h2>
+
 <h4><a name="ModificationWriterTask-Outputformat"></a>Output format</h4>
-
-<p>The modifications are written as follows:</p>
-
-<h5><a name="ModificationWriterTask-XMLheader."></a>XML header.</h5>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;?xml version=<span class="code-quote">"1.0"</span> encoding=<span class="code-quote">"utf-8"</span>?&gt;</span></pre>
-</div></div>
-
-<h5><a name="ModificationWriterTask-Startofthegroupofmodifications%28evenifjustone%29."></a>Start of the group of modifications (even if just one).</h5>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;ArrayOfModification <span class="code-keyword">xmlns:xsi</span>=<span class="code-quote">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="code-keyword">xmlns:xsd</span>=<span class="code-quote">"http://www.w3.org/2001/XMLSchema"</span>&gt;</span></pre>
-</div></div>
-
-<h5><a name="ModificationWriterTask-Startofonemodification."></a>Start of one modification.</h5>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;Modification&gt;</span></pre>
-</div></div>
-
-<h5><a name="ModificationWriterTask-Thechangenumber."></a>The change number.</h5>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;ChangeNumber&gt;</span>... value .../ChangeNumber&gt;</pre>
-</div></div>
-
-<h5><a name="ModificationWriterTask-Thecomment."></a>The comment.</h5>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;Comment&gt;</span>... value ...<span class="code-tag">&lt;/Comment&gt;</span></pre>
-</div></div>
-
-<h5><a name="ModificationWriterTask-Theuser%27semailaddress."></a>The user's email address.</h5>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;EmailAddress&gt;</span>... value ...<span class="code-tag">&lt;/EmailAddress&gt;</span></pre>
-</div></div>
-
-<h5><a name="ModificationWriterTask-Theaffectedfilename."></a>The affected file name.</h5>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;FileName&gt;</span>... value ...<span class="code-tag">&lt;/FileName&gt;</span></pre>
-</div></div>
-
-<h5><a name="ModificationWriterTask-Theaffectfile%27sfoldername."></a>The affect file's folder name.</h5>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;FolderName&gt;</span>... value ...<span class="code-tag">&lt;/FolderName&gt;</span></pre>
-</div></div>
-
-<h5><a name="ModificationWriterTask-Thechangetimestamp%2CinyyyymmddThh%3Amm%3Ass.nnnnhhmmformat"></a>The change timestamp, in yyyy-mm-ddThh:mm:ss.nnnn-hhmm format</h5>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;ModifiedTime&gt;</span>... value ...<span class="code-tag">&lt;/ModifiedTime&gt;</span></pre>
-</div></div>
-
-<h5><a name="ModificationWriterTask-Theoperationtype."></a>The operation type.</h5>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;Type&gt;</span>... value ...<span class="code-tag">&lt;/Type&gt;</span></pre>
-</div></div>
-
-<h5><a name="ModificationWriterTask-Theusername."></a>The user name.</h5>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;UserName&gt;</span>... value ...<span class="code-tag">&lt;/UserName&gt;</span></pre>
-</div></div>
-
-<h5><a name="ModificationWriterTask-TherelatedURL."></a>The related URL.</h5>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;Url&gt;</span>... value ...<span class="code-tag">&lt;/Url&gt;</span></pre>
-</div></div>
-
-<h5><a name="ModificationWriterTask-Thefileversion."></a>The file version.</h5>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;Version&gt;</span>... value ...<span class="code-tag">&lt;/Version&gt;</span></pre>
-</div></div>
-
-<h5><a name="ModificationWriterTask-Endofmodification."></a>End of modification.</h5>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;/Modification&gt;</span></pre>
-</div></div>
-
-<h5><a name="ModificationWriterTask-Endofthegroupofmodifications."></a>End of the group of modifications.</h5>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;/ArrayOfModification&gt;</span></pre>
-</div></div>
-
-<h4><a name="ModificationWriterTask-Sampleoutput"></a>Sample output</h4>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;?xml version=<span class="code-quote">"1.0"</span> encoding=<span class="code-quote">"utf-8"</span>?&gt;</span>
+<p>The modifications are written as follows:  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag"><span class="code-comment">&lt;!-- Start of the group of modifications (even if just one). --&gt;</span></span>
 <span class="code-tag">&lt;ArrayOfModification <span class="code-keyword">xmlns:xsi</span>=<span class="code-quote">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="code-keyword">xmlns:xsd</span>=<span class="code-quote">"http://www.w3.org/2001/XMLSchema"</span>&gt;</span>
-    <span class="code-tag">&lt;Modification&gt;</span>
-        <span class="code-tag">&lt;ChangeNumber&gt;</span>12245<span class="code-tag">&lt;/ChangeNumber&gt;</span>
-        <span class="code-tag">&lt;Comment&gt;</span>New Project for testing stuff<span class="code-tag">&lt;/Comment&gt;</span>
-        <span class="code-tag">&lt;EmailAddress&gt;</span>JUser@Example.Com<span class="code-tag">&lt;/EmailAddress&gt;</span>
-        <span class="code-tag">&lt;FileName&gt;</span>AssemblyInfo.cs<span class="code-tag">&lt;/FileName&gt;</span>
-        <span class="code-tag">&lt;FolderName&gt;</span>Dev\Server\Interface\Properties\<span class="code-tag">&lt;/FolderName&gt;</span>
-        <span class="code-tag">&lt;ModifiedTime&gt;</span>2006-11-22T11:11:00-0500<span class="code-tag">&lt;/ModifiedTime&gt;</span>
-        <span class="code-tag">&lt;Type&gt;</span>add<span class="code-tag">&lt;/Type&gt;</span>
-        <span class="code-tag">&lt;UserName&gt;</span>joe_user<span class="code-tag">&lt;/UserName&gt;</span>
-        <span class="code-tag">&lt;Url&gt;</span>http://www.example.com/index.html<span class="code-tag">&lt;/Url&gt;</span>
-        <span class="code-tag">&lt;Version&gt;</span>5<span class="code-tag">&lt;/Version&gt;</span>
-    <span class="code-tag">&lt;/Modification&gt;</span>
-    <span class="code-tag">&lt;Modification&gt;</span>
-        <span class="code-tag">&lt;ChangeNumber&gt;</span>12244<span class="code-tag">&lt;/ChangeNumber&gt;</span>
-        <span class="code-tag">&lt;Comment&gt;</span>New Project for accessing web services<span class="code-tag">&lt;/Comment&gt;</span>
-        <span class="code-tag">&lt;EmailAddress&gt;</span>SSpade@Example.Com<span class="code-tag">&lt;/EmailAddress&gt;</span>
-        <span class="code-tag">&lt;FileName&gt;</span>Interface<span class="code-tag">&lt;/FileName&gt;</span>
-        <span class="code-tag">&lt;FolderName&gt;</span>Dev\Server\<span class="code-tag">&lt;/FolderName&gt;</span>
-        <span class="code-tag">&lt;ModifiedTime&gt;</span>2006-11-22T11:10:44-0500<span class="code-tag">&lt;/ModifiedTime&gt;</span>
-        <span class="code-tag">&lt;Type&gt;</span>add<span class="code-tag">&lt;/Type&gt;</span>
-        <span class="code-tag">&lt;UserName&gt;</span>sam_spade<span class="code-tag">&lt;/UserName&gt;</span>
-        <span class="code-tag">&lt;Url&gt;</span>http://www.example.com/index.html<span class="code-tag">&lt;/Url&gt;</span>
-        <span class="code-tag">&lt;Version&gt;</span>4<span class="code-tag">&lt;/Version&gt;</span>
-    <span class="code-tag">&lt;/Modification&gt;</span>
+  <span class="code-tag"><span class="code-comment">&lt;!-- Start of one modification. --&gt;</span></span>
+  <span class="code-tag">&lt;Modification&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- The change number. --&gt;</span></span>
+    <span class="code-tag">&lt;ChangeNumber&gt;</span>... value ...<span class="code-tag">&lt;/ChangeNumber&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- The comment. --&gt;</span></span>
+    <span class="code-tag">&lt;Comment&gt;</span>... value ...<span class="code-tag">&lt;/Comment&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- The user's email address. --&gt;</span></span>
+    <span class="code-tag">&lt;EmailAddress&gt;</span>... value ...<span class="code-tag">&lt;/EmailAddress&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- The affected file name. --&gt;</span></span>
+    <span class="code-tag">&lt;FileName&gt;</span>... value ...<span class="code-tag">&lt;/FileName&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- The affect file's folder name. --&gt;</span></span>
+    <span class="code-tag">&lt;FolderName&gt;</span>... value ...<span class="code-tag">&lt;/FolderName&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- The change timestamp, in yyyy-mm-ddThh:mm:ss.nnnn-hhmm format --&gt;</span></span>
+    <span class="code-tag">&lt;ModifiedTime&gt;</span>... value ...<span class="code-tag">&lt;/ModifiedTime&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- The operation type. --&gt;</span></span>
+    <span class="code-tag">&lt;Type&gt;</span>... value ...<span class="code-tag">&lt;/Type&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- The user name. --&gt;</span></span>
+    <span class="code-tag">&lt;UserName&gt;</span>... value ...<span class="code-tag">&lt;/UserName&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- The related URL. --&gt;</span></span>
+    <span class="code-tag">&lt;Url&gt;</span>... value ...<span class="code-tag">&lt;/Url&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- The file version. --&gt;</span></span>
+    <span class="code-tag">&lt;Version&gt;</span>... value ...<span class="code-tag">&lt;/Version&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- End of modification. --&gt;</span></span>
+  <span class="code-tag">&lt;/Modification&gt;</span>
+  <span class="code-tag"><span class="code-comment">&lt;!-- End of the group of modifications. --&gt;</span></span>
 <span class="code-tag">&lt;/ArrayOfModification&gt;</span></pre>
 </div></div>
+<h4><a name="ModificationWriterTask-Sampleoutput"></a>Sample output</h4>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;ArrayOfModification <span class="code-keyword">xmlns:xsi</span>=<span class="code-quote">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="code-keyword">xmlns:xsd</span>=<span class="code-quote">"http://www.w3.org/2001/XMLSchema"</span>&gt;</span>
+  <span class="code-tag">&lt;Modification&gt;</span>
+    <span class="code-tag">&lt;ChangeNumber&gt;</span>12245<span class="code-tag">&lt;/ChangeNumber&gt;</span>
+    <span class="code-tag">&lt;Comment&gt;</span>New Project for testing stuff<span class="code-tag">&lt;/Comment&gt;</span>
+    <span class="code-tag">&lt;EmailAddress&gt;</span>JUser@Example.Com<span class="code-tag">&lt;/EmailAddress&gt;</span>
+    <span class="code-tag">&lt;FileName&gt;</span>AssemblyInfo.cs<span class="code-tag">&lt;/FileName&gt;</span>
+    <span class="code-tag">&lt;FolderName&gt;</span>Dev\Server\Interface\Properties\<span class="code-tag">&lt;/FolderName&gt;</span>
+    <span class="code-tag">&lt;ModifiedTime&gt;</span>2006-11-22T11:11:00-0500<span class="code-tag">&lt;/ModifiedTime&gt;</span>
+    <span class="code-tag">&lt;Type&gt;</span>add<span class="code-tag">&lt;/Type&gt;</span>
+    <span class="code-tag">&lt;UserName&gt;</span>joe_user<span class="code-tag">&lt;/UserName&gt;</span>
+    <span class="code-tag">&lt;Url&gt;</span>http://www.example.com/index.html<span class="code-tag">&lt;/Url&gt;</span>
+    <span class="code-tag">&lt;Version&gt;</span>5<span class="code-tag">&lt;/Version&gt;</span>
+  <span class="code-tag">&lt;/Modification&gt;</span>
+  <span class="code-tag">&lt;Modification&gt;</span>
+    <span class="code-tag">&lt;ChangeNumber&gt;</span>12244<span class="code-tag">&lt;/ChangeNumber&gt;</span>
+    <span class="code-tag">&lt;Comment&gt;</span>New Project for accessing web services<span class="code-tag">&lt;/Comment&gt;</span>
+    <span class="code-tag">&lt;EmailAddress&gt;</span>SSpade@Example.Com<span class="code-tag">&lt;/EmailAddress&gt;</span>
+    <span class="code-tag">&lt;FileName&gt;</span>Interface<span class="code-tag">&lt;/FileName&gt;</span>
+    <span class="code-tag">&lt;FolderName&gt;</span>Dev\Server\<span class="code-tag">&lt;/FolderName&gt;</span>
+    <span class="code-tag">&lt;ModifiedTime&gt;</span>2006-11-22T11:10:44-0500<span class="code-tag">&lt;/ModifiedTime&gt;</span>
+    <span class="code-tag">&lt;Type&gt;</span>add<span class="code-tag">&lt;/Type&gt;</span>
+    <span class="code-tag">&lt;UserName&gt;</span>sam_spade<span class="code-tag">&lt;/UserName&gt;</span>
+    <span class="code-tag">&lt;Url&gt;</span>http://www.example.com/index.html<span class="code-tag">&lt;/Url&gt;</span>
+    <span class="code-tag">&lt;Version&gt;</span>4<span class="code-tag">&lt;/Version&gt;</span>
+  <span class="code-tag">&lt;/Modification&gt;</span>
+<span class="code-tag">&lt;/ArrayOfModification&gt;</span></pre>
+</div></div>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Saturday, 5 Dec 2009 at 6:34:42 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -227,7 +172,7 @@ Intended to be used with the <a href="Modification Reader Task.html" title="Modi
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

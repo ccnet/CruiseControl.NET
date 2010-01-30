@@ -16,73 +16,109 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Aug 24, 2009 by <font color="#0050B2">williams</font>.
+					    This page last changed on Dec 02, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <p>The Schedule Trigger is used to specify that an integration should be run at a certain time on certain days. By default, an integration will only be triggered if modifications have been detected since the last integration.  The trigger can be configured to force a build even if have occurred to source control.  The items to watch for modifications are specified with <a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a>.</p>
+				    <h1><a name="ScheduleTrigger-ScheduleTrigger"></a>Schedule Trigger</h1>
 
-<h4><a name="ScheduleTrigger-Example"></a>Example</h4>
+<p>The Schedule Trigger is used to specify that an integration should be run at a certain time on certain days. By default, an integration will only be triggered if modifications have been detected since the last integration. The trigger can be configured to force a build even if have occurred to source control. The items to watch for modifications are specified with <a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a>.  </p>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Like all triggers, the scheduleTrigger must be enclosed within a triggers element in the appropriate <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a>.  </p></td></tr></table></div>
 
-<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>NOTE: Like all triggers, the scheduleTrigger must be enclosed within a triggers element in the appropriate <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a></td></tr></table></div>
-<p><br clear="all" />
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+
+<h2><a name="ScheduleTrigger-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="ScheduleTrigger-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;scheduleTrigger time=<span class="code-quote">"23:30"</span> buildCondition=<span class="code-quote">"ForceBuild"</span> name=<span class="code-quote">"Scheduled"</span>&gt;</span>
-    <span class="code-tag">&lt;weekDays&gt;</span>
-        <span class="code-tag">&lt;weekDay&gt;</span>Monday<span class="code-tag">&lt;/weekDay&gt;</span>
-    <span class="code-tag">&lt;/weekDays&gt;</span>
+  <span class="code-tag">&lt;weekDays&gt;</span>
+    <span class="code-tag">&lt;weekDay&gt;</span>Monday<span class="code-tag">&lt;/weekDay&gt;</span>
+  <span class="code-tag">&lt;/weekDays&gt;</span>
 <span class="code-tag">&lt;/scheduleTrigger&gt;</span></pre>
-</div></div><br clear="all" />
-<br clear="all" />
-<br clear="all" /></p>
+</div></div>
 
-<h4><a name="ScheduleTrigger-ConfigurationElements%3A"></a>Configuration Elements:</h4>
+
+<h2><a name="ScheduleTrigger-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
 <th class='confluenceTh'> Default </th>
-</tr>
-<tr>
-<td class='confluenceTd'> time </td>
-<td class='confluenceTd'> The time of day that the build should run at.  The time should be specified in a locale-specific format (ie. H:mm am/pm is acceptable for US locales.) </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true </td>
-<td class='confluenceTd'> n/a </td>
-</tr>
-<tr>
-<td class='confluenceTd'> weekDays </td>
-<td class='confluenceTd'> The week days on which the build should be run (eg. Monday, Tuesday).  By default, all days of the week are set. </td>
-<td class='confluenceTd'> elements </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> Monday-Sunday </td>
+<th class='confluenceTh'> Version </th>
 </tr>
 <tr>
 <td class='confluenceTd'> buildCondition </td>
-<td class='confluenceTd'> The condition that should be used to launch the integration.  By default, this value is <b>IfModificationExists</b>, meaning that an integration will only be triggered if modifications have been detected. Set this attribute to <b>ForceBuild</b> in order to ensure that a build should be launched regardless of whether new modifications are detected. The items to watch for modifications are specified with <a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a>. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> The condition that should be used to launch the integration. By default, this value is <b>IfModificationExists</b>, meaning that an integration will only be triggered if modifications have been detected. Set this attribute to <b>ForceBuild</b> in order to ensure that a build should be launched regardless of whether new modifications are detected.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>NoBuild</li>
+	<li>IfModificationExists</li>
+	<li>ForceBuild</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> IfModificationExists </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> name </td>
-<td class='confluenceTd'> The name of the trigger.  This name is passed to external tools as a means to identify the trigger that requested the build. (Added in CCNet 1.1) </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> The name of the trigger. This name is passed to external tools as a means to identify the trigger that requested the build.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> ScheduleTrigger </td>
+<td class='confluenceTd'> 1.1 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> randomOffSetInMinutesFromTime <br clear="all" /> </td>
-<td class='confluenceTd'> adds a random amount of minutes between 0 and set value to the time. This is mainly meant for spreading the load of actions to a central server. <br clear="all" />
- value must be between 0 and 59. <br clear="all" /> </td>
-<td class='confluenceTd'> int </td>
-<td class='confluenceTd'> false <br clear="all" /> </td>
+<td class='confluenceTd'> randomOffSetInMinutesFromTime </td>
+<td class='confluenceTd'> Adds a random amount of minutes between 0 and set value to the time. This is mainly meant for spreading the load of actions to a central server. Value must be between 0 and 59.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> 0 </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> time </td>
+<td class='confluenceTd'> The time of day that the build should run at. The time should be specified in a locale-specific format (ie. H:mm am/pm is acceptable for US locales.)   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> weekDays </td>
+<td class='confluenceTd'> The week days on which the build should be run (eg. Monday, Tuesday). By default, all days of the week are set.   </td>
+<td class='confluenceTd'> String array<br clear="all" />The following values are valid:
+<ul>
+	<li>Sunday</li>
+	<li>Monday</li>
+	<li>Tuesday</li>
+	<li>Wednesday</li>
+	<li>Thursday</li>
+	<li>Friday</li>
+	<li>Saturday</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Monday-Sunday </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 </tbody></table>
-<p><img class="emoticon" src="images/icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: this class replaces the <b>PollingScheduleTrigger</b> and the <b>ForceBuildScheduleTrigger</b>.  Use the <b>buildCondition</b> property if you want to run a scheduled forced build.</p>
+
+<h2><a name="ScheduleTrigger-Notes"></a>Notes</h2>
+
+<p>Use the <b>buildCondition</b> property if you want to run a scheduled forced build.  </p>
+<div class='panelMacro'><table class='warningMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>this class replaces the <b>PollingScheduleTrigger</b> and the <b>ForceBuildScheduleTrigger</b>.  </p></td></tr></table></div>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 1 Dec 2009 at 11:54:58 PM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -93,7 +129,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

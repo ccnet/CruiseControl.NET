@@ -16,60 +16,77 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jan 05, 2009 by <font color="#0050B2">williams</font>.
+					    This page last changed on Dec 02, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <p>The Multiple Trigger is used to support the execution of multiple nested triggers.  Each trigger will be executed sequentially in the order specified in the configuration file.  By default, if any of the triggers specify that a build should occur then a build will be triggered.  The <a href="Integration Properties.html" title="Integration Properties">build condition</a> will be ForceBuild if any trigger returns a ForceBuild condition.  Otherwise, the build condition will be IfModificationsExist if any trigger returns that condition. Multiple Triggers can contain nested multiple triggers.</p>
+				    <h1><a name="MultipleTrigger-MultipleTrigger"></a>Multiple Trigger</h1>
 
-<p>It is possible to change the logical operator applied to assessing the build conditions.  If the Multiple Trigger's <b>operator</b> property is set to "And" then if any trigger says that a build should not happen, then the build will not happen.  This is particularly useful when using multiple <a href="Filter Trigger.html" title="Filter Trigger">Filter Triggers</a>.</p>
+<p>The Multiple Trigger is used to support the execution of multiple nested triggers. Each trigger will be executed sequentially in the order specified in the configuration file. By default, if any of the triggers specify that a build should occur then a build will be triggered. The build condition will be ForceBuild if any trigger returns a ForceBuild condition. Otherwise, the build condition will be IfModificationsExist if any trigger returns that condition. Multiple Triggers can contain nested multiple triggers.  <br/>
+It is possible to change the logical operator applied to assessing the build conditions. If the Multiple Trigger's operator property is set to "And" then if any trigger says that a build should not happen, then the build will not happen. This is particularly useful when using multiple <a href="Filter Trigger.html" title="Filter Trigger">Filter Trigger</a>s.  </p>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Like all triggers, the multiTrigger must be enclosed within a triggers element in the appropriate <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a>.  </p></td></tr></table></div>
 
-<h4><a name="MultipleTrigger-Examples"></a>Examples</h4>
 
-<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>NOTE: Like all triggers, the multiTrigger must be enclosed within a triggers element in the appropriate <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a></td></tr></table></div>
-<p>Minimalist example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<h2><a name="MultipleTrigger-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="MultipleTrigger-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;multiTrigger /&gt;</span></pre>
 </div></div>
-<p>Full example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;multiTrigger operator=<span class="code-quote">"And"</span>&gt;</span>
-        <span class="code-tag">&lt;triggers&gt;</span>
-            <span class="code-tag">&lt;urlTrigger url=<span class="code-quote">"http://server/page.html"</span> seconds=<span class="code-quote">"30"</span> buildCondition=<span class="code-quote">"ForceBuild"</span>/&gt;</span>
-            <span class="code-tag">&lt;filterTrigger startTime=<span class="code-quote">"23:30"</span> endTime=<span class="code-quote">"23:45"</span>&gt;</span>
-              <span class="code-tag">&lt;trigger type=<span class="code-quote">"intervalTrigger"</span> seconds=<span class="code-quote">"60"</span> /&gt;</span>
-               <span class="code-tag">&lt;weekDays&gt;</span>
-                 <span class="code-tag">&lt;weekDay&gt;</span>Sunday<span class="code-tag">&lt;/weekDay&gt;</span>
-               <span class="code-tag">&lt;/weekDays&gt;</span>
-            <span class="code-tag">&lt;/filterTrigger&gt;</span>
-        <span class="code-tag">&lt;/triggers&gt;</span>
+  <span class="code-tag">&lt;triggers&gt;</span>
+    <span class="code-tag">&lt;urlTrigger url=<span class="code-quote">"http://server/page.html"</span> seconds=<span class="code-quote">"30"</span> buildCondition=<span class="code-quote">"ForceBuild"</span> /&gt;</span>
+    <span class="code-tag">&lt;filterTrigger startTime=<span class="code-quote">"23:30"</span> endTime=<span class="code-quote">"23:45"</span>&gt;</span>
+      <span class="code-tag">&lt;trigger type=<span class="code-quote">"intervalTrigger"</span> seconds=<span class="code-quote">"60"</span> /&gt;</span>
+      <span class="code-tag">&lt;weekDays&gt;</span>
+        <span class="code-tag">&lt;weekDay&gt;</span>Sunday<span class="code-tag">&lt;/weekDay&gt;</span>
+      <span class="code-tag">&lt;/weekDays&gt;</span>
+    <span class="code-tag">&lt;/filterTrigger&gt;</span>
+  <span class="code-tag">&lt;/triggers&gt;</span>
 <span class="code-tag">&lt;/multiTrigger&gt;</span></pre>
 </div></div>
 
-<h4><a name="MultipleTrigger-ConfigurationElements%3A"></a>Configuration Elements:</h4>
+
+<h2><a name="MultipleTrigger-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
 <th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
 </tr>
 <tr>
 <td class='confluenceTd'> operator </td>
-<td class='confluenceTd'> The logical operator to apply to the results of the nested triggers (And or Or). (Added in CCNet 1.1) </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> The logical operator to apply to the results of the nested triggers (And or Or).   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>Or</li>
+	<li>And</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> Or </td>
+<td class='confluenceTd'> 1.1 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> triggers </td>
-<td class='confluenceTd'> A collection of nested trigger blocks </td>
-<td class='confluenceTd'> <a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a> </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> n/a </td>
+<td class='confluenceTd'> The nested triggers.   </td>
+<td class='confluenceTd'> <a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> n/a/ </td>
+<td class='confluenceTd'> 1.0 </td>
 </tr>
 </tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Wednesday, 2 Dec 2009 at 1:14:50 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -80,7 +97,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

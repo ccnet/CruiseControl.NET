@@ -16,40 +16,85 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 28, 2008 by <font color="#0050B2">rosspatterson</font>.
+					    This page last changed on Dec 15, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <h3><a name="MultiSourceControlBlock-%27Multi%27SourceControlConfigurationExample"></a>'Multi' Source Control Configuration Example</h3>
-<p>You can use the 'Multi' Source Control plugin to check for modifications from any number of source control repositories. You may want to do this if (for example) you want to build if the source for your project changes, or if the binaries your project depends on change (which may be stored on a file server). Here's an example: </p>
+				    <h1><a name="MultiSourceControlBlock-MultiSourceControlBlock"></a>Multi Source Control Block</h1>
 
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<p>You can use the 'Multi' Source Control plugin to check for modifications from any number of source control repositories. You may want to do this if (for example) you want to build if the source for your project changes, or if the binaries your project depends on change (which may be stored on a file server).  </p>
+
+<h2><a name="MultiSourceControlBlock-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="MultiSourceControlBlock-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"multi"</span>&gt;</span>
   <span class="code-tag">&lt;sourceControls&gt;</span>
-	<span class="code-tag">&lt;filesystem&gt;</span>
-	  <span class="code-tag"><span class="code-comment">&lt;!-- Check for changes in the latest 1.2 version of the server... --&gt;</span></span>
-	  <span class="code-tag">&lt;repositoryRoot&gt;</span>\\DistributionFileServer\Server\1.2.latest<span class="code-tag">&lt;/repositoryRoot&gt;</span>
-	<span class="code-tag">&lt;/filesystem&gt;</span>
-	<span class="code-tag">&lt;cvs&gt;</span>
-	  <span class="code-tag"><span class="code-comment">&lt;!-- ...or in the source of the client project --&gt;</span></span>
-	  <span class="code-tag">&lt;executable&gt;</span>c:\tools\cvs-exe\cvswithplinkrsh.bat<span class="code-tag">&lt;/executable&gt;</span>
-	  <span class="code-tag">&lt;workingDirectory&gt;</span>c:\localcvs\myproject\client<span class="code-tag">&lt;/workingDirectory&gt;</span>
-	<span class="code-tag">&lt;/cvs&gt;</span>
+    <span class="code-tag">&lt;filesystem&gt;</span>
+      <span class="code-tag"><span class="code-comment">&lt;!-- Check for changes in the latest 1.2 version of the server... --&gt;</span></span>
+      <span class="code-tag">&lt;repositoryRoot&gt;</span>\\DistributionFileServer\Server\1.2.latest<span class="code-tag">&lt;/repositoryRoot&gt;</span>
+    <span class="code-tag">&lt;/filesystem&gt;</span>
+    <span class="code-tag">&lt;cvs&gt;</span>
+      <span class="code-tag"><span class="code-comment">&lt;!-- ...or in the source of the client project --&gt;</span></span>
+      <span class="code-tag">&lt;executable&gt;</span>c:\tools\cvs-exe\cvswithplinkrsh.bat<span class="code-tag">&lt;/executable&gt;</span>
+      <span class="code-tag">&lt;workingDirectory&gt;</span>c:\localcvs\myproject\client<span class="code-tag">&lt;/workingDirectory&gt;</span>
+    <span class="code-tag">&lt;/cvs&gt;</span>
   <span class="code-tag">&lt;/sourceControls&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
 
-<p>Note that, due to the way the configuration gets parsed, if you are using a "multi" block, then the items within the &lt;sourceControls&gt; element should not be &lt;sourcecontrol&gt; elements (as you may expect). Instead, the name of the element should be the same as you would put in the "type" attribute when using a &lt;sourcecontrol&gt; element.</p>
 
-<p>For example, normally you would point to a cvs repository like this:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<h2><a name="MultiSourceControlBlock-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the source control block.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> requireChangesFromAll </td>
+<td class='confluenceTd'> If true, only return a list of modifications if all sourceControl sections return a non&#45;empty list. Note that this is short&#45;circuiting, i.e. if the first sourceControl returns an empty list, the next won't be called (this can be useful for situations where you have a slow source control server and you want to check a specific file first as a trigger).   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> sourceControls </td>
+<td class='confluenceTd'> The list of other Source Control Blocks to include.   </td>
+<td class='confluenceTd'> <a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a> array </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="MultiSourceControlBlock-Notes"></a>Notes</h2>
+
+<p>Note that, due to the way the configuration gets parsed, if you are using a "multi" block, then the items within the &lt;sourceControls&gt; element should not be &lt;sourcecontrol&gt; elements (as you may expect). Instead, the name of the element should be the same as you would put in the "type" attribute when using a &lt;sourcecontrol&gt; element.  <br/>
+For example, normally you would point to a cvs repository like this:  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"cvs"</span>&gt;</span>
   <span class="code-tag">&lt;executable&gt;</span>c:\tools\cvs-exe\cvswithplinkrsh.bat<span class="code-tag">&lt;/executable&gt;</span>
   <span class="code-tag">&lt;workingDirectory&gt;</span>c:\localcvs\myproject\client<span class="code-tag">&lt;/workingDirectory&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
-
-<p>But inside a &lt;sourcecontrol type="multi"&gt; element, this becomes:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<p>But inside a &lt;sourcecontrol type="multi"&lt; element, this becomes:  </p>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"multi"</span>&gt;</span>
   <span class="code-tag">&lt;sourceControls&gt;</span>
     <span class="code-tag">&lt;cvs&gt;</span>
@@ -60,32 +105,9 @@
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
 
-<h3><a name="MultiSourceControlBlock-ConfigurationElements%3A"></a>Configuration Elements:</h3>
 
-<table class='confluenceTable'><tbody>
-<tr>
-<th class='confluenceTh'> Node </th>
-<th class='confluenceTh'> Description </th>
-<th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Required </th>
-<th class='confluenceTh'> Default </th>
-</tr>
-<tr>
-<td class='confluenceTd'> sourceControls </td>
-<td class='confluenceTd'> The list of other <a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a> to include. </td>
-<td class='confluenceTd'> list of <a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a> </td>
-<td class='confluenceTd'> true </td>
-<td class='confluenceTd'> <em>n.a.</em> </td>
-</tr>
-<tr>
-<td class='confluenceTd'> requireChangesFromAll </td>
-<td class='confluenceTd'> If true, only return a list of modifications if <b>all</b> <tt>sourceControl</tt> sections return a non-empty list. Note that this is short-circuiting, i.e. if the first <tt>sourceControl</tt> returns an empty list, the next won't be called (this can be useful for situations where you have a slow source control server and you want to check a specific file first as a trigger) </td>
-<td class='confluenceTd'> boolean </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> false </td>
-</tr>
-</tbody></table>
-<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Unlike most source control blocks, this one does not support the <b>timeout</b> configuration element.</td></tr></table></div>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 15 Dec 2009 at 12:19:12 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -96,7 +118,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

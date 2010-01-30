@@ -16,120 +16,153 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 10, 2009 by <font color="#0050B2">williams</font>.
+					    This page last changed on Dec 15, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <h3><a name="MercurialSourceControlBlock-MercurialSourceControlBlock"></a>Mercurial Source Control Block</h3>
+				    <h1><a name="MercurialSourceControlBlock-MercurialSourceControlBlock"></a>Mercurial Source Control Block </h1>
 
-<p>CruiseControl.NET provides basic support for Mercurial repositories. Checking for changes, checking out or updating sources, and tagging are supported.</p>
+<p>Provides basic support for Mercurial repositories. Checking for changes, checking out or updating sources, and tagging are supported.  </p>
 
-<p>To configure the CruiseControl.NET server to monitor a Mercurial repository, edit ccnet.config and configure sourcecontrol to point at your repository.</p>
+<h2><a name="MercurialSourceControlBlock-Version"></a>Version</h2>
 
-<h3><a name="MercurialSourceControlBlock-hgclone"></a>hg clone</h3>
+<p>Available from version 1.5</p>
 
-<p>The Mercurial provider supports automatic initialization of the local source repository. If the working directory does not contain a .hg folder, the hg block will automatically perform an init before pulling from the upstream repository. The repo element must be specified for auto-init to function.</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<h2><a name="MercurialSourceControlBlock-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"hg"</span>&gt;</span>
-	<span class="code-tag">&lt;repo&gt;</span>http://hg.mycompany.com/hgwebdir.cgi/myproject/<span class="code-tag">&lt;/repo&gt;</span>
-	<span class="code-tag">&lt;workingDirectory&gt;</span>c:\dev\ccnet\myproject<span class="code-tag">&lt;/workingDirectory&gt;</span>
+  <span class="code-tag">&lt;repo&gt;</span>http://hg.mycompany.com/hgwebdir.cgi/myproject/<span class="code-tag">&lt;/repo&gt;</span>
+  <span class="code-tag">&lt;workingDirectory&gt;</span>c:\dev\ccnet\myproject<span class="code-tag">&lt;/workingDirectory&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
-<p>The &lt;repo&gt; tag should specify the URL to use to determine if changes have occurred in your repository.</p>
 
-<p>You need to make sure your hg client settings are such that all authentication is automated. Typically you can do this by using anonymous access or appropriate SSH setups if using hg over SSH.<br/>
-Configuration Elements:</p>
+
+<h2><a name="MercurialSourceControlBlock-ConfigurationElements"></a>Configuration Elements</h2>
+
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Default </th>
 <th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> repo </td>
-<td class='confluenceTd'> The url for your repository (e.g., <a href="http://hgserver/myproject/">http://hgserver/myproject/</a>) </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> N/A </td>
-<td class='confluenceTd'> Only if autoGetSource=true </td>
-</tr>
-<tr>
-<td class='confluenceTd'> workingDirectory </td>
-<td class='confluenceTd'> The directory containing the locally checked out workspace. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> The project working directory </td>
-<td class='confluenceTd'> false </td>
-</tr>
-<tr>
-<td class='confluenceTd'> executable </td>
-<td class='confluenceTd'> The location of the hg executable </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> "hg" </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> type </td>
+<td class='confluenceTd'> The type of source control block. </td>
+<td class='confluenceTd'> String - must be hg </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> autoGetSource </td>
-<td class='confluenceTd'> Whether to update the local working copy from the local repository for a particular build. </td>
-<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> Whether to update the local working copy from the local repository for a particular build.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> true </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> branch </td>
-<td class='confluenceTd'> Repository branch </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> N/A </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> Repository branch.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> tagOnSuccess </td>
-<td class='confluenceTd'> Indicates that the repository should be tagged if the build succeeds. </td>
-<td class='confluenceTd'> bool </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> dynamicValues </td>
+<td class='confluenceTd'> The dynamic values to use for the source control block.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> tagCommitMessage </td>
-<td class='confluenceTd'> String format for tags in your repository. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> Tagging successful build {0} </td>
-<td class='confluenceTd'> false </td>
-</tr>
-<tr>
-<td class='confluenceTd'> multipleHeadsFail </td>
-<td class='confluenceTd'> Should the build fail if the local repository has multiple heads? </td>
-<td class='confluenceTd'> bool </td>
-<td class='confluenceTd'> true </td>
-<td class='confluenceTd'> false </td>
-</tr>
-<tr>
-<td class='confluenceTd'> timeout </td>
-<td class='confluenceTd'> Sets the timeout period for the source control operation. See Timeout Configuration for details. </td>
-<td class='confluenceTd'> Timeout </td>
-<td class='confluenceTd'> 10 minutes </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The location of the hg executable.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> hg </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> issueUrlBuilder </td>
-<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. See Issue Builder for more details </td>
-<td class='confluenceTd'> Group </td>
-<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> for more details.   </td>
+<td class='confluenceTd'> <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.4 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> multipleHeadsFail </td>
+<td class='confluenceTd'> Should the build fail if the local repository has multiple heads?   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> repo </td>
+<td class='confluenceTd'> The url for your repository (e.g., <a href="http://hgserver/myproject/">http://hgserver/myproject/</a>).  <br clear="all" />This is required if autoGetSource is true.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> tagCommitMessage </td>
+<td class='confluenceTd'> String format for tags in your repository.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Tagging successful build {0} </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> tagOnSuccess </td>
+<td class='confluenceTd'> Indicates that the repository should be tagged if the build succeeds.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
 <td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> Sets the timeout period for the source control operation. See <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> for details.   </td>
+<td class='confluenceTd'> <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 10 minutes </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> webUrlBuilder </td>
+<td class='confluenceTd'> Generates a web URL.   </td>
+<td class='confluenceTd'> <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> workingDirectory </td>
+<td class='confluenceTd'> The directory containing the locally checked out workspace.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project Working Directory </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 </tbody></table>
 
-<h3><a name="MercurialSourceControlBlock-Linkingmodificationstohgweb"></a>Linking modifications to hgweb</h3>
+<h2><a name="MercurialSourceControlBlock-Notes"></a>Notes</h2>
 
-<p>You can link the modifications detected by CruiseControl.NET to the appropriate hgweb page by adding the following additional configuration information to the Mercurial source control section:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;webUrlBuilder type=<span class="code-quote">"hgweb"</span>&gt;</span>
-	<span class="code-tag">&lt;url&gt;</span>http://hg.mycompany.com/hgwebdir.cgi/myproject/<span class="code-tag">&lt;/url&gt;</span>
-<span class="code-tag">&lt;/webUrlBuilder&gt;</span></pre>
-</div></div>
-<p>Change the &lt;url&gt; element to point to the root url for the hgweb site. The rev parameter will be appended by CruiseControl.NET when it generates the link to the code file page.</p>
+<p>You need to make sure your hg client settings are such that all authentication is automated. Typically you can do this by using anonymous access or appropriate SSH setups if using hg over SSH.  <br/>
+You can link the modifications detected by CruiseControl.NET to the appropriate hgweb page by adding the following additional configuration information to the Mercurial source control section by using the <a href="Mercurial Issue Tracker URL Builder.html" title="Mercurial Issue Tracker URL Builder">Mercurial Issue Tracker URL Builder</a>.  <br/>
+External contributors: Kent Johnson  </p>
 
-<p>External contributors:<br/>
-Kent Johnson</p>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 15 Dec 2009 at 8:24:08 PM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -140,7 +173,7 @@ Kent Johnson</p>
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>

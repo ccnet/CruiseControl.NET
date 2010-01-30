@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Synergy Issue Tracker URL Builder</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Synergy Issue Tracker URL Builder
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 15, 2009 by <font color="#0050B2">csut017</font>.
+				    </div>
+
+				    <h1><a name="SynergyIssueTrackerURLBuilder-SynergyIssueTrackerURLBuilder"></a>Synergy Issue Tracker URL Builder</h1>
+
+<p>A URL builder to link each modification to the ChangeSynergy task details form.  </p>
+
+<h2><a name="SynergyIssueTrackerURLBuilder-Version"></a>Version</h2>
+
+<p>Available from version 1.0</p>
+
+<h2><a name="SynergyIssueTrackerURLBuilder-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;changeSynergy&gt;</span>
+  <span class="code-tag">&lt;role&gt;</span>User<span class="code-tag">&lt;/role&gt;</span>
+  <span class="code-tag">&lt;url&gt;</span>http://myserver:8060<span class="code-tag">&lt;/url&gt;</span>
+  <span class="code-tag">&lt;username&gt;</span>%CS_USER%<span class="code-tag">&lt;/username&gt;</span>
+  <span class="code-tag">&lt;password&gt;</span>%CS_PWD%<span class="code-tag">&lt;/password&gt;</span>
+<span class="code-tag">&lt;/changeSynergy&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="SynergyIssueTrackerURLBuilder-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> database </td>
+<td class='confluenceTd'> Network path to the Synergy database instance   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> password </td>
+<td class='confluenceTd'> The Synergy password for the associate Username" value.  <br clear="all" />Support environment variable expansion.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> role </td>
+<td class='confluenceTd'> The role to use for the Synergy session.  <br clear="all" />If Username is specified to allow anonymous access to ChangeSynergy, you should specify a role with minimum read&#45;only permissions.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> User </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> url </td>
+<td class='confluenceTd'> The root path to the ChangeSynergy installation.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> username </td>
+<td class='confluenceTd'> The username to use for ChangeSynergy access. Can include environmental variables to be replaced.  <br clear="all" />The ChangeSynergy username should be different from the one specified for the CM Synergy server.  Ideally, you should specify a user with read&#45;only permissions for ChangeSynergy.  This will prevent someone from modifying objects through ChangeSynergy.  If you specify an impersonation account with write permissions, a malicious user could bypass auditing in ChangeSynergy.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.0 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="SynergyIssueTrackerURLBuilder-Notes"></a>Notes</h2>
+
+<p>If you specify values for the optional properties Username&gt; and Password, make sure that the user has read&#45;only permissions within your ChangeSynergy lifecycle definition.  This is necessary, since the Uri for  each modification will allow anonymous access to ChangeSynergy, possibily exposing vulnerabilities for spoofing, tampering, repudiation, information disclosure, and/or escalation of priveledge.  <br/>
+That is, a STRIDE classification of "STRDE", with a possible DREAD rating as high as 10 if permissions are inappropriatedly assigned to the anonymous account.  <br/>
+If you do not specify a Username and Password, the end&#45;user will be prompted to ChangeSynergy to login.  However, the login screen will not correctly populate the database and role select inputs.  This is due to a documented bug in ChangeSynergy 4.3 SP4.  The bug case tracking number is 2067637; the change request is R21683.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Tuesday, 15 Dec 2009 at 8:24:11 PM</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

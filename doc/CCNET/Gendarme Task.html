@@ -16,54 +16,55 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 26, 2009 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Dec 06, 2009 by <font color="#0050B2">csut017</font>.
 				    </div>
 
-				    <p>Then Gendarme task is used to run a static code analysis over your assemblies.</p>
+				    <h1><a name="GendarmeTask-GendarmeTask"></a>Gendarme Task</h1>
 
-<p><img class="emoticon" src="images/icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> See <a href="Using CruiseControl.NET with Gendarme.html" title="Using CruiseControl.NET with Gendarme">Using CruiseControl.NET with Gendarme</a> for more details.</p>
+<p>Gendarme is a extensible rule&#45;based tool to find problems in .NET applications and libraries. Gendarme inspects programs and libraries that contain code in ECMA CIL format (Mono and .NET) and looks for common problems with the code, problems that compiler do not typically check or have not historically checked. Website: http://mono\-project.com/Gendarme  </p>
+<div class='panelMacro'><table class='tipMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/check.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>See <a href="Using CruiseControl.NET with Gendarme.html" title="Using CruiseControl.NET with Gendarme">Using CruiseControl.NET with Gendarme</a> for more details.  </p></td></tr></table></div>
 
-<h3><a name="GendarmeTask-Version"></a>Version</h3>
 
-<p>This task is available from version 1.4.3.</p>
+<h2><a name="GendarmeTask-Version"></a>Version</h2>
 
-<h3><a name="GendarmeTask-Examples"></a>Examples</h3>
+<p>Available from version 1.4.3</p>
 
-<p>Minimalist Example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<h2><a name="GendarmeTask-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist example</b></div><div class="codeContent panelContent">
 <pre class="code-xml"><span class="code-tag">&lt;gendarme&gt;</span>
-	<span class="code-tag">&lt;assemblies&gt;</span>
-		<span class="code-tag">&lt;assemblyMatch expr='*.dll' /&gt;</span>
-		<span class="code-tag">&lt;assemblyMatch expr='*.exe' /&gt;</span>
-	<span class="code-tag">&lt;/assemblies&gt;</span>
+  <span class="code-tag">&lt;assemblies&gt;</span>
+    <span class="code-tag">&lt;assemblyMatch expr=<span class="code-quote">"*.dll"</span> /&gt;</span>
+    <span class="code-tag">&lt;assemblyMatch expr=<span class="code-quote">"*.exe"</span> /&gt;</span>
+  <span class="code-tag">&lt;/assemblies&gt;</span>
+<span class="code-tag">&lt;/gendarme&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Full example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;gendarme&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>Tools\gendarme.exe<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;baseDirectory&gt;</span>C:\Build\Project1\Bin\Debug\<span class="code-tag">&lt;/baseDirectory&gt;</span>
+  <span class="code-tag">&lt;configFile&gt;</span>rules.xml<span class="code-tag">&lt;/configFile&gt;</span>
+  <span class="code-tag">&lt;ruleSet&gt;</span>*<span class="code-tag">&lt;/ruleSet&gt;</span>
+  <span class="code-tag">&lt;ignoreFile&gt;</span>C:\Build\Project1\gendarme.ignore.list.txt<span class="code-tag">&lt;/ignoreFile&gt;</span>
+  <span class="code-tag">&lt;limit&gt;</span>200<span class="code-tag">&lt;/limit&gt;</span>
+  <span class="code-tag">&lt;severity&gt;</span>medium+<span class="code-tag">&lt;/severity&gt;</span>
+  <span class="code-tag">&lt;confidence&gt;</span>normal+<span class="code-tag">&lt;/confidence&gt;</span>
+  <span class="code-tag">&lt;quiet&gt;</span>FALSE<span class="code-tag">&lt;/quiet&gt;</span>
+  <span class="code-tag">&lt;verbose&gt;</span>TRUE<span class="code-tag">&lt;/verbose&gt;</span>
+  <span class="code-tag">&lt;failBuildOnFoundDefects&gt;</span>TRUE<span class="code-tag">&lt;/failBuildOnFoundDefects&gt;</span>
+  <span class="code-tag">&lt;verifyTimeoutSeconds&gt;</span>600<span class="code-tag">&lt;/verifyTimeoutSeconds&gt;</span>
+  <span class="code-tag">&lt;assemblyListFile&gt;</span>C:\Build\Project1\gendarme.assembly.list.txt<span class="code-tag">&lt;/assemblyListFile&gt;</span>
+  <span class="code-tag">&lt;description&gt;</span>Test description<span class="code-tag">&lt;/description&gt;</span>
 <span class="code-tag">&lt;/gendarme&gt;</span></pre>
 </div></div>
 
-<p>Full example:</p>
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;gendarme&gt;</span>
-	<span class="code-tag">&lt;executable&gt;</span>Tools\gendarme.exe<span class="code-tag">&lt;/executable&gt;</span>
-	<span class="code-tag">&lt;baseDirectory&gt;</span>C:\Build\Project1\Bin\Debug\<span class="code-tag">&lt;/baseDirectory&gt;</span>
-	<span class="code-tag">&lt;configFile&gt;</span>rules.xml<span class="code-tag">&lt;/configFile&gt;</span>
-	<span class="code-tag">&lt;ruleSet&gt;</span>*<span class="code-tag">&lt;/ruleSet&gt;</span>
-	<span class="code-tag">&lt;ignoreFile&gt;</span>C:\Build\Project1\gendarme.ignore.list.txt<span class="code-tag">&lt;/ignoreFile&gt;</span>
-	<span class="code-tag">&lt;limit&gt;</span>200<span class="code-tag">&lt;/limit&gt;</span>
-	<span class="code-tag">&lt;severity&gt;</span>medium+<span class="code-tag">&lt;/severity&gt;</span>
-	<span class="code-tag">&lt;confidence&gt;</span>normal+<span class="code-tag">&lt;/confidence&gt;</span>
-	<span class="code-tag">&lt;quiet&gt;</span>FALSE<span class="code-tag">&lt;/quiet&gt;</span>
-	<span class="code-tag">&lt;verbose&gt;</span>TRUE<span class="code-tag">&lt;/verbose&gt;</span>
-	<span class="code-tag">&lt;failBuildOnFoundDefects&gt;</span>TRUE<span class="code-tag">&lt;/failBuildOnFoundDefects&gt;</span>
-	<span class="code-tag">&lt;verifyTimeoutSeconds&gt;</span>600<span class="code-tag">&lt;/verifyTimeoutSeconds&gt;</span>
-	<span class="code-tag">&lt;assemblyListFile&gt;</span>C:\Build\Project1\gendarme.assembly.list.txt<span class="code-tag">&lt;/assemblyListFile&gt;</span>
-	<span class="code-tag">&lt;description&gt;</span>Test description<span class="code-tag">&lt;/description&gt;</span>
-<span class="code-tag">&lt;/gendarme&gt;</span></pre>
-</div></div>
 
-<h3><a name="GendarmeTask-ConfigurationElements%3A"></a>Configuration Elements:</h3>
+<h2><a name="GendarmeTask-ConfigurationElements"></a>Configuration Elements</h2>
 
 <table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Element </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
 <th class='confluenceTh'> Required </th>
@@ -71,161 +72,137 @@
 <th class='confluenceTh'> Version </th>
 </tr>
 <tr>
-<td class='confluenceTd'> executable </td>
-<td class='confluenceTd'> The location of the Gendarme executable </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> gendarme.exe </td>
-<td class='confluenceTd'> 1.4.3 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> baseDirectory </td>
-<td class='confluenceTd'> The directory to run Gendarme in </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a> </td>
-<td class='confluenceTd'> 1.4.3 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> configFile </td>
-<td class='confluenceTd'> Specify the configuration file </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> Default is 'rules.xml' </td>
-<td class='confluenceTd'> 1.4.3 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> ruleSet </td>
-<td class='confluenceTd'> Specify the set of rules to verify </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> Default is '*' </td>
-<td class='confluenceTd'> 1.4.3 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> ignoreFile </td>
-<td class='confluenceTd'> Do not report the known defects that are part of the specified file </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'>&nbsp;</td>
-<td class='confluenceTd'> 1.4.3 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> limit </td>
-<td class='confluenceTd'> Stop reporting after N defects are found </td>
-<td class='confluenceTd'> int </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'>&nbsp;</td>
-<td class='confluenceTd'> 1.4.3 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> severity </td>
-<td class='confluenceTd'> Filter the reported defects to include the specified severity levels </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> Default is 'medium+' (i.e. low and audit levels are ignored) </td>
-<td class='confluenceTd'> 1.4.3 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> confidence </td>
-<td class='confluenceTd'> Filter the reported defects to include the specified confidence levels. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> Default is 'normal+' (i.e. low level is ignored) </td>
-<td class='confluenceTd'> 1.4.3 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> quiet </td>
-<td class='confluenceTd'> If true, display minimal output (results) from the runner. </td>
-<td class='confluenceTd'> bool </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> 1.4.3 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> verbose </td>
-<td class='confluenceTd'> Enable debugging output. </td>
-<td class='confluenceTd'> bool </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> 1.4.3 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> failBuildOnFoundDefects </td>
-<td class='confluenceTd'> Specify whenver the build should fail if some defects are found by Gendarme. </td>
-<td class='confluenceTd'> bool </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> 1.4.3 </td>
-</tr>
-<tr>
 <td class='confluenceTd'> assemblies </td>
-<td class='confluenceTd'> A set of &lt;assemblyMatch&gt; elements that define what assemblies to analyse. </td>
-<td class='confluenceTd'> complex </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> Specify the assemblies to verify. You can specify multiple filenames, including masks (? and &#42;).   </td>
+<td class='confluenceTd'> <a href="Assembly Match.html" title="Assembly Match">Assembly Match</a> array </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
 <td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> assemblyListFile </td>
-<td class='confluenceTd'> Specify a file that contains the assemblies to verify. You can specify multiple filenames, including masks (? and *), one by line. </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'> Specify a file that contains the assemblies to verify. You can specify multiple filenames, including masks (? and &#42;), one by line.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
 <td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
-<td class='confluenceTd'> verifyTimeoutSeconds </td>
-<td class='confluenceTd'> Gets and sets the maximum number of seconds that the build may take.  If the build process takes longer than this period, it will be killed.  Specify this value as zero to disable process timeouts. </td>
-<td class='confluenceTd'> int </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'> 0 (disabled) </td>
+<td class='confluenceTd'> confidence </td>
+<td class='confluenceTd'> Filter the reported defects to include the specified confidence levels.  <br clear="all" /> <b>"&#45;&#45;confidence [all &#124; low[&#43;] &#124; normal[&#43;&#124;&#45;] &#124; high[&#43;&#124;&#45;] &#124; total[&#45;]],..."</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> normal&#43; </td>
+<td class='confluenceTd'> 1.4.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> configFile </td>
+<td class='confluenceTd'> Specify the configuration file.  <br clear="all" /> <b>Maps to "&#45;&#45;config configfile"</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> rules.xml </td>
+<td class='confluenceTd'> 1.4.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> baseDirectory </td>
+<td class='confluenceTd'> The directory to run Gendarme in.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Project Working Directory </td>
 <td class='confluenceTd'> 1.4.3 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> description </td>
-<td class='confluenceTd'> If filled in, this will be shown in the buildstage as the process name </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false </td>
-<td class='confluenceTd'>&nbsp;</td>
-<td class='confluenceTd'> 1.4.3 </td>
+<td class='confluenceTd'> Description used for the visualisation of the buildstage, if left empty the process name will be shown.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> The task/publisher name. </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> dynamicValues </td>
-<td class='confluenceTd'> Any dynamic parameters to be used. See <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
-<td class='confluenceTd'> Dynamic values array - see <a href="Dynamic Parameters.html" title="Dynamic Parameters">Dynamic Parameters</a> </td>
+<td class='confluenceTd'> The dynamic values to use for the task.   </td>
+<td class='confluenceTd'> <a href="Dynamic Values.html" title="Dynamic Values">Dynamic Values</a> array </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.5.0 </td>
+<td class='confluenceTd'> 1.5 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The location of the Gendarme executable.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> gendarme </td>
+<td class='confluenceTd'> 1.4.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> failBuildOnFoundDefects </td>
+<td class='confluenceTd'> Specify whenver the build should fail if some defects are found by Gendarme.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> ignoreFile </td>
+<td class='confluenceTd'> Do not report the known defects that are part of the specified file.  <br clear="all" /> <b>Maps to "&#45;&#45;ignore ignore&#45;file"</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>None</em> </td>
+<td class='confluenceTd'> 1.4.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> limit </td>
+<td class='confluenceTd'> Stop reporting after N defects are found.  <br clear="all" /> <b>Maps to "&#45;&#45;limit N"</b> </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> &#45;1 </td>
+<td class='confluenceTd'> 1.4.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> quiet </td>
+<td class='confluenceTd'> If true, display minimal output (results) from the runner.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> ruleSet </td>
+<td class='confluenceTd'> Specify the set of rules to verify.  <br clear="all" /> <b>Maps to "&#45;&#45;set ruleset"</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> &#42; </td>
+<td class='confluenceTd'> 1.4.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> severity </td>
+<td class='confluenceTd'> Filter the reported defects to include the specified severity levels.  <br clear="all" /> <b>Maps to "&#45;&#45;severity [all &#124; audit[&#43;] &#124; low[&#43;&#124;&#45;] &#124; medium[&#43;&#124;&#45;] &#124; high[&#43;&#124;&#45;] &#124; critical[&#45;]],..."</b> </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> Medium&#43; </td>
+<td class='confluenceTd'> 1.4.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> verbose </td>
+<td class='confluenceTd'> Enable debugging output.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.4.3 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> verifyTimeoutSeconds </td>
+<td class='confluenceTd'> The maximum number of seconds that the build may take.  If the build process takes longer than this period, it will be killed.  Specify this value as zero to disable process timeouts.   </td>
+<td class='confluenceTd'> Int32 </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> 0 </td>
+<td class='confluenceTd'> 1.4.3 </td>
 </tr>
 </tbody></table>
 
-<h4><a name="GendarmeTask-AssemblyMatchConfigurationElement%3A"></a>AssemblyMatch Configuration Element:</h4>
-
-<table class='confluenceTable'><tbody>
-<tr>
-<th class='confluenceTh'> Node </th>
-<th class='confluenceTh'> Description </th>
-<th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Required </th>
-</tr>
-<tr>
-<td class='confluenceTd'> expr </td>
-<td class='confluenceTd'> The name expression of the Assembly, including masks (? and *). </td>
-<td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true </td>
-</tr>
-</tbody></table>
-
-
-<h6><a name="GendarmeTask-Example%3A"></a>Example:</h6>
-
-<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
-<pre class="code-xml"><span class="code-tag">&lt;assemblies&gt;</span>
-	<span class="code-tag">&lt;assemblyMatch expr='*.dll' /&gt;</span>
-	<span class="code-tag">&lt;assemblyMatch expr='*.exe' /&gt;</span>
-<span class="code-tag">&lt;/assemblies&gt;</span></pre>
-</div></div>
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Sunday, 6 Dec 2009 at 8:38:47 AM</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -236,7 +213,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 29, 2009 20:59</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
 		    </tr>
 	    </table>
     </body>
