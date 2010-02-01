@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// Is the parameter required?
         /// </summary>
         /// <version>1.5</version>
-        /// <default>flase</default>
+        /// <default>false</default>
 #if !NoReflector
         [ReflectorProperty("required", Required = false)]
 #endif
