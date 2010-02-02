@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     public class FileTaskResult
         : ITaskResult
     {
-        #region Privte fields
+        #region Private fields
         /// <summary>
         /// The file containing the data.
         /// </summary>
