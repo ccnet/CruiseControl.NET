@@ -172,8 +172,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                                 // Add the file to the merge list
                                 actualLogger.Info("Merging file '{0}'", fileInfo);
                                 result.BuildProgressInformation.AddTaskInformation(string.Format("Merging file '{0}'", fileInfo));
-                                var useCData = (mergeFile.MergeAction == MergeFileInfo.MergeActionType.CData);
-                                result.AddTaskResultFromFile(fileInfo.FullName, useCData);
+                                result.AddTaskResult(new FileTaskResult(fileInfo, mergeFile.DeleteAfterMerge, actualFileSystem)
+                                                         {WrapInCData = (mergeFile.MergeAction == MergeFileInfo.MergeActionType.CData)});
                                 break;
                             case MergeFileInfo.MergeActionType.Copy:
                                 // Copy the file to the target folder

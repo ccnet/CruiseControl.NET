@@ -188,6 +188,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             // Mock the file system
             var fileSystem = mocks.StrictMock<IFileSystem>();
             Expect.Call(fileSystem.FileExists(Path.Combine(working, "text.xml"))).Return(true);
+            Expect.Call(fileSystem.FileExists(Path.Combine(working, "text.xml"))).Return(true);
             Expect.Call(fileSystem.FileExists(Path.Combine(working, "text.txt"))).Return(true);
             Expect.Call(fileSystem.FileExists(Path.Combine(working, "blank.txt"))).Return(false);
             Expect.Call(() => { fileSystem.EnsureFolderExists(targetFolder); });
@@ -213,6 +214,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
             // Mock the result
             var result = mocks.StrictMock<IIntegrationResult>();
+            Expect.Call(() =>
+                            {
+                                result.AddTaskResult((ITaskResult) null);
+                            }).IgnoreArguments();
+
             var buildProgress = mocks.StrictMock<BuildProgressInformation>(artefact, "Project1");
             SetupResult.For(result.BuildProgressInformation)
                 .Return(buildProgress);
@@ -222,7 +228,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Expect.Call(() => { buildProgress.SignalStartRunTask("Merging Files"); });
             buildProgress.Expect(bpi => bpi.AddTaskInformation(null)).IgnoreArguments();
             buildProgress.Expect(bpi => bpi.AddTaskInformation(null)).IgnoreArguments();
-            Expect.Call(() => { result.AddTaskResultFromFile(Path.Combine(working, "text.xml"), false); });
+
+            //var testFile = new FileInfo(Path.Combine(working, "text.xml"));
+            //Expect.Call(fileSystem.FileExists(testFile.FullName)).Return(true);
+            //Expect.Call(() =>
+            //                {
+            //                    result.AddTaskResult(new FileTaskResult(
+            //                                             testFile, false,
+            //                                             fileSystem) {WrapInCData = false});
+            //                });
 
             // Run the test
             mocks.ReplayAll();

@@ -308,18 +308,6 @@ namespace ThoughtWorks.CruiseControl.Core
             Status = result.CheckIfSuccess() ? IntegrationStatus.Success : IntegrationStatus.Failure;
         }
 
-        public void AddTaskResultFromFile(string filename)
-        {
-            AddTaskResultFromFile(filename, false);
-        }
-
-        public void AddTaskResultFromFile(string filename, bool wrapInCData)
-        {
-            var result = new FileTaskResult(filename);
-            result.WrapInCData = wrapInCData;
-            AddTaskResult(result);
-        }
-
         public void MarkStartTime()
         {
             StartTime = DateTime.Now;

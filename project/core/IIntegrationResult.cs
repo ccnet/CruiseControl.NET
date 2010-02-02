@@ -54,8 +54,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		string TaskOutput { get; }
 		void AddTaskResult(string result);
         void AddTaskResult(ITaskResult result);
-        void AddTaskResultFromFile(string filename);
-        void AddTaskResultFromFile(string filename, bool wrapInCData);
 		bool HasModifications();
 		bool ShouldRunBuild();
 

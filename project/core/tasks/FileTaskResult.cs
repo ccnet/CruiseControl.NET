@@ -1,3 +1,5 @@
+using ThoughtWorks.CruiseControl.Core.Util;
+
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     using System;
@@ -16,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         private readonly FileInfo dataSource;
         private bool deleteAfterMerge = true;
+        private readonly IFileSystem fileSystem;
         #endregion
 
         #region Constructors
@@ -52,15 +55,27 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="deleteAfterMerge">Delete file after merging.</param>
-        public FileTaskResult(FileInfo file, bool deleteAfterMerge)
+        public FileTaskResult(FileInfo file, bool deleteAfterMerge) :
+            this(file, deleteAfterMerge, new SystemIoFileSystem())
         {
-            if (!file.Exists)
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileTaskResult"/> class from a <see cref="FileInfo"/>.
+        /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="deleteAfterMerge">Delete file after merging.</param>
+        /// <param name="fileSystem">IFileSystem instance, allows this task to interact with the file system in a testable way.</param>
+        public FileTaskResult(FileInfo file, bool deleteAfterMerge, IFileSystem fileSystem)
+        {
+            this.deleteAfterMerge = deleteAfterMerge;
+            this.dataSource = file;
+            this.fileSystem = fileSystem;
+
+            if (!fileSystem.FileExists(file.FullName))
             {
                 throw new CruiseControlException("File not found: " + file.FullName);
             }
-
-            this.deleteAfterMerge = deleteAfterMerge;
-            this.dataSource = file;
         }
         #endregion
 
