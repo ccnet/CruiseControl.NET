@@ -44,18 +44,6 @@
             this.progressLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.buttonOpen = new System.Windows.Forms.ToolStripButton();
-            this.buttonReload = new System.Windows.Forms.ToolStripButton();
-            this.buttonPrint = new System.Windows.Forms.ToolStripButton();
-            this.openMenuButton = new System.Windows.Forms.ToolStripMenuItem();
-            this.reloadMenuButton = new System.Windows.Forms.ToolStripMenuItem();
-            this.printMenuButton = new System.Windows.Forms.ToolStripMenuItem();
-            this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.vericalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.horizontalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.offToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resultsDisplay = new System.Windows.Forms.SplitContainer();
             this.validationResults = new System.Windows.Forms.WebBrowser();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -66,12 +54,25 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.configurationHierarchy = new Validator.ConfigurationHierarchy();
             this.localImages = new System.Windows.Forms.ImageList(this.components);
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.buttonOpen = new System.Windows.Forms.ToolStripButton();
+            this.buttonReload = new System.Windows.Forms.ToolStripButton();
+            this.buttonPrint = new System.Windows.Forms.ToolStripButton();
+            this.openMenuButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.reloadMenuButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.printMenuButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.vericalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.horizontalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.offToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.versionInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             this.resultsDisplay.Panel1.SuspendLayout();
             this.resultsDisplay.Panel2.SuspendLayout();
             this.resultsDisplay.SuspendLayout();
@@ -81,6 +82,7 @@
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.processedDisplay)).BeginInit();
             this.tabPage3.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -106,7 +108,7 @@
             this.toolStripMenuItem2,
             this.exitMenuButton});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // historyMenu
@@ -114,7 +116,7 @@
             this.historyMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.emptyToolStripMenuItem});
             this.historyMenu.Name = "historyMenu";
-            this.historyMenu.Size = new System.Drawing.Size(181, 22);
+            this.historyMenu.Size = new System.Drawing.Size(186, 22);
             this.historyMenu.Text = "&History";
             // 
             // emptyToolStripMenuItem
@@ -127,27 +129,29 @@
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(178, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(183, 6);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(178, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(183, 6);
             // 
             // exitMenuButton
             // 
             this.exitMenuButton.Name = "exitMenuButton";
             this.exitMenuButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.exitMenuButton.Size = new System.Drawing.Size(181, 22);
+            this.exitMenuButton.Size = new System.Drawing.Size(186, 22);
             this.exitMenuButton.Text = "E&xit";
             this.exitMenuButton.Click += new System.EventHandler(this.exitMenuButton_Click);
             // 
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.configurationToolStripMenuItem});
+            this.configurationToolStripMenuItem,
+            this.toolStripMenuItem3,
+            this.versionInformationToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "&View";
             // 
             // helpToolStripMenuItem
@@ -155,14 +159,14 @@
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F1)));
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -207,121 +211,6 @@
             // toolStripContainer1.TopToolStripPanel
             // 
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.buttonOpen,
-            this.buttonReload,
-            this.toolStripSeparator1,
-            this.buttonPrint});
-            this.toolStrip1.Location = new System.Drawing.Point(3, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(87, 25);
-            this.toolStrip1.TabIndex = 0;
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // buttonOpen
-            // 
-            this.buttonOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.buttonOpen.Image = global::Validator.Properties.Resources.folder_table;
-            this.buttonOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.buttonOpen.Name = "buttonOpen";
-            this.buttonOpen.Size = new System.Drawing.Size(23, 22);
-            this.buttonOpen.Text = "Open configuration file";
-            this.buttonOpen.Click += new System.EventHandler(this.buttonOpen_Click);
-            // 
-            // buttonReload
-            // 
-            this.buttonReload.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.buttonReload.Image = global::Validator.Properties.Resources.table_refresh;
-            this.buttonReload.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.buttonReload.Name = "buttonReload";
-            this.buttonReload.Size = new System.Drawing.Size(23, 22);
-            this.buttonReload.Text = "Refresh current configuration";
-            this.buttonReload.Click += new System.EventHandler(this.buttonReload_Click);
-            // 
-            // buttonPrint
-            // 
-            this.buttonPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.buttonPrint.Image = global::Validator.Properties.Resources.printer;
-            this.buttonPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.buttonPrint.Name = "buttonPrint";
-            this.buttonPrint.Size = new System.Drawing.Size(23, 22);
-            this.buttonPrint.Text = "Print the validation report";
-            this.buttonPrint.Click += new System.EventHandler(this.buttonPrint_Click);
-            // 
-            // openMenuButton
-            // 
-            this.openMenuButton.Image = global::Validator.Properties.Resources.folder_table;
-            this.openMenuButton.Name = "openMenuButton";
-            this.openMenuButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openMenuButton.Size = new System.Drawing.Size(181, 22);
-            this.openMenuButton.Text = "&Open...";
-            this.openMenuButton.Click += new System.EventHandler(this.openMenuButton_Click);
-            // 
-            // reloadMenuButton
-            // 
-            this.reloadMenuButton.Image = global::Validator.Properties.Resources.table_refresh;
-            this.reloadMenuButton.Name = "reloadMenuButton";
-            this.reloadMenuButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.reloadMenuButton.Size = new System.Drawing.Size(181, 22);
-            this.reloadMenuButton.Text = "&Reload";
-            this.reloadMenuButton.Click += new System.EventHandler(this.reloadMenuButton_Click);
-            // 
-            // printMenuButton
-            // 
-            this.printMenuButton.Image = global::Validator.Properties.Resources.printer;
-            this.printMenuButton.Name = "printMenuButton";
-            this.printMenuButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.printMenuButton.Size = new System.Drawing.Size(181, 22);
-            this.printMenuButton.Text = "&Print results...";
-            this.printMenuButton.Click += new System.EventHandler(this.printMenuButton_Click);
-            // 
-            // configurationToolStripMenuItem
-            // 
-            this.configurationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.vericalToolStripMenuItem,
-            this.horizontalToolStripMenuItem,
-            this.offToolStripMenuItem});
-            this.configurationToolStripMenuItem.Image = global::Validator.Properties.Resources.table_relationship;
-            this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
-            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
-            this.configurationToolStripMenuItem.Text = "Configuration";
-            // 
-            // vericalToolStripMenuItem
-            // 
-            this.vericalToolStripMenuItem.Checked = true;
-            this.vericalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.vericalToolStripMenuItem.Image = global::Validator.Properties.Resources.application_tile_horizontal;
-            this.vericalToolStripMenuItem.Name = "vericalToolStripMenuItem";
-            this.vericalToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
-            this.vericalToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.vericalToolStripMenuItem.Text = "Verical";
-            this.vericalToolStripMenuItem.Click += new System.EventHandler(this.vericalToolStripMenuItem_Click);
-            // 
-            // horizontalToolStripMenuItem
-            // 
-            this.horizontalToolStripMenuItem.Image = global::Validator.Properties.Resources.application_split;
-            this.horizontalToolStripMenuItem.Name = "horizontalToolStripMenuItem";
-            this.horizontalToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D2)));
-            this.horizontalToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.horizontalToolStripMenuItem.Text = "Horizontal";
-            this.horizontalToolStripMenuItem.Click += new System.EventHandler(this.horizontalToolStripMenuItem_Click);
-            // 
-            // offToolStripMenuItem
-            // 
-            this.offToolStripMenuItem.Image = global::Validator.Properties.Resources.application;
-            this.offToolStripMenuItem.Name = "offToolStripMenuItem";
-            this.offToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D3)));
-            this.offToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.offToolStripMenuItem.Text = "Off";
-            this.offToolStripMenuItem.Click += new System.EventHandler(this.offToolStripMenuItem_Click);
             // 
             // resultsDisplay
             // 
@@ -452,6 +341,134 @@
             this.localImages.Images.SetKeyName(1, "processed");
             this.localImages.Images.SetKeyName(2, "hierarchy");
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.buttonOpen,
+            this.buttonReload,
+            this.toolStripSeparator1,
+            this.buttonPrint});
+            this.toolStrip1.Location = new System.Drawing.Point(3, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(87, 25);
+            this.toolStrip1.TabIndex = 0;
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(176, 6);
+            // 
+            // buttonOpen
+            // 
+            this.buttonOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.buttonOpen.Image = global::Validator.Properties.Resources.folder_table;
+            this.buttonOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buttonOpen.Name = "buttonOpen";
+            this.buttonOpen.Size = new System.Drawing.Size(23, 22);
+            this.buttonOpen.Text = "Open configuration file";
+            this.buttonOpen.Click += new System.EventHandler(this.buttonOpen_Click);
+            // 
+            // buttonReload
+            // 
+            this.buttonReload.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.buttonReload.Image = global::Validator.Properties.Resources.table_refresh;
+            this.buttonReload.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buttonReload.Name = "buttonReload";
+            this.buttonReload.Size = new System.Drawing.Size(23, 22);
+            this.buttonReload.Text = "Refresh current configuration";
+            this.buttonReload.Click += new System.EventHandler(this.buttonReload_Click);
+            // 
+            // buttonPrint
+            // 
+            this.buttonPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.buttonPrint.Image = global::Validator.Properties.Resources.printer;
+            this.buttonPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buttonPrint.Name = "buttonPrint";
+            this.buttonPrint.Size = new System.Drawing.Size(23, 22);
+            this.buttonPrint.Text = "Print the validation report";
+            this.buttonPrint.Click += new System.EventHandler(this.buttonPrint_Click);
+            // 
+            // openMenuButton
+            // 
+            this.openMenuButton.Image = global::Validator.Properties.Resources.folder_table;
+            this.openMenuButton.Name = "openMenuButton";
+            this.openMenuButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.openMenuButton.Size = new System.Drawing.Size(186, 22);
+            this.openMenuButton.Text = "&Open...";
+            this.openMenuButton.Click += new System.EventHandler(this.openMenuButton_Click);
+            // 
+            // reloadMenuButton
+            // 
+            this.reloadMenuButton.Image = global::Validator.Properties.Resources.table_refresh;
+            this.reloadMenuButton.Name = "reloadMenuButton";
+            this.reloadMenuButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.reloadMenuButton.Size = new System.Drawing.Size(186, 22);
+            this.reloadMenuButton.Text = "&Reload";
+            this.reloadMenuButton.Click += new System.EventHandler(this.reloadMenuButton_Click);
+            // 
+            // printMenuButton
+            // 
+            this.printMenuButton.Image = global::Validator.Properties.Resources.printer;
+            this.printMenuButton.Name = "printMenuButton";
+            this.printMenuButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.printMenuButton.Size = new System.Drawing.Size(186, 22);
+            this.printMenuButton.Text = "&Print results...";
+            this.printMenuButton.Click += new System.EventHandler(this.printMenuButton_Click);
+            // 
+            // configurationToolStripMenuItem
+            // 
+            this.configurationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.vericalToolStripMenuItem,
+            this.horizontalToolStripMenuItem,
+            this.offToolStripMenuItem});
+            this.configurationToolStripMenuItem.Image = global::Validator.Properties.Resources.table_relationship;
+            this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
+            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.configurationToolStripMenuItem.Text = "&Configuration";
+            // 
+            // vericalToolStripMenuItem
+            // 
+            this.vericalToolStripMenuItem.Checked = true;
+            this.vericalToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.vericalToolStripMenuItem.Image = global::Validator.Properties.Resources.application_tile_horizontal;
+            this.vericalToolStripMenuItem.Name = "vericalToolStripMenuItem";
+            this.vericalToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
+            this.vericalToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.vericalToolStripMenuItem.Text = "&Verical";
+            this.vericalToolStripMenuItem.Click += new System.EventHandler(this.vericalToolStripMenuItem_Click);
+            // 
+            // horizontalToolStripMenuItem
+            // 
+            this.horizontalToolStripMenuItem.Image = global::Validator.Properties.Resources.application_split;
+            this.horizontalToolStripMenuItem.Name = "horizontalToolStripMenuItem";
+            this.horizontalToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D2)));
+            this.horizontalToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.horizontalToolStripMenuItem.Text = "&Horizontal";
+            this.horizontalToolStripMenuItem.Click += new System.EventHandler(this.horizontalToolStripMenuItem_Click);
+            // 
+            // offToolStripMenuItem
+            // 
+            this.offToolStripMenuItem.Image = global::Validator.Properties.Resources.application;
+            this.offToolStripMenuItem.Name = "offToolStripMenuItem";
+            this.offToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D3)));
+            this.offToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.offToolStripMenuItem.Text = "&Off";
+            this.offToolStripMenuItem.Click += new System.EventHandler(this.offToolStripMenuItem_Click);
+            // 
+            // versionInformationToolStripMenuItem
+            // 
+            this.versionInformationToolStripMenuItem.Image = global::Validator.Properties.Resources.application_text_image;
+            this.versionInformationToolStripMenuItem.Name = "versionInformationToolStripMenuItem";
+            this.versionInformationToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.versionInformationToolStripMenuItem.Text = "&Version Information";
+            this.versionInformationToolStripMenuItem.Click += new System.EventHandler(this.versionInformationToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -474,8 +491,6 @@
             this.toolStripContainer1.TopToolStripPanel.PerformLayout();
             this.toolStripContainer1.ResumeLayout(false);
             this.toolStripContainer1.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
             this.resultsDisplay.Panel1.ResumeLayout(false);
             this.resultsDisplay.Panel2.ResumeLayout(false);
             this.resultsDisplay.ResumeLayout(false);
@@ -485,6 +500,8 @@
             this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.processedDisplay)).EndInit();
             this.tabPage3.ResumeLayout(false);
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -528,6 +545,8 @@
         private System.Windows.Forms.TabPage tabPage3;
         private ConfigurationHierarchy configurationHierarchy;
         private System.Windows.Forms.ImageList localImages;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem versionInformationToolStripMenuItem;
     }
 }
 

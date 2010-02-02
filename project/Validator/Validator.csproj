@@ -118,6 +118,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ValidationErrorProcesser.cs" />
+    <Compile Include="VersionInformationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VersionInformationForm.Designer.cs">
+      <DependentUpon>VersionInformationForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="WindowStateEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -131,6 +137,9 @@
     <EmbeddedResource Include="ConfigurationHierarchy.resx">
       <DependentUpon>ConfigurationHierarchy.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="VersionInformationForm.resx">
+      <DependentUpon>VersionInformationForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources/dialog.bmp" />
@@ -141,6 +150,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="AppIcon.ico" />
+    <None Include="Resources\application-text-image.png" />
     <None Include="Resources\printer.png" />
     <None Include="Resources\folder_table.png" />
     <None Include="Resources\table_refresh.png" />

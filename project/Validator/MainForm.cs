@@ -30,6 +30,7 @@ namespace Validator
         private PersistWindowState myWindowState;
         private List<string> myFileHistory = new List<string>();
         private bool isConfigValid = true;
+        private VersionInformationForm versionInformation;
 
         public MainForm()
         {
@@ -111,7 +112,19 @@ namespace Validator
                 }
             }
 
-            myTypeTable.Add(Directory.GetCurrentDirectory(), CONFIG_ASSEMBLY_PATTERN);
+            try
+            {
+                myTypeTable.Add(Directory.GetCurrentDirectory(), CONFIG_ASSEMBLY_PATTERN);
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(
+                    "Unable to load one or more plug-ins: " + error.Message, 
+                    "Plug-in Load Error", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+            }
+
             myTypeTable.InvalidNode += delegate(InvalidNodeEventArgs args)
             {
                 throw new NetReflectorException(args.Message);
@@ -700,6 +713,24 @@ namespace Validator
             {
                 File.AppendAllText(LogFile,
                     string.Format("{0:o} {1}", DateTime.Now, message) + Environment.NewLine);
+            }
+        }
+
+        private void versionInformationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.versionInformation == null)
+            {
+                this.versionInformation = new VersionInformationForm();
+                this.versionInformation.LoadInformation(this.myTypeTable);
+                this.versionInformation.FormClosed += (o, a) =>
+                {
+                    this.versionInformation = null;
+                };
+                this.versionInformation.Show(this);
+            }
+            else
+            {
+                this.versionInformation.BringToFront();
             }
         }
     }
