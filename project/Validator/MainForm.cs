@@ -234,6 +234,11 @@ namespace Validator
             myBodyEl = validationResults.Document.Body;
             myBodyEl.InnerHtml = string.Empty;
             this.configurationHierarchy.Initialise(myFileName);
+
+            // Initialise the display
+            DisplayConfig();
+            ClearProcessed();
+            
             try
             {
                 // Attempt to load the configuration
@@ -242,12 +247,24 @@ namespace Validator
             catch (ConfigurationException error)
             {
                 // There is an error with the configuration
-                var message = "Configuration contains invalid XML: " + error.Message;
                 myBodyEl.AppendChild(
                     GenerateElement("div",
                     new HtmlAttribute("class", "error"),
-                    GenerateElement("div", message)));
-                LogMessage(message);
+                    GenerateElement("div", "Unable to load configuration:")));
+                var errors = GenerateElement("ul");
+                myBodyEl.AppendChild(errors);
+
+                // Generate the error details
+                Exception errorDetails = error;
+                while (errorDetails != null)
+                {
+                    errors.AppendChild(
+                        GenerateElement("li", errorDetails.Message));
+                    errorDetails = errorDetails.InnerException;
+                }
+
+                // Log the base error
+                LogMessage(error.Message);
                 isConfigValid = false;
             }
             catch (PreprocessorException error)
@@ -320,11 +337,8 @@ namespace Validator
         public IConfiguration Read(XmlDocument document, IConfigurationErrorProcesser errorProcesser)
         {
             DisplayFileName();
-            DisplayConfig();
-
             DisplayProgressMessage("Validating configuration, please wait...", 10);
             ValidateData(document);
-
             LoadCompleted();
             return null;
         }
@@ -419,6 +433,12 @@ namespace Validator
             processedDisplay.IsReadOnly = true;
         }
 
+        private void ClearProcessed()
+        {
+            processedDisplay.IsReadOnly = false;
+            processedDisplay.Text = string.Empty;
+            processedDisplay.IsReadOnly = true;
+        }
 
         private object ValidateElement(HtmlElement tableEl, XmlNode node, int row, Configuration configuration)
         {
