@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Xml;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -56,6 +57,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             foreach (ITaskResult taskResult in result.TaskResults)
             {
                 WriteOutput(taskResult.Data);
+
+                var fileTaskResult = taskResult as FileTaskResult;
+                if(fileTaskResult != null)
+                {
+                    // check whether the file should be deleted after merging
+                    if(fileTaskResult.DeleteAfterMerge)
+                    {
+                        Log.Info("Delete merged file '{0}'.", fileTaskResult.File.FullName);
+                        //TODO: enqueue for deleting
+                    }
+                }
             }
         }
 

@@ -96,6 +96,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         {
             get { return deleteAfterMerge; }
         }
+
+        /// <summary>
+        /// Gets the <see cref="T:System.IO.FileInfo"/> object represinting this FileTaskResult.
+        /// </summary>
+        public FileInfo File
+        {
+            get { return dataSource; }
+        }
         #endregion
 
         #region Data
