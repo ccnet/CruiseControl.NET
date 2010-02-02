@@ -15,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// The file containing the data.
         /// </summary>
         private readonly FileInfo dataSource;
+        private bool deleteAfterMerge = true;
         #endregion
 
         #region Constructors
@@ -23,7 +24,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <param name="filename">The name of the file.</param>
         public FileTaskResult(string filename) :
-            this(new FileInfo(filename))
+            this(filename, true)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileTaskResult"/> class from a file name.
+        /// </summary>
+        /// <param name="filename">The name of the file.</param>
+        /// <param name="deleteAfterMerge">Delete file after merging.</param>
+        public FileTaskResult(string filename, bool deleteAfterMerge) :
+            this(new FileInfo(filename), deleteAfterMerge)
         {
         }
 
@@ -31,13 +42,24 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Initializes a new instance of the <see cref="FileTaskResult"/> class from a <see cref="FileInfo"/>.
         /// </summary>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
-        public FileTaskResult(FileInfo file)
+        public FileTaskResult(FileInfo file) :
+            this(file, true)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileTaskResult"/> class from a <see cref="FileInfo"/>.
+        /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="deleteAfterMerge">Delete file after merging.</param>
+        public FileTaskResult(FileInfo file, bool deleteAfterMerge)
         {
             if (!file.Exists)
             {
                 throw new CruiseControlException("File not found: " + file.FullName);
             }
 
+            this.deleteAfterMerge = deleteAfterMerge;
             this.dataSource = file;
         }
         #endregion
@@ -51,6 +73,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// 	<c>true</c> if the data should be wrapped in a CData section; otherwise, <c>false</c>.
         /// </value>
         public bool WrapInCData { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating if the file should be deleted after merge.
+        /// </summary>
+        public bool DeleteAfterMerge
+        {
+            get { return deleteAfterMerge; }
+        }
         #endregion
 
         #region Data
