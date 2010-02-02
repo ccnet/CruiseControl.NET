@@ -12,7 +12,7 @@
     /// &lt;file&gt;&lt;!-- path to file --&gt;&lt;/file&gt;
     /// </code>
     /// <code title="Full Example">
-    /// &lt;file action="Copy"&gt;
+    /// &lt;file action="Copy" deleteAfterMerge="false"&gt;
     /// &lt;path&gt;
     /// &lt;!-- path to file --&gt;
     /// &lt;/path&gt;
@@ -42,6 +42,14 @@
         [ReflectorProperty("action", Required = false)]
         public MergeActionType MergeAction { get; set; }
         #endregion
+
+        /// <summary>
+        /// Delete the file after merging if set to true.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
+        [ReflectorProperty("deleteAfterMerge", Required = false)]
+        public bool DeleteAfterMerge { get; set; }
         #endregion
 
         #region Public enumerations
