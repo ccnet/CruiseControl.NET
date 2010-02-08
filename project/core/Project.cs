@@ -78,6 +78,7 @@ namespace ThoughtWorks.CruiseControl.Core
     /// &lt;parameters&gt;
     /// &lt;textParameter name="Build Name" default="Unknown" /&gt;
     /// &lt;/parameters&gt;
+    /// &lt;linkedSites&gt;&lt;namedValue name="ohloh" value="5623"/&gt;&lt;/linkedSites&gt;
     /// &lt;/project&gt;
     /// </code>
     /// </example>
@@ -178,7 +179,9 @@ namespace ThoughtWorks.CruiseControl.Core
 
         #region Links
         /// <summary>
-        /// Links for this project to other sites.
+        /// Links for this project to other sites. 
+        /// <br/>Example for the Ohloh Project plugin<br/>
+        /// &lt;linkedSites&gt;&lt;namedValue name="ohloh" value="5623"/&gt;&lt;/linkedSites&gt;
         /// </summary>
         /// <version>1.5</version>
         /// <default>None</default>
