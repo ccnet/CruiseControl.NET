@@ -22,7 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\ThoughtWorks.CruiseControl.Remote.Extensions.XML</DocumentationFile>
-    <WarningsAsErrors>1712,1591,1573,1570,1574,1580,1581,1584,1589,1590,1592,1598</WarningsAsErrors>
+    <WarningsAsErrors>1712,1573,1570,1574,1580,1581,1584,1589,1590,1592,1598</WarningsAsErrors>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -32,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Build|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,7 +42,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <DocumentationFile>..\..\Build\Remote\ThoughtWorks.CruiseControl.Remote.Extensions.XML</DocumentationFile>
-    <WarningsAsErrors>1712,1591,1573,1570,1574,1580,1581,1584,1589,1590,1592,1598</WarningsAsErrors>
+    <WarningsAsErrors>1712,1573,1570,1574,1580,1581,1584,1589,1590,1592,1598</WarningsAsErrors>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
