@@ -144,14 +144,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources/dialog.bmp" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\lib\SciLexer.dll">
       <Link>SciLexer.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="AppIcon.ico" />
+    <Content Include="Resources\dialog.bmp" />
     <None Include="Resources\application-text-image.png" />
     <None Include="Resources\printer.png" />
     <None Include="Resources\folder_table.png" />
