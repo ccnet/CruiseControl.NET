@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// A <see cref="ITaskResult"/> that reads the data directly from a file.
     /// </summary>
     public class FileTaskResult
-        : ITaskResult
+        : ITaskResult, ITemporaryResult
     {
         #region Private fields
         /// <summary>
@@ -138,6 +138,20 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         public bool CheckIfSuccess()
         {
             return true;
+        }
+        #endregion
+
+        #region CleanUp()
+        /// <summary>
+        /// Clean up the result when it is no longer needed.
+        /// </summary>
+        public virtual void CleanUp()
+        {
+            // Delete the file after the build has finished
+            if (this.deleteAfterMerge)
+            {
+                this.fileSystem.DeleteFile(this.dataSource.FullName);
+            }
         }
         #endregion
         #endregion

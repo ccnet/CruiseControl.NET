@@ -18,12 +18,16 @@ using ThoughtWorks.CruiseControl.Core.Triggers;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
+using Rhino.Mocks;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	[TestFixture]
 	public class ProjectTest : IntegrationFixture
 	{
+        private MockRepository mocks;
 		private Project project;
 		private IMock mockSourceControl;
 		private IMock mockStateManager;
@@ -40,7 +44,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[SetUp]
 		public void SetUp()
 		{
-			workingDirPath = TempFileUtil.CreateTempDir("workingDir");
+            this.mocks = new MockRepository();
+            workingDirPath = TempFileUtil.CreateTempDir("workingDir");
 			artifactDirPath = TempFileUtil.CreateTempDir("artifactDir");
 			Assert.IsTrue(Directory.Exists(workingDirPath));
 			Assert.IsTrue(Directory.Exists(artifactDirPath));
@@ -531,34 +536,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			ProjectStatus status = project.CreateProjectStatus(new ProjectIntegrator(project, queue));
 			Assert.AreEqual(message, status.Messages[0]);
 		}
-
-		[Test]
-		public void ShouldClearMessagesAfterSuccessfulBuild()
-		{
-			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
-			mockTrigger.ExpectAndReturn("NextBuild", DateTime.Now);
-			mockPublisher.Expect("Run", new AddTaskResultConstraint());
-
-			project.AddMessage(new Message("foo"));
-			project.PublishResults(IntegrationResultMother.CreateSuccessful());
-			ProjectStatus status = project.CreateProjectStatus(new ProjectIntegrator(project, queue));			
-			Assert.AreEqual(0, status.Messages.Length);
-		}
-	
-		[Test]
-		public void DoNotClearMessagesAfterFailedBuild()
-		{
-			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
-			mockTrigger.ExpectAndReturn("NextBuild", DateTime.Now);
-			mockPublisher.Expect("Run", new AddTaskResultConstraint());
-
-			project.AddMessage(new Message("foo"));
-			project.PublishResults(IntegrationResultMother.CreateFailed());
-			ProjectStatus status = project.CreateProjectStatus(new ProjectIntegrator(project, queue));			
-			Assert.AreEqual(2, status.Messages.Length);
-
-
-		}
 		
         //[Test]
         //public void PrebuildShouldIncrementLabelAndRunPrebuildTasks()
@@ -587,6 +564,107 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			{
 				get { return "failed AddTaskResultConstraint"; }
 			}
-		}
+        }
+
+        #region PublishResults() tests
+        [Test]
+        public void ShouldClearMessagesAfterSuccessfulBuild()
+        {
+            mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
+            mockTrigger.ExpectAndReturn("NextBuild", DateTime.Now);
+            mockPublisher.Expect("Run", new AddTaskResultConstraint());
+
+            project.AddMessage(new Message("foo"));
+            project.PublishResults(IntegrationResultMother.CreateSuccessful());
+            ProjectStatus status = project.CreateProjectStatus(new ProjectIntegrator(project, queue));
+            Assert.AreEqual(0, status.Messages.Length);
+        }
+
+        [Test]
+        public void DoNotClearMessagesAfterFailedBuild()
+        {
+            mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
+            mockTrigger.ExpectAndReturn("NextBuild", DateTime.Now);
+            mockPublisher.Expect("Run", new AddTaskResultConstraint());
+
+            project.AddMessage(new Message("foo"));
+            project.PublishResults(IntegrationResultMother.CreateFailed());
+            ProjectStatus status = project.CreateProjectStatus(new ProjectIntegrator(project, queue));
+            Assert.AreEqual(2, status.Messages.Length);
+        }
+
+        [Test]
+        public void PublishResultsShouldCleanTemporaryResultsOnSuccess()
+        {
+            // Set up the test
+            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var parameters = new List<NameValuePair>();
+            SetupResult.For(result.Parameters).Return(parameters);
+            SetupResult.For(result.Succeeded).Return(true);
+            var results = new List<ITaskResult>();
+            SetupResult.For(result.TaskResults).Return(results);
+            var project = new Project();
+            project.Publishers = new ITask[0];
+            var cleaned = false;
+            var tempResult = new PhantomResult(p => { cleaned = true; });
+            results.Add(tempResult);
+
+            // Run the test
+            this.mocks.ReplayAll();
+            project.PublishResults(result);
+
+            // Check the results
+            this.mocks.VerifyAll();
+            Assert.IsTrue(cleaned);
+        }
+
+        [Test]
+        public void PublishResultsShouldNotCleanTemporaryResultsOnFailure()
+        {
+            // Set up the test
+            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var parameters = new List<NameValuePair>();
+            SetupResult.For(result.Parameters).Return(parameters);
+            SetupResult.For(result.Succeeded).Return(false);
+            SetupResult.For(result.Modifications).Return(new Modification[0]);
+            SetupResult.For(result.FailureUsers).Return(new ArrayList());
+            var results = new List<ITaskResult>();
+            SetupResult.For(result.TaskResults).Return(results);
+            var project = new Project();
+            project.Publishers = new ITask[0];
+            var tempResult = new PhantomResult(p => { Assert.Fail("CleanUp() called"); });
+            results.Add(tempResult);
+
+            // Run the test
+            this.mocks.ReplayAll();
+            project.PublishResults(result);
+
+            // Check the results
+            this.mocks.VerifyAll();
+        }
+        #endregion
+
+        private class PhantomResult
+            : ITaskResult, ITemporaryResult
+        {
+            private Action<PhantomResult> onCleanUp;
+
+            public PhantomResult(Action<PhantomResult> onCleanUp)
+            {
+                this.onCleanUp = onCleanUp;
+            }
+
+            public string Data { get;set; }
+
+            public bool CheckIfSuccess()
+            {
+                return true;
+            }
+
+            public void CleanUp()
+            {
+                this.onCleanUp(this);
+            }
+        }
 	}
 }

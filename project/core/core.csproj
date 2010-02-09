@@ -293,6 +293,7 @@
     <Compile Include="ITaskResult.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ITemporaryResult.cs" />
     <Compile Include="label\AssemblyVersionLabeller.cs" />
     <Compile Include="label\DateLabeller.cs">
       <SubType>Code</SubType>

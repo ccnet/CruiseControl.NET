@@ -695,6 +695,16 @@ namespace ThoughtWorks.CruiseControl.Core
             if (result.Succeeded)
             {
                 messages.Clear();
+
+                // Clean up any temporary results
+                foreach (var taskResult in result.TaskResults)
+                {
+                    var temporaryResult = taskResult as ITemporaryResult;
+                    if (temporaryResult != null)
+                    {
+                        temporaryResult.CleanUp();
+                    }
+                }
             }
             else
             {
