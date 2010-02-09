@@ -8,12 +8,15 @@ using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using System.Collections.Generic;
+using Rhino.Mocks;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
     [TestFixture]
     public class IntegrationRunnerTest : IntegrationFixture
     {
+        private MockRepository mocks;
+
         private IntegrationRunner runner;
 
         private IMock resultManagerMock;
@@ -34,6 +37,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         [SetUp]
         public void Setup()
         {
+            this.mocks = new MockRepository();
+
             mockery = new Mockery();
             targetMock = mockery.NewDynamicMock(typeof(IIntegrationRunnerTarget));
             resultManagerMock = mockery.NewDynamicMock(typeof(IIntegrationResultManager));
@@ -152,5 +157,91 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             targetMock.Expect("PublishResults", result);
             resultManagerMock.Expect("FinishIntegration");           
         }
+
+        #region GenerateSystemParameterValues() tests
+        [Test]
+        public void GenerateSystemParameterValuesShouldAddNewParameters()
+        {
+            // Initialise the test
+            var runner = new IntegrationRunner(null, null, null);
+            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var integrationProperties = new Dictionary<string, string>
+            {
+                {
+                    "CCNetUser",
+                    "John Doe"
+                },
+                {
+                    "CCNetLabel",
+                    "1.1"
+                }
+            };
+            SetupResult.For(result.IntegrationProperties).Return(integrationProperties);
+            var request = new IntegrationRequest(BuildCondition.ForceBuild, "Test", "John Doe");
+            SetupResult.For(result.IntegrationRequest).Return(request);
+            var parameters = new List<NameValuePair>();
+            SetupResult.For(result.Parameters).Return(parameters);
+
+            // Run the test
+            this.mocks.ReplayAll();
+            runner.GenerateSystemParameterValues(result);
+
+            // Check the results
+            this.mocks.VerifyAll();
+            Assert.AreEqual(2, request.BuildValues.Count);
+            Assert.IsTrue(request.BuildValues.ContainsKey("$CCNetUser"));
+            Assert.AreEqual("John Doe", request.BuildValues["$CCNetUser"]);
+            Assert.IsTrue(request.BuildValues.ContainsKey("$CCNetLabel"));
+            Assert.AreEqual("1.1", request.BuildValues["$CCNetLabel"]);
+            Assert.AreEqual(2, parameters.Count);
+            Assert.AreEqual("$CCNetUser", parameters[0].Name);
+            Assert.AreEqual("John Doe", parameters[0].Value);
+            Assert.AreEqual("$CCNetLabel", parameters[1].Name);
+            Assert.AreEqual("1.1", parameters[1].Value);
+        }
+
+        [Test]
+        public void GenerateSystemParameterValuesShouldUpdateExistingParameters()
+        {
+            // Initialise the test
+            var runner = new IntegrationRunner(null, null, null);
+            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var integrationProperties = new Dictionary<string, string>
+            {
+                {
+                    "CCNetUser",
+                    "John Doe"
+                },
+                {
+                    "CCNetLabel",
+                    "1.1"
+                }
+            };
+            SetupResult.For(result.IntegrationProperties).Return(integrationProperties);
+            var request = new IntegrationRequest(BuildCondition.ForceBuild, "Test", "John Doe");
+            SetupResult.For(result.IntegrationRequest).Return(request);
+            var parameters = new List<NameValuePair>();
+            SetupResult.For(result.Parameters).Return(parameters);
+
+            // Run the test
+            this.mocks.ReplayAll();
+            runner.GenerateSystemParameterValues(result);
+            integrationProperties["CCNetLabel"] = "1.2";
+            runner.GenerateSystemParameterValues(result);
+
+            // Check the results
+            this.mocks.VerifyAll();
+            Assert.AreEqual(2, request.BuildValues.Count);
+            Assert.IsTrue(request.BuildValues.ContainsKey("$CCNetUser"));
+            Assert.AreEqual("John Doe", request.BuildValues["$CCNetUser"]);
+            Assert.IsTrue(request.BuildValues.ContainsKey("$CCNetLabel"));
+            Assert.AreEqual("1.2", request.BuildValues["$CCNetLabel"]);
+            Assert.AreEqual(2, parameters.Count);
+            Assert.AreEqual("$CCNetUser", parameters[0].Name);
+            Assert.AreEqual("John Doe", parameters[0].Value);
+            Assert.AreEqual("$CCNetLabel", parameters[1].Name);
+            Assert.AreEqual("1.2", parameters[1].Value);
+        }
+        #endregion
     }
 }

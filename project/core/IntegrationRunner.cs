@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     NameValuePair.FromDictionary(request.BuildValues));
             }
             result.MarkStartTime();
-            GenerateSystemParameterValues(result);
+            this.GenerateSystemParameterValues(result);
 
             Log.Trace("Getting Modifications for project {0}", result.ProjectName);
             try
@@ -91,6 +91,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     }
 
                     Log.Trace("Running tasks of project {0}", result.ProjectName);
+                    this.GenerateSystemParameterValues(result); 
                     Build(result);
                 }
                 else if (lastResult.HasSourceControlError)
@@ -117,21 +118,37 @@ namespace ThoughtWorks.CruiseControl.Core
             return result;
         }
 
+        #region GenerateSystemParameterValues()
         /// <summary>
         /// Generates parameter values from the incoming request values.
         /// </summary>
-        /// <param name="result"></param>
-        private void GenerateSystemParameterValues(IIntegrationResult result)
+        /// <param name="result">The result.</param>
+        public void GenerateSystemParameterValues(IIntegrationResult result)
         {
             var props = result.IntegrationProperties;
             foreach (var property in props.Keys)
             {
+                // Generate the build value
                 var key = string.Format("${0}", property);
                 var value = (props[property] ?? string.Empty).ToString();
                 result.IntegrationRequest.BuildValues[key] = value;
-                result.Parameters.Add(new NameValuePair(key, value));
+
+                // Add to the parameters
+                var namedValue = new NameValuePair(key, value);
+                if (result.Parameters.Contains(namedValue))
+                {
+                    // Replace an existing value
+                    var index = result.Parameters.IndexOf(namedValue);
+                    result.Parameters[index] = namedValue;
+                }
+                else
+                {
+                    // Add a new value
+                    result.Parameters.Add(namedValue);
+                }
             }
         }
+        #endregion
 
         /// <summary>
         /// Completes an integration.
