@@ -485,7 +485,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             var buffer = new PrivateArguments(
                 "workspaces");
             buffer.Add("/computer:", Environment.MachineName);
-            buffer.Add("-server:{0}", Server);
+            buffer.Add("-server:", Server);
             buffer.Add("/format:detailed");
             buffer.AddQuote(Workspace);
             return NewProcessInfo(buffer, result);
