@@ -67,6 +67,38 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             Assert.AreEqual("value", list[0].Value);
         }
         #endregion
+
+        #region Equals()
+        [Test]
+        public void EqualsReturnsTrueIfTheNameIsTheSame()
+        {
+            var value1 = new NameValuePair("value", "key");
+            var value2 = new NameValuePair("value", "key");
+            Assert.IsTrue(value1.Equals(value2));
+        }
+
+        [Test]
+        public void EqualsReturnsFalseIfTheNameIsDifferent()
+        {
+            var value1 = new NameValuePair("value1", "key");
+            var value2 = new NameValuePair("value2", "key");
+            Assert.IsFalse(value1.Equals(value2));
+        }
+
+        [Test]
+        public void EqualsReturnsFalseIfTheOtherIsNull()
+        {
+            var value = new NameValuePair("value1", "key");
+            Assert.IsFalse(value.Equals(null));
+        }
+
+        [Test]
+        public void EqualsReturnsFalseIfTheOtherIsNotNamedValue()
+        {
+            var value = new NameValuePair("value1", "key");
+            Assert.IsFalse(value.Equals("test"));
+        }
+        #endregion
         #endregion
     }
 }

@@ -28,6 +28,7 @@ namespace ThoughtWorks.CruiseControl.Remote
     [ReflectorType("namedValue")]
 #endif
     public class NameValuePair
+        : IEquatable<NameValuePair>
     {
         #region Private fields
         private string name;
@@ -183,6 +184,51 @@ namespace ThoughtWorks.CruiseControl.Remote
                     destination.Add(new NameValuePair(pair.Name, pair.Value));
                 }
             }
+        }
+        #endregion
+
+        #region GetHashCode()
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like
+        /// a hash table. 
+        /// </returns>
+        public override int GetHashCode()
+        {
+            return this.name == null ? 0 : this.name.GetHashCode();
+        }
+        #endregion
+
+        #region Equals()
+        /// <summary>
+        /// Determines whether the specified <see cref="Object"/> is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="Object"/> to compare with this instance.</param>
+        /// <returns>
+        /// <c>true</c> if the specified <see cref="Object"/> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as NameValuePair);
+        }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public bool Equals(NameValuePair other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            return other.name == this.name;
         }
         #endregion
         #endregion
