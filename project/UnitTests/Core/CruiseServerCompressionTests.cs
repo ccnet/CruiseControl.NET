@@ -35,7 +35,6 @@
         #region Tests
         #region GetLog() tests
         [Test(Description = "GetLog() should compress the log data.")]
-        [Explicit("Code is not ready yet, just adding to SVN so it is not lost")]
         public void GetLogCompressesData()
         {
             // Initialise the mocks
