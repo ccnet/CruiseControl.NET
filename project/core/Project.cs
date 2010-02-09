@@ -676,10 +676,14 @@ namespace ThoughtWorks.CruiseControl.Core
             CancelTasks(PrebuildTasks);
             CancelTasks(Tasks);
 
+            var merged = false;
+            var mergeFailed = false;
             foreach (ITask publisher in publishers)
             {
+                var isMergeTask = publisher is IMergeTask;
                 try
                 {
+                    merged |= isMergeTask;
                     if (publisher is IParamatisedItem)
                     {
                         (publisher as IParamatisedItem).ApplyParameters(parameterValues, parameters);
@@ -689,13 +693,22 @@ namespace ThoughtWorks.CruiseControl.Core
                 }
                 catch (Exception e)
                 {
+                    mergeFailed |= isMergeTask;
                     Log.Error("Publisher threw exception: " + e);
                 }
             }
             if (result.Succeeded)
             {
                 messages.Clear();
+            }
+            else
+            {
+                AddBreakersToMessages(result);
+                AddFailedTaskToMessages();
+            }
 
+            if (merged && !mergeFailed)
+            {
                 // Clean up any temporary results
                 foreach (var taskResult in result.TaskResults)
                 {
@@ -708,8 +721,31 @@ namespace ThoughtWorks.CruiseControl.Core
             }
             else
             {
-                AddBreakersToMessages(result);
-                AddFailedTaskToMessages();
+                // Display a warning message if there are temporary files that were not deleted
+                var hasTemporaryFiles = false;
+                foreach (var taskResult in result.TaskResults)
+                {
+                    var temporaryResult = taskResult as ITemporaryResult;
+                    if (temporaryResult != null)
+                    {
+                        hasTemporaryFiles = true;
+                        break;
+                    }
+                }
+
+                // Display the appropriate message
+                // TODO: replace the hard-coded Log with an ILogger - cannot unit test otherwise
+                if (hasTemporaryFiles)
+                {
+                    if (mergeFailed)
+                    {
+                        Log.Warning("One or more merge publishers failed - temporary files have not been deleted!");
+                    }
+                    else
+                    {
+                        Log.Warning("There are no merge publishers - temporary files have not been deleted!");
+                    }
+                }
             }
         }
 

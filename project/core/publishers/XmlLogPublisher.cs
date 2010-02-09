@@ -34,8 +34,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// </code>
     /// </example>
     [ReflectorType("xmllogger")]
-    public class XmlLogPublisher 
-        : TaskBase
+    public class XmlLogPublisher
+        : TaskBase, IMergeTask
     {
 		public static readonly string DEFAULT_LOG_SUBDIRECTORY = "buildlogs";
 

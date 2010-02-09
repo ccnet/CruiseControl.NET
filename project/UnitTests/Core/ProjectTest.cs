@@ -604,7 +604,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             var results = new List<ITaskResult>();
             SetupResult.For(result.TaskResults).Return(results);
             var project = new Project();
-            project.Publishers = new ITask[0];
+            project.Publishers = new ITask[]
+            {
+                new PhantomPublisher(false)
+            };
             var cleaned = false;
             var tempResult = new PhantomResult(p => { cleaned = true; });
             results.Add(tempResult);
@@ -619,15 +622,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         }
 
         [Test]
-        public void PublishResultsShouldNotCleanTemporaryResultsOnFailure()
+        public void PublishResultsShouldNotCleanTemporaryResultsWithoutAMerge()
         {
             // Set up the test
             var result = this.mocks.StrictMock<IIntegrationResult>();
             var parameters = new List<NameValuePair>();
             SetupResult.For(result.Parameters).Return(parameters);
-            SetupResult.For(result.Succeeded).Return(false);
-            SetupResult.For(result.Modifications).Return(new Modification[0]);
-            SetupResult.For(result.FailureUsers).Return(new ArrayList());
+            SetupResult.For(result.Succeeded).Return(true);
             var results = new List<ITaskResult>();
             SetupResult.For(result.TaskResults).Return(results);
             var project = new Project();
@@ -642,7 +643,84 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             // Check the results
             this.mocks.VerifyAll();
         }
+
+        [Test]
+        public void PublishResultsShouldCleanTemporaryResultsOnFailure()
+        {
+            // Set up the test
+            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var parameters = new List<NameValuePair>();
+            SetupResult.For(result.Parameters).Return(parameters);
+            SetupResult.For(result.Succeeded).Return(false);
+            SetupResult.For(result.Modifications).Return(new Modification[0]);
+            SetupResult.For(result.FailureUsers).Return(new ArrayList());
+            var results = new List<ITaskResult>();
+            SetupResult.For(result.TaskResults).Return(results);
+            var project = new Project();
+            project.Publishers = new ITask[]
+            {
+                new PhantomPublisher(false)
+            };
+            var cleaned = false;
+            var tempResult = new PhantomResult(p => { cleaned = true; });
+            results.Add(tempResult);
+
+            // Run the test
+            this.mocks.ReplayAll();
+            project.PublishResults(result);
+
+            // Check the results
+            this.mocks.VerifyAll();
+            Assert.IsTrue(cleaned);
+        }
+
+        [Test]
+        public void PublishResultsShouldNotCleanTemporaryResultsOnMergeFailure()
+        {
+            // Set up the test
+            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var parameters = new List<NameValuePair>();
+            SetupResult.For(result.Parameters).Return(parameters);
+            SetupResult.For(result.Succeeded).Return(false);
+            SetupResult.For(result.Modifications).Return(new Modification[0]);
+            SetupResult.For(result.FailureUsers).Return(new ArrayList());
+            var results = new List<ITaskResult>();
+            SetupResult.For(result.TaskResults).Return(results);
+            var project = new Project();
+            project.Publishers = new ITask[]
+            {
+                new PhantomPublisher(true)
+            };
+            var tempResult = new PhantomResult(p => { Assert.Fail("CleanUp() called"); });
+            results.Add(tempResult);
+
+            // Run the test
+            this.mocks.ReplayAll();
+            project.PublishResults(result);
+
+            // Check the results
+            this.mocks.VerifyAll();
+        }
         #endregion
+
+        private class PhantomPublisher
+            : ITask, IMergeTask
+        {
+            private bool failOnRun;
+
+            public PhantomPublisher(bool failOnRun)
+            {
+                this.failOnRun = failOnRun;
+            }
+
+            public void Run(IIntegrationResult result)
+            {
+                if (failOnRun)
+                {
+                    throw new Exception("Failing on run");
+                }
+            }
+        }
 
         private class PhantomResult
             : ITaskResult, ITemporaryResult

@@ -248,6 +248,7 @@
     <Compile Include="IIntegrationRunnerTarget.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IMergeTask.cs" />
     <Compile Include="IntegrationPropertyNames.cs" />
     <Compile Include="IntegrationQueueManager.cs">
       <SubType>Code</SubType>
