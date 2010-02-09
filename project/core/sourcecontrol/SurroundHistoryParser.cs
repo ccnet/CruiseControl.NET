@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	///
 	/// where
 	/// {History Line} has the following format:
-	/// <repository><filename><rev><action><timestamp><comment><username><user email>
+    /// &lt;repository&gt;&lt;filename&gt;&lt;rev&gt;&lt;action&gt;&lt;timestamp&gt;&lt;comment&gt;&lt;username&gt;&lt;user email&gt;
 	/// </summary>
 	public class SurroundHistoryParser : IHistoryParser
 	{

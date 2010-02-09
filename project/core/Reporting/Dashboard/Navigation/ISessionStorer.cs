@@ -10,7 +10,6 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
         /// <summary>
         /// Generates a token to add to a query string for a session.
         /// </summary>
-        /// <param name="sessionToken"></param>
         /// <returns></returns>
         string GenerateQueryToken();
 

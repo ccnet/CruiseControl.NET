@@ -162,6 +162,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Writes a value.
         /// </summary>
         /// <param name="writer"></param>
+        /// <param name="elementName"></param>
         /// <param name="value"></param>
         private void WriteValue(XmlWriter writer, NameValuePair value, string elementName)
         {

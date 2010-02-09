@@ -33,6 +33,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// Method implementaion for IHistoryParser
 		/// </summary>
 		/// <param name="starTeamLog"></param>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
 		/// <returns></returns>
 		public Modification[] Parse(TextReader starTeamLog, DateTime from, DateTime to)
 		{

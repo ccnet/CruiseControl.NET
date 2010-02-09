@@ -48,6 +48,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
         /// </summary>
         /// <param name="projectName">The name of the project.</param>
         /// <param name="enforcerName">The person forcing the build.</param>
+        /// <param name="buildValues"></param>
         void ForceBuild(string projectName, string enforcerName, Dictionary<string, string> buildValues);
 
         /// <summary>

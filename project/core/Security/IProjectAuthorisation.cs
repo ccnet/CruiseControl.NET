@@ -33,6 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <param name="permission">The permission to check.</param>
         /// <param name="defaultRight">The default right to use.</param>
         /// <returns>True if the permission is valid, false otherwise.</returns>
+        /// <param name="manager"></param>
         bool CheckPermission(ISecurityManager manager, 
             string userName, 
             SecurityPermission permission,

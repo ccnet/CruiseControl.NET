@@ -25,6 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// </summary>
         /// <param name="userName"></param>
         /// <param name="password"></param>
+        /// <param name="domainName"></param>
         public ImpersonationDetails(string domainName, string userName, string password)
         {
             DomainName = domainName;

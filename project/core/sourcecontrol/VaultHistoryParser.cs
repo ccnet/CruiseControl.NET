@@ -36,13 +36,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return mods.ToArray();
 		}
 
-		/// <summary
+		/// <summary>
 		/// The Vault command line client (vault.exe), at least for
 		/// version 2.0.4, is not guaranteed to output valid XML in
 		/// that there may be some not XML output surrounding the XML.
 		/// This method strips away any non-XML	output surrounding
-		/// the <vault>...</vault> elements.
-		/// </summary
+        /// the &lt;vault&gt;...&lt;/vault&gt; elements.
+		/// </summary>
 		/// <param name="history"Output from Vault client is read from this reader.</param>
 		/// <returns>string containing only the XML output from the Vault client.</returns>
 		/// <exception cref="CruiseControlException">The <vault> start element or </vault> end element cannot be found.</exception>

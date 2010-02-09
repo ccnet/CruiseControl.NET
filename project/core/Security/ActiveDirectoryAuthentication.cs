@@ -43,6 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// Start a new authentication with a user name.
         /// </summary>
         /// <param name="userName"></param>
+        /// <param name="ldap"></param>
         public ActiveDirectoryAuthentication(string userName, Util.ILdapService ldap)
         {
             this.UserName = userName;

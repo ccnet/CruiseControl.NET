@@ -16,6 +16,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
     /// Display Ohloh stats for a project.
     /// Configuration is done in ccnet.config via the linkedSites property
     /// </summary>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code>
+    /// </code>
+    /// </example>
     [ReflectorType("ohlohProjectPlugin")]
     public class OhlohProjectPlugin
         : ICruiseAction, IPlugin
