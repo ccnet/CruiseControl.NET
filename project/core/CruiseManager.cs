@@ -274,22 +274,60 @@ namespace ThoughtWorks.CruiseControl.Core
             return Convert.ToInt64(resp.Data);
         }
 
-        #region RetrieveFileTransfer()
+        #region File transfer methods
+        #region OpenFile()
         /// <summary>
-        /// Retrieve a file transfer object.
+        /// Opens a file from a project.
         /// </summary>
-        /// <param name="project">The project to retrieve the file for.</param>
-        /// <param name="fileName">The name of the file.</param>
-        public virtual RemotingFileTransfer RetrieveFileTransfer(string project, string fileName)
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns>The file key to use for accessing the file.</returns>
+        /// <remarks>
+        /// This will only open files relative to the artifacts folder.
+        /// </remarks>
+        public string OpenFile(string projectName, string fileName)
         {
             var request = new FileTransferRequest();
-            request.ProjectName = project;
+            request.ProjectName = projectName;
             request.FileName = fileName;
-            var response = cruiseServer.RetrieveFileTransfer(request);
+            var response = cruiseServer.OpenFile(request);
             ValidateResponse(response);
-            return response.FileTransfer as RemotingFileTransfer;
+            return response.Data;
         }
-		#endregion
+        #endregion
+
+        #region TransferFileData()
+        /// <summary>
+        /// Transfers a block of data from a file.
+        /// </summary>
+        /// <param name="fileKey">The file key.</param>
+        /// <returns>The base-64 encoded block of data from the file.</returns>
+        public string TransferFileData(string fileKey)
+        {
+            var request = new FileTransferRequest();
+            request.ProjectName = "<transfer>";
+            request.FileName = fileKey;
+            var response = cruiseServer.TransferFileData(request);
+            ValidateResponse(response);
+            return response.Data;
+        }
+        #endregion
+
+        #region CloseFile()
+        /// <summary>
+        /// Closes a file.
+        /// </summary>
+        /// <param name="fileKey">The file key.</param>
+        public void CloseFile(string fileKey)
+        {
+            var request = new FileTransferRequest();
+            request.ProjectName = "<transfer>";
+            request.FileName = fileKey;
+            var response = cruiseServer.CloseFile(request);
+            ValidateResponse(response);
+        }
+        #endregion
+        #endregion
 
         #region Helper methods - conversion from old to new
         #region GenerateServerRequest()

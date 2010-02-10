@@ -1,4 +1,22 @@
 <!-- BuildLog.vm: Start -->
+<style type="text/css">
+  div.indent
+  {
+  margin-left: 1em;
+  }
+  span.html
+  {
+  color:#1111ff;
+  }
+  span.tagName
+  {
+  color:#991111;
+  }
+  span.attributeName
+  {
+  color:#dd0000;
+  }
+</style>
 <p>Click <a href="$logUrl">here</a> to open log in its own page</p>
-<pre class="log">$log</pre>
+<div>$log</div>
 <!-- BuildLog.vm: End -->

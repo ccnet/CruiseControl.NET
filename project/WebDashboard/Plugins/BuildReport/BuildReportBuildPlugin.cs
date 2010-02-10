@@ -30,6 +30,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			get { return xslFileNames; }
 			set { xslFileNames = value; }
 		}
+        [ReflectorArray("taskTypes", Required = false)]
+        public string[] TaskTypes { get; set; }
 
 		public override INamedAction[] NamedActions
 		{
@@ -37,6 +39,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			{
 				MultipleXslReportBuildAction buildAction = (MultipleXslReportBuildAction) actionInstantiator.InstantiateAction(typeof (MultipleXslReportBuildAction));
 				buildAction.XslFileNames = XslFileNames;
+                buildAction.TaskTypes = this.TaskTypes;
 				return new INamedAction[] {new ImmutableNamedAction(ACTION_NAME, buildAction)};
 			}
 		}

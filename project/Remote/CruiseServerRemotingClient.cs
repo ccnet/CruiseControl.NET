@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.Remoting;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Security;
+using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -383,17 +384,29 @@ namespace ThoughtWorks.CruiseControl.Remote
         }
         #endregion
 
-        #region RetrieveFileTransfer()
+        #region TransferFile()
         /// <summary>
-        /// Retrieves a file transfer instance.
+        /// Transfers a file.
         /// </summary>
-        /// <param name="projectName">The name of the project.</param>
-        /// <param name="fileName">The name of the file.</param>
-        /// <returns>The file transfer instance.</returns>
-        public override IFileTransfer RetrieveFileTransfer(string projectName, string fileName)
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="outputStream">The output stream.</param>
+        public override void TransferFile(string projectName, string fileName, Stream outputStream)
         {
-            var response = manager.RetrieveFileTransfer(projectName, fileName);
-            return response;
+            var fileKey = manager.OpenFile(projectName, fileName);
+            string fileData = null;
+            try
+            {
+                while ((fileData = manager.TransferFileData(fileKey)).Length > 0)
+                {
+                    var data = Convert.FromBase64String(fileData);
+                    outputStream.Write(data, 0, data.Length);
+                }
+            }
+            finally
+            {
+                manager.CloseFile(fileKey);
+            }
         }
         #endregion
         #endregion

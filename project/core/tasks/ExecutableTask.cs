@@ -109,28 +109,25 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 			ProcessInfo info = CreateProcessInfo(result);
 			SetConfiguredEnvironmentVariables(info.EnvironmentVariables, EnvironmentVariables);
-
-			ProcessResult processResult = TryToRun(info, result);
-
-            if (!StringUtil.IsWhitespace(processResult.StandardOutput) || !StringUtil.IsWhitespace(processResult.StandardError))
+            
+            // Initialise the streams
+            using (var stdOut = this.Context.CreateResultStream("stdout", "data/xml"))
             {
-                // The executable produced some output.  We need to transform it into an XML build report 
-                // fragment so the rest of CC.Net can process it.
-                ProcessResult newResult = new ProcessResult(
-                    StringUtil.MakeBuildResult(processResult.StandardOutput,string.Empty),
-					StringUtil.MakeBuildResult(processResult.StandardError, "Error"), 
-                    processResult.ExitCode, 
-                    processResult.TimedOut,
-					processResult.Failed);
+                using (var stdErr = this.Context.CreateResultStream("stderr", "data/xml"))
+                {
+                    // Perform the actual execution
+                    var processResult = TryToRun(info, result, stdOut, stdErr, true);
 
-                processResult = newResult;
+                    // Check the results
+                    result.AddTaskResult(new ProcessTaskResult(processResult));
+                    if (processResult.TimedOut)
+                    {
+                        throw new BuilderException(this, "Command Line Build timed out (after " + BuildTimeoutSeconds + " seconds)");
+                    }
+
+                    return !processResult.Failed;
+                }
             }
-            result.AddTaskResult(new ProcessTaskResult(processResult));
-
-        	if (processResult.TimedOut)
-        		throw new BuilderException(this, "Command Line Build timed out (after " + BuildTimeoutSeconds + " seconds)");
-
-            return !processResult.Failed;
 		}
 
 		protected override string GetProcessFilename()

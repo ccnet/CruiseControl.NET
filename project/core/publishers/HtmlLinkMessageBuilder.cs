@@ -1,4 +1,5 @@
 
+using ThoughtWorks.CruiseControl.Core.Tasks;
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	public class HtmlLinkMessageBuilder : IMessageBuilder
@@ -10,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			this.includeAnchorTag = includeAnchorTag;
 		}
 
-		public string BuildMessage(IIntegrationResult result)
+        public string BuildMessage(IIntegrationResult result, TaskContext context)
 		{
 			string link = result.ProjectUrl;
 			if (includeAnchorTag) link = string.Format(@"<a href=""{0}"">web page</a>", link);

@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Xml;
+using System.Xml.Xsl;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
@@ -7,6 +9,8 @@ using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+using System.IO;
+using System.Text;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 {
@@ -34,10 +38,31 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 
 		public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
+            // Transform the document into a dynamic document
+            var buildSpecifier = cruiseRequest.BuildSpecifier;
+            var build = buildRetriever.GetBuild(buildSpecifier, cruiseRequest.RetrieveSessionToken());
+            var transform = new XslCompiledTransform();
+            using (var reader = XmlReader.Create(this.GetType().Assembly.GetManifestResourceStream("ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport.BuildReportTransform.xslt")))
+            {
+                transform.Load(reader);
+            }
+            var builder = new StringBuilder();
+            using (var stringReader = new StringReader(build.Log))
+            {
+                using (var stringWriter = new StringWriter(builder))
+                {
+                    using (var reader = XmlReader.Create(stringReader))
+                    {
+                        using (var writer = XmlWriter.Create(stringWriter))
+                        {
+                            transform.Transform(reader, writer);
+                        }
+                    }
+                }
+            }
+
 			Hashtable velocityContext = new Hashtable();
-			IBuildSpecifier buildSpecifier = cruiseRequest.BuildSpecifier;
-			Build build = buildRetriever.GetBuild(buildSpecifier, cruiseRequest.RetrieveSessionToken());
-			velocityContext["log"] = build.Log.Replace("<", "&lt;").Replace(">", "&gt;");
+            velocityContext["log"] = builder.ToString();
 
 			// TODO - urk, this is a hack, need a better way of setting extensions
 			string oldExtension = urlBuilder.Extension;

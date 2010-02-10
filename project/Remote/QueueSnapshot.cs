@@ -14,8 +14,10 @@ namespace ThoughtWorks.CruiseControl.Remote
 	{
 		private string queueName;
         private List<QueuedRequestSnapshot> queueRequests = new List<QueuedRequestSnapshot>();
-        // Required for 1.4.4 or earlier compatibility
+
+        #pragma warning disable 649  // Required for 1.4.4 or earlier compatibility
         private QueuedRequestSnapshotList _requests;
+        #pragma warning restore 649
 
         /// <summary>
         /// Initialise a new blank <see cref="QueueSnapshot"/>.

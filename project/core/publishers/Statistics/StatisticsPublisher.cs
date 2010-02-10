@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
                 Statistic statistic = ConfiguredStatistics[i];
                 builder.Add(statistic);     // Note: This may actually remove the statistic if include=false.
             }
-            StatisticsResults stats = builder.ProcessBuildResults(integrationResult);
+            StatisticsResults stats = builder.ProcessBuildResults(this.Context);
 
             UpdateXmlFile(stats, integrationResult);
             

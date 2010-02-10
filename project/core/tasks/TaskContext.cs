@@ -10,8 +10,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
+    using System.Threading;
     using System.Xml;
+    using ThoughtWorks.CruiseControl.Core.Publishers;
     using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
     /// <summary>
     /// Provides context for a task.
@@ -26,25 +29,46 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         private readonly IFileSystem fileSystem;
         #endregion
 
-        #region resultDetails
-        /// <summary>
-        /// The result details for the tasks that have have streams created.
-        /// </summary>
-        private readonly List<TaskResultDetails> resultDetails = new List<TaskResultDetails>();
-        #endregion
-
-        #region contextId
-        /// <summary>
-        /// A unique identifier for the context.
-        /// </summary>
-        private readonly Guid contextId;
-        #endregion
-
         #region parentContext
         /// <summary>
         /// The parent context for this instance.
         /// </summary>
         private readonly TaskContext parentContext;
+        #endregion
+
+        #region contextId
+        /// <summary>
+        /// The identifier of the context.
+        /// </summary>
+        private readonly Guid contextId = Guid.NewGuid();
+        #endregion
+
+        #region result
+        /// <summary>
+        /// The integration result for the context.
+        /// </summary>
+        private readonly IIntegrationResult result;
+        #endregion
+
+        #region snapshotLock
+        /// <summary>
+        /// A lock object to use for generating snapshots.
+        /// </summary>
+        private readonly object snapshotLock = new object();
+        #endregion
+
+        #region associatedResult
+        /// <summary>
+        /// The associated <see cref="TaskResult"/>.
+        /// </summary>
+        private TaskResult associatedResult;
+        #endregion
+
+        #region buildFolder
+        /// <summary>
+        /// The integration result for the context.
+        /// </summary>
+        private string buildFolder;
         #endregion
         #endregion
 
@@ -52,36 +76,37 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskContext"/> class.
         /// </summary>
+        /// <param name="project">The project configuration.</param>
         /// <param name="fileSystem">The file system.</param>
-        /// <param name="artifactFolder">The artifact folder.</param>
-        public TaskContext(IFileSystem fileSystem, string artifactFolder)
-            : this(fileSystem, artifactFolder, null, Guid.NewGuid())
+        /// <param name="result">The associated result.</param>
+        private TaskContext(ProjectConfiguration project, IFileSystem fileSystem, IIntegrationResult result)
+            : this(project, fileSystem, result, null)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskContext"/> class.
         /// </summary>
+        /// <param name="project">The project configuration.</param>
         /// <param name="fileSystem">The file system.</param>
-        /// <param name="artifactFolder">The artifact folder.</param>
+        /// <param name="result">The associated result.</param>
         /// <param name="parent">The parent context.</param>
-        /// <param name="contextId">The context id.</param>
-        private TaskContext(IFileSystem fileSystem, string artifactFolder, TaskContext parent, Guid contextId)
+        private TaskContext(ProjectConfiguration project, IFileSystem fileSystem, IIntegrationResult result, TaskContext parent)
         {
+            this.Project = project;
             this.fileSystem = fileSystem;
-            this.ArtifactFolder = artifactFolder;
+            this.result = result;
             this.parentContext = parent;
-            this.contextId = contextId;
+            this.associatedResult = new TaskResult("project", project.Name);
         }
         #endregion
 
         #region Public properties
-        #region ArtifactFolder
+        #region Project
         /// <summary>
-        /// Gets the artifact folder for the task.
+        /// Gets the configuration settings for the project.
         /// </summary>
-        /// <value>The artifact folder.</value>
-        public string ArtifactFolder { get; private set; }
+        public ProjectConfiguration Project { get; private set; }
         #endregion
 
         #region IsFinialised
@@ -93,38 +118,94 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </value>
         public bool IsFinialised { get; private set; }
         #endregion
-        #endregion
 
-        #region Public delegates
-        #region MergeHandler()
+        #region BuildFolder
         /// <summary>
-        /// A handler for merging streams.
+        /// Gets the build folder.
         /// </summary>
-        public delegate void MergeHandler(Stream outputStream, Stream[] inputStreams);
+        /// <value>The build folder.</value>
+        public string BuildFolder
+        {
+            get
+            {
+                if (this.buildFolder == null)
+                {
+                    this.buildFolder = this.result.BaseFromArtifactsDirectory(this.result.Label);
+                }
+
+                return this.buildFolder;
+            }
+        }
         #endregion
         #endregion
 
         #region Public methods
-        #region MergeResultStreams()
+        #region FromProject()
         /// <summary>
-        /// Merges multiple result streams.
+        /// Starts a new task context from a project.
         /// </summary>
-        /// <param name="taskName">Name of the task.</param>
-        /// <param name="taskType">Type of the task.</param>
-        /// <param name="streamsToMerge">The streams to merge.</param>
-        public void MergeResultStreams(string taskName, string taskType, params Stream[] streamsToMerge)
+        /// <param name="project">The project.</param>
+        /// <param name="result">The result.</param>
+        /// <returns>The new <see cref="TaskContext"/>.</returns>
+        public static TaskContext FromProject(Project project, IIntegrationResult result)
         {
-            this.MergeResultStreams(taskName, taskType, null, streamsToMerge);
+            var context = new TaskContext(ProjectConfiguration.FromProject(project), new SystemIoFileSystem(), result);
+            return context;
         }
 
         /// <summary>
-        /// Merges multiple result streams.
+        /// Starts a new task context from a project.
         /// </summary>
-        /// <param name="taskName">Name of the task.</param>
-        /// <param name="taskType">Type of the task.</param>
-        /// <param name="mergeHandler">The merge handler to use. If null, a plain binary merge will be used.</param>
-        /// <param name="streamsToMerge">The streams to merge.</param>
-        public void MergeResultStreams(string taskName, string taskType, MergeHandler mergeHandler, params Stream[] streamsToMerge)
+        /// <param name="project">The project configuration.</param>
+        /// <param name="result">The result.</param>
+        /// <returns>The new <see cref="TaskContext"/>.</returns>
+        public static TaskContext FromProject(ProjectConfiguration project, IIntegrationResult result)
+        {
+            var context = new TaskContext(project, new SystemIoFileSystem(), result);
+            return context;
+        }
+        #endregion
+
+        #region GetStreamName()
+        /// <summary>
+        /// Gets the filename of the stream.
+        /// </summary>
+        /// <param name="remoteStream">The remote stream.</param>
+        /// <returns>The filename of the stream.</returns>
+        public string GetStreamName(Stream remoteStream)
+        {
+            var fileStream = remoteStream as FileStream;
+            if (fileStream != null)
+            {
+                return fileStream.Name;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+        #endregion
+
+        #region ImportResult()
+        /// <summary>
+        /// Imports a result from an external source.
+        /// </summary>
+        /// <param name="resultToImport">The result to import.</param>
+        public void ImportResult(TaskResult resultToImport)
+        {
+            this.associatedResult.Children.Add(resultToImport);
+        }
+        #endregion
+
+        #region ImportResultFile()
+        /// <summary>
+        /// Imports a result file.
+        /// </summary>
+        /// <param name="filename">The filename of the results file.</param>
+        /// <param name="resultName">Name of the result.</param>
+        /// <param name="dataType">Type of the data.</param>
+        /// <param name="deleteSourceFile">If set to <c>true</c> the source file will be deleted.</param>
+        public void ImportResultFile(string filename, string resultName, string dataType, bool deleteSourceFile)
         {
             // Make sure this context has not been finialised
             if (this.IsFinialised)
@@ -132,83 +213,85 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 throw new ApplicationException("Context has been finialised - no further actions can be performed using it");
             }
 
-            // Validate the task name
-            if (String.IsNullOrEmpty(taskName))
-            {
-                throw new ArgumentException("taskName is null or empty.", "taskName");
-            }
-
             // Validate the task type
-            if (String.IsNullOrEmpty(taskType))
+            if (String.IsNullOrEmpty(filename))
             {
-                throw new ArgumentException("taskType is null or empty.", "taskType");
+                throw new ArgumentException("filename is null or empty.", "filename");
             }
 
-            // Validate the streams to merge
-            if (streamsToMerge.Length == 0)
+            // Validate the result name
+            if (String.IsNullOrEmpty(resultName))
             {
-                throw new ArgumentException("There must be at least one stream to merge");
+                throw new ArgumentException("resultName is null or empty.", "resultName");
             }
 
-            // Make sure there is a merge handler
-            var actualHandler = mergeHandler ?? new MergeHandler((output, input) =>
+            // Validate the data type
+            if (String.IsNullOrEmpty(dataType))
             {
-                var blockSize = 32768;
-                var dataBlock = new byte[blockSize];
-                int len;
-                foreach (var stream in input)
+                throw new ArgumentException("dataType is null or empty.", "dataType");
+            }
+
+            // Generate the filename
+            var actualFilename = this.GenerateDataFilename();
+            this.fileSystem.EnsureFolderExists(actualFilename);
+
+            // Add the result details
+            var details = new TaskOutput(actualFilename, resultName, dataType);
+            this.LockResults(
+                t =>
                 {
-                    while ((len = stream.Read(dataBlock, 0, blockSize)) > 0)
+                    this.associatedResult.Output.Add(details);
+                },
+                "Unable to add new output - index is locked");
+
+            // Move/copy the file
+            if (deleteSourceFile)
+            {
+                File.Move(filename, actualFilename);
+            }
+            else
+            {
+                File.Copy(filename, actualFilename);
+            }
+        }
+
+        public void ImportResultFile(Stream inputStream, string resultName, string dataType)
+        {
+            // Make sure this context has not been finialised
+            if (this.IsFinialised)
+            {
+                throw new ApplicationException("Context has been finialised - no further actions can be performed using it");
+            }
+
+            // Validate the input stream
+            if (inputStream == null)
+            {
+                throw new ArgumentNullException("inputStream");
+            }
+
+            // Validate the result name
+            if (String.IsNullOrEmpty(resultName))
+            {
+                throw new ArgumentException("resultName is null or empty.", "resultName");
+            }
+
+            // Validate the data type
+            if (String.IsNullOrEmpty(dataType))
+            {
+                throw new ArgumentException("dataType is null or empty.", "dataType");
+            }
+
+            // Open the new stream and copy the data
+            using (var newStream = this.CreateResultStream(resultName, dataType))
+            {
+                using (var stream = this.fileSystem.ResetStreamForReading(inputStream))
+                {
+                    var buffer = new byte[4096];
+                    var length = 1;
+                    while ((length = stream.Read(buffer, 0, buffer.Length)) > 0)
                     {
-                        output.Write(dataBlock, 0, len);
+                        newStream.Write(buffer, 0, length);
                     }
-                }
-            });
-
-            // Reopen the streams so they can be merged
-            var inputStreams = new List<Stream>();
-            try
-            {
-                // This only works if the user has not opened a result stream externally - need to
-                // figure out some way of checking this
-                foreach (FileStream streamToMerge in streamsToMerge)
-                {
-                    inputStreams.Add(this.fileSystem.OpenInputStream(streamToMerge.Name));
-                }
-
-                // Generate the output stream
-                using (var outputStream = this.CreateResultStream(taskName, taskType))
-                {
-                    actualHandler(outputStream, inputStreams.ToArray());
-                }
-            }
-            finally
-            {
-                // Clean up
-                foreach (var inputStream in inputStreams)
-                {
-                    inputStream.Dispose();
-                }
-            }
-
-            // Finally remove the references to the old results
-            foreach (FileStream streamToMerge in streamsToMerge)
-            {
-                // Search from the end - this is based on the assumption that we will be
-                // merging recent results
-                int position = -1;
-                for (var loop = this.resultDetails.Count - 1; loop >= 0; loop--)
-                {
-                    if (this.resultDetails[loop].FileName == streamToMerge.Name)
-                    {
-                        position = loop;
-                        break;
-                    }
-                }
-
-                if (position >= 0)
-                {
-                    this.resultDetails.RemoveAt(position);
                 }
             }
         }
@@ -218,26 +301,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Opens a new result stream for a task.
         /// </summary>
-        /// <param name="taskName">Name of the task.</param>
-        /// <param name="taskType">Type of the task.</param>
+        /// <param name="resultName">Name of the result.</param>
+        /// <param name="dataType">Type of the data.</param>
         /// <returns>
         /// The <see cref="Stream"/> for writing the task result.
         /// </returns>
-        public virtual Stream CreateResultStream(string taskName, string taskType)
-        {
-            return this.CreateResultStream(taskName, taskType, false);
-        }
-
-        /// <summary>
-        /// Opens a new result stream for a task.
-        /// </summary>
-        /// <param name="taskName">Name of the task.</param>
-        /// <param name="taskType">Type of the task.</param>
-        /// <param name="ignoreExtension">If set to <c>true</c> then the extension is not changed.</param>
-        /// <returns>
-        /// The <see cref="Stream"/> for writing the task result.
-        /// </returns>
-        public virtual Stream CreateResultStream(string taskName, string taskType, bool ignoreExtension)
+        public virtual Stream CreateResultStream(string resultName, string dataType)
         {
             // Make sure this context has not been finialised
             if (this.IsFinialised)
@@ -245,32 +314,30 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 throw new ApplicationException("Context has been finialised - no further actions can be performed using it");
             }
 
-            // Validate the task name
-            if (String.IsNullOrEmpty(taskName))
+            // Validate the result name
+            if (String.IsNullOrEmpty(resultName))
             {
-                throw new ArgumentException("taskName is null or empty.", "taskName");
+                throw new ArgumentException("resultName is null or empty.", "resultName");
             }
 
-            // Validate the task type
-            if (String.IsNullOrEmpty(taskType))
+            // Validate the data type
+            if (String.IsNullOrEmpty(dataType))
             {
-                throw new ArgumentException("taskType is null or empty.", "taskType");
+                throw new ArgumentException("dataType is null or empty.", "dataType");
             }
 
             // Generate the filename
-            var extension = Path.GetExtension(taskName);
-            if (!ignoreExtension || (extension.Length == 0))
-            {
-                extension = ".xml";
-            }
-
-            // Make sure the filename does not exist
-            var fileName = this.GenerateUniqueFileName(
-                Path.GetFileNameWithoutExtension(taskName) + extension);
+            var fileName = this.GenerateDataFilename();
+            this.fileSystem.EnsureFolderExists(fileName);
 
             // Add the result details
-            var details = new TaskResultDetails(taskName, taskType, fileName);
-            this.resultDetails.Add(details);
+            var details = new TaskOutput(fileName, resultName, dataType);
+            this.LockResults(
+                t =>
+                {
+                    this.associatedResult.Output.Add(details);
+                },
+                "Unable to add new result - index is locked");
 
             // Generate the actual stream
             var stream = this.fileSystem.OpenOutputStream(fileName);
@@ -282,19 +349,26 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Starts a new child <see cref="TaskContext"/> instance.
         /// </summary>
-        /// <returns>The child <see cref="TaskContext"/> instance.</returns>
+        /// <returns>
+        /// The child <see cref="TaskContext"/> instance.
+        /// </returns>
         public TaskContext StartChildContext()
         {
-            // Generate the child's id here, so it can be used to generate the new folder
-            var childId = Guid.NewGuid();
-
-            // Generate the new folder for the child artifacts
-            var childFolder = Path.Combine(this.ArtifactFolder, childId.ToString());
-            this.fileSystem.EnsureFolderExists(Path.Combine(childFolder, "temp"));
-
             // Start the new context
-            var child = new TaskContext(this.fileSystem, childFolder, this, childId);
+            var child = new TaskContext(this.Project, this.fileSystem, this.result, this);
             return child;
+        }
+        #endregion
+
+        #region InitialiseResult()
+        /// <summary>
+        /// Initialises the associated result.
+        /// </summary>
+        /// <param name="taskType">Type of the task.</param>
+        /// <param name="identifier">The identifier (name) of the task.</param>
+        public void InitialiseResult(string taskType, string identifier)
+        {
+            this.associatedResult = new TaskResult(taskType, identifier);
         }
         #endregion
 
@@ -303,7 +377,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Merges a child <see cref="TaskContext"/>.
         /// </summary>
         /// <param name="childContext">The child <see cref="TaskContext"/> to merge.</param>
-        public void MergeChildContext(TaskContext childContext)
+        /// <param name="status">The status.</param>
+        public void MergeChildContext(TaskContext childContext, ItemBuildStatus status)
         {
             // Validate the child context first
             if (childContext == null)
@@ -317,16 +392,52 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             // Finialise the context so noone else can modify it
             childContext.IsFinialised = true;
+            childContext.associatedResult.TaskOutcome = status;
 
             // Merge all the child results
-            foreach (var childResult in childContext.resultDetails)
+            this.LockResults(
+                t =>
+                {
+                    this.associatedResult.Children.Add(childContext.associatedResult);
+                },
+                "Unable to merge results - index is locked");
+        }
+        #endregion
+
+        #region GenerateLogFolder()
+        /// <summary>
+        /// Generates the log folder.
+        /// </summary>
+        /// <param name="logFolder">The default log folder.</param>
+        /// <returns>The name of the log folder.</returns>
+        /// <remarks>
+        /// This method will also ensure that the log folder exists.
+        /// </remarks>
+        public string GenerateLogFolder(string logFolder)
+        {
+            // Generate the folder name
+            var folder = logFolder ?? "buildlogs";
+            if (!Path.IsPathRooted(folder))
             {
-                var newFilePath = this.GenerateUniqueFileName(
-                    Path.GetFileName(childResult.FileName));
-                this.fileSystem.MoveFile(childResult.FileName, newFilePath);
-                this.resultDetails.Add(
-                    new TaskResultDetails(childResult.TaskName, childResult.TaskType, newFilePath));
+                folder = this.result.BaseFromArtifactsDirectory(folder);
             }
+
+            // Ensure the folder exists
+            this.fileSystem.EnsureFolderExists(folder, false);
+            return folder;
+        }
+        #endregion
+
+        #region GenerateLogFilename()
+        /// <summary>
+        /// Generates the log filename.
+        /// </summary>
+        /// <returns>The name of the log file.</returns>
+        public string GenerateLogFilename()
+        {
+            var baseName = Util.StringUtil.RemoveInvalidCharactersFromFileName(new LogFile(this.result).Filename);
+            var fullName = Path.Combine(this.result.BuildLogDirectory, baseName);
+            return fullName;
         }
         #endregion
 
@@ -334,43 +445,69 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Finialises this instance.
         /// </summary>
-        public void Finialise()
+        public void Finialise(ItemBuildStatus status)
         {
             // Mark this instance as finialised
             this.IsFinialised = true;
+            this.associatedResult.TaskOutcome = status;
 
-            // Write out the index
-            var indexPath = Path.Combine(this.ArtifactFolder, "ccnet-task-index.xml");
-            using (var indexStream = this.fileSystem.OpenOutputStream(indexPath))
+            // Generate the log folder
+            var logLocation = this.GenerateLogFolder(this.Project.LogFolder);
+            this.result.BuildLogDirectory = logLocation;
+
+            // Start the log writer
+            var logName = this.GenerateLogFilename();
+            this.fileSystem.DeleteFile(logName);
+            using (var writer = new StreamWriter(this.fileSystem.OpenOutputStream(logName)))
             {
-                var settings = new XmlWriterSettings
-                {
-                    CheckCharacters = true,
-                    CloseOutput = true,
-                    ConformanceLevel = ConformanceLevel.Document,
-                    Encoding = UTF8Encoding.UTF8,
-                    Indent = false,
-                    NewLineHandling = NewLineHandling.None,
-                    NewLineOnAttributes = false,
-                    OmitXmlDeclaration = true
-                };
-                using (var document = XmlWriter.Create(indexStream, settings))
-                {
-                    document.WriteStartElement("task");
-                    foreach (var result in this.resultDetails)
-                    {
-                        document.WriteStartElement("result");
-                        document.WriteAttributeString("file", result.FileName);
-                        document.WriteAttributeString("name", result.TaskName);
-                        document.WriteAttributeString("type", result.TaskType);
-                        document.WriteEndElement();
-                    }
-
-                    document.WriteEndElement();
-                    document.Flush();
-                    document.Close();
-                }
+                this.WriteCurrentLog(writer);
             }
+        }
+        #endregion
+
+        #region WriteCurrentLog()
+        /// <summary>
+        /// Writes the current log to the writer.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        public void WriteCurrentLog(TextWriter writer)
+        {
+            using (var integrationWriter = new XmlIntegrationResultWriter(writer, this.GenerateResultsSnapshot()))
+            {
+                integrationWriter.Formatting = Formatting.Indented;
+                integrationWriter.Write(this.result);
+            }
+        }
+        #endregion
+
+        #region GenerateResultsSnapshot()
+        /// <summary>
+        /// Generates a snapshot of the current results.
+        /// </summary>
+        /// <returns>
+        /// The current results that have been generated.
+        /// </returns>
+        public TaskResult GenerateResultsSnapshot()
+        {
+            // Add the results from this context
+            TaskResult snapshot = null;
+
+            if (this.parentContext != null)
+            {
+                // Add the results from the parent and any ancestors
+                snapshot = this.parentContext.GenerateResultsSnapshot();
+            }
+            else
+            {
+                this.LockResults(
+                    t =>
+                    {
+                        snapshot = this.associatedResult;
+                    },
+                    "Unable to generate snapshot - unable to retrieve lock");
+            }
+
+            return snapshot;
         }
         #endregion
 
@@ -379,8 +516,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Runs a task in a child context.
         /// </summary>
         /// <param name="task">The task to run.</param>
-        /// <param name="result">The result to use.</param>
-        public void RunTask(TaskBase task, IIntegrationResult result)
+        public void RunTask(ITask task)
         {
             if (task == null)
             {
@@ -391,40 +527,66 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             var child = this.StartChildContext();
             try
             {
-                task.AssociateContext(this);
-                task.Run(result);
+                if (task is TaskBase)
+                {
+                    (task as TaskBase).AssociateContext(child);
+                }
+
+                task.Run(this.result);
             }
             finally
             {
                 // Clean up
-                this.MergeChildContext(child);
+                if (task is TaskBase)
+                {
+                    this.MergeChildContext(child, (task as TaskBase).CurrentStatus.Status);
+                }
+                else
+                {
+                    this.MergeChildContext(child, ItemBuildStatus.Unknown);
+                }
             }
         }
         #endregion
         #endregion
 
         #region Private methods
-        #region GenerateUniqueFileName()
+        #region LockResults()
         /// <summary>
-        /// Generates a unique file name.
+        /// Locks the results.
         /// </summary>
-        /// <param name="fileName">The base name of the file.</param>
-        /// <returns>A unique file name within the artifacts folder.</returns>
-        private string GenerateUniqueFileName(string fileName)
+        /// <param name="action">The action to perform.</param>
+        /// <param name="errorMessage">The error message if the lock cannot be entered.</param>
+        private void LockResults(Action<bool> action, string errorMessage)
         {
-            var baseFileName = Path.Combine(
-                this.ArtifactFolder,
-                Path.GetFileNameWithoutExtension(fileName));
-            var extension = Path.GetExtension(fileName);
-
-            var actualFileName = baseFileName + extension;
-            var copy = 0;
-            while (this.fileSystem.FileExists(actualFileName))
+            // Attempt to lock the results
+            if (Monitor.TryEnter(this.snapshotLock, 30000))
             {
-                actualFileName = baseFileName + "-" + (++copy).ToString() + extension;
+                try
+                {
+                    action(true);
+                }
+                finally
+                {
+                    Monitor.Exit(this.snapshotLock);
+                }
             }
+            else
+            {
+                // Cannot lock because someone else is holding the lock - deadlock?
+                throw new CruiseControlException(errorMessage);
+            }
+        }
+        #endregion
 
-            return actualFileName;
+        #region GenerateDataFilename()
+        /// <summary>
+        /// Generates a new data filename.
+        /// </summary>
+        /// <returns>The full path to the data file.</returns>
+        private string GenerateDataFilename()
+        {
+            return Path.Combine(this.BuildFolder, Guid.NewGuid().ToString() + ".data");
         }
         #endregion
         #endregion

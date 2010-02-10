@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Finishes this instance.
         /// </summary>
-        void Finish();
+        void Finish(ItemBuildStatus status);
         #endregion
     }
 }

@@ -506,16 +506,6 @@ namespace ThoughtWorks.CruiseControl.Core
         }
         #endregion
 
-        #region RetrieveFileTransfer()
-        /// <summary>
-        /// Retrieve a file transfer object.
-        /// </summary>
-        public FileTransferResponse RetrieveFileTransfer(FileTransferRequest request)
-        {
-            return cruiseServer.RetrieveFileTransfer(request);
-        }
-        #endregion
-
         #region GetLinkedSiteId()
         /// <summary>
         /// Retrieve the identifer for this project on a linked site.
@@ -662,6 +652,44 @@ namespace ThoughtWorks.CruiseControl.Core
                 }
             };
         }
+        #endregion
+
+        #region File transfer methods
+        #region OpenFile()
+        /// <summary>
+        /// Opens a file from a project's artifact folder.
+        /// </summary>
+        /// <param name="request">The request containing the name of the file.</param>
+        /// <returns>The response containing the key to the file.</returns>
+        public DataResponse OpenFile(FileTransferRequest request)
+        {
+            return this.cruiseServer.OpenFile(request);
+        }
+        #endregion
+
+        #region TransferFileData()
+        /// <summary>
+        /// Transfers a block of data from a previously opened file.
+        /// </summary>
+        /// <param name="request">The request containing the file key.</param>
+        /// <returns>The response containing Base64 encoded data.</returns>
+        public DataResponse TransferFileData(FileTransferRequest request)
+        {
+            return this.cruiseServer.TransferFileData(request);
+        }
+        #endregion
+
+        #region CloseFile()
+        /// <summary>
+        /// Closes a previously opened file.
+        /// </summary>
+        /// <param name="request">The request containing the file key.</param>
+        /// <returns>The response containing the outcome of the closure.</returns>
+        public Response CloseFile(FileTransferRequest request)
+        {
+            return this.cruiseServer.CloseFile(request);
+        }
+        #endregion
         #endregion
         #endregion
 

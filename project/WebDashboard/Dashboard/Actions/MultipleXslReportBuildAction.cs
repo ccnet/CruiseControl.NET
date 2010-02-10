@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
 			}
 			Hashtable xsltArgs = new Hashtable();
 			xsltArgs["applicationPath"] = cruiseRequest.Request.ApplicationPath;
-			return new HtmlFragmentResponse(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, xslFileNames, xsltArgs, cruiseRequest.RetrieveSessionToken()));
+			return new HtmlFragmentResponse(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, xslFileNames, xsltArgs, cruiseRequest.RetrieveSessionToken(), this.TaskTypes));
 		}
 
 		[ReflectorArray("xslFileNames")]
@@ -37,6 +37,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
 			get { return xslFileNames; }
 			set { xslFileNames = value; }
 		}
+
+        [ReflectorArray("taskTypes", Required = false)]
+        public string[] TaskTypes { get; set; }
 
 	    public ConditionalGetFingerprint GetFingerprint(IRequest request)
 	    {

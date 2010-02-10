@@ -35,63 +35,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return info;
 		}
 
-        /// <summary>
-        /// Merges the standard output and error streams.
-        /// </summary>
-        /// <param name="output">The output stream.</param>
-        /// <param name="input">The streams to merge.</param>
-        protected virtual void MergeHandler(Stream output, Stream[] input)
-        {
-            using (var writer = new StreamWriter(output, Encoding.UTF8))
-            {
-                // Start the data
-                writer.WriteLine("<buildresults>");
-                for (var loop = 0; loop < input.Length; loop++)
-                {
-                    var reader = new StreamReader(input[loop]);
-                    while (reader.Peek() >= 0)
-                    {
-                        // Write the start tag for the message
-                        writer.Write("<message");
-                        if (loop == 1)
-                        {
-                            writer.Write(" level=\"Error\"");
-                        }
-
-                        // Retrieve and write the message
-                        writer.WriteLine(">");
-                        var line = reader.ReadLine();
-                        if (!string.IsNullOrEmpty(line))
-                        {
-                            writer.WriteLine(XmlUtil.EncodePCDATA(line));
-                        }
-
-                        // Write the end tag for the message
-                        writer.WriteLine("</message>");
-                    }
-                }
-
-                // Close off the data
-                writer.WriteLine("</buildresults>");
-                writer.Flush();
-            }
-        }
-
-        /// <summary>
-        /// Creates a result stream.
-        /// </summary>
-        /// <param name="name">The name of the stream (stdout or stderr).</param>
-        /// <returns>A <see cref="Stream"/> for retrieving results.</returns>
-        protected virtual Stream CreateResultStream(string name)
-        {
-            return this.Context.CreateResultStream(name, "Executable-temp");
-        }
-
-        [Obsolete("Use the override that accepts a task name and type.")]
+        [Obsolete("This method is no longer supported.")]
         protected ProcessResult TryToRun(ProcessInfo info, IIntegrationResult result)
         {
-            var name = this.GetType().Name;
-            return this.TryToRun(info, result, name, name);
+            throw new NotImplementedException("This method is no longer supported");
         }
 
         /// <summary>
@@ -99,36 +46,39 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <param name="info">The info.</param>
         /// <param name="result">The result.</param>
-        /// <param name="taskName">The name of the task.</param>
-        /// <param name="taskType">The type of the task.</param>
-        /// <returns>A <see cref="ProcessResult"/> containing the results.</returns>
-        protected ProcessResult TryToRun(ProcessInfo info, IIntegrationResult result, string taskName, string taskType)
+        /// <param name="stdOut">The standard output stream.</param>
+        /// <param name="stdErr">The standard error stream.</param>
+        /// <returns>
+        /// A <see cref="ProcessResult"/> containing the results.
+        /// </returns>
+        protected ProcessResult TryToRun(ProcessInfo info, IIntegrationResult result, Stream stdOut, Stream stdErr)
+        {
+            return this.TryToRun(info, result, stdOut, stdErr, false);
+        }
+
+        /// <summary>
+        /// Tries to run an external executable.
+        /// </summary>
+        /// <param name="info">The info.</param>
+        /// <param name="result">The result.</param>
+        /// <param name="stdOut">The standard output stream.</param>
+        /// <param name="stdErr">The standard error stream.</param>
+        /// <param name="generateXml">If set to <c>true</c> XML will be generated.</param>
+        /// <returns>
+        /// A <see cref="ProcessResult"/> containing the results.
+        /// </returns>
+        protected ProcessResult TryToRun(ProcessInfo info, IIntegrationResult result, Stream stdOut, Stream stdErr, bool generateXml)
         {
             buildProgressInformation = result.BuildProgressInformation;
 
             ProcessResult processResult = null;
-            Stream outputStream = null;
-            Stream errorStream = null;
             try
             {
                 // enable Stdout monitoring
                 executor.ProcessOutput += ProcessExecutor_ProcessOutput;
 
                 // Run the executable
-                using (outputStream = this.CreateResultStream("stdout"))
-                {
-                    using (errorStream = this.CreateResultStream("stderr"))
-                    {
-                        processResult = executor.Execute(info, outputStream, errorStream);
-                    }
-                }
-
-                this.Context.MergeResultStreams(
-                    taskName, 
-                    taskType, 
-                    this.MergeHandler,
-                    outputStream, 
-                    errorStream);
+                processResult = executor.Execute(info, stdOut, stdErr, generateXml);
                 return processResult;
             }
             catch (IOException e)

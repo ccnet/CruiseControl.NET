@@ -2,6 +2,7 @@ using ThoughtWorks.CruiseControl.Remote.Parameters;
 using System.Collections.Generic;
 
 using ThoughtWorks.CruiseControl.Remote;
+using System.IO;
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
 	/// <summary>
@@ -35,13 +36,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         PackageDetails[] RetrievePackageList();
         #endregion
 
-        #region RetrieveFileTransfer()
+        #region TransferFile()
         /// <summary>
-        /// Retrieve a file transfer object.
+        /// Transfers a file.
         /// </summary>
-        /// <param name="project">The project to retrieve the file for.</param>
-        /// <param name="fileName">The name of the file.</param>
-        IFileTransfer RetrieveFileTransfer(string fileName);
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="outputStream">The output stream.</param>
+        void TransferFile(string fileName, Stream outputStream);
         #endregion
 
         /// <summary>

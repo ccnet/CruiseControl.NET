@@ -45,6 +45,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
             public Stream OpenInputStream(string fileName) { return null; }
 
             public void MoveFile(string oldFile, string newFile) { }
+
+            public void DeleteFile(string fileName)
+            {
+            }
+
+            public void EnsureFolderExists(string fileName, bool includesFileName)
+            {
+            }
+
+            public Stream CreateTempFile() { return null; }
+
+            public void DeleteTempFile(Stream tempFile) { }
+
+            public Stream ResetStreamForReading(Stream inputStream) { return null; }
         }
 
         [Test]

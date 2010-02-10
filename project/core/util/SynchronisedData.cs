@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
     /// A delegate for loading data.
     /// </summary>
     /// <returns>The data that has been loaded.</returns>
-    public delegate object LoadDataHandler();
+    public delegate TData LoadDataHandler<TData>();
     #endregion
 
     #region SynchronisedData
@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
     /// (using the <see cref="LoadData"/>() method). Any other caller that accesses an instance of
     /// this class should call <see cref="WaitForLoad"/>() before attempting to access the data.
     /// </remarks>
-    public class SynchronisedData
+    public class SynchronisedData<TData>
         : IDisposable
     {
         #region Private fields
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// Gets the synchronised data.
         /// </summary>
         /// <value>The data that is being synchronised.</value>
-        public object Data { get; private set; }
+        public TData Data { get; private set; }
         #endregion
         #endregion
 
@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// Loads the data and marks this instance as loaded.
         /// </summary>
         /// <param name="handler">The handler for loading the data.</param>
-        public void LoadData(LoadDataHandler handler)
+        public void LoadData(LoadDataHandler<TData> handler)
         {
             try
             {

@@ -5,6 +5,7 @@ using ThoughtWorks.CruiseControl.Remote.Messages;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using System.Xml;
+using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -675,22 +676,42 @@ namespace ThoughtWorks.CruiseControl.Remote
         }
         #endregion
 
-        #region RetrieveFileTransfer()
+        #region TransferFile()
         /// <summary>
-        /// Retrieves a file transfer instance.
+        /// Transfers a file.
         /// </summary>
-        /// <param name="projectName">The name of the project.</param>
-        /// <param name="fileName">The name of the file.</param>
-        /// <returns>The file transfer instance.</returns>
-        public override IFileTransfer RetrieveFileTransfer(string projectName, string fileName)
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="outputStream">The output stream.</param>
+        public override void TransferFile(string projectName, string fileName, Stream outputStream)
         {
-            if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
-
-            var request = new FileTransferRequest(SessionToken, projectName, fileName);
-            request.ServerName = TargetServer;
-            var response = connection.SendMessage("RetrieveFileTransfer", request);
-            ValidateResponse(response);
-            return (response as FileTransferResponse).FileTransfer;
+            // Open the file on the remote server
+            var request = new FileTransferRequest(this.SessionToken, projectName, fileName);
+            var openResponse = ValidateResponse(connection.SendMessage("OpenFile", request)) as DataResponse;
+            request.FileName = openResponse.Data;
+            try
+            {
+                // Transfer the data
+                var transfer = true;
+                while (transfer)
+                {
+                    var transferResponse = ValidateResponse(connection.SendMessage("TransferFileData", request)) as DataResponse;
+                    if (transferResponse.Data.Length > 0)
+                    {
+                        var data = Convert.FromBase64String(transferResponse.Data);
+                        outputStream.Write(data, 0, data.Length);
+                    }
+                    else
+                    {
+                        transfer = false;
+                    }
+                }
+            }
+            finally
+            {
+                // Close the file on the remote server
+                ValidateResponse(connection.SendMessage("CloseFile", request));
+            }
         }
         #endregion
 

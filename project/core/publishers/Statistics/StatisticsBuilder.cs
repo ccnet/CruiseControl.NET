@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Xml.XPath;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
@@ -39,22 +40,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// </summary>
         /// <param name="result">The results of the build.</param>
         /// <returns>The set of statistic values.</returns>
-        internal StatisticsResults ProcessBuildResults(IIntegrationResult result)
+        internal StatisticsResults ProcessBuildResults(TaskContext context)
         {
-            return ProcessBuildResults(ToXml(result));
-        }
-
-        /// <summary>
-        /// Convert the build results into XML.
-        /// </summary>
-        /// <param name="result">The build results.</param>
-        /// <returns>The XML results.</returns>
-        private static string ToXml(IIntegrationResult result)
-        {
-            StringWriter xmlResultString = new StringWriter();
-            XmlIntegrationResultWriter writer = new XmlIntegrationResultWriter(xmlResultString);
-            writer.Write(result);
-            return xmlResultString.ToString();
+            var xmlResultString = new StringWriter();
+            context.WriteCurrentLog(xmlResultString);
+            var results = xmlResultString.ToString();
+            return ProcessBuildResults(results);
         }
 
         /// <summary>

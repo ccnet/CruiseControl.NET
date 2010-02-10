@@ -1,5 +1,6 @@
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using System.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -18,5 +19,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			return new Build(buildSpecifier, log);
 		}
-	}
+
+        public void GetFile(IBuildSpecifier buildSpecifier, string sessionToken, string fileName, Stream outputStream)
+        {
+            cruiseManagerWrapper.RetrieveFileTransfer(buildSpecifier, fileName, sessionToken, outputStream);
+        }
+    }
 }

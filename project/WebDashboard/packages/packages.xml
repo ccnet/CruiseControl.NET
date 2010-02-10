@@ -23,4 +23,5 @@
   <package name="Ohloh" description="Display the statistics from Ohloh." type="Plugin" file="OhlohStats.zip" installed="no" />
   <package name="Liquid Blue Theme" description="The liquid blue theme." type="Plugin" file="LiquidBlue.zip" installed="no" />
   <package name="Note worthy Theme" description="The note worthy theme." type="Plugin" file="noteWorthy.zip" installed="no" />
+  <package name="Duplicate Finder Results" description="Display the results of a duplicate finder analysis." type="Plugin" file="DupFinder.zip" installed="no" />
 </packages>

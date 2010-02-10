@@ -4,6 +4,8 @@ using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.Remote.Messages;
+using System.IO;
+using System;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
@@ -109,9 +111,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         long GetFreeDiskSpace(IServerSpecifier serverSpecifier);
 
         #region RetrieveFileTransfer()
-        RemotingFileTransfer RetrieveFileTransfer(IProjectSpecifier projectSpecifier, string fileName, string sessionToken);
+        Action<Stream> RetrieveFileTransfer(IProjectSpecifier projectSpecifier, string fileName, string sessionToken);
 
-        RemotingFileTransfer RetrieveFileTransfer(IBuildSpecifier buildSpecifier, string fileName, string sessionToken);
+        Action<Stream> RetrieveFileTransfer(IBuildSpecifier buildSpecifier, string fileName, string sessionToken);
         #endregion
 
         #region RetrievePackageList()

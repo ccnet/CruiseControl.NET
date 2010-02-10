@@ -74,6 +74,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 			}
 		}
 
+        [ReflectorProperty("taskType", Required = false)]
+        public string TaskType { get; set; }
+
 		public override INamedAction[] NamedActions
 		{
 			get
@@ -81,6 +84,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 				XslReportBuildAction action = (XslReportBuildAction) actionInstantiator.InstantiateAction(typeof(XslReportBuildAction));
 				action.XslFileName = XslFileName;
                 action.Parameters = Parameters;
+                action.TaskType = this.TaskType;
 				return new INamedAction[] { new ImmutableNamedAction(actionName, action) } ;
 			}
 		}

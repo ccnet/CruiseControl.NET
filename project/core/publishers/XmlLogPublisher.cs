@@ -1,70 +1,95 @@
-using System.IO;
-using System.Xml;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Core.Tasks;
+//-----------------------------------------------------------------------
+// <copyright file="XmlLogPublisher.cs" company="CruiseControl.NET">
+//     Copyright (c) 2009 CruiseControl.NET. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    using System.IO;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Tasks;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using ThoughtWorks.CruiseControl.Remote;
+
+    /// <summary>
+    /// Publishes the current XML log.
+    /// </summary>
+    /// <remarks>
+    /// This will only publish the current log details, the full log will be published automatically by the project when it
+    /// has finished running.
+    /// </remarks>
+    /// <example>
+    /// <para>
+    /// This publisher is configured by the following:
+    /// </para>
+    /// <code>
+    /// &lt;xmllogger /&gt;
+    /// </code>
+    /// <para>
+    /// It is also possible to change the location where the log is published to:
+    /// </para>
+    /// <code>
+    /// &lt;xmllogger logDir="newLogLocation" /&gt;
+    /// </code>
+    /// </example>
     [ReflectorType("xmllogger")]
     public class XmlLogPublisher 
         : TaskBase
     {
-		public static readonly string DEFAULT_LOG_SUBDIRECTORY = "buildlogs";
+        #region Private fields
+        #region fileSystem
+        /// <summary>
+        /// The <see cref="IFileSystem"/> to use when manipulating the file system.
+        /// </summary>
+        private readonly IFileSystem fileSystem;
+        #endregion
+        #endregion
 
-        [ReflectorProperty("logDir", Required = false)] 
-		public string ConfiguredLogDirectory;
+        #region Public properties
+        #region ConfiguredLogDirectory
+        /// <summary>
+        /// Gets or sets the configured log directory.
+        /// </summary>
+        /// <value>The configured log directory.</value>
+        [ReflectorProperty("logDir", Required = false)]
+        public string ConfiguredLogDirectory { get; set; }
+        #endregion
+        #endregion
 
-		// This is only public because of a nasty hack which I (MR) put in the code. To be made private later...
-		public string LogDirectory(string artifactDirectory)
-		{
-            if (string.IsNullOrEmpty(ConfiguredLogDirectory))
-			{
-				return Path.Combine(artifactDirectory, DEFAULT_LOG_SUBDIRECTORY);
-			}
-			else if (Path.IsPathRooted(ConfiguredLogDirectory))
-			{
-				return ConfiguredLogDirectory;
-			}
-			else
-			{
-				return Path.Combine(artifactDirectory, ConfiguredLogDirectory);
-			}
-		}
-
+        #region Protected methods
+        #region Execute()
+        /// <summary>
+        /// Execute the actual task functionality.
+        /// </summary>
+        /// <param name="result">The result to use while executing this publisher.</param>
+        /// <returns>
+        /// True if the task was successful, false otherwise.
+        /// </returns>
         protected override bool Execute(IIntegrationResult result)
-        {         
+        {
+            var fileSystem = this.fileSystem ?? new SystemIoFileSystem();
+
             // only deal with known integration status
             if (result.Status == IntegrationStatus.Unknown)
-                return true;
-
-            using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(CreateWriter(LogDirectory(result.ArtifactDirectory), GetFilename(result))))
             {
-				integrationWriter.Formatting = Formatting.Indented;
-				integrationWriter.Write(result);
+                return true;
             }
 
-            result.BuildLogDirectory = LogDirectory(result.ArtifactDirectory);
+            // Generate the log folder
+            var logLocation = this.Context.GenerateLogFolder(this.ConfiguredLogDirectory ?? this.Context.Project.LogFolder);
+
+            // Start the log writer
+            var logName = this.Context.GenerateLogFilename();
+            fileSystem.DeleteFile(logName);
+            using (var writer = new StreamWriter(fileSystem.OpenOutputStream(logName)))
+            {
+                this.Context.WriteCurrentLog(writer);
+            }
 
             return true;
         }
-
-        private TextWriter CreateWriter(string dirname, string filename)
-        {
-            // create directory if necessary
-            if (!Directory.Exists(dirname))
-                Directory.CreateDirectory(dirname);
-
-            string path = Path.Combine(dirname, filename);
-
-			// create XmlWriter using UTF8 encoding
-			return new StreamWriter(path);
-        }
-
-        private string GetFilename(IIntegrationResult result)
-        {
-            return Util.StringUtil.RemoveInvalidCharactersFromFileName(new LogFile(result).Filename);
-        }
+        #endregion
+        #endregion
     }
 }

@@ -279,15 +279,6 @@ namespace ThoughtWorks.CruiseControl.Remote
         ListPackagesResponse RetrievePackageList(ProjectRequest request);
         #endregion
 
-        #region RetrieveFileTransfer()
-        /// <summary>
-        /// Retrieve a file transfer object.
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        FileTransferResponse RetrieveFileTransfer(FileTransferRequest request);
-        #endregion
-
         #region GetLinkedSiteId()
         /// <summary>
         /// Retrieve the identifer for this project on a linked site.

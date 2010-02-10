@@ -282,7 +282,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             try
             {
                 messageBuilder.xslFiles = this.XslFiles;
-                return messageBuilder.BuildMessage(result);
+                return messageBuilder.BuildMessage(result, this.Context);
             }
             catch (Exception e)
             {

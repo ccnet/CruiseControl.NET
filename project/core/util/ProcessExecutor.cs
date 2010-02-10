@@ -61,12 +61,33 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="outputStream">The stream to receive standard output.</param>
         /// <param name="errorStream">The stream to receive standard error.</param>
         /// <returns>The result of the execution.</returns>
-		public virtual ProcessResult Execute(ProcessInfo processInfo, Stream outputStream, Stream errorStream)
+        public virtual ProcessResult Execute(ProcessInfo processInfo, Stream outputStream, Stream errorStream)
+        {
+            return this.Execute(processInfo, outputStream, errorStream, false);
+        }
+
+        /// <summary>
+        /// Runs the executable and saves the standard output and error to streams.
+        /// </summary>
+        /// <param name="processInfo">The information about the process to execute.</param>
+        /// <param name="outputStream">The stream to receive standard output.</param>
+        /// <param name="errorStream">The stream to receive standard error.</param>
+        /// <param name="generateXml">If set to <c>true</c> then generate the results as XML instead of plain text.</param>
+        /// <returns>The result of the execution.</returns>
+		public virtual ProcessResult Execute(ProcessInfo processInfo, Stream outputStream, Stream errorStream, bool generateXml)
 		{
 			string projectName = Thread.CurrentThread.Name;
-            using (var outputWriter = new StreamWriter(outputStream, UTF8Encoding.UTF8))
+            TextWriter innerOutputWriter = new StreamWriter(outputStream ?? new MemoryStream(), UTF8Encoding.UTF8);
+            TextWriter innerErrorWriter = new StreamWriter(errorStream ?? new MemoryStream(), UTF8Encoding.UTF8);
+            if (generateXml)
             {
-                using (var errorWriter = new StreamWriter(errorStream, UTF8Encoding.UTF8))
+                innerOutputWriter = new XmlStreamWriter(innerOutputWriter, null);
+                innerErrorWriter = new XmlStreamWriter(innerErrorWriter, null);
+            }
+
+            using (var outputWriter = innerOutputWriter)
+            {
+                using (var errorWriter = innerErrorWriter)
                 {
                     using (RunnableProcess p = new RunnableProcess(processInfo, projectName, outputWriter, errorWriter))
                     {
@@ -77,7 +98,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                         ProcessMonitor.RemoveMonitorForProject(projectName);
 
                         outputWriter.Flush();
+                        outputWriter.Close();
                         errorWriter.Flush();
+                        errorWriter.Close();
 
                         return run;
                     }

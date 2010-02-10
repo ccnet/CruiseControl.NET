@@ -1,6 +1,6 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
-    <ProjectType>Local</ProjectType>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{482EF049-EC0C-4819-B568-75B5F74BDD5B}</ProjectGuid>
@@ -770,6 +770,7 @@
     <Content Include="packages\ServerConfig\Manifest.xml" />
     <Content Include="packages\ServerInformation\Manifest.xml" />
     <Content Include="packages\ServerLog\Manifest.xml" />
+    <EmbeddedResource Include="Plugins\BuildReport\BuildReportTransform.xslt" />
     <Content Include="Themes\liquidBlue\cruisecontrol.css" />
     <Content Include="Themes\liquidBlue\images\arrow.gif" />
     <Content Include="Themes\liquidBlue\images\bullet_black.png" />
@@ -788,6 +789,7 @@
     <Content Include="Themes\noteWorthy\images\top_margin.jpg" />
     <Content Include="Themes\noteWorthy\images\top_section.jpg" />
     <Content Include="Themes\noteWorthy\Manifest.xml" />
+    <Content Include="xsl\dupfinder.xsl" />
     <Content Include="xsl\ndependreport-ccnet.v2.xsl" />
     <None Include="dashboard.config" />
     <None Include="templates\ActionException.vm" />
@@ -842,4 +844,23 @@
     <PostBuildEvent>mkdir "$(ProjectDir)\xsl"
 xcopy/y/q "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"</PostBuildEvent>
   </PropertyGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>1888</DevelopmentServerPort>
+          <DevelopmentServerVPath>/ccnet/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

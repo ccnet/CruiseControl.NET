@@ -1,4 +1,5 @@
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using System.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
@@ -13,5 +14,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         string GetProject(IProjectSpecifier projectSpecifier, string sessionToken);
         void UpdateProject(IProjectSpecifier projectSpecifier, string serializedProject, string sessionToken);
         IServerSpecifier GetServerConfiguration(string serverName);
+        void RetrieveFileTransfer(IBuildSpecifier buildSpecifier, string fileName, string sessionToken, Stream outputStream);
 	}
 }

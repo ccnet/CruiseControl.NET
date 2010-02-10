@@ -1,3 +1,4 @@
+using ThoughtWorks.CruiseControl.Core.Tasks;
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	public interface IMessageBuilder
@@ -9,6 +10,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         System.Collections.IList xslFiles { get; set; }
 
 
-		string BuildMessage(IIntegrationResult result);
+        string BuildMessage(IIntegrationResult result, TaskContext context);
 	}
 }

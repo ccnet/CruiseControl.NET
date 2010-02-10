@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		public void ShouldCreateStyleElementsInTheMailMessage()
 	    {
 	    	HtmlDetailsMessageBuilder builder = new HtmlDetailsMessageBuilder();
-	        string message = builder.BuildMessage(IntegrationResultMother.CreateSuccessful());
+	        string message = builder.BuildMessage(IntegrationResultMother.CreateSuccessful(), null);
 	        int styleBegin = message.IndexOf("<style>");
 	        int styleEnd = message.IndexOf("</style>");
 

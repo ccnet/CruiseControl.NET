@@ -3,16 +3,20 @@ using System.IO;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Tasks;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
     public class XmlIntegrationResultWriter : IDisposable
     {
         private XmlFragmentWriter writer;
+        private readonly TaskResult taskResults;
 
-        public XmlIntegrationResultWriter(TextWriter textWriter)
+        public XmlIntegrationResultWriter(TextWriter textWriter, TaskResult taskResults)
         {
             writer = new XmlFragmentWriter(textWriter);
+            this.taskResults = taskResults;
         }
 
         public void Write(IIntegrationResult result)
@@ -42,10 +46,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 writer.WriteStartElement(Elements.Parameters);
                 foreach (string key in request.BuildValues.Keys)
                 {
-                    writer.WriteStartElement(Elements.Parameter);
-                    writer.WriteAttributeString("name", key);
-                    writer.WriteAttributeString("value", request.BuildValues[key]);
-                    writer.WriteEndElement();
+                    if (!key.StartsWith("$CCNet"))
+                    {
+                        writer.WriteStartElement(Elements.Parameter);
+                        writer.WriteAttributeString("name", key);
+                        writer.WriteAttributeString("value", request.BuildValues[key]);
+                        writer.WriteEndElement();
+                    }
                 }
                 writer.WriteEndElement();
             }
@@ -53,10 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private void WriteTaskResults(IIntegrationResult result)
         {
-            foreach (ITaskResult taskResult in result.TaskResults)
-            {
-                WriteOutput(taskResult.Data);
-            }
+            this.taskResults.WriteTo(writer);
         }
 
         public void WriteBuildElement(IIntegrationResult result)

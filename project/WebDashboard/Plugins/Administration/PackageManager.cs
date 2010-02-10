@@ -336,11 +336,18 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             settings.OmitXmlDeclaration = true;
 
             // Save the document
-            using (XmlWriter writer = XmlWriter.Create(packagePath, settings))
+            try
             {
-                packageList.Save(writer);
-                writer.Close();
-                writer.Close();
+                using (XmlWriter writer = XmlWriter.Create(packagePath, settings))
+                {
+                    packageList.Save(writer);
+                    writer.Close();
+                    writer.Close();
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw new UnauthorizedAccessException("Unable to access path '" + packagePath + "' - make sure account '" + Environment.UserDomainName + "\\" + Environment.UserName + "' has write access to this path");
             }
         }
         #endregion

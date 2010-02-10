@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			delegateTransformerMock.ExpectAndReturn("Transform", "transformed", "logContents", fileNames, null);
 
-			Assert.AreEqual("transformed", requestTransformer.Transform(buildSpecifier, fileNames, null, null));
+			Assert.AreEqual("transformed", requestTransformer.Transform(buildSpecifier, fileNames, null, null, null));
 
 			buildRetrieverMock.Verify();
 			delegateTransformerMock.Verify();

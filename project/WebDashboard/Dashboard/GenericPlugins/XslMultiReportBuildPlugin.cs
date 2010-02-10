@@ -47,12 +47,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 			set { xslFileNames = value; }
 		}
 
+        [ReflectorArray("taskTypes")]
+        public string[] TaskTypes { get; set; }
+
 		public override INamedAction[] NamedActions
 		{
 			get
 			{
 				MultipleXslReportBuildAction buildAction = (MultipleXslReportBuildAction) actionInstantiator.InstantiateAction(typeof (MultipleXslReportBuildAction));
 				buildAction.XslFileNames = XslFileNames;
+                buildAction.TaskTypes = this.TaskTypes;
 				return new INamedAction[] {new ImmutableNamedAction(ActionName, buildAction)};
 			}
 		}

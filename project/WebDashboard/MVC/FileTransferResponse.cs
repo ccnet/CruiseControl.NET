@@ -3,22 +3,23 @@ using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.Remote;
 using System.IO;
 using Microsoft.Win32;
+using System;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 {
     public class FileTransferResponse : IResponse
     {
-        private IFileTransfer fileTransfer;
+        private Action<Stream> fileTransfer;
         private ConditionalGetFingerprint serverFingerprint;
         private string fileName;
         private string type;
 
-        public FileTransferResponse(IFileTransfer fileTransfer, string fileName)
+        public FileTransferResponse(Action<Stream> fileTransfer, string fileName)
             : this(fileTransfer, fileName, null)
         {
         }
 
-        public FileTransferResponse(IFileTransfer fileTransfer, string fileName, string type)
+        public FileTransferResponse(Action<Stream> fileTransfer, string fileName, string type)
         {
             this.fileTransfer = fileTransfer;
             this.fileName = fileName;
@@ -44,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
                 var mimeType = GetMimeType(fileName);
                 response.ContentType = type;
             }
-            fileTransfer.Download(response.OutputStream);
+            fileTransfer(response.OutputStream);
         }
 
         public ConditionalGetFingerprint ServerFingerprint

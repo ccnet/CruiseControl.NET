@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		protected void SetUp()
 		{
 			buffer = new StringWriter();
-			writer = new XmlIntegrationResultWriter(buffer);
+			writer = new XmlIntegrationResultWriter(buffer, new TaskResult("Test", "Test"));
 			result = IntegrationResultMother.CreateSuccessful();
 		}
 

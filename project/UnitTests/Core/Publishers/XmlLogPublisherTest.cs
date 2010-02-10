@@ -65,22 +65,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		}
 
 		[Test]
-		public void ShouldPublishSuccessfulBuildWithNoConfiguredPath()
-		{
-			// Setup
-			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success,  true);
-			result.ArtifactDirectory = ARTIFACTS_DIR_PATH;
-
-			// Execute
-			publisher.Run(result);
-
-			// Verify
-			string expectedOutputPath = Path.Combine(Path.Combine(ARTIFACTS_DIR_PATH, XmlLogPublisher.DEFAULT_LOG_SUBDIRECTORY), "log19800101000000Lbuild.1.xml");
-			Assert.IsTrue(File.Exists(expectedOutputPath));
-			CheckForXml(expectedOutputPath);
-		}
-
-		[Test]
         public void ShouldPublishFailedBuildWithFullConfiguredPath()
         {
 			// Setup

@@ -345,6 +345,7 @@
     <Compile Include="ProjectBase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ProjectConfiguration.cs" />
     <Compile Include="ProjectIntegrator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -773,6 +774,7 @@
     <Compile Include="tasks\CruiseServerControlTaskAction.cs" />
     <Compile Include="tasks\CruiseServerControlTaskActionType.cs" />
     <Compile Include="tasks\DirectDynamicValue.cs" />
+    <Compile Include="tasks\DupFinderTask.cs" />
     <Compile Include="tasks\DynamicValueUtility.cs" />
     <Compile Include="tasks\FtpTask.cs" />
     <Compile Include="tasks\MergeFileSerialiser.cs" />
@@ -830,13 +832,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="tasks\RakeTask.cs" />
+    <Compile Include="tasks\RemoteProjectTask.cs" />
     <Compile Include="tasks\ReplacementDynamicValue.cs" />
     <Compile Include="tasks\SequentialTask.cs" />
     <Compile Include="tasks\SynchronisationTask.cs" />
     <Compile Include="tasks\TaskBase.cs" />
     <Compile Include="tasks\TaskContainerBase.cs" />
     <Compile Include="tasks\TaskContext.cs" />
-    <Compile Include="tasks\TaskResultDetails.cs" />
     <Compile Include="Triggers\FilterTrigger.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1003,6 +1005,7 @@
     <Compile Include="util\XmlFragmentWriter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="util\XmlStreamWriter.cs" />
     <Compile Include="util\XmlUtil.cs">
       <SubType>Code</SubType>
     </Compile>

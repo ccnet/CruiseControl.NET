@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			result.ProjectUrl = "http://localhost/ccnet";
 
 			HtmlLinkMessageBuilder linkMessageBuilder = new HtmlLinkMessageBuilder(false);
-			string message = linkMessageBuilder.BuildMessage(result);
+			string message = linkMessageBuilder.BuildMessage(result, null);
 			Assert.AreEqual(@"CruiseControl.NET Build Results for project Project#9 (http://localhost/ccnet)", message);
 		}
 
@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			result.ProjectUrl = "http://localhost/ccnet";
 
 			HtmlLinkMessageBuilder linkMessageBuilder = new HtmlLinkMessageBuilder(true);
-			string message = linkMessageBuilder.BuildMessage(result);
+            string message = linkMessageBuilder.BuildMessage(result, null);
 			Assert.AreEqual(@"CruiseControl.NET Build Results for project Project#9 (<a href=""http://localhost/ccnet"">web page</a>)", message);
 		}
 

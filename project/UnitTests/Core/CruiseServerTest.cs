@@ -820,44 +820,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             Assert.AreEqual("Project 1", snapshot.Name, "Name not set");
         }
 
-        [Test]
-        public void RetrieveFileTransferOnlyWorksForFilesInArtefactFolder()
-        {
-        	Assert.That(delegate { server.CruiseManager.RetrieveFileTransfer("Project 1", Path.Combine("..", "testfile.txt")); },
-                        Throws.TypeOf<CruiseControlException>());
-        }
-
-        [Test]
-        public void RetrieveFileTransferFailsForBuildLogsFolder()
-        {
-            Assert.That(delegate { server.CruiseManager.RetrieveFileTransfer("Project 1", Path.Combine("buildlogs", "testfile.txt")); },
-                        Throws.TypeOf<CruiseControlException>());
-        }
-
-        [Test]
-        public void RetrieveFileTransferFailsForAbsolutePaths()
-        {
-            Assert.That(delegate { server.CruiseManager.RetrieveFileTransfer("Project 1", Path.GetFullPath(Path.Combine(".", "MyFile.txt"))); },
-                        Throws.TypeOf<CruiseControlException>());
-        }
-
-        [Test]
-        public void RetrieveFileTransferGeneratesTransferForValidFile()
-        {
-            var tempFile = Path.GetTempFileName();
-            if (!File.Exists(tempFile)) File.WriteAllText(tempFile, "This is a test");
-            project1.ConfiguredArtifactDirectory = Path.GetDirectoryName(tempFile);
-            var transfer = server.CruiseManager.RetrieveFileTransfer("Project 1", Path.GetFileName(tempFile));
-            Assert.IsNotNull(transfer);
-        }
-
-        [Test]
-        public void RetrieveFileTransferGeneratesNullForInvalidFile()
-        {
-            var transfer = server.CruiseManager.RetrieveFileTransfer("Project 1", "GarbageFileNameThatShouldNotExist.NotHere");
-            Assert.IsNull(transfer);
-        }
-
         private ProjectRequest GenerateProjectRequest(string projectName)
         {
             var request = new ProjectRequest(null, projectName);

@@ -120,6 +120,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BuildLog.cs" />
     <Compile Include="ClientStartUpSettings.cs" />
     <Compile Include="CommunicationsEventArgs.cs" />
     <Compile Include="CommunicationsException.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Messages\CommunicationsMessage.cs" />
     <Compile Include="Messages\EncryptedRequest.cs" />
     <Compile Include="Messages\EncryptedResponse.cs" />
+    <Compile Include="Messages\FileTransferRequest.cs" />
     <Compile Include="Messages\ProjectItemRequest.cs" />
     <Compile Include="Monitor\BuildQueue.cs" />
     <Compile Include="Monitor\BuildQueueChangedArgs.cs" />
@@ -160,8 +162,6 @@
     <Compile Include="Messages\BuildParametersResponse.cs" />
     <Compile Include="Messages\ChangePasswordRequest.cs" />
     <Compile Include="Messages\ChangeConfigurationRequest.cs" />
-    <Compile Include="Messages\FileTransferResponse.cs" />
-    <Compile Include="Messages\FileTransferRequest.cs" />
     <Compile Include="Messages\ErrorMessage.cs" />
     <Compile Include="Messages\ListPackagesResponse.cs" />
     <Compile Include="Messages\SnapshotResponse.cs" />
@@ -221,7 +221,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ICruiseServerExtension.cs" />
-    <Compile Include="IFileTransfer.cs" />
     <Compile Include="IntegrationRequest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -253,9 +252,6 @@
     <Compile Include="ProjectActivity.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ProjectConfiguration.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ProjectIntegratorState.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -268,7 +264,6 @@
     <Compile Include="RemoteCruiseManagerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RemotingFileTransfer.cs" />
     <Compile Include="RemotingServiceAdapter.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -290,6 +285,8 @@
     <Compile Include="ServerConnectionBase.cs" />
     <Compile Include="SessionInvalidException.cs" />
     <Compile Include="NameValuePair.cs" />
+    <Compile Include="TaskOutput.cs" />
+    <Compile Include="TaskResult.cs" />
     <Compile Include="XmlConversionUtil.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

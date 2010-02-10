@@ -2,6 +2,7 @@ using System.IO;
 using System.Text;
 using System.Xml.XPath;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -31,14 +32,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
         }
 
-
-		public string BuildMessage(IIntegrationResult result)
+        public string BuildMessage(IIntegrationResult result, TaskContext context)
 		{
 			StringBuilder message = new StringBuilder(10000);
 			AppendHtmlHeader(message);
-			AppendLinkToWebPage(message, result);
+			AppendLinkToWebPage(message, result, context);
 			AppendHorizontalRule(message);
-			AppendHtmlMessageDetails(message, result);
+			AppendHtmlMessageDetails(message, context);
 			AppendHtmlFooter(message);
 			return message.ToString();
 		}
@@ -52,9 +52,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			message.Append("</head><body>");
 		}
 
-		private void AppendLinkToWebPage(StringBuilder message, IIntegrationResult result)
+        private void AppendLinkToWebPage(StringBuilder message, IIntegrationResult result, TaskContext context)
 		{
-			message.Append(new HtmlLinkMessageBuilder(true).BuildMessage(result));
+			message.Append(new HtmlLinkMessageBuilder(true).BuildMessage(result, context));
 		}
 
 		private void AppendHorizontalRule(StringBuilder message)
@@ -62,16 +62,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			message.Append(@"<p></p><hr size=""1"" width=""98%"" align=""left"" color=""#888888""/>");
 		}
 
-		private void AppendHtmlMessageDetails(StringBuilder message, IIntegrationResult result)
+		private void AppendHtmlMessageDetails(StringBuilder message, TaskContext context)
 		{
-			StringWriter buffer = new StringWriter();
-			using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(buffer))
-			{
-				integrationWriter.Write(result);
-			}
-
-			XPathDocument xml = new XPathDocument(new StringReader(buffer.ToString()));
-
+			var buffer = new StringWriter();
+            context.WriteCurrentLog(buffer);
+			var xml = new XPathDocument(new StringReader(buffer.ToString()));
             if (xslFiles == null)
             {
                 message.Append(new BuildLogTransformer().TransformResultsWithAllStyleSheets(xml));

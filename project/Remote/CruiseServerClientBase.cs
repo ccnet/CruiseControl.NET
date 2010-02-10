@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using ThoughtWorks.CruiseControl.Remote.Security;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
+using System.IO;
 using ThoughtWorks.CruiseControl.Remote.Messages;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
+using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -495,14 +495,14 @@ namespace ThoughtWorks.CruiseControl.Remote
         }
         #endregion
 
-        #region RetrieveFileTransfer()
+        #region TransferFile()
         /// <summary>
-        /// Retrieves a file transfer instance.
+        /// Transfers a file.
         /// </summary>
-        /// <param name="projectName">The name of the project.</param>
-        /// <param name="fileName">The name of the file.</param>
-        /// <returns>The file transfer instance.</returns>
-        public virtual IFileTransfer RetrieveFileTransfer(string projectName, string fileName)
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="outputStream">The output stream.</param>
+        public virtual void TransferFile(string projectName, string fileName, Stream outputStream)
         {
             throw new NotImplementedException();
         }

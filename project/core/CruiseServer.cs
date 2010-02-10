@@ -27,10 +27,12 @@ namespace ThoughtWorks.CruiseControl.Core
         : CruiseServerEventsBase, ICruiseServer
     {
         #region Private fields
+        private Dictionary<string, Stream> fileTransferSessions = new Dictionary<string, Stream>();
+        private object fileTransferLock = new object();
         private readonly IProjectSerializer projectSerializer;
         private readonly IConfigurationService configurationService;
-		private readonly IFileSystem fileSystem;
-		private readonly IExecutionEnvironment executionEnvironment;
+        private readonly IFileSystem fileSystem;
+        private readonly IExecutionEnvironment executionEnvironment;
         private IConfiguration configuration;
         [Obsolete]
         private readonly ICruiseManager manager;
@@ -43,8 +45,8 @@ namespace ThoughtWorks.CruiseControl.Core
         private bool disposed;
         private IQueueManager integrationQueueManager;
         // TODO: Replace this with a proper IoC container
-        private Dictionary<Type, object> services = new Dictionary<Type,object>();
-    	private readonly string programmDataFolder;
+        private Dictionary<Type, object> services = new Dictionary<Type, object>();
+        private readonly string programmDataFolder;
         private object logCacheLock = new object();
         #endregion
 
@@ -53,16 +55,16 @@ namespace ThoughtWorks.CruiseControl.Core
                             IProjectIntegratorListFactory projectIntegratorListFactory,
                             IProjectSerializer projectSerializer,
                             IProjectStateManager stateManager,
-							IFileSystem fileSystem,
-							IExecutionEnvironment executionEnvironment,
+                            IFileSystem fileSystem,
+                            IExecutionEnvironment executionEnvironment,
                             List<ExtensionConfiguration> extensionList)
         {
             Log.Trace();
 
             this.configurationService = configurationService;
             this.projectSerializer = projectSerializer;
-			this.fileSystem = fileSystem;
-			this.executionEnvironment = executionEnvironment;
+            this.fileSystem = fileSystem;
+            this.executionEnvironment = executionEnvironment;
 
             // Leave the manager for backwards compatability - it is marked as obsolete
 #pragma warning disable 0618
@@ -88,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
             this.configurationService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(Restart));
 
-        	programmDataFolder = this.executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server);
+            programmDataFolder = this.executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server);
         }
         #endregion
 
@@ -147,10 +149,10 @@ namespace ThoughtWorks.CruiseControl.Core
             monitor.Reset();
 
             // Make sure the default program data folder exists
-			if (!fileSystem.DirectoryExists(programmDataFolder))
+            if (!fileSystem.DirectoryExists(programmDataFolder))
             {
-				Log.Info("Initialising data folder: '{0}'", programmDataFolder);
-            	fileSystem.EnsureFolderExists(programmDataFolder);
+                Log.Info("Initialising data folder: '{0}'", programmDataFolder);
+                fileSystem.EnsureFolderExists(programmDataFolder);
             }
 
             integrationQueueManager.StartAllProjects();
@@ -914,55 +916,6 @@ namespace ThoughtWorks.CruiseControl.Core
         }
         #endregion
 
-        #region RetrieveFileTransfer()
-        /// <summary>
-        /// Retrieve a file transfer object.
-        /// </summary>
-        public virtual FileTransferResponse RetrieveFileTransfer(FileTransferRequest request)
-        {
-            var response = new FileTransferResponse(request);
-            try
-            {
-                // Validate that the path is valid
-                var sourceProject = GetIntegrator(request.ProjectName).Project;
-                var filePath = Path.Combine(sourceProject.ArtifactDirectory, request.FileName);
-                var fileInfo = new FileInfo(filePath);
-                if (!fileInfo.FullName.StartsWith(sourceProject.ArtifactDirectory, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    var message = string.Format("Files can only be retrieved from the artefact folder - unable to retrieve {0}", request.FileName);
-                    Log.Warning(message);
-                    throw new CruiseControlException(message);
-                }
-                else if (fileInfo.FullName.StartsWith(Path.Combine(sourceProject.ArtifactDirectory, "buildlogs"), StringComparison.InvariantCultureIgnoreCase))
-                {
-                    var message = string.Format("Unable to retrieve files from the build logs folder - unable to retrieve {0}", request.FileName);
-                    Log.Warning(message);
-                    throw new CruiseControlException(message);
-                }
-
-                RemotingFileTransfer fileTransfer = null;
-                if (fileInfo.Exists)
-                {
-                    Log.Debug(string.Format("Retrieving file '{0}' from '{1}'", request.FileName, request.ProjectName));
-                    fileTransfer = new RemotingFileTransfer(File.OpenRead(filePath));
-                }
-                else
-                {
-                    Log.Warning(string.Format("Unable to find file '{0}' in '{1}'", request.FileName, request.ProjectName));
-                }
-                response.FileTransfer = fileTransfer;
-                response.Result = ResponseResult.Success;
-            }
-            catch (Exception error)
-            {
-                response.Result = ResponseResult.Failure;
-                response.ErrorMessages.Add(
-                    new ErrorMessage(error.Message));
-            }
-            return response;
-        }
-        #endregion
-
         #region Login()
         /// <summary>
         /// Logs a user into the session and generates a session.
@@ -1220,6 +1173,133 @@ namespace ThoughtWorks.CruiseControl.Core
                 services[serviceType] = service;
             }
         }
+        #endregion
+
+        #region File transfer methods
+        #region OpenFile()
+        /// <summary>
+        /// Opens a file from a project's artifact folder.
+        /// </summary>
+        /// <param name="request">The request containing the name of the file.</param>
+        /// <returns>The response containing the key to the file.</returns>
+        public DataResponse OpenFile(FileTransferRequest request)
+        {
+            var response = new DataResponse(request);
+            try
+            {
+                // Validate that the path is valid
+                var sourceProject = GetIntegrator(request.ProjectName).Project;
+                var filePath = Path.Combine(sourceProject.ArtifactDirectory, request.FileName);
+                var fileInfo = new FileInfo(filePath);
+                if (!fileInfo.FullName.StartsWith(sourceProject.ArtifactDirectory, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var message = string.Format("Files can only be retrieved from the artefact folder - unable to retrieve {0}", request.FileName);
+                    Log.Warning(message);
+                    throw new CruiseControlException(message);
+                }
+
+                string key = null;
+                if (fileInfo.Exists)
+                {
+                    Log.Debug(string.Format("Retrieving file '{0}' from '{1}'", request.FileName, request.ProjectName));
+                    key = Guid.NewGuid().ToString();
+                    lock (this.fileTransferLock)
+                    {
+                        this.fileTransferSessions.Add(key, fileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.Read));
+                    }
+                }
+                else
+                {
+                    Log.Warning(string.Format("Unable to find file '{0}' in '{1}'", request.FileName, request.ProjectName));
+                }
+                response.Data = key;
+                response.Result = ResponseResult.Success;
+            }
+            catch (Exception error)
+            {
+                response.Result = ResponseResult.Failure;
+                response.ErrorMessages.Add(
+                    new ErrorMessage(error.Message));
+            }
+            return response;
+        }
+        #endregion
+
+        #region TransferFileData()
+        /// <summary>
+        /// Transfers a block of data from a previously opened file.
+        /// </summary>
+        /// <param name="request">The request containing the file key.</param>
+        /// <returns>The response containing Base64 encoded data.</returns>
+        public DataResponse TransferFileData(FileTransferRequest request)
+        {
+            byte[] data = new byte[4096];
+
+            // Retrieve the stream
+            Stream stream = null;
+            lock (this.fileTransferLock)
+            {
+                if (this.fileTransferSessions.ContainsKey(request.FileName))
+                {
+                    stream = this.fileTransferSessions[request.FileName];
+                }
+            }
+
+            var response = new DataResponse(request);
+            if (stream == null)
+            {
+                // Unable to find the stream, tell the user
+                response.ErrorMessages.Add(new ErrorMessage("File key not found"));
+                response.Result = ResponseResult.Failure;
+            }
+            else
+            {
+                // Read and encode the data
+                var length = stream.Read(data, 0, data.Length);
+                response.Data = Convert.ToBase64String(data, 0, length);
+                response.Result = ResponseResult.Success;
+            }
+
+            return response;
+        }
+        #endregion
+
+        #region CloseFile()
+        /// <summary>
+        /// Closes a previously opened file.
+        /// </summary>
+        /// <param name="request">The request containing the file key.</param>
+        /// <returns>The response containing the outcome of the closure.</returns>
+        public Response CloseFile(FileTransferRequest request)
+        {
+            // Retrieve the stream
+            Stream stream = null;
+            lock (this.fileTransferLock)
+            {
+                if (this.fileTransferSessions.ContainsKey(request.FileName))
+                {
+                    stream = this.fileTransferSessions[request.FileName];
+                    this.fileTransferSessions.Remove(request.FileName);
+                }
+            }
+
+            var response = new Response(request);
+            if (stream == null)
+            {
+                // Unable to find the stream, tell the user
+                response.ErrorMessages.Add(new ErrorMessage("File key not found"));
+                response.Result = ResponseResult.Failure;
+            }
+            else
+            {
+                // Close the stream
+                stream.Close();
+                response.Result = ResponseResult.Success;
+            }
+
+            return response;
+        }
+        #endregion
         #endregion
         #endregion
 
@@ -1699,7 +1779,7 @@ namespace ThoughtWorks.CruiseControl.Core
             DataResponse response = new DataResponse(RunProjectRequest(request,
                 SecurityPermission.ViewProject,
                 null,
-                (arg) => 
+                (arg) =>
                 {
                     // Retrieve the project configuration
                     var project = GetIntegrator(arg.ProjectName).Project;
@@ -1740,14 +1820,14 @@ namespace ThoughtWorks.CruiseControl.Core
 
             // Check if the log has already been cached
             var loadData = false;
-            SynchronisedData logData;
+            SynchronisedData<string> logData;
             lock (logCacheLock)
             {
-                logData = cache[logKey] as SynchronisedData;
+                logData = cache[logKey] as SynchronisedData<string>;
                 if (logData == null)
                 {
                     // Add the new log data and load it
-                    logData = new SynchronisedData();
+                    logData = new SynchronisedData<string>();
                     cache.Add(
                         logKey,
                         logData,
@@ -1784,7 +1864,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 throw new ApplicationException("Unable to retrieve log data");
             }
 
-            return logData.Data as string;
+            return logData.Data;
         }
         #endregion
         #endregion

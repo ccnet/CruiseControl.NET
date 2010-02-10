@@ -559,9 +559,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         [Test]
         public void AssociateContextStoresContext()
         {
-            var basePath = Path.GetTempPath();
-            var ioSystem = this.mocks.StrictMock<IFileSystem>();
-            var context = new TaskContext(ioSystem, basePath);
+            var project = this.mocks.StrictMock<ProjectConfiguration>();
+            var result = this.mocks.StrictMock<IIntegrationResult>();
+            var context = TaskContext.FromProject(project, result);
             var task = new TestTask();
             task.AssociateContext(context);
             Assert.AreSame(context, task.Context);

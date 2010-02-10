@@ -167,11 +167,29 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             var outputDirectory = RootPath(OutputDir, false);
             var oldFiles = GenerateOriginalFileList(outputDirectory);
 
-            // Run the executable
-			var processResult = TryToRun(CreateProcessInfo(result), result);
-            result.AddTaskResult(new ProcessTaskResult(processResult, true));
 
-            if (Publish && !processResult.Failed)
+            // Initialise the streams
+            var isSuccessful = false;
+            using (var stdOut = this.Context.CreateResultStream("stdout", "data/xml"))
+            {
+                using (var stdErr = this.Context.CreateResultStream("stderr", "data/xml"))
+                {
+                    // Perform the actual execution
+                    var info = CreateProcessInfo(result);
+                    var processResult = TryToRun(info, result, stdOut, stdErr, true);
+
+                    // Check the results
+                    result.AddTaskResult(new ProcessTaskResult(processResult));
+                    if (processResult.TimedOut)
+                    {
+                        throw new BuilderException(this, "NDepend timed out (after " + this.TimeOut + " seconds)");
+                    }
+
+                    isSuccessful = !processResult.Failed;
+                }
+            }
+
+            if (Publish && isSuccessful)
             {
                 // Check for any new files
                 var newFiles = ListFileDifferences(oldFiles, outputDirectory);
@@ -181,24 +199,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     logger.Debug("Copying {0} new file(s)", newFiles.Length);
 
                     // Copy all the new files over
-                    var publishDir = Path.Combine(result.BaseFromArtifactsDirectory(result.Label), "NDepend");
-                    fileSystem.EnsureFolderExists(publishDir);
                     foreach (var newFile in newFiles)
                     {
-                        fileSystem.Copy(newFile, 
-                            Path.Combine(publishDir, 
-                                Path.GetFileName(newFile)));
-
-                        // Merge all XML files
-                        if (Path.GetExtension(newFile) == ".xml")
-                        {
-                            result.AddTaskResult(fileSystem.GenerateTaskResultFromFile(newFile));
-                        }
+                        this.Context.ImportResultFile(newFile, Path.GetFileName(newFile), "data/unknown", true);
                     }
                 }
             }
 
-            return !processResult.Failed;
+            return isSuccessful;
         }
         #endregion
 

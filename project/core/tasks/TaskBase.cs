@@ -17,6 +17,7 @@
         private IDynamicValue[] myDynamicValues = new IDynamicValue[0];
         private ItemStatus currentStatus;
         private List<TimeSpan> elapsedTimes = new List<TimeSpan>();
+        private string name;
         #endregion
 
         #region Public properties
@@ -36,9 +37,11 @@
         /// <summary>
         /// The name of the task - by default this is the name of the type.
         /// </summary>
+        [ReflectorProperty("name", Required = false)]
         public virtual string Name
         {
-            get { return GetType().Name; }
+            get { return string.IsNullOrEmpty(name) ? GetType().Name : name; }
+            set { name = value; }
         }
         #endregion
 
@@ -93,6 +96,7 @@
             {
                 // Store the error message
                 currentStatus.Error = error.Message;
+                result.Status = IntegrationStatus.Exception;
                 throw;
             }
             finally
@@ -100,6 +104,10 @@
                 // Clean up
                 currentStatus.Status = (taskSuccess) ? ItemBuildStatus.CompletedSuccess : ItemBuildStatus.CompletedFailed;
                 currentStatus.TimeCompleted = DateTime.Now;
+                if (result.Status == IntegrationStatus.Unknown)
+                {
+                    result.Status = taskSuccess ? IntegrationStatus.Success : IntegrationStatus.Failure;
+                }
             }
         }
         #endregion
@@ -226,6 +234,7 @@
             }
 
             this.Context = context;
+            this.Context.InitialiseResult(this.RetrieveType(), this.RetrieveDescriptionOrName());
         }
         #endregion
         #endregion
@@ -239,6 +248,23 @@
         /// <returns>True if the task was successful, false otherwise.</returns>
         protected abstract bool Execute(IIntegrationResult result);
         #endregion
+
+        /// <summary>
+        /// Retrieves the type of the task.
+        /// </summary>
+        /// <returns>The task type as defined by the first <see cref="ReflectorTypeAttribute"/>.</returns>
+        protected virtual string RetrieveType()
+        {
+            var typeDefinition = this.GetType().GetCustomAttributes(typeof(ReflectorTypeAttribute), false);
+            if (typeDefinition.Length > 0)
+            {
+                return (typeDefinition[0] as ReflectorTypeAttribute).Name;
+            }
+            else
+            {
+                return "{Unknown task type}";
+            }
+        }
         #endregion
     }
 }

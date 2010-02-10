@@ -6,65 +6,65 @@ using ThoughtWorks.CruiseControl.Core.Tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
-	public class SystemIoFileSystem : IFileSystem
-	{
-		public void Copy(string sourcePath, string destPath)
-		{
-			if (!File.Exists(sourcePath) && !Directory.Exists(sourcePath))
-			{
-				throw new IOException(string.Format("Source Path [{0}] doesn't exist", sourcePath));
-			}
+    public class SystemIoFileSystem : IFileSystem
+    {
+        public void Copy(string sourcePath, string destPath)
+        {
+            if (!File.Exists(sourcePath) && !Directory.Exists(sourcePath))
+            {
+                throw new IOException(string.Format("Source Path [{0}] doesn't exist", sourcePath));
+            }
 
-			if (Directory.Exists(sourcePath))
-				CopyDirectoryToDirectory(sourcePath, destPath);
-			else
-				CopyFile(sourcePath, destPath);
-		}
+            if (Directory.Exists(sourcePath))
+                CopyDirectoryToDirectory(sourcePath, destPath);
+            else
+                CopyFile(sourcePath, destPath);
+        }
 
-		private void CopyDirectoryToDirectory(string sourcePath, string destPath)
-		{
-			foreach (DirectoryInfo subdir in new DirectoryInfo(sourcePath).GetDirectories())
-			{
-				CopyDirectoryToDirectory(subdir.FullName, Path.Combine(destPath, subdir.Name));
-			}
-			foreach (string file in Directory.GetFiles(sourcePath))
-			{
-				CopyFileToDirectory(Path.Combine(sourcePath, file), destPath);
-			}
-		}
+        private void CopyDirectoryToDirectory(string sourcePath, string destPath)
+        {
+            foreach (DirectoryInfo subdir in new DirectoryInfo(sourcePath).GetDirectories())
+            {
+                CopyDirectoryToDirectory(subdir.FullName, Path.Combine(destPath, subdir.Name));
+            }
+            foreach (string file in Directory.GetFiles(sourcePath))
+            {
+                CopyFileToDirectory(Path.Combine(sourcePath, file), destPath);
+            }
+        }
 
-		private void CopyFile(string sourcePath, string destPath)
-		{
-			if (Directory.Exists(destPath))
-				CopyFileToDirectory(sourcePath, destPath);
-			else
-				CopyFileToFile(sourcePath, destPath);
-		}
+        private void CopyFile(string sourcePath, string destPath)
+        {
+            if (Directory.Exists(destPath))
+                CopyFileToDirectory(sourcePath, destPath);
+            else
+                CopyFileToFile(sourcePath, destPath);
+        }
 
-		private void CopyFileToDirectory(string sourcePath, string destPath)
-		{
-			CopyFileToFile(sourcePath, Path.Combine(destPath, Path.GetFileName(sourcePath)));
-		}
+        private void CopyFileToDirectory(string sourcePath, string destPath)
+        {
+            CopyFileToFile(sourcePath, Path.Combine(destPath, Path.GetFileName(sourcePath)));
+        }
 
-		private void CopyFileToFile(string sourcePath, string destPath)
-		{
-			string destDir = Path.GetDirectoryName(destPath);
-			if (! Directory.Exists(destDir))
-				Directory.CreateDirectory(destDir);
+        private void CopyFileToFile(string sourcePath, string destPath)
+        {
+            string destDir = Path.GetDirectoryName(destPath);
+            if (!Directory.Exists(destDir))
+                Directory.CreateDirectory(destDir);
 
-			if (File.Exists(destPath))
-				File.SetAttributes(destPath, FileAttributes.Normal);
+            if (File.Exists(destPath))
+                File.SetAttributes(destPath, FileAttributes.Normal);
 
-			File.Copy(sourcePath, destPath, true);
-		}
+            File.Copy(sourcePath, destPath, true);
+        }
 
-		public void Save(string file, string content)
-		{
-			using (StreamWriter stream = File.CreateText(file))
-			{
-				stream.Write(content);
-			}
-		}
+        public void Save(string file, string content)
+        {
+            using (StreamWriter stream = File.CreateText(file))
+            {
+                stream.Write(content);
+            }
+        }
 
         /// <summary>
         /// Write the specified data in UTF8 encoding to the specified file in an atomic fashion, such
@@ -131,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             catch
             {
                 if (newFile != null)
-                {	
+                {
                     // Don't leave open files laying around.
                     newFile.Close();
                     newFile.Dispose();
@@ -141,37 +141,42 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         }
 
         public TextReader Load(string file)
-		{
-			using (TextReader reader = new StreamReader(file))
-			{
-				return new StringReader(reader.ReadToEnd());
-			}
-		}
+        {
+            using (TextReader reader = new StreamReader(file))
+            {
+                return new StringReader(reader.ReadToEnd());
+            }
+        }
 
-		public bool FileExists(string file)
-		{
-			return File.Exists(file);
-		}
+        public bool FileExists(string file)
+        {
+            return File.Exists(file);
+        }
 
-		public bool DirectoryExists(string folder)
-		{
-			return Directory.Exists(folder);
-		}
+        public bool DirectoryExists(string folder)
+        {
+            return Directory.Exists(folder);
+        }
 
+        #region DeleteFile
         /// <summary>
         /// Delete a file if it exists.
         /// </summary>
         /// <param name="filePath">The filepath to delete.</param>
-        private static void DeleteFile(string filePath)
+        public void DeleteFile(string filePath)
         {
             FileInfo fileInfo = new FileInfo(filePath);
             if (fileInfo.Exists)
             {
                 if ((fileInfo.Attributes & FileAttributes.ReadOnly) != 0)
+                {
                     fileInfo.Attributes ^= FileAttributes.ReadOnly;
+                }
+
                 fileInfo.Delete();
             }
         }
+        #endregion
 
         #region EnsureFolderExists()
         /// <summary>
@@ -180,8 +185,21 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="fileName">The name of the file, including the folder path.</param>
         public void EnsureFolderExists(string fileName)
         {
-            string directory = Path.GetDirectoryName(fileName);
-            if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+            this.EnsureFolderExists(fileName, true);
+        }
+
+        /// <summary>
+        /// Ensures that the folder for the specified file exists.
+        /// </summary>
+        /// <param name="fileName">The name of the file, including the folder path.</param>
+        /// <param name="includesFileName"><c>true</c> if the filename also includes the file name.</param>
+        public void EnsureFolderExists(string fileName, bool includesFileName)
+        {
+            string directory = includesFileName ? Path.GetDirectoryName(fileName) : fileName;
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
         }
         #endregion
 
@@ -189,13 +207,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <summary>
         /// Retrieves the free disk space for a drive.
         /// </summary>
-		/// <param name="driveName">The name of the drive (e.g. c:).</param>
+        /// <param name="driveName">The name of the drive (e.g. c:).</param>
         /// <returns>The amount of free space in bytes.</returns>
         public long GetFreeDiskSpace(string driveName)
         {
-			DriveInfo drive = new DriveInfo(driveName);
+            DriveInfo drive = new DriveInfo(driveName);
 
-        	return drive.AvailableFreeSpace;
+            return drive.AvailableFreeSpace;
         }
         #endregion
 
@@ -273,6 +291,72 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         public void MoveFile(string oldFilePath, string newFilePath)
         {
             File.Move(oldFilePath, newFilePath);
+        }
+        #endregion
+
+        #region CreateTempFile()
+        /// <summary>
+        /// Creates a temp file.
+        /// </summary>
+        /// <returns>A <see cref="FileStream"/> to the temp file.</returns>
+        public Stream CreateTempFile()
+        {
+            var tempFile = Path.GetTempFileName();
+            return this.OpenOutputStream(tempFile);
+        }
+        #endregion
+
+        #region DeleteTempFile()
+        /// <summary>
+        /// Deletes a temp file.
+        /// </summary>
+        /// <param name="tempFile">The temp file to delete.</param>
+        public void DeleteTempFile(Stream tempFile)
+        {
+            tempFile.Close();
+            var file = tempFile as FileStream;
+            if (file != null)
+            {
+                var name = file.Name;
+                file.Dispose();
+                File.Delete(name);
+            }
+        }
+        #endregion
+
+        #region ResetStreamForReading()
+        /// <summary>
+        /// Resets the stream for reading.
+        /// </summary>
+        /// <param name="inputStream">The input stream.</param>
+        /// <returns>The stream ready for reading.</returns>
+        public Stream ResetStreamForReading(Stream inputStream)
+        {
+            if (inputStream.CanRead)
+            {
+                if (inputStream.Position != 0)
+                {
+                    // Reset the stream to the beginning
+                    inputStream.Seek(0, SeekOrigin.Begin);
+                }
+            }
+            else
+            {
+                if (inputStream is FileStream)
+                {
+                    // Close and reopen the stream
+                    var name = (inputStream as FileStream).Name;
+                    inputStream.Close();
+                    inputStream.Dispose();
+                    inputStream = this.OpenInputStream(name);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Unable to reset stream for reading");
+                }
+            }
+
+            return inputStream;
         }
         #endregion
     }

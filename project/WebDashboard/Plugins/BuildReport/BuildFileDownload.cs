@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
             {
                 // Transfer the file across and load it into a string
                 var stream = new MemoryStream();
-                fileTransfer.Download(stream);
+                fileTransfer(stream);
                 stream.Seek(0, SeekOrigin.Begin);
                 var reader = new StreamReader(stream);
                 string htmlData = reader.ReadToEnd();

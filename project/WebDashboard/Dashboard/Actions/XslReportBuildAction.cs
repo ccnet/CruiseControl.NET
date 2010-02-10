@@ -47,13 +47,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
                 }
             }
 
-			return new HtmlFragmentResponse(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, new string[] {xslFileName}, xsltArgs, cruiseRequest.RetrieveSessionToken()));
+            var html = buildLogTransformer.Transform(
+                cruiseRequest.BuildSpecifier,
+                new string[] { xslFileName },
+                xsltArgs,
+                cruiseRequest.RetrieveSessionToken(),
+                new string[] { this.TaskType });
+            return new HtmlFragmentResponse(html);
 		}
 
         /// <summary>
         /// Optional parameters to pass into the XSL-T.
         /// </summary>
         public List<XsltParameter> Parameters { get; set; }
+
+        public string TaskType { get; set; }
 
 		[ReflectorProperty("xslFileName")]
 		public string XslFileName

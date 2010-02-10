@@ -10,6 +10,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.Remote.Messages;
+using System.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
@@ -494,20 +495,24 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         }
 
         #region RetrieveFileTransfer()
-        public virtual RemotingFileTransfer RetrieveFileTransfer(IProjectSpecifier projectSpecifier, string fileName, string sessionToken)
+        public virtual Action<Stream> RetrieveFileTransfer(IProjectSpecifier projectSpecifier, string fileName, string sessionToken)
         {
-            var response = GetCruiseManager(projectSpecifier, sessionToken)
-                .RetrieveFileTransfer(projectSpecifier.ProjectName, fileName);
-            return response as RemotingFileTransfer;
+            var action = new Action<Stream>(s => this.GetCruiseManager(projectSpecifier, sessionToken).TransferFile(projectSpecifier.ProjectName, fileName, s));
+            return action;
         }
 
-        public virtual RemotingFileTransfer RetrieveFileTransfer(IBuildSpecifier buildSpecifier, string fileName, string sessionToken)
+        public virtual Action<Stream> RetrieveFileTransfer(IBuildSpecifier buildSpecifier, string fileName, string sessionToken)
         {
             var logFile = new LogFile(buildSpecifier.BuildName);
             var fullName = string.Format("{0}\\{1}", logFile.Label, fileName);
-            var fileTransfer = GetCruiseManager(buildSpecifier, sessionToken)
-                .RetrieveFileTransfer(buildSpecifier.ProjectSpecifier.ProjectName, fullName);
-            return fileTransfer as RemotingFileTransfer;
+            return this.RetrieveFileTransfer(buildSpecifier.ProjectSpecifier, fullName, sessionToken);
+        }
+
+        public void RetrieveFileTransfer(IBuildSpecifier buildSpecifier, string fileName, string sessionToken, Stream outputStream)
+        {
+            var logFile = new LogFile(buildSpecifier.BuildName);
+            var fullName = string.Format("{0}\\{1}", logFile.Label, fileName);
+            this.GetCruiseManager(buildSpecifier.ProjectSpecifier, sessionToken).TransferFile(buildSpecifier.ProjectSpecifier.ProjectName, fileName, outputStream);
         }
         #endregion
 

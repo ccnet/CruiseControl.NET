@@ -3,6 +3,7 @@ using ThoughtWorks.CruiseControl.Remote;
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Messages;
+using System.IO;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -164,16 +165,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         }
         #endregion
 
-        #region RetrieveFileTransfer()
+        #region TransferFile()
         /// <summary>
-        /// Retrieve a file transfer object.
+        /// Transfers a file.
         /// </summary>
-        /// <param name="project">The project to retrieve the file for.</param>
-        /// <param name="fileName">The name of the file.</param>
-        public virtual IFileTransfer RetrieveFileTransfer(string fileName)
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="outputStream">The output stream.</param>
+        public void TransferFile(string fileName, Stream outputStream)
         {
-            var fileTransfer = manager.RetrieveFileTransfer(projectName, fileName);
-            return fileTransfer;
+            manager.TransferFile(this.projectName, fileName, outputStream);
         }
         #endregion
 

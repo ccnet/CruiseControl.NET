@@ -135,7 +135,7 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             result.MarkEndTime();
             PostBuild(result);
-            target.Finish();
+            target.Finish(result.Succeeded ? ItemBuildStatus.CompletedSuccess : ItemBuildStatus.CompletedFailed);
             Log.Info(string.Format("Integration complete: {0} - {1}", result.Status, result.EndTime));
         }
 

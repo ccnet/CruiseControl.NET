@@ -15,11 +15,23 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		bool DirectoryExists(string folder);
 
         /// <summary>
+        /// Deletes the file.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        void DeleteFile(string fileName);
+
+        /// <summary>
         /// Ensures that the folder for the specified file exists.
         /// </summary>
         /// <param name="fileName">The name of the file, including the folder path.</param>
-        /// <returns>The fileName.</returns>
         void EnsureFolderExists(string fileName);
+
+        /// <summary>
+        /// Ensures that the folder for the specified file exists.
+        /// </summary>
+        /// <param name="fileName">The name of the file, including the folder path.</param>
+        /// <param name="includesFileName"><c>true</c> if the filename also includes the file name.</param>
+        void EnsureFolderExists(string fileName, bool includesFileName);
 
         /// <summary>
         /// Retrieves the free disk space for a drive.
@@ -69,5 +81,24 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="oldFilePath">The old file path.</param>
         /// <param name="newFilePath">The new file path.</param>
         void MoveFile(string oldFilePath, string newFilePath);
+
+        /// <summary>
+        /// Creates a temp file.
+        /// </summary>
+        /// <returns>A <see cref="Stream"/> to the temp file.</returns>
+        Stream CreateTempFile();
+
+        /// <summary>
+        /// Deletes a temp file.
+        /// </summary>
+        /// <param name="tempFile">The temp file to delete.</param>
+        void DeleteTempFile(Stream tempFile);
+
+        /// <summary>
+        /// Resets the stream for reading.
+        /// </summary>
+        /// <param name="inputStream">The input stream.</param>
+        /// <returns>The reset stream.</returns>
+        Stream ResetStreamForReading(Stream inputStream);
     }
 }

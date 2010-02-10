@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private ISourceControl sourceControl = new NullSourceControl();
         private ILabeller labeller = new DefaultLabeller();
         private ITask[] tasks = new ITask[] { new NullTask() };
-        private ITask[] publishers = new ITask[] { new XmlLogPublisher() };
+        private ITask[] publishers = new ITask[] { };
         private ProjectActivity currentActivity = ProjectActivity.Sleeping;
         private IStateManager state = new FileStateManager();
         private IIntegrationResultManager integrationResultManager;
@@ -245,6 +245,15 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             get { return integrationResultManager.CurrentIntegration; }
         }
+
+        #region ConfiguredLogDirectory
+        /// <summary>
+        /// Gets or sets the configured log directory.
+        /// </summary>
+        /// <value>The configured log directory.</value>
+        [ReflectorProperty("logDir", Required = false)]
+        public string ConfiguredLogDirectory { get; set; }
+        #endregion
 
         public IIntegrationResult Integrate(IntegrationRequest request)
         {
@@ -551,14 +560,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
             try
             {
-                // Make sure the context is set
-                if (baseTask != null)
-                {
-                    baseTask.AssociateContext(this.context);
-                }
-
                 // Run the actual task
-                task.Run(result);
+                this.context.RunTask(task);
                 if (status != null)
                 {
                     // Only need to update the status if it is not already set
@@ -837,25 +840,18 @@ namespace ThoughtWorks.CruiseControl.Core
 
         private string GetLogDirectory()
         {
-            XmlLogPublisher publisher = GetLogPublisher();
-            string logDirectory = publisher.LogDirectory(ArtifactDirectory);
-            if (!Directory.Exists(logDirectory))
+            var logPath = this.ConfiguredLogDirectory ?? "buildlogs";
+            if (!Path.IsPathRooted(logPath))
             {
-                Log.Warning("Log Directory [ " + logDirectory + " ] does not exist. Are you sure any builds have completed?");
+                logPath = Path.Combine(this.ArtifactDirectory, logPath);
             }
-            return logDirectory;
-        }
 
-        private XmlLogPublisher GetLogPublisher()
-        {
-            foreach (ITask publisher in Publishers)
+            if (!Directory.Exists(logPath))
             {
-                if (publisher is XmlLogPublisher)
-                {
-                    return (XmlLogPublisher)publisher;
-                }
+                Log.Warning("Log Directory [ " + logPath + " ] does not exist. Are you sure any builds have completed?");
             }
-            throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
+
+            return logPath;
         }
         
         public void CreateLabel(IIntegrationResult result)
@@ -1152,9 +1148,7 @@ namespace ThoughtWorks.CruiseControl.Core
         public void Start(IIntegrationResult result)
         {
             var ioSystem = new SystemIoFileSystem();
-            var folder = Path.Combine(this.ArtifactDirectory, result.Label);
-            ioSystem.EnsureFolderExists(Path.Combine(folder, "temp"));
-            this.context = new TaskContext(ioSystem, folder);
+            this.context = TaskContext.FromProject(this, result);
         }
         #endregion
 
@@ -1162,9 +1156,9 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Finishes this instance.
         /// </summary>
-        public void Finish()
+        public void Finish(ItemBuildStatus status)
         {
-            this.context.Finialise();
+            this.context.Finialise(status);
         }
         #endregion
     }

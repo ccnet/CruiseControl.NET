@@ -400,13 +400,6 @@ namespace ThoughtWorks.CruiseControl.Remote
         ListPackagesResponse RetrievePackageList(ProjectRequest request);
         #endregion
 
-        #region RetrieveFileTransfer()
-        /// <summary>
-        /// Retrieve a file transfer object.
-        /// </summary>
-        FileTransferResponse RetrieveFileTransfer(FileTransferRequest request);
-        #endregion
-
         #region RetrieveService()
         /// <summary>
         /// Retrieves a service.
@@ -432,6 +425,35 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="request"></param>
         /// <returns></returns>
         DataResponse GetLinkedSiteId(ProjectItemRequest request);
+        #endregion
+
+        #region File transfer methods
+        #region OpenFile()
+        /// <summary>
+        /// Opens a file from a project's artifact folder.
+        /// </summary>
+        /// <param name="request">The request containing the name of the file.</param>
+        /// <returns>The response containing the key to the file.</returns>
+        DataResponse OpenFile(FileTransferRequest request);
+        #endregion
+
+        #region TransferFileData()
+        /// <summary>
+        /// Transfers a block of data from a previously opened file.
+        /// </summary>
+        /// <param name="request">The request containing the file key.</param>
+        /// <returns>The response containing Base64 encoded data.</returns>
+        DataResponse TransferFileData(FileTransferRequest request);
+        #endregion
+
+        #region CloseFile()
+        /// <summary>
+        /// Closes a previously opened file.
+        /// </summary>
+        /// <param name="request">The request containing the file key.</param>
+        /// <returns>The response containing the outcome of the closure.</returns>
+        Response CloseFile(FileTransferRequest request);
+        #endregion
         #endregion
     }
 }

@@ -165,13 +165,36 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         long GetFreeDiskSpace();
 
-        #region RetrieveFileTransfer()
+        #region File transfer methods
+        #region OpenFile()
         /// <summary>
-        /// Retrieve a file transfer object.
+        /// Opens a file from a project.
         /// </summary>
-        /// <param name="project">The project to retrieve the file for.</param>
-        /// <param name="fileName">The name of the file.</param>
-        RemotingFileTransfer RetrieveFileTransfer(string project, string fileName);
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns>The file key to use for accessing the file.</returns>
+        /// <remarks>
+        /// This will only open files relative to the artifacts folder.
+        /// </remarks>
+        string OpenFile(string projectName, string fileName);
+        #endregion
+
+        #region TransferFileData()
+        /// <summary>
+        /// Transfers a block of data from a file.
+        /// </summary>
+        /// <param name="fileKey">The file key.</param>
+        /// <returns>The base-64 encoded block of data from the file.</returns>
+        string TransferFileData(string fileKey);
+        #endregion
+
+        #region CloseFile()
+        /// <summary>
+        /// Closes a file.
+        /// </summary>
+        /// <param name="fileKey">The file key.</param>
+        void CloseFile(string fileKey);
+        #endregion
         #endregion
     }
 }
