@@ -77,6 +77,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
         /// </summary>
         /// <version>1.5</version>
         /// <default>n/a</default>
+        /// <remarks>
+        /// This will be displayed as the title of the link.
+        /// </remarks>
         [ReflectorProperty("description")]
         public string ConfiguredLinkDescription
         {
@@ -104,6 +107,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
         /// </summary>
         /// <version>1.5</version>
         /// <default>n/a</default>
+        /// <remarks>
+        /// This must be unique for the dashboard (e.g. there cannot be another action or plug-in with the
+        /// same name.
+        /// </remarks>
         [ReflectorProperty("actionName")]
         public string ActionName
         {
@@ -118,6 +125,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
         /// </summary>
         /// <version>1.5</version>
         /// <default>n/a</default>
+        /// <remarks>
+        /// See the notes below on what are valid names.
+        /// </remarks>
         [ReflectorProperty("htmlFileName")]
         public string HtmlFileName { get; set; }
         #endregion
