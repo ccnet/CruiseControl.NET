@@ -8,6 +8,47 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
     /// <summary>
     /// A generic plug-in to display a report from an HTML file.
     /// </summary>
+    /// <example>
+    /// <code title="Minimalist">
+    /// &lt;htmlReportPlugin description="Document Report" actionName="viewReport" htmlFileName="reports\document.html"/&gt;
+    /// </code>
+    /// <code title="In Context">
+    /// &lt;buildPlugins&gt;
+    /// &lt;buildReportBuildPlugin&gt;
+    /// &lt;xslFileNames&gt;
+    /// &lt;xslFile&gt;xsl\header.xsl&lt;/xslFile&gt;
+    /// &lt;xslFile&gt;xsl\modifications.xsl&lt;/xslFile&gt;
+    /// &lt;/xslFileNames&gt;
+    /// &lt;/buildReportBuildPlugin&gt;
+    /// &lt;buildLogBuildPlugin /&gt;
+    /// &lt;htmlReportPlugin description="Document Report" actionName="viewReport" htmlFileName="reports\document.html"/&gt;
+    /// &lt;/buildPlugins&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <title>HTML Source Location</title>
+    /// <para>
+    /// This plug-in can display any file that is in the build folder under artefacts folder for the 
+    /// project. It cannot display files from any other location (for security reasons).
+    /// </para>
+    /// <para>
+    /// Files can be published to a build folder using the <link>File Merge Task</link>. This will
+    /// automatically generate the correct folder structure for the HTML reports.
+    /// </para>
+    /// <title>File Names</title>
+    /// <para>
+    /// All file names are relative to the build folder. Files directly in the folder can be specified,
+    /// as well as folders in sub-folders. For example both report.html and documents\report.html are
+    /// valid file names.
+    /// </para>
+    /// <para>
+    /// Absolute filepaths are not allowed (e.g. c:\somewhere\report.html).
+    /// </para>
+    /// <para>
+    /// If the project's artefact folder was d:\data\ and the build label was 1.0.1, then report.html
+    /// would come from d:\data\1.0.1\report.html.
+    /// </para>
+    /// </remarks>
     [ReflectorType("htmlReportPlugin")]
     public class HtmlReportPlugin
         : ProjectConfigurableBuildPlugin

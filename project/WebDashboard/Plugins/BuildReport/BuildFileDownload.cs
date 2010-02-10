@@ -75,21 +75,28 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
         /// <returns></returns>
         private string LoadHtmlFile(ICruiseRequest cruiseRequest, string fileName)
         {
-            // Retrieve the file transfer object
-            var fileTransfer = farmService.RetrieveFileTransfer(cruiseRequest.BuildSpecifier, fileName, cruiseRequest.RetrieveSessionToken());
-            if (fileTransfer != null)
+            try
             {
-                // Transfer the file across and load it into a string
-                var stream = new MemoryStream();
-                fileTransfer.Download(stream);
-                stream.Seek(0, SeekOrigin.Begin);
-                var reader = new StreamReader(stream);
-                string htmlData = reader.ReadToEnd();
-                return htmlData;
+                // Retrieve the file transfer object
+                var fileTransfer = farmService.RetrieveFileTransfer(cruiseRequest.BuildSpecifier, fileName, cruiseRequest.RetrieveSessionToken());
+                if (fileTransfer != null)
+                {
+                    // Transfer the file across and load it into a string
+                    var stream = new MemoryStream();
+                    fileTransfer.Download(stream);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    var reader = new StreamReader(stream);
+                    string htmlData = reader.ReadToEnd();
+                    return htmlData;
+                }
+                else
+                {
+                    return "<div>Unable to find file</div>";
+                }
             }
-            else
+            catch (Exception error)
             {
-                return "<div>Unable to find file</div>";
+                return "<div>An error occurred while retrieving the file: " + error.Message + "</div>";
             }
         }
         #endregion
