@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// This method strips away any non-XML	output surrounding
         /// the &lt;vault&gt;...&lt;/vault&gt; elements.
 		/// </summary>
-		/// <param name="history"Output from Vault client is read from this reader.</param>
+		/// <param name="history">Output from Vault client is read from this reader.</param>
 		/// <returns>string containing only the XML output from the Vault client.</returns>
 		/// <exception cref="CruiseControlException">The <vault> start element or </vault> end element cannot be found.</exception>
 		private string ExtractXmlFromHistory(TextReader history)

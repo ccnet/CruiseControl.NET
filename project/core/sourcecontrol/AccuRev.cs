@@ -155,7 +155,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		/// <remarks>
         /// Uses <see cref="AccuRev(IHistoryParser, ProcessExecutor)"/> to do the heavy lifting.
-		/// <remarks>
+		/// </remarks>
 		public AccuRev() : this(new AccuRevHistoryParser(), new ProcessExecutor())
 		{
 		}
@@ -165,7 +165,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		/// <remarks>
         /// Uses <see cref="AccuRev(IHistoryParser, ProcessExecutor)"/> to do the heavy lifting.
-		/// <remarks>
+		/// </remarks>
 		public AccuRev(ProcessExecutor executor) : this(new AccuRevHistoryParser(), executor)
 		{
 		}
@@ -227,7 +227,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <b>Note:</b> The technique used by this method is only aware of changes in the workspace's
 		/// parent stream, not in streams that are ancestors of that stream.  This method should
 		/// probably be changed to detect such changes, possibly through use of the "accurev update -i"
-        /// command instead of "accurev hist", as suggested by "dhearing1 <dp_godwin@hotmail.com>" to
+        /// command instead of "accurev hist", as suggested by "dhearing1 &lt;dp_godwin@hotmail.com&gt;" to
         /// the ccnet-user list on 2007-07-09.
 		/// </remarks>
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)

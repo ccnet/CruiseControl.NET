@@ -68,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         #region Operators
         #region implicit
         /// <summary>
-        /// Performs an implicit conversion from <see cref="String"/> to <see cref="PrivateString"/>.
+        /// Performs an implicit conversion from <see cref="System.String"/> to <see cref="PrivateString"/>.
         /// </summary>
         /// <param name="args">The args.</param>
         /// <returns>The result of the conversion.</returns>

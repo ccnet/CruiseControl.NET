@@ -142,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </summary>
         /// <remarks>
         /// Uses <see cref="ExternalSourceControl(IHistoryParser, ProcessExecutor)"/> to do the heavy lifting.
-        /// <remarks>
+        /// </remarks>
         public ExternalSourceControl()
             : this(new ExternalSourceControlHistoryParser(), new ProcessExecutor())
         {
@@ -153,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </summary>
         /// <remarks>
         /// Uses <see cref="ExternalSourceControl(IHistoryParser, ProcessExecutor)"/> to do the heavy lifting.
-        /// <remarks>
+        /// </remarks>
         public ExternalSourceControl(ProcessExecutor executor)
             : this(new ExternalSourceControlHistoryParser(), executor)
         {
@@ -282,6 +282,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <param>executable</param> <code>SETLABEL</code> "<param>label</param>" "<param>sourcetimestamp</param>" <param>argstring</param>
         /// with the source timestamp represented as "<i>yyyy</i>-<i>mm</i>-<i>dd</i> <i>hh</i>:<i>mm</i>:<i>ss</i>"
         /// in local 24-hour time.
+        /// </remarks>
         public override void LabelSourceControl(IIntegrationResult result)
         {
             if (LabelOnSuccess && result.Succeeded && (result.Label != string.Empty))

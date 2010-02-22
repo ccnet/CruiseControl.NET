@@ -49,6 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// Checks if the user should use this permission.
         /// </summary>
         /// <param name="userName">The name of the user that is being checked.</param>
+        /// <param name="manager"></param>
         /// <returns>True if the permission is valid for the user, false otherwise.</returns>
         public virtual bool CheckUser(ISecurityManager manager, string userName)
         {
@@ -76,6 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// Checks the result of this permission.
         /// </summary>
         /// <param name="permission">The permission to check.</param>
+        /// <param name="manager"></param>
         /// <returns>The security right.</returns>
         public virtual SecurityRight CheckPermission(ISecurityManager manager, SecurityPermission permission)
         {
@@ -104,6 +106,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// </summary>
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
+        /// <param name="errorProcesser"></param>
         public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
         {
             if (!string.IsNullOrEmpty(refId))
@@ -128,6 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// Checks the result of this permission.
         /// </summary>
         /// <param name="permission">The permission to check.</param>
+        /// <param name="manager"></param>
         /// <returns>The security right.</returns>
         protected virtual SecurityRight CheckPermissionActual(ISecurityManager manager, SecurityPermission permission)
         {

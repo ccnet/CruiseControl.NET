@@ -50,6 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// when CC.Net first starts.
 		/// </summary>
         /// <param name="enforcerName">ID of program/person forcing the build</param>
+        /// <param name="buildValues"></param>
         void ForceBuild(string enforcerName, Dictionary<string, string> buildValues);
 		
 		/// <summary>

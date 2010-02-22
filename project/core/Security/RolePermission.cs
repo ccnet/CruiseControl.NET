@@ -105,6 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// Checks if the user should use this permission.
         /// </summary>
         /// <param name="userName">The name of the user that is being checked.</param>
+        /// <param name="manager"></param>
         /// <returns>True if the permission is valid for the user, false otherwise.</returns>
         protected override bool CheckUserActual(ISecurityManager manager, string userName)
         {

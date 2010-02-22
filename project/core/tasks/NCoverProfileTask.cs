@@ -642,6 +642,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Ensures that a path is rooted.
         /// </summary>
         /// <param name="path"></param>
+        /// <param name="doubleQuote"></param>
         /// <returns></returns>
         private string RootPath(string path, bool doubleQuote)
         {

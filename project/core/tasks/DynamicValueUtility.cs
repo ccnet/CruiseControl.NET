@@ -142,8 +142,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Finds a keyed value.
         /// </summary>
         /// <param name="values">The enumeration containing the values.</param>
-        /// <param name="keyName">The name of the key.</param>
-        /// <param name="keyValue">The value of the key.</param>
+        /// <param name="typeName"></param>
         /// <returns>The matching value, if found, null otherwise.</returns>
         public static object FindTypedValue(IEnumerable values, string typeName)
         {
@@ -600,7 +599,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             /// Change the value when the source is a property.
             /// </summary>
             /// <param name="value"></param>
-            /// <param name="actualValue"></param>
             private void ChangePropertyValue(object value)
             {
                 object actualValue = value;

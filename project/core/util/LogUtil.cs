@@ -263,6 +263,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             /// </summary>
             /// <param name="logger">The underlying logger to use.</param>
             /// <param name="methodName">The name of the method that is being traced;</param>
+            /// <param name="message"></param>
             public TraceBlock(ITraceLog logger, string methodName, string message)
             {
                 this.logger = logger;

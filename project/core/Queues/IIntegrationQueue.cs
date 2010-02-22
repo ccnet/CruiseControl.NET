@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
         /// <summary>
         /// Attempt to acquire a lock on the queue to mark it as in-use.
         /// </summary>
-        /// <param name="lockObject">If locking the queue for use was
+        /// <param name="queueLock">If locking the queue for use was
         /// successful (returned true), lockObject is an IDisposable that
         /// will discard the lock when disposed.</param>
         /// <returns>True if the queue is now marked as in-use, false if the

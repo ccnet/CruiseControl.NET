@@ -231,7 +231,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="msgLevel">the message level, if any.  Values are "Error" and "Warning".</param>
         /// <returns>the build result string</returns>
         /// <remarks>If there are any non-blank lines in the input, they are each wrapped in a
-        /// <code>&lt;message&gt</code> element and the entire set is wrapped in a
+        /// <code>&lt;message&gt;</code> element and the entire set is wrapped in a
         /// <code>&lt;buildresults&gt;</code> element and returned.  Each line of the input is encoded
         /// as XML CDATA rules require.  If the input is empty or contains only whitspace, an 
         /// empty string is returned.

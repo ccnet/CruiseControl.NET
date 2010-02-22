@@ -110,13 +110,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			Execute(GetSourceProcessInfo(result, _shim.ApplyLabel));
 		}
 
-		/// <summary
+		/// <summary>
 		/// The Vault command line client (vault.exe), at least for
 		/// version 2.0.4, is not guaranteed to output valid XML in
 		/// that there may be some not XML output surrounding the XML.
 		/// This method strips away any non-XML	output surrounding
 		/// the <vault>...</vault> elements.
-		/// </summary
+		/// </summary>
 		/// <param name="output">String containing all vault command-line client output.</param>
 		/// <returns>string containing only the XML output from the Vault client.</returns>
 		/// <exception cref="CruiseControlException">The <vault> start element or </vault> end element cannot be found.</exception>

@@ -195,7 +195,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// Lists all the users who have been defined in the system.
         /// </summary>
         /// <returns>
-        /// A list of <see cref="UserNameCredentials"/> containing the details on all the users
+        /// A list of <see cref="UserDetails"/> containing the details on all the users
         /// who have been defined.
         /// </returns>
         public override List<UserDetails> ListAllUsers()
@@ -245,6 +245,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// </summary>
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
+        /// <param name="errorProcesser"></param>
         public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
         {
             List<string> settings = new List<string>();

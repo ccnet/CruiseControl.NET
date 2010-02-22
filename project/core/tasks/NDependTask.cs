@@ -104,6 +104,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Initialise a new <see cref="NDependTask"/> with the injection properties.
         /// </summary>
         /// <param name="executor"></param>
+        /// <param name="fileSystem"></param>
+        /// <param name="logger"></param>
         public NDependTask(ProcessExecutor executor, IFileSystem fileSystem, ILogger logger)
         {
             this.executor = executor;
@@ -390,6 +392,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Ensures that a path is rooted.
         /// </summary>
         /// <param name="path"></param>
+        /// <param name="doubleQuote"></param>
         /// <returns></returns>
         private string RootPath(string path, bool doubleQuote)
         {
@@ -419,7 +422,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Generate a list of differences in files.
         /// </summary>
         /// <param name="originalList"></param>
-        /// <param name="newList"></param>
+        ///<param name="outputDirectory"></param>
         /// <returns></returns>
         private string[] ListFileDifferences(Dictionary<string, DateTime> originalList, string outputDirectory)
         {

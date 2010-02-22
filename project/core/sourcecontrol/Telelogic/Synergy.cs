@@ -253,7 +253,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		///     Performs a CM Synergy "Reconfigure"/"Update Members" for a forced build.
 		/// </summary>
 		/// <remarks>
-		/// 	<see cref="GetModifications"/> will also reconfigure when modifications are detected
+        /// 	<see cref="GetModifications(ThoughtWorks.CruiseControl.Core.IIntegrationResult, ThoughtWorks.CruiseControl.Core.IIntegrationResult)"/> will also reconfigure when modifications are detected
 		///     which explains why this method is a no-op unless we have a forced build.
 		/// </remarks>
 		/// <param name="integration">Not used.</param>
@@ -368,7 +368,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// </remarks>
 		/// <exception cref="CruiseControlException">
 		///     Thrown if an external process has reconfigured the project since 
-		///     <see cref="GetModifications"/> was called.
+        ///     <see cref="GetModifications(ThoughtWorks.CruiseControl.Core.IIntegrationResult, ThoughtWorks.CruiseControl.Core.IIntegrationResult)"/> was called.
 		/// </exception>
 		/// <param name="result">Not used.</param>
 		/// <url>element://model:project::CCNet.Synergy.Plugin/design:view:::ow43bejw6wm4was_v</url>

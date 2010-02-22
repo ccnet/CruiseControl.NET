@@ -272,7 +272,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// Lists all the users who have been defined in the system.
         /// </summary>
         /// <returns>
-        /// A list of <see cref="UserNameCredentials"/> containing the details on all the users
+        /// A list of <see cref="UserDetails"/> containing the details on all the users
         /// who have been defined.
         /// </returns>
         public abstract List<UserDetails> ListAllUsers();

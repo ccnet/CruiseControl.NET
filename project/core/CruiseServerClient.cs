@@ -325,7 +325,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <param name="request"></param>
         /// <returns>
-        /// A list of <see cref="UserNameCredentials"/> containing the details on all the users
+        /// A list of <see cref="ListUsersResponse"/> containing the details on all the users
         /// who have been defined.
         /// </returns>
         public ListUsersResponse ListUsers(ServerRequest request)
@@ -351,7 +351,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// Reads the specified number of filtered audit events.
         /// </summary>
         /// <param name="request"></param>
-        /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
+        /// <returns>A list of <see cref="ReadAuditResponse"/>s containing the audit details that match the filter.</returns>
         public ReadAuditResponse ReadAuditRecords(ReadAuditRequest request)
         {
             return cruiseServer.ReadAuditRecords(request);
@@ -362,7 +362,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Lists the build parameters for a project.
         /// </summary>
-        /// <param name="projectName">The name of the project to retrieve the parameters for.</param>
+        /// <param name="request">The project to retrieve the parameters for.</param>
         /// <returns>The list of parameters (if any).</returns>
         public BuildParametersResponse ListBuildParameters(ProjectRequest request)
         {

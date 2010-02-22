@@ -452,6 +452,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </summary>
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
+        /// <param name="errorProcesser"></param>
         public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
         {
             if (parent is Project)

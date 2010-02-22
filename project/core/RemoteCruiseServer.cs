@@ -466,7 +466,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <param name="request"></param>
         /// <returns>
-        /// A list of <see cref="UserNameCredentials"/> containing the details on all the users
+        /// A list of <see cref="ListUsersResponse"/> containing the details on all the users
         /// who have been defined.
         /// </returns>
         public virtual ListUsersResponse ListUsers(ServerRequest request)
@@ -503,7 +503,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Lists the build parameters for a project.
         /// </summary>
-        /// <param name="projectName">The name of the project to retrieve the parameters for.</param>
+        /// <param name="request">The project to retrieve the parameters for.</param>
         /// <returns>The list of parameters (if any).</returns>
         public virtual BuildParametersResponse ListBuildParameters(ProjectRequest request)
         {
@@ -578,7 +578,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Retrieves a service.
         /// </summary>
-        /// <typeparam name="TService">The type of service to retrieve.</typeparam>
+        /// <param name="serviceType">The type of service to retrieve.</param>
         /// <returns>A valid service, if found, null otherwise.</returns>
         public virtual object RetrieveService(Type serviceType)
         {

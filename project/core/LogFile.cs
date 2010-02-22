@@ -83,8 +83,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// Validates filename structure, throwing exceptions if badly formed.
 		/// </summary>
 		/// <param name="filename">The filename to validate.</param>
-		/// <exception cref="ArgumentNullException">If <see cref="filename"/> is null</exception>
-		/// <exception cref="ArgumentException">If <see cref="filename"/> is badly formed</exception>
+        /// <exception cref="ArgumentNullException">If filename is null</exception>
+        /// <exception cref="ArgumentException">If filename is badly formed</exception>
 		private void ValidateFilename(string filename)
 		{
 			if (filename == null)

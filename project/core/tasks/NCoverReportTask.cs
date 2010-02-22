@@ -528,6 +528,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Ensures that a path is rooted.
         /// </summary>
         /// <param name="path"></param>
+        /// <param name="doubleQuote"></param>
         /// <returns></returns>
         private string RootPath(string path, bool doubleQuote)
         {
@@ -557,7 +558,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Generate a list of differences in files.
         /// </summary>
         /// <param name="originalList"></param>
-        /// <param name="newList"></param>
+        /// <param name="outputDirectory"></param>
         /// <returns></returns>
         private FileInfo[] ListFileDifferences(Dictionary<string, DateTime> originalList, DirectoryInfo outputDirectory)
         {

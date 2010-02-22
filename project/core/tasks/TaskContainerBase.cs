@@ -70,7 +70,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Initialise an <see cref="ItemStatus"/>.
         /// </summary>
-        /// <param name="tasks"></param>
         public override void InitialiseStatus()
         {
             // This needs to be called first, otherwise the status is not set up

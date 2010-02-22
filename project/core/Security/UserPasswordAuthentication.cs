@@ -62,6 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// Start a new authentication with a user name and password.
         /// </summary>
         /// <param name="userName"></param>
+        /// <param name="password"></param>
         public UserPasswordAuthentication(string userName, string password)
         {
             this.userName = userName;

@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// Create a chart generator for the specified statistics using the default plotter.
         /// </summary>
         /// <param name="statistics">The statistics to include, checking their
-        /// <see cref="Statistic.GenerateGraph"/> property</param>
+        /// <see cref="StatisticsChartGenerator"/> property</param>
         /// <returns>The chart generator.</returns>
         private static StatisticsChartGenerator ChartGenerator(List<StatisticBase> statistics)
         {

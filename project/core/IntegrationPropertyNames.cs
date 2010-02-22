@@ -56,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.Core
         public const string CCNetLastIntegrationStatus = "CCNetLastIntegrationStatus";
         /// <summary>
         /// The file used by CCNet to read the progress of external tools
-        /// <see cref="http://confluence.public.thoughtworks.org/display/CCNETCOMM/Viewing+build+progress+with+Nant+and+MSBuild"/>
+        /// <see href="http://confluence.public.thoughtworks.org/display/CCNETCOMM/Viewing+build+progress+with+Nant+and+MSBuild"/>
         /// </summary>
         public const string CCNetListenerFile = "CCNetListenerFile";
         /// <summary>

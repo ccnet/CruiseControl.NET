@@ -123,6 +123,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <param name="userName">The name of the user that is being checked.</param>
         /// <param name="permission">The permission to check.</param>
         /// <param name="defaultRight">The default right to use.</param>
+        /// <param name="manager"></param>
         /// <returns>True if the permission is valid, false otherwise.</returns>
         public virtual bool CheckPermission(ISecurityManager manager, 
             string userName,
@@ -151,6 +152,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// </summary>
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
+        /// <param name="errorProcesser"></param>
         public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
         {
             foreach (IPermission permission in permissions)

@@ -89,11 +89,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// Not all file systems provide an atomic-file-replace operation, therefore we implement this 
         /// ourselves.
         /// <ol>
-        /// <li>Write to a new file on disk.
-        /// <li>Flush all the writes to disk.
-        /// <li>Rename the existing target file to the "old" file name.
-        /// <li>Rename the new file to the target file.
-        /// <li>Delete the old target file.
+        /// <li>Write to a new file on disk.</li>
+        /// <li>Flush all the writes to disk.</li>
+        /// <li>Rename the existing target file to the "old" file name.</li>
+        /// <li>Rename the new file to the target file.</li>
+        /// <li>Delete the old target file.</li>
+        /// </ol>
         /// </remarks>
         public void AtomicSave(string file, string content, Encoding encoding)
         {

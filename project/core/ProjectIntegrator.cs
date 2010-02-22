@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// a project's integration.
 	/// <list type="1">
 	///		<item>The <see cref="ITrigger"/> instance is asked whether to build or not.</item>
-	///		<item>If a build is required, the <see cref="IProject.Integrate(IntegrationRequest)"/>
+	///		<item>If a build is required, the <see cref="IIntegratable.Integrate(IntegrationRequest)"/>
 	///		is called.</item>
 	/// </list>
 	/// </summary>

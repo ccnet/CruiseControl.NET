@@ -395,13 +395,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return true;
         }
 
-        /**
- * Breaks up a target path based on known file seperators such
- * as / or \ or :
- * 
- * @param target
- * @return
- */
 
 
         /// <summary>

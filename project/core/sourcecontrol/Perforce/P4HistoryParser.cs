@@ -50,6 +50,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		/// NOTE there's a tab character before comment text.
 		/// </summary>
 		/// <param name="reader"></param>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
 		/// <returns></returns>
 		public Modification[] Parse(TextReader reader, DateTime from, DateTime to)
 		{

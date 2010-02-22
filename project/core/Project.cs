@@ -754,6 +754,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <param name="task"></param>
         /// <param name="result"></param>
+        /// <param name="isPublisher"></param>
         private void RunTask(ITask task, IIntegrationResult result, bool isPublisher)
         {
             // Load the status details
@@ -1157,6 +1158,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
+        /// <param name="errorProcesser"></param>
         public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
         {
             if (security.RequiresServerSecurity &&
@@ -1226,6 +1228,8 @@ namespace ThoughtWorks.CruiseControl.Core
         /// Validates the configuration of an item.
         /// </summary>
         /// <param name="item"></param>
+        /// <param name="configuration"></param>
+        /// <param name="errorProcesser"></param>
         private void ValidateItem(object item, IConfiguration configuration, IConfigurationErrorProcesser errorProcesser)
         {
             if ((item != null) && (item is IConfigurationValidation))
@@ -1237,7 +1241,9 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Validates the configuration of an enumerable.
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="items"></param>
+        /// <param name="configuration"></param>
+        /// <param name="errorProcesser"></param>
         private void ValidateItems(IEnumerable items, IConfiguration configuration, IConfigurationErrorProcesser errorProcesser)
         {
             if (items != null)

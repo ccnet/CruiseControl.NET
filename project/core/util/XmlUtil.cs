@@ -126,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="text">the text to encode</param>
         /// <returns>the encoded text</returns>
         /// <remarks>
-        /// This method damages the resulting string, because the sequence "]]>" is forbidden inside
+        /// This method damages the resulting string, because the sequence "]]&gt;" is forbidden inside
         /// a CDATA section and cannot be escaped or encoded.  Since we can't protect it, we insert a
         /// space between the brackets so it isn't recognized by an XML parser.  C'est la guerre.
         /// </remarks>
