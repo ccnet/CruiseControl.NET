@@ -43,6 +43,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// </summary>
         /// <param name="manager"></param>
         /// <param name="viewGenerator"></param>
+        /// <param name="physicalApplicationPathProvider"></param>
+        /// <param name="servicesConfiguration"></param>
         public AdministerAction(PackageManager manager,
             IVelocityViewGenerator viewGenerator,
             IRemoteServicesConfiguration servicesConfiguration,
@@ -167,6 +169,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// Save the server details
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="velocityContext"></param>
         private void SaveServer(IRequest request, Hashtable velocityContext)
         {
             // Retrieve the details
@@ -249,6 +252,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// Deletes a server.
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="velocityContext"></param>
         private void DeleteServer(IRequest request, Hashtable velocityContext)
         {
             // Retrieve the details

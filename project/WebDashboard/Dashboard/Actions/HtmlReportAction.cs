@@ -25,6 +25,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
         /// Initialise a new <see cref="HtmlReportAction"/>.
         /// </summary>
         /// <param name="fingerprintFactory"></param>
+        /// <param name="farmService"></param>
+        /// <param name="viewGenerator"></param>
         public HtmlReportAction(IFingerprintFactory fingerprintFactory, IFarmService farmService,
             IVelocityViewGenerator viewGenerator)
         {

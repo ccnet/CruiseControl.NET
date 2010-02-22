@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         private readonly IFarmService farmServer;
 
         /// <summary>
-        /// Initialise a new <see cref="ProjectXmlStatusAction"/>.
+        /// Initialise a new <see cref="ProjectStatusAction"/>.
         /// </summary>
         /// <param name="farmServer">The farm service to use.</param>
         public ProjectStatusAction(IFarmService farmServer)

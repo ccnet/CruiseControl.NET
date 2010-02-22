@@ -84,7 +84,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// Installs a package.
         /// </summary>
         /// <param name="fileName"></param>
-        /// <param name="velocityContext"></param>
         public List<PackageImportEventArgs> InstallPackage(string fileName)
         {
             // Validate that the package is still valid, just in case somebody else deleted it
@@ -170,7 +169,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// Uninstalls a package.
         /// </summary>
         /// <param name="fileName"></param>
-        /// <param name="velocityContext"></param>
         public List<PackageImportEventArgs> UninstallPackage(string fileName)
         {
             // Validate that the package is still valid, just in case somebody else deleted it

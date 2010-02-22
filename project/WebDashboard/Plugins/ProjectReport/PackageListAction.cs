@@ -30,9 +30,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 
         #region Constructors
         /// <summary>
-        /// Create a new <see cref="AdministerAction"/>.
+        /// Create a new <see cref="PackageListAction"/>.
         /// </summary>
         /// <param name="viewGenerator"></param>
+        /// <param name="farmService"></param>
         public PackageListAction(IVelocityViewGenerator viewGenerator,
             IFarmService farmService)
 		{

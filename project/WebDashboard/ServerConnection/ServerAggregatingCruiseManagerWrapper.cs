@@ -384,6 +384,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// Retrieves the configuration for security on a server.
         /// </summary>
         /// <param name="serverSpecifier">The server to get the configuration from.</param>
+        /// <param name="sessionToken"></param>
         /// <returns>An XML fragment containing the security configuration.</returns>
         public virtual string GetServerSecurity(IServerSpecifier serverSpecifier, string sessionToken)
         {
@@ -395,8 +396,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// Lists all the users who have been defined on a server.
         /// </summary>
         /// <param name="serverSpecifier">The server to get the users from.</param>
+        /// <param name="sessionToken"></param>
         /// <returns>
-        /// A list of <see cref="UserNameCredentials"/> containing the details on all the users
+        /// A list of <see cref="UserDetails"/> containing the details on all the users
         /// who have been defined.
         /// </returns>
         public virtual List<UserDetails> ListAllUsers(IServerSpecifier serverSpecifier, string sessionToken)
@@ -411,6 +413,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// </summary>
         /// <param name="projectSpecifier">The project to check.</param>
         /// <param name="userName">The name of the user.</param>
+        /// <param name="sessionToken"></param>
         /// <returns>A set of diagnostics information.</returns>
         public virtual List<SecurityCheckDiagnostics> DiagnoseSecurityPermissions(IProjectSpecifier projectSpecifier, string sessionToken, string userName)
         {
@@ -426,6 +429,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// </summary>
         /// <param name="serverSpecifier">The server to check.</param>
         /// <param name="userName">The name of the user.</param>
+        /// <param name="sessionToken"></param>
         /// <returns>A set of diagnostics information.</returns>
         public virtual List<SecurityCheckDiagnostics> DiagnoseSecurityPermissions(IServerSpecifier serverSpecifier, string sessionToken, string userName)
         {
@@ -440,6 +444,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// Lists the build parameters for a project.
         /// </summary>
         /// <param name="projectSpecifier">The project to check.</param>
+        /// <param name="sessionToken"></param>
         /// <returns>The list of parameters (if any).</returns>
         public virtual List<ParameterBase> ListBuildParameters(IProjectSpecifier projectSpecifier, string sessionToken)
         {
@@ -451,6 +456,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// Reads all the specified number of audit events.
         /// </summary>
         /// <param name="startPosition">The starting position.</param>
+        /// <param name="serverSpecifier"></param>
+        /// <param name="sessionToken"></param>
         /// <param name="numberOfRecords">The number of records to read.</param>
         /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details.</returns>
         public virtual List<AuditRecord> ReadAuditRecords(IServerSpecifier serverSpecifier, string sessionToken, int startPosition, int numberOfRecords)
@@ -466,6 +473,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <param name="startPosition">The starting position.</param>
         /// <param name="numberOfRecords">The number of records to read.</param>
         /// <param name="filter">The filter to use.</param>
+        /// <param name="serverSpecifier"></param>
+        /// <param name="sessionToken"></param>
         /// <returns>A list of <see cref="AuditRecord"/>s containing the audit details that match the filter.</returns>
         public virtual List<AuditRecord> ReadAuditRecords(IServerSpecifier serverSpecifier, string sessionToken, int startPosition, int numberOfRecords, AuditFilterBase filter)
         {
@@ -543,6 +552,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// List the available packages for a project.
         /// </summary>
         /// <param name="projectSpecifier"></param>
+        /// <param name="sessionToken"></param>
         /// <returns></returns>
         public virtual PackageDetails[] RetrievePackageList(IProjectSpecifier projectSpecifier, string sessionToken)
         {
@@ -554,7 +564,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <summary>
         /// List the available packages for a build.
         /// </summary>
-        /// <param name="projectSpecifier"></param>
+        /// <param name="buildSpecifier"></param>
+        /// <param name="sessionToken"></param>
         /// <returns></returns>
         public virtual PackageDetails[] RetrievePackageList(IBuildSpecifier buildSpecifier, string sessionToken)
         {
@@ -568,7 +579,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <summary>
         /// Takes a status snapshot of a project.
         /// </summary>
-        /// <param name="projectName">The name of the project.</param>
+        /// <param name="projectSpecifier">The project.</param>
+        /// <param name="sessionToken"></param>
         /// <returns>The snapshot of the current status.</returns>
         public ProjectStatusSnapshot TakeStatusSnapshot(IProjectSpecifier projectSpecifier, string sessionToken)
         {
@@ -583,6 +595,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// </summary>
         /// <param name="projectSpecifier">The project to retrieve the identifier for.</param>
         /// <param name="siteName">The name of the linked site.</param>
+        /// <param name="sessionId"></param>
         /// <returns>The identifier of the other site.</returns>
         public string GetLinkedSiteId(IProjectSpecifier projectSpecifier, string sessionId, string siteName)
         {

@@ -277,7 +277,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// <summary>
         /// Removes files to the install location.
         /// </summary>
-        /// <param name="physicalApplicationPathProvider"></param>
         /// <param name="folder">The details of the files to remove.</param>
         private void RemoveFiles(FileLocation folder)
         {
@@ -382,7 +381,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         /// <summary>
         /// Updates the configuration file.
         /// </summary>
-        /// <param name="physicalApplicationPathProvider"></param>
         /// <param name="addSettings"></param>
         private void UpdateConfigurationFile(bool addSettings)
         {

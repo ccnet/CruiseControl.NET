@@ -36,6 +36,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         /// </summary>
         /// <param name="viewGenerator">The view generator.</param>
         /// <param name="farmService">The farm service.</param>
+        /// <param name="urlBuilder"></param>
         public ProjectTimelineAction(IVelocityViewGenerator viewGenerator, IFarmService farmService, ICruiseUrlBuilder urlBuilder)
 		{
             this.viewGenerator = viewGenerator;

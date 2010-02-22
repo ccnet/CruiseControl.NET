@@ -99,9 +99,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
 			return hashCode;
 		}
         
-        /// <summary>
-        //Returns a sorted list containing build information per buildday
-        /// </summary>
+        ///<summary>
+        /// Returns a sorted list containing build information per buildday
+        ///</summary>
         public ArrayList GetBuildHistory(Int32 maxAmountOfDays)
         {
             ArrayList Result;
@@ -165,9 +165,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
 
 
         /// <summary>
-        // Information about a certain build 
-        // Wrapper around existing functions for ease of use in template
-        /// </summary>
+        /// Information about a certain build 
+        /// Wrapper around existing functions for ease of use in template
+        ///</summary>
         public class GraphBuildInfo
         {
             private IBuildSpecifier mybuildSpecifier;
@@ -206,7 +206,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
         }
 
         /// <summary>
-        // structure containing all the builds on 1 day (YYYY-MM-DD)
+        /// structure containing all the builds on 1 day (YYYY-MM-DD)
         /// </summary>
         public class GraphBuildDayInfo
         {
