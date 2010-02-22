@@ -329,7 +329,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="request"></param>
         /// <returns>
-        /// A list of <see cref="UserNameCredentials"/> containing the details on all the users
+        /// A list of <see cref="ListUsersResponse"/> containing the details on all the users
         /// who have been defined.
         /// </returns>
         ListUsersResponse ListUsers(ServerRequest request);
