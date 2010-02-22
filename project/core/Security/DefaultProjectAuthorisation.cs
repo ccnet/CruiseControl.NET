@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     /// <version>1.5</version>
     /// <title>Default Project Security</title>
     /// <remarks>
-    /// <include>General Security Permissions</include>
+    /// <includePage>General Security Permissions</includePage>
     /// </remarks>
     /// <example>
     /// <code>

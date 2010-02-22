@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     /// <title>Internal Server Security</title>
     /// <version>1.5</version>
     /// <remarks>
-    /// <include>General Security Permissions</include>
+    /// <includePage>General Security Permissions</includePage>
     /// </remarks>
     /// <example>
     /// <code>

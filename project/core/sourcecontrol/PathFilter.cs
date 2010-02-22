@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// </code>
     /// </example>
     /// <remarks>
-    /// <include> PathFilter Wildcards</include>
+    /// <includePage> PathFilter Wildcards</includePage>
     /// </remarks>
 	[ReflectorType("pathFilter")]
 	public class PathFilter : IModificationFilter

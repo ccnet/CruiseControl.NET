@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     /// It is possible to define multiple external security files. Each file can define the users and/or permissions for different areas (e.g.
     /// different departments).
     /// </para>
-    /// <include>General Security Permissions</include>
+    /// <includePage>General Security Permissions</includePage>
     /// </remarks>
     [ReflectorType("externalFileSecurity")]
     public class ExternalFileSecurityManager

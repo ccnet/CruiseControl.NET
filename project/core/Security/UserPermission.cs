@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     /// <title>User Permission</title>
     /// <version>1.5</version>
     /// <remarks>
-    /// <include>General Security Permissions</include>
+    /// <includePage>General Security Permissions</includePage>
     /// </remarks>
     /// <example>
     /// <code title="User Definition Example">

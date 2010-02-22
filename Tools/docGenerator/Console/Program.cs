@@ -2,17 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Text;
-    using System.Xml.Linq;
-    using Exortech.NetReflector;
-    using System.Text.RegularExpressions;
-    using System.Diagnostics;
     using System.ServiceModel;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Xml.Linq;
     using Console.ConfluenceApi;
+    using Exortech.NetReflector;
 
     public class Program
     {
@@ -870,7 +870,7 @@
                             builder.Append("[" + TrimValue(childElement.Value) + "]");
                             break;
 
-                        case "include":
+                        case "includePage":
                             builder.Append("{include:" + TrimValue(childElement.Value) + "}");
                             break;
 
