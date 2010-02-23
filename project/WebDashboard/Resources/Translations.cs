@@ -4,6 +4,7 @@
     using System.Globalization;
     using System.Resources;
     using System.Web;
+    using System.Configuration;
 
     /// <summary>
     /// Provides translations for different resources.
@@ -25,39 +26,49 @@
             var context = HttpContext.Current;
             try
             {
-                // Get the user's preferred language - this comes from the browser so we are assuming that the user has choosen their preferred languages
-                if ((context != null) &&
-                    (context.Request != null) &&
-                    (context.Request.UserLanguages.Length > 0))
-                {
-                    foreach (var language in context.Request.UserLanguages)
-                    {
-                        try
-                        {
-                            this.culture = new CultureInfo(language);
+                // Check if there is a override language
+                var systemLanguage = ConfigurationManager.AppSettings["language"];
 
-                            // Stop on the first non-neutral language
-                            if (!this.culture.IsNeutralCulture)
+                if (string.IsNullOrEmpty(systemLanguage))
+                {
+                    // Get the user's preferred language - this comes from the browser so we are assuming that the user has choosen their preferred languages
+                    if ((context != null) &&
+                        (context.Request != null) &&
+                        (context.Request.UserLanguages.Length > 0))
+                    {
+                        foreach (var language in context.Request.UserLanguages)
+                        {
+                            try
                             {
-                                break;
+                                this.culture = new CultureInfo(language);
+
+                                // Stop on the first non-neutral language
+                                if (!this.culture.IsNeutralCulture)
+                                {
+                                    break;
+                                }
+                            }
+                            catch (ArgumentException)
+                            {
+                                // This means that the language has invalid characters in it - normally because .NET has incorrectly parsed the user agent string
+                            }
+
+                            if (this.culture.IsNeutralCulture)
+                            {
+                                // Revert to the first culture since there are no non-neutral cultures defined
+                                this.culture = new CultureInfo(context.Request.UserLanguages[0]);
                             }
                         }
-                        catch (ArgumentException)
-                        {
-                            // This means that the language has invalid characters in it - normally because .NET has incorrectly parsed the user agent string
-                        }
-
-                        if (this.culture.IsNeutralCulture)
-                        {
-                            // Revert to the first culture since there are no non-neutral cultures defined
-                            this.culture = new CultureInfo(context.Request.UserLanguages[0]);
-                        }
+                    }
+                    else
+                    {
+                        // Use the default culture from the server
+                        this.culture = CultureInfo.CurrentUICulture;
                     }
                 }
                 else
                 {
-                    // Use the default culture from the server
-                    this.culture = CultureInfo.CurrentUICulture;
+                    this.culture = new CultureInfo(systemLanguage);
                 }
             }
             catch
