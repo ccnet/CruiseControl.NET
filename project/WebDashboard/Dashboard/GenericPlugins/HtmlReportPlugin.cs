@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
     /// </code>
     /// </example>
     /// <remarks>
-    /// <title>HTML Source Location</title>
+    /// <heading>HTML Source Location</heading>
     /// <para>
     /// This plug-in can display any file that is in the build folder under artefacts folder for the 
     /// project. It cannot display files from any other location (for security reasons).
@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
     /// Files can be published to a build folder using the <link>File Merge Task</link>. This will
     /// automatically generate the correct folder structure for the HTML reports.
     /// </para>
-    /// <title>File Names</title>
+    /// <heading>File Names</heading>
     /// <para>
     /// All file names are relative to the build folder. Files directly in the folder can be specified,
     /// as well as folders in sub-folders. For example both report.html and documents\report.html are
