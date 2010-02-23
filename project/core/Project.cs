@@ -707,6 +707,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 AddFailedTaskToMessages();
             }
 
+            this.ClearMessages(Message.MessageKind.BuildStatus);
             if (merged && !mergeFailed)
             {
                 // Clean up any temporary results
@@ -1411,14 +1412,20 @@ namespace ThoughtWorks.CruiseControl.Core
             return parameterList;
         }
 
-
-
         public void ClearNotNeededMessages()
         {
             ClearMessages(Message.MessageKind.Breakers);
             ClearMessages(Message.MessageKind.FailingTasks);
         }
 
-
+        /// <summary>
+        /// Initialises the target for a build.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        public void InitialiseForBuild(IntegrationRequest request)
+        {
+            this.ClearMessages(Message.MessageKind.BuildStatus);
+            this.AddMessage(new Message(request.ToString(), Message.MessageKind.BuildStatus));
+        }
     }
 }

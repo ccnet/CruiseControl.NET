@@ -86,6 +86,18 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
             set { sessionToken = value; }
         }
         #endregion
+
+        #region UserName
+        /// <summary>
+        /// Gets or sets the name of the user.
+        /// </summary>
+        /// <value>The name of the user.</value>
+        /// <remarks>
+        /// This will only be used on non-secure servers - if the server is secured then the user name from
+        /// the session token will be used instead.
+        /// </remarks>
+        public string UserName { get; set; }
+        #endregion
         #endregion
 
         #region Public methods

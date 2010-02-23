@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
                 .IgnoreArguments();
             Expect.Call(mockCruiseManager.SessionToken).PropertyBehavior();
             repository.ReplayAll();
-			manager.ForceBuild(null, parameters);
+			manager.ForceBuild(null, parameters, null);
             repository.VerifyAll();
 		}
 	}

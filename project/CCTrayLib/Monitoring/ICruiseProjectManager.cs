@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	/// </summary>
 	public interface ICruiseProjectManager
 	{
-        void ForceBuild(string sessionToken, Dictionary<string, string> parameters);
+        void ForceBuild(string sessionToken, Dictionary<string, string> parameters, string userName);
 		void FixBuild(string sessionToken, string fixingUserName);
         void AbortBuild(string sessionToken);
         void StopProject(string sessionToken);

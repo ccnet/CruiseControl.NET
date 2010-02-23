@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             }
         }
 
-        public string GetDisplayName(string sessionToken)
+        public string GetDisplayName(string sessionToken, string displayName)
         {
             actualCounts[6]++;
             if (getDisplayNameResults.Count == 0)

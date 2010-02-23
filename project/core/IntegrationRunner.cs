@@ -23,10 +23,9 @@ namespace ThoughtWorks.CruiseControl.Core
         public IIntegrationResult Integrate(IntegrationRequest request)
         {
             Log.Trace();
-
+            this.target.InitialiseForBuild(request);
             IIntegrationResult result = resultManager.StartNewIntegration(request);
             IIntegrationResult lastResult = resultManager.LastIntegrationResult;
-
             CreateDirectoryIfItDoesntExist(result.WorkingDirectory);
             CreateDirectoryIfItDoesntExist(result.ArtifactDirectory);
 

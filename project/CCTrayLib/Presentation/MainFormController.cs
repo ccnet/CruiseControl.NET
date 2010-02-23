@@ -194,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 try
                 {
                 	RunSecureMethod(b => {
-                    	SelectedProject.ForceBuild(parameters);
+                        SelectedProject.ForceBuild(parameters, this.GetUserName());
                 	}, "ForceBuild");
                 }
                 catch (Exception error)
@@ -428,7 +428,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             {
                 RunSecureMethod(b =>
                 {
-                    selectedProject.FixBuild(configuration.FixUserName);
+                    selectedProject.FixBuild(this.GetUserName());
                 }, "FixBuild");
             }
 		}
@@ -673,6 +673,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 var result = form.ShowDialog(mainForm);
                 return (result == DialogResult.OK);
             });
+        }
+
+        private string GetUserName()
+        {
+            if (string.IsNullOrEmpty(this.configuration.FixUserName))
+            {
+                return Environment.UserName;
+            }
+            else
+            {
+                return this.configuration.FixUserName;
+            }
         }
 	}
 }

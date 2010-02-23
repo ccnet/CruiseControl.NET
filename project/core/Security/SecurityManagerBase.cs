@@ -237,12 +237,15 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// Retrieves the display name from a session token.
         /// </summary>
         /// <param name="sessionToken">The session token.</param>
-        /// <returns>The name of the user if the session is valid, null otherwise.</returns>
-        public virtual string GetDisplayName(string sessionToken)
+        /// <param name="displayName">The display name that was sent from the client.</param>
+        /// <returns>
+        /// The name of the user if the session is valid, null otherwise.
+        /// </returns>
+        public virtual string GetDisplayName(string sessionToken, string displayName)
         {
             if (sessionToken == null) return null;
-            string displayName = sessionCache.RetrieveSessionValue(sessionToken, displayNameKey) as string;
-            return displayName;
+            var actualDisplayName = sessionCache.RetrieveSessionValue(sessionToken, displayNameKey) as string;
+            return actualDisplayName;
         }
         #endregion
 

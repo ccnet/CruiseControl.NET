@@ -28,5 +28,10 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         void ClearNotNeededMessages();
 
+        /// <summary>
+        /// Initialises the target for a build.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        void InitialiseForBuild(IntegrationRequest request);
     }
 }

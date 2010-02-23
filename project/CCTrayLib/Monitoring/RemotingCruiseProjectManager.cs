@@ -20,10 +20,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			this.projectName = projectName;
 		}
 
-        public void ForceBuild(string sessionToken, Dictionary<string, string> parameters)
+        public void ForceBuild(string sessionToken, Dictionary<string, string> parameters, string userName)
 		{
 			try
 			{
+                manager.UserName = userName;
                 manager.SessionToken = sessionToken;
                 if (parameters != null)
                 {

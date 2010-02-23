@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
         {
             string sessionToken = "anydetailsinhere";
             NullSecurityManager manager = new NullSecurityManager();
-            string userName = manager.GetDisplayName(sessionToken);
+            string userName = manager.GetDisplayName(sessionToken, null);
             Assert.AreEqual(sessionToken, userName);
         }
 

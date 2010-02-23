@@ -16,7 +16,8 @@ namespace ThoughtWorks.CruiseControl.Remote
             NotDefined = 0,
             Breakers = 1,
             Fixer = 2,
-            FailingTasks = 3
+            FailingTasks = 3,
+            BuildStatus = 4
         }
 
         private string message;
@@ -62,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// The type of message
         /// </summary>
-        ///[XmlText]
+        [XmlAttribute]
         public MessageKind Kind
         {
             get { return messageKind; }

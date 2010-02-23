@@ -201,7 +201,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             mocks.ReplayAll();
             manager.Initialise();
 
-            string result = manager.GetDisplayName(testSessionToken);
+            string result = manager.GetDisplayName(testSessionToken, null);
             Assert.AreEqual("John Doe", result);
         }
 
@@ -213,7 +213,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             mocks.ReplayAll();
             manager.Initialise();
 
-            string result = manager.GetDisplayName(testSessionToken);
+            string result = manager.GetDisplayName(testSessionToken, null);
             Assert.IsNull(result);
         }
 
@@ -223,7 +223,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Security
             mocks.ReplayAll();
             manager.Initialise();
 
-            string result = manager.GetDisplayName(null);
+            string result = manager.GetDisplayName(null, null);
             Assert.IsNull(result);
         }
 

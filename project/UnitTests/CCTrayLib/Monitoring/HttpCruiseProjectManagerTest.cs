@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
             });
             mocks.ReplayAll();
 
-            manager.ForceBuild(null, parameters);
+            manager.ForceBuild(null, parameters, null);
             mocks.VerifyAll();
 		}
 

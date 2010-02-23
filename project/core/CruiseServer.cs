@@ -335,7 +335,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 delegate(ProjectRequest arg, Response resp)
                 {
                     // Perform the actual force build
-                    string userName = securityManager.GetDisplayName(arg.SessionToken);
+                    string userName = securityManager.GetDisplayName(arg.SessionToken, request.UserName);
                     if (!FireForceBuildReceived(arg.ProjectName, userName))
                     {
                         // Build the integration request
@@ -374,7 +374,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 delegate(ProjectRequest arg, Response resp)
                 {
                     // Perform the actual abort build
-                    string userName = securityManager.GetDisplayName(arg.SessionToken);
+                    string userName = securityManager.GetDisplayName(arg.SessionToken, request.UserName);
                     if (!FireAbortBuildReceived(arg.ProjectName, userName))
                     {
                         GetIntegrator(arg.ProjectName).AbortBuild(userName);
@@ -1166,7 +1166,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 null,
                 delegate(ServerRequest arg)
                 {
-                    string displayName = securityManager.GetDisplayName(request.SessionToken);
+                    string displayName = securityManager.GetDisplayName(request.SessionToken, request.UserName);
                     Log.Debug(string.Format("Changing password for '{0}'", displayName));
                     securityManager.ChangePassword(request.SessionToken,
                         request.OldPassword,
@@ -1188,7 +1188,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 null,
                 delegate(ServerRequest arg)
                 {
-                    string displayName = securityManager.GetDisplayName(request.SessionToken);
+                    string displayName = securityManager.GetDisplayName(request.SessionToken, request.UserName);
                     Log.Debug(string.Format("'{0}' is resetting password for '{1}'", displayName, request.UserName));
                     securityManager.ResetPassword(request.SessionToken,
                         request.UserName,
@@ -1576,7 +1576,7 @@ namespace ThoughtWorks.CruiseControl.Core
             IProjectAuthorisation authorisation = null;
             bool requiresSession = securityManager.RequiresSession;
             string userName = securityManager.GetUserName(sessionToken);
-            string displayName = securityManager.GetDisplayName(sessionToken) ?? userName;
+            string displayName = securityManager.GetDisplayName(sessionToken, null) ?? userName;
             if (!string.IsNullOrEmpty(projectName))
             {
                 IProjectIntegrator projectIntegrator = GetIntegrator(projectName);

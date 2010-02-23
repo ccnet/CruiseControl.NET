@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 
-        public void ForceBuild(Dictionary<string, string> parameters)
+        public void ForceBuild(Dictionary<string, string> parameters, string userName)
 		{
 			throw new NotImplementedException();
 		}

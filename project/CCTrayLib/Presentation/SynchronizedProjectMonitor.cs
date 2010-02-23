@@ -48,10 +48,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			get { return projectMonitor.ProjectIntegratorState; }
 		}
-		
-        public void ForceBuild(Dictionary<string, string> parameters)
+
+        public void ForceBuild(Dictionary<string, string> parameters, string userName)
 		{
-			projectMonitor.ForceBuild(parameters);
+			projectMonitor.ForceBuild(parameters, userName);
 		}
 		
 		public void AbortBuild()

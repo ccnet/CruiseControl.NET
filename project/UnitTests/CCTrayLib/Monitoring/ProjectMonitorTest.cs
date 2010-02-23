@@ -290,7 +290,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
             mockServerMonitor.ExpectAndReturn("SessionToken", null);
             var parameters = new Dictionary<string, string>();
             mockProjectManager.Expect("ForceBuild", (string)null, parameters);
-            monitor.ForceBuild(parameters);
+            monitor.ForceBuild(parameters, null);
 		}
 
 		[Test]

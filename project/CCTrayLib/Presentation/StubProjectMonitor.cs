@@ -158,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// No implementation.
 		}
 
-        public void ForceBuild(Dictionary<string, string> parameters)
+        public void ForceBuild(Dictionary<string, string> parameters, string userName)
 		{
 			throw new NotImplementedException();
 		}

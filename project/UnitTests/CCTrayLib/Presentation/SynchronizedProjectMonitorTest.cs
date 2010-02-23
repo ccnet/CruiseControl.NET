@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 
             Dictionary<string, string> parameters = new Dictionary<string, string>();
 			mockProjectMonitor.Expect("ForceBuild", parameters);
-			monitor.ForceBuild(parameters);
+			monitor.ForceBuild(parameters, null);
 
 			mockProjectMonitor.Expect("Poll");
 			monitor.Poll();

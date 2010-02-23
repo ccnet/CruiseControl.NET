@@ -269,11 +269,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
         private delegate TResult ActionHandler<TResult>();
 
-        public void ForceBuild(Dictionary<string, string> parameters)
+        public void ForceBuild(Dictionary<string, string> parameters, string userName)
 		{
             AttemptActionWithRetry(delegate()
             {
-                cruiseProjectManager.ForceBuild(serverMonitor.SessionToken, parameters);
+                cruiseProjectManager.ForceBuild(serverMonitor.SessionToken, parameters, userName);
             });
 		}
 		
