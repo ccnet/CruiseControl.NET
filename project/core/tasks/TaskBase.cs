@@ -63,6 +63,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             get { return currentStatus; }
         }
         #endregion
+
+        #region WasSuccessful
+        /// <summary>
+        /// Gets or sets a value indicating whether the task was successful.
+        /// </summary>
+        /// <value><c>true</c> if the task was successful; otherwise, <c>false</c>.</value>
+        public bool WasSuccessful { get; private set; }
+        #endregion
         #endregion
 
         #region Public methods
@@ -74,16 +82,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         public virtual void Run(IIntegrationResult result)
         {
             // Initialise the task
+            this.WasSuccessful = false;
             InitialiseStatus();
             currentStatus.Status = ItemBuildStatus.Running;
             currentStatus.TimeOfEstimatedCompletion = CalculateEstimatedTime();
             currentStatus.TimeStarted = DateTime.Now;
 
             // Perform the actual run
-            var taskSuccess = false;
             try
             {
-                taskSuccess = Execute(result);
+                this.WasSuccessful = Execute(result);
             }
             catch (Exception error)
             {
@@ -94,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             finally
             {
                 // Clean up
-                currentStatus.Status = (taskSuccess) ? ItemBuildStatus.CompletedSuccess : ItemBuildStatus.CompletedFailed;
+                currentStatus.Status = (this.WasSuccessful) ? ItemBuildStatus.CompletedSuccess : ItemBuildStatus.CompletedFailed;
                 currentStatus.TimeCompleted = DateTime.Now;
             }
         }

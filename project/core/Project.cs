@@ -763,12 +763,13 @@ namespace ThoughtWorks.CruiseControl.Core
             if (currentProjectItems.ContainsKey(task)) status = currentProjectItems[task];
 
             // If there is a status, update it
+            var baseTask = task as TaskBase;
             if (status != null)
             {
-                var baseTask = task as TaskBase;
                 if (baseTask != null)
                 {
                     status.TimeOfEstimatedCompletion = baseTask.CalculateEstimatedTime();
+                    isPublisher = false;
                 }
 
                 status.TimeStarted = DateTime.Now;
@@ -788,19 +789,25 @@ namespace ThoughtWorks.CruiseControl.Core
                 task.Run(result);
                 if (status != null && !isPublisher)
                 {
+                    var wasSuccessful = !result.Failed;
+                    if (baseTask != null)
+                    {
+                        wasSuccessful = baseTask.WasSuccessful;
+                    }
+
                     // Only need to update the status if it is not already set
                     switch (status.Status)
                     {
                         case ItemBuildStatus.Pending:
                         case ItemBuildStatus.Running:
                         case ItemBuildStatus.Unknown:
-                            if (result.Failed)
+                            if (wasSuccessful)
                             {
-                                status.Status = ItemBuildStatus.CompletedFailed;
+                                status.Status = ItemBuildStatus.CompletedSuccess;
                             }
                             else
                             {
-                                status.Status = ItemBuildStatus.CompletedSuccess;
+                                status.Status = ItemBuildStatus.CompletedFailed;
                             }
                             break;
                     }
