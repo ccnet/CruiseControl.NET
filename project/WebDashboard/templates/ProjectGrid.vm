@@ -94,7 +94,7 @@
             <td>$translations.Translate($projectGridRow.NextBuildTime)</td>
             <td>$translations.Translate($projectGridRow.LastBuildLabel)</td>
             <td class="status$projectGridRow.Status">$translations.Translate($projectGridRow.Status)</td>
-            <td class="activity$projectGridRow.Activity">$translations.Translate($projectGridRow.Activity)</td>
+            <td class="activity$projectGridRow.Activity">$translations.Translate($projectGridRow.Activity.ToString())</td>
             <td class="left">
               <ul>
                 #if ($projectGridRow.Breakers.Length > 0)

@@ -26,7 +26,7 @@
           $project.ProjectName
         </td>
         <td>
-          $translations.Translate($project.Activity)
+          $translations.Translate($project.Activity.ToString())
         </td>
       </tr>
       #end

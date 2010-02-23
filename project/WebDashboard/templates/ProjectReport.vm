@@ -78,7 +78,7 @@
 		  #end
 		  <tr>
 			<th>$translations.Translate("Last Build Status")</th>
-			<td>$status.BuildStatus</td>
+			<td>$translations.Translate($status.BuildStatus.ToString())</td>
 		  </tr>
 		  <tr>
 			<th>$translations.Translate("Last Build Label")</th>
@@ -86,11 +86,11 @@
 		  </tr>
 		  <tr>
 			<th>$translations.Translate("CCNet Status")</th>
-			<td>$status.Status</td>
+			<td>$translations.Translate($status.Status.ToString())</td>
 		  </tr>
 		  <tr>
 			<th>$translations.Translate("Activity")</th>
-			<td>$status.Activity</td>
+			<td>$translations.Translate($status.Activity.ToString())</td>
 		  </tr>
 		  <tr>
 		    <td colspan="2">
