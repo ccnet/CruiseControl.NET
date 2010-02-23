@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			Assert.IsNull(monitor.ProjectState);
 
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-			mockProjectMonitor.Expect("ForceBuild", parameters);
+			mockProjectMonitor.Expect("ForceBuild", parameters, (string)null);
 			monitor.ForceBuild(parameters, null);
 
 			mockProjectMonitor.Expect("Poll");

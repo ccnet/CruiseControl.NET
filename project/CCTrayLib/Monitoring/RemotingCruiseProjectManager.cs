@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			try
 			{
-                manager.UserName = userName;
+                manager.DisplayName = userName;
                 manager.SessionToken = sessionToken;
                 if (parameters != null)
                 {

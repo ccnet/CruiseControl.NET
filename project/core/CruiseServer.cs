@@ -335,7 +335,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 delegate(ProjectRequest arg, Response resp)
                 {
                     // Perform the actual force build
-                    string userName = securityManager.GetDisplayName(arg.SessionToken, request.UserName);
+                    string userName = securityManager.GetDisplayName(arg.SessionToken, request.DisplayName);
                     if (!FireForceBuildReceived(arg.ProjectName, userName))
                     {
                         // Build the integration request
@@ -374,7 +374,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 delegate(ProjectRequest arg, Response resp)
                 {
                     // Perform the actual abort build
-                    string userName = securityManager.GetDisplayName(arg.SessionToken, request.UserName);
+                    string userName = securityManager.GetDisplayName(arg.SessionToken, request.DisplayName);
                     if (!FireAbortBuildReceived(arg.ProjectName, userName))
                     {
                         GetIntegrator(arg.ProjectName).AbortBuild(userName);

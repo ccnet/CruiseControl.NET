@@ -827,7 +827,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             ServerRequest request = new ServerRequest(SessionToken);
             request.ServerName = TargetServer;
-            request.UserName = this.UserName;
+            request.DisplayName = this.DisplayName;
             return request;
         }
         #endregion
@@ -843,7 +843,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
 
             ProjectRequest request = new ProjectRequest(SessionToken, projectName);
-            request.UserName = this.UserName;
+            request.DisplayName = this.DisplayName;
             request.ServerName = TargetServer;
             return request;
         }

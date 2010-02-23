@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         public void ForceBuild(string sessionToken, Dictionary<string, string> parameters, string userName)
 		{
             client.SessionToken = sessionToken;
-            client.UserName = userName;
+            client.DisplayName = userName;
             client.ForceBuild(projectName, NameValuePair.FromDictionary(parameters));
 		}
 

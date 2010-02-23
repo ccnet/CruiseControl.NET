@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
             mockProjectMonitor.ExpectAndReturn("ListBuildParameters", null);
 			controller.SelectedProject = projectMonitor;
 
-			mockProjectMonitor.Expect("ForceBuild", (Dictionary<string, string>)null);
+			mockProjectMonitor.Expect("ForceBuild", (Dictionary<string, string>)null, (string)null);
 			controller.ForceBuild();
 
 			mockProjectMonitor.Verify();
@@ -79,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
             mockProjectMonitor.ExpectAndReturn("ListBuildParameters", null);
 			controller.SelectedProject = projectMonitor;
 
-            mockProjectMonitor.ExpectNoCall("ForceBuild", typeof(Dictionary<string, string>));
+            mockProjectMonitor.ExpectNoCall("ForceBuild", typeof(Dictionary<string, string>), typeof(string));
 			controller.ForceBuild();
 
 			mockProjectMonitor.Verify();
