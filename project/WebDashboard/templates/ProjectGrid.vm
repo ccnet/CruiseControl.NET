@@ -142,9 +142,9 @@
         #if ($projectGridRow.BuildStage.Length > 0)
         <tr id="link$RowId" class="buildStatus">
             #if ($wholeFarm)
-            <td colspan="10">$projectGridRow.BuildStage</td>
+            <td colspan="10">$translations.FormatBuildStage($projectGridRow.BuildStage)</td>
             #else
-            <td colspan="9">$projectGridRow.BuildStage</td>
+            <td colspan="9">$translations.FormatBuildStage($projectGridRow.BuildStage)</td>
             #end
         </tr>
         #end

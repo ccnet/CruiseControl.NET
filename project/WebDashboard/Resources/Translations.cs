@@ -5,6 +5,8 @@
     using System.Resources;
     using System.Web;
     using System.Configuration;
+    using System.Xml;
+    using System.Text;
 
     /// <summary>
     /// Provides translations for different resources.
@@ -181,6 +183,56 @@
             }
 
             return translation;
+        }
+        #endregion
+
+        #region FormatBuildStage()
+        /// <summary>
+        /// Formats the build stage.
+        /// </summary>
+        /// <param name="buildStageData">The build stage data.</param>
+        /// <returns>An HTML fragment to display the build stage data in a table.</returns>
+        public string FormatBuildStage(string buildStageData)
+        {
+            if (string.IsNullOrEmpty(buildStageData))
+            {
+                return string.Empty;
+            }
+
+            var formattedResult = new StringBuilder();
+            try
+            {
+                var reader = new XmlTextReader(buildStageData, XmlNodeType.Document, null);
+                try
+                {
+                    reader.WhitespaceHandling = WhitespaceHandling.None;
+                    formattedResult.Append("<table>");
+                    formattedResult.AppendLine();
+                    while (reader.Read())
+                    {
+                        reader.MoveToContent();
+
+                        if (reader.AttributeCount > 0)
+                        {
+                            formattedResult.AppendFormat("<tr><td>{0}</td> ", reader.GetAttribute("Time"));
+                            formattedResult.AppendFormat("<td>{0}</td></tr>", reader.GetAttribute("Data"));
+                            formattedResult.AppendLine();
+                        }
+                    }
+
+                    formattedResult.Append("</table>");
+                }
+                finally
+                {
+                    reader.Close();
+                }
+            }
+            catch
+            {
+                formattedResult = new System.Text.StringBuilder();
+            }
+
+            return formattedResult.ToString();
         }
         #endregion
 

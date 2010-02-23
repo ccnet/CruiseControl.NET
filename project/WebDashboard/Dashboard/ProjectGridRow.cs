@@ -182,9 +182,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 string CurrentBuildStage = status.BuildStage;
 
                 if (CurrentBuildStage.Length == 0)
-                { return string.Empty; }
+                {
+                    return string.Empty;
+                }
                 else
-                { return GetFormattedBuildStage(CurrentBuildStage); }
+                {
+                    return CurrentBuildStage;
+                }
             }
         }
 
@@ -206,47 +210,5 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             return string.Empty;
 
         }
-
-        private string GetFormattedBuildStage(string buildStageData)
-        {
-            System.Xml.XmlDocument XDoc = new System.Xml.XmlDocument();
-            System.Xml.XmlTextReader XReader;
-            System.Text.StringBuilder Result = new System.Text.StringBuilder();
-
-            try
-            {
-
-                XDoc.LoadXml(buildStageData);
-                XReader = new System.Xml.XmlTextReader(XDoc.OuterXml, System.Xml.XmlNodeType.Document, null);
-                XReader.WhitespaceHandling = System.Xml.WhitespaceHandling.None;
-
-                Result.Append("<table>");
-                Result.AppendLine();
-
-                while (XReader.Read())
-                {
-                    XReader.MoveToContent();
-
-                    if (XReader.AttributeCount > 0)
-                    {
-                        Result.AppendFormat("<tr><td>{0}</td> ", XReader.GetAttribute("Time"));
-                        Result.AppendFormat("<td>{0}</td></tr>", XReader.GetAttribute("Data"));
-                        Result.AppendLine();
-                    }
-                }
-
-                Result.Append("</table>");
-
-                XReader.Close();
-            }
-            catch
-            {
-                Result = new System.Text.StringBuilder();
-            }
-            return Result.ToString();
-        }
-
-
-
     }
 }
