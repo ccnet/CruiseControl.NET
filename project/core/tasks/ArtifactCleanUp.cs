@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// not work in the tasks section. Be sure to specify the <link>Xml Log Publisher</link> before this one.
 	/// </summary>
     /// <title> Artifact Cleanup Publisher </title>
-    /// <version>1.0</version>
+    /// <version>1.5</version>
     /// <remarks>
     /// <para>
     /// Supported cleaning up methods :
@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		/// <summary>
         /// Defines the procedure to use for cleaning up the artifact folder.
 		/// </summary>
-        /// <version>1.0</version>
+        /// <version>1.5</version>
         /// <default>n/a</default>
 		[ReflectorProperty("cleanUpMethod", Required = true)]
 		public CleanUpMethod CleaningUpMethod
@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		/// <summary>
         /// Defines the value for the cleanup procedure.
 		/// </summary>
-        /// <version>1.0</version>
+        /// <version>1.5</version>
         /// <default>n/a</default>
         [ReflectorProperty("cleanUpValue", Required = true)]
 		public int CleaningUpValue
