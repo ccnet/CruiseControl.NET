@@ -64,6 +64,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                 ICruiseAction action = actionInstantiator.InstantiateAction(typeof(AdministerAction));
                 if (action is AdministerAction)
                 {
+
                     (action as AdministerAction).Password = password;
                 }
 				return new INamedAction[]

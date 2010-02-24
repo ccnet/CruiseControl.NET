@@ -456,7 +456,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             bool isValid = false;
 
             // See if the password needs to be checked
-            if (!string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(password))
+            {
+                // password may not be empty
+                velocityContext["Error"] = this.translations.Translate("Administration password may not be empty. Update dashboard.config, section administrationPlugin.");
+                isValid = false;
+            }
+            else
             {
                 // First see if there is a session token
                 HttpContext context = HttpContext.Current;
@@ -484,11 +490,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                         }
                     }
                 }
-            }
-            else
-            {
-                // Otherwise, just validate it
-                isValid = true;
             }
 
             return isValid;
