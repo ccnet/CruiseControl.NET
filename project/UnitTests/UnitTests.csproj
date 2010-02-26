@@ -180,6 +180,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CCnetDeploymentTests.cs" />
     <Compile Include="CCTrayLib\CCTimeFormatterTest.cs">
       <SubType>Code</SubType>
     </Compile>
