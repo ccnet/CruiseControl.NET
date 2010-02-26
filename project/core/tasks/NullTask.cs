@@ -19,12 +19,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// </code>
     /// </example>
     [ReflectorType("nullTask")]
-	public class NullTask : ITask
+    public class NullTask : TaskBase
 	{
         /// <summary>
         /// Defines whether to fail the task or not.
         /// </summary>
-        /// <version>1.5</version>
+        /// <version>1.3</version>
         /// <default>false</default>
         /// <remarks>
         /// This can be useful in testing scenarios - but is probably most useful for people developing for
@@ -33,17 +33,27 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("simulateFailure", Required = false)]
         public bool SimulateFailure = false;
 
-		public void Run(IIntegrationResult result)
-		{
+        /// <summary>
+        /// The message for the exception. Makes it easier to spot differences between different errors.
+        /// </summary>
+        /// <version>1.5</version>
+        [ReflectorProperty("simulateFailureMessage", Required = false)]
+        public string SimulateFailureMessage = "Simulating Failure";
+
+
+        protected override bool Execute(IIntegrationResult result)
+        {
             if (SimulateFailure)
             {
-                result.AddTaskResult("Simulating Failure");
-                throw new System.Exception("Simulating a failure");
+                result.AddTaskResult(SimulateFailureMessage);
+                throw new System.Exception(SimulateFailureMessage);
             }
             else
             {
                 result.AddTaskResult(string.Empty);
-            }			            
-		}
-	}
+            }
+            
+            return !SimulateFailure;
+        }
+    }
 }
