@@ -157,6 +157,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             }
 
             LdapSearcher.SearchRoot = Ldap;
+            LdapSearcher.SearchScope = SearchScope.Subtree;
 
             LdapSearcher.PropertiesToLoad.Add(LdapFieldMailAddress);
             LdapSearcher.PropertiesToLoad.Add(LdapFieldName);
