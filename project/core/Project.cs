@@ -939,7 +939,10 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 if (item.Status == ItemBuildStatus.CompletedFailed)
                 {
-                    failedTasks.Add(item.Name);
+                    if (string.IsNullOrEmpty(item.Description))
+                    { failedTasks.Add(item.Name); }
+                    else
+                    { failedTasks.Add(item.Description); }
                 }
             }
         }
