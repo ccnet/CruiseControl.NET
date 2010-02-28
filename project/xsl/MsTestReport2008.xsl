@@ -1,126 +1,218 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+version="1.0">
+ <xsl:output method="html"/>
+ <xsl:template match="/">
+   <xsl:apply-templates select="/cruisecontrol/build/*[local-name()='TestRun']" />
+ </xsl:template>
 
-	<xsl:output method="html"/>
-	
-	<xsl:template match="/">
-	
-		<xsl:variable name="pass_count" select="/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='ResultSummary']/*[local-name()='Counters']/@passed"/>
-		<xsl:variable name="inconclusive_count" select="/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='ResultSummary']/*[local-name()='Counters']/@inconclusive"/>
-		<xsl:variable name="failed_count" select="/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='ResultSummary']/*[local-name()='Counters']/@failed"/>
-		<xsl:variable name="total_count" select="/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='ResultSummary']/*[local-name()='Counters']/@total"/>
+ <xsl:template match="/cruisecontrol/build/*[local-name()='TestRun']">
+   <h1>
+     Test Run: <xsl:value-of select="@name" />
+   </h1>
 
-		<xsl:choose>
-			<xsl:when test="$total_count > 0">
-				<table class="section-table" width="100%">
-				<tr>
-					<td class="sectionheader">
-						Tests run: <xsl:value-of select="$total_count"/>, Failures: <xsl:value-of select="$failed_count"/>, Inconclusive: <xsl:value-of select="$inconclusive_count"/>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table>
-							<tr>
-								<td width="100">
-									<b>Passed:</b>
-								</td>
-								<td>
-									<xsl:value-of select="$pass_count"/>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<b>Failed:</b>
-								</td>
-								<td>
-									<xsl:value-of select="$failed_count"/>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<b>Inconclusive:</b>
-								</td>
-								<td>
-									<xsl:value-of select="$inconclusive_count"/>
-								</td>
-							</tr> 
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="100%">
-						<table border="1" width="100%">
-							<tr height="20">
-								<xsl:choose>
-									<xsl:when test="$total_count=$pass_count">
-										<td bgcolor="00FF33" align="center">
-											<b>PASSED</b>
-										</td>
-									</xsl:when>
-									<xsl:otherwise>
-										<td bgcolor="FF0000" align="center">
-											<b>FAILED</b>
-										</td>
-									</xsl:otherwise>
-								</xsl:choose>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table border="1" width="100%" frame="box">
-							<tr bgcolor="#2288FF">
-								<th align="center" width="40">Code</th>
-								<th align="left">Method</th>
-								<th align="left">Message</th>
-								<th align="left">Duration</th>
-							</tr>
-							<xsl:apply-templates select="/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='Results']/*[local-name()='UnitTestResult']" />
-						</table>
-					</td>
-				</tr>
-			</table>
-			</xsl:when>
-			<xsl:otherwise>
-				<table class="section-table" width="100%">
-					<tr>
-						<td class="sectionheader">Tests run: 0</td>
-					</tr>
-					<tr>
-						<td>No tests found</td>
-					</tr>
-				</table>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
+   <h2>Summary</h2>
+   <p>
+     Designated outcome :
+     <xsl:choose>
+       <xsl:when test="*[local-name()='ResultSummary']/@outcome ='Passed'">
+         <span style="color: forestGreen; font-weight: bold;">
+           <xsl:value-of select="*[local-name()='ResultSummary']/@outcome" />
+         </span>
+       </xsl:when>
+       <xsl:otherwise>
+         <span style="color: Red; font-weight: bold;">
+           <xsl:value-of select="*[local-name()='ResultSummary']/@outcome" />
+         </span>
+       </xsl:otherwise>
+     </xsl:choose>
+   </p>
+   <table border="1" cellSpacing="0" cellPadding="5" >
+     <thead style="text-align: center;">
+       <td>Number of Tests</td>
+       <td style="background-color: forestGreen; color:white">Passed</td>
+       <td style="background-color: fireBrick; color: white;">Failed</td>
+       <td style="background-color: yellow; color:black;">Inconclusive</td>
+       <td style="background-color: red; color: black;">Aborted</td>
+       <td style="background-color: darkblue; color: white;">Timeout</td>
+     </thead>
+     <tr style="text-align: center;">
+       <td>
+         <xsl:value-of select="*[local-name()='ResultSummary']//*[local-name()='Counters']/@total" />
+       </td>
+       <td>
+         <xsl:value-of select="*[local-name()='ResultSummary']//*[local-name()='Counters']/@passed" />
+       </td>
+       <td>
+         <xsl:value-of select="*[local-name()='ResultSummary']//*[local-name()='Counters']/@failed" />
+       </td>
+       <td>
+         <xsl:value-of select="*[local-name()='ResultSummary']//*[local-name()='Counters']/@inconclusive" />
+       </td>
+       <td>
+         <xsl:value-of select="*[local-name()='ResultSummary']//*[local-name()='Counters']/@aborted" />
+       </td>
+       <td>
+         <xsl:value-of select="*[local-name()='ResultSummary']//*[local-name()='Counters']/@timeout" />
+       </td>
+     </tr>
+   </table>
 
-	<xsl:template match="*[local-name()='UnitTestResult']">
-		<tr>
-			<xsl:choose>
-				<xsl:when test="@outcome = 'Passed'">
-					<td bgcolor="00FF33" align="center"> P </td>
-				</xsl:when>
-				<xsl:when test="@outcome = 'Failed'">
-					<td bgcolor="FF0000" align="center"> F </td>
-				</xsl:when>
-				<xsl:when test="@outcome = 'Inconclusive'">
-					<td bgcolor="FFCC00" align="center"> I </td>
-				</xsl:when>
-				<xsl:otherwise>
-					<td bgcolor="3399FF" align="center"> ? </td>
-				</xsl:otherwise>
-			</xsl:choose>
-			<td>
-				<xsl:value-of select="@testName"/>
-			</td>
-			<td>
-				<xsl:value-of select="*[local-name()='Output']/*[local-name()='ErrorInfo']/*[local-name()='Message']"/>
-			</td>
-			<td>
-				<xsl:value-of select="concat(substring-before(@duration,'.'),'.',substring(substring-after(@duration,'.'),1,7))"/>
-			</td>
-		</tr>
-	</xsl:template>
-</xsl:stylesheet>
+   <xsl:variable name="runinfos" select="*[local-name()='ResultSummary']/*[local-name()='RunInfos']/*[local-name()='RunInfo']" />
+   <xsl:if test="count($runinfos) > 0">
+     <h3>Errors and Warnings</h3>
+     <table width="100%" border="1" cellSpacing="0" style="font-size:small;">
+       <xsl:apply-templates select="$runinfos" />
+     </table>
+   </xsl:if>
+
+   <xsl:apply-templates select="*[local-name()='Results']">
+
+   </xsl:apply-templates>
+ </xsl:template>
+
+ <xsl:template match="*[local-name()='RunInfo']">
+   <tr>
+     <td>
+       <pre>
+         <xsl:apply-templates select="*" />
+       </pre>
+     </td>
+   </tr>
+ </xsl:template>
+
+ <xsl:template match="*[local-name()='Results']">
+   <h2>Test Results</h2>
+   <table border="1" cellPadding="2" cellSpacing="0" width="98%">
+     <thead style="text-align: center; font-size: large; font-weight:bold;background-color:#33CCFF">
+       <td>Test Name</td>
+	   <td>Test Result</td>
+       <td>Test Duration</td>
+	 </thead>
+     <tr>
+       <xsl:apply-templates select="./*" />
+     </tr>
+   </table>
+ </xsl:template>
+
+ <xsl:template match="*[local-name()='TestResultAggregation']">
+   <tr>
+     <td colspan="3">
+     <center>
+       <b>Composite Test : <xsl:value-of select="@testName "/></b><br />
+       <table border="1" style="text-align: center;"
+       cellSpacing="0" cellpadding="5" >
+         <thead>
+           <td style="background-color: forestGreen; color:white">Passed</td>
+           <td style="background-color: fireBrick; color:white;">Failed</td>
+           <td style="background-color: yellow; color:black;">Inconclusive</td>
+           <td style="background-color: red; color: black;">Aborted</td>
+           <td style="background-color: darkblue; color:white;">Timeout</td>
+         </thead>
+         <tr>
+           <td>
+             <xsl:value-of select="*[local-name()='Counters']/@passed"/>
+           </td>
+           <td>
+             <xsl:value-of select="*[local-name()='Counters']/@failed"/>
+           </td>
+           <td>
+             <xsl:value-of select="*[local-name()='Counters']/@inconclusive"/>
+           </td>
+           <td>
+             <xsl:value-of select="*[local-name()='Counters']/@aborted"/>
+           </td>
+           <td>
+             <xsl:value-of select="*[local-name()='Counters']/@timeout"/>
+           </td>
+         </tr>
+       </table>
+
+   </center>
+     </td>
+   </tr>
+   <xsl:apply-templates select="./*[local-name()='InnerResults']/*" />
+
+   <tr>
+     <td colspan="3" style="text-align: center; font-weight: bold;">
+           End of composite test :  <xsl:value-of select="@testName "/>
+     </td>
+   </tr>
+ </xsl:template>
+
+ <xsl:template match="*[local-name()='UnitTestResult']">
+   <tr>
+     <td>
+       <xsl:value-of select="@testName"/>
+     </td>
+     <xsl:choose>
+       <xsl:when test="@outcome = 'Passed'">
+         <td style="text-align: center; font-weight: bold; background-color: forestGreen; color: white;">
+           <xsl:value-of select="@outcome"/>
+         </td>
+       </xsl:when>
+       <xsl:when test="@outcome = 'Failed'">
+         <td style="text-align: center; font-weight: bold; background-color: fireBrick; color: white;">
+           <xsl:value-of select="@outcome"/>
+         </td>
+       </xsl:when>
+       <xsl:when test="@outcome = 'Inconclusive'">
+         <td style="text-align: center; font-weight: bold; background-color: yellow; color: black;">
+           <xsl:value-of select="@outcome"/>
+         </td>
+       </xsl:when>
+       <xsl:otherwise>
+         <td style="text-align: center; font-weight: bold; background-color: lightblue; color: black; ">
+           <xsl:value-of select="@outcome"/>
+         </td>
+       </xsl:otherwise>
+     </xsl:choose>
+     <td style="text-align: right;">
+       <xsl:value-of select="@duration"/>
+     </td>
+   </tr>
+               <xsl:apply-templates select="./*[local-name()='Output']/*[local-name()='ErrorInfo']" />
+ </xsl:template>
+
+ <xsl:template match="*[local-name()='ErrorInfo']">
+       <tr>
+               <td colspan="3" bgcolor="#FF9900">
+                       <b><xsl:value-of select="./*[local-name()='Message']" /></b><br />
+                       <xsl:value-of select="./*[local-name()='StackTrace']" />
+               </td>
+       </tr>
+ </xsl:template>
+
+ <xsl:template match="*[local-name()='TestResult']">
+   <tr>
+     <td>
+       <xsl:value-of select="@testName"/>
+     </td>
+     <xsl:choose>
+       <xsl:when test="@outcome = 'Passed'">
+         <td style="text-align: center; font-weight: bold; background-color: forestGreen; color: white">
+           <xsl:value-of select="@outcome"/>
+         </td>
+       </xsl:when>
+       <xsl:when test="@outcome = 'Failed'">
+         <td style="text-align: center; font-weight: bold; background-color: fireBrick; color: white  ">
+           <xsl:value-of select="@outcome"/>
+         </td>
+       </xsl:when>
+       <xsl:when test="@outcome = 'Inconclusive'">
+         <td style="text-align: center; font-weight: bold; background-color: yellow; color: black;">
+<xsl:value-of select="@outcome"/>
+         </td>
+       </xsl:when>
+       <xsl:otherwise>
+         <td style="text-align: center; font-weight: bold; background-color: lightblue; color: black; ">
+           <xsl:value-of select="@outcome"/>
+         </td>
+       </xsl:otherwise>
+     </xsl:choose>
+     <td style="text-align: right;">
+       <xsl:value-of select="@duration"/>
+     </td>
+   </tr>
+ </xsl:template>
+ </xsl:stylesheet>
