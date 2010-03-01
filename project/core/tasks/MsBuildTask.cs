@@ -38,6 +38,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// </code>
     /// </example>
     /// <remarks>
+    /// <includePage>Integration Properties</includePage>
     /// <para>
     /// Many thanks to Szymon Kobalczyk for helping out with this part of CruiseControl.NET.
     /// </para>

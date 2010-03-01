@@ -27,6 +27,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// &lt;/ftp&gt;
     /// </code>
     /// </example>
+    /// <remarks>
+    /// <includePage>Integration Properties</includePage>
+    /// </remarks>
     [ReflectorType("ftp")]
     public class FtpTask : TaskBase
     {

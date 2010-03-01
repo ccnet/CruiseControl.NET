@@ -40,9 +40,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("simulateFailureMessage", Required = false)]
         public string SimulateFailureMessage = "Simulating Failure";
 
-
         protected override bool Execute(IIntegrationResult result)
         {
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Executing null task");
+            System.Threading.Thread.Sleep(5000);
+
             if (SimulateFailure)
             {
                 result.AddTaskResult(SimulateFailureMessage);
@@ -50,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
             else
             {
-                result.AddTaskResult(string.Empty);
+                result.AddTaskResult("All OK for " + (!string.IsNullOrEmpty(Description) ? Description : "Null task"));
             }
             
             return !SimulateFailure;

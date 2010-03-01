@@ -29,6 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// Often programmers like to use a centralised project to build an entire software system. They define specific dependencies and the
     /// build order on that specific project to reproduce the behaviours of an nmake build.
     /// </para>
+    /// <includePage>Integration Properties</includePage>
     /// </remarks>
     /// <example>
     /// <code title="Minimalist example">
@@ -48,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// &lt;version&gt;VS2002&lt;/version&gt;
     /// &lt;/devenv&gt;
     /// </code>
-    /// </example>
+    /// </example>    
     [ReflectorType("devenv")]
 	public class DevenvTask
         : TaskBase
