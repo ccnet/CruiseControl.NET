@@ -22,16 +22,40 @@ namespace ThoughtWorks.CruiseControl.Core
         public const string ServerClientUri = "CruiseServerClient.rem";
         public const string DefaultServerClientUri = "tcp://localhost:21234/" + ServerClientUri;
 
+        private readonly bool disableRemoting;
         private ICruiseServer server;
         private bool disposed;
         private IExecutionEnvironment environment = new ExecutionEnvironment();
 
         public RemoteCruiseServer(ICruiseServer server, string remotingConfigurationFile)
+            : this(server, remotingConfigurationFile, false)
         {
+        }
+
+        public RemoteCruiseServer(ICruiseServer server, string remotingConfigurationFile, bool disableRemoting)
+        {
+            // Store the server instance and wire up the events so they are passed on
             this.server = server;
-            RemotingConfiguration.Configure(remotingConfigurationFile, false);
-            RegisterManagerForRemoting();
-            RegisterServerClientForRemoting();
+            this.server.AbortBuildProcessed += (o, e) => { this.FireAbortBuildProcessed(e.ProjectName, e.Data); };
+            this.server.AbortBuildReceived += (o, e) => { this.FireAbortBuildReceived(e.ProjectName, e.Data); };
+            this.server.ForceBuildProcessed += (o, e) => { this.FireForceBuildProcessed(e.ProjectName, e.Data); };
+            this.server.ForceBuildReceived += (o, e) => { this.FireForceBuildReceived(e.ProjectName, e.Data); };
+            this.server.IntegrationCompleted += (o, e) => { this.FireIntegrationCompleted(e.Request, e.ProjectName, e.Status); };
+            this.server.IntegrationStarted += (o, e) => { this.FireIntegrationStarted(e.Request, e.ProjectName); };
+            this.server.ProjectStarted += (o, e) => { this.FireProjectStarted(e.ProjectName); };
+            this.server.ProjectStarting += (o, e) => { this.FireProjectStarting(e.ProjectName); };
+            this.server.ProjectStopped += (o, e) => { this.FireProjectStopped(e.ProjectName); };
+            this.server.ProjectStopping += (o, e) => { this.FireProjectStopping(e.ProjectName); };
+            this.server.SendMessageProcessed += (o, e) => { this.FireSendMessageProcessed(e.ProjectName, e.Data); };
+            this.server.SendMessageReceived += (o, e) => { this.FireSendMessageReceived(e.ProjectName, e.Data); };
+
+            this.disableRemoting = disableRemoting;
+            if (!disableRemoting)
+            {
+                RemotingConfiguration.Configure(remotingConfigurationFile, false);
+                RegisterManagerForRemoting();
+                RegisterServerClientForRemoting();
+            }
         }
 
         private void RegisterManagerForRemoting()
@@ -101,14 +125,19 @@ namespace ThoughtWorks.CruiseControl.Core
                 if (disposed) return;
                 disposed = true;
             }
-            Log.Info("Disconnecting remote server: ");
-            RemotingServices.Disconnect((MarshalByRefObject)server.CruiseManager);
-            RemotingServices.Disconnect((MarshalByRefObject)server.CruiseServerClient);
-            foreach (IChannel channel in ChannelServices.RegisteredChannels)
+
+            if (!disableRemoting)
             {
-                Log.Info("Unregistering channel: " + channel.ChannelName);
-                ChannelServices.UnregisterChannel(channel);
+                Log.Info("Disconnecting remote server: ");
+                RemotingServices.Disconnect((MarshalByRefObject)server.CruiseManager);
+                RemotingServices.Disconnect((MarshalByRefObject)server.CruiseServerClient);
+                foreach (IChannel channel in ChannelServices.RegisteredChannels)
+                {
+                    Log.Info("Unregistering channel: " + channel.ChannelName);
+                    ChannelServices.UnregisterChannel(channel);
+                }
             }
+
             server.Dispose();
         }
 
