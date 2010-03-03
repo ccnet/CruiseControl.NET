@@ -1,4 +1,9 @@
-﻿using System;
+﻿//***********************************************************************
+// Author           : Craig Sutherland
+// Created          : 7 Feb, 2010
+// Copyright        : (c) 2010 CruiseControl.NET. All rights reserved.
+//***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
