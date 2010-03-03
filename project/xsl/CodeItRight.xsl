@@ -39,29 +39,32 @@
       background-image:url(<xsl:value-of select="applicationPath"/>/images/arrow_plus_small.gif);
       }
       .itemCol{
-      width: 40%
+      width: 50%
       }
       .lineCol{
-      width: 5%
+      width: 50px;
       }
       .typeCol{
-      width: 10%
+      width: 50px;
       }
       .violCol{
-      width: 30%
+      width: 50%
       }
       .catCol{
-      width: 5%
+      width: 50px;
       }
       .sevCol{
-      width: 5%
+      width: 50px;
       }
       .helpCol{
-      width: 5%
+      width: 50px;
       }
       div.section{
-        border: solid 1px #888888;
-        margin-left: 16px;
+      border: solid 1px #2E8A2E;
+      padding-left: 16px;
+      }
+      div.sectionHeader{
+      margin-left:-16px;
       }
     </style>
     <script type="text/javascript">
@@ -115,26 +118,30 @@
     <xsl:for-each select="Violation[generate-id() = generate-id(key('projects', ProjectName)[1])]">
       <xsl:sort select="ProjectName"/>
       <xsl:variable name="currentProject" select="ProjectName"/>
-      <div>
-        <img src="{$applicationPath}/images/shim.gif" class="expandable open"/>
-        <xsl:value-of select="$currentProject" /> [<xsl:value-of select="count(key('projects', ProjectName))" />]
-      </div>
       <div class="section">
-        <xsl:for-each select="key('projects', ProjectName)">
-          <xsl:sort select="FileName"/>
-          <xsl:for-each select="current()[generate-id() = generate-id(key('files', FileName)[ProjectName=$currentProject][1])]">
-            <xsl:variable name="currentFile" select="FileName"/>
-            <div >
-              <img src="{$applicationPath}/images/shim.gif" class="expandable open"/>
-              <xsl:value-of select="$currentFile" /> [<xsl:value-of select="count(key('files', FileName)[ProjectName=$currentProject])" />]
-            </div>
-            <div class="section">
-              <table class="details">
-                <xsl:apply-templates select="key('files', FileName)"/>
-              </table>
-            </div>
+        <div class="sectionHeader">
+          <img src="{$applicationPath}/images/shim.gif" class="expandable open"/>
+          <xsl:value-of select="$currentProject" /> [<xsl:value-of select="count(key('projects', ProjectName))" />]
+        </div>
+        <div>
+          <xsl:for-each select="key('projects', ProjectName)">
+            <xsl:sort select="FileName"/>
+            <xsl:for-each select="current()[generate-id() = generate-id(key('files', FileName)[ProjectName=$currentProject][1])]">
+              <xsl:variable name="currentFile" select="FileName"/>
+              <div class="section">
+                <div class="sectionHeader">
+                  <img src="{$applicationPath}/images/shim.gif" class="expandable open"/>
+                  <xsl:value-of select="$currentFile" /> [<xsl:value-of select="count(key('files', FileName)[ProjectName=$currentProject])" />]
+                </div>
+                <div>
+                  <table class="details">
+                    <xsl:apply-templates select="key('files', FileName)"/>
+                  </table>
+                </div>
+              </div>
+            </xsl:for-each>
           </xsl:for-each>
-        </xsl:for-each>
+        </div>
       </div>
     </xsl:for-each>
   </xsl:template>
