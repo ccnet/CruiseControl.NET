@@ -1,0 +1,32 @@
+﻿<package>
+  <name>CodeIt.Right Analysis</name>
+  <description>Display the results of a CodeIt.Right Analysis.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Xsl</location>
+      <files>
+        <file>CodeItRight.xsl</file>
+        <file>CodeItRightSummary.xsl</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins/buildReportBuildPlugin/xslFileNames</path>
+      <filter>.='xsl\CodeItRightSummary.xsl'</filter>
+      <name>xslFile</name>
+      <value>xsl\CodeItRightSummary.xsl</value>
+    </setting>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <filter>@xslFileName='xsl\CodeItRight.xsl'</filter>
+      <name>xslReportBuildPlugin</name>
+      <attributes>
+        <attribute name="description" value="CodeIt.Right Analysis"/>
+        <attribute name="actionName" value="CodeItRight"/>
+        <attribute name="xslFileName" value="xsl\CodeItRight.xsl"/>
+      </attributes>
+    </setting>
+  </configuration>
+</package>

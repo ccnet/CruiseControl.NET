@@ -174,7 +174,7 @@
   </target>
 
   <target name="build.level.packages" description="Generate the build level packages"
-          depends="build.nunit.package,build.ndepend.package,build.dupfinder.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.stylecop.package,build.msTest.package">
+          depends="build.nunit.package,build.ndepend.package,build.dupfinder.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.codeItRight.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.stylecop.package,build.msTest.package">
 	</target>
 
 	<target name="build.nunit.package" description="Generates the NUnit package">
@@ -268,20 +268,33 @@
 		</zip>
 	</target>
 
-	<target name="build.ncover.package" description="Generates the NCover package">
-		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
-		<zip zipfile="${build.dir}/WebDashboard/packages/NCover.zip">
-			<fileset basedir="${src.dir}/WebDashboard/packages/NCover">
-				<include name="*.*"/>
-			</fileset>
-			<fileset basedir="${src.dir}/Xsl">
-				<include name="NCoverSummary.xsl"/>
-				<include name="NCover.xsl"/>
-			</fileset>
-		</zip>
-	</target>
+  <target name="build.codeItRight.package" description="Generates the CodeIt.Right package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/CodeItRight.zip">
+      <fileset basedir="${src.dir}/WebDashboard/packages/CodeItRight">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}/Xsl">
+        <include name="CodeItRight.xsl"/>
+        <include name="CodeItRightSummary.xsl"/>
+      </fileset>
+    </zip>
+  </target>
 
-	<target name="build.simian.package" description="Generates the Simian package">
+  <target name="build.ncover.package" description="Generates the NCover package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/NCover.zip">
+      <fileset basedir="${src.dir}/WebDashboard/packages/NCover">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}/Xsl">
+        <include name="NCoverSummary.xsl"/>
+        <include name="NCover.xsl"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="build.simian.package" description="Generates the Simian package">
 		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
 		<zip zipfile="${build.dir}/WebDashboard/packages/Simian.zip">
 			<fileset basedir="${src.dir}/WebDashboard/packages/Simian">

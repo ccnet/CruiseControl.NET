@@ -4213,6 +4213,14 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="codeItRight" type="codeItRight">
+        <xs:annotation>
+          <xs:documentation>
+            Perform a code analysis using SubMain.CodeItRight.
+            SubMain.CodeItRight is a commerical application that will analyse the code for any standards violations. The tool is available from http://submain.com/products/codeit.right.aspx.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="conditionalPublisher" type="conditionalPublisher">
         <xs:annotation>
           <xs:documentation>
@@ -4594,6 +4602,88 @@
         <xs:annotation>
           <xs:documentation>
             Gets or sets the retry delay.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="codeItRight">
+    <xs:all>
+      <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The executable to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="solution" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The solution to analyse.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="project" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The project to analyse.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="xsl" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the XSL file to override the default XSL.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="crData" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the CodeIt.Right .crdata file. When specified, CodeItRight.Cmd will use the exclusion list (violations, rules and files) saved using the Visual Studio version of CodeIt.Right.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="profile" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the User Profile that defines active rule set for the analysis. When omitted, the built\-in profile is used.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="severityThreshold" type="Severity" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Severity Threshold value to limit the output violation set. When omitted, the the lowest Severity is used \- None.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="timeout" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The time\-out period in seconds. If the task does no finish running in this time it will be terminated.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="priority" type="ProcessPriorityClass" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The priority class of the spawned process.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -8403,6 +8493,17 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <xs:simpleType name="ProcessPriorityClass">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Normal"/>
+      <xs:enumeration value="Idle"/>
+      <xs:enumeration value="High"/>
+      <xs:enumeration value="RealTime"/>
+      <xs:enumeration value="BelowNormal"/>
+      <xs:enumeration value="AboveNormal"/>
+    </xs:restriction>
+  </xs:simpleType>
+
   <xs:simpleType name="ProjectInitialState">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Started"/>
@@ -8437,6 +8538,17 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="Fixed"/>
       <xs:enumeration value="Sliding"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Severity">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CriticalError"/>
+      <xs:enumeration value="Error"/>
+      <xs:enumeration value="CriticalWarning"/>
+      <xs:enumeration value="Warning"/>
+      <xs:enumeration value="Information"/>
+      <xs:enumeration value="None"/>
     </xs:restriction>
   </xs:simpleType>
 

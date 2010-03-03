@@ -26,4 +26,5 @@
   <package name="Duplicate Finder Results" description="Display the results of a duplicate finder analysis." type="Plugin" file="DupFinder.zip" installed="no" />
   <package name="Project Timeline" description="Display a timeline of project builds." type="Plugin" file="ProjectTimeline.zip" installed="no" />
   <package name="StyleCop Results" description="Display the results of a StyleCop report." type="Plugin" file="StyleCop.zip" installed="no" />
+  <package name="CodeIt.Right Analysis" description="Display the results of a CodeIt.Right Analysis." type="Plugin" file="CodeItRight.zip" installed="no" />
 </packages>
