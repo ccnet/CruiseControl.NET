@@ -1,0 +1,57 @@
+﻿<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+  <!-- This is your CruiseControl.NET Server Configuration file. Add your projects below! -->
+
+  <project name="test01"
+           queue="Q1"
+           queuePriority="1"
+           category="cat1"
+           description="first testing project">
+    <workingDirectory>scenarioTests/test01</workingDirectory>
+    <artifactDirectory>scenarioTests/test01</artifactDirectory>
+    <webURL>http://confluence.public.thoughtworks.org</webURL>
+
+    <triggers />
+
+    <tasks>
+      <nullTask  simulateFailure="false"
+                 description="good task" />
+    </tasks>
+
+    <publishers>
+      <artifactcleanup cleanUpMethod="KeepMaximumXHistoryDataEntries"
+                       cleanUpValue="10" />
+      <xmllogger />
+      <statistics />
+      <modificationHistory  onlyLogWhenChangesFound="true" />
+      <rss/>
+    </publishers>
+
+  </project>
+
+  <project name="test02"
+           queue="Q1"
+           queuePriority="2"
+           category="cat2"
+           description="second testing project">
+    <workingDirectory>scenarioTests/test02</workingDirectory>
+    <artifactDirectory>scenarioTests/test02</artifactDirectory>
+
+    <triggers />
+
+    <tasks>
+      <nullTask  simulateFailure="true"
+                 description="bad task" />
+    </tasks>
+
+    <publishers>
+      <artifactcleanup cleanUpMethod="KeepMaximumXHistoryDataEntries"
+                       cleanUpValue="10" />
+      <xmllogger />
+      <statistics />
+      <modificationHistory  onlyLogWhenChangesFound="true" />
+      <rss/>
+    </publishers>
+
+  </project>
+
+</cruisecontrol>

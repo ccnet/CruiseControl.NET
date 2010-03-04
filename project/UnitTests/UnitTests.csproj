@@ -347,6 +347,7 @@
     <Compile Include="Core\Util\PrivateStringSerialiserTests.cs" />
     <Compile Include="Core\Util\PrivateStringTests.cs" />
     <Compile Include="Core\Util\ZipCompressionServiceTests.cs" />
+    <Compile Include="IntegrationTests\SimpleScenarioTests.cs" />
     <Compile Include="TestClock.cs" />
     <Compile Include="Core\SourceControl\GitHistoryParserTest.cs" />
     <Compile Include="Core\SourceControl\GitTest.cs" />
@@ -1229,6 +1230,9 @@
     <Content Include="resources\buildlog.xml" />
     <Content Include="resources\CCNet.git.log.txt" />
     <Content Include="resources\failedbuildlog.xml" />
+    <Content Include="resources\IntegrationScenarios\Simple.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\statistics.xml" />
     <Content Include="resources\UnitTestResults.xml" />
   </ItemGroup>
