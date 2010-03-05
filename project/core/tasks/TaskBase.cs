@@ -97,6 +97,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             {
                 // Store the error message
                 currentStatus.Error = error.Message;
+                result.Status = IntegrationStatus.Exception;
                 throw;
             }
             finally
@@ -104,6 +105,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 // Clean up
                 currentStatus.Status = (this.WasSuccessful) ? ItemBuildStatus.CompletedSuccess : ItemBuildStatus.CompletedFailed;
                 currentStatus.TimeCompleted = DateTime.Now;
+
+                switch (result.Status)
+                {
+                    case IntegrationStatus.Unknown:
+                    case IntegrationStatus.Success:
+                        result.Status = this.WasSuccessful ? IntegrationStatus.Success : IntegrationStatus.Failure;
+                        break;
+                }
             }
         }
         #endregion
