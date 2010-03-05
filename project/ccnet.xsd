@@ -4666,10 +4666,17 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="severityThreshold" type="Severity" minOccurs="0" maxOccurs="1">
+      <xs:element name="reportingThreshold" type="Severity" minOccurs="0" maxOccurs="1">
         <xs:annotation>
           <xs:documentation>
             Severity Threshold value to limit the output violation set. When omitted, the the lowest Severity is used \- None.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="failureThreshold" type="Severity" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Severity value to fail the build on. When omitted, the the lowest Severity is used \- None.
           </xs:documentation>
         </xs:annotation>
       </xs:element>

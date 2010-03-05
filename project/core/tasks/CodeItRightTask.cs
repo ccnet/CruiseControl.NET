@@ -6,9 +6,10 @@
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     using System.Diagnostics;
+    using System.IO;
+    using System.Xml;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Util;
-using System.IO;
 
     /// <title>CodeItRight Analysis Task</title>
     /// <version>1.5</version>
@@ -68,7 +69,8 @@ using System.IO;
             this.executor = executor;
             this.Executable = CodeItRightTask.DefaultExecutable;
             this.TimeOut = 600;
-            this.SeverityThreshold = Severity.None;
+            this.ReportingThreshold = Severity.None;
+            this.FailureThreshold = Severity.None;
             this.Priority = ProcessPriorityClass.Normal;
         }
         #endregion
@@ -141,14 +143,24 @@ using System.IO;
         public string Profile { get; set; }
         #endregion
 
-        #region SeverityThreshold
+        #region ReportingThreshold
         /// <summary>
         /// Severity Threshold value to limit the output violation set. When omitted, the the lowest Severity is used - None.
         /// </summary>
         /// <version>1.5</version>
         /// <default>None</default>
-        [ReflectorProperty("severityThreshold", Required = false)]
-        public Severity SeverityThreshold { get; set; }
+        [ReflectorProperty("reportingThreshold", Required = false)]
+        public Severity ReportingThreshold { get; set; }
+        #endregion
+
+        #region FailureThreshold
+        /// <summary>
+        /// Severity value to fail the build on. When omitted, the the lowest Severity is used - None.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>None</default>
+        [ReflectorProperty("failureThreshold", Required = false)]
+        public Severity FailureThreshold { get; set; }
         #endregion
 
         #region TimeOut
@@ -201,7 +213,27 @@ using System.IO;
                     new FileTaskResult(xmlFile, true));
             }
 
-            return !processResult.Failed;
+            // Check the failure threshold
+            var failed = processResult.Failed;
+            if (!failed && (this.FailureThreshold != Severity.None))
+            {
+                var xmlFile = result.BaseFromWorkingDirectory("codeitright.xml");
+                var document = new XmlDocument();
+                if (File.Exists(xmlFile))
+                {
+                    document.Load(xmlFile);
+                    for (var level = (int)Severity.CriticalError; level >= (int)this.FailureThreshold; level--)
+                    {
+                        failed = CodeItRightTask.CheckReportForSeverity(document, (Severity)level);
+                        if (failed)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return !failed;
         }
         #endregion
 
@@ -250,7 +282,7 @@ using System.IO;
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("/quiet");
-            buffer.AddArgument("/severityThreshold:\"" + this.SeverityThreshold.ToString() + "\"");
+            buffer.AddArgument("/severityThreshold:\"" + this.ReportingThreshold.ToString() + "\"");
             buffer.AddArgument("/out:\"" + result.BaseFromWorkingDirectory("codeitright.xml") + "\"");
             if (!string.IsNullOrEmpty(this.Solution))
             {
@@ -296,6 +328,20 @@ using System.IO;
         #endregion
 
         #region Private methods
+        #region CheckReportForSeverity()
+        /// <summary>
+        /// Checks if the report has the severity.
+        /// </summary>
+        /// <param name="document">The document.</param>
+        /// <param name="value">The value.</param>
+        /// <returns><c>true</c> if there is a violation with that severity, <c>false</c> otherwise.</returns>
+        private static bool CheckReportForSeverity(XmlDocument document, Severity value)
+        {
+            var nodes = document.SelectNodes("/CodeItRightReport/Violations/Violation[Severity='" + value.ToString() + "']");
+            return nodes.Count > 0;
+        }
+        #endregion
+
         #region EnsurePathIsRooted()
         /// <summary>
         /// Ensures the path is rooted.
@@ -327,32 +373,32 @@ using System.IO;
             /// <summary>
             /// Display critical errors.
             /// </summary>
-            CriticalError,
+            CriticalError = 5,
 
             /// <summary>
             /// Display errors.
             /// </summary>
-            Error,
+            Error = 4,
 
             /// <summary>
             /// Display critical warnings.
             /// </summary>
-            CriticalWarning,
+            CriticalWarning = 3,
 
             /// <summary>
             /// Display warnings.
             /// </summary>
-            Warning,
+            Warning = 2,
 
             /// <summary>
             /// Display information.
             /// </summary>
-            Information,
+            Information = 1,
 
             /// <summary>
             /// No severity threshold.
             /// </summary>
-            None,
+            None = 0,
         }
         #endregion
         #endregion
