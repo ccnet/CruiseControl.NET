@@ -48,7 +48,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             var logger = mocks.DynamicMock<ILogger>();
             var task = new NDependTask(executor, fileSystem, logger);
 
+            Expect.Call(result.Status).PropertyBehavior();
             mocks.ReplayAll();
+            result.Status = IntegrationStatus.Unknown;
             task.Run(result);
             mocks.VerifyAll();
         }
@@ -74,7 +76,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             var task = new NDependTask(executor, fileSystem, logger);
             task.Executable = "ndepend-app.exe";
 
+            Expect.Call(result.Status).PropertyBehavior();
             mocks.ReplayAll();
+            result.Status = IntegrationStatus.Unknown;
             task.Run(result);
             mocks.VerifyAll();
         }
@@ -100,7 +104,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             var task = new NDependTask(executor, fileSystem, logger);
             task.BaseDirectory = "somewhere-else";
 
+            Expect.Call(result.Status).PropertyBehavior();
             mocks.ReplayAll();
+            result.Status = IntegrationStatus.Unknown;
             task.Run(result);
             mocks.VerifyAll();
         }
@@ -137,7 +143,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             task.OutputDir = "out-dir";
             task.ReportXslt = "report.xslt";
 
+            Expect.Call(result.Status).PropertyBehavior();
             mocks.ReplayAll();
+            result.Status = IntegrationStatus.Unknown;
             task.Run(result);
             mocks.VerifyAll();
         }
@@ -167,7 +175,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             var logger = mocks.DynamicMock<ILogger>();
             var task = new NDependTask(executor, fileSystem, logger);
 
+            Expect.Call(result.Status).PropertyBehavior();
             mocks.ReplayAll();
+            result.Status = IntegrationStatus.Unknown;
             task.Run(result);
             mocks.VerifyAll();
         }

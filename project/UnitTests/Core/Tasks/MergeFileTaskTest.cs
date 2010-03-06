@@ -9,6 +9,7 @@ using ThoughtWorks.CruiseControl.Core.Config;
 using System.Xml;
 using Rhino.Mocks;
 using System.IO;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
@@ -218,6 +219,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                             {
                                 result.AddTaskResult((ITaskResult) null);
                             }).IgnoreArguments();
+            Expect.Call(result.Status).PropertyBehavior();
 
             var buildProgress = mocks.StrictMock<BuildProgressInformation>(artefact, "Project1");
             SetupResult.For(result.BuildProgressInformation)
@@ -240,6 +242,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
             // Run the test
             mocks.ReplayAll();
+            result.Status = IntegrationStatus.Unknown;
             task.Run(result);
 
             // Check the results

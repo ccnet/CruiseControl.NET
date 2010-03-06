@@ -199,7 +199,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			catch (BuilderException)
 			{
 			}
-			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
+			Assert.AreEqual(IntegrationStatus.Exception, result.Status);
 		}
 
 		[Test]
