@@ -197,7 +197,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public PrivateString Password;
 
         /// <summary>
-        /// Directory for the source safe repository.
+        /// The directory containing SRCSAFE.INI. If this SSDIR environment variable is already set then this property may be omitted. 
         /// </summary>
         /// <version>1.0</version>
         /// <default>None</default>
