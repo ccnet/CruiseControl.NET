@@ -107,10 +107,13 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                         switch (configuration.HandlingMode)
                         {
                             case QueueDuplicateHandlingMode.UseFirst:
+                                // Only use the first item in the queue - if a newer item is added it will be ignored
                                 Log.Info(String.Format("Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
                                 addItem = false;
                                 break;
+
                             case QueueDuplicateHandlingMode.ApplyForceBuildsReAdd:
+                                // If a force build is added to the queue, it will remove an existing non-force build and add the new request to the end of the queue
                                 if (foundItem.IntegrationRequest.BuildCondition >= integrationQueueItem.IntegrationRequest.BuildCondition)
                                 {
                                     Log.Info(String.Format("Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
@@ -125,7 +128,28 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                                     }
                                 }
                                 break;
+
+                            case QueueDuplicateHandlingMode.ApplyForceBuildsReAddTop:
+                                // If a force build is added to th queue, it will remove an existing non-force build and add the new request to the beginning of the queue
+                                addItem = false;
+                                if (foundItem.IntegrationRequest.BuildCondition >= integrationQueueItem.IntegrationRequest.BuildCondition)
+                                {
+                                    Log.Info(String.Format("Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
+                                }
+                                else
+                                {
+                                    Log.Info(String.Format("Project: {0} already on queue: {1} with lower prority - cancelling existing request", integrationQueueItem.Project.Name, Name));
+                                    lock (this)
+                                    {
+                                        NotifyExitingQueueAndRemoveItem(foundIndex.Value, foundItem, true);
+                                        // Add project to the queue directly after the currently building one.
+                                        AddToQueue(integrationQueueItem, 1);
+                                    }
+                                }
+                                break;
+
                             case QueueDuplicateHandlingMode.ApplyForceBuildsReplace:
+                                // If a force build is added to the queue, it will replace an existing non-forc build
                                 addItem = false;
                                 if (foundItem.IntegrationRequest.BuildCondition >= integrationQueueItem.IntegrationRequest.BuildCondition)
                                 {

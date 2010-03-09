@@ -22,6 +22,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
         private IntegrationQueueSet integrationQueues;
 		private IIntegrationQueue integrationQueueUseFirst;
         private IIntegrationQueue integrationQueueReAdd;
+        private IIntegrationQueue integrationQueueReAddTop;
         private IIntegrationQueue integrationQueueReplace;
         private IntegrationRequest integrationRequestForceBuild;
         private IntegrationRequest integrationRequestIfModificationExists;
@@ -43,6 +44,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
             readConfig.HandlingMode = QueueDuplicateHandlingMode.ApplyForceBuildsReAdd;
             integrationQueues.Add(secondQueueName, readConfig);
             integrationQueueReAdd = integrationQueues[secondQueueName];
+
+            // Generate a queue to test re-adding to top
+            var fourthQueueName = "Test Queue #4";
+            var raddTopConfig = new DefaultQueueConfiguration(fourthQueueName);
+            raddTopConfig.HandlingMode = QueueDuplicateHandlingMode.ApplyForceBuildsReAddTop;
+            integrationQueues.Add(fourthQueueName, raddTopConfig);
+            integrationQueueReAddTop = integrationQueues[fourthQueueName];
 
             // Generate a queue to test replacing
             string thirdQueueName = "Test Queue #3";
@@ -118,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			integrationQueueUseFirst.Enqueue(integrationQueueItem1);
 
 			string[] queueNames = integrationQueues.GetQueueNames();
-			Assert.AreEqual(3, queueNames.Length);
+			Assert.AreEqual(4, queueNames.Length);
 			Assert.AreEqual(TestQueueName, queueNames[0]);
 
 			IIntegrationQueueItem[] itemsOnQueue = integrationQueueUseFirst.GetQueuedIntegrations();
@@ -193,7 +201,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			integrationQueueUseFirst.Enqueue(integrationQueueItem2);
 
 			string[] queueNames = integrationQueues.GetQueueNames();
-			Assert.AreEqual(3, queueNames.Length);
+			Assert.AreEqual(4, queueNames.Length);
 			Assert.AreEqual(TestQueueName, queueNames[0]);
 
 			IIntegrationQueueItem[] itemsOnQueue = integrationQueueUseFirst.GetQueuedIntegrations();
@@ -214,7 +222,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			integrationQueueUseFirst.Dequeue();
 
 			string[] queueNames = integrationQueues.GetQueueNames();
-			Assert.AreEqual(3, queueNames.Length);
+			Assert.AreEqual(4, queueNames.Length);
 			Assert.AreEqual(TestQueueName, queueNames[0]);
 
 			IIntegrationQueueItem[] itemsOnQueue = integrationQueueUseFirst.GetQueuedIntegrations();
@@ -532,6 +540,41 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
             IIntegrationQueueItem[] queuedItems = integrationQueueReAdd.GetQueuedIntegrations();
             Assert.AreEqual(integrationQueueItem3, queuedItems[1], "Integration item #1 is incorrect");
             Assert.AreEqual(integrationQueueItem2, queuedItems[2], "Integration item #2 is incorrect");
+            VerifyAll();
+        }
+
+        [Test]
+        public void AddingADuplicateProjectWithForceBuildReAddsToTop()
+        {
+            // Setup the first project request
+            project1Mock.SetupResult("QueueName", integrationQueueReAddTop.Name);
+            project1Mock.SetupResult("QueuePriority", 1);
+            queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+            integrationQueueReAddTop.Enqueue(integrationQueueItem1);
+
+            // Add a second project request for different project with same queue name
+            project2Mock.SetupResult("QueueName", integrationQueueReAddTop.Name);
+            project2Mock.SetupResult("QueuePriority", 0);
+            queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
+            integrationQueueReAddTop.Enqueue(integrationQueueItem4);
+
+            // Add a third project request for different project with same queue name
+            project3Mock.SetupResult("QueueName", integrationQueueReAddTop.Name);
+            project3Mock.SetupResult("QueuePriority", 0);
+            queueNotifier3Mock.Expect("NotifyEnteringIntegrationQueue");
+            integrationQueueReAddTop.Enqueue(integrationQueueItem3);
+
+            // Now add the second project request again, but with a force build
+            project2Mock.SetupResult("QueueName", integrationQueueReAddTop.Name);
+            project2Mock.SetupResult("QueuePriority", 0);
+            queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
+            queueNotifier2Mock.Expect("NotifyExitingIntegrationQueue", true);
+            integrationQueueReAddTop.Enqueue(integrationQueueItem2);
+
+            // Check the queued items
+            IIntegrationQueueItem[] queuedItems = integrationQueueReAddTop.GetQueuedIntegrations();
+            Assert.AreEqual(integrationQueueItem2, queuedItems[1], "Integration item #1 is incorrect");
+            Assert.AreEqual(integrationQueueItem3, queuedItems[2], "Integration item #2 is incorrect");
             VerifyAll();
         }
 
