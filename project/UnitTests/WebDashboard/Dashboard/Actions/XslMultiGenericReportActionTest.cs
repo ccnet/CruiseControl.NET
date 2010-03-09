@@ -3,6 +3,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 {
@@ -11,7 +12,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 	{
 		private DynamicMock actionInstantiatorMock;
 		private XslMultiReportBuildPlugin buildPlugin;
-		private string[] xslFiles = new string[2] {@"xsl\myxsl.xsl", @"xsl\myxsl2.xsl"};
+        private BuildReportXslFilename[] xslFiles = new BuildReportXslFilename[] {
+            new BuildReportXslFilename(@"xsl\myxsl.xsl"),
+            new BuildReportXslFilename(@"xsl\myxsl2.xsl")
+        };
 
 		[SetUp]
 		public void Setup()

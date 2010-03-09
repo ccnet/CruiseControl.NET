@@ -1,5 +1,6 @@
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 {
@@ -15,7 +16,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 		}
 
 		private readonly IActionInstantiator actionInstantiator;
-		private string[] xslFileNames = new string[0];
 		private string description = "no description set";
 		private string actionName = "NoActionSet";
 
@@ -40,12 +40,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 			set { actionName = value; }
 		}
 
-		[ReflectorArray("xslFileNames")]
-		public string[] XslFileNames
-		{
-			get { return xslFileNames; }
-			set { xslFileNames = value; }
-		}
+        [ReflectorProperty("xslFileNames", typeof(BuildReportXslFilenameSerialiserFactory))]
+        public BuildReportXslFilename[] XslFileNames { get; set; }
 
 		public override INamedAction[] NamedActions
 		{

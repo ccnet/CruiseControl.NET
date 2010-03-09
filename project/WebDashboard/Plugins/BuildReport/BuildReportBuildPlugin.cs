@@ -10,9 +10,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 	public class BuildReportBuildPlugin : ProjectConfigurableBuildPlugin
 	{
 		public static readonly string ACTION_NAME = "ViewBuildReport";
-
 		private readonly IActionInstantiator actionInstantiator;
-		private string[] xslFileNames = new string[0];
 
 		public BuildReportBuildPlugin(IActionInstantiator actionInstantiator)
 		{
@@ -24,19 +22,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			get { return "Build Report"; }
 		}
 
-		[ReflectorArray("xslFileNames")]
-		public string[] XslFileNames
-		{
-			get { return xslFileNames; }
-			set { xslFileNames = value; }
-		}
+        /// <summary>
+        /// Gets or sets the XSL file names.
+        /// </summary>
+        /// <value>The XSL file names.</value>
+        [ReflectorProperty("xslFileNames", typeof(BuildReportXslFilenameSerialiserFactory))]
+        public BuildReportXslFilename[] XslFileNames { get; set; }
 
 		public override INamedAction[] NamedActions
 		{
 			get
 			{
 				MultipleXslReportBuildAction buildAction = (MultipleXslReportBuildAction) actionInstantiator.InstantiateAction(typeof (MultipleXslReportBuildAction));
-				buildAction.XslFileNames = XslFileNames;
+				buildAction.XslFileNames = this.XslFileNames;
 				return new INamedAction[] {new ImmutableNamedAction(ACTION_NAME, buildAction)};
 			}
 		}

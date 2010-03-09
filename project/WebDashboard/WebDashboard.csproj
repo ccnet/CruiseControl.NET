@@ -507,6 +507,9 @@
     <Compile Include="Plugins\BuildReport\BuildReportBuildPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\BuildReport\BuildReportXslFilename.cs" />
+    <Compile Include="Plugins\BuildReport\BuildReportXslFilenameSerialiser.cs" />
+    <Compile Include="Plugins\BuildReport\BuildReportXslFilenameSerialiserFactory.cs" />
     <Compile Include="Plugins\BuildReport\HtmlBuildLogAction.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
         /// <summary>
         /// The projects to include in this plug-in.
         /// </summary>
-        /// <version>1.6</version>
+        /// <version>1.0</version>
         /// <default>None</default>
         /// <remarks>
         /// This is currently not implemented.
@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
         /// <summary>
         /// The projects to exclude from this plug-in.
         /// </summary>
-        /// <version>1.6</version>
+        /// <version>1.0</version>
         /// <default>None</default>
         /// <remarks>
         /// This is currently not implemented.
