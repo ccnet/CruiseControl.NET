@@ -40,18 +40,29 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
             }
         }
         #endregion
+
+        #region SuccessIndicatorBarLocation
+        /// <summary>
+        /// Gets or sets the success indicator bar location.
+        /// </summary>
+        /// <value>The success indicator bar location.</value>
+        [ReflectorProperty("successBar", Required = false)]
+        public IndicatorBarLocation SuccessIndicatorBarLocation { get; set; }
+        #endregion
         #endregion
 
         public FarmReportFarmPlugin(IProjectGridAction projectGridAction, ProjectParametersAction parametersAction)
 		{
 			this.projectGridAction = projectGridAction;
             this.parametersAction = parametersAction;
+            this.SuccessIndicatorBarLocation = IndicatorBarLocation.Bottom;
 		}
 
 		public IResponse Execute(ICruiseRequest request)
 		{
             if (sortColumn.HasValue) projectGridAction.DefaultSortColumn = sortColumn.Value;
-			return projectGridAction.Execute(ACTION_NAME, request);
+            this.projectGridAction.SuccessIndicatorBarLocation = this.SuccessIndicatorBarLocation;
+            return projectGridAction.Execute(ACTION_NAME, request);
 		}
 
 		public string LinkDescription

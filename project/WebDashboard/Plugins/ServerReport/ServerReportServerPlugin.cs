@@ -44,16 +44,27 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
             set { this.sortColumn = value; }
         }
         #endregion
+
+        #region SuccessIndicatorBarLocation
+        /// <summary>
+        /// Gets or sets the success indicator bar location.
+        /// </summary>
+        /// <value>The success indicator bar location.</value>
+        [ReflectorProperty("successBar", Required = false)]
+        public IndicatorBarLocation SuccessIndicatorBarLocation { get; set; }
+        #endregion
         #endregion
 
 		public ServerReportServerPlugin(IProjectGridAction projectGridAction)
 		{
 			this.projectGridAction = projectGridAction;
+            this.SuccessIndicatorBarLocation = IndicatorBarLocation.Bottom;
 		}
 
 		public IResponse Execute(ICruiseRequest request)
 		{
-            projectGridAction.DefaultSortColumn = sortColumn;
+            this.projectGridAction.DefaultSortColumn = sortColumn;
+            this.projectGridAction.SuccessIndicatorBarLocation = this.SuccessIndicatorBarLocation;
             return projectGridAction.Execute(ACTION_NAME, request.ServerSpecifier, request);
 		}
 

@@ -13,6 +13,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         /// </summary>
         ProjectGridSortColumn DefaultSortColumn { get; set; }
         #endregion
+
+        #region SuccessIndicatorBarLocation
+        /// <summary>
+        /// Gets or sets the success indicator bar location.
+        /// </summary>
+        /// <value>The success indicator bar location.</value>
+        IndicatorBarLocation SuccessIndicatorBarLocation { get; set; }
+        #endregion
         #endregion
 
         IResponse Execute(string actionName, ICruiseRequest request);

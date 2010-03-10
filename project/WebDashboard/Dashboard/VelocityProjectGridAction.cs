@@ -45,8 +45,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             set { sortColumn = value; }
         }
         #endregion
-        #endregion
 
+        #region SuccessIndicatorBarLocation
+        /// <summary>
+        /// Gets or sets the success indicator bar location.
+        /// </summary>
+        /// <value>The success indicator bar location.</value>
+        public IndicatorBarLocation SuccessIndicatorBarLocation { get; set; }
+        #endregion
+        #endregion
 
         public IResponse Execute(string actionName, ICruiseRequest request)
 		{
@@ -99,6 +106,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
             Array categoryList = this.GenerateCategoryList(projectGridRows);
             velocityContext["categoryList"] = categoryList;
+            velocityContext["barAtTop"] = (this.SuccessIndicatorBarLocation == IndicatorBarLocation.Top) ||
+                (this.SuccessIndicatorBarLocation == IndicatorBarLocation.TopAndBottom);
+            velocityContext["barAtBottom"] = (this.SuccessIndicatorBarLocation == IndicatorBarLocation.Bottom) ||
+                (this.SuccessIndicatorBarLocation == IndicatorBarLocation.TopAndBottom);
 
 			return viewGenerator.GenerateView(@"ProjectGrid.vm", velocityContext);
 		}

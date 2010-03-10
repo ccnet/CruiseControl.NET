@@ -49,10 +49,52 @@
 </P>
 #end
 
+#set ($ProjectOKCounter = 0)
+#set ($ProjectNOKCounter = 0)
+#foreach ($projectGridRow in $projectGrid)
+  #if ($projectGridRow.BuildStatus == "Success")
+    #set ($ProjectOKCounter = $ProjectOKCounter + 1)
+  #else
+    #set ($ProjectNOKCounter = $ProjectNOKCounter + 1)
+  #end
+#end
+#set ($ProjectCounter = $ProjectOKCounter + $ProjectNOKCounter)
+#if ($ProjectCounter == 0)
+  #set ($OKPercent = 50)
+  #set ($NOKPercent = 0)
+#else
+  #set ($OKPercent = 50 * $ProjectOKCounter / $ProjectCounter)
+  #set ($NOKPercent = 50 - $OKPercent)
+#end
+#set ($OKPercentToolTip = $OKPercent * 2)
+
 #if ($projectGrid.Length > 0)
 <table id="StatusGrid"
        class="SortableGrid">
   <thead>
+    #if ($barAtTop)
+    <tr>
+      <td colspan="10">
+        <table  id="BuildPercentage">
+          <tr title="Percentage of successfull builds : $OKPercentToolTip%">
+            #if ($OKPercent == 50)
+            <td width="100%"
+                bgcolor="#33CC00"></td>
+            #else
+            <td width="$OKPercent%"
+                bgcolor="#33CC00"></td>
+            <td width="$NOKPercent%"
+                bgcolor="#FF0000"></td>
+            <td width="$NOKPercent%"
+                bgcolor="#FF0000"></td>
+            <td width="$OKPercent%"
+                bgcolor="#33CC00"></td>
+            #end
+          </tr>
+        </table>
+      </td>
+    </tr>
+    #end
     <tr class="ProjectGridHeader">
       #if ($wholeFarm)
       <th class="left">$translations.Translate("Server")</th>
@@ -70,17 +112,9 @@
   </thead>
   <tbody>
 
-    #set ($ProjectOKCounter = 0)
-    #set ($ProjectNOKCounter = 0)
     #set ($RowId = 0)
-
     #foreach ($projectGridRow in $projectGrid)
     #set ($RowId = $RowId + 1)
-    #if ($projectGridRow.BuildStatus == "Success")
-    #set ($ProjectOKCounter = $ProjectOKCounter + 1)
-    #else
-    #set ($ProjectNOKCounter = $ProjectNOKCounter + 1)
-    #end
 
         <tr id="projectData$RowId">
             #if ($wholeFarm)
@@ -150,16 +184,8 @@
         #end
       #end
     </tbody>
+  #if ($barAtBottom)
   <tfoot>
-    #set ($ProjectCounter = $ProjectOKCounter + $ProjectNOKCounter)
-    #if ($ProjectCounter == 0)
-    #set ($OKPercent = 50)
-    #set ($NOKPercent = 0)
-    #else
-    #set ($OKPercent = 50 * $ProjectOKCounter / $ProjectCounter)
-    #set ($NOKPercent = 50 - $OKPercent)
-    #end
-    #set ($OKPercentToolTip = $OKPercent * 2)
     <tr>
       <td colspan="10">
         <table  id="BuildPercentage">
@@ -182,6 +208,7 @@
       </td>
     </tr>
   </tfoot>
+  #end
 </table>
 #end
 
