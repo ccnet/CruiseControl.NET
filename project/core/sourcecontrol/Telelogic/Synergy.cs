@@ -374,38 +374,41 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <url>element://model:project::CCNet.Synergy.Plugin/design:view:::ow43bejw6wm4was_v</url>
         public override void LabelSourceControl(IIntegrationResult result)
 		{
-			DateTime currentReconfigureTime = GetReconfigureTime();
-			if (currentReconfigureTime != project.LastReconfigureTime)
-			{
-				string message = String.Format(@"Invalid project state.  Cannot add tasks to shared folder '{0}' because " + @"the integration project '{1}' was internally reconfigured at '{2}' " + @"and externally reconfigured at '{3}'.  Projects cannot be reconfigured " + @"during an integration run.", project.TaskFolder, project.ProjectSpecification, project.LastReconfigureTime, currentReconfigureTime);
-				throw(new CruiseControlException(message));
-			}
+            if (result.Succeeded)
+            {
+			    DateTime currentReconfigureTime = GetReconfigureTime();
+			    if (currentReconfigureTime != project.LastReconfigureTime)
+			    {
+				    string message = String.Format(@"Invalid project state.  Cannot add tasks to shared folder '{0}' because " + @"the integration project '{1}' was internally reconfigured at '{2}' " + @"and externally reconfigured at '{3}'.  Projects cannot be reconfigured " + @"during an integration run.", project.TaskFolder, project.ProjectSpecification, project.LastReconfigureTime, currentReconfigureTime);
+				    throw(new CruiseControlException(message));
+			    }
 
-			/* Populate the query selection set with a list of ALL tasks 
-             * not in the manual folder. This includes all tasks for this integration,
-             * and any prior failed integrations.
-             * We find these by passing the the maximum range of dates to GetModifications */
-			result.Modifications = GetModifications(DateTime.MinValue);
+			    /* Populate the query selection set with a list of ALL tasks 
+                * not in the manual folder. This includes all tasks for this integration,
+                * and any prior failed integrations.
+                * We find these by passing the the maximum range of dates to GetModifications */
+			    result.Modifications = GetModifications(DateTime.MinValue);
 
-			// skip this step if a build was forced, and no changes were found
-			if (null != result.Modifications && result.Modifications.Length > 0)
-			{
-				// comment those tasks with the "label", for both shared folders and baselines
-				command.Execute(SynergyCommandBuilder.AddLabelToTaskComment(connection, project, result));
+			    // skip this step if a build was forced, and no changes were found
+			    if (null != result.Modifications && result.Modifications.Length > 0)
+			    {
+				    // comment those tasks with the "label", for both shared folders and baselines
+				    command.Execute(SynergyCommandBuilder.AddLabelToTaskComment(connection, project, result));
 
-				// append tasks to the shared folder, if one was specified
-				if (SynergyProjectInfo.DefaultTaskFolder != project.TaskFolder)
-				{
-					// append those tasks in the selection set to the shared build folder
-					command.Execute(SynergyCommandBuilder.AddTasksToFolder(connection, project, result));
-				}
-			}
+				    // append tasks to the shared folder, if one was specified
+				    if (SynergyProjectInfo.DefaultTaskFolder != project.TaskFolder)
+				    {
+					    // append those tasks in the selection set to the shared build folder
+					    command.Execute(SynergyCommandBuilder.AddTasksToFolder(connection, project, result));
+				    }
+			    }
 
-			// create a baseline, if requested
-			if (project.BaseliningEnabled)
-			{
-				command.Execute(SynergyCommandBuilder.CreateBaseline(connection, project, result));
-			}
+			    // create a baseline, if requested
+			    if (project.BaseliningEnabled)
+			    {
+				    command.Execute(SynergyCommandBuilder.CreateBaseline(connection, project, result));
+			    }
+            }
 		}
 
 		/// <summary>

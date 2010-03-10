@@ -200,7 +200,9 @@ Current project could not be identified.
 			SynergyConnectionInfo connectionInfo = new SynergyConnectionInfo();
 			connectionInfo.FormatProvider = CultureInfo.InvariantCulture;
 			Synergy synergy = new Synergy(connectionInfo, new SynergyProjectInfo(), (ISynergyCommand) mockCommand.MockInstance, (SynergyParser) mockParser.MockInstance);
-			synergy.LabelSourceControl(new IntegrationResult());
+			IntegrationResult integrationResult = new IntegrationResult();
+			integrationResult.Status = ThoughtWorks.CruiseControl.Remote.IntegrationStatus.Success;
+			synergy.LabelSourceControl(integrationResult);
 			mockCommand.Verify();
 		}
 
