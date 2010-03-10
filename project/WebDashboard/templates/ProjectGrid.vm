@@ -22,7 +22,7 @@
       });
   });
 </script>
-<div id="parameterCheck">
+<div id="parameterCheck" style="display:none;">
   <div id="parameterEditor">$translations.Translate("Loading parameters, please wait...")</div>
 </div>
 <form id="RefreshForm"

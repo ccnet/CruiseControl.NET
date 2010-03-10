@@ -27,35 +27,37 @@
     // Add the display widget
     $.tablesorter.addWidget({
         id: 'statusDisplay',
-        format:function(table){
-			$("tr.buildStatus",table.tBodies[0]).each(function(){
-			    var row = $(this);
-			    
-			    // Get the identifier of the owning row
-			    var id = row.attr('id');
-			    var linkedId = 'projectData' + id.substring(4);
-			    var parent = $('#' + linkedId);
-			    
-			    // Move the row to after the owning row
-			    row.insertAfter(parent);
-			});
+        format: function(table) {
+            $("tr.buildStatus", table.tBodies[0]).each(function() {
+                var row = $(this);
+
+                // Get the identifier of the owning row
+                var id = row.attr('id');
+                var linkedId = 'projectData' + id.substring(4);
+                var parent = $('#' + linkedId);
+
+                // Move the row to after the owning row
+                row.insertAfter(parent);
+            });
         }
     });
 
     // Helper function for initialising the project grid and all its fun stuff
-    $.fn.initialiseProjectGrid = function(config){
+    $.fn.initialiseProjectGrid = function(config) {
         // Initialise the configuration
         var defaultConfig = {
-            sortList: [[0,0]]
+            widgets: ['statusDisplay'],
+            sortList: [[0, 0]],
+            textExtraction: function(node) {
+                var t = $(node).text().trim();
+                return t;
+            }
         };
         config = $.extend(defaultConfig, config || {});
-        
+
         // Initialise the sorting
-        this.tablesorter({
-            sortList: config.sortList,
-            widgets: ['statusDisplay'] 
-        });
-        
+        this.tablesorter(config);
+
         // Allow chaining
         return this;
     };
