@@ -194,6 +194,7 @@
     <Compile Include="Dashboard\ISessionStore.cs" />
     <Compile Include="Dashboard\LoginViewBuilder.cs" />
     <Compile Include="Dashboard\ProjectParametersAction.cs" />
+    <Compile Include="Dashboard\IndicatorBarLocation.cs" />
     <Compile Include="IO\ProgramDataFolder.cs" />
     <Compile Include="Plugins\Administration\AdministerAction.cs" />
     <Compile Include="Plugins\Administration\AdministerPlugin.cs" />
