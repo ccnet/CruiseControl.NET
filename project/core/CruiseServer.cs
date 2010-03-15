@@ -1343,6 +1343,8 @@ namespace ThoughtWorks.CruiseControl.Core
             }
             catch (Exception error)
             {
+                // Log any errors to help diagnosing issues
+                Log.Warning(error);
                 response.Result = ResponseResult.Failure;
                 response.ErrorMessages.Add(
                     new ErrorMessage(
@@ -1387,7 +1389,10 @@ namespace ThoughtWorks.CruiseControl.Core
             catch (Exception error)
             {
                 // Security exceptions have already been logged, just need to log any other exception
-                if (!(error is SecurityException)) Log.Error(error);
+                if (!(error is SecurityException))
+                {
+                    Log.Warning(error);
+                }
 
                 // Tell the caller the request failed and include the error message (but not the stack trace!)
                 response.Result = ResponseResult.Failure;

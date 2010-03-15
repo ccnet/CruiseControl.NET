@@ -245,7 +245,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <returns>The value to use.</returns>
         public override object Convert(string value)
         {
-            var actualValue = CalculateDate(value);
+            var actualValue = this.CalculateDate(value);
             return actualValue;
         }
         #endregion
@@ -258,7 +258,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// </summary>
         private void SetClientDefault()
         {
-            myClientDefault = CalculateDate(DefaultValue).ToShortDateString();
+            myClientDefault = this.CalculateDate(this.DefaultValue).ToShortDateString();
         }
         #endregion
 
@@ -266,7 +266,12 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         private DateTime CalculateDate(string value)
         {
             DateTime date;
-            if (DefaultValue.StartsWith("today", StringComparison.CurrentCultureIgnoreCase))
+            if (string.IsNullOrEmpty(value))
+            {
+                value = "today";
+            }
+
+            if (value.StartsWith("today", StringComparison.CurrentCultureIgnoreCase))
             {
                 date = CalculateOperation(value.Substring(5), DateTime.Today);
             }
@@ -287,6 +292,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
             {
                 date = DateTime.Parse(value);
             }
+
             return date;
         }
         #endregion
