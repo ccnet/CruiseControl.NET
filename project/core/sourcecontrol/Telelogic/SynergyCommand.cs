@@ -237,8 +237,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 			ProcessInfo info;
 
 			if (isOpen)
-			{
+            {
 				info = SynergyCommandBuilder.Stop(connection);
+                
+                // set the session id for ccm.exe to use
+                info.EnvironmentVariables[SessionToken] = connection.SessionId;
+                //Make sure the thread has a name so the ProcessExecuter will not crash
+                if ( string.IsNullOrEmpty( Thread.CurrentThread.Name ) )
+                {
+                    Thread.CurrentThread.Name = connection.SessionId;
+                }
+
 				/* This should be a fire-and-forget call.
                  * We don't want an exception thrown if the session cannot be stopped. */
 				/* don't call this.Execute(), as it will cause an infinite loop 
