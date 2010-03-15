@@ -60,20 +60,37 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             }
         }
 
+        /// <summary>
+        /// Converts the values in the holder instance to a string dictionary for transmission to the server.
+        /// </summary>
+        /// <returns>A dictionary of strings containing the non-null values.</returns>
         private Dictionary<string, string> RetrieveParameters()
         {
-            Dictionary<string, string> results = new Dictionary<string, string>();
-            Type holderType = myParameterHolder.GetType();
-            foreach (ParameterBase parameter in myParameters.Values)
+            var results = new Dictionary<string, string>();
+            var holderType = myParameterHolder.GetType();
+            foreach (var parameter in myParameters.Values)
             {
-                PropertyInfo property = holderType.GetProperty(parameter.Name);
-                object propertyValue = property.GetValue(myParameterHolder,
-                    new object[0]);
+                // Retrieve the property value from the holder
+                var property = holderType.GetProperty(parameter.Name);
+                var propertyValue = property.GetValue(myParameterHolder, new object[0]);
+
+                // Convert the value to a string for transmission
                 if (propertyValue != null)
                 {
-                    results.Add(parameter.Name, propertyValue.ToString());
+                    var propertyValueString = propertyValue.ToString();
+
+                    // Check if the parameter performs any internal conversion
+                    var convertedValue = parameter.Convert(propertyValueString);
+                    if (convertedValue != null)
+                    {
+                        propertyValueString = convertedValue.ToString();
+                    }
+
+                    // Finally add to the results
+                    results.Add(parameter.Name, propertyValueString); 
                 }
             }
+
             return results;
         }
 
