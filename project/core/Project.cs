@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using System.Text;
 using System.Runtime;
+using ThoughtWorks.CruiseControl.Core.Triggers;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -1170,7 +1171,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
         /// <param name="errorProcesser"></param>
-        public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
+        public virtual void Validate(IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
             if (security.RequiresServerSecurity &&
                 (configuration.SecurityManager is NullSecurityManager))
@@ -1180,17 +1181,20 @@ namespace ThoughtWorks.CruiseControl.Core
                         string.Format("Security is defined for project '{0}', but not defined at the server", this.Name)));
             }
 
-            ValidateProject(errorProcesser);
-            ValidateItem(sourceControl, configuration, errorProcesser);
-            ValidateItem(labeller, configuration, errorProcesser);
-            ValidateItems(PrebuildTasks, configuration, errorProcesser);
-            ValidateItems(tasks, configuration, errorProcesser);
-            ValidateItems(publishers, configuration, errorProcesser);
-            ValidateItem(state, configuration, errorProcesser);
-            ValidateItem(security, configuration, errorProcesser);
+            this.ValidateProject(errorProcesser);
+            this.ValidateItem(sourceControl, configuration, parent, errorProcesser);
+            this.ValidateItem(labeller, configuration, parent, errorProcesser);
+            this.ValidateItems(PrebuildTasks, configuration, parent, errorProcesser);
+            this.ValidateItems(tasks, configuration, parent, errorProcesser);
+            this.ValidateItems(publishers, configuration, parent, errorProcesser);
+            this.ValidateItem(state, configuration, parent, errorProcesser);
+            this.ValidateItem(security, configuration, parent, errorProcesser);
 
-            Core.Triggers.MultipleTrigger mt = (Core.Triggers.MultipleTrigger) this.Triggers;
-            ValidateItems(mt.Triggers, configuration, errorProcesser);
+            var mt = (MultipleTrigger)this.Triggers;
+            if (mt != null)
+            {
+                this.ValidateItems(mt.Triggers, configuration, parent, errorProcesser);
+            }
 
         }
 
@@ -1241,11 +1245,11 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <param name="item"></param>
         /// <param name="configuration"></param>
         /// <param name="errorProcesser"></param>
-        private void ValidateItem(object item, IConfiguration configuration, IConfigurationErrorProcesser errorProcesser)
+        private void ValidateItem(object item, IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
             if ((item != null) && (item is IConfigurationValidation))
             {
-                (item as IConfigurationValidation).Validate(configuration, this, errorProcesser);
+                (item as IConfigurationValidation).Validate(configuration, parent.Wrap(this), errorProcesser);
             }
         }
 
@@ -1255,13 +1259,13 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <param name="items"></param>
         /// <param name="configuration"></param>
         /// <param name="errorProcesser"></param>
-        private void ValidateItems(IEnumerable items, IConfiguration configuration, IConfigurationErrorProcesser errorProcesser)
+        private void ValidateItems(IEnumerable items, IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
             if (items != null)
             {
                 foreach (object item in items)
                 {
-                    ValidateItem(item, configuration, errorProcesser);
+                    this.ValidateItem(item, configuration, parent, errorProcesser);
                 }
             }
         }

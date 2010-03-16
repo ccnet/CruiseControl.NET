@@ -671,7 +671,7 @@ namespace Validator
 
             try
             {
-                validator.Validate(configuration, null, errorProcesser);
+                validator.Validate(configuration, ConfigurationTrace.Start(configuration), errorProcesser);
             }
             catch (Exception error)
             {

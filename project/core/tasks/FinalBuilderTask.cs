@@ -307,11 +307,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			FB3 = 3,
 			FB4 = 4,
 			FB5 = 5
-		}
+        }
 
-        #region IConfigurationValidation Members
-
-        public void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
+        #region Validate()
+        /// <summary>
+        /// Checks the internal validation of the item.
+        /// </summary>
+        /// <param name="configuration">The entire configuration.</param>
+        /// <param name="parent">The parent item for the item being validated.</param>
+        /// <param name="errorProcesser">The error processer to use.</param>
+        public void Validate(IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
             try
             {
@@ -323,7 +328,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 errorProcesser.ProcessError(error);
             }
         }
-
         #endregion
     }
 }

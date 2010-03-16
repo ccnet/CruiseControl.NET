@@ -196,10 +196,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// </remarks>
         private void ValidateConfiguration(Configuration value, IConfigurationErrorProcesser errorProcesser)
         {
+            var rootTrace = ConfigurationTrace.Start(value);
+
             // Validate the security manager - need to do this first
             if (value.SecurityManager is IConfigurationValidation)
             {
-                (value.SecurityManager as IConfigurationValidation).Validate(value, null, errorProcesser);
+                (value.SecurityManager as IConfigurationValidation).Validate(value, rootTrace, errorProcesser);
             }
 
             // Validate all the projects
@@ -207,7 +209,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             {
                 if (project is IConfigurationValidation)
                 {
-                    (project as IConfigurationValidation).Validate(value, null, errorProcesser);
+                    (project as IConfigurationValidation).Validate(value, rootTrace, errorProcesser);
                 }
             }
 
@@ -216,7 +218,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             {
                 if (queue is IConfigurationValidation)
                 {
-                    (queue as IConfigurationValidation).Validate(value, null, errorProcesser);
+                    (queue as IConfigurationValidation).Validate(value, rootTrace, errorProcesser);
                 }
             }
         }

@@ -88,10 +88,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="configuration"></param>
         /// <param name="parent"></param>
         /// <param name="errorProcesser"></param>
-        public override void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
+        public override void Validate(IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
             base.Validate(configuration, parent, errorProcesser);
-            var project = parent as Project;
+            var project = parent.GetAncestorValue<Project>();
 
             if (project != null)
             {

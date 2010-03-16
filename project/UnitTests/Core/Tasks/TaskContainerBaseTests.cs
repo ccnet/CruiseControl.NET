@@ -196,7 +196,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 Executed = true;
             }
 
-            public void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
+            public void Validate(IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
             {
                 IsValided = true;
             }

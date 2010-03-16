@@ -134,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             var errorProcessor = mocks.StrictMock<IConfigurationErrorProcesser>();
             mocks.ReplayAll();
 
-            task.Validate(null, project, errorProcessor);
+            task.Validate(null, ConfigurationTrace.Start(project), errorProcessor);
             mocks.VerifyAll();
         }
 
@@ -156,7 +156,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             }).IgnoreArguments();
             mocks.ReplayAll();
 
-            task.Validate(null, project, errorProcessor);
+            task.Validate(null, ConfigurationTrace.Start(project), errorProcessor);
             mocks.VerifyAll();
         }
         #endregion

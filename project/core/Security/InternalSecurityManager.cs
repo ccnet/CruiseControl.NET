@@ -275,20 +275,21 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
         /// <param name="errorProcesser"></param>
-        public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
+        public virtual void Validate(IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
             foreach (IAuthentication user in users)
             {
                 if (user is IConfigurationValidation)
                 {
-                    (user as IConfigurationValidation).Validate(configuration, parent, errorProcesser);
+                    (user as IConfigurationValidation).Validate(configuration, parent.Wrap(this), errorProcesser);
                 }
             }
+
             foreach (IPermission permission in permissions)
             {
                 if (permission is IConfigurationValidation)
                 {
-                    (permission as IConfigurationValidation).Validate(configuration, parent, errorProcesser);
+                    (permission as IConfigurationValidation).Validate(configuration, parent.Wrap(this), errorProcesser);
                 }
             }
         }

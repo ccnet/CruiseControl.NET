@@ -142,6 +142,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="configuration\ConfigurationTrace.cs" />
     <Compile Include="configuration\ConfigurationValidationUtils.cs" />
     <Compile Include="ConsoleRunnerArguments.cs">
       <SubType>Code</SubType>

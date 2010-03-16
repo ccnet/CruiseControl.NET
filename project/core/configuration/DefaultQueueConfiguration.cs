@@ -136,10 +136,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
         /// <param name="errorProcesser"></param>
-        public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
+        public virtual void Validate(IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
             // Ensure that the queue has at least one project in it
-            bool queueFound = false;
+            var queueFound = false;
             foreach (IProject projectDef in configuration.Projects)
             {
                 if (string.Equals(this.Name, projectDef.QueueName, StringComparison.InvariantCulture))
@@ -148,6 +148,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
                     break;
                 }
             }
+
             if (!queueFound)
             {
                 errorProcesser.ProcessError(new ConfigurationException(

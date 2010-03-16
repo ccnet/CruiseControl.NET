@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace ThoughtWorks.CruiseControl.Core.Config
+﻿namespace ThoughtWorks.CruiseControl.Core.Config
 {
+    using System;
+
     /// <summary>
     /// Allows a configuration item to perform any internal validation checks.
     /// </summary>
@@ -13,6 +13,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
         /// <param name="errorProcesser">The error processer to use.</param>
-        void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser);
+        void Validate(IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser);
     }
 }

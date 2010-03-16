@@ -114,14 +114,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
         /// <param name="errorProcesser">The error processer to use.</param>
-        public void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
+        public void Validate(IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
             // Get the name of the executable
             var canCheck = true;
             var fileName = this.GetProcessFilename();
             if (!Path.IsPathRooted(fileName))
             {
-                var project = parent as Project;
+                var project = parent.GetAncestorValue<Project>();
                 if (project != null)
                 {
                     var result = ConfigurationValidationUtils.GenerateResultForProject(project);

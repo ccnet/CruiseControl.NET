@@ -213,19 +213,20 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         }
 
 
-        void IConfigurationValidation.Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
+        void IConfigurationValidation.Validate(IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
             string projectName = "(Unknown)";
 
-            if (parent is Project)
+            var project = parent.GetAncestorValue<Project>();
+            if (project != null)
             {
-                Project parentProject = parent as Project;
-
-                projectName = parentProject.Name;
+                projectName = project.Name;
             }
 
             if (integrationTime.Minutes + RandomOffSetInMinutesFromTime >= 60)
+            {
                 errorProcesser.ProcessError("Scheduled time {0}:{1} + randomOffSetInMinutesFromTime {2} would exceed the hour, this is not allowed. Conflicting project {3}", integrationTime.Hours, integrationTime.Minutes, RandomOffSetInMinutesFromTime, projectName);
+            }
         }
 
     }

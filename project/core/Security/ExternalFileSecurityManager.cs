@@ -246,12 +246,37 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
         /// <param name="errorProcesser"></param>
-        public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
+        public virtual void Validate(IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
-            List<string> settings = new List<string>();
-            List<string> duplicates = new List<string>();
+            var isInitialised = false;
+            try
+            {
+                Initialise();
+                isInitialised = true;
+            }
+            catch (Exception error)
+            {
+                errorProcesser.ProcessError(error);
+            }
 
-            Initialise();
+            if (isInitialised)
+            {
+                foreach (IAuthentication user in this.loadedUsers.Values)
+                {
+                    if (user is IConfigurationValidation)
+                    {
+                        (user as IConfigurationValidation).Validate(configuration, parent.Wrap(this), errorProcesser);
+                    }
+                }
+
+                foreach (IPermission permission in this.loadedPermissions.Values)
+                {
+                    if (permission is IConfigurationValidation)
+                    {
+                        (permission as IConfigurationValidation).Validate(configuration, parent.Wrap(this), errorProcesser);
+                    }
+                }
+            }
         }
         #endregion
 

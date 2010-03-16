@@ -452,16 +452,15 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </summary>
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
-        /// <param name="errorProcesser"></param>
-        public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
+        /// <param name="errorProcesser">The error processer to use.</param>
+        public virtual void Validate(IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
-            if (parent is Project)
+            var parentProject = parent.GetAncestorValue<Project>();
+            if (parentProject != null)
             {
-                Project parentProject = parent as Project;
-
                 // Attempt to find this publisher in the publishers section
-                bool isPublisher = false;
-                foreach (ITask task in parentProject.Publishers)
+                var isPublisher = false;
+                foreach (var task in parentProject.Publishers)
                 {
                     if (task == this)
                     {

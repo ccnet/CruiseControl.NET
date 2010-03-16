@@ -46,10 +46,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Validates this task.
         /// </summary>
-        /// <param name="configuration"></param>
-        /// <param name="parent"></param>
-        /// <param name="errorProcesser"></param>
-        public virtual void Validate(IConfiguration configuration, object parent, IConfigurationErrorProcesser errorProcesser)
+        /// <param name="configuration">The entire configuration.</param>
+        /// <param name="parent">The parent item for the item being validated.</param>
+        /// <param name="errorProcesser">The error processer to use.</param>
+        public virtual void Validate(IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
             // Validate all the child tasks
             if (Tasks != null)
@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     var validatorTask = task as IConfigurationValidation;
                     if (validatorTask != null)
                     {
-                        validatorTask.Validate(configuration, parent, errorProcesser);
+                        validatorTask.Validate(configuration, parent.Wrap(this), errorProcesser);
                     }
                 }
             }
