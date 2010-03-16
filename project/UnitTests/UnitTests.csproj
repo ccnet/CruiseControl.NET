@@ -349,6 +349,8 @@
     <Compile Include="Core\Util\PrivateStringTests.cs" />
     <Compile Include="Core\Util\ZipCompressionServiceTests.cs" />
     <Compile Include="IntegrationTests\SimpleScenarioTests.cs" />
+    <Compile Include="IntegrationTests\CCNet_1835.cs" />
+    <Compile Include="IntegrationTests\TriggerTests.cs" />
     <Compile Include="TestClock.cs" />
     <Compile Include="Core\SourceControl\GitHistoryParserTest.cs" />
     <Compile Include="Core\SourceControl\GitTest.cs" />
@@ -1157,7 +1159,9 @@
     </Compile>
     <None Include="resources\Statistics.csv" />
     <None Include="resources\templates\TestTransform.vm" />
-    <None Include="test.config" />
+    <None Include="test.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="WebDashboard\Plugins\BuildReport\XmlReportActionSchema.xsx">
       <DependentUpon>XmlReportActionSchema.xsd</DependentUpon>
     </None>
@@ -1228,12 +1232,15 @@
     <EmbeddedResource Include="Core\Publishers\Rss.WithinLimits.xml" />
     <EmbeddedResource Include="Core\SourceControl\MksHistoryParserTestDataMemberInfo.xml" />
     <EmbeddedResource Include="Core\SourceControl\MksHistoryParserTestData.xml" />
+    <Content Include="IntegrationTests\IntegrationTests_Readme.txt" />
     <Content Include="resources\buildlog.xml" />
     <Content Include="resources\CCNet.git.log.txt" />
     <Content Include="resources\failedbuildlog.xml" />
+    <Content Include="resources\IntegrationScenarios\ProblemWithInnerTriggers_CCnet1835.xml" />
     <Content Include="resources\IntegrationScenarios\Simple.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\IntegrationScenarios\Triggers.xml" />
     <Content Include="resources\statistics.xml" />
     <Content Include="resources\UnitTestResults.xml" />
   </ItemGroup>

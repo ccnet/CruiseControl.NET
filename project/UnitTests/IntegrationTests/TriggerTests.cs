@@ -11,38 +11,68 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
     /// </summary>
     [TestFixture]
     [Category("Integration")]
-    public class SimpleScenarioTests
+    public class TriggerTests
     {
         System.Collections.Generic.Dictionary<string, bool> IntegrationCompleted = new System.Collections.Generic.Dictionary<string, bool>();
 
-        [TestFixtureSetUp]
-        public void fixLog4Net()
-        {
-            log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo("test.config"));
-        }
-
         [Test]
-        public void ForceBuildOf1ProjectAndCheckBasicPropertiesOfProjectStatus()
+        [Timeout(120000)]
+        public void Simulate()
         {
-            const string ProjectName1 = "test01";
-            const string ProjectName2 = "test02";
+            const string ProjectName1 = "triggerTest01";
+            const string ProjectName2 = "triggerTest02";
+
 
             string IntegrationFolder = System.IO.Path.Combine("scenarioTests", ProjectName1);
-            string CCNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "Simple.xml");
-            string ProjectStateFile = new System.IO.FileInfo(ProjectName1 + ".state").FullName;
+            string CCNetConfigFile = System.IO.Path.Combine("IntegrationScenarios", "Triggers.xml");
+            string Project1StateFile = new System.IO.FileInfo(ProjectName1 + ".state").FullName;
+            string Project2StateFile = new System.IO.FileInfo(ProjectName2 + ".state").FullName;
 
             IntegrationCompleted.Add(ProjectName1, false);
             IntegrationCompleted.Add(ProjectName2, false);
 
-            Log("Clear existing state file, to simulate first run : " + ProjectStateFile);
-            System.IO.File.Delete(ProjectStateFile);
+            const Int32 SecondsToWaitFromNow = 120;
+            // adjust triggertime of project 1 to now + 70 seconds (SecondsToWaitFromNow)
+            // this will give the unittest time to create an ok build of project2
+            // and let the schedule trigger work as normal : check if it is time to integrate and check on the status
+            // 70 seconds should be ok, less time may give problems on slower machines 
+            // keep in mind that cruise server is also starting, so this time must also be taken into account
+            // also we want the cuise server to wait for 1 minute, otherwise it starts integrating project 1 immediately
+            System.Xml.XmlDocument xdoc = new System.Xml.XmlDocument();
+            xdoc.Load(CCNetConfigFile);
+            string xslt = string.Format("/cruisecontrol/project[@name='{0}']/triggers/scheduleTrigger", ProjectName1);
+            var scheduleTrigger = xdoc.SelectSingleNode(xslt);
+
+            if (scheduleTrigger == null)
+            {
+                throw new Exception(string.Format("Schedule trigger not found,via xslt {0} in configfile {1}", xslt, CCNetConfigFile));
+            }
+
+            string newIntegrationTime = System.DateTime.Now.AddSeconds(SecondsToWaitFromNow).ToString("HH:mm");
+            Log("--------------------------------------------------------------------------");
+            Log(string.Format("{0} is scheduled to integrate at {1}", ProjectName1, newIntegrationTime));
+            Log("--------------------------------------------------------------------------");
+
+            scheduleTrigger.Attributes["time"].Value = newIntegrationTime;
+            xdoc.Save(CCNetConfigFile);
+
+
+            Log("Clear existing state file, to simulate first run : " + Project1StateFile);
+            System.IO.File.Delete(Project1StateFile);
+
+            Log("Clear existing state file, to simulate first run : " + Project2StateFile);
+            System.IO.File.Delete(Project2StateFile);
+
 
             Log("Clear integration folder to simulate first run");
             if (System.IO.Directory.Exists(IntegrationFolder)) System.IO.Directory.Delete(IntegrationFolder, true);
 
 
             CCNet.Remote.Messages.ProjectStatusResponse psr;
-            CCNet.Remote.Messages.ProjectRequest pr = new CCNet.Remote.Messages.ProjectRequest(null, ProjectName1);
+            CCNet.Remote.Messages.ProjectRequest pr1 = new CCNet.Remote.Messages.ProjectRequest(null, ProjectName1);
+            CCNet.Remote.Messages.ProjectRequest pr2 = new CCNet.Remote.Messages.ProjectRequest(null, ProjectName2);
+
+
 
             Log("Making CruiseServerFactory");
             CCNet.Core.CruiseServerFactory csf = new CCNet.Core.CruiseServerFactory();
@@ -57,30 +87,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
                 Log("Starting cruiseServer");
                 cruiseServer.Start();
 
-                Log("Forcing build");
-                CheckResponse(cruiseServer.ForceBuild(pr));
+                Log("Forcing build on project " + ProjectName1 + " to test the innertrigger");
+                CheckResponse(cruiseServer.ForceBuild(pr1));
 
                 System.Threading.Thread.Sleep(250); // give time to start the build
 
-                Log("Waiting for integration to complete");
+                Log("Waiting for integration to complete of : " + ProjectName1);
                 while (!IntegrationCompleted[ProjectName1])
                 {
                     for (int i = 1; i <= 4; i++) System.Threading.Thread.Sleep(250);
                     Log(" waiting ...");
                 }
 
+
                 // un-subscribe to integration complete 
                 cruiseServer.IntegrationCompleted -= new EventHandler<ThoughtWorks.CruiseControl.Remote.Events.IntegrationCompletedEventArgs>(cruiseServer_IntegrationCompleted);
 
                 Log("getting project status");
-                psr = cruiseServer.GetProjectStatus(pr);
+                psr = cruiseServer.GetProjectStatus(pr1);
                 CheckResponse(psr);
 
                 Log("Stopping cruiseServer");
                 cruiseServer.Stop();
 
                 Log("waiting for cruiseServer to stop");
-                cruiseServer.WaitForExit(pr);
+                cruiseServer.WaitForExit(pr1);
                 Log("cruiseServer stopped");
 
             }
@@ -97,19 +128,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             }
 
             Assert.AreEqual(ProjectName1, ps.Name);
-            Assert.AreEqual(CCNet.Remote.IntegrationStatus.Success, ps.BuildStatus);
-            Assert.IsTrue(ps.Activity.IsSleeping(), "Activity should be sleeping after an integration");
-            Assert.AreEqual(ps.Category, "cat1");
-            Assert.AreEqual(string.Empty, ps.CurrentMessage, "message should be empty after an ok build");
-            Assert.AreEqual("first testing project", ps.Description);
-            Assert.AreEqual("1", ps.LastBuildLabel);
-            Assert.AreEqual("1", ps.LastSuccessfulBuildLabel);
-            Assert.AreEqual(0, ps.Messages.Length);
-            Assert.AreEqual("Q1", ps.Queue);
-            Assert.AreEqual(1, ps.QueuePriority);
-            Assert.AreEqual(System.Environment.MachineName, ps.ServerName);
-            Assert.AreEqual(CCNet.Remote.ProjectIntegratorState.Running, ps.Status);
-            Assert.AreEqual("http://confluence.public.thoughtworks.org", ps.WebURL);
+            Assert.AreEqual(CCNet.Remote.IntegrationStatus.Success, ps.BuildStatus, "wrong build state for project " + ProjectName1);
 
 
             // checking data of project 2
@@ -118,25 +137,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
                 if (p.Name == ProjectName2) ps = p;
             }
 
-            Assert.IsFalse(IntegrationCompleted[ProjectName2], "integration not done, event may not be fired");
             Assert.AreEqual(ProjectName2, ps.Name);
-            Assert.AreEqual(CCNet.Remote.IntegrationStatus.Unknown, ps.BuildStatus);
-            Assert.IsTrue(ps.Activity.IsSleeping(), "Activity should be still sleeping");
-            Assert.AreEqual(ps.Category, "cat2");
-            Assert.AreEqual(string.Empty, ps.CurrentMessage, "message should still be empty");
-            Assert.AreEqual("second testing project", ps.Description);
-            Assert.AreEqual("UNKNOWN", ps.LastBuildLabel);
-            Assert.AreEqual("UNKNOWN", ps.LastSuccessfulBuildLabel);
-            Assert.AreEqual(0, ps.Messages.Length);
-            Assert.AreEqual("Q1", ps.Queue);
-            Assert.AreEqual(2, ps.QueuePriority);
-            Assert.AreEqual(System.Environment.MachineName, ps.ServerName);
-            Assert.AreEqual(CCNet.Remote.ProjectIntegratorState.Running, ps.Status);
-            Assert.AreEqual("http://" + System.Environment.MachineName + "/ccnet", ps.WebURL, "Default url not correct");
-
+            Assert.AreEqual(CCNet.Remote.IntegrationStatus.Success, ps.BuildStatus, "wrong build state for project " + ProjectName2);
 
 
         }
+ 
 
         void cruiseServer_IntegrationCompleted(object sender, CCNet.Remote.Events.IntegrationCompletedEventArgs e)
         {
@@ -158,6 +164,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
                 throw new CCNet.Core.CruiseControlException(message);
             }
         }
+
 
     }
 }

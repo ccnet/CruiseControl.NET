@@ -1,0 +1,77 @@
+﻿<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+  <!-- This is your CruiseControl.NET Server Configuration file. Add your projects below! -->
+
+  <project name="InnerTriggerTest_CCNet1835"
+           queue="Q1"
+           queuePriority="1"
+           category="cat1"
+           description="first testing project">
+    <workingDirectory>scenarioTests/InnerTriggerTest_CCNet1835</workingDirectory>
+    <artifactDirectory>scenarioTests/InnerTriggerTest_CCNet1835</artifactDirectory>
+    <webURL>http://confluence.public.thoughtworks.org</webURL>
+
+    <!--the time must be 23:00 AND the dependend project 'CheckBuild' must have an ok build as last build status  -->
+    <triggers>
+      <multiTrigger operator="And">
+        <triggers>
+          <scheduleTrigger time="23:00"
+                           buildCondition="ForceBuild" />
+          <projectTrigger project="CheckBuild"
+                          serverUri="tcp://localhost:21234/CruiseManager.rem"
+                          triggerFirstTime = "false"
+                          >
+            <triggerStatus>Success</triggerStatus>
+            <innerTrigger type="intervalTrigger"
+                          seconds="10"
+                          buildCondition="ForceBuild" />
+          </projectTrigger>
+        </triggers>
+      </multiTrigger>
+    </triggers>
+
+    <tasks>
+      <nullTask  simulateFailure="false"
+                 description="good task" />
+    </tasks>
+
+    <publishers>
+      <artifactcleanup cleanUpMethod="KeepMaximumXHistoryDataEntries"
+                       cleanUpValue="10" />
+      <xmllogger />
+      <statistics />
+      <modificationHistory  onlyLogWhenChangesFound="true" />
+      <rss/>
+    </publishers>
+
+  </project>
+
+
+
+  <project name="CheckBuild"
+           queue="Q1"
+           queuePriority="2"
+           category="cat2"
+           description="second testing project">
+    <workingDirectory>scenarioTests/CheckBuild</workingDirectory>
+    <artifactDirectory>scenarioTests/CheckBuild</artifactDirectory>
+
+    <triggers />
+
+    <tasks>
+      <nullTask  simulateFailure="false"
+                 description="good task" />
+    </tasks>
+
+    <publishers>
+      <artifactcleanup cleanUpMethod="KeepMaximumXHistoryDataEntries"
+                       cleanUpValue="10" />
+      <xmllogger />
+      <statistics />
+      <modificationHistory  onlyLogWhenChangesFound="true" />
+      <rss/>
+    </publishers>
+
+  </project>
+
+
+</cruisecontrol>

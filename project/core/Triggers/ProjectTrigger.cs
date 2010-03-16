@@ -123,6 +123,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			{
 				if (projectStatus.Name == Project)
 				{
+                    Log.Debug("Found status for dependent project {0} is {1}",projectStatus.Name,projectStatus.BuildStatus);
 					return projectStatus;
 				}
 			}

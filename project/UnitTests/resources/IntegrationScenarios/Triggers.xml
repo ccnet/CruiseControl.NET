@@ -1,0 +1,60 @@
+﻿<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+  <!-- This is your CruiseControl.NET Server Configuration file. Add your projects below! -->
+
+  <project name="triggerTest01"
+           queue="Q1"
+           queuePriority="1"
+           category="cat1"
+           description="first testing project">
+    <workingDirectory>scenarioTests/triggerTest01</workingDirectory>
+    <artifactDirectory>scenarioTests/triggerTest01</artifactDirectory>
+    <webURL>http://confluence.public.thoughtworks.org</webURL>
+
+    <triggers>
+      <scheduleTrigger time="23:00"
+                       buildCondition="ForceBuild" />
+    </triggers>
+
+    <tasks>
+      <nullTask  simulateFailure="false"
+                 description="good task" />
+    </tasks>
+
+    <publishers>
+      <artifactcleanup cleanUpMethod="KeepMaximumXHistoryDataEntries"
+                       cleanUpValue="10" />
+      <xmllogger />
+      <statistics />
+      <modificationHistory  onlyLogWhenChangesFound="true" />
+      <rss/>
+    </publishers>
+
+  </project>
+
+  <project name="triggerTest02"
+           queue="Q1"
+           queuePriority="2"
+           category="cat2"
+           description="second testing project">
+    <workingDirectory>scenarioTests/triggerTest02</workingDirectory>
+    <artifactDirectory>scenarioTests/triggerTest02</artifactDirectory>
+
+    <triggers />
+
+    <tasks>
+      <nullTask  simulateFailure="true"
+                 description="bad task" />
+    </tasks>
+
+    <publishers>
+      <artifactcleanup cleanUpMethod="KeepMaximumXHistoryDataEntries"
+                       cleanUpValue="10" />
+      <xmllogger />
+      <statistics />
+      <modificationHistory  onlyLogWhenChangesFound="true" />
+      <rss/>
+    </publishers>
+
+  </project>
+
+</cruisecontrol>
