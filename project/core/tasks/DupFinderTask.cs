@@ -234,14 +234,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         public string[] FilesToExclude { get; set; }
         #endregion
 
-        #region ioSystem
-        /// <summary>
-        /// Gets or sets the IO system to use.
-        /// </summary>
-        /// <value>The IO system.</value>
-        public IFileSystem ioSystem { get; set; }
-        #endregion
-
         #region logger
         /// <summary>
         /// Gets or sets the logger to use.
@@ -285,7 +277,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 if (this.IncludeCode)
                 {
                     this.logger.Info("Including duplicate code lines");
-                    this.ioSystem = this.ioSystem ?? new SystemIoFileSystem();
                     this.ImportCode(document);
                 }
 
@@ -459,7 +450,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 // Sort all the lines so the lines can be processed in order
                 file.Value.Sort(this.CompareFileNodes);
 
-                using (var inputFile = this.ioSystem.OpenInputStream(file.Key))
+                using (var inputFile = this.IOSystemActual.OpenInputStream(file.Key))
                 {
                     using (var reader = new StreamReader(inputFile))
                     {
