@@ -58,8 +58,6 @@ namespace ThoughtWorks.CruiseControl.Core
 							IExecutionEnvironment executionEnvironment,
                             List<ExtensionConfiguration> extensionList)
         {
-            Log.Trace();
-
             this.configurationService = configurationService;
             this.projectSerializer = projectSerializer;
 			this.fileSystem = fileSystem;
