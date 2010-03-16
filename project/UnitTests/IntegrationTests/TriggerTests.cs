@@ -138,7 +138,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             }
 
             Assert.AreEqual(ProjectName2, ps.Name);
-            Assert.AreEqual(CCNet.Remote.IntegrationStatus.Success, ps.BuildStatus, "wrong build state for project " + ProjectName2);
+            Assert.AreEqual(CCNet.Remote.IntegrationStatus.Unknown , ps.BuildStatus, "wrong build state for project " + ProjectName2);
 
 
         }

@@ -17,7 +17,7 @@
           <scheduleTrigger time="23:00"
                            buildCondition="ForceBuild" />
           <projectTrigger project="CheckBuild"
-                          serverUri="tcp://localhost:21234/CruiseManager.rem"
+                          serverUri="tcp://localhost:21235/CruiseManager.rem"
                           triggerFirstTime = "false"
                           >
             <triggerStatus>Success</triggerStatus>

@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
     ///      <multiTrigger operator="And">
     ///        <triggers>
     ///          <scheduleTrigger time="23:00" buildCondition="ForceBuild" />
-    ///          <projectTrigger project="CheckBuild" serverUri="tcp://buildhost:21234/CruiseManager.rem">
+    ///          <projectTrigger project="CheckBuild" serverUri="tcp://buildhost:21235/CruiseManager.rem">
     ///            <triggerStatus>Success</triggerStatus>
     ///            <innerTrigger type="intervalTrigger" seconds="10" buildCondition="ForceBuild" />
     ///          </projectTrigger>
