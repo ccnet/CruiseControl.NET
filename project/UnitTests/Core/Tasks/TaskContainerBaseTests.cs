@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 }
             };
 
-            task.Validate(null, null, null);
+            task.Validate(null, ConfigurationTrace.Start(null), null);
             Assert.IsTrue(subTask.IsValided);
         }
 
