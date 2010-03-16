@@ -434,7 +434,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.AddQuote(ProjectPath);
             buffer.AddQuote(WorkingDirectory);
             buffer.Add("/server:", Server);
-            buffer.Add("/workspace:{0}", Workspace);
+            buffer.Add("/workspace:", Workspace);
             return NewProcessInfo(buffer, result);
         }
 
@@ -461,7 +461,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 "/new");
             buffer.Add("/computer:", Environment.MachineName);
             buffer.AddQuote("/comment:", DEFAULT_WORKSPACE_COMMENT);
-            buffer.Add("/server:{0}", Server);
+            buffer.Add("/server:", Server);
             buffer.AddQuote(Workspace);
             return NewProcessInfo(buffer, result);
         }
@@ -473,7 +473,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             var buffer = new PrivateArguments(
                 "workspace",
                 "/delete");
-            buffer.Add("/computer:", Environment.MachineName);
+            // buffer.Add("/computer:", Environment.MachineName);
             buffer.Add("-server:", Server);
             buffer.AddQuote(Workspace);
             return NewProcessInfo(buffer, result);
