@@ -1000,13 +1000,23 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public ProjectStatus CreateProjectStatus(IProjectIntegrator integrator)
         {
-            ProjectStatus status =
-                new ProjectStatus(Name, Category, CurrentActivity, LastIntegration.Status, integrator.State, WebURL,
-                                  LastIntegration.StartTime, LastIntegration.Label,
-                                  LastIntegration.LastSuccessfulIntegrationLabel,
-                                  Triggers.NextBuild, CurrentBuildStage(), QueueName, QueuePriority);
-            status.Description = Description;
-            status.Messages = (Message[])messages.ToArray(typeof(Message));
+            var lastIntegration = this.LastIntegration;
+            ProjectStatus status = new ProjectStatus(
+                this.Name, 
+                this.Category, 
+                this.CurrentActivity, 
+                lastIntegration.Status, 
+                integrator.State, 
+                this.WebURL,
+                lastIntegration.StartTime, 
+                lastIntegration.Label,
+                lastIntegration.LastSuccessfulIntegrationLabel,
+                this.Triggers.NextBuild, 
+                this.CurrentBuildStage(), 
+                this.QueueName, 
+                this.QueuePriority);
+            status.Description = this.Description;
+            status.Messages = (Message[])this.messages.ToArray(typeof(Message));
             return status;
         }
 
