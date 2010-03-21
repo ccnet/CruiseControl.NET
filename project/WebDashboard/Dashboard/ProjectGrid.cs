@@ -1,19 +1,19 @@
-using System.Collections;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
-using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
-using ThoughtWorks.CruiseControl.WebDashboard.Resources;
-
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	public class ProjectGrid : IProjectGrid
+    using System.Collections.Generic;
+    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
+    using ThoughtWorks.CruiseControl.WebDashboard.Resources;
+    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+
+    public class ProjectGrid : IProjectGrid
 	{
 		public ProjectGridRow[] GenerateProjectGridRows(ProjectStatusOnServer[] statusList, string forceBuildActionName,
 		                                                ProjectGridSortColumn sortColumn, bool sortIsAscending, string categoryFilter,
                                                         ICruiseUrlBuilder urlBuilder, Translations translations) 
 		{
-			ArrayList rows = new ArrayList();
+			var rows = new List<ProjectGridRow>();
 			foreach (ProjectStatusOnServer statusOnServer in statusList)
 			{
 				ProjectStatus status = statusOnServer.ProjectStatus;
@@ -33,15 +33,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			rows.Sort(GetComparer(sortColumn, sortIsAscending));
 
-			return (ProjectGridRow[]) rows.ToArray(typeof (ProjectGridRow));
+			return rows.ToArray();
 		}
 
-		private IComparer GetComparer(ProjectGridSortColumn column, bool ascending)
+		private IComparer<ProjectGridRow> GetComparer(ProjectGridSortColumn column, bool ascending)
 		{
 			return new ProjectGridRowComparer(column, ascending);
 		}
 
-		private class ProjectGridRowComparer : IComparer
+		private class ProjectGridRowComparer 
+            : IComparer<ProjectGridRow>
 		{
 			private readonly ProjectGridSortColumn column;
 			private readonly bool ascending;
@@ -52,30 +53,27 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				this.ascending = ascending;
 			}
 
-			public int Compare(object x, object y)
+            public int Compare(ProjectGridRow x, ProjectGridRow y)
 			{
-				ProjectGridRow rowx = x as ProjectGridRow;
-				ProjectGridRow rowy = y as ProjectGridRow;
-
 				if (column == ProjectGridSortColumn.Name)
 				{
-					return rowx.Name.CompareTo(rowy.Name)*(ascending ? 1 : -1);
+					return x.Name.CompareTo(y.Name)*(ascending ? 1 : -1);
 				}
 				else if (column == ProjectGridSortColumn.LastBuildDate)
 				{
-					return rowx.LastBuildDate.CompareTo(rowy.LastBuildDate)*(ascending ? 1 : -1);
+					return x.LastBuildDate.CompareTo(y.LastBuildDate)*(ascending ? 1 : -1);
 				}
 				else if (column == ProjectGridSortColumn.BuildStatus)
 				{
-					return rowx.BuildStatus.CompareTo(rowy.BuildStatus)*(ascending ? 1 : -1);
+					return x.BuildStatus.CompareTo(y.BuildStatus)*(ascending ? 1 : -1);
 				}
 				else if (column == ProjectGridSortColumn.ServerName)
 				{
-					return rowx.ServerName.CompareTo(rowy.ServerName)*(ascending ? 1 : -1);
+					return x.ServerName.CompareTo(y.ServerName)*(ascending ? 1 : -1);
 				}
 				else if (column == ProjectGridSortColumn.Category)
                 {
-                    return rowx.Category.CompareTo(rowy.Category)*(ascending ? 1 : -1);
+                    return x.Category.CompareTo(y.Category)*(ascending ? 1 : -1);
                 } 
 				else
 				{

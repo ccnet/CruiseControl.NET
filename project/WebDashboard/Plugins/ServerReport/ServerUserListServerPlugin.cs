@@ -1,24 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Web;
-using System.Xml;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
-using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
-using System;
-using ThoughtWorks.CruiseControl.Remote.Security;
-
-namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
+﻿namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Web;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+    using ThoughtWorks.CruiseControl.Remote.Security;
+    using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+    using ThoughtWorks.CruiseControl.WebDashboard.IO;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+
     /// <title>User List Server Plugin</title>
     /// <version>1.5</version>
     /// <summary>
@@ -156,7 +151,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
             velocityContext["message"] = message;
             velocityContext["error"] = error;
 
-            ArrayList links = new ArrayList();
+            var links = new List<IAbsoluteLink>();
             links.Add(new ServerLink(request.UrlBuilder, request.ServerSpecifier, "User List", ActionName));
 
             ProjectStatusListAndExceptions projects = farmService.GetProjectStatusListAndCaptureExceptions(request.ServerSpecifier, request.RetrieveSessionToken());

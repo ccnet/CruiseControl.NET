@@ -503,9 +503,6 @@
     <Compile Include="Plugins\AddProject\AddProjectPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Plugins\AddProject\AddProjectViewBuilder.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Plugins\AddProject\ContinueAddProjectPageAction.cs">
       <SubType>Code</SubType>
     </Compile>

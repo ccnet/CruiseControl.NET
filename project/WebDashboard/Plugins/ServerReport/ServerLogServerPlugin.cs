@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Web;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
-using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
-
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Web;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+    using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+    using ThoughtWorks.CruiseControl.WebDashboard.IO;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+    using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
+    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+
     /// <title>Server Log Server Plugin</title>
     /// <version>1.0</version>
     /// <summary>
@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 		public IResponse Execute(ICruiseRequest request)
 		{
 			Hashtable velocityContext = new Hashtable();
-			ArrayList links = new ArrayList();
+			var links = new List<IAbsoluteLink>();
 			links.Add(new ServerLink(urlBuilder, request.ServerSpecifier, "Server Log", ActionName));
 
 			ProjectStatusListAndExceptions projects = farmService.GetProjectStatusListAndCaptureExceptions(request.ServerSpecifier,

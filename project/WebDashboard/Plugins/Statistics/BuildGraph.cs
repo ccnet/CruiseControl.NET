@@ -1,14 +1,13 @@
-using System;
-using System.Collections;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
-using ThoughtWorks.CruiseControl.WebDashboard.Resources;
-
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
 {
+    using System;
+    using System.Collections.Generic;
+    using ThoughtWorks.CruiseControl.Core;
+    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+    using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+    using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
+    using ThoughtWorks.CruiseControl.WebDashboard.Resources;
+
 	/// <summary>
 	/// Provides functions for making a graph of the specified builds.
     /// These are HTML tables, so should not be browser specific.
@@ -102,64 +101,60 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
         ///<summary>
         /// Returns a sorted list containing build information per buildday
         ///</summary>
-        public ArrayList GetBuildHistory(Int32 maxAmountOfDays)
+        public List<GraphBuildDayInfo> GetBuildHistory(Int32 maxAmountOfDays)
         {
-            ArrayList Result;
-            ArrayList DateSorter;
-            Hashtable FoundDates;
-            GraphBuildInfo CurrentBuildInfo;
-            GraphBuildDayInfo CurrentBuildDayInfo;
-
+            GraphBuildInfo currentBuildInfo;
+            GraphBuildDayInfo currentBuildDayInfo;
 
             // adding the builds to a list per day
-            FoundDates = new Hashtable();
-            DateSorter = new ArrayList();
+            var foundDates = new Dictionary<DateTime, GraphBuildDayInfo>();
+            var dateSorter = new List<DateTime>();
 
             foreach (IBuildSpecifier buildSpecifier in mybuildSpecifiers)
             {           
-                CurrentBuildInfo = new GraphBuildInfo(buildSpecifier, mylinkFactory);
+                currentBuildInfo = new GraphBuildInfo(buildSpecifier, mylinkFactory);
 
-                if (!FoundDates.Contains(CurrentBuildInfo.BuildDate()))
+                if (!foundDates.ContainsKey(currentBuildInfo.BuildDate()))
                 {
-                    FoundDates.Add(CurrentBuildInfo.BuildDate(), new GraphBuildDayInfo(CurrentBuildInfo, this.translations) );
-                    DateSorter.Add(CurrentBuildInfo.BuildDate());
+                    foundDates.Add(currentBuildInfo.BuildDate(), new GraphBuildDayInfo(currentBuildInfo, this.translations) );
+                    dateSorter.Add(currentBuildInfo.BuildDate());
                 }
                 else
                 {
-                    CurrentBuildDayInfo = FoundDates[CurrentBuildInfo.BuildDate()] as GraphBuildDayInfo;
-                    CurrentBuildDayInfo.AddBuild(CurrentBuildInfo);
+                    currentBuildDayInfo = foundDates[currentBuildInfo.BuildDate()] as GraphBuildDayInfo;
+                    currentBuildDayInfo.AddBuild(currentBuildInfo);
 
-                    FoundDates[CurrentBuildInfo.BuildDate()] = CurrentBuildDayInfo;
+                    foundDates[currentBuildInfo.BuildDate()] = currentBuildDayInfo;
                 }                            
             }
  
             //making a sorted list of the dates where we have builds of
             //and limit to the amount specified in maxAmountOfDays
-            DateSorter.Sort();
-            while (DateSorter.Count > maxAmountOfDays)
+            dateSorter.Sort();
+            while (dateSorter.Count > maxAmountOfDays)
             {
-                DateSorter.RemoveAt(0);
+                dateSorter.RemoveAt(0);
             }
 
             //making final sorted arraylist
-            Result = new ArrayList();
+            var result = new List<GraphBuildDayInfo>();
             myHighestAmountPerDay = 1;
 
-            foreach (DateTime BuildDate in DateSorter)
+            foreach (DateTime BuildDate in dateSorter)
             {
-                CurrentBuildDayInfo = FoundDates[BuildDate] as GraphBuildDayInfo;
-                Result.Add(CurrentBuildDayInfo);            
+                currentBuildDayInfo = foundDates[BuildDate] as GraphBuildDayInfo;
+                result.Add(currentBuildDayInfo);            
 
-                if (CurrentBuildDayInfo.AmountOfBuilds > myHighestAmountPerDay) 
+                if (currentBuildDayInfo.AmountOfBuilds > myHighestAmountPerDay) 
                 {
-                    myHighestAmountPerDay = CurrentBuildDayInfo.AmountOfBuilds; 
+                    myHighestAmountPerDay = currentBuildDayInfo.AmountOfBuilds; 
                 }
 
-                myOKBuildAmount += CurrentBuildDayInfo.AmountOfOKBuilds;
-                myFailedBuildAmount += CurrentBuildDayInfo.AmountOfFailedBuilds;
+                myOKBuildAmount += currentBuildDayInfo.AmountOfOKBuilds;
+                myFailedBuildAmount += currentBuildDayInfo.AmountOfFailedBuilds;
             }
 
-            return Result;
+            return result;
         }
 
 
@@ -211,7 +206,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
         public class GraphBuildDayInfo
         {
             private DateTime myBuildDate; 
-            private ArrayList myBuilds;
+            private List<GraphBuildInfo> myBuilds;
 
             private Int32 myOKBuildAmount;
             private Int32 myFailedBuildAmount;
@@ -221,7 +216,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
             {
                 this.translations = translations;
                 myBuildDate = buildInfo.BuildDate();
-                myBuilds = new ArrayList();
+                myBuilds = new List<GraphBuildInfo>();
                 //myBuilds.Add(buildInfo);
                 AddBuild(buildInfo);
             }

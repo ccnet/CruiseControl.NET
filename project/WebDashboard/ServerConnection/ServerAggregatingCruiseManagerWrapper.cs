@@ -1,18 +1,17 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Remote.Messages;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
-using ThoughtWorks.CruiseControl.Remote.Security;
-using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
-
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Net.Sockets;
+    using ThoughtWorks.CruiseControl.Core;
+    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
+    using ThoughtWorks.CruiseControl.Remote.Parameters;
+    using ThoughtWorks.CruiseControl.Remote.Security;
+    using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
+
 	public class ServerAggregatingCruiseManagerWrapper : ICruiseManagerWrapper, IFarmService
 	{
         private readonly ICruiseServerClientFactory clientFactory;
@@ -81,12 +80,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 
 		private IBuildSpecifier[] CreateBuildSpecifiers(IProjectSpecifier projectSpecifier, string[] buildNames)
 		{
-			ArrayList buildSpecifiers = new ArrayList();
+			var buildSpecifiers = new List<IBuildSpecifier>();
 			foreach (string buildName in buildNames)
 			{
 				buildSpecifiers.Add(new DefaultBuildSpecifier(projectSpecifier, buildName));
 			}
-			return (IBuildSpecifier[]) buildSpecifiers.ToArray(typeof (IBuildSpecifier));
+			return buildSpecifiers.ToArray();
 		}
 
         public void DeleteProject(IProjectSpecifier projectSpecifier, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment, string sessionToken)
@@ -144,8 +143,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 
         private ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier[] serverSpecifiers, string sessionToken)
         {
-            ArrayList projectStatusOnServers = new ArrayList();
-            ArrayList exceptions = new ArrayList();
+            var projectStatusOnServers = new List<ProjectStatusOnServer>();
+            var exceptions = new List<CruiseServerException>();
 
             foreach (IServerSpecifier serverSpecifier in serverSpecifiers)
             {
@@ -167,11 +166,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
                 }
             }
 
-            return new ProjectStatusListAndExceptions((ProjectStatusOnServer[])projectStatusOnServers.ToArray(typeof(ProjectStatusOnServer)),
-                                                      (CruiseServerException[])exceptions.ToArray(typeof(CruiseServerException)));
+            return new ProjectStatusListAndExceptions(projectStatusOnServers.ToArray(), exceptions.ToArray());
         }
 
-		private void AddException(ArrayList exceptions, IServerSpecifier serverSpecifier, Exception e)
+        private void AddException(List<CruiseServerException> exceptions, IServerSpecifier serverSpecifier, Exception e)
 		{
 			exceptions.Add(new CruiseServerException(serverSpecifier.ServerName, GetServerUrl(serverSpecifier).Url, e));
 		}
@@ -212,12 +210,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 
 		public IServerSpecifier[] GetServerSpecifiers()
 		{
-			ArrayList serverSpecifiers = new ArrayList();
+			var serverSpecifiers = new List<IServerSpecifier>();
 			foreach (ServerLocation serverLocation in ServerLocations)
 			{
 				serverSpecifiers.Add(new DefaultServerSpecifier(serverLocation.Name, serverLocation.AllowForceBuild, serverLocation.AllowStartStopBuild));
 			}
-			return (IServerSpecifier[]) serverSpecifiers.ToArray(typeof (IServerSpecifier));
+			return serverSpecifiers.ToArray();
 		}
 
         public void AddProject(IServerSpecifier serverSpecifier, string serializedProject, string sessionToken)
@@ -353,8 +351,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 
         private CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions(IServerSpecifier[] serverSpecifiers, string sessionToken)
         {
-            ArrayList cruiseServerSnapshotsOnServers = new ArrayList();
-            ArrayList exceptions = new ArrayList();
+            var cruiseServerSnapshotsOnServers = new List<CruiseServerSnapshotOnServer>();
+            var exceptions = new List<CruiseServerException>();
 
             foreach (IServerSpecifier serverSpecifier in serverSpecifiers)
             {
@@ -376,8 +374,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
             }
 
             return new CruiseServerSnapshotListAndExceptions(
-                (CruiseServerSnapshotOnServer[])cruiseServerSnapshotsOnServers.ToArray(typeof(CruiseServerSnapshotOnServer)),
-                (CruiseServerException[])exceptions.ToArray(typeof(CruiseServerException)));
+                cruiseServerSnapshotsOnServers.ToArray(),
+                exceptions.ToArray());
         }
 
         /// <summary>

@@ -56,11 +56,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.Statistics
             CruiseControl.WebDashboard.Plugins.Statistics.BuildGraph bg01;                        
             CruiseControl.WebDashboard.Plugins.Statistics.BuildGraph.GraphBuildDayInfo GraphInfoDay1;
 
-            ArrayList Result;
-
             bg01 = GetBuildGraph(1, true);
 
-            Result = bg01.GetBuildHistory(15); // get all builds, but limit them to the last 15 days
+            var Result = bg01.GetBuildHistory(15); // get all builds, but limit them to the last 15 days
             
             Assert.AreEqual(1,bg01.HighestAmountPerDay, "builds in same day must result in HighestAmountPerDay set to 1");
             Assert.AreEqual(1,Result.Count, "1 build must result in HighestAmountPerDay set to 1");
@@ -77,11 +75,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.Statistics
             CruiseControl.WebDashboard.Plugins.Statistics.BuildGraph bg01;                        
             CruiseControl.WebDashboard.Plugins.Statistics.BuildGraph.GraphBuildDayInfo GraphInfoDay1;
 
-            ArrayList Result;
-
             bg01 = GetBuildGraph(10, true);
 
-            Result = bg01.GetBuildHistory(15); // get all builds, but limit them to the last 15 days
+            var Result = bg01.GetBuildHistory(15); // get all builds, but limit them to the last 15 days
             
             Assert.AreEqual(10, bg01.HighestAmountPerDay, "incorrect amount of HighestAmountPerDay");
             Assert.AreEqual(1,Result.Count, "builds are in the same day, must have 1 day-build result");
@@ -98,11 +94,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.Statistics
             CruiseControl.WebDashboard.Plugins.Statistics.BuildGraph bg01;                        
             CruiseControl.WebDashboard.Plugins.Statistics.BuildGraph.GraphBuildDayInfo GraphInfoDay1;
 
-            ArrayList Result;
-
             bg01 = GetBuildGraph(10, false);
 
-            Result = bg01.GetBuildHistory(15); // get all builds, but limit them to the last 15 days
+            var Result = bg01.GetBuildHistory(15); // get all builds, but limit them to the last 15 days
             
             Assert.AreEqual(1,bg01.HighestAmountPerDay, "1 build must result in HighestAmountPerDay set to 1");
             Assert.AreEqual(10,Result.Count, "incorrect amount of build days");

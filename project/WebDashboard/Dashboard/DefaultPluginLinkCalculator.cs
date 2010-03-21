@@ -1,10 +1,10 @@
-using System.Collections;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
-
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	public class DefaultPluginLinkCalculator : IPluginLinkCalculator
+    using System.Collections.Generic;
+    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+    using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
+
+    public class DefaultPluginLinkCalculator : IPluginLinkCalculator
 	{
 		private readonly ILinkFactory LinkFactory;
 		private readonly IPluginConfiguration pluginConfiguration;
@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public IAbsoluteLink[] GetBuildPluginLinks(IBuildSpecifier buildSpecifier)
 		{
-			ArrayList links = new ArrayList();
+			var links = new List<IAbsoluteLink>();
 			foreach (IBuildPlugin plugin in pluginConfiguration.BuildPlugins)
 			{
 				if (plugin.IsDisplayedForProject(buildSpecifier.ProjectSpecifier))
@@ -25,37 +25,37 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 					links.Add(LinkFactory.CreateBuildLink(buildSpecifier, plugin.LinkDescription, plugin.NamedActions[0].ActionName));
 				}
 			}
-			return (IAbsoluteLink[]) links.ToArray(typeof (IAbsoluteLink));
+            return links.ToArray();
 		}
 
 		public IAbsoluteLink[] GetServerPluginLinks(IServerSpecifier serverSpecifier)
 		{
-			ArrayList links = new ArrayList();
+            var links = new List<IAbsoluteLink>();
 			foreach (IPlugin plugin in pluginConfiguration.ServerPlugins)
 			{
 				links.Add(LinkFactory.CreateServerLink(serverSpecifier, plugin.LinkDescription, plugin.NamedActions[0].ActionName));
 			}
-			return (IAbsoluteLink[]) links.ToArray(typeof (IAbsoluteLink));
+			return links.ToArray();
 		}
 
 		public IAbsoluteLink[] GetProjectPluginLinks(IProjectSpecifier projectSpecifier)
 		{
-			ArrayList links = new ArrayList();
+            var links = new List<IAbsoluteLink>();
 			foreach (IPlugin plugin in pluginConfiguration.ProjectPlugins)
 			{
 				links.Add(LinkFactory.CreateProjectLink(projectSpecifier, plugin.LinkDescription, plugin.NamedActions[0].ActionName));
 			}
-			return (IAbsoluteLink[]) links.ToArray(typeof (IAbsoluteLink));
+            return links.ToArray();
 		}
 
 		public IAbsoluteLink[] GetFarmPluginLinks()
 		{
-			ArrayList links = new ArrayList();
+            var links = new List<IAbsoluteLink>();
 			foreach (IPlugin plugin in pluginConfiguration.FarmPlugins)
 			{
 				links.Add(LinkFactory.CreateFarmLink(plugin.LinkDescription, plugin.NamedActions[0].ActionName));
 			}
-			return (IAbsoluteLink[]) links.ToArray(typeof (IAbsoluteLink));
+            return links.ToArray();
 		}
 	}
 }

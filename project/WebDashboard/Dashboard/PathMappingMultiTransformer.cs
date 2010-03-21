@@ -1,11 +1,11 @@
-using System.Collections;
-using System.IO;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	public class PathMappingMultiTransformer : IMultiTransformer
+    using System.Collections;
+    using System.Collections.Generic;
+    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
+    public class PathMappingMultiTransformer : IMultiTransformer
 	{
 		private readonly IMultiTransformer transformer;
 		private readonly IPhysicalApplicationPathProvider physicalApplicationPathProvider;
@@ -18,12 +18,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public string Transform(string input, string[] transformerFileNames, Hashtable xsltArgs)
 		{
-			ArrayList mappedFiles = new ArrayList();
+			var mappedFiles = new List<string>();
 			foreach (string transformerFileName in transformerFileNames)
 			{
 				mappedFiles.Add(physicalApplicationPathProvider.GetFullPathFor(transformerFileName));
 			}
-			return transformer.Transform(input, (string[]) mappedFiles.ToArray(typeof (string)), xsltArgs);
+			return transformer.Transform(input, mappedFiles.ToArray(), xsltArgs);
 		}
 	}
 }

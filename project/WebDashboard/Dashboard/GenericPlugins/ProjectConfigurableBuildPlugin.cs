@@ -1,14 +1,14 @@
-using System.Collections;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 {
-	public abstract class ProjectConfigurableBuildPlugin : IBuildPlugin
+    using System.Collections.Generic;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core;
+    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+
+    public abstract class ProjectConfigurableBuildPlugin : IBuildPlugin
 	{
-		private ArrayList includedProjects = new ArrayList();
-		private ArrayList excludedProjects = new ArrayList();
+        private List<string> includedProjects = new List<string>();
+        private List<string> excludedProjects = new List<string>();
 
 		public bool IsDisplayedForProject(IProjectSpecifier project)
 		{
@@ -39,11 +39,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 		[ReflectorArray("includedProjects", Required=false)]
 		public string[] IncludedProjects
 		{
-			get { return (string[]) includedProjects.ToArray(typeof (string)); }
+			get { return includedProjects.ToArray(); }
 			set
 			{
 				CheckOtherPropertyNotAlreadySet(value, excludedProjects);
-				includedProjects = new ArrayList(value);
+                includedProjects = new List<string>(value);
 			}
 		}
 
@@ -58,15 +58,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
         [ReflectorArray("excludedProjects", Required = false)]
 		public string[] ExcludedProjects
 		{
-			get { return (string[]) excludedProjects.ToArray(typeof (string)); }
+			get { return excludedProjects.ToArray(); }
 			set
 			{
 				CheckOtherPropertyNotAlreadySet(value, includedProjects);
-				excludedProjects = new ArrayList(value);
+                excludedProjects = new List<string>(value);
 			}
 		}
 
-		private void CheckOtherPropertyNotAlreadySet(string[] newList, ArrayList otherList)
+        private void CheckOtherPropertyNotAlreadySet(string[] newList, List<string> otherList)
 		{
 			if (otherList.Count > 0 && newList.Length > 0)
 			{

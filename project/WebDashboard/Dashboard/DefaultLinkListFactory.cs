@@ -1,9 +1,9 @@
-using System.Collections;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	public class DefaultLinkListFactory : ILinkListFactory
+    using System.Collections.Generic;
+    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+
+    public class DefaultLinkListFactory : ILinkListFactory
 	{
 		private readonly ILinkFactory linkFactory;
 
@@ -19,18 +19,18 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public IAbsoluteLink[] CreateServerLinkList(IServerSpecifier[] serverSpecifiers, string action)
 		{
-			ArrayList lstLinks = new ArrayList();
+			var lstLinks = new List<IAbsoluteLink>();
 			foreach (IServerSpecifier serverSpecifier in serverSpecifiers)
 			{
 				lstLinks.Add(linkFactory.CreateServerLink(serverSpecifier, action));
 			}
 
-			return (IAbsoluteLink[])lstLinks.ToArray(typeof(IAbsoluteLink));
+			return lstLinks.ToArray();
 		}
 
 		public IAbsoluteLink[] CreateStyledBuildLinkList(IBuildSpecifier[] buildSpecifiers, IBuildSpecifier selectedBuildSpecifier, string action)
 		{
-			ArrayList displayableBuildLinkList = new ArrayList();
+			var displayableBuildLinkList = new List<IAbsoluteLink>();
 			
 			foreach (IBuildSpecifier buildSpecifier in buildSpecifiers)
 			{
@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				}
 			}
 
-			return (IAbsoluteLink[]) displayableBuildLinkList.ToArray(typeof (IAbsoluteLink));			
+			return displayableBuildLinkList.ToArray();			
 		}
 	}
 }
