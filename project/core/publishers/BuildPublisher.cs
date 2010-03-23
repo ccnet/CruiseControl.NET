@@ -55,6 +55,20 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             DeleteBuildsOlderThanXDays
         }
 
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BuildPublisher"/> class.
+        /// </summary>
+        public BuildPublisher()
+        {
+            this.UseLabelSubDirectory = true;
+            this.AlwaysPublish = false;
+            this.CleanPublishDirPriorToCopy = false;
+            this.CleanUpMethod = CleanupPolicy.NoCleaning;
+            this.CleanUpValue = 5;
+        }
+        #endregion
+
         /// <summary>
         /// The directory to copy the files to. This path can be absolute or can be relative to the project's
         /// artifact directory. If <b>useLabelSubDirectory</b> is true (default) a subdirectory with the
@@ -64,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("publishDir", Required = false)]
-        public string PublishDir;
+        public string PublishDir { get; set; }
 
         /// <summary>
         /// The source directory to copy files from. This path can be absolute or can be relative to the
@@ -74,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("sourceDir", Required = false)]
-        public string SourceDir;
+        public string SourceDir { get; set; }
 
         /// <summary>
         /// If set to true (the default value), files will be copied to subdirectory under the publishDir which
@@ -83,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.0</version>
         /// <default>true</default>
         [ReflectorProperty("useLabelSubDirectory", Required = false)]
-        public bool UseLabelSubDirectory = true;
+        public bool UseLabelSubDirectory { get; set; }
 
         /// <summary>
         /// Always copies the files, regardless of the state of the build.
@@ -91,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("alwaysPublish", Required = false)]
-        public bool AlwaysPublish = false;
+        public bool AlwaysPublish { get; set; }
 
         /// <summary>
         /// Cleans the publishDir if it exists, so that you will always have an exact copy of the sourceDir.
@@ -99,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.5</version>
         /// <default>false</default>
         [ReflectorProperty("cleanPublishDirPriorToCopy", Required = false)]
-        public bool CleanPublishDirPriorToCopy = false;
+        public bool CleanPublishDirPriorToCopy { get; set; }
 
         /// <summary>
         /// Defines a way to clean up published builds.
@@ -107,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.4.4</version>
         /// <default>NoClean</default>
         [ReflectorProperty("cleanUpMethod", Required = false)]
-        public CleanupPolicy CleanUpMethod = CleanupPolicy.NoCleaning;
+        public CleanupPolicy CleanUpMethod { get; set; }
 
         /// <summary>
         /// The value used for the cleaning method.
@@ -115,9 +129,15 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.4.4</version>
         /// <default>5</default>
         [ReflectorProperty("cleanUpValue", Required = false)]
-        public int CleanUpValue = 5;
+        public int CleanUpValue { get; set; }
 
-
+        /// <summary>
+        /// Execute the actual task functionality.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns>
+        /// True if the task was successful, false otherwise.
+        /// </returns>
         protected override bool Execute(IIntegrationResult result)
         {
 
@@ -173,8 +193,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <summary>
         /// Copies all files and folders from srcDir to pubDir
         /// </summary>
-        /// <param name="srcDir"></param>
-        /// <param name="pubDir"></param>
+        /// <param name="srcDir">The SRC dir.</param>
+        /// <param name="pubDir">The pub dir.</param>
         private void RecurseSubDirectories(DirectoryInfo srcDir, DirectoryInfo pubDir)
         {
             FileInfo[] files = srcDir.GetFiles();
@@ -194,7 +214,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
         }
 
-
+        /// <summary>
+        /// Keeps the last X sub dirs.
+        /// </summary>
+        /// <param name="targetFolder">The target folder.</param>
+        /// <param name="amountToKeep">The amount to keep.</param>
+        /// <param name="buildLogDirectory">The build log directory.</param>
         private void KeepLastXSubDirs(string targetFolder, int amountToKeep, string buildLogDirectory)
         {
             Util.Log.Trace("Deleting Subdirs of {0}", targetFolder);

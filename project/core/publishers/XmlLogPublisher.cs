@@ -44,8 +44,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </summary>
         /// <version>1.0</version>
         /// <default>buildlogs</default>
-        [ReflectorProperty("logDir", Required = false)] 
-		public string ConfiguredLogDirectory;
+        [ReflectorProperty("logDir", Required = false)]
+        public string ConfiguredLogDirectory { get; set; }
 
 		// This is only public because of a nasty hack which I (MR) put in the code. To be made private later...
 		public string LogDirectory(string artifactDirectory)

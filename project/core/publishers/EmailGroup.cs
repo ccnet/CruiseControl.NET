@@ -58,8 +58,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </summary>
         /// <version>1.3</version>
         /// <default>n.a</default>
-		[ReflectorProperty("name")]
-		public string Name;
+        [ReflectorProperty("name")]
+        public string Name { get; set; }
 
         /// <summary>
         /// A list of notification types, determining when to send email to this group.

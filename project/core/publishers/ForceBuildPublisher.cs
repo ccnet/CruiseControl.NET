@@ -58,6 +58,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         public ForceBuildPublisher(ICruiseServerClientFactory factory)
 		{
 			this.factory = factory;
+            this.ServerUri = string.Format("tcp://localhost:21234/{0}", RemoteCruiseServer.ManagerUri);
+            this.IntegrationStatus = IntegrationStatus.Success;
 		}
         /// <summary>
         /// The CCNet project to force build.
@@ -65,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("project")]
-        public string Project;
+        public string Project { get; set; }
 
         /// <summary>
         /// Identification of a ForceBuildPublisher. This value is passed to the CCNetRequestSource attribute of the
@@ -91,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// HTTP protocol for connecting.
         /// </remarks>
         [ReflectorProperty("serverUri", Required = false)]
-		public string ServerUri = string.Format("tcp://localhost:21234/{0}", RemoteCruiseServer.ManagerUri);
+        public string ServerUri { get; set; }
 
         /// <summary>
         /// The condition determining whether or not the remoting call should be made. The default value is "Success"
@@ -100,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.0</version>
         /// <default>Success</default>
         [ReflectorProperty("integrationStatus", Required = false)]
-		public IntegrationStatus IntegrationStatus = IntegrationStatus.Success;
+        public IntegrationStatus IntegrationStatus { get; set; }
 
         /// <summary>
         /// The security credentials to pass through to the remote server.

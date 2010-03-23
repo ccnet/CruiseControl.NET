@@ -83,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("value")]
-        public string Value;
+        public string Value { get; set; }
 
         /// <summary>
         /// A build result state, see below for the possible values.
@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("buildResult")]
-        public BuildResultType BuildResult;
+        public BuildResultType BuildResult { get; set; }
 
         public override bool Equals(Object o)
         {

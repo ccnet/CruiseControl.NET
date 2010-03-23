@@ -348,6 +348,7 @@
     <Compile Include="Core\Publishers\PackagePublisherTests.cs" />
     <Compile Include="Core\Label\AssemblyVersionLabellerTest.cs" />
     <Compile Include="Core\Tasks\CruiseServerControlTaskTests.cs" />
+    <Compile Include="Core\Util\InstanceAssert.cs" />
     <Compile Include="Core\Util\PrivateArgumentsTests.cs" />
     <Compile Include="Core\Util\PrivateStringSerialiserTests.cs" />
     <Compile Include="Core\Util\PrivateStringTests.cs" />

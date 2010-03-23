@@ -4,6 +4,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.UnitTests.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
@@ -166,15 +167,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void LoadFromXml()
 		{
-			string xml = @"<buildpublisher useLabelSubDirectory=""false"">
+            string xml = @"<buildpublisher useLabelSubDirectory=""false"" 
+    alwaysPublish=""true"" 
+    cleanPublishDirPriorToCopy=""true""
+    cleanUpMethod=""KeepLastXBuilds""
+    cleanUpValue=""10"">
 	<sourceDir>c:\source</sourceDir>
 	<publishDir>\\file\share\build</publishDir>
 </buildpublisher>";
 
 			publisher = (BuildPublisher) NetReflector.Read(xml);
-			Assert.AreEqual(@"c:\source", publisher.SourceDir);
-			Assert.AreEqual(@"\\file\share\build", publisher.PublishDir);
-			Assert.AreEqual(false, publisher.UseLabelSubDirectory);
+
+            var expected = new BuildPublisher
+            {
+                AlwaysPublish = true,
+                CleanPublishDirPriorToCopy = true,
+                CleanUpMethod = BuildPublisher.CleanupPolicy.KeepLastXBuilds,
+                CleanUpValue = 10,
+                PublishDir = @"\\file\share\build",
+                SourceDir = @"c:\source",
+                UseLabelSubDirectory = false
+            };
+            this.AssertAreSame(expected, publisher);
 		}
 
 		[Test]
@@ -185,7 +199,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			publisher = (BuildPublisher) NetReflector.Read(xml);
 			Assert.IsNull(publisher.SourceDir);
 			Assert.IsNull(publisher.PublishDir);
-			Assert.IsTrue(publisher.UseLabelSubDirectory);			
+
+            var expected = new BuildPublisher
+            {
+                AlwaysPublish = false,
+                CleanPublishDirPriorToCopy = false,
+                CleanUpMethod = BuildPublisher.CleanupPolicy.NoCleaning,
+                CleanUpValue = 5,
+                PublishDir = null,
+                SourceDir = null,
+                UseLabelSubDirectory = true
+            };
+            this.AssertAreSame(expected, publisher);
 		}
 		
 		[Test]
@@ -207,5 +232,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			srcRoot.DeleteDirectory();
 			pubRoot.DeleteDirectory();
 		}
+
+        /// <summary>
+        /// Checks that two <see cref="BuildPublisher"/> instances have the same properties.
+        /// </summary>
+        /// <param name="expected">The expected <see cref="BuildPublisher"/>.</param>
+        /// <param name="actual">The actual <see cref="BuildPublisher"/>.</param>
+        private void AssertAreSame(BuildPublisher expected, BuildPublisher actual)
+        {
+            InstanceAssert.PropertiesAreEqual(
+                expected,
+                actual,
+                "PublishDir",
+                "SourceDir",
+                "UseLabelSubDirectory",
+                "AlwaysPublish",
+                "CleanPublishDirPriorToCopy",
+                "CleanUpMethod",
+                "CleanUpValue");
+        }
 	}
 }

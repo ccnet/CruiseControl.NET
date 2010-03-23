@@ -55,8 +55,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </summary>
         /// <version>1.0</version>
         /// <default>n/a</default>
-		[ReflectorProperty("name")]
-		public string Name;
+        [ReflectorProperty("name")]
+        public string Name { get; set; }
 
         /// <summary>
         /// The Internet-style email address of the user (e.g., "joe@example.com").
@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("address")]
-		public string Address;
+        public string Address { get; set; }
 
         /// <summary>
         /// The group that the user is in. This needs to match the name of one of the &lt;group&gt; elements.
@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.3</version>
         /// <default>None</default>
         [ReflectorProperty("group", Required = false)]
-		public string Group;
+        public string Group { get; set; }
 
 		public override bool Equals(Object obj)
 		{
