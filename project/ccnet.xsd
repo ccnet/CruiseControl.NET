@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema targetNamespace="http://thoughtworks.org/ccnet/1/5"
+<xs:schema targetNamespace="http://thoughtworks.org/ccnet/1/6"
     elementFormDefault="qualified"
-    xmlns="http://thoughtworks.org/ccnet/1/5"
+    xmlns="http://thoughtworks.org/ccnet/1/6"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:element name="cruisecontrol">
     <xs:annotation>
