@@ -105,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <version>1.3</version>
         /// <default>None</default>
-        [ReflectorArray("FBVariables", Required = false)] 
+        [ReflectorProperty("FBVariables", Required = false)] 
 		public FBVariable[] FBVariables;
 
         /// <summary>

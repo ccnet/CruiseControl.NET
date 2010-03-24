@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
         /// <summary>
         /// Optional parameters to pass into the XSL-T.
         /// </summary>
-        [ReflectorArray("parameters", Required = false)]
+        [ReflectorProperty("parameters", Required = false)]
         public List<XsltParameter> Parameters { get; set; }
 
 		// These 2 are separate due to inheritence / property monkey-ness

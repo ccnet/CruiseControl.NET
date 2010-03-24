@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </summary>
         /// <version>1.0</version>
         /// <default>n/a</default>
-        [ReflectorArray("issueTrackers", Required = true)]
+        [ReflectorProperty("issueTrackers", Required = true)]
         public IModificationUrlBuilder[] IssueTrackers
         {
             get

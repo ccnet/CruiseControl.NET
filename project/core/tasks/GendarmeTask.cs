@@ -190,7 +190,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		/// </summary>
         /// <version>1.4.3</version>
         /// <default>None</default>
-        [ReflectorArray("assemblies", Required = false)]
+        [ReflectorProperty("assemblies", Required = false)]
 		public AssemblyMatch[] Assemblies = new AssemblyMatch[0];
 
 		/// <summary>

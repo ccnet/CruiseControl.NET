@@ -74,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         /// </summary>
         /// <version>1.0</version>
         /// <default>n/a/</default>
-		[ReflectorArray("triggers", Required=false)]
+        [ReflectorProperty("triggers", Required = false)]
 		public ITrigger[] Triggers
 		{
 			get { return triggers; }

@@ -84,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </summary>
         /// <version>1.0</version>
         /// <default>n/a</default>
-		[ReflectorArray("sourceControls", Required=true)]
+        [ReflectorProperty("sourceControls", Required = true)]
 		public ISourceControl[] SourceControls 
 		{
 			get 

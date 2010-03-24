@@ -1,15 +1,15 @@
-using System;
-using System.Collections;
-using System.Net.Mail;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Core.Config;
-using ThoughtWorks.CruiseControl.Core.Tasks;
-using System.IO;
-
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Net.Mail;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Config;
+    using ThoughtWorks.CruiseControl.Core.Tasks;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using ThoughtWorks.CruiseControl.Remote;
+
     /// <summary>
     /// <para>
     /// Publishes results of integrations via email.  This implementation supports plain-text, and Html email formats.
@@ -121,13 +121,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private string fromAddress;
         private string replytoAddress;
         private string subjectPrefix;
-        private Hashtable users = new Hashtable();
-        private Hashtable groups = new Hashtable();
         private IMessageBuilder messageBuilder;
         private EmailGroup.NotificationType[] modifierNotificationTypes = { EmailGroup.NotificationType.Always };
         private IEmailConverter[] converters = new IEmailConverter[0];
 
-        private Hashtable subjectSettings = new Hashtable();
+        private EmailSubject[] subjectSettings = new EmailSubject[0];
 
         private string[] xslFiles;
 
@@ -138,6 +136,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         public EmailPublisher(IMessageBuilder messageBuilder)
         {
             this.messageBuilder = messageBuilder;
+            this.IndexedEmailUsers = new Dictionary<string, EmailUser>();
+            this.IndexedEmailGroups = new Dictionary<string, EmailGroup>();
         }
 
         public EmailGateway EmailGateway
@@ -303,12 +303,30 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.0</version>
         /// <default>n/a</default>
         /// <dataType>ThoughtWorks.CruiseControl.Core.Publishers.EmailUser</dataType>
-        [ReflectorHash("users", "name")]
-        public Hashtable EmailUsers
+        [ReflectorProperty("users")]
+        public EmailUser[] EmailUsers
         {
-            get { return users; }
-            set { users = value; }
+            get
+            {
+                var values = new EmailUser[this.IndexedEmailUsers.Count];
+                this.IndexedEmailUsers.Values.CopyTo(values, 0);
+                return values;
+            }
+            set
+            {
+                this.IndexedEmailUsers.Clear();
+                foreach (var user in value)
+                {
+                    this.IndexedEmailUsers.Add(user.Name, user);
+                }
+            }
         }
+
+        /// <summary>
+        /// Gets the email users via an index.
+        /// </summary>
+        /// <value>The indexed email users.</value>
+        public Dictionary<string, EmailUser> IndexedEmailUsers { get; private set; }
 
         /// <summary>
         /// A set of &lt;group&gt; elements that identify which the notification policy for a set of users. 
@@ -316,12 +334,30 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.3</version>
         /// <default>n/a</default>
         /// <dataType>ThoughtWorks.CruiseControl.Core.Publishers.EmailGroup</dataType>
-        [ReflectorHash("groups", "name")]
-        public Hashtable EmailGroups
+        [ReflectorProperty("groups")]
+        public EmailGroup[] EmailGroups
         {
-            get { return groups; }
-            set { groups = value; }
+            get
+            {
+                var values = new EmailGroup[this.IndexedEmailGroups.Count];
+                this.IndexedEmailGroups.Values.CopyTo(values, 0);
+                return values;
+            }
+            set
+            {
+                this.IndexedEmailGroups.Clear();
+                foreach (var group in value)
+                {
+                    this.IndexedEmailGroups.Add(group.Name, group);
+                }
+            }
         }
+
+        /// <summary>
+        /// Gets the email groups via an index.
+        /// </summary>
+        /// <value>The indexed email groups.</value>
+        public Dictionary<string, EmailGroup> IndexedEmailGroups { get; private set; }
 
         /// <summary>
         /// A set of &lt;subject&gt; elements that define the subject of the email, according to the state of the build 
@@ -330,8 +366,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.0</version>
         /// <default>None</default>
         /// <dataType>ThoughtWorks.CruiseControl.Core.Publishers.EmailSubject</dataType>
-        [ReflectorHash("subjectSettings", "buildResult", Required = false)]
-        public Hashtable SubjectSettings
+        [ReflectorProperty("subjectSettings", Required = false)]
+        public EmailSubject[] SubjectSettings
         {
             get { return subjectSettings; }
             set { subjectSettings = value; }
@@ -343,7 +379,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </summary>
         /// <version>1.0</version>
         /// <default>None</default>
-        [ReflectorArray("converters", Required = false)]
+        [ReflectorProperty("converters", Required = false)]
         public IEmailConverter[] Converters
         {
             get { return converters; }

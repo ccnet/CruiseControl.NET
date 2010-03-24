@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Text;
-using ThoughtWorks.CruiseControl.Remote;
-
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    using System.Collections;
+    using System.Text;
+    using ThoughtWorks.CruiseControl.Remote;
+
     /// <summary>
     /// This class encloses all the details related to a typical message needed by a 
     /// Email Publisher
@@ -30,12 +30,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             // copy into own lookuptable for easier processing
             SetSubjects = new Hashtable();
             string mySubject;
-
-            foreach (EmailSubject setValue in emailPublisher.SubjectSettings.Values)
+            foreach (EmailSubject setValue in emailPublisher.SubjectSettings)
             {
                 SetSubjects.Add(setValue.BuildResult, setValue.Value);
             }
-
 
             //add missing defaults for each notificationtype
             foreach (EmailSubject.BuildResultType item in System.Enum.GetValues(typeof(EmailSubject.BuildResultType)))
@@ -189,7 +187,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private void AddRecipients(IDictionary recipients, EmailGroup.NotificationType notificationType)
         {
-            foreach (EmailUser user in emailPublisher.EmailUsers.Values)
+            foreach (EmailUser user in emailPublisher.EmailUsers)
             {
                 EmailGroup group = GetEmailGroup(user.Group);
                 if (group != null && group.HasNotification(notificationType))
@@ -258,7 +256,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private EmailUser GetEmailUser(string username)
         {
             if (username == null) return null;
-            EmailUser user = (EmailUser)emailPublisher.EmailUsers[username];
+            var user = emailPublisher.IndexedEmailUsers.ContainsKey(username) ?
+                emailPublisher.IndexedEmailUsers[username] :
+                null;
 
             // if user is not specified in the project config, 
             // use the converters to create the email address from the sourcecontrol ID           
@@ -280,8 +280,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private EmailGroup GetEmailGroup(string groupname)
         {
-            if (groupname == null) return null;
-            return (EmailGroup)emailPublisher.EmailGroups[groupname];
+            EmailGroup group = null;
+            if (groupname != null)
+            {
+                emailPublisher.IndexedEmailGroups.TryGetValue(groupname, out group);
+            }
+
+            return group;
         }
 
         private bool BuildStateChanged()

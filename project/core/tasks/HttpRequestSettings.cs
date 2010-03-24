@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <version>1.5</version>
         /// <default>None</default>
-        [ReflectorArray("headers", Required = false)]
+        [ReflectorProperty("headers", Required = false)]
         public HttpRequestHeader[] Headers { get; set; }
         #endregion
 

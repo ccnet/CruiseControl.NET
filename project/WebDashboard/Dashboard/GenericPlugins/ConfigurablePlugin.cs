@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 			}
 		}
 
-		[ReflectorArray("actions", Required=true)]
+        [ReflectorProperty("actions", Required = true)]
 		public INamedAction[] NamedActions
 		{
 			get

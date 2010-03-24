@@ -105,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <version>1.5</version>
         /// <default>n/a</default>
-        [ReflectorArray("parameters")]
+        [ReflectorProperty("parameters")]
         public NameValuePair[] Parameters
         {
             get { return parameterValues; }

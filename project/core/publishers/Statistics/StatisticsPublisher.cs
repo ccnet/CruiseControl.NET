@@ -86,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// </remarks>
         /// <default>None</default>
         /// <version>1.0</version>
-        [ReflectorArray("statisticList", Required=false)]
+        [ReflectorProperty("statisticList", Required = false)]
         public StatisticBase[] ConfiguredStatistics = new Statistic[0];
 
         #region ITask Members

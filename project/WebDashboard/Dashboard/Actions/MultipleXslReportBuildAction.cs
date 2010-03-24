@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
         /// Gets or sets the XSL file names.
         /// </summary>
         /// <value>The XSL file names.</value>
-        [ReflectorArray("xslFileNames")]
+        [ReflectorProperty("xslFileNames")]
         public BuildReportXslFilename[] XslFileNames { get; set; }
 
 	    public ConditionalGetFingerprint GetFingerprint(IRequest request)

@@ -197,7 +197,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </remarks>
         /// <version>1.4.4</version>
         /// <default>n/a</default>
-        [ReflectorArray("files")]
+        [ReflectorProperty("files")]
         public string[] Files
         {
             get { return files; }

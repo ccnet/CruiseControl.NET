@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
             set { templateLocation = value; }
         }
 
-		[ReflectorArray("farmPlugins", Required=true)]
+        [ReflectorProperty("farmPlugins", Required = true)]
 		public IPlugin[] FarmPlugins
 		{
 			get
@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			}
 		}
 
-		[ReflectorArray("serverPlugins", Required=true)]
+        [ReflectorProperty("serverPlugins", Required = true)]
 		public IPlugin[] ServerPlugins
 		{
 			get
@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			}
 		}
 
-		[ReflectorArray("projectPlugins", Required=true)]
+        [ReflectorProperty("projectPlugins", Required = true)]
 		public IPlugin[] ProjectPlugins
 		{
 			get
@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			}
 		}
 
-		[ReflectorArray("buildPlugins", Required=true)]
+        [ReflectorProperty("buildPlugins", Required = true)]
 		public IBuildPlugin[] BuildPlugins
 		{
 			get
@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			}
 		}
 
-        [ReflectorArray("securityPlugins", Required = false)]
+        [ReflectorProperty("securityPlugins", Required = false)]
         public ISecurityPlugin[] SecurityPlugins
         {
             get { return securityPlugins; }

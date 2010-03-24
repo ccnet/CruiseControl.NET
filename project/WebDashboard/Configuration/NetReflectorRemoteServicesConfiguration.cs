@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 	{
 		private ServerLocation[] servers = new ServerLocation[0];
 
-		[ReflectorArray("servers")]
+        [ReflectorProperty("servers")]
 		public ServerLocation[] Servers
 		{
 			get { return servers; }

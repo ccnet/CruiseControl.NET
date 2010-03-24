@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </summary>
         /// <version>1.0</version>
         /// <default>n/a</default>
-		[ReflectorArray("actions")]
+        [ReflectorProperty("actions")]
 		public string[] Actions = new string[0];
 
 		public bool Accept(Modification m)

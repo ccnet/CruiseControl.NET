@@ -90,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         /// </summary>
         /// <version>1.5</version>
         /// <default>None</default>
-        [ReflectorArray("users", Required=false)]
+        [ReflectorProperty("users", Required = false)]
         public UserName[] Users
         {
             get { return users; }

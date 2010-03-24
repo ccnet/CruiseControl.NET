@@ -68,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <version>1.0</version>
         /// <default>n/a</default>
-		[ReflectorArray("assemblies")]
+        [ReflectorProperty("assemblies")]
 		public string[] Assemblies = new string[0];
         #endregion
 
@@ -118,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <version>1.0</version>
         /// <default>None</default>
-        [ReflectorArray("excludedCategories", Required = false)]
+        [ReflectorProperty("excludedCategories", Required = false)]
         public string[] ExcludedCategories = new string[0];
         #endregion
 
@@ -128,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <version>1.0</version>
         /// <default>None</default>
-        [ReflectorArray("includedCategories", Required = false)]
+        [ReflectorProperty("includedCategories", Required = false)]
         public string[] IncludedCategories = new string[0];
         #endregion
         #endregion

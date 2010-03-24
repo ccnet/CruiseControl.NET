@@ -333,7 +333,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <default>None</default>
         /// <version><link>Xml Log Publisher</link></version>
-        [ReflectorArray("publishers", Required = false)]
+        [ReflectorProperty("publishers", Required = false)]
         public ITask[] Publishers
         {
             get { return publishers; }
@@ -380,7 +380,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <version>1.0</version>
         /// <default>None</default>
-        [ReflectorArray("tasks", Required = false)]
+        [ReflectorProperty("tasks", Required = false)]
         public ITask[] Tasks
         {
             get { return tasks; }

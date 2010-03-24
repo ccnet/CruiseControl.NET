@@ -132,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		/// </summary>
         /// <version>1.0</version>
         /// <default>None</default>
-        [ReflectorArray("environment", Required = false)]
+        [ReflectorProperty("environment", Required = false)]
 		public EnvironmentVariable[] EnvironmentVariables = new EnvironmentVariable[0];
 
 		private int[] successExitCodes;

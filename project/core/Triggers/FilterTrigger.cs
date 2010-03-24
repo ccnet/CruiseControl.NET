@@ -181,7 +181,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         /// </summary>
         /// <version>1.0</version>
         /// <default>Monday-Sunday</default>
-		[ReflectorArray("weekDays", Required=false)]
+        [ReflectorProperty("weekDays", Required = false)]
 		public DayOfWeek[] WeekDays
 		{
 			get { return weekDays; }

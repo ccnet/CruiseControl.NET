@@ -142,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <version>1.0</version>
         /// <default>Default build target</default>
-        [ReflectorArray("targetList", Required = false)]
+        [ReflectorProperty("targetList", Required = false)]
 		public string[] Targets = new string[0];
         #endregion
 

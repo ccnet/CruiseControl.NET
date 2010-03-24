@@ -27,15 +27,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		protected void CreatePublisher()
 		{
 			publisher = new EmailPublisher();
-			publisher.EmailGroups.Add(alwaysGroup.Name, alwaysGroup);
-			publisher.EmailGroups.Add(changedGroup.Name, changedGroup);
-			publisher.EmailGroups.Add(failedGroup.Name, failedGroup);
-            publisher.EmailGroups.Add(successGroup.Name, successGroup);
-            publisher.EmailUsers.Add(always.Name, always);
-			publisher.EmailUsers.Add(failed.Name, failed);
-			publisher.EmailUsers.Add(changed.Name, changed);
-            publisher.EmailUsers.Add(success.Name, success);
-            publisher.EmailUsers.Add(modifier.Name, modifier);
+            publisher.IndexedEmailGroups.Add(alwaysGroup.Name, alwaysGroup);
+            publisher.IndexedEmailGroups.Add(changedGroup.Name, changedGroup);
+            publisher.IndexedEmailGroups.Add(failedGroup.Name, failedGroup);
+            publisher.IndexedEmailGroups.Add(successGroup.Name, successGroup);
+            publisher.IndexedEmailUsers.Add(always.Name, always);
+            publisher.IndexedEmailUsers.Add(failed.Name, failed);
+            publisher.IndexedEmailUsers.Add(changed.Name, changed);
+            publisher.IndexedEmailUsers.Add(success.Name, success);
+            publisher.IndexedEmailUsers.Add(modifier.Name, modifier);
 		}
 
 		[Test]
@@ -97,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void CreateModifiersListForUnknownUser()
 		{
-			publisher.EmailUsers.Remove(modifier.Name);
+            publisher.IndexedEmailUsers.Remove(modifier.Name);
 			IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillSuccessful());
 			Assert.AreEqual(ExpectedRecipients(always, success), new EmailMessage(result, publisher).Recipients);
 		}
@@ -155,7 +155,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         {
 
             EmailPublisher publisher = EmailPublisherMother.Create();
-            publisher.SubjectSettings = new System.Collections.Hashtable();
+            publisher.SubjectSettings = new EmailSubject[0];
 
             IntegrationResult result = IntegrationResultMother.CreateFailed(ThoughtWorks.CruiseControl.Remote.IntegrationStatus.Failure);
 
@@ -177,8 +177,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		public void OnlyEmailModifierRecipientsOnBuildFailure()
 		{
 			publisher = new EmailPublisher();
-			publisher.EmailUsers.Add(modifier.Name, modifier);
-			publisher.EmailUsers.Add(changed.Name, changed);
+            publisher.IndexedEmailUsers.Add(modifier.Name, modifier);
+            publisher.IndexedEmailUsers.Add(changed.Name, changed);
 			IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
 			Assert.AreEqual(ExpectedRecipients(modifier), new EmailMessage(result, publisher).Recipients);
 		}
@@ -187,8 +187,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		public void HandleEmailUserWithUnspecifiedGroup()
 		{
 			publisher = new EmailPublisher();
-			publisher.EmailUsers.Add(modifier.Name, modifier);
-			publisher.EmailUsers.Add("foo", new EmailUser("foo", null, "x@x.com"));
+            publisher.IndexedEmailUsers.Add(modifier.Name, modifier);
+            publisher.IndexedEmailUsers.Add("foo", new EmailUser("foo", null, "x@x.com"));
 			IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
 			Assert.AreEqual(ExpectedRecipients(modifier), new EmailMessage(result, publisher).Recipients);
 		}

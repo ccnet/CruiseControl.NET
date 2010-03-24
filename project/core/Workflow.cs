@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private ProjectInitialState initialState = ProjectInitialState.Started;
         private ProjectStartupMode startupMode = ProjectStartupMode.UseLastState;
 
-		[ReflectorCollection("tasks", InstanceType = typeof(ArrayList))]
+        [ReflectorProperty("tasks", InstanceType = typeof(ArrayList))]
 		public IList Tasks
 		{
 			get { return _tasks; }

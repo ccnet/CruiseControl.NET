@@ -196,7 +196,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </summary>
         /// <version>1.3</version>
         /// <default>None</default>
-        [ReflectorArray("environment", Required = false)]
+        [ReflectorProperty("environment", Required = false)]
         public EnvironmentVariable[] EnvironmentVariables = new EnvironmentVariable[0];
 
         /// <summary>

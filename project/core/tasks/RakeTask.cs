@@ -64,13 +64,37 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public const string DefaultExecutable = @"rake";
         public const ProcessPriorityClass DefaultPriority = ProcessPriorityClass.Normal;
 
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RakeTask"/> class.
+        /// </summary>
+        public RakeTask()
+            : this(new ProcessExecutor()) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RakeTask"/> class.
+        /// </summary>
+        /// <param name="executor">The executor.</param>
+        public RakeTask(ProcessExecutor executor)
+        {
+            this.executor = executor;
+            this.BuildArgs = string.Empty;
+            this.BaseDirectory = string.Empty;
+            this.BuildTimeoutSeconds = RakeTask.DefaultBuildTimeout;
+            this.Executable = RakeTask.DefaultExecutable;
+            this.Priority = RakeTask.DefaultPriority;
+            this.Rakefile = string.Empty;
+            this.Targets = new string[0];
+        }
+        #endregion
+
         /// <summary>
         /// Any arguments to pass through to Rake (e.g to specify build properties).
         /// </summary>
         /// <default>None</default>
         /// <version>1.4</version>
-		[ReflectorProperty("buildArgs", Required = false)]
-		public string BuildArgs =string.Empty;
+        [ReflectorProperty("buildArgs", Required = false)]
+        public string BuildArgs { get; set; }
 
         /// <summary>
         /// The directory to run the Rake process in. If relative, is a subdirectory of the Project Working Directory.
@@ -78,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <default>Project Working Directory</default>
         /// <version>1.4</version>
         [ReflectorProperty("baseDirectory", Required = false)]
-		public string BaseDirectory =string.Empty;
+        public string BaseDirectory { get; set; }
 
         /// <summary>
         /// Number of seconds to wait before assuming that the process has hung and should be killed. 
@@ -86,7 +110,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <default>600</default>
         /// <version>1.4</version>
         [ReflectorProperty("buildTimeoutSeconds", Required = false)]
-		public int BuildTimeoutSeconds = DefaultBuildTimeout;
+        public int BuildTimeoutSeconds { get; set; }
 
         /// <summary>
         /// Do not log messages to standard output.
@@ -94,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <default>false</default>
         /// <version>1.4</version>
         [ReflectorProperty("quiet", Required = false)]
-		public bool Quiet;
+        public bool Quiet { get; set; }
 
         /// <summary>
         /// The path of the version of Rake you want to run. If this is relative, then must be relative to either (a) the base directory, 
@@ -104,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <default>c:\ruby\bin\rake.bat</default>
         /// <version>1.4</version>
         [ReflectorProperty("executable", Required = false)]
-		public string Executable = DefaultExecutable;
+        public string Executable { get; set; }
 
         /// <summary>
         /// The priority class of the spawned process.
@@ -112,7 +136,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>Normal</default>
         [ReflectorProperty("priority", Required = false)]
-        public ProcessPriorityClass Priority = DefaultPriority;
+        public ProcessPriorityClass Priority { get; set; }
 
         /// <summary>
         /// The name of the Rakefile to run, relative to the baseDirectory. 
@@ -123,7 +147,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// If no rake file is specified Rake will use the default build file in the working directory.
         /// </remarks>
         [ReflectorProperty("rakefile", Required = false)]
-		public string Rakefile =string.Empty;
+        public string Rakefile { get; set; }
 
         /// <summary>
         /// Like quiet but also suppresses the 'in directory' announcement. 
@@ -131,7 +155,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <default>false</default>
         /// <version>1.4</version>
         [ReflectorProperty("silent", Required = false)]
-		public bool Silent;
+        public bool Silent { get; set; }
 
         /// <summary>
         /// A list of targets to be called. CruiseControl.NET does not call Rake once for each target, it uses the Rake feature of
@@ -142,8 +166,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </remarks>
         /// <default>None</default>
         /// <version>1.4</version>
-		[ReflectorArray("targetList", Required = false)]
-		public string[] Targets = new string[0];
+        [ReflectorProperty("targetList", Required = false)]
+        public string[] Targets { get; set; }
 
         /// <summary>
         /// Turns on invoke/execute tracing and enables full backtrace.
@@ -151,15 +175,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <default>false</default>
         /// <version>1.4</version>
         [ReflectorProperty("trace", Required = false)]
-		public bool Trace;
-
-		public RakeTask()
-			: this(new ProcessExecutor()) {}
-
-		public RakeTask(ProcessExecutor executor)
-		{
-			this.executor = executor;
-		}
+        public bool Trace { get; set; }
 
 		protected override bool Execute(IIntegrationResult result)
 		{

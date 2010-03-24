@@ -10,6 +10,7 @@ using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
@@ -42,8 +43,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             mockGateway.ExpectNoCall("Send", typeof(MailMessage));
 			publisher = new EmailPublisher();
 			publisher.EmailGateway = (EmailGateway) mockGateway.MockInstance;
-			publisher.EmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
-            publisher.EmailGroups.Add("foo", new EmailGroup("foo", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Change }));
+            publisher.IndexedEmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
+            publisher.IndexedEmailGroups.Add("foo", new EmailGroup("foo", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Change }));
 			publisher.Run(IntegrationResultMother.CreateStillSuccessful());
             mockGateway.Verify();
 		}
@@ -56,8 +57,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			publisher = new EmailPublisher();
 		    publisher.FromAddress = "from@foo.com";
 			publisher.EmailGateway = (EmailGateway) mockGateway.MockInstance;
-			publisher.EmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
-            publisher.EmailGroups.Add("foo", new EmailGroup("foo", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Change }));
+            publisher.IndexedEmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
+            publisher.IndexedEmailGroups.Add("foo", new EmailGroup("foo", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Change }));
 			publisher.Run(IntegrationResultMother.CreateFailed());
             mockGateway.Verify();
 		}
@@ -70,8 +71,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             publisher = new EmailPublisher();
             publisher.FromAddress = "from@foo.com";
 			publisher.EmailGateway = (EmailGateway) mockGateway.MockInstance;
-			publisher.EmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
-            publisher.EmailGroups.Add("foo", new EmailGroup("foo", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Failed }));
+            publisher.IndexedEmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
+            publisher.IndexedEmailGroups.Add("foo", new EmailGroup("foo", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Failed }));
 			publisher.Run(IntegrationResultMother.CreateFailed() );
             mockGateway.Verify();
         }
@@ -85,12 +86,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             publisher = new EmailPublisher();
             publisher.FromAddress = "from@foo.com";
             publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
-			
-			publisher.EmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
-			publisher.EmailUsers.Add("admin", new EmailUser("admin", "failing", "bar@foo.com"));
 
-            publisher.EmailGroups.Add("changing", new EmailGroup("changing", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Change }));
-            publisher.EmailGroups.Add("failing", new EmailGroup("failing", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Failed }));
+            publisher.IndexedEmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
+            publisher.IndexedEmailUsers.Add("admin", new EmailUser("admin", "failing", "bar@foo.com"));
+
+            publisher.IndexedEmailGroups.Add("changing", new EmailGroup("changing", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Change }));
+            publisher.IndexedEmailGroups.Add("failing", new EmailGroup("failing", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Failed }));
 
 			publisher.Run(IntegrationResultMother.CreateFailed(IntegrationStatus.Failure) );
             mockGateway.Verify();
@@ -104,12 +105,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             publisher = new EmailPublisher();
             publisher.FromAddress = "from@foo.com";
             publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
-			
-			publisher.EmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
-			publisher.EmailUsers.Add("admin", new EmailUser("admin", "failing", "bar@foo.com"));
 
-            publisher.EmailGroups.Add("changing", new EmailGroup("changing", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Change }));
-            publisher.EmailGroups.Add("failing", new EmailGroup("failing", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Failed }));
+            publisher.IndexedEmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
+            publisher.IndexedEmailUsers.Add("admin", new EmailUser("admin", "failing", "bar@foo.com"));
+
+            publisher.IndexedEmailGroups.Add("changing", new EmailGroup("changing", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Change }));
+            publisher.IndexedEmailGroups.Add("failing", new EmailGroup("failing", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Failed }));
 
 			publisher.Run(IntegrationResultMother.CreateFailed(IntegrationStatus.Success) );
             mockGateway.Verify();
@@ -123,8 +124,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             publisher = new EmailPublisher();
             publisher.FromAddress = "from@foo.com";
             publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
-            publisher.EmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
-            publisher.EmailGroups.Add("foo", new EmailGroup("foo", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Success }));
+            publisher.IndexedEmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
+            publisher.IndexedEmailGroups.Add("foo", new EmailGroup("foo", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Success }));
             publisher.Run(IntegrationResultMother.CreateSuccessful());
             mockGateway.Verify();
         }
@@ -138,13 +139,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             publisher.FromAddress = "from@foo.com";
             publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
 
-            publisher.EmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
-            publisher.EmailUsers.Add("admin", new EmailUser("admin", "succeeding", "bar@foo.com"));
-            publisher.EmailUsers.Add("fixer", new EmailUser("fixer", "fixing", "bar@foo.com"));
+            publisher.IndexedEmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
+            publisher.IndexedEmailUsers.Add("admin", new EmailUser("admin", "succeeding", "bar@foo.com"));
+            publisher.IndexedEmailUsers.Add("fixer", new EmailUser("fixer", "fixing", "bar@foo.com"));
 
-            publisher.EmailGroups.Add("changing", new EmailGroup("changing", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Change }));
-            publisher.EmailGroups.Add("succeeding", new EmailGroup("succeeding", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Success }));
-            publisher.EmailGroups.Add("fixing", new EmailGroup("fixing", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Fixed }));
+            publisher.IndexedEmailGroups.Add("changing", new EmailGroup("changing", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Change }));
+            publisher.IndexedEmailGroups.Add("succeeding", new EmailGroup("succeeding", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Success }));
+            publisher.IndexedEmailGroups.Add("fixing", new EmailGroup("fixing", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Fixed }));
 
             publisher.Run(IntegrationResultMother.CreateSuccessful(IntegrationStatus.Failure));
             mockGateway.Verify();
@@ -159,11 +160,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             publisher.FromAddress = "from@foo.com";
             publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
 
-            publisher.EmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
-            publisher.EmailUsers.Add("admin", new EmailUser("admin", "succeeding", "bar@foo.com"));
+            publisher.IndexedEmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
+            publisher.IndexedEmailUsers.Add("admin", new EmailUser("admin", "succeeding", "bar@foo.com"));
 
-            publisher.EmailGroups.Add("changing", new EmailGroup("changing", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Change }));
-            publisher.EmailGroups.Add("succeeding", new EmailGroup("succeeding", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Success }));
+            publisher.IndexedEmailGroups.Add("changing", new EmailGroup("changing", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Change }));
+            publisher.IndexedEmailGroups.Add("succeeding", new EmailGroup("succeeding", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Success }));
 
             publisher.Run(IntegrationResultMother.CreateSuccessful(IntegrationStatus.Success));
             mockGateway.Verify();
@@ -178,8 +179,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             publisher.FromAddress = "from@foo.com";
             publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
 
-            publisher.EmailUsers.Add("user1", new EmailUser("user1", null, "user1@foo.com"));
-            publisher.EmailUsers.Add("user2", new EmailUser("user2", null, "user2@foo.com"));
+            publisher.IndexedEmailUsers.Add("user1", new EmailUser("user1", null, "user1@foo.com"));
+            publisher.IndexedEmailUsers.Add("user2", new EmailUser("user2", null, "user2@foo.com"));
 
             IntegrationResult result;
             Modification modification;
@@ -208,8 +209,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             publisher.ModifierNotificationTypes[0] = EmailGroup.NotificationType.Failed;
             publisher.ModifierNotificationTypes[1] = EmailGroup.NotificationType.Fixed;
 
-            publisher.EmailUsers.Add("user1", new EmailUser("user1", null, "user1@foo.com"));
-            publisher.EmailUsers.Add("user2", new EmailUser("user2", null, "user2@foo.com"));
+            publisher.IndexedEmailUsers.Add("user1", new EmailUser("user1", null, "user1@foo.com"));
+            publisher.IndexedEmailUsers.Add("user2", new EmailUser("user2", null, "user2@foo.com"));
 
             IntegrationResult result;
             Modification modification;
@@ -331,8 +332,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             Assert.AreEqual("$", ((EmailRegexConverter) publisher.Converters[0]).Find);
             Assert.AreEqual("@TheCompany.com", ((EmailRegexConverter) publisher.Converters[0]).Replace);
 
-			Assert.AreEqual(6, publisher.EmailUsers.Count);
-			ArrayList expected = new ArrayList();
+            Assert.AreEqual(6, publisher.IndexedEmailUsers.Count);
+			var expected = new List<EmailUser>();
 			expected.Add(new EmailUser("buildmaster", "buildmaster", "servid@telus.net"));
 			expected.Add(new EmailUser("orogers", "developers", "orogers@thoughtworks.com"));
 			expected.Add(new EmailUser("manders", "developers", "mandersen@thoughtworks.com"));
@@ -341,16 +342,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             expected.Add(new EmailUser("owjones", "successdudes", "oliver.wendell.jones@example.com"));
 			for (int i = 0; i < expected.Count; i++)
 			{
-				Assert.IsTrue(publisher.EmailUsers.ContainsValue(expected[i]));
+                Assert.IsTrue(publisher.IndexedEmailUsers.ContainsValue(expected[i]));
 			}
 
-			Assert.AreEqual(3, publisher.EmailGroups.Count);
+            Assert.AreEqual(3, publisher.IndexedEmailGroups.Count);
             EmailGroup developers = new EmailGroup("developers", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Change });
             EmailGroup buildmaster = new EmailGroup("buildmaster", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Always });
             EmailGroup successdudes = new EmailGroup("successdudes", new EmailGroup.NotificationType[] { EmailGroup.NotificationType.Success });
-			Assert.AreEqual(developers, publisher.EmailGroups["developers"]);
-			Assert.AreEqual(buildmaster, publisher.EmailGroups["buildmaster"]);
-            Assert.AreEqual(successdudes, publisher.EmailGroups["successdudes"]);
+			Assert.AreEqual(developers, publisher.IndexedEmailGroups["developers"]);
+            Assert.AreEqual(buildmaster, publisher.IndexedEmailGroups["buildmaster"]);
+            Assert.AreEqual(successdudes, publisher.IndexedEmailGroups["successdudes"]);
 		}
 
         [Test]
@@ -371,8 +372,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             Assert.AreEqual(EmailGroup.NotificationType.Always, publisher.ModifierNotificationTypes[0]);
 
             Assert.AreEqual(0, publisher.Converters.Length);
-            Assert.AreEqual(0, publisher.EmailUsers.Count);
-            Assert.AreEqual(0, publisher.EmailGroups.Count);
+            Assert.AreEqual(0, publisher.IndexedEmailUsers.Count);
+            Assert.AreEqual(0, publisher.IndexedEmailGroups.Count);
         }
 
 

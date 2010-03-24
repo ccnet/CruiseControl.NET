@@ -130,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <version>1.0</version>
         /// <default>None</default>
-		[ReflectorArray("externalLinks", Required=false)]
+		[ReflectorProperty("externalLinks", Required=false)]
 		public ExternalLink[] ExternalLinks
 		{
 			get { return externalLinks; }

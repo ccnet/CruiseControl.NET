@@ -129,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// </value>
         /// <version>1.0</version>
         /// <default>false</default>
-        [ReflectorArray("reconcile", Required = false)]
+        [ReflectorProperty("reconcile", Required = false)]
 		public string[] ReconcilePaths;
 
 		/// <summary>

@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
         /// <remarks>
         /// This is currently not implemented.
         /// </remarks>
-		[ReflectorArray("includedProjects", Required=false)]
+        [ReflectorProperty("includedProjects", Required = false)]
 		public string[] IncludedProjects
 		{
 			get { return includedProjects.ToArray(); }
@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
         /// <remarks>
         /// This is currently not implemented.
         /// </remarks>
-        [ReflectorArray("excludedProjects", Required = false)]
+        [ReflectorProperty("excludedProjects", Required = false)]
 		public string[] ExcludedProjects
 		{
 			get { return excludedProjects.ToArray(); }

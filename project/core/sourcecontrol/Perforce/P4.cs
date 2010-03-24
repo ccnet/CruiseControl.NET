@@ -211,7 +211,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// </summary>
         /// <version>1.0</version>
         /// <default>file\(s\) up-to-date\.</default>
-        [ReflectorArray("acceptableErrors", Required = false)]
+        [ReflectorProperty("acceptableErrors", Required = false)]
         public string[] AcceptableErrors = new string[1] { FILES_UP_TO_DATE_PATTERN };
 
 
