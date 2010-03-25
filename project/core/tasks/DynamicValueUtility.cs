@@ -96,8 +96,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Attempts to find a reflector property.
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="reflectorProperty"></param>
+        /// <param name="value">The value.</param>
+        /// <param name="reflectorProperty">The reflector property.</param>
         /// <returns></returns>
         public static MemberInfo FindActualProperty(object value, string reflectorProperty)
         {

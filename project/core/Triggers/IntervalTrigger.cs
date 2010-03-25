@@ -54,7 +54,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		public IntervalTrigger(DateTimeProvider dtProvider)
 		{
 			this.dateTimeProvider = dtProvider;
-            IncrementNextBuildTime();
+            this.IncrementNextBuildTime();
+            this.BuildCondition = BuildCondition.IfModificationExists;
 		}
 
         /// <summary>
@@ -118,8 +119,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         /// </summary>
         /// <version>1.0</version>
         /// <default>IfModificationExists</default>
-		[ReflectorProperty("buildCondition", Required=false)]
-		public BuildCondition BuildCondition = BuildCondition.IfModificationExists;
+        [ReflectorProperty("buildCondition", Required = false)]
+        public BuildCondition BuildCondition { get; set; }
 
 		public virtual void IntegrationCompleted()
 		{

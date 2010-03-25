@@ -63,6 +63,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         public ScheduleTrigger(DateTimeProvider dtProvider)
         {
             this.dtProvider = dtProvider;
+            this.BuildCondition = BuildCondition.IfModificationExists;
+            WeekDays = (DayOfWeek[])DayOfWeek.GetValues(typeof(DayOfWeek));
         }
 
         /// <summary>
@@ -95,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         /// <version>1.4</version>
         /// <default>0</default>
         [ReflectorProperty("randomOffSetInMinutesFromTime", Required = false)]
-        public Int32 RandomOffSetInMinutesFromTime
+        public int RandomOffSetInMinutesFromTime
         {
             get { return randomOffSetInMinutesFromTime; }
             set
@@ -130,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         /// <version>1.0</version>
         /// <default>IfModificationExists</default>
         [ReflectorProperty("buildCondition", Required = false)]
-        public BuildCondition BuildCondition = BuildCondition.IfModificationExists;
+        public BuildCondition BuildCondition { get; set; }
 
         /// <summary>
         /// The week days on which the build should be run (eg. Monday, Tuesday). By default, all days of the week are set.
@@ -138,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         /// <version>1.0</version>
         /// <default>Monday-Sunday</default>
         [ReflectorProperty("weekDays", Required = false)]
-        public DayOfWeek[] WeekDays = (DayOfWeek[])DayOfWeek.GetValues(typeof(DayOfWeek));
+        public DayOfWeek[] WeekDays { get; set; }
 
         private void SetNextIntegrationDateTime()
         {

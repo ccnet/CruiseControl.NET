@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-
-namespace ThoughtWorks.CruiseControl.Core.Tasks
+﻿namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    using System;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
     /// <summary>
     /// <para>
     /// The ftp task / publisher allows to download or upload files/ folders, for example, uploading a new version of a web page to ftp site
@@ -47,13 +45,30 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         //todo: limit number of files shown to the last 10 like in build stage : done
         //todo : change color of progress bar in cctray to red if a failure is found
 
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FtpTask"/> class.
+        /// </summary>
+        public FtpTask()
+        {
+            this.ServerName = string.Empty;
+            this.UserName = string.Empty;
+            this.Password = string.Empty;
+            this.UseActiveConnectionMode = true;
+            this.Action = FtpAction.DownloadFolder;
+            this.FtpFolderName = string.Empty;
+            this.LocalFolderName = string.Empty;
+            this.RecursiveCopy = true;
+        }
+        #endregion
+
         /// <summary>
         /// The name of the server to connect to.
         /// </summary>
         /// <version>1.5</version>
         /// <default>n/a</default>
         [ReflectorProperty("serverName", Required = true)]
-        public string ServerName = string.Empty;
+        public string ServerName { get; set; }
 
         /// <summary>
         /// The username to log in with.
@@ -61,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>n/a</default>
         [ReflectorProperty("userName", Required = true)]
-        public string UserName = string.Empty;
+        public string UserName { get; set; }
 
         /// <summary>
         /// The password to use.
@@ -69,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>n/a</default>
         [ReflectorProperty("password", Required = true)]
-        public string Password = string.Empty;
+        public string Password { get; set; }
 
         /// <summary>
         /// Whether to use active connection mode or not.
@@ -77,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>true</default>
         [ReflectorProperty("useActiveConnectionMode", Required = false)]
-        public bool UseActiveConnectionMode = true;
+        public bool UseActiveConnectionMode { get; set; }
 
         /// <summary>
         /// The action to perform.
@@ -85,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>DownloadFolder</default>
         [ReflectorProperty("action", Required = false)]
-        public FtpAction Action = FtpAction.DownloadFolder;
+        public FtpAction Action { get; set; }
 
         /// <summary>
         /// The path to the folder to use on the FTP server.
@@ -93,7 +108,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>n/a</default>
         [ReflectorProperty("ftpFolderName", Required = true)]
-        public string FtpFolderName = string.Empty;
+        public string FtpFolderName { get; set; }
 
         /// <summary>
         /// The to the folder to use on the local machine.
@@ -101,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>n/a</default>
         [ReflectorProperty("localFolderName", Required = true)]
-        public string LocalFolderName = string.Empty;
+        public string LocalFolderName { get; set; }
 
         /// <summary>
         /// Whether to perform a recursive copy or not.
@@ -109,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>true</default>
         [ReflectorProperty("recursiveCopy", Required = false)]
-        public bool RecursiveCopy = true;
+        public bool RecursiveCopy { get; set; }
 
         protected override bool Execute(IIntegrationResult result)
         {

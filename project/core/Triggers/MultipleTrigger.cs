@@ -53,6 +53,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		public MultipleTrigger(ITrigger[] triggers)
 		{
 			this.triggers = triggers;
+            this.Operator = Operator.Or;
 		}
 
         /// <summary>
@@ -66,8 +67,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         /// </summary>
         /// <default>Or</default>
         /// <version>1.1</version>
-		[ReflectorProperty("operator", Required=false)]
-		public Operator Operator = Operator.Or;
+        [ReflectorProperty("operator", Required = false)]
+        public Operator Operator { get; set; }
 
         /// <summary>
         /// The nested triggers.

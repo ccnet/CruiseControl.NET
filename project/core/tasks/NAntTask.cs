@@ -1,12 +1,12 @@
-using System;
-using System.Collections;
-using System.Diagnostics;
-using System.IO;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    using System;
+    using System.Collections;
+    using System.Diagnostics;
+    using System.IO;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
     /// <summary>
     /// <para>
     /// Runs a NAnt script.
@@ -132,6 +132,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public NAntTask(ProcessExecutor executor)
 		{
 			this.executor = executor;
+            this.Targets = new string[0];
+            this.Executable = defaultExecutable;
+            this.Priority = DefaultPriority;
+            this.BuildFile = string.Empty;
+            this.ConfiguredBaseDirectory = string.Empty;
+            this.BuildArgs = string.Empty;
+            this.Logger = DefaultLogger;
+            this.Listener = DefaultListener;
+            this.NoLogo = DefaultNoLogo;
+            this.BuildTimeoutSeconds = DefaultBuildTimeout;
         }
 
         #region Public fields
@@ -143,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>Default build target</default>
         [ReflectorProperty("targetList", Required = false)]
-		public string[] Targets = new string[0];
+        public string[] Targets { get; set; }
         #endregion
 
         #region Executable
@@ -155,7 +165,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>nant</default>
         [ReflectorProperty("executable", Required = false)]
-		public string Executable = defaultExecutable;
+        public string Executable { get; set; }
         #endregion
 
         #region Priority
@@ -165,7 +175,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>Normal</default>
         [ReflectorProperty("priority", Required = false)]
-        public ProcessPriorityClass Priority = DefaultPriority;
+        public ProcessPriorityClass Priority { get; set; }
         #endregion
 
         #region BuildFile
@@ -175,7 +185,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>Default build field in the working directory</default>
         [ReflectorProperty("buildFile", Required = false)]
-		public string BuildFile = string.Empty;
+        public string BuildFile { get; set; }
         #endregion
 
         #region ConfiguredBaseDirectory
@@ -185,7 +195,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>Project working directory</default>
         [ReflectorProperty("baseDirectory", Required = false)]
-		public string ConfiguredBaseDirectory = string.Empty;
+        public string ConfiguredBaseDirectory { get; set; }
         #endregion
 
         #region BuildArgs
@@ -195,7 +205,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("buildArgs", Required = false)]
-		public string BuildArgs = string.Empty;
+        public string BuildArgs { get; set; }
         #endregion
 
         #region Logger
@@ -205,7 +215,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>NAnt.Core.XmlLogger</default>
         [ReflectorProperty("logger", Required = false)]
-		public string Logger = DefaultLogger;
+        public string Logger { get; set; }
         #endregion
 
         #region Listener
@@ -215,7 +225,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>NAnt.Core.DefaultLogger</default>
         [ReflectorProperty("listener", Required = false)]
-		public string Listener = DefaultListener;
+        public string Listener { get; set; }
         #endregion
 
         #region NoLogo
@@ -225,7 +235,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>true</default>
         [ReflectorProperty("nologo", Required = false)]
-		public bool NoLogo = DefaultNoLogo;
+        public bool NoLogo { get; set; }
         #endregion
 
         #region BuildTimeoutSeconds
@@ -236,7 +246,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>600</default>
         [ReflectorProperty("buildTimeoutSeconds", Required = false)]
-		public int BuildTimeoutSeconds = DefaultBuildTimeout;
+        public int BuildTimeoutSeconds { get; set; }
         #endregion
         #endregion
 

@@ -67,6 +67,21 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public GendarmeTask(ProcessExecutor executor)
 		{
 			this.executor = executor;
+            this.Assemblies = new AssemblyMatch[0];
+            this.AssemblyListFile = string.Empty;
+            this.VerifyTimeoutSeconds = defaultVerifyTimeout;
+            this.Executable = defaultExecutable;
+            this.ConfiguredBaseDirectory = string.Empty;
+            this.Priority = defaultPriority;
+            this.ConfigFile = string.Empty;
+            this.RuleSet = string.Empty;
+            this.IgnoreFile = string.Empty;
+            this.Limit = defaultLimit;
+            this.Severity = string.Empty;
+            this.Confidence = string.Empty;
+            this.Quiet = defaultQuiet;
+            this.Verbose = defaultVerbose;
+            this.FailBuildOnFoundDefects = defaultFailBuildOnFoundDefects;
 		}
 
 		#region public properties
@@ -76,8 +91,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		/// </summary>
         /// <version>1.4.3</version>
         /// <default>gendarme</default>
-		[ReflectorProperty("executable", Required = false)]
-		public string Executable = defaultExecutable;
+        [ReflectorProperty("executable", Required = false)]
+        public string Executable { get; set; }
 
 		/// <summary>
         /// The directory to run Gendarme in.
@@ -85,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.4.3</version>
         /// <default>Project Working Directory</default>
         [ReflectorProperty("baseDirectory", Required = false)]
-		public string ConfiguredBaseDirectory = string.Empty;
+        public string ConfiguredBaseDirectory { get; set; }
 
 		/// <summary>
         /// The priority class of the spawned process.
@@ -93,7 +108,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>Normal</default>
         [ReflectorProperty("priority", Required = false)]
-        public ProcessPriorityClass Priority = defaultPriority;
+        public ProcessPriorityClass Priority { get; set; }
 
 		/// <summary>
         /// Specify the configuration file.
@@ -104,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <b>Maps to "--config configfile"</b>
         /// </remarks>
         [ReflectorProperty("configFile", Required = false)]
-		public string ConfigFile = string.Empty;
+        public string ConfigFile { get; set; }
 
 		/// <summary>
 		/// Specify the set of rules to verify.
@@ -115,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <b>Maps to "--set ruleset"</b>
         /// </remarks>
         [ReflectorProperty("ruleSet", Required = false)]
-		public string RuleSet = string.Empty;
+        public string RuleSet { get; set; }
 
 		/// <summary>
 		/// Do not report the known defects that are part of the specified file.
@@ -126,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <b>Maps to "--ignore ignore-file"</b>
         /// </remarks>
         [ReflectorProperty("ignoreFile", Required = false)]
-		public string IgnoreFile = string.Empty;
+        public string IgnoreFile { get; set; }
 
 		/// <summary>
 		/// Stop reporting after N defects are found.
@@ -137,7 +152,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <b>Maps to "--limit N"</b>
         /// </remarks>
         [ReflectorProperty("limit", Required = false)]
-		public int Limit = defaultLimit;
+        public int Limit { get; set; }
 
 		/// <summary>
 		/// Filter the reported defects to include the specified severity levels.
@@ -148,7 +163,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <b>Maps to "--severity [all | audit[+] | low[+|-] | medium[+|-] | high[+|-] | critical[-]],..."</b>
         /// </remarks>
         [ReflectorProperty("severity", Required = false)]
-		public string Severity = string.Empty;
+        public string Severity { get; set; }
 
 		/// <summary>
 		/// Filter the reported defects to include the specified confidence levels.
@@ -159,7 +174,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <b>"--confidence [all | low[+] | normal[+|-] | high[+|-] | total[-]],..."</b>
         /// </remarks>
         [ReflectorProperty("confidence", Required = false)]
-		public string Confidence = string.Empty;
+        public string Confidence { get; set; }
 
 		/// <summary>
 		/// If true, display minimal output (results) from the runner.
@@ -167,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.4.3</version>
         /// <default>false</default>
         [ReflectorProperty("quiet", Required = false)]
-		public bool Quiet = defaultQuiet;
+        public bool Quiet { get; set; }
 
 		/// <summary>
 		/// Enable debugging output.
@@ -175,7 +190,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.4.3</version>
         /// <default>false</default>
         [ReflectorProperty("verbose", Required = false)]
-		public bool Verbose = defaultVerbose;
+        public bool Verbose { get; set; }
 
 		/// <summary>
 		/// Specify whenver the build should fail if some defects are found by Gendarme.
@@ -183,7 +198,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.4.3</version>
         /// <default>false</default>
         [ReflectorProperty("failBuildOnFoundDefects", Required = false)]
-		public bool FailBuildOnFoundDefects = defaultFailBuildOnFoundDefects;
+        public bool FailBuildOnFoundDefects { get; set; }
 
 		/// <summary>
 		/// Specify the assemblies to verify. You can specify multiple filenames, including masks (? and *).
@@ -191,7 +206,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.4.3</version>
         /// <default>None</default>
         [ReflectorProperty("assemblies", Required = false)]
-		public AssemblyMatch[] Assemblies = new AssemblyMatch[0];
+        public AssemblyMatch[] Assemblies { get; set; }
 
 		/// <summary>
 		/// Specify a file that contains the assemblies to verify. You can specify multiple filenames, including masks (? and *), one by line.
@@ -199,7 +214,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.4.3</version>
         /// <default>None</default>
         [ReflectorProperty("assemblyListFile", Required = false)]
-		public string AssemblyListFile = string.Empty;
+        public string AssemblyListFile { get; set; }
 
 		/// <summary>
 		/// The maximum number of seconds that the build may take.  If the build process takes longer than this period, it will be killed.  Specify this value as zero to disable process timeouts.
@@ -207,7 +222,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.4.3</version>
         /// <default>0</default>
         [ReflectorProperty("verifyTimeoutSeconds", Required = false)]
-		public int VerifyTimeoutSeconds = defaultVerifyTimeout;
+        public int VerifyTimeoutSeconds { get; set; }
 		#endregion
 
 		#region BaseExecutableTask overrides

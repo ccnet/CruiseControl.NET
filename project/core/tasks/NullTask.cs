@@ -1,7 +1,7 @@
-using Exortech.NetReflector;
-
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    using Exortech.NetReflector;
+
     /// <summary>
     /// <para>
     /// The Null Task is a task that doesn't do anything - it simply returns successfully. This is useful for
@@ -22,6 +22,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     public class NullTask : TaskBase
 	{
         /// <summary>
+        /// Initializes a new instance of the <see cref="NullTask"/> class.
+        /// </summary>
+        public NullTask()
+        {
+            this.SimulateFailure = false;
+            this.SimulateFailureMessage = "Simulating Failure";
+        }
+
+        /// <summary>
         /// Defines whether to fail the task or not.
         /// </summary>
         /// <version>1.3</version>
@@ -31,14 +40,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// CruiseControl.NET.
         /// </remarks>
         [ReflectorProperty("simulateFailure", Required = false)]
-        public bool SimulateFailure = false;
+        public bool SimulateFailure { get; set; }
 
         /// <summary>
         /// The message for the exception. Makes it easier to spot differences between different errors.
         /// </summary>
         /// <version>1.5</version>
         [ReflectorProperty("simulateFailureMessage", Required = false)]
-        public string SimulateFailureMessage = "Simulating Failure";
+        public string SimulateFailureMessage { get; set; }
 
         protected override bool Execute(IIntegrationResult result)
         {

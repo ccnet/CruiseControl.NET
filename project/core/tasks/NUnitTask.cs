@@ -1,10 +1,10 @@
-using System.Diagnostics;
-using System.IO;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    using System.Diagnostics;
+    using System.IO;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
     /// <summary>
     /// <para type="tip">
     ///  See <link>Using CruiseControl.NET with NUnit</link> for more details.
@@ -59,6 +59,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public NUnitTask(ProcessExecutor exec)
 		{
 			executor = exec;
+            this.Assemblies = new string[0];
+            this.NUnitPath = DefaultPath;
+            this.OutputFile = DefaultOutputFile;
+            this.Timeout = DefaultTimeout;
+            this.Priority = ProcessPriorityClass.Normal;
+            this.ExcludedCategories = new string[0];
+            this.IncludedCategories = new string[0];
         }
 
         #region Public fields
@@ -69,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("assemblies")]
-		public string[] Assemblies = new string[0];
+        public string[] Assemblies { get; set; }
         #endregion
 
         #region NUnitPath
@@ -79,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>nunit-console</default>
         [ReflectorProperty("path", Required = false)]
-		public string NUnitPath = DefaultPath;
+        public string NUnitPath { get; set; }
         #endregion
 
         #region OutputFile
@@ -89,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>nunit-results.xml</default>
         [ReflectorProperty("outputfile", Required = false)]
-		public string OutputFile = DefaultOutputFile;
+        public string OutputFile { get; set; }
         #endregion
 
         #region Timeout
@@ -99,7 +106,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>600</default>
         [ReflectorProperty("timeout", Required = false)]
-		public int Timeout = DefaultTimeout;
+        public int Timeout { get; set; }
         #endregion
 
         #region Priority
@@ -109,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>Normal</default>
         [ReflectorProperty("priority", Required = false)]
-        public ProcessPriorityClass Priority = ProcessPriorityClass.Normal;
+        public ProcessPriorityClass Priority { get; set; }
         #endregion
 
         #region ExcludedCategories
@@ -119,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("excludedCategories", Required = false)]
-        public string[] ExcludedCategories = new string[0];
+        public string[] ExcludedCategories { get; set; }
         #endregion
 
         #region IncludedCategories
@@ -129,7 +136,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("includedCategories", Required = false)]
-        public string[] IncludedCategories = new string[0];
+        public string[] IncludedCategories { get; set; }
         #endregion
         #endregion
 

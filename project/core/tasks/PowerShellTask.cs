@@ -58,6 +58,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
             this.Registry = registry;
 			this.executor = executor;
+            this.BuildTimeoutSeconds = DefaultBuildTimeOut;
+            this.Priority = ProcessPriorityClass.Normal;
+            this.ConfiguredScriptsDirectory = DefaultScriptsDirectory;
+            this.BuildArgs = string.Empty;
+            this.EnvironmentVariables = new EnvironmentVariable[0];
 		}
 
         /// <summary>
@@ -71,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>None</default>
         [ReflectorProperty("script", Required = true)]
-        public string Script;
+        public string Script { get; set; }
 
         /// <summary>
         /// The PowerShell executable.
@@ -98,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>Normal</default>
         [ReflectorProperty("priority", Required = false)]
-        public ProcessPriorityClass Priority = ProcessPriorityClass.Normal;
+        public ProcessPriorityClass Priority { get; set; }
 
         /// <summary>
         /// The directory that the PowerShell scripts are stored in. 
@@ -106,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>%Documents%\WindowsPowerShell</default>
         [ReflectorProperty("scriptsDirectory", Required = false)]
-        public string ConfiguredScriptsDirectory = DefaultScriptsDirectory;
+        public string ConfiguredScriptsDirectory { get; set; }
 
         /// <summary>
         /// Any arguments to pass into the script. 
@@ -114,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>None</default>
         [ReflectorProperty("buildArgs", Required = false)]
-		public string BuildArgs = string.Empty;
+        public string BuildArgs { get; set; }
 
 		/// <summary>
         /// Any environment variables to pass into the script. 
@@ -122,7 +127,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>None</default>
         [ReflectorProperty("environment", Required = false)]
-		public EnvironmentVariable[] EnvironmentVariables = new EnvironmentVariable[0];
+        public EnvironmentVariable[] EnvironmentVariables { get; set; }
 
 		private int[] successExitCodes = null;
 
@@ -176,7 +181,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>600</default>
         [ReflectorProperty("buildTimeoutSeconds", Required = false)]
-		public int BuildTimeoutSeconds = DefaultBuildTimeOut;
+        public int BuildTimeoutSeconds { get; set; }
 
         /// <summary>
         /// Run the specified PowerShell and add its output to the build results.

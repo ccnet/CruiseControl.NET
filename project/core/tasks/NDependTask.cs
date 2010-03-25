@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-
-namespace ThoughtWorks.CruiseControl.Core.Tasks
+﻿namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
     /// <summary>
     /// <para>
     /// Runs an NDepend analysis.
@@ -111,8 +110,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             this.executor = executor;
             this.fileSystem = fileSystem;
             this.logger = logger;
-            TimeOut = 600;
-            Publish = true;
+            this.TimeOut = 600;
+            this.Publish = true;
+            this.Priority = ProcessPriorityClass.Normal;
         }
         #endregion
 
@@ -144,7 +144,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>Normal</default>
         [ReflectorProperty("priority", Required = false)]
-        public ProcessPriorityClass Priority = ProcessPriorityClass.Normal;
+        public ProcessPriorityClass Priority { get; set; }
         #endregion
 
         #region EmitXml

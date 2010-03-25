@@ -77,6 +77,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			this.registry = registry;
 			this.executor = executor;
+            this.BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
+            this.BuildType = DEFAULT_BUILDTYPE;
+            this.Project = DEFAULT_PROJECT;
+            this.Priority = DEFAULT_PRIORITY;
 		}
 
 		private readonly string[] ExpectedVisualStudioVersions =
@@ -194,8 +198,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <default>n/a</default>
         /// <version>1.0</version>
-		[ReflectorProperty("solutionfile")]
-		public string SolutionFile;
+        [ReflectorProperty("solutionfile")]
+        public string SolutionFile { get; set; }
 	
         /// <summary>
         /// The solution configuration to use (not case sensitive). 
@@ -203,15 +207,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <default>n/a</default>
         /// <version>1.0</version>
         [ReflectorProperty("configuration")]
-		public string Configuration;
+        public string Configuration { get; set; }
 
         /// <summary>
         /// Number of seconds to wait before assuming that the process has hung and should be killed. 
         /// </summary>
         /// <default>600 (10 minutes)</default>
         /// <version>1.0</version>
-        [ReflectorProperty("buildTimeoutSeconds", Required = false)] 
-		public int BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
+        [ReflectorProperty("buildTimeoutSeconds", Required = false)]
+        public int BuildTimeoutSeconds { get; set; }
 
         /// <summary>
         /// The type of build.
@@ -223,16 +227,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <value>Build</value>
         /// <value>Clean</value>
         /// </values>
-		[ReflectorProperty("buildtype", Required = false)]
-		public string BuildType = DEFAULT_BUILDTYPE;
+        [ReflectorProperty("buildtype", Required = false)]
+        public string BuildType { get; set; }
 
         /// <summary>
         /// A specific project in the solution, if you only want to build one project (not case sensitive). 
         /// </summary>
         /// <version>1.0</version>
         /// <default>All projects</default>
-		[ReflectorProperty("project", Required = false)]
-		public string Project  = DEFAULT_PROJECT;
+        [ReflectorProperty("project", Required = false)]
+        public string Project { get; set; }
 
         /// <summary>
         /// The priority class of the spawned process.
@@ -240,7 +244,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>Normal</default>
         [ReflectorProperty("priority", Required = false)]
-        public ProcessPriorityClass Priority = DEFAULT_PRIORITY;
+        public ProcessPriorityClass Priority { get; set; }
 
         protected override bool Execute(IIntegrationResult result)
 		{

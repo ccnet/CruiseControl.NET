@@ -75,6 +75,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		public FilterTrigger(DateTimeProvider dtProvider)
 		{
 			this.dtProvider = dtProvider;
+            this.BuildCondition = BuildCondition.NoBuild; 
 		}
 
         /// <summary>
@@ -82,8 +83,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         /// </summary>
         /// <version>1.0</version>
         /// <default>n/a</default>
-		[ReflectorProperty("trigger", InstanceTypeKey="type")]
-		public ITrigger InnerTrigger;
+        [ReflectorProperty("trigger", InstanceTypeKey = "type")]
+        public ITrigger InnerTrigger { get; set; }
 
         /// <summary>
         /// The start of the filter window. Builds will not occur after this time and before the end time. 
@@ -120,8 +121,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         /// </summary>
         /// <default>NoBuild</default>
         /// <version>1.0</version>
-		[ReflectorProperty("buildCondition", Required=false)]
-		public BuildCondition BuildCondition = BuildCondition.NoBuild;
+        [ReflectorProperty("buildCondition", Required = false)]
+        public BuildCondition BuildCondition { get; set; }
 
 		private bool IsInFilterRange(DateTime now)
 		{

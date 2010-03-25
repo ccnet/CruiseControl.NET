@@ -99,6 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             this.TimeOut = 600;
             this.Threshold = 5;
             this.Width = 2;
+            this.Priority = ProcessPriorityClass.Normal;
         }
         #endregion
 
@@ -120,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>Normal</default>
         [ReflectorProperty("priority", Required = false)]
-        public ProcessPriorityClass Priority = ProcessPriorityClass.Normal;
+        public ProcessPriorityClass Priority { get; set; }
         #endregion
 
         #region InputDir

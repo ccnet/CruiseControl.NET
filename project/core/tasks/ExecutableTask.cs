@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.Diagnostics;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
     /// <summary>
     /// <para>
     /// The Executable Task lets you invoke any command line executable. It doesn't offer as much specific
@@ -90,6 +90,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public ExecutableTask(ProcessExecutor executor)
 		{
 			this.executor = executor;
+            this.Executable = string.Empty;
+            this.Priority = DEFAULT_PRIORITY;
+            this.ConfiguredBaseDirectory = string.Empty;
+            this.BuildArgs = string.Empty;
+            this.EnvironmentVariables = new EnvironmentVariable[0];
+            this.BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
 		}
 
         /// <summary>
@@ -99,8 +105,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <version>1.0</version>
         /// <default>n/a</default>
-		[ReflectorProperty("executable", Required = true)]
-		public string Executable = string.Empty;
+        [ReflectorProperty("executable", Required = true)]
+        public string Executable { get; set; }
 
         /// <summary>
         /// The priority class of the spawned process.
@@ -108,7 +114,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>Normal</default>
         [ReflectorProperty("priority", Required = false)]
-        public ProcessPriorityClass Priority = DEFAULT_PRIORITY;
+        public ProcessPriorityClass Priority { get; set; }
 
         /// <summary>
         /// The directory to run the process in. If relative, is a subdirectory of the Project Working
@@ -117,7 +123,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>Project working directory</default>
         [ReflectorProperty("baseDirectory", Required = false)]
-		public string ConfiguredBaseDirectory = string.Empty;
+        public string ConfiguredBaseDirectory { get; set; }
 
         /// <summary>
         /// Any command line arguments to pass in.
@@ -125,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("buildArgs", Required = false)]
-		public string BuildArgs = string.Empty;
+        public string BuildArgs { get; set; }
 
 		/// <summary>
 		/// A set of environment variables set for commands that are executed.
@@ -133,7 +139,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("environment", Required = false)]
-		public EnvironmentVariable[] EnvironmentVariables = new EnvironmentVariable[0];
+        public EnvironmentVariable[] EnvironmentVariables { get; set; }
 
 		private int[] successExitCodes;
 
@@ -187,7 +193,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>600</default>
         [ReflectorProperty("buildTimeoutSeconds", Required = false)]
-		public int BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
+        public int BuildTimeoutSeconds { get; set; }
 
         /// <summary>
         /// Run the specified executable and add its output to the build results.

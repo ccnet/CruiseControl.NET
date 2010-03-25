@@ -304,6 +304,7 @@
     <Compile Include="CCTrayLib\X10\X10ControllerTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CodeChecks\ReflectorChecks.cs" />
     <Compile Include="Config\CCNetConfigFileValidationTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -944,12 +945,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\Util\XslTransformerTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Core\WorkflowResultTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Core\WorkflowTest.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CustomAssertion.cs">

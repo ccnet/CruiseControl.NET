@@ -1,11 +1,11 @@
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     using System;
-    using System.Text;
     using System.IO;
-    using ThoughtWorks.CruiseControl.Core.Util;
+    using System.Text;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Config;
+    using ThoughtWorks.CruiseControl.Core.Util;
 
     /// <summary>
     /// <para>
@@ -79,6 +79,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			_registry = registry;
 			_fbversion = FinalBuilderVersion.FBUnknown;
 			_fbcmdpath = String.Empty;
+            this.ProjectFile = string.Empty;
 		}
 
 		#endregion
@@ -89,8 +90,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <version>1.3</version>
         /// <default>n/a</default>
-		[ReflectorProperty("ProjectFile", Required = true)]
-		public string ProjectFile = string.Empty;
+        [ReflectorProperty("ProjectFile", Required = true)]
+        public string ProjectFile { get; set; }
 
         /// <summary>
         /// Specify 'true' to enable the "banner" at the top of the FinalBuilder console output.
@@ -98,15 +99,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.3</version>
         /// <default>false</default>
         [ReflectorProperty("ShowBanner", Required = false)]
-		public bool ShowBanner;
+        public bool ShowBanner { get; set; }
 
         /// <summary>
         /// One or more FBVariable elements to pass to FinalBuilder. 
         /// </summary>
         /// <version>1.3</version>
         /// <default>None</default>
-        [ReflectorProperty("FBVariables", Required = false)] 
-		public FBVariable[] FBVariables;
+        [ReflectorProperty("FBVariables", Required = false)]
+        public FBVariable[] FBVariables { get; set; }
 
         /// <summary>
         /// Use this element to explicitly specify a version of FinalBuilder to run (for instance, you could force
@@ -146,7 +147,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.3</version>
         /// <default>false</default>
         [ReflectorProperty("DontWriteToLog", Required = false)]
-		public bool DontWriteToLog;
+        public bool DontWriteToLog { get; set; }
 
         /// <summary>
         /// Log to a temporary log file which is deleted when the project closes. Overrides DontWriteToLog.
@@ -158,7 +159,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// don't want the log file to be updated.
         /// </remarks>
         [ReflectorProperty("UseTemporaryLogFile", Required = false)]
-        public bool UseTemporaryLogFile;
+        public bool UseTemporaryLogFile { get; set; }
 
         /// <summary>
         /// The number of seconds to wait before assuming that the FinalBuilder project has hung and should be killed. 
@@ -166,7 +167,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.3</version>
         /// <default>0</default>
         [ReflectorProperty("Timeout", Required = false)]
-		public int Timeout;
+        public int Timeout { get; set; }
 
         protected override bool Execute(IIntegrationResult result)
 		{

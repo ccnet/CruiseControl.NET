@@ -1033,12 +1033,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="util\ZipCompressionService.cs" />
-    <Compile Include="Workflow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="WorkflowResult.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <EmbeddedResource Include="configuration\ccnet.xsd">
       <SubType>
       </SubType>

@@ -76,6 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             this.NumberToReport = -1;
             this.SortBy = NCoverSortBy.None;
             this.MergeMode = NCoverMergeMode.Default;
+            this.Priority = ProcessPriorityClass.Normal;
         }
         #endregion
 
@@ -130,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>Normal</default>
         [ReflectorProperty("priority", Required = false)]
-        public ProcessPriorityClass Priority = ProcessPriorityClass.Normal;
+        public ProcessPriorityClass Priority { get; set; }
         #endregion
 
         #region CoverageFile

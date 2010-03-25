@@ -65,6 +65,10 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		public ProjectTrigger(ICruiseManagerFactory managerFactory)
 		{
 			this.managerFactory = managerFactory;
+            this.ServerUri = DefaultServerUri;
+            this.TriggerStatus = IntegrationStatus.Success;
+            this.InnerTrigger = ProjectTrigger.NewIntervalTrigger();
+            this.TriggerFirstTime = false;
 		}
 
         /// <summary>
@@ -72,16 +76,16 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         /// </summary>
         /// <version>1.0</version>
         /// <default>n/a</default>
-		[ReflectorProperty("project")]
-		public string Project;
+        [ReflectorProperty("project")]
+        public string Project { get; set; }
 
         /// <summary>
         /// The URI for the CCNet server containing the dependent project.
         /// </summary>
         /// <version>1.0</version>
         /// <default>tcp://localhost:21234/CruiseManager.rem</default>
-		[ReflectorProperty("serverUri", Required=false)]
-		public string ServerUri = DefaultServerUri;
+        [ReflectorProperty("serverUri", Required = false)]
+        public string ServerUri { get; set; }
 
         /// <summary>
         /// The status of the dependent project that will be used to trigger the build. For example, if this value is set to Success then a build will 
@@ -89,8 +93,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         /// </summary>
         /// <version>1.0</version>
         /// <default>Success</default>
-		[ReflectorProperty("triggerStatus", Required=false)]
-		public IntegrationStatus TriggerStatus = IntegrationStatus.Success;
+        [ReflectorProperty("triggerStatus", Required = false)]
+        public IntegrationStatus TriggerStatus { get; set; }
 
         /// <summary>
         /// The trigger used to modulate the polling interval for the ProjectTrigger. By default, this is set to a ForceBuild IntervalTrigger that will cause 
@@ -98,16 +102,16 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         /// </summary>
         /// <version>1.0</version>
         /// <default>5 second ForceBuild intervalTrigger</default>
-		[ReflectorProperty("innerTrigger", InstanceTypeKey="type", Required=false)]
-		public ITrigger InnerTrigger = NewIntervalTrigger();
+        [ReflectorProperty("innerTrigger", InstanceTypeKey = "type", Required = false)]
+        public ITrigger InnerTrigger { get; set; }
 
         /// <summary>
         /// Whether to trigger on the first time or not.
         /// </summary>
         /// <version>1.0</version>
         /// <default>false</default>
-		[ReflectorProperty("triggerFirstTime", Required = false)]
-		public bool TriggerFirstTime = false;
+        [ReflectorProperty("triggerFirstTime", Required = false)]
+        public bool TriggerFirstTime { get; set; }
 
 		public void IntegrationCompleted()
 		{

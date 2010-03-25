@@ -71,6 +71,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             this.Publish = true;
             this.TimeOut = 600;
             this.LogLevel = NCoverLogLevel.Default;
+            this.Priority = ProcessPriorityClass.Normal;
         }
         #endregion
 
@@ -122,7 +123,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>Normal</default>
         [ReflectorProperty("priority", Required = false)]
-        public ProcessPriorityClass Priority = ProcessPriorityClass.Normal;
+        public ProcessPriorityClass Priority { get; set; }
         #endregion
 
         #region TimeOut

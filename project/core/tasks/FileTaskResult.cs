@@ -1,10 +1,9 @@
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     using System;
     using System.IO;
     using System.Runtime;
+    using ThoughtWorks.CruiseControl.Core.Util;
 
     /// <summary>
     /// A <see cref="ITaskResult"/> that reads the data directly from a file.
