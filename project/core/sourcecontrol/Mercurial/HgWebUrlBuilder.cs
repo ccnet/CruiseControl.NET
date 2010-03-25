@@ -1,7 +1,7 @@
-using Exortech.NetReflector;
-
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 {
+    using Exortech.NetReflector;
+
     /// <summary>
     /// Build a Mercurial URL.
     /// </summary>
@@ -22,8 +22,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         /// </summary>
         /// <version>1.5</version>
         /// <default>n/a</default>
-        [ReflectorProperty("url")] 
-        public string Url;
+        [ReflectorProperty("url")]
+        public string Url { get; set; }
 
         public void SetupModification(Modification[] modifications)
         {

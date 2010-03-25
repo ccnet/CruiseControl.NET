@@ -6,16 +6,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
     [ReflectorType("modification")]
     public class MercurialModification
     {
-        [ReflectorProperty("node")] public string Version;
+        [ReflectorProperty("node")]
+        public string Version { get; set; }
 
-        [ReflectorProperty("date")] public string ModificationTime;
+        [ReflectorProperty("date")]
+        public string ModificationTime { get; set; }
 
         public string Type
         {
             get { return "Changeset"; }
         }
 
-        [ReflectorProperty("files")] public string FileName;
+        [ReflectorProperty("files")]
+        public string FileName { get; set; }
 
         public DateTime ModifiedTime
         {
@@ -23,10 +26,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
             set { ModificationTime = value.ToString(); }
         }
 
-        [ReflectorProperty("author")] public string UserName;
-        [ReflectorProperty("rev")] public int ChangeNumber;
-        [ReflectorProperty("desc")] public string Comment;
-        [ReflectorProperty("email")] public string EmailAddress;
+        [ReflectorProperty("author")]
+        public string UserName { get; set; }
+
+        [ReflectorProperty("rev")]
+        public int ChangeNumber { get; set; }
+
+        [ReflectorProperty("desc")]
+        public string Comment { get; set; }
+
+        [ReflectorProperty("email")]
+        public string EmailAddress { get; set; }
+
 
         public static implicit operator Modification(MercurialModification hg)
         {

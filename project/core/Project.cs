@@ -1,27 +1,27 @@
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.IO;
-using System.Xml;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Config;
-using ThoughtWorks.CruiseControl.Core.Label;
-using ThoughtWorks.CruiseControl.Core.Publishers;
-using ThoughtWorks.CruiseControl.Core.Publishers.Statistics;
-using ThoughtWorks.CruiseControl.Core.Security;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
-using ThoughtWorks.CruiseControl.Core.State;
-using ThoughtWorks.CruiseControl.Core.Tasks;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
-using System.Collections.Generic;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
-using System.Text;
-using System.Runtime;
-using ThoughtWorks.CruiseControl.Core.Triggers;
-
 namespace ThoughtWorks.CruiseControl.Core
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.IO;
+    using System.Runtime;
+    using System.Text;
+    using System.Xml;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Config;
+    using ThoughtWorks.CruiseControl.Core.Label;
+    using ThoughtWorks.CruiseControl.Core.Publishers;
+    using ThoughtWorks.CruiseControl.Core.Publishers.Statistics;
+    using ThoughtWorks.CruiseControl.Core.Security;
+    using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+    using ThoughtWorks.CruiseControl.Core.State;
+    using ThoughtWorks.CruiseControl.Core.Tasks;
+    using ThoughtWorks.CruiseControl.Core.Triggers;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.Remote.Parameters;
+
     /// <summary>
     /// A &lt;project&gt; block defines all the configuration for one project running in a CruiseControl.NET server.
     /// </summary>
@@ -111,19 +111,15 @@ namespace ThoughtWorks.CruiseControl.Core
         private Dictionary<ITask, ItemStatus> currentProjectItems = new Dictionary<ITask, ItemStatus>();
         private Dictionary<SourceControlOperation, ItemStatus> sourceControlOperations = new Dictionary<SourceControlOperation, ItemStatus>();
 
+        #region Constructors
         /// <summary>
-        /// A set of Tasks to run before the build starts and before the source is updated. A failed task will fail the build and any
-        /// subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration. 
+        /// Initializes a new instance of the <see cref="Project"/> class.
         /// </summary>
-        /// <version>1.1</version>
-        /// <default>None</default>
-        [ReflectorProperty("prebuild", Required = false)]
-        public ITask[] PrebuildTasks = new ITask[0];
-
         public Project()
         {
             integrationResultManager = new IntegrationResultManager(this);
             integratable = new IntegrationRunner(integrationResultManager, this, quietPeriod);
+            this.PrebuildTasks = new ITask[0];
 
             // Generates the initial snapshot
             currentProjectStatus = new ProjectStatusSnapshot();
@@ -147,11 +143,25 @@ namespace ThoughtWorks.CruiseControl.Core
             };
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Project"/> class.
+        /// </summary>
+        /// <param name="integratable">The integratable.</param>
         public Project(IIntegratable integratable)
             : this()
         {
             this.integratable = integratable;
         }
+        #endregion
+
+        /// <summary>
+        /// A set of Tasks to run before the build starts and before the source is updated. A failed task will fail the build and any
+        /// subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration. 
+        /// </summary>
+        /// <version>1.1</version>
+        /// <default>None</default>
+        [ReflectorProperty("prebuild", Required = false)]
+        public ITask[] PrebuildTasks { get; set; }
 
         /// <summary>
         /// Any security for the project.

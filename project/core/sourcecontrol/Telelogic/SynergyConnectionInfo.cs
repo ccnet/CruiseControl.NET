@@ -1,11 +1,11 @@
-using System;
-using System.Globalization;
-using System.IO;
-using Exortech.NetReflector;
-
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 {
-	/// <summary>
+    using System;
+    using System.Globalization;
+    using System.IO;
+    using Exortech.NetReflector;
+
+    /// <summary>
 	/// A CM Synergy client session.
 	/// </summary>
     /// <title>Synergy Client Session</title>
@@ -108,7 +108,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("host")]
-		public string Host;
+        public string Host { get; set; }
 
 		/// <summary>
 		/// Network path to the Synergy database instance
@@ -116,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("database")]
-		public string Database;
+        public string Database { get; set; }
 
 		/// <summary>
 		/// The configured database delimiter for object and project specifications.
@@ -162,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("polling", Required = false)]
-		public bool PollingEnabled;
+        public bool PollingEnabled { get; set; }
 
 		/// <summary>
 		/// The username for the Synergy session. Can include environmental variables to be replaced.
@@ -203,7 +203,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
         /// <version>1.0</version>
         /// <default>build_mgr</default>
         [ReflectorProperty("role", Required = false)]
-		public string Role;
+        public string Role { get; set; }
 
 		/// <summary>
 		/// The full physical path of the home directory for the associated Username on the client machine. Can include environmental variables to be replaced.
@@ -241,7 +241,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
         /// <version>1.0</version>
         /// <default>3600</default>
         [ReflectorProperty("timeout", Required = false)]
-		public int Timeout;
+        public int Timeout { get; set; }
 
 		public IFormatProvider FormatProvider = CultureInfo.CurrentCulture;
 		

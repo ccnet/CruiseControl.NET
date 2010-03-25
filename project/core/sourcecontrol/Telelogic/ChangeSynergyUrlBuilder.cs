@@ -47,8 +47,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// </summary>
         /// <version>1.0</version>
         /// <default>None</default>
-		[ReflectorProperty("database", Required=false)]
-		public string Database;
+        [ReflectorProperty("database", Required = false)]
+        public string Database { get; set; }
 
 		/// <summary>
 		/// The username to use for ChangeSynergy access.
@@ -124,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
         /// <version>1.0</version>
         /// <default>User</default>
         [ReflectorProperty("role", Required = false)]
-		public string Role;
+        public string Role { get; set; }
 
 		/// <summary>
 		/// The root path to the ChangeSynergy installation.
@@ -139,7 +139,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("url")]
-		public string Url;
+        public string Url { get; set; }
 
 		/// <summary>
 		///     Copies the database path from the CM Synergy session for use with the

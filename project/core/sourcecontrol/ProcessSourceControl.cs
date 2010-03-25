@@ -116,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.4</version>
         /// <default>None</default>
         [ReflectorProperty("issueUrlBuilder", InstanceTypeKey = "type", Required = false)]
-        public IModificationUrlBuilder IssueUrlBuilder;
+        public IModificationUrlBuilder IssueUrlBuilder { get; set; }
 
         protected void FillIssueUrl(Modification[] modifications)
         {

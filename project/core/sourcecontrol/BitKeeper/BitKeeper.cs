@@ -39,19 +39,47 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 	{
 		public const string DefaultExecutable = @"C:\Program Files\BitKeeper\bk.exe";
 
-		public BitKeeper(IHistoryParser parser, ProcessExecutor executor) : base(parser, executor)
-		{}
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BitKeeper"/> class.
+        /// </summary>
+        /// <param name="parser">The parser.</param>
+        /// <param name="executor">The executor.</param>
+        public BitKeeper(IHistoryParser parser, ProcessExecutor executor) : base(parser, executor)
+		{
+            this.InitialiseDefaults();
+        }
 
-		public BitKeeper() : base(new BitKeeperHistoryParser())
-		{}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BitKeeper"/> class.
+        /// </summary>
+        public BitKeeper()
+            : base(new BitKeeperHistoryParser())
+        {
+            this.InitialiseDefaults();
+        }
+        #endregion
 
-		/// <summary>
+        /// <summary>
+        /// Initialises the defaults.
+        /// </summary>
+        private void InitialiseDefaults()
+        {
+            this.Executable = DefaultExecutable;
+            this.WorkingDirectory = string.Empty;
+            this.TagOnSuccess = false;
+            this.AutoGetSource = true;
+            this.FileHistory = false;
+            this.CloneTo = string.Empty;
+        }
+
+        /// <summary>
 		/// Absolute, DOS-style, path to bk.exe.
 		/// </summary>
         /// <version>1.0</version>
         /// <default>c:\Program Files\BitKeeper\bk.exe</default>
-		[ReflectorProperty("executable", Required=false)]
-		public string Executable = DefaultExecutable;
+        [ReflectorProperty("executable", Required = false)]
+        public string Executable { get; set; }
 
 		/// <summary>
 		/// Absolute, DOS-style, path to permanent BK repository.
@@ -59,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
         /// <version>1.0</version>
         /// <default>Project Working Directory</default>
         [ReflectorProperty("workingDirectory", Required = true)]
-		public string WorkingDirectory = string.Empty;
+        public string WorkingDirectory { get; set; }
 
 		/// <summary>
 		/// Add BK tag on successful build.
@@ -67,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("tagOnSuccess", Required = false)]
-		public bool TagOnSuccess = false;
+        public bool TagOnSuccess { get; set; }
 
 		/// <summary>
 		/// Automatically pull latest source into permanent BK repository.
@@ -75,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
         /// <version>1.0</version>
         /// <default>true</default>
         [ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = true;
+        public bool AutoGetSource { get; set; }
 
 		/// <summary>
 		/// Include history of each file, rather than just ChangeSets.
@@ -83,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("fileHistory", Required = false)]
-		public bool FileHistory = false;
+        public bool FileHistory { get; set; }
 
 		/// <summary>
 		/// Make a clone of the permanent BK repository into the designated path. The DOS-style path can be relative to WorkingDirectory or
@@ -92,7 +120,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("cloneTo", Required = false)]
-		public string CloneTo = string.Empty;
+        public string CloneTo { get; set; }
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{

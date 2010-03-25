@@ -15,12 +15,20 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	[ReflectorType("assemblyMatch")]
 	public class AssemblyMatch
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AssemblyMatch"/> class.
+        /// </summary>
+        public AssemblyMatch()
+        {
+            this.Expression = string.Empty;
+        }
+
 		/// <summary>
 		/// The name expression of the assembly, e.g. "*.dll". Masks (? and *) are allowed.
 		/// </summary>
         /// <version>1.4.3</version>
         /// <default>n/a</default>
-		[ReflectorProperty("expr", Required = true)]
-		public string Expression = string.Empty;
+        [ReflectorProperty("expr", Required = true)]
+        public string Expression { get; set; }
 	}
 }

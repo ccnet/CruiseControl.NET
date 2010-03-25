@@ -6,6 +6,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
     public class MercurialModificationCollection
     {
         [ReflectorProperty("array")]
-        public MercurialModification[] modifications;
+        public MercurialModification[] modifications { get; set; }
     }
 }

@@ -4,9 +4,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
-    using System.Xml;
     using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Core.Tasks;
 
     /// <summary>
@@ -76,6 +74,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         public const string XmlFileName = "report.xml";
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="StatisticsPublisher"/> class.
+        /// </summary>
+        public StatisticsPublisher()
+        {
+            this.ConfiguredStatistics = new Statistic[0];
+        }
+
+        /// <summary>
         /// The list of statistics to be included in the build.
         /// </summary>
         /// <remarks>
@@ -87,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// <default>None</default>
         /// <version>1.0</version>
         [ReflectorProperty("statisticList", Required = false)]
-        public StatisticBase[] ConfiguredStatistics = new Statistic[0];
+        public StatisticBase[] ConfiguredStatistics { get; set; }
 
         #region ITask Members
 

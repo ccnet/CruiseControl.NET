@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("name", Required = true)]
-        public string name;
+        public string name { get; set; }
 
         /// <summary>
         /// The value of the environment variable.

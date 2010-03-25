@@ -1,11 +1,11 @@
-using System;
-using System.IO;
-using System.Text;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 {
+    using System;
+    using System.IO;
+    using System.Text;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
     /// <summary>
     /// Provides basic support for Mercurial repositories. Checking for changes, checking out or updating sources, and tagging are supported.
     /// </summary>
@@ -47,13 +47,40 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         private readonly IFileSystem _fileSystem;
         private BuildProgressInformation _buildProgressInformation;
 
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Mercurial"/> class.
+        /// </summary>
+        public Mercurial()
+            : this(new MercurialHistoryParser(), new ProcessExecutor(), new SystemIoFileSystem())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Mercurial"/> class.
+        /// </summary>
+        /// <param name="historyParser">The history parser.</param>
+        /// <param name="executor">The executor.</param>
+        /// <param name="fileSystem">The file system.</param>
+        public Mercurial(IHistoryParser historyParser, ProcessExecutor executor, IFileSystem fileSystem)
+            : base(historyParser, executor)
+        {
+            _fileSystem = fileSystem;
+            this.AutoGetSource = true;
+            this.Executable = DefaultExecutable;
+            this.MultipleHeadsFail = true;
+            this.TagCommitMessage = DefaultTagCommitMessage;
+            this.TagOnSuccess = false;
+        }
+        #endregion
+
         /// <summary>
         /// Whether to update the local working copy from the local repository for a particular build. 
         /// </summary>
         /// <version>1.5</version>
         /// <default>true</default>
-        [ReflectorProperty("autoGetSource", Required = false)] 
-        public bool AutoGetSource = true;
+        [ReflectorProperty("autoGetSource", Required = false)]
+        public bool AutoGetSource { get; set; }
 
         /// <summary>
         /// Repository branch.
@@ -61,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         /// <version>1.5</version>
         /// <default>None</default>
         [ReflectorProperty("branch", Required = false)]
-        public string Branch;
+        public string Branch { get; set; }
 
         /// <summary>
         /// The location of the hg executable.
@@ -69,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         /// <version>1.5</version>
         /// <default>hg</default>
         [ReflectorProperty("executable", Required = false)]
-        public string Executable = DefaultExecutable;
+        public string Executable { get; set; }
 
         /// <summary>
         /// Should the build fail if the local repository has multiple heads?
@@ -77,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         /// <version>1.5</version>
         /// <default>true</default>
         [ReflectorProperty("multipleHeadsFail", Required = false)]
-        public bool MultipleHeadsFail = true;
+        public bool MultipleHeadsFail { get; set; }
 
         /// <summary>
         /// The url for your repository (e.g., http://hgserver/myproject/).
@@ -88,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         /// This is required if autoGetSource is true.
         /// </remarks>
         [ReflectorProperty("repo", Required = false)]
-        public string Repo;
+        public string Repo { get; set; }
 
         /// <summary>
         /// String format for tags in your repository.
@@ -96,7 +123,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         /// <version>1.5</version>
         /// <default>Tagging successful build \{0\}</default>
         [ReflectorProperty("tagCommitMessage", Required = false)]
-        public string TagCommitMessage = DefaultTagCommitMessage;
+        public string TagCommitMessage { get; set; }
 
         /// <summary>
         /// Indicates that the repository should be tagged if the build succeeds.
@@ -104,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         /// <version>1.5</version>
         /// <default>false</default>
         [ReflectorProperty("tagOnSuccess", Required = false)]
-        public bool TagOnSuccess = false;
+        public bool TagOnSuccess { get; set; }
 
         /// <summary>
         /// The directory containing the locally checked out workspace.
@@ -112,7 +139,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         /// <version>1.5</version>
         /// <default>Project Working Directory</default>
         [ReflectorProperty("workingDirectory", Required = false)]
-        public string WorkingDirectory;
+        public string WorkingDirectory { get; set; }
 
         /// <summary>
         /// Generates a web URL.
@@ -120,12 +147,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         /// <version>1.5</version>
         /// <default>None</default>
         [ReflectorProperty("webUrlBuilder", InstanceTypeKey = "type", Required = false)]
-        public IModificationUrlBuilder UrlBuilder;
-
-        public Mercurial() : this(new MercurialHistoryParser(), new ProcessExecutor(), new SystemIoFileSystem()) { }
-
-        public Mercurial(IHistoryParser historyParser, ProcessExecutor executor, IFileSystem fileSystem)
-            : base(historyParser, executor) { _fileSystem = fileSystem; }
+        public IModificationUrlBuilder UrlBuilder { get; set; }
 
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {

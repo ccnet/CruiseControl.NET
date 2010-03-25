@@ -1,14 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
     /// <summary>
     /// Perforce source control block.
     /// </summary>
@@ -78,6 +78,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			processInfoCreator = new P4ConfigProcessInfoCreator();
 			p4Initializer = new ProcessP4Initializer(processExecutor, processInfoCreator);
 			p4Purger = new ProcessP4Purger(processExecutor, processInfoCreator);
+            this.InitialiseDefaults();
 		}
 
 		public P4(ProcessExecutor processExecutor, IP4Initializer initializer, IP4Purger p4Purger, IP4ProcessInfoCreator processInfoCreator)
@@ -86,6 +87,27 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			p4Initializer = initializer;
 			this.processInfoCreator = processInfoCreator;
 			this.p4Purger = p4Purger;
+            this.InitialiseDefaults();
+        }
+
+        /// <summary>
+        /// Initialises the defaults.
+        /// </summary>
+        private void InitialiseDefaults()
+        {
+            this.Executable = "p4";
+            this.Client = string.Empty;
+            this.User = string.Empty;
+            this.Password = string.Empty;
+            this.Port = string.Empty;
+            this.WorkingDirectory = string.Empty;
+            this.ApplyLabel = false;
+            this.AutoGetSource = true;
+            this.ForceSync = false;
+            this.TimeZoneOffset = 0;
+            this.ErrorPattern = DEFAULT_ERROR_PATTERN;
+            this.UseExitCode = false;
+            this.AcceptableErrors = new string[1] { FILES_UP_TO_DATE_PATTERN };
 		}
 
         /// <summary>
@@ -93,8 +115,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// </summary>
         /// <version>1.0</version>
         /// <default>p4</default>
-		[ReflectorProperty("executable", Required=false)]
-		public string Executable = "p4";
+        [ReflectorProperty("executable", Required = false)]
+        public string Executable { get; set; }
 
         /// <summary>
         /// The perforce 'view' to check for changes. For 'multi-line' views, use a comma-separated list. 'Exclusionary' view lines starting
@@ -104,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("view")]
-		public string View;
+        public string View { get; set; }
 
         /// <summary>
         /// The perforce 'client' to use.
@@ -112,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// <version>1.0</version>
         /// <default>Performance environment setting</default>
         [ReflectorProperty("client", Required = false)]
-		public string Client = string.Empty;
+        public string Client { get; set; }
 
         /// <summary>
         /// The perforce user to use.
@@ -120,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// <version>1.0</version>
         /// <default>Performance environment setting</default>
         [ReflectorProperty("user", Required = false)]
-		public string User = string.Empty;
+        public string User { get; set; }
 
         /// <summary>
         /// The perforce password to use.
@@ -128,7 +150,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// <version>1.0</version>
         /// <default>Performance environment setting</default>
         [ReflectorProperty("password", Required = false)]
-		public string Password = string.Empty;
+        public string Password { get; set; }
 
         /// <summary>
         /// The perforce hostname and port to use.
@@ -136,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// <version>1.0</version>
         /// <default>Performance environment setting</default>
         [ReflectorProperty("port", Required = false)]
-		public string Port = string.Empty;
+        public string Port { get; set; }
 
         /// <summary>
         /// The working directory to use.
@@ -144,7 +166,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// <version>1.0</version>
         /// <default>Project Working Directory</default>
         [ReflectorProperty("workingDirectory", Required = false)]
-		public string WorkingDirectory = string.Empty;
+        public string WorkingDirectory { get; set; }
 
         /// <summary>
         /// Whether to apply a label on a successful build.
@@ -152,7 +174,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("applyLabel", Required = false)]
-		public bool ApplyLabel = false;
+        public bool ApplyLabel { get; set; }
 
         /// <summary>
         /// Whether to automatically 'sync' the latest changes from source control before performing the build. The sync target is the entire
@@ -161,7 +183,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// <version>1.0</version>
         /// <default>true</default>
         [ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = true;
+        public bool AutoGetSource { get; set; }
 
         /// <summary>
         /// If autoGetSource is set to true, then whether to use the -f option to sync. See
@@ -170,7 +192,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("forceSync", Required = false)]
-		public bool ForceSync = false;
+        public bool ForceSync { get; set; }
 
         /// <summary>
         /// Creates a link to the P4Web change list page for each detected modification. The specified value is transformed using String.Format
@@ -179,7 +201,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty(@"p4WebURLFormat", Required = false)]
-		public string P4WebURLFormat;
+        public string P4WebURLFormat { get; set; }
 
         /// <summary>
         /// How many hours ahead your Perforce Server is from your build server. E.g. if your build server is in London, and your Perforce
@@ -188,7 +210,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// <version>1.0</version>
         /// <default>0</default>
         [ReflectorProperty("timeZoneOffset", Required = false)]
-		public double TimeZoneOffset = 0;
+        public double TimeZoneOffset { get; set; }
 
         /// <summary>
         /// The error pattern to use.
@@ -196,7 +218,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// <version>1.0</version>
         /// <default>^error: .*</default>
         [ReflectorProperty("errorPattern", Required = false)]
-        public string ErrorPattern = DEFAULT_ERROR_PATTERN;
+        public string ErrorPattern { get; set; }
 
         /// <summary>
         /// Whether to use exit codes.
@@ -204,7 +226,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("useExitCode", Required = false)]
-        public bool UseExitCode = false;
+        public bool UseExitCode { get; set; }
 
         /// <summary>
         /// The acceptable errors.
@@ -212,7 +234,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// <version>1.0</version>
         /// <default>file\(s\) up-to-date\.</default>
         [ReflectorProperty("acceptableErrors", Required = false)]
-        public string[] AcceptableErrors = new string[1] { FILES_UP_TO_DATE_PATTERN };
+        public string[] AcceptableErrors { get; set; }
 
 
 		private string BuildModificationsCommandArguments(DateTime from, DateTime to)
@@ -498,7 +520,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("issueUrlBuilder", InstanceTypeKey = "type", Required = false)]
-        public IModificationUrlBuilder IssueUrlBuilder;
+        public IModificationUrlBuilder IssueUrlBuilder { get; set; }
 
 
         private void FillIssueUrl(Modification[] modifications)

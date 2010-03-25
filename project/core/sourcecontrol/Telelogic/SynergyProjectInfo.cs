@@ -1,9 +1,9 @@
-using System;
-using Exortech.NetReflector;
-
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 {
-	/// <summary>
+    using System;
+    using Exortech.NetReflector;
+
+    /// <summary>
 	/// A CM Synergy project (which is similar to a "view" in other SCM packages).
 	/// </summary>
     /// <title>Synergy Project</title>
@@ -29,7 +29,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <summary>The default value for <see cref="Purpose"/></summary>
 		public const string DefaultPurpose = "Integration Testing";
 
-		/// <summary>
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SynergyProjectInfo"/> class.
+        /// </summary>
+        public SynergyProjectInfo()
+        {
+            this.TaskFolder = DefaultTaskFolder;
+            this.BaseliningEnabled = false;
+            this.TemplateEnabled = false;
+            this.Purpose = DefaultPurpose;
+        }
+        #endregion
+
+        /// <summary>
 		/// The configured Synergy release value for the given project.
 		/// </summary>
 		/// <remarks>
@@ -40,8 +53,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// </value>
         /// <version>1.0</version>
         /// <default>n/a</default>
-		[ReflectorProperty("release")]
-		public string Release;
+        [ReflectorProperty("release")]
+        public string Release { get; set; }
 
 		/// <summary>
 		/// The configured Synergy project specification for all source control operations.
@@ -52,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("projectSpecification")]
-		public string ProjectSpecification;
+        public string ProjectSpecification { get; set; }
 
 		/// <summary>
 		/// The 4 part object identifier for this project.
@@ -86,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
         /// <version>1.0</version>
         /// <default>0</default>
         [ReflectorProperty("taskFolder", Required = false)]
-		public int TaskFolder = DefaultTaskFolder;
+        public int TaskFolder { get; set; }
 
 		/// <summary>
 		/// If true, creates a new baseline for the project configuration after a successful integration.
@@ -101,7 +114,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
         /// <version>1.0</version>
         /// <default>0</default>
         [ReflectorProperty("baseline", Required = false)]
-		public bool BaseliningEnabled = false;
+        public bool BaseliningEnabled { get; set; }
 
 		/// <summary>
 		/// If true, resets the reconfigure properties for this project and all subprojects to use the reconfigure template.
@@ -116,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("template", Required = false)]
-		public bool TemplateEnabled = false;
+        public bool TemplateEnabled { get; set; }
 
 		/// <summary>
 		/// If enabled, updates the work area from the database, discarding all uncontrolled files in the work area and changes to static objects.
@@ -130,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("reconcile", Required = false)]
-		public string[] ReconcilePaths;
+        public string[] ReconcilePaths { get; set; }
 
 		/// <summary>
 		/// Synergy purpose specification for the project and any created baselines.
@@ -141,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
         /// <version>1.0</version>
         /// <default>Integration Testing</default>
         [ReflectorProperty("purpose", Required = false)]
-		public string Purpose = DefaultPurpose;
+        public string Purpose { get; set; }
 
 		/// <summary>
 		///     The timestamp of when the integration project was last reconfigured.
