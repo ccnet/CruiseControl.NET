@@ -1,11 +1,11 @@
-﻿using System;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
-
-namespace ThoughtWorks.CruiseControl.Core.Label
+﻿namespace ThoughtWorks.CruiseControl.Core.Label
 {
-	/// <summary>
+    using System;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using ThoughtWorks.CruiseControl.Remote;
+
+    /// <summary>
     /// Provides a valid System.Version label for your .NET assemblies that could be used to set the AssemblyVersionAttribute(). It increments
     /// the build number on every successful integration and uses the CruiseControl.NET change number, provided by source control systems like
     /// Subversion, for the revision number component.
@@ -36,16 +36,26 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 	[ReflectorType("assemblyVersionLabeller")]
 	public class AssemblyVersionLabeller
         : LabellerBase
-	{
-		#region public properties
+    {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AssemblyVersionLabeller"/> class.
+        /// </summary>
+        public AssemblyVersionLabeller()
+        {
+            this.Build = -1;
+            this.Revision = -1;
+        }
+        #endregion
 
-		/// <summary>
+        #region public properties
+        /// <summary>
         /// Major number component of the version. 
 		/// </summary>
         /// <version>1.4.4</version>
         /// <default>0</default>
-		[ReflectorProperty("major", Required = false)]
-		public int Major;
+        [ReflectorProperty("major", Required = false)]
+        public int Major { get; set; }
 
 		/// <summary>
         /// Minor number component of the version. 
@@ -53,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// <version>1.4.4</version>
         /// <default>0</default>
         [ReflectorProperty("minor", Required = false)]
-		public int Minor;
+        public int Minor { get; set; }
 
 		/// <summary>
         /// Build number component of the version. If not specified the build number is incremented on every successful integration. 
@@ -61,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// <version>1.4.4</version>
         /// <default>-1</default>
         [ReflectorProperty("build", Required = false)]
-		public int Build = -1;
+        public int Build { get; set; }
 
 		/// <summary>
         /// Revision number component of the version. If not specified the revision number is the LastChangeNumber, provided by some VCS (e.g.
@@ -70,7 +80,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// <version>1.4.4</version>
         /// <default>-1</default>
         [ReflectorProperty("revision", Required = false)]
-		public int Revision = -1;
+        public int Revision { get; set; }
 
 		/// <summary>
         /// Whether to increase the build number component if the integration fails. By default the build number component will only increase
@@ -79,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// <version>1.4.4</version>
         /// <default>false</default>
         [ReflectorProperty("incrementOnFailure", Required = false)]
-		public bool IncrementOnFailure;
+        public bool IncrementOnFailure { get; set; }
 
 		#endregion
 

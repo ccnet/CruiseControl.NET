@@ -1,10 +1,10 @@
-using System.IO;
-using System.Xml.Serialization;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    using System.IO;
+    using System.Xml.Serialization;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
     /// <summary>
     /// <para>
     /// This task writes the detected modifications for the current integration to a file as XML. This enables the modifications to be used
@@ -103,6 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         public ModificationWriterTask(IFileSystem fileSystem)
         {
             this.fileSystem = fileSystem;
+            this.Filename = "modifications.xml";
         }
 
         protected override bool Execute(IIntegrationResult result)
@@ -138,7 +139,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>modifications.xml</default>
         [ReflectorProperty("filename", Required = false)]
-        public string Filename = "modifications.xml";
+        public string Filename { get; set; }
 
         /// <summary>
         /// The directory to write the xml file to. 
@@ -146,7 +147,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>Project Artefact Directory</default>
         [ReflectorProperty("path", Required = false)]
-        public string OutputPath;
+        public string OutputPath { get; set; }
 
         /// <summary>
         /// Appends the integration start time to the filename, just before the extention. Making it possible to create a modification file
@@ -155,6 +156,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("appendTimeStamp", Required = false)]
-        public bool AppendTimeStamp;
+        public bool AppendTimeStamp { get; set; }
     }
 }

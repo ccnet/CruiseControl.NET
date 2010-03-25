@@ -1,9 +1,8 @@
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.State;
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.State;
+
     /// <summary>
     /// This labeller retrieves the last successful integration label for a project using the project's state file. You can use this labeller
     /// if you have split your build across multiple projects and you want to use a consistent version across all builds.
@@ -36,8 +35,8 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// </summary>
         /// <version>1.0</version>
         /// <default>n/a</default>
-		[ReflectorProperty("project")]
-		public string Project;
+        [ReflectorProperty("project")]
+        public string Project { get; set; }
 
 		public override string Generate(IIntegrationResult integrationResult)
 		{

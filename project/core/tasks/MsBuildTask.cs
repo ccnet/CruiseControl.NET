@@ -4,7 +4,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     using System.Collections;
     using System.Diagnostics;
     using System.IO;
-    using System.Reflection;
     using System.Text;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Util;
@@ -62,7 +61,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			this.executionEnvironment = executionEnvironment;
 			this.shadowCopier = shadowCopier;
 
-			Executable = GetDefaultExecutable();
+			this.Executable = GetDefaultExecutable();
+            this.Timeout = DefaultTimeout;
+            this.Priority = ProcessPriorityClass.Normal;
         }
 
         #region Public fields
@@ -72,8 +73,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <version>1.0</version>
         /// <default>MSBuild with .NET Framework, xbuild on Unix with Mono.</default>
-        [ReflectorProperty("executable", Required=false)]
-		public string Executable;
+        [ReflectorProperty("executable", Required = false)]
+        public string Executable { get; set; }
         #endregion
 
         #region WorkingDirectory
@@ -84,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>Project Working Directory</default>
         [ReflectorProperty("workingDirectory", Required = false)]
-		public string WorkingDirectory;
+        public string WorkingDirectory { get; set; }
         #endregion
 
         #region ProjectFile
@@ -94,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>Default MSBuild file.</default>
         [ReflectorProperty("projectFile", Required = false)]
-		public string ProjectFile;
+        public string ProjectFile { get; set; }
         #endregion
 
         #region BuildArgs
@@ -104,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("buildArgs", Required = false)]
-		public string BuildArgs;
+        public string BuildArgs { get; set; }
         #endregion
 
         #region Targets
@@ -114,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>Default project target.</default>
         [ReflectorProperty("targets", Required = false)]
-		public string Targets;
+        public string Targets { get; set; }
         #endregion
 
         #region Logger
@@ -126,7 +127,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>ThoughtWorks.CruiseControl.MsBuild.XmlLogger, ThoughtWorks.CruiseControl.MsBuild.dll</default>
         [ReflectorProperty("logger", Required = false)]
-		public string Logger;
+        public string Logger { get; set; }
         #endregion
 
         #region Timeout
@@ -136,7 +137,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>600</default>
         [ReflectorProperty("timeout", Required = false)]
-		public int Timeout = DefaultTimeout;
+        public int Timeout { get; set; }
         #endregion
 
         #region Priority
@@ -146,7 +147,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.5</version>
         /// <default>Normal</default>
         [ReflectorProperty("priority", Required = false)]
-        public ProcessPriorityClass Priority = ProcessPriorityClass.Normal;
+        public ProcessPriorityClass Priority { get; set; }
         #endregion
 
         #endregion

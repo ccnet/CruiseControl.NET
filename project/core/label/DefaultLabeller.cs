@@ -1,9 +1,9 @@
-using System.Text.RegularExpressions;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Remote;
-
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
+    using System.Text.RegularExpressions;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Remote;
+
     /// <summary>
     /// <para>
     /// By default, CCNet uses a plain incrementing build number as a build label. Some source controls (e.g. <link>Perforce Source Control
@@ -31,13 +31,27 @@ namespace ThoughtWorks.CruiseControl.Core.Label
     {
         public const int INITIAL_LABEL = 1;
 
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultLabeller"/> class.
+        /// </summary>
+        public DefaultLabeller()
+        {
+            this.LabelPrefix = string.Empty;
+            this.LabelPostfix = string.Empty;
+            this.InitialBuildLabel = INITIAL_LABEL;
+            this.IncrementOnFailed = false;
+            this.LabelFormat = "0";
+        }
+        #endregion
+
         /// <summary>
         /// Any string to be put in front of all labels.
         /// </summary>
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("prefix", Required = false)]
-        public string LabelPrefix = string.Empty;
+        public string LabelPrefix { get; set; }
 
         /// <summary>
         /// Any string to be put at the end of all labels.
@@ -45,15 +59,15 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("postfix", Required = false)]
-        public string LabelPostfix = string.Empty;
+        public string LabelPostfix { get; set; }
 
         /// <summary>
         /// Allows you to set the initial build number.
         /// </summary>
         /// <version>1.5</version>
         /// <default>1</default>
-		[ReflectorProperty("initialBuildLabel", Required = false)]
-		public int InitialBuildLabel = INITIAL_LABEL;
+        [ReflectorProperty("initialBuildLabel", Required = false)]
+        public int InitialBuildLabel { get; set; }
 
         /// <summary>
         /// If true, the label will be incremented even if the build fails. Otherwise it will only be incremented if the build succeeds. 
@@ -61,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// <version>1.1</version>
         /// <default>false</default>
         [ReflectorProperty("incrementOnFailure", Required = false)]
-        public bool IncrementOnFailed = false;
+        public bool IncrementOnFailed { get; set; }
 
         /// <summary>
         /// A format applied to the buildnumber. 
@@ -69,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// <version>1.0</version>
         /// <default>0</default>
         [ReflectorProperty("labelFormat", Required = false)]
-        public string LabelFormat = "0";
+        public string LabelFormat { get; set; }
 
         public override string Generate(IIntegrationResult integrationResult)
         {

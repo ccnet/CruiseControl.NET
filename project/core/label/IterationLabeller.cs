@@ -1,13 +1,13 @@
-using System;
-using System.Text;
-using System.Text.RegularExpressions;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
-
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
-	/// <summary>
+    using System;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using ThoughtWorks.CruiseControl.Remote;
+
+    /// <summary>
     /// The Iteration Labeller is similar to the <link>Default Labeller</link>; however, it maintains a revision number that is incremented by
     /// one for each iteration from the release start date. For example, if the release start date was June 1, 2005 and the iteration duration
     /// was 2 weeks, the iteration number on July 1, 2005 would be 3. This would create a label of &lt;prefix&gt;.3.&lt;build number&gt;.
@@ -41,6 +41,8 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 		public IterationLabeller(DateTimeProvider dateTimeProvider)
 		{
 			this.dateTimeProvider = dateTimeProvider;
+            this.Duration = 2;
+            this.Separator = ".";
 		}
 
 		/// <summary>
@@ -48,24 +50,24 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 		/// </summary>
         /// <version>1.0</version>
         /// <default>2</default>
-		[ReflectorProperty("duration", Required=false)]
-		public int Duration = 2;
+        [ReflectorProperty("duration", Required = false)]
+        public int Duration { get; set; }
 
         /// <summary>
         /// The start date for the release (the start date of iteration one).
         /// </summary>
         /// <version>1.0</version>
         /// <default>n/a</default>
-		[ReflectorProperty("releaseStartDate")]
-		public DateTime ReleaseStartDate;
+        [ReflectorProperty("releaseStartDate")]
+        public DateTime ReleaseStartDate { get; set; }
 
         /// <summary>
         /// The separator between the iteration number and the build number.
         /// </summary>
         /// <version>1.0</version>
         /// <default>.</default>
-		[ReflectorProperty("separator", Required=false)]
-		public string Separator = ".";
+        [ReflectorProperty("separator", Required = false)]
+        public string Separator { get; set; }
 
 		public override string Generate(IIntegrationResult integrationResult)
 		{

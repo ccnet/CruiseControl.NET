@@ -1,10 +1,10 @@
-using System;
-using System.Text.RegularExpressions;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
+    using System;
+    using System.Text.RegularExpressions;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
     /// <summary>
     /// Some source control systems (e.g., AccuRev) have a concept of a "change number", which the Last Change Labeller can use to build a
     /// label. The following configuration would prefix all labels with the string 'Foo-1-', so the build of change number 213 would be
@@ -25,13 +25,24 @@ namespace ThoughtWorks.CruiseControl.Core.Label
     {
         private const int INITIAL_SUFFIX_NUMBER = 1;
 
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LastChangeLabeller"/> class.
+        /// </summary>
+        public LastChangeLabeller()
+        {
+            this.LabelPrefix = string.Empty;
+            this.AllowDuplicateSubsequentLabels = true; 
+        }
+        #endregion
+
         /// <summary>
         /// The string to be prepended onto the last change number.
         /// </summary>
         /// <version>1.3</version>
         /// <default>None</default>
         [ReflectorProperty("prefix", Required = false)]
-        public string LabelPrefix = string.Empty;
+        public string LabelPrefix { get; set; }
 
         /// <summary>
         /// Controls whether duplicate subsequent labels are permitted or not. If true, duplicate labels are left
@@ -41,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// <version>1.3</version>
         /// <default>true</default>
         [ReflectorProperty("allowDuplicateSubsequentLabels", Required = false)]
-        public bool AllowDuplicateSubsequentLabels = true;
+        public bool AllowDuplicateSubsequentLabels { get; set; }
         
         /// <summary>
         /// Generate a label string from the last change number.

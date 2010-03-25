@@ -1,10 +1,10 @@
-using System;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
-	/// <summary>
+    using System;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
+    /// <summary>
     /// The Date Labeller is used to generate labels in the format "yyyy.mm.dd.build". Using the Date Labeller makes it easy for the user to identify and communicate the date that a particular build occurred.
     /// </summary>
     /// <title>Date Labeller</title>
@@ -28,13 +28,36 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 	{
 		private readonly DateTimeProvider dateTimeProvider;
 
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DateLabeller"/> class.
+        /// </summary>
+        public DateLabeller()
+            : this(new DateTimeProvider())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DateLabeller"/> class.
+        /// </summary>
+        /// <param name="dateTimeProvider">The date time provider.</param>
+        public DateLabeller(DateTimeProvider dateTimeProvider)
+        {
+            this.dateTimeProvider = dateTimeProvider;
+            this.YearFormat = "0000";
+            this.MonthFormat = "00";
+            this.DayFormat = "00";
+            RevisionFormat = "000";
+        }
+        #endregion
+
         /// <summary>
         /// The format for the year part.
         /// </summary>
         /// <version>1.0</version>
         /// <default>0000</default>
         [ReflectorProperty("yearFormat", Required = false)]
-        public string YearFormat = "0000";
+        public string YearFormat { get; set; }
 
         /// <summary>
         /// The format for the month part.
@@ -42,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// <version>1.0</version>
         /// <default>00</default>
         [ReflectorProperty("monthFormat", Required = false)]
-        public string MonthFormat = "00";
+        public string MonthFormat { get; set; }
 
         /// <summary>
         /// The format for the day part.
@@ -50,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// <version>1.0</version>
         /// <default>000</default>
         [ReflectorProperty("dayFormat", Required = false)]
-        public string DayFormat = "00";
+        public string DayFormat { get; set; }
 
         /// <summary>
         /// The format for the revision part.
@@ -58,16 +81,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         /// <version>1.0</version>
         /// <default>000</default>
         [ReflectorProperty("revisionFormat", Required = false)]
-        public string RevisionFormat = "000";
-
-
-		public DateLabeller() : this(new DateTimeProvider())
-		{}
-
-		public DateLabeller(DateTimeProvider dateTimeProvider)
-		{
-			this.dateTimeProvider = dateTimeProvider;
-		}
+        public string RevisionFormat { get; set; }
 
 		public override string Generate(IIntegrationResult integrationResult)
 		{

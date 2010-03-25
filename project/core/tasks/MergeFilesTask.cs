@@ -1,9 +1,9 @@
-using System.IO;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    using System.IO;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
     /// <summary>
     /// <para>
     /// Merges external files into the build log.
@@ -100,7 +100,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     [ReflectorType("merge")]
 	public class MergeFilesTask
         : TaskBase
-	{
+    {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MergeFilesTask"/> class.
+        /// </summary>
+        public MergeFilesTask()
+        {
+            this.MergeFiles = new MergeFileInfo[0];
+        }
+        #endregion
+
         /// <summary>
         /// The folder to copy the files to.
         /// </summary>
@@ -115,7 +125,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("files", typeof(MergeFileSerialiserFactory))]
-        public MergeFileInfo[] MergeFiles = new MergeFileInfo[0];
+        public MergeFileInfo[] MergeFiles { get; set; }
 
         /// <summary>
         /// Allows this task to interact with the file system in a testable way.
