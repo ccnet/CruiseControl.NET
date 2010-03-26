@@ -1,9 +1,9 @@
-using System.Diagnostics;
-using System.Reflection;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol 
+{
+    using System.Diagnostics;
+    using System.Reflection;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
 
     /// <summary>
     /// SourceGear Vault Source Control Block.
@@ -137,8 +137,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// </summary>
         /// <version>1.0</version>
         /// <default>None</default>
-		[ReflectorProperty("username", Required=false)]
-		public string Username;
+        [ReflectorProperty("username", Required = false)]
+        public string Username { get; set; }
 
         /// <summary>
         /// Password for the Vault user.
@@ -146,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("password", typeof(PrivateStringSerialiserFactory), Required = false)]
-		public PrivateString Password;
+        public PrivateString Password { get; set; }
 
         /// <summary>
         /// The name of the Vault server.
@@ -154,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("host", Required = false)]
-		public string Host;
+        public string Host { get; set; }
 
         /// <summary>
         /// The name of the Vault repository to monitor. .
@@ -162,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("repository", Required = false)]
-		public string Repository;
+        public string Repository { get; set; }
 
         /// <summary>
         /// The root folder to be monitored by CCNet.
@@ -170,7 +170,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>$</default>
         [ReflectorProperty("folder", Required = false)]
-		public string Folder = DefaultFolder;
+        public string Folder { get; set; }
 
         /// <summary>
         /// The location of the Vault command-line executable.
@@ -178,7 +178,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>C:\Program Files\SourceGear\Vault Client\vault.exe</default>
         [ReflectorProperty("executable", Required = false)]
-		public string Executable = DefaultExecutable;
+        public string Executable { get; set; }
 
         /// <summary>
         /// Should SSL be used to communicate with the Vault server.
@@ -186,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("ssl", Required = false)]
-		public bool Ssl = false;
+        public bool Ssl { get; set; }
 
         /// <summary>
         /// Specifies if CCNet should automatically retrieve the latest version of the source from the repository.
@@ -194,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>true</default>
         [ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = true;
+        public bool AutoGetSource { get; set; }
 
         /// <summary>
         /// Specifies if CCNet should apply the build label to the repository.
@@ -202,7 +202,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("applyLabel", Required = false)]
-		public bool ApplyLabel = false;
+        public bool ApplyLabel { get; set; }
 
         /// <summary>
         /// Extra arguments to be included in the history commandline.
@@ -210,7 +210,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>-excludeactions label,obliterate -rowlimit 0</default>
         [ReflectorProperty("historyArgs", Required = false)]
-		public string HistoryArgs = DefaultHistoryArgs;
+        public string HistoryArgs { get; set; }
 
         /// <summary>
         /// Sets the timeout period for the source control operation.
@@ -243,7 +243,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>true</default>
         [ReflectorProperty("useWorkingDirectory", Required = false)]
-		public bool UseVaultWorkingDirectory = true;
+        public bool UseVaultWorkingDirectory { get; set; }
 
         /// <summary>
         /// The root folder where the latest source will retrieved from Vault. This path can either be absolute or it
@@ -259,7 +259,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// CC.NET 1.0.
         /// </remarks>
         [ReflectorProperty("workingDirectory", Required = false)]
-		public string WorkingDirectory;
+        public string WorkingDirectory { get; set; }
 
         /// <summary>
         /// The modification date that retrieved source files will have. 
@@ -273,7 +273,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// * modification - the date/time the file was last modified
         /// </remarks>
         [ReflectorProperty("setFileTime", Required = false)]
-		public string setFileTime = DefaultFileTime;
+        public string setFileTime { get; set; }
 
         /// <summary>
         /// If true, the source path will be emptied before retrieving new source. 
@@ -281,7 +281,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("cleanCopy", Required = false)]
-		public bool CleanCopy = false;
+        public bool CleanCopy { get; set; }
 
         /// <summary>
         /// The host name of the HTTP proxy Vault should use. 
@@ -289,7 +289,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("proxyServer", Required = false)]
-		public string proxyServer;
+        public string proxyServer { get; set; }
 
         /// <summary>
         /// The port on the HTTP proxy Vault should use. 
@@ -297,7 +297,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("proxyPort", Required = false)]
-		public string proxyPort;
+        public string proxyPort { get; set; }
 
         /// <summary>
         /// The user name for the HTTP proxy Vault should use. 
@@ -305,7 +305,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("proxyUser", Required = false)]
-		public string proxyUser;
+        public string proxyUser { get; set; }
 
         /// <summary>
         /// The password for the HTTP proxy Vault should use. 
@@ -313,7 +313,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("proxyPassword", Required = false)]
-		public string proxyPassword;
+        public string proxyPassword { get; set; }
 
         /// <summary>
         /// The Windows domain of the HTTP proxy Vault should use.  
@@ -321,7 +321,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("proxyDomain", Required = false)]
-		public string proxyDomain;
+        public string proxyDomain { get; set; }
 
         /// <summary>
         /// Any other aruuments to pass into the executable.
@@ -329,7 +329,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("otherVaultArguments", Required = false)]
-		public string otherVaultArguments;
+        public string otherVaultArguments { get; set; }
 
         /// <summary>
         /// The number of seconds to wait between retries when a check for modifications fails. 
@@ -337,7 +337,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>5</default>
         [ReflectorProperty("pollRetryWait", Required = false)]
-		public int pollRetryWait = DefaultPollRetryWait;
+        public int pollRetryWait { get; set; }
 
         /// <summary>
         /// The number of automatic retries when failing to check for modifications before an exception is thrown. 
@@ -345,18 +345,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
         /// <version>1.0</version>
         /// <default>5</default>
         [ReflectorProperty("pollRetryAttempts", Required = false)]
-		public int pollRetryAttempts = DefaultPollRetryAttempts;
+        public int pollRetryAttempts { get; set; }
 
 		public Vault3 VaultSourceControl
 		{
 			get { return _vaultSourceControl; }
 		}
 
-		public VaultVersionChecker() {}
+        public VaultVersionChecker()
+        {
+            this.InitialiseDefaults();
+        }
 
 		public VaultVersionChecker(IHistoryParser historyParser, ProcessExecutor executor, EForcedVaultVersion forceVersion)
 		{
-			_forcedVaultVersion = forceVersion;
+            this.InitialiseDefaults();
+            _forcedVaultVersion = forceVersion;
 			switch ( forceVersion )
 			{
 				case EForcedVaultVersion.Vault3:
@@ -369,9 +373,24 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
 					Debug.Fail("You have to force a version of Vault from the unit tests.");
 					break;
 			}
-		}
+        }
 
-		public override void Initialize(IProject project)
+        private void InitialiseDefaults()
+        {
+            this.Folder = DefaultFolder;
+            this.Executable = DefaultExecutable;
+            this.Ssl = false;
+            this.AutoGetSource = true;
+            this.ApplyLabel = false;
+            this.HistoryArgs = DefaultHistoryArgs;
+            this.UseVaultWorkingDirectory = true;
+            this.setFileTime = DefaultFileTime;
+            this.CleanCopy = false;
+            this.pollRetryWait = DefaultPollRetryWait;
+            this.pollRetryAttempts = DefaultPollRetryAttempts;
+        }
+
+        public override void Initialize(IProject project)
 		{
 			GetCorrectVaultInstance();
 			VaultSourceControl.Initialize(project);

@@ -1,11 +1,11 @@
-using System;
-using System.IO;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 {
-	/// <summary>
+    using System;
+    using System.IO;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
+    /// <summary>
     /// <para>
     /// CruiseControl.NET SCM plugin for CM Synergy.
     /// </para>
@@ -472,8 +472,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("issueUrlBuilder", InstanceTypeKey = "type", Required = false)]
-        public IModificationUrlBuilder IssueUrlBuilder;
-
+        public IModificationUrlBuilder IssueUrlBuilder { get; set; }
 
         private void FillIssueUrl(Modification[] modifications)
         {

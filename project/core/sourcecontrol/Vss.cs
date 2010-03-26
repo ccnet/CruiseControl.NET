@@ -151,6 +151,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			this.registry = registry;
 			this.locale = locale;
+            this.Project = DefaultProject;
+            this.ApplyLabel = false;
+            this.AutoGetSource = true;
+            this.AlwaysGetLatest = false;
+            this.CleanCopy = true;
 		}
 
         /// <summary>
@@ -177,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>$/</default>
         [ReflectorProperty("project", Required = false)]
-		public string Project = DefaultProject;
+        public string Project { get; set; }
 
         /// <summary>
         /// VSS user ID that CCNet should use to authenticate. If the username is unspecified, the VSS client will attempt to authenticate
@@ -186,7 +191,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("username", Required = false)]
-		public string Username;
+        public string Username { get; set; }
 
         /// <summary>
         /// Password for the VSS user ID.
@@ -194,7 +199,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("password", typeof(PrivateStringSerialiserFactory), Required = false)]
-		public PrivateString Password;
+        public PrivateString Password { get; set; }
 
         /// <summary>
         /// The directory containing SRCSAFE.INI. If this SSDIR environment variable is already set then this property may be omitted. 
@@ -217,7 +222,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// The specified VSS username must have write access to the repository.
         /// </remarks>
         [ReflectorProperty("applyLabel", Required = false)]
-		public bool ApplyLabel = false;
+        public bool ApplyLabel { get; set; }
 
         /// <summary>
         /// Specifies whether the current version of the source should be retrieved from VSS.
@@ -225,7 +230,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>true</default>
         [ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = true;
+        public bool AutoGetSource { get; set; }
 
         /// <summary>
         /// Specifies whether the most recent version of the source should be retrieved from VSS. If not, CCNet will obtain the source as of
@@ -234,7 +239,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("alwaysGetLatest", Required = false)]
-		public bool AlwaysGetLatest = false;
+        public bool AlwaysGetLatest { get; set; }
 
         /// <summary>
         /// The folder into which the source should be retrived from VSS. If this folder does not exist, it will be automatically created.
@@ -242,7 +247,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>Project Working Directory</default>
         [ReflectorProperty("workingDirectory", Required = false)]
-		public string WorkingDirectory;
+        public string WorkingDirectory { get; set; }
 
         /// <summary>
         /// The culture under which VSS is running. This value must match the culture of the VSS installation for CCNet to work with VSS. Most
@@ -264,7 +269,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>true</default>
         [ReflectorProperty("cleanCopy", Required = false)]
-		public bool CleanCopy = true;
+        public bool CleanCopy { get; set; }
 
             
 	    public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
