@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>n/a</default>
         [ReflectorProperty("pattern", Required = true)]
-        public string Pattern;
+        public string Pattern { get; set; }
 
         /// <summary>
         /// Does the modification pass the filter?

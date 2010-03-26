@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("repositoryRoot")]
-        public string RepositoryRoot;
+        public string RepositoryRoot { get; set; }
 
         /// <summary>
         /// Whether to automatically (recursively) copy the contents of the repositoryRoot directory to the Project Working Directory.
@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("ignoreMissingRoot", Required = false)]
-        public bool IgnoreMissingRoot;
+        public bool IgnoreMissingRoot { get; set; }
 
         /// <summary>
         /// Whether to not fail if the repository doesn't exist.
@@ -68,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("autoGetSource", Required = false)]
-        public bool AutoGetSource = false;
+        public bool AutoGetSource { get; set; }
 
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {

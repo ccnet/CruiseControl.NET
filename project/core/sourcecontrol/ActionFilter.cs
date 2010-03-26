@@ -20,12 +20,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class ActionFilter : IModificationFilter
 	{
         /// <summary>
+        /// Initializes a new instance of the <see cref="ActionFilter"/> class.
+        /// </summary>
+        public ActionFilter()
+        {
+            this.Actions = new string[0];
+        }
+
+        /// <summary>
         /// The actions to filter.
         /// </summary>
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("actions")]
-		public string[] Actions = new string[0];
+        public string[] Actions { get; set; }
 
 		public bool Accept(Modification m)
 		{

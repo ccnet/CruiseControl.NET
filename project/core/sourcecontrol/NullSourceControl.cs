@@ -1,7 +1,7 @@
-using Exortech.NetReflector;
-
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
+    using Exortech.NetReflector;
+
     /// <summary>
     /// Use the Null Source Control if you don't want to check a Source Control repository for changes. In this instance you would always want
     /// to either use a 'Force Build' Trigger or always manually start builds, from the <link>Web Dashboard</link> or <link>CCTray</link>.
@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>false</default>
         [ReflectorProperty("failGetModifications", Required = false)]
-        public bool FailGetModifications = false;
+        public bool FailGetModifications { get; set; }
 
         /// <summary>
         /// Defines wheter or not to fail the labeling.
@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>false</default>
         [ReflectorProperty("failLabelSourceControl", Required = false)]
-        public bool FailLabelSourceControl = false;
+        public bool FailLabelSourceControl { get; set; }
 
         /// <summary>
         /// Defines wheter or not to fail the getting of the source.
@@ -46,10 +46,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>false</default>
         [ReflectorProperty("failGetSource", Required = false)]
-        public bool FailGetSource = false;
+        public bool FailGetSource { get; set; }
 
-
-
+        /// <summary>
+        /// Gets the modifications from the source control provider
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
 		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
             if (FailGetModifications)
