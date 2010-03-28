@@ -1,11 +1,10 @@
-﻿using System;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
-using System.Collections.Generic;
-
-namespace ThoughtWorks.CruiseControl.Core.Triggers
+﻿namespace ThoughtWorks.CruiseControl.Core.Triggers
 {
+    using System;
+    using System.Collections.Generic;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Remote;
+
     /// <summary>
     /// <para>
     /// Trigger to add build parameters to an integration request.

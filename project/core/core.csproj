@@ -830,6 +830,7 @@
     </Compile>
     <Compile Include="tasks\NDependTask.cs" />
     <Compile Include="tasks\XmlTaskResult.cs" />
+    <Compile Include="Triggers\RollUpTrigger.cs" />
     <Compile Include="util\ICompressionService.cs" />
     <Compile Include="util\IPrivateData.cs" />
     <Compile Include="util\PrivateArguments.cs" />
