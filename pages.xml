@@ -48,42 +48,42 @@
   <page title="Channel Security" id="31490148" url="http://confluence.public.thoughtworks.org//display/CCNET/Channel+Security" parentId="28868730" />
   <page title="CommentFilter" id="31686689" url="http://confluence.public.thoughtworks.org//display/CCNET/CommentFilter" parentId="31686678" source="commentFilter.wiki" />
   <page title="Commit Process" id="5434" url="http://confluence.public.thoughtworks.org//display/CCNET/Commit+Process" parentId="71" />
-  <page title="Conditional Publisher" id="28868660" url="http://confluence.public.thoughtworks.org//display/CCNET/Conditional+Publisher" parentId="1756" />
+  <page title="Conditional Publisher" id="28868660" url="http://confluence.public.thoughtworks.org//display/CCNET/Conditional+Publisher" parentId="1756" source="conditionalPublisher.wiki" />
   <page title="Configuration Preprocessor" id="20152326" url="http://confluence.public.thoughtworks.org//display/CCNET/Configuration+Preprocessor" parentId="325" />
   <page title="Configure CruiseControl.Net to Automatically Update its Config File" id="3997877" url="http://confluence.public.thoughtworks.org//display/CCNET/Configure+CruiseControl.Net+to+Automatically+Update+its+Config+File" parentId="325" />
   <page title="Configuring the Server" id="325" url="http://confluence.public.thoughtworks.org//display/CCNET/Configuring+the+Server" parentId="300" />
   <page title="Configuring the Web Dashboard" id="2969" url="http://confluence.public.thoughtworks.org//display/CCNET/Configuring+the+Web+Dashboard" parentId="409" />
   <page title="Contributor License Agreement" id="1178" url="http://confluence.public.thoughtworks.org//display/CCNET/Contributor+License+Agreement" parentId="115" />
-  <page title="Coverage Filter" id="31097556" url="http://confluence.public.thoughtworks.org//display/CCNET/Coverage+Filter" parentId="29130773" />
-  <page title="Coverage Threshold" id="31097558" url="http://confluence.public.thoughtworks.org//display/CCNET/Coverage+Threshold" parentId="29130773" />
+  <page title="Coverage Filter" id="31097556" url="http://confluence.public.thoughtworks.org//display/CCNET/Coverage+Filter" parentId="29130773" source="coverageFilter.wiki" />
+  <page title="Coverage Threshold" id="31097558" url="http://confluence.public.thoughtworks.org//display/CCNET/Coverage+Threshold" parentId="29130773" source="coverageThreshold.wiki" />
   <page title="CruiseControl.NET Integration Process" id="701" url="http://confluence.public.thoughtworks.org//display/CCNET/CruiseControl.NET+Integration+Process" parentId="71" />
   <page title="CruiseControl.NET Server" id="300" url="http://confluence.public.thoughtworks.org//display/CCNET/CruiseControl.NET+Server" parentId="71" />
-  <page title="CruiseServer Control Action" id="31097528" url="http://confluence.public.thoughtworks.org//display/CCNET/CruiseServer+Control+Action" parentId="28868702" />
-  <page title="CruiseServer Control Task" id="28868702" url="http://confluence.public.thoughtworks.org//display/CCNET/CruiseServer+Control+Task" parentId="1756" />
+  <page title="CruiseServer Control Action" id="31097528" url="http://confluence.public.thoughtworks.org//display/CCNET/CruiseServer+Control+Action" parentId="28868702" source="controlAction.wiki" />
+  <page title="CruiseServer Control Task" id="28868702" url="http://confluence.public.thoughtworks.org//display/CCNET/CruiseServer+Control+Task" parentId="1756" source="cruiseServerControl.wiki" />
   <page title="Custom Builder Plug-in" id="441" url="http://confluence.public.thoughtworks.org//display/CCNET/Custom+Builder+Plug-in" parentId="71" />
   <page title="Custom templates" id="25591840" url="http://confluence.public.thoughtworks.org//display/CCNET/Custom+templates" parentId="2973" />
-  <page title="CVS Source Control Block" id="315" url="http://confluence.public.thoughtworks.org//display/CCNET/CVS+Source+Control+Block" parentId="1753" />
+  <page title="CVS Source Control Block" id="315" url="http://confluence.public.thoughtworks.org//display/CCNET/CVS+Source+Control+Block" parentId="1753" source="cvs.wiki" />
   <page title="Dashboard Administration Plugin" id="26247259" url="http://confluence.public.thoughtworks.org//display/CCNET/Dashboard+Administration+Plugin" parentId="2973" />
   <page title="Dashboard Configuration Block" id="2970" url="http://confluence.public.thoughtworks.org//display/CCNET/Dashboard+Configuration+Block" parentId="2969" />
   <page title="Date Labeller" id="4487" url="http://confluence.public.thoughtworks.org//display/CCNET/Date+Labeller" parentId="1755" source="dateLabeller.wiki" />
-  <page title="Date Parameter" id="28868640" url="http://confluence.public.thoughtworks.org//display/CCNET/Date+Parameter" parentId="28475414" />
-  <page title="Default Issue Tracker URL Builder" id="31686713" url="http://confluence.public.thoughtworks.org//display/CCNET/Default+Issue+Tracker+URL+Builder" parentId="22118409" />
-  <page title="Default Labeller" id="632" url="http://confluence.public.thoughtworks.org//display/CCNET/Default+Labeller" parentId="1755" />
-  <page title="Default Manifest Generator" id="26247214" url="http://confluence.public.thoughtworks.org//display/CCNET/Default+Manifest+Generator" parentId="26247211" />
-  <page title="Default Project Security" id="29130776" url="http://confluence.public.thoughtworks.org//display/CCNET/Default+Project+Security" parentId="28868738" />
+  <page title="Date Parameter" id="28868640" url="http://confluence.public.thoughtworks.org//display/CCNET/Date+Parameter" parentId="28475414" source="dateParameter.wiki" />
+  <page title="Default Issue Tracker URL Builder" id="31686713" url="http://confluence.public.thoughtworks.org//display/CCNET/Default+Issue+Tracker+URL+Builder" parentId="22118409" source="defaultIssueTracker.wiki" />
+  <page title="Default Labeller" id="632" url="http://confluence.public.thoughtworks.org//display/CCNET/Default+Labeller" parentId="1755" source="defaultlabeller.wiki" />
+  <page title="Default Manifest Generator" id="26247214" url="http://confluence.public.thoughtworks.org//display/CCNET/Default+Manifest+Generator" parentId="26247211" source="defaultManifestGenerator.wiki" />
+  <page title="Default Project Security" id="29130776" url="http://confluence.public.thoughtworks.org//display/CCNET/Default+Project+Security" parentId="28868738" source="defaultProjectSecurity.wiki" />
   <page title="Developer Guidelines" id="444" url="http://confluence.public.thoughtworks.org//display/CCNET/Developer+Guidelines" parentId="71" />
   <page title="Developer Registration Process" id="6206" url="http://confluence.public.thoughtworks.org//display/CCNET/Developer+Registration+Process" parentId="71" />
   <page title="Developing Web Dashboard Plugins" id="2649" url="http://confluence.public.thoughtworks.org//display/CCNET/Developing+Web+Dashboard+Plugins" parentId="409" />
-  <page title="Direct Dynamic Value" id="28475458" url="http://confluence.public.thoughtworks.org//display/CCNET/Direct+Dynamic+Value" parentId="28475417" />
+  <page title="Direct Dynamic Value" id="28475458" url="http://confluence.public.thoughtworks.org//display/CCNET/Direct+Dynamic+Value" parentId="28475417" source="directValue.wiki" />
   <page title="Documentation" id="71" url="http://confluence.public.thoughtworks.org//display/CCNET/Documentation" parentId="3" />
   <page title="Documentation Guidelines" id="2062" url="http://confluence.public.thoughtworks.org//display/CCNET/Documentation+Guidelines" parentId="71" />
   <page title="Download" id="112" url="http://confluence.public.thoughtworks.org//display/CCNET/Download" parentId="3" />
-  <page title="Duplicate Finder Task" id="31097605" url="http://confluence.public.thoughtworks.org//display/CCNET/Duplicate+Finder+Task" parentId="1756" />
+  <page title="Duplicate Finder Task" id="31097605" url="http://confluence.public.thoughtworks.org//display/CCNET/Duplicate+Finder+Task" parentId="1756" source="dupfinder.wiki" />
   <page title="Dynamic Parameters" id="28475402" url="http://confluence.public.thoughtworks.org//display/CCNET/Dynamic+Parameters" parentId="1738" />
   <page title="Dynamic Values" id="28475417" url="http://confluence.public.thoughtworks.org//display/CCNET/Dynamic+Values" parentId="28475402" />
   <page title="Email Converter" id="31097612" url="http://confluence.public.thoughtworks.org//display/CCNET/Email+Converter" parentId="351" />
-  <page title="Email Group" id="31097625" url="http://confluence.public.thoughtworks.org//display/CCNET/Email+Group" parentId="351" />
-  <page title="Email Publisher" id="351" url="http://confluence.public.thoughtworks.org//display/CCNET/Email+Publisher" parentId="1756" />
+  <page title="Email Group" id="31097625" url="http://confluence.public.thoughtworks.org//display/CCNET/Email+Group" parentId="351" source="group.wiki" />
+  <page title="Email Publisher" id="351" url="http://confluence.public.thoughtworks.org//display/CCNET/Email+Publisher" parentId="1756" source="email.wiki" />
   <page title="Email Subject" id="31097627" url="http://confluence.public.thoughtworks.org//display/CCNET/Email+Subject" parentId="351" />
   <page title="Email User" id="31097622" url="http://confluence.public.thoughtworks.org//display/CCNET/Email+User" parentId="351" />
   <page title="Encrypted Messages Channel" id="31490164" url="http://confluence.public.thoughtworks.org//display/CCNET/Encrypted+Messages+Channel" parentId="31490148" />
@@ -91,64 +91,64 @@
   <page title="Environment Variable" id="31097537" url="http://confluence.public.thoughtworks.org//display/CCNET/Environment+Variable" parentId="0" />
   <page title="Examples" id="806" url="http://confluence.public.thoughtworks.org//display/CCNET/Examples" parentId="0" />
   <page title="Executable Task" id="1630" url="http://confluence.public.thoughtworks.org//display/CCNET/Executable+Task" parentId="1756" source="exec.wiki" />
-  <page title="External File Server Security" id="28868733" url="http://confluence.public.thoughtworks.org//display/CCNET/External+File+Server+Security" parentId="28868730" />
-  <page title="External Links" id="2827" url="http://confluence.public.thoughtworks.org//display/CCNET/External+Links" parentId="1738" />
+  <page title="External File Server Security" id="28868733" url="http://confluence.public.thoughtworks.org//display/CCNET/External+File+Server+Security" parentId="28868730" source="externalFileSecurity.wiki" />
+  <page title="External Links" id="2827" url="http://confluence.public.thoughtworks.org//display/CCNET/External+Links" parentId="1738" source="externalLink.wiki" />
   <page title="External Source Control" id="5865505" url="http://confluence.public.thoughtworks.org//display/CCNET/External+Source+Control" parentId="1753" source="external.wiki" />
   <page title="FAQ" id="4166" url="http://confluence.public.thoughtworks.org//display/CCNET/FAQ" parentId="71" />
-  <page title="Farm Report Farm Plugin" id="2981" url="http://confluence.public.thoughtworks.org//display/CCNET/Farm+Report+Farm+Plugin" parentId="2973" />
-  <page title="FBVariable" id="31097603" url="http://confluence.public.thoughtworks.org//display/CCNET/FBVariable" parentId="786435" />
-  <page title="File Based Security Cache" id="28868757" url="http://confluence.public.thoughtworks.org//display/CCNET/File+Based+Security+Cache" parentId="28868744" />
-  <page title="File Labeller" id="3997755" url="http://confluence.public.thoughtworks.org//display/CCNET/File+Labeller" parentId="1755" />
-  <page title="File Merge Task" id="271" url="http://confluence.public.thoughtworks.org//display/CCNET/File+Merge+Task" parentId="1756" />
+  <page title="Farm Report Farm Plugin" id="2981" url="http://confluence.public.thoughtworks.org//display/CCNET/Farm+Report+Farm+Plugin" parentId="2973" source="farmReportFarmPlugin.wiki" />
+  <page title="FBVariable" id="31097603" url="http://confluence.public.thoughtworks.org//display/CCNET/FBVariable" parentId="786435" source="FBVariable.wiki" />
+  <page title="File Based Security Cache" id="28868757" url="http://confluence.public.thoughtworks.org//display/CCNET/File+Based+Security+Cache" parentId="28868744" source="fileBasedCache.wiki" />
+  <page title="File Labeller" id="3997755" url="http://confluence.public.thoughtworks.org//display/CCNET/File+Labeller" parentId="1755" source="fileLabeller.wiki" />
+  <page title="File Merge Task" id="271" url="http://confluence.public.thoughtworks.org//display/CCNET/File+Merge+Task" parentId="1756" source="merge.wiki" />
   <page title="File State Manager" id="1805" url="http://confluence.public.thoughtworks.org//display/CCNET/File+State+Manager" parentId="1751" />
-  <page title="Filesystem Source Control Block" id="347" url="http://confluence.public.thoughtworks.org//display/CCNET/Filesystem+Source+Control+Block" parentId="1753" />
-  <page title="Filter Trigger" id="2417" url="http://confluence.public.thoughtworks.org//display/CCNET/Filter+Trigger" parentId="1750" />
+  <page title="Filesystem Source Control Block" id="347" url="http://confluence.public.thoughtworks.org//display/CCNET/Filesystem+Source+Control+Block" parentId="1753" source="filesystem.wiki" />
+  <page title="Filter Trigger" id="2417" url="http://confluence.public.thoughtworks.org//display/CCNET/Filter+Trigger" parentId="1750" source="filterTrigger.wiki" />
   <page title="Filtered Source Control Block" id="1068" url="http://confluence.public.thoughtworks.org//display/CCNET/Filtered+Source+Control+Block" parentId="1753" source="filtered.wiki" />
   <page title="FinalBuilder Task" id="786435" url="http://confluence.public.thoughtworks.org//display/CCNET/FinalBuilder+Task" parentId="1756" />
-  <page title="FirstMatch" id="31097499" url="http://confluence.public.thoughtworks.org//display/CCNET/FirstMatch" parentId="31097495" />
-  <page title="ForceBuildPublisher" id="2340" url="http://confluence.public.thoughtworks.org//display/CCNET/ForceBuildPublisher" parentId="1756" />
-  <page title="FTP Source control" id="29130765" url="http://confluence.public.thoughtworks.org//display/CCNET/FTP+Source+control" parentId="1753" />
-  <page title="Ftp task - Publisher" id="29130759" url="http://confluence.public.thoughtworks.org//display/CCNET/Ftp+task+-+Publisher" parentId="1756" />
-  <page title="Gendarme Task" id="25591881" url="http://confluence.public.thoughtworks.org//display/CCNET/Gendarme+Task" parentId="1756" />
+  <page title="FirstMatch" id="31097499" url="http://confluence.public.thoughtworks.org//display/CCNET/FirstMatch" parentId="31097495" source="firstMatch.wiki" />
+  <page title="ForceBuildPublisher" id="2340" url="http://confluence.public.thoughtworks.org//display/CCNET/ForceBuildPublisher" parentId="1756" source="forcebuild.wiki" />
+  <page title="FTP Source control" id="29130765" url="http://confluence.public.thoughtworks.org//display/CCNET/FTP+Source+control" parentId="1753" source="ftpSourceControl.wiki" />
+  <page title="Ftp task - Publisher" id="29130759" url="http://confluence.public.thoughtworks.org//display/CCNET/Ftp+task+-+Publisher" parentId="1756" source="ftp.wiki" />
+  <page title="Gendarme Task" id="25591881" url="http://confluence.public.thoughtworks.org//display/CCNET/Gendarme+Task" parentId="1756" source="gendarme.wiki" />
   <page title="General Security" id="28868741" url="http://confluence.public.thoughtworks.org//display/CCNET/General+Security" parentId="28868727" />
   <page title="General Security Permissions" id="28868753" url="http://confluence.public.thoughtworks.org//display/CCNET/General+Security+Permissions" parentId="28868741" />
-  <page title="Git Source Control Block" id="28475426" url="http://confluence.public.thoughtworks.org//display/CCNET/Git+Source+Control+Block" parentId="1753" />
+  <page title="Git Source Control Block" id="28475426" url="http://confluence.public.thoughtworks.org//display/CCNET/Git+Source+Control+Block" parentId="1753" source="git.wiki" />
   <page title="How to force a CCNet build from a NAnt script" id="4993" url="http://confluence.public.thoughtworks.org//display/CCNET/How+to+force+a+CCNet+build+from+a+NAnt+script" parentId="1836" />
   <page title="HTML Report Plugin" id="32505931" url="http://confluence.public.thoughtworks.org//display/CCNET/HTML+Report+Plugin" parentId="2973" source="htmlReportPlugin.wiki" />
   <page title="HTTP Request Header" id="31097591" url="http://confluence.public.thoughtworks.org//display/CCNET/HTTP+Request+Header" parentId="31097589" />
-  <page title="HTTP Settings" id="31097589" url="http://confluence.public.thoughtworks.org//display/CCNET/HTTP+Settings" parentId="0" />
+  <page title="HTTP Settings" id="31097589" url="http://confluence.public.thoughtworks.org//display/CCNET/HTTP+Settings" parentId="0" source="httpRequest.wiki" />
   <page title="HTTP Status Task" id="31097587" url="http://confluence.public.thoughtworks.org//display/CCNET/HTTP+Status+Task" parentId="1756" />
-  <page title="Impersonation" id="31490098" url="http://confluence.public.thoughtworks.org//display/CCNET/Impersonation" parentId="1738" />
-  <page title="In Memory Security Cache" id="28868759" url="http://confluence.public.thoughtworks.org//display/CCNET/In+Memory+Security+Cache" parentId="28868744" />
-  <page title="Inherited Project Security" id="28868770" url="http://confluence.public.thoughtworks.org//display/CCNET/Inherited+Project+Security" parentId="28868738" />
+  <page title="Impersonation" id="31490098" url="http://confluence.public.thoughtworks.org//display/CCNET/Impersonation" parentId="1738" source="impersonation.wiki" />
+  <page title="In Memory Security Cache" id="28868759" url="http://confluence.public.thoughtworks.org//display/CCNET/In+Memory+Security+Cache" parentId="28868744" source="inMemoryCache.wiki" />
+  <page title="Inherited Project Security" id="28868770" url="http://confluence.public.thoughtworks.org//display/CCNET/Inherited+Project+Security" parentId="28868738" source="inheritedProjectSecurity.wiki" />
   <page title="Installation Prerequisites" id="286" url="http://confluence.public.thoughtworks.org//display/CCNET/Installation+Prerequisites" parentId="71" />
   <page title="Installing the Web Dashboard" id="2968" url="http://confluence.public.thoughtworks.org//display/CCNET/Installing+the+Web+Dashboard" parentId="409" />
   <page title="Integration Properties" id="3960" url="http://confluence.public.thoughtworks.org//display/CCNET/Integration+Properties" parentId="0" />
   <page title="Integration Queues" id="2555953" url="http://confluence.public.thoughtworks.org//display/CCNET/Integration+Queues" parentId="300" />
-  <page title="Internal Server Security" id="28868736" url="http://confluence.public.thoughtworks.org//display/CCNET/Internal+Server+Security" parentId="28868730" />
-  <page title="Interval Trigger" id="2594" url="http://confluence.public.thoughtworks.org//display/CCNET/Interval+Trigger" parentId="1750" />
+  <page title="Internal Server Security" id="28868736" url="http://confluence.public.thoughtworks.org//display/CCNET/Internal+Server+Security" parentId="28868730" source="internalSecurity.wiki" />
+  <page title="Interval Trigger" id="2594" url="http://confluence.public.thoughtworks.org//display/CCNET/Interval+Trigger" parentId="1750" source="intervalTrigger.wiki" />
   <page title="Issues" id="17" url="http://confluence.public.thoughtworks.org//display/CCNET/Issues" parentId="115" />
   <page title="IssueUrlBuilder" id="22118409" url="http://confluence.public.thoughtworks.org//display/CCNET/IssueUrlBuilder" parentId="325" />
-  <page title="Iteration Labeller" id="4034" url="http://confluence.public.thoughtworks.org//display/CCNET/Iteration+Labeller" parentId="1755" />
+  <page title="Iteration Labeller" id="4034" url="http://confluence.public.thoughtworks.org//display/CCNET/Iteration+Labeller" parentId="1755" source="iterationlabeller.wiki" />
   <page title="Labeller Blocks" id="1755" url="http://confluence.public.thoughtworks.org//display/CCNET/Labeller+Blocks" parentId="1738" />
-  <page title="Last Change Labeller" id="6345" url="http://confluence.public.thoughtworks.org//display/CCNET/Last+Change+Labeller" parentId="1755" />
-  <page title="Latest Build Report Project Plugin" id="4440" url="http://confluence.public.thoughtworks.org//display/CCNET/Latest+Build+Report+Project+Plugin" parentId="2973" />
-  <page title="LDAP Email Converter" id="31097618" url="http://confluence.public.thoughtworks.org//display/CCNET/LDAP+Email+Converter" parentId="31097612" />
-  <page title="LDAP User Authentication" id="28868784" url="http://confluence.public.thoughtworks.org//display/CCNET/LDAP+User+Authentication" parentId="28868781" />
+  <page title="Last Change Labeller" id="6345" url="http://confluence.public.thoughtworks.org//display/CCNET/Last+Change+Labeller" parentId="1755" source="lastChangeLabeller.wiki" />
+  <page title="Latest Build Report Project Plugin" id="4440" url="http://confluence.public.thoughtworks.org//display/CCNET/Latest+Build+Report+Project+Plugin" parentId="2973" source="latestBuildReportProjectPlugin.wiki" />
+  <page title="LDAP Email Converter" id="31097618" url="http://confluence.public.thoughtworks.org//display/CCNET/LDAP+Email+Converter" parentId="31097612" source="ldapConverter.wiki" />
+  <page title="LDAP User Authentication" id="28868784" url="http://confluence.public.thoughtworks.org//display/CCNET/LDAP+User+Authentication" parentId="28868781" source="ldapUser.wiki" />
   <page title="License" id="118" url="http://confluence.public.thoughtworks.org//display/CCNET/License" parentId="115" />
   <page title="Mailing Lists" id="121" url="http://confluence.public.thoughtworks.org//display/CCNET/Mailing+Lists" parentId="115" />
   <page title="Manifest Generators" id="26247211" url="http://confluence.public.thoughtworks.org//display/CCNET/Manifest+Generators" parentId="26247208" />
   <page title="Manifest Importer" id="26247221" url="http://confluence.public.thoughtworks.org//display/CCNET/Manifest+Importer" parentId="26247211" />
-  <page title="Mercurial Issue Tracker URL Builder" id="31686709" url="http://confluence.public.thoughtworks.org//display/CCNET/Mercurial+Issue+Tracker+URL+Builder" parentId="22118409" />
-  <page title="Mercurial Source Control Block" id="28278800" url="http://confluence.public.thoughtworks.org//display/CCNET/Mercurial+Source+Control+Block" parentId="1753" />
+  <page title="Mercurial Issue Tracker URL Builder" id="31686709" url="http://confluence.public.thoughtworks.org//display/CCNET/Mercurial+Issue+Tracker+URL+Builder" parentId="22118409" source="hgweb.wiki" />
+  <page title="Mercurial Source Control Block" id="28278800" url="http://confluence.public.thoughtworks.org//display/CCNET/Mercurial+Source+Control+Block" parentId="1753" source="hg.wiki" />
   <page title="Merge File" id="31097585" url="http://confluence.public.thoughtworks.org//display/CCNET/Merge+File" parentId="271" />
-  <page title="MKS Source Integrity Source Control Block" id="2869" url="http://confluence.public.thoughtworks.org//display/CCNET/MKS+Source+Integrity+Source+Control+Block" parentId="1753" />
+  <page title="MKS Source Integrity Source Control Block" id="2869" url="http://confluence.public.thoughtworks.org//display/CCNET/MKS+Source+Integrity+Source+Control+Block" parentId="1753" source="mks.wiki" />
   <page title="Modification Filters" id="31686678" url="http://confluence.public.thoughtworks.org//display/CCNET/Modification+Filters" parentId="1068" />
   <page title="Modification Reader Task" id="21626918" url="http://confluence.public.thoughtworks.org//display/CCNET/Modification+Reader+Task" parentId="1756" source="modificationReader.wiki" />
-  <page title="Modification Writer Task" id="3797" url="http://confluence.public.thoughtworks.org//display/CCNET/Modification+Writer+Task" parentId="1756" />
-  <page title="ModificationHistory Publisher" id="3997789" url="http://confluence.public.thoughtworks.org//display/CCNET/ModificationHistory+Publisher" parentId="1756" />
+  <page title="Modification Writer Task" id="3797" url="http://confluence.public.thoughtworks.org//display/CCNET/Modification+Writer+Task" parentId="1756" source="modificationWriter.wiki" />
+  <page title="ModificationHistory Publisher" id="3997789" url="http://confluence.public.thoughtworks.org//display/CCNET/ModificationHistory+Publisher" parentId="1756" source="modificationHistory.wiki" />
   <page title="modificationHistoryProjectPlugin" id="3997792" url="http://confluence.public.thoughtworks.org//display/CCNET/modificationHistoryProjectPlugin" parentId="2973" />
-  <page title="MsBuild Task" id="4044" url="http://confluence.public.thoughtworks.org//display/CCNET/MsBuild+Task" parentId="1756" />
+  <page title="MsBuild Task" id="4044" url="http://confluence.public.thoughtworks.org//display/CCNET/MsBuild+Task" parentId="1756" source="msbuild.wiki" />
   <page title="Multi Issue Tracker URL Builder" id="31686666" url="http://confluence.public.thoughtworks.org//display/CCNET/Multi+Issue+Tracker+URL+Builder" parentId="22118409" />
   <page title="Multi Source Control Block" id="348" url="http://confluence.public.thoughtworks.org//display/CCNET/Multi+Source+Control+Block" parentId="1753" />
   <page title="Multiple Projects" id="408" url="http://confluence.public.thoughtworks.org//display/CCNET/Multiple+Projects" parentId="300" />
