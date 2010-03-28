@@ -19,6 +19,12 @@
     /// <version>1.6</version>
     /// <example>
     /// <code title="Time Period Example">
+    /// <![CDATA[
+    /// <rollUpTrigger>
+    /// <trigger type="intervalTrigger" seconds="60" />
+    /// <time units="hours">1</time>
+    /// </rollUpTrigger>
+    /// ]]>
     /// </code>
     /// </example>
     [ReflectorType("rollUpTrigger")]
