@@ -45,8 +45,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public RobocopySourceControl() : this(new RobocopyHistoryParser(), new ProcessExecutor())
 		{}
 
-		public RobocopySourceControl(IHistoryParser parser, ProcessExecutor executor) : base(parser, executor)
-		{}
+        public RobocopySourceControl(IHistoryParser parser, ProcessExecutor executor)
+            : base(parser, executor)
+        {
+            this.Executable = "C:\\Windows\\System32\\robocopy.exe";
+            this.AutoGetSource = false;
+            this.WorkingDirectory = string.Empty;
+            this.AdditionalArguments = string.Empty;
+        }
 
         /// <summary>
         /// The executable location.
@@ -54,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.4.4</version>
         /// <default>C:\\Windows\\System32\\robocopy.exe</default>
         [ReflectorProperty("executable", Required = false)]
-		public string Executable = "C:\\Windows\\System32\\robocopy.exe";
+        public string Executable { get; set; }
 
         /// <summary>
         /// The repository root.
@@ -62,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.4.4</version>
         /// <default>n/a</default>
         [ReflectorProperty("repositoryRoot")]
-		public string RepositoryRoot;
+        public string RepositoryRoot { get; set; }
 
         /// <summary>
         /// Whether to automatically get the source.
@@ -70,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.4.4</version>
         /// <default>false</default>
         [ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = false;
+        public bool AutoGetSource { get; set; }
 
         /// <summary>
         /// The working directory to use.
@@ -78,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.4.4</version>
         /// <default>Project Working Directory</default>
         [ReflectorProperty("workingDirectory", Required = false)]
-		public string WorkingDirectory = string.Empty;
+        public string WorkingDirectory { get; set; }
 
         /// <summary>
         /// Any additional arguments.
@@ -86,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.4.4</version>
         /// <default>None</default>
         [ReflectorProperty("additionalArguments", Required = false)]
-		public string AdditionalArguments = string.Empty;
+        public string AdditionalArguments { get; set; }
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{

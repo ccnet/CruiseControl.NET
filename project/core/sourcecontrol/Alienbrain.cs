@@ -73,6 +73,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public Alienbrain(IHistoryParser parser, ProcessExecutor executor, IRegistry registry) : base(parser, executor)
 		{
 			this.registry = registry;
+            this.Server = string.Empty;
+            this.Database = string.Empty;
+            this.Username = string.Empty;
+            this.Password = string.Empty;
+            this.Branch = string.Empty;
+            this.Project = string.Empty;
+            this.AutoGetSource = true;
+            this.WorkingDirectory = string.Empty;
+            this.LabelOnSuccess = false;
 		}
 
         /// <summary>
@@ -102,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("server")]
-		public string Server = string.Empty;
+        public string Server { get; set; }
 
         /// <summary>
         /// Alienbrain project database name. The list of valid project databases are listed in the File, Connect to project database, Step 2,
@@ -111,7 +120,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("database")]
-		public string Database = string.Empty;
+        public string Database { get; set; }
 
         /// <summary>
         /// The name of the user you want to use to connect to the server project database.
@@ -119,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("username")]
-		public string Username = string.Empty;
+        public string Username { get; set; }
 
         /// <summary>
         /// The password of the user you want to use to connect to the server project database.
@@ -127,7 +136,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("password", typeof(PrivateStringSerialiserFactory))]
-		public PrivateString Password = string.Empty;
+        public PrivateString Password { get; set; }
 
         /// <summary>
         /// The path of the branch specification. to enumarate the name of the branches, use the ab enumbranch command line.
@@ -138,7 +147,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("branch", Required = false)]
-		public string Branch = string.Empty;
+        public string Branch { get; set; }
 
         /// <summary>
         /// This is the path of to monitor the file changes. Use alienbrain://Code or ab://Code project path format.
@@ -146,7 +155,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("project", Required = true)]
-		public string Project = string.Empty;
+        public string Project { get; set; }
 
         /// <summary>
         /// Specifies whether the current version of the source should be retrieved from Alienbrain. 
@@ -154,7 +163,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>true</default>
         [ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = true;
+        public bool AutoGetSource { get; set; }
 
         /// <summary>
         /// The path where the get latest will update the files. 
@@ -162,7 +171,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>Project Working Directory</default>
         [ReflectorProperty("workingDirectory", Required = false)]
-		public string WorkingDirectory = string.Empty;
+        public string WorkingDirectory { get; set; }
 
         /// <summary>
         /// Specifies whether or not the repository should be labelled after a successful build. 
@@ -170,7 +179,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("labelOnSuccess", Required = false)]
-		public bool LabelOnSuccess = false;
+        public bool LabelOnSuccess { get; set; }
 
 		// Actions
 		// I had to bake something here because Alienbrain return ERRORLEVEL 1 when nothing is found

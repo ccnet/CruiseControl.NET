@@ -114,9 +114,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public ClearCase() : base(new ClearCaseHistoryParser())
 		{}
 
-		public ClearCase(ProcessExecutor executor)
-			: base(new ClearCaseHistoryParser(), executor)
-		{}
+        public ClearCase(ProcessExecutor executor)
+            : base(new ClearCaseHistoryParser(), executor)
+        {
+            this.Executable = "cleartool.exe";
+            this.UseBaseline = false;
+            this.UseLabel = true;
+            this.AutoGetSource = true;
+        }
 
         /// <summary>
         /// Specifies the path to the ClearCase command line tool. You should only have to include this element if the
@@ -125,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>cleartool.exe</default>
         [ReflectorProperty("executable", Required = false)]
-		public string Executable = "cleartool.exe";
+        public string Executable { get; set; }
 
         /// <summary>
         /// The name of the project VOB that the view path uses. 
@@ -136,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("projectVobName", Required = false)]
-		public string ProjectVobName;
+        public string ProjectVobName { get; set; }
 
         /// <summary>
         /// Specifies whether a baseline should be applied when the build is successful. Requires the VOB your view
@@ -148,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("useBaseline", Required = false)]
-		public bool UseBaseline = false;
+        public bool UseBaseline { get; set; }
 
         /// <summary>
         /// Specifies whether a label should be applied when the build is successful. 
@@ -156,7 +161,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>true</default>
         [ReflectorProperty("useLabel", Required = false)]
-		public bool UseLabel = true;
+        public bool UseLabel { get; set; }
 
         /// <summary>
         /// The name of the view that you're using. 
@@ -167,7 +172,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("viewName", Required = false)]
-		public string ViewName;
+        public string ViewName { get; set; }
 
         /// <summary>
         /// The path that CCNet will check for modifications and use to apply the label. 
@@ -180,8 +185,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// This doesn't have to be the root of the local ClearCase view. It may be any of the root's children or even
         /// a single object.
         /// </remarks>
-		[ReflectorProperty("viewPath", Required=false)]
-		public string ViewPath;
+        [ReflectorProperty("viewPath", Required = false)]
+        public string ViewPath { get; set; }
 
         /// <summary>
         /// Specifies whether the current version of the source should be retrieved from ClearCase.
@@ -189,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>true</default>
         [ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = true;
+        public bool AutoGetSource { get; set; }
 
         /// <summary>
         /// The name of the branch that CCNet will monitor for modifications. Note that the config spec of the view
@@ -198,7 +203,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("branch", Required = false)]
-		public string Branch;
+        public string Branch { get; set; }
 
 		public string TempBaseline;
 

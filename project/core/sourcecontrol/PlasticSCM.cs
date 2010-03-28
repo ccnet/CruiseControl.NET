@@ -51,6 +51,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public PlasticSCM(IHistoryParser parser, ProcessExecutor executor)
 			: base(parser, executor)
 		{
+            this.AutoGetSource = true;
+            this.Executable = DefaultPlasticExecutable;
+            this.Branch = string.Empty;
+            this.Repository = string.Empty;
+            this.WorkingDirectory = string.Empty;
+            this.LabelOnSuccess = false;
+            this.LabelPrefix = "ccver-";
+            this.Forced = false;
 		}
 
         /// <summary>
@@ -59,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>true</default>
         [ReflectorProperty("autoGetSource", Required = false)]
-        public bool AutoGetSource = true;
+        public bool AutoGetSource { get; set; }
         
         /// <summary>
         /// Name of the PlasticSCM executable.  
@@ -67,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>cm</default>
         [ReflectorProperty("executable", Required = false)]
-		public string Executable = DefaultPlasticExecutable;
+        public string Executable { get; set; }
 
         /// <summary>
         /// The Plastic SCM branch to monitor. 
@@ -75,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>n/a</default>
         [ReflectorProperty("branch", Required = true)]
-		public string Branch = string.Empty;
+        public string Branch { get; set; }
 
         /// <summary>
         /// The Plastic SCM repository to monitor. 
@@ -83,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>Current in workspace</default>
         [ReflectorProperty("repository", Required = false)]
-		public string Repository = string.Empty;
+        public string Repository { get; set; }
 
         /// <summary>
         /// Valid Plastic SCM workspace path. 
@@ -91,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>Project Working Directory</default>
         [ReflectorProperty("workingDirectory", Required = false)]
-		public string WorkingDirectory = string.Empty;
+        public string WorkingDirectory { get; set; }
 
         /// <summary>
         /// Specifies whether or not CCNet should create an Plastic SCM baseline when the build is successful. 
@@ -99,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>false</default>
         [ReflectorProperty("labelOnSuccess", Required = false)]
-		public bool LabelOnSuccess = false;
+        public bool LabelOnSuccess { get; set; }
 
         /// <summary>
         /// Specifies the prefix label name. 
@@ -107,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>ccver-</default>
         [ReflectorProperty("labelPrefix", Required = false)]
-		public string LabelPrefix = "ccver-";
+        public string LabelPrefix { get; set; }
 
         /// <summary>
         /// Do the update with the "--forced" option.
@@ -115,7 +123,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>false</default>
         [ReflectorProperty("forced", Required = false)]
-		public bool Forced = false;
+        public bool Forced { get; set; }
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{

@@ -39,12 +39,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         private FtpLib ftp;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="FtpSourceControl"/> class.
+        /// </summary>
+        public FtpSourceControl()
+        {
+            this.ServerName = string.Empty;
+            this.UserName = string.Empty;
+            this.Password = string.Empty;
+            this.UseActiveConnectionMode = true;
+            this.FtpFolderName = string.Empty;
+            this.LocalFolderName = string.Empty;
+            this.RecursiveCopy = true;
+        }
+
+        /// <summary>
         /// The name of the server to connect to.
         /// </summary>
         /// <version>1.4.4</version>
         /// <default>n/a</default>
         [ReflectorProperty("serverName", Required = true)]
-        public string ServerName = string.Empty;
+        public string ServerName { get; set; }
 
         /// <summary>
         /// The user name to log in with.
@@ -52,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.4.4</version>
         /// <default>n/a</default>
         [ReflectorProperty("userName", Required = true)]
-        public string UserName = string.Empty;
+        public string UserName { get; set; }
 
         /// <summary>
         /// The password for the user.
@@ -60,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.4.4</version>
         /// <default>n/a</default>
         [ReflectorProperty("password", typeof(PrivateStringSerialiserFactory), Required = true)]
-        public PrivateString Password = string.Empty;
+        public PrivateString Password { get; set; }
 
         /// <summary>
         /// Whether to use active connection mode or not.
@@ -68,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.4.4</version>
         /// <default>true</default>
         [ReflectorProperty("useActiveConnectionMode", Required = false)]
-        public bool UseActiveConnectionMode = true;
+        public bool UseActiveConnectionMode { get; set; }
 
         /// <summary>
         /// The folder name of on the ftp site.
@@ -76,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.4.4</version>
         /// <default>n/a</default>
         [ReflectorProperty("ftpFolderName", Required = true)]
-        public string FtpFolderName = string.Empty;
+        public string FtpFolderName { get; set; }
 
         /// <summary>
         /// The folder name on the local system.
@@ -84,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.4.4</version>
         /// <default>n/a</default>
         [ReflectorProperty("localFolderName", Required = true)]
-        public string LocalFolderName = string.Empty;
+        public string LocalFolderName { get; set; }
 
         /// <summary>
         /// Whether to recurse into subfolders or not.
@@ -92,7 +106,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.4.4</version>
         /// <default>true</default>
         [ReflectorProperty("recursiveCopy", Required = true)]
-        public bool RecursiveCopy = true;
+        public bool RecursiveCopy { get; set; }
 
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {

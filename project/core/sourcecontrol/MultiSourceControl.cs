@@ -67,6 +67,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class MultiSourceControl 
         : SourceControlBase
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MultiSourceControl"/> class.
+        /// </summary>
+        public MultiSourceControl()
+        {
+            this.RequireChangesFromAll = false;
+        }
+
 		private ISourceControl[] _sourceControls;
 
         /// <summary>
@@ -76,8 +84,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </summary>
         /// <version>1.0</version>
         /// <default>false</default>
-		[ReflectorProperty("requireChangesFromAll", Required=false)]
-		public bool RequireChangesFromAll = false;
+        [ReflectorProperty("requireChangesFromAll", Required = false)]
+        public bool RequireChangesFromAll { get; set; }
 
         /// <summary>
         /// The list of other Source Control Blocks to include.

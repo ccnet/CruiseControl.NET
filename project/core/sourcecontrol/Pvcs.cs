@@ -68,16 +68,27 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public Pvcs() : this(new PvcsHistoryParser(), new ProcessExecutor())
 		{}
 
-		public Pvcs(IHistoryParser parser, ProcessExecutor executor) : base(parser, executor)
-		{}
+        public Pvcs(IHistoryParser parser, ProcessExecutor executor)
+            : base(parser, executor)
+        {
+            this.Executable = "pcli.exe";
+            this.Username = string.Empty;
+            this.Password = string.Empty;
+            this.WorkingDirectory = string.Empty;
+            this.Workspace = "/@/RootWorkspace";
+            this.Recursive = true;
+            this.LabelOnSuccess = false;
+            this.AutoGetSource = true;
+            this.ManuallyAdjustForDaylightSavings = false;
+        }
 
         /// <summary>
         /// The PVCS client executable.
         /// </summary>
         /// <version>1.0</version>
         /// <default>pcli.exe</default>
-		[ReflectorProperty("executable")]
-		public string Executable = "pcli.exe";
+        [ReflectorProperty("executable")]
+        public string Executable { get; set; }
 
         /// <summary>
         /// The location of the PVCS project database.
@@ -85,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("project")]
-		public string Project;
+        public string Project { get; set; }
 
         /// <summary>
         /// One ore more projects in PVCS that you wish to monitor. As long as each subproject is separated with a space
@@ -94,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("subproject")]
-		public string Subproject;
+        public string Subproject { get; set; }
 
         /// <summary>
         /// Username for the user account to use to connect to PVCS.
@@ -102,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("username", Required = false)]
-		public string Username =string.Empty;
+        public string Username { get; set; }
 
         /// <summary>
         /// Password for the PVCS user account.
@@ -110,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("password", Required = false)]
-		public string Password =string.Empty;
+        public string Password { get; set; }
 
         /// <summary>
         /// The local directory containing the source from the repository. 
@@ -118,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>Project Working Directory</default>
         [ReflectorProperty("workingdirectory", Required = false)]
-		public string WorkingDirectory =string.Empty;
+        public string WorkingDirectory { get; set; }
 
         /// <summary>
         /// The workspace to use.
@@ -126,7 +137,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>/@/RootWorkspace</default>
         [ReflectorProperty("workspace", Required = false)]
-		public string Workspace = "/@/RootWorkspace";
+        public string Workspace { get; set; }
 
         /// <summary>
         /// Whether to monitor all subfolders of the specified subproject.
@@ -134,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>true</default>
         [ReflectorProperty("recursive", Required = false)]
-		public bool Recursive = true;
+        public bool Recursive { get; set; }
 
         /// <summary>
         /// Whether or not to apply a label to the repository after each successful build. 
@@ -142,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("labelOnSuccess", Required = false)]
-		public bool LabelOnSuccess = false;
+        public bool LabelOnSuccess { get; set; }
 
         /// <summary>
         /// Specifies whether the CCNet should take responsibility for retrieving the current version of the source from
@@ -151,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>true</default>
         [ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = true;
+        public bool AutoGetSource { get; set; }
 
         /// <summary>
         /// In PVCS 7.5.1, the client does not automatically adjust dates to accommodate daylight savings time. Setting
@@ -160,7 +171,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.2.2</version>
         /// <default>false</default>
         [ReflectorProperty("manuallyAdjustForDaylightSavings", Required = false)]
-		public bool ManuallyAdjustForDaylightSavings = false;
+        public bool ManuallyAdjustForDaylightSavings { get; set; }
 
 		//TODO: Support Promotion Groups -- [ReflectorProperty("isPromotionGroup", Required=false)]
 		public bool IsPromotionGroup = false;

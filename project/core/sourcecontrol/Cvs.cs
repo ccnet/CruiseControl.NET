@@ -58,6 +58,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			this.fileSystem = fileSystem;
             this.executionEnvironment = executionEnvironment;
+            this.Executable = DefaultCvsExecutable;
+            this.CvsRoot = string.Empty;
+            this.WorkingDirectory = string.Empty;
+            this.LabelOnSuccess = false;
+            this.RestrictLogins = string.Empty;
+            this.UrlBuilder = new NullUrlBuilder();
+            this.AutoGetSource = true;
+            this.CleanCopy = true;
+            this.ForceCheckout = false;
+            this.Branch = string.Empty;
+            this.TagPrefix = "ver-";
 		}
 
         /// <summary>
@@ -66,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.2</version>
         /// <default>cvs</default>
         [ReflectorProperty("executable", Required = false)]
-		public string Executable = DefaultCvsExecutable;
+        public string Executable { get; set; }
 
         /// <summary>
         /// The cvs connection string. If this is unspecified and your working directory contains a previous checkout, then the CVS client
@@ -76,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.2</version>
         /// <default>n/a</default>
         [ReflectorProperty("cvsroot")]
-		public string CvsRoot = string.Empty;
+        public string CvsRoot { get; set; }
 
         /// <summary>
         /// The cvs module to monitor. This element is used both when checking for modifications and when checking out the source into an
@@ -85,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.2</version>
         /// <default>n/a</default>
         [ReflectorProperty("module")]
-		public string Module;
+        public string Module { get; set; }
 
         /// <summary>
         /// The folder that the source has been checked out into. 
@@ -93,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.2</version>
         /// <default>Project Working Directory</default>
         [ReflectorProperty("workingDirectory", Required = false)]
-		public string WorkingDirectory = string.Empty;
+        public string WorkingDirectory { get; set; }
 
         /// <summary>
         /// Specifies whether or not the repository should be labelled after a successful build.
@@ -101,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.2</version>
         /// <default>false</default>
         [ReflectorProperty("labelOnSuccess", Required = false)]
-		public bool LabelOnSuccess = false;
+        public bool LabelOnSuccess { get; set; }
 
         /// <summary>
         /// Only list modifications checked in by specified logins.
@@ -109,7 +120,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.2</version>
         /// <default>None</default>
         [ReflectorProperty("restrictLogins", Required = false)]
-		public string RestrictLogins = string.Empty;
+        public string RestrictLogins { get; set; }
 
         /// <summary>
         /// Converts the comment (or parts from it) into an url pointing to the issue for this build. See <link>IssueUrlBuilder</link> for
@@ -118,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.2</version>
         /// <default>false</default>
         [ReflectorProperty("webUrlBuilder", InstanceTypeKey = "type", Required = false)]
-		public IModificationUrlBuilder UrlBuilder = new NullUrlBuilder();
+        public IModificationUrlBuilder UrlBuilder { get; set; }
 
         /// <summary>
         /// Specifies whether the current version of the source should be retrieved from CVS. 
@@ -126,7 +137,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.2</version>
         /// <default>true</default>
         [ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = true;
+        public bool AutoGetSource { get; set; }
 
         /// <summary>
         /// Specifies whether or not a clean copy should be retrieved.
@@ -134,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.2</version>
         /// <default>true</default>
         [ReflectorProperty("cleanCopy", Required = false)]
-		public bool CleanCopy = true;
+        public bool CleanCopy { get; set; }
 
         /// <summary>
         /// Specifies whether the checkout command should be used instead of update.
@@ -142,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.2</version>
         /// <default>false</default>
         [ReflectorProperty("forceCheckout", Required = false)]
-        public bool ForceCheckout = false;
+        public bool ForceCheckout { get; set; }
 
         /// <summary>
         /// The branch to check for modifications on. 
@@ -150,7 +161,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.2</version>
         /// <default>None</default>
         [ReflectorProperty("branch", Required = false)]
-		public string Branch = string.Empty;
+        public string Branch { get; set; }
 
         /// <summary>
         /// By default the CVS tag name used when labelOnSuccess is set to true is ver-BuildLabel. If you specify this property, the
@@ -159,7 +170,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.2</version>
         /// <default>ver-</default>
         [ReflectorProperty("tagPrefix", Required = false)]
-		public string TagPrefix = "ver-";
+        public string TagPrefix { get; set; }
 
         /// <summary>
         /// Suppresses headers that do not have revisions within the specified modification window. Setting this option to true will reduce
@@ -169,7 +180,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.2</version>
         /// <default>false</default>
         [ReflectorProperty("suppressRevisionHeader", Required = false)]
-		public bool SuppressRevisionHeader;
+        public bool SuppressRevisionHeader { get; set; }
 
 		public string FormatCommandDate(DateTime date)
 		{

@@ -42,7 +42,6 @@
         }
 
         [Test]
-        [Explicit]
         public void CoreHasNoFieldsForReflection()
         {
             this.CheckForFieldAsReflectorProperty(typeof(Project).Assembly);

@@ -128,8 +128,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </summary>
         /// <version>1.5</version>
         /// <default>true</default>
-		[ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = true;
+        [ReflectorProperty("autoGetSource", Required = false)]
+        public bool AutoGetSource { get; set; }
 
         /// <summary>
         /// The location of the Git executable. 
@@ -137,7 +137,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>git</default>
         [ReflectorProperty("executable", Required = false)]
-		public string Executable = "git";
+        public string Executable { get; set; }
 
         /// <summary>
         /// The url to the remote repository. 
@@ -145,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>false</default>
         [ReflectorProperty("repository", Required = true)]
-		public string Repository;
+        public string Repository { get; set; }
 
         /// <summary>
         /// Remote repository branch to monitor and checkout. 
@@ -153,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>master</default>
         [ReflectorProperty("branch", Required = false)]
-		public string Branch = "master";
+        public string Branch { get; set; }
 
         /// <summary>
         /// Format string for the commit message of each tag. \{0\} is the placeholder for the current build label. 
@@ -161,7 +161,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>CCNet Build \{0\}</default>
         [ReflectorProperty("tagCommitMessage", Required = false)]
-		public string TagCommitMessage = "CCNet Build {0}";
+        public string TagCommitMessage { get; set; }
 
         /// <summary>
         /// Format string for the name of each tag. Make sure you're only using allowed characters. \{0\} is the placeholder for the current
@@ -170,7 +170,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>CCNet-Build-\{0\}</default>
         [ReflectorProperty("tagNameFormat", Required = false)]
-		public string TagNameFormat = "CCNet-Build-{0}";
+        public string TagNameFormat { get; set; }
 
         /// <summary>
         /// Indicates that the repository should be tagged if the build succeeds.
@@ -178,7 +178,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>false</default>
         [ReflectorProperty("tagOnSuccess", Required = false)]
-		public bool TagOnSuccess;
+        public bool TagOnSuccess { get; set; }
 
         /// <summary>
         /// Indicates that all modifications during the build process should be committed before tagging. This requires 'tagOnSuccess ' to be
@@ -187,7 +187,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>false</default>
         [ReflectorProperty("commitBuildModifications", Required = false)]
-		public bool CommitBuildModifications;
+        public bool CommitBuildModifications { get; set; }
 
         /// <summary>
         /// Indicates that files created during the build process should be committed before tagging. This requires 'commitBuildModifications'
@@ -196,7 +196,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>false</default>
         [ReflectorProperty("commitUntrackedFiles", Required = false)]
-		public bool CommitUntrackedFiles;
+        public bool CommitUntrackedFiles { get; set; }
 
         /// <summary>
         /// Used to set the "user.name" configuration setting in the local repository. Required for the 'tagOnSuccess ' feature. 
@@ -204,7 +204,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>None</default>
         [ReflectorProperty("committerName", Required = false)]
-		public string CommitterName;
+        public string CommitterName { get; set; }
 
         /// <summary>
         /// Used to set the "user.email" configuration setting in the local repository. Required for the 'tagOnSuccess ' feature. 
@@ -212,7 +212,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>None</default>
         [ReflectorProperty("committerEMail", Required = false)]
-		public string CommitterEMail;
+        public string CommitterEMail { get; set; }
 
         /// <summary>
         /// The directory containing the local git repository. 
@@ -220,7 +220,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>Project Working Directory</default>
         [ReflectorProperty("workingDirectory", Required = false)]
-		public string WorkingDirectory;
+        public string WorkingDirectory { get; set; }
 
 		public Git() : this(new GitHistoryParser(), new ProcessExecutor(), new SystemIoFileSystem(), new IoService()) { }
 
@@ -229,6 +229,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			_fileSystem = fileSystem;
 			_fileDirectoryDeleter = fileDirectoryDeleter;
+            this.AutoGetSource = true;
+            this.Executable = "git";
+            this.Branch = "master";
+            this.TagCommitMessage = "CCNet Build {0}";
+            this.TagNameFormat = "CCNet-Build-{0}";
 		}
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)

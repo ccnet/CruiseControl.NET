@@ -53,6 +53,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public Mks(IHistoryParser parser, ProcessExecutor executor) : base(parser, executor)
 		{
+            this.Executable = DefaultExecutable;
+            this.AutoGetSource = DefaultAutoGetSource;
+            this.AutoDisconnect = DefaultAutoDisconnect;
+            this.Port = DefaultPort;
 		}
 
         /// <summary>
@@ -60,8 +64,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </summary>
         /// <version>1.0</version>
         /// <default>si.exe</default>
-		[ReflectorProperty("executable")]
-		public string Executable = DefaultExecutable;
+        [ReflectorProperty("executable")]
+        public string Executable { get; set; }
 
         /// <summary>
         /// MKS Source Integrity user ID that CCNet should use.
@@ -69,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("user", Required = false)]
-		public string User;
+        public string User { get; set; }
 
         /// <summary>
         /// Password for the MKS Source Integrity user ID.
@@ -77,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("password", Required = false)]
-		public string Password;
+        public string Password { get; set; }
 
         /// <summary>
         /// Whether to set a checkpoint on success or not.
@@ -85,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("checkpointOnSuccess", Required = false)]
-		public bool CheckpointOnSuccess;
+        public bool CheckpointOnSuccess { get; set; }
 
         /// <summary>
         /// Instruct CCNet whether or not you want it to automatically retrieve the latest source from the repository.
@@ -93,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>true</default>
         [ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = DefaultAutoGetSource;
+        public bool AutoGetSource { get; set; }
 		
 		/// <summary>
         /// Whether or not CCNet should automatically disconnect after the sourcecontrol operation has finished.
@@ -101,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("autoDisconnect", Required = false)]
-		public bool AutoDisconnect = DefaultAutoDisconnect;
+        public bool AutoDisconnect { get; set; }
 
         /// <summary>
         /// The IP address or machine name of the MKS Source Integrity server. 
@@ -109,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("hostname")]
-		public string Hostname;
+        public string Hostname { get; set; }
 
         /// <summary>
         /// The port on the MKS Source Integrity server to connect to. 
@@ -117,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>8722</default>
         [ReflectorProperty("port", Required = false)]
-		public int Port = DefaultPort;
+        public int Port { get; set; }
 
         /// <summary>
         /// The local path MKS Source Integrity sandbox root corresponds to.
@@ -125,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("sandboxroot")]
-		public string SandboxRoot;
+        public string SandboxRoot { get; set; }
 
         /// <summary>
         /// The project file.
@@ -133,7 +137,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("sandboxfile")]
-		public string SandboxFile;
+        public string SandboxFile { get; set; }
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{

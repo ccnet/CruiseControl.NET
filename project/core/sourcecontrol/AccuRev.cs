@@ -69,8 +69,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		/// <version>1.3</version>
         /// <default>false</default>
-		[ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = false;
+        [ReflectorProperty("autoGetSource", Required = false)]
+        public bool AutoGetSource { get; set; }
 
 		/// <summary>
         /// Specifies the path to the AccuRev command line tool. You should only have to include this element if the tool isn't in your
@@ -79,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>accurev.exe</default>
         [ReflectorProperty("executable", Required = false)]
-		public string Executable = "accurev.exe";
+        public string Executable { get; set; }
 
 		/// <summary>
         /// Specifies the location of the AccuRev home directory. The pathname can be either absolute or relative to the project artifact
@@ -92,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>None</default>
         [ReflectorProperty("homeDir", Required = false)]
-		public string AccuRevHomeDir = null;
+        public string AccuRevHomeDir { get; set; }
 		
 		/// <summary>
         /// Specifies whether or not CCNet should create an AccuRev snapshot when the build is successful. If set to true, CCNet will create
@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>false</default>
         [ReflectorProperty("labelOnSuccess", Required = false)]
-		public bool LabelOnSuccess = false;
+        public bool LabelOnSuccess { get; set; }
 
 		/// <summary>
         /// Specifies whether or not CCNet should log in to AccuRev using the specified principal and password. If set to true, the principal
@@ -113,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>false</default>
         [ReflectorProperty("login", Required = false)]
-		public bool LogIn = false;
+        public bool LogIn { get; set; }
 		
 		/// <summary>
         /// Specifies the password for the AccuRev "principal" (userid). 
@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>None</default>
         [ReflectorProperty("password", typeof(PrivateStringSerialiserFactory), Required = false)]
-        public PrivateString AccuRevPassword = null;
+        public PrivateString AccuRevPassword { get; set; }
 
 		/// <summary>
         /// Specifies the AccuRev "principal" (userid) to run under. If not specified, AccuRev will follow its rules for determining the
@@ -130,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>false</default>
         [ReflectorProperty("principal", Required = false)]
-		public string AccuRevPrincipal = null;
+        public string AccuRevPrincipal { get; set; }
 		
 		/// <summary>
         /// Specifies the location on disk of the AccuRev workspace that CCNet monitors for changes. The pathname can be either absolute or
@@ -140,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>false</default>
         [ReflectorProperty("workspace", Required = false)]
-		public string Workspace = string.Empty;
+        public string Workspace { get; set; }
         
         #endregion
 
@@ -179,6 +179,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				Log.Error("login=true requires principal= and password= to be specified.");
 			}
+
+            this.AutoGetSource = false;
+            this.Executable = "accurev.exe";
+            this.AccuRevHomeDir = null;
+            this.LabelOnSuccess = false;
+            this.LogIn = false;
+            this.AccuRevPassword = null;
+            this.AccuRevPrincipal = null;
+            this.Workspace = string.Empty;
 		}
 
 		/// <summary>

@@ -165,8 +165,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         public ExternalSourceControl(IHistoryParser parser, ProcessExecutor executor)
             : base(parser, executor)
         {
+            this.ArgString = string.Empty;
+            this.AutoGetSource = false;
+            this.EnvironmentVariables = new EnvironmentVariable[0];
+            this.LabelOnSuccess = false;
         }
-
         #endregion
 
         #region Properties
@@ -181,7 +184,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>None</default>
         [ReflectorProperty("args", Required = false)]
-        public string ArgString = string.Empty;
+        public string ArgString { get; set; }
 
         /// <summary>
         /// Should we automatically obtain updated source from the source control system or not? 
@@ -189,7 +192,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>false</default>
         [ReflectorProperty("autoGetSource", Required = false)]
-        public bool AutoGetSource = false;
+        public bool AutoGetSource { get; set; }
 
         /// <summary>
         /// A set of environment variables set for commands that are executed.
@@ -197,7 +200,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>None</default>
         [ReflectorProperty("environment", Required = false)]
-        public EnvironmentVariable[] EnvironmentVariables = new EnvironmentVariable[0];
+        public EnvironmentVariable[] EnvironmentVariables { get; set; }
 
         /// <summary>
         /// Name of the source control system executable to run.
@@ -205,7 +208,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>n/a</default>
         [ReflectorProperty("executable", Required = true)]
-        public string Executable;
+        public string Executable { get; set; }
 
         /// <summary>
         /// If set, the source repository will be tagged with the build label upon successful builds.
@@ -213,7 +216,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.3</version>
         /// <default>false</default>
         [ReflectorProperty("labelOnSuccess", Required = false)]
-        public bool LabelOnSuccess = false;
+        public bool LabelOnSuccess { get; set; }
 
         #endregion
 

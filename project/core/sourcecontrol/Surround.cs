@@ -47,8 +47,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private const string DefaultServerConnection = "127.0.0.1:4900";
 		private const string DefaultServerLogin = "Administrator:";
 
-		public Surround() : base(new SurroundHistoryParser(), new ProcessExecutor())
-		{}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Surround"/> class.
+        /// </summary>
+        public Surround()
+            : base(new SurroundHistoryParser(), new ProcessExecutor())
+        {
+            this.Executable = "sscm";
+            this.ServerConnect = DefaultServerConnection;
+            this.ServerLogin = DefaultServerLogin;
+            this.SearchRegExp = 0;
+            this.Recursive = 0;
+        }
 
         /// <summary>
         /// The local path for the Surround SCM command-line client 
@@ -56,8 +66,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </summary>
         /// <version>1.0</version>
         /// <default>sscm</default>
-		[ReflectorProperty("executable")]
-		public string Executable = "sscm";
+        [ReflectorProperty("executable")]
+        public string Executable { get; set; }
 
         /// <summary>
         /// The Surround SCM branch to monitor. 
@@ -65,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("branch")]
-		public string Branch;
+        public string Branch { get; set; }
 
         /// <summary>
         /// The Surround SCM repository to monitor. 
@@ -73,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("repository")]
-		public string Repository;
+        public string Repository { get; set; }
 
         /// <summary>
         /// A filename pattern to match to monitor and retrieve files.
@@ -81,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("file", Required = false)]
-		public string File;
+        public string File { get; set; }
 
         /// <summary>
         /// The local path to get files from Surround SCM to. 
@@ -89,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>n/a</default>
         [ReflectorProperty("workingDirectory")]
-		public string WorkingDirectory;
+        public string WorkingDirectory { get; set; }
 
         /// <summary>
         /// The IP address or machine name and port number of the Surround SCM server. 
@@ -97,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>127.0.0.1:4900</default>
         [ReflectorProperty("serverconnect", Required = false)]
-		public string ServerConnect = DefaultServerConnection;
+        public string ServerConnect { get; set; }
 
         /// <summary>
         /// Surround SCM login:password that CCNet should use. 
@@ -105,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>Administrator</default>
         [ReflectorProperty("serverlogin", Required = false)]
-		public string ServerLogin = DefaultServerLogin;
+        public string ServerLogin { get; set; }
 
         /// <summary>
         /// Treat the filename pattern as a regular expression. (Value 1 = true, 0 = false) 
@@ -113,7 +123,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>0</default>
         [ReflectorProperty("searchregexp", Required = false)]
-		public int SearchRegExp = 0;
+        public int SearchRegExp { get; set; }
 
         /// <summary>
         /// Monitor and retrieve all files in child repositories of the specified repository. (Value 1 = true, 
@@ -122,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>0</default>
         [ReflectorProperty("recursive", Required = false)]
-		public int Recursive = 0;
+        public int Recursive { get; set; }
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
