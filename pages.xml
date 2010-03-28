@@ -1,18 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <confluence space="CCNET">
   <page title=".bookmarks" id="21004293" url="http://confluence.public.thoughtworks.org//display/CCNET/.bookmarks" parentId="0" />
-  <page title="AccuRev Source Control Block" id="6342" url="http://confluence.public.thoughtworks.org//display/CCNET/AccuRev+Source+Control+Block" parentId="1753" />
-  <page title="ActionFilter" id="31686687" url="http://confluence.public.thoughtworks.org//display/CCNET/ActionFilter" parentId="31686678" />
+  <page title="AccuRev Source Control Block" id="6342" url="http://confluence.public.thoughtworks.org//display/CCNET/AccuRev+Source+Control+Block" parentId="1753" source="accurev.wiki" />
+  <page title="ActionFilter" id="31686687" url="http://confluence.public.thoughtworks.org//display/CCNET/ActionFilter" parentId="31686678" source="actionFilter.wiki" />
   <page title="Alienbrain Source Control Block" id="4909" url="http://confluence.public.thoughtworks.org//display/CCNET/Alienbrain+Source+Control+Block" parentId="1753" source="alienbrain.wiki" />
-  <page title="Artifact Cleanup Publisher" id="5505061" url="http://confluence.public.thoughtworks.org//display/CCNET/Artifact+Cleanup+Publisher" parentId="1756" />
-  <page title="Assembly Match" id="31097597" url="http://confluence.public.thoughtworks.org//display/CCNET/Assembly+Match" parentId="25591881" />
-  <page title="Assembly Version Labeller" id="26247204" url="http://confluence.public.thoughtworks.org//display/CCNET/Assembly+Version+Labeller" parentId="1755" />
+  <page title="Artifact Cleanup Publisher" id="5505061" url="http://confluence.public.thoughtworks.org//display/CCNET/Artifact+Cleanup+Publisher" parentId="1756" source="artifactcleanup.wiki" />
+  <page title="Assembly Match" id="31097597" url="http://confluence.public.thoughtworks.org//display/CCNET/Assembly+Match" parentId="25591881" source="assemblyMatch.wiki" />
+  <page title="Assembly Version Labeller" id="26247204" url="http://confluence.public.thoughtworks.org//display/CCNET/Assembly+Version+Labeller" parentId="1755" source="assemblyVersionLabeller.wiki" />
   <page title="Basic Installation" id="295" url="http://confluence.public.thoughtworks.org//display/CCNET/Basic+Installation" parentId="71" />
-  <page title="BitKeeper Source Control Block" id="4448" url="http://confluence.public.thoughtworks.org//display/CCNET/BitKeeper+Source+Control+Block" parentId="1753" />
-  <page title="Boolean Parameter" id="28868637" url="http://confluence.public.thoughtworks.org//display/CCNET/Boolean+Parameter" parentId="28475414" />
-  <page title="Build Log Build Plugin" id="3001" url="http://confluence.public.thoughtworks.org//display/CCNET/Build+Log+Build+Plugin" parentId="2973" />
-  <page title="Build Publisher" id="1798" url="http://confluence.public.thoughtworks.org//display/CCNET/Build+Publisher" parentId="1756" />
-  <page title="Build Report Build Plugin" id="2998" url="http://confluence.public.thoughtworks.org//display/CCNET/Build+Report+Build+Plugin" parentId="2973" />
+  <page title="BitKeeper Source Control Block" id="4448" url="http://confluence.public.thoughtworks.org//display/CCNET/BitKeeper+Source+Control+Block" parentId="1753" source="bitkeeper.wiki" />
+  <page title="Boolean Parameter" id="28868637" url="http://confluence.public.thoughtworks.org//display/CCNET/Boolean+Parameter" parentId="28475414" source="booleanParameter.wiki" />
+  <page title="Build Log Build Plugin" id="3001" url="http://confluence.public.thoughtworks.org//display/CCNET/Build+Log+Build+Plugin" parentId="2973" source="buildLogBuildPlugin.wiki" />
+  <page title="Build Publisher" id="1798" url="http://confluence.public.thoughtworks.org//display/CCNET/Build+Publisher" parentId="1756" source="buildpublisher.wiki" />
+  <page title="Build Report Build Plugin" id="2998" url="http://confluence.public.thoughtworks.org//display/CCNET/Build+Report+Build+Plugin" parentId="2973" source="buildReportBuildPlugin.wiki" />
   <page title="Building Packages" id="26574854" url="http://confluence.public.thoughtworks.org//display/CCNET/Building+Packages" parentId="71" />
   <page title="CCNet 0.6 Final Release Notes" id="500" url="http://confluence.public.thoughtworks.org//display/CCNET/CCNet+0.6+Final+Release+Notes" parentId="112" />
   <page title="CCNet 0.6 RC1 Release Notes" id="363" url="http://confluence.public.thoughtworks.org//display/CCNET/CCNet+0.6+RC1+Release+Notes" parentId="112" />
@@ -42,11 +42,11 @@
   <page title="CCNet 1.4.4 SP1 Release Notes" id="28278789" url="http://confluence.public.thoughtworks.org//display/CCNET/CCNet+1.4.4+SP1+Release+Notes" parentId="112" />
   <page title="CCNet 1.5 CTP Release Notes" id="28475432" url="http://confluence.public.thoughtworks.org//display/CCNET/CCNet+1.5+CTP+Release+Notes" parentId="112" />
   <page title="CCTray" id="413" url="http://confluence.public.thoughtworks.org//display/CCNET/CCTray" parentId="71" />
-  <page title="CCTray Download Plugin" id="4390945" url="http://confluence.public.thoughtworks.org//display/CCNET/CCTray+Download+Plugin" parentId="2973" />
+  <page title="CCTray Download Plugin" id="4390945" url="http://confluence.public.thoughtworks.org//display/CCNET/CCTray+Download+Plugin" parentId="2973" source="cctrayDownloadPlugin.wiki" />
   <page title="cctray-settings.xml" id="4404" url="http://confluence.public.thoughtworks.org//display/CCNET/cctray-settings.xml" parentId="413" />
   <page title="CCValidator" id="25591829" url="http://confluence.public.thoughtworks.org//display/CCNET/CCValidator" parentId="325" />
   <page title="Channel Security" id="31490148" url="http://confluence.public.thoughtworks.org//display/CCNET/Channel+Security" parentId="28868730" />
-  <page title="CommentFilter" id="31686689" url="http://confluence.public.thoughtworks.org//display/CCNET/CommentFilter" parentId="31686678" />
+  <page title="CommentFilter" id="31686689" url="http://confluence.public.thoughtworks.org//display/CCNET/CommentFilter" parentId="31686678" source="commentFilter.wiki" />
   <page title="Commit Process" id="5434" url="http://confluence.public.thoughtworks.org//display/CCNET/Commit+Process" parentId="71" />
   <page title="Conditional Publisher" id="28868660" url="http://confluence.public.thoughtworks.org//display/CCNET/Conditional+Publisher" parentId="1756" />
   <page title="Configuration Preprocessor" id="20152326" url="http://confluence.public.thoughtworks.org//display/CCNET/Configuration+Preprocessor" parentId="325" />
