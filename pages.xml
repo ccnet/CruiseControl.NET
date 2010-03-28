@@ -41,11 +41,13 @@
   <page title="CCNet 1.4.4 Release Notes" id="28016681" url="http://confluence.public.thoughtworks.org//display/CCNET/CCNet+1.4.4+Release+Notes" parentId="112" />
   <page title="CCNet 1.4.4 SP1 Release Notes" id="28278789" url="http://confluence.public.thoughtworks.org//display/CCNET/CCNet+1.4.4+SP1+Release+Notes" parentId="112" />
   <page title="CCNet 1.5 CTP Release Notes" id="28475432" url="http://confluence.public.thoughtworks.org//display/CCNET/CCNet+1.5+CTP+Release+Notes" parentId="112" />
+  <page title="CCNet 1.5 RC1 Release Notes" id="32505938" url="http://confluence.public.thoughtworks.org//display/CCNET/CCNet+1.5+RC1+Release+Notes" parentId="112" />
   <page title="CCTray" id="413" url="http://confluence.public.thoughtworks.org//display/CCNET/CCTray" parentId="71" />
   <page title="CCTray Download Plugin" id="4390945" url="http://confluence.public.thoughtworks.org//display/CCNET/CCTray+Download+Plugin" parentId="2973" source="cctrayDownloadPlugin.wiki" />
   <page title="cctray-settings.xml" id="4404" url="http://confluence.public.thoughtworks.org//display/CCNET/cctray-settings.xml" parentId="413" />
   <page title="CCValidator" id="25591829" url="http://confluence.public.thoughtworks.org//display/CCNET/CCValidator" parentId="325" />
   <page title="Channel Security" id="31490148" url="http://confluence.public.thoughtworks.org//display/CCNET/Channel+Security" parentId="28868730" />
+  <page title="CodeIt.Right Analysis Task" id="34701688" url="http://confluence.public.thoughtworks.org//display/CCNET/CodeIt.Right+Analysis+Task" parentId="1756" source="codeItRight.wiki" />
   <page title="CommentFilter" id="31686689" url="http://confluence.public.thoughtworks.org//display/CCNET/CommentFilter" parentId="31686678" source="commentFilter.wiki" />
   <page title="Commit Process" id="5434" url="http://confluence.public.thoughtworks.org//display/CCNET/Commit+Process" parentId="71" />
   <page title="Conditional Publisher" id="28868660" url="http://confluence.public.thoughtworks.org//display/CCNET/Conditional+Publisher" parentId="1756" source="conditionalPublisher.wiki" />
@@ -167,6 +169,7 @@
   <page title="Null Task" id="4319" url="http://confluence.public.thoughtworks.org//display/CCNET/Null+Task" parentId="1756" />
   <page title="Numeric Parameter" id="28868642" url="http://confluence.public.thoughtworks.org//display/CCNET/Numeric+Parameter" parentId="28475414" />
   <page title="NUnit Task" id="625" url="http://confluence.public.thoughtworks.org//display/CCNET/NUnit+Task" parentId="1756" />
+  <page title="Ohloh Project Plugin" id="34013214" url="http://confluence.public.thoughtworks.org//display/CCNET/Ohloh+Project+Plugin" parentId="2973" />
   <page title="Package Publisher" id="26247208" url="http://confluence.public.thoughtworks.org//display/CCNET/Package+Publisher" parentId="1756" />
   <page title="Packaging a Release" id="21004316" url="http://confluence.public.thoughtworks.org//display/CCNET/Packaging+a+Release" parentId="115" />
   <page title="Parallel Task" id="28475398" url="http://confluence.public.thoughtworks.org//display/CCNET/Parallel+Task" parentId="1756" />
@@ -203,6 +206,7 @@
   <page title="Roadmap" id="25591930" url="http://confluence.public.thoughtworks.org//display/CCNET/Roadmap" parentId="3" />
   <page title="RoboCopy Source Control Block" id="31686739" url="http://confluence.public.thoughtworks.org//display/CCNET/RoboCopy+Source+Control+Block" parentId="1753" />
   <page title="Role Permission" id="31490139" url="http://confluence.public.thoughtworks.org//display/CCNET/Role+Permission" parentId="31490136" source="rolePermission.wiki" />
+  <page title="Roll-up Trigger" id="34701686" url="http://confluence.public.thoughtworks.org//display/CCNET/Roll-up+Trigger" parentId="1750" source="rollUpTrigger.wiki" />
   <page title="RSS Publisher" id="5865638" url="http://confluence.public.thoughtworks.org//display/CCNET/RSS+Publisher" parentId="1756" />
   <page title="RSSFeedProjectPlugin" id="5865639" url="http://confluence.public.thoughtworks.org//display/CCNET/RSSFeedProjectPlugin" parentId="2973" />
   <page title="Scenario 1" id="28868718" url="http://confluence.public.thoughtworks.org//display/CCNET/Scenario+1" parentId="28868714" />
