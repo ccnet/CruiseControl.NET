@@ -776,6 +776,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="tasks\CodeItRightTask.cs" />
+    <Compile Include="tasks\CommentTask.cs" />
     <Compile Include="tasks\CoverageFilter.cs" />
     <Compile Include="tasks\CoverageThreshold.cs" />
     <Compile Include="tasks\CruiseServerControlTask.cs" />
@@ -786,6 +787,7 @@
     <Compile Include="tasks\DynamicValueUtility.cs" />
     <Compile Include="tasks\FBVariable.cs" />
     <Compile Include="tasks\FtpTask.cs" />
+    <Compile Include="tasks\GeneralTaskResult.cs" />
     <Compile Include="tasks\HttpRequestHeader.cs" />
     <Compile Include="tasks\HttpRequestSettings.cs" />
     <Compile Include="tasks\HttpStatusTask.cs" />
