@@ -176,7 +176,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldCheckoutInsteadOfUpdateIfCVSFoldersDoNotExist()
 		{
-			ExpectToExecuteArguments(string.Format(@"-d :pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet -q checkout -R -P -d {0} ccnet", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
+            var lastDirectorySeparatorIndex = DefaultWorkingDirectory.TrimEnd().TrimEnd(Path.DirectorySeparatorChar).LastIndexOf(Path.DirectorySeparatorChar);
+            var checkoutWd = DefaultWorkingDirectory.Substring(0, lastDirectorySeparatorIndex);
+            var checkoutDir = DefaultWorkingDirectory.Substring(lastDirectorySeparatorIndex).Trim(Path.DirectorySeparatorChar);
+
+		    ExpectToExecuteArguments(
+		        string.Format(
+		            @"-d :pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet -q checkout -R -P -d {0} ccnet",
+                    StringUtil.AutoDoubleQuoteString(checkoutDir)), checkoutWd);
+
 			ExpectCvsDirectoryExists(false);
 
 			cvs.CvsRoot = ":pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet";
@@ -189,7 +197,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldCheckoutFromBranchInsteadOfUpdateIfCVSFoldersDoNotExist()
 		{
-			ExpectToExecuteArguments(string.Format(@"-d :pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet -q checkout -R -P -r branch -d {0} ccnet", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory)));
+            var lastDirectorySeparatorIndex = DefaultWorkingDirectory.TrimEnd().TrimEnd(Path.DirectorySeparatorChar).LastIndexOf(Path.DirectorySeparatorChar);
+            var checkoutWd = DefaultWorkingDirectory.Substring(0, lastDirectorySeparatorIndex);
+            var checkoutDir = DefaultWorkingDirectory.Substring(lastDirectorySeparatorIndex).Trim(Path.DirectorySeparatorChar);
+
+		    ExpectToExecuteArguments(
+		        string.Format(
+		            @"-d :pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet -q checkout -R -P -r branch -d {0} ccnet",
+                    StringUtil.AutoDoubleQuoteString(checkoutDir)), checkoutWd);
+
 			ExpectCvsDirectoryExists(false);
 
 			cvs.CvsRoot = ":pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet";
@@ -203,7 +219,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldCheckoutOnWorkingDictionaryWithSpaces()
 		{
-			ExpectToExecuteArguments(string.Format(@"-d :pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet -q checkout -R -P -r branch -d {0} ccnet", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectoryWithSpaces)), DefaultWorkingDirectoryWithSpaces);
+            var lastDirectorySeparatorIndex = DefaultWorkingDirectoryWithSpaces.TrimEnd().TrimEnd(Path.DirectorySeparatorChar).LastIndexOf(Path.DirectorySeparatorChar);
+            var checkoutWd = DefaultWorkingDirectoryWithSpaces.Substring(0, lastDirectorySeparatorIndex);
+            var checkoutDir = DefaultWorkingDirectoryWithSpaces.Substring(lastDirectorySeparatorIndex).Trim(Path.DirectorySeparatorChar);
+
+		    ExpectToExecuteArguments(
+		        string.Format(
+		            @"-d :pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet -q checkout -R -P -r branch -d {0} ccnet",
+                    StringUtil.AutoDoubleQuoteString(checkoutDir)), checkoutWd);
+
 			mockFileSystem.ExpectAndReturn("DirectoryExists", false, Path.Combine(DefaultWorkingDirectoryWithSpaces, "CVS"));
 
 			cvs.CvsRoot = ":pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet";
