@@ -178,21 +178,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             : base(parser, executor)
         {
             this.fileSystem = fileSystem;
-            this.InitialiseDefaults();
+            this.AuthCaching = AuthCachingMode.None;
+            this.Executable = DefaultExecutable;
+            this.TagOnSuccess = false;
+            this.DeleteObstructions = false;
+            this.AutoGetSource = true;
+            this.CheckExternals = false;
+            this.CheckExternalsRecursive = true;
+            this.CleanCopy = false;
+            this.Revert = false;
+            this.CleanUp = false;
         }
 
         public Svn()
             : this(new ProcessExecutor(), new SvnHistoryParser(), new SystemIoFileSystem())
         {
-            this.InitialiseDefaults();
-        }
-
-        /// <summary>
-        /// Initialises the defaults.
-        /// </summary>
-        private void InitialiseDefaults()
-        {
-            this.AuthCaching = AuthCachingMode.None;
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("webUrlBuilder", InstanceTypeKey = "type", Required = false)]
-        public IModificationUrlBuilder UrlBuilder;
+        public IModificationUrlBuilder UrlBuilder { get; set; }
 
         /// <summary>
         /// The location of the svn executable.
@@ -209,7 +209,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>svn</default>
         [ReflectorProperty("executable", Required = false)]
-        public string Executable = DefaultExecutable;
+        public string Executable { get; set; }
 
         /// <summary>
         /// The url for your repository (e.g., svn://svnserver/).
@@ -217,7 +217,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("trunkUrl", Required = false)]
-        public string TrunkUrl;
+        public string TrunkUrl { get; set; }
 
         /// <summary>
         /// The directory containing the locally checked out workspace. 
@@ -225,7 +225,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>Project Working Directory</default>
         [ReflectorProperty("workingDirectory", Required = false)]
-        public string WorkingDirectory;
+        public string WorkingDirectory { get; set; }
 
         /// <summary>
         /// Indicates that the repository should be tagged if the build succeeds. 
@@ -233,7 +233,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("tagOnSuccess", Required = false)]
-        public bool TagOnSuccess = false;
+        public bool TagOnSuccess { get; set; }
 
         /// <summary>
         /// Should any detected obstructions be deleted prior to getting modifications?
@@ -241,7 +241,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>false</default>
         [ReflectorProperty("deleteObstructions", Required = false)]
-        public bool DeleteObstructions = false;
+        public bool DeleteObstructions { get; set; }
 
         /// <summary>
         /// The base url for tags in your repository. 
@@ -249,7 +249,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("tagBaseUrl", Required = false)]
-        public string TagBaseUrl;
+        public string TagBaseUrl { get; set; }
 
         /// <summary>
         /// The username to use for authentication when connecting to the repository. 
@@ -257,7 +257,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("username", Required = false)]
-        public string Username;
+        public string Username { get; set; }
 
         /// <summary>
         /// The password to use for authentication when connecting to the repository. 
@@ -265,7 +265,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>None</default>
         [ReflectorProperty("password", typeof(PrivateStringSerialiserFactory), Required = false)]
-        public PrivateString Password;
+        public PrivateString Password { get; set; }
 
         /// <summary>
         /// Whether to retrieve the updates from Subversion for a particular build. 
@@ -273,7 +273,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>true</default>
         [ReflectorProperty("autoGetSource", Required = false)]
-        public bool AutoGetSource = true;
+        public bool AutoGetSource { get; set; }
 
         /// <summary>
         /// Whether to check the paths specified in the svn:externals property for modifications. 
@@ -281,7 +281,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("checkExternals", Required = false)]
-        public bool CheckExternals = false;
+        public bool CheckExternals { get; set; }
 
         /// <summary>
         /// Whether to check for modifications of svn:externals recursively. 
@@ -289,7 +289,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>true</default>
         [ReflectorProperty("checkExternalsRecursive", Required = false)]
-        public bool CheckExternalsRecursive = true;
+        public bool CheckExternalsRecursive { get; set; }
 
         /// <summary>
         /// Whether to delete the working copy before updating the source. 
@@ -297,7 +297,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.0</version>
         /// <default>false</default>
         [ReflectorProperty("cleanCopy", Required = false)]
-        public bool CleanCopy = false;
+        public bool CleanCopy { get; set; }
 
         /// <summary>
         /// Reverts any local changes to a file or directory and resolves any conflicted states. svn revert will not only revert the contents
@@ -307,7 +307,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.4.3</version>
         /// <default>false</default>
         [ReflectorProperty("revert", Required = false)]
-        public bool Revert = false;
+        public bool Revert { get; set; }
 
         /// <summary>
         /// Recursively clean up the working copy, removing locks resuming unfinished operations. If you ever get a "working copy locked"
@@ -316,7 +316,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.4.3</version>
         /// <default>false</default>
         [ReflectorProperty("cleanUp", Required = false)]
-        public bool CleanUp = false;
+        public bool CleanUp { get; set; }
 
         /// <summary>
         /// Whether to use revision numbers for fetching the modifications.
@@ -333,6 +333,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <default>None</default>
         [ReflectorProperty("authCaching", Required = false)]
         public AuthCachingMode AuthCaching { get; set; }
+
+
+        /// <summary>
+        /// Forces updating, overwriting modified files. See CCNET-1351.
+        /// This passes --force to svn.exe.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
+        [ReflectorProperty("forceUpdate", Required = false)]
+        public bool ForceUpdate { get; set; }
+
 
         private readonly IFileSystem fileSystem;
 
@@ -659,6 +670,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             // Do not use Modification.GetLastChangeNumber() here directly.
             AppendRevision(buffer, latestRevision);
             AppendCommonSwitches(buffer);
+            if (ForceUpdate) buffer.Add("--force");
             return NewProcessInfo(buffer, result);
         }
 
