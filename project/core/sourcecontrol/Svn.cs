@@ -334,6 +334,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("authCaching", Required = false)]
         public AuthCachingMode AuthCaching { get; set; }
 
+
+        /// <summary>
+        /// Forces updating, overwriting modified files. See CCNET-1351.
+        /// This passes --force to svn.exe.
+        /// </summary>
+        /// <version>1.5</version>
+        /// <default>false</default>
+        [ReflectorProperty("forceUpdate", Required = false)]
+        public bool ForceUpdate = false;
+
+
         private readonly IFileSystem fileSystem;
 
         /// <summary>
@@ -659,6 +670,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             // Do not use Modification.GetLastChangeNumber() here directly.
             AppendRevision(buffer, latestRevision);
             AppendCommonSwitches(buffer);
+            if (ForceUpdate) buffer.Add("--force");
             return NewProcessInfo(buffer, result);
         }
 
