@@ -342,7 +342,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>false</default>
         [ReflectorProperty("forceUpdate", Required = false)]
-        public bool ForceUpdate = false;
+        public bool ForceUpdate { get; set; }
 
 
         private readonly IFileSystem fileSystem;
