@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		const string GIT_FETCH = "fetch origin";
 		const string GIT_REMOTE_HASH = "log origin/master --date-order -1 --pretty=format:\"%H\"";
 		const string GIT_LOCAL_HASH = "log --date-order -1 --pretty=format:\"%H\"";
-		string GIT_REMOTE_COMMITS = "log origin/master --date-order --name-status \"--after={0}\" \"--before={1}\" --pretty=format:\"Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:\"";
+		string GIT_REMOTE_COMMITS = "log origin/master --date-order --name-status -c \"--after={0}\" \"--before={1}\" --pretty=format:\"Commit:%H%nTime:%ci%nAuthor:%an%nE-Mail:%ae%nMessage:%s%n%n%b%nChanges:\"";
 
 		private Git git;
 		private IMock mockHistoryParser;

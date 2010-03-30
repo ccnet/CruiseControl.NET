@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				case "m":
 					return "Modified";
 				default:
-					return string.Concat("Unknown action: ", actionAbbreviation);
+					return actionAbbreviation;
 			}
 		}
 

@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// no changes.
     /// </para>
     /// <para>
-    /// If the 2 sha-1 hashes are different a "git log --name-status --before=... --after=..." command is issued to get a list of the new
+    /// If the 2 sha-1 hashes are different a "git log --name-status -c --before=... --after=..." command is issued to get a list of the new
     /// commits and their changes.
     /// </para>
     /// <para>
@@ -460,6 +460,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AddArgument(string.Concat("origin/", branchName));
 			buffer.AddArgument("--date-order");
 			buffer.AddArgument("--name-status");
+            buffer.AddArgument("-c"); // CCNET-1854: detect merge commits
 			buffer.AddArgument(string.Concat("--after=", from.StartTime.ToUniversalTime().ToString("R")));
 			buffer.AddArgument(string.Concat("--before=", to.StartTime.ToUniversalTime().ToString("R")));
 			buffer.AddArgument(string.Concat("--pretty=format:", '"', historyFormat, '"'));
