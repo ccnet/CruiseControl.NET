@@ -101,7 +101,7 @@
 		  #end
 		  <tr>
 		    <td colspan="2">
-		          <form methd="POST">
+		          <form method="POST">
 		            <span>
     #if ($server.AllowForceBuild)
     #if($ForceAbortBuildButtonValue == "Force")
