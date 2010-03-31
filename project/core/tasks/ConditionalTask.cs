@@ -68,7 +68,7 @@
         /// Gets or sets the task conditions.
         /// </summary>
         /// <value>The task conditions.</value>
-        [ReflectorArray("conditions", Required = true)]
+        [ReflectorProperty("conditions", Required = true)]
         public ITaskCondition[] TaskConditions { get; set; }
         #endregion
 
@@ -77,7 +77,7 @@
         /// Gets or sets the tasks to run if conditions evaluates to true.
         /// </summary>
         /// <value>The tasks.</value>
-        [ReflectorArray("tasks", Required = false)]
+        [ReflectorProperty("tasks", Required = false)]
         public ITask[] Tasks { get; set; }
         #endregion
 
@@ -86,7 +86,7 @@
         /// Gets or sets the tasks to run if conditions evaluates to false.
         /// </summary>
         /// <value>The tasks.</value>
-        [ReflectorArray("elseTasks", Required = false)]
+        [ReflectorProperty("elseTasks", Required = false)]
         public ITask[] ElseTasks { get; set; }
         #endregion
 

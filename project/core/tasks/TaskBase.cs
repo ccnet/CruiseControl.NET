@@ -83,7 +83,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         {
             // Initialise the task
             this.WasSuccessful = false;
-            if (this.currentStatus.Status != ItemBuildStatus.Running)
+            if ((this.currentStatus == null) ||
+                (this.currentStatus.Status != ItemBuildStatus.Running))
             {
                 InitialiseStatus(ItemBuildStatus.Pending);
                 currentStatus.Status = ItemBuildStatus.Running;
