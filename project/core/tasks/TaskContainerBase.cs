@@ -73,37 +73,41 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="newStatus">The new status.</param>
         public override void InitialiseStatus(ItemBuildStatus newStatus)
         {
-            // This needs to be called first, otherwise the status is not set up
-            taskStatuses.Clear();
-            base.InitialiseStatus(newStatus);
-
-            // Add each status
-            if (Tasks != null)
+            // Do not re-initialise if the status is already set
+            if ((this.CurrentStatus == null) || (this.CurrentStatus.Status != newStatus))
             {
-                foreach (ITask task in Tasks)
+                // This needs to be called first, otherwise the status is not set up
+                taskStatuses.Clear();
+                base.InitialiseStatus(newStatus);
+
+                // Add each status
+                if (Tasks != null)
                 {
-                    ItemStatus taskItem = null;
-                    if (task is TaskBase)
+                    foreach (ITask task in Tasks)
                     {
-                        // Reset the status for the task
-                        (task as TaskBase).InitialiseStatus(newStatus);
-                    }
+                        ItemStatus taskItem = null;
+                        if (task is TaskBase)
+                        {
+                            // Reset the status for the task
+                            (task as TaskBase).InitialiseStatus(newStatus);
+                        }
 
-                    if (task is IStatusSnapshotGenerator)
-                    {
-                        taskItem = (task as IStatusSnapshotGenerator).GenerateSnapshot();
-                    }
-                    else
-                    {
-                        taskItem = new ItemStatus(task.GetType().Name);
-                        taskItem.Status = newStatus;
-                    }
+                        if (task is IStatusSnapshotGenerator)
+                        {
+                            taskItem = (task as IStatusSnapshotGenerator).GenerateSnapshot();
+                        }
+                        else
+                        {
+                            taskItem = new ItemStatus(task.GetType().Name);
+                            taskItem.Status = newStatus;
+                        }
 
-                    // Only add the item if it has been initialised
-                    if (taskItem != null)
-                    {
-                        CurrentStatus.AddChild(taskItem);
-                        taskStatuses.Add(task, taskItem);
+                        // Only add the item if it has been initialised
+                        if (taskItem != null)
+                        {
+                            CurrentStatus.AddChild(taskItem);
+                            taskStatuses.Add(task, taskItem);
+                        }
                     }
                 }
             }

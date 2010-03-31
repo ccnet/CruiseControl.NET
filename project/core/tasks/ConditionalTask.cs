@@ -71,7 +71,7 @@
         /// Gets or sets the logger to use.
         /// </summary>
         /// <value>The logger.</value>
-        public ILogger Logger { get; private set; }
+        public ILogger Logger { get; set; }
         #endregion
         #endregion
 

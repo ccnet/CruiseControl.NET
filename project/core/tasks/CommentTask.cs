@@ -2,6 +2,7 @@
 {
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core;
+    using ThoughtWorks.CruiseControl.Core.Util;
 
     ///<title>Comment Task</title>
     ///<version>1.6</version>
@@ -41,6 +42,14 @@
         [ReflectorProperty("failure", Required = false)]
         public bool FailTask { get; set; }
         #endregion
+
+        #region Logger
+        /// <summary>
+        /// Gets or sets the logger to use.
+        /// </summary>
+        /// <value>The logger.</value>
+        public ILogger Logger { get; set; }
+        #endregion
         #endregion
 
         #region Protected methods
@@ -56,6 +65,8 @@
         {
             result.BuildProgressInformation
                 .SignalStartRunTask("Adding a comment to the log");
+            (this.Logger ?? new DefaultLogger())
+                .Debug("Logging " + (this.FailTask ? "error " : string.Empty) + "message: " + this.Message);
             result.AddTaskResult(
                 new GeneralTaskResult(!this.FailTask, Message));
             return true;
