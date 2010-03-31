@@ -779,6 +779,8 @@
     <Compile Include="tasks\CodeItRightTask.cs" />
     <Compile Include="tasks\CommentTask.cs" />
     <Compile Include="tasks\ConditionalTask.cs" />
+    <Compile Include="tasks\Conditions\ConditionBase.cs" />
+    <Compile Include="tasks\Conditions\StatusTaskCondition.cs" />
     <Compile Include="tasks\CoverageFilter.cs" />
     <Compile Include="tasks\CoverageThreshold.cs" />
     <Compile Include="tasks\CruiseServerControlTask.cs" />

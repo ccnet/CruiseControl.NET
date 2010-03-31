@@ -1,12 +1,13 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     using System;
+    using System.Collections.Generic;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using System.Collections.Generic;
-    using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Core.Config;
+    using ThoughtWorks.CruiseControl.Core.Tasks.Conditions;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Remote.Parameters;
 
     /// <title>Conditional Task</title>
@@ -14,6 +15,29 @@
     /// <summary>
     /// Checks to see if a condition is true before the contained tasks run.
     /// </summary>
+    /// <example>
+    /// <code>
+    /// <![CDATA[
+    /// <conditional>
+    /// <conditions>
+    /// <!-- Conditions -->
+    /// </conditions>
+    /// <tasks>
+    /// <!-- Tasks to run if conditions pass -->
+    /// </tasks>
+    /// <elseTasks>
+    /// <!-- Tasks to run if conditions fail -->
+    /// </elseTasks>
+    /// </conditional>
+    /// ]]>
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para>
+    /// This task has been kindly supplied by Lasse Sjorup. The original project is available from
+    /// <link>http://ccnetconditional.codeplex.com/</link>.
+    /// </para>
+    /// </remarks>
     [ReflectorType("conditional")]
     public class ConditionalTask
         : TaskBase, IConfigurationValidation
@@ -100,8 +124,23 @@
         /// <param name="errorProcesser">The error processer to use.</param>
         public virtual void Validate(IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
-            this.ValidateTasks(this.Tasks, configuration, parent, errorProcesser);
-            this.ValidateTasks(this.ElseTasks, configuration, parent, errorProcesser);
+            // Validate the conditions
+            var trace = parent.Wrap(this);
+            foreach (var condition in this.TaskConditions)
+            {
+                var validation = condition as IConfigurationValidation;
+                if (validation != null)
+                {
+                    validation.Validate(
+                        configuration,
+                        trace,
+                        errorProcesser);
+                }
+            }
+
+            // Validate the tasks
+            this.ValidateTasks(this.Tasks, configuration, trace, errorProcesser);
+            this.ValidateTasks(this.ElseTasks, configuration, trace, errorProcesser);
         }
         #endregion
 
@@ -143,7 +182,7 @@
             // Check the conditions
             var logger = this.Logger ?? new DefaultLogger();
             logger.Debug("Checking conditions");
-            var conditionsPassed = this.EvaluateConditions(result);
+            var conditionsPassed = this.EvaluateConditions(logger, result);
             var successful = true;
 
             // Run the required tasks
@@ -192,7 +231,7 @@
                     var validatorTask = task as IConfigurationValidation;
                     if (validatorTask != null)
                     {
-                        validatorTask.Validate(configuration, parent.Wrap(this), errorProcesser);
+                        validatorTask.Validate(configuration, parent, errorProcesser);
                     }
                 }
             }
@@ -203,11 +242,12 @@
         /// <summary>
         /// Evaluates the conditions.
         /// </summary>
+        /// <param name="logger">The logger.</param>
         /// <param name="result">The result.</param>
         /// <returns>
         /// <c>true</c> if the conditions are met; <c>false</c> otherwise.
         /// </returns>
-        private bool EvaluateConditions(IIntegrationResult result)
+        private bool EvaluateConditions(ILogger logger,  IIntegrationResult result)
         {
             // Sanity check - this should not be possible
             if (this.TaskConditions == null)
@@ -219,6 +259,12 @@
             var passed = true;
             foreach (ITaskCondition condition in TaskConditions)
             {
+                var commonCondition = condition as ConditionBase;
+                if (commonCondition != null)
+                {
+                    commonCondition.Logger = logger;
+                }
+
                 passed = condition.Eval(result);
                 if (!passed)
                 {

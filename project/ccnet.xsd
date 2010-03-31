@@ -7161,7 +7161,26 @@
 
   <xs:complexType name="TaskConditions">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="statusCondition" type="statusCondition">
+        <xs:annotation>
+          <xs:documentation>
+            Checks if the current status matches a status.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
     </xs:choice>  
+  </xs:complexType>
+
+  <xs:complexType name="statusCondition">
+    <xs:all>
+      <xs:element name="value" type="IntegrationStatus" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The status to match.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
   </xs:complexType>
 
   <xs:complexType name="stateManager" abstract="true" />
