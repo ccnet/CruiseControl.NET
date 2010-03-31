@@ -119,8 +119,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 }
             }
 
+            // Clean up
+            this.CancelTasks();
             logger.Info("Sequential task completed: {0} successful, {1} failed", successCount, failureCount);
-            return true;
+            return failureCount == 0;
         }
         #endregion
         #endregion

@@ -118,6 +118,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 logger.Info("Conditions not met - publishers not run");
             }
 
+            // Clean up
+            this.CancelTasks();
             return true;
         }
         #endregion

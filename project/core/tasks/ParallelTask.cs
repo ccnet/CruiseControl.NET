@@ -116,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
         #endregion
 
-        #region Public methods
+        #region Protected methods
         #region Execute()
         /// <summary>
         /// Runs the task, given the specified <see cref="IIntegrationResult"/>, in the specified <see cref="IProject"/>.
@@ -195,6 +195,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 result.Merge(taskResult);
             }
 
+            // Clean up
+            this.CancelTasks();
             logger.Info("Parallel task completed: {0} successful, {1} failed", successCount, failureCount);
             return true;
         }

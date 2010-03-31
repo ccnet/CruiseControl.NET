@@ -293,6 +293,7 @@
     <Compile Include="IProjectSerializer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IStatusItem.cs" />
     <Compile Include="IStatusSnapshotGenerator.cs" />
     <Compile Include="ITask.cs">
       <SubType>Code</SubType>
@@ -777,6 +778,7 @@
     </Compile>
     <Compile Include="tasks\CodeItRightTask.cs" />
     <Compile Include="tasks\CommentTask.cs" />
+    <Compile Include="tasks\ConditionalTask.cs" />
     <Compile Include="tasks\CoverageFilter.cs" />
     <Compile Include="tasks\CoverageThreshold.cs" />
     <Compile Include="tasks\CruiseServerControlTask.cs" />
@@ -791,6 +793,7 @@
     <Compile Include="tasks\HttpRequestHeader.cs" />
     <Compile Include="tasks\HttpRequestSettings.cs" />
     <Compile Include="tasks\HttpStatusTask.cs" />
+    <Compile Include="tasks\ITaskCondition.cs" />
     <Compile Include="tasks\MergeFileSerialiser.cs" />
     <Compile Include="tasks\MergeFileSerialiserFactory.cs" />
     <Compile Include="tasks\MergeFileInfo.cs" />

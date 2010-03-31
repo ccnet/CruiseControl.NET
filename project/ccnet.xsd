@@ -4221,6 +4221,20 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="commentTask" type="commentTask">
+        <xs:annotation>
+          <xs:documentation>
+            Adds a comment to the log.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="conditional" type="conditional">
+        <xs:annotation>
+          <xs:documentation>
+            Checks to see if a condition is true before the contained tasks run.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="conditionalPublisher" type="conditionalPublisher">
         <xs:annotation>
           <xs:documentation>
@@ -4691,6 +4705,79 @@
         <xs:annotation>
           <xs:documentation>
             The priority class of the spawned process.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="commentTask">
+    <xs:all>
+      <xs:element name="message" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The message to add to the log.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="failure" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Defines whether to fail the task or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="conditional">
+    <xs:all>
+      <xs:element name="conditions" type="TaskConditions" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Gets or sets the task conditions.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="tasks" type="Tasks" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Gets or sets the tasks to run if conditions evaluates to true.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="elseTasks" type="Tasks" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Gets or sets the tasks to run if conditions evaluates to false.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -7070,6 +7157,11 @@
         </xs:annotation>
       </xs:element>
     </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="TaskConditions">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    </xs:choice>  
   </xs:complexType>
 
   <xs:complexType name="stateManager" abstract="true" />

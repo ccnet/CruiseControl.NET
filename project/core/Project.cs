@@ -535,7 +535,13 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             ItemStatus sourceControlStatus = null;
 
-            if (SourceControl is IStatusSnapshotGenerator)
+            if (this.sourceControl is IStatusItem)
+            {
+                var item = this.sourceControl as IStatusItem;
+                item.InitialiseStatus();
+                sourceControlStatus = item.GenerateSnapshot();
+            }
+            else if (SourceControl is IStatusSnapshotGenerator)
             {
                 sourceControlStatus = (SourceControl as IStatusSnapshotGenerator).GenerateSnapshot();
             }
@@ -571,6 +577,12 @@ namespace ThoughtWorks.CruiseControl.Core
                     (task as TaskBase).InitialiseStatus();
                 }
 
+                if (task is IStatusItem)
+                {
+                    var item = task as IStatusItem;
+                    item.InitialiseStatus();
+                    taskItem = item.GenerateSnapshot();
+                }
                 if (task is IStatusSnapshotGenerator)
                 {
                     taskItem = (task as IStatusSnapshotGenerator).GenerateSnapshot();

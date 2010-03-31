@@ -70,11 +70,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Initialise an <see cref="ItemStatus"/>.
         /// </summary>
-        public override void InitialiseStatus()
+        /// <param name="newStatus">The new status.</param>
+        public override void InitialiseStatus(ItemBuildStatus newStatus)
         {
             // This needs to be called first, otherwise the status is not set up
             taskStatuses.Clear();
-            base.InitialiseStatus();
+            base.InitialiseStatus(newStatus);
 
             // Add each status
             if (Tasks != null)
@@ -85,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     if (task is TaskBase)
                     {
                         // Reset the status for the task
-                        (task as TaskBase).InitialiseStatus();
+                        (task as TaskBase).InitialiseStatus(newStatus);
                     }
 
                     if (task is IStatusSnapshotGenerator)
@@ -95,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     else
                     {
                         taskItem = new ItemStatus(task.GetType().Name);
-                        taskItem.Status = ItemBuildStatus.Pending;
+                        taskItem.Status = newStatus;
                     }
 
                     // Only add the item if it has been initialised
@@ -125,6 +126,27 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
 
             task.Run(result);
+        }
+        #endregion
+
+        #region CancelTasks()
+        /// <summary>
+        /// Cancels any pending tasks.
+        /// </summary>
+        protected void CancelTasks()
+        {
+            foreach (var status in this.taskStatuses)
+            {
+                var task = status.Key as IStatusItem;
+                if (task != null)
+                {
+                    task.CancelStatus();
+                }
+                else if (status.Value.Status == ItemBuildStatus.Pending)
+                {
+                    status.Value.Status = ItemBuildStatus.Cancelled;
+                }
+            }
         }
         #endregion
         #endregion

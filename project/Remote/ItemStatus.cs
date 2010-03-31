@@ -14,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.Remote
     public class ItemStatus
     {
         #region Private fields
+        private readonly Guid uniqueId = Guid.NewGuid();
         private Guid identifier = Guid.NewGuid();
         private string name;
         private ItemBuildStatus status = ItemBuildStatus.Unknown;
