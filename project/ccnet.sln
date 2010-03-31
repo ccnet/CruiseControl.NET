@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ccnet.xsd = ccnet.xsd
 		..\install\cctools.nsi.template = ..\install\cctools.nsi.template
 		..\install\cctray.nsi.template = ..\install\cctray.nsi.template
+		..\pages.xml = ..\pages.xml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDashboard", "WebDashboard\WebDashboard.csproj", "{482EF049-EC0C-4819-B568-75B5F74BDD5B}"
@@ -40,6 +41,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communications.Extensions", "Communications.Extensions\Communications.Extensions.csproj", "{A1B0C773-4779-4A1B-AE4E-8A53D73A8BE5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuildLogger", "MSBuildLogger\MSBuildLogger.csproj", "{E9D3235E-2268-4846-B9EC-DFE24AAA438D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCNet.CSharpDemos.Plugin", "CCNet.CSharpDemos.Plugin\CCNet.CSharpDemos.Plugin.csproj", "{99180CA9-1A33-460E-A4D5-6A1E2B03898F}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CCNet.VBDemos.Plugin", "CCNet.VBDemos.Plugin\CCNet.VBDemos.Plugin.vbproj", "{6984BCE9-51E5-4F73-BD08-E3E545B6B0A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -132,6 +137,18 @@ Global
 		{E9D3235E-2268-4846-B9EC-DFE24AAA438D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9D3235E-2268-4846-B9EC-DFE24AAA438D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9D3235E-2268-4846-B9EC-DFE24AAA438D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99180CA9-1A33-460E-A4D5-6A1E2B03898F}.Build|Any CPU.ActiveCfg = Release|Any CPU
+		{99180CA9-1A33-460E-A4D5-6A1E2B03898F}.Build|Any CPU.Build.0 = Release|Any CPU
+		{99180CA9-1A33-460E-A4D5-6A1E2B03898F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99180CA9-1A33-460E-A4D5-6A1E2B03898F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99180CA9-1A33-460E-A4D5-6A1E2B03898F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99180CA9-1A33-460E-A4D5-6A1E2B03898F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6984BCE9-51E5-4F73-BD08-E3E545B6B0A7}.Build|Any CPU.ActiveCfg = Release|Any CPU
+		{6984BCE9-51E5-4F73-BD08-E3E545B6B0A7}.Build|Any CPU.Build.0 = Release|Any CPU
+		{6984BCE9-51E5-4F73-BD08-E3E545B6B0A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6984BCE9-51E5-4F73-BD08-E3E545B6B0A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6984BCE9-51E5-4F73-BD08-E3E545B6B0A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6984BCE9-51E5-4F73-BD08-E3E545B6B0A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
