@@ -1363,19 +1363,12 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <returns></returns>
         public virtual List<PackageDetails> RetrievePackageList()
         {
-            var lastBuild = this.GetLatestBuildName();
-            if (!string.IsNullOrEmpty(lastBuild))
+            List<PackageDetails> packages = new List<PackageDetails>();
+            foreach(string packgeInfo in Directory.GetFiles(ArtifactDirectory, "*-packages.xml", SearchOption.AllDirectories))
             {
-                var logDetails = new LogFile(lastBuild);
-                var listFile = Path.Combine(logDetails.Label, Name + "-packages.xml");
-                listFile = Path.Combine(ArtifactDirectory, listFile);
-                var packages = LoadPackageList(listFile);
-                return packages;
+                packages.AddRange(LoadPackageList(packgeInfo));
             }
-            else
-            {
-                return new List<PackageDetails>();
-            }
+            return packages;
         }
 
         /// <summary>
