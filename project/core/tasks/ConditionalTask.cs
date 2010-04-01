@@ -65,27 +65,34 @@
         #region Public properties
         #region TaskConditions
         /// <summary>
-        /// Gets or sets the task conditions.
+        /// The conditions to check.
         /// </summary>
-        /// <value>The task conditions.</value>
+        /// <default>n/a</default>
+        /// <version>1.6</version>
+        /// <remarks>
+        /// These conditions must all pass in order for the main tasks to run. Use an 
+        /// <link>Or Condition</link> when only one condition is required.
+        /// </remarks>
         [ReflectorProperty("conditions", Required = true)]
         public ITaskCondition[] TaskConditions { get; set; }
         #endregion
 
         #region Tasks
         /// <summary>
-        /// Gets or sets the tasks to run if conditions evaluates to true.
+        /// The tasks to run if conditions evaluates to true.
         /// </summary>
-        /// <value>The tasks.</value>
+        /// <default>None</default>
+        /// <version>1.6</version>
         [ReflectorProperty("tasks", Required = false)]
         public ITask[] Tasks { get; set; }
         #endregion
 
         #region ElseTasks
         /// <summary>
-        /// Gets or sets the tasks to run if conditions evaluates to false.
+        /// The tasks to run if conditions evaluates to false.
         /// </summary>
-        /// <value>The tasks.</value>
+        /// <default>None</default>
+        /// <version>1.6</version>
         [ReflectorProperty("elseTasks", Required = false)]
         public ITask[] ElseTasks { get; set; }
         #endregion

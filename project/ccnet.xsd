@@ -7161,6 +7161,20 @@
 
   <xs:complexType name="TaskConditions">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="andCondition" type="andCondition">
+        <xs:annotation>
+          <xs:documentation>
+            Checks that all the child condition pass.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="orCondition" type="orCondition">
+        <xs:annotation>
+          <xs:documentation>
+            Checks that at least one child condition matches.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="statusCondition" type="statusCondition">
         <xs:annotation>
           <xs:documentation>
@@ -7169,6 +7183,30 @@
         </xs:annotation>
       </xs:element>
     </xs:choice>  
+  </xs:complexType>
+
+  <xs:complexType name="andCondition">
+    <xs:all>
+      <xs:element name="conditions" type="TaskConditions" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The conditions to check.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="orCondition">
+    <xs:all>
+      <xs:element name="conditions" type="TaskConditions" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The conditions to check.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
   </xs:complexType>
 
   <xs:complexType name="statusCondition">

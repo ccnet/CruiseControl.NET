@@ -4,6 +4,7 @@
   <page title="AccuRev Source Control Block" id="6342" url="http://confluence.public.thoughtworks.org//display/CCNET/AccuRev+Source+Control+Block" parentId="1753" source="accurev.wiki" />
   <page title="ActionFilter" id="31686687" url="http://confluence.public.thoughtworks.org//display/CCNET/ActionFilter" parentId="31686678" source="actionFilter.wiki" />
   <page title="Alienbrain Source Control Block" id="4909" url="http://confluence.public.thoughtworks.org//display/CCNET/Alienbrain+Source+Control+Block" parentId="1753" source="alienbrain.wiki" />
+  <page title="And Condition" id="34701722" url="http://confluence.public.thoughtworks.org//display/CCNET/And+Condition" parentId="34701711" source="andCondition.wiki" />
   <page title="Artifact Cleanup Publisher" id="5505061" url="http://confluence.public.thoughtworks.org//display/CCNET/Artifact+Cleanup+Publisher" parentId="1756" source="artifactcleanup.wiki" />
   <page title="Assembly Match" id="31097597" url="http://confluence.public.thoughtworks.org//display/CCNET/Assembly+Match" parentId="25591881" source="assemblyMatch.wiki" />
   <page title="Assembly Version Labeller" id="26247204" url="http://confluence.public.thoughtworks.org//display/CCNET/Assembly+Version+Labeller" parentId="1755" source="assemblyVersionLabeller.wiki" />
@@ -171,6 +172,7 @@
   <page title="Numeric Parameter" id="28868642" url="http://confluence.public.thoughtworks.org//display/CCNET/Numeric+Parameter" parentId="28475414" />
   <page title="NUnit Task" id="625" url="http://confluence.public.thoughtworks.org//display/CCNET/NUnit+Task" parentId="1756" />
   <page title="Ohloh Project Plugin" id="34013214" url="http://confluence.public.thoughtworks.org//display/CCNET/Ohloh+Project+Plugin" parentId="2973" />
+  <page title="Or Condition" id="34701717" url="http://confluence.public.thoughtworks.org//display/CCNET/Or+Condition" parentId="34701711" source="orCondition.wiki" />
   <page title="Package Publisher" id="26247208" url="http://confluence.public.thoughtworks.org//display/CCNET/Package+Publisher" parentId="1756" />
   <page title="Packaging a Release" id="21004316" url="http://confluence.public.thoughtworks.org//display/CCNET/Packaging+a+Release" parentId="115" />
   <page title="Parallel Task" id="28475398" url="http://confluence.public.thoughtworks.org//display/CCNET/Parallel+Task" parentId="1756" />

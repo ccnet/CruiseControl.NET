@@ -1,9 +1,5 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Remote;
 
@@ -38,7 +34,7 @@
     /// </example>
     /// <remarks>
     /// <para>
-    /// This task has been kindly supplied by Lasse Sjorup. The original project is available from
+    /// This condition has been kindly supplied by Lasse Sjorup. The original project is available from
     /// <link>http://ccnetconditional.codeplex.com/</link>.
     /// </para>
     /// </remarks>
