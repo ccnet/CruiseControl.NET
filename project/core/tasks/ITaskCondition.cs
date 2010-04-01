@@ -1,5 +1,6 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    /// <title>Task Condition Blocks</title>
     /// <summary>
     /// A condition that can be used within the <see cref="ConditionalTask"/>.
     /// </summary>

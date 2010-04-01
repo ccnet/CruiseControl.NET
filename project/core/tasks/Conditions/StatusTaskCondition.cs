@@ -18,12 +18,30 @@
     /// <statusCondition value="Success" />
     /// ]]>
     /// </code>
-    /// <code title="In context">
+    /// <code title="Example in context">
     /// <![CDATA[
-    /// 
+    /// <conditional>
+    /// <conditions>
+    /// <statusCondition>
+    /// <value>Failure</value>
+    /// </statusCondition>
+    /// </conditions>
+    /// <tasks>
+    /// <!-- Tasks to perform if condition passed -->
+    /// </tasks>
+    /// <elseTasks>
+    /// <!-- Tasks to perform if condition failed -->
+    /// </elseTasks>
+    /// </conditional>
     /// ]]>
     /// </code>
     /// </example>
+    /// <remarks>
+    /// <para>
+    /// This task has been kindly supplied by Lasse Sjorup. The original project is available from
+    /// <link>http://ccnetconditional.codeplex.com/</link>.
+    /// </para>
+    /// </remarks>
     [ReflectorType("statusCondition")]
     public class StatusTaskCondition
         : ConditionBase

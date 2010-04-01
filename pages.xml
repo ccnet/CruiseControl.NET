@@ -51,6 +51,7 @@
   <page title="CommentFilter" id="31686689" url="http://confluence.public.thoughtworks.org//display/CCNET/CommentFilter" parentId="31686678" source="commentFilter.wiki" />
   <page title="Commit Process" id="5434" url="http://confluence.public.thoughtworks.org//display/CCNET/Commit+Process" parentId="71" />
   <page title="Conditional Publisher" id="28868660" url="http://confluence.public.thoughtworks.org//display/CCNET/Conditional+Publisher" parentId="1756" source="conditionalPublisher.wiki" />
+  <page title="Conditional Task" id="34701709" url="http://confluence.public.thoughtworks.org//display/CCNET/Conditional+Task" parentId="1756" source="conditional.wiki" />
   <page title="Configuration Preprocessor" id="20152326" url="http://confluence.public.thoughtworks.org//display/CCNET/Configuration+Preprocessor" parentId="325" />
   <page title="Configure CruiseControl.Net to Automatically Update its Config File" id="3997877" url="http://confluence.public.thoughtworks.org//display/CCNET/Configure+CruiseControl.Net+to+Automatically+Update+its+Config+File" parentId="325" />
   <page title="Configuring the Server" id="325" url="http://confluence.public.thoughtworks.org//display/CCNET/Configuring+the+Server" parentId="300" />
@@ -255,6 +256,7 @@
   <page title="Statistic" id="31097497" url="http://confluence.public.thoughtworks.org//display/CCNET/Statistic" parentId="31097495" />
   <page title="Statistics" id="31097495" url="http://confluence.public.thoughtworks.org//display/CCNET/Statistics" parentId="5413" />
   <page title="Statistics Publisher" id="5413" url="http://confluence.public.thoughtworks.org//display/CCNET/Statistics+Publisher" parentId="1756" source="statistics.wiki" />
+  <page title="Status Condition" id="34701714" url="http://confluence.public.thoughtworks.org//display/CCNET/Status+Condition" parentId="34701711" source="statusCondition.wiki" />
   <page title="Subversion Source Control Block" id="324" url="http://confluence.public.thoughtworks.org//display/CCNET/Subversion+Source+Control+Block" parentId="1753" source="svn.wiki" />
   <page title="Support" id="128" url="http://confluence.public.thoughtworks.org//display/CCNET/Support" parentId="3" />
   <page title="Synchronisation Context Task" id="31097513" url="http://confluence.public.thoughtworks.org//display/CCNET/Synchronisation+Context+Task" parentId="1756" />
@@ -262,6 +264,7 @@
   <page title="Synergy Issue Tracker URL Builder" id="31686703" url="http://confluence.public.thoughtworks.org//display/CCNET/Synergy+Issue+Tracker+URL+Builder" parentId="22118409" />
   <page title="Synergy Project" id="31686696" url="http://confluence.public.thoughtworks.org//display/CCNET/Synergy+Project" parentId="3800" />
   <page title="Task Blocks" id="1756" url="http://confluence.public.thoughtworks.org//display/CCNET/Task+Blocks" parentId="1738" />
+  <page title="Task Condition Blocks" id="34701711" url="http://confluence.public.thoughtworks.org//display/CCNET/Task+Condition+Blocks" parentId="34701709" />
   <page title="Telelogic Synergy" id="3800" url="http://confluence.public.thoughtworks.org//display/CCNET/Telelogic+Synergy" parentId="1753" />
   <page title="Text Parameter" id="28868632" url="http://confluence.public.thoughtworks.org//display/CCNET/Text+Parameter" parentId="28475414" />
   <page title="The CruiseControl Configuration Block" id="1737" url="http://confluence.public.thoughtworks.org//display/CCNET/The+CruiseControl+Configuration+Block" parentId="325" />
