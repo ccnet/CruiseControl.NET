@@ -61,7 +61,11 @@ function refreshDisplay(){
 function refreshData(item){
     var id = item.id.replace(/-/g, '');
     var title = jQuery('#h' + id);
-    title.text(item.name);
+	if (item.description!==undefined){
+		title.text(item.name + ": " + item.description);
+	}else{
+		title.text(item.name);
+	}
     title.prepend('<img src="' + imagesUrl + item.status + '.png"/>');
     var details = jQuery('#c' + id);
     generateDetails(details, item);
@@ -78,7 +82,12 @@ function generateStatusItem(item, parent){
     group.addClass('dataGroup');
     
     var id = item.id.replace(/-/g, '');
-    var title = jQuery('<h3>' + item.name + '</h3>');
+	var title=null
+	if (item.description!==undefined){
+		title = jQuery('<h3>' + item.name + ": " + item.description + '</h3>');
+	}else{
+		title = jQuery('<h3>' + item.name + '</h3>');
+	}
     title.prepend('<img src="' + imagesUrl + item.status + '.png"/>');
     title.attr('id', 'h' + id);
     group.append(title);
