@@ -11,6 +11,7 @@
   <page title="Basic Installation" id="295" url="http://confluence.public.thoughtworks.org//display/CCNET/Basic+Installation" parentId="71" />
   <page title="BitKeeper Source Control Block" id="4448" url="http://confluence.public.thoughtworks.org//display/CCNET/BitKeeper+Source+Control+Block" parentId="1753" source="bitkeeper.wiki" />
   <page title="Boolean Parameter" id="28868637" url="http://confluence.public.thoughtworks.org//display/CCNET/Boolean+Parameter" parentId="28475414" source="booleanParameter.wiki" />
+  <page title="Build Condition Condition" id="34701729" url="http://confluence.public.thoughtworks.org//display/CCNET/Build+Condition+Condition" parentId="34701711" source="buildCondition.wiki" />
   <page title="Build Log Build Plugin" id="3001" url="http://confluence.public.thoughtworks.org//display/CCNET/Build+Log+Build+Plugin" parentId="2973" source="buildLogBuildPlugin.wiki" />
   <page title="Build Publisher" id="1798" url="http://confluence.public.thoughtworks.org//display/CCNET/Build+Publisher" parentId="1756" source="buildpublisher.wiki" />
   <page title="Build Report Build Plugin" id="2998" url="http://confluence.public.thoughtworks.org//display/CCNET/Build+Report+Build+Plugin" parentId="2973" source="buildReportBuildPlugin.wiki" />
@@ -51,6 +52,7 @@
   <page title="CodeIt.Right Analysis Task" id="34701688" url="http://confluence.public.thoughtworks.org//display/CCNET/CodeIt.Right+Analysis+Task" parentId="1756" source="codeItRight.wiki" />
   <page title="CommentFilter" id="31686689" url="http://confluence.public.thoughtworks.org//display/CCNET/CommentFilter" parentId="31686678" source="commentFilter.wiki" />
   <page title="Commit Process" id="5434" url="http://confluence.public.thoughtworks.org//display/CCNET/Commit+Process" parentId="71" />
+  <page title="Compare Values Condition" id="34701727" url="http://confluence.public.thoughtworks.org//display/CCNET/Compare+Values+Condition" parentId="34701711" source="compareCondition.wiki" />
   <page title="Conditional Publisher" id="28868660" url="http://confluence.public.thoughtworks.org//display/CCNET/Conditional+Publisher" parentId="1756" source="conditionalPublisher.wiki" />
   <page title="Conditional Task" id="34701709" url="http://confluence.public.thoughtworks.org//display/CCNET/Conditional+Task" parentId="1756" source="conditional.wiki" />
   <page title="Configuration Preprocessor" id="20152326" url="http://confluence.public.thoughtworks.org//display/CCNET/Configuration+Preprocessor" parentId="325" />

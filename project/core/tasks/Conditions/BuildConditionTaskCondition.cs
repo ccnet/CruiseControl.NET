@@ -3,24 +3,24 @@
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Remote;
 
-    /// <title>Status Condition</title>
+    /// <title>Build Condition Condition</title>
     /// <version>1.6</version>
     /// <summary>
-    /// Checks if the current status matches a value.
+    /// Checks if the current build condition matches a value.
     /// </summary>
     /// <example>
     /// <code title="Basic example">
     /// <![CDATA[
-    /// <statusCondition value="Success" />
+    /// <buildCondition value="ForeceBuild" />
     /// ]]>
     /// </code>
     /// <code title="Example in context">
     /// <![CDATA[
     /// <conditional>
     /// <conditions>
-    /// <statusCondition>
-    /// <value>Failure</value>
-    /// </statusCondition>
+    /// <buildCondition>
+    /// <value>ForceBuild</value>
+    /// </buildCondition>
     /// </conditions>
     /// <tasks>
     /// <!-- Tasks to perform if condition passed -->
@@ -38,19 +38,19 @@
     /// <link>http://ccnetconditional.codeplex.com/</link>.
     /// </para>
     /// </remarks>
-    [ReflectorType("statusCondition")]
-    public class StatusTaskCondition
+    [ReflectorType("buildCondition")]
+    public class BuildConditionTaskCondition
         : ConditionBase
     {
         #region Public properties
-        #region Status
+        #region BuildCondition
         /// <summary>
-        /// The status to match.
+        /// The build condition to match.
         /// </summary>
         /// <version>1.6</version>
         /// <default>n/a</default>
         [ReflectorProperty("value", Required = true)]
-        public IntegrationStatus Status { get; set; }
+        public BuildCondition BuildCondition { get; set; }
         #endregion
         #endregion
 
@@ -66,8 +66,8 @@
         protected override bool Evaluate(IIntegrationResult result)
         {
             this.RetrieveLogger()
-                .Debug("Checing status - matching to " + this.Status.ToString());
-            return this.Status == result.Status;
+                .Debug("Checking build condition - matching to " + this.BuildCondition.ToString());
+            return this.BuildCondition == result.BuildCondition;
         }
         #endregion
         #endregion

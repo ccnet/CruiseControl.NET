@@ -7168,6 +7168,21 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="buildCondition" type="buildCondition">
+        <xs:annotation>
+          <xs:documentation>
+            Checks if the current build condition matches a value.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="compareCondition" type="compareCondition">
+        <xs:annotation>
+          <xs:documentation>
+            Checks if two values are the same.
+            This is typically used with dynamic values.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="orCondition" type="orCondition">
         <xs:annotation>
           <xs:documentation>
@@ -7191,6 +7206,51 @@
         <xs:annotation>
           <xs:documentation>
             The conditions to check.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="buildCondition">
+    <xs:all>
+      <xs:element name="value" type="BuildCondition" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The build condition to match.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="compareCondition">
+    <xs:all>
+      <xs:element name="value1" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The first value to evaluate.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="value2" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The second value to evaluate.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="evaluation" type="Evaluations" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The type of evaluation.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ignoreCase" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to ignore any case differences or not.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -8507,6 +8567,13 @@
       <xs:enumeration value="None"/>
       <xs:enumeration value="Optional"/>
       <xs:enumeration value="Required"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Evaluations">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="equal"/>
+      <xs:enumeration value="notEqual"/>
     </xs:restriction>
   </xs:simpleType>
 
