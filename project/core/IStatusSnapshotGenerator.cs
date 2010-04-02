@@ -1,7 +1,7 @@
-﻿using ThoughtWorks.CruiseControl.Remote;
-
-namespace ThoughtWorks.CruiseControl.Core
+﻿namespace ThoughtWorks.CruiseControl.Core
 {
+    using ThoughtWorks.CruiseControl.Remote;
+
     /// <summary>
     /// Generates a status snapshot of the item.
     /// </summary>

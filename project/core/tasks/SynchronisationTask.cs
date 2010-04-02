@@ -202,6 +202,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 result.Status = IntegrationStatus.Failure;
             }
 
+            // Clean up
+            this.CancelTasks();
             return (result.Status == IntegrationStatus.Success);
         }
         #endregion

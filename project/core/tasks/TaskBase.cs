@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// An abstract base class to add parameters to a task
     /// </summary>
     public abstract class TaskBase
-        : IParamatisedItem, IStatusSnapshotGenerator, ITask
+        : IParamatisedItem, IStatusSnapshotGenerator, ITask, IStatusItem
     {
         #region Private fields
         private IDynamicValue[] myDynamicValues = new IDynamicValue[0];
@@ -83,12 +83,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         {
             // Initialise the task
             this.WasSuccessful = false;
-            InitialiseStatus();
-            currentStatus.Status = ItemBuildStatus.Running;
-            currentStatus.TimeOfEstimatedCompletion = CalculateEstimatedTime();
-            currentStatus.TimeStarted = DateTime.Now;
+            if ((this.currentStatus == null) ||
+                (this.currentStatus.Status != ItemBuildStatus.Running))
+            {
+                InitialiseStatus(ItemBuildStatus.Pending);
+                currentStatus.Status = ItemBuildStatus.Running;
+            }
 
             // Perform the actual run
+            currentStatus.TimeOfEstimatedCompletion = CalculateEstimatedTime();
+            currentStatus.TimeStarted = DateTime.Now;
             try
             {
                 this.WasSuccessful = Execute(result);
@@ -145,8 +149,68 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <returns></returns>
         public virtual ItemStatus GenerateSnapshot()
         {
-            if (currentStatus == null) InitialiseStatus();
+            if (currentStatus == null) this.InitialiseStatus(ItemBuildStatus.Unknown);
             return currentStatus;
+        }
+        #endregion
+
+        #region InitialiseStatus()
+        /// <summary>
+        /// Initialises the status.
+        /// </summary>
+        public void InitialiseStatus()
+        {
+            this.InitialiseStatus(ItemBuildStatus.Pending);
+        }
+
+        /// <summary>
+        /// Initialise an <see cref="ItemStatus"/>.
+        /// </summary>
+        /// <param name="newStatus">The new status.</param>
+        public virtual void InitialiseStatus(ItemBuildStatus newStatus)
+        {
+            // Store the last elapsed time
+            if (currentStatus != null)
+            {
+                var elapsedTime = currentStatus.TimeCompleted - currentStatus.TimeStarted;
+                if (elapsedTime.HasValue)
+                {
+                    if (elapsedTimes.Count >= 8)
+                    {
+                        elapsedTimes.RemoveAt(7);
+                    }
+                    elapsedTimes.Insert(0, elapsedTime.Value);
+                }
+            }
+
+            // Initialise the status with the default value - do not re-initialise if the status is already set
+            if ((currentStatus == null) || (currentStatus.Status != newStatus))
+            {
+                currentStatus = new ItemStatus
+                {
+                    Name = Name,
+                    Description = Description,
+                    Status = newStatus,
+                    TimeCompleted = null,
+                    TimeOfEstimatedCompletion = null,
+                    TimeStarted = null
+                };
+            }
+        }
+        #endregion
+
+        #region CancelStatus()
+        /// <summary>
+        /// Cancels the status.
+        /// </summary>
+        public void CancelStatus()
+        {
+            if ((this.currentStatus != null) && 
+                ((this.currentStatus.Status == ItemBuildStatus.Running) ||
+                 (this.currentStatus.Status == ItemBuildStatus.Pending)))
+            {
+                this.currentStatus.Status = ItemBuildStatus.Cancelled;
+            }
         }
         #endregion
 
@@ -193,39 +257,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             return value;
         }
         #endregion
-
-        #region InitialiseStatus()
-        /// <summary>
-        /// Initialise an <see cref="ItemStatus"/>.
-        /// </summary>
-        public virtual void InitialiseStatus()
-        {
-            // Store the last elapsed time
-            if (currentStatus != null)
-            {
-                var elapsedTime = currentStatus.TimeCompleted - currentStatus.TimeStarted;
-                if (elapsedTime.HasValue)
-                {
-                    if (elapsedTimes.Count >= 8)
-                    {
-                        elapsedTimes.RemoveAt(7);
-                    }
-                    elapsedTimes.Insert(0, elapsedTime.Value);
-                }
-            }
-
-            // Initialise the status with the default value
-            currentStatus = new ItemStatus
-            {
-                Name = Name,
-                Description = Description,
-                Status = ItemBuildStatus.Pending,
-                TimeCompleted = null,
-                TimeOfEstimatedCompletion = null,
-                TimeStarted = null
-            };
-        }
-        #endregion
         #endregion
 
         #region Protected methods
@@ -233,8 +264,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <summary>
         /// Execute the actual task functionality.
         /// </summary>
-        /// <param name="result"></param>
-        /// <returns>True if the task was successful, false otherwise.</returns>
+        /// <param name="result">The result to use.</param>
+        /// <returns><c>true</c> if the task was successful; <c>false</c> otherwise.</returns>
         protected abstract bool Execute(IIntegrationResult result);
         #endregion
         #endregion
