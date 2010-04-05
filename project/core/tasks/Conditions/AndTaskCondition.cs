@@ -71,8 +71,7 @@
         /// </returns>
         protected override bool Evaluate(IIntegrationResult result)
         {
-            this.RetrieveLogger()
-                .Debug("Performing AND check - " +
+            this.LogDescriptionOrMessage("Performing AND check - " +
                 this.Conditions.Length.ToString() +
                 " conditions to check");
             var evaluationResult = true;

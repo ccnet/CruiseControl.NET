@@ -1,5 +1,6 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
 {
+    using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Tasks;
     using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -10,6 +11,16 @@
         : ITaskCondition
     {
         #region Public properties
+        #region Description
+        /// <summary>
+        /// A description of the condition.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>none</default>
+        [ReflectorProperty("description", Required = false)]
+        public string Description { get; set; }
+        #endregion
+
         #region Logger
         /// <summary>
         /// Gets or sets the logger.
@@ -61,6 +72,25 @@
             }
 
             return this.Logger;
+        }
+        #endregion
+
+        #region LogDescriptionOrMessage()
+        /// <summary>
+        /// Logs the description or a message.
+        /// </summary>
+        /// <param name="message">The message to use if there is no description.</param>
+        protected void LogDescriptionOrMessage(string message)
+        {
+            var logger = this.RetrieveLogger();
+            if (string.IsNullOrEmpty(this.Description))
+            {
+                logger.Debug(message);
+            }
+            else
+            {
+                logger.Info(this.Description);
+            }
         }
         #endregion
         #endregion

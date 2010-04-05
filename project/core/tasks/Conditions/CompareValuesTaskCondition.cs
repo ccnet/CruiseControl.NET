@@ -107,8 +107,7 @@
         /// </returns>
         protected override bool Evaluate(IIntegrationResult result)
         {
-            this.RetrieveLogger()
-                .Debug("Checking value comparison condition - " + this.Value1 + " with " + this.Value2);
+            this.LogDescriptionOrMessage("Checking value comparison condition - " + this.Value1 + " with " + this.Value2);
 
             var evaluation = false;
             switch (this.Evaluation)

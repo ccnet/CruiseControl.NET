@@ -7183,6 +7183,20 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="fileExistsCondition" type="fileExistsCondition">
+        <xs:annotation>
+          <xs:documentation>
+            Checks if a file exists.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="folderExistsCondition" type="folderExistsCondition">
+        <xs:annotation>
+          <xs:documentation>
+            Checks if a folder exists.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="orCondition" type="orCondition">
         <xs:annotation>
           <xs:documentation>
@@ -7209,6 +7223,13 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A description of the condition.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
     </xs:all>
   </xs:complexType>
 
@@ -7218,6 +7239,13 @@
         <xs:annotation>
           <xs:documentation>
             The build condition to match.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A description of the condition.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
@@ -7254,6 +7282,51 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A description of the condition.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="fileExistsCondition">
+    <xs:all>
+      <xs:element name="file" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The file to check for.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A description of the condition.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="folderExistsCondition">
+    <xs:all>
+      <xs:element name="folder" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The folder to check for.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A description of the condition.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
     </xs:all>
   </xs:complexType>
 
@@ -7266,6 +7339,13 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A description of the condition.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
     </xs:all>
   </xs:complexType>
 
@@ -7275,6 +7355,13 @@
         <xs:annotation>
           <xs:documentation>
             The status to match.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A description of the condition.
           </xs:documentation>
         </xs:annotation>
       </xs:element>

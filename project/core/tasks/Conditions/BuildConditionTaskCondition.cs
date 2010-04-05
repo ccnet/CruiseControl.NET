@@ -65,8 +65,7 @@
         /// </returns>
         protected override bool Evaluate(IIntegrationResult result)
         {
-            this.RetrieveLogger()
-                .Debug("Checking build condition - matching to " + this.BuildCondition.ToString());
+            this.LogDescriptionOrMessage("Checking build condition - matching to " + this.BuildCondition.ToString());
             return this.BuildCondition == result.BuildCondition;
         }
         #endregion

@@ -783,6 +783,8 @@
     <Compile Include="tasks\Conditions\BuildConditionTaskCondition.cs" />
     <Compile Include="tasks\Conditions\CompareValuesTaskCondition.cs" />
     <Compile Include="tasks\Conditions\ConditionBase.cs" />
+    <Compile Include="tasks\Conditions\FileExistsTaskCondition.cs" />
+    <Compile Include="tasks\Conditions\FolderExistsTaskCondition.cs" />
     <Compile Include="tasks\Conditions\OrTaskCondition.cs" />
     <Compile Include="tasks\Conditions\StatusTaskCondition.cs" />
     <Compile Include="tasks\CoverageFilter.cs" />

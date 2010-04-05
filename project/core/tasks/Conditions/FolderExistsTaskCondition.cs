@@ -1,26 +1,27 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
 {
     using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
     using ThoughtWorks.CruiseControl.Remote;
 
-    /// <title>Status Condition</title>
+    /// <title>Folder Exists Condition</title>
     /// <version>1.6</version>
     /// <summary>
-    /// Checks if the current status matches a value.
+    /// Checks if a folder exists.
     /// </summary>
     /// <example>
     /// <code title="Basic example">
     /// <![CDATA[
-    /// <statusCondition value="Success" />
+    /// <folderExistsCondition folder="documentation" />
     /// ]]>
     /// </code>
     /// <code title="Example in context">
     /// <![CDATA[
     /// <conditional>
     /// <conditions>
-    /// <statusCondition>
-    /// <value>Failure</value>
-    /// </statusCondition>
+    /// <folderExistsCondition>
+    /// <folder>documentation</folder>
+    /// </folderExistsCondition>
     /// </conditions>
     /// <tasks>
     /// <!-- Tasks to perform if condition passed -->
@@ -38,19 +39,30 @@
     /// <link>http://ccnetconditional.codeplex.com/</link>.
     /// </para>
     /// </remarks>
-    [ReflectorType("statusCondition")]
-    public class StatusTaskCondition
+    [ReflectorType("folderExistsCondition")]
+    public class FolderExistsTaskCondition
         : ConditionBase
     {
         #region Public properties
         #region Status
         /// <summary>
-        /// The status to match.
+        /// The folder to check for.
         /// </summary>
         /// <version>1.6</version>
         /// <default>n/a</default>
-        [ReflectorProperty("value", Required = true)]
-        public IntegrationStatus Status { get; set; }
+        /// <remarks>
+        /// If the folder is relative then it will be relative to the working directory.
+        /// </remarks>
+        [ReflectorProperty("folder", Required = true)]
+        public string FolderName { get; set; }
+        #endregion
+
+        #region FileSystem
+        /// <summary>
+        /// Gets or sets the file system.
+        /// </summary>
+        /// <value>The file system.</value>
+        public IFileSystem FileSystem { get; set; }
         #endregion
         #endregion
 
@@ -65,8 +77,11 @@
         /// </returns>
         protected override bool Evaluate(IIntegrationResult result)
         {
-            this.LogDescriptionOrMessage("Checking status - matching to " + this.Status.ToString());
-            return this.Status == result.Status;
+            var folderName = result.BaseFromWorkingDirectory(this.FolderName);
+            this.LogDescriptionOrMessage("Checking for folder '" + folderName.ToString() + "'");
+            var fileSystem = this.FileSystem ?? new SystemIoFileSystem();
+            var exists = fileSystem.DirectoryExists(folderName);
+            return exists;
         }
         #endregion
         #endregion
