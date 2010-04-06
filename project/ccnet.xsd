@@ -7197,6 +7197,13 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="lastStatusCondition" type="lastStatusCondition">
+        <xs:annotation>
+          <xs:documentation>
+            Checks if the status of the last build matches a value.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="orCondition" type="orCondition">
         <xs:annotation>
           <xs:documentation>
@@ -7331,6 +7338,25 @@
         <xs:annotation>
           <xs:documentation>
             The folder to check for.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A description of the condition.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="lastStatusCondition">
+    <xs:all>
+      <xs:element name="value" type="IntegrationStatus" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The status to match.
           </xs:documentation>
         </xs:annotation>
       </xs:element>

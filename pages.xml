@@ -139,6 +139,7 @@
   <page title="IssueUrlBuilder" id="22118409" url="http://confluence.public.thoughtworks.org//display/CCNET/IssueUrlBuilder" parentId="325" />
   <page title="Iteration Labeller" id="4034" url="http://confluence.public.thoughtworks.org//display/CCNET/Iteration+Labeller" parentId="1755" source="iterationlabeller.wiki" />
   <page title="Labeller Blocks" id="1755" url="http://confluence.public.thoughtworks.org//display/CCNET/Labeller+Blocks" parentId="1738" />
+  <page title="Last Build Status Condition" id="34701768" url="http://confluence.public.thoughtworks.org//display/CCNET/Last+Build+Status+Condition" parentId="34701711" source="lastStatusCondition.wiki" />
   <page title="Last Change Labeller" id="6345" url="http://confluence.public.thoughtworks.org//display/CCNET/Last+Change+Labeller" parentId="1755" source="lastChangeLabeller.wiki" />
   <page title="Latest Build Report Project Plugin" id="4440" url="http://confluence.public.thoughtworks.org//display/CCNET/Latest+Build+Report+Project+Plugin" parentId="2973" source="latestBuildReportProjectPlugin.wiki" />
   <page title="LDAP Email Converter" id="31097618" url="http://confluence.public.thoughtworks.org//display/CCNET/LDAP+Email+Converter" parentId="31097612" source="ldapConverter.wiki" />
