@@ -787,6 +787,8 @@
     <Compile Include="tasks\Conditions\FolderExistsTaskCondition.cs" />
     <Compile Include="tasks\Conditions\OrTaskCondition.cs" />
     <Compile Include="tasks\Conditions\StatusTaskCondition.cs" />
+    <Compile Include="tasks\Conditions\UrlHeaderValueTaskCondition.cs" />
+    <Compile Include="tasks\Conditions\UrlPingsTaskCondition.cs" />
     <Compile Include="tasks\CoverageFilter.cs" />
     <Compile Include="tasks\CoverageThreshold.cs" />
     <Compile Include="tasks\CruiseServerControlTask.cs" />
@@ -844,8 +846,10 @@
     <Compile Include="tasks\NDependTask.cs" />
     <Compile Include="tasks\XmlTaskResult.cs" />
     <Compile Include="Triggers\RollUpTrigger.cs" />
+    <Compile Include="util\DefaultWebFunctions.cs" />
     <Compile Include="util\ICompressionService.cs" />
     <Compile Include="util\IPrivateData.cs" />
+    <Compile Include="util\IWebFunctions.cs" />
     <Compile Include="util\PrivateArguments.cs" />
     <Compile Include="util\PrivateString.cs" />
     <Compile Include="util\PrivateStringSerialiser.cs" />

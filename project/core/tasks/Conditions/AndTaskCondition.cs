@@ -49,7 +49,7 @@
         : ConditionBase, IConfigurationValidation
     {
         #region Public properties
-        #region Status
+        #region Conditions
         /// <summary>
         /// The conditions to check.
         /// </summary>

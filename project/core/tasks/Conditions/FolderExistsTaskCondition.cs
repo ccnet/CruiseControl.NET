@@ -44,7 +44,7 @@
         : ConditionBase
     {
         #region Public properties
-        #region Status
+        #region FolderName
         /// <summary>
         /// The folder to check for.
         /// </summary>

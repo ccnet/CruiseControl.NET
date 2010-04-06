@@ -1,27 +1,27 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
 {
     using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Config;
     using ThoughtWorks.CruiseControl.Core.Util;
-    using ThoughtWorks.CruiseControl.Remote;
 
-    /// <title>File Exists Condition</title>
+    /// <title>URL Ping Condition</title>
     /// <version>1.6</version>
     /// <summary>
-    /// Checks if a file exists.
+    /// Checks if a URL can be pinged.
     /// </summary>
     /// <example>
     /// <code title="Basic example">
     /// <![CDATA[
-    /// <fileExistsCondition file="readme.txt" />
+    /// <urlPingCondition url="http://somewhere.com" />
     /// ]]>
     /// </code>
     /// <code title="Example in context">
     /// <![CDATA[
     /// <conditional>
     /// <conditions>
-    /// <fileExistsCondition>
-    /// <file>readme.txt</file>
-    /// </fileExistsCondition>
+    /// <urlPingCondition>
+    /// <url>http://somewhere.com</url>
+    /// </urlPingCondition>
     /// </conditions>
     /// <tasks>
     /// <!-- Tasks to perform if condition passed -->
@@ -39,30 +39,45 @@
     /// <link>http://ccnetconditional.codeplex.com/</link>.
     /// </para>
     /// </remarks>
-    [ReflectorType("fileExistsCondition")]
-    public class FileExistsTaskCondition
-        : ConditionBase
+    [ReflectorType("urlPingCondition")]
+    public class UrlPingsTaskCondition
+        : ConditionBase, IConfigurationValidation
     {
         #region Public properties
-        #region FileName
+        #region Url
         /// <summary>
-        /// The file to check for.
+        /// The URL to ping.
         /// </summary>
         /// <version>1.6</version>
         /// <default>n/a</default>
-        /// <remarks>
-        /// If the file is relative then it will be relative to the working directory.
-        /// </remarks>
-        [ReflectorProperty("file", Required = true)]
-        public string FileName { get; set; }
+        [ReflectorProperty("url", Required = true)]
+        public string Url { get; set; }
         #endregion
 
-        #region FileSystem
+        #region WebFunctions
         /// <summary>
-        /// Gets or sets the file system.
+        /// Gets or sets the web functions.
         /// </summary>
-        /// <value>The file system.</value>
-        public IFileSystem FileSystem { get; set; }
+        /// <value>The web functions.</value>
+        public IWebFunctions WebFunctions { get; set; }
+        #endregion
+        #endregion
+
+        #region Public methods
+        #region Validate()
+        /// <summary>
+        /// Checks the internal validation of the item.
+        /// </summary>
+        /// <param name="configuration">The entire configuration.</param>
+        /// <param name="parent">The parent item for the item being validated.</param>
+        /// <param name="errorProcesser">The error processer to use.</param>
+        public void Validate(IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
+        {
+            if (string.IsNullOrEmpty(this.Url))
+            {
+                errorProcesser.ProcessError("URL cannot be empty");
+            }
+        }
         #endregion
         #endregion
 
@@ -77,10 +92,9 @@
         /// </returns>
         protected override bool Evaluate(IIntegrationResult result)
         {
-            var fileName = result.BaseFromWorkingDirectory(this.FileName);
-            this.LogDescriptionOrMessage("Checking for file '" + fileName.ToString() + "'");
-            var fileSystem = this.FileSystem ?? new SystemIoFileSystem();
-            var exists = fileSystem.FileExists(fileName);
+            this.LogDescriptionOrMessage("Pinging URL '" + this.Url.ToString() + "'");
+            var functions = this.WebFunctions ?? new DefaultWebFunctions();
+            var exists = functions.PingUrl(this.Url);
             return exists;
         }
         #endregion

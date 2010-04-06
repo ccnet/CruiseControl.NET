@@ -7211,6 +7211,20 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="urlHeaderValueCondition" type="urlHeaderValueCondition">
+        <xs:annotation>
+          <xs:documentation>
+            Checks if a URL returns a specified header.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="urlPingCondition" type="urlPingCondition">
+        <xs:annotation>
+          <xs:documentation>
+            Checks if a URL can be pinged.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
     </xs:choice>  
   </xs:complexType>
 
@@ -7355,6 +7369,58 @@
         <xs:annotation>
           <xs:documentation>
             The status to match.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A description of the condition.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+  
+  <xs:complexType name="urlHeaderValueCondition">
+    <xs:all>
+      <xs:element name="url" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The URL to ping.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="key" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The key of the header to check.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="value" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The expected value for the header.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A description of the condition.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="urlPingCondition">
+    <xs:all>
+      <xs:element name="url" type="String" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The URL to ping.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
