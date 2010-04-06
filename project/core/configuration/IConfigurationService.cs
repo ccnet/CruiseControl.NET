@@ -1,3 +1,4 @@
+using System;
 using ThoughtWorks.CruiseControl.Core.Config;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
@@ -12,5 +13,5 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 	}
 
 	public delegate void ConfigurationUpdateHandler();
-    public delegate void ConfigurationSubfileLoadedHandler (string path);
+    public delegate void ConfigurationSubfileLoadedHandler (Uri subfile_uri);
 }

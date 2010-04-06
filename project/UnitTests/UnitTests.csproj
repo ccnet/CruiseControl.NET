@@ -154,6 +154,9 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <ProjectReference Include="..\CCTrayLib\CCTrayLib.csproj">
       <Name>CCTrayLib</Name>
       <Project>{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}</Project>
@@ -308,6 +311,7 @@
     <Compile Include="Config\CCNetConfigFileValidationTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\Config\TestNodeProcessor.cs" />
     <Compile Include="Core\ConsoleRunnerArgumentsTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1233,6 +1237,21 @@
     <EmbeddedResource Include="Core\Publishers\Rss.WithinLimits.xml" />
     <EmbeddedResource Include="Core\SourceControl\MksHistoryParserTestDataMemberInfo.xml" />
     <EmbeddedResource Include="Core\SourceControl\MksHistoryParserTestData.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestInvalidAttribute.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestInvalidAttribute2.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestAttrNodesetDefine.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestCount.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestElementAttribute.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestEval.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestExplicitDefine.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestFor.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestForEach.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestIf.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestIfdefIfNDef.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestImport.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestImportFrom.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestProcessingInstruction.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\SampleInclude.xml" />
     <Content Include="IntegrationTests\IntegrationTests_Readme.txt" />
     <Content Include="resources\buildlog.xml" />
     <Content Include="resources\CCNet.git.log.txt" />

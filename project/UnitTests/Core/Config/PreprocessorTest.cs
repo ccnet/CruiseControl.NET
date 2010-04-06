@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
@@ -14,8 +15,204 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
     {
     	private static readonly string FAKE_ROOT = Path.DirectorySeparatorChar == '\\' ? "c:\\temp folder\\" : "/tmp/";
 
-        private readonly PreprocessorUrlResolver _resolver =
-            new PreprocessorUrlResolver();
+        private readonly XmlUrlResolver _resolver =
+            new XmlUrlResolver();
+
+        [Test]
+        public void TestAttrNodesetDefine()
+        {
+            XmlDocument doc = _Preprocess("TestAttrNodesetDefine.xml");
+            XPathNavigator nav = doc.CreateNavigator();
+            AssertNodeValue(nav, "/root/test-one/outer-content", "textcontent");
+            AssertNodeExists(nav, "/root/test-two/outer-content/nodeset-content");
+        }
+
+        [Test, ExpectedException(typeof(InvalidMarkupException))]
+        public void TestAttributeWithNoName()
+        {
+            _Preprocess("TestInvalidAttribute2.xml");
+        }
+
+        [Test, Ignore("Long running test")]
+        public void TestBigFor()
+        {
+            XmlDocument doc = _Preprocess("TestBigFor.xml");
+            XPathNavigator nav = doc.CreateNavigator();
+            AssertNodeValue(nav, "/root/hello[1]/@attr", "0");
+            AssertNodeValue(nav, "/root/hello[25000]/@attr", "24999");
+        }
+
+        [Test]
+        public void TestCount()
+        {
+            XmlDocument doc = _Preprocess("TestCount.xml");
+            XPathNavigator nav = doc.CreateNavigator();
+            AssertNodeValue(nav, "/root/foo[1]/@val", "1");
+            AssertNodeValue(nav, "/root/foo[2]/@val", "2");
+            AssertNodeValue(nav, "/root/foo[3]/@val", "3");
+            AssertNodeCount(nav, "/root/foo[@val]", 3);
+        }      
+
+        [Test]
+        public void TestElementsAndAttributes()
+        {
+            XmlDocument doc = _Preprocess("TestElementAttribute.xml");
+            XPathNavigator nav = doc.CreateNavigator();
+            AssertNodeValue(nav, "/myel", "myelval");
+            AssertNodeValue(nav, "/myel/@myattr1", "myattrval1");
+            AssertNodeValue(nav, "/myel/@myattr2", "myattrval2");
+        }
+
+        [Test]
+        public void TestEvals()
+        {
+            XmlDocument doc = _Preprocess("TestEval.xml");
+            XPathNavigator nav = doc.CreateNavigator();
+            AssertNodeValue(nav, "/root/eval1", "54");
+            AssertNodeValue(nav, "/root/eval2", "6");
+            AssertNodeValue(nav, "/root/evalliteral",
+                             @"(""A STRING WITH 'THINGS' WHICH MAY NEED TO BE ""ESCAPED"""")");
+            AssertNodeValue(nav, "/root/two", "2");
+            AssertNodeExists(nav, "/root/three/inner");
+        }
+
+
+        [Test]
+        public void TestExplicitDefine1()
+        {
+            var settings = new PreprocessorSettings();
+            Environment.SetEnvironmentVariable("foo", "foo_val");
+            settings.ExplicitDeclarationRequired = false;
+            XmlDocument doc = _Preprocess("TestExplicitDefine.xml", settings);
+            XPathNavigator nav = doc.CreateNavigator();
+            AssertNodeValue(nav, "/root/@foo", "foo_val");
+        }
+
+        [Test, ExpectedException(typeof(ExplicitDefinitionRequiredException))]
+        public void TestExplicitDefine2()
+        {
+            var settings = new PreprocessorSettings();
+            try
+            {
+                Environment.SetEnvironmentVariable("foo", "foo_val");
+                settings.ExplicitDeclarationRequired = true;
+                _Preprocess("TestExplicitDefine.xml", settings);
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("foo", null);
+            }
+        }
+
+        [Test]
+        public void TestFor()
+        {
+            XmlDocument doc = _Preprocess("TestFor.xml");
+            XPathNavigator nav = doc.CreateNavigator();
+            AssertNodeValue(nav, "/root/hello[1]/@attr", "0");
+            AssertNodeValue(nav, "/root/hello[2]/@attr", "1");
+            AssertNodeValue(nav, "/root/hello[3]/@attr", "2");
+        }
+
+        [Test]
+        public void TestForEach()
+        {
+            XmlDocument doc = _Preprocess("TestForEach.xml");
+            XPathNavigator nav = doc.CreateNavigator();
+            AssertNodeExists(nav, "/root/one");
+            AssertNodeExists(nav, "/root/two");
+            AssertNodeExists(nav, "/root/three");
+            AssertNodeExists(nav, "/root/four");
+            AssertNodeExists(nav, "/root/five");
+            AssertNodeExists(nav, "/root/six");
+        }
+
+        [Test]
+        public void TestIf()
+        {
+            XmlDocument doc = _Preprocess("TestIf.xml");
+            XPathNavigator nav = doc.CreateNavigator();
+            AssertNodeExists(nav, "/root/ifeq_succeeded");
+            AssertNodeDoesNotExist(nav, "/root/ifeq_failed");
+            AssertNodeExists(nav, "/root/ifeq_negative_succeeded");
+            AssertNodeDoesNotExist(nav, "/root/ifeq_negative_failed");
+            AssertNodeExists(nav, "/root/ifneq_succeeded");
+            AssertNodeDoesNotExist(nav, "/root/ifneq_failed");
+        }
+
+        [Test]
+        public void TestIfDefIfNDef()
+        {
+            XmlDocument doc = _Preprocess("TestIfdefIfNDef.xml");
+            XPathNavigator nav = doc.CreateNavigator();
+            AssertNodeExists(nav, "/root/ifdef_foo_succeeded");
+            AssertNodeDoesNotExist(nav, "/root/ifdef_foo_failed");
+            AssertNodeExists(nav, "/root/ifndef_foo_succeeded");
+            AssertNodeDoesNotExist(nav, "/root/ifndef_foo_failed");
+            AssertNodeExists(nav, "/root/ifdef_else_succeeded");
+            AssertNodeDoesNotExist(nav, "/root/ifdef_else_failed");
+            AssertNodeExists(nav, "/root/ifndef_else_succeeded");
+            AssertNodeDoesNotExist(nav, "/root/ifndef_else_failed");
+        }
+
+        [Test]
+        public void TestImporFrom()
+        {
+            XmlDocument doc = _Preprocess("TestImportFrom.xml");
+            AssertNodeValue(doc, "/root/test", "Hello From TestElementProcessor!");
+        }
+
+        [Test]
+        public void TestImport()
+        {
+            XmlDocument doc = _Preprocess("TestImport.xml");
+            AssertNodeValue(doc, "/root/test", "Hello From TestElementProcessor!");
+        }
+
+        
+        [Test]
+        public void TestInitialDefine()
+        {
+            var settings = new PreprocessorSettings();
+            var defs = new Dictionary<string, string>();
+            defs["foo"] = "foo_val";
+            settings.InitialDefinitions = defs;
+            settings.ExplicitDeclarationRequired = false;
+            XmlDocument doc = _Preprocess("TestExplicitDefine.xml", settings);
+            XPathNavigator nav = doc.CreateNavigator();
+            AssertNodeValue(nav, "/root/@foo", "foo_val");
+        }
+
+        [Test, ExpectedException(typeof(ExplicitDefinitionRequiredException))]
+        public void TestInitialDefine2()
+        {
+            var settings = new PreprocessorSettings();
+            var defs = new Dictionary<string, string>();
+            defs["foo"] = "foo_val";
+            settings.InitialDefinitions = defs;
+            settings.ExplicitDeclarationRequired = true;
+            XmlDocument doc = _Preprocess("TestExplicitDefine.xml", settings);
+            XPathNavigator nav = doc.CreateNavigator();
+            AssertNodeValue(nav, "/root/@foo", "foo_val");
+        }
+
+        [Test, ExpectedException(typeof(InvalidMarkupException))]
+        public void TestMisplacedAttribute()
+        {
+            _Preprocess("TestInvalidAttribute.xml");
+        }
+        
+
+        [Test]
+        public void TestProcessingInstruction()
+        {
+            XmlDocument doc = _Preprocess("TestProcessingInstruction.xml");
+            XPathNavigator nav = doc.CreateNavigator();
+            AssertNodeValue(nav, "/processing-instruction('mypi')", "mypival");
+        }
+
+
+        #region existing
 
         [Test]
         public void TestDefineConst()
@@ -25,10 +222,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                 using (XmlWriter output = GetOutput())
                 {
                     ConfigPreprocessor preprocessor = new ConfigPreprocessor();
-                    ConfigPreprocessorEnvironment env =
+                    PreprocessorEnvironment env =
                         preprocessor.PreProcess(input, output, _resolver, null );
-                    Assert.AreEqual(
-                        env._GetConstantDef( "var1" ).Value, "value1" );                    
+                    Assert.AreEqual( env.EvalSymbol( "var1" ).GetTextValue(), "value1" );                    
                 }
             }
         }        
@@ -85,7 +281,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         {
             using (XmlReader input = GetInput("TestIncluder.xml"))
             {
-                ConfigPreprocessorEnvironment env;
+                PreprocessorEnvironment env;
                 using ( XmlWriter output = GetOutput() )
                 {
                     ConfigPreprocessor preprocessor = new ConfigPreprocessor();
@@ -95,10 +291,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                                   "/includer/included/included2" );
 
                 Assert.AreEqual( env.Fileset.Length, 3 );
-                Assert.AreEqual(GetTestPath("TestIncluder.xml"), env.Fileset[0]);
-                Assert.AreEqual(GetTestPath(String.Format(
-					"Subfolder{0}TestIncluded.xml", Path.DirectorySeparatorChar)), env.Fileset[1]);
-                Assert.AreEqual(GetTestPath("TestIncluded2.xml"), env.Fileset[2]);
+                Assert.AreEqual( GetTestPath( "TestIncluder.xml" ), env.Fileset[ 0 ].LocalPath );
+                Assert.AreEqual(
+                    GetTestPath( String.Format( "Subfolder{0}TestIncluded.xml",
+                                                Path.DirectorySeparatorChar ) ),
+                    env.Fileset[ 1 ].LocalPath );
+                Assert.AreEqual( GetTestPath( "TestIncluded2.xml" ), env.Fileset[ 2 ].LocalPath );
             }
         }
 
@@ -107,7 +305,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         {
             using (XmlReader input = GetInput("TestIncludeStack1.xml"))
             {
-                ConfigPreprocessorEnvironment env;
+                PreprocessorEnvironment env;
                 using (XmlWriter output = GetOutput())
                 {
                     ConfigPreprocessor preprocessor = new ConfigPreprocessor();
@@ -120,11 +318,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
                 Assert.AreEqual(env.Fileset.Length, 4);
 
-                Assert.AreEqual(GetTestPath("TestIncludeStack1.xml"), env.Fileset[0]);
+                Assert.AreEqual(GetTestPath("TestIncludeStack1.xml"), env.Fileset[0].LocalPath);
                 Assert.AreEqual(GetTestPath(String.Format(
-					"Subfolder{0}TestIncludeStack2.xml", Path.DirectorySeparatorChar)), env.Fileset[1]);
-                Assert.AreEqual(GetTestPath("TestIncludeStack3.xml"), env.Fileset[2]);
-                Assert.AreEqual(GetTestPath("TestIncludeStack4.xml"), env.Fileset[3]);
+                    "Subfolder{0}TestIncludeStack2.xml", Path.DirectorySeparatorChar)), env.Fileset[1].LocalPath);
+                Assert.AreEqual(GetTestPath("TestIncludeStack3.xml"), env.Fileset[2].LocalPath);
+                Assert.AreEqual(GetTestPath("TestIncludeStack4.xml"), env.Fileset[3].LocalPath);
             }
         }
 
@@ -168,7 +366,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         {
             using (XmlReader input = GetInput("Test Include File With Spaces.xml"))
             {
-                ConfigPreprocessorEnvironment env;
+                PreprocessorEnvironment env;
                 using (XmlWriter output = GetOutput())
                 {
                     ConfigPreprocessor preprocessor = new ConfigPreprocessor();
@@ -179,7 +377,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                 XmlDocument doc = ReadOutputDoc();
                 AssertNodeValue(doc, "/element", "value");
                 Assert.AreEqual(env.Fileset.Length, 1);
-                Assert.AreEqual(GetTestPath("Test Include File With Spaces.xml"), env.Fileset[0]);
+                Assert.AreEqual( new Uri(GetTestPath("Test Include File With Spaces.xml")), env.Fileset[0]);
             }
         }
 
@@ -188,7 +386,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         {
             using (XmlReader input = GetInput("TestIncludeVariable.xml"))
             {
-                ConfigPreprocessorEnvironment env;
+                PreprocessorEnvironment env;
                 using (XmlWriter output = GetOutput())
                 {
                     ConfigPreprocessor preprocessor = new ConfigPreprocessor();
@@ -200,19 +398,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                                   "/includeVariable/included/included2");
 
                 Assert.AreEqual(env.Fileset.Length, 3);
-                Assert.AreEqual(GetTestPath("TestIncludeVariable.xml"), env.Fileset[0]);
-                Assert.AreEqual(GetTestPath(@"Subfolder\TestIncluded.xml"), env.Fileset[1]);
-                Assert.AreEqual(GetTestPath("TestIncluded2.xml"), env.Fileset[2]);
+                Assert.AreEqual(GetTestPath("TestIncludeVariable.xml"), env.Fileset[0].LocalPath);
+                Assert.AreEqual(GetTestPath(@"Subfolder\TestIncluded.xml"), env.Fileset[1].LocalPath);
+                Assert.AreEqual(GetTestPath("TestIncluded2.xml"), env.Fileset[2].LocalPath);
             }
         }
-        
-        private static XmlDocument _Preprocess(string filename)
+        #endregion
+
+        private static XmlDocument _Preprocess(string filename  )
+        {
+            return _Preprocess( filename, new PreprocessorSettings() );
+        }
+        private static XmlDocument _Preprocess(string filename, PreprocessorSettings settings )
         {
             using( XmlReader input = GetInput( filename ) )
             {
                 using ( XmlWriter output = GetOutput() )
                 {
-                    ConfigPreprocessor preprocessor = new ConfigPreprocessor();
+                    ConfigPreprocessor preprocessor = new ConfigPreprocessor( settings );
                     preprocessor.PreProcess(
                         input, output, new TestResolver( FAKE_ROOT + filename  ), new Uri( FAKE_ROOT + filename  )  );
                 }
@@ -225,12 +428,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             return Path.Combine(FAKE_ROOT, relative_path);
         }
 
+        private static void AssertNodeCount(XPathNavigator nav, string xpath, int count)
+        {
+            XPathNodeIterator nodes = nav.Select(xpath, nav);
+            Assert.That(nodes.Count, Is.EqualTo(count));
+        }
+
         private static void AssertNodeValue(IXPathNavigable doc, string xpath, string expected_val)
         {
             XPathNavigator nav = doc.CreateNavigator();
             XPathNavigator node = nav.SelectSingleNode(xpath, nav);
             Assert.IsNotNull(node, "Node '{0}' not found", xpath);
-            Assert.AreEqual( node.Value, expected_val);
+            Assert.AreEqual( node.Value.Trim(), expected_val);
         }
 
         private static void AssertNodeValue(XPathNavigator nav,
@@ -238,7 +447,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         {
             XPathNavigator node = nav.SelectSingleNode(xpath, nav);
             Assert.IsNotNull(node, "Node '{0}' not found", xpath);
-            Assert.AreEqual( node.Value, expected_val);
+            Assert.AreEqual( node.Value.Trim(), expected_val);
         }
 
         private static void AssertNodeExists(XPathNavigator nav,
@@ -246,6 +455,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         {
             XPathNavigator node = nav.SelectSingleNode(xpath, nav);
             Assert.IsNotNull(node, "Node '{0}' not found", xpath);
+        }
+
+        private static void AssertNodeDoesNotExist(XPathNavigator nav,
+                                                   string xpath)
+        {
+            XPathNavigator node = nav.SelectSingleNode(xpath, nav);
+            Assert.IsNull(node, "Node '{0}' found when it should not exist", xpath);
         }
 
         private static XmlReader GetInput(string filename)
@@ -283,48 +499,37 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		}
     }
 
-    internal class TestResolver : PreprocessorUrlResolver
+    internal class TestResolver : XmlUrlResolver
     {
-        /// <summary>
-        /// The base string of the URIs, to remove later.
-        /// </summary>
         private readonly string _original_base_path;
-        public TestResolver(string base_path)
+
+        public TestResolver(string base_path) : base()
         {
             _original_base_path = Path.GetDirectoryName( base_path ) +
                                   Path.DirectorySeparatorChar;
         }
 
-        /// <summary>
-        /// Return the resource represented by the specified URI as a Stream.
-        /// </summary>
-        /// <param name="absoluteUri">The URI for the resource.</param>
-        /// <param name="role">Ignroed.</param>
-        /// <param name="ofObjectToReturn">Ignored.</param>
-        /// <returns>A Stream connected to the resource.</returns>
-        public override object GetEntity (
-            Uri absoluteUri, string role, Type ofObjectToReturn)
-        {
-            string relativeUri = Resolve( absoluteUri );
-            // Ignore the path and load the file from the manifest resources.
-            return
-                PreprocessorTest.GetManifestResourceStream( 
-               relativeUri );
-        }        
-
         public override ICredentials Credentials
         {
-            set {  }
+            set { }
         }
 
-        /// <summary>
-        /// Resolve an absolute URI to a resource name.
-        /// </summary>
-        /// <param name="absoluteUri"></param>
-        /// <returns></returns>
-        private string Resolve( Uri absoluteUri )
+        public override object GetEntity(
+            Uri absolute_uri, string role, Type of_object_to_return)
         {
-            return absoluteUri.LocalPath.Substring(_original_base_path.Length).Replace(Path.DirectorySeparatorChar, '.');
+            string relative_uri = Resolve( absolute_uri );
+            // Ignore the path and load the file from the manifest resources.
+            Stream stream = PreprocessorTest.GetManifestResourceStream(
+                relative_uri );
+            if ( stream == null )
+                Utils.ThrowAppException( "Resource '{0}' not found", relative_uri );
+            return stream;
         }
-    }
+
+        private string Resolve(Uri absolute_uri)
+        {
+            return absolute_uri.LocalPath.Substring( _original_base_path.Length ).Replace( '\\',
+                                                                                             '.' );
+        }
+    }    
 }

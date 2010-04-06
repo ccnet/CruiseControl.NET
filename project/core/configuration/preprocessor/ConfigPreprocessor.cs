@@ -1,128 +1,90 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
+using System.Linq;
 using System.Xml;
-using System.Xml.Xsl;
-using ThoughtWorks.CruiseControl.Core.Util;
+using System.Xml.Linq;
 
 namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 {
     /// <summary>
-    /// Provides preprocessing facility for XML documents.  Preprocessing performs the following
-    /// services:
-    /// 1. Expansion of includes
-    /// 2. Definition and expansion of constants    
+    /// The preprocessor
     /// </summary>
-    internal class ConfigPreprocessor
+    public class ConfigPreprocessor
     {
-        private ConfigPreprocessorEnvironment _current_env;
-		private readonly IFileSystem fileSystem;
-		private readonly IExecutionEnvironment executionEnvironment;
-		private readonly string programDataFolder;
-       
-		internal ConfigPreprocessor() : this(new SystemIoFileSystem(), new ExecutionEnvironment())
-		{}
+        private readonly PreprocessorSettings _settings;
+        private PreprocessorEnvironment _env;
 
-		internal ConfigPreprocessor(IFileSystem fileSystem, IExecutionEnvironment executionEnvironment)
-		{
-			this.fileSystem = fileSystem;
-			this.executionEnvironment = executionEnvironment;
+        public event ConfigurationSubfileLoadedHandler SubfileLoaded;
 
-			programDataFolder = this.executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server);
-			fileSystem.EnsureFolderExists(programDataFolder);
-		}
-
-        /// <summary>
-        /// Run the given input reader through the preprocessor, writing it
-        /// to the given output writer.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="output"></param>
-        /// <returns></returns>
-        /// <param name="resolver"></param>
-        /// <param name="input_uri"></param>
-        /// <exception cref="EvaluationException">Error occurred during the evaluation of a constant</exception>
-        public ConfigPreprocessorEnvironment PreProcess(XmlReader input,
-                                                         XmlWriter output,
-            PreprocessorUrlResolver resolver,
-            Uri input_uri
-            )
+        public ConfigPreprocessor(PreprocessorSettings settings)
         {
-            XsltSettings xslt_settings = new XsltSettings(true, true);
+            _settings = settings;
+        }
 
-#if DEBUG
-            XslCompiledTransform xslt_preprocess = new XslCompiledTransform(true);
-#else
-            XslCompiledTransform xslt_preprocess = new XslCompiledTransform( false );
-#endif
+        public ConfigPreprocessor() : this( new PreprocessorSettings
+                                          {
+                                              ExplicitDeclarationRequired = false,
+                                              InitialDefinitions =
+                                                  new Dictionary< string, string >(),
+                                              NamesAreCaseSensitve = false,
+                                              UseOsEnvironment = true
+                                          } )
+        {
+        }
 
-            using (XmlReader xslt_reader = XmlReader.Create(Utils.GetAssemblyResourceStream(
-                    "ThoughtWorks.CruiseControl.Core.configuration.preprocessor.ConfigPreprocessor.xslt")))
-            {
-                xslt_preprocess.Load(
-                    xslt_reader, xslt_settings, new XmlUrlResolver());
-            }            
 
-            // Install a special XmlResolver for the resolution of 
-            // preprocessor includes (which use the xslt document() function).
-            // The resolver keeps track of the URI path of the outermost document and any includes
-            // and uses it to resolve relative include paths.  
-            if ( resolver == null )
-            {
-                resolver = new PreprocessorUrlResolver();
-            }
-
-            XsltArgumentList xslt_args = new XsltArgumentList();
-
+        public PreprocessorEnvironment PreProcess(XmlReader input, XmlWriter output,
+                                                  XmlUrlResolver resolver, Uri input_uri)
+        {
+            // The base URI is needed to resolve includes of relative paths, as well as to generate
+            // error messages.
+            // If none is given explicitly, try to use the XmlReader's BaseUri.  
+            // If that doesn't exist either, use the current working directory and a fake filename.
             Uri base_uri = input_uri ??
                            ( String.IsNullOrEmpty( input.BaseURI )
                                  ? new Uri(
                                        Path.Combine(
-										   programDataFolder,
+                                           Environment.CurrentDirectory,
                                            "nofile.xml" ) )
                                  : new Uri( input.BaseURI ) );
-            _current_env = new ConfigPreprocessorEnvironment( base_uri, resolver );
-
-            // The XSLT calls extension functions in _current_env.
-            xslt_args.AddExtensionObject("environment", _current_env);
-            try
+            // Create the environment
+            _env = new PreprocessorEnvironment( _settings, base_uri, resolver );
+            // Load the input document
+            XDocument doc = XDocument.Load( input, LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri | LoadOptions.SetLineInfo );
+            // Process the input document's nodes and write the results to the output stream
+            foreach ( XNode out_node in
+                doc.Nodes().SelectMany(
+                    node => _env._DefaultNodeProcessor.Process( node ) ) )
             {
-                xslt_preprocess.Transform( input, xslt_args, output, null );
-            }
-            catch( XsltException ex )
-            {
-                if ( ex.InnerException != null )
-                {                    
-                    // Get the _remoteStackTraceString of the Exception class
-                    FieldInfo remoteStackTraceString = typeof(Exception).GetField("_remoteStackTraceString",
-                    BindingFlags.Instance | BindingFlags.NonPublic );
-
-					// TODO: Remove this workaround after Mono Bug 425512 is resolved (CCNET-1244)
-					if (remoteStackTraceString == null)
-						remoteStackTraceString = typeof(Exception).GetField("remote_stack_trace",
-							BindingFlags.Instance | BindingFlags.NonPublic);
-					
-					// Set the InnerException._remoteStackTraceString to the current InnerException.StackTrace
-                    remoteStackTraceString.SetValue( ex.InnerException, 
-                    ex.InnerException.StackTrace + Environment.NewLine );                    
-                    // Throw the new exception
-                    throw ex.InnerException;
-                }
-                throw;
+                out_node.WriteTo( output );
             }
 
             // Notify listeners of all files encountered.
-            if ( SubfileLoaded != null )
+            if (SubfileLoaded != null)
             {
-                foreach ( string path in _current_env.Fileset )
-                {             
+                foreach (Uri path in _env.Fileset)
+                {
                     SubfileLoaded( path );
                 }
             }
+            return _env;
+        }
+    }
 
-            return _current_env;
-        }        
-
-        public event ConfigurationSubfileLoadedHandler SubfileLoaded;
+    internal class AttrName
+    {
+        public static XName AssemblyLocation = "assembly-location";
+        public static XName CounterName = "counter-name";
+        public static XName CountExpr = "count-expr";
+        public static XName Expr = "expr";
+        public static XName Href = "href";
+        public static XName InitExpr = "init-expr";
+        public static XName IteratorExpr = "iterator-expr";
+        public static XName IteratorName = "iterator-name";
+        public static XName Max = "max";
+        public static XName Name = "name";
+        public static XName TestExpr = "test-expr";
+        public static XName Type = "type";
     }
 }

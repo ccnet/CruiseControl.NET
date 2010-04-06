@@ -71,9 +71,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             {
                 foreach (XmlNode node in document.DocumentElement)
                 {
-                    ConflictingXMLNode = string.Empty;
+                    ConflictingXMLNode = string.Empty;                    
 
-                    if (!(node is XmlComment))
+                    if (!(node.NodeType == XmlNodeType.Comment || node.NodeType == XmlNodeType.Text))
                     {
                         ConflictingXMLNode = "Conflicting project data : " + node.OuterXml;
 

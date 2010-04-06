@@ -1,13 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <cb:config-template xmlns:cb="urn:ccnet.config.builder">
 
   <cb:define name="macro1">
     <hello>
-      <cb:foo/>
+      <cb:foo />
     </hello>
     <hi>
-      <cb:bar/>
+      <cb:bar />
     </hi>
   </cb:define>
 
@@ -15,15 +15,15 @@
     <cb:scope>
       <cb:define name="foo">
         <a>
-          <b/>
+          <b />
         </a>
       </cb:define>
       <cb:define name="bar">
         <c>
-          <d/>
+          <d />
         </c>
       </cb:define>
-      <cb:macro1/>
+      <cb:macro1 />
     </cb:scope>
   </c>
 

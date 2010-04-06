@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <!--# This file exists in a subdirectory to make sure that relative 
 paths are resolved with respect to this file's path.
 -->
 <included>
-      <cb:include xmlns:cb="urn:ccnet.config.builder" href="../TestIncluded2.xml"/>
+  <cb:include xmlns:cb="urn:ccnet.config.builder" href="../TestIncluded2.xml" />
 </included>
-

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <cb:define elname="myel" elval="myelval" attrname="myattr" attrval="myattrval" />
+  <cb:element name="$(elname)">
+    <cb:attribute name="$(attrname)1">$(attrval)1</cb:attribute>
+    <cb:attribute name="$(attrname)2">$(attrval)2</cb:attribute>
+    $(elval)
+  </cb:element>
+</cb:config-template>

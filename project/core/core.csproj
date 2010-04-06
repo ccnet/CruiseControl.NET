@@ -106,6 +106,7 @@
       <Name>log4net</Name>
       <HintPath>..\..\lib\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.JScript" />
     <Reference Include="NetReflector, Version=1.1.2009.1214, Culture=neutral, PublicKeyToken=2f4dd8b32acbcd8e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\NetReflector.dll</HintPath>
@@ -135,6 +136,9 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <ProjectReference Include="..\Remote\Remote.csproj">
       <Name>Remote</Name>
       <Project>{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}</Project>
@@ -148,6 +152,35 @@
     </Compile>
     <Compile Include="configuration\ConfigurationTrace.cs" />
     <Compile Include="configuration\ConfigurationValidationUtils.cs" />
+    <Compile Include="configuration\preprocessor\CodeEvaluator.cs" />
+    <Compile Include="configuration\preprocessor\DebuggingWriter.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\ConditionalProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\ConfigTemplateProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\CountProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\CreateElementProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\DefaultProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\DefineProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\ElementProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\EvalProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\ExpandSymbolProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\ForEachProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\ForProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\IfDefProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\IfNDefProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\IfProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\IgnoreProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\ImportProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\IncludeProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\ProcessingInstructionProcessor.cs" />
+    <Compile Include="configuration\preprocessor\ElementProcessors\ScopeProcessor.cs" />
+    <Compile Include="configuration\preprocessor\Exceptions.cs" />
+    <Compile Include="configuration\preprocessor\ConfigPreprocessor.cs" />
+    <Compile Include="configuration\preprocessor\PreprocessorEnvironment.cs" />
+    <Compile Include="configuration\preprocessor\PreprocessorSettings.cs" />
+    <Compile Include="configuration\preprocessor\SymbolicDef.cs" />
+    <Compile Include="configuration\preprocessor\TempFile.cs" />
+    <Compile Include="configuration\preprocessor\Validation.cs" />
+    <Compile Include="configuration\preprocessor\XHelpers.cs" />
     <Compile Include="ConsoleRunnerArguments.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -199,10 +232,6 @@
     <Compile Include="configuration\NetReflectorConfigurationReader.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\preprocessor\ConfigPreprocessor.cs" />
-    <Compile Include="configuration\preprocessor\ConfigPreprocessorEnvironment.cs" />
-    <Compile Include="configuration\preprocessor\Constant.cs" />
-    <Compile Include="configuration\preprocessor\PreprocessorUrlResolver.cs" />
     <Compile Include="configuration\preprocessor\Utils.cs" />
     <Compile Include="configuration\ServerConfiguration.cs" />
     <Compile Include="configuration\ServerConfigurationHandler.cs" />
@@ -1097,7 +1126,6 @@
       <Link>publishers\xsl\unittests.xsl</Link>
     </Content>
     <EmbeddedResource Include="sourcecontrol\MksHistory-viewsandbox-mods.xsl" />
-    <EmbeddedResource Include="configuration\preprocessor\ConfigPreprocessor.xslt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -1,3 +1,8 @@
+/**
+ * Purpose: definitinon of the XmlPreprocessor.Utils class
+ * Author: Jeremy Lew
+ * Created: 2008.03.24
+ */
 using System;
 using System.IO;
 using System.Reflection;
@@ -7,46 +12,107 @@ using System.Xml.Xsl;
 
 namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 {
-    class Utils
-    {      
-        internal static XmlWriter CreateWriter( string url )
+    /// <summary>
+    /// Internal static utility methods
+    /// </summary>
+    internal class Utils
+    {
+        /// <summary>
+        /// Create a XML writer with the following settings:
+        /// Indent = true;
+        /// UTF-8 encoding
+        /// Auto conformance level
+        /// NewlineChars = "\n"
+        /// NewlineHandling = Replace
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        internal static XmlWriter CreateWriter(string url)
         {
-            XmlWriterSettings writer_settings = new XmlWriterSettings();            
+            var writer_settings = new XmlWriterSettings();
             writer_settings.Indent = true;
-            writer_settings.Encoding = Encoding.UTF8;            
+            writer_settings.Encoding = Encoding.UTF8;
             writer_settings.ConformanceLevel = ConformanceLevel.Auto;
             writer_settings.NewLineChars = "\n";
             writer_settings.NewLineHandling = NewLineHandling.Replace;
-            return XmlTextWriter.Create( url, writer_settings);
+            return XmlWriter.Create( url, writer_settings );
         }
 
-        internal static void ThrowAppException( string fmt, params object[] args)
+        /// <summary>
+        /// Throws an ApplicationException with a message constructed from the
+        /// given formatting arguments
+        /// </summary>
+        /// <param name="fmt"></param>
+        /// <param name="args"></param>
+        internal static void ThrowAppException(string fmt, params object[] args)
         {
             throw new ApplicationException( String.Format( fmt, args ) );
-        }              
+        }
 
-        internal static void ThrowException( ExceptionFactory factory, string fmt, params object[] args )
+        /// <summary>
+        /// Construct an exception from the given factory, using the message constructed from the given
+        /// formatting arguments.
+        /// </summary>
+        /// <param name="factory"></param>
+        /// <param name="fmt"></param>
+        /// <param name="args"></param>
+        internal static void ThrowException(ExceptionFactory factory, string fmt,
+                                            params object[] args)
         {
             throw factory( String.Format( fmt, args ) );
         }
 
-        internal static XmlDocument TransformToDocument( XmlReader input, XslCompiledTransform transform, XsltArgumentList args, XmlResolver resolver )
-        {            
-            XmlDocument doc = new XmlDocument( );
-            using( XmlWriter output = doc.CreateNavigator().AppendChild() )
+        /// <summary>
+        /// Transforms <paramref name="input"/> using the supplied XSLT and associated support objects.  Result is returned as
+        /// a XmlDocument DOM object.
+        /// </summary>
+        /// <param name="input">Document to transform</param>
+        /// <param name="transform">The XSLT to apply</param>
+        /// <param name="args">The XSLT arguments</param>
+        /// <param name="resolver">The XmlResolver used during the transform</param>
+        /// <returns>The transformed document as a DOM</returns>
+        internal static XmlDocument TransformToDocument(XmlReader input,
+                                                        XslCompiledTransform transform,
+                                                        XsltArgumentList args, XmlResolver resolver)
+        {
+            var doc = new XmlDocument();
+            using ( XmlWriter output = doc.CreateNavigator().AppendChild() )
             {
                 transform.Transform( input, args, output, resolver );
             }
             return doc;
         }
 
-        public static Stream GetAssemblyResourceStream (Type type, string resource_name )
+        /// <summary>
+        /// Returns manifest resource stream qualified by the given type and name.
+        /// </summary>
+        /// <param name="type">Qualifying type</param>
+        /// <param name="resource_name">Resource name</param>
+        /// <returns></returns>
+        public static Stream GetAssemblyResourceStream(Type type, string resource_name)
         {
-            return type.Assembly.GetManifestResourceStream( type, resource_name );            
+            return type.Assembly.GetManifestResourceStream( type, resource_name );
         }
-        public static Stream GetAssemblyResourceStream (string resource_name )
+
+        /// <summary>
+        /// Returns the manifest resource stream with the given name.
+        /// </summary>
+        /// <param name="resource_name"></param>
+        /// <returns></returns>
+        public static Stream GetAssemblyResourceStream(string resource_name)
         {
-            return Assembly.GetExecutingAssembly().GetManifestResourceStream(resource_name);            
+            Stream stream = Assembly.GetCallingAssembly().GetManifestResourceStream( resource_name );
+            if ( stream == null )
+                throw new ApplicationException(
+                    String.Format( "Could not find manifest resource stream: {0}", resource_name ) );
+            return stream;
+        }
+
+        public static string ResolvePathToAssemblyLocation(string rel_path, Assembly assembly)
+        {
+            return
+                Path.Combine(
+                    Path.GetDirectoryName( assembly.Location ), rel_path );
         }
     }
 }

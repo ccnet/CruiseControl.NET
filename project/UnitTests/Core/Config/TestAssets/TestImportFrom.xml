@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root xmlns:cb="urn:ccnet.config.builder">
+  <cb:import type="ThoughtWorks.CruiseControl.UnitTests.Core.Config.Preprocessor.TestElementProcessor" assembly-location="ThoughtWorks.CruiseControl.UnitTests.dll" />
+  <test>
+    <cb:test />
+  </test>
+</root>

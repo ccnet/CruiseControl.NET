@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <root>
+    <cb:for counter-name="i" init-expr="0" test-expr="$(i)&lt;3" count-expr="$(i)+1">
+      <hello attr="$(i)" />
+    </cb:for>
+  </root>
+</cb:config-template>

@@ -18,7 +18,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 
 		private ValidationEventHandler handler;
         private INetReflectorConfigurationReader reader;
-	    private ConfigPreprocessor preprocessor = new ConfigPreprocessor();
+	    private ConfigPreprocessor preprocessor = new ConfigPreprocessor( new PreprocessorSettings
+            {
+                IgnoreWhitespace = true
+            });
 
 	    public DefaultConfigurationFileLoader() : this(new NetReflectorConfigurationReader())
 		{}
@@ -79,6 +82,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             XmlReaderSettings settings = new XmlReaderSettings();
 		    settings.ConformanceLevel = ConformanceLevel.Auto;
 		    settings.ProhibitDtd = false;
+		    settings.IgnoreWhitespace = true;
             // Wrap the preprocessed output with an XmlValidatingLoader
 		    XmlValidatingLoader loader =
 		        new XmlValidatingLoader( XmlReader.Create( doc.CreateNavigator().ReadSubtree(), settings ) );

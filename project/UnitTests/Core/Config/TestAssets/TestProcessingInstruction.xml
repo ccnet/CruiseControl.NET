@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <cb:define piname="mypi" pival="mypival" />
+  <cb:processing-instruction name="$(piname)">$(pival)</cb:processing-instruction>
+  <root />
+</cb:config-template>

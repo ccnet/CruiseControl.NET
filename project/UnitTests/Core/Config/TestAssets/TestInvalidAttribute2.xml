@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <cb:element name="foo">
+    <cb:attribute /> <!-- no name attribute -->
+  </cb:element>
+</cb:config-template>

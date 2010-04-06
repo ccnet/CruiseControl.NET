@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <root>
+    <cb:count name="val" max="3">
+      <foo val="$(val)" />
+    </cb:count>
+  </root>
+</cb:config-template>

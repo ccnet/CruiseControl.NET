@@ -26,9 +26,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			return decoratedService.Load();
 		}
 
-	    private void SubfileLoaded (string path)
+	    private void SubfileLoaded (Uri uri)
 	    {
-	        fileWatcher.AddWatcher( path );
+	        fileWatcher.AddWatcher( uri.LocalPath );
 	    }
 
 	    public void Save(IConfiguration configuration)

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <root>
+    <cb:for-each iterator-name="i" iterator-expr="['one','two','three']">
+      <cb:element name="$(i)" />
+    </cb:for-each>
+    <cb:define name="expr">
+      ['four','five','six']
+    </cb:define>
+    <cb:for-each iterator-name="i" iterator-expr="$(expr)">
+      <cb:element name="$(i)" />
+    </cb:for-each>
+  </root>
+</cb:config-template>

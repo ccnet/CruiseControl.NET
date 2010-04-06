@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <cb:config-template xmlns:cb="urn:ccnet.config.builder">
-  <cb:define prop1="val1"/>
+  <cb:define prop1="val1" />
   <root>
     <cb:scope prop2="val2">
       <!-- val1 -->

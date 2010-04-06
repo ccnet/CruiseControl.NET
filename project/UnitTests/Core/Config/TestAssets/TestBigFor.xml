@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<pp:config-template xmlns:pp="urn:XmlPreprocessor">
+  <root>
+    <pp:for counter-name="i" init-expr="0" test-expr="$(i)&lt;25000" count-expr="$(i)+1">
+      <hello attr="$(i)" />
+    </pp:for>
+  </root>
+</pp:config-template>
