@@ -454,6 +454,7 @@
                         var typeElement = (from element in documentation.Descendants("member")
                                            where element.Attribute("name").Value == "T:" + publicType.FullName
                                            select element).SingleOrDefault();
+                        var typeVersion = 1.0;
 
                         using (var output = new StreamWriter(fileName))
                         {
@@ -482,6 +483,8 @@
                                 output.Write("Available from version ");
                                 WriteDocumentation(typeElement, "version", output, documentation);
                                 output.WriteLine();
+                                var versionEl = typeElement.Element("version");
+                                double.TryParse(versionEl.Value, out typeVersion);
                             }
 
                             if (HasTag(typeElement, "example"))
@@ -506,7 +509,7 @@
                             if ((elements.Count > 0) || (keyElement != null))
                             {
                                 output.WriteLine("|| Element || Description || Type || Required || Default || Version ||");
-                                WriteElements(elements, output, documentation, typeElement);
+                                WriteElements(elements, output, documentation, typeElement, typeVersion);
                             }
                             else
                             {
@@ -919,7 +922,7 @@
             return elements;
         }
 
-        private static void WriteElements(Dictionary<MemberInfo, ReflectorPropertyAttribute> elements, StreamWriter output, XDocument documentation, XElement typeElement)
+        private static void WriteElements(Dictionary<MemberInfo, ReflectorPropertyAttribute> elements, StreamWriter output, XDocument documentation, XElement typeElement, double typeVersion)
         {
             if (typeElement != null)
             {
@@ -991,6 +994,18 @@
                     description = RetrieveXmlData(memberElement, "summary", "remarks");
                     defaultValue = RetrieveXmlData(memberElement, "default");
                     version = RetrieveXmlData(memberElement, "version");
+                    if (!string.IsNullOrEmpty(version))
+                    {
+                        double versionValue;
+                        if (double.TryParse(version, out versionValue))
+                        {
+                            if (typeVersion > versionValue)
+                            {
+                                version = typeVersion.ToString();
+                            }
+                        }
+                    }
+
                     var values = memberElement.Element("values");
                     if (values != null)
                     {
