@@ -104,7 +104,7 @@
   <page title="Farm Report Farm Plugin" id="2981" url="http://confluence.public.thoughtworks.org//display/CCNET/Farm+Report+Farm+Plugin" parentId="2973" source="farmReportFarmPlugin.wiki" />
   <page title="FBVariable" id="31097603" url="http://confluence.public.thoughtworks.org//display/CCNET/FBVariable" parentId="786435" source="FBVariable.wiki" />
   <page title="File Based Security Cache" id="28868757" url="http://confluence.public.thoughtworks.org//display/CCNET/File+Based+Security+Cache" parentId="28868744" source="fileBasedCache.wiki" />
-  <page title="File Exists Condition" id="34701748" url="http://confluence.public.thoughtworks.org//display/CCNET/File+Exists+Condition" parentId="34701711" />
+  <page title="File Exists Condition" id="34701748" url="http://confluence.public.thoughtworks.org//display/CCNET/File+Exists+Condition" parentId="34701711" source="fileExistsCondition.wiki" />
   <page title="File Labeller" id="3997755" url="http://confluence.public.thoughtworks.org//display/CCNET/File+Labeller" parentId="1755" source="fileLabeller.wiki" />
   <page title="File Merge Task" id="271" url="http://confluence.public.thoughtworks.org//display/CCNET/File+Merge+Task" parentId="1756" source="merge.wiki" />
   <page title="File State Manager" id="1805" url="http://confluence.public.thoughtworks.org//display/CCNET/File+State+Manager" parentId="1751" />
@@ -113,7 +113,7 @@
   <page title="Filtered Source Control Block" id="1068" url="http://confluence.public.thoughtworks.org//display/CCNET/Filtered+Source+Control+Block" parentId="1753" source="filtered.wiki" />
   <page title="FinalBuilder Task" id="786435" url="http://confluence.public.thoughtworks.org//display/CCNET/FinalBuilder+Task" parentId="1756" />
   <page title="FirstMatch" id="31097499" url="http://confluence.public.thoughtworks.org//display/CCNET/FirstMatch" parentId="31097495" source="firstMatch.wiki" />
-  <page title="Folder Exists Condition" id="34701746" url="http://confluence.public.thoughtworks.org//display/CCNET/Folder+Exists+Condition" parentId="34701711" />
+  <page title="Folder Exists Condition" id="34701746" url="http://confluence.public.thoughtworks.org//display/CCNET/Folder+Exists+Condition" parentId="34701711" source="folderExistsCondition.wiki" />
   <page title="ForceBuildPublisher" id="2340" url="http://confluence.public.thoughtworks.org//display/CCNET/ForceBuildPublisher" parentId="1756" source="forcebuild.wiki" />
   <page title="FTP Source control" id="29130765" url="http://confluence.public.thoughtworks.org//display/CCNET/FTP+Source+control" parentId="1753" source="ftpSourceControl.wiki" />
   <page title="Ftp task - Publisher" id="29130759" url="http://confluence.public.thoughtworks.org//display/CCNET/Ftp+task+-+Publisher" parentId="1756" source="ftp.wiki" />
@@ -280,8 +280,8 @@
   <page title="Timeout Configuration" id="4792" url="http://confluence.public.thoughtworks.org//display/CCNET/Timeout+Configuration" parentId="1738" />
   <page title="Trigger Blocks" id="1750" url="http://confluence.public.thoughtworks.org//display/CCNET/Trigger+Blocks" parentId="1738" />
   <page title="Upgrading CCNet" id="6098" url="http://confluence.public.thoughtworks.org//display/CCNET/Upgrading+CCNet" parentId="71" />
-  <page title="URL Header Value Condition" id="34701758" url="http://confluence.public.thoughtworks.org//display/CCNET/URL+Header+Value+Condition" parentId="34701711" />
-  <page title="URL Ping Condition" id="34701756" url="http://confluence.public.thoughtworks.org//display/CCNET/URL+Ping+Condition" parentId="34701711" />
+  <page title="URL Header Value Condition" id="34701758" url="http://confluence.public.thoughtworks.org//display/CCNET/URL+Header+Value+Condition" parentId="34701711" source="urlHeaderValueCondition.wiki" />
+  <page title="URL Ping Condition" id="34701756" url="http://confluence.public.thoughtworks.org//display/CCNET/URL+Ping+Condition" parentId="34701711" source="urlPingCondition.wiki" />
   <page title="Url Trigger" id="4485" url="http://confluence.public.thoughtworks.org//display/CCNET/Url+Trigger" parentId="1750" />
   <page title="User List Project Plugin" id="32505918" url="http://confluence.public.thoughtworks.org//display/CCNET/User+List+Project+Plugin" parentId="2973" source="serverUserListProjectPlugin.wiki" />
   <page title="User List Server Plugin" id="32505914" url="http://confluence.public.thoughtworks.org//display/CCNET/User+List+Server+Plugin" parentId="2973" source="serverUserListServerPlugin.wiki" />
