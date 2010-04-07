@@ -33,7 +33,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 		    if (string.IsNullOrEmpty(iconFilename))
 		    {
-		        Debug.WriteLine("Using default icon for state " + projectState);
 		        map.Add(projectState, defaultIcon);
 		        return;
 		    }
@@ -41,8 +40,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		    try
 		    {
 		        StatusIcon icon = StatusIcon.LoadFromFile(iconFilename);
-
-		        Debug.WriteLine("Using custom icon " + iconFilename + " for state " + projectState);
 		        map.Add(projectState, icon);
 		        return;
 		    }
