@@ -309,7 +309,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <returns>The filename of the process to execute.</returns>
         protected override string GetProcessFilename()
         {
-            var path = this.QuoteSpaces(this.executable);
+            var path = this.executable ?? this.Executable;
+            path = string.IsNullOrEmpty(path) ? DefaultExecutable : path;
+            path = this.QuoteSpaces(path);
             return path;
         }
         #endregion
