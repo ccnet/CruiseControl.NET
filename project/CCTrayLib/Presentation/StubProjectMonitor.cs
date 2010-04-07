@@ -183,6 +183,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			throw new NotImplementedException();
 		}
 
+        public Message[] Messages
+        {
+            get
+            {
+                return projectStatus.Messages;
+            }
+        }
+
 		public void SetUpAsIfExceptionOccurredOnConnect(Exception exception)
 		{
 			ProjectState = ProjectState.NotConnected;

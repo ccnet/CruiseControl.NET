@@ -151,6 +151,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 
+
+	    public Message[] Messages
+	    {
+            get
+            {
+                if (IsConnected)
+                {
+                    return lastProjectStatus.Messages;
+                }
+                return new Message[0]; 
+            }    
+	    }
+
+
 		public string ProjectName
 		{
 			get { return cruiseProjectManager.ProjectName; }
