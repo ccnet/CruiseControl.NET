@@ -34,7 +34,7 @@
     /// </example>
     /// <remarks>
     /// <para>
-    /// This task has been kindly supplied by Lasse Sjorup. The original project is available from
+    /// This task has been kindly supplied by Lasse Sjørup. The original project is available from
     /// <link>http://ccnetconditional.codeplex.com/</link>.
     /// </para>
     /// </remarks>

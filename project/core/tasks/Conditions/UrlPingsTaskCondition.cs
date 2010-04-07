@@ -36,7 +36,7 @@
     /// </example>
     /// <remarks>
     /// <para>
-    /// This condition has been kindly supplied by Lasse Sjorup. The original project is available from
+    /// This condition has been kindly supplied by Lasse Sjørup. The original project is available from
     /// <link>http://ccnetconditional.codeplex.com/</link>.
     /// </para>
     /// </remarks>
