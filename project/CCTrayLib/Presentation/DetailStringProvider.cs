@@ -1,5 +1,6 @@
 using System;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -16,8 +17,45 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 
 			string message = GetTimeRemainingMessage(projectStatus);
-			if (projectStatus.CurrentMessage.Length > 0)
-				message += " - " + projectStatus.CurrentMessage;
+
+
+
+            // show first breaking task and the breaking users
+            // search from the end, to get the most recent messages of the specified kind.
+		    bool breakerFound = false;
+		    bool breakingTaskFound = false;
+
+            for (int i = projectStatus.Messages.Length - 1; i >= 0; i--)
+            {
+                if (projectStatus.Messages[i].Kind == Message.MessageKind.Breakers)
+                {
+                    if (!breakerFound)
+                    {
+                        if (projectStatus.CurrentMessage != projectStatus.Messages[i].Text)
+                        {
+                            if (message.Length > 0) message += " - ";
+                            message += projectStatus.Messages[i].Text;
+                        }
+
+                        breakerFound = true;
+                    }                                        
+                }
+
+                if (projectStatus.Messages[i].Kind == Message.MessageKind.FailingTasks)
+                {
+                    if (!breakingTaskFound)
+                    {
+                        if (projectStatus.CurrentMessage != projectStatus.Messages[i].Text)
+                        {
+                            if (message.Length > 0) message += " - ";
+                            message += projectStatus.Messages[i].Text;
+                        }
+                        breakingTaskFound = true;
+                    }
+                }
+            }
+
+            if (projectStatus.CurrentMessage.Length > 0) message += " - " + projectStatus.CurrentMessage;
 
 			return message;
 		}

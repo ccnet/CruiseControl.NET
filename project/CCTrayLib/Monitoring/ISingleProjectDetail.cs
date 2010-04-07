@@ -29,6 +29,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		string WebURL { get; }
 		string CurrentMessage { get; }
         string CurrentBuildStage { get; }
+        Message[] Messages { get; }
 		
 		/// <summary>
 		/// Returns TimeSpan.MaxValue if unknown
