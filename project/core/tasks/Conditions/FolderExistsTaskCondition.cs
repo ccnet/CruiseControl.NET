@@ -78,7 +78,7 @@
         protected override bool Evaluate(IIntegrationResult result)
         {
             var folderName = result.BaseFromWorkingDirectory(this.FolderName);
-            this.LogDescriptionOrMessage("Checking for folder '" + folderName.ToString() + "'");
+            this.LogDescriptionOrMessage("Checking for folder '" + folderName + "'");
             var fileSystem = this.FileSystem ?? new SystemIoFileSystem();
             var exists = fileSystem.DirectoryExists(folderName);
             return exists;

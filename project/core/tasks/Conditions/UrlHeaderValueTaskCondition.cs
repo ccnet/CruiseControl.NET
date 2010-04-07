@@ -118,7 +118,7 @@
         protected override bool Evaluate(IIntegrationResult result)
         {
             this.LogDescriptionOrMessage(
-                "Pinging URL '" + this.Url.ToString() + 
+                "Pinging URL '" + this.Url + 
                 "' and checking the value for header '" + this.HeaderKey + "'");
             var functions = this.WebFunctions ?? new DefaultWebFunctions();
             var exists = functions.PingAndValidateHeaderValue(this.Url, this.HeaderKey, this.HeaderValue);

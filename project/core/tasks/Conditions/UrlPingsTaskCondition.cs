@@ -1,5 +1,6 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
 {
+    using System.Globalization;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Config;
     using ThoughtWorks.CruiseControl.Core.Util;
@@ -92,7 +93,7 @@
         /// </returns>
         protected override bool Evaluate(IIntegrationResult result)
         {
-            this.LogDescriptionOrMessage("Pinging URL '" + this.Url.ToString() + "'");
+            this.LogDescriptionOrMessage("Pinging URL '" + this.Url + "'");
             var functions = this.WebFunctions ?? new DefaultWebFunctions();
             var exists = functions.PingUrl(this.Url);
             return exists;

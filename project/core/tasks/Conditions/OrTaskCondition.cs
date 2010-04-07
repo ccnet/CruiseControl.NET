@@ -1,5 +1,6 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
 {
+    using System.Globalization;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Config;
 
@@ -72,7 +73,7 @@
         protected override bool Evaluate(IIntegrationResult result)
         {
             this.LogDescriptionOrMessage("Performing OR check - " + 
-                this.Conditions.Length.ToString() + 
+                this.Conditions.Length.ToString(CultureInfo.InvariantCulture) + 
                 " conditions to check");
             var evaluationResult = false;
             foreach (var condition in this.Conditions)

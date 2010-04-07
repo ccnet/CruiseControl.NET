@@ -1,5 +1,6 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
 {
+    using System.Globalization;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Remote;
 

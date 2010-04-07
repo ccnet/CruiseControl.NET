@@ -1,5 +1,6 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
 {
+    using System.Globalization;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Remote;
 
@@ -59,7 +60,9 @@
         /// </returns>
         protected override bool Evaluate(IIntegrationResult result)
         {
-            this.LogDescriptionOrMessage("Checking last build status - matching to " + this.Status.ToString());
+            this.LogDescriptionOrMessage(
+                "Checking last build status - matching to " + 
+                this.Status.ToString(CultureInfo.InvariantCulture));
             if (result.IsInitial())
             {
                 // There is no previous build - assume that the condition fails

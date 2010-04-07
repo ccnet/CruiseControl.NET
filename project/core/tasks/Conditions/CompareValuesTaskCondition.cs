@@ -1,6 +1,7 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
 {
     using System;
+    using System.Globalization;
     using Exortech.NetReflector;
 
     /// <title>Compare Values Condition</title>
@@ -82,7 +83,7 @@
         /// <version>1.6</version>
         /// <default>n/a</default>
         [ReflectorProperty("evaluation", Required = true)]
-        public Evaluations Evaluation { get; set; }
+        public Evaluation EvaluationType { get; set; }
         #endregion
 
         #region IgnoreCase
@@ -110,14 +111,14 @@
             this.LogDescriptionOrMessage("Checking value comparison condition - " + this.Value1 + " with " + this.Value2);
 
             var evaluation = false;
-            switch (this.Evaluation)
+            switch (this.EvaluationType)
             {
-                case Evaluations.equal:
-                    evaluation = string.Compare(this.Value1, this.Value2, this.IgnoreCase) == 0;
+                case Evaluation.Equal:
+                    evaluation = string.Compare(this.Value1, this.Value2, this.IgnoreCase, CultureInfo.InvariantCulture) == 0;
                     break;
 
-                case Evaluations.notEqual:
-                    evaluation = string.Compare(this.Value1, this.Value2, this.IgnoreCase) != 0;
+                case Evaluation.NotEqual:
+                    evaluation = string.Compare(this.Value1, this.Value2, this.IgnoreCase, CultureInfo.InvariantCulture) != 0;
                     break;
 
                 default:
@@ -133,17 +134,17 @@
         /// <summary>
         /// The type of evaluation to perform.
         /// </summary>
-        public enum Evaluations
+        public enum Evaluation
         {
             /// <summary>
             /// Are the two values equal.
             /// </summary>
-            equal,
+            Equal,
 
             /// <summary>
             /// Are the two values not equal.
             /// </summary>
-            notEqual,
+            NotEqual,
         }
         #endregion
     }
