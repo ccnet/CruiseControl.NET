@@ -1,25 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Reflection;
-using System.Threading;
-using System.Web;
-using System.Web.Caching;
-using ThoughtWorks.CruiseControl.Core.Config;
-using ThoughtWorks.CruiseControl.Core.Logging;
-using ThoughtWorks.CruiseControl.Core.Queues;
-using ThoughtWorks.CruiseControl.Core.Security;
-using ThoughtWorks.CruiseControl.Core.State;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Remote.Events;
-using ThoughtWorks.CruiseControl.Remote.Messages;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
-using ThoughtWorks.CruiseControl.Remote.Security;
-
 namespace ThoughtWorks.CruiseControl.Core
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.IO;
+    using System.Reflection;
+    using System.Threading;
+    using System.Web;
+    using System.Web.Caching;
+    using ThoughtWorks.CruiseControl.Core.Config;
+    using ThoughtWorks.CruiseControl.Core.Logging;
+    using ThoughtWorks.CruiseControl.Core.Queues;
+    using ThoughtWorks.CruiseControl.Core.Security;
+    using ThoughtWorks.CruiseControl.Core.State;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.Remote.Events;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
+    using ThoughtWorks.CruiseControl.Remote.Parameters;
+    using ThoughtWorks.CruiseControl.Remote.Security;
+
     /// <summary>
     /// The Continuous Integration server.
     /// </summary>
@@ -76,7 +76,6 @@ namespace ThoughtWorks.CruiseControl.Core
             // Initialise the queue manager
             integrationQueueManager = IntegrationQueueManagerFactory.CreateManager(projectIntegratorListFactory, configuration, stateManager);
             integrationQueueManager.AssociateIntegrationEvents(OnIntegrationStarted, OnIntegrationCompleted);
-
             securityManager = configuration.SecurityManager;
 
             // Load the extensions
@@ -86,7 +85,6 @@ namespace ThoughtWorks.CruiseControl.Core
             }
 
             this.configurationService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(Restart));
-
         	programmDataFolder = this.executionEnvironment.GetDefaultProgramDataFolder(ApplicationType.Server);
 
             // Initialise the cache time
@@ -191,10 +189,13 @@ namespace ThoughtWorks.CruiseControl.Core
             securityManager.Initialise();
 
             // Start the extensions
-            Log.Info("Starting extensions");
-            foreach (ICruiseServerExtension extension in extensions)
+            if ((this.extensions != null) && (this.extensions.Count > 0))
             {
-                extension.Start();
+                Log.Info("Starting extensions");
+                foreach (ICruiseServerExtension extension in this.extensions)
+                {
+                    extension.Start();
+                }
             }
         }
 
@@ -203,18 +204,26 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         private void InitialiseDistributedBuilds()
         {
-            // Start the agents for distributed builds
-            Log.Debug("Initialising build agents");
-            foreach (var agent in this.configuration.BuildAgents)
+            if ((this.configuration.BuildAgents != null) &&
+                (this.configuration.BuildAgents.Count > 0))
             {
-                agent.Initialise();
+                // Start the agents for distributed builds
+                Log.Debug("Initialising build agents");
+                foreach (var agent in this.configuration.BuildAgents)
+                {
+                    agent.Initialise();
+                }
             }
 
-            // Start the machines for distributed builds
-            Log.Debug("Initialising remote build machine connections");
-            foreach (var machine in this.configuration.BuildMachines)
+            if ((this.configuration.BuildMachines != null) &&
+                (this.configuration.BuildMachines.Count > 0))
             {
-                machine.Initialise();
+                // Start the machines for distributed builds
+                Log.Debug("Initialising remote build machine connections");
+                foreach (var machine in this.configuration.BuildMachines)
+                {
+                    machine.Initialise();
+                }
             }
         }
 
@@ -223,18 +232,26 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         private void TerminateDistributedBuilds()
         {
-            // Stop the machines for distributed builds
-            Log.Debug("Terminating remote build machine connections");
-            foreach (var machine in this.configuration.BuildMachines)
+            if ((this.configuration.BuildMachines != null) &&
+                (this.configuration.BuildMachines.Count > 0))
             {
-                machine.Terminate();
+                // Stop the machines for distributed builds
+                Log.Debug("Terminating remote build machine connections");
+                foreach (var machine in this.configuration.BuildMachines)
+                {
+                    machine.Terminate();
+                }
             }
 
-            // Stop the agents for distributed builds
-            Log.Debug("Terminating build agents");
-            foreach (var agent in this.configuration.BuildAgents)
+            if ((this.configuration.BuildAgents != null) &&
+                (this.configuration.BuildAgents.Count > 0))
             {
-                agent.Terminate();
+                // Stop the agents for distributed builds
+                Log.Debug("Terminating build agents");
+                foreach (var agent in this.configuration.BuildAgents)
+                {
+                    agent.Terminate();
+                }
             }
         }
 
@@ -267,11 +284,14 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         public void Stop()
         {
-            // Stop the extensions
-            Log.Info("Stopping extensions");
-            foreach (ICruiseServerExtension extension in extensions)
+            if ((this.extensions != null) && (this.extensions.Count > 0))
             {
-                extension.Stop();
+                // Stop the extensions
+                Log.Info("Stopping extensions");
+                foreach (ICruiseServerExtension extension in extensions)
+                {
+                    extension.Stop();
+                }
             }
 
             Log.Info("Stopping CruiseControl.NET Server");
@@ -309,11 +329,14 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         public void Abort()
         {
-            // Abort the extensions
-            Log.Info("Aborting extensions");
-            foreach (ICruiseServerExtension extension in extensions)
+            if ((this.extensions != null) && (this.extensions.Count > 0))
             {
-                extension.Abort();
+                // Abort the extensions
+                Log.Info("Aborting extensions");
+                foreach (ICruiseServerExtension extension in extensions)
+                {
+                    extension.Abort();
+                }
             }
 
             Log.Info("Aborting CruiseControl.NET Server");
