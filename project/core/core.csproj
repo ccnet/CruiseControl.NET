@@ -132,6 +132,12 @@
     <Reference Include="System.Runtime.Remoting">
       <Name>System.Runtime.Remoting</Name>
     </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
@@ -193,7 +199,7 @@
     <Compile Include="configuration\DefaultQueueConfiguration.cs" />
     <Compile Include="configuration\IConfigurationErrorProcesser.cs" />
     <Compile Include="configuration\IConfigurationValidation.cs" />
-    <Compile Include="configuration\INetReflectorConfigurationReader.cs" />
+    <Compile Include="INetReflectorConfigurationReader.cs" />
     <Compile Include="configuration\QueueDuplicateHandling.cs" />
     <Compile Include="configuration\Configuration.cs">
       <SubType>Code</SubType>
@@ -262,6 +268,21 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CruiseXmlWriter.cs" />
+    <Compile Include="Distribution\IBuildAgent.cs" />
+    <Compile Include="Distribution\IBuildMachine.cs" />
+    <Compile Include="Distribution\IRemoteBuildService.cs" />
+    <Compile Include="Distribution\Messages\CancelBuildRequest.cs" />
+    <Compile Include="Distribution\Messages\CancelBuildResponse.cs" />
+    <Compile Include="Distribution\Messages\CheckIfBuildCanRunRequest.cs" />
+    <Compile Include="Distribution\Messages\CheckIfBuildCanRunResponse.cs" />
+    <Compile Include="Distribution\Messages\RetrieveBuildStatusRequest.cs" />
+    <Compile Include="Distribution\Messages\RetrieveBuildStatusResponse.cs" />
+    <Compile Include="Distribution\Messages\StartBuildRequest.cs" />
+    <Compile Include="Distribution\Messages\StartBuildResponse.cs" />
+    <Compile Include="Distribution\RemoteBuildAgent.cs" />
+    <Compile Include="Distribution\RemoteBuildMachine.cs" />
+    <Compile Include="Distribution\RemoteBuildRequest.cs" />
+    <Compile Include="Distribution\RemoteBuildTaskResult.cs" />
     <Compile Include="Extensions\DiskSpaceMonitorExtension.cs" />
     <Compile Include="Extensions\IntegrationRequestThrottleExtension.cs" />
     <Compile Include="Extensions\IntegrationPerformanceCountersExtension.cs" />
@@ -877,8 +898,10 @@
     <Compile Include="tasks\NDependTask.cs" />
     <Compile Include="tasks\XmlTaskResult.cs" />
     <Compile Include="Triggers\RollUpTrigger.cs" />
+    <Compile Include="util\DefaultCryptoFunctions.cs" />
     <Compile Include="util\DefaultWebFunctions.cs" />
     <Compile Include="util\ICompressionService.cs" />
+    <Compile Include="util\ICryptoFunctions.cs" />
     <Compile Include="util\IPrivateData.cs" />
     <Compile Include="util\IWebFunctions.cs" />
     <Compile Include="util\PrivateArguments.cs" />

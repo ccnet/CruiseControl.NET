@@ -183,6 +183,9 @@ namespace ThoughtWorks.CruiseControl.Core
             	fileSystem.EnsureFolderExists(programmDataFolder);
             }
 
+            // Initialise distributed builds
+            this.InitialiseDistributedBuilds();
+
             integrationQueueManager.StartAllProjects();
             Log.Info("Initialising security");
             securityManager.Initialise();
@@ -192,6 +195,46 @@ namespace ThoughtWorks.CruiseControl.Core
             foreach (ICruiseServerExtension extension in extensions)
             {
                 extension.Start();
+            }
+        }
+
+        /// <summary>
+        /// Initialises the infrastructure for distributed builds.
+        /// </summary>
+        private void InitialiseDistributedBuilds()
+        {
+            // Start the agents for distributed builds
+            Log.Debug("Initialising build agents");
+            foreach (var agent in this.configuration.BuildAgents)
+            {
+                agent.Initialise();
+            }
+
+            // Start the machines for distributed builds
+            Log.Debug("Initialising remote build machine connections");
+            foreach (var machine in this.configuration.BuildMachines)
+            {
+                machine.Initialise();
+            }
+        }
+
+        /// <summary>
+        /// Terminates the infrastructure for distributed builds.
+        /// </summary>
+        private void TerminateDistributedBuilds()
+        {
+            // Stop the machines for distributed builds
+            Log.Debug("Terminating remote build machine connections");
+            foreach (var machine in this.configuration.BuildMachines)
+            {
+                machine.Terminate();
+            }
+
+            // Stop the agents for distributed builds
+            Log.Debug("Terminating build agents");
+            foreach (var agent in this.configuration.BuildAgents)
+            {
+                agent.Terminate();
             }
         }
 
@@ -233,6 +276,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
             Log.Info("Stopping CruiseControl.NET Server");
             integrationQueueManager.StopAllProjects();
+            this.TerminateDistributedBuilds();
             monitor.Set();
         }
 
@@ -274,6 +318,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
             Log.Info("Aborting CruiseControl.NET Server");
             integrationQueueManager.Abort();
+            this.TerminateDistributedBuilds();
             monitor.Set();
         }
         #endregion

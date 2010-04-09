@@ -5,6 +5,7 @@ namespace ThoughtWorks.CruiseControl.Core
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.IO;
+    using System.Linq;
     using System.Runtime;
     using System.Text;
     using System.Xml;
@@ -21,6 +22,8 @@ namespace ThoughtWorks.CruiseControl.Core
     using ThoughtWorks.CruiseControl.Core.Util;
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Remote.Parameters;
+using ThoughtWorks.CruiseControl.Core.Distribution;
+    using System.Threading;
 
     /// <summary>
     /// A &lt;project&gt; block defines all the configuration for one project running in a CruiseControl.NET server.
@@ -110,6 +113,8 @@ namespace ThoughtWorks.CruiseControl.Core
         private ProjectStatusSnapshot currentProjectStatus;
         private Dictionary<ITask, ItemStatus> currentProjectItems = new Dictionary<ITask, ItemStatus>();
         private Dictionary<SourceControlOperation, ItemStatus> sourceControlOperations = new Dictionary<SourceControlOperation, ItemStatus>();
+        private IConfiguration configuration;
+        private RemoteBuildRequest remoteBuildRequest;
 
         #region Constructors
         /// <summary>
@@ -120,6 +125,7 @@ namespace ThoughtWorks.CruiseControl.Core
             integrationResultManager = new IntegrationResultManager(this);
             integratable = new IntegrationRunner(integrationResultManager, this, quietPeriod);
             this.PrebuildTasks = new ITask[0];
+            this.CryptoFunctions = new DefaultCryptoFunctions();
 
             // Generates the initial snapshot
             currentProjectStatus = new ProjectStatusSnapshot();
@@ -397,6 +403,14 @@ namespace ThoughtWorks.CruiseControl.Core
             set { tasks = value; }
         }
 
+        /// <summary>
+        /// The remote machines that this project can build on.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>none</default>
+        [ReflectorProperty("remoteTargets", Required = false)]
+        public string[] RemoteMachines { get; set; }
+
         // Move this ideally
         public ProjectActivity Activity
         {
@@ -415,77 +429,160 @@ namespace ThoughtWorks.CruiseControl.Core
             get { return integrationResultManager.CurrentIntegration; }
         }
 
+        private IBuildMachine FindBuildMachine(string machineName)
+        {
+            if ((this.configuration != null) &&
+                (this.configuration.BuildMachines != null))
+            {
+                var machine = (from record in this.configuration.BuildMachines
+                               where record.Name == machineName
+                               select record).SingleOrDefault();
+                return machine;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Starts a new integration result.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>
+        /// The new <see cref="IIntegrationResult"/>.
+        /// </returns>
+        public IIntegrationResult StartNewIntegration(IntegrationRequest request)
+        {
+            return this.integratable.StartNewIntegration(request);
+        }
+
         public IIntegrationResult Integrate(IntegrationRequest request)
         {
             Log.Trace("Integrating {0}", Name);
 
-            lock (currentProjectStatus)
+            // Check if this project can run remotely
+            var result = RunRemoteBuild(request);
+            if (result == null)
             {
-                // Build up all the child items
-                // Note: this will only build up the direct children, it doesn't handle below the initial layer
-                currentProjectItems.Clear();
-                sourceControlOperations.Clear();
-                currentProjectStatus.Status = ItemBuildStatus.Running;
-                currentProjectStatus.ChildItems.Clear();
-                currentProjectStatus.TimeCompleted = null;
-                currentProjectStatus.TimeOfEstimatedCompletion = null;
-                currentProjectStatus.TimeStarted = DateTime.Now;
-                GenerateSourceControlOperation(SourceControlOperation.CheckForModifications);
-                GenerateTaskStatuses("Pre-build tasks", PrebuildTasks);
-                GenerateSourceControlOperation(SourceControlOperation.GetSource);
-                GenerateTaskStatuses("Build tasks", Tasks);
-                GenerateTaskStatuses("Publisher tasks", Publishers);
-            }
-
-            // Start the integration
-            IIntegrationResult result = null;
-            IDisposable impersonation = null;
-            var hasError = false;
-            try
-            {
-                if (Impersonation != null) impersonation = Impersonation.Impersonate();
-                var dynamicSourceControl = sourceControl as IParamatisedItem;
-                if (dynamicSourceControl != null)
-                {
-                    dynamicSourceControl.ApplyParameters(request.BuildValues, parameters);
-                }
-                result = integratable.Integrate(request);
-            }
-            catch (Exception error)
-            {
-                Log.Error(error);
-                hasError = true;
-                throw;
-            }
-            finally
-            {
-                if (impersonation != null) impersonation.Dispose();
-
-                // Tidy up the status
                 lock (currentProjectStatus)
                 {
-                    CancelAllOutstandingItems(currentProjectStatus);
-                    currentProjectStatus.TimeCompleted = DateTime.Now;
-                    IntegrationStatus resultStatus = result == null ? 
-                        (hasError ? IntegrationStatus.Exception : IntegrationStatus.Unknown) : 
-                        result.Status;
-                    switch (resultStatus)
+                    // Build up all the child items
+                    // Note: this will only build up the direct children, it doesn't handle below the initial layer
+                    currentProjectItems.Clear();
+                    sourceControlOperations.Clear();
+                    currentProjectStatus.Status = ItemBuildStatus.Running;
+                    currentProjectStatus.ChildItems.Clear();
+                    currentProjectStatus.TimeCompleted = null;
+                    currentProjectStatus.TimeOfEstimatedCompletion = null;
+                    currentProjectStatus.TimeStarted = DateTime.Now;
+                    GenerateSourceControlOperation(SourceControlOperation.CheckForModifications);
+                    GenerateTaskStatuses("Pre-build tasks", PrebuildTasks);
+                    GenerateSourceControlOperation(SourceControlOperation.GetSource);
+                    GenerateTaskStatuses("Build tasks", Tasks);
+                    GenerateTaskStatuses("Publisher tasks", Publishers);
+                }
+
+                // Start the integration
+                IDisposable impersonation = null;
+                var hasError = false;
+                try
+                {
+                    if (Impersonation != null) impersonation = Impersonation.Impersonate();
+                    var dynamicSourceControl = sourceControl as IParamatisedItem;
+                    if (dynamicSourceControl != null)
                     {
-                        case IntegrationStatus.Success:
-                            currentProjectStatus.Status = ItemBuildStatus.CompletedSuccess;
-                            break;
-                        case IntegrationStatus.Unknown:
-                            // This probably means the build was cancelled (i.e. no changes detected)
-                            currentProjectStatus.Status = ItemBuildStatus.Cancelled;
-                            break;
-                        default:
-                            currentProjectStatus.Status = ItemBuildStatus.CompletedFailed;
-                            break;
+                        dynamicSourceControl.ApplyParameters(request.BuildValues, parameters);
+                    }
+                    result = integratable.Integrate(request);
+                }
+                catch (Exception error)
+                {
+                    Log.Error(error);
+                    hasError = true;
+                    throw;
+                }
+                finally
+                {
+                    if (impersonation != null) impersonation.Dispose();
+
+                    // Tidy up the status
+                    lock (currentProjectStatus)
+                    {
+                        CancelAllOutstandingItems(currentProjectStatus);
+                        currentProjectStatus.TimeCompleted = DateTime.Now;
+                        IntegrationStatus resultStatus = result == null ?
+                            (hasError ? IntegrationStatus.Exception : IntegrationStatus.Unknown) :
+                            result.Status;
+                        switch (resultStatus)
+                        {
+                            case IntegrationStatus.Success:
+                                currentProjectStatus.Status = ItemBuildStatus.CompletedSuccess;
+                                break;
+                            case IntegrationStatus.Unknown:
+                                // This probably means the build was cancelled (i.e. no changes detected)
+                                currentProjectStatus.Status = ItemBuildStatus.Cancelled;
+                                break;
+                            default:
+                                currentProjectStatus.Status = ItemBuildStatus.CompletedFailed;
+                                break;
+                        }
                     }
                 }
             }
 
             // Finally, return the actual result
+            return result;
+        }
+
+        /// <summary>
+        /// Attempts to run this build remotely.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>
+        /// An <see cref="IIntegrationResult"/> if the build ran remotely; <c>null</c> otherwise.
+        /// </returns>
+        private IIntegrationResult RunRemoteBuild(IntegrationRequest request)
+        {
+            IIntegrationResult result = null;
+            if (this.RemoteMachines != null)
+            {
+                foreach (var remoteMachine in this.RemoteMachines)
+                {
+                    // Get the build machine definition and see if it can build the project
+                    var machine = this.FindBuildMachine(remoteMachine);
+                    if (machine != null)
+                    {
+                        Log.Debug("Checking remote machine " + machine.Name);
+                        if (machine.CanBuild(this))
+                        {
+                            // Initialise a new result
+                            result = this.StartNewIntegration(request);
+
+                            // Perform the remote build and store the results
+                            Log.Info("Running build on remote machine " + machine.Name);
+                            var completedEvent = new ManualResetEvent(false);
+                            ITaskResult finalResult = null;
+                            this.remoteBuildRequest = machine.StartBuild(
+                                this,
+                                result,
+                                e =>
+                                {
+                                    // Handle the build completing
+                                    this.remoteBuildRequest = null;
+                                    result.AddTaskResult(e.Result);
+                                    finalResult = e.Result;
+                                    completedEvent.Set();
+                                });
+                            completedEvent.WaitOne();
+                            Log.Info(
+                                "Build on remote machine " + machine.Name +
+                                " completed - " + (finalResult.CheckIfSuccess() ? "success" : "failure"));
+                            break;
+                        }
+                    }
+                }
+            }
             return result;
         }
 
@@ -683,7 +780,14 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public void AbortRunningBuild()
         {
-            ProcessExecutor.KillProcessCurrentlyRunningForProject(Name);
+            if (this.remoteBuildRequest != null)
+            {
+                this.remoteBuildRequest.Cancel();
+            }
+            else
+            {
+                ProcessExecutor.KillProcessCurrentlyRunningForProject(Name);
+            }
         }
 
         public void PublishResults(IIntegrationResult result)
@@ -1228,6 +1332,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 this.ValidateItems(mt.Triggers, configuration, parent, errorProcesser);
             }
 
+            this.configuration = configuration;
         }
 
         /// <summary>
@@ -1274,9 +1379,10 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Validates the configuration of an item.
         /// </summary>
-        /// <param name="item"></param>
-        /// <param name="configuration"></param>
-        /// <param name="errorProcesser"></param>
+        /// <param name="item">The item.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="parent">The parent.</param>
+        /// <param name="errorProcesser">The error processer.</param>
         private void ValidateItem(object item, IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
             if ((item != null) && (item is IConfigurationValidation))
@@ -1288,9 +1394,10 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Validates the configuration of an enumerable.
         /// </summary>
-        /// <param name="items"></param>
-        /// <param name="configuration"></param>
-        /// <param name="errorProcesser"></param>
+        /// <param name="items">The items.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="parent">The parent.</param>
+        /// <param name="errorProcesser">The error processer.</param>
         private void ValidateItems(IEnumerable items, IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
             if (items != null)
@@ -1415,6 +1522,43 @@ namespace ThoughtWorks.CruiseControl.Core
                 }
             }
             return packages;
+        }
+        #endregion
+
+        #region ConfigurationXml
+        /// <summary>
+        /// Gets or sets the configuration XML.
+        /// </summary>
+        /// <value>The configuration XML.</value>
+        public string ConfigurationXml { get; private set; }
+        #endregion
+
+        #region CryptoFunctions
+        /// <summary>
+        /// Gets or sets the crypto functions.
+        /// </summary>
+        /// <value>The crypto functions.</value>
+        public ICryptoFunctions CryptoFunctions { get; set; }
+        #endregion
+
+        #region PreprocessConfiguration()
+        /// <summary>
+        /// Preprocesses a node prior to loading it via NetReflector.
+        /// </summary>
+        /// <param name="typeTable">The type table.</param>
+        /// <param name="inputNode">The input node.</param>
+        /// <returns>
+        /// The original node.
+        /// </returns>
+        /// <remarks>
+        /// This method just stores a copy of the original configuraiton. This allows the configuration to
+        /// be propogated to remote agents.
+        /// </remarks>
+        [ReflectionPreprocessor]
+        public virtual XmlNode PreprocessConfiguration(NetReflectorTypeTable typeTable, XmlNode inputNode)
+        {
+            this.ConfigurationXml = inputNode.OuterXml;
+            return inputNode;
         }
         #endregion
 

@@ -1,16 +1,17 @@
-
-using System;
-using System.IO;
-using System.Xml;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Security;
-using System.Collections.Generic;
-using System.Configuration;
-using ThoughtWorks.CruiseControl.Core.Util;
-using System.Reflection;
-
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Xml;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Distribution;
+    using ThoughtWorks.CruiseControl.Core.Security;
+    using ThoughtWorks.CruiseControl.Core.Util;
+
     /// <summary>
     /// Load a configuration file using NetReflector.
     /// </summary>
@@ -77,18 +78,32 @@ namespace ThoughtWorks.CruiseControl.Core.Config
                     {
                         ConflictingXMLNode = "Conflicting project data : " + node.OuterXml;
 
-                        object loadedItem = reader.Read(node);
+                        object loadedItem = ParseElement(node);
                         if (loadedItem is IProject)
                         {
-                            LoadAndValidateProject(actualErrorProcesser, projectNames, configuration, loadedItem);
+                            this.LoadAndValidateProject(actualErrorProcesser, projectNames, configuration, loadedItem);
                         }
                         else if (loadedItem is IQueueConfiguration)
                         {
-                            LoadAndValidateQueue(configuration, loadedItem);
+                            this.LoadAndValidateQueue(configuration, loadedItem);
+                        }
+                        else if (loadedItem is IBuildMachine)
+                        {
+                            this.LoadAndValidateBuildMachine(
+                                actualErrorProcesser,
+                                configuration,
+                                loadedItem);
+                        }
+                        else if (loadedItem is IBuildAgent)
+                        {
+                            this.LoadAndValidateBuildAgent(
+                                actualErrorProcesser,
+                                configuration,
+                                loadedItem);
                         }
                         else if (loadedItem is ISecurityManager)
                         {
-                            LoadAndValidateSecurityManager(configuration, loadedItem);
+                            this.LoadAndValidateSecurityManager(configuration, loadedItem);
                         }
                         else
                         {
@@ -117,6 +132,17 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             return configuration;
         }
 
+        /// <summary>
+        /// Parses an element.
+        /// </summary>
+        /// <param name="node">The element to parse.</param>
+        /// <returns>The parsed element.</returns>
+        public object ParseElement(XmlNode node)
+        {
+            var loadedItem = reader.Read(node);
+            return loadedItem;
+        }
+
         private void LoadAndValidateSecurityManager(Configuration configuration, object loadedItem)
         {
             ISecurityManager securityManager = loadedItem as ISecurityManager;
@@ -127,6 +153,55 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         {
             IQueueConfiguration queueConfig = loadedItem as IQueueConfiguration;
             configuration.QueueConfigurations.Add(queueConfig);
+        }
+
+        /// <summary>
+        /// Loads and validates a build machine.
+        /// </summary>
+        /// <param name="errorProcesser">The error processer.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="loadedItem">The loaded item.</param>
+        private void LoadAndValidateBuildMachine(
+            IConfigurationErrorProcesser errorProcesser, 
+            Configuration configuration, 
+            object loadedItem)
+        {
+            // Check if the machine has already been defined
+            var machineConfig = loadedItem as IBuildMachine;
+            var existingMachine = (from machine in configuration.BuildMachines
+                                   where machine.Name == machineConfig.Name
+                                   select machine).SingleOrDefault();
+
+            if (existingMachine != null)
+            {
+                // Tell the user
+                var message = "A duplicate build machine (" + machineConfig.Name +
+                    ") has been found - build machines must be unique per server";
+                errorProcesser.ProcessError(
+                    new CruiseControlException(message));
+            }
+            else
+            {
+                // Add the machine
+                configuration.BuildMachines.Add(machineConfig);
+            }
+        }
+
+        /// <summary>
+        /// Loads and validates a build agent.
+        /// </summary>
+        /// <param name="errorProcesser">The error processer.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="loadedItem">The loaded item.</param>
+        private void LoadAndValidateBuildAgent(
+            IConfigurationErrorProcesser errorProcesser,
+            Configuration configuration,
+            object loadedItem)
+        {
+            // Add the agent
+            var agentConfig = loadedItem as IBuildAgent;
+            agentConfig.ConfigurationReader = this;
+            configuration.BuildAgents.Add(agentConfig);
         }
 
         private void LoadAndValidateProject(IConfigurationErrorProcesser errorProcesser, 
@@ -219,6 +294,16 @@ namespace ThoughtWorks.CruiseControl.Core.Config
                 if (queue is IConfigurationValidation)
                 {
                     (queue as IConfigurationValidation).Validate(value, rootTrace, errorProcesser);
+                }
+            }
+
+            // Validate all the build machines
+            foreach (var buildMachine in value.BuildMachines)
+            {
+                var validator = buildMachine as IConfigurationValidation;
+                if (validator != null)
+                {
+                    validator.Validate(value, rootTrace, errorProcesser);
                 }
             }
         }

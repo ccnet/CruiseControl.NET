@@ -173,11 +173,39 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 				get { throw new NotImplementedException(); }
 			}
 
+            /// <summary>
+            /// Starts a new integration result.
+            /// </summary>
+            /// <param name="request">The request.</param>
+            /// <returns>
+            /// The new <see cref="IIntegrationResult"/>.
+            /// </returns>
+            public IIntegrationResult StartNewIntegration(IntegrationRequest request)
+            {
+                return null;
+            }
+
             #region Links
             /// <summary>
             /// Link this project to other sites.
             /// </summary>
             public NameValuePair[] LinkedSites { get; set; }
+            #endregion
+
+            #region ConfigurationXml
+            /// <summary>
+            /// Gets or sets the configuration XML.
+            /// </summary>
+            /// <value>The configuration XML.</value>
+            public string ConfigurationXml { get; private set; }
+            #endregion
+
+            #region ConfigurationHash
+            /// <summary>
+            /// Gets or sets the configuration hash.
+            /// </summary>
+            /// <value>The configuration hash.</value>
+            public string ConfigurationHash { get; private set; }
             #endregion
 
             public string ModificationHistory

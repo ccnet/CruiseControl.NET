@@ -20,14 +20,16 @@ namespace ThoughtWorks.CruiseControl.Core
             this.resultManager = resultManager;
         }
 
-        public IIntegrationResult Integrate(IntegrationRequest request)
+        /// <summary>
+        /// Starts a new integration result.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>
+        /// The new <see cref="IIntegrationResult"/>.
+        /// </returns>
+        public IIntegrationResult StartNewIntegration(IntegrationRequest request)
         {
-            Log.Trace();
-            this.target.InitialiseForBuild(request);
-            IIntegrationResult result = resultManager.StartNewIntegration(request);
-            IIntegrationResult lastResult = resultManager.LastIntegrationResult;
-            CreateDirectoryIfItDoesntExist(result.WorkingDirectory);
-            CreateDirectoryIfItDoesntExist(result.ArtifactDirectory);
+            var result = resultManager.StartNewIntegration(request);
 
             // Copy any parameters to the result
             if ((request.BuildValues != null) && (request.BuildValues.Count > 0))
@@ -35,8 +37,20 @@ namespace ThoughtWorks.CruiseControl.Core
                 result.Parameters.AddRange(
                     NameValuePair.FromDictionary(request.BuildValues));
             }
+
             result.MarkStartTime();
             this.GenerateSystemParameterValues(result);
+            return result;
+        }
+
+        public IIntegrationResult Integrate(IntegrationRequest request)
+        {
+            Log.Trace();
+            this.target.InitialiseForBuild(request);
+            var result = this.StartNewIntegration(request);
+            IIntegrationResult lastResult = resultManager.LastIntegrationResult;
+            CreateDirectoryIfItDoesntExist(result.WorkingDirectory);
+            CreateDirectoryIfItDoesntExist(result.ArtifactDirectory);
 
             Log.Trace("Getting Modifications for project {0}", result.ProjectName);
             try

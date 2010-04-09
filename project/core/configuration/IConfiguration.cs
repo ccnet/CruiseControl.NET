@@ -1,11 +1,19 @@
-using System.Collections.Generic;
-using ThoughtWorks.CruiseControl.Core.Config;
-using ThoughtWorks.CruiseControl.Core.Security;
-
 namespace ThoughtWorks.CruiseControl.Core
 {
-	public interface IConfiguration
+    using System.Collections.Generic;
+    using ThoughtWorks.CruiseControl.Core.Config;
+    using ThoughtWorks.CruiseControl.Core.Distribution;
+    using ThoughtWorks.CruiseControl.Core.Security;
+
+    /// <summary>
+    /// The configuration for a server.
+    /// </summary>
+    public interface IConfiguration
 	{
+        /// <summary>
+        /// Gets the projects.
+        /// </summary>
+        /// <value>The projects.</value>
 		IProjectList Projects { get; }
 
         /// <summary>
@@ -25,7 +33,32 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         ISecurityManager SecurityManager { get; }
 
-		void AddProject(IProject project);
+        #region BuildMachines
+        /// <summary>
+        /// Gets the available build machines.
+        /// </summary>
+        /// <value>The build machines.</value>
+        IList<IBuildMachine> BuildMachines { get; }
+        #endregion
+
+        #region BuildAgents
+        /// <summary>
+        /// Gets the build agents.
+        /// </summary>
+        /// <value>The build agents.</value>
+        IList<IBuildAgent> BuildAgents { get; }
+        #endregion
+
+        /// <summary>
+        /// Adds a project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        void AddProject(IProject project);
+        
+        /// <summary>
+        /// Deletes a project.
+        /// </summary>
+        /// <param name="name">The name.</param>
 		void DeleteProject(string name);
 	}
 }

@@ -34,6 +34,14 @@ namespace ThoughtWorks.CruiseControl.Core
 			get;
 		}
 
+        #region ConfigurationXml
+        /// <summary>
+        /// Gets or sets the configuration XML.
+        /// </summary>
+        /// <value>The configuration XML.</value>
+        string ConfigurationXml { get; }
+        #endregion
+
         /// <summary>
         /// An optional description for the project.
         /// </summary>

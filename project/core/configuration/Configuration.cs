@@ -1,16 +1,30 @@
-
-using System;
-using System.Collections.Generic;
-using ThoughtWorks.CruiseControl.Core.Security;
-
-
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
-	public class Configuration : IConfiguration
+    using System;
+    using System.Collections.Generic;
+    using ThoughtWorks.CruiseControl.Core.Distribution;
+    using ThoughtWorks.CruiseControl.Core.Security;
+
+    /// <summary>
+    /// The configuration for a server.
+    /// </summary>
+    public class Configuration 
+        : IConfiguration
 	{
 		private ProjectList projects = new ProjectList();
         private List<IQueueConfiguration> queueConfigurations = new List<IQueueConfiguration>();
         private ISecurityManager securityManager = new NullSecurityManager();
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Configuration"/> class.
+        /// </summary>
+        public Configuration()
+        {
+            this.BuildMachines = new List<IBuildMachine>();
+            this.BuildAgents = new List<IBuildAgent>();
+        }
+        #endregion
 
         /// <summary>
         /// Store the security manager that is being used.
@@ -29,6 +43,26 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             get { return queueConfigurations; }
         }
 
+        #region BuildMachines
+        /// <summary>
+        /// Gets the available build machines.
+        /// </summary>
+        /// <value>The build machines.</value>
+        public IList<IBuildMachine> BuildMachines { get; set; }
+        #endregion
+
+        #region BuildAgents
+        /// <summary>
+        /// Gets the build agents.
+        /// </summary>
+        /// <value>The build agents.</value>
+        public IList<IBuildAgent> BuildAgents { get; set; }
+        #endregion
+
+        /// <summary>
+        /// Adds a project.
+        /// </summary>
+        /// <param name="project">The project.</param>
 		public void AddProject(IProject project)
 		{
 			projects.Add(project);
@@ -59,11 +93,19 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             return actualConfig;
         }
 
+        /// <summary>
+        /// Deletes a project.
+        /// </summary>
+        /// <param name="name">The name.</param>
 		public void DeleteProject(string name)
 		{
 			projects.Delete(name);
 		}
 
+        /// <summary>
+        /// Gets the projects.
+        /// </summary>
+        /// <value>The projects.</value>
 		public IProjectList Projects
 		{
 			get { return projects; }

@@ -356,6 +356,16 @@ namespace Validator
             return null;
         }
 
+        /// <summary>
+        /// Parses an element.
+        /// </summary>
+        /// <param name="node">The element to parse.</param>
+        /// <returns>The parsed element.</returns>
+        public object ParseElement(XmlNode node)
+        {
+            return null;
+        }
+
         private void DisplayConfig()
         {
             using (StreamReader sr = new StreamReader(myFileName))
