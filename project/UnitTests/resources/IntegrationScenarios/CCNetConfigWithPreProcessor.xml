@@ -1,0 +1,24 @@
+﻿<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+  <!-- This is your CruiseControl.NET Server Configuration file. Add your projects below! -->
+
+  <cb:include href="Definitions.xml"
+              xmlns:cb="urn:ccnet.config.builder"/>
+
+  <project name="Test01"
+           queue="$(Q_Name)"
+           queuePriority="1"
+           category="cat1"
+           description="first testing project">
+    <workingDirectory>scenarioTests/test01</workingDirectory>
+    <artifactDirectory>scenarioTests/test01</artifactDirectory>
+    <webURL>$(Web_URL)</webURL>
+
+    <triggers />
+
+    <cb:Tasks/>
+
+    <cb:Publishers/>
+
+  </project>
+  
+</cruisecontrol>

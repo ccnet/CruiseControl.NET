@@ -359,6 +359,7 @@
     <Compile Include="Core\Util\PrivateStringSerialiserTests.cs" />
     <Compile Include="Core\Util\PrivateStringTests.cs" />
     <Compile Include="Core\Util\ZipCompressionServiceTests.cs" />
+    <Compile Include="IntegrationTests\PreprocessorTest.cs" />
     <Compile Include="IntegrationTests\SimpleScenarioTests.cs" />
     <Compile Include="IntegrationTests\CCNet_1835.cs" />
     <Compile Include="IntegrationTests\TriggerTests.cs" />
@@ -1256,6 +1257,10 @@
     <Content Include="resources\buildlog.xml" />
     <Content Include="resources\CCNet.git.log.txt" />
     <Content Include="resources\failedbuildlog.xml" />
+    <Content Include="resources\IntegrationScenarios\CCNetConfigWithPreProcessor.xml" />
+    <Content Include="resources\IntegrationScenarios\Definitions.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\IntegrationScenarios\ProblemWithInnerTriggers_CCnet1835.xml" />
     <Content Include="resources\IntegrationScenarios\Simple.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
