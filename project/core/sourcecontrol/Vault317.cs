@@ -16,6 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private long _folderVersion;
 		private long _lastTxID;
 		private CultureInfo culture = CultureInfo.CurrentCulture;
+        private readonly IFileDirectoryDeleter fileDirectoryDeleter = new IoService();
 
 		public Vault317(VaultVersionChecker versionCheckerShim) : base(versionCheckerShim)
 		{
@@ -100,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					cleanCopyWorkingFolder = result.BaseFromWorkingDirectory(_shim.WorkingDirectory);
 
 				Log.Debug("Cleaning out source folder: " + cleanCopyWorkingFolder);
-				new IoService().EmptyDirectoryIncludingReadOnlyObjects(cleanCopyWorkingFolder);
+                fileDirectoryDeleter.DeleteIncludingReadOnlyObjects(cleanCopyWorkingFolder);
 			}
 
 			Log.Info("Getting source from Vault");

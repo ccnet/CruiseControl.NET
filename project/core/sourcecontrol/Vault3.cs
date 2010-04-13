@@ -13,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class Vault3 : ProcessSourceControl
 	{
 		private static readonly Regex MatchVaultElements = new Regex("<vault>(?:.|\n)*</vault>", RegexOptions.IgnoreCase);
+	    private readonly IFileDirectoryDeleter fileDirectoryDeleter = new IoService();
 
 		// This is used to determine if CC.NET actually applied a label.  In the event of a failed integration 
 		// (when labels are turned on) the label is removed.  We want to ensure that we only remove a label
@@ -103,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             if (_shim.CleanCopy && !string.IsNullOrEmpty(this._shim.WorkingDirectory))
 			{
 				Log.Debug("Cleaning out source folder: " + result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
-				new IoService().EmptyDirectoryIncludingReadOnlyObjects(result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
+                fileDirectoryDeleter.DeleteIncludingReadOnlyObjects(result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
 			}
 
 			Log.Info("Getting source from Vault");
