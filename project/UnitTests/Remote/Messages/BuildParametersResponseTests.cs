@@ -1,10 +1,11 @@
-﻿using System;
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Remote.Messages;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
-
-namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
+﻿namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
 {
+    using System;
+    using System.Collections.Generic;
+    using NUnit.Framework;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
+    using ThoughtWorks.CruiseControl.Remote.Parameters;
+
     [TestFixture]
     public class BuildParametersResponseTests
     {
@@ -13,6 +14,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
         {
             DateTime now = DateTime.Now;
             BuildParametersResponse response = new BuildParametersResponse();
+            var parameters = new List<ParameterBase>();
+            response.Parameters = parameters;
+            Assert.AreSame(parameters, response.Parameters);
             Assert.AreEqual(ResponseResult.Unknown, response.Result, "Result wasn't set to failure");
             Assert.IsTrue((now <= response.Timestamp), "Timestamp was not set");
         }

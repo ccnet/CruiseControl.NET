@@ -1,12 +1,11 @@
-﻿using System;
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Remote.Messages;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
-using ThoughtWorks.CruiseControl.Remote.Security;
-using ThoughtWorks.CruiseControl.Remote;
-
-namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
+﻿namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
 {
+    using System;
+    using System.Collections.Generic;
+    using NUnit.Framework;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
+    using ThoughtWorks.CruiseControl.Remote.Security;
+
     [TestFixture]
     public class DiagnoseSecurityResponseTests
     {
@@ -17,6 +16,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             DiagnoseSecurityResponse response = new DiagnoseSecurityResponse();
             Assert.AreEqual(ResponseResult.Unknown, response.Result, "Result wasn't set to failure");
             Assert.IsTrue((now <= response.Timestamp), "Timestamp was not set");
+            var diagnostics = new List<SecurityCheckDiagnostics>();
+            response.Diagnostics = diagnostics;
+            Assert.AreSame(diagnostics, response.Diagnostics);
         }
 
         [Test]

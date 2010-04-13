@@ -1,9 +1,10 @@
-﻿using System;
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Remote.Messages;
-
-namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
+﻿namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
 {
+    using System;
+    using System.Collections.Generic;
+    using NUnit.Framework;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
+
     [TestFixture]
     public class DiagnoseSecurityRequestTests
     {
@@ -13,6 +14,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             DiagnoseSecurityRequest request = new DiagnoseSecurityRequest();
             request.UserName = "new user";
             Assert.AreEqual("new user", request.UserName, "UserName fails the get/set test");
+            var projects = new List<string>();
+            request.Projects = projects;
+            Assert.AreSame(projects, request.Projects);
         }
 
         [Test]

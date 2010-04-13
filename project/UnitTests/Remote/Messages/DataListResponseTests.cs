@@ -1,9 +1,10 @@
-﻿using System;
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Remote.Messages;
-
-namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
+﻿namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
 {
+    using System;
+    using System.Collections.Generic;
+    using NUnit.Framework;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
+
     [TestFixture]
     public class DataListResponseTests
     {
@@ -14,6 +15,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             DataListResponse response = new DataListResponse();
             Assert.AreEqual(ResponseResult.Unknown, response.Result, "Result wasn't set to failure");
             Assert.IsTrue((now <= response.Timestamp), "Timestamp was not set");
+
+            var data = new List<string>();
+            response.Data = data;
+            Assert.AreSame(data, response.Data);
         }
 
         [Test]

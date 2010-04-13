@@ -1,10 +1,11 @@
-﻿using System;
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Remote.Messages;
-using ThoughtWorks.CruiseControl.Remote;
-
-namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
+﻿namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
 {
+    using System;
+    using System.Collections.Generic;
+    using NUnit.Framework;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
+
     [TestFixture]
     public class BuildIntegrationRequestTests
     {
@@ -12,7 +13,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
         public void GetSetAllPropertiesWorks()
         {
             BuildIntegrationRequest request = new BuildIntegrationRequest();
+            var values = new List<NameValuePair>();
             request.BuildCondition = BuildCondition.IfModificationExists;
+            request.BuildValues = values;
+            Assert.AreSame(values, request.BuildValues);
             Assert.AreEqual(BuildCondition.IfModificationExists, request.BuildCondition, "BuildCondition fails the get/set test");
         }
 
