@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// <version>1.0</version>
     /// <remarks>
     /// <para>
-    /// If executable and version are not specified, CC.NET will search the registry for VS.NET 2008, 2005, 2003, and 2002 in that order.
+    /// If executable and version are not specified, CC.NET will search the registry for VS.NET 2010, 2008, 2005, 2003, and 2002 in that order.
     /// If you need to use a specific version when a newer version is installed, you should specify the version property to identify it,
     /// or specify the executable property to point to the location of correct version of devenv.com.
     /// </para>
@@ -54,8 +54,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	public class DevenvTask
         : TaskBase
 	{
-		public const string VS2008_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\9.0";
-		public const string VS2005_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\8.0";
+        public const string VS2010_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\10.0";
+        public const string VS2008_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\9.0";
+        public const string VS2005_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\8.0";
 		public const string VS2003_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\7.1";
 		public const string VS2002_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\7.0";
 		public const string VS_REGISTRY_KEY = @"InstallDir";
@@ -86,14 +87,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		private readonly string[] ExpectedVisualStudioVersions =
 			new string[]
 				{
-					"9.0", "8.0", "7.1", "7.0",
-					"VS2008", "VS2005", "VS2003", "VS2002"
+					"10.0", "9.0", "8.0", "7.1", "7.0",
+					"VS2010", "VS2008", "VS2005", "VS2003", "VS2002"
 				};
 
 		private readonly string[] RegistryScanOrder = 
 			new string[]
 				{
-					VS2008_REGISTRY_PATH, VS2005_REGISTRY_PATH, VS2003_REGISTRY_PATH, VS2002_REGISTRY_PATH
+					VS2010_REGISTRY_PATH, VS2008_REGISTRY_PATH, VS2005_REGISTRY_PATH, VS2003_REGISTRY_PATH, VS2002_REGISTRY_PATH
 				};
 
         /// <summary>
@@ -106,10 +107,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <value>VS2003</value>
         /// <value>VS2005</value>
         /// <value>VS2008</value>
+        /// <value>VS2010</value>
         /// <value>7.0</value>
         /// <value>7.1</value>
         /// <value>8.0</value>
         /// <value>9.0</value>
+        /// <value>10.0</value>
         /// </values>
 		[ReflectorProperty("version", Required = false)]
 		public string Version
@@ -158,11 +161,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 			switch (Version)
 			{
-				case "VS2008":
-				case "9.0":
-					path = registry.GetExpectedLocalMachineSubKeyValue(VS2008_REGISTRY_PATH, VS_REGISTRY_KEY);
-					break;
-				case "VS2005":
+                case "VS2010":
+                case "10.0":
+                    path = registry.GetExpectedLocalMachineSubKeyValue(VS2010_REGISTRY_PATH, VS_REGISTRY_KEY);
+                    break;
+                case "VS2008":
+                case "9.0":
+                    path = registry.GetExpectedLocalMachineSubKeyValue(VS2008_REGISTRY_PATH, VS_REGISTRY_KEY);
+                    break;
+                case "VS2005":
 				case "8.0":
 					path = registry.GetExpectedLocalMachineSubKeyValue(VS2005_REGISTRY_PATH, VS_REGISTRY_KEY);
 					break;
