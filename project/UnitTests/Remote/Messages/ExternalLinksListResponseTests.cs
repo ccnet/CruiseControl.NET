@@ -1,10 +1,11 @@
-﻿using System;
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Remote.Messages;
-using ThoughtWorks.CruiseControl.Remote;
-
-namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
+﻿namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
 {
+    using System;
+    using System.Collections.Generic;
+    using NUnit.Framework;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
+    using ThoughtWorks.CruiseControl.Remote;
+
     [TestFixture]
     public class ExternalLinksListResponseTests
     {
@@ -15,6 +16,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             ExternalLinksListResponse response = new ExternalLinksListResponse();
             Assert.AreEqual(ResponseResult.Unknown, response.Result, "Result wasn't set to failure");
             Assert.IsTrue((now <= response.Timestamp), "Timestamp was not set");
+            var links = new List<ExternalLink>();
+            response.ExternalLinks = links;
+            Assert.AreSame(links, response.ExternalLinks);
         }
 
         [Test]

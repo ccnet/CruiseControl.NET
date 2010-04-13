@@ -367,6 +367,10 @@
     <Compile Include="Remote\Messages\CommunicationsMessageTests.cs" />
     <Compile Include="Remote\Messages\EncryptedRequestTests.cs" />
     <Compile Include="Remote\Messages\EncryptedResponseTests.cs" />
+    <Compile Include="Remote\Messages\ErrorMessageTests.cs" />
+    <Compile Include="Remote\Messages\FileTransferRequestTests.cs" />
+    <Compile Include="Remote\Messages\FileTransferResponseTests.cs" />
+    <Compile Include="Remote\Messages\ListPackagesResponseTests.cs" />
     <Compile Include="TestClock.cs" />
     <Compile Include="Core\SourceControl\GitHistoryParserTest.cs" />
     <Compile Include="Core\SourceControl\GitTest.cs" />

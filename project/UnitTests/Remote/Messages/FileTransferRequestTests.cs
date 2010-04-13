@@ -4,7 +4,7 @@
     using ThoughtWorks.CruiseControl.Remote.Messages;
 
     [TestFixture]
-    public class EncryptedRequestTests
+    public class FileTransferRequestTests
     {
         #region Tests
         #region Constructor tests
@@ -12,7 +12,7 @@
         public void SessionConstructorInitialisesTheValues()
         {
             var sessionId = "MyNewSession";
-            var request = new EncryptedRequest(sessionId);
+            var request = new FileTransferRequest(sessionId);
             Assert.AreEqual(sessionId, request.SessionToken);
         }
 
@@ -20,21 +20,23 @@
         public void FullConstructorInitialisesTheValues()
         {
             var sessionId = "MyNewSession";
-            var data = "SomeEncryptedData";
-            var request = new EncryptedRequest(sessionId, data);
+            var projectName = "projectName";
+            var fileName = "fileName";
+            var request = new FileTransferRequest(sessionId, projectName, fileName);
             Assert.AreEqual(sessionId, request.SessionToken);
-            Assert.AreEqual(data, request.EncryptedData);
+            Assert.AreEqual(projectName, request.ProjectName);
+            Assert.AreEqual(fileName, request.FileName);
         }
         #endregion
 
         #region Getter/setter tests
         [Test]
-        public void EncryptedDataCanBeSetAndRetrieved()
+        public void FileNameCanBeSetAndRetrieved()
         {
-            var request = new EncryptedRequest();
-            var data = "SomeEncryptedData";
-            request.EncryptedData = data;
-            Assert.AreEqual(data, request.EncryptedData);
+            var request = new FileTransferRequest();
+            var projectName = "projectName";
+            request.FileName = projectName;
+            Assert.AreEqual(projectName, request.FileName);
         }
         #endregion
         #endregion

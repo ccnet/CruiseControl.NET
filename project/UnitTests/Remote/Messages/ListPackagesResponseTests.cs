@@ -1,10 +1,12 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
 {
+    using System.Collections.Generic;
     using NUnit.Framework;
+    using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Remote.Messages;
 
     [TestFixture]
-    public class EncryptedResponseTests
+    public class ListPackagesResponseTests
     {
         #region Tests
         #region Constructor tests
@@ -12,7 +14,7 @@
         public void RequestConstructorInitialisesTheValues()
         {
             var request = new EncryptedRequest();
-            var response = new EncryptedResponse(request);
+            var response = new ListPackagesResponse(request);
             // Only check one property is set, since the properties are set by the base class
             Assert.AreEqual(request.Identifier, response.RequestIdentifier);
         }
@@ -20,9 +22,9 @@
         [Test]
         public void FullConstructorInitialisesTheValues()
         {
-            var response1 = new EncryptedResponse();
+            var response1 = new ListPackagesResponse();
             response1.RequestIdentifier = "12345";
-            var response2 = new EncryptedResponse(response1);
+            var response2 = new ListPackagesResponse(response1);
             // Only check one property is set, since the properties are set by the base class
             Assert.AreEqual(response1.RequestIdentifier, response2.RequestIdentifier);
         }
@@ -32,10 +34,10 @@
         [Test]
         public void EncryptedDataCanBeSetAndRetrieved()
         {
-            var request = new EncryptedResponse();
-            var data = "SomeEncryptedData";
-            request.EncryptedData = data;
-            Assert.AreEqual(data, request.EncryptedData);
+            var request = new ListPackagesResponse();
+            var packages = new List<PackageDetails>();
+            request.Packages = packages;
+            Assert.AreEqual(packages, request.Packages);
         }
         #endregion
         #endregion
