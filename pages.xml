@@ -332,7 +332,7 @@
   <page title="ViewCVS URL Builder" id="31490192" url="http://confluence.public.thoughtworks.org//display/CCNET/ViewCVS+URL+Builder" parentId="22118409" />
   <page title="ViewServerQueue Server Plugin" id="22347902" url="http://confluence.public.thoughtworks.org//display/CCNET/ViewServerQueue+Server+Plugin" parentId="2973" />
   <page title="Visual Source Safe Source Control Block" id="340" url="http://confluence.public.thoughtworks.org//display/CCNET/Visual+Source+Safe+Source+Control+Block" parentId="1753" />
-  <page title="Visual Studio Task" id="525" url="http://confluence.public.thoughtworks.org//display/CCNET/Visual+Studio+Task" parentId="1756" />
+  <page title="Visual Studio Task" id="525" url="http://confluence.public.thoughtworks.org//display/CCNET/Visual+Studio+Task" parentId="1756" source="devenv.wiki" />
   <page title="Visual Studio Team Foundation Server Plugin" id="4557" url="http://confluence.public.thoughtworks.org//display/CCNET/Visual+Studio+Team+Foundation+Server+Plugin" parentId="1753" />
   <page title="VSTS Team Foundation Server Source Control Block" id="31686741" url="http://confluence.public.thoughtworks.org//display/CCNET/VSTS+Team+Foundation+Server+Source+Control+Block" parentId="1753" />
   <page title="Web Dashboard" id="409" url="http://confluence.public.thoughtworks.org//display/CCNET/Web+Dashboard" parentId="71" />
