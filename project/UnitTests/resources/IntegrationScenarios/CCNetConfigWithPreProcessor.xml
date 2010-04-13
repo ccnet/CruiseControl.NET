@@ -4,6 +4,17 @@
   <cb:include href="Definitions.xml"
               xmlns:cb="urn:ccnet.config.builder"/>
 
+  <cb:define Q_Name="Q1"/>
+  <cb:define Web_URL="http://confluence.public.thoughtworks.org"/>
+
+  <cb:define name="Tasks">
+    <tasks>
+      <nullTask  simulateFailure="false"
+                 description="good task" />
+    </tasks>
+  </cb:define>
+
+
   <project name="Test01"
            queue="$(Q_Name)"
            queuePriority="1"
@@ -17,7 +28,7 @@
 
     <cb:Tasks/>
 
-    <cb:Publishers/>
+    <cb:CommonPublishers/>
 
   </project>
   

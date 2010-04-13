@@ -17,7 +17,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
 
         [Test]
         [Timeout(120000)]
-        [Explicit]
         public void Simulate()
         {
             const string projectName1 = "Test01";
