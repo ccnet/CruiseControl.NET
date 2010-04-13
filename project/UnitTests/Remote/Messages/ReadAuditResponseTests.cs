@@ -1,11 +1,11 @@
-﻿using System;
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Remote.Messages;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
-using ThoughtWorks.CruiseControl.Remote.Security;
-
-namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
+﻿namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
 {
+    using System;
+    using System.Collections.Generic;
+    using NUnit.Framework;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
+    using ThoughtWorks.CruiseControl.Remote.Security;
+
     [TestFixture]
     public class ReadAuditResponseTests
     {
@@ -16,6 +16,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             ReadAuditResponse response = new ReadAuditResponse();
             Assert.AreEqual(ResponseResult.Unknown, response.Result, "Result wasn't set to failure");
             Assert.IsTrue((now <= response.Timestamp), "Timestamp was not set");
+
+            var records = new List<AuditRecord>();
+            response.Records = records;
+            Assert.AreSame(records, response.Records);
         }
 
         [Test]

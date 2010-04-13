@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
 {
@@ -14,6 +15,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             LoginRequest request = new LoginRequest("johndoe");
             string actual = NameValuePair.FindNamedValue(request.Credentials, LoginRequest.UserNameCredential);
             Assert.AreEqual("johndoe", actual);
+            var credentials = new List<NameValuePair>();
+            request.Credentials = credentials;
+            Assert.AreSame(credentials, request.Credentials);
         }
 
         [Test]
@@ -59,6 +63,33 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
                 request.SessionToken,
                 request.Timestamp);
             Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void FindCredentialFindsExistingCredential()
+        {
+            var request = new LoginRequest();
+            var password = "whoareyou";
+            request.Credentials = new List<NameValuePair>
+            {
+                new NameValuePair("name", "me"),
+                new NameValuePair("password", password)
+            };
+            var credential = request.FindCredential("password");
+            Assert.IsNotNull(credential);
+            Assert.AreEqual(password, credential.Value);
+        }
+
+        [Test]
+        public void FindCredentialHandlesMissingCredential()
+        {
+            var request = new LoginRequest();
+            request.Credentials = new List<NameValuePair>
+            {
+                new NameValuePair("name", "me")
+            };
+            var credential = request.FindCredential("password");
+            Assert.IsNull(credential);
         }
     }
 }

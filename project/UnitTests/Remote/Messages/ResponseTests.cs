@@ -85,6 +85,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
         }
 
         [Test]
+        public void EqualsDoesNotMatchDifferentTypes()
+        {
+            var request = new Response();
+            var different = new object();
+            Assert.IsFalse(request.Equals(different));
+        }
+
+        [Test]
         public void GetHashCodeReturnsHashCodeOfIdentifierAndTimestamp()
         {
             Response response = new Response();

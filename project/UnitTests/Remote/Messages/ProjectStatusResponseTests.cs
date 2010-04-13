@@ -1,10 +1,11 @@
-﻿using System;
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Remote.Messages;
-using ThoughtWorks.CruiseControl.Remote;
-
-namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
+﻿namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
 {
+    using System;
+    using System.Collections.Generic;
+    using NUnit.Framework;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
+
     [TestFixture]
     public class ProjectStatusResponseTests
     {
@@ -15,6 +16,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             ProjectStatusResponse response = new ProjectStatusResponse();
             Assert.AreEqual(ResponseResult.Unknown, response.Result, "Result wasn't set to failure");
             Assert.IsTrue((now <= response.Timestamp), "Timestamp was not set");
+
+            var projects = new List<ProjectStatus>();
+            response.Projects = projects;
+            Assert.AreSame(projects, response.Projects);
         }
 
         [Test]
