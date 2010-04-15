@@ -373,6 +373,7 @@
     <Compile Include="Remote\Messages\ListPackagesResponseTests.cs" />
     <Compile Include="Remote\Messages\ProjectItemRequestTests.cs" />
     <Compile Include="Remote\Messages\StatusSnapshotResponseTests.cs" />
+    <Compile Include="Remote\Parameters\BooleanParameterTests.cs" />
     <Compile Include="TestClock.cs" />
     <Compile Include="Core\SourceControl\GitHistoryParserTest.cs" />
     <Compile Include="Core\SourceControl\GitTest.cs" />

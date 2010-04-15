@@ -1,11 +1,11 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
-
-namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Parameters
+﻿namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Parameters
 {
+    using NUnit.Framework;
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using ThoughtWorks.CruiseControl.Remote.Parameters;
+
     [TestFixture]
     public class NumericParameterTests
     {
