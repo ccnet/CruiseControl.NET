@@ -11,6 +11,14 @@
     public class BooleanParameterTests
     {
         [Test]
+        public void ConstructorSetsName()
+        {
+            var name = "newParam";
+            var parameter = new BooleanParameter(name);
+            Assert.AreEqual(name, parameter.Name);
+        }
+
+        [Test]
         public void SetGetProperties()
         {
             var parameter = new BooleanParameter();
@@ -48,6 +56,38 @@
             var results = parameter.Validate(string.Empty);
             Assert.AreEqual(1, results.Length, "Number of exceptions does not match");
             Assert.AreEqual("Value of 'Test' is required", results[0].Message, "Exception message does not match");
+        }
+
+        [Test]
+        public void ConvertHandlesTrueValue()
+        {
+            var parameter = GenerateParameter();
+            var value = parameter.Convert("trueName");
+            Assert.AreEqual("trueValue", value);
+        }
+
+        [Test]
+        public void ConvertHandlesFalseValue()
+        {
+            var parameter = GenerateParameter();
+            var value = parameter.Convert("falseName");
+            Assert.AreEqual("falseValue", value);
+        }
+
+        [Test]
+        public void ConvertHandlesUnknown()
+        {
+            var parameter = GenerateParameter();
+            var value = parameter.Convert("Unknown");
+            Assert.AreEqual("Unknown", value);
+        }
+
+        private static BooleanParameter GenerateParameter()
+        {
+            var parameter = new BooleanParameter();
+            parameter.TrueValue = new NameValuePair("trueName", "trueValue");
+            parameter.FalseValue = new NameValuePair("falseName", "falseValue");
+            return parameter;
         }
     }
 }
