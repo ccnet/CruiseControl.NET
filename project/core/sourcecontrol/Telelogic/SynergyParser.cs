@@ -195,9 +195,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 				}
 				catch (FormatException ex)
 				{
-					// Handle parse errors gracefully in a RELEASE build, so that 
-					// the server does not hang when a parse error occurs
-					Debug.Assert(false, "Failed to parse task " + match.Groups["displayname"].Value, ex.Message);
+                    throw new CruiseControlException("Failed to parse task " + match.Groups["displayname"].Value, ex);
 				}
 			}
 			return retVal;

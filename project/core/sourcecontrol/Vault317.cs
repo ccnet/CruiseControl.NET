@@ -84,7 +84,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             result.BuildProgressInformation.SignalStartRunTask("Getting source from Vault");
 
 			if (!_shim.AutoGetSource) return;
-			Debug.Assert(_folderVersion > 0, "_folderVersion <= 0 when attempting to get source.  This shouldn't happen.");
+            if (_folderVersion <= 0)
+            {
+                throw new CruiseControlException("_folderVersion <= 0 when attempting to get source.  This shouldn't happen.");
+            }                                                                                                                     
+                                                                                                                      
 
 			if (_shim.CleanCopy)
 			{
@@ -113,7 +117,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			// only apply label if it's turned on and the integration was a success
 			if (!_shim.ApplyLabel || result.Status != IntegrationStatus.Success) return;
 
-			Debug.Assert(_folderVersion > 0, "_folderVersion <= 0 when attempting to label.  This shouldn't happen.");
+            if (_folderVersion <= 0)
+            {
+                throw new CruiseControlException("_folderVersion <= 0 when attempting to get source.  This shouldn't happen.");
+            }                                                                                                                     
+                                                                                                                      
 
 			Log.Info(string.Format("Applying label \"{0}\" to version {1} of {2} in repository {3}.",
 			                       result.Label, _folderVersion, _shim.Folder, _shim.Repository));
@@ -162,13 +170,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			XmlNode folderVersionNode = null;
 			if (bForceGetLatestVersion)
 			{
-				Debug.Assert(versionNodeList.Count == 1, "Attempted to retrieve folder's current version and got no results.");
-				folderVersionNode = versionNodeList.Item(0);
+                if (versionNodeList.Count != 1)
+                {
+                    throw new CruiseControlException("Attempted to retrieve folder's current version and got no results.");
+                }
+                folderVersionNode = versionNodeList.Item(0);
 			}
 			else
 			{
-				Debug.Assert(versionNodeList.Count == 0 || versionNodeList.Count == 1, "Vault versionhistory -rowlimit 1 returned more than 1 row.");
-				if (versionNodeList.Count == 1)
+                if (versionNodeList.Count != 0 && versionNodeList.Count != 1)
+                {
+                    throw new CruiseControlException("Vault versionhistory -rowlimit 1 returned more than 1 row.");
+                }
+                if (versionNodeList.Count == 1)
 				{
 					folderVersionNode = versionNodeList.Item(0);
 					// We asked vault for only new folder versions, so if we got one, the folder has changed.
@@ -183,21 +197,30 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					// We asked Vault for the most recent folder version.  We have to check its date to
 					// see if this represents a change since the last integration.
 					XmlAttribute dateAttr = (XmlAttribute) folderVersionNode.Attributes.GetNamedItem("date");
-					Debug.Assert(dateAttr != null, "date attribute not found in version history");
-					DateTime dtLastChange = DateTime.Parse(dateAttr.Value, culture);
+                    if (dateAttr == null)
+                    {
+                        throw new CruiseControlException("date attribute not found in version history");
+                    }
+                    DateTime dtLastChange = DateTime.Parse(dateAttr.Value, culture);
 					if (dtLastChange > from.StartTime)
 						bFoundChanges = true;
 				}
 				// get the new most recent folder version
 				XmlAttribute versionAttr = (XmlAttribute) folderVersionNode.Attributes.GetNamedItem("version");
-				Debug.Assert(versionAttr != null, "version attribute not found in version history");
-				_folderVersion = long.Parse(versionAttr.Value);
+                if (versionAttr == null)
+                {
+                    throw new CruiseControlException("version attribute not found in version history");
+                }
+                _folderVersion = long.Parse(versionAttr.Value);
 				Log.Debug("Most recent folder version: " + _folderVersion);
 
 				// get the new most recent TxId
 				XmlAttribute txIdAttr = (XmlAttribute) folderVersionNode.Attributes.GetNamedItem("txid");
-				Debug.Assert(txIdAttr != null, "txid attribute not found in version history");
-				_lastTxID = long.Parse(txIdAttr.Value);
+                if (txIdAttr == null)
+                {
+                    throw new CruiseControlException("txid attribute not found in version history");
+                }
+                _lastTxID = long.Parse(txIdAttr.Value);
 				Log.Debug("Most recent TxID: " + _lastTxID);
 			}
 
