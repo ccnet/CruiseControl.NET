@@ -294,8 +294,8 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
             if (!queuePosition.HasValue)
             {
                 queuePosition = GetPrioritisedQueuePosition(integrationQueueItem.Project.QueuePriority);
-                Log.Info(string.Format("Project: '{0}' is added to queue: '{1}' in position {2}.",
-                                       integrationQueueItem.Project.Name, Name, queuePosition));
+                Log.Info(string.Format("Project: '{0}' is added to queue: '{1}' in position {2}. Requestsource : {3} ({4})",
+                                       integrationQueueItem.Project.Name, Name, queuePosition, integrationQueueItem.IntegrationRequest.Source,integrationQueueItem.IntegrationRequest.UserName));
             }
 			integrationQueueItem.IntegrationQueueNotifier.NotifyEnteringIntegrationQueue();
 			Insert(queuePosition.Value, integrationQueueItem);
