@@ -92,5 +92,13 @@
             Assert.AreEqual(1, results.Length, "Number of exceptions does not match");
             Assert.AreEqual("Value of 'Test' is more than the maximum allowed (25)", results[0].Message, "Exception message does not match");
         }
+
+        [Test]
+        public void ConvertReturnsNumber()
+        {
+            var parameter = new NumericParameter();
+            var value = parameter.Convert("123");
+            Assert.AreEqual(123, value);
+        }
     }
 }

@@ -82,5 +82,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Parameters
             Assert.AreEqual(1, results.Length, "Number of exceptions does not match");
             Assert.AreEqual("Value of 'Test' is more than the maximum length (20)", results[0].Message, "Exception message does not match");
         }
+
+        [Test]
+        public void ConvertReturnsOriginalString()
+        {
+            var parameter = new TextParameter();
+            var value = parameter.Convert("testValue");
+            Assert.AreEqual("testValue", value);
+        }
     }
 }

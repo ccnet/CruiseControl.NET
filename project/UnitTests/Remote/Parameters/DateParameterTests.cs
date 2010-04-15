@@ -105,6 +105,17 @@
         }
 
         [Test]
+        public void ConvertFailsWhenOperationIsUnknown()
+        {
+            var parameter = new DateParameter();
+            var error = Assert.Throws<InvalidOperationException>(() =>
+            {
+                parameter.Convert("Today*2");
+            });
+            Assert.AreEqual("Unknown operation: '*'", error.Message);
+        }
+
+        [Test]
         public void ConvertHandlesDayOfWeek()
         {
             var parameter = new DateParameter();
@@ -126,6 +137,35 @@
             var parameter = new DateParameter();
             var actualValue = parameter.Convert("2010-01-01");
             Assert.AreEqual(new DateTime(2010, 1, 1), actualValue);
+        }
+
+        [Test]
+        public void ValidateChecksThatTheValueIsADate()
+        {
+            var parameter = new DateParameter("Test");
+            var exceptions = parameter.Validate("notadate!");
+            Assert.AreEqual(1, exceptions.Length);
+            Assert.AreEqual("Value of 'Test' is not a date", exceptions[0].Message);
+        }
+
+        [Test]
+        public void ValidateChecksTheDateIsLessThanMaximum()
+        {
+            var parameter = new DateParameter("Test");
+            parameter.MaximumValue = new DateTime(2010, 1, 1);
+            var exceptions = parameter.Validate("2010-1-31");
+            Assert.AreEqual(1, exceptions.Length);
+            Assert.AreEqual("Value of 'Test' is more than the maximum allowed (01/01/2010)", exceptions[0].Message);
+        }
+
+        [Test]
+        public void ValidateChecksTheDateIsMoreThanMinimum()
+        {
+            var parameter = new DateParameter("Test");
+            parameter.MinimumValue = new DateTime(2010, 1, 31);
+            var exceptions = parameter.Validate("2010-1-1");
+            Assert.AreEqual(1, exceptions.Length);
+            Assert.AreEqual("Value of 'Test' is less than the minimum allowed (01/31/2010)", exceptions[0].Message);
         }
     }
 }
