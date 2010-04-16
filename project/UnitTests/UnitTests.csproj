@@ -364,6 +364,7 @@
     <Compile Include="IntegrationTests\CCNet_1835.cs" />
     <Compile Include="IntegrationTests\TriggerTests.cs" />
     <Compile Include="Remote\CommunicationsEventArgsTests.cs" />
+    <Compile Include="Remote\HttpConnectionTests.cs" />
     <Compile Include="Remote\Messages\ChangeConfigurationRequestTests.cs" />
     <Compile Include="Remote\Messages\CommunicationsMessageTests.cs" />
     <Compile Include="Remote\Messages\EncryptedRequestTests.cs" />

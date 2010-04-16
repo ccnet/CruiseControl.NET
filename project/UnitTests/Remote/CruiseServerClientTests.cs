@@ -1,14 +1,13 @@
-﻿using System;
-using NUnit.Framework;
-using Rhino.Mocks;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Remote.Messages;
-using System.Collections.Generic;
-using ThoughtWorks.CruiseControl.Remote.Security;
-using System.Diagnostics;
-
-namespace ThoughtWorks.CruiseControl.UnitTests.Remote
+﻿namespace ThoughtWorks.CruiseControl.UnitTests.Remote
 {
+    using System;
+    using System.Collections.Generic;
+    using NUnit.Framework;
+    using Rhino.Mocks;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
+    using ThoughtWorks.CruiseControl.Remote.Security;
+
     [TestFixture]
     public class CruiseServerClientTests
     {

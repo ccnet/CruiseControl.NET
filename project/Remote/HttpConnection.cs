@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ThoughtWorks.CruiseControl.Remote.Messages;
-using System.Net;
-using System.Collections.Specialized;
-using System.Xml.Serialization;
-using System.IO;
-using System.Reflection;
-using System.Xml;
-
-namespace ThoughtWorks.CruiseControl.Remote
+﻿namespace ThoughtWorks.CruiseControl.Remote
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.Net;
+    using System.Text;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
+
     /// <summary>
     /// A server connection over HTTP.
     /// </summary>
@@ -20,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         #region Private fields
         private readonly Uri serverAddress;
         private bool isBusy;
-        private Dictionary<object, WebClient> asyncOperations = new Dictionary<object, WebClient>();
+        private Dictionary<object, IWebClient> asyncOperations = new Dictionary<object, IWebClient>();
         private object lockObject = new object();
         #endregion
 
@@ -39,12 +35,31 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         /// <param name="serverAddress">The address of the remote server.</param>
         public HttpConnection(Uri serverAddress)
+            : this(serverAddress, new WebClientFactory<DefaultWebClient>())
+        {
+        }
+
+        /// <summary>
+        /// Initialises a new <see cref="HttpConnection"/> to a remote server.
+        /// </summary>
+        /// <param name="serverAddress">The address of the remote server.</param>
+        /// <param name="clientfactory">The clientfactory.</param>
+        public HttpConnection(Uri serverAddress, IWebClientFactory clientfactory)
         {
             this.serverAddress = serverAddress;
+            this.WebClientfactory = clientfactory;
         }
         #endregion
 
         #region Public properties
+        #region WebClientFactory
+        /// <summary>
+        /// Gets or sets the web client.
+        /// </summary>
+        /// <value>The web client.</value>
+        public IWebClientFactory WebClientfactory { get; set; }
+        #endregion
+
         #region Type
         /// <summary>
         /// The type of connection.
@@ -100,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             Uri targetAddress = GenerateTargetUri(request);
 
             // Build the request and send it
-            WebClient client = new WebClient();
+            var client = this.WebClientfactory.Generate();
             NameValueCollection formData = new NameValueCollection();
             formData.Add("action", action);
             formData.Add("message", request.ToString());
@@ -148,7 +163,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             }
 
             // Initialise the web client
-            WebClient client = new WebClient();
+            var client = this.WebClientfactory.Generate();
             client.UploadValuesCompleted += delegate(object sender, UploadValuesCompletedEventArgs e)
             {
                 if (SendMessageCompleted != null)
