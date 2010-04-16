@@ -74,5 +74,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Parameters
             Assert.AreEqual(1, results.Length, "Number of exceptions does not match");
             Assert.AreEqual("Value of 'Test' is not an allowed value", results[0].Message, "Exception message does not match");
         }
+
+        [Test]
+        public void CanGetSetDataValues()
+        {
+            var parameter = new SelectParameter();
+            var dataValues = new NameValuePair[] 
+            {
+                new NameValuePair("one", "1"),
+                new NameValuePair("two", "2"),
+                new NameValuePair("three", "3")
+            };
+            parameter.DataValues = dataValues;
+            Assert.AreSame(dataValues, parameter.DataValues);
+        }
     }
 }
