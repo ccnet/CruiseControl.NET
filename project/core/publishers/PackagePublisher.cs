@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Xml;
-using Exortech.NetReflector;
-using ICSharpCode.SharpZipLib.Zip;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Core.Tasks;
-using System.Threading;
-
-namespace ThoughtWorks.CruiseControl.Core.Publishers
+﻿namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Threading;
+    using System.Xml;
+    using Exortech.NetReflector;
+    using ICSharpCode.SharpZipLib.Zip;
+    using ThoughtWorks.CruiseControl.Core.Tasks;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using ThoughtWorks.CruiseControl.Remote;
+
     /// <summary>
     /// <para>
     /// Generates a ZIP file package containing the specified files.
@@ -26,14 +26,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// <title>Package Publisher</title>
     /// <version>1.4.4</version>
     /// <example>
-    /// <code title="Minimalist example">
-    /// &lt;package&gt;
-    /// &lt;name&gt;Example&lt;/name&gt;
-    /// &lt;files&gt;
-    /// &lt;file&gt;Results.txt&lt;/file&gt;
-    /// &lt;/files&gt;
-    /// &lt;/package&gt;
-    /// </code>
     /// <code title="Full example">
     /// &lt;package&gt;
     /// &lt;name&gt;Example&lt;/name&gt;
@@ -48,40 +40,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// &lt;/package&gt;
     /// </code>
     /// </example>
-    /// <remarks>
-    /// <heading>Sub-folders</heading>
-    /// <para>
-    /// Sub-folders can be added using a combination of relative paths in the filename and a base directory. When a file
-    /// is added, the publisher checks if the filename is relative to the base directory and strips the base directory
-    /// from the file name.
-    /// </para>
-    /// <para>
-    /// For example, the following configuration will add two files, logo.gif in the root and AdminIcon.gif in a 
-    /// sub-folder.
-    /// </para>
-    /// <code>
-    /// &lt;package&gt;
-    /// &lt;baseDirectory&gt;temp&lt;/baseDirectory&gt;
-    /// &lt;files&gt;
-    /// &lt;file&gt;logo.gif&lt;/file&gt;
-    /// &lt;file&gt;images\AdminIcon.gif&lt;/file&gt;
-    /// &lt;/files&gt;
-    /// &lt;name&gt;output&lt;/name&gt;
-    /// &lt;/package&gt;
-    /// </code>
-    /// </remarks>
     [ReflectorType("package")]
     public class PackagePublisher
         : TaskBase
     {
         #region Private fields
         private int compressionLevel = 5;
-        private bool alwaysPackage;
-        private bool flatten;
-        private IManifestGenerator manifestGenerator;
-        private string baseDirectory;
-        private string[] files = {};
-        private string name;
         #endregion
 
         #region Public properties
@@ -94,15 +58,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </remarks>
         /// <version>1.4.4</version>
         /// <default>n/a</default>
-        [ReflectorProperty("name")]
-        public string PackageName
-        {
-            get { return name; }
-            set { name = value; }
-        }
+        [ReflectorProperty("name", Required = true)]
+        public string PackageName { get; set; }
         #endregion
-
         #region CompressionLevel
+
         /// <summary>
         /// The level of compression to use. The valid range is from zero to nine, zero is no compression and nine is maximum compression.
         /// </summary>
@@ -111,10 +71,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         [ReflectorProperty("compression", Required = false)]
         public int CompressionLevel
         {
-            get { return compressionLevel; }
+            get
+            {
+                return compressionLevel;
+            }
             set
             {
-                if ((value < 0) || (value > 9)) throw new ArgumentOutOfRangeException("CompressionLevel");
+                if ((value < 0) || (value > 9))
+                {
+                    throw new ArgumentOutOfRangeException("CompressionLevel");
+                }
+
                 compressionLevel = value;
             }
         }
@@ -132,11 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.4.4</version>
         /// <default>false</default>
         [ReflectorProperty("always", Required = false)]
-        public bool AlwaysPackage
-        {
-            get { return alwaysPackage; }
-            set { alwaysPackage = value; }
-        }
+        public bool AlwaysPackage { get; set; }
         #endregion
 
         #region Flatten
@@ -150,25 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.4.4</version>
         /// <default>false</default>
         [ReflectorProperty("flatten", Required = false)]
-        public bool Flatten
-        {
-            get { return flatten; }
-            set { flatten = value; }
-        }
-        #endregion
-
-        #region BaseDirectory
-        /// <summary>
-        /// The directory to base all the file locations from.
-        /// </summary>
-        /// <version>1.4.4</version>
-        /// <default>Project working directory</default>
-        [ReflectorProperty("baseDirectory", Required = false)]
-        public string BaseDirectory
-        {
-            get { return baseDirectory; }
-            set { baseDirectory = value; }
-        }
+        public bool Flatten { get; set; }
         #endregion
 
         #region ManifestGenerator
@@ -181,28 +126,20 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <version>1.4.4</version>
         /// <default>None</default>
         [ReflectorProperty("manifest", Required = false, InstanceTypeKey = "type")]
-        public IManifestGenerator ManifestGenerator
-        {
-            get { return manifestGenerator; }
-            set { manifestGenerator = value; }
-        }
+        public IManifestGenerator ManifestGenerator { get; set; }
         #endregion
 
-        #region Files
+        #region PackageList
         /// <summary>
-        /// The files to include in the package.
+        /// The list of files and folders to include in the package.
         /// </summary>
         /// <remarks>
         /// All relative files will be relative to the baseDirectory.
         /// </remarks>
-        /// <version>1.4.4</version>
+        /// <version>1.6</version>
         /// <default>n/a</default>
-        [ReflectorProperty("files")]
-        public string[] Files
-        {
-            get { return files; }
-            set { files = value; }
-        }
+        [ReflectorProperty("packageList", Required = true)]
+        public IPackageItem[] PackageList { get; set; }
         #endregion
 
         #region OutputDirectory
@@ -225,9 +162,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         protected override bool Execute(IIntegrationResult result)
         {
             // Check whether the package should be generated
-            if (alwaysPackage || (result.Status == IntegrationStatus.Success))
+            if (AlwaysPackage || (result.Status == IntegrationStatus.Success))
             {
-                string logMessage = string.Format("Building package '{0}'", name);
+                var logMessage = string.Format("Building package '{0}'", PackageName);
                 result.BuildProgressInformation.SignalStartRunTask(logMessage);
                 Log.Info(logMessage);
 
@@ -236,26 +173,25 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 string tempFile = Path.GetTempFileName();
                 try
                 {
-                    List<string> fileList = new List<string>();
-                    ZipOutputStream zipStream = new ZipOutputStream(File.Create(tempFile));
+                    var fileList = new List<string>();
+                    var zipStream = new ZipOutputStream(File.Create(tempFile));
                     zipStream.IsStreamOwner = true;
                     zipStream.UseZip64 = UseZip64.Off;
                     try
                     {
-                        zipStream.SetLevel(compressionLevel);
-
-                        // Add all the files
-                        List<string> packagedFiles = new List<string>();
-                        fileList = GenerateFileList(result);
-                        Log.Debug(string.Format("Compressing {0} file(s)", fileList.Count));
-                        foreach (string file in fileList)
+                        var packagedFiles = new List<string>();
+                        zipStream.SetLevel(CompressionLevel == 0 ? 5 : CompressionLevel);
+                        foreach (IPackageItem packageEntry in PackageList)
                         {
-                            string fileInfo = PackageFile(result, file, zipStream);
-                            if (fileInfo != null) packagedFiles.Add(fileInfo);
+                            var packagedFileList = packageEntry.Package(result, zipStream);
+                            if (packagedFileList != null)
+                            {
+                                packagedFiles.AddRange(packagedFileList);
+                            }
                         }
 
                         // Generate and add the manifest
-                        if (manifestGenerator != null)
+                        if (ManifestGenerator != null)
                         {
                             Log.Debug("Generating manifest");
                             AddManifest(result, packagedFiles, zipStream);
@@ -277,7 +213,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 }
                 finally
                 {
-                    if (File.Exists(tempFile)) File.Delete(tempFile);
+                    if (File.Exists(tempFile))
+                    {
+                        try
+                        {
+                            File.Delete(tempFile);
+                        }
+                        catch (IOException)
+                        {
+                            // Can't delete the temp. file - not a major, just means the file is left on the system!
+                        }
+                    }
                 }
             }
 
@@ -286,80 +232,48 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return true;
         }
         #endregion
-        #endregion
 
-        #region Private methods
-        #region GenerateFileList()
+        #region UpgradeConfiguration()
         /// <summary>
-        /// Generate the list of files to include in the package.
+        /// Upgrades the configuration for the node.
         /// </summary>
-        /// <param name="result">The build result.</param>
-        /// <returns>A list of all the files to be included.</returns>
-        /// <remarks>
-        /// This method uses custom logic for handling "**"
-        /// </remarks>
-        private List<string> GenerateFileList(IIntegrationResult result)
+        /// <param name="configVersion">The version of the configuration.</param>
+        /// <param name="node">The input node.</param>
+        /// <returns>The upgraded node</returns>
+        protected override XmlNode UpgradeConfiguration(Version configVersion, XmlNode node)
         {
-            List<string> fileList = new List<string>();
-            string allDirsWildcard = Path.DirectorySeparatorChar + "**" + Path.DirectorySeparatorChar;
-
-            foreach (string fileName in files)
+            node = base.UpgradeConfiguration(configVersion, node);
+            if (configVersion < new Version(1, 6))
             {
-                // Handle any wildcard characters
-                if (fileName.Contains("*") || fileName.Contains("?"))
+                var listNode = node.OwnerDocument.CreateElement("packageList");
+                XmlNode filesNode = null;
+                foreach (XmlNode childNode in node.ChildNodes)
                 {
-                    List<string> possibilities = new List<string>();
-
-                    string actualPath = EnsureFileIsRooted(result, fileName);
-
-                    // Check for **, if it exists, then split the search pattern and use the second half to find all
-                    // matching files
-                    if (actualPath.Contains(allDirsWildcard))
+                    if (childNode.Name == "files")
                     {
-                        int position = actualPath.IndexOf(allDirsWildcard);
-                        string path = actualPath.Substring(0, position);
-                        string pattern = actualPath.Substring(position + 4);
-                        possibilities.AddRange(Directory.GetFiles(path, pattern, SearchOption.AllDirectories));
-                    }
-                    else
-                    {
-                        // Otherwise, just use the plain ordinary search pattern
-                        int position = actualPath.IndexOfAny(new char[] { '*', '?' });
-                        position = actualPath.LastIndexOf(Path.DirectorySeparatorChar, position);
-                        string path = actualPath.Substring(0, position);
-                        string pattern = actualPath.Substring(position + 1);
-                        possibilities.AddRange(Directory.GetFiles(path, pattern, SearchOption.TopDirectoryOnly));
-                    }
-
-                    // The current list of files is just a set of possibilities, now need to check that they completely
-                    // match the search criteria and they have not already been added.
-                    foreach (string possibility in possibilities)
-                    {
-                        if (!fileList.Contains(possibility))
-                        {
-                            if (PathUtils.MatchPath(actualPath, possibility, false))
-                            {
-                                fileList.Add(possibility);
-                            }
-                        }
+                        filesNode = childNode;
+                        break;
                     }
                 }
-                else
-                {
-                    // Make sure the file is rooted
-                    string actualPath = EnsureFileIsRooted(result, fileName);
 
-                    // Only add it to the list if it doesn't already exist
-                    if (!fileList.Contains(actualPath))
+                if (filesNode != null)
+                {
+                    filesNode.ParentNode.ReplaceChild(listNode, filesNode);
+                    foreach (XmlElement childNode in filesNode.ChildNodes)
                     {
-                        fileList.Add(actualPath);
+                        var fileNode = node.OwnerDocument.CreateElement("packageFile");
+                        fileNode.SetAttribute("sourceFile", childNode.InnerText);
+                        listNode.AppendChild(fileNode);
                     }
                 }
             }
 
-            return fileList;
+            return node;
         }
         #endregion
+        #endregion
+
+        #region Private methods
 
         #region AddToPackageList()
         /// <summary>
@@ -391,12 +305,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             // See if the entry already exists
             XmlElement packageElement = listXml.SelectSingleNode(
-                string.Format("/packages/package[@name='{0}']", name)) as XmlElement;
+                string.Format("/packages/package[@name='{0}']", PackageName)) as XmlElement;
             if (packageElement == null)
             {
                 packageElement = listXml.CreateElement("package");
                 listXml.DocumentElement.AppendChild(packageElement);
-                packageElement.SetAttribute("name", name);
+                packageElement.SetAttribute("name", PackageName);
             }
 
 
@@ -431,7 +345,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </remarks>
         private string MoveFile(IIntegrationResult result, string tempFile)
         {
-            string actualFile = Path.Combine(result.Label, name);
+            string actualFile = Path.Combine(result.Label, PackageName);
             if (!actualFile.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase)) actualFile += ".zip";
             actualFile = result.BaseFromArtifactsDirectory(actualFile);
             if (File.Exists(actualFile)) DeleteFileWithRetry(actualFile);
@@ -445,7 +359,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 var basePath = OutputDirectory;
                 if (!Path.IsPathRooted(basePath)) basePath = Path.Combine(result.ArtifactDirectory, basePath);
                 Log.Info(string.Format("Copying file to '{0}'", basePath));
-                File.Copy(actualFile, Path.Combine(basePath, Name), true);
+                File.Copy(actualFile, Path.Combine(basePath, PackageName), true);
             }
 
             return actualFile;
@@ -496,102 +410,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private void AddManifest(IIntegrationResult result, List<string> packagedFiles, ZipOutputStream zipStream)
         {
             // Generate the manifest
-            XmlDocument manifest = manifestGenerator.Generate(result, packagedFiles.ToArray());
+            XmlDocument manifest = ManifestGenerator.Generate(result, packagedFiles.ToArray());
 
             // And add the manifest to the package
             ZipEntry entry = new ZipEntry("manifest.xml");
             zipStream.PutNextEntry(entry);
             manifest.Save(zipStream);
             zipStream.CloseEntry();
-        }
-        #endregion
-
-        #region PackageFile()
-        /// <summary>
-        /// Adds a file to the current package.
-        /// </summary>
-        /// <param name="result"></param>
-        /// <param name="file"></param>
-        /// <param name="zipStream"></param>
-        /// <returns></returns>
-        private string PackageFile(IIntegrationResult result, string file, ZipOutputStream zipStream)
-        {
-            // Generate the full path to the file and make sure it exists
-            var baseFolder = string.IsNullOrEmpty(baseDirectory) ? result.WorkingDirectory : baseDirectory;
-            if (!Path.IsPathRooted(baseFolder))
-            {
-                baseFolder = result.BaseFromWorkingDirectory(baseFolder);
-            }
-
-            // Generate the full path to the file
-            var fullName = Path.IsPathRooted(file) ? file : result.BaseFromWorkingDirectory(file);
-            var fileInfo = new FileInfo(fullName);
-            if (fileInfo.Exists)
-            {
-                // Generate the name of the file to store in the package
-                var fileName = file;
-                if (flatten)
-                {
-                    // For flattened packages, just store the name of the file
-                    fileName = fileInfo.Name;
-                }
-                else
-                {
-                    // For non-flattened packages, store the full path, except when it is relative to the base directory, 
-                    if (fullName.StartsWith(baseFolder, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        fileName = fullName.Substring(baseFolder.Length);
-                    }
-                    if (fileName.StartsWith(Path.DirectorySeparatorChar + string.Empty)) fileName = fileName.Substring(1);
-                }
-
-                // Add the entry to the file file
-                var entry = new ZipEntry(ZipEntry.CleanName(fileName));
-                entry.Size = fileInfo.Length;
-                zipStream.PutNextEntry(entry);
-                var buffer = new byte[8182];
-
-                // Add the actual file - just tranfer the data from one stream to another
-                var inputStream = fileInfo.OpenRead();
-                try
-                {
-                    var dataLength = 1;
-                    while (dataLength > 0)
-                    {
-                        dataLength = inputStream.Read(buffer, 0, buffer.Length);
-                        zipStream.Write(buffer, 0, dataLength);
-                    }
-                }
-                finally
-                {
-                    inputStream.Close();
-                }
-
-                // Finish up and return the file name so it can be used in the manifest
-                zipStream.CloseEntry();
-                return fileName;
-            }
-            else
-            {
-                // Still need to return something, but since no file was found, just return null
-                return null;
-            }
-        }
-        #endregion
-
-        #region EnsureFileIsRooted()
-        /// <summary>
-        /// Ensure the file is rooted to the base directory.
-        /// </summary>
-        /// <param name="result"></param>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        private string EnsureFileIsRooted(IIntegrationResult result, string fileName)
-        {
-            string actualPath = fileName;
-            string baseFolder = string.IsNullOrEmpty(baseDirectory) ? result.WorkingDirectory : baseDirectory;
-            if (!Path.IsPathRooted(actualPath)) actualPath = Path.Combine(baseFolder, actualPath);
-            return actualPath;
         }
         #endregion
         #endregion

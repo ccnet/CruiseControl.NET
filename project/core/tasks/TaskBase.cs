@@ -242,7 +242,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectionPreprocessor]
         public virtual XmlNode PreprocessParameters(NetReflectorTypeTable typeTable, XmlNode inputNode)
         {
-            return DynamicValueUtility.ConvertXmlToDynamicValues(typeTable, inputNode);
+            var node = DynamicValueUtility.ConvertXmlToDynamicValues(typeTable, inputNode);
+            if (!string.IsNullOrEmpty(inputNode.NamespaceURI) &&
+                inputNode.NamespaceURI.StartsWith("http://thoughtworks.org/ccnet/"))
+            {
+                var parts = inputNode.NamespaceURI.Split('/');
+                var version = new Version(
+                    Convert.ToInt32(parts[parts.Length - 2]),
+                    Convert.ToInt32(parts[parts.Length - 1]));
+                node = this.UpgradeConfiguration(version, node);
+            }
+
+            return node;
         }
         #endregion
 
@@ -267,6 +278,19 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="result">The result to use.</param>
         /// <returns><c>true</c> if the task was successful; <c>false</c> otherwise.</returns>
         protected abstract bool Execute(IIntegrationResult result);
+        #endregion
+
+        #region UpgradeConfiguration()
+        /// <summary>
+        /// Upgrades the configuration for the node.
+        /// </summary>
+        /// <param name="configVersion">The version of the configuration.</param>
+        /// <param name="node">The input node.</param>
+        /// <returns>The upgraded node.</returns>
+        protected virtual XmlNode UpgradeConfiguration(Version configVersion, XmlNode node)
+        {
+            return node;
+        }
         #endregion
         #endregion
     }

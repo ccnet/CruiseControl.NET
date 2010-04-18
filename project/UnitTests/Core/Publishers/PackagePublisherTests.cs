@@ -1,17 +1,16 @@
-﻿using NMock;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Publishers;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Core;
-using System.IO;
-using System.Xml;
-using System.Diagnostics;
-
-namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
+﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Xml;
+    using Exortech.NetReflector;
+    using NMock;
+    using NUnit.Framework;
+    using ThoughtWorks.CruiseControl.Core;
+    using ThoughtWorks.CruiseControl.Core.Publishers;
+    using ThoughtWorks.CruiseControl.Remote;
+
     [TestFixture]
     public class PackagePublisherTests
     {
@@ -53,8 +52,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             PackagePublisher publisher = new PackagePublisher();
             publisher.AlwaysPackage = true;
             Assert.AreEqual(true, publisher.AlwaysPackage);
-            publisher.BaseDirectory = "The BASE!";
-            Assert.AreEqual("The BASE!", publisher.BaseDirectory);
             publisher.CompressionLevel = 9;
             Assert.AreEqual(9, publisher.CompressionLevel);
             publisher.Flatten = true;
@@ -64,9 +61,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             Assert.AreSame(generator, publisher.ManifestGenerator);
             publisher.PackageName = "Package name";
             Assert.AreEqual("Package name", publisher.PackageName);
-            publisher.Files = new string[] { "filename" };
-            Assert.AreEqual(1, publisher.Files.Length);
-            Assert.AreEqual("filename", publisher.Files[0]);
+            publisher.PackageList = new IPackageItem[] {
+                new PackageFile()
+            };
+            Assert.AreEqual(1, publisher.PackageList.Length);
         }
         #endregion
 
@@ -126,7 +124,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             if (File.Exists(packageName)) File.Delete(packageName);
             PackagePublisher publisher = new PackagePublisher();
             publisher.PackageName = packageLocation;
-            publisher.Files = new string[] { dataFilePath };
+            publisher.PackageList = new IPackageItem[] { 
+                new PackageFile(dataFilePath) 
+            };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
             Assert.IsTrue(
@@ -157,39 +157,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             PackagePublisher publisher = new PackagePublisher();
             publisher.PackageName = packageLocation;
             publisher.Flatten = true;
-            publisher.Files = new string[] { dataFilePath };
-            publisher.Run(result);
-            Assert.IsTrue(File.Exists(packageName), "Package not generated");
-            Assert.IsTrue(
-                File.Exists(Path.Combine(Path.GetTempPath(), Path.Combine("A Label", "Test project-packages.xml"))),
-                "Project package list not generated");
-        }
-        #endregion
-
-        #region RunWithRelativeFileAndBaseFolder()
-        /// <summary>
-        /// Run the publisher with the minimum options.
-        /// </summary>
-        [Test]
-        public void RunWithRelativeFileAndBaseFolder()
-        {
-            IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, "Somewhere", null);
-            IntegrationSummary summary = new IntegrationSummary(IntegrationStatus.Success, "A Label", "Another Label", new DateTime(2009, 1, 1));
-            IntegrationResult result = new IntegrationResult("Test project", "Working directory", "Artifact directory", request, summary);
-            Modification modification1 = GenerateModification("first file", "Add");
-            Modification modification2 = GenerateModification("second file", "Modify");
-            result.Modifications = new Modification[] { modification1, modification2 };
-            result.Status = IntegrationStatus.Success;
-            result.ArtifactDirectory = Path.GetTempPath();
-
-            string packageLocation = Path.Combine(Path.GetTempPath(), "Test Package-1");
-            string packageName = packageLocation + ".zip";
-            if (File.Exists(packageName)) File.Delete(packageName);
-            PackagePublisher publisher = new PackagePublisher();
-            publisher.PackageName = packageLocation;
-            publisher.Flatten = true;
-            publisher.BaseDirectory = Path.GetTempPath();
-            publisher.Files = new string[] { "datafile.txt" };
+            publisher.PackageList = new IPackageItem[] { 
+                new PackageFile(dataFilePath) 
+            };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
             Assert.IsTrue(
@@ -219,7 +189,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             if (File.Exists(packageName)) File.Delete(packageName);
             PackagePublisher publisher = new PackagePublisher();
             publisher.PackageName = packageLocation;
-            publisher.Files = new string[] { Path.GetTempFileName() };
+            publisher.PackageList = new IPackageItem[] { 
+                new PackageFile(Path.GetTempFileName()) 
+            };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
             Assert.IsTrue(
@@ -257,7 +229,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             if (File.Exists(packageName)) File.Delete(packageName);
             PackagePublisher publisher = new PackagePublisher();
             publisher.PackageName = packageLocation;
-            publisher.Files = new string[] { Path.Combine(tempPath, "*.txt") };
+            publisher.PackageList = new IPackageItem[] { 
+                new PackageFile(Path.Combine(tempPath, "*.txt")) 
+            };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
             Assert.IsTrue(
@@ -287,7 +261,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             if (File.Exists(packageName)) File.Delete(packageName);
             PackagePublisher publisher = new PackagePublisher();
             publisher.PackageName = packageLocation;
-            publisher.Files = new string[] { Path.Combine(Path.GetTempPath(), "**\\datafile.txt") };
+            publisher.PackageList = new IPackageItem[] { 
+                new PackageFile(Path.Combine(Path.GetTempPath(), "**\\datafile.txt"))
+            };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
             Assert.IsTrue(
@@ -325,7 +301,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             PackagePublisher publisher = new PackagePublisher();
             publisher.PackageName = packageLocation;
             publisher.ManifestGenerator = generatorMock.MockInstance as IManifestGenerator;
-            publisher.Files = new string[] { dataFilePath };
+            publisher.PackageList = new IPackageItem[] { 
+                new PackageFile(dataFilePath) 
+            };
             publisher.Run(result);
             Assert.IsTrue(File.Exists(packageName), "Package not generated");
             Assert.IsTrue(
@@ -334,9 +312,60 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             generatorMock.Verify();
         }
         #endregion
+
+        [Test]
+        public void Loads15Configuration()
+        {
+            // NOTE: The namespace is important - this identifies the version!
+            var xml = "<package xmlns=\"http://thoughtworks.org/ccnet/1/5\">" +
+                "<name>Test</name>" + 
+                "<files>" +
+                "<file>fileToLoad.1</file>" +
+                "<file>fileToLoad.2</file>" + 
+                "</files>" + 
+                "</package>";
+            var publisher = NetReflector.Read(xml);
+            Assert.IsNotNull(publisher);
+            Assert.IsInstanceOf<PackagePublisher>(publisher);
+            var packagePublisher = publisher as PackagePublisher;
+            Assert.AreEqual("Test", packagePublisher.PackageName);
+            Assert.AreEqual(2, packagePublisher.PackageList.Length);
+            this.AssertFilesAreTheSame(new PackageFile("fileToLoad.1"), packagePublisher.PackageList[0]);
+            this.AssertFilesAreTheSame(new PackageFile("fileToLoad.2"), packagePublisher.PackageList[1]);
+        }
+
+        [Test]
+        public void Loads16Configuration()
+        {
+            // NOTE: The namespace is important - this identifies the version!
+            var xml = "<package xmlns=\"http://thoughtworks.org/ccnet/1/6\">" +
+                "<name>Test</name>" +
+                "<packageList>" +
+                "<packageFile sourceFile=\"fileToLoad.1\" />" +
+                "<packageFile sourceFile=\"fileToLoad.2\" />" +
+                "</packageList>" +
+                "</package>";
+            var publisher = NetReflector.Read(xml);
+            Assert.IsNotNull(publisher);
+            Assert.IsInstanceOf<PackagePublisher>(publisher);
+            var packagePublisher = publisher as PackagePublisher;
+            Assert.AreEqual("Test", packagePublisher.PackageName);
+            Assert.AreEqual(2, packagePublisher.PackageList.Length);
+            this.AssertFilesAreTheSame(new PackageFile("fileToLoad.1"), packagePublisher.PackageList[0]);
+            this.AssertFilesAreTheSame(new PackageFile("fileToLoad.2"), packagePublisher.PackageList[1]);
+        }
         #endregion
 
         #region Private methods
+        private void AssertFilesAreTheSame(PackageFile expected, object actual)
+        {
+            Assert.IsInstanceOf<PackageFile>(actual);
+            var actualFile = actual as PackageFile;
+            Assert.AreEqual(expected.SourceFile, actualFile.SourceFile);
+            Assert.AreEqual(expected.TargetFileName, actualFile.TargetFileName);
+            Assert.AreEqual(expected.TargetFolder, actualFile.TargetFolder);
+        }
+
         #region GenerateModification()
         private Modification GenerateModification(string name, string type)
         {

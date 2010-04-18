@@ -452,9 +452,12 @@
     <Compile Include="publishers\IMessageBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="publishers\IPackageItem.cs" />
     <Compile Include="publishers\ManifestGenerator.cs" />
     <Compile Include="publishers\ManifestImporter.cs" />
     <Compile Include="publishers\ModificationHistoryPublisher.cs" />
+    <Compile Include="publishers\PackageFile.cs" />
+    <Compile Include="publishers\PackageFolder.cs" />
     <Compile Include="publishers\PackagePublisher.cs" />
     <Compile Include="publishers\RssPublisher.cs">
       <SubType>Code</SubType>
