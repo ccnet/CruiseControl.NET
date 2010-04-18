@@ -4,6 +4,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System;
 using ThoughtWorks.CruiseControl.Core.Tasks;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -309,5 +310,28 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             Directory.Delete(folder, recursive);
         }
         #endregion
+
+        /// <summary>
+        /// Gets the length of the file.
+        /// </summary>
+        /// <param name="fullName">The full name.</param>
+        /// <returns>The length of the file in bytes.</returns>
+        public long GetFileLength(string fullName)
+        {
+            var info = new FileInfo(fullName);
+            return info.Length;
+        }
+
+        /// <summary>
+        /// Gets the files in directory.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="pattern">The pattern.</param>
+        /// <param name="searchOption">The search option.</param>
+        /// <returns>The files in the directory that match the pattern.</returns>
+        public IEnumerable<string> GetFilesInDirectory(string path, string pattern, SearchOption searchOption)
+        {
+            return Directory.GetFiles(path, pattern, searchOption);
+        }
     }
 }

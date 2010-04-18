@@ -104,6 +104,10 @@
       <Name>Commons</Name>
       <HintPath>..\..\lib\Commons.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <Name>log4net</Name>
       <HintPath>..\..\lib\log4net.dll</HintPath>
@@ -350,6 +354,7 @@
     <Compile Include="Core\Publishers\ConditionalPublisherTests.cs" />
     <Compile Include="Core\Publishers\ManifestGeneratorTests.cs" />
     <Compile Include="Core\Publishers\ManifestImporterTests.cs" />
+    <Compile Include="Core\Publishers\PackageFileTests.cs" />
     <Compile Include="Core\Publishers\PackagePublisherTests.cs" />
     <Compile Include="Core\Label\AssemblyVersionLabellerTest.cs" />
     <Compile Include="Core\Tasks\CruiseServerControlTaskTests.cs" />

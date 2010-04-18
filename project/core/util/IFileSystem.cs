@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text;
 using System;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -93,5 +94,21 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="folder">The name of the folder to delete.</param>
         /// <param name="recursive">If set to <c>true</c> recursively delete folders.</param>
         void DeleteDirectory(string folder, bool recursive);
+
+        /// <summary>
+        /// Gets the length of the file.
+        /// </summary>
+        /// <param name="fullName">The full name.</param>
+        /// <returns>The length of the file in bytes.</returns>
+        long GetFileLength(string fullName);
+
+        /// <summary>
+        /// Gets the files in directory.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="pattern">The pattern.</param>
+        /// <param name="searchOption">The search option.</param>
+        /// <returns>The files in the directory that match the pattern.</returns>
+        IEnumerable<string> GetFilesInDirectory(string path, string pattern, SearchOption searchOption);
     }
 }

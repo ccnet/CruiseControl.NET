@@ -31,6 +31,7 @@
         }
         #endregion
 
+        #region Public properties
         /// <summary>
         /// The name and path of the file to store into the package
         /// </summary>
@@ -61,6 +62,13 @@
         public string TargetFolder { get; set; }
 
         /// <summary>
+        /// Gets or sets the file system.
+        /// </summary>
+        /// <value>The file system.</value>
+        public IFileSystem FileSystem { get; set; }
+        #endregion
+
+        /// <summary>
         /// Packages the specified items.
         /// </summary>
         /// <param name="result">The result.</param>
@@ -68,32 +76,45 @@
         /// <returns>The name of the files that were packaged.</returns>
         public IEnumerable<string> Package(IIntegrationResult result, ZipOutputStream zipStream)
         {
+            var fileSystem = this.FileSystem ?? new SystemIoFileSystem();
+
             var baseFolder = result.WorkingDirectory;
-            var files = this.GenerateFileList(result);
+            var files = this.GenerateFileList(result, fileSystem);
             var actualFiles = new List<string>();
             foreach (var fullName in files)
             {
                 var fileInfo = new FileInfo(fullName);
-                if (fileInfo.Exists)
+                if (fileSystem.FileExists(fullName))
                 {
                     // Generate the name of the file to store in the package
-                    string targetFileName = string.IsNullOrEmpty(this.TargetFileName) ?
-                        fileInfo.Name :
-                        this.TargetFileName;
-                    string targetPath = string.IsNullOrEmpty(this.TargetFolder) ?
-                        fileInfo.DirectoryName.Substring(baseFolder.Length) :
-                        this.TargetFolder;
+                    var targetFileName = string.IsNullOrEmpty(this.TargetFileName) ? fileInfo.Name : this.TargetFileName;
+                    var targetPath = this.TargetFolder;
+                    if (string.IsNullOrEmpty(targetPath))
+                    {
+                        if (fileInfo.DirectoryName.StartsWith(baseFolder))
+                        {
+                            targetPath = fileInfo.DirectoryName.Substring(baseFolder.Length);
+                        }
+                        else
+                        {
+                            targetPath = fileInfo.DirectoryName;
+                        }
+                    }
 
-                    if (targetPath.StartsWith(Path.DirectorySeparatorChar + string.Empty)) targetPath = targetPath.Substring(1);
+                    // Clean the target name
+                    if (targetPath.StartsWith(Path.DirectorySeparatorChar + string.Empty))
+                    {
+                        targetPath = targetPath.Substring(1);
+                    }
 
                     // Add the entry to the file file
                     var entry = new ZipEntry(ZipEntry.CleanName(Path.Combine(targetPath, targetFileName)));
-                    entry.Size = fileInfo.Length;
+                    entry.Size = fileSystem.GetFileLength(fullName);
                     zipStream.PutNextEntry(entry);
                     var buffer = new byte[8182];
 
                     // Add the actual file - just tranfer the data from one stream to another
-                    var inputStream = fileInfo.OpenRead();
+                    var inputStream = fileSystem.OpenInputStream(fullName);
                     try
                     {
                         var dataLength = 1;
@@ -122,11 +143,12 @@
         /// Generate the list of files to include in the package.
         /// </summary>
         /// <param name="result">The build result.</param>
+        /// <param name="fileSystem">The file system.</param>
         /// <returns>A list of all the files to be included.</returns>
         /// <remarks>
         /// This method uses custom logic for handling "**"
         /// </remarks>
-        private List<string> GenerateFileList(IIntegrationResult result)
+        private List<string> GenerateFileList(IIntegrationResult result, IFileSystem fileSystem)
         {
             var fileList = new List<string>();
             var allDirsWildcard = Path.DirectorySeparatorChar + "**" + Path.DirectorySeparatorChar;
@@ -144,7 +166,7 @@
                     var position = actualPath.IndexOf(allDirsWildcard);
                     var path = actualPath.Substring(0, position);
                     var pattern = actualPath.Substring(position + 4);
-                    possibilities.AddRange(Directory.GetFiles(path, pattern, SearchOption.AllDirectories));
+                    possibilities.AddRange(fileSystem.GetFilesInDirectory(path, pattern, SearchOption.AllDirectories));
                 }
                 else
                 {
@@ -153,7 +175,7 @@
                     position = actualPath.LastIndexOf(Path.DirectorySeparatorChar, position);
                     var path = actualPath.Substring(0, position);
                     var pattern = actualPath.Substring(position + 1);
-                    possibilities.AddRange(Directory.GetFiles(path, pattern, SearchOption.TopDirectoryOnly));
+                    possibilities.AddRange(fileSystem.GetFilesInDirectory(path, pattern, SearchOption.TopDirectoryOnly));
                 }
 
                 // The current list of files is just a set of possibilities, now need to check that they completely

@@ -9,6 +9,7 @@ using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 {
@@ -86,6 +87,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
             {
             }
             #endregion
+
+            public long GetFileLength(string fullName)
+            {
+                throw new NotImplementedException();
+            }
+
+            /// <summary>
+            /// Gets the files in directory.
+            /// </summary>
+            /// <param name="path">The path.</param>
+            /// <param name="pattern">The pattern.</param>
+            /// <param name="searchOption">The search option.</param>
+            /// <returns>The files in the directory that match the pattern.</returns>
+            public IEnumerable<string> GetFilesInDirectory(string path, string pattern, SearchOption searchOption)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [Test]
