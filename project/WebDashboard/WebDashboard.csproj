@@ -934,6 +934,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Languages.de.resx" />
+    <EmbeddedResource Include="Resources\Languages.pl.resx" />
     <EmbeddedResource Include="Resources\Languages.resx">
     </EmbeddedResource>
   </ItemGroup>

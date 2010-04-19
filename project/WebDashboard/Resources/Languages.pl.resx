@@ -1,0 +1,627 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Activity" xml:space="preserve">
+    <value>Aktywność</value>
+  </data>
+  <data name="Add New Server" xml:space="preserve">
+    <value>Dodaj nowy serwer</value>
+  </data>
+  <data name="Allow Force/Abort Build" xml:space="preserve">
+    <value>Pozwól wymusić/przerwać kompilację</value>
+  </data>
+  <data name="Allow Start/Stop Project" xml:space="preserve">
+    <value>Pozwól uruchomić/zatrzymać projekt</value>
+  </data>
+  <data name="Audit History for Project: {0}" xml:space="preserve">
+    <value>Audyt histori projektu: {0}</value>
+  </data>
+  <data name="Available Packages for {0}" xml:space="preserve">
+    <value>Paczki dostępne dla projektu {0}</value>
+  </data>
+  <data name="Backwards Compatible" xml:space="preserve">
+    <value>Zgodność wstecz</value>
+  </data>
+  <data name="Build" xml:space="preserve">
+    <value>Kompilacja</value>
+  </data>
+  <data name="Build Label" xml:space="preserve">
+    <value>Etykieta kompilacji</value>
+  </data>
+  <data name="Build Overview" xml:space="preserve">
+    <value>Przegląd kompilacji</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Kategorie</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Kategoria</value>
+  </data>
+  <data name="CCNet Status" xml:space="preserve">
+    <value>Status CCNet</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Zmiana</value>
+  </data>
+  <data name="Click here for the full build report." xml:space="preserve">
+    <value>Klinkij tutaj by zobaczyć pełen raport kompilacji.</value>
+  </data>
+  <data name="Click here for the most recent build report." xml:space="preserve">
+    <value>Klinkij tutaj by zobaczyć najnowszy raport kompilacji.</value>
+  </data>
+  <data name="Click here to open log in its own page" xml:space="preserve">
+    <value>Klinkij tutaj by zobaczyć dziennik jako osobną stronę.</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Zamknij</value>
+  </data>
+  <data name="Commands" xml:space="preserve">
+    <value>Komendy</value>
+  </data>
+  <data name="Current Password" xml:space="preserve">
+    <value>Aktualne hasło</value>
+  </data>
+  <data name="Current Status for {0}" xml:space="preserve">
+    <value>Aktualny status {0}</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Tablica</value>
+  </data>
+  <data name="Dashboard Administration" xml:space="preserve">
+    <value>Ustawienia tablicy</value>
+  </data>
+  <data name="Defined Users" xml:space="preserve">
+    <value>Zdefiniowani użytkownicy</value>
+  </data>
+  <data name="Defined Users for Project: {0}" xml:space="preserve">
+    <value>Zdefiniowani użytkownicy dla projektu: {0}</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Skasuj</value>
+  </data>
+  <data name="Delete server" xml:space="preserve">
+    <value>Skasuj serwer</value>
+  </data>
+  <data name="Display Name" xml:space="preserve">
+    <value>Nazwa wyświetlana</value>
+  </data>
+  <data name="Enter" xml:space="preserve">
+    <value>Wprowadź</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Błąd</value>
+  </data>
+  <data name="Event" xml:space="preserve">
+    <value>Zdażenie</value>
+  </data>
+  <data name="Event Date/Time" xml:space="preserve">
+    <value>Data/czas zdarzenia</value>
+  </data>
+  <data name="External Links" xml:space="preserve">
+    <value>Zewnętrzne odnośniki</value>
+  </data>
+  <data name="Free Disk Space" xml:space="preserve">
+    <value>Dostępne miejsce na dysku</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Importuj</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>Instaluj</value>
+  </data>
+  <data name="Installation Log" xml:space="preserve">
+    <value>Dziennik instalacji</value>
+  </data>
+  <data name="Last Build Label" xml:space="preserve">
+    <value>Ostatnia etykieta kompilacji</value>
+  </data>
+  <data name="Last Build Status" xml:space="preserve">
+    <value>Ostatni status kompilacji</value>
+  </data>
+  <data name="Last Build Time" xml:space="preserve">
+    <value>Czas ostatniej kompilacji</value>
+  </data>
+  <data name="Latest" xml:space="preserve">
+    <value>Najnowsze</value>
+  </data>
+  <data name="Load Package" xml:space="preserve">
+    <value>Załaduj paczkę</value>
+  </data>
+  <data name="Loading parameters, please wait..." xml:space="preserve">
+    <value>Ładowanie parametrów, proszę czekać...</value>
+  </data>
+  <data name="Loading status data, please wait..." xml:space="preserve">
+    <value>Ładowanie danych statusu, proszę czekać...</value>
+  </data>
+  <data name="Loading, please wait..." xml:space="preserve">
+    <value>Ładowanie, proszę czekać...</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Ścieżka</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Zaloguj</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Wyloguj</value>
+  </data>
+  <data name="Most Recent Build Results" xml:space="preserve">
+    <value>Wyniki najnowszej kompilacji</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nazwa</value>
+  </data>
+  <data name="New Password" xml:space="preserve">
+    <value>Nowe hasło</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Następny</value>
+  </data>
+  <data name="Next Build Time" xml:space="preserve">
+    <value>Czas następnej kompilacji</value>
+  </data>
+  <data name="Number of Files" xml:space="preserve">
+    <value>Liczba plików</value>
+  </data>
+  <data name="Outcome" xml:space="preserve">
+    <value>Wynik</value>
+  </data>
+  <data name="Package" xml:space="preserve">
+    <value>Paczka</value>
+  </data>
+  <data name="Package details" xml:space="preserve">
+    <value>Szczegóły paczki</value>
+  </data>
+  <data name="Package Name" xml:space="preserve">
+    <value>Nazwa paczki</value>
+  </data>
+  <data name="Package Size" xml:space="preserve">
+    <value>Rozmiar paczki</value>
+  </data>
+  <data name="Packages" xml:space="preserve">
+    <value>Paczki</value>
+  </data>
+  <data name="PageRendered" xml:space="preserve">
+    <value>Strona wygenerowana {0}</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Hasło</value>
+  </data>
+  <data name="Permission Diagnostics" xml:space="preserve">
+    <value>Diagnostyka uprawnień</value>
+  </data>
+  <data name="Please contact your build administrator." xml:space="preserve">
+    <value>Proszę skontaktować się z administratorem.</value>
+  </data>
+  <data name="Please login again or contact your build administrator." xml:space="preserve">
+    <value>Proszę zalogować się ponownie lub skontaktować się z administratorem.</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Poprzedni</value>
+  </data>
+  <data name="Project" xml:space="preserve">
+    <value>Projekt</value>
+  </data>
+  <data name="Project Name" xml:space="preserve">
+    <value>Nazwa projektu</value>
+  </data>
+  <data name="Project Parameters" xml:space="preserve">
+    <value>Parametry projektu</value>
+  </data>
+  <data name="Project Report for {0}" xml:space="preserve">
+    <value>Raport dla projektu {0}</value>
+  </data>
+  <data name="Project Status for {0}" xml:space="preserve">
+    <value>Status projektu {0}</value>
+  </data>
+  <data name="Queue" xml:space="preserve">
+    <value>Kolejka</value>
+  </data>
+  <data name="Queue Priority" xml:space="preserve">
+    <value>Priorytet w kolejce</value>
+  </data>
+  <data name="Recent Builds" xml:space="preserve">
+    <value>Ostatnie kompilacje</value>
+  </data>
+  <data name="Refresh status" xml:space="preserve">
+    <value>Odśwież status</value>
+  </data>
+  <data name="Reload dashboard" xml:space="preserve">
+    <value>Przeładuj tablicę</value>
+  </data>
+  <data name="Remote Servers" xml:space="preserve">
+    <value>Zdalne serwery</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
+  <data name="Repeat New Password" xml:space="preserve">
+    <value>Wprowadź ponownie nowe hasło</value>
+  </data>
+  <data name="Reset password" xml:space="preserve">
+    <value>Zresetuj hasło</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Zapisz</value>
+  </data>
+  <data name="Security Configuration for Project: {0}" xml:space="preserve">
+    <value>Konfiguracja zabezpieczeń projektu: {0}</value>
+  </data>
+  <data name="Server" xml:space="preserve">
+    <value>Serwer</value>
+  </data>
+  <data name="Server Audit History" xml:space="preserve">
+    <value>Audyt histori serwera</value>
+  </data>
+  <data name="Server details" xml:space="preserve">
+    <value>Szczegóły serwera</value>
+  </data>
+  <data name="Server Log" xml:space="preserve">
+    <value>Dziennik serwera</value>
+  </data>
+  <data name="Server Log for Project: {0}" xml:space="preserve">
+    <value>Dziennik serwera dla projektu: {0}</value>
+  </data>
+  <data name="Server Name" xml:space="preserve">
+    <value>Nazwa serwera</value>
+  </data>
+  <data name="Server Security Configuration" xml:space="preserve">
+    <value>Ustawienia zabezpieczeń serwera</value>
+  </data>
+  <data name="Server Version" xml:space="preserve">
+    <value>Wersja serwera</value>
+  </data>
+  <data name="Servers" xml:space="preserve">
+    <value>Serwery</value>
+  </data>
+  <data name="Show All" xml:space="preserve">
+    <value>Pokaż wszystkie</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="The administration console is password protected, please enter your password" xml:space="preserve">
+    <value>Konsola administracyjna jest zabezpieczona hasłem, proszę wprowadź swoje hasło</value>
+  </data>
+  <data name="There was an exception trying to carry out your request." xml:space="preserve">
+    <value>W trakce realizacji żądania wystąpił wyjątek.</value>
+  </data>
+  <data name="Time Completed" xml:space="preserve">
+    <value>Czas zakończenia</value>
+  </data>
+  <data name="Time Started" xml:space="preserve">
+    <value>Czas rozpoczęcia</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>Użytkownik</value>
+  </data>
+  <data name="User Name" xml:space="preserve">
+    <value>Nazwa użytkownika</value>
+  </data>
+  <data name="View Log" xml:space="preserve">
+    <value>Podgląd dziennika</value>
+  </data>
+  <data name="View this report in its own window" xml:space="preserve">
+    <value>Zobacz ten raport jako osobną stronę</value>
+  </data>
+  <data name="Web Url" xml:space="preserve">
+    <value>Odnośnik</value>
+  </data>
+  <data name="You do not have permission for this action" xml:space="preserve">
+    <value>Nie posiadasz uprawnień do wykonania tej akcji.</value>
+  </data>
+  <data name="You have successfully logged in" xml:space="preserve">
+    <value>Zalogowanie poprawne</value>
+  </data>
+  <data name="You have successfully logged out" xml:space="preserve">
+    <value>Wylogowanie poprawne</value>
+  </data>
+  <data name="Your session is invalid" xml:space="preserve">
+    <value>Błędna sesja</value>
+  </data>
+  <data name="Abort" xml:space="preserve">
+    <value>Przerwij</value>
+  </data>
+  <data name="Abort successfully forced for {0}" xml:space="preserve">
+    <value>Udało się wymusić przerwanie {0}</value>
+  </data>
+  <data name="Administer Dashboard" xml:space="preserve">
+    <value>Ustawienia tablicy</value>
+  </data>
+  <data name="Breakers" xml:space="preserve">
+    <value>Psuje</value>
+  </data>
+  <data name="Build Report" xml:space="preserve">
+    <value>Raport kompilacji</value>
+  </data>
+  <data name="Build successfully forced for {0}" xml:space="preserve">
+    <value>Udało się wymusić kompilację {0}</value>
+  </data>
+  <data name="Building" xml:space="preserve">
+    <value>Kompilacja w trakcie</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>Anulowany</value>
+  </data>
+  <data name="CheckingModifications" xml:space="preserve">
+    <value>Sprawdzanie zmian</value>
+  </data>
+  <data name="Download CCTray" xml:space="preserve">
+    <value>Pobierz CCTray</value>
+  </data>
+  <data name="Exception" xml:space="preserve">
+    <value>Wyjątek</value>
+  </data>
+  <data name="Exception Full Details" xml:space="preserve">
+    <value>Szczegóły wyjątku</value>
+  </data>
+  <data name="Exception Message" xml:space="preserve">
+    <value>Komunika wyjątku</value>
+  </data>
+  <data name="Failing Tasks" xml:space="preserve">
+    <value>Nieudane zadania</value>
+  </data>
+  <data name="Failure" xml:space="preserve">
+    <value>Niepowodzenia</value>
+  </data>
+  <data name="Farm Report" xml:space="preserve">
+    <value>Stan farmy</value>
+  </data>
+  <data name="Force" xml:space="preserve">
+    <value>Wymuś</value>
+  </data>
+  <data name="Force Build Only" xml:space="preserve">
+    <value>Tylko wymuszenie kompilacji</value>
+  </data>
+  <data name="Invalid package - manifest file is missing" xml:space="preserve">
+    <value>Niewłaściwa paczka - brak pliku manifestu</value>
+  </data>
+  <data name="Invalid password" xml:space="preserve">
+    <value>Niewłaściwe hasło</value>
+  </data>
+  <data name="Latest Build" xml:space="preserve">
+    <value>Najnowsza kompilacja</value>
+  </data>
+  <data name="Name is a compulsory value" xml:space="preserve">
+    <value>Nazwa jest wymagana</value>
+  </data>
+  <data name="No file selected to import!" xml:space="preserve">
+    <value>Nie wybrano pliku do importu</value>
+  </data>
+  <data name="Package '{0}' has been loaded" xml:space="preserve">
+    <value>Paczka '{0}' została załadowana</value>
+  </data>
+  <data name="Package has been installed" xml:space="preserve">
+    <value>Paczka została zainstalowana</value>
+  </data>
+  <data name="Package has been removed" xml:space="preserve">
+    <value>Paczka została usunięta</value>
+  </data>
+  <data name="Package has been uninstalled" xml:space="preserve">
+    <value>Paczka została odinstalowana</value>
+  </data>
+  <data name="Package List" xml:space="preserve">
+    <value>Lista paczek</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Oczekujące</value>
+  </data>
+  <data name="Project Configuration" xml:space="preserve">
+    <value>Ustawienia projektu</value>
+  </data>
+  <data name="Project Report" xml:space="preserve">
+    <value>Raport projektu</value>
+  </data>
+  <data name="Project Status" xml:space="preserve">
+    <value>Status projektu</value>
+  </data>
+  <data name="Running" xml:space="preserve">
+    <value>W trakcie</value>
+  </data>
+  <data name="Server has been deleted" xml:space="preserve">
+    <value>Serwer został usunięty</value>
+  </data>
+  <data name="Server has been saved" xml:space="preserve">
+    <value>Serwer został zapisany</value>
+  </data>
+  <data name="Server name has not been set" xml:space="preserve">
+    <value>Nazwa serwera nie została ustawiona</value>
+  </data>
+  <data name="Server Report" xml:space="preserve">
+    <value>Raport serwera</value>
+  </data>
+  <data name="Sleeping" xml:space="preserve">
+    <value>Uśpiony</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Uruchom</value>
+  </data>
+  <data name="Starting project {0}" xml:space="preserve">
+    <value>Uruchamianie projektu {0}</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Zatrzymaj</value>
+  </data>
+  <data name="Stopped" xml:space="preserve">
+    <value>Zatrzymany</value>
+  </data>
+  <data name="Stopping" xml:space="preserve">
+    <value>W trakcie zatrzymywania</value>
+  </data>
+  <data name="Stopping project {0}" xml:space="preserve">
+    <value>Zatrzymuję projekt {0}</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Sukces</value>
+  </data>
+  <data name="The dashboard configuration has been reloaded" xml:space="preserve">
+    <value>Konfiguracja tablicy została załadowana ponownie</value>
+  </data>
+  <data name="Unable to find server" xml:space="preserve">
+    <value>Nie można znaleźć serwera</value>
+  </data>
+  <data name="Unable to remove package - has the package already been removed?" xml:space="preserve">
+    <value>Nie udało się usunąć paczki - czy została już skasowana?</value>
+  </data>
+  <data name="Unable to uninstall package" xml:space="preserve">
+    <value>Nie udało się odinstalować paczki</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Nieznany</value>
+  </data>
+  <data name="Unknown action '{0}'" xml:space="preserve">
+    <value>Nieznana akcja '{0}'</value>
+  </data>
+  <data name="URI is a compulsory value" xml:space="preserve">
+    <value>URI jest wymagane</value>
+  </data>
+  <data name="View All Builds" xml:space="preserve">
+    <value>Pokaż wszystkie kompilacje</value>
+  </data>
+  <data name="View Build Log" xml:space="preserve">
+    <value>Pokaż dziennik kompilacji</value>
+  </data>
+  <data name="View Modification History" xml:space="preserve">
+    <value>Pokaż historię zmian</value>
+  </data>
+  <data name="View Project Configuration" xml:space="preserve">
+    <value>Pokaż ustawienia projektu</value>
+  </data>
+  <data name="View Queue Status" xml:space="preserve">
+    <value>Pokaż stan kolejki</value>
+  </data>
+  <data name="View Security Configuration" xml:space="preserve">
+    <value>Pokaż ustawienia zabezpieczeń</value>
+  </data>
+  <data name="View Server Info" xml:space="preserve">
+    <value>Pokaż informacje o serwerze</value>
+  </data>
+  <data name="View Server Log" xml:space="preserve">
+    <value>Pokaż dziennik serwera</value>
+  </data>
+  <data name="View Statistics" xml:space="preserve">
+    <value>Pokaż statystyki</value>
+  </data>
+  <data name="View User List" xml:space="preserve">
+    <value>Pokaż listę użytkowników</value>
+  </data>
+</root>
