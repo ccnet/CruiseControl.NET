@@ -59,6 +59,125 @@
             Assert.AreEqual(request.Identifier, response.RequestIdentifier);
         }
         #endregion
+
+        #region
+        [Test]
+        public void SendMessageAsyncSendsMessage()
+        {
+            var action = "DoSomething";
+            var request = new ServerRequest
+            {
+                ServerName = "TestServer"
+            };
+            var url = "http://somewhere/";
+            var factory = new TestClientFactory((u, a, d) =>
+            {
+                Assert.AreEqual(url + "/server/TestServer/RawXmlMessage.aspx", u.AbsoluteUri);
+                Assert.AreEqual("POST", a);
+                Assert.AreEqual(action, d["action"]);
+                Assert.AreEqual(request.ToString(), d["message"]);
+                var theResponse = new Response
+                {
+                    RequestIdentifier = request.Identifier
+                };
+                return Encoding.UTF8.GetBytes(theResponse.ToString());
+            });
+            var connection = new HttpConnection(new Uri(url), factory);
+            var completed = false;
+            connection.SendMessageCompleted += (o, e) =>
+            {
+                completed = true;
+                Assert.IsFalse(e.Cancelled);
+                Assert.IsNull(e.Error);
+            };
+            connection.SendMessageAsync(action, request);
+            Assert.IsTrue(completed);
+        }
+
+        [Test]
+        public void SendMessageAsyncPassesOnRemoteException()
+        {
+            var action = "DoSomething";
+            var request = new ServerRequest
+            {
+                ServerName = "TestServer"
+            };
+            var url = "http://somewhere/";
+            var errorMessage = "Oops, an error happened";
+            var factory = new TestClientFactory((u, a, d) =>
+            {
+                throw new Exception(errorMessage);
+            });
+            var connection = new HttpConnection(new Uri(url), factory);
+            var completed = false;
+            connection.SendMessageCompleted += (o, e) =>
+            {
+                completed = true;
+                Assert.IsFalse(e.Cancelled);
+                Assert.IsNotNull(e.Error);
+                Assert.AreEqual(errorMessage, e.Error.Message);
+                Assert.IsNull(e.Response);
+            };
+            connection.SendMessageAsync(action, request);
+            Assert.IsTrue(completed);
+        }
+
+        [Test]
+        public void SendMessageAsyncPassesOnLocalException()
+        {
+            var action = "DoSomething";
+            var request = new ServerRequest
+            {
+                ServerName = "TestServer"
+            };
+            var url = "http://error";
+            var errorMessage = "Oops, an error happened";
+            var factory = new TestClientFactory((u, a, d) =>
+            {
+                throw new Exception(errorMessage);
+            });
+            var connection = new HttpConnection(new Uri(url), factory);
+            var completed = false;
+            connection.SendMessageCompleted += (o, e) =>
+            {
+                completed = true;
+                Assert.IsFalse(e.Cancelled);
+                Assert.IsNotNull(e.Error);
+                Assert.AreEqual("Oops, unknown address", e.Error.Message);
+                Assert.IsNull(e.Response);
+            };
+            connection.SendMessageAsync(action, request);
+            Assert.IsTrue(completed);
+        }
+
+        [Test]
+        public void SendMessageAsyncCanBeCancelled()
+        {
+            var action = "DoSomething";
+            var request = new ServerRequest
+            {
+                ServerName = "TestServer"
+            };
+            var url = "http://nowhere";
+            HttpConnection connection = null;
+            var factory = new TestClientFactory((u, a, d) =>
+            {
+                connection.CancelAsync();
+                return new byte[0];
+            });
+            connection = new HttpConnection(new Uri(url), factory);
+            var completed = false;
+            connection.SendMessageCompleted += (o, e) =>
+            {
+                completed = true;
+                Assert.IsTrue(e.Cancelled);
+                Assert.IsNull(e.Error);
+                Assert.IsNull(e.Response);
+            };
+            connection.SendMessageAsync(action, request);
+            Assert.IsTrue(completed);
+        }
+        #endregion
         #endregion
 
         #region Private classes
@@ -85,6 +204,7 @@
             : IWebClient
         {
             private Func<Uri, string, NameValueCollection, byte[]> action;
+            private bool cancelled = false;
 
             public TestClient(Func<Uri, string, NameValueCollection, byte[]> action)
             {
@@ -98,15 +218,35 @@
 
             public void UploadValuesAsync(Uri address, string method, NameValueCollection data)
             {
-                throw new NotImplementedException();
+                if (address.AbsoluteUri.StartsWith("http://error"))
+                {
+                    throw new Exception("Oops, unknown address");
+                }
+                else
+                {
+                    try
+                    {
+                        var binaryData = this.action(address, method, data);
+                        if (this.UploadValuesCompleted != null)
+                        {
+                            var args = new BinaryDataEventArgs(binaryData, null, cancelled, null);
+                            this.UploadValuesCompleted(this, args);
+                        }
+                    }
+                    catch (Exception error)
+                    {
+                        var args = new BinaryDataEventArgs(new byte[0], error, cancelled, null);
+                        this.UploadValuesCompleted(this, args);
+                    }
+                }
             }
 
             public void CancelAsync()
             {
-                throw new NotImplementedException();
+                this.cancelled = true;
             }
 
-            public event UploadValuesCompletedEventHandler UploadValuesCompleted;
+            public event EventHandler<BinaryDataEventArgs> UploadValuesCompleted;
         }
         #endregion
         #endregion

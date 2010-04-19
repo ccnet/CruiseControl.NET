@@ -164,14 +164,14 @@
 
             // Initialise the web client
             var client = this.WebClientfactory.Generate();
-            client.UploadValuesCompleted += delegate(object sender, UploadValuesCompletedEventArgs e)
+            client.UploadValuesCompleted += (o, e) =>
             {
                 if (SendMessageCompleted != null)
                 {
-                    if ((e.Error != null) && !e.Cancelled)
+                    if ((e.Error == null) && !e.Cancelled)
                     {
                         // Convert the response into a response object
-                        string response = Encoding.UTF8.GetString(e.Result);
+                        string response = Encoding.UTF8.GetString(e.Data);
                         Response result = XmlConversionUtil.ProcessResponse(response);
 
                         MessageReceivedEventArgs args = new MessageReceivedEventArgs(result, null, false, userState);

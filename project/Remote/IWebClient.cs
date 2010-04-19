@@ -44,7 +44,7 @@
         /// <summary>
         /// Occurs when the values have completed uploading.
         /// </summary>
-        event UploadValuesCompletedEventHandler UploadValuesCompleted;
+        event EventHandler<BinaryDataEventArgs> UploadValuesCompleted;
         #endregion
         #endregion
     }

@@ -26,7 +26,7 @@
                 // Pass on the event
                 if (this.UploadValuesCompleted != null)
                 {
-                    this.UploadValuesCompleted(this, e);
+                    this.UploadValuesCompleted(this, new BinaryDataEventArgs(e.Result, e.Error, e.Cancelled, e.UserState));
                 }
             };
         }
@@ -76,7 +76,7 @@
         /// <summary>
         /// Occurs when the values have completed uploading.
         /// </summary>
-        public event UploadValuesCompletedEventHandler UploadValuesCompleted;
+        public event EventHandler<BinaryDataEventArgs> UploadValuesCompleted;
         #endregion
         #endregion
     }
