@@ -32,6 +32,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             Assert.IsFalse(activity.IsPending());
         }
         #endregion
+
+        #region IsCheckingModifications()
+        [Test]
+        public void IsCheckingModificationsReturnsTrueWhenCheckingModifications()
+        {
+            Assert.IsTrue(ProjectActivity.CheckingModifications.IsCheckingModifications());
+        }
+
+        [Test]
+        public void IsCheckingModificationsReturnsFalseForAllOtherStates()
+        {
+            Assert.IsFalse(ProjectActivity.Building.IsCheckingModifications());
+            Assert.IsFalse(ProjectActivity.Pending.IsCheckingModifications());
+            Assert.IsFalse(ProjectActivity.Sleeping.IsCheckingModifications());
+        }
+        #endregion
         #endregion
     }
 }

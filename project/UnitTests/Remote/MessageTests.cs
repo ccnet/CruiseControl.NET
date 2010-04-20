@@ -42,6 +42,46 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             Message value = new Message(expected);
             Assert.AreEqual(expected, value.ToString());
         }
+
+        [Test]
+        public void GetHashCodeReturnsStringHashCode()
+        {
+            var msg = new Message("A message");
+            var hashCode = msg.GetHashCode();
+            Assert.AreEqual(msg.ToString().GetHashCode(), msg.GetHashCode());
+        }
+
+        [Test]
+        public void EqualsReturnsTrueWhenBothMessageAndKindAreSame()
+        {
+            var msg1 = new Message("The message", Message.MessageKind.NotDefined);
+            var msg2 = new Message("The message", Message.MessageKind.NotDefined);
+            Assert.IsTrue(msg1.Equals(msg2));
+        }
+
+        [Test]
+        public void EqualsReturnsFalseIfMessageIsDifferent()
+        {
+            var msg1 = new Message("The message1", Message.MessageKind.NotDefined);
+            var msg2 = new Message("The message2", Message.MessageKind.NotDefined);
+            Assert.IsFalse(msg1.Equals(msg2));
+        }
+
+        [Test]
+        public void EqualsReturnsFalseIfTypeIsDifferent()
+        {
+            var msg1 = new Message("The message", Message.MessageKind.NotDefined);
+            var msg2 = new Message("The message", Message.MessageKind.Fixer);
+            Assert.IsFalse(msg1.Equals(msg2));
+        }
+
+        [Test]
+        public void EqualsReturnsFalseIfArgumentIsNotAMessage()
+        {
+            var msg1 = new Message("The message", Message.MessageKind.NotDefined);
+            var msg2 = "A message";
+            Assert.IsFalse(msg1.Equals(msg2));
+        }
         #endregion
     }
 }

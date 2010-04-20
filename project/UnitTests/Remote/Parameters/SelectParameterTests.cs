@@ -1,12 +1,11 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
-using ThoughtWorks.CruiseControl.Remote;
-
-namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Parameters
+﻿namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Parameters
 {
+    using System;
+    using System.IO;
+    using NUnit.Framework;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.Remote.Parameters;
+
     [TestFixture]
     public class SelectParameterTests
     {
@@ -33,6 +32,53 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Parameters
             Assert.AreEqual("Some name", parameter.DisplayName, "DisplayName does not match");
             parameter.DisplayName = "Another name";
             Assert.AreEqual("Another name", parameter.DisplayName, "DisplayName does not match");
+
+            var defaultValue = "daDefault";
+            var clientValue = "daDefaultForDaClient";
+            parameter.DefaultValue = defaultValue;
+            Assert.AreEqual(defaultValue, parameter.DefaultValue);
+            Assert.AreEqual(defaultValue, parameter.ClientDefaultValue);
+            parameter.ClientDefaultValue = clientValue;
+            Assert.AreEqual(clientValue, parameter.ClientDefaultValue);
+        }
+
+        [Test]
+        public void DefaultValueChecksAllowedValues()
+        {
+            var parameter = new SelectParameter();
+            parameter.DataValues = new NameValuePair[] 
+            {
+                new NameValuePair("name1", "value1"),
+                new NameValuePair("name2", "value2")
+            };
+            parameter.DefaultValue = "value2";
+            Assert.AreEqual("name2", parameter.ClientDefaultValue);
+        }
+
+        [Test]
+        public void ConvertReturnsValueForName()
+        {
+            var parameter = new SelectParameter();
+            parameter.DataValues = new NameValuePair[] 
+            {
+                new NameValuePair("name1", "value1"),
+                new NameValuePair("name2", "value2")
+            };
+            var value = parameter.Convert("name1");
+            Assert.AreEqual("value1", value);
+        }
+
+        [Test]
+        public void ConvertReturnsOriginalIfNameNotFound()
+        {
+            var parameter = new SelectParameter();
+            parameter.DataValues = new NameValuePair[] 
+            {
+                new NameValuePair("name1", "value1"),
+                new NameValuePair("name2", "value2")
+            };
+            var value = parameter.Convert("notFound");
+            Assert.AreEqual("notFound", value);
         }
 
         [Test]
@@ -87,6 +133,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Parameters
             };
             parameter.DataValues = dataValues;
             Assert.AreSame(dataValues, parameter.DataValues);
+        }
+
+        [Test]
+        public void GenerateClientDefaultLoadsFromAFile()
+        {
+            var sourceFile = Path.GetTempFileName();
+            try
+            {
+                var lines = new string[] 
+                {
+                    "Option #1",
+                    "Option #2"
+                };
+                File.WriteAllLines(sourceFile, lines);
+                var parameter = new SelectParameter();
+                parameter.SourceFile = sourceFile;
+                parameter.GenerateClientDefault();
+                CollectionAssert.AreEqual(lines, parameter.AllowedValues);
+            }
+            finally
+            {
+                File.Delete(sourceFile);
+            }
         }
     }
 }

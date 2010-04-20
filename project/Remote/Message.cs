@@ -86,15 +86,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            //check if obj isn't null, if it is return false 
-            if (obj == null)
-            {
-                return false;
-            }
-
-            Message m = obj as Message;
-
             //if obj can't be casted as Message, return false 
+            var m = obj as Message;
             if (m == null)
             {
                 return false;

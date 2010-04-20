@@ -212,8 +212,11 @@ using NUnit.Framework;
 
             public void SendMessageAsync(string action, ServerRequest request, object userState)
             {
-                throw new NotImplementedException();
+                var response = this.SendMessageAction(action, request);
+                this.TriggerSendMessageCompleted(response, null, false, userState);
             }
+
+            public Action<object> CancelAsyncAction { get; set; }
 
             public void CancelAsync()
             {
@@ -222,7 +225,7 @@ using NUnit.Framework;
 
             public void CancelAsync(object userState)
             {
-                throw new NotImplementedException();
+                this.CancelAsyncAction(userState);
             }
 
             public event EventHandler<MessageReceivedEventArgs> SendMessageCompleted;

@@ -382,12 +382,15 @@
     <Compile Include="Remote\Messages\ListPackagesResponseTests.cs" />
     <Compile Include="Remote\Messages\ProjectItemRequestTests.cs" />
     <Compile Include="Remote\Messages\StatusSnapshotResponseTests.cs" />
+    <Compile Include="Remote\Monitor\BuildQueueChangedArgsTests.cs" />
+    <Compile Include="Remote\Monitor\ServerUpdateArgsTests.cs" />
     <Compile Include="Remote\NameValuePairListSerialiserFactoryTests.cs" />
     <Compile Include="Remote\NameValuePairSerialiserFactoryTests.cs" />
     <Compile Include="Remote\NameValuePairSerialiserTests.cs" />
     <Compile Include="Remote\PackageDetailsTests.cs" />
     <Compile Include="Remote\Parameters\BooleanParameterTests.cs" />
     <Compile Include="Remote\Parameters\DateParameterTests.cs" />
+    <Compile Include="Remote\ProjectStatusSnapshotTests.cs" />
     <Compile Include="Remote\QueuedRequestSnapshotListTests.cs" />
     <Compile Include="Remote\QueueSnapshotListTests.cs" />
     <Compile Include="Remote\WebClientFactoryTests.cs" />

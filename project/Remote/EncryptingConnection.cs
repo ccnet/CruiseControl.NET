@@ -118,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="request">The request to send to the server.</param>
         public void SendMessageAsync(string action, ServerRequest request)
         {
-            innerConnection.SendMessageAsync(action, request);
+            this.SendMessageAsync(action, request, null);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="userState">Any user state data.</param>
         public void SendMessageAsync(string action, ServerRequest request, object userState)
         {
-            innerConnection.SendMessageAsync(action, request, userState);
+            throw new NotImplementedException();
         }
         #endregion
 
@@ -139,7 +139,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// </summary>
         public void CancelAsync()
         {
-            innerConnection.CancelAsync();
+            this.CancelAsync(null);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="userState"></param>
         public void CancelAsync(object userState)
         {
-            innerConnection.CancelAsync(userState);
+            throw new NotImplementedException();
         }
         #endregion
 
