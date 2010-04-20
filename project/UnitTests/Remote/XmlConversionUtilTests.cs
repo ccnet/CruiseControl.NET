@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Remote;
-using Rhino.Mocks;
-using ThoughtWorks.CruiseControl.Remote.Messages;
-
-namespace ThoughtWorks.CruiseControl.UnitTests.Remote
+﻿namespace ThoughtWorks.CruiseControl.UnitTests.Remote
 {
+    using System;
+    using NUnit.Framework;
+    using Rhino.Mocks;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.Remote.Messages;
+
     [TestFixture]
     public class XmlConversionUtilTests
     {
@@ -43,6 +41,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             object result = XmlConversionUtil.ConvertXmlToObject(typeof(Response), xml);
             Assert.IsInstanceOfType(typeof(Response), result);
             Assert.AreEqual(xml, result.ToString());
+        }
+        #endregion
+
+        #region ConvertXmlToRequest()
+        [Test]
+        public void ConvertXmlToRequestConvertsRequest()
+        {
+            var request = new ServerRequest("123456-789");
+            request.ServerName = "theServer";
+            var xmlString = request.ToString();
+            var convertedRequest = XmlConversionUtil.ConvertXmlToRequest(xmlString);
+            Assert.AreEqual("123456-789", convertedRequest.SessionToken);
+            Assert.AreEqual("theServer", convertedRequest.ServerName);
         }
         #endregion
 

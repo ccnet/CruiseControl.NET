@@ -370,6 +370,7 @@
     <Compile Include="IntegrationTests\TriggerTests.cs" />
     <Compile Include="Remote\CommunicationsEventArgsTests.cs" />
     <Compile Include="Remote\HttpConnectionTests.cs" />
+    <Compile Include="Remote\ItemStatusTests.cs" />
     <Compile Include="Remote\Messages\ChangeConfigurationRequestTests.cs" />
     <Compile Include="Remote\Messages\CommunicationsMessageTests.cs" />
     <Compile Include="Remote\Messages\EncryptedRequestTests.cs" />
@@ -380,8 +381,14 @@
     <Compile Include="Remote\Messages\ListPackagesResponseTests.cs" />
     <Compile Include="Remote\Messages\ProjectItemRequestTests.cs" />
     <Compile Include="Remote\Messages\StatusSnapshotResponseTests.cs" />
+    <Compile Include="Remote\NameValuePairListSerialiserFactoryTests.cs" />
+    <Compile Include="Remote\NameValuePairSerialiserFactoryTests.cs" />
+    <Compile Include="Remote\NameValuePairSerialiserTests.cs" />
+    <Compile Include="Remote\PackageDetailsTests.cs" />
     <Compile Include="Remote\Parameters\BooleanParameterTests.cs" />
     <Compile Include="Remote\Parameters\DateParameterTests.cs" />
+    <Compile Include="Remote\QueuedRequestSnapshotListTests.cs" />
+    <Compile Include="Remote\QueueSnapshotListTests.cs" />
     <Compile Include="Remote\WebClientFactoryTests.cs" />
     <Compile Include="TestClock.cs" />
     <Compile Include="Core\SourceControl\GitHistoryParserTest.cs" />
@@ -455,7 +462,6 @@
     <Compile Include="Remote\ProjectActivityTests.cs" />
     <Compile Include="Remote\ProjectStatusTests.cs" />
     <Compile Include="Remote\QueuedRequestSnapshotTests.cs" />
-    <Compile Include="Remote\QueueSnapshotTests.cs" />
     <Compile Include="Remote\Security\AuditFiltersTests.cs" />
     <Compile Include="Remote\Security\AuditRecordTests.cs" />
     <Compile Include="Remote\CruiseControlExceptionTests.cs" />

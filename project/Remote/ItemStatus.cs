@@ -194,14 +194,15 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="value"></param>
         public virtual void CopyTo(ItemStatus value)
         {
-            value.identifier = identifier;
-            value.description = description;
-            value.name = name;
-            value.status = status;
-            value.timeCompleted = timeCompleted;
-            value.timeOfEstimatedCompletion = timeOfEstimatedCompletion;
-            value.timeStarted = timeStarted;
-            foreach (ItemStatus item in childItems)
+            value.identifier = this.identifier;
+            value.description = this.description;
+            value.name = this.name;
+            value.status = this.status;
+            value.Error = this.Error;
+            value.timeCompleted = this.timeCompleted;
+            value.timeOfEstimatedCompletion = this.timeOfEstimatedCompletion;
+            value.timeStarted = this.timeStarted;
+            foreach (ItemStatus item in this.childItems)
             {
                 value.AddChild(item.Clone());
             };

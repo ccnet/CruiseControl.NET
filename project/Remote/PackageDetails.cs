@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Serialization;
-using System.IO;
-
-namespace ThoughtWorks.CruiseControl.Remote
+﻿namespace ThoughtWorks.CruiseControl.Remote
 {
+    using System;
+    using System.Xml.Serialization;
+
     /// <summary>
     /// Details on a package.
     /// </summary>

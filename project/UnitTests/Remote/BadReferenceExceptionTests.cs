@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             BadReferenceException exception = new BadReferenceException(reference);
             object result = TestHelpers.RunSerialisationTest(exception);
             Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(typeof(BadReferenceException), result);
+            Assert.IsInstanceOf<BadReferenceException>(result);
             Assert.AreEqual("Reference 'Something' is either incorrect or missing.", (result as BadReferenceException).Message);
             Assert.AreEqual(reference, (result as BadReferenceException).Reference);
         }

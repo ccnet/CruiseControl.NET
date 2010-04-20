@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Exortech.NetReflector;
-using Exortech.NetReflector.Util;
-using System.Xml;
-
-namespace ThoughtWorks.CruiseControl.Remote
+﻿namespace ThoughtWorks.CruiseControl.Remote
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using Exortech.NetReflector;
+    using Exortech.NetReflector.Util;
+    using System.Xml;
+
     /// <summary>
     /// Serialise/deserialise a name/value pair.
     /// </summary>
@@ -29,6 +29,19 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             this.isList = isList;
         }
+        #endregion
+
+        #region Public properties
+        #region IsList
+        /// <summary>
+        /// Gets a value indicating whether this instance is list.
+        /// </summary>
+        /// <value><c>true</c> if this instance is list; otherwise, <c>false</c>.</value>
+        public bool IsList
+        {
+            get { return this.isList; }
+        }
+        #endregion
         #endregion
 
         #region Public methods
