@@ -75,8 +75,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             using (XmlReader reader = XmlReader.Create(configFile.FullName, settings2))
             {
                 using( XmlWriter writer = doc.CreateNavigator().AppendChild() )
-                {                                        
-                    preprocessor.PreProcess( reader, writer, null, null );
+                {
+                    preprocessor.PreProcess(reader, writer, new XmlUrlResolver(), null);
                 }
             }
             XmlReaderSettings settings = new XmlReaderSettings();

@@ -1,8 +1,6 @@
 ﻿<cb:config-template xmlns:cb="urn:ccnet.config.builder">
 
 
-  <cb:include href="Definitions.xml"
-              xmlns:cb="urn:ccnet.config.builder"/>
 
   <cb:define Q_Name="Q1"/>
   <cb:define Web_URL="http://confluence.public.thoughtworks.org"/>
