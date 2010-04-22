@@ -1,0 +1,3 @@
+<cb:config-template xmlns:cb="urn:ccnet.config.builder"> 
+<project name="MyFirstProject" />
+</cb:config-template> 
