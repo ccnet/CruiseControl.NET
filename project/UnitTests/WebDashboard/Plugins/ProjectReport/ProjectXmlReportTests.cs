@@ -1,15 +1,16 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectReport
 {
+    using System;
+    using System.Xml;
     using NUnit.Framework;
     using Rhino.Mocks;
-    using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-    using ThoughtWorks.CruiseControl.WebDashboard.IO;
-    using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
-    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
     using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
     using ThoughtWorks.CruiseControl.Remote;
-    using System;
+    using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+    using ThoughtWorks.CruiseControl.WebDashboard.IO;
     using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+    using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
+    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
     public class ProjectXmlReportTests
     {
@@ -57,7 +58,8 @@
                 "<Projects>" +
                 "<Project name=\"daProject\" category=\"\" activity=\"Sleeping\" " +
                     "status=\"Running\" lastBuildStatus=\"Success\" lastBuildLabel=\"\" " +
-                    "lastBuildTime=\"2010-01-02T03:04:05+13:00\" nextBuildTime=\"0001-01-01T00:00:00+13:00\" " +
+                    "lastBuildTime=\"" + XmlConvert.ToString(project.LastBuildDate, XmlDateTimeSerializationMode.Local) + 
+                    "\" nextBuildTime=\"" + XmlConvert.ToString(project.NextBuildTime, XmlDateTimeSerializationMode.Local) + "\" " +
                     "webUrl=\"\" buildStage=\"\" serverName=\"TESTMACHINE\" />" +
                 "</Projects>" +
                 "<Queues />" +
