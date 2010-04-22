@@ -1144,20 +1144,19 @@
     <Compile Include="WebDashboard\Plugins\BuildReport\XmlReportActionTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WebDashboard\Plugins\DeleteProject\DoDeleteProjectActionTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="WebDashboard\Plugins\DeleteProject\ShowDeleteProjectActionTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="WebDashboard\Plugins\FarmReport\XmlServerReportActionTest.cs" />
     <Compile Include="WebDashboard\Plugins\ForceBuild\ForceBuildXmlActionTest.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WebDashboard\Plugins\ProjectReport\BuildGraphTest.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\OhlohProjectPluginTests.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\PackageListActionTests.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\PackageListPluginTests.cs" />
     <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectReportProjectPluginTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectTimelineActionTests.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectTimelinePluginTests.cs" />
     <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectXmlReportTest.cs" />
     <Compile Include="WebDashboard\Plugins\ViewServerLog\ServerLogServerPluginTest.cs">
       <SubType>Code</SubType>

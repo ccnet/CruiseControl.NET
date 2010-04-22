@@ -494,27 +494,6 @@
     <Compile Include="MVC\XmlFragmentResponse.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Plugins\AddProject\AddEditProjectModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plugins\AddProject\AddProjectModelGenerator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plugins\AddProject\AddProjectPlugin.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plugins\AddProject\ContinueAddProjectPageAction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plugins\AddProject\NameAndSelected.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plugins\AddProject\SaveNewProjectAction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plugins\AddProject\StartAddProjectPageAction.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Plugins\BuildReport\BuildLogBuildPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -538,33 +517,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Plugins\CCTray\CCTrayDownloadPlugin.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plugins\DeleteProject\DeleteProjectHtmlViewBuilder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plugins\DeleteProject\DeleteProjectModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plugins\DeleteProject\DeleteProjectPlugin.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plugins\DeleteProject\DoDeleteProjectAction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plugins\DeleteProject\IDeleteProjectViewBuilder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plugins\DeleteProject\ShowDeleteProjectAction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plugins\EditProject\DisplayEditProjectPageAction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plugins\EditProject\EditProjectPlugin.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Plugins\EditProject\SaveEditProjectAction.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Plugins\FarmReport\XmlProjectParametersReportAction.cs" />

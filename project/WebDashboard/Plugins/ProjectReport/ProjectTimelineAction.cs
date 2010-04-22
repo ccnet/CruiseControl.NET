@@ -1,17 +1,17 @@
-﻿using System;
-namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
+﻿namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
+    using System;
     using System.Collections;
+    using System.Text;
+    using System.Xml;
+    using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
     using ThoughtWorks.CruiseControl.WebDashboard.IO;
     using ThoughtWorks.CruiseControl.WebDashboard.MVC;
     using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
     using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
-    using System.Text;
-    using System.Xml;
-    using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
+    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
     /// <summary>
     /// Displays a timeline of the project builds.
