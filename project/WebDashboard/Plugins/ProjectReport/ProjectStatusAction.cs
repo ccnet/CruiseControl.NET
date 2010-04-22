@@ -1,19 +1,15 @@
-﻿using System.Collections;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
-using System.Xml;
-using System.Text;
-using System;
-
-namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
+﻿namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
+    using System;
+    using System.Linq;
+    using System.Text;
+    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.WebDashboard.IO;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+
     /// <summary>
     /// Returns an XML fragment containing the current status of the project.
     /// </summary>
@@ -39,22 +35,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         public IResponse Execute(ICruiseRequest cruiseRequest)
         {
             // Retrieve the actual snapshot
-            IProjectSpecifier projectSpecifier = cruiseRequest.ProjectSpecifier;
-            ProjectStatusSnapshot snapshot = farmServer.TakeStatusSnapshot(projectSpecifier, cruiseRequest.RetrieveSessionToken());
+            var projectSpecifier = cruiseRequest.ProjectSpecifier;
+            var snapshot = farmServer.TakeStatusSnapshot(projectSpecifier, cruiseRequest.RetrieveSessionToken());
 
             // See what type of output is required
             IResponse output = null;
-            string outputType = (cruiseRequest.Request.GetText("view") ?? string.Empty).ToLower();
+            var outputType = (cruiseRequest.Request.GetText("view") ?? string.Empty).ToLower();
             switch (outputType)
             {
                 case "json":
                     // Generate the output as JSON
-                    string json = ConvertStatusToJson(snapshot);
+                    var json = this.ConvertStatusToJson(snapshot);
                     output = new JsonFragmentResponse(json);
                     break;
                 default:
                     // Default output is XML
-                    string xml = snapshot.ToString();
+                    var xml = snapshot.ToString();
                     output = new XmlFragmentResponse(xml);
                     break;
             }
@@ -68,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         /// <returns></returns>
         private string ConvertStatusToJson(ProjectStatusSnapshot status)
         {
-            StringBuilder jsonText = new StringBuilder();
+            var jsonText = new StringBuilder();
             jsonText.Append("{");
             jsonText.AppendFormat("time:{0},", ToJsonDate(status.TimeOfSnapshot));
             AppendStatusDetails(status, jsonText);
@@ -83,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         /// <returns></returns>
         private string ConvertStatusToJson(ItemStatus status)
         {
-            StringBuilder jsonText = new StringBuilder();
+            var jsonText = new StringBuilder();
             jsonText.Append("{");
             AppendStatusDetails(status, jsonText);
             jsonText.Append("}");
@@ -107,12 +103,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             if (status.ChildItems.Count > 0)
             {
                 builder.Append(",children:[");
-                int count = 0;
-                foreach (ItemStatus child in status.ChildItems)
-                {
-                    if (count++ > 0) builder.Append(",");
-                    builder.Append(ConvertStatusToJson(child));
-                }
+                var children = from child in status.ChildItems
+                               select this.ConvertStatusToJson(child);
+                builder.Append(string.Join(",", children.ToArray()));
                 builder.Append("]");
             }
         }

@@ -1,15 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-
-namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
+﻿namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+
     /// <summary>
-    /// A plug-in for generating a list of packages.
+    /// Display any available packages for a build.
     /// </summary>
+    /// <version>1.5</version>
+    /// <example>
+    /// <code>
+    /// &lt;packageListPlugin /&gt;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// <para type="tip">
+    /// This can be installed using the "Package List" package.
+    /// </para>
+    /// </remarks>
     [ReflectorType("packageListPlugin")]
     public class PackageListPlugin
         : IPlugin

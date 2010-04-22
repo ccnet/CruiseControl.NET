@@ -1152,12 +1152,16 @@
     <Compile Include="WebDashboard\Plugins\ProjectReport\OhlohProjectPluginTests.cs" />
     <Compile Include="WebDashboard\Plugins\ProjectReport\PackageListActionTests.cs" />
     <Compile Include="WebDashboard\Plugins\ProjectReport\PackageListPluginTests.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectFileDownloadTests.cs" />
     <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectReportProjectPluginTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectStatusActionTests.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectStatusPluginTests.cs" />
     <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectTimelineActionTests.cs" />
     <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectTimelinePluginTests.cs" />
     <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectXmlReportTest.cs" />
+    <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectXmlReportTests.cs" />
     <Compile Include="WebDashboard\Plugins\ViewServerLog\ServerLogServerPluginTest.cs">
       <SubType>Code</SubType>
     </Compile>

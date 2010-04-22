@@ -25,6 +25,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
             this.type = type;
         }
 
+        public IFileTransfer FileTransfer { get { return this.fileTransfer; } }
+        public string FileName { get { return this.fileName; } }
+        public string FileType { get { return this.type; } }
+
         public void Process(HttpResponse response)
         {
             response.AppendHeader("Last-Modified", serverFingerprint.LastModifiedTime.ToString("r"));

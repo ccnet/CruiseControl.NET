@@ -1,16 +1,15 @@
-using System.Collections;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
-
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
+    using System.Collections;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+    using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+    using ThoughtWorks.CruiseControl.WebDashboard.IO;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+
     /// <title>Project Status Plugin</title>
     /// <version>1.0</version>
     /// <summary>
@@ -35,10 +34,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             this.urlBuilder = urlBuilder;
         }
 
+        /// <summary>
+        /// Executes the specified cruise request.
+        /// </summary>
+        /// <param name="cruiseRequest">The cruise request.</param>
+        /// <returns></returns>
         public IResponse Execute(ICruiseRequest cruiseRequest)
         {
-            IProjectSpecifier projectSpecifier = cruiseRequest.ProjectSpecifier;
-            Hashtable velocityContext = new Hashtable();
+            var projectSpecifier = cruiseRequest.ProjectSpecifier;
+            var velocityContext = new Hashtable();
             velocityContext["dataUrl"] = urlBuilder.BuildProjectUrl(ProjectStatusAction.ActionName, projectSpecifier) + "?view=json";
             velocityContext["projectName"] = projectSpecifier.ProjectName;
             if (cruiseRequest.Request.ApplicationPath == "/")

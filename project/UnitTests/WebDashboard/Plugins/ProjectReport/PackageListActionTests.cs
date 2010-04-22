@@ -38,7 +38,7 @@
                 FileName = "somewhere\\thefile.type",
                 Name = "theName",
                 NumberOfFiles = 2,
-                Size = 1234
+                Size = 1
             };
             var package2 = new PackageDetails
             {
@@ -49,7 +49,16 @@
                 NumberOfFiles = 5,
                 Size = 9876
             };
-            var packages = new PackageDetails[] { package1, package2 };
+            var package3 = new PackageDetails
+            {
+                BuildLabel = "label3",
+                DateTime = new DateTime(2010, 1, 1, 2, 3, 5),
+                FileName = "anotherfile.txt",
+                Name = "secondName",
+                NumberOfFiles = 5,
+                Size = 1234567890
+            };
+            var packages = new PackageDetails[] { package1, package2, package3 };
             var projectName = "Test Project";
             var farmService = this.mocks.StrictMock<IFarmService>();
             var viewGenerator = this.mocks.StrictMock<IVelocityViewGenerator>();

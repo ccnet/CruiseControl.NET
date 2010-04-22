@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-using System.Collections;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-
-namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
+﻿namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using ThoughtWorks.CruiseControl.WebDashboard.IO;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+
     /// <summary>
     /// Display a list of all the generated packages.
     /// </summary>

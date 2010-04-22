@@ -1,26 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-using System.IO;
-
-namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
+﻿namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
+    using System.IO;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.WebDashboard.IO;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+
+    /// <summary>
+    /// Downloads a file from the server to the client.
+    /// </summary>
     public class ProjectFileDownload
         : ICruiseAction
     {
         public const string ActionName = "RetrieveFile";
         private readonly IFarmService farmService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProjectFileDownload"/> class.
+        /// </summary>
+        /// <param name="farmService">The farm service.</param>
         public ProjectFileDownload(IFarmService farmService)
         {
             this.farmService = farmService;
         }
 
+        /// <summary>
+        /// Executes the specified cruise request.
+        /// </summary>
+        /// <param name="cruiseRequest">The cruise request.</param>
+        /// <returns></returns>
         public IResponse Execute(ICruiseRequest cruiseRequest)
         {
             string fileName = cruiseRequest.Request.GetText("file");
