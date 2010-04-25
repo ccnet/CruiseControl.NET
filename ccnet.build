@@ -3,7 +3,7 @@
 <project name="CruiseControl.NET" default="showHelp" xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
 
 	<!-- properties -->
-	<property name="nant.verbosity"			 overwrite="false"	value="true" />
+	<property name="nant.verbosity"			 overwrite="false"	value="false" />
 	<property name="build.configuration"	 overwrite="false"	value="Build" />
 	<property name="build.target"			 overwrite="false"	value="Build" />
 	<property name="build.project"			 overwrite="false"	value="ccnet.sln" />
