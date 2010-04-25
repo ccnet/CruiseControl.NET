@@ -1,26 +1,12 @@
 ﻿<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  
 
-
-
-  <cb:define Q_Name="Q1"/>
-  <cb:define Web_URL="http://confluence.public.thoughtworks.org"/>
-  <cb:define name="Tasks">
-    <tasks>
-      <nullTask  simulateFailure="false"
-                 description="good task" />
-    </tasks>
-  </cb:define>
-
-  <cb:define name="Publishers">
-
+  
+<cb:define name="CommonPublishers">
     <publishers>
-      <artifactcleanup cleanUpMethod="KeepMaximumXHistoryDataEntries"
-                       cleanUpValue="10" />
-      <xmllogger />
-      <statistics />
-      <modificationHistory  onlyLogWhenChangesFound="true" />
-      <rss/>
+        <cb:innerPublishers/>
     </publishers>
-  </cb:define>
+</cb:define>
+
 
 </cb:config-template>
