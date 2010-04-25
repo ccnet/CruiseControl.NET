@@ -130,7 +130,7 @@
             ValidateResponse(this.server.ForceBuild(request));
             
             // Wait for the build to complete (or time-out)
-            if (!completionEvent.WaitOne(this.TimeoutLength))
+            if (!completionEvent.WaitOne(this.TimeoutLength, false))
             {
                 // Attempt to cancel the build and tell the caller that we timed-out
                 ValidateResponse(this.server.AbortBuild(request));
