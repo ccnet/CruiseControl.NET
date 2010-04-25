@@ -1,16 +1,12 @@
 ﻿<cb:config-template xmlns:cb="urn:ccnet.config.builder">
   
 
-  <cb:define name="CommonPublishers">
-
+  
+<cb:define name="CommonPublishers">
     <publishers>
-      <artifactcleanup cleanUpMethod="KeepMaximumXHistoryDataEntries"
-                       cleanUpValue="10" />
-      <xmllogger />
-      <statistics />
-      <modificationHistory  onlyLogWhenChangesFound="true" />
-      <rss/>
+        <cb:innerPublishers/>
     </publishers>
-  </cb:define>
+</cb:define>
+
 
 </cb:config-template>

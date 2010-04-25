@@ -175,6 +175,14 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             Constant const_def = _GetConstantDef( name );
             if ( const_def.Value is string )
             {
+                string value = const_def.Value.ToString();
+                Match match = _const_ref_matcher.Match(value);
+                if ((!string.IsNullOrEmpty(match.Value)) && (match.Value == value))
+                {
+                    string nameConst = match.Value.Substring(2, match.Value.Length - 3);
+	                return eval_constant(nameConst);
+                }
+
                 XmlDocument doc = new XmlDocument();
                 using (
                     XmlWriter writer = doc.CreateNavigator().AppendChild() )

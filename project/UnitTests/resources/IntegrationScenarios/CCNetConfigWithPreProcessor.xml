@@ -14,6 +14,19 @@
     </tasks>
   </cb:define>
 
+<!-- CCNET-1813 : Preprocessor: xml node in scope -->
+
+  <cb:define name="innerPublishersValue">
+    <artifactcleanup cleanUpMethod="KeepMaximumXHistoryDataEntries"
+                     cleanUpValue="10" />
+    <xmllogger />
+    <statistics />
+    <modificationHistory  onlyLogWhenChangesFound="true" />
+    <rss/>
+  </cb:define>
+
+  <!-- / CCNET-1813 : Preprocessor: xml node in scope -->
+
 
   <project name="Test01"
            queue="$(Q_Name)"
@@ -24,11 +37,12 @@
     <artifactDirectory>scenarioTests/test01</artifactDirectory>
     <webURL>$(Web_URL)</webURL>
 
-    <triggers />
 
     <cb:Tasks/>
 
-    <cb:CommonPublishers/>
+    <cb:scope innerPublishers="$(innerPublishersValue)">
+      <cb:CommonPublishers/>
+    </cb:scope>
 
   </project>
   
