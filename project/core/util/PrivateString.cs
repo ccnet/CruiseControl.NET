@@ -1,9 +1,11 @@
-﻿
-namespace ThoughtWorks.CruiseControl.Core.Util
+﻿namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    using System.ComponentModel;
+
     /// <summary>
     /// Stores a string that can be access either publicly (and is hidden) or privately (accessed normally).
     /// </summary>
+    [TypeConverter(typeof(PrivateStringTypeConverter))]
     public sealed class PrivateString
         : IPrivateData
     {

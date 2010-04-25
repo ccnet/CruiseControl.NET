@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Xml;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
-
-namespace ThoughtWorks.CruiseControl.Core.Tasks
+﻿namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Reflection;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Xml;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Remote.Parameters;
+    using System.ComponentModel;
+
     /// <summary>
     /// Utility class for setting dynamic values.
     /// </summary>
@@ -618,9 +619,38 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 }
                 else
                 {
-                    if (property.PropertyType != value.GetType())
+                    if ((value != null) && (property.PropertyType != value.GetType()))
+                    {
+                        // See if there are any converters on either the property or the underlying type
+                        var converters = property.GetCustomAttributes(typeof(TypeConverterAttribute), true);
+                        if (converters.Length == 0)
+                        {
+                            converters = property.PropertyType.GetCustomAttributes(typeof(TypeConverterAttribute), true);
+                        }
+
+                        // Convert the value
+                        var converted = false;
+                        if (converters.Length > 0)
+                        {
+                            // Check the converters
+                            var valueType = value.GetType();
+                            foreach (TypeConverterAttribute converterAttrib in converters)
+                            {
+                                var converter = Activator.CreateInstance(Type.GetType(converterAttrib.ConverterTypeName)) as TypeConverter;
+                                if (converter.CanConvertFrom(valueType))
+                                {
+                                    actualValue = converter.ConvertFrom(value);
+                                    converted = true;
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        // Finally, if all else fails, use the standard convert
+                        if (!converted)
                     {
                         actualValue = Convert.ChangeType(value, property.PropertyType);
+                        }
                     }
                 }
                 property.SetValue(mySource, actualValue, index);

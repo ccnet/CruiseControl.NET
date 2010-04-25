@@ -8,9 +8,11 @@ namespace ThoughtWorks.CruiseControl.Core
     using System.Linq;
     using System.Runtime;
     using System.Text;
+    using System.Threading;
     using System.Xml;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Config;
+    using ThoughtWorks.CruiseControl.Core.Distribution;
     using ThoughtWorks.CruiseControl.Core.Label;
     using ThoughtWorks.CruiseControl.Core.Publishers;
     using ThoughtWorks.CruiseControl.Core.Publishers.Statistics;
@@ -22,8 +24,6 @@ namespace ThoughtWorks.CruiseControl.Core
     using ThoughtWorks.CruiseControl.Core.Util;
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Remote.Parameters;
-using ThoughtWorks.CruiseControl.Core.Distribution;
-    using System.Threading;
 
     /// <summary>
     /// A &lt;project&gt; block defines all the configuration for one project running in a CruiseControl.NET server.

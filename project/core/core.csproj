@@ -911,6 +911,7 @@
     <Compile Include="util\PrivateString.cs" />
     <Compile Include="util\PrivateStringSerialiser.cs" />
     <Compile Include="util\PrivateStringSerialiserFactory.cs" />
+    <Compile Include="util\PrivateStringTypeConverter.cs" />
     <Compile Include="util\SecureDataMode.cs" />
     <Compile Include="util\UriSerializer.cs" />
     <Compile Include="util\UriSerializerFactory.cs" />

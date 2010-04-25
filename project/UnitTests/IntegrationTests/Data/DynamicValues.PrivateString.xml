@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<cruisecontrol xmlns="http://thoughtworks.org/ccnet/1/6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <project name="Test Project">
+    <webURL>xxx</webURL>
+    <sourcecontrol xsi:type="nullSourceControl" />
+    <tasks>
+      <nullTask />
+      <email>
+        <mailhost>nowhere</mailhost>
+        <from>ccnet@nowhere</from>
+        <mailhostPassword>$[Password]</mailhostPassword>
+        <users />
+        <groups />
+      </email>
+    </tasks>
+    <parameters>
+      <textParameter name="Username">
+        <description>Username</description>
+      </textParameter>
+      <textParameter name="Password">
+        <description>Password</description>
+      </textParameter>
+    </parameters>
+  </project>
+</cruisecontrol>
