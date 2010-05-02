@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Folder Exists Condition</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Folder Exists Condition
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Apr 08, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="FolderExistsCondition-FolderExistsCondition"></a>Folder Exists Condition</h1>
+
+<p>Checks if a folder exists.  </p>
+
+<h2><a name="FolderExistsCondition-Version"></a>Version</h2>
+
+<p>Available from version 1.6</p>
+
+<h2><a name="FolderExistsCondition-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Basic example</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;folderExistsCondition folder=<span class="code-quote">"documentation"</span> /&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Example in context</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;conditional&gt;</span>
+  <span class="code-tag">&lt;conditions&gt;</span>
+    <span class="code-tag">&lt;folderExistsCondition&gt;</span>
+      <span class="code-tag">&lt;folder&gt;</span>documentation<span class="code-tag">&lt;/folder&gt;</span>
+    <span class="code-tag">&lt;/folderExistsCondition&gt;</span>
+  <span class="code-tag">&lt;/conditions&gt;</span>
+  <span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Tasks to perform if condition passed --&gt;</span></span>
+  <span class="code-tag">&lt;/tasks&gt;</span>
+  <span class="code-tag">&lt;elseTasks&gt;</span>
+    <span class="code-tag"><span class="code-comment">&lt;!-- Tasks to perform if condition failed --&gt;</span></span>
+  <span class="code-tag">&lt;/elseTasks&gt;</span>
+<span class="code-tag">&lt;/conditional&gt;</span></pre>
+</div></div>
+
+
+<h2><a name="FolderExistsCondition-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> description </td>
+<td class='confluenceTd'> A description of the condition.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> <em>none</em> </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> folder </td>
+<td class='confluenceTd'> The folder to check for.  <br clear="all" />If the folder is relative then it will be relative to the working directory.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'> <em>n/a</em> </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+</tbody></table>
+
+<h2><a name="FolderExistsCondition-Notes"></a>Notes</h2>
+
+<p>This condition has been kindly supplied by Lasse Sjørup. The original project is available from  <a href="http://ccnetconditional.codeplex.com/">http://ccnetconditional.codeplex.com/</a>.  </p>
+
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Thursday, 8 Apr 2010 at 12:04:29 AM<br/>
+Using assembly version 1.6.7128.1</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 02, 2010 20:17</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>
