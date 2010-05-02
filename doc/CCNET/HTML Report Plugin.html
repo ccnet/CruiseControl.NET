@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jan 08, 2010 by <font color="#0050B2">csut017</font>.
+					    This page last changed on Apr 06, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
 				    </div>
 
 				    <h1><a name="HTMLReportPlugin-HTMLReportPlugin"></a>HTML Report Plugin</h1>
@@ -26,6 +26,25 @@
 <h2><a name="HTMLReportPlugin-Version"></a>Version</h2>
 
 <p>Available from version 1.5</p>
+
+<h2><a name="HTMLReportPlugin-Examples"></a>Examples</h2>
+
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>Minimalist</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;htmlReportPlugin description=<span class="code-quote">"Document Report"</span> actionName=<span class="code-quote">"viewReport"</span> htmlFileName=<span class="code-quote">"reports\document.html"</span> /&gt;</span></pre>
+</div></div>
+<div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeHeader panelHeader" style="border-bottom-width: 1px;border-bottom-style: solid;background-color: #ADD6FF;"><b>In Context</b></div><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;buildPlugins&gt;</span>
+  <span class="code-tag">&lt;buildReportBuildPlugin&gt;</span>
+    <span class="code-tag">&lt;xslFileNames&gt;</span>
+      <span class="code-tag">&lt;xslFile&gt;</span>xsl\header.xsl<span class="code-tag">&lt;/xslFile&gt;</span>
+      <span class="code-tag">&lt;xslFile&gt;</span>xsl\modifications.xsl<span class="code-tag">&lt;/xslFile&gt;</span>
+    <span class="code-tag">&lt;/xslFileNames&gt;</span>
+  <span class="code-tag">&lt;/buildReportBuildPlugin&gt;</span>
+  <span class="code-tag">&lt;buildLogBuildPlugin /&gt;</span>
+  <span class="code-tag">&lt;htmlReportPlugin description=<span class="code-quote">"Document Report"</span> actionName=<span class="code-quote">"viewReport"</span> htmlFileName=<span class="code-quote">"reports\document.html"</span> /&gt;</span>
+<span class="code-tag">&lt;/buildPlugins&gt;</span></pre>
+</div></div>
+
 
 <h2><a name="HTMLReportPlugin-ConfigurationElements"></a>Configuration Elements</h2>
 
@@ -40,7 +59,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> actionName </td>
-<td class='confluenceTd'> The name of the action &#45; this will be used in the URL for the plug&#45;in.   </td>
+<td class='confluenceTd'> The name of the action &#45; this will be used in the URL for the plug&#45;in.  <br clear="all" />This must be unique for the dashboard (e.g. there cannot be another action or plug&#45;in with the same name.   </td>
 <td class='confluenceTd'> String </td>
 <td class='confluenceTd'> Yes </td>
 <td class='confluenceTd'> <em>n/a</em> </td>
@@ -48,7 +67,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> description </td>
-<td class='confluenceTd'> The description of the plug&#45;in.   </td>
+<td class='confluenceTd'> The description of the plug&#45;in.  <br clear="all" />This will be displayed as the title of the link.   </td>
 <td class='confluenceTd'> String </td>
 <td class='confluenceTd'> Yes </td>
 <td class='confluenceTd'> <em>n/a</em> </td>
@@ -60,11 +79,11 @@
 <td class='confluenceTd'> String array </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.6 </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> htmlFileName </td>
-<td class='confluenceTd'> The name of the file to display.   </td>
+<td class='confluenceTd'> The name of the file to display.  <br clear="all" />See the notes below on what are valid names.   </td>
 <td class='confluenceTd'> String </td>
 <td class='confluenceTd'> Yes </td>
 <td class='confluenceTd'> <em>n/a</em> </td>
@@ -76,12 +95,24 @@
 <td class='confluenceTd'> String array </td>
 <td class='confluenceTd'> No </td>
 <td class='confluenceTd'> <em>None</em> </td>
-<td class='confluenceTd'> 1.6 </td>
+<td class='confluenceTd'> 1.5 </td>
 </tr>
 </tbody></table>
 
+<h2><a name="HTMLReportPlugin-Notes"></a>Notes</h2>
+
+<h4><a name="HTMLReportPlugin-HTMLSourceLocation"></a>HTML Source Location</h4>
+<p>This plug&#45;in can display any file that is in the build folder under artefacts folder for the project. It cannot display files from any other location (for security reasons).  <br/>
+Files can be published to a build folder using the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>. This will automatically generate the correct folder structure for the HTML reports.  </p>
+<h4><a name="HTMLReportPlugin-FileNames"></a>File Names</h4>
+<p>All file names are relative to the build folder. Files directly in the folder can be specified, as well as folders in sub&#45;folders. For example both report.html and documents\report.html are valid file names.  <br/>
+Absolute filepaths are not allowed (e.g. c:\somewhere\report.html).  <br/>
+If the project's artefact folder was d:\data\ and the build label was 1.0.1, then report.html would come from d:\data\1.0.1\report.html.  </p>
+
+
 <div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
-<p>Documentation generated on Friday, 8 Jan 2010 at 9:09:53 AM</p></td></tr></table></div>
+<p>Documentation generated on Tuesday, 6 Apr 2010 at 9:32:07 PM<br/>
+Using assembly version 1.6.7109.1</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -92,7 +123,7 @@
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 30, 2010 19:06</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 02, 2010 20:17</font></td>
 		    </tr>
 	    </table>
     </body>
