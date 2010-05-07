@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Messages;
+using System.ComponentModel;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -11,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.Remote
     /// A base class to implement client-side communications with a CruiseControl.NET server.
     /// </summary>
     public abstract class CruiseServerClientBase
+        : IDisposable
     {
         #region Private fields
         private string sessionToken;
@@ -388,6 +391,24 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Logs in using the specified credentials.
+        /// </summary>
+        /// <param name="credentials">The credentials.</param>
+        /// <returns><c>true</c> if the login was successful; otherwise<c>false</c>.</returns>
+        public virtual bool Login(object credentials)
+        {
+            var input = TypeDescriptor.GetProperties(credentials);
+            var output = new List<NameValuePair>();
+            foreach (PropertyDescriptor property in input)
+            {
+                var value = property.GetValue(credentials);
+                output.Add(new NameValuePair(property.Name, value == null ? null : value.ToString()));
+            }
+
+            return this.Login(output);
+        }
         #endregion
 
         #region Logout()
@@ -609,6 +630,21 @@ namespace ThoughtWorks.CruiseControl.Remote
             throw new NotImplementedException();
         }
         #endregion
+
+        #region Dispose()
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            if (this.IsLoggedIn)
+            {
+                this.Logout();
+            }
+
+            this.DoDispose();
+        }
+        #endregion
         #endregion
 
         #region Public events
@@ -628,6 +664,15 @@ namespace ThoughtWorks.CruiseControl.Remote
         #endregion
 
         #region Protected methods
+        #region DoDispose()
+        /// <summary>
+        /// Cleans up any additional resources.
+        /// </summary>
+        protected virtual void DoDispose()
+        {
+        }
+        #endregion
+
         #region FireRequestSending
         /// <summary>
         /// Fires the <see cref="RequestSending"/> event.

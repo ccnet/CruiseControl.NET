@@ -18,16 +18,20 @@ namespace ThoughtWorks.CruiseControl.CCCmd
         private static bool quiet;
         private static CommandType command;
         private static List<string> extra = new List<string>();
+        private static string userName;
+        private static string password;
         
         static void Main(string[] args)
         {
            	OptionSet opts = new OptionSet();
-        	opts.Add("h|?|help", "display this help screen", delegate (string v) { help = v != null; })
-        		.Add("s|server=", "the CruiseControl.Net server to send the commands to (required for all actions except help)", delegate (string v) { server = v; })
-        		.Add("t|target=", "the target server for all messages", delegate (string v) { target = v; })
-        		.Add("p|project=", "the project to use (required for all actions except help and retrieve)", delegate (string v) { project = v; })
-        		.Add("a|all", "lists all the projects (only valid for retrieve)", delegate (string v) { all = v != null; })
-        		.Add("q|quiet", "run in quiet mode (do not print messages)", delegate (string v) { quiet = v != null; });
+            opts.Add("h|?|help", "display this help screen", delegate(string v) { help = v != null; })
+                .Add("s|server=", "the CruiseControl.Net server to send the commands to (required for all actions except help)", delegate(string v) { server = v; })
+                .Add("t|target=", "the target server for all messages", delegate(string v) { target = v; })
+                .Add("p|project=", "the project to use (required for all actions except help and retrieve)", delegate(string v) { project = v; })
+                .Add("a|all", "lists all the projects (only valid for retrieve)", delegate(string v) { all = v != null; })
+                .Add("q|quiet", "run in quiet mode (do not print messages)", delegate(string v) { quiet = v != null; })
+                .Add("user=", "the user of the user account to use", v => { userName = v; })
+                .Add("pwd=", "the password to use for the user", v => { password = v;});
         	
         	try
         	{
@@ -85,6 +89,11 @@ namespace ThoughtWorks.CruiseControl.CCCmd
         private static CruiseServerClientBase GenerateClient()
         {
             var client = new CruiseServerClientFactory().GenerateClient(server, target);
+            if (!string.IsNullOrEmpty(userName))
+            {
+                client.Login(new { UserName = userName, Password = password });
+            }
+
             return client;
         }
 
@@ -96,10 +105,12 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             {
                 try
                 {
-                    var client = GenerateClient();
-                    if (!quiet) WriteLine(string.Format("Sending ForceBuild request for '{0}'", project), ConsoleColor.White);
-                    client.ForceBuild(project);
-                    if (!quiet) WriteLine("ForceBuild request sent", ConsoleColor.White);
+                    using (var client = GenerateClient())
+                    {
+                        if (!quiet) WriteLine(string.Format("Sending ForceBuild request for '{0}'", project), ConsoleColor.White);
+                        client.ForceBuild(project);
+                        if (!quiet) WriteLine("ForceBuild request sent", ConsoleColor.White);
+                    }
                 }
                 catch (Exception error)
                 {
@@ -116,10 +127,12 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             {
                 try
                 {
-                    var client = GenerateClient();
-                    if (!quiet) WriteLine(string.Format("Sending AbortBuild request for '{0}'", project), ConsoleColor.White);
-                    client.AbortBuild(project);
-                    if (!quiet) WriteLine("AbortBuild request sent", ConsoleColor.White);
+                    using (var client = GenerateClient())
+                    {
+                        if (!quiet) WriteLine(string.Format("Sending AbortBuild request for '{0}'", project), ConsoleColor.White);
+                        client.AbortBuild(project);
+                        if (!quiet) WriteLine("AbortBuild request sent", ConsoleColor.White);
+                    }
                 }
                 catch (Exception error)
                 {
@@ -136,10 +149,12 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             {
                 try
                 {
-                    var client = GenerateClient();
-                    if (!quiet) WriteLine(string.Format("Sending StartProject request for '{0}'", project), ConsoleColor.White);
-                    client.StartProject(project);
-                    if (!quiet) WriteLine("StartProject request sent", ConsoleColor.White);
+                    using (var client = GenerateClient())
+                    {
+                        if (!quiet) WriteLine(string.Format("Sending StartProject request for '{0}'", project), ConsoleColor.White);
+                        client.StartProject(project);
+                        if (!quiet) WriteLine("StartProject request sent", ConsoleColor.White);
+                    }
                 }
                 catch (Exception error)
                 {
@@ -156,10 +171,12 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             {
                 try
                 {
-                    var client = GenerateClient();
-                    if (!quiet) WriteLine(string.Format("Sending StopProject request for '{0}'", project), ConsoleColor.White);
-                    client.StopProject(project);
-                    if (!quiet) WriteLine("StopProject request sent", ConsoleColor.White);
+                    using (var client = GenerateClient())
+                    {
+                        if (!quiet) WriteLine(string.Format("Sending StopProject request for '{0}'", project), ConsoleColor.White);
+                        client.StopProject(project);
+                        if (!quiet) WriteLine("StopProject request sent", ConsoleColor.White);
+                    }
                 }
                 catch (Exception error)
                 {
@@ -178,14 +195,16 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                 }
                 else
                 {
-                    var client = GenerateClient();
-                    if (all)
+                    using (var client = GenerateClient())
                     {
-                        DisplayServerStatus(client, quiet);
-                    }
-                    else
-                    {
-                        DisplayProjectStatus(client, project, quiet);
+                        if (all)
+                        {
+                            DisplayServerStatus(client, quiet);
+                        }
+                        else
+                        {
+                            DisplayProjectStatus(client, project, quiet);
+                        }
                     }
                 }
             }
@@ -214,12 +233,20 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             {
                 if (!isQuiet) WriteLine(string.Format("Retrieving project '{0}' on server {1}", projectName, client.TargetServer), ConsoleColor.Gray);
                 CruiseServerSnapshot snapShot = client.GetCruiseServerSnapshot();
+                var wasFound = false;
                 foreach (ProjectStatus project in snapShot.ProjectStatuses)
                 {
                     if (string.Equals(project.Name, projectName, StringComparison.CurrentCultureIgnoreCase))
                     {
                         DisplayProject(project);
+                        wasFound = true;
+                        break;
                     }
+                }
+
+                if (!wasFound)
+                {
+                    WriteError("Project '" + projectName + "' was not found", null);
                 }
             }
             catch (Exception error)
