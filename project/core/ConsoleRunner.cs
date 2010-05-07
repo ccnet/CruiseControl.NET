@@ -85,17 +85,16 @@ namespace ThoughtWorks.CruiseControl.Core
 					else
 					{
                         // Force the build
-                        var actualServer = ((server as RemoteCruiseServer).CruiseManager as CruiseManager).ActualServer as CruiseServer;
                         ValidateResponse(
                             server.ForceBuild(
-                                new ProjectRequest(actualServer.OverrideSession, args.Project)));
+                                new ProjectRequest(SecurityOverride.SessionIdentifier, args.Project)));
 
                         // Tell the server to stop as soon as the build has finished and then wait for it
                         ValidateResponse(
                             server.Stop(
-                                new ProjectRequest(actualServer.OverrideSession, args.Project)));
+                                new ProjectRequest(SecurityOverride.SessionIdentifier, args.Project)));
 						server.WaitForExit(
-                            new ProjectRequest(actualServer.OverrideSession, args.Project));
+                            new ProjectRequest(SecurityOverride.SessionIdentifier, args.Project));
 					}
 				}
 			}
