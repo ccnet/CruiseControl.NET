@@ -62,6 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core
             this.projectSerializer = projectSerializer;
 			this.fileSystem = fileSystem;
 			this.executionEnvironment = executionEnvironment;
+            this.OverrideSession = Guid.NewGuid().ToString();
 
             // Leave the manager for backwards compatability - it is marked as obsolete
 #pragma warning disable 0618
@@ -150,6 +151,19 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <value>The compression service.</value>
         public ICompressionService CompressionService { get; set; }
+        #endregion
+
+        #region OverrideSession
+        /// <summary>
+        /// Gets the override session identifier.
+        /// </summary>
+        /// <value>The override session.</value>
+        /// <remarks>
+        /// This should only be used internally as it overrides any security settings. This is needed to
+        /// allowed performing a force build when the console is being run directly from the command-line
+        /// but the configuration has security configured.
+        /// </remarks>
+        public string OverrideSession { get; private set; }
         #endregion
         #endregion
 
@@ -1643,6 +1657,12 @@ namespace ThoughtWorks.CruiseControl.Core
             SecurityPermission permission,
             SecurityEvent? eventType)
         {
+            // NASTY HACK: Bypass all security if the session override is being used
+            if (sessionToken == this.OverrideSession)
+            {
+                return string.Empty;
+            }
+
             // Retrieve the project authorisation
             IProjectAuthorisation authorisation = null;
             bool requiresSession = securityManager.RequiresSession;

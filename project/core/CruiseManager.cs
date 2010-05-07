@@ -19,10 +19,15 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		private readonly ICruiseServer cruiseServer;
 
-		public CruiseManager(ICruiseServer cruiseServer)
+        public CruiseManager(ICruiseServer cruiseServer)
 		{
 			this.cruiseServer = cruiseServer;
 		}
+
+        public ICruiseServer ActualServer
+        {
+            get { return this.cruiseServer; }
+        }
 
         public override object InitializeLifetimeService()
 		{
