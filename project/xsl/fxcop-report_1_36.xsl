@@ -365,7 +365,7 @@
 													</td>
 													<td>
 														<xsl:if test="./Issue/@Path">
-															<xsl:value-of select="./Issue/@Path" /> at line <xsl:value-of select="./Issue/@Line" />
+															<xsl:value-of select="./Issue/@Path" />\<xsl:value-of select="./Issue/@File" /> at line <xsl:value-of select="./Issue/@Line" />
 														</xsl:if>
 													</td>
 												</tr>
