@@ -87,8 +87,14 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public IProjectIntegrator GetIntegrator(string projectName)
 		{
+            if (string.IsNullOrEmpty(projectName))
+                throw new NoSuchProjectException(projectName);
+
 			IProjectIntegrator integrator = projectIntegrators[projectName];
-			if (integrator == null) throw new NoSuchProjectException(projectName);
+			
+            if (integrator == null)
+                throw new NoSuchProjectException(projectName);
+
 			return integrator;
 		}
 
