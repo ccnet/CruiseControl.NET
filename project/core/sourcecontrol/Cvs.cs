@@ -256,10 +256,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             // CCNET-1796: work around a CVS limitation: the -d parameter only accepts limited relative paths
             // so the working directory is one level up of the checkout dir and
             // override checkout directory
-            var wd = result.BaseFromWorkingDirectory(WorkingDirectory);
-            var lastDirectorySeparatorIndex = wd.TrimEnd().TrimEnd(Path.DirectorySeparatorChar).LastIndexOf(Path.DirectorySeparatorChar);
-            var checkoutWd = wd.Substring(0, lastDirectorySeparatorIndex);
-            var checkoutDir = wd.Substring(lastDirectorySeparatorIndex).Trim(Path.DirectorySeparatorChar);
+		    var wd = new DirectoryInfo(result.BaseFromWorkingDirectory(WorkingDirectory));
+            if (wd.Parent == null)
+                throw new ArgumentException(
+                    @"[CVS] Cannot checkout into working directory that denotes a root, such as '\' or 'C:\'.");
+
+            var checkoutWd = wd.Parent.FullName;
+		    var checkoutDir = wd.Name;
+
             Log.Debug("[CVS] Configured Working Directory: '{0}'", wd);
             Log.Debug("[CVS] Checkout Working Directory: '{0}'", checkoutWd);
             Log.Debug("[CVS] Checkout Directory: '{0}'", checkoutDir);
