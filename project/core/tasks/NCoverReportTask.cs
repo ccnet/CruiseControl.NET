@@ -21,17 +21,30 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// CruiseControl.NET only supports NCover 3.x currently.
     /// </para>
     /// </summary>
-    /// <title>NCover Profiler Task</title>
+    /// <title>NCover Report Task</title>
     /// <version>1.5</version>
     /// <example>
-    /// <code>
-    /// &lt;ncoverProfile&gt;
-    /// &lt;executable&gt;C:\Program Files\NCover\NCover.Console.exe&lt;/executable&gt;
-    /// &lt;program&gt;tools\nunit\nunit-console.exe&lt;/program&gt;
-    /// &lt;testProject&gt;myproject.test.dll&lt;/testProject&gt;
-    /// &lt;workingDir&gt;build\unittests&lt;/workingDir&gt;
-    /// &lt;includedAssemblies&gt;myproject.*.dll&lt;/includedAssemblies&gt;
-    /// &lt;/ncoverProfile&gt;
+    /// <code title="To produce a summary report with a minimum coverage of 95%">
+    /// &lt;ncoverReport&gt;
+    /// &lt;executable&gt;C:\Program Files\NCover\NCover.Reporting.exe&lt;/executable&gt;
+    /// &lt;outputDir&gt;ncover\reports&lt;/outputDir&gt;
+    /// &lt;reports&gt;
+    /// &lt;report&gt;Summary&lt;/report&gt;
+    /// &lt;/reports&gt;
+    /// &lt;minimumThresholds&gt;
+    /// &lt;coverageThreshold metric="SymbolCoverage" value="95"/&gt;
+    /// &lt;/minimumThresholds&gt;
+    /// &lt;/ncoverReport&gt;
+    /// </code>
+    /// <code title="To generate a full report that is ordered by coverage percentage in a descending order">
+    /// &lt;ncoverReport&gt;
+    /// &lt;executable&gt;C:\Program Files\NCover\NCover.Reporting.exe&lt;/executable&gt;
+    /// &lt;outputDir&gt;ncover\reports&lt;/outputDir&gt;
+    /// &lt;reports&gt;
+    /// &lt;report&gt;FullCoverageReport&lt;/report&gt;
+    /// &lt;/reports&gt;
+    /// &lt;sortBy&gt;CoveragePercentageDescending&lt;/sortBy&gt;
+    /// &lt;/ncoverReport&gt;
     /// </code>
     /// </example>
     /// <remarks>
