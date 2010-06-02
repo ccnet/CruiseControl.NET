@@ -21,17 +21,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// CruiseControl.NET only supports NCover 3.x currently.
     /// </para>
     /// </summary>
-    /// <title>NCover Profiler Task</title>
+    /// <title>NCover Report Task</title>
     /// <version>1.5</version>
     /// <example>
     /// <code>
-    /// &lt;ncoverProfile&gt;
-    /// &lt;executable&gt;C:\Program Files\NCover\NCover.Console.exe&lt;/executable&gt;
-    /// &lt;program&gt;tools\nunit\nunit-console.exe&lt;/program&gt;
-    /// &lt;testProject&gt;myproject.test.dll&lt;/testProject&gt;
-    /// &lt;workingDir&gt;build\unittests&lt;/workingDir&gt;
-    /// &lt;includedAssemblies&gt;myproject.*.dll&lt;/includedAssemblies&gt;
-    /// &lt;/ncoverProfile&gt;
+    /// &lt;ncoverReport&gt;
+    /// &lt;executable&gt;C:\Program Files\NCover\NCover.Reporting.exe&lt;/executable&gt;
+    /// &lt;/ncoverReport&gt;
     /// </code>
     /// </example>
     /// <remarks>
