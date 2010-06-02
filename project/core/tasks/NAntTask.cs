@@ -14,6 +14,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// <para type="tip">
     /// See <link>Using CruiseControl.NET with NAnt</link> for more information on working with NAnt and CruiseControl.Net.
     /// </para>
+    /// <para type="tip">
+    /// To see build progress information in the CCNet 1.5 WebDashboard remove any listener arguments from &lt;buildArgs&gt;
+    /// and leave the &lt;listener&gt; property on the default value.
+    /// </para>
     /// </summary>
     /// <title>NAnt Task</title>
     /// <version>1.0</version>

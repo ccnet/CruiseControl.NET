@@ -17,6 +17,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// In order to work with the results of MsBuild it is important to use a custom xml logger to format the build results. For details on
     /// this, and a tutorial on how to use the task, see <link>Using CruiseControl.NET with MSBuild</link>.
     /// </para>
+    /// <para type="tip">
+    /// To see build progress information in the CCNet 1.5 WebDashboard remove the "/noconsolelogger" argument.
+    /// </para>
     /// </summary>
     /// <title>MSBuild Task</title>
     /// <version>1.0</version>
@@ -29,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// &lt;executable&gt;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe&lt;/executable&gt;
     /// &lt;workingDirectory&gt;C:\dev\ccnet&lt;/workingDirectory&gt;
     /// &lt;projectFile&gt;CCNet.sln&lt;/projectFile&gt;
-    /// &lt;buildArgs&gt;/noconsolelogger /p:Configuration=Debug /v:diag&lt;/buildArgs&gt;
+    /// &lt;buildArgs&gt;/p:Configuration=Debug /v:diag&lt;/buildArgs&gt;
     /// &lt;targets&gt;Build;Test&lt;/targets&gt;
     /// &lt;timeout&gt;900&lt;/timeout&gt;
     /// &lt;logger&gt;C:\Program Files\CruiseControl.NET\server\ThoughtWorks.CruiseControl.MsBuild.dll&lt;/logger&gt;
