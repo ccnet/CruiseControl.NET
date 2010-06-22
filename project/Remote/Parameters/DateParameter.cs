@@ -209,13 +209,13 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
                     {
                         exceptions.Add(
                             GenerateException("Value of '{name}' is less than the minimum allowed ({0})",
-                                    myMinValue.ToString(CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern)));
+                                    myMinValue.ToString(CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture)));
                     }
                     if (actualValue > myMaxValue)
                     {
                         exceptions.Add(
                             GenerateException("Value of '{name}' is more than the maximum allowed ({0})",
-                                    myMaxValue.ToString(CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern)));
+                                    myMaxValue.ToString(CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture)));
                     }
                 }
                 else
