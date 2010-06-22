@@ -343,6 +343,7 @@
     <Compile Include="Core\Publishers\ManifestImporterTests.cs" />
     <Compile Include="Core\Publishers\PackagePublisherTests.cs" />
     <Compile Include="Core\Label\AssemblyVersionLabellerTest.cs" />
+    <Compile Include="Core\SourceControl\VstsTest.cs" />
     <Compile Include="Core\Tasks\CruiseServerControlTaskTests.cs" />
     <Compile Include="Core\Util\PrivateArgumentsTests.cs" />
     <Compile Include="Core\Util\PrivateStringSerialiserTests.cs" />
