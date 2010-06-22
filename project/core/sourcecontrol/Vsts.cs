@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>n/a</default>
         [ReflectorProperty("server")]
-        public string Server;
+        public string Server { get; set; }
 
         /// <summary>
         /// The path to the executable
@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>n/a</default>
         [ReflectorProperty("project")]
-        public string ProjectPath;
+        public string ProjectPath { get; set; }
 
         /// <summary>
         /// Whether this repository should be labeled.
@@ -109,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>false</default>
         [ReflectorProperty("applyLabel", Required = false)]
-        public bool ApplyLabel = false;
+        public bool ApplyLabel { get; set; }
 
         /// <summary>
         /// Whether to automatically get the source.
@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>falsea</default>
         [ReflectorProperty("autoGetSource", Required = false)]
-        public bool AutoGetSource = false;
+        public bool AutoGetSource { get; set; }
 
         /// <summary>
         /// Username that should be used.  Domain cannot be placed here, rather in domain property.
@@ -125,7 +125,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>None</default>
         [ReflectorProperty("username", Required = false)]
-        public string Username = String.Empty;
+        public string Username { get; set; }
 
         /// <summary>
         /// The password in clear text of the domain user to be used.
@@ -133,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>None</default>
         [ReflectorProperty("password", typeof(PrivateStringSerialiserFactory), Required = false)]
-        public PrivateString Password = String.Empty;
+        public PrivateString Password { get; set; }
 
         /// <summary>
         ///  The domain of the user to be used.
@@ -141,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>None</default>
         [ReflectorProperty("domain", Required = false)]
-        public string Domain = String.Empty;
+        public string Domain { get; set; }
 
         /// <summary>
         /// The working directory to use.
@@ -149,7 +149,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>Project Working Directory</default>
         [ReflectorProperty("workingDirectory", Required = false)]
-        public string WorkingDirectory = String.Empty;
+        public string WorkingDirectory { get; set; }
 
         /// <summary>
         /// Whether to do a clean copy.
@@ -157,7 +157,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>false</default>
         [ReflectorProperty("cleanCopy", Required = false)]
-        public bool CleanCopy = false;
+        public bool CleanCopy { get; set; }
 
         /// <summary>
         /// Whether to force or not.
@@ -165,7 +165,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>false</default>
         [ReflectorProperty("force", Required = false)]
-        public bool Force = false;
+        public bool Force { get; set; }
 
         private string workspaceName;
         /// <summary>
@@ -204,7 +204,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.5</version>
         /// <default>false</default>
         [ReflectorProperty("deleteWorkspace", Required = false)]
-        public bool DeleteWorkspace = false;
+        public bool DeleteWorkspace { get; set; }
 
         #endregion NetReflectored Properties
 
