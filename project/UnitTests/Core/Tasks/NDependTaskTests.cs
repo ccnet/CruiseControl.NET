@@ -84,6 +84,34 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         }
 
         [Test]
+        public void CanUsePathsWithSpaces()
+        {
+            var workingDir = "working Dir\\NDependResults";
+            var result = GenerateResultMock("working Dir", "artefact Dir");
+            var executor = GenerateExecutorMock("working Dir\\ndepend-app.exe", "\"working Dir\\NDependResults\" /OutDir \"working Dir\\NDependResults\"", "working Dir", 600000);
+            var fileSystem = mocks.StrictMock<IFileSystem>();
+            Expect.Call(fileSystem.DirectoryExists(workingDir)).Return(true).Repeat.Times(2);
+            Expect.Call(fileSystem.GetFilesInDirectory(workingDir)).Return(new string[0]);
+            Expect.Call(fileSystem.GetFilesInDirectory(workingDir)).Return(new string[] {
+                "working Dir\\file1.txt",
+                "working Dir\\file2.xml"
+            });
+            Expect.Call(() => fileSystem.EnsureFolderExists("artefact Dir\\1\\NDepend"));
+            Expect.Call(() => fileSystem.Copy("working Dir\\file1.txt", "artefact Dir\\1\\NDepend\\file1.txt"));
+            Expect.Call(() => fileSystem.Copy("working Dir\\file2.xml", "artefact Dir\\1\\NDepend\\file2.xml"));
+            Expect.Call(fileSystem.GenerateTaskResultFromFile("working Dir\\file2.xml")).Return(mocks.DynamicMock<ITaskResult>());
+            var logger = mocks.DynamicMock<ILogger>();
+            var task = new NDependTask(executor, fileSystem, logger);
+            task.Executable = "ndepend-app.exe";
+
+            Expect.Call(result.Status).PropertyBehavior();
+            mocks.ReplayAll();
+            result.Status = IntegrationStatus.Unknown;
+            task.Run(result);
+            mocks.VerifyAll();
+        }
+
+        [Test]
         public void CanOverrideBaseDirectory()
         {
             var workingDir = "somewhere-else\\NDependResults";
@@ -194,15 +222,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         #region Private methods
         private IIntegrationResult GenerateResultMock()
         {
+            return GenerateResultMock("workingDir", "artefactDir");
+        }
+
+        private IIntegrationResult GenerateResultMock(string workingDir, string artefactDir)
+        {
             var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
             var result = mocks.StrictMock<IIntegrationResult>();
             SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
-            SetupResult.For(result.WorkingDirectory).Return("workingDir");
-            SetupResult.For(result.ArtifactDirectory).Return("artefactDir");
+            SetupResult.For(result.WorkingDirectory).Return(workingDir);
+            SetupResult.For(result.ArtifactDirectory).Return(artefactDir);
             SetupResult.For(result.IntegrationProperties).Return(new Dictionary<string, string>());
             SetupResult.For(result.Label).Return("1");
             Expect.Call(() => result.AddTaskResult(mocks.DynamicMock<ITaskResult>())).IgnoreArguments().Repeat.Any();
-            SetupResult.For(result.BaseFromArtifactsDirectory("1")).Return("artefactDir\\1");
+            SetupResult.For(result.BaseFromArtifactsDirectory("1")).Return(string.Concat(artefactDir, "\\1"));
             return result;
         }
 

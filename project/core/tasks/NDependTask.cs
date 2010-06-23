@@ -311,11 +311,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             string path;
             if (string.IsNullOrEmpty(Executable))
             {
-                path = RootPath(defaultExecutable, true);
+                path = RootPath(defaultExecutable, false);
             }
             else
             {
-                path = RootPath(Executable, true);
+                path = RootPath(Executable, false);
             }
             return path;
         }
@@ -329,8 +329,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <returns></returns>
         protected override string GetProcessBaseDirectory(IIntegrationResult result)
         {
-            string path = StringUtil.AutoDoubleQuoteString(rootPath);
-            return path;
+            return rootPath;
         }
         #endregion
 
