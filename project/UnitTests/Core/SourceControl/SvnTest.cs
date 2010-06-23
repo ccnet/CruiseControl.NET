@@ -67,6 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	<username>user</username>
 	<password>password</password>
 	<tagOnSuccess>true</tagOnSuccess>
+	<tagWorkingCopy>true</tagWorkingCopy>
 	<tagBaseUrl>svn://myserver/mypath/tags</tagBaseUrl>
 	<autoGetSource>true</autoGetSource>
 	<checkExternals>true</checkExternals>
@@ -80,6 +81,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("user", svn.Username);
 			Assert.AreEqual("password", svn.Password.PrivateValue);
 			Assert.AreEqual(true, svn.TagOnSuccess);
+            Assert.AreEqual(true, svn.TagWorkingCopy);
 			Assert.AreEqual(true, svn.AutoGetSource);
 			Assert.AreEqual(true, svn.CheckExternals);
 			Assert.AreEqual("svn://myserver/mypath/tags", svn.TagBaseUrl);
@@ -90,7 +92,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			string xml = @"<svn/>";
 			svn = (Svn) NetReflector.Read(xml);
-			Assert.AreEqual("svn", svn.Executable);			
+            Assert.AreEqual("svn", svn.Executable);
+            Assert.AreEqual(false, svn.TagWorkingCopy);
 		}
 
 		[Test]
@@ -205,6 +208,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			svn.TagBaseUrl = "svn://someserver/tags";
 			svn.LabelSourceControl(result);
 		}
+
+        [Test]
+        public void CreateLabelFromWorkingCopyWhenTagWorkingCopyTrue()
+        {
+            string args = string.Format(@"copy -m ""CCNET build foo"" {0} svn://someserver/tags/foo --no-auth-cache --non-interactive", StringUtil.AutoDoubleQuoteString(DefaultWorkingDirectory));
+            ExpectToExecuteArguments(args);
+            
+            IIntegrationResult result = IntegrationResult();
+            result.Label = "foo";
+            svn.latestRevision = 10;
+            svn.TagOnSuccess = true;
+            svn.TagWorkingCopy = true;
+            svn.TagBaseUrl = "svn://someserver/tags";
+            svn.LabelSourceControl(result);
+        }
 
 		[Test]
 		public void ShouldGetSourceWithAppropriateRevisionNumberIfTagOnSuccessTrueAndModificationsFound()

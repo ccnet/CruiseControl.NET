@@ -181,6 +181,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             this.AuthCaching = AuthCachingMode.None;
             this.Executable = DefaultExecutable;
             this.TagOnSuccess = false;
+            this.TagWorkingCopy = false;
             this.DeleteObstructions = false;
             this.AutoGetSource = true;
             this.CheckExternals = false;
@@ -234,6 +235,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <default>false</default>
         [ReflectorProperty("tagOnSuccess", Required = false)]
         public bool TagOnSuccess { get; set; }
+
+        /// <summary>
+        /// Indicates that the Working Copy should always be used when Cruise Control creates a tag.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>false</default>
+        [ReflectorProperty("tagWorkingCopy", Required = false)]
+        public bool TagWorkingCopy { get; set; }
 
         /// <summary>
         /// Should any detected obstructions be deleted prior to getting modifications?
@@ -682,7 +691,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.Add(null, TagSource(result), true);
             buffer.Add(null, TagDestination(result.Label), true);
             // Do not use Modification.GetLastChangeNumber() here directly.
-            AppendRevision(buffer, latestRevision);
+            if (!TagWorkingCopy)
+                AppendRevision(buffer, latestRevision);
+
             AppendCommonSwitches(buffer);
             return NewProcessInfo(buffer, result);
         }
@@ -767,7 +778,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private string TagSource(IIntegrationResult result)
         {
-            if (Modification.GetLastChangeNumber(mods) == null)
+            if ((Modification.GetLastChangeNumber(mods) == null) || TagWorkingCopy)
             {
                 return Path.GetFullPath(result.BaseFromWorkingDirectory(WorkingDirectory)).TrimEnd(Path.DirectorySeparatorChar);
             }
