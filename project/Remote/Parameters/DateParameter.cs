@@ -4,6 +4,7 @@ using Exortech.NetReflector;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Xml.Serialization;
 using System.Text.RegularExpressions;
 
