@@ -1,13 +1,12 @@
-﻿namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
-{
-    using System.Globalization;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Remote;
+﻿using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Remote;
 
+namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
+{
     /// <title>Last Build Status Condition</title>
     /// <version>1.6</version>
     /// <summary>
-    /// Checks if the status of the last build matches a value.
+    /// Checks if the status of the last build matches a value. If no previous build exists any specified status will return false.
     /// </summary>
     /// <example>
     /// <code title="Basic example">
@@ -38,7 +37,9 @@
         : ConditionBase
     {
         #region Public properties
+
         #region Status
+
         /// <summary>
         /// The status to match.
         /// </summary>
@@ -46,11 +47,15 @@
         /// <default>n/a</default>
         [ReflectorProperty("value", Required = true)]
         public IntegrationStatus Status { get; set; }
+
         #endregion
+
         #endregion
 
         #region Protected methods
+
         #region Evaluate()
+
         /// <summary>
         /// Performs the actual evaluation.
         /// </summary>
@@ -60,9 +65,7 @@
         /// </returns>
         protected override bool Evaluate(IIntegrationResult result)
         {
-            this.LogDescriptionOrMessage(
-                "Checking last build status - matching to " + 
-                this.Status.ToString(CultureInfo.InvariantCulture));
+            LogDescriptionOrMessage("Checking last build status - matching to " + Status);
             if (result.IsInitial())
             {
                 // There is no previous build - assume that the condition fails
@@ -70,10 +73,12 @@
             }
             else
             {
-                return this.Status == result.LastBuildStatus;
+                return Status == result.LastBuildStatus;
             }
         }
+
         #endregion
+
         #endregion
     }
 }

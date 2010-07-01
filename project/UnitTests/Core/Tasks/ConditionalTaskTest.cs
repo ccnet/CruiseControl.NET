@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using Exortech.NetReflector;
 using NUnit.Framework;
 using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
@@ -19,22 +16,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         MockRepository mocks = new MockRepository();
 
         [SetUp]
-        protected void SetUp()
+        protected virtual void SetUp()
         {
         }
 
         [TearDown]
-        protected void TearDown()
+        protected virtual void TearDown()
         {
         }
 
         [TestFixtureSetUp]
-        public void TestFixtureSetup()
+        public virtual void TestFixtureSetup()
         {
         }
 
         [TestFixtureTearDown]
-        public void TestFixtureTearDown()
+        public virtual void TestFixtureTearDown()
         {
         }
 
@@ -91,8 +88,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             ITask runTask = mocks.StrictMock<ITask>();
             Expect.Call(delegate { runTask.Run(null); }).IgnoreArguments();
             ITask noRunTask = mocks.StrictMock<ITask>();
-            IIntegrationResult ResultMock = IntegrationResultMother.CreateSuccessful(); //mocks.StrictMock<IIntegrationResult>();
-            //Expect.Call(ResultMock.Status).PropertyBehavior().Return(IntegrationStatus.Success).IgnoreArguments().Repeat.Any();
+            IIntegrationResult ResultMock = IntegrationResultMother.CreateSuccessful();
 
             mocks.ReplayAll();
 
@@ -116,10 +112,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Expect.Call(delegate { runTask.Run(null); }).IgnoreArguments();
             ITask noRunTask = mocks.StrictMock<ITask>();
             IIntegrationResult ResultMock = IntegrationResultMother.CreateSuccessful();
-            //mocks.StrictMock<IIntegrationResult>();
-            //BuildProgressInformation bpi = mocks.StrictMock<BuildProgressInformation>
-            //Expect.Call(ResultMock.Status).PropertyBehavior().Return(IntegrationStatus.Success).IgnoreArguments().Repeat.Any();
-            //Expect.Call(ResultMock.BuildProgressInformation).IgnoreArguments().Return()
             mocks.ReplayAll();
 
             ConditionalTask task = new ConditionalTask();
@@ -155,5 +147,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Debug.WriteLine(testXml);
             ConditionalTask result = NetReflector.Read(testXml) as ConditionalTask;
         }
+
+        //[Test]
+        //[Description("DynamicValues Success")]
+        //[Category("Category")]
+        //public void ConditionalTaskTest_DynamicValues_Success()
+        //{
+        //    CommentTask task = new CommentTask();
+        //    task.Message = "$[buildType|DEV]";
+
+        //    IEnumerable<ParameterBase> pardef = null;
+        //    Dictionary<string, string> par = new Dictionary<string, string>();
+        //    par.Add("buildType", "TEST");
+        //    task.ApplyParameters(par, pardef);
+        //    Assert.That(task.Message, Is.EqualTo("TEST"));
+        //}
+
     }
 }
