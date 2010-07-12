@@ -295,7 +295,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		///         <para />
 		///         This query excludes tasks already in the baseline.  Assuming that all project purposes
 		///         employ similar baseline selection criteria, this should not be a problem.
-        ///			NB. Dates must be formatted as 'yyyy/MM/dd HH:mm:ss': <see href="https://support.telelogic.com/en/synergy/docs/docs_63/help_w/wwhelp/wwhimpl/common/html/wwhelp.htm?context=cmsynergy&file=formats_at.html#wp901144"/>
+        ///			NB. Dates must be formatted as 'yyyy/MM/dd HH:mm:ss': <see href="https://support.telelogic.com/en/synergy/docs/docs_63/help_w/wwhelp/wwhimpl/common/html/wwhelp.htm?context=cmsynergy%26file=formats_at.html#wp901144"/>
 		///     </note>
 		/// </remarks>
 		/// <param name="connection">CM Synergy connection parameters.</param>
