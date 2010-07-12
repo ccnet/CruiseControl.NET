@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -21,6 +20,21 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// The Google group can be found at: http://groups.google.com/group/fsharpMake
     /// More information on: http://bitbucket.org/forki/fake/wiki/Home
     /// </para>
+    /// <example>
+    /// <code title="Minimalist example">
+    /// &lt;fake&gt;
+    /// &lt;buildFile&gt;build.fsx&lt;/buildFile&gt;
+    /// &lt;/fake&gt;
+    /// </code>
+    /// <code title="Full example">
+    /// &lt;fake&gt;
+    /// &lt;executable&gt;Tools\FAKE.exe&lt;/executable&gt;
+    /// &lt;baseDirectory&gt;C:\Build\Project1\&lt;/baseDirectory&gt;
+    /// &lt;buildFile&gt;build.fsx&lt;/buildFile&gt;
+    /// &lt;buildTimeoutSeconds&gt;1200&lt;/buildTimeoutSeconds&gt;
+    /// &lt;/fake&gt;
+    /// </code>
+    /// </example>
     /// </summary>
     [ReflectorType("fake")]
     public class FakeTask : BaseExecutableTask
