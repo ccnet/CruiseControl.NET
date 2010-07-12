@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -44,6 +47,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         public const string logFilename = "fake-results-{0}.xml";
         public readonly Guid LogFileId = Guid.NewGuid();
         public const ProcessPriorityClass DefaultPriority = ProcessPriorityClass.Normal;
+
+        private readonly IFileDirectoryDeleter fileDirectoryDeleter = new IoService();
 
         /// <summary>
         /// The location of the FAKE executable.
@@ -86,6 +91,19 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("buildFile", Required = false)]
         public string BuildFile { get; set; }
 
+        public FakeTask(): 
+			this(new ProcessExecutor()){}
+
+        public FakeTask(ProcessExecutor executor)
+		{
+			this.executor = executor;
+            Executable = defaultExecutable;
+            ConfiguredBaseDirectory = string.Empty;
+            Priority = DefaultPriority;
+            BuildTimeoutSeconds = DefaultBuildTimeout;
+            BuildFile = string.Empty;
+        }
+
         #region Overrides of TaskBase
 
         /// <summary>
@@ -95,7 +113,25 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <returns><c>true</c> if the task was successful; <c>false</c> otherwise.</returns>
         protected override bool Execute(IIntegrationResult result)
         {
-            throw new NotImplementedException();
+            var fakeOutputFile = GetFakeOutputFile(result);
+
+            //delete old nant output logfile, if exist
+            fileDirectoryDeleter.DeleteIncludingReadOnlyObjects(fakeOutputFile);
+
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
+                string.Format("Executing FAKE - {0}", ToString()));
+
+            var processResult = TryToRun(CreateProcessInfo(result), result);
+
+            if (File.Exists(fakeOutputFile))
+                result.AddTaskResult(new FileTaskResult(fakeOutputFile));
+
+            result.AddTaskResult(new ProcessTaskResult(processResult, true));
+
+            if (processResult.TimedOut)
+                throw new BuilderException(this, string.Concat("FAKE process timed out (after ", BuildTimeoutSeconds, " seconds)"));
+
+            return !processResult.Failed;
         }
 
         #endregion
@@ -109,7 +145,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         protected override string GetProcessArguments(IIntegrationResult result)
         {
-            throw new NotImplementedException();
+            var buffer = new ProcessArgumentBuilder();
+            buffer.AppendArgument(StringUtil.AutoDoubleQuoteString(BuildFile));
+            buffer.AppendArgument("logfile={0}", StringUtil.AutoDoubleQuoteString(GetFakeOutputFile(result)));
+            AppendIntegrationResultProperties(buffer, result);
+            return buffer.ToString();
         }
 
         protected override string GetProcessBaseDirectory(IIntegrationResult result)
@@ -128,5 +168,29 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         }
 
         #endregion
+
+        private static void AppendIntegrationResultProperties(ProcessArgumentBuilder buffer, IIntegrationResult result)
+        {
+            // We have to sort this alphabetically, else the unit tests
+            // that expect args in a certain order are unpredictable
+            IDictionary properties = result.IntegrationProperties;
+            foreach (string key in properties.Keys)
+            {
+                object value = result.IntegrationProperties[key];
+                if (value != null)
+                    buffer.AppendArgument(string.Format("{0}={1}", key, StringUtil.AutoDoubleQuoteString(StringUtil.RemoveTrailingPathDelimeter(StringUtil.IntegrationPropertyToString(value)))));
+            }
+        }
+
+        public override string ToString()
+        {
+            string baseDirectory = ConfiguredBaseDirectory ?? string.Empty;
+            return string.Format(@" BaseDirectory: {0}, Executable: {1}, BuildFile: {2}", baseDirectory, Executable, BuildFile);
+        }
+
+        private string GetFakeOutputFile(IIntegrationResult result)
+        {
+            return Path.Combine(result.ArtifactDirectory, string.Format(logFilename, LogFileId));
+        }
     }
 }

@@ -38,5 +38,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Assert.AreEqual("mybuild.fx", task.BuildFile);
             Assert.AreEqual("Test description", task.Description);
         }
+
+        [Test]
+        public void PopulateFromConfigurationUsingOnlyRequiredElementsAndCheckDefaultValues()
+        {
+            
+            var task = new FakeTask();
+            const string xml = "<fake />";
+
+            NetReflector.Read(xml, task);
+            Assert.AreEqual(FakeTask.defaultExecutable, task.Executable);
+            Assert.AreEqual(string.Empty, task.ConfiguredBaseDirectory);
+            Assert.AreEqual(string.Empty, task.BuildFile);
+            Assert.AreEqual(null, task.Description);
+        }
     }
 }
