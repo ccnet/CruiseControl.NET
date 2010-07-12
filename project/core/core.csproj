@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F8113DB9-6C47-4FD1-8A01-655FCF151747}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -853,6 +853,7 @@
     <Compile Include="tasks\DirectDynamicValue.cs" />
     <Compile Include="tasks\DupFinderTask.cs" />
     <Compile Include="tasks\DynamicValueUtility.cs" />
+    <Compile Include="tasks\FakeTask.cs" />
     <Compile Include="tasks\FBVariable.cs" />
     <Compile Include="tasks\FtpTask.cs" />
     <Compile Include="tasks\GeneralTaskResult.cs" />
