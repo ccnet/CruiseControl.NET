@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// <para>Runs a FAKE - F# Make script.</para>
     /// <version>1.6</version>
     /// </summary>
-    /// <title>FAKE Task</title>
+    /// <title>FAKE - F# Make Task</title>
     /// <para>
     /// "FAKE - F# Make" is a build automation system. Due to its integration in F#, all benets of the .NET Framework and
     /// functional programming can be used, including the extensive class library,
