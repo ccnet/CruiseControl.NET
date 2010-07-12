@@ -167,8 +167,8 @@
   <page title="Multiple XSL Report Build Plugin" id="6072" url="http://confluence.public.thoughtworks.org//display/CCNET/Multiple+XSL+Report+Build+Plugin" parentId="2973" />
   <page title="Named Value" id="31097640" url="http://confluence.public.thoughtworks.org//display/CCNET/Named+Value" parentId="1738" />
   <page title="NAnt Task" id="311" url="http://confluence.public.thoughtworks.org//display/CCNET/NAnt+Task" parentId="1756" />
-  <page title="NCover Profiler Task" id="29130770" url="http://confluence.public.thoughtworks.org//display/CCNET/NCover+Profiler+Task" parentId="1756" />
-  <page title="NCover Reporting Task" id="29130773" url="http://confluence.public.thoughtworks.org//display/CCNET/NCover+Reporting+Task" parentId="1756" />
+  <page title="NCover Profiler Task" id="29130770" url="http://confluence.public.thoughtworks.org//display/CCNET/NCover+Profiler+Task" parentId="1756" source="ncoverProfile.wiki" />
+  <page title="NCover Reporting Task" id="29130773" url="http://confluence.public.thoughtworks.org//display/CCNET/NCover+Reporting+Task" parentId="1756" source="ncoverReport.wiki" />
   <page title="NDepend Task" id="26247297" url="http://confluence.public.thoughtworks.org//display/CCNET/NDepend+Task" parentId="1756" />
   <page title="NetReflector" id="3859" url="http://confluence.public.thoughtworks.org//display/CCNET/NetReflector" parentId="0" />
   <page title="News" id="27" url="http://confluence.public.thoughtworks.org//display/CCNET/News" parentId="3" />
