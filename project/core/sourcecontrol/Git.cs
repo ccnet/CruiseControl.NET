@@ -25,6 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// &lt;repository&gt;git://github.com/rails/rails.git&lt;/repository&gt;
     /// &lt;branch&gt;master&lt;/branch&gt;
     /// &lt;autoGetSource&gt;true&lt;/autoGetSource&gt;
+    /// &lt;fetchSubmodules&gt;true&lt;/fetchSubmodules&gt;
     /// &lt;executable&gt;git&lt;/executable&gt;
     /// &lt;tagOnSuccess&gt;false&lt;/tagOnSuccess&gt;
     /// &lt;commitBuildModifications&gt;false&lt;/commitBuildModifications&gt;
@@ -46,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// <para>
     /// The Git Source Control Block will check whenever the specified working directory exist or not. If it does not exist a "git clone"
     /// command is issued to create and setup the local repository. Also the configuration settings "user.name" and "user.email" for the local
-    /// repository will be set with "git config" if both are provided.
+    /// repository will be set with "git config" if both are provided. If 'fetchSubmodules' is set to 'true' git submodules will be initialized.
     /// </para>
     /// <para>
     /// If the working directory exists but is not a git repository (e.g. the .git directory is missing) it will be deleted and the "git clone"
@@ -73,6 +74,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// <para>
     /// Once Cruise Control.NET has modifications detected and the 'autoGetSource' property is set to 'true' the "git checkout -f
     /// origin/$NameOfTheBranch" command is issued. Also the "git clean -f -d -x" command to get a clean working copy to start a new build.
+    /// If 'fetchSubmodules' is set to 'true' git submodules will be fetched and updated.
     /// </para>
     /// <para>
     /// <b>Tagging a successful build</b>
@@ -154,6 +156,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <default>master</default>
         [ReflectorProperty("branch", Required = false)]
         public string Branch { get; set; }
+
+        /// <summary>
+        /// Indicates that CruiseControl.NET should initialize and fetch git submodules.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>false</default>
+        [ReflectorProperty("fetchSubmodules", Required = false)]
+        public bool FetchSubmodules { get; set; }
 
         /// <summary>
         /// Format string for the commit message of each tag. \{0\} is the placeholder for the current build label. 
@@ -262,6 +272,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			// checkout remote branch
 			GitCheckoutRemoteBranch(Branch, result);
 
+            // update submodules
+            if (FetchSubmodules)
+                GitUpdateSubmodules(result);
+
 			// clean up the local working copy
 			GitClean(result);
 		}
@@ -343,6 +357,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 				// if the working does not exist, call git clone
 				GitClone(result);
+
+                // init submodules
+                if (FetchSubmodules)
+                    GitInitSubmodules(result);
 
 				// setup some required configuration settings for the local repository
 				SetupLocalRepository(result);
@@ -668,6 +686,41 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			// remove Stdout monitoring
 			ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
 		}
+
+        /// <summary>
+        /// Initialize the git submodules.
+        /// </summary>
+        /// <param name="result">IIntegrationResult of the current build.</param>
+        private void GitInitSubmodules(IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("submodule");
+            buffer.AddArgument("init");
+            Execute(NewProcessInfo(buffer.ToString(), result));
+        }
+
+        /// <summary>
+        /// Updates and fetches git submodules.
+        /// </summary>
+        /// <param name="result"></param>
+        private void GitUpdateSubmodules(IIntegrationResult result)
+        {
+            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+            buffer.AddArgument("submodule");
+            buffer.AddArgument("update");
+
+            // initialize progress information
+            var bpi = GetBuildProgressInformation(result);
+            bpi.SignalStartRunTask(string.Concat("git ", buffer.ToString()));
+
+            // enable Stdout monitoring
+            ProcessExecutor.ProcessOutput += ProcessExecutor_ProcessOutput;
+
+            Execute(NewProcessInfo(buffer.ToString(), result));
+
+            // remove Stdout monitoring
+            ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
+        }
 
 		#endregion
 
