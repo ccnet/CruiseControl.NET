@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Exortech.NetReflector;
 using NUnit.Framework;
 using Rhino.Mocks;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
@@ -13,11 +17,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
     public class FakeTaskTest
     {
         private MockRepository mocks;
+        private readonly string DefaultWorkingDirectory = Path.GetFullPath(Path.Combine(".", "source"));
+        private readonly string DefaultWorkingDirectoryWithSpaces = Path.GetFullPath(Path.Combine(".", "source code"));
+        private ProcessExecutor executor;
 
         [SetUp]
         public void Setup()
         {
             mocks = new MockRepository();
+            executor = mocks.StrictMock<ProcessExecutor>();
         }
 
         [Test]
@@ -51,6 +59,53 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Assert.AreEqual(string.Empty, task.ConfiguredBaseDirectory);
             Assert.AreEqual(string.Empty, task.BuildFile);
             Assert.AreEqual(null, task.Description);
+        }
+
+        [Test]
+        public void ExecuteRunsFakeWithDefaults()
+        {
+            var workingDir = Path.Combine(DefaultWorkingDirectory, "WorkingDir");
+            var artefactDir = Path.Combine(DefaultWorkingDirectoryWithSpaces, "ArtifactsDir");
+            var buildFile = Path.Combine(DefaultWorkingDirectory, "ccnet.fsx");
+
+            var result = GenerateResultMock(workingDir, artefactDir);
+            var task = new FakeTask(executor);
+            task.BuildFile = buildFile;
+            SetupExecutorMock(executor, "FAKE.exe", string.Concat(StringUtil.AutoDoubleQuoteString(buildFile), " ", "logfile=", StringUtil.AutoDoubleQuoteString(Path.Combine(artefactDir, string.Format(FakeTask.logFilename, task.LogFileId)))), workingDir, 600000);
+            Expect.Call(result.Status).PropertyBehavior();
+
+            mocks.ReplayAll();
+            result.Status = IntegrationStatus.Unknown;
+            task.Run(result);
+            mocks.VerifyAll();
+        }
+
+        private IIntegrationResult GenerateResultMock(string workingDir, string artefactDir)
+        {
+            var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
+            var result = mocks.StrictMock<IIntegrationResult>();
+            SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
+            SetupResult.For(result.WorkingDirectory).Return(workingDir);
+            SetupResult.For(result.ArtifactDirectory).Return(artefactDir);
+            SetupResult.For(result.IntegrationProperties).Return(new Dictionary<string, string>());
+            SetupResult.For(result.Label).Return("1");
+            Expect.Call(() => result.AddTaskResult(mocks.DynamicMock<ITaskResult>())).IgnoreArguments().Repeat.Any();
+            SetupResult.For(result.BaseFromWorkingDirectory("")).Return(workingDir);
+            return result;
+        }
+
+        private void SetupExecutorMock(ProcessExecutor executor, string fileName, string args, string workingDir, int timeout)
+        {
+            Expect.Call(executor.Execute(null))
+                .IgnoreArguments()
+                .Do(new Function<ProcessInfo, ProcessResult>(info =>
+                {
+                    Assert.AreEqual(fileName, info.FileName);
+                    Assert.AreEqual(args, info.Arguments);
+                    Assert.AreEqual(workingDir, info.WorkingDirectory);
+                    Assert.AreEqual(timeout, info.TimeOut);
+                    return new ProcessResult(string.Empty, string.Empty, 0, false);
+                }));
         }
     }
 }
