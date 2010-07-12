@@ -12,18 +12,25 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     /// <summary>
     /// <para>Runs a FAKE - F# Make script.</para>
-    /// <version>1.6</version>
-    /// </summary>
-    /// <title>FAKE - F# Make Task</title>
     /// <para>
     /// "FAKE - F# Make" is a build automation system. Due to its integration in F#, all benets of the .NET Framework and
     /// functional programming can be used, including the extensive class library,
     /// powerful debuggers and integrated development environments like
     /// Visual Studio 2008 or SharpDevelop, which provide syntax highlighting and code completion.
-    /// 
-    /// The Google group can be found at: http://groups.google.com/group/fsharpMake
-    /// More information on: http://bitbucket.org/forki/fake/wiki/Home
     /// </para>
+    /// <para>
+    /// <list type="bullet">
+    /// <item>
+    /// The Google group can be found at: http://groups.google.com/group/fsharpMake
+    /// </item>
+    /// <item>
+    /// More information on: http://bitbucket.org/forki/fake/wiki/Home
+    /// </item>
+    /// </list>
+    /// </para>
+    /// </summary>
+    /// <title>FAKE - F# Make Task</title>
+    /// <version>1.6</version>
     /// <example>
     /// <code title="Minimalist example">
     /// &lt;fake&gt;
