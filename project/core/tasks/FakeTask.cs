@@ -11,9 +11,10 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     /// <summary>
-    /// <title>FAKE Task</title>
     /// <para>Runs a FAKE - F# Make script.</para>
     /// <version>1.6</version>
+    /// </summary>
+    /// <title>FAKE Task</title>
     /// <para>
     /// "FAKE - F# Make" is a build automation system. Due to its integration in F#, all benets of the .NET Framework and
     /// functional programming can be used, including the extensive class library,
@@ -38,7 +39,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     /// &lt;/fake&gt;
     /// </code>
     /// </example>
-    /// </summary>
     [ReflectorType("fake")]
     public class FakeTask : BaseExecutableTask
     {
