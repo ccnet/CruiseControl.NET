@@ -25,6 +25,53 @@ namespace ThoughtWorks.CruiseControl.Core.tasks
     [ReflectorType("fake")]
     public class FakeTask : BaseExecutableTask
     {
+        public const string defaultExecutable = "FAKE.exe";
+        public const int DefaultBuildTimeout = 600;
+        public const string logFilename = "fake-results-{0}.xml";
+        public readonly Guid LogFileId = Guid.NewGuid();
+        public const ProcessPriorityClass DefaultPriority = ProcessPriorityClass.Normal;
+
+        /// <summary>
+        /// The location of the FAKE executable.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>FAKE.exe</default>
+        [ReflectorProperty("executable", Required = false)]
+        public string Executable { get; set; }
+
+        /// <summary>
+        /// The directory to run FAKE in.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>Project Working Directory</default>
+        [ReflectorProperty("baseDirectory", Required = false)]
+        public string ConfiguredBaseDirectory { get; set; }
+
+        /// <summary>
+        /// The priority class of the spawned process.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>Normal</default>
+        [ReflectorProperty("priority", Required = false)]
+        public ProcessPriorityClass Priority { get; set; }
+
+        /// <summary>
+        /// The maximum number of seconds that the build may take.  If the build process takes longer than this period, it will be killed.
+        /// Specify this value as zero to disable process timeouts.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>600</default>
+        [ReflectorProperty("buildTimeoutSeconds", Required = false)]
+        public int BuildTimeoutSeconds { get; set; }
+
+        /// <summary>
+        /// The name of the build file to run, relative to the baseDirectory. 
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>Default build field in the working directory</default>
+        [ReflectorProperty("buildFile", Required = false)]
+        public string BuildFile { get; set; }
+
         #region Overrides of TaskBase
 
         /// <summary>
@@ -43,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.Core.tasks
 
         protected override string GetProcessFilename()
         {
-            throw new NotImplementedException();
+            return Executable;
         }
 
         protected override string GetProcessArguments(IIntegrationResult result)
@@ -53,17 +100,17 @@ namespace ThoughtWorks.CruiseControl.Core.tasks
 
         protected override string GetProcessBaseDirectory(IIntegrationResult result)
         {
-            throw new NotImplementedException();
+            return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
         }
 
         protected override ProcessPriorityClass GetProcessPriorityClass()
         {
-            throw new NotImplementedException();
+            return Priority;
         }
 
         protected override int GetProcessTimeout()
         {
-            throw new NotImplementedException();
+            return BuildTimeoutSeconds * 1000;
         }
 
         #endregion
