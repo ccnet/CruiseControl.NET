@@ -336,6 +336,11 @@
                                         }
                                     }
                                 }
+                                else
+                                {
+                                    WriteToOutput(string.Format("Missing source attribute for {0}.", titleAttr),
+                                                  OutputType.Warning);
+                                }
                             }
                         }
                         finally
@@ -454,6 +459,14 @@
                         var typeElement = (from element in documentation.Descendants("member")
                                            where element.Attribute("name").Value == "T:" + publicType.FullName
                                            select element).SingleOrDefault();
+
+                        if (typeElement == null)
+                        {
+                            WriteToOutput(
+                                string.Format("XML docs for {0} are badly formed XML or missing.", publicType.FullName),
+                                OutputType.Error);
+                        }
+
                         var typeVersion = 1.0;
 
                         using (var output = new StreamWriter(fileName))
