@@ -69,7 +69,7 @@
   <page title="Custom Builder Plug-in" id="441" url="http://confluence.public.thoughtworks.org//display/CCNET/Custom+Builder+Plug-in" parentId="71" />
   <page title="Custom templates" id="25591840" url="http://confluence.public.thoughtworks.org//display/CCNET/Custom+templates" parentId="2973" />
   <page title="CVS Source Control Block" id="315" url="http://confluence.public.thoughtworks.org//display/CCNET/CVS+Source+Control+Block" parentId="1753" source="cvs.wiki" />
-  <page title="Dashboard Administration Plugin" id="26247259" url="http://confluence.public.thoughtworks.org//display/CCNET/Dashboard+Administration+Plugin" parentId="2973" />
+  <page title="Dashboard Administration Plugin" id="26247259" url="http://confluence.public.thoughtworks.org//display/CCNET/Dashboard+Administration+Plugin" parentId="2973" source="administrationPlugin.wiki" />
   <page title="Dashboard Configuration Block" id="2970" url="http://confluence.public.thoughtworks.org//display/CCNET/Dashboard+Configuration+Block" parentId="2969" />
   <page title="Date Labeller" id="4487" url="http://confluence.public.thoughtworks.org//display/CCNET/Date+Labeller" parentId="1755" source="dateLabeller.wiki" />
   <page title="Date Parameter" id="28868640" url="http://confluence.public.thoughtworks.org//display/CCNET/Date+Parameter" parentId="28475414" source="dateParameter.wiki" />
@@ -160,25 +160,25 @@
   <page title="ModificationHistory Publisher" id="3997789" url="http://confluence.public.thoughtworks.org//display/CCNET/ModificationHistory+Publisher" parentId="1756" source="modificationHistory.wiki" />
   <page title="modificationHistoryProjectPlugin" id="3997792" url="http://confluence.public.thoughtworks.org//display/CCNET/modificationHistoryProjectPlugin" parentId="2973" />
   <page title="MsBuild Task" id="4044" url="http://confluence.public.thoughtworks.org//display/CCNET/MsBuild+Task" parentId="1756" source="msbuild.wiki" />
-  <page title="Multi Issue Tracker URL Builder" id="31686666" url="http://confluence.public.thoughtworks.org//display/CCNET/Multi+Issue+Tracker+URL+Builder" parentId="22118409" />
-  <page title="Multi Source Control Block" id="348" url="http://confluence.public.thoughtworks.org//display/CCNET/Multi+Source+Control+Block" parentId="1753" />
+  <page title="Multi Issue Tracker URL Builder" id="31686666" url="http://confluence.public.thoughtworks.org//display/CCNET/Multi+Issue+Tracker+URL+Builder" parentId="22118409" source="multiIssueTracker.wiki" />
+  <page title="Multi Source Control Block" id="348" url="http://confluence.public.thoughtworks.org//display/CCNET/Multi+Source+Control+Block" parentId="1753" source="multi.wiki" />
   <page title="Multiple Projects" id="408" url="http://confluence.public.thoughtworks.org//display/CCNET/Multiple+Projects" parentId="300" />
-  <page title="Multiple Trigger" id="5069" url="http://confluence.public.thoughtworks.org//display/CCNET/Multiple+Trigger" parentId="1750" />
+  <page title="Multiple Trigger" id="5069" url="http://confluence.public.thoughtworks.org//display/CCNET/Multiple+Trigger" parentId="1750" source="multiTrigger.wiki" />
   <page title="Multiple XSL Report Build Plugin" id="6072" url="http://confluence.public.thoughtworks.org//display/CCNET/Multiple+XSL+Report+Build+Plugin" parentId="2973" />
   <page title="Named Value" id="31097640" url="http://confluence.public.thoughtworks.org//display/CCNET/Named+Value" parentId="1738" />
-  <page title="NAnt Task" id="311" url="http://confluence.public.thoughtworks.org//display/CCNET/NAnt+Task" parentId="1756" />
+  <page title="NAnt Task" id="311" url="http://confluence.public.thoughtworks.org//display/CCNET/NAnt+Task" parentId="1756" source="nant.wiki" />
   <page title="NCover Profiler Task" id="29130770" url="http://confluence.public.thoughtworks.org//display/CCNET/NCover+Profiler+Task" parentId="1756" source="ncoverProfile.wiki" />
   <page title="NCover Reporting Task" id="29130773" url="http://confluence.public.thoughtworks.org//display/CCNET/NCover+Reporting+Task" parentId="1756" source="ncoverReport.wiki" />
-  <page title="NDepend Task" id="26247297" url="http://confluence.public.thoughtworks.org//display/CCNET/NDepend+Task" parentId="1756" />
+  <page title="NDepend Task" id="26247297" url="http://confluence.public.thoughtworks.org//display/CCNET/NDepend+Task" parentId="1756" source="ndepend.wiki"/>
   <page title="NetReflector" id="3859" url="http://confluence.public.thoughtworks.org//display/CCNET/NetReflector" parentId="0" />
   <page title="News" id="27" url="http://confluence.public.thoughtworks.org//display/CCNET/News" parentId="3" />
   <page title="Null Project Security" id="28868777" url="http://confluence.public.thoughtworks.org//display/CCNET/Null+Project+Security" parentId="28868738" />
   <page title="Null Server Security" id="28868775" url="http://confluence.public.thoughtworks.org//display/CCNET/Null+Server+Security" parentId="28868730" />
   <page title="Null Source Control Block" id="3041" url="http://confluence.public.thoughtworks.org//display/CCNET/Null+Source+Control+Block" parentId="1753" source="nullSourceControl.wiki" />
-  <page title="Null Task" id="4319" url="http://confluence.public.thoughtworks.org//display/CCNET/Null+Task" parentId="1756" />
+  <page title="Null Task" id="4319" url="http://confluence.public.thoughtworks.org//display/CCNET/Null+Task" parentId="1756" source="nullTask.wiki" />
   <page title="Numeric Parameter" id="28868642" url="http://confluence.public.thoughtworks.org//display/CCNET/Numeric+Parameter" parentId="28475414" />
-  <page title="NUnit Task" id="625" url="http://confluence.public.thoughtworks.org//display/CCNET/NUnit+Task" parentId="1756" />
-  <page title="Ohloh Project Plugin" id="34013214" url="http://confluence.public.thoughtworks.org//display/CCNET/Ohloh+Project+Plugin" parentId="2973" />
+  <page title="NUnit Task" id="625" url="http://confluence.public.thoughtworks.org//display/CCNET/NUnit+Task" parentId="1756" source="nunit.wiki"/>
+  <page title="Ohloh Project Plugin" id="34013214" url="http://confluence.public.thoughtworks.org//display/CCNET/Ohloh+Project+Plugin" parentId="2973" source="ohlohProjectPlugin.wiki" />
   <page title="Or Condition" id="34701717" url="http://confluence.public.thoughtworks.org//display/CCNET/Or+Condition" parentId="34701711" source="orCondition.wiki" />
   <page title="Package Publisher" id="26247208" url="http://confluence.public.thoughtworks.org//display/CCNET/Package+Publisher" parentId="1756" />
   <page title="Packaging a Release" id="21004316" url="http://confluence.public.thoughtworks.org//display/CCNET/Packaging+a+Release" parentId="115" />
