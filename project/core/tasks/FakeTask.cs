@@ -6,7 +6,7 @@ using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 
-namespace ThoughtWorks.CruiseControl.Core.tasks
+namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     /// <summary>
     /// <title>FAKE Task</title>
