@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F8113DB9-6C47-4FD1-8A01-655FCF151747}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -902,6 +902,13 @@
     </Compile>
     <Compile Include="tasks\NDependTask.cs" />
     <Compile Include="tasks\XmlTaskResult.cs" />
+    <Compile Include="Triggers\CronTrigger.cs" />
+    <Compile Include="Triggers\NCrontab\CrontabException.cs" />
+    <Compile Include="Triggers\NCrontab\CrontabField.cs" />
+    <Compile Include="Triggers\NCrontab\CrontabFieldImpl.cs" />
+    <Compile Include="Triggers\NCrontab\CrontabFieldKind.cs" />
+    <Compile Include="Triggers\NCrontab\CrontabSchedule.cs" />
+    <Compile Include="Triggers\NCrontab\ICrontabField.cs" />
     <Compile Include="Triggers\RollUpTrigger.cs" />
     <Compile Include="util\DefaultCryptoFunctions.cs" />
     <Compile Include="util\DefaultWebFunctions.cs" />

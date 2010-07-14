@@ -62,6 +62,7 @@
   <page title="Contributor License Agreement" id="1178" url="http://confluence.public.thoughtworks.org//display/CCNET/Contributor+License+Agreement" parentId="115" />
   <page title="Coverage Filter" id="31097556" url="http://confluence.public.thoughtworks.org//display/CCNET/Coverage+Filter" parentId="29130773" source="coverageFilter.wiki" />
   <page title="Coverage Threshold" id="31097558" url="http://confluence.public.thoughtworks.org//display/CCNET/Coverage+Threshold" parentId="29130773" source="coverageThreshold.wiki" />
+  <page title="Cron Trigger" id="36536816" url="http://confluence.public.thoughtworks.org/display/CCNET/Cron+Trigger" parentId="1750" />
   <page title="CruiseControl.NET Integration Process" id="701" url="http://confluence.public.thoughtworks.org//display/CCNET/CruiseControl.NET+Integration+Process" parentId="71" />
   <page title="CruiseControl.NET Server" id="300" url="http://confluence.public.thoughtworks.org//display/CCNET/CruiseControl.NET+Server" parentId="71" />
   <page title="CruiseServer Control Action" id="31097528" url="http://confluence.public.thoughtworks.org//display/CCNET/CruiseServer+Control+Action" parentId="28868702" source="controlAction.wiki" />
