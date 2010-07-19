@@ -722,7 +722,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             else
             {
                 controller.SelectedProject = (IProjectMonitor)lvProjects.SelectedItems[0].Tag;
-                tltBuildStage.SetToolTip(this.lvProjects, GetBuildStage());                
+                tltBuildStage.SetToolTip(this.lvProjects, GetBuildStage());
                 System.Threading.Timer t =
                     new System.Threading.Timer(new System.Threading.TimerCallback(PollProject), controller.SelectedProject, 0,
                         System.Threading.Timeout.Infinite);
@@ -927,7 +927,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
         private void ToggleStatusWindow()
         {
-            if (!Visible)
+            // if started first time , Visible is appearently set to true,
+            // therefore clicking on toolbar Show State Window does only work 
+            // when pressed twice.
+            // this fixed: check for !Created solve this issue
+            // rei 30.12.2009
+            if (!Created || !Visible)
             {
                 WindowState = FormWindowState.Normal;
                 Show();
@@ -995,10 +1000,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             controller.VolunteerToFixBuild();
         }
 
-        private void btnToggleQueueView_Click(object sender, EventArgs e)        
+        private void btnToggleQueueView_Click(object sender, EventArgs e)
         {
             queueViewPanelVisible = !queueViewPanelVisible;
-            
+
             splitterQueueView.Visible = queueViewPanelVisible;
             pnlViewQueues.Visible = queueViewPanelVisible;
             queueTreeView.Visible = queueViewPanelVisible;
@@ -1122,7 +1127,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 int compare = 0;
                 switch (_columnSortTypes[col])
                 {
-                    case "int":                        
+                    case "int":
                         int xValue = 0;
                         int yValue = 0;
 
