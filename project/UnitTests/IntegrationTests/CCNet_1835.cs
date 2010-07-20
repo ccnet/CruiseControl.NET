@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             // and let the schedule trigger work as normal : check if it is time to integrate and check on the status
             // 60 seconds should be ok, less time may give problems on slower machines 
             // keep in mind that cruise server is also starting, so this time must also be taken into account
-            // also we want the cuise server to wait for 1 minute, otherwise it starts integrating project 1 immediately
+            // also we want the cruise server to wait for 1 minute, otherwise it starts integrating project 1 immediately
             System.Xml.XmlDocument xdoc = new System.Xml.XmlDocument();
             xdoc.Load(CCNetConfigFile);
             string xslt = string.Format("/cruisecontrol/project[@name='{0}']/triggers/multiTrigger/triggers/scheduleTrigger", projectName1);
