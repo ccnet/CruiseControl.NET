@@ -152,7 +152,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
 			integrator.Stop();
-			Assert.AreEqual(ProjectIntegratorState.Unknown, integrator.State);
+			Assert.AreEqual(ProjectIntegratorState.Stopping, integrator.State);
 			VerifyAll();
 		}
 
