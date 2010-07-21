@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private readonly IProject project;
         private readonly IIntegrationQueue integrationQueue;
         private Thread thread;
-        private ProjectIntegratorState state = ProjectIntegratorState.Stopped;
+        private ProjectIntegratorState state = ProjectIntegratorState.Unknown ;
         private int AmountOfSourceControlExceptions = 0;
 
         public ProjectIntegrator(IProject project, IIntegrationQueue integrationQueue)
@@ -306,7 +306,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         public void Stop()
         {
-            if (IsRunning)
+            if (IsRunning || state == ProjectIntegratorState.Unknown)
             {
                 Log.Info("Stopping integrator for project: " + project.Name);
                 state = ProjectIntegratorState.Stopping;

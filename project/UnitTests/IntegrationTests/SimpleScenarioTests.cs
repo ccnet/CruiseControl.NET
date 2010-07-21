@@ -42,7 +42,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
 
 
             CCNet.Remote.Messages.ProjectStatusResponse psr;
-            CCNet.Remote.Messages.ProjectRequest pr = new CCNet.Remote.Messages.ProjectRequest(null, ProjectName1);
+            CCNet.Remote.Messages.ProjectRequest pr1 = new CCNet.Remote.Messages.ProjectRequest(null, ProjectName1);
+            CCNet.Remote.Messages.ProjectRequest pr2 = new CCNet.Remote.Messages.ProjectRequest(null, ProjectName2);
+
 
             Log("Making CruiseServerFactory");
             CCNet.Core.CruiseServerFactory csf = new CCNet.Core.CruiseServerFactory();
@@ -58,10 +60,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
                 cruiseServer.Start();
 
                 System.Threading.Thread.Sleep(250); // give time to start
-                
 
                 Log("Forcing build");
-                CheckResponse(cruiseServer.ForceBuild(pr));
+                CheckResponse(cruiseServer.ForceBuild(pr1));
 
                 System.Threading.Thread.Sleep(250); // give time to start the build
 
@@ -76,14 +77,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
                 cruiseServer.IntegrationCompleted -= new EventHandler<ThoughtWorks.CruiseControl.Remote.Events.IntegrationCompletedEventArgs>(cruiseServer_IntegrationCompleted);
 
                 Log("getting project status");
-                psr = cruiseServer.GetProjectStatus(pr);
+                psr = cruiseServer.GetProjectStatus(pr1);
                 CheckResponse(psr);
 
                 Log("Stopping cruiseServer");
                 cruiseServer.Stop();
 
                 Log("waiting for cruiseServer to stop");
-                cruiseServer.WaitForExit(pr);
+                cruiseServer.WaitForExit(pr1);
                 Log("cruiseServer stopped");
 
             }
@@ -93,7 +94,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
 
             CCNet.Remote.ProjectStatus ps = null;
 
-            // checking data of project 1
+            Log("checking data of project " + ProjectName1);
             foreach (var p in psr.Projects)
             {
                 if (p.Name == ProjectName1) ps = p;
@@ -115,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             Assert.AreEqual("http://confluence.public.thoughtworks.org", ps.WebURL);
 
 
-            // checking data of project 2
+            Log("checking data of project " + ProjectName2);
             foreach (var p in psr.Projects)
             {
                 if (p.Name == ProjectName2) ps = p;
@@ -134,7 +135,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             Assert.AreEqual("Q1", ps.Queue);
             Assert.AreEqual(2, ps.QueuePriority);
             Assert.AreEqual(System.Environment.MachineName, ps.ServerName);
-            Assert.AreEqual(CCNet.Remote.ProjectIntegratorState.Running, ps.Status);
+            Assert.AreEqual(CCNet.Remote.ProjectIntegratorState.Unknown, ps.Status);
             Assert.AreEqual("http://" + System.Environment.MachineName + "/ccnet", ps.WebURL, "Default url not correct");
 
 
@@ -149,7 +150,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
 
         private void Log(string message)
         {
-            System.Diagnostics.Debug.WriteLine(string.Format("{0} {1}", DateTime.Now.ToUniversalTime(), message));
+            System.Diagnostics.Debug.WriteLine(string.Format("--> {0} {1}", DateTime.Now.ToUniversalTime(), message));
         }
 
         private void CheckResponse(ThoughtWorks.CruiseControl.Remote.Messages.Response value)

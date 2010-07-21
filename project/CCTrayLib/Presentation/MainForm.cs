@@ -287,7 +287,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.lvProjects.Location = new System.Drawing.Point(203, 38);
             this.lvProjects.MultiSelect = false;
             this.lvProjects.Name = "lvProjects";
-            this.lvProjects.Size = new System.Drawing.Size(689, 102);
+            this.lvProjects.Size = new System.Drawing.Size(689, 0);
             this.lvProjects.SmallImageList = this.iconList;
             this.lvProjects.TabIndex = 0;
             this.lvProjects.UseCompatibleStateImageBehavior = false;
@@ -524,7 +524,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.pnlButtons.Controls.Add(this.btnForceBuild);
             this.pnlButtons.Controls.Add(this.btnStartStopProject);
             this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlButtons.Location = new System.Drawing.Point(0, 140);
+            this.pnlButtons.Location = new System.Drawing.Point(0, -45);
             this.pnlButtons.Name = "pnlButtons";
             this.pnlButtons.Size = new System.Drawing.Size(892, 45);
             this.pnlButtons.TabIndex = 1;
@@ -563,7 +563,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             this.splitterQueueView.Location = new System.Drawing.Point(200, 38);
             this.splitterQueueView.Name = "splitterQueueView";
-            this.splitterQueueView.Size = new System.Drawing.Size(3, 102);
+            this.splitterQueueView.Size = new System.Drawing.Size(3, 0);
             this.splitterQueueView.TabIndex = 3;
             this.splitterQueueView.TabStop = false;
             this.splitterQueueView.Visible = false;
@@ -574,7 +574,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.pnlViewQueues.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlViewQueues.Location = new System.Drawing.Point(0, 38);
             this.pnlViewQueues.Name = "pnlViewQueues";
-            this.pnlViewQueues.Size = new System.Drawing.Size(200, 102);
+            this.pnlViewQueues.Size = new System.Drawing.Size(200, 0);
             this.pnlViewQueues.TabIndex = 4;
             this.pnlViewQueues.Visible = false;
             // 
@@ -670,14 +670,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.queueTreeView.Location = new System.Drawing.Point(0, 0);
             this.queueTreeView.Name = "queueTreeView";
             this.queueTreeView.SelectedImageIndex = 0;
-            this.queueTreeView.Size = new System.Drawing.Size(200, 102);
+            this.queueTreeView.Size = new System.Drawing.Size(200, 0);
             this.queueTreeView.TabIndex = 2;
             this.queueTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.queueTreeView_MouseUp);
             // 
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(892, 185);
+            this.ClientSize = new System.Drawing.Size(892, 0);
             this.Controls.Add(this.lvProjects);
             this.Controls.Add(this.splitterQueueView);
             this.Controls.Add(this.pnlViewQueues);

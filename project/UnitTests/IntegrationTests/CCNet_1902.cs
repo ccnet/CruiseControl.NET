@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
         [Timeout(120000)]
         public void ForceBuildShouldNotWorkWhenProjectIsStopped()
         {
-            const string projectName1 = "test01";
+            const string projectName1 = "test02";
 
             IntegrationCompleted = new System.Collections.Generic.Dictionary<string, bool>();
 
@@ -55,14 +55,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             Log("Making cruiseServer with config from :" + CCNetConfigFile);
             using (var cruiseServer = csf.Create(true, CCNetConfigFile))
             {
+                cruiseServer.ProjectStarting += new EventHandler<ThoughtWorks.CruiseControl.Remote.Events.CancelProjectEventArgs>(cruiseServer_ProjectStarting);
+
                 Log("Starting cruiseServer");
                 cruiseServer.Start();
 
-                Log("Stopping project 1");
+                cruiseServer.ProjectStarting -= new EventHandler<ThoughtWorks.CruiseControl.Remote.Events.CancelProjectEventArgs>(cruiseServer_ProjectStarting);
+
+
+                Log("Stopping project " + projectName1);
                 cruiseServer.Stop(pr1);
 
                 System.Threading.Thread.Sleep(250); // give time to stop the build
-                
+
                 Log("Forcing build on project " + projectName1);
                 try
                 {
@@ -74,16 +79,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
 
                     Assert.AreEqual(e.Message, "Project is stopping / stopped - unable to start integration");
                 }
-                
+
                 Assert.IsTrue(ErrorOccured, "Force build should raise exception when forcing build and project is stopping or stopped");
             }
 
         }
 
+        void cruiseServer_ProjectStarting(object sender, ThoughtWorks.CruiseControl.Remote.Events.CancelProjectEventArgs e)
+        {
+            Log("starting project " + e.ProjectName);
+        }
+
 
         private void Log(string message)
         {
-            System.Diagnostics.Debug.WriteLine(string.Format("{0} {1}", DateTime.Now.ToLongTimeString(), message));
+            System.Diagnostics.Debug.WriteLine(string.Format("--> {0} {1}", DateTime.Now.ToLongTimeString(), message));
         }
 
         private void CheckResponse(ThoughtWorks.CruiseControl.Remote.Messages.Response value)
