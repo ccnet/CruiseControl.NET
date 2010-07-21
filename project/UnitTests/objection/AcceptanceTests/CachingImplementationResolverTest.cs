@@ -33,7 +33,7 @@ namespace Objection.UnitTests.AcceptanceTests
 
 			resolvingThread.Start();
 			moochingThread.Start();
-			Thread.Sleep(100); // allow moochingThread to catch up to resolvingThread
+			Thread.Sleep(500); // allow moochingThread to catch up to resolvingThread
 			stallingResolver.Resume();
 			
 			Assert.IsTrue(resolvingThread.Join(200), "Resolving thread did not complete before timeout.");
