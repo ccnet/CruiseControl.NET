@@ -57,6 +57,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
                 Log("Starting cruiseServer");
                 cruiseServer.Start();
 
+                System.Threading.Thread.Sleep(250); // give time to start
+                
+
                 Log("Forcing build");
                 CheckResponse(cruiseServer.ForceBuild(pr));
 
