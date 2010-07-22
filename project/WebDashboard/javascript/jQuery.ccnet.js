@@ -49,7 +49,7 @@
             widgets: ['statusDisplay'],
             sortList: [[0, 0]],
             textExtraction: function(node) {
-                var t = $(node).text().trim();
+                var t = $(node).text();
                 return t;
             }
         };
