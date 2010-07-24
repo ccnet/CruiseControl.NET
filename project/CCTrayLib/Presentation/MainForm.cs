@@ -238,7 +238,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.btnStartStopProject = new System.Windows.Forms.Button();
             this.splitterQueueView = new System.Windows.Forms.Splitter();
             this.pnlViewQueues = new System.Windows.Forms.Panel();
-            this.queueTreeView = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.QueueTreeView();
             this.queueIconList = new System.Windows.Forms.ImageList(this.components);
             this.queueContextMenu = new System.Windows.Forms.ContextMenu();
             this.mnuQueueCancelPending = new System.Windows.Forms.MenuItem();
@@ -249,6 +248,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.updateProjectsButton = new System.Windows.Forms.Button();
             this.updateProjectsMessage = new System.Windows.Forms.Label();
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.queueTreeView = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.QueueTreeView();
             menuItem1 = new System.Windows.Forms.MenuItem();
             this.pnlButtons.SuspendLayout();
             this.pnlViewQueues.SuspendLayout();
@@ -578,18 +578,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.pnlViewQueues.TabIndex = 4;
             this.pnlViewQueues.Visible = false;
             // 
-            // queueTreeView
-            // 
-            this.queueTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.queueTreeView.ImageIndex = 0;
-            this.queueTreeView.ImageList = this.queueIconList;
-            this.queueTreeView.Location = new System.Drawing.Point(0, 0);
-            this.queueTreeView.Name = "queueTreeView";
-            this.queueTreeView.SelectedImageIndex = 0;
-            this.queueTreeView.Size = new System.Drawing.Size(200, 0);
-            this.queueTreeView.TabIndex = 2;
-            this.queueTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.queueTreeView_MouseUp);
-            // 
             // queueIconList
             // 
             this.queueIconList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
@@ -673,6 +661,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.trayIcon.Visible = true;
             this.trayIcon.Click += new System.EventHandler(this.trayIcon_Click);
             this.trayIcon.DoubleClick += new System.EventHandler(this.trayIcon_DoubleClick);
+            // 
+            // queueTreeView
+            // 
+            this.queueTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.queueTreeView.ImageIndex = 0;
+            this.queueTreeView.ImageList = this.queueIconList;
+            this.queueTreeView.Location = new System.Drawing.Point(0, 0);
+            this.queueTreeView.Name = "queueTreeView";
+            this.queueTreeView.SelectedImageIndex = 0;
+            this.queueTreeView.Size = new System.Drawing.Size(200, 0);
+            this.queueTreeView.TabIndex = 2;
+            this.queueTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.queueTreeView_MouseUp);
             // 
             // MainForm
             // 
