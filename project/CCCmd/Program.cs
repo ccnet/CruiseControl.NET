@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Xml;
+using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Mono;
 
@@ -20,7 +21,8 @@ namespace ThoughtWorks.CruiseControl.CCCmd
         private static List<string> extra = new List<string>();
         private static string userName;
         private static string password;
-        
+        private static bool xml;
+
         static void Main(string[] args)
         {
            	OptionSet opts = new OptionSet();
@@ -30,8 +32,10 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                 .Add("p|project=", "the project to use (required for all actions except help and retrieve)", delegate(string v) { project = v; })
                 .Add("a|all", "lists all the projects (only valid for retrieve)", delegate(string v) { all = v != null; })
                 .Add("q|quiet", "run in quiet mode (do not print messages)", delegate(string v) { quiet = v != null; })
+                .Add("x|xml", "outputs the details in XML format instead of plain text (only valid for retrieve)", delegate(string v) { xml = v != null; })
                 .Add("user=", "the user of the user account to use", v => { userName = v; })
                 .Add("pwd=", "the password to use for the user", v => { password = v;});
+
         	
         	try
         	{
@@ -216,10 +220,20 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             {
                 if (!isQuiet) WriteLine("Retrieving snapshot from " + client.TargetServer, ConsoleColor.Gray);
                 CruiseServerSnapshot snapShot = client.GetCruiseServerSnapshot();
-                foreach (ProjectStatus project in snapShot.ProjectStatuses)
+                if (xml)
                 {
-                    DisplayProject(project);
+                    XmlSerializer serializer = new XmlSerializer(typeof(CruiseServerSnapshot));
+                    Stream console = Console.OpenStandardOutput();
+                    serializer.Serialize(console, snapShot);
+                    console.Close();
                 }
+                else
+                {
+                    foreach (ProjectStatus prj in snapShot.ProjectStatuses)
+                    {
+                        DisplayProject(prj);
+                    }
+                } 
             }
             catch (Exception error)
             {
@@ -238,7 +252,18 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                 {
                     if (string.Equals(project.Name, projectName, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        DisplayProject(project);
+                        if (xml)
+                        {
+                            XmlSerializer serializer = new XmlSerializer(typeof(ProjectStatus));
+                            Stream console = Console.OpenStandardOutput();
+                            serializer.Serialize(console, project);
+                            console.Close();
+                        }
+                        else
+                        {
+                            DisplayProject(project);
+                        } 
+                        
                         wasFound = true;
                         break;
                     }
@@ -339,6 +364,13 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                 helpStream.Close();
             }
             opts.WriteOptionDescriptions (Console.Out);
+
+            Console.WriteLine();
+            Console.WriteLine("Examples :");
+            Console.WriteLine("    CCCmd.exe retrieve   -s=tcp://localhost:21234/CruiseManager.rem -a");
+            Console.WriteLine("    CCCmd.exe retrieve   -s=tcp://localhost:21234/CruiseManager.rem -a -x");
+            Console.WriteLine("    CCCmd.exe retrieve   -s=tcp://localhost:21234/CruiseManager.rem -p=ccnet");
+            Console.WriteLine("    CCCmd.exe forcebuild -s=tcp://localhost:21234/CruiseManager.rem -p=ccnet");
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿CruiseControl.Net Command-Line Utility
 Provides command-line access to a CruiseControl.Net server
 
-cccmd <command> [options]
+CCCmd <command> [options]
 
 command: one of the following actions
   help:         display this help screen
