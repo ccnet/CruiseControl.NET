@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Mono;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.CCCmd
 {
@@ -17,6 +18,8 @@ namespace ThoughtWorks.CruiseControl.CCCmd
         private static string project;
         private static bool all;
         private static bool quiet;
+        private static string string_params;
+        private static string params_filename;
         private static CommandType command;
         private static List<string> extra = new List<string>();
         private static string userName;
@@ -32,7 +35,9 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                 .Add("p|project=", "the project to use (required for all actions except help and retrieve)", delegate(string v) { project = v; })
                 .Add("a|all", "lists all the projects (only valid for retrieve)", delegate(string v) { all = v != null; })
                 .Add("q|quiet", "run in quiet mode (do not print messages)", delegate(string v) { quiet = v != null; })
-                .Add("x|xml", "outputs the details in XML format instead of plain text (only valid for retrieve)", delegate(string v) { xml = v != null; })
+                .Add("r|params=", "a semicolon separated list of name value pairs", delegate(string v) { string_params = v; })
+                .Add("f|params_file=", "the name of a XML file containing the parameters values to use when forcing a build. If specified at the same time as this flag, the values from the command line are ignored", delegate(string v) { params_filename = v; })             
+ 				.Add("x|xml", "outputs the details in XML format instead of plain text (only valid for retrieve)", delegate(string v) { xml = v != null; })
                 .Add("user=", "the user of the user account to use", v => { userName = v; })
                 .Add("pwd=", "the password to use for the user", v => { password = v;});
 
@@ -109,10 +114,88 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             {
                 try
                 {
+                    Dictionary<string, string> userParameters = new Dictionary<string, string>();
+                    if (File.Exists(params_filename))
+                    {
+                        XmlDocument xmlDoc = new XmlDocument();
+                        xmlDoc.Load(params_filename);
+                        XmlNodeList names = xmlDoc.GetElementsByTagName("name");
+                        XmlNodeList values = xmlDoc.GetElementsByTagName("value");
+
+                        for (int i = 0; i < names.Count; ++i)
+                            userParameters.Add(names[i].InnerText, values[i].InnerText);
+                    }
+                    else if (!String.IsNullOrEmpty(string_params))
+                    {
+                        string[] splittedParams = string_params.Split(';');
+                        foreach (string nameValuePair in splittedParams)
+                        {
+                            string[] splittedNameValuePair = nameValuePair.Split('=');
+                            userParameters.Add(splittedNameValuePair[0], splittedNameValuePair[1]);
+                        }
+                    } 
+
+
                     using (var client = GenerateClient())
                     {
+                        List<ParameterBase> parameters = client.ListBuildParameters(project);
+                        List<NameValuePair> buildParameters = new List<NameValuePair>();
+
+                        foreach (ParameterBase parameter in parameters)
+                        {
+                            if (!quiet) WriteLine(string.Format("Parameter: {0}", parameter.Name), ConsoleColor.Gray);
+
+                            bool required = false;
+                            PropertyInfo propInfos = parameter.GetType().GetProperty("IsRequired");
+                            if (propInfos == null)
+                                WriteLine(string.Format("propInfos is null, considering that parameter {0} is not required", parameter.Name), ConsoleColor.DarkYellow);
+                            else
+                                required = (bool)propInfos.GetValue(parameter, null);
+
+                            if (!quiet) WriteLine(string.Format(" Kind: {0}", parameter.ToString()), ConsoleColor.Gray);
+                            if (!quiet) WriteLine(string.Format(" Data type: {0}", parameter.DataType), ConsoleColor.Gray);
+                            if (!quiet) WriteLine(string.Format(" Required: {0}", required), ConsoleColor.Gray);
+                            string userProvidedValue;
+                            userParameters.TryGetValue(parameter.Name, out userProvidedValue);
+                            if (!quiet) WriteLine(string.Format(" User provided value: {0}", userProvidedValue), ConsoleColor.Gray);
+
+                            var convertedValue = parameter.Convert(userProvidedValue);
+                            string convertedValueString = userProvidedValue;
+                            if (convertedValue != null)
+                            {
+                                convertedValueString = convertedValue.ToString();
+                            }
+                            if (!quiet) WriteLine(string.Format(" Converted value: {0}", convertedValueString), ConsoleColor.Gray);
+
+                            if (!quiet) WriteLine(string.Format(" Default value: {0}", parameter.DefaultValue), ConsoleColor.Gray);
+                            if (parameter.AllowedValues == null)
+                            {
+                                if (!quiet) WriteLine(" Allowed values: null", ConsoleColor.Gray);
+                            }
+                            else
+                            {
+                                if (!quiet) WriteLine(string.Format(" Allowed values: {0}", parameter.AllowedValues), ConsoleColor.Gray);
+
+                                bool isAllowedValue = false;
+                                int i = 0;
+                                while (!isAllowedValue && (i < parameter.AllowedValues.Length))
+                                {
+                                    isAllowedValue = parameter.AllowedValues[i].Equals(userProvidedValue);
+                                    ++i;
+                                }
+
+                                if (!isAllowedValue)
+                                    throw new Exception(string.Format("Parameter {0} was given value {1} which is not one of the allowed ones ({2})", parameter.Name, userProvidedValue, string.Format("{0}", parameter.AllowedValues)));
+                            }
+
+                            if (required && String.IsNullOrEmpty(convertedValueString) && String.IsNullOrEmpty(parameter.DefaultValue))
+                                throw new Exception(string.Format("Parameter {0} is required but was not provided and does not have a default value", parameter.Name));
+
+                            buildParameters.Add(new NameValuePair(parameter.Name, convertedValueString));
+                        } 
+
                         if (!quiet) WriteLine(string.Format("Sending ForceBuild request for '{0}'", project), ConsoleColor.White);
-                        client.ForceBuild(project);
+                        client.ForceBuild(project );
                         if (!quiet) WriteLine("ForceBuild request sent", ConsoleColor.White);
                     }
                 }
@@ -340,7 +423,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             WriteLine(message, ConsoleColor.Red);
             if (error != null)
             {
-                WriteLine(error.Message, ConsoleColor.Red);
+                WriteLine(error.ToString(), ConsoleColor.Red);
                 Environment.ExitCode = 2;
             }
             else
@@ -351,6 +434,18 @@ namespace ThoughtWorks.CruiseControl.CCCmd
 
         private static void DisplayHelp(OptionSet opts)
         {
+            string xmlParamFileLayout =
+@"<parameters>
+  <parameter>
+    <name>buildType</name>
+    <value>Development</value>
+  </parameter>
+  <parameter>
+    <name>DeployMsg</name>
+    <value>This is a test</value>
+  </parameter>
+</parameters> ";
+
             Assembly thisApp = Assembly.GetExecutingAssembly();
             Stream helpStream = thisApp.GetManifestResourceStream("ThoughtWorks.CruiseControl.CCCmd.Help.txt");
             try
@@ -366,11 +461,21 @@ namespace ThoughtWorks.CruiseControl.CCCmd
             opts.WriteOptionDescriptions (Console.Out);
 
             Console.WriteLine();
-            Console.WriteLine("Examples :");
-            Console.WriteLine("    CCCmd.exe retrieve   -s=tcp://localhost:21234/CruiseManager.rem -a");
-            Console.WriteLine("    CCCmd.exe retrieve   -s=tcp://localhost:21234/CruiseManager.rem -a -x");
-            Console.WriteLine("    CCCmd.exe retrieve   -s=tcp://localhost:21234/CruiseManager.rem -p=ccnet");
-            Console.WriteLine("    CCCmd.exe forcebuild -s=tcp://localhost:21234/CruiseManager.rem -p=ccnet");
+            WriteLine("Layout of the parameter file :", ConsoleColor.Yellow);
+            WriteLine(xmlParamFileLayout,ConsoleColor.DarkGray);
+            Console.WriteLine();
+            WriteLine(" Examples :",ConsoleColor.Yellow);
+            WriteLine("-==========-", ConsoleColor.Yellow);
+            WriteLine("    CCCmd.exe retrieve   -s=tcp://localhost:21234/CruiseManager.rem -a", ConsoleColor.White);
+            WriteLine("    CCCmd.exe retrieve   -s=tcp://localhost:21234/CruiseManager.rem -a -x", ConsoleColor.White);
+            WriteLine("    CCCmd.exe retrieve   -s=tcp://localhost:21234/CruiseManager.rem -p=ccnet", ConsoleColor.White);
+            WriteLine("    CCCmd.exe forcebuild -s=tcp://localhost:21234/CruiseManager.rem -p=ccnet", ConsoleColor.White);
+            WriteLine("    CCCmd.exe forcebuild -s=tcp://localhost:21234/CruiseManager.rem -p=ccnet -r=buildtype=fulltest", ConsoleColor.White);
+            WriteLine("    CCCmd.exe forcebuild -s=tcp://localhost:21234/CruiseManager.rem -p=ccnet -r=buildtype=fulltest;makepackage=true", ConsoleColor.White);
+
+ 
+
+
         }
     }
 }
