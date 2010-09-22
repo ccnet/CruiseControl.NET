@@ -221,7 +221,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
                 if (statisticResult.Value == null)
                     result = string.Empty;
                 else
-                    result = statisticResult.Value.ToString();
+                    result = System.Security.SecurityElement.Escape(statisticResult.Value.ToString());
 
                 el.AppendLine();
                 el.AppendFormat("  <statistic name=\"{0}\">{1}</statistic>",
