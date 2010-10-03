@@ -189,7 +189,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="result">the IIntegrationResult object for the build</param>
         protected override bool Execute(IIntegrationResult result)
 		{
-            result.BuildProgressInformation.SignalStartRunTask(string.Format("Executing {0}", Executable));
+            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description)
+                                                                           ? Description
+                                                                           : string.Format("Executing {0}", Executable)); 
             
 			ProcessInfo processInfo = NewProcessInfoFrom(result);
 

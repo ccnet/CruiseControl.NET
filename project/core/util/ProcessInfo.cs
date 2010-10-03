@@ -133,6 +133,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 	    public Process CreateProcess()
 		{
+            // if WorkingDirectory is filled in, check that it exists
 			if (!string.IsNullOrEmpty(WorkingDirectory) && !Directory.Exists(WorkingDirectory)) 
 				throw new DirectoryNotFoundException("Directory does not exist: " + WorkingDirectory);
 
