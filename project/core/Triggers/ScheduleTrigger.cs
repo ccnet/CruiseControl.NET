@@ -157,7 +157,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
                 nextBuild = nextBuild.AddMinutes(randomNumber);
             }
 
-            if (now >= nextBuild || now.Date == previousBuild.Date)
+            if (now >= nextBuild)
             {
                 nextBuild = nextBuild.AddDays(1);
             }
