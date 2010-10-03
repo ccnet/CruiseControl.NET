@@ -6,49 +6,64 @@ namespace ThoughtWorks.CruiseControl.Core.Util
     /// </summary>
     public class FtpLib : IFtpLib
     {
-        private EnterpriseDT.Net.Ftp.FTPConnection FtpServer;
-        private Tasks.TaskBase CallingTask;
-        private Util.BuildProgressInformation bpi;
+        private EnterpriseDT.Net.Ftp.FTPConnection ftpServer;
+        private Tasks.TaskBase callingTask;
+        private BuildProgressInformation bpi;
 
 
-        public FtpLib(Tasks.TaskBase callingTask, Util.BuildProgressInformation buildProgressInformation)
+        public FtpLib(Tasks.TaskBase callingTask, BuildProgressInformation buildProgressInformation)
         {
-            CallingTask = callingTask;
+            this.callingTask = callingTask;
             bpi = buildProgressInformation;
 
-            this.FtpServer = new EnterpriseDT.Net.Ftp.FTPConnection();
+            this.ftpServer = new EnterpriseDT.Net.Ftp.FTPConnection();
 
-            this.FtpServer.ReplyReceived += HandleMessages;
+            this.ftpServer.ReplyReceived += HandleMessages;
 
-            this.FtpServer.CommandSent += HandleMessages;
+            this.ftpServer.CommandSent += HandleMessages;
 
-            this.FtpServer.Downloaded += new EnterpriseDT.Net.Ftp.FTPFileTransferEventHandler(FtpServer_Downloaded);
+            this.ftpServer.Downloaded += new EnterpriseDT.Net.Ftp.FTPFileTransferEventHandler(FtpServer_Downloaded);
 
-            this.FtpServer.Uploaded += new EnterpriseDT.Net.Ftp.FTPFileTransferEventHandler(FtpServer_Uploaded);
+            this.ftpServer.Uploaded += new EnterpriseDT.Net.Ftp.FTPFileTransferEventHandler(FtpServer_Uploaded);
 
         }
 
 
-        public FtpLib(Util.BuildProgressInformation buildProgressInformation)
+        public FtpLib(BuildProgressInformation buildProgressInformation)
         {
             bpi = buildProgressInformation;
 
-            this.FtpServer = new EnterpriseDT.Net.Ftp.FTPConnection();
+            this.ftpServer = new EnterpriseDT.Net.Ftp.FTPConnection();
 
-            this.FtpServer.ReplyReceived += HandleMessages;
+            this.ftpServer.ReplyReceived += HandleMessages;
 
-            this.FtpServer.CommandSent += HandleMessages;
+            this.ftpServer.CommandSent += HandleMessages;
         }
 
         public FtpLib()
         {
-            this.FtpServer = new EnterpriseDT.Net.Ftp.FTPConnection();
+            this.ftpServer = new EnterpriseDT.Net.Ftp.FTPConnection();
 
-            this.FtpServer.ReplyReceived += HandleMessages;
+            this.ftpServer.ReplyReceived += HandleMessages;
 
-            this.FtpServer.CommandSent += HandleMessages;
+            this.ftpServer.CommandSent += HandleMessages;
 
         }
+
+        public System.TimeSpan TimeDifference
+        {
+            get
+            {
+                return ftpServer.TimeDifference;
+            }
+ 
+            set
+            {
+                ftpServer.TimeDifference = value;
+            }
+        }
+
+
 
         public void LogIn(string serverName, string userName, string password, bool activeConnectionMode)
         {
@@ -56,38 +71,34 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             Log.Info("Connecting to {0} ...", serverName);
 
             {
-                this.FtpServer.ServerAddress = serverName;
-                this.FtpServer.UserName = userName;
-                this.FtpServer.Password = password;
-                this.FtpServer.Connect();
+                this.ftpServer.ServerAddress = serverName;
+                this.ftpServer.UserName = userName;
+                this.ftpServer.Password = password;
+                this.ftpServer.Connect();
 
                 if (activeConnectionMode)
                 {
                     Log.Trace("Active mode enabled");
-                    this.FtpServer.ConnectMode = EnterpriseDT.Net.Ftp.FTPConnectMode.ACTIVE;
+                    this.ftpServer.ConnectMode = EnterpriseDT.Net.Ftp.FTPConnectMode.ACTIVE;
                 }
                 else
                 {
                     Log.Trace("Passive mode enabled");
-                    this.FtpServer.ConnectMode = EnterpriseDT.Net.Ftp.FTPConnectMode.PASV;
+                    this.ftpServer.ConnectMode = EnterpriseDT.Net.Ftp.FTPConnectMode.PASV;
                 }
 
-                this.FtpServer.TransferType = EnterpriseDT.Net.Ftp.FTPTransferType.BINARY;
+                this.ftpServer.TransferType = EnterpriseDT.Net.Ftp.FTPTransferType.BINARY;
             }
         }
 
         public void DownloadFolder(string localFolder, string remoteFolder, bool recursive)
         {
 
-            this.FtpServer.ChangeWorkingDirectory(remoteFolder);
+            this.ftpServer.ChangeWorkingDirectory(remoteFolder);
 
-            EnterpriseDT.Net.Ftp.FTPFile[] FtpServerFileInfo = this.FtpServer.GetFileInfos();
+            var ftpServerFileInfo = this.ftpServer.GetFileInfos();
 
-            string LocalTargetFolder = null;
-            string FtpTargetFolder = null;
-            bool DownloadFile = false;
-            string LocalFile = null;
-            System.IO.FileInfo fi = default(System.IO.FileInfo);
+            var fi = default(System.IO.FileInfo);
 
             if (!System.IO.Directory.Exists(localFolder))
             {
@@ -95,72 +106,72 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 System.IO.Directory.CreateDirectory(localFolder);
             }
 
-            foreach (EnterpriseDT.Net.Ftp.FTPFile CurrentFileOrDirectory in FtpServerFileInfo)
+            foreach (EnterpriseDT.Net.Ftp.FTPFile currentFileOrDirectory in ftpServerFileInfo)
             {
                 if (recursive)
                 {
-                    if (CurrentFileOrDirectory.Dir && CurrentFileOrDirectory.Name != "." && CurrentFileOrDirectory.Name != "..")
+                    if (currentFileOrDirectory.Dir && currentFileOrDirectory.Name != "." && currentFileOrDirectory.Name != "..")
                     {
 
-                        LocalTargetFolder = System.IO.Path.Combine(localFolder, CurrentFileOrDirectory.Name);
-                        FtpTargetFolder = string.Format("{0}/{1}", remoteFolder, CurrentFileOrDirectory.Name);
+                        string localTargetFolder = System.IO.Path.Combine(localFolder, currentFileOrDirectory.Name);
+                        string ftpTargetFolder = string.Format("{0}/{1}", remoteFolder, currentFileOrDirectory.Name);
 
-                        if (!System.IO.Directory.Exists(LocalTargetFolder))
+                        if (!System.IO.Directory.Exists(localTargetFolder))
                         {
-                            Log.Trace("creating {0}", LocalTargetFolder);
-                            System.IO.Directory.CreateDirectory(LocalTargetFolder);
+                            Log.Trace("creating {0}", localTargetFolder);
+                            System.IO.Directory.CreateDirectory(localTargetFolder);
                         }
 
-                        DownloadFolder(LocalTargetFolder, FtpTargetFolder, recursive);
+                        DownloadFolder(localTargetFolder, ftpTargetFolder, recursive);
 
                         //set the ftp working folder back to the correct value
-                        this.FtpServer.ChangeWorkingDirectory(remoteFolder);
+                        this.ftpServer.ChangeWorkingDirectory(remoteFolder);
                     }
                 }
 
-                if (!CurrentFileOrDirectory.Dir)
+                if (!currentFileOrDirectory.Dir)
                 {
-                    DownloadFile = false;
+                    bool downloadFile = false;
 
-                    LocalFile = System.IO.Path.Combine(localFolder, CurrentFileOrDirectory.Name);
+                    string localFile = System.IO.Path.Combine(localFolder, currentFileOrDirectory.Name);
 
 
                     // check file existence
-                    if (!System.IO.File.Exists(LocalFile))
+                    if (!System.IO.File.Exists(localFile))
                     {
-                        DownloadFile = true;
+                        downloadFile = true;
                     }
                     else
                     {
                         //check file size
-                        fi = new System.IO.FileInfo(LocalFile);
-                        if (CurrentFileOrDirectory.Size != fi.Length)
+                        fi = new System.IO.FileInfo(localFile);
+                        if (currentFileOrDirectory.Size != fi.Length)
                         {
-                            DownloadFile = true;
-                            System.IO.File.Delete(LocalFile);
+                            downloadFile = true;
+                            System.IO.File.Delete(localFile);
                         }
                         else
                         {
                             //check modification time
-                            if (CurrentFileOrDirectory.LastModified != fi.CreationTime)
+                            if (currentFileOrDirectory.LastModified != fi.CreationTime)
                             {
-                                DownloadFile = true;
-                                System.IO.File.Delete(LocalFile);
+                                downloadFile = true;
+                                System.IO.File.Delete(localFile);
 
                             }
                         }
                     }
 
 
-                    if (DownloadFile)
+                    if (downloadFile)
                     {
-                        Log.Trace("Downloading {0}", CurrentFileOrDirectory.Name);
-                        this.FtpServer.DownloadFile(localFolder, CurrentFileOrDirectory.Name);
+                        Log.Trace("Downloading {0}", currentFileOrDirectory.Name);
+                        this.ftpServer.DownloadFile(localFolder, currentFileOrDirectory.Name);
 
-                        fi = new System.IO.FileInfo(LocalFile);
-                        fi.CreationTime = CurrentFileOrDirectory.LastModified;
-                        fi.LastAccessTime = CurrentFileOrDirectory.LastModified;
-                        fi.LastWriteTime = CurrentFileOrDirectory.LastModified;
+                        fi = new System.IO.FileInfo(localFile);
+                        fi.CreationTime = currentFileOrDirectory.LastModified;
+                        fi.LastAccessTime = currentFileOrDirectory.LastModified;
+                        fi.LastWriteTime = currentFileOrDirectory.LastModified;
                     }
 
                 }
@@ -174,7 +185,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             string[] LocalFiles = null;
 
             LocalFiles = System.IO.Directory.GetFiles(localFolder, "*.*");
-            this.FtpServer.ChangeWorkingDirectory(remoteFolder);
+            this.ftpServer.ChangeWorkingDirectory(remoteFolder);
 
 
             // remove the local folder value, so we can work relative
@@ -185,22 +196,22 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 
             //upload files
-            //FtpServer.Exists throws an error, so we must do it ourselves
-            EnterpriseDT.Net.Ftp.FTPFile[] FtpServerFileInfo = this.FtpServer.GetFileInfos();
+            //ftpServer.Exists throws an error, so we must do it ourselves
+            EnterpriseDT.Net.Ftp.FTPFile[] ftpServerFileInfo = this.ftpServer.GetFileInfos();
 
 
             foreach (var LocalFile in LocalFiles)
             {
-                if (!FileExistsAtFtp(FtpServerFileInfo, LocalFile))
+                if (!FileExistsAtFtp(ftpServerFileInfo, LocalFile))
                 {
-                    this.FtpServer.UploadFile(System.IO.Path.Combine(localFolder, LocalFile), LocalFile);
+                    this.ftpServer.UploadFile(System.IO.Path.Combine(localFolder, LocalFile), LocalFile);
                 }
                 else
                 {
-                    if (FileIsDifferentAtFtp(FtpServerFileInfo, LocalFile, localFolder))
+                    if (FileIsDifferentAtFtp(ftpServerFileInfo, LocalFile, localFolder))
                     {
-                        this.FtpServer.DeleteFile(LocalFile);
-                        this.FtpServer.UploadFile(System.IO.Path.Combine(localFolder, LocalFile), LocalFile);
+                        this.ftpServer.DeleteFile(LocalFile);
+                        this.ftpServer.UploadFile(System.IO.Path.Combine(localFolder, LocalFile), LocalFile);
                     }
 
                 }
@@ -228,12 +239,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             foreach (var Folder in Folders)
             {
                 //explicit set the folder back, because of recursive calls
-                this.FtpServer.ChangeWorkingDirectory(remoteFolder);
+                this.ftpServer.ChangeWorkingDirectory(remoteFolder);
 
 
-                if (!FolderExistsAtFtp(FtpServerFileInfo, Folder))
+                if (!FolderExistsAtFtp(ftpServerFileInfo, Folder))
                 {
-                    this.FtpServer.CreateDirectory(Folder);
+                    this.ftpServer.CreateDirectory(Folder);
                 }
 
                 LocalTargetFolder = System.IO.Path.Combine(localFolder, Folder);
@@ -245,17 +256,17 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         public void DisConnect()
         {
-            this.FtpServer.Close();
+            this.ftpServer.Close();
         }
 
         public bool IsConnected()
         {
-            return this.FtpServer.IsConnected;
+            return this.ftpServer.IsConnected;
         }
 
         public string CurrentWorkingFolder()
         {
-            return this.FtpServer.ServerDirectory;
+            return this.ftpServer.ServerDirectory;
         }
 
         public Modification[] ListNewOrUpdatedFilesAtFtpSite(string localFolder, string remoteFolder, bool recursive)
@@ -269,9 +280,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         private void GetTheList(System.Collections.Generic.List<Modification> mods, string localFolder, string remoteFolder, bool recursive)
         {
-            this.FtpServer.ChangeWorkingDirectory(remoteFolder);
+            this.ftpServer.ChangeWorkingDirectory(remoteFolder);
 
-            EnterpriseDT.Net.Ftp.FTPFile[] FtpServerFileInfo = this.FtpServer.GetFileInfos();
+            EnterpriseDT.Net.Ftp.FTPFile[] FtpServerFileInfo = this.ftpServer.GetFileInfos();
 
             string LocalTargetFolder = null;
             string FtpTargetFolder = null;
@@ -304,7 +315,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                         GetTheList(mods, LocalTargetFolder, FtpTargetFolder, recursive);
 
                         //set the ftp working folder back to the correct value
-                        this.FtpServer.ChangeWorkingDirectory(remoteFolder);
+                        this.ftpServer.ChangeWorkingDirectory(remoteFolder);
                     }
                 }
 
@@ -408,7 +419,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 {
                     fi = new System.IO.FileInfo(System.IO.Path.Combine(localFolder, localFile));
 
-                    if (fi.Length != CurrentFileOrDirectory.Size || fi.LastWriteTime != CurrentFileOrDirectory.LastModified)
+                    if (fi.Length != CurrentFileOrDirectory.Size || fi.LastWriteTime > CurrentFileOrDirectory.LastModified)
                     {
                         isDifferent = true;
                     }
@@ -449,11 +460,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         private void AddTaskStatusItem(string information)
         {
-            CallingTask.CurrentStatus.AddChild(new ThoughtWorks.CruiseControl.Remote.ItemStatus(information));
+            callingTask.CurrentStatus.AddChild(new ThoughtWorks.CruiseControl.Remote.ItemStatus(information));
 
-            if (CallingTask.CurrentStatus.ChildItems.Count > 10)
+            if (callingTask.CurrentStatus.ChildItems.Count > 10)
             {
-                CallingTask.CurrentStatus.ChildItems.RemoveAt(0);
+                callingTask.CurrentStatus.ChildItems.RemoveAt(0);
             }
 
         }

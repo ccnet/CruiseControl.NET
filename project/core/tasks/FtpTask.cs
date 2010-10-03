@@ -126,6 +126,16 @@
         [ReflectorProperty("recursiveCopy", Required = false)]
         public bool RecursiveCopy { get; set; }
 
+        /// <summary>
+        /// Time difference between server and client (relative to client) in hours.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>0</default>
+        [ReflectorProperty("timeDifference", Required = false)]
+        public int TimeDifference = 0;
+
+
+
         protected override bool Execute(IIntegrationResult result)
         {
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : GetDescription());
@@ -137,6 +147,10 @@
             try
             {
                 ftp.LogIn(ServerName, UserName, Password, UseActiveConnectionMode);
+
+                ftp.TimeDifference = new TimeSpan(TimeDifference, 0, 0);
+
+
 
                 if (!FtpFolderName.StartsWith("/"))
                 {
@@ -160,14 +174,11 @@
             {
                 Log.Error(ex);
                 // try to disconnect in a proper way on getting an error
-                if (ftp != null)
-                {
                     try
                     {  // swallow exception on disconnect to keep the original error
                         if (ftp.IsConnected()) ftp.DisConnect();
                     }
                     catch { }
-                }
                 Log.Info("throwing");
                 throw;
             }
