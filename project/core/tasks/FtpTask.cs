@@ -132,7 +132,7 @@
         /// <version>1.6</version>
         /// <default>0</default>
         [ReflectorProperty("timeDifference", Required = false)]
-        public int TimeDifference = 0;
+        public int TimeDifference { get; set; }
 
 
 
