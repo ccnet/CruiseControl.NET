@@ -116,9 +116,21 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="parameters"></param>
         public override void ForceBuild(string projectName, List<NameValuePair> parameters)
         {
+            this.ForceBuild(projectName, parameters, BuildCondition.ForceBuild);
+        }
+
+        /// <summary>
+        /// Forces a build for the named project with some parameters.
+        /// </summary>
+        /// <param name="projectName">project to force</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="condition">The condition.</param>
+        public override void ForceBuild(string projectName, List<NameValuePair> parameters, BuildCondition condition)
+        {
             if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
 
             BuildIntegrationRequest request = new BuildIntegrationRequest(SessionToken, projectName);
+            request.BuildCondition = condition;
             request.BuildValues = parameters;
             request.ServerName = TargetServer;
             Response resp = connection.SendMessage("ForceBuild", request);

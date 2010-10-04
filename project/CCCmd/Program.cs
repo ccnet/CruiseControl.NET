@@ -25,6 +25,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
         private static string userName;
         private static string password;
         private static bool xml;
+        private static BuildCondition condition = BuildCondition.ForceBuild;
 
         static void Main(string[] args)
         {
@@ -35,13 +36,12 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                 .Add("p|project=", "the project to use (required for all actions except help and retrieve)", delegate(string v) { project = v; })
                 .Add("a|all", "lists all the projects (only valid for retrieve)", delegate(string v) { all = v != null; })
                 .Add("q|quiet", "run in quiet mode (do not print messages)", delegate(string v) { quiet = v != null; })
+                .Add("ime|ifmodificationexists", "only force the build if modification exist", delegate(string v) { condition = v != null ? BuildCondition.IfModificationExists : BuildCondition.ForceBuild; })
                 .Add("r|params=", "a semicolon separated list of name value pairs", delegate(string v) { string_params = v; })
                 .Add("f|params_file=", "the name of a XML file containing the parameters values to use when forcing a build. If specified at the same time as this flag, the values from the command line are ignored", delegate(string v) { params_filename = v; })             
  				.Add("x|xml", "outputs the details in XML format instead of plain text (only valid for retrieve)", delegate(string v) { xml = v != null; })
                 .Add("user=", "the user of the user account to use", v => { userName = v; })
-                .Add("pwd=", "the password to use for the user", v => { password = v;});
-
-        	
+                .Add("pwd=", "the password to use for the user", v => { password = v;});        	
         	try
         	{
         		extra = opts.Parse(args);
@@ -195,7 +195,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                         } 
 
                         if (!quiet) WriteLine(string.Format("Sending ForceBuild request for '{0}'", project), ConsoleColor.White);
-                        client.ForceBuild(project );
+                        client.ForceBuild(project, buildParameters, condition);
                         if (!quiet) WriteLine("ForceBuild request sent", ConsoleColor.White);
                     }
                 }

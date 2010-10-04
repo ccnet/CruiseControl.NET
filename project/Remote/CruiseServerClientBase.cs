@@ -105,7 +105,18 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="parameters"></param>
         public virtual void ForceBuild(string projectName, List<NameValuePair> parameters)
         {
-            throw new NotImplementedException();
+            this.ForceBuild(projectName);
+        }
+
+        /// <summary>
+        /// Forces a build for the named project with some parameters.
+        /// </summary>
+        /// <param name="projectName">project to force</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="condition">The condition.</param>
+        public virtual void ForceBuild(string projectName, List<NameValuePair> parameters, BuildCondition condition)
+        {
+            this.ForceBuild(projectName, parameters);
         }
         #endregion
 
