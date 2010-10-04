@@ -222,7 +222,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private ProcessInfo NewProcessInfoFrom(IIntegrationResult result)
 		{
-            ProcessInfo info = new ProcessInfo( executable, Args(result), BaseDirectory(result), this.Priority, successExitCodes);
+            ProcessInfo info = new ProcessInfo( Executable, Args(result), BaseDirectory(result), this.Priority, successExitCodes);
 			info.TimeOut = BuildTimeoutSeconds*1000;
             SetConfiguredEnvironmentVariables(info.EnvironmentVariables, this.EnvironmentVariables);
             IDictionary properties = result.IntegrationProperties;
