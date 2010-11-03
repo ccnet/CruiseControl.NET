@@ -206,6 +206,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("deleteWorkspace", Required = false)]
         public bool DeleteWorkspace { get; set; }
 
+
+        /// <summary>
+        /// Encoding Code page to use for communicating with TFS
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>Empty String, will default to UTF-8 encoding</default>
+        [ReflectorProperty("codepage", Required = false)]
+        public string CodePage { get; set; } 
+
+
         #endregion NetReflectored Properties
 
         #region ISourceControl Implementation
@@ -523,6 +533,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
             var processInfo = new ProcessInfo(Executable, args, workingDirectory);
             processInfo.StreamEncoding = Encoding.UTF8;
+
+            if (!string.IsNullOrEmpty(CodePage))
+            {
+                int codePage;
+                if (int.TryParse(CodePage, out codePage))
+                {
+                    processInfo.StreamEncoding = Encoding.GetEncoding(codePage);
+                }
+                else
+                {
+                    throw new CruiseControlException(string.Format("Code page {0} could not be parsed to an encoding via instruction : Encoding.GetEncoding(codePage)",CodePage));
+                }
+            }
+            
             processInfo.TimeOut = 600000;
             return processInfo;
         }
