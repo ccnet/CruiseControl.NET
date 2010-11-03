@@ -3,7 +3,7 @@
 	<xsl:output method="html" />
 	<xsl:param name="applicationPath" select="'.'" />
 
-	<xsl:variable name="fxcop.root" select="//FxCopReport[@Version = '1.36']" />
+	<xsl:variable name="fxcop.root" select="//FxCopReport" />
 
 	<xsl:template match="/">
 		<div id="fxcop-report">
