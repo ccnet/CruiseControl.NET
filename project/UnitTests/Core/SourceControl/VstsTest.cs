@@ -125,6 +125,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                                                              new IntegrationSummary(IntegrationStatus.Unknown,"testLabel", "testLastSuccessfulLabel", DateTime.Now));
             vsts.AutoGetSource = true;
             vsts.Domain = "testDomain";
+            vsts.Force = true;
             string expectedUsername = vsts.Domain + "\\" + fakeUsername;
 
             ExpectToExecuteArguments(string.Format("dir /folders /server:{0} \"{1}\" /login:{2},{3}",
@@ -146,7 +147,49 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                                                    expectedUsername,
                                                    fakePassword));
 
-            string getCommand = string.Format("get /force /recursive /noprompt \"{0}\" /login:{1},{2}",
+            string getCommand = string.Format("get /recursive /noprompt /force \"{0}\" /login:{1},{2}",
+                                                   DefaultWorkingDirectory,
+                                                   expectedUsername,
+                                                   fakePassword);
+
+            ProcessInfo info = NewProcessInfo(getCommand, DefaultWorkingDirectory);
+            info.TimeOut = 3600000;
+            ExpectToExecute(info);
+
+            
+            vsts.GetSource(result);
+        }
+
+        [Test]
+        public void VerifyGetSourceProcessInfoArgumentsWhenForceIsFalse()
+        {
+            IntegrationResult result = new IntegrationResult("testProject", "testWorkingDir", "testArtifactDir",
+                                                             new IntegrationRequest(BuildCondition.ForceBuild,"testSource", "testUsername"),
+                                                             new IntegrationSummary(IntegrationStatus.Unknown,"testLabel", "testLastSuccessfulLabel", DateTime.Now));
+            vsts.AutoGetSource = true;
+            vsts.Domain = "testDomain";
+            string expectedUsername = vsts.Domain + "\\" + fakeUsername;
+
+            ExpectToExecuteArguments(string.Format("dir /folders /server:{0} \"{1}\" /login:{2},{3}",
+                                                   fakeTfsPath,
+                                                   fakeProjectPath,
+                                                   expectedUsername,
+                                                   fakePassword));
+
+            ExpectToExecuteArguments(string.Format("workspaces /computer:{1} -server:{0} /format:detailed \"CCNET\" /login:{2},{3}",
+                                                   fakeTfsPath,
+                                                   Environment.MachineName,
+                                                   expectedUsername,
+                                                   fakePassword));
+
+            ExpectToExecuteArguments(string.Format(@"workfold /map ""{0}"" ""{1}"" /server:{2} /workspace:CCNET /login:{3},{4}",
+                                                   fakeProjectPath,
+                                                   DefaultWorkingDirectory,
+                                                   fakeTfsPath,
+                                                   expectedUsername,
+                                                   fakePassword));
+
+            string getCommand = string.Format("get /recursive /noprompt \"{0}\" /login:{1},{2}",
                                                    DefaultWorkingDirectory,
                                                    expectedUsername,
                                                    fakePassword);
@@ -166,6 +209,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                                                              new IntegrationRequest(BuildCondition.ForceBuild,"testSource", "testUsername"),
                                                              new IntegrationSummary(IntegrationStatus.Unknown,"testLabel", "testLastSuccessfulLabel", DateTime.Now));
             vsts.AutoGetSource = true;
+            vsts.Force = true;
 
             ExpectToExecuteArguments(string.Format("dir /folders /server:{0} \"{1}\" /login:{2},{3}",
                                                    fakeTfsPath,
@@ -186,7 +230,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                                                    fakeUsername,
                                                    fakePassword));
 
-            string getCommand = string.Format("get /force /recursive /noprompt \"{0}\" /login:{1},{2}",
+            string getCommand = string.Format("get /recursive /noprompt /force \"{0}\" /login:{1},{2}",
                                                    DefaultWorkingDirectory,
                                                    fakeUsername,
                                                    fakePassword);

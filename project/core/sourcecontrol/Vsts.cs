@@ -213,7 +213,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <version>1.6</version>
         /// <default>Empty String, will default to UTF-8 encoding</default>
         [ReflectorProperty("codepage", Required = false)]
-        public string CodePage { get; set; } 
+        public string CodePage { get; set; }
 
 
         #endregion NetReflectored Properties
@@ -409,9 +409,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             var buffer = new PrivateArguments(
                 "get",
-                "/force",
                 "/recursive",
                 "/noprompt");
+
+            if (Force)
+            {
+                buffer.Add("/force");
+            }
+
             buffer.AddQuote(WorkingDirectory);
 
             AppendSourceControlAuthentication(buffer);
@@ -469,7 +474,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             var buffer = new PrivateArguments("label");
             buffer.Add("/server:", Server);
-            buffer.Add(result.Label,string.Format("@{0}", ProjectPath));
+            buffer.Add(result.Label, string.Format("@{0}", ProjectPath));
             buffer.AddQuote(WorkingDirectory);
             buffer.Add("/recursive");
             buffer.Add("/comment:", "CCNet Build Label", true);
@@ -543,10 +548,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 }
                 else
                 {
-                    throw new CruiseControlException(string.Format("Code page {0} could not be parsed to an encoding via instruction : Encoding.GetEncoding(codePage)",CodePage));
+                    throw new CruiseControlException(string.Format("Code page {0} could not be parsed to an encoding via instruction : Encoding.GetEncoding(codePage)", CodePage));
                 }
             }
-            
+
             processInfo.TimeOut = 600000;
             return processInfo;
         }
