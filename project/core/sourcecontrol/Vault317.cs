@@ -40,14 +40,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             string realVaultWorkingFolder = null;
             if (string.IsNullOrEmpty(_shim.WorkingDirectory))
             {
-                realVaultWorkingFolder = GetVaultWorkingFolder(result);
+                realVaultWorkingFolder = GetVaultWorkingFolder(from);
                 if (string.IsNullOrEmpty(realVaultWorkingFolder))
                     throw new VaultException(
                         string.Format("Vault user {0} has no working folder set for {1} in repository {2} and no working directory has been specified.",
                                       _shim.Username, _shim.Folder, _shim.Repository));
             }
             else
-                realVaultWorkingFolder = result.BaseFromWorkingDirectory(_shim.WorkingDirectory);
+                realVaultWorkingFolder = from.BaseFromWorkingDirectory(_shim.WorkingDirectory);
 
 
             if (!System.IO.Directory.Exists(realVaultWorkingFolder))
