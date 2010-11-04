@@ -396,7 +396,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             buffer.AddQuote(ProjectPath);
             buffer.AddQuote(WorkingDirectory);
             buffer.Add("/server:", Server);
-            buffer.Add("/workspace:", this.Workspace);
+            buffer.Add("/workspace:", this.Workspace, true);
 
             AppendSourceControlAuthentication(buffer);
 
