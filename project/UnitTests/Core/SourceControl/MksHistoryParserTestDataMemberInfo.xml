@@ -47,7 +47,7 @@
       </List>
     </Field>
     <Field name="cpid">
-      <Value></Value>
+      <Value>1234:56</Value>
     </Field>
     <Field name="cpsummary">
       <Value></Value>

@@ -90,6 +90,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             modification.UserName = node.SelectSingleNode("Field[@name='author']/Value").Value;
             modification.ModifiedTime = DateTime.Parse(node.SelectSingleNode("Field[@name='date']/Value").Value, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal);
             modification.Comment = node.SelectSingleNode("Field[@name='description']/Value").Value;
+
+            // Parse task ID from change package ID.
+            string cpid = node.SelectSingleNode("Field[@name='cpid']/Value").Value;
+            modification.ChangeNumber = ParseTaskIDFromCPID(cpid);
+        }
+
+        private string ParseTaskIDFromCPID(string cpid)
+        {
+            if (cpid.Contains(":"))
+            {
+                cpid = cpid.Substring(0, cpid.IndexOf(":"));
+            }
+
+            return cpid;
         }
 	}
 }

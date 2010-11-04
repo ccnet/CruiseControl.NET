@@ -142,6 +142,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             Assert.AreEqual("Test", modification.UserName);
             Assert.AreEqual(expectedOffsetAtModifiedTime, actualOffsetAtModifiedTime, "Date was not parsed with correct time zone offset.");
             Assert.AreEqual("Test Comment", modification.Comment);
+            Assert.AreEqual("1234", modification.ChangeNumber);
         }
 	}
 }
