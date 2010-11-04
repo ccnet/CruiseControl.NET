@@ -71,8 +71,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				return;
 
 			// ignore error output in the progress information
-			if (e.OutputType == ProcessOutputType.ErrorOutput)
-				return;
+			//if (e.OutputType == ProcessOutputType.ErrorOutput)
+			//	return;
+            // show error output as requested by CCNET-1918:MSBuild task does not give console output error messages for report generators to use
 
 			buildProgressInformation.AddTaskInformation(e.Data);
         }
