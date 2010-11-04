@@ -106,7 +106,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
                 Log.Debug("Cleaning out source folder: " + cleanCopyWorkingFolder);
                 fileDirectoryDeleter.DeleteIncludingReadOnlyObjects(cleanCopyWorkingFolder);
-                
+
                 System.IO.Directory.CreateDirectory(cleanCopyWorkingFolder);
             }
 
@@ -206,6 +206,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 _lastTxID = long.Parse(txIdAttr.Value);
                 Log.Debug("Most recent TxID: " + _lastTxID);
             }
+
+
+
+            //hack : attempt to fix CCNET-1053
+            string realWorkingFolder = null;
+            if (string.IsNullOrEmpty(_shim.WorkingDirectory))
+            {
+                realWorkingFolder = GetVaultWorkingFolder(from);
+                if (string.IsNullOrEmpty(realWorkingFolder))
+                    throw new VaultException(
+                        string.Format("Vault user {0} has no working folder set for {1} in repository {2} and no working directory has been specified.",
+                                      _shim.Username, _shim.Folder, _shim.Repository));
+            }
+            else
+                realWorkingFolder = from.BaseFromWorkingDirectory(_shim.WorkingDirectory);
+
+            System.IO.Directory.CreateDirectory(realWorkingFolder);
 
             return bFoundChanges;
         }
