@@ -155,8 +155,6 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         bool stopProjectOnReachingMaxSourceControlRetries { get; }
 
-
-
         /// <summary>
         /// What do do when an error occurs in the getmodifications stage of the source control 
         /// </summary>
@@ -186,6 +184,5 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <returns></returns>
         List<PackageDetails> RetrievePackageList(string buildName);
         #endregion
-
     }
 }

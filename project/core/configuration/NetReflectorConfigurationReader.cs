@@ -149,10 +149,20 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             configuration.SecurityManager = securityManager as ISecurityManager;
         }
 
+        /// <summary>
+        /// Loads and validates a queue.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="loadedItem">The loaded item.</param>
         private void LoadAndValidateQueue(Configuration configuration, object loadedItem)
         {
-            IQueueConfiguration queueConfig = loadedItem as IQueueConfiguration;
+            var queueConfig = loadedItem as IQueueConfiguration;
             configuration.QueueConfigurations.Add(queueConfig);
+            foreach (var project in queueConfig.Projects)
+            {
+                configuration.AddProject(project);
+                project.QueueName = queueConfig.Name;
+            }
         }
 
         /// <summary>

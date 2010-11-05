@@ -1,8 +1,9 @@
-using Exortech.NetReflector;
-using System;
-
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
+    using System;
+    using System.Collections.Generic;
+    using Exortech.NetReflector;
+
     /// <summary>
     /// Configure the behaviour of the build queues.
     /// </summary>
@@ -81,14 +82,15 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         private string lockQueueNames;
 
         /// <summary>
-        /// Default constructor - needed for NetReflector.
+        /// Initializes a new instance of the <see cref="DefaultQueueConfiguration"/> class.
         /// </summary>
-        public DefaultQueueConfiguration() { }
+        public DefaultQueueConfiguration() 
+        { }
 
         /// <summary>
-        /// Start a new queue configuration with a name.
+        /// Initializes a new instance of the <see cref="DefaultQueueConfiguration"/> class.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">The name.</param>
         public DefaultQueueConfiguration(string name)
         {
             this.name = name;
@@ -129,6 +131,14 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             get { return lockQueueNames; }
             set { lockQueueNames = value; }
         }
+
+        /// <summary>
+        /// The list of projects for the queue.
+        /// </summary>
+        /// <default>none</default>
+        /// <version>1.6</version>
+        [ReflectorProperty("projects")]
+        public virtual List<Project> Projects { get; set; }
 
         /// <summary>
         /// Checks the internal validation of the item.
