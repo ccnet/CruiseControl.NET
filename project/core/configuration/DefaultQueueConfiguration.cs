@@ -137,7 +137,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         /// </summary>
         /// <default>none</default>
         /// <version>1.6</version>
-        [ReflectorProperty("projects")]
+        [ReflectorProperty("projects", Required = false)]
         public virtual List<Project> Projects { get; set; }
 
         /// <summary>

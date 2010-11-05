@@ -158,10 +158,13 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         {
             var queueConfig = loadedItem as IQueueConfiguration;
             configuration.QueueConfigurations.Add(queueConfig);
-            foreach (var project in queueConfig.Projects)
+            if (queueConfig.Projects != null)
             {
-                configuration.AddProject(project);
-                project.QueueName = queueConfig.Name;
+                foreach (var project in queueConfig.Projects)
+                {
+                    configuration.AddProject(project);
+                    project.QueueName = queueConfig.Name;
+                }
             }
         }
 
