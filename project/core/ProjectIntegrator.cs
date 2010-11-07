@@ -216,7 +216,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 
                                 if ((AmountOfSourceControlExceptions > project.MaxSourceControlRetries)
-                                    && project.stopProjectOnReachingMaxSourceControlRetries)
+                                    && project.StopProjectOnReachingMaxSourceControlRetries)
                                 {
                                     Stopped();
                                 }

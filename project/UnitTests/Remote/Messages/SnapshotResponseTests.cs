@@ -79,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
                 "<error>Error 2</error>" +
                 "<snapshot>" +
                     "<projects>" +
-                        "<projectStatus serverName=\"{6}\" status=\"Running\" buildStatus=\"Success\" name=\"test project\" " +
+                        "<projectStatus showForceBuildButton=\"true\" showStartStopButton=\"true\" serverName=\"{6}\" status=\"Running\" buildStatus=\"Success\" name=\"test project\" " +
                             "queuePriority=\"0\" lastBuildDate=\"{3:yyyy-MM-ddTHH:mm:ss.FFFFFFF}\" nextBuildTime=\"{4:yyyy-MM-ddTHH:mm:ss.FFFFFFF}\">" +
                             "<activity type=\"Sleeping\" />" +
                         "</projectStatus>" + 

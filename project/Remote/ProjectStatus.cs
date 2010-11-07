@@ -30,6 +30,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         private Message[] messages = new Message[0];
         private string queue;
         private int queuePriority;
+        private bool showForceBuildButton = true;
+        private bool showStartStopButton = true;
 
         /// <summary>
         /// Initialises a new blank <see cref="ProjectStatus"/>.
@@ -92,6 +94,29 @@ namespace ThoughtWorks.CruiseControl.Remote
             get { return currentBuildStage; }
             set { currentBuildStage = value; }
         }
+
+        /// <summary>
+        /// (Should) show or hide the ForceBuildButton in UI programs. 
+        /// </summary>
+        [XmlAttribute("showForceBuildButton")]
+        public bool ShowForceBuildButton
+        {
+            get { return showForceBuildButton; }
+            set { showForceBuildButton = value; }
+        }
+
+        /// <summary>
+        /// (Should) show or hide the Start - Stop Button in UI programs.  
+        /// </summary>
+        [XmlAttribute("showStartStopButton")]
+        public bool ShowStartStopButton
+        {
+            get { return showStartStopButton; }
+            set { showStartStopButton = value; }
+        }
+
+
+
 
         /// <summary>
         /// The name of the server this status is from.

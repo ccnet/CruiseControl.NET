@@ -81,6 +81,32 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			get { return ProjectStatus != null; }
 		}
 
+        public bool ShowForceBuildButton
+        {
+            get
+            {
+                if (IsConnected)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        public bool ShowStartStopButton
+        {
+            get
+            {
+                if (IsConnected)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+
+
 		public ProjectActivity Activity
 		{
 			get { return ProjectStatus.Activity; }

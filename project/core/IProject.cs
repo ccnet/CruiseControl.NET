@@ -153,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Stop the project when the MaxSourceControlRetries limit has been reached
         /// </summary>
-        bool stopProjectOnReachingMaxSourceControlRetries { get; }
+        bool StopProjectOnReachingMaxSourceControlRetries { get; }
 
         /// <summary>
         /// What do do when an error occurs in the getmodifications stage of the source control 

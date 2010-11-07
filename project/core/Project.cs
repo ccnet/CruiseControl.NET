@@ -92,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core
     {
         private string webUrl = DefaultUrl();
         private string queueName = string.Empty;
-        private int queuePriority = 0;
+        private int queuePriority ;
         private ISourceControl sourceControl = new NullSourceControl();
         private ILabeller labeller = new DefaultLabeller();
         private ITask[] tasks = new ITask[] { new NullTask() };
@@ -108,13 +108,16 @@ namespace ThoughtWorks.CruiseControl.Core
         private ParameterBase[] parameters = new ParameterBase[0];
         private ProjectInitialState initialState = ProjectInitialState.Started;
         private ProjectStartupMode startupMode = ProjectStartupMode.UseLastState;
-        private bool StopProjectOnReachingMaxSourceControlRetries = false;
+        private bool stopProjectOnReachingMaxSourceControlRetries;
         private Sourcecontrol.Common.SourceControlErrorHandlingPolicy sourceControlErrorHandling = Common.SourceControlErrorHandlingPolicy.ReportEveryFailure;
         private ProjectStatusSnapshot currentProjectStatus;
         private Dictionary<ITask, ItemStatus> currentProjectItems = new Dictionary<ITask, ItemStatus>();
         private Dictionary<SourceControlOperation, ItemStatus> sourceControlOperations = new Dictionary<SourceControlOperation, ItemStatus>();
         private IConfiguration configuration;
         private RemoteBuildRequest remoteBuildRequest;
+        private bool showForceBuildButton = true;
+        private bool showStartStopButton = true;
+
 
         #region Constructors
         /// <summary>
@@ -247,7 +250,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
         /// <summary>
         /// The maximum amount of source control exceptions in a row that may occur, before the project goes to the stopped state(when
-        /// stopProjectOnReachingMaxSourceControlRetries is set to true).
+        /// StopProjectOnReachingMaxSourceControlRetries is set to true).
         /// </summary>
         /// <version>1.4</version>
         /// <default>5</default>
@@ -264,13 +267,47 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <version>1.4</version>
         /// <default>false</default>
-        [ReflectorProperty("stopProjectOnReachingMaxSourceControlRetries", Required = false)]
-        public bool stopProjectOnReachingMaxSourceControlRetries
+        [ReflectorProperty("StopProjectOnReachingMaxSourceControlRetries", Required = false)]
+        public bool StopProjectOnReachingMaxSourceControlRetries
         {
-            get { return StopProjectOnReachingMaxSourceControlRetries; }
-            set { StopProjectOnReachingMaxSourceControlRetries = value; }
+            get { return stopProjectOnReachingMaxSourceControlRetries; }
+            set { stopProjectOnReachingMaxSourceControlRetries = value; }
         }
-        
+
+
+
+        /// <summary>
+        /// (Should) show or hide the ForceBuildButton in UI programs. This is an extra setting on top of security.
+        /// This is setting is mainly meant to disable the possibility to force a project via a UI. (dashboard and cctray)
+        /// Forcing a build via other tools : ccmd, ... will work if you have the rights to do so.
+        /// For example there is a project GatherErrorsDuringWeekend which is scheduled to run at Saturday and Sunday.
+        /// Forcing this project on a weekday could mess up statistics or so. 
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>True</default>
+        [ReflectorProperty("showForceBuildButton", Required = false)]
+        public bool ShowForceBuildButton
+        {
+            get { return showForceBuildButton; }
+            set { showForceBuildButton = value; }
+        }
+
+        /// <summary>
+        /// (Should) show or hide the Start - Stop Button in UI programs. This is an extra setting on top of security.
+        /// This is setting is mainly meant to disable the possibility to start or stop a project via a UI. (dashboard and cctray) 
+        /// Starting - Stopping a build via other tools : ccmd, ... will work if you have the rights to do so.
+        /// For example there is a project GatherErrorsDuringWeekend which is scheduled to run at Saturday and Sunday.
+        /// Stopping this project on a weekday could mess up statistics or so. 
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>True</default>
+        [ReflectorProperty("showStartStopButton", Required = false)]
+        public bool ShowStartStopButton
+        {
+            get { return showStartStopButton; }
+            set { showStartStopButton = value; }
+        }
+
         /// <summary>
         /// What action to take when a source control error occurs (during GetModifications).
         /// </summary>
@@ -1012,11 +1049,11 @@ namespace ThoughtWorks.CruiseControl.Core
             }
 
 
-            foreach (string UserName in result.FailureUsers)
+            foreach (string userName in result.FailureUsers)
             {
-                if (!breakers.Contains(UserName))
+                if (!breakers.Contains(userName))
                 {
-                    breakers.Add(UserName);
+                    breakers.Add(userName);
                 }
             }
 
@@ -1143,6 +1180,8 @@ namespace ThoughtWorks.CruiseControl.Core
                 this.QueuePriority);
             status.Description = this.Description;
             status.Messages = (Message[])this.messages.ToArray(typeof(Message));
+            status.ShowForceBuildButton = this.ShowForceBuildButton;
+            status.ShowStartStopButton = this.ShowStartStopButton;
             return status;
         }
 

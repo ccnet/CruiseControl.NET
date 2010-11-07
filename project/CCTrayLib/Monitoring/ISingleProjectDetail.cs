@@ -17,6 +17,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         ProjectState ProjectState { get; }
 
 		bool IsConnected { get; }
+        bool ShowForceBuildButton { get; }
+        bool ShowStartStopButton { get; }
+
+        
 
         string ServerName { get; }	
 

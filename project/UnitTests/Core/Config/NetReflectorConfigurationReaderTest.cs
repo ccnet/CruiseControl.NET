@@ -272,7 +272,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             #region IProject Members
 
 
-            public bool stopProjectOnReachingMaxSourceControlRetries
+            public bool StopProjectOnReachingMaxSourceControlRetries
             {
                 get { throw new NotImplementedException(); }
             }

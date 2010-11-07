@@ -151,8 +151,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             foreach (IProjectMonitor mon in controller.Monitors)
                 mon.Polled += mon_Polled;
 
-            btnForceBuild.DataBindings.Add("Enabled", controller, "IsProjectSelected");
-            btnStartStopProject.DataBindings.Add("Enabled", controller, "IsProjectSelected");
+            btnForceBuild.DataBindings.Add("Enabled", controller, "ShowForceBuildButton");
+            btnStartStopProject.DataBindings.Add("Enabled", controller, "ShowStartStopButton");
         }
 
         protected override void OnLoad(EventArgs e)
@@ -287,7 +287,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.lvProjects.Location = new System.Drawing.Point(203, 38);
             this.lvProjects.MultiSelect = false;
             this.lvProjects.Name = "lvProjects";
-            this.lvProjects.Size = new System.Drawing.Size(689, 0);
+            this.lvProjects.Size = new System.Drawing.Size(689, 293);
             this.lvProjects.SmallImageList = this.iconList;
             this.lvProjects.TabIndex = 0;
             this.lvProjects.UseCompatibleStateImageBehavior = false;
@@ -524,7 +524,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.pnlButtons.Controls.Add(this.btnForceBuild);
             this.pnlButtons.Controls.Add(this.btnStartStopProject);
             this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlButtons.Location = new System.Drawing.Point(0, -45);
+            this.pnlButtons.Location = new System.Drawing.Point(0, 331);
             this.pnlButtons.Name = "pnlButtons";
             this.pnlButtons.Size = new System.Drawing.Size(892, 45);
             this.pnlButtons.TabIndex = 1;
@@ -563,7 +563,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             this.splitterQueueView.Location = new System.Drawing.Point(200, 38);
             this.splitterQueueView.Name = "splitterQueueView";
-            this.splitterQueueView.Size = new System.Drawing.Size(3, 0);
+            this.splitterQueueView.Size = new System.Drawing.Size(3, 293);
             this.splitterQueueView.TabIndex = 3;
             this.splitterQueueView.TabStop = false;
             this.splitterQueueView.Visible = false;
@@ -574,7 +574,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.pnlViewQueues.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlViewQueues.Location = new System.Drawing.Point(0, 38);
             this.pnlViewQueues.Name = "pnlViewQueues";
-            this.pnlViewQueues.Size = new System.Drawing.Size(200, 0);
+            this.pnlViewQueues.Size = new System.Drawing.Size(200, 293);
             this.pnlViewQueues.TabIndex = 4;
             this.pnlViewQueues.Visible = false;
             // 
@@ -586,7 +586,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.queueTreeView.Location = new System.Drawing.Point(0, 0);
             this.queueTreeView.Name = "queueTreeView";
             this.queueTreeView.SelectedImageIndex = 0;
-            this.queueTreeView.Size = new System.Drawing.Size(200, 0);
+            this.queueTreeView.Size = new System.Drawing.Size(200, 293);
             this.queueTreeView.TabIndex = 2;
             this.queueTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.queueTreeView_MouseUp);
             // 
@@ -677,7 +677,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(892, 0);
+            this.ClientSize = new System.Drawing.Size(892, 376);
             this.Controls.Add(this.lvProjects);
             this.Controls.Add(this.splitterQueueView);
             this.Controls.Add(this.pnlViewQueues);
@@ -812,7 +812,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private void UpdateForceAbortBuildButtonLabel()
         {
             btnForceBuild.Text = controller.IsProjectBuilding ? "Abort &Build" : "Force &Build";
-            btnForceBuild.Enabled = ((controller.SelectedProject != null) && controller.SelectedProject.IsConnected);
+            btnForceBuild.Enabled = ((controller.SelectedProject != null) && controller.SelectedProject.Detail.ShowForceBuildButton);
         }
 
         private void mnuWebPage_Click(object sender, EventArgs e)
@@ -1084,7 +1084,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private void UpdateStartStopProjectButtonLabel()
         {
             btnStartStopProject.Text = controller.IsProjectRunning ? "&Stop Project" : "&Start Project";
-            btnStartStopProject.Enabled = ((controller.SelectedProject != null) && controller.SelectedProject.IsConnected);
+            btnStartStopProject.Enabled = ((controller.SelectedProject != null) && controller.SelectedProject.Detail.ShowStartStopButton);
         }
 
         // Implements the manual sorting of items by columns.

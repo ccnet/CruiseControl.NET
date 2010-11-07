@@ -163,12 +163,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
         public bool AllowForceBuild
         {
-            get { return serverSpecifier.AllowForceBuild; }
+            get { return serverSpecifier.AllowForceBuild && status.ShowForceBuildButton; }
         }
 
         public bool AllowStartStopBuild
         {
-            get { return serverSpecifier.AllowStartStopBuild; }
+            get { return serverSpecifier.AllowStartStopBuild && status.ShowStartStopButton; }
         }
 
         private string CalculateHtmlColor(IntegrationStatus integrationStatus)

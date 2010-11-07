@@ -52,6 +52,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         /// </summary>
         public ProjectStatus GetProjectStatus(string projectName)
         {
+            //todo also take in account the servername  : status.ServerName
+
             if (lastCruiseServerSnapshot == null || lastCruiseServerSnapshot.ProjectStatuses == null)
             {
                 return null;

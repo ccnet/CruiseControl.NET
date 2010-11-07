@@ -43,6 +43,31 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			get { return lastProjectStatus != null; }
 		}
 
+        public bool ShowForceBuildButton
+        {
+            get
+            {
+                if (IsConnected)
+                {
+                    return lastProjectStatus.ShowForceBuildButton;
+                }
+                return false;
+            }
+        }
+
+        public bool ShowStartStopButton
+        {
+            get
+            {
+                if (IsConnected)
+                {
+                    return lastProjectStatus.ShowStartStopButton;
+                }
+                return false;
+            }
+        }
+
+
         public string Category
         {
             get

@@ -131,7 +131,26 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 		}
 		}
-		
+
+        public bool ShowForceBuildButton
+        {
+            get
+            {
+                if (!IsProjectSelected) return false;
+                return selectedProject.Detail.ShowForceBuildButton;
+            }
+        }
+
+        public bool ShowStartStopButton
+        {
+            get
+            {
+                if (!IsProjectSelected) return false;
+                return selectedProject.Detail.ShowStartStopButton;
+            }
+        }
+
+
 		public event EventHandler IsProjectSelectedChanged;
 
         public void CopyBuildLabel()
