@@ -21,7 +21,8 @@
     <tr>
       <td class="left">$project.Queue</td>
       <td>$project.QueuePriority</td>
-      <td class="left">$project.Name</td>
+      <td class="left"
+          title="$project.Description">$project.Name</td>
       <td class="left">$project.Category</td>
       <td class="left">
         <a href="$project.WebURL">$project.WebURL</a>

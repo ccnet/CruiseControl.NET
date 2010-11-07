@@ -121,7 +121,7 @@
             <td class="Black left">$projectGridRow.ServerName</td>
             #end
             <td class="left">
-              <a href="$projectGridRow.Url">$projectGridRow.Name</a>
+              <a href="$projectGridRow.Url" title="$projectGridRow.Description">$projectGridRow.Name</a>
             </td>
             <td class="$projectGridRow.BuildStatusHtmlColor">$translations.Translate($projectGridRow.BuildStatus)</td>
             <td>$projectGridRow.LastBuildDate</td>

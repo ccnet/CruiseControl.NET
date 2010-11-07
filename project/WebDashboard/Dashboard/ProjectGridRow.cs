@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -26,6 +27,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         {
             get { return status.Name; }
         }
+
+        public string Description
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(status.Description)) return "";
+
+                return status.Description;
+            }
+        }
+
 
         public string ServerName
         {
