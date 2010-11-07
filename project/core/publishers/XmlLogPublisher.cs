@@ -70,13 +70,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             if (result.Status == IntegrationStatus.Unknown)
                 return true;
 
+            result.BuildLogDirectory = LogDirectory(result.ArtifactDirectory);
+
             using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(CreateWriter(LogDirectory(result.ArtifactDirectory), GetFilename(result))))
             {
 				integrationWriter.Formatting = Formatting.Indented;
 				integrationWriter.Write(result);
             }
-
-            result.BuildLogDirectory = LogDirectory(result.ArtifactDirectory);
 
             return true;
         }
