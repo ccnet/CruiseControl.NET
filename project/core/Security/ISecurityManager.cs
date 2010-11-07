@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ThoughtWorks.CruiseControl.Core.Security.Auditing;
-using ThoughtWorks.CruiseControl.Remote;
+﻿using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 

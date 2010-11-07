@@ -1,8 +1,8 @@
-/**
- * Purpose: definitinon of the XmlPreprocessor.PreprocessorEnvironment class
- * Author: Jeremy Lew
- * Created: 2008.03.24
- */
+///
+/// Purpose: definitinon of the XmlPreprocessor.PreprocessorEnvironment class
+/// Author: Jeremy Lew
+/// Created: 2008.03.24
+///
 using System;
 using System.Collections;
 using System.Collections.Generic;

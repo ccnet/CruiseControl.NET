@@ -45,7 +45,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             if (System.IO.Directory.Exists(IntegrationFolder)) System.IO.Directory.Delete(IntegrationFolder, true);
 
 
-            CCNet.Remote.Messages.ProjectStatusResponse psr;
             CCNet.Remote.Messages.ProjectRequest pr1 = new CCNet.Remote.Messages.ProjectRequest(null, projectName1);
 
 

@@ -11,8 +11,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	[TestFixture]
 	public class HttpCruiseProjectManagerTest
 	{
-		private readonly string serverUrl = "http://xxx";
-		private readonly string serverAlias = "local";
         private MockRepository mocks = new MockRepository();
 		private HttpCruiseProjectManager manager;
         private ICruiseServerManager serverManagerMock;

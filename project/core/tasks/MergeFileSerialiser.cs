@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Exortech.NetReflector;
 using Exortech.NetReflector.Util;
 using System.Xml;

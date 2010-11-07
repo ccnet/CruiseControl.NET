@@ -1,7 +1,6 @@
 ﻿using Exortech.NetReflector;
 using System;
 using System.IO;
-using System.Text;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote.Security;

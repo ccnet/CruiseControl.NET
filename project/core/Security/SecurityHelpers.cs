@@ -1,6 +1,4 @@
-﻿
-using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {

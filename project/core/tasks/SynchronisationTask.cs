@@ -10,7 +10,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     using System.Collections.Generic;
     using System.Threading;
     using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.Config;
     using ThoughtWorks.CruiseControl.Core.Util;
     using ThoughtWorks.CruiseControl.Remote;
 

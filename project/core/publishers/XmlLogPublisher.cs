@@ -1,12 +1,11 @@
+using System.IO;
+using System.Xml;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Tasks;
+using ThoughtWorks.CruiseControl.Remote;
+
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
-    using System.IO;
-    using System.Xml;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using ThoughtWorks.CruiseControl.Remote;
-    using ThoughtWorks.CruiseControl.Core.Tasks;
-
     /// <summary>
     /// <para>
     /// The Xml Log Publisher is used to create the log files used by the CruiseControl.NET Web Dashboard, so if you don't define an 

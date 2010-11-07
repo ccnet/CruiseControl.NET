@@ -1,6 +1,4 @@
 
-using System;
-
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
 	public class AbsolutePathUrlBuilderDecorator : IUrlBuilder

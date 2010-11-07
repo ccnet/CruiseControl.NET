@@ -1,6 +1,4 @@
-
 using System.Text;
-using System.Web;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation

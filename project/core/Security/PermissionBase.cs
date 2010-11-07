@@ -1,10 +1,6 @@
 ﻿using Exortech.NetReflector;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Remote.Security;
-using System.ComponentModel;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {

@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Tasks;

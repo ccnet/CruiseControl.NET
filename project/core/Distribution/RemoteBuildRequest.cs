@@ -26,6 +26,7 @@ using ThoughtWorks.CruiseControl.Core.Distribution.Messages;
         /// <param name="machine">The machine.</param>
         /// <param name="identifier">The identifier.</param>
         /// <param name="onCheck">The check to perform for any status updates.</param>
+        /// <param name="onCompleted"></param>
         public RemoteBuildRequest(
             IBuildMachine machine, 
             string identifier, 

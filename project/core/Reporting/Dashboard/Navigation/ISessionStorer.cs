@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
+﻿namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
     /// <summary>
     /// Interface for storing sessions.

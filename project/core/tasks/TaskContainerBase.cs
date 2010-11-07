@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote;
-using System;
 using ThoughtWorks.CruiseControl.Core.Config;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks

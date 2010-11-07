@@ -1,5 +1,4 @@
-﻿using System;
-using ThoughtWorks.CruiseControl.Remote.Security;
+﻿using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
 {

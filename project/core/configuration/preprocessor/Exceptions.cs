@@ -1,8 +1,8 @@
-/**
- * Purpose: definitinon of the XmlPreprocessor.Exceptions class
- * Author: Jeremy Lew
- * Created: 2008.03.24
- */
+///
+/// Purpose: definitinon of the XmlPreprocessor.Exceptions class
+///Author: Jeremy Lew
+///Created: 2008.03.24
+///
 using System;
 using System.Reflection;
 using System.Xml;

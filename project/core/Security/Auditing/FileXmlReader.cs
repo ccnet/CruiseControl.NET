@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;

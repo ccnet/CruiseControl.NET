@@ -1,6 +1,3 @@
-
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
 	public class DefaultUrlBuilder : IUrlBuilder

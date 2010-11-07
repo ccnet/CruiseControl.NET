@@ -1,6 +1,4 @@
-﻿using System;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Config;
+﻿using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.Core.Security

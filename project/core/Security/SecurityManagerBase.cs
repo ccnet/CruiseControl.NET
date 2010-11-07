@@ -1,15 +1,10 @@
-﻿
-using Exortech.NetReflector;
+﻿using Exortech.NetReflector;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.Core.Security.Auditing;
-using ThoughtWorks.CruiseControl.Core.Config;
-using System.Globalization;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.Core.Security

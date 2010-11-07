@@ -1,8 +1,8 @@
-/**
- * Purpose: definitinon of the XmlPreprocessor.symbolic_def class
- * Author: Jeremy Lew
- * Created: 2008.03.24
- */
+///
+/// Purpose: definitinon of the XmlPreprocessor.symbolic_def class
+/// Author: Jeremy Lew
+/// Created: 2008.03.24
+///
 using System.Collections.Generic;
 using System.Xml.Linq;
 

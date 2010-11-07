@@ -1,6 +1,4 @@
-﻿using System.DirectoryServices;
-using System.Runtime.InteropServices;
-using Exortech.NetReflector;
+﻿using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 
