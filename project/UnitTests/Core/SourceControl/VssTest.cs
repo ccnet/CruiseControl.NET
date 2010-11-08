@@ -200,7 +200,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void GetSourceShouldNotGetCleanCopy()
 		{
-            ExpectToExecuteArguments(string.Format("get $/fooProject/*?* -R -Vd{0} \"-YJoe Admin,admin\" -I-N -W -GF- -GTM", CommandDate(today)));
+            ExpectToExecuteArguments(string.Format("get $/fooProject/*?* -R -Vd{0} \"-YJoe Admin,admin\" -I-Y -W -GF- -GTM", CommandDate(today)));
 
 			vss.AutoGetSource = true;
 			vss.CleanCopy = false;
@@ -210,7 +210,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void DoNotGetFromDateIfAlwaysGetLatestIsTrue()
 		{
-			ExpectToExecuteArguments("get $/fooProject/*?* -R \"-YJoe Admin,admin\" -I-N -W -GF- -GTM");
+			ExpectToExecuteArguments("get $/fooProject/*?* -R \"-YJoe Admin,admin\" -I-Y -W -GF- -GTM");
 
 			vss.AutoGetSource = true;
 			vss.CleanCopy = false;
@@ -345,7 +345,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		private string ForGetCommand()
 		{
-            return string.Format("get $/fooProject/*?* -R -Vd{0} \"-YJoe Admin,admin\" -I-N -W -GF- -GTM -GWR", CommandDate(today));
+            return string.Format("get $/fooProject/*?* -R -Vd{0} \"-YJoe Admin,admin\" -I-Y -W -GF- -GTM -GWR", CommandDate(today));
 		}
 
         /// <summary>

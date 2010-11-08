@@ -336,7 +336,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			builder.AddIf(ApplyLabel, "-VL", tempLabel);
 			builder.AddIf(!AlwaysGetLatest, "-Vd", locale.FormatCommandDate(result.StartTime));
 			AppendUsernameAndPassword(builder);
-			builder.Add("-I-N -W -GF- -GTM");
+			builder.Add("-I-Y -W -GF- -GTM");
 			builder.AddIf(CleanCopy, "-GWR");
 			return builder;
 		}
