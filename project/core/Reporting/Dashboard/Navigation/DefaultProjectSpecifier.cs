@@ -36,9 +36,9 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 
 		public override bool Equals(object obj)
 		{
-			if (obj is DefaultProjectSpecifier)
+            DefaultProjectSpecifier other = obj as DefaultProjectSpecifier;
+            if (other != null)
 			{
-				DefaultProjectSpecifier other = obj as DefaultProjectSpecifier;
 				return (this.ProjectName == other.ProjectName && this.ServerSpecifier.Equals(other.ServerSpecifier));
 			}
 			return false;

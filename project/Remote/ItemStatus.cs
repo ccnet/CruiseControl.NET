@@ -14,7 +14,6 @@ namespace ThoughtWorks.CruiseControl.Remote
     public class ItemStatus
     {
         #region Private fields
-        private readonly Guid uniqueId = Guid.NewGuid();
         private Guid identifier = Guid.NewGuid();
         private string name;
         private ItemBuildStatus status = ItemBuildStatus.Unknown;
@@ -228,9 +227,11 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (obj is ItemStatus)
+            var dummy = obj as ItemStatus;
+
+            if (dummy != null)
             {
-                bool areEqual = identifier.Equals((obj as ItemStatus).identifier);
+                bool areEqual = identifier.Equals((dummy).identifier);
                 return areEqual;
             }
             else

@@ -123,8 +123,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override bool Equals(object obj)
 		{
-			if (obj is IVssLocale) 
-				return ((IVssLocale)obj).ServerCulture == ServerCulture;
+            var dummy = obj as IVssLocale;
+			if (dummy != null) 
+				return dummy.ServerCulture == ServerCulture;
 			return false;
 		}
 

@@ -120,7 +120,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
             int seperator = newpieces[0].LastIndexOf("/") + 1;
             returnValues[0] = newpieces[0].Substring(seperator, (newpieces[0].Length - seperator));
-            string folderName = string.Empty;
 
             if (returnValues[0].Contains("."))
             {

@@ -124,27 +124,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         #endregion
 
         /// <summary>
-        /// Create a chart generator for the specified statistics using the default plotter.
-        /// </summary>
-        /// <param name="statistics">The statistics to include, checking their
-        /// <see cref="StatisticsChartGenerator"/> property</param>
-        /// <returns>The chart generator.</returns>
-        private static StatisticsChartGenerator ChartGenerator(List<StatisticBase> statistics)
-        {
-            StatisticsChartGenerator chartGenerator = new StatisticsChartGenerator();
-            List<string> list = new List<String>();
-            statistics.ForEach(delegate(StatisticBase statistic)
-                                   {
-                                       if (statistic.GenerateGraph)
-                                       {
-                                           list.Add(statistic.Name);
-                                       }
-                                   });
-            chartGenerator.RelevantStats = list.ToArray();
-            return chartGenerator;
-        }
-
-        /// <summary>
         /// Write the specified collection of statistics to the XML
         /// statistics file, creating it if it does not already exist
         /// </summary>

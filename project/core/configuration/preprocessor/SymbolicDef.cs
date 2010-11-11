@@ -1,8 +1,8 @@
-///
-/// Purpose: definitinon of the XmlPreprocessor.symbolic_def class
-/// Author: Jeremy Lew
-/// Created: 2008.03.24
-///
+/*
+ Purpose: definitinon of the XmlPreprocessor.symbolic_def class
+ Author: Jeremy Lew
+ Created: 2008.03.24
+*/
 using System.Collections.Generic;
 using System.Xml.Linq;
 
@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// <summary>
         /// Constant value
         /// </summary>
-        public IEnumerable< XNode > Value;
+        public IEnumerable<XNode> Value;
 
         /// <summary>
         /// Stack frame on which the definition lives.

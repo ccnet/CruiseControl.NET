@@ -98,9 +98,10 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (obj is Response)
+            var other = obj as Response;
+
+            if (other != null)
             {
-                Response other = obj as Response;
                 return string.Equals(other.requestIdentifier, requestIdentifier) &&
                     DateTime.Equals(other.Timestamp, Timestamp);
             }

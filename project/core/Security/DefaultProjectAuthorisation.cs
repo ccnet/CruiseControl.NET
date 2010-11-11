@@ -156,9 +156,10 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         {
             foreach (IPermission permission in permissions)
             {
-                if (permission is IConfigurationValidation)
+                var dummy = permission as IConfigurationValidation;
+                if (dummy != null)
                 {
-                    (permission as IConfigurationValidation).Validate(configuration, parent.Wrap(this), errorProcesser);
+                    dummy.Validate(configuration, parent.Wrap(this), errorProcesser);
                 }
             }
         }

@@ -295,18 +295,20 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             // Validate all the projects
             foreach (IProject project in value.Projects)
             {
-                if (project is IConfigurationValidation)
+                var dummy = project as IConfigurationValidation;
+                if (dummy != null)
                 {
-                    (project as IConfigurationValidation).Validate(value, rootTrace, errorProcesser);
+                    dummy.Validate(value, rootTrace, errorProcesser);
                 }
             }
 
             // Validate all the queues
             foreach (IQueueConfiguration queue in value.QueueConfigurations)
             {
-                if (queue is IConfigurationValidation)
+                var dummy = queue as IConfigurationValidation;
+                if (dummy != null)
                 {
-                    (queue as IConfigurationValidation).Validate(value, rootTrace, errorProcesser);
+                    dummy.Validate(value, rootTrace, errorProcesser);
                 }
             }
 

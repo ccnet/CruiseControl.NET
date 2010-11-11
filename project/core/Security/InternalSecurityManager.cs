@@ -274,17 +274,19 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         {
             foreach (IAuthentication user in users)
             {
-                if (user is IConfigurationValidation)
+                var dummy = user as IConfigurationValidation;
+                if (dummy != null)
                 {
-                    (user as IConfigurationValidation).Validate(configuration, parent.Wrap(this), errorProcesser);
+                    dummy.Validate(configuration, parent.Wrap(this), errorProcesser);
                 }
             }
 
             foreach (IPermission permission in permissions)
             {
-                if (permission is IConfigurationValidation)
+                var dummy = permission as IConfigurationValidation;
+                if (dummy != null)
                 {
-                    (permission as IConfigurationValidation).Validate(configuration, parent.Wrap(this), errorProcesser);
+                    dummy.Validate(configuration, parent.Wrap(this), errorProcesser);
                 }
             }
         }

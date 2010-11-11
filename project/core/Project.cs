@@ -706,20 +706,25 @@ namespace ThoughtWorks.CruiseControl.Core
             foreach (ITask task in tasks)
             {
                 ItemStatus taskItem = null;
-                if (task is TaskBase)
+                
+                var tbase = task as TaskBase;
+                if (tbase != null)
                 {
-                    (task as TaskBase).InitialiseStatus();
+                    tbase.InitialiseStatus();
                 }
 
-                if (task is IStatusItem)
+                var item = task as IStatusItem;
+                if (item != null)
                 {
-                    var item = task as IStatusItem;
                     item.InitialiseStatus();
                     taskItem = item.GenerateSnapshot();
                 }
-                if (task is IStatusSnapshotGenerator)
+
+
+                var dummyStatusSnapshotGenerator = task as IStatusSnapshotGenerator; 
+                if (dummyStatusSnapshotGenerator != null)
                 {
-                    taskItem = (task as IStatusSnapshotGenerator).GenerateSnapshot();
+                    taskItem = dummyStatusSnapshotGenerator.GenerateSnapshot();
                 }
                 else
                 {
@@ -804,9 +809,10 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             foreach (ITask task in tasksToRun)
             {
-                if (task is IParamatisedItem)
+                var dummy = task as IParamatisedItem;
+                if (dummy != null)
                 {
-                    (task as IParamatisedItem).ApplyParameters(parameterValues, parameters);
+                    dummy.ApplyParameters(parameterValues, parameters);
                 }
 
                 RunTask(task, result,false);
@@ -848,9 +854,10 @@ namespace ThoughtWorks.CruiseControl.Core
                 try
                 {
                     merged |= isMergeTask;
-                    if (publisher is IParamatisedItem)
+                    var dummy = publisher as IParamatisedItem;
+                    if (dummy != null)
                     {
-                        (publisher as IParamatisedItem).ApplyParameters(parameterValues, parameters);
+                        dummy.ApplyParameters(parameterValues, parameters);
                     }
 
                     RunTask(publisher, result, true);
@@ -1296,9 +1303,10 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             foreach (ITask publisher in Publishers)
             {
-                if (publisher is XmlLogPublisher)
+                var xmlPublisher = publisher as XmlLogPublisher;
+                if (xmlPublisher != null)
                 {
-                    return (XmlLogPublisher)publisher;
+                    return xmlPublisher;
                 }
             }
             throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
@@ -1424,9 +1432,11 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <param name="errorProcesser">The error processer.</param>
         private void ValidateItem(object item, IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
-            if ((item != null) && (item is IConfigurationValidation))
-            {
-                (item as IConfigurationValidation).Validate(configuration, parent.Wrap(this), errorProcesser);
+            if (item == null) return;
+
+            var dummy = item as IConfigurationValidation;
+            if (dummy != null)             {
+                dummy.Validate(configuration, parent.Wrap(this), errorProcesser);
             }
         }
 

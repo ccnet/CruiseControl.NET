@@ -44,9 +44,9 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 
 		public override bool Equals(object obj)
 		{
-			if (obj is DefaultServerSpecifier)
+            DefaultServerSpecifier other = obj as DefaultServerSpecifier;
+            if (other != null)
 			{
-				DefaultServerSpecifier other = obj as DefaultServerSpecifier;
 				return this.ServerName == other.ServerName;
 			}
 			return false;

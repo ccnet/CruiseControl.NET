@@ -110,9 +110,11 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (obj is ServerRequest)
+            var dummy = obj as ServerRequest;
+
+            if (dummy != null)
             {
-                return string.Equals((obj as ServerRequest).identifier, identifier);
+                return string.Equals((dummy).identifier, identifier);
             }
             else
             {

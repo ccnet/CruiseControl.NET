@@ -70,9 +70,10 @@ namespace ThoughtWorks.CruiseControl.Core
                 // GetUrlsForUri is not support on cross-AppDomain channels on mono (as of 1.1.8.3)
                 if (environment.IsRunningOnWindows)
                 {
-                    if (channel is IChannelReceiver)
+                    var dummy = channel as IChannelReceiver;
+                    if (dummy != null)
                     {
-                        foreach (string url in ((IChannelReceiver)channel).GetUrlsForUri(ManagerUri))
+                        foreach (string url in dummy.GetUrlsForUri(ManagerUri))
                         {
                             Log.Info("CruiseManager: Listening on url: " + url);
                         }
@@ -93,9 +94,10 @@ namespace ThoughtWorks.CruiseControl.Core
                 // GetUrlsForUri is not support on cross-AppDomain channels on mono (as of 1.1.8.3)
                 if (environment.IsRunningOnWindows)
                 {
-                    if (channel is IChannelReceiver)
+                    var dummy = channel as IChannelReceiver;
+                    if (dummy != null)
                     {
-                        foreach (string url in ((IChannelReceiver)channel).GetUrlsForUri(ServerClientUri))
+                        foreach (string url in dummy.GetUrlsForUri(ServerClientUri))
                         {
                             Log.Info("CruiseServerClient: Listening on url: " + url);
                         }

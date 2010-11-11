@@ -189,9 +189,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
             else
             {
-                if (value is System.Collections.ArrayList)
+                var dummy = value as System.Collections.ArrayList;
+                if (dummy != null)
                 {
-                    string[] tmp = (string[])((System.Collections.ArrayList)value).ToArray(typeof(string));
+                    string[] tmp = (string[])dummy.ToArray(typeof(string));
 
                     foreach (string s in tmp)
                     {

@@ -312,15 +312,17 @@
                 foreach (ITask task in tasks)
                 {
                     ItemStatus taskItem = null;
-                    if (task is TaskBase)
+                    var tbase = task as TaskBase;
+                    if (tbase != null)
                     {
                         // Reset the status for the task
-                        (task as TaskBase).InitialiseStatus(newStatus);
+                        tbase.InitialiseStatus(newStatus);
                     }
 
-                    if (task is IStatusSnapshotGenerator)
+                    var dummy = task as IStatusSnapshotGenerator;
+                    if (dummy != null)
                     {
-                        taskItem = (task as IStatusSnapshotGenerator).GenerateSnapshot();
+                        taskItem = dummy.GenerateSnapshot();
                     }
                     else
                     {

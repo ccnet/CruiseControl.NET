@@ -1,8 +1,8 @@
-///
-/// Purpose: definitinon of the XmlPreprocessor.Utils class
-/// Author: Jeremy Lew
-/// Created: 2008.03.24
-///
+/*
+Purpose: definitinon of the XmlPreprocessor.Utils class
+Author: Jeremy Lew
+Created: 2008.03.24
+*/
 using System;
 using System.IO;
 using System.Reflection;

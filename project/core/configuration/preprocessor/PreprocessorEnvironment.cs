@@ -1,8 +1,8 @@
-///
-/// Purpose: definitinon of the XmlPreprocessor.PreprocessorEnvironment class
-/// Author: Jeremy Lew
-/// Created: 2008.03.24
-///
+/*
+Purpose: definitinon of the XmlPreprocessor.PreprocessorEnvironment class
+Author: Jeremy Lew
+Created: 2008.03.24
+*/
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -414,9 +414,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             try
             {
                 object obj2 = Evaluator.EvalToObject( expr );
-                if ( !( obj2 is string ) && ( obj2 is IEnumerable ) )
+                var dummy = obj2 as IEnumerable; 
+                if ( !( obj2 is string ) && ( dummy != null ) )
                 {
-                    return _GetAsNodeSet( ( IEnumerable ) obj2 );
+                    return _GetAsNodeSet( dummy );
                 }
                 iterator = _GetAsNodeSet( new[] {obj2.ToString()} );
             }
@@ -444,10 +445,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             try
             {
                 object obj2 = Evaluator.EvalToObject( expr );
-                if ( !( obj2 is string ) && ( obj2 is IEnumerable ) )
+                var dummy = obj2 as IEnumerable;
+                if ( !( obj2 is string ) && ( dummy != null) )
                 {
                     var builder = new StringBuilder();
-                    foreach ( object obj3 in ( IEnumerable ) obj2 )
+                    foreach ( object obj3 in dummy )
                     {
                         builder.Append( obj3 );
                     }

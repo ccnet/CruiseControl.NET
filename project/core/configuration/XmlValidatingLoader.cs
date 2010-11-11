@@ -14,9 +14,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config
         {
             this.innerReader = innerReader;
             // This is a bit of a hack - Turn on DTD entity resolution if it is not already on.
-            if ( innerReader is XmlTextReader )
+            var dummy = innerReader as XmlTextReader;
+            if ( dummy != null )
             {
-                ((XmlTextReader)(innerReader)).EntityHandling = EntityHandling.ExpandEntities;
+                dummy.EntityHandling = EntityHandling.ExpandEntities;
             }
             xmlReaderSettings = new XmlReaderSettings();
             xmlReaderSettings.ValidationType = ValidationType.None;

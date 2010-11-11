@@ -630,9 +630,10 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             string data = null;
             DataResponse response = null;
-            if (request is ProjectRequest)
+            var dummy = request as ProjectRequest;
+            if (dummy != null)
             {
-                response = new DataResponse(RunProjectRequest(request as ProjectRequest,
+                response = new DataResponse(RunProjectRequest(dummy,
                     SecurityPermission.ViewConfiguration,
                     null,
                     delegate(ProjectRequest arg, Response resp)
@@ -1281,9 +1282,10 @@ namespace ThoughtWorks.CruiseControl.Core
                     IProjectIntegrator projectIntegrator = GetIntegrator(arg.ProjectName);
                     if (projectIntegrator == null) throw new NoSuchProjectException(arg.ProjectName);
                     IProject project = projectIntegrator.Project;
-                    if (project is IParamatisedProject)
+                    var dummy = project as IParamatisedProject;
+                    if (dummy != null)
                     {
-                        parameters = (project as IParamatisedProject).ListBuildParameters();
+                        parameters = (dummy).ListBuildParameters();
                     }
                 }));
             response.Parameters = parameters;
