@@ -110,6 +110,10 @@
                     // Add the entry to the file file
                     var entry = new ZipEntry(ZipEntry.CleanName(Path.Combine(targetPath, targetFileName)));
                     entry.Size = fileSystem.GetFileLength(fullName);
+										// zipentry date set to last changedate, other it contains not the right filedate.
+										// added 10.11.2010 by rolf eisenhut
+										entry.DateTime = fileSystem.GetLastWriteTime(fullName);
+
                     zipStream.PutNextEntry(entry);
                     var buffer = new byte[8182];
 
