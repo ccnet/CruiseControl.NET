@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <root>
+    <Direct AttributeForm="$(COMPUTERNAME)">$(COMPUTERNAME)</Direct>
+    <cb:define name="compName">$(COMPUTERNAME)</cb:define>
+    <Indirect AttributeForm="$(compName)">$(compName)</Indirect>
+  </root>
+</cb:config-template>

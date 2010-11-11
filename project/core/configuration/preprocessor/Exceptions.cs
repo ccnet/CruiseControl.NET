@@ -9,6 +9,28 @@ using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 {
+    public class UndefinedSymbolException : EvaluationException
+    {
+        internal UndefinedSymbolException(string msg) : base(msg)
+        {
+        }
+        internal static Exception CreateException(string msg, params object[] args)
+        {
+            return new UndefinedSymbolException(String.Format(msg, args));
+        }
+    }
+
+    public class CyclicalEvaluationException : EvaluationException
+    {
+        internal CyclicalEvaluationException(string msg)
+            : base(msg)
+        {
+        }
+        internal static Exception CreateException(string msg, params object[] args)
+        {
+            return new CyclicalEvaluationException(String.Format(msg, args));
+        }
+    }
     /// <summary>
     /// Exception for preprocessor constant evaluation problems
     /// </summary>

@@ -36,6 +36,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
                         return _ProcessTextNode( ( XText ) node );
                     case XmlNodeType.Comment:
                         return new[] {new XComment( ( XComment ) node )};
+                    case XmlNodeType.DocumentType:                        
+                    case XmlNodeType.Entity:
+                    case XmlNodeType.EntityReference:
+                        return new[] { node };
                     default:
                         throw new InvalidOperationException( "Unhandled Xml Node Type: " +
                                                              node.NodeType );

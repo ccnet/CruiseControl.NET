@@ -19,6 +19,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             new XmlUrlResolver();
 
         [Test]
+        public void TestDocType()
+        {
+            var doc = _Preprocess("TestDocType.xml");            
+        }
+        [Test]
         public void TestAttrNodesetDefine()
         {
             XmlDocument doc = _Preprocess("TestAttrNodesetDefine.xml");
@@ -33,13 +38,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             _Preprocess("TestInvalidAttribute2.xml");
         }
 
-        [Test, Ignore("Long running test")]
+        [Test]
         public void TestBigFor()
         {
             XmlDocument doc = _Preprocess("TestBigFor.xml");
             XPathNavigator nav = doc.CreateNavigator();
             AssertNodeValue(nav, "/root/hello[1]/@attr", "0");
             AssertNodeValue(nav, "/root/hello[25000]/@attr", "24999");
+        }
+
+        [Test]
+        public void TestRedefineBug()
+        {
+            var doc = _Preprocess("TestRedefineBug.xml");            
         }
 
         [Test]
@@ -61,6 +72,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             AssertNodeValue(nav, "/myel", "myelval");
             AssertNodeValue(nav, "/myel/@myattr1", "myattrval1");
             AssertNodeValue(nav, "/myel/@myattr2", "myattrval2");
+        }
+
+        [Test]
+        public void TestEnvironmentVariableExpansion()
+        {
+            var doc = _Preprocess("TestEnvironmentVariableExpansion.xml");
+            var nav = doc.CreateNavigator();
+            AssertNodeValue(nav, "/root/Direct", Environment.MachineName);
+            AssertNodeValue(nav, "/root/Direct/@AttributeForm", Environment.MachineName);
+            AssertNodeValue(nav, "/root/Indirect", Environment.MachineName);
+            AssertNodeValue(nav, "/root/Indirect/@AttributeForm", Environment.MachineName);
         }
 
         [Test]
@@ -336,8 +358,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             AssertNodeValue( doc, "/root/inner/test[2]", "val2_redef" );
         }
 
-        [Test,ExpectedException(typeof(EvaluationException))]
-        [Ignore("Ignoring this test because cycle checking is disabled until we can make it work correctly.")]
+        [Test,ExpectedException(typeof(CyclicalEvaluationException))]        
         public void TestCycle()
         {            
             _Preprocess( "TestCycle.xml" );            
@@ -403,6 +424,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                 Assert.AreEqual(GetTestPath("TestIncluded2.xml"), env.Fileset[2].LocalPath);
             }
         }
+
+        [Test]
+        public void TestCCNET_1991()
+        {
+            var doc = _Preprocess("TestCCNET-1991.xml");
+            AssertNodeValue(doc,"/cruisecontrol/project/workingDirectory",@"C:\Test\Space Error\Working");
+            AssertNodeValue(doc, "/cruisecontrol/project/artifactDirectory", @"C:\Test\Space Error\Artifacts");
+            AssertNodeValue(doc, "/cruisecontrol/project/publishers/xmllogger/@logDir", @"C:\Test\Space Error\BuildLogs");        
+        }
         #endregion
 
         private static XmlDocument _Preprocess(string filename  )
@@ -466,11 +496,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
         private static XmlReader GetInput(string filename)
         {
+            var settings = new XmlReaderSettings();
+            settings.ProhibitDtd = false;            
             return
-                XmlReader.Create( GetManifestResourceStream( filename ) );            
+                XmlReader.Create( GetManifestResourceStream( filename ), settings );
         }
 
-		internal static Stream GetManifestResourceStream(string filename)
+        internal static Stream GetManifestResourceStream(string filename)
 		{
 			System.IO.Stream result = Assembly.GetExecutingAssembly().
 				GetManifestResourceStream(

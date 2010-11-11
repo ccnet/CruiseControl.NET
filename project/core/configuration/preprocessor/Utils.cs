@@ -32,9 +32,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             var writer_settings = new XmlWriterSettings();
             writer_settings.Indent = true;
             writer_settings.Encoding = Encoding.UTF8;
-            writer_settings.ConformanceLevel = ConformanceLevel.Auto;
+            writer_settings.ConformanceLevel = ConformanceLevel.Document;
             writer_settings.NewLineChars = "\n";
-            writer_settings.NewLineHandling = NewLineHandling.Replace;
+            writer_settings.NewLineHandling = NewLineHandling.Replace;            
             return XmlWriter.Create( url, writer_settings );
         }
 

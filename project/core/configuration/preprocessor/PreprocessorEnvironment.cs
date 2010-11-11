@@ -176,7 +176,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         {
             if ( !_IsDefined( name ) )
             {
-                Utils.ThrowException( EvaluationException.CreateException,
+                Utils.ThrowException( UndefinedSymbolException.CreateException,
                                       "Reference to unknown symbol '{0}'", new object[] {name} );
             }
             SymbolicDef symbolic_def = _InternalGetSymbolDef( _CanonicalizeName( name ) );
@@ -214,7 +214,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             foreach ( var dictionary in _define_stack.ToArray() )
             {
                 SymbolicDef symbolic_def;
-                if ( dictionary.TryGetValue( symbol_name, out symbolic_def ) )
+                if ( dictionary.TryGetValue( symbol_name, out symbolic_def ) && !_evaluated_symbols.ContainsKey(symbolic_def))
                 {
                     return symbolic_def;
                 }
@@ -349,19 +349,28 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         public IEnumerable< XNode > EvalSymbol(string name)
         {
             string symbol_name = _CanonicalizeName( name );
-            SymbolicDef symbol_def = GetSymbolDef( symbol_name );
-            IEnumerable< XNode > val = symbol_def.Value;
-
-            // Detect cyclical definition and error out.
-            if ( _evaluated_symbols.ContainsKey( symbol_def ) )
+            SymbolicDef symbol_def;
+            try
             {
-                IEnumerable< string > names =
-                    _evaluated_symbols.OrderBy( def => def.Value ).Select( def => def.Key.Name );
-                string eval_chain = String.Join( "->", names.ToArray() ) + "->" + symbol_name;
-                throw EvaluationException.CreateException(
-                    "Cyclical definition detected definiton: {0}",
-                    eval_chain );
+                symbol_def = GetSymbolDef(symbol_name);
             }
+            catch(UndefinedSymbolException)
+            {
+                // If UndefinedSymbolException was thrown and symbol_name exists in the _evaluated_symbols
+                // dictionary, it means that a mutually-recursive evaluation is happening, which would cause
+                // an infinite loop.  Throw an exception instead.
+                if (_evaluated_symbols.Keys.Any( sym => sym.Name == symbol_name ))
+                {
+                    IEnumerable<string> names =
+                  _evaluated_symbols.OrderBy(def => def.Value).Select(def => def.Key.Name);
+                    string eval_chain = String.Join("->", names.ToArray()) + "->" + symbol_name;
+                    throw CyclicalEvaluationException.CreateException(
+                        "Cyclical definition detected definiton: {0}",
+                        eval_chain);                    
+                }
+                throw;
+            }
+            IEnumerable< XNode > val = symbol_def.Value;          
             _evaluated_symbols.Add( symbol_def, _evaluated_symbols.Count );
             try
             {

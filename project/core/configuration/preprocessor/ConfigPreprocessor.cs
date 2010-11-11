@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             // Process the input document's nodes and write the results to the output stream
             foreach ( XNode out_node in
                 doc.Nodes().SelectMany(
-                    node => _env._DefaultNodeProcessor.Process( node ) ) )
+                    node => _env._DefaultNodeProcessor.Process( node ) ).Where( node => !(node is XText)) )
             {
                 out_node.WriteTo( output );
             }

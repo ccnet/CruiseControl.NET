@@ -28,5 +28,15 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// Constant value
         /// </summary>
         public IEnumerable< XNode > Value;
+
+        /// <summary>
+        /// Stack frame on which the definition lives.
+        /// -1 is the system environment table, 
+        /// 0 is the top of the stack,
+        /// 1 is the next frame, etc...
+        /// </summary>
+        public int StackFrame;
+
+        public string StackQualifiedName { get { return string.Format("{0}:{1}", StackFrame, Name); } }
     }
 }

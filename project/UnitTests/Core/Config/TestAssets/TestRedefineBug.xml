@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <cb:define name="Outer">   
+    <OuterPath>$(Path)</OuterPath>
+    <cb:Inner Path="$(Path)\MyInnerPath" />
+  </cb:define>
+  <cb:define name="Inner">
+    <InnerPath>$(Path)</InnerPath>
+  </cb:define>
+  <root>
+    <cb:Outer Path="MyOuterPath"/>
+  </root>
+</cb:config-template>
