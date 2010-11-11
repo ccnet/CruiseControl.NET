@@ -133,6 +133,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             request.BuildCondition = condition;
             request.BuildValues = parameters;
             request.ServerName = TargetServer;
+            request.DisplayName = this.DisplayName;
             Response resp = connection.SendMessage("ForceBuild", request);
             ValidateResponse(resp);
         }
