@@ -112,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			get { return ProjectStatus.Activity; }
 		}
 
-        public void AbortBuild()
+        public void AbortBuild(string userName)
         {
             throw new NotImplementedException();
         }

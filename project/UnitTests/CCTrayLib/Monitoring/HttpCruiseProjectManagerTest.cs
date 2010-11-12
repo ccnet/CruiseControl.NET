@@ -84,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
                 serverClient.AbortBuild("yyy");
             });
             mocks.ReplayAll();
-            manager.AbortBuild(null);
+            manager.AbortBuild(null,"John Do");
             mocks.VerifyAll();
 		}
 

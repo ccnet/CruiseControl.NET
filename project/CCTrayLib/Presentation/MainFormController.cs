@@ -234,7 +234,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             {
                 RunSecureMethod(b =>
                 {
-                    SelectedProject.AbortBuild();
+                    SelectedProject.AbortBuild(this.GetUserName());
                 }, "AbortBuild");
             }
         }

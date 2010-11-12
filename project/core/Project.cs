@@ -821,8 +821,10 @@ namespace ThoughtWorks.CruiseControl.Core
             CancelTasks(tasksToRun);
         }
 
-        public void AbortRunningBuild()
+        public void AbortRunningBuild(string userName)
         {
+            AddMessage(new Message(string.Format("Build Aborted by : {0}",userName ),  Message.MessageKind.BuildAbortedBy));
+
             if (this.remoteBuildRequest != null)
             {
                 this.remoteBuildRequest.Cancel();
@@ -1648,6 +1650,8 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             ClearMessages(Message.MessageKind.Breakers);
             ClearMessages(Message.MessageKind.FailingTasks);
+            ClearMessages(Message.MessageKind.BuildAbortedBy);
+
         }
 
         /// <summary>

@@ -17,7 +17,8 @@ namespace ThoughtWorks.CruiseControl.Remote
             Breakers = 1,
             Fixer = 2,
             FailingTasks = 3,
-            BuildStatus = 4
+            BuildStatus = 4,
+            BuildAbortedBy = 5
         }
 
         private string message;

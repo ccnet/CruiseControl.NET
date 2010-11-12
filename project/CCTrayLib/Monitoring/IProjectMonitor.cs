@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		event MessageEventHandler MessageReceived;
 
 		void ForceBuild(Dictionary<string, string> parameters, string userName);
-		void AbortBuild();
+        void AbortBuild(string userName);
 		void FixBuild(string fixingUserName);
 		void StopProject();
 		void StartProject();

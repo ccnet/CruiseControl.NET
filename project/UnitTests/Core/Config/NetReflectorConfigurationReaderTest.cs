@@ -248,7 +248,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                 get { throw new NotImplementedException(); }
             }
 			
-			public void AbortRunningBuild()
+			public void AbortRunningBuild(string userName)
 			{
 				throw new NotImplementedException();
 			}

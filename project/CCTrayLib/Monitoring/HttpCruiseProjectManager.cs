@@ -27,8 +27,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             client.ForceBuild(projectName, NameValuePair.FromDictionary(parameters));
 		}
 
-        public void AbortBuild(string sessionToken)
+        public void AbortBuild(string sessionToken, string userName)
 		{
+            client.DisplayName = userName;
             client.SessionToken = sessionToken;
             client.AbortBuild(projectName);
 		}

@@ -71,11 +71,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			{
 			}
 		}
-		
-        public void AbortBuild(string sessionToken)
+
+        public void AbortBuild(string sessionToken, string userName)
 		{
 			try
 			{
+                manager.DisplayName = userName;
                 manager.SessionToken = sessionToken;
                 manager.AbortBuild(projectName);
 			}

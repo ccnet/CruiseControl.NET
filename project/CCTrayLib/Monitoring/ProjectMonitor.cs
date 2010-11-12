@@ -316,11 +316,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             });
 		}
 		
-		public void AbortBuild()
+		public void AbortBuild(string userName)
 		{
             AttemptActionWithRetry(delegate()
             {
-                cruiseProjectManager.AbortBuild(serverMonitor.SessionToken);
+                cruiseProjectManager.AbortBuild(serverMonitor.SessionToken,userName);
             });
 		}
 		
