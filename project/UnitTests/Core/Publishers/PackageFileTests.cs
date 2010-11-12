@@ -31,6 +31,7 @@
             var inputStream = new MemoryStream(Encoding.UTF8.GetBytes("This is some test data"));
             Expect.Call(fileSystem.GetFileLength(testFile)).Return(inputStream.Length);
             Expect.Call(fileSystem.OpenInputStream(testFile)).Return(inputStream);
+            Expect.Call(fileSystem.GetLastWriteTime(testFile)).Return(System.DateTime.Now);
 
             var file = new PackageFile(testFile);
             file.FileSystem = fileSystem;
