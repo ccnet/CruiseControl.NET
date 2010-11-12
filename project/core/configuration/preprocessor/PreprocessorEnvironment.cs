@@ -616,21 +616,39 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             Uri url = _resolver.ResolveUri( base_url, href );
             // Record for posterity
             AddToFileset( url );
-            // Try to read in the document at the resolved url
-            using (
-                XmlReader reader =
-                    XmlReader.Create( ( Stream ) _resolver.GetEntity( url, null, typeof ( Stream ) ) )
-                )
+
+            try
             {
-                XDocument document = XDocument.Load( reader,
-                                                     LoadOptions.SetLineInfo |
-                                                     LoadOptions.SetBaseUri |
-                                                     LoadOptions.PreserveWhitespace );
-                // Load was successful, push the current base URL onto the include stack and set the
-                // resolver's base dir.
-                _include_stack.Push( url );                
-                return document;
+                // Try to read in the document at the resolved url
+                using (
+                    XmlReader reader =
+                        XmlReader.Create((Stream)_resolver.GetEntity(url, null, typeof(Stream)))
+                    )
+                {
+                    XDocument document = XDocument.Load(reader,
+                                                         LoadOptions.SetLineInfo |
+                                                         LoadOptions.SetBaseUri |
+                                                         LoadOptions.PreserveWhitespace);
+                    // Load was successful, push the current base URL onto the include stack and set the
+                    // resolver's base dir.
+                    _include_stack.Push(url);
+                    return document;
+                }
             }
+            catch (FileNotFoundException fnfe)
+            {
+                throw MissingIncludeException.CreateException("Failed to include file: " + fnfe.Message);
+            }
+            catch (DirectoryNotFoundException dnfe)
+            {
+                throw MissingIncludeException.CreateException("Failed to include file: " + dnfe.Message);
+            }
+            catch (System.Net.WebException we)
+            {
+                throw MissingIncludeException.CreateException("Failed to include file '{0}': {1}", url.AbsoluteUri, we.Message);
+            }
+            
+            return null;
         }
 
         /// <summary>

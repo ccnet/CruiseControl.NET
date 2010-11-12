@@ -108,6 +108,19 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         }
     }
 
+    public class MissingIncludeException : PreprocessorException
+    {
+        public MissingIncludeException(string msg)
+            : base(msg)
+        {
+        }
+
+        internal static Exception CreateException(string msg, params object[] args)
+        {
+            return new MissingIncludeException(String.Format(msg, args));
+        }
+    }
+
     /// <summary>
     /// Base preprocessor exception class
     /// </summary>
