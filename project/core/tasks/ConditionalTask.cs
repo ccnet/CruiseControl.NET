@@ -373,9 +373,10 @@
         /// <param name="result"></param>
         private void RunTask(ITask task, IIntegrationResult result)
         {
-            if (task is IParamatisedItem)
+            var tsk = task as IParamatisedItem;
+            if (tsk!= null)
             {
-                (task as IParamatisedItem).ApplyParameters(parameters, parameterDefinitions);
+                tsk.ApplyParameters(parameters, parameterDefinitions);
             }
 
             task.Run(result);

@@ -42,9 +42,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         {
             NetworkCredential ret = null;
 
-            if (node is XmlElement)
+            XmlElement elem = (XmlElement)node;
+
+            if (elem != null)
             {
-                XmlElement elem = (XmlElement)node;
                 if (!elem.HasAttribute("userName") || String.IsNullOrEmpty(elem.GetAttribute("userName").Trim()))
                 {
                     Log.Warning("No 'userName' specified!");

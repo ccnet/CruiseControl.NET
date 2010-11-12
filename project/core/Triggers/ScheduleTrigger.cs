@@ -43,7 +43,6 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         private DateTimeProvider dtProvider;
         private TimeSpan integrationTime;
         private DateTime nextBuild;
-        private DateTime previousBuild;
         private bool triggered;
         private Int32 randomOffSetInMinutesFromTime = 0;
         Random randomizer = new Random();
@@ -185,7 +184,6 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         {
             if (triggered)
             {
-                previousBuild = dtProvider.Now;
                 SetNextIntegrationDateTime();
             }
             triggered = false;

@@ -88,7 +88,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Reading Modifications");                
 
 
-			List<object> stuff = new List<object>();
         	System.Collections.ArrayList AllModifications = new System.Collections.ArrayList();
             
 

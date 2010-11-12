@@ -40,9 +40,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             }
 
             Timeout timeout = Timeout.DefaultTimeout;
-            if (node is XmlAttribute)
+            XmlAttribute a = node as XmlAttribute;
+
+            if (a != null)
             {
-                XmlAttribute a = (XmlAttribute)node;
                 try
                 {
                     timeout = new Timeout(Int32.Parse(a.Value));
@@ -52,22 +53,25 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                     Log.Warning("Could not parse timeout string. Using default timeout.");
                 }
             }
-            else if (node is XmlElement)
+            else
             {
-                XmlElement e = (XmlElement)node;
-                try
+                var e = node as XmlElement;
+                if (e != null)
                 {
-                    TimeUnits units = TimeUnits.MILLIS;
-                    string unitsString = e.GetAttribute("units");
-                    if (unitsString != null && unitsString != string.Empty)
+                    try
                     {
-                        units = TimeUnits.Parse(unitsString);
+                        TimeUnits units = TimeUnits.MILLIS;
+                        string unitsString = e.GetAttribute("units");
+                        if (unitsString != null && unitsString != string.Empty)
+                        {
+                            units = TimeUnits.Parse(unitsString);
+                        }
+                        timeout = new Timeout(Int32.Parse(e.InnerText), units);
                     }
-                    timeout = new Timeout(Int32.Parse(e.InnerText), units);
-                }
-                catch (Exception)
-                {
-                    Log.Warning("Could not parse timeout string. Using default timeout.");
+                    catch (Exception)
+                    {
+                        Log.Warning("Could not parse timeout string. Using default timeout.");
+                    }
                 }
             }
             return timeout;

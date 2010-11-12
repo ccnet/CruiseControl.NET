@@ -42,11 +42,12 @@
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             object convertedValue = null;
-            if (value is string)
+            var stringValue = value as string;
+            if (stringValue != null)
             {
                 convertedValue = new PrivateString
                 {
-                    PrivateValue = (string)value
+                    PrivateValue = stringValue
                 };
             }
 

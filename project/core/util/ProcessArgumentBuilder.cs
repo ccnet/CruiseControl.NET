@@ -6,7 +6,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class ProcessArgumentBuilder
 	{
-        private static Regex hiddenTextRegex = new Regex("<hide>[^<]*</hide>");
+        //private static Regex hiddenTextRegex = new Regex("<hide>[^<]*</hide>");
         private readonly StringBuilder builder = new StringBuilder();
 
         /// <summary>

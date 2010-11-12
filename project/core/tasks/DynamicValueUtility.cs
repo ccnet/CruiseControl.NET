@@ -49,9 +49,10 @@
                         currentProperty = null;
                     }
 
-                    if (currentValue is IEnumerable)
+                    var curValue = currentValue as IEnumerable;
+                    if (curValue != null)
                     {
-                        currentValue = FindTypedValue(currentValue as IEnumerable, parts[position].Name);
+                        currentValue = FindTypedValue(curValue, parts[position].Name);
                     }
                     else
                     {
@@ -117,9 +118,10 @@
                     {
                         // Get the name of the property
                         string name = null;
-                        if (attribute is ReflectorPropertyAttribute)
+                        var attrib = attribute as ReflectorPropertyAttribute;
+                        if (attrib !=null)
                         {
-                            name = (attribute as ReflectorPropertyAttribute).Name;
+                            name = attrib.Name;
                         }
 
                         // Check to see whether the property has been found
@@ -155,9 +157,10 @@
                 object[] attributes = value.GetType().GetCustomAttributes(true);
                 foreach (object attribute in attributes)
                 {
-                    if (attribute is ReflectorTypeAttribute)
+                    var attrib = attribute as ReflectorTypeAttribute;
+                    if (attrib != null)
                     {
-                        string name = (attribute as ReflectorTypeAttribute).Name;
+                        string name = attrib.Name;
                         if (name == typeName)
                         {
                             actualValue = value;
@@ -428,9 +431,10 @@
                         // Move to the parent
                         lastName = nodeName;
                         previousNode = currentNode;
-                        if (currentNode is XmlAttribute)
+                        var curNode = currentNode as XmlAttribute;
+                        if (curNode != null)
                         {
-                            currentNode = (currentNode as XmlAttribute).OwnerElement;
+                            currentNode = curNode.OwnerElement;
                         }
                         else
                         {
@@ -472,9 +476,10 @@
         {
             object value = null;
 
-            if (member is PropertyInfo)
+            var pi = member as PropertyInfo;
+            if (pi !=null)
             {
-                value = (member as PropertyInfo).GetValue(source, new object[0]);
+                value = pi.GetValue(source, new object[0]);
             }
             else
             {

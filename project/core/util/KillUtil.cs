@@ -44,7 +44,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                case PlatformID.Unix:
                                       
                     // need to execute uname -s to find out if it is a MAC or not
-                    Process unameprocess = new Process();
                     process.StartInfo.FileName = "uname";
                     process.StartInfo.Arguments = "-s";
                     process.StartInfo.CreateNoWindow = true;

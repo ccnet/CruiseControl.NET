@@ -260,17 +260,19 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             {
                 foreach (IAuthentication user in this.loadedUsers.Values)
                 {
-                    if (user is IConfigurationValidation)
+                    var config = user as IConfigurationValidation;
+                    if (config != null)
                     {
-                        (user as IConfigurationValidation).Validate(configuration, parent.Wrap(this), errorProcesser);
+                        config.Validate(configuration, parent.Wrap(this), errorProcesser);
                     }
                 }
 
                 foreach (IPermission permission in this.loadedPermissions.Values)
                 {
-                    if (permission is IConfigurationValidation)
+                    var config = permission as IConfigurationValidation;
+                    if (config != null)
                     {
-                        (permission as IConfigurationValidation).Validate(configuration, parent.Wrap(this), errorProcesser);
+                        config.Validate(configuration, parent.Wrap(this), errorProcesser);
                     }
                 }
             }

@@ -50,7 +50,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         #region PrivateVariables
 
         private readonly IRegistry registry;
-        private VstsHistoryParser parser;
         private string executable;
 
         private class TfsWorkspaceStatus
@@ -66,7 +65,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             this.registry = registry;
             this.executor = executor;
-            this.parser = parser as VstsHistoryParser;
         }
 
         public Vsts() :

@@ -211,9 +211,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             if ((value is string) || (value is int) || (value is Enum))
                 return value.ToString();
 
-            if (value is ArrayList)
+            var dummy = value as ArrayList;
+            if (dummy != null)
             {
-                string[] tmp = (string[])((ArrayList)value).ToArray(typeof(string));
+                string[] tmp = (string[])dummy.ToArray(typeof(string));
                 if (tmp.Length <= 1)
                     return string.Join(string.Empty, tmp);
 

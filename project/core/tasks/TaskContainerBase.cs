@@ -85,15 +85,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     foreach (ITask task in Tasks)
                     {
                         ItemStatus taskItem = null;
-                        if (task is TaskBase)
+                        var tbase = task as TaskBase;
+                        if (tbase != null)
                         {
                             // Reset the status for the task
-                            (task as TaskBase).InitialiseStatus(newStatus);
+                            tbase.InitialiseStatus(newStatus);
                         }
 
-                        if (task is IStatusSnapshotGenerator)
+                        var dummy = task as IStatusSnapshotGenerator;
+                        if (dummy != null)
                         {
-                            taskItem = (task as IStatusSnapshotGenerator).GenerateSnapshot();
+                            taskItem = dummy.GenerateSnapshot();
                         }
                         else
                         {
@@ -123,9 +125,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="result"></param>
         protected virtual void RunTask(ITask task, IIntegrationResult result)
         {
-            if (task is IParamatisedItem)
+            var tsk = task as IParamatisedItem;
+            if (tsk != null)
             {
-                (task as IParamatisedItem).ApplyParameters(parameters, parameterDefinitions);
+                tsk.ApplyParameters(parameters, parameterDefinitions);
             }
 
             task.Run(result);
