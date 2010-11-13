@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			if (integrator != null)
 			{
-				integrator.Stop();
+				integrator.Stop(false);
 				integrator.WaitForExit();
 			}
             if (Directory.Exists(tempWorkingDir1))
@@ -94,7 +94,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integrationTriggerMock.WaitForSignal();
 			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
 
-			integrator.Stop();
+			integrator.Stop(false);
 			integrator.WaitForExit();
 			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
 			VerifyAll();
@@ -114,7 +114,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integrator.Start();
 			integrationTriggerMock.WaitForSignal();
 			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
-			integrator.Stop();
+			integrator.Stop(false);
 			integrator.WaitForExit();
 			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
 			VerifyAll();
@@ -131,13 +131,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			integrator.Start();
 			integrationTriggerMock.WaitForSignal();
-			integrator.Stop();
+			integrator.Stop(false);
 			integrator.WaitForExit();
 
 			integrationTriggerMock.ResetLatch();
 			integrator.Start();
 			integrationTriggerMock.WaitForSignal();
-			integrator.Stop();
+			integrator.Stop(false);
 			integrator.WaitForExit();
 			VerifyAll();
 		}
@@ -151,7 +151,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectMock.ExpectNoCall("NotifySleepingState");
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			integrator.Stop();
+			integrator.Stop(false);
 			Assert.AreEqual(ProjectIntegratorState.Stopping, integrator.State);
 			VerifyAll();
 		}
@@ -172,7 +172,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integrator.Start();
 			projectMock.WaitForSignal();
 			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
-			integrator.Stop();
+			integrator.Stop(false);
 			integrator.WaitForExit();
 			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
 			VerifyAll();

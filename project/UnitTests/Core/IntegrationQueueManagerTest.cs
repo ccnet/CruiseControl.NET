@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			string[] queueNames = queueManager.GetQueueNames();
 			Assert.AreEqual(1, queueNames.Length);
 
-			queueManager.StopAllProjects();
+			queueManager.StopAllProjects(false);
 
 			queueNames = queueManager.GetQueueNames();
 			Assert.AreEqual(0, queueNames.Length);

@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// Stops the integration of this project.
 		/// </summary>
-		void Stop();
+        void Stop(bool restarting);
 
 		/// <summary>
 		/// Waits for the project integrator thread to exit, and joins with it.

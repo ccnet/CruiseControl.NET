@@ -26,14 +26,19 @@ namespace ThoughtWorks.CruiseControl.Core
         private readonly IProject project;
         private readonly IIntegrationQueue integrationQueue;
         private Thread thread;
-        private ProjectIntegratorState state = ProjectIntegratorState.Unknown ;
+        private ProjectIntegratorState state = ProjectIntegratorState.Unknown;
         private int AmountOfSourceControlExceptions = 0;
+
+        private bool runAndStop;
+        private bool isRestarting = false;
+
 
         public ProjectIntegrator(IProject project, IIntegrationQueue integrationQueue)
         {
             trigger = project.Triggers;
             this.project = project;
             this.integrationQueue = integrationQueue;
+            this.runAndStop = false;
             // Make sure the project's directories exist.
             if (!Directory.Exists(project.WorkingDirectory))
                 Directory.CreateDirectory(project.WorkingDirectory);
@@ -69,6 +74,14 @@ namespace ThoughtWorks.CruiseControl.Core
                 if (IsRunning)
                     return;
 
+                //if stopping or currently within a restart, allow this run to occur, but then stop project when finished
+                //this is to allow the server to restart when config has been update
+
+                if (isRestarting || state == ProjectIntegratorState.Stopping)
+                {
+                    runAndStop = true;
+                    isRestarting = false;
+                }
                 state = ProjectIntegratorState.Running;
             }
 
@@ -107,7 +120,7 @@ namespace ThoughtWorks.CruiseControl.Core
         public void Request(IntegrationRequest request)
         {
             if (State == ProjectIntegratorState.Stopping || State == ProjectIntegratorState.Stopped) throw new CruiseControlException("Project is stopping / stopped - unable to start integration");
-            
+
             AddToQueue(request);
             Start();
         }
@@ -130,7 +143,12 @@ namespace ThoughtWorks.CruiseControl.Core
                 {
                     try
                     {
-                        Integrate();
+                        bool ran = Integrate();
+                        if (ran && runAndStop)
+                        {
+                            state = ProjectIntegratorState.Stopping;
+                            runAndStop = false;
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -151,8 +169,10 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
-        private void Integrate()
+        private bool Integrate()
         {
+            bool ran=false;
+
             while (integrationQueue.IsBlocked)
                 Thread.Sleep(200);
 
@@ -161,7 +181,7 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 IDisposable queueLock;
                 if (!integrationQueue.TryLock(out queueLock))
-                    return;
+                    return false;
 
                 using (queueLock)
                 {
@@ -175,13 +195,14 @@ namespace ThoughtWorks.CruiseControl.Core
 
                             IntegrationStatus status = IntegrationStatus.Unknown;
                             IIntegrationResult result = new IntegrationResult();
+                            ran = true;
 
                             try
                             {
-                                    ir.PublishOnSourceControlException = (AmountOfSourceControlExceptions == project.MaxSourceControlRetries)
-                                                                          || (project.SourceControlErrorHandling == ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
-                                    result = project.Integrate(ir);
-                                    if (result != null) status = result.Status;
+                                ir.PublishOnSourceControlException = (AmountOfSourceControlExceptions == project.MaxSourceControlRetries)
+                                                                      || (project.SourceControlErrorHandling == ThoughtWorks.CruiseControl.Core.Sourcecontrol.Common.SourceControlErrorHandlingPolicy.ReportEveryFailure);
+                                result = project.Integrate(ir);
+                                if (result != null) status = result.Status;
                             }
                             catch
                             {
@@ -259,6 +280,8 @@ namespace ThoughtWorks.CruiseControl.Core
                     Thread.Sleep(200);
                 }
             }
+
+            return ran;
         }
 
         private void PollTriggers()
@@ -304,10 +327,11 @@ namespace ThoughtWorks.CruiseControl.Core
         /// Sets the state to <see cref="ProjectIntegratorState.Stopping"/>, telling the project to
         /// stop at the next possible point in time.
         /// </summary>
-        public void Stop()
+        public void Stop(bool restarting)
         {
             if (IsRunning || state == ProjectIntegratorState.Unknown)
             {
+                this.isRestarting = restarting;
                 Log.Info("Stopping integrator for project: " + project.Name);
                 state = ProjectIntegratorState.Stopping;
             }
@@ -333,7 +357,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 if (State != ProjectIntegratorState.Stopping)
                 {
                     Log.Info(string.Format("WaitForExit requested for non stopping project '{0}' - stopping project", Name));
-                    Stop();
+                    Stop(false);
                 }
 
                 try

@@ -295,7 +295,7 @@ namespace ThoughtWorks.CruiseControl.Core
             }
 
             Log.Info("Stopping CruiseControl.NET Server");
-            integrationQueueManager.StopAllProjects();
+            integrationQueueManager.StopAllProjects(false);
             this.TerminateDistributedBuilds();
             monitor.Set();
         }

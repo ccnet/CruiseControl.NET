@@ -52,11 +52,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		public void StopAllProjects()
+        public void StopAllProjects(bool restarting)
 		{
 			foreach (IProjectIntegrator integrator in projectIntegrators)
 			{
-				integrator.Stop();
+				integrator.Stop(restarting);
 			}
 			WaitForIntegratorsToExit();
 			// We should clear the integration queue so the queues can be rebuilt when start again.
@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void Stop(string project)
 		{
             stateManager.RecordProjectAsStopped(project);
-			GetIntegrator(project).Stop();
+			GetIntegrator(project).Stop(false);
 		}
 
 		public void Start(string project)
@@ -132,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public void Restart(IConfiguration configuration)
 		{
-			StopAllProjects();
+		    StopAllProjects(true);
 			Initialize(configuration);
 			StartAllProjects();
 		}

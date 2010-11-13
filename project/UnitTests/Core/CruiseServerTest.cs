@@ -159,9 +159,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			server.Start();
 
-			integratorMock1.Expect("Stop");
+			integratorMock1.Expect("Stop",false);
 			integratorMock1.Expect("WaitForExit");
-			integratorMock2.Expect("Stop");
+			integratorMock2.Expect("Stop",false);
 			integratorMock2.Expect("WaitForExit");
 
 			server.Stop();
@@ -202,9 +202,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			server.Start();
 
-			integratorMock1.Expect("Stop");
+			integratorMock1.Expect("Stop",true);
 			integratorMock1.Expect("WaitForExit");
-			integratorMock2.Expect("Stop");
+			integratorMock2.Expect("Stop",true);
 			integratorMock2.Expect("WaitForExit");
 
 			configuration = new Configuration();
@@ -326,7 +326,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void StopSpecificProject()
 		{
             stateManagerMock.Expect("RecordProjectAsStopped", "Project 1");
-            integratorMock1.Expect("Stop");
+            integratorMock1.Expect("Stop",false);
 			server.CruiseManager.Stop("Project 1");
 			integratorMock1.Verify();
             stateManagerMock.Verify();

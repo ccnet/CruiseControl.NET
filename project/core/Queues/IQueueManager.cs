@@ -18,7 +18,8 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
         /// <summary>
         /// Stops all the projects.
         /// </summary>
-        void StopAllProjects();
+        /// <param name="restarting">true when an update is done to the config, so we need to stop all projects and restart them. No other projects may be started in this timeframe.</param>
+        void StopAllProjects(bool restarting);
 
         /// <summary>
         /// Aborts all running projects and stops queue processing.
