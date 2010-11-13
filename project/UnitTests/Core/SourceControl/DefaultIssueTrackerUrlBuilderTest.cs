@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
         private string CreateSourceControlXml()
         {
-            return string.Format("<issueUrlBuilder type=\"defaultIssueTracker\"><url>{0}</url></issueUrlBuilder>", UrlFromConfigFile);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"<issueUrlBuilder type=\"defaultIssueTracker\"><url>{0}</url></issueUrlBuilder>", UrlFromConfigFile);
         }
 
 

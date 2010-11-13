@@ -45,24 +45,24 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 
             if (xattribute != null)
             {
-                obj_info = String.Format("Attribute '{0}'", xattribute.Name);
+                obj_info = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Attribute '{0}'", xattribute.Name);
             }
             else
             {
                 var xelement = obj as XElement;
                 if (xelement != null)
                 {
-                    obj_info = String.Format("Element '{0}'", xelement.Name);
+                    obj_info = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Element '{0}'", xelement.Name);
                 }
             }
             IXmlLineInfo line_info = obj;
             string line_and_pos = "line and position unknown";
             if (line_info.HasLineInfo())
             {
-                line_and_pos = String.Format("line {0}, pos {1}", line_info.LineNumber,
+                line_and_pos = string.Format(System.Globalization.CultureInfo.CurrentCulture,"line {0}, pos {1}", line_info.LineNumber,
                                               line_info.LinePosition);
             }
-            return String.Format("File: {0} ({1}:{2})", obj.BaseUri, line_and_pos, obj_info);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"File: {0} ({1}:{2})", obj.BaseUri, line_and_pos, obj_info);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
                     return String.Empty;
                 default:
                     throw new InvalidOperationException(
-                        String.Format("{0} Unhandled node type {1}",
+                        string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} Unhandled node type {1}",
                                        node.ErrorContext(),
                                        node.NodeType));
             }

@@ -56,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				throw new BuilderException(
                     this, 
-                    string.Format("Unable to execute: {0} {1}\n{2}", info.FileName, info.PublicArguments, e), e);
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to execute: {0} {1}\n{2}", info.FileName, info.PublicArguments, e), e);
 			}
 			finally
 			{

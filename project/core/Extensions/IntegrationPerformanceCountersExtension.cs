@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
 
             server.IntegrationStarted += (o, e) =>
             {
-                Log.Debug(string.Format("Starting stopwatch for '{0}'", e.ProjectName));
+                Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Starting stopwatch for '{0}'", e.ProjectName));
 
                 // Start a stopwatch for the project
                 if (stopwatches.ContainsKey(e.ProjectName))
@@ -82,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
             };
             server.IntegrationCompleted += (o, e) =>
             {
-                Log.Debug(string.Format("Performance logging for '{0}'", e.ProjectName));
+                Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Performance logging for '{0}'", e.ProjectName));
 
                 // Stop the stopwatch and record the elapsed time
                 if (stopwatches.ContainsKey(e.ProjectName))

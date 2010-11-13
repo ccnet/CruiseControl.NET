@@ -181,7 +181,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                             case MergeFileInfo.MergeActionType.CData:
                                 // Add the file to the merge list
                                 actualLogger.Info("Merging file '{0}'", fileInfo);
-                                result.BuildProgressInformation.AddTaskInformation(string.Format("Merging file '{0}'", fileInfo));
+                                result.BuildProgressInformation.AddTaskInformation(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Merging file '{0}'", fileInfo));
                                 result.AddTaskResult(new FileTaskResult(fileInfo, mergeFile.DeleteAfterMerge, actualFileSystem)
                                                          {WrapInCData = (mergeFile.MergeAction == MergeFileInfo.MergeActionType.CData)});
                                 break;
@@ -189,12 +189,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                                 // Copy the file to the target folder
                                 actualFileSystem.EnsureFolderExists(targetFolder);
                                 actualLogger.Info("Copying file '{0}' to '{1}'", fileInfo.Name, targetFolder);
-                                result.BuildProgressInformation.AddTaskInformation(string.Format("Copying file '{0}' to '{1}'", fileInfo.Name, targetFolder));
+                                result.BuildProgressInformation.AddTaskInformation(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Copying file '{0}' to '{1}'", fileInfo.Name, targetFolder));
                                 actualFileSystem.Copy(fileInfo.FullName, Path.Combine(targetFolder, fileInfo.Name));
                                 break;
                             default:
                                 throw new CruiseControlException(
-                                    string.Format("Unknown file merge action '{0}'", mergeFile.MergeAction));
+                                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unknown file merge action '{0}'", mergeFile.MergeAction));
                         }
                     }
                     else

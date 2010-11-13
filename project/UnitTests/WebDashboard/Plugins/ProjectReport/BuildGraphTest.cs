@@ -134,9 +134,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.Statistics
             for(int i=0; i < amountOfBuilds; i++)
             {
                 if (buildsAreInSameDay)                
-                    builds[i] = new CruiseControl.Core.Reporting.Dashboard.Navigation.DefaultBuildSpecifier( ProjectSpecifier , string.Format("log20050801015223Lbuild.0.0.0.{0}.xml", i) );
+                    builds[i] = new CruiseControl.Core.Reporting.Dashboard.Navigation.DefaultBuildSpecifier( ProjectSpecifier , string.Format(System.Globalization.CultureInfo.CurrentCulture,"log20050801015223Lbuild.0.0.0.{0}.xml", i) );
                   else
-                    builds[i] = new CruiseControl.Core.Reporting.Dashboard.Navigation.DefaultBuildSpecifier( ProjectSpecifier , string.Format("log200508{0}015223Lbuild.0.0.0.{1}.xml", (i+1).ToString("00"), i) );
+                    builds[i] = new CruiseControl.Core.Reporting.Dashboard.Navigation.DefaultBuildSpecifier( ProjectSpecifier , string.Format(System.Globalization.CultureInfo.CurrentCulture,"log200508{0}015223Lbuild.0.0.0.{1}.xml", (i+1).ToString("00"), i) );
             }
 
             UrlBuilder = new CruiseControl.Core.Reporting.Dashboard.Navigation.DefaultUrlBuilder();

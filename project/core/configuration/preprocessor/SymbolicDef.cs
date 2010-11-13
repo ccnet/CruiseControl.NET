@@ -37,6 +37,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// </summary>
         public int StackFrame;
 
-        public string StackQualifiedName { get { return string.Format("{0}:{1}", StackFrame, Name); } }
+        public string StackQualifiedName { get { return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}:{1}", StackFrame, Name); } }
     }
 }

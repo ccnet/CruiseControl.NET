@@ -40,10 +40,10 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 		public string BuildUrl(string action, string queryString, string path)
 		{
             queryString = GenerateQuery(queryString);
-			string url = string.Format("{0}{1}.{2}", CalculatePath(path), action, extension);
+			string url = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}{1}.{2}", CalculatePath(path), action, extension);
 			if (queryString!= null && queryString != string.Empty)
 			{
-				url += string.Format("?{0}", queryString);
+				url += string.Format(System.Globalization.CultureInfo.CurrentCulture,"?{0}", queryString);
 			}
 			return url;
 		}

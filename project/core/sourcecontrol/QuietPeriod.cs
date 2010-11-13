@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				
 				if (timeInTheFutureOfLatestModification > AmountOfTimeInTheFutureToWarnAboutFutureModifications)
 				{
-					Log.Warning(string.Format("The latest modification is {0:n0} seconds in the future; this probably indicates that the clock of your " +
+					Log.Warning(string.Format(System.Globalization.CultureInfo.CurrentCulture,"The latest modification is {0:n0} seconds in the future; this probably indicates that the clock of your " +
 						"build server is out of sync with your source control server.  This can adversely impact the behaviour of CruiseControl.NET",
 					            	timeInTheFutureOfLatestModification.TotalSeconds ));					
 				}
@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				if (waitRequiredToReachEndOfQuietPeriod < GracePeriodInWhichItIsNotWorthApplyingTheQuietPeriod)
 					return modifications;
 								
-				Log.Info(string.Format("The most recent modification at {0} is within in the modification delay.  Waiting for {1:n1} seconds until {2} before checking again.", 
+				Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"The most recent modification at {0} is within in the modification delay.  Waiting for {1:n1} seconds until {2} before checking again.", 
 				                       timeOfLatestModification, waitRequiredToReachEndOfQuietPeriod.TotalSeconds, endOfQuietPeriod));
 				
 				dtProvider.Sleep(waitRequiredToReachEndOfQuietPeriod);
@@ -80,7 +80,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				case 1:
 					return "1 modification detected.";
 				default:
-					return string.Format("{0} modifications detected.", modifications.Length);
+					return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} modifications detected.", modifications.Length);
 			}
 		}
 

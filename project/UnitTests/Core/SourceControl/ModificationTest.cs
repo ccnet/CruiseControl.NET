@@ -17,9 +17,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Modification beta = new Modification();
 			alpha.ModifiedTime = new DateTime(1961, 3, 3);
 
-			Assert.IsTrue(alpha.CompareTo(beta) > 0, string.Format("expected alpha greater than beta {0}", alpha.CompareTo(beta)));
-			Assert.IsTrue(alpha.CompareTo(alpha) == 0, string.Format("expected alpha-beta equality {0}", alpha.CompareTo(beta)));
-			Assert.IsTrue(beta.CompareTo(alpha) < 0, string.Format("expected alpha less than beta {0}", alpha.CompareTo(beta)));
+			Assert.IsTrue(alpha.CompareTo(beta) > 0, string.Format(System.Globalization.CultureInfo.CurrentCulture,"expected alpha greater than beta {0}", alpha.CompareTo(beta)));
+			Assert.IsTrue(alpha.CompareTo(alpha) == 0, string.Format(System.Globalization.CultureInfo.CurrentCulture,"expected alpha-beta equality {0}", alpha.CompareTo(beta)));
+			Assert.IsTrue(beta.CompareTo(alpha) < 0, string.Format(System.Globalization.CultureInfo.CurrentCulture,"expected alpha less than beta {0}", alpha.CompareTo(beta)));
 		}
 
 		[Test]

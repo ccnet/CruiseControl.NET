@@ -123,7 +123,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             fileDirectoryDeleter.DeleteIncludingReadOnlyObjects(fakeOutputFile);
 
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
-                string.Format("Executing FAKE - {0}", ToString()));
+                string.Format(System.Globalization.CultureInfo.CurrentCulture,"Executing FAKE - {0}", ToString()));
 
             var processResult = TryToRun(CreateProcessInfo(result), result);
 
@@ -182,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             {
                 object value = result.IntegrationProperties[key];
                 if (value != null)
-                    buffer.AppendArgument(string.Format("{0}={1}", key, StringUtil.AutoDoubleQuoteString(StringUtil.RemoveTrailingPathDelimeter(StringUtil.IntegrationPropertyToString(value)))));
+                    buffer.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}={1}", key, StringUtil.AutoDoubleQuoteString(StringUtil.RemoveTrailingPathDelimeter(StringUtil.IntegrationPropertyToString(value)))));
             }
         }
 

@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 look like: <section name=""log4net""
 type=""log4net.Config.Log4NetConfigurationSectionHandler,log4net"" />";
 			writer.WriteNode(text);
-			Assert.AreEqual(string.Format("<![CDATA[{0}]]>", text), baseWriter.ToString());
+			Assert.AreEqual(string.Format(System.Globalization.CultureInfo.CurrentCulture,"<![CDATA[{0}]]>", text), baseWriter.ToString());
 		}
 
 		[Test]
@@ -97,7 +97,7 @@ type=""log4net.Config.Log4NetConfigurationSectionHandler,log4net"" />";
 		{
 			string text = "<a><b><c/></b>";
 			writer.WriteNode(text);
-			Assert.AreEqual(string.Format("<![CDATA[{0}]]>", text), baseWriter.ToString());
+			Assert.AreEqual(string.Format(System.Globalization.CultureInfo.CurrentCulture,"<![CDATA[{0}]]>", text), baseWriter.ToString());
 		}
 
 		[Test]
@@ -113,7 +113,7 @@ type=""log4net.Config.Log4NetConfigurationSectionHandler,log4net"" />";
 		[Test]
 		public void ShouldStripIllegalCharacters()
 		{
-			writer.WriteNode(string.Format("<foo>{0}</foo>", IllegalCharacters()));
+			writer.WriteNode(string.Format(System.Globalization.CultureInfo.CurrentCulture,"<foo>{0}</foo>", IllegalCharacters()));
 			Assert.AreEqual("<foo>\t\n\n</foo>", baseWriter.ToString());
 		}
 

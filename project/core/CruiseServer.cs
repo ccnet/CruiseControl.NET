@@ -1033,13 +1033,13 @@ namespace ThoughtWorks.CruiseControl.Core
                 var fileInfo = new FileInfo(filePath);
                 if (!fileInfo.FullName.StartsWith(sourceProject.ArtifactDirectory, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var message = string.Format("Files can only be retrieved from the artefact folder - unable to retrieve {0}", request.FileName);
+                    var message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Files can only be retrieved from the artefact folder - unable to retrieve {0}", request.FileName);
                     Log.Warning(message);
                     throw new CruiseControlException(message);
                 }
                 else if (fileInfo.FullName.StartsWith(Path.Combine(sourceProject.ArtifactDirectory, "buildlogs"), StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var message = string.Format("Unable to retrieve files from the build logs folder - unable to retrieve {0}", request.FileName);
+                    var message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to retrieve files from the build logs folder - unable to retrieve {0}", request.FileName);
                     Log.Warning(message);
                     throw new CruiseControlException(message);
                 }
@@ -1047,12 +1047,12 @@ namespace ThoughtWorks.CruiseControl.Core
                 RemotingFileTransfer fileTransfer = null;
                 if (fileInfo.Exists)
                 {
-                    Log.Debug(string.Format("Retrieving file '{0}' from '{1}'", request.FileName, request.ProjectName));
+                    Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Retrieving file '{0}' from '{1}'", request.FileName, request.ProjectName));
                     fileTransfer = new RemotingFileTransfer(File.OpenRead(filePath));
                 }
                 else
                 {
-                    Log.Warning(string.Format("Unable to find file '{0}' in '{1}'", request.FileName, request.ProjectName));
+                    Log.Warning(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to find file '{0}' in '{1}'", request.FileName, request.ProjectName));
                 }
                 response.FileTransfer = fileTransfer;
                 response.Result = ResponseResult.Success;
@@ -1176,11 +1176,11 @@ namespace ThoughtWorks.CruiseControl.Core
                     {
                         if (string.IsNullOrEmpty(projectName))
                         {
-                            Log.Info(string.Format("DiagnoseServerPermission for user {0}", request.UserName));
+                            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"DiagnoseServerPermission for user {0}", request.UserName));
                         }
                         else
                         {
-                            Log.Info(string.Format("DiagnoseProjectPermission for user {0} project {1}", request.UserName, projectName));
+                            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"DiagnoseProjectPermission for user {0} project {1}", request.UserName, projectName));
                         }
                         foreach (SecurityPermission permission in permissions)
                         {
@@ -1234,7 +1234,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 delegate(ServerRequest arg)
                 {
                     string displayName = securityManager.GetDisplayName(request.SessionToken, request.UserName);
-                    Log.Debug(string.Format("Changing password for '{0}'", displayName));
+                    Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Changing password for '{0}'", displayName));
                     securityManager.ChangePassword(request.SessionToken,
                         request.OldPassword,
                         request.NewPassword);
@@ -1256,7 +1256,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 delegate(ServerRequest arg)
                 {
                     string displayName = securityManager.GetDisplayName(request.SessionToken, request.UserName);
-                    Log.Debug(string.Format("'{0}' is resetting password for '{1}'", displayName, request.UserName));
+                    Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"'{0}' is resetting password for '{1}'", displayName, request.UserName));
                     securityManager.ResetPassword(request.SessionToken,
                         request.UserName,
                         request.NewPassword);
@@ -1568,11 +1568,11 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 // See if we can find the type
                 Type extensionType = Type.GetType(extensionConfig.Type);
-                if (extensionType == null) throw new NullReferenceException(string.Format("Unable to find extension '{0}'", extensionConfig.Type));
+                if (extensionType == null) throw new NullReferenceException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to find extension '{0}'", extensionConfig.Type));
 
                 // Load and initialise the extension
                 ICruiseServerExtension extension = Activator.CreateInstance(extensionType) as ICruiseServerExtension;
-                if (extension == null) throw new NullReferenceException(string.Format("Unable to create an instance of '{0}'", extensionType.FullName));
+                if (extension == null) throw new NullReferenceException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to create an instance of '{0}'", extensionType.FullName));
                 extension.Initialise(this, extensionConfig);
 
                 // Add to the list of extensions
@@ -1672,7 +1672,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     (projectIntegrator.Project.Security == null))
                 {
                     // The project is found, but security is missing - application error
-                    string errorMessage = string.Format("Security not found for project {0}", projectName);
+                    string errorMessage = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Security not found for project {0}", projectName);
                     Log.Error(errorMessage);
                     if (eventType.HasValue)
                     {
@@ -1687,7 +1687,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 else
                 {
                     // Couldn't find the requested project
-                    string errorMessage = string.Format("project not found {0}", projectName);
+                    string errorMessage = string.Format(System.Globalization.CultureInfo.CurrentCulture,"project not found {0}", projectName);
                     Log.Error(errorMessage);
                     if (eventType.HasValue)
                     {
@@ -1708,7 +1708,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     // Checking server-level security
                     if (!securityManager.CheckServerPermission(userName, permission))
                     {
-                        string info = string.Format("{2} [{0}] has been denied {1} permission at the server",
+                        string info = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{2} [{0}] has been denied {1} permission at the server",
                             userName, permission, displayName);
                         Log.Warning(info);
                         if (eventType.HasValue)
@@ -1723,7 +1723,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     }
                     else
                     {
-                        string info = string.Format("{2} [{0}] has been granted {1} permission at the server",
+                        string info = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{2} [{0}] has been granted {1} permission at the server",
                             userName, permission, displayName);
                         Log.Debug(info);
                         if (eventType.HasValue)
@@ -1745,7 +1745,7 @@ namespace ThoughtWorks.CruiseControl.Core
                         permission,
                         securityManager.GetDefaultRight(permission)))
                     {
-                        string info = string.Format("{3} [{0}] has been denied {1} permission on '{2}'",
+                        string info = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{3} [{0}] has been denied {1} permission on '{2}'",
                             userName, permission, projectName, displayName);
                         Log.Warning(info);
                         if (eventType.HasValue)
@@ -1760,7 +1760,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     }
                     else
                     {
-                        Log.Debug(string.Format("{3} [{0}] has been granted {1} permission on '{2}'",
+                        Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{3} [{0}] has been granted {1} permission on '{2}'",
                             userName,
                             permission,
                             projectName,
@@ -1783,7 +1783,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 switch (defaultRight)
                 {
                     case SecurityRight.Allow:
-                        Log.Debug(string.Format("{3} [{0}] has been granted {1} permission on '{2}'",
+                        Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{3} [{0}] has been granted {1} permission on '{2}'",
                             userName,
                             permission,
                             projectName,
@@ -1791,7 +1791,7 @@ namespace ThoughtWorks.CruiseControl.Core
                         return string.Empty;
                     default:
                         // Tell the user that the session is unknown
-                        var info = string.Format("Session with token '{0}' is not valid", sessionToken);
+                        var info = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Session with token '{0}' is not valid", sessionToken);
                         Log.Warning(info);
                         if (eventType.HasValue)
                         {

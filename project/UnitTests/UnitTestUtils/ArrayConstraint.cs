@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
 
 			if (expected.Length != obtained.Length)
 			{
-				message = string.Format("Expected {0} values but found {1}", expected.Length, obtained.Length);
+				message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Expected {0} values but found {1}", expected.Length, obtained.Length);
 				return false;
 			}
 
@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
 
 				if (!expected[i].Equals(obtained[i]))
 				{
-					message = string.Format("Expected {0} but was {1}", expected[i], obtained[i]);
+					message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Expected {0} but was {1}", expected[i], obtained[i]);
 					return false;
 				}
 			}

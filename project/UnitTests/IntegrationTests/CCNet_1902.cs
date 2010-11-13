@@ -92,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
 
         private void Log(string message)
         {
-            System.Diagnostics.Debug.WriteLine(string.Format("--> {0} {1}", DateTime.Now.ToLongTimeString(), message));
+            System.Diagnostics.Debug.WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"--> {0} {1}", DateTime.Now.ToLongTimeString(), message));
         }
 
         private void CheckResponse(ThoughtWorks.CruiseControl.Remote.Messages.Response value)

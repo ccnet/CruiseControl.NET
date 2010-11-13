@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		private void Start()
 		{
-			Trace.WriteLine(string.Format("Start: {0}", activityName));
+			Trace.WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Start: {0}", activityName));
 			QueryPerformanceCounter(out startTime);
 		}
 
@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 			long durationInMs = ((endTime - startTime)*1000)/frequency;
 
-			Trace.WriteLine(string.Format("Done: {0} took {1} ms", activityName, durationInMs));
+			Trace.WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Done: {0} took {1} ms", activityName, durationInMs));
 		}
 
 		public void Dispose()

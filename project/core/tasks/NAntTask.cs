@@ -267,7 +267,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		    fileDirectoryDeleter.DeleteIncludingReadOnlyObjects(nantOutputFile);
 
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : 
-                string.Format("Executing Nant :BuildFile: {0} Targets: {1} ", BuildFile, string.Join(", ", Targets)));
+                string.Format(System.Globalization.CultureInfo.CurrentCulture,"Executing Nant :BuildFile: {0} Targets: {1} ", BuildFile, string.Join(", ", Targets)));
 
 			ProcessResult processResult = TryToRun(CreateProcessInfo(result), result);
             
@@ -326,7 +326,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				object value = result.IntegrationProperties[key];
 				if (value != null)
-					buffer.AppendArgument(string.Format("-D:{0}={1}", key, StringUtil.AutoDoubleQuoteString(StringUtil.RemoveTrailingPathDelimeter(StringUtil.IntegrationPropertyToString(value)))));
+					buffer.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"-D:{0}={1}", key, StringUtil.AutoDoubleQuoteString(StringUtil.RemoveTrailingPathDelimeter(StringUtil.IntegrationPropertyToString(value)))));
 			}
 		}
 

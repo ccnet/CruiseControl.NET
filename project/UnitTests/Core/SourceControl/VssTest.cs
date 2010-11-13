@@ -118,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void VerifyHistoryProcessInfoArguments()
 		{
             string tempOutputFileName = Path.GetTempFileName();
-            ExpectToExecuteArguments(string.Format("history $/fooProject -R -Vd{0}~{1} \"-YJoe Admin,admin\" -I-Y {2}", 
+            ExpectToExecuteArguments(string.Format(System.Globalization.CultureInfo.CurrentCulture,"history $/fooProject -R -Vd{0}~{1} \"-YJoe Admin,admin\" -I-Y {2}", 
                 CommandDate(today), 
                 CommandDate(yesterday), 
                 GeneratePath("-O@{0}", tempOutputFileName)));
@@ -129,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         public void VerifyHistoryProcessInfoArgumentsWithSpaceInProjectName()
 		{
             string tempOutputFileName = Path.GetTempFileName();
-            ExpectToExecuteArguments(string.Format("history \"$/My Project\" -R -Vd{0}~{1} \"-YJoe Admin,admin\" -I-Y {2}", 
+            ExpectToExecuteArguments(string.Format(System.Globalization.CultureInfo.CurrentCulture,"history \"$/My Project\" -R -Vd{0}~{1} \"-YJoe Admin,admin\" -I-Y {2}", 
                 CommandDate(today), 
                 CommandDate(yesterday), 
                 GeneratePath("-O@{0}", tempOutputFileName)));
@@ -141,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         public void VerifyHistoryProcessInfoArgumentsWhenUsernameIsNotSpecified()
 		{
             string tempOutputFileName = Path.GetTempFileName();
-            ExpectToExecuteArguments(string.Format("history $/fooProject -R -Vd{0}~{1} -I-Y {2}", 
+            ExpectToExecuteArguments(string.Format(System.Globalization.CultureInfo.CurrentCulture,"history $/fooProject -R -Vd{0}~{1} -I-Y {2}", 
                 CommandDate(today), 
                 CommandDate(yesterday), 
                 GeneratePath("-O@{0}", tempOutputFileName)));
@@ -200,7 +200,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void GetSourceShouldNotGetCleanCopy()
 		{
-            ExpectToExecuteArguments(string.Format("get $/fooProject/*?* -R -Vd{0} \"-YJoe Admin,admin\" -I-Y -W -GF- -GTM", CommandDate(today)));
+            ExpectToExecuteArguments(string.Format(System.Globalization.CultureInfo.CurrentCulture,"get $/fooProject/*?* -R -Vd{0} \"-YJoe Admin,admin\" -I-Y -W -GF- -GTM", CommandDate(today)));
 
 			vss.AutoGetSource = true;
 			vss.CleanCopy = false;
@@ -345,7 +345,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		private string ForGetCommand()
 		{
-            return string.Format("get $/fooProject/*?* -R -Vd{0} \"-YJoe Admin,admin\" -I-Y -W -GF- -GTM -GWR", CommandDate(today));
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"get $/fooProject/*?* -R -Vd{0} \"-YJoe Admin,admin\" -I-Y -W -GF- -GTM -GWR", CommandDate(today));
 		}
 
         /// <summary>

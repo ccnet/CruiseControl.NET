@@ -172,7 +172,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         protected override bool Execute(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : 
-                            string.Format("Executing FinalBuilder : BuildFile: {0} ", ProjectFile));
+                            string.Format(System.Globalization.CultureInfo.CurrentCulture,"Executing FinalBuilder : BuildFile: {0} ", ProjectFile));
 
             ProcessResult processResult = AttemptToExecute(NewProcessInfoFrom(result), result.ProjectName);
 			result.AddTaskResult(new ProcessTaskResult(processResult));
@@ -197,7 +197,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}
 			catch (Exception e)
 			{
-				throw new BuilderException(this, string.Format("FBCMD unable to execute: {0}\n{1}", info, e), e);
+				throw new BuilderException(this, string.Format(System.Globalization.CultureInfo.CurrentCulture,"FBCMD unable to execute: {0}\n{1}", info, e), e);
 			}
 		}
 
@@ -289,7 +289,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			string executableDir = _registry.GetLocalMachineSubKeyValue(keyName, "Location");
             if (string.IsNullOrEmpty((executableDir)))
 			{
-				throw new BuilderException(this, String.Format("Path to Finalbuilder {0} command line executable could not be found.", fbversion));				
+				throw new BuilderException(this, string.Format(System.Globalization.CultureInfo.CurrentCulture,"Path to Finalbuilder {0} command line executable could not be found.", fbversion));				
 			}
 
             if (fbversion == 3) // FinalBuilder 3 has a different executable name to other versions

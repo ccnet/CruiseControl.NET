@@ -201,7 +201,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             Log.Debug("HttpStatusTask is executing");
 
             bool taskTimedOut = false;
-            string msg = string.Format("Checking http status of URI: '{0}'", this.RequestSettings.Uri.ToString());
+            string msg = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Checking http status of URI: '{0}'", this.RequestSettings.Uri.ToString());
             if (!String.IsNullOrEmpty(Description))
             {
                 msg = Description + " (" + msg + ")";
@@ -263,7 +263,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 }
                 catch (Exception ex)
                 {
-                    throw new BuilderException(this, String.Format("An exception occured in HttpStatusTask while checking status for: '{0}'", this.RequestSettings.Uri), ex);
+                    throw new BuilderException(this, string.Format(System.Globalization.CultureInfo.CurrentCulture,"An exception occured in HttpStatusTask while checking status for: '{0}'", this.RequestSettings.Uri), ex);
                 }
 
                 // sleeping
@@ -288,7 +288,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             if (taskTimedOut)
             {
-                throw new BuilderException(this, String.Format("HttpStatusTask timed out while checking status for: '{0}'", this.RequestSettings.Uri));
+                throw new BuilderException(this, string.Format(System.Globalization.CultureInfo.CurrentCulture,"HttpStatusTask timed out while checking status for: '{0}'", this.RequestSettings.Uri));
             }
 
             Log.Debug("Writing output...");

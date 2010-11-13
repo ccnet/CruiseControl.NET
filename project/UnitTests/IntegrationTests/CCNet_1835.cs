@@ -65,17 +65,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             // also we want the cruise server to wait for 1 minute, otherwise it starts integrating project 1 immediately
             System.Xml.XmlDocument xdoc = new System.Xml.XmlDocument();
             xdoc.Load(CCNetConfigFile);
-            string xslt = string.Format("/cruisecontrol/project[@name='{0}']/triggers/multiTrigger/triggers/scheduleTrigger", projectName1);
+            string xslt = string.Format(System.Globalization.CultureInfo.CurrentCulture,"/cruisecontrol/project[@name='{0}']/triggers/multiTrigger/triggers/scheduleTrigger", projectName1);
             var scheduleTrigger = xdoc.SelectSingleNode(xslt);
 
             if (scheduleTrigger == null)
             {
-                throw new Exception(string.Format("Schedule trigger not found via xslt {0} in configfile {1}", xslt, CCNetConfigFile));
+                throw new Exception(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Schedule trigger not found via xslt {0} in configfile {1}", xslt, CCNetConfigFile));
             }
 
             string newIntegrationTime = System.DateTime.Now.AddSeconds(SecondsToWaitFromNow).ToString("HH:mm");
             Log("--------------------------------------------------------------------------");
-            Log(string.Format("{0} is scheduled to integrate at {1}", projectName1, newIntegrationTime));
+            Log(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} is scheduled to integrate at {1}", projectName1, newIntegrationTime));
             Log("--------------------------------------------------------------------------");
 
             scheduleTrigger.Attributes["time"].Value = newIntegrationTime;
@@ -204,17 +204,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             // also we want the cuise server to wait for 1 minute, otherwise it starts integrating project 1 immediately
             System.Xml.XmlDocument xdoc = new System.Xml.XmlDocument();
             xdoc.Load(CCNetConfigFile);
-            string xslt = string.Format("/cruisecontrol/project[@name='{0}']/triggers/multiTrigger/triggers/scheduleTrigger", projectName1);
+            string xslt = string.Format(System.Globalization.CultureInfo.CurrentCulture,"/cruisecontrol/project[@name='{0}']/triggers/multiTrigger/triggers/scheduleTrigger", projectName1);
             var scheduleTrigger = xdoc.SelectSingleNode(xslt);
 
             if (scheduleTrigger == null)
             {
-                throw new Exception(string.Format("Schedule trigger not found via xslt {0} in configfile {1}", xslt, CCNetConfigFile));
+                throw new Exception(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Schedule trigger not found via xslt {0} in configfile {1}", xslt, CCNetConfigFile));
             }
 
             string newIntegrationTime = System.DateTime.Now.AddSeconds(SecondsToWaitFromNow).ToString("HH:mm");
             Log("--------------------------------------------------------------------------");
-            Log(string.Format("{0} is scheduled to integrate at {1}", projectName1, newIntegrationTime));
+            Log(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} is scheduled to integrate at {1}", projectName1, newIntegrationTime));
             Log("--------------------------------------------------------------------------");
 
             scheduleTrigger.Attributes["time"].Value = newIntegrationTime;
@@ -359,28 +359,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             // also we want the cuise server to wait for 1 minute, otherwise it starts integrating project 1 immediately
             System.Xml.XmlDocument xdoc = new System.Xml.XmlDocument();
             xdoc.Load(CCNetConfigFile);
-            string xslt = string.Format("/cruisecontrol/project[@name='{0}']/triggers/multiTrigger/triggers/scheduleTrigger", projectName1);
+            string xslt = string.Format(System.Globalization.CultureInfo.CurrentCulture,"/cruisecontrol/project[@name='{0}']/triggers/multiTrigger/triggers/scheduleTrigger", projectName1);
             var scheduleTrigger = xdoc.SelectSingleNode(xslt);
 
             if (scheduleTrigger == null)
             {
-                throw new Exception(string.Format("Schedule trigger not found via xslt {0} in configfile {1}", xslt, CCNetConfigFile));
+                throw new Exception(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Schedule trigger not found via xslt {0} in configfile {1}", xslt, CCNetConfigFile));
             }
 
             string newIntegrationTime = System.DateTime.Now.AddSeconds(SecondsToWaitFromNow).ToString("HH:mm");
             scheduleTrigger.Attributes["time"].Value = newIntegrationTime;
 
-            xslt = string.Format("/cruisecontrol/project[@name='{0}']/triggers/multiTrigger/triggers/projectTrigger", projectName1);
+            xslt = string.Format(System.Globalization.CultureInfo.CurrentCulture,"/cruisecontrol/project[@name='{0}']/triggers/multiTrigger/triggers/projectTrigger", projectName1);
             var projectTrigger = xdoc.SelectSingleNode(xslt);
             if (projectTrigger == null)
             {
-                throw new Exception(string.Format("projectTrigger trigger not found via xslt {0} in configfile {1}", xslt, CCNetConfigFile));
+                throw new Exception(string.Format(System.Globalization.CultureInfo.CurrentCulture,"projectTrigger trigger not found via xslt {0} in configfile {1}", xslt, CCNetConfigFile));
             }
             projectTrigger.Attributes["triggerFirstTime"].Value = "true";
 
             Log("--------------------------------------------------------------------------");
-            Log(string.Format("{0} is scheduled to integrate at {1}", projectName1, newIntegrationTime));
-            Log(string.Format("{0} projectTrigger has triggerFirstTime set to true", projectName1));
+            Log(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} is scheduled to integrate at {1}", projectName1, newIntegrationTime));
+            Log(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} projectTrigger has triggerFirstTime set to true", projectName1));
             Log("--------------------------------------------------------------------------");
 
             xdoc.Save(CCNetConfigFile);
@@ -482,13 +482,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
 
         void CruiseServerIntegrationCompleted(object sender, CCNet.Remote.Events.IntegrationCompletedEventArgs e)
         {
-            Log(string.Format("Integration complete. Project {0} ", e.ProjectName));
+            Log(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Integration complete. Project {0} ", e.ProjectName));
             IntegrationCompleted[e.ProjectName] = true;
         }
 
         private void Log(string message)
         {
-            System.Diagnostics.Debug.WriteLine(string.Format("{0} {1}", DateTime.Now.ToLongTimeString(), message));
+            System.Diagnostics.Debug.WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} {1}", DateTime.Now.ToLongTimeString(), message));
         }
 
         private void CheckResponse(ThoughtWorks.CruiseControl.Remote.Messages.Response value)

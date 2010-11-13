@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private string permission;
 
         public PermissionDeniedException(string permission)
-            : this(permission, string.Format("Permission to execute '{0}' has been denied.", permission), null)
+            : this(permission, string.Format(System.Globalization.CultureInfo.CurrentCulture,"Permission to execute '{0}' has been denied.", permission), null)
         {
         }
         public PermissionDeniedException(string permission, string s) : this(permission, s, null) { }

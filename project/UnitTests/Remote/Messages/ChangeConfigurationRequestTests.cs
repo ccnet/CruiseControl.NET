@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
         {
             ChangeConfigurationRequest request = new ChangeConfigurationRequest();
             string actual = request.ToString();
-            string expected = string.Format("<changeConfigurationRequest xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+            string expected = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<changeConfigurationRequest xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
                 "timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" source=\"{1}\" " +
                 "purgeWorking=\"false\" purgeArtifact=\"false\" purgeSourceControl=\"false\" />",
                 request.Identifier,
@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             request.PurgeSourceControlEnvironment = true;
             request.PurgeWorkingDirectory = true;
             string actual = request.ToString();
-            string expected = string.Format("<changeConfigurationRequest xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+            string expected = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<changeConfigurationRequest xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
                 "timestamp=\"{4:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" server=\"{1}\" source=\"{2}\" session=\"{3}\" " +
                 "purgeWorking=\"true\" purgeArtifact=\"true\" purgeSourceControl=\"true\">" + 
                 "<definition>Build#1</definition>" + 

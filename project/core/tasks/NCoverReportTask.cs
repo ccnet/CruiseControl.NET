@@ -420,7 +420,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 {
                     // Copy all the new files over
                     var publishDir = Path.Combine(result.BaseFromArtifactsDirectory(result.Label), "NCover");
-                    Log.Debug(string.Format("Copying {0} files to {1}", newFiles.Length, publishDir));
+                    Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Copying {0} files to {1}", newFiles.Length, publishDir));
 
                     var index = outputDirectory.FullName.Length + 1;
                     foreach (FileInfo newFile in newFiles)
@@ -657,9 +657,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 }
                 else
                 {
-                    path = RootPath(string.Format("{0}.html", report), false);
+                    path = RootPath(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}.html", report), false);
                 }
-                buffer.AppendArgument("//or \"{0}\"", string.Format("{0}:Html:{1}", report, path));
+                buffer.AppendArgument("//or \"{0}\"", string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}:Html:{1}", report, path));
             }
         }
         #endregion

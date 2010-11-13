@@ -164,7 +164,7 @@
             // Check whether the package should be generated
             if (AlwaysPackage || (result.Status == IntegrationStatus.Success))
             {
-                var logMessage = string.Format("Building package '{0}'", PackageName);
+                var logMessage = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Building package '{0}'", PackageName);
                 result.BuildProgressInformation.SignalStartRunTask(logMessage);
                 Log.Info(logMessage);
 
@@ -305,7 +305,7 @@
 
             // See if the entry already exists
             XmlElement packageElement = listXml.SelectSingleNode(
-                string.Format("/packages/package[@name='{0}']", PackageName)) as XmlElement;
+                string.Format(System.Globalization.CultureInfo.CurrentCulture,"/packages/package[@name='{0}']", PackageName)) as XmlElement;
             if (packageElement == null)
             {
                 packageElement = listXml.CreateElement("package");
@@ -358,7 +358,7 @@
                 // Copy the file to the output directory (so it can be used by other tasks)
                 var basePath = OutputDirectory;
                 if (!Path.IsPathRooted(basePath)) basePath = Path.Combine(result.ArtifactDirectory, basePath);
-                Log.Info(string.Format("Copying file to '{0}'", basePath));
+                Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Copying file to '{0}'", basePath));
                 File.Copy(actualFile, Path.Combine(basePath, PackageName), true);
             }
 

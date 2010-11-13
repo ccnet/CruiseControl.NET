@@ -25,22 +25,22 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
         public string XmlServerReport
         {
-            get { return string.Format("{0}/XmlServerReport.aspx", serverUrl); }
+            get { return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/XmlServerReport.aspx", serverUrl); }
         }
 
         public string ViewFarmReport
         {
-            get { return string.Format("{0}/server/{1}/ViewFarmReport.aspx", serverUrl, serverAlias); }
+            get { return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/server/{1}/ViewFarmReport.aspx", serverUrl, serverAlias); }
         }
 
         public string Security
         {
-            get { return string.Format("{0}/server/{1}/XmlSecurity.aspx", serverUrl, serverAlias); }
+            get { return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/server/{1}/XmlSecurity.aspx", serverUrl, serverAlias); }
         }
 
         public string ViewParametersReport(string projectName)
         {
-            return string.Format("{0}/server/{1}/project/{2}/XmlProjectParametersReport.aspx", 
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/server/{1}/project/{2}/XmlProjectParametersReport.aspx", 
                 serverUrl, 
                 serverAlias,
                 projectName);

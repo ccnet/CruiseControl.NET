@@ -92,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         {
             string label = fileReader.GetLabel(integrationResult.BaseFromWorkingDirectory(labelFilePath));
             string suffix = GetSuffixBasedOn(label, integrationResult.LastIntegration.Label);
-            return string.Format("{0}{1}{2}", prefix, label, suffix);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}{1}{2}", prefix, label, suffix);
         }
         #endregion
 
@@ -175,12 +175,12 @@ namespace ThoughtWorks.CruiseControl.Core.Label
                 catch (Exception e)
                 {
                     throw new CruiseControlException(
-                        String.Format("Error reading file {0}: {1}", labelFilePath, e.Message),
+                        string.Format(System.Globalization.CultureInfo.CurrentCulture,"Error reading file {0}: {1}", labelFilePath, e.Message),
                         e);
                 }
                 if (ver == string.Empty)
                     throw new CruiseControlException(
-                        String.Format("File {0} only contains whitespace.", labelFilePath));
+                        string.Format(System.Globalization.CultureInfo.CurrentCulture,"File {0} only contains whitespace.", labelFilePath));
                 return ver;
             }
         }

@@ -144,13 +144,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
 
         void cruiseServer_IntegrationCompleted(object sender, CCNet.Remote.Events.IntegrationCompletedEventArgs e)
         {
-            Log(string.Format("Integration complete. Project {0} ", e.ProjectName));
+            Log(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Integration complete. Project {0} ", e.ProjectName));
             IntegrationCompleted[e.ProjectName] = true;
         }
 
         private void Log(string message)
         {
-            System.Diagnostics.Debug.WriteLine(string.Format("--> {0} {1}", DateTime.Now.ToUniversalTime(), message));
+            System.Diagnostics.Debug.WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"--> {0} {1}", DateTime.Now.ToUniversalTime(), message));
         }
 
         private void CheckResponse(ThoughtWorks.CruiseControl.Remote.Messages.Response value)

@@ -15,12 +15,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		private string CreateMessage()
 		{
-			return string.Format("{0}", DateTime.Now.ToString());
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}", DateTime.Now.ToString());
 		}
 
 		private string CreateMessage(string category)
 		{
-			return string.Format("{0}: {1}", DateTime.Now.ToString(), category);
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}: {1}", DateTime.Now.ToString(), category);
 		}
 
 		public override void Write(string message) 

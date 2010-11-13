@@ -210,7 +210,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 myMethodName = "";
             }
 
-            return string.Format("{0} - {1}.{2} : ", myAssemblyName, myClassName, myMethodName);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} - {1}.{2} : ", myAssemblyName, myClassName, myMethodName);
         }
 
 		private static string CreateExceptionMessage(Exception ex)

@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 
 		public override string Message
 		{
-			get { return string.Format("does not have {0} child nodes.", count); }
+			get { return string.Format(System.Globalization.CultureInfo.CurrentCulture,"does not have {0} child nodes.", count); }
 		}
 	}
 

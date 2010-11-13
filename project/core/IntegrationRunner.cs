@@ -65,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 result.SourceControlError = error;
                 result.LastBuildStatus = lastResult.HasSourceControlError ? lastResult.LastBuildStatus : lastResult.Status;
-                Log.Warning(string.Format("Source control failure (GetModifications): {0}", error.Message));
+                Log.Warning(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Source control failure (GetModifications): {0}", error.Message));
                 if (request.PublishOnSourceControlException)
                 {
                     result.ExceptionResult = error;
@@ -146,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.Core
             foreach (var property in props.Keys)
             {
                 // Generate the build value
-                var key = string.Format("${0}", property);
+                var key = string.Format(System.Globalization.CultureInfo.CurrentCulture,"${0}", property);
                 var value = (props[property] ?? string.Empty).ToString();
                 result.IntegrationRequest.BuildValues[key] = value;
 
@@ -175,7 +175,7 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             result.MarkEndTime();
             PostBuild(result);
-            Log.Info(string.Format("Integration complete: {0} - {1}", result.Status, result.EndTime));
+            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Integration complete: {0} - {1}", result.Status, result.EndTime));
         }
 
         private Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)

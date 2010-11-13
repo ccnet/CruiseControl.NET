@@ -218,11 +218,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 if (tmp.Length <= 1)
                     return string.Join(string.Empty, tmp);
 
-                return string.Format("\"{0}\"", string.Join(delimiter, tmp));
+                return string.Format(System.Globalization.CultureInfo.CurrentCulture,"\"{0}\"", string.Join(delimiter, tmp));
             }
 
             throw new ArgumentException(
-                string.Format("The IntegrationProperty type {0} is not supported yet", value.GetType()), "value");
+                string.Format(System.Globalization.CultureInfo.CurrentCulture,"The IntegrationProperty type {0} is not supported yet", value.GetType()), "value");
         }
 
         /// <summary>
@@ -356,7 +356,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             var encodedName = urlEncodeRegex.Replace(name, (match) =>
             {
                 var charValue = (int)match.Value[0];
-                var value = charValue >= 255 ? match.Value : "%" + string.Format("{0:x2}", charValue);
+                var value = charValue >= 255 ? match.Value : "%" + string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0:x2}", charValue);
                 return value;
             });
             return encodedName;

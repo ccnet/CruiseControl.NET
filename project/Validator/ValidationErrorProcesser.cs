@@ -37,7 +37,7 @@ namespace Validator
                 GenerateElement("div",
                 new HtmlAttribute("class", "error"),
                 GenerateElement("div",
-                    string.Format("ERROR ({0}): {1}",
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"ERROR ({0}): {1}",
                         ItemName,
                         message))));
             Passed = false;
@@ -49,7 +49,7 @@ namespace Validator
                 GenerateElement("div",
                 new HtmlAttribute("class", "error"),
                 GenerateElement("div",
-                    string.Format("ERROR ({0}): {1}",
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"ERROR ({0}): {1}",
                         ItemName,
                         error.Message))));
             Passed = false;
@@ -67,7 +67,7 @@ namespace Validator
                 GenerateElement("div",
                 new HtmlAttribute("class", "warning"),
                 GenerateElement("div",
-                    string.Format("Warning ({0}): {1}",
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"Warning ({0}): {1}",
                         ItemName,
                         message))));
             Passed = false;

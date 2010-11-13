@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
                         : IntegrationStartedEventArgs.EventResult.Cancel;
                     if (!hasSpace)
                     {
-                        Log.Warning(string.Format("Integration for '{0}' cancelled due to a lack of space.", e.ProjectName));
+                        Log.Warning(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Integration for '{0}' cancelled due to a lack of space.", e.ProjectName));
                     }
                 };
             }

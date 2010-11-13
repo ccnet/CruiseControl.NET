@@ -257,7 +257,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		protected override bool Execute(IIntegrationResult result)
 		{
-			result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format("Executing Devenv :{0}", GetArguments(result)));
+			result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format(System.Globalization.CultureInfo.CurrentCulture,"Executing Devenv :{0}", GetArguments(result)));
 			ProcessResult processResult = TryToRun(result);
 
 			// rei added 30.5.2010, merge devenv output to task result 
@@ -269,7 +269,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			Log.Info("Devenv build complete.  Status: " + result.Status);
 
 			if (processResult.TimedOut)
-				throw new BuilderException(this, string.Format("Devenv process timed out after {0} seconds.", BuildTimeoutSeconds));
+				throw new BuilderException(this, string.Format(System.Globalization.CultureInfo.CurrentCulture,"Devenv process timed out after {0} seconds.", BuildTimeoutSeconds));
 
 			return !processResult.Failed;
 		}
@@ -286,14 +286,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				processInfo.EnvironmentVariables[key] = StringUtil.IntegrationPropertyToString(properties[key]);
 			}
 
-			Log.Info(string.Format("Starting build: {0} {1}", processInfo.FileName, processInfo.PublicArguments));
+			Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Starting build: {0} {1}", processInfo.FileName, processInfo.PublicArguments));
 			try
 			{
 				return executor.Execute(processInfo);
 			}
 			catch (IOException ex)
 			{
-				string message = string.Format("Unable to launch the devenv process.  Please verify that you can invoke this command from the command line: {0} {1}", processInfo.FileName, processInfo.PublicArguments);
+				string message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to launch the devenv process.  Please verify that you can invoke this command from the command line: {0} {1}", processInfo.FileName, processInfo.PublicArguments);
 				throw new BuilderException(this, message, ex);
 			}
 		}

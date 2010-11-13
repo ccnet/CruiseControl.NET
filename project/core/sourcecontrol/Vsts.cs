@@ -222,7 +222,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             if (!ProjectExists(from))
             {
-                Log.Error(String.Format("[TFS] Project {0} is not valid on {1} TFS server", ProjectPath, Server));
+                Log.Error(string.Format(System.Globalization.CultureInfo.CurrentCulture,"[TFS] Project {0} is not valid on {1} TFS server", ProjectPath, Server));
                 throw new Exception("Project Name is not valid on this TFS server");
             }
 
@@ -272,7 +272,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                     LookForErrorReturns(executor.Execute(CreateWorkSpaceProcessInfo(result)));
 
                     //Map Workspace
-                    Log.Debug(string.Format("[TFS] Mapping Workspace {0} to {1}", Workspace, WorkingDirectory));
+                    Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"[TFS] Mapping Workspace {0} to {1}", Workspace, WorkingDirectory));
                     LookForErrorReturns(executor.Execute(MapWorkSpaceProcessInfo(result)));
                 }
             }
@@ -283,14 +283,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 LookForErrorReturns(executor.Execute(CreateWorkSpaceProcessInfo(result)));
 
                 //Map Workspace
-                Log.Debug(string.Format("[TFS] Mapping Workspace {0} to {1}", Workspace, WorkingDirectory));
+                Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"[TFS] Mapping Workspace {0} to {1}", Workspace, WorkingDirectory));
                 LookForErrorReturns(executor.Execute(MapWorkSpaceProcessInfo(result)));
             }
 
             if (!workspaceStatus.WorkspaceIsMappedCorrectly)
             {
                 //Map Workspace
-                Log.Debug(string.Format("[TFS] Mapping Workspace {0} to {1}", Workspace, WorkingDirectory));
+                Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"[TFS] Mapping Workspace {0} to {1}", Workspace, WorkingDirectory));
                 LookForErrorReturns(executor.Execute(MapWorkSpaceProcessInfo(result)));
             }
 
@@ -307,7 +307,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         private bool ProjectExists(IIntegrationResult result)
         {
             //Check for  Workspace
-            Log.Debug(String.Format("[TFS] Checking if Project {0} exists", ProjectPath));
+            Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"[TFS] Checking if Project {0} exists", ProjectPath));
             ProcessResult pr = executor.Execute(CheckProjectProcessInfo(result));
             LookForErrorReturns(pr);
 
@@ -316,7 +316,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private TfsWorkspaceStatus GetWorkspaceStatus(IIntegrationResult result)
         {
-            Log.Debug(String.Format("[TFS] Fetching Workspace {0} details", Workspace));
+            Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"[TFS] Fetching Workspace {0} details", Workspace));
             ProcessResult pr = executor.Execute(CheckWorkSpaceProcessInfo(result));
 
             LookForErrorReturns(pr);
@@ -472,7 +472,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             var buffer = new PrivateArguments("label");
             buffer.Add("/server:", Server);
-            buffer.Add(result.Label, string.Format("@{0}", ProjectPath));
+            buffer.Add(result.Label, string.Format(System.Globalization.CultureInfo.CurrentCulture,"@{0}", ProjectPath));
             buffer.AddQuote(WorkingDirectory);
             buffer.Add("/recursive");
             buffer.Add("/comment:", "CCNet Build Label", true);
@@ -490,7 +490,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             var buffer = new PrivateArguments("history", "-noprompt");
             buffer.Add("-server:", Server);
             buffer.AddQuote(ProjectPath);
-            buffer.Add(String.Format("-version:D{0}~D{1}", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
+            buffer.Add(string.Format(System.Globalization.CultureInfo.CurrentCulture,"-version:D{0}~D{1}", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
             buffer.Add("-recursive");
             buffer.Add("-format:detailed");
 
@@ -546,7 +546,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 }
                 else
                 {
-                    throw new CruiseControlException(string.Format("Code page {0} could not be parsed to an encoding via instruction : Encoding.GetEncoding(codePage)", CodePage));
+                    throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Code page {0} could not be parsed to an encoding via instruction : Encoding.GetEncoding(codePage)", CodePage));
                 }
             }
 

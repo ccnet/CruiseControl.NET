@@ -280,7 +280,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         {
             DateTime now = DateTime.Now;
 
-            return string.Format("<timestamp day=\"{0}\" month=\"{1}\" year=\"{2}\" />",
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"<timestamp day=\"{0}\" month=\"{1}\" year=\"{2}\" />",
                 now.Day.ToString(), now.ToString("MMM"), now.Year.ToString());
         }
     }

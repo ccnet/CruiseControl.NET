@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 			try
 			{
-                string message = string.Format("{0} is fixing the build.", Fixer);
+                string message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} is fixing the build.", Fixer);
                 manager.SessionToken = sessionToken;
                 manager.SendMessage(projectName, new Message(message, Message.MessageKind.Fixer));
 			}

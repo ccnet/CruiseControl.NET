@@ -162,12 +162,12 @@ namespace ThoughtWorks.CruiseControl.Core.Security
 
             if (sessionToken != null)
             {
-                Log.Debug(string.Format("{0} [{1}] has logged in", displayName, userName));
+                Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} [{1}] has logged in", displayName, userName));
                 LogEvent(null, userName, SecurityEvent.Login, SecurityRight.Allow, null);
             }
             else
             {
-                Log.Warning(string.Format("Login failure: {0} has failed to login", userName));
+                Log.Warning(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Login failure: {0} has failed to login", userName));
                 LogEvent(null, userName, SecurityEvent.Login, SecurityRight.Deny, null);
             }
 
@@ -186,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             if (!string.IsNullOrEmpty(userName))
             {
                 sessionCache.RemoveFromCache(sessionToken);
-                Log.Debug(string.Format("{0} has logged out", userName));
+                Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} has logged out", userName));
                 LogEvent(null, userName, SecurityEvent.Logout, SecurityRight.Allow, null);
             }
             else

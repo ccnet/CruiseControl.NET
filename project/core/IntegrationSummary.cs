@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public override string ToString()
 		{
-			return string.Format("Status: {0}, Label: {1}", status, label);
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Status: {0}, Label: {1}", status, label);
 		}
 
 		public string Label

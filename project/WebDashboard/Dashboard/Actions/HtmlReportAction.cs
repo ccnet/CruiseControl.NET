@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
         public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
             var velocityContext = new Hashtable();
-            velocityContext["url"] = string.Format("RetrieveBuildFile.aspx?file={0}", HtmlFileName);
+            velocityContext["url"] = string.Format(System.Globalization.CultureInfo.CurrentCulture,"RetrieveBuildFile.aspx?file={0}", HtmlFileName);
             return viewGenerator.GenerateView("HtmlReport.vm", velocityContext);
         }
         #endregion

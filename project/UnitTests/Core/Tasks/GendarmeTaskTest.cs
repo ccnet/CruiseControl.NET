@@ -154,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			AddDefaultAssemblyToCheck(task);
 			ProcessInfo info =
 				NewProcessInfo(
-					string.Format("--xml {0} {1} {2}",
+					string.Format(System.Globalization.CultureInfo.CurrentCulture,"--xml {0} {1} {2}",
 					              StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, "gendarme-results.xml")),
 					              StringUtil.AutoDoubleQuoteString("*.dll"), StringUtil.AutoDoubleQuoteString("*.exe")),
 					Path.Combine(DefaultWorkingDirectory, "src"));
@@ -174,7 +174,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			ProcessInfo info =
 				NewProcessInfo(
-					string.Format("--xml {0} @{1} {2} {3}",
+					string.Format(System.Globalization.CultureInfo.CurrentCulture,"--xml {0} @{1} {2} {3}",
 					              StringUtil.AutoDoubleQuoteString(Path.Combine(result.ArtifactDirectory, "gendarme-results.xml")),
 					              StringUtil.AutoDoubleQuoteString(task.AssemblyListFile),
 					              StringUtil.AutoDoubleQuoteString("*.dll"), StringUtil.AutoDoubleQuoteString("*.exe")),

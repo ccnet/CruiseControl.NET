@@ -446,7 +446,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public override string ToString()
         {
-            return string.Format("Project: {0}, Status: {1}, Label: {2}, StartTime: {3}", ProjectName, Status, Label, StartTime);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0}, Status: {1}, Label: {2}, StartTime: {3}", ProjectName, Status, Label, StartTime);
         }
 
         /// <summary>

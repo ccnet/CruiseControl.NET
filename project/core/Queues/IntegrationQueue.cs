@@ -108,7 +108,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                         {
                             case QueueDuplicateHandlingMode.UseFirst:
                                 // Only use the first item in the queue - if a newer item is added it will be ignored
-                                Log.Info(String.Format("Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
+                                Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
                                 addItem = false;
                                 break;
 
@@ -116,12 +116,12 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                                 // If a force build is added to the queue, it will remove an existing non-force build and add the new request to the end of the queue
                                 if (foundItem.IntegrationRequest.BuildCondition >= integrationQueueItem.IntegrationRequest.BuildCondition)
                                 {
-                                    Log.Info(String.Format("Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
+                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
                                     addItem = false;
                                 }
                                 else
                                 {
-                                    Log.Info(String.Format("Project: {0} already on queue: {1} with lower prority - cancelling existing request", integrationQueueItem.Project.Name, Name));
+                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0} already on queue: {1} with lower prority - cancelling existing request", integrationQueueItem.Project.Name, Name));
                                     lock (this)
                                     {
                                         NotifyExitingQueueAndRemoveItem(foundIndex.Value, foundItem, true);
@@ -134,11 +134,11 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                                 addItem = false;
                                 if (foundItem.IntegrationRequest.BuildCondition >= integrationQueueItem.IntegrationRequest.BuildCondition)
                                 {
-                                    Log.Info(String.Format("Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
+                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
                                 }
                                 else
                                 {
-                                    Log.Info(String.Format("Project: {0} already on queue: {1} with lower prority - cancelling existing request", integrationQueueItem.Project.Name, Name));
+                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0} already on queue: {1} with lower prority - cancelling existing request", integrationQueueItem.Project.Name, Name));
                                     lock (this)
                                     {
                                         NotifyExitingQueueAndRemoveItem(foundIndex.Value, foundItem, true);
@@ -153,11 +153,11 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                                 addItem = false;
                                 if (foundItem.IntegrationRequest.BuildCondition >= integrationQueueItem.IntegrationRequest.BuildCondition)
                                 {
-                                    Log.Info(String.Format("Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
+                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0} already on queue: {1} - cancelling new request", integrationQueueItem.Project.Name, Name));
                                 }
                                 else
                                 {
-                                    Log.Info(String.Format("Project: {0} already on queue: {1} with lower prority - replacing existing request at position {2}", integrationQueueItem.Project.Name, Name, foundIndex));
+                                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0} already on queue: {1} with lower prority - replacing existing request at position {2}", integrationQueueItem.Project.Name, Name, foundIndex));
                                     lock (this)
                                     {
                                         NotifyExitingQueueAndRemoveItem(foundIndex.Value, foundItem, true);
@@ -294,7 +294,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
             if (!queuePosition.HasValue)
             {
                 queuePosition = GetPrioritisedQueuePosition(integrationQueueItem.Project.QueuePriority);
-                Log.Info(string.Format("Project: '{0}' is added to queue: '{1}' in position {2}. Requestsource : {3} ({4})",
+                Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: '{0}' is added to queue: '{1}' in position {2}. Requestsource : {3} ({4})",
                                        integrationQueueItem.Project.Name, Name, queuePosition, integrationQueueItem.IntegrationRequest.Source,integrationQueueItem.IntegrationRequest.UserName));
             }
 			integrationQueueItem.IntegrationQueueNotifier.NotifyEnteringIntegrationQueue();
@@ -366,7 +366,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                         if (actualQueues.Contains(queueToLock))
                             yield return parentQueueSet[queueToLock];
                         else
-                            Log.Warning(string.Format("Unknown queue found: '{0}'", queueToLock));
+                            Log.Warning(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unknown queue found: '{0}'", queueToLock));
                     }
                 }
             }
@@ -383,14 +383,14 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
         /// one of its lockqueues was in-use).</returns>
         public bool TryLock(out IDisposable lockObject)
         {
-            Log.Info(string.Format("Queue: '{0}' is attempting to be in-use, trying to lock related queues", Name));
+            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Queue: '{0}' is attempting to be in-use, trying to lock related queues", Name));
 
             lockObject = null;
             lock (blockingLockObject)
             {
                 if (IsBlocked)
                 {
-                    Log.Info(string.Format("Queue: '{0}' is locked and cannot be in-use", Name));
+                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Queue: '{0}' is locked and cannot be in-use", Name));
                     return false;
                 }
 
@@ -401,12 +401,12 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                 {
                     if (queue.BlockQueue(this))
                     {
-                        Log.Info(string.Format("Queue: '{0}' has acquired a lock against queue '{1}'", Name, queue.Name));
+                        Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Queue: '{0}' has acquired a lock against queue '{1}'", Name, queue.Name));
                         lockedQueues.Add(queue);
                     }
                     else
                     {
-                        Log.Info(string.Format("Queue: '{0}' has FAILED to acquire a lock against queue '{1}'", Name, queue.Name));
+                        Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Queue: '{0}' has FAILED to acquire a lock against queue '{1}'", Name, queue.Name));
                         failed = true;
                         break;
                     }
@@ -416,7 +416,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                 {
                     foreach (IIntegrationQueue queue in lockedQueues)
                     {
-                        Log.Info(string.Format("Queue: '{0}' has released a lock against queue '{1}'", Name, queue.Name));
+                        Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Queue: '{0}' has released a lock against queue '{1}'", Name, queue.Name));
                         queue.UnblockQueue(this);
                         return false;
                     }
@@ -443,7 +443,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
             {
                 foreach (IIntegrationQueue queue in lockedQueues)
                 {
-                    Log.Info(string.Format("Queue: '{0}' has released a lock against queue '{1}'", lockingQueue.Name, queue.Name));
+                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Queue: '{0}' has released a lock against queue '{1}'", lockingQueue.Name, queue.Name));
                     queue.UnblockQueue(lockingQueue);
                 }
                 lockingQueue.inUse = false;

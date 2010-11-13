@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.Service
                 watcher = new FileSystemWatcher(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
                 watcher.Changed += delegate(object sender, FileSystemEventArgs e)
                 {
-                    StopRunner(string.Format("One or more DLLs have changed - waiting {0}s", restartTime));
+                    StopRunner(string.Format(System.Globalization.CultureInfo.CurrentCulture,"One or more DLLs have changed - waiting {0}s", restartTime));
                     waitTimer.Stop();
                     waitTimer.Start();
                 };
@@ -82,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.Service
                 var configFilename = ConfigurationManager.AppSettings["ccnet.config"];
                 configFilename = string.IsNullOrEmpty(configFilename) ? Path.Combine(Environment.CurrentDirectory, "ccnet.log") : configFilename;
                 throw new ApplicationException(
-                    string.Format("A fatal error has occurred while starting CCService. Please check '{0}' for any details.", configFilename));
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"A fatal error has occurred while starting CCService. Please check '{0}' for any details.", configFilename));
             }
         }
 

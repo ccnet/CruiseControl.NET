@@ -239,7 +239,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 		private string BuildModificationsCommandArguments(DateTime from, DateTime to)
 		{
-			return string.Format("changes -s submitted {0}", GenerateRevisionsForView(from, to));
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"changes -s submitted {0}", GenerateRevisionsForView(from, to));
 		}
 
 		private string GenerateRevisionsForView(DateTime from, DateTime to)
@@ -255,7 +255,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 				}
 				else
 				{
-					args.Append(string.Format("@{0},@{1}", FormatDate(from), FormatDate(to)));
+					args.Append(string.Format(System.Globalization.CultureInfo.CurrentCulture,"@{0},@{1}", FormatDate(from), FormatDate(to)));
 				}
 			}
 			return args.ToString();
@@ -397,7 +397,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
             {
                 if (!StringUtil.IsWhitespace(acceptableError) && Regex.IsMatch(errorLine, acceptableError, DEFAULT_REGEX_OPTIONS))
                 {
-                    Log.Debug(String.Format("Perforce ignored an acceptable error: {0}", errorLine));
+                    Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Perforce ignored an acceptable error: {0}", errorLine));
                     return true;
                 }
             }
@@ -407,7 +407,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		private ProcessInfo CreateLabelSpecificationProcess(string label)
 		{
 			ProcessInfo processInfo = processInfoCreator.CreateProcessInfo(this, "label -i");
-			processInfo.StandardInputContent = string.Format("Label:	{0}\n\nDescription:\n	Created by CCNet\n\nOptions:	unlocked\n\nView:\n{1}", label, ViewForSpecificationsAsNewlineSeparatedString);
+			processInfo.StandardInputContent = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Label:	{0}\n\nDescription:\n	Created by CCNet\n\nOptions:	unlocked\n\nView:\n{1}", label, ViewForSpecificationsAsNewlineSeparatedString);
 			return processInfo;
 		}
 
@@ -475,7 +475,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 		protected virtual string Execute(ProcessInfo process, string description)
 		{
-            Log.Info(String.Format("Perforce {0}: {1} {2}", description, process.FileName, process.PublicArguments));
+            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Perforce {0}: {1} {2}", description, process.FileName, process.PublicArguments));
 			ProcessResult result = processExecutor.Execute(process);
             string errorSummary = ParseErrors(result.StandardOutput, result.StandardError);
             if (errorSummary != null)

@@ -68,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
             var pr = executor.Execute(processInfo);
             if (pr.Failed)
-                throw new CruiseControlException(string.Format("Unable to delete path '{0}'.", path));
+                throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to delete path '{0}'.", path));
         }
 
         /// <summary>

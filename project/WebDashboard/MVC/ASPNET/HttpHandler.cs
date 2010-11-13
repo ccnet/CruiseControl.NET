@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
             ObjectSource objectSource = new CruiseObjectSourceInitializer(objectionStore).SetupObjectSourceForRequest(context);
 
             context.Response.AppendHeader("X-CCNet-Version",
-                string.Format("CruiseControl.NET/{0}", Assembly.GetExecutingAssembly().GetName().Version));
+                string.Format(System.Globalization.CultureInfo.CurrentCulture,"CruiseControl.NET/{0}", Assembly.GetExecutingAssembly().GetName().Version));
             Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
             IResponse response = ((RequestController)objectSource.GetByType(typeof(RequestController))).Do();

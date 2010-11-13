@@ -72,11 +72,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			{
 				if (strInput.Length == 0)
 				{
-					strInput = string.Format("{0}={1}", input.Keys[i], input[input.Keys[i]]);
+					strInput = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}={1}", input.Keys[i], input[input.Keys[i]]);
 				}
 				else
 				{
-					strInput += string.Format("&{0}={1}", input.Keys[i], input[input.Keys[i]]);
+					strInput += string.Format(System.Globalization.CultureInfo.CurrentCulture,"&{0}={1}", input.Keys[i], input[input.Keys[i]]);
 				}
 			}
 

@@ -109,14 +109,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
 			if (displayNameParts.Length == 1)
 			{
-				url = string.Format("tcp://{0}:{1}/CruiseManager.rem", displayNameParts[0], DefaultRemotingPort);
+				url = string.Format(System.Globalization.CultureInfo.CurrentCulture,"tcp://{0}:{1}/CruiseManager.rem", displayNameParts[0], DefaultRemotingPort);
 			}
 			else if (displayNameParts.Length == 2)
 			{
 				try
 				{
 					url =
-						string.Format("tcp://{0}:{1}/CruiseManager.rem", displayNameParts[0], Convert.ToInt32(displayNameParts[1]));
+						string.Format(System.Globalization.CultureInfo.CurrentCulture,"tcp://{0}:{1}/CruiseManager.rem", displayNameParts[0], Convert.ToInt32(displayNameParts[1]));
 				}
 				catch (FormatException)
 				{

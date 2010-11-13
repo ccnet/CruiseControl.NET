@@ -248,7 +248,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             }
             else
             {
-                return string.Format("{0}/{1}", serverUri, pageUrl);
+                return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/{1}", serverUri, pageUrl);
             }
         }
         #endregion
@@ -384,7 +384,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             catch (Exception error)
             {
                 throw new CommunicationsException(
-                    string.Format("{0} failed: {1}", command, error.Message),
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} failed: {1}", command, error.Message),
                     error);
             }
         }

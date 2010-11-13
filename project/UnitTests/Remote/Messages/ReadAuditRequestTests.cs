@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
         {
             ReadAuditRequest request = new ReadAuditRequest();
             string actual = request.ToString();
-            string expected = string.Format("<readAuditMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+            string expected = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<readAuditMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
                 "timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" source=\"{1}\" />",
                 request.Identifier,
                 request.SourceName,
@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             request.SourceName = "sourceName";
             request.Timestamp = DateTime.Now;
             string actual = request.ToString();
-            string expected = string.Format("<readAuditMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+            string expected = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<readAuditMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
                 "timestamp=\"{4:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" server=\"{1}\" source=\"{2}\" session=\"{3}\" start=\"{5}\" number=\"{6}\">" +
                 "<filter xsi:type=\"ProjectAuditFilter\" project=\"testing\" />" + 
                 "</readAuditMessage>",

@@ -27,16 +27,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                         // "Windows 2000 Service Pack 4 Support Tools" package from Microsoft's download center
                         // (http://www.microsoft.com/Downloads/details.aspx?FamilyID=f08d28f3-b835-4847-b810-bb6539362473&displaylang=en)
                         // instead.  It may not exist, but if it doesn't, at least if can be obtained.
-                        process.StartInfo.FileName = string.Format("{0}\\kill.exe", WIN2K_SUPPORT_TOOLS_DIR);
-                        process.StartInfo.Arguments = string.Format("-f {0}", pid);
+                        process.StartInfo.FileName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}\\kill.exe", WIN2K_SUPPORT_TOOLS_DIR);
+                        process.StartInfo.Arguments = string.Format(System.Globalization.CultureInfo.CurrentCulture,"-f {0}", pid);
                         platform = "Windows";
                         break;
                     }
                     else
                     {
-                        process.StartInfo.FileName = string.Format("{0}\\taskkill.exe",
+                        process.StartInfo.FileName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}\\taskkill.exe",
                                 Environment.GetFolderPath(Environment.SpecialFolder.System));
-                        process.StartInfo.Arguments = string.Format("/pid {0} /t /f", pid);
+                        process.StartInfo.Arguments = string.Format(System.Globalization.CultureInfo.CurrentCulture,"/pid {0} /t /f", pid);
                         platform = "Windows";
                         break;
                     }
@@ -64,14 +64,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                     if ((nRet == 0) && (output.Contains("Darwin")))
                     {
                         process.StartInfo.FileName = "/bin/kill";
-                        process.StartInfo.Arguments = string.Format("-9 {0}", pid);
+                        process.StartInfo.Arguments = string.Format(System.Globalization.CultureInfo.CurrentCulture,"-9 {0}", pid);
                         platform = "Mac";
 
                     }
                     else
                     {
                         process.StartInfo.FileName = "/usr/bin/pkill";
-                        process.StartInfo.Arguments = string.Format("-9 -g {0}", pid);
+                        process.StartInfo.Arguments = string.Format(System.Globalization.CultureInfo.CurrentCulture,"-9 -g {0}", pid);
                         platform = "Unix";
                     }
 
@@ -83,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
             if (!File.Exists(process.StartInfo.FileName))
             {
-                throw new Exception(string.Format("Kill command {0} not found on {1} OS. PID:{2}",
+                throw new Exception(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Kill command {0} not found on {1} OS. PID:{2}",
                                                   process.StartInfo.FileName, platform, Convert.ToString(pid)));
             }
 

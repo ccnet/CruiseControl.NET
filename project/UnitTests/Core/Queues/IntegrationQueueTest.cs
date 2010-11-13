@@ -686,7 +686,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
             // queue 0 should lock queues 1 + 2 when buildling
             // queues 1 + 2 should lock queue 0 when building
             string[] queues = integrationQueues.GetQueueNames();
-            integrationQueues[queues[0]].Configuration.LockQueueNames = string.Format("{0},{1}", queues[1], queues[2]);
+            integrationQueues[queues[0]].Configuration.LockQueueNames = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0},{1}", queues[1], queues[2]);
             integrationQueues[queues[1]].Configuration.LockQueueNames = queues[0];
             integrationQueues[queues[2]].Configuration.LockQueueNames = queues[0];
 
@@ -740,7 +740,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
         {
             // ensure we have the correct setup for testing
             string[] queues = integrationQueues.GetQueueNames();
-            integrationQueues[queues[0]].Configuration.LockQueueNames = string.Format("{0},{1}", queues[1], queues[2]);
+            integrationQueues[queues[0]].Configuration.LockQueueNames = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0},{1}", queues[1], queues[2]);
             integrationQueues[queues[1]].Configuration.LockQueueNames = queues[0];
             integrationQueues[queues[2]].Configuration.LockQueueNames = queues[0];
 

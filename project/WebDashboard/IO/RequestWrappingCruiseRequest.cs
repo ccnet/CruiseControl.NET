@@ -56,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 					else
 					{
 						throw new CruiseControlException(
-							string.Format("unexpected URL format - found {0} REST Specifier, but no following value", specifier));
+							string.Format(System.Globalization.CultureInfo.CurrentCulture,"unexpected URL format - found {0} REST Specifier, but no following value", specifier));
 					}
 				}
 			}

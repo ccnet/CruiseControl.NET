@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		public void WriteModifications()
 		{
 			Modification[] mods = CreateModifications();
-			string expected = string.Format("<modifications>{0}</modifications>", mods[0].ToXml());
+			string expected = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<modifications>{0}</modifications>", mods[0].ToXml());
 
 			writer.WriteModifications(mods);
 			Assert.AreEqual(expected, buffer.ToString());
@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		{
 			writer.Write(result);
 			string xml = buffer.ToString();
-			AssertXPathExists(xml, string.Format("//request[@source='{0}' and @buildCondition='{1}']", 
+			AssertXPathExists(xml, string.Format(System.Globalization.CultureInfo.CurrentCulture,"//request[@source='{0}' and @buildCondition='{1}']", 
 			                                                   result.IntegrationRequest.Source, result.IntegrationRequest.BuildCondition));
 
             Assert.AreEqual("Build (IfModificationExists) triggered from foo", result.IntegrationRequest.ToString(), "request section is wrong");

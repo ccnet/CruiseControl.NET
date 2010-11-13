@@ -111,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
                     if (RetryCounter > MaxAmountOfRetries)
                         throw new CruiseControlException(
-                            string.Format("Failed to delete {0} after {1} attempts", this._listenerFile, RetryCounter), e);
+                            string.Format(System.Globalization.CultureInfo.CurrentCulture,"Failed to delete {0} after {1} attempts", this._listenerFile, RetryCounter), e);
                 }
             }
         }
@@ -133,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             foreach( BuildProgressInformationData bpi in Progress)
             {
                 ListenData.AppendLine(
-                    string.Format("<Item Time=\"{0}\" Data=\"{1}\" />", bpi.At ?? string.Empty, bpi.Information ?? string.Empty));
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"<Item Time=\"{0}\" Data=\"{1}\" />", bpi.At ?? string.Empty, bpi.Information ?? string.Empty));
             }
 
             ListenData.AppendLine("</data>");

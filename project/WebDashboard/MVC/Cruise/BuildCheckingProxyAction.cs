@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		{
 			if (cruiseRequest.BuildName == string.Empty)
 			{
-				return errorViewBuilder.BuildView(string.Format("Error - Action [{0}] expects Build Name to be specified in request", proxiedAction.GetType().FullName));
+				return errorViewBuilder.BuildView(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Error - Action [{0}] expects Build Name to be specified in request", proxiedAction.GetType().FullName));
 			}
 			else
 			{

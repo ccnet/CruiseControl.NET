@@ -158,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 			String[] contentLines = new String[lines];
 			for (int i = 0; i < lines; i++)
 			{
-				contentLines[i] = string.Format("Line {0}", i + 1);
+				contentLines[i] = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Line {0}", i + 1);
 			}
 
 			return contentLines;

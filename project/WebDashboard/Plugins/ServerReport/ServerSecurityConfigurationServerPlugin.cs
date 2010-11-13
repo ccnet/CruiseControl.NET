@@ -70,7 +70,7 @@
             else
             {
                 velocityContext["currentProject"] = request.ProjectSpecifier.ProjectName;
-                string xpath = string.Format("/security/projects/projectSecurity[name='{0}']/authorisation", request.ProjectSpecifier.ProjectName);
+                string xpath = string.Format(System.Globalization.CultureInfo.CurrentCulture,"/security/projects/projectSecurity[name='{0}']/authorisation", request.ProjectSpecifier.ProjectName);
                 securityConfig = document.SelectSingleNode(xpath).OuterXml;
             }
             string xmlData = FormatXml(securityConfig);

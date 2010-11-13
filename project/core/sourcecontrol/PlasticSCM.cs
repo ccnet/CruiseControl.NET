@@ -161,7 +161,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public ProcessInfo NewGetSourceProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-            builder.AppendArgument(string.Format("update {0}", result.BaseFromWorkingDirectory(WorkingDirectory)));
+            builder.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"update {0}", result.BaseFromWorkingDirectory(WorkingDirectory)));
 			if (Forced)
 			{
 				builder.AppendArgument("--forced");
@@ -172,10 +172,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public ProcessInfo GoToBranchProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AppendArgument(string.Format("stb {0}", Branch));
+			builder.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"stb {0}", Branch));
 			if (Repository != string.Empty)
 			{
-				builder.AppendArgument(string.Format("-repository={0}", Repository));
+				builder.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"-repository={0}", Repository));
 			}
 			builder.AppendArgument("--noupdate");
 			return NewProcessInfoWithArgs(result, builder.ToString());
@@ -185,18 +185,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AppendArgument(
-				string.Format("find revision where branch = '{0}' "+
+				string.Format(System.Globalization.CultureInfo.CurrentCulture,"find revision where branch = '{0}' "+
 							  "and revno != 'CO' "+
 							  "and date between '{1}' and '{2}'",
 				Branch, from.StartTime.ToString(DATEFORMAT, CultureInfo.InvariantCulture), to.StartTime.ToString(DATEFORMAT, CultureInfo.InvariantCulture)));
         
 			if (Repository != string.Empty) 
 			{
-				builder.AppendArgument(string.Format("on repository '{0}'", Repository));
+				builder.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"on repository '{0}'", Repository));
 			}
 
-			builder.AppendArgument(string.Format("--dateformat=\"{0}\"", DATEFORMAT));
-			builder.AppendArgument(string.Format("--format=\"{0}\"", FORMAT));
+			builder.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"--dateformat=\"{0}\"", DATEFORMAT));
+			builder.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"--format=\"{0}\"", FORMAT));
 
 			return NewProcessInfoWithArgs(from, builder.ToString());
 		}
@@ -205,7 +205,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			string labelName = LabelPrefix + result.Label;
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AppendArgument(string.Format("mklb {0}", labelName));
+			buffer.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"mklb {0}", labelName));
 			return NewProcessInfoWithArgs(result, buffer.ToString());
 		}
 
@@ -213,7 +213,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			string labelName = LabelPrefix + result.Label;
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AppendArgument(string.Format("label -R lb:{0} .", labelName));
+			buffer.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"label -R lb:{0} .", labelName));
 			return NewProcessInfoWithArgs(result, buffer.ToString());
 		}
 

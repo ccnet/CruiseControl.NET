@@ -82,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Growl
 
 			
 			CaptionAndMessage captionAndMessage = GetCaptionAndMessageForBuildTransition(e.BuildTransition);
-			string caption = string.Format("{0}: {1} ",
+			string caption = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}: {1} ",
 			                               projectName, captionAndMessage.Caption);
 
 			Notification notification = new Notification(ApplicationName, captionAndMessage.Caption, null, projectName, captionAndMessage.Message);

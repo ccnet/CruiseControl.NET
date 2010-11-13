@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			ProcessMonitor monitor = ProcessMonitor.ForProject(name);
 			if (monitor == null)
 			{
-				Log.Debug(string.Format("Request to abort process currently running for project {0}, but no process is currently running.", name));
+				Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Request to abort process currently running for project {0}, but no process is currently running.", name));
 			}
 			else
 			{
@@ -155,25 +155,25 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                     {
                         try
                         {
-                            Log.Debug(string.Format("Setting PriorityClass on [{0}] to {1}", filename, processInfo.Priority));
+                            Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Setting PriorityClass on [{0}] to {1}", filename, processInfo.Priority));
                             process.PriorityClass = processInfo.Priority;
                         }
                         catch (Exception ex)
                         {
                             if (!process.HasExited)
                             {
-                                Log.Info(string.Format("Unable to set PriorityClass on [{0}]: {1}", filename, ex.ToString()));
+                                Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to set PriorityClass on [{0}]: {1}", filename, ex.ToString()));
                             }
                         }
                     }
                     else
                     {
-                        Log.Debug(string.Format("Not setting PriorityClass on [{0}] to default {1}", filename, processInfo.Priority));
+                        Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Not setting PriorityClass on [{0}] to default {1}", filename, processInfo.Priority));
                     }
 				}
 				catch (Win32Exception e)
 				{
-					string msg = string.Format("Unable to execute file [{0}].  The file may not exist or may not be executable.", filename);
+					string msg = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to execute file [{0}].  The file may not exist or may not be executable.", filename);
 					throw new IOException(msg, e);
 				}
 
@@ -186,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			{
 				const int WAIT_FOR_KILLED_PROCESS_TIMEOUT = 10000;
 
-				Log.Debug(string.Format("Sending kill to process {0} and waiting {1} seconds for it to exit.", process.Id, WAIT_FOR_KILLED_PROCESS_TIMEOUT / 1000));
+				Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Sending kill to process {0} and waiting {1} seconds for it to exit.", process.Id, WAIT_FOR_KILLED_PROCESS_TIMEOUT / 1000));
 				CancelEventsAndWait();
 				try
 				{
@@ -196,11 +196,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 							string.Format(@"The killed process {0} did not terminate within the allotted timeout period {1}.  The process or one of its child processes may not have died.  This may create problems when trying to re-execute the process.  It may be necessary to reboot the server to recover.",
 								process.Id,
 								WAIT_FOR_KILLED_PROCESS_TIMEOUT));
-					Log.Warning(string.Format("The process has been killed: {0}", process.Id));
+					Log.Warning(string.Format(System.Globalization.CultureInfo.CurrentCulture,"The process has been killed: {0}", process.Id));
 				}
 				catch (InvalidOperationException)
 				{
-					Log.Warning(string.Format("Process has already exited before getting killed: {0}", process.Id));
+					Log.Warning(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Process has already exited before getting killed: {0}", process.Id));
 				}
 			}
 
@@ -244,7 +244,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				catch (Exception e)
 				{
 					Log.Error(e);
-					Log.Error(string.Format("[{0} {1}] Exception while collecting standard output", projectName, processInfo.FileName));
+					Log.Error(string.Format(System.Globalization.CultureInfo.CurrentCulture,"[{0} {1}] Exception while collecting standard output", projectName, processInfo.FileName));
 					supervisingThread.Interrupt();
 				}
 			}
@@ -263,7 +263,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				catch (Exception e)
 				{
 					Log.Error(e);
-					Log.Error(string.Format("[{0} {1}] Exception while collecting error output", projectName, processInfo.FileName));
+					Log.Error(string.Format(System.Globalization.CultureInfo.CurrentCulture,"[{0} {1}] Exception while collecting error output", projectName, processInfo.FileName));
 					supervisingThread.Interrupt();
 				}
 			}
@@ -278,7 +278,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				}
 
 				collector.AppendLine(output);
-				Log.Debug(string.Format("[{0} {1}] {2}", projectName, processInfo.FileName, output));
+				Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"[{0} {1}] {2}", projectName, processInfo.FileName, output));
 			}
 
 			void IDisposable.Dispose()
@@ -368,9 +368,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			public void KillProcess()
 			{
 				KillUtil.KillPid(process.Id);
-				Log.Info(string.Format("{0}: ------------------------------------------------------------------", projectName));
-				Log.Info(string.Format("{0}: ---------The Build Process was successfully aborted---------------", projectName));
-				Log.Info(string.Format("{0}: ------------------------------------------------------------------", projectName));
+				Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}: ------------------------------------------------------------------", projectName));
+				Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}: ---------The Build Process was successfully aborted---------------", projectName));
+				Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}: ------------------------------------------------------------------", projectName));
 			}
 		}
 	}

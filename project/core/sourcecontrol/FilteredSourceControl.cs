@@ -135,12 +135,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 if (IsAcceptedByInclusionFilters(modification) &&
                     (!IsAcceptedByExclusionFilters(modification)))
                 {
-                    Log.Debug(String.Format("Modification {0} was accepted by the filter specification.",
+                    Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Modification {0} was accepted by the filter specification.",
                         modification));
                     acceptedModifications.Add(modification);
                 }
                 else
-                    Log.Debug(String.Format("Modification {0} was not accepted by the filter specification.",
+                    Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Modification {0} was not accepted by the filter specification.",
                         modification));
             }
 
@@ -186,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				if (mf.Accept(m))
                 {
-                    Log.Debug(String.Format("Modification {0} was included by filter {1}.", m, mf));
+                    Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Modification {0} was included by filter {1}.", m, mf));
                     return true;
                 }
             }
@@ -213,7 +213,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
                 if (mf.Accept(m))
                 {
-                    Log.Debug(String.Format("Modification {0} was excluded by filter {1}.", m, mf));
+                    Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Modification {0} was excluded by filter {1}.", m, mf));
                     return true;
                 }
 			}

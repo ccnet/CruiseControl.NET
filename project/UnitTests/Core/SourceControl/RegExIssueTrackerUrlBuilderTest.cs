@@ -27,12 +27,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 
         //replace with /browse/backreference1  «$1»
-        private string replacementString = string.Format("{0}/browse/$1", issueTrackerUrl);
+        private string replacementString = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/browse/$1", issueTrackerUrl);
 
 
         private string CreateSourceControlXml()
         {
-            return string.Format("<issueUrlBuilder type=\"regexIssueTracker\"><find>{0}</find><replace>{1}</replace></issueUrlBuilder>", searchString, replacementString);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"<issueUrlBuilder type=\"regexIssueTracker\"><find>{0}</find><replace>{1}</replace></issueUrlBuilder>", searchString, replacementString);
         }
 
 

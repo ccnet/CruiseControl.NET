@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Remote
                         if (messageTypes.ContainsKey(attribute.ElementName))
                         {
                             throw new ApplicationException(
-                                string.Format("Duplicate message type found: '{0}'.\r\nFirst type: {1}\r\nSecond type: {2}",
+                                string.Format(System.Globalization.CultureInfo.CurrentCulture,"Duplicate message type found: '{0}'.\r\nFirst type: {1}\r\nSecond type: {2}",
                                     attribute.ElementName,
                                     messageTypes[attribute.ElementName].FullName,
                                     remotingType.FullName));

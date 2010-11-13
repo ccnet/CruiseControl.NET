@@ -112,11 +112,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                         if (absolutePathPrefixPattern.IsMatch(firstToken))
                             ParseFileLine(line);
                         else
-                            Log.Error(string.Format("Unrecognized line in AccuRev \"accurev hist\" output: {0}", line));
+                            Log.Error(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unrecognized line in AccuRev \"accurev hist\" output: {0}", line));
                         break;
                 }
             }
-			Log.Debug(string.Format("AccuRev reported {0} modifications", modificationList.Count));
+			Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"AccuRev reported {0} modifications", modificationList.Count));
 			return modificationList.ToArray();
 		}
 
@@ -153,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             }
 			else
 			{
-                Log.Error(string.Format("Illegal transaction line in AccuRev \"accurev hist\" output: {0}", line));
+                Log.Error(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Illegal transaction line in AccuRev \"accurev hist\" output: {0}", line));
 			}
 		}
 
@@ -208,7 +208,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			else
 			{
-				Log.Error(String.Format("Illegal file detail line in AccuRev \"accurev hist\" output: {0}", line));
+				Log.Error(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Illegal file detail line in AccuRev \"accurev hist\" output: {0}", line));
 			}
 		}
 
@@ -235,7 +235,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			entry.UserName = template.UserName;
 			entry.Version = template.Version;
 
-			Log.Debug(string.Format("Added a modification: {0}", entry));
+			Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Added a modification: {0}", entry));
 			modificationList.Add(entry);
 		}
 

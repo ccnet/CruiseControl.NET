@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
         {
             LoginRequest request = new LoginRequest();
             string actual = request.ToString();
-            string expected = string.Format("<loginMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+            string expected = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<loginMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
                 "timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" source=\"{1}\" />",
                 request.Identifier,
                 request.SourceName,
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             request.Timestamp = DateTime.Now;
             request.AddCredential(LoginRequest.UserNameCredential, "johnDoe");
             string actual = request.ToString();
-            string expected = string.Format("<loginMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+            string expected = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<loginMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
                 "timestamp=\"{4:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" server=\"{1}\" source=\"{2}\" session=\"{3}\">" + 
                 "<credential name=\"userName\" value=\"johnDoe\" />" + 
                 "</loginMessage>",

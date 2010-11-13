@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		public override string ToString()
 		{
 			if (timeSpan < TimeSpan.FromMinutes(1.0))
-				return string.Format("{0} seconds", timeSpan.Seconds);
+				return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} seconds", timeSpan.Seconds);
 
 			StringBuilder sb = new StringBuilder();
 			AddIfNeeded(sb, timeSpan.Days, "day");

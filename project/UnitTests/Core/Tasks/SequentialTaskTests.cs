@@ -131,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             SetupResult.For(result.BuildProgressInformation).Return(buildInfo);
             for (var loop = 1; loop <= runCount; loop++)
             {
-                Expect.Call(() => { result.AddTaskResult(string.Format("Task #{0} has run", loop)); });
+                Expect.Call(() => { result.AddTaskResult(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Task #{0} has run", loop)); });
             }
             Expect.Call(result.Status).PropertyBehavior();
             Expect.Call(result.Clone()).Return(result).Repeat.Times(runCount == 0 ? 1 : runCount);
@@ -149,7 +149,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
             public void Run(IIntegrationResult result)
             {
-                result.AddTaskResult(string.Format("Task #{0} has run", TaskNumber));
+                result.AddTaskResult(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Task #{0} has run", TaskNumber));
                 result.Status = Result;
             }
         }

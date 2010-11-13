@@ -75,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 			catch (FileNotFoundException)
 			{
-				throw new CruiseControlException(string.Format("XSL stylesheet file not found: {0}", xslFileName));
+				throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"XSL stylesheet file not found: {0}", xslFileName));
 			}
             catch (XsltException ex)
 			{

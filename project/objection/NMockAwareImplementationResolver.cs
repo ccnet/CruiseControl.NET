@@ -92,7 +92,7 @@ namespace Objection
 					{
 						if (candidateType != null)
 						{
-							throw new Exception(string.Format("Ambiguous type {0}, implemented by {1} and {2}", baseType.FullName, candidateType.FullName, type.FullName));	
+							throw new Exception(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Ambiguous type {0}, implemented by {1} and {2}", baseType.FullName, candidateType.FullName, type.FullName));	
 						}						
 						candidateType = type;
 					}

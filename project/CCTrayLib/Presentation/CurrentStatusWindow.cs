@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 // Now we can do the actual monitor change
                 if (changeMonitor)
                 {
-                    Text = string.Format("Current Status for {0} [{1}]",
+                    Text = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Current Status for {0} [{1}]",
                         value.Detail.ProjectName,
                         value.Detail.ServerName);
                     projectToMonitor = value;
@@ -102,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private void displayWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             loadStopwatch.Stop();
-            currentStatus.Text = string.Format("Status loaded ({0:0.00}s)",
+            currentStatus.Text = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Status loaded ({0:0.00}s)",
                 Convert.ToDouble(loadStopwatch.ElapsedMilliseconds) / 1000);
             if (currentError == null)
             {

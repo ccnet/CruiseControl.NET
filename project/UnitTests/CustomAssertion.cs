@@ -11,13 +11,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests
 	{
 		public static void AssertContains(string search, string target)
 		{
-			string message = string.Format("Search substring: {0} is not contained in target: {1}", search, target);
+			string message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Search substring: {0} is not contained in target: {1}", search, target);
 			Assert.IsTrue(target.IndexOf(search) >= 0, message);
 		}
 
 		public static void AssertNotContains(string search, string target)
 		{
-			string message = string.Format("Search substring: {0} should not be contained in target: {1}", search, target);
+			string message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Search substring: {0} should not be contained in target: {1}", search, target);
 			Assert.IsFalse(target.IndexOf(search) >= 0, message);
 		}
 
@@ -27,19 +27,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests
 			{
 				if (a.Equals(search)) return;
 			}
-			string message = string.Format("Did not find {0} in the array", search);
+			string message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Did not find {0} in the array", search);
 			Assert.Fail(message);
 		}
 
 		public static void AssertStartsWith(string expected, string actual)
 		{
-			string message = string.Format("<{0}> does not start wth \n<{1}>", actual, expected);
+			string message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<{0}> does not start wth \n<{1}>", actual, expected);
 			Assert.IsTrue(actual != null && actual.StartsWith(expected), message);
 		}
 
 		public static void AssertMatches(string pattern, string actual)
 		{
-			string message = string.Format("Pattern string <{0}> does not match \nactual string <{1}>", pattern, actual);
+			string message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Pattern string <{0}> does not match \nactual string <{1}>", pattern, actual);
 			Assert.IsTrue(Regex.IsMatch(actual, pattern), message);
 		}
 
@@ -66,14 +66,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests
 				Assert.AreEqual(expectedType, actual);
 				return;
 			}
-			Assert.IsNotNull(actual, string.Format("object of expected type {0} is null", expectedType.FullName));
+			Assert.IsNotNull(actual, string.Format(System.Globalization.CultureInfo.CurrentCulture,"object of expected type {0} is null", expectedType.FullName));
 			Type actualType = (actual is Type) ? (Type) actual : actual.GetType();
 			Assert.AreEqual(expectedType, actualType, "object of the wrong type");
 		}
 
 		public static void AssertNotEquals(object expected, object actual)
 		{
-			string message = string.Format("Values ({0}) and ({1}) should not be equal", expected, actual);
+			string message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Values ({0}) and ({1}) should not be equal", expected, actual);
 			Assert.IsTrue(!expected.Equals(actual), message);
 			Assert.IsTrue(!actual.Equals(expected), message);
 		}
@@ -85,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests
 
 		public static void AssertApproximatelyEqual(string message, double expected, double actual, double tolerance)
 		{
-			string expectation = string.Format("Expected {0}, but was {1}", expected, actual);
+			string expectation = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Expected {0}, but was {1}", expected, actual);
 			Assert.IsTrue(Math.Abs(expected - actual) < tolerance, message + expectation);
 		}
 
@@ -102,14 +102,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests
 		public static void AssertXPathExists(string xml, string xpath)
 		{
 			Assert.IsTrue(SelectNodeIterator(xpath, xml).Count > 0,
-			              string.Format("Unable to locate xpath expression <{0}>\n\t in xml <{1}>", xpath, xml));
+			              string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to locate xpath expression <{0}>\n\t in xml <{1}>", xpath, xml));
 		}
 
 		public static void AssertXPathNodeValue(string expectedValue, string xml, string xpath)
 		{
 			string actual = SelectNodeIterator(xpath, xml).Current.Value;
 			Assert.AreEqual(expectedValue, actual,
-			                string.Format("Expected value <{0}> does not equal <{1}>\n\t in xml <{2}>", xpath, actual, xml));
+			                string.Format(System.Globalization.CultureInfo.CurrentCulture,"Expected value <{0}> does not equal <{1}>\n\t in xml <{2}>", xpath, actual, xml));
 		}
 
 		private static XPathNodeIterator SelectNodeIterator(string xpath, string xml)
@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests
 			}
 			catch (Exception e)
 			{
-				throw new AssertionException(string.Format("Unable to parse xml <{0}> or xpath expression <{1}>\n\t{2}", xml, xpath, e), e);
+				throw new AssertionException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to parse xml <{0}> or xpath expression <{1}>\n\t{2}", xml, xpath, e), e);
 			}
 		}
 	}

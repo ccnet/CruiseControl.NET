@@ -220,7 +220,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					return parsed.Groups[1].ToString().Trim();	
 				// Format is: "Basis:          __stream_name__"
 			}
-			Log.Error(string.Format("No \"Basis:\" line found in output from AccuRev \"accurev info\": {0}", cmdResults.StandardOutput));
+			Log.Error(string.Format(System.Globalization.CultureInfo.CurrentCulture,"No \"Basis:\" line found in output from AccuRev \"accurev info\": {0}", cmdResults.StandardOutput));
 			return string.Empty;
 		}
 
@@ -242,7 +242,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			PossiblyLogIn(from);
-			string args = string.Format("hist -a -s \"{0}\" -t \"{1}-{2}\"", 
+			string args = string.Format(System.Globalization.CultureInfo.CurrentCulture,"hist -a -s \"{0}\" -t \"{1}-{2}\"", 
 				GetBasisStreamName(to),
 				FormatCommandDate(to.StartTime),
 				FormatCommandDate(from.StartTime));
@@ -285,7 +285,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			if (LabelOnSuccess && result.Succeeded && (result.Label != string.Empty))
 			{
 				PossiblyLogIn(result);
-				string args = string.Format("mksnap -s \"{0}\" -b \"{1}\" -t \"{2}\"",
+				string args = string.Format(System.Globalization.CultureInfo.CurrentCulture,"mksnap -s \"{0}\" -b \"{1}\" -t \"{2}\"",
 					result.Label,
 					GetBasisStreamName(result),
 					FormatCommandDate(result.StartTime));
@@ -317,7 +317,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <returns>a ProcessInfo object primed to execute the specified command</returns>
         private ProcessInfo PrepCommand(PrivateArguments args, IIntegrationResult result)
 		{
-			Log.Debug(string.Format("Preparing to run AccuRev command: {0} {1}", Executable, args));
+			Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Preparing to run AccuRev command: {0} {1}", Executable, args));
 			ProcessInfo command = new ProcessInfo(Executable, args, result.BaseFromWorkingDirectory(Workspace));
 			SetEnvironmentVariables(command.EnvironmentVariables, result);
 			return command;
@@ -335,10 +335,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessResult cmdResults = Execute(command);
 			if (cmdResults.Failed)
 			{
-				Log.Error(string.Format("AccuRev command \"{0} {1}\" failed with RC={2}", 
+				Log.Error(string.Format(System.Globalization.CultureInfo.CurrentCulture,"AccuRev command \"{0} {1}\" failed with RC={2}", 
 					Executable, args, cmdResults.ExitCode));
 				if ((cmdResults.StandardError != null) && (cmdResults.StandardError != string.Empty))
-					Log.Error(string.Format("\tError output: {0}", cmdResults.StandardError));
+					Log.Error(string.Format(System.Globalization.CultureInfo.CurrentCulture,"\tError output: {0}", cmdResults.StandardError));
 			}
 			return cmdResults;
 		}

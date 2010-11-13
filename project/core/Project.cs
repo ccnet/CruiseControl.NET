@@ -682,7 +682,7 @@ namespace ThoughtWorks.CruiseControl.Core
             else
             {
                 sourceControlStatus = new ItemStatus(
-                    string.Format("{0}: {1}", 
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}: {1}", 
                         SourceControl.GetType().Name,
                         operation));
                 sourceControlStatus.Status = ItemBuildStatus.Pending;
@@ -823,7 +823,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public void AbortRunningBuild(string userName)
         {
-            AddMessage(new Message(string.Format("Build Aborted by : {0}",userName ),  Message.MessageKind.BuildAbortedBy));
+            AddMessage(new Message(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Build Aborted by : {0}",userName ),  Message.MessageKind.BuildAbortedBy));
 
             if (this.remoteBuildRequest != null)
             {
@@ -1122,13 +1122,13 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public void Initialize()
         {
-            Log.Info(string.Format("Initializing Project [{0}]", Name));
+            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Initializing Project [{0}]", Name));
             SourceControl.Initialize(this);
         }
 
         public void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
         {
-            Log.Info(string.Format("Purging Project [{0}]", Name));
+            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Purging Project [{0}]", Name));
             if (purgeSourceControlEnvironment)
             {
                 SourceControl.Purge(this);
@@ -1167,7 +1167,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public static string DefaultUrl()
         {
-            return string.Format("http://{0}/ccnet", Environment.MachineName);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"http://{0}/ccnet", Environment.MachineName);
         }
 
         public ProjectStatus CreateProjectStatus(IProjectIntegrator integrator)
@@ -1363,7 +1363,7 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 errorProcesser.ProcessError(
                     new ConfigurationException(
-                        string.Format("Security is defined for project '{0}', but not defined at the server", this.Name)));
+                        string.Format(System.Globalization.CultureInfo.CurrentCulture,"Security is defined for project '{0}', but not defined at the server", this.Name)));
             }
 
             this.ValidateProject(errorProcesser);
@@ -1395,7 +1395,7 @@ namespace ThoughtWorks.CruiseControl.Core
             if (ContainsInvalidChars(this.Name))
             {
                 errorProcesser.ProcessWarning(
-                    string.Format("Project name '{0}' contains some chars that could cause problems, better use only numbers and letters",
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project name '{0}' contains some chars that could cause problems, better use only numbers and letters",
                         Name));
             }
         }

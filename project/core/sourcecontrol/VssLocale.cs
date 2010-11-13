@@ -85,14 +85,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			// vss gives am and pm as a and p, so we append an m
 			string suffix = (time.EndsWith("a") || time.EndsWith("p")) ? "m" : string.Empty;
-			string dateAndTime = string.Format("{0} {1}{2}", date, time, suffix);
+			string dateAndTime = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} {1}{2}", date, time, suffix);
 			try
 			{
 				return DateTime.Parse(dateAndTime, CreateDateTimeInfo());				
 			}
 			catch (FormatException ex)
 			{
-				throw new CruiseControlException(string.Format("Unable to parse vss date: {0}", dateAndTime), ex);
+				throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to parse vss date: {0}", dateAndTime), ex);
 			}
 		}
 
@@ -107,18 +107,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			DateTimeFormatInfo info = CreateDateTimeInfo();
 			if (info.LongTimePattern.IndexOf('h') >= 0 || info.LongTimePattern.IndexOf('t') >= 0)
 			{
-				info.LongTimePattern = string.Format("h{0}mmt", info.TimeSeparator);
+				info.LongTimePattern = string.Format(System.Globalization.CultureInfo.CurrentCulture,"h{0}mmt", info.TimeSeparator);
 			}
 			else
 			{
-				info.LongTimePattern = string.Format("H{0}mm", info.TimeSeparator);				
+				info.LongTimePattern = string.Format(System.Globalization.CultureInfo.CurrentCulture,"H{0}mm", info.TimeSeparator);				
 			}
 			return string.Concat(date.ToString("d", info), ";", date.ToString(info.LongTimePattern, info));
 		}
 
 		public override string ToString()
 		{
-			return string.Format("VssLocale: local culture = {0}, server culture = {1}", localCulture.DisplayName, serverCulture.DisplayName);
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"VssLocale: local culture = {0}, server culture = {1}", localCulture.DisplayName, serverCulture.DisplayName);
 		}
 
 		public override bool Equals(object obj)

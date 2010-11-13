@@ -68,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
             if (int.TryParse(resultFromThisBuild.LastChangeNumber, out changeNumber))
             {
                 Log.Debug(
-                    string.Format("LastChangeNumber retrieved - {0}",
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"LastChangeNumber retrieved - {0}",
                     changeNumber));
             }
             else
@@ -107,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
                 current = Int32.Parse(match.Groups[2].Value);
                 label = match.Groups[1].Value;
             }
-            return String.Format("{0}.{1}", label, current + 1);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}.{1}", label, current + 1);
         }
     }
 }

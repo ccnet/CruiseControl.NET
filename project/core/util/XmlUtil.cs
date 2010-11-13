@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 			if (list.Count > 1)
 			{
-				throw new CruiseControlException(string.Format("Expected single element '{0}', got multiple ({1})", name, list.Count));
+				throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Expected single element '{0}', got multiple ({1})", name, list.Count));
 			}
 			return (XmlElement) list.Item(0);
 		}

@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Speech
 				projectName = SpeechUtil.makeProjectNameMoreSpeechFriendly(projectName);
 	
 				CaptionAndMessage captionAndMessage = balloonMessageProvider.GetCaptionAndMessageForBuildTransition(e.BuildTransition);
-				String message = String.Format("The {0} project reports {1}", projectName, captionAndMessage.Message);
+				String message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"The {0} project reports {1}", projectName, captionAndMessage.Message);
                 SpeechSynthesizer speaker = new SpeechSynthesizer();
                 speaker.Speak(message);	            
                 Trace.WriteLine("speaking: " + message);
@@ -70,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Speech
 				projectStates[projectName] = newState;
 				if (newState == ProjectState.Building ||
 				    newState == ProjectState.BrokenAndBuilding) {
-					String message = String.Format("The {0} project has started building", projectName);
+					String message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"The {0} project has started building", projectName);
                     SpeechSynthesizer speaker = new SpeechSynthesizer();
                     speaker.Speak(message);
                     Trace.WriteLine("speaking: " + message);

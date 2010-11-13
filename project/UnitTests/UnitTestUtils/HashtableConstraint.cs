@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
 
 			if (expected.Keys.Count != obtained.Keys.Count)
 			{
-				message = string.Format("Expected {0} keys but found {1}", expected.Keys.Count, obtained.Keys.Count);
+				message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Expected {0} keys but found {1}", expected.Keys.Count, obtained.Keys.Count);
 				return false;
 			}
 
@@ -57,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
 				if (!object.Equals(expected[expectedKey], obtained[expectedKey]))
 				{
 					message =
-						string.Format("Expected {0} to be {1} but was {2}", expectedKey, expected[expectedKey], obtained[expectedKey]);
+						string.Format(System.Globalization.CultureInfo.CurrentCulture,"Expected {0} to be {1} but was {2}", expectedKey, expected[expectedKey], obtained[expectedKey]);
 					return false;
 				}
 			}

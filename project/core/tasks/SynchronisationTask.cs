@@ -135,7 +135,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             var numberOfTasks = Tasks.Length;
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description)
                 ? Description
-                : string.Format("Running tasks in synchronisation context({0} task(s))", numberOfTasks));
+                : string.Format(System.Globalization.CultureInfo.CurrentCulture,"Running tasks in synchronisation context({0} task(s))", numberOfTasks));
             logger.Info("Starting synchronisation task with {0} sub-task(s)", numberOfTasks);
             var contextToUse = this.ContextName ?? "DefaultSynchronisationContext";
 
@@ -158,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     var failureCount = 0;
                     for (var loop = 0; loop < numberOfTasks; loop++)
                     {
-                        var taskName = string.Format("{0} [{1}]", Tasks[loop].GetType().Name, loop);
+                        var taskName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} [{1}]", Tasks[loop].GetType().Name, loop);
                         logger.Debug("Starting task '{0}'", taskName);
                         try
                         {

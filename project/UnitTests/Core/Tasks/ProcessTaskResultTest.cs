@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			ProcessResult processResult = new ProcessResult("stdout", "error", 5, false);
 			ProcessTaskResult result = new ProcessTaskResult(processResult);
-			Assert.AreEqual(string.Format("stdout{0}error", Environment.NewLine), result.Data);
+			Assert.AreEqual(string.Format(System.Globalization.CultureInfo.CurrentCulture,"stdout{0}error", Environment.NewLine), result.Data);
 		}
 
 		[Test]

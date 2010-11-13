@@ -312,14 +312,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         {
             System.Text.StringBuilder ErrorDescription = new System.Text.StringBuilder();
 
-            ErrorDescription.AppendLine(string.Format("Error loading {0} ", pluginTypeName));
+            ErrorDescription.AppendLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Error loading {0} ", pluginTypeName));
             ErrorDescription.AppendLine("Unknown pluginnames detected");
             ErrorDescription.AppendLine("Check your config");
             ErrorDescription.AppendLine("The following plugins were loaded successfully : ");
 
             foreach (string item in loadedPlugins)
             {
-                ErrorDescription.AppendLine(string.Format(" * {0}", item));
+                ErrorDescription.AppendLine(string.Format(System.Globalization.CultureInfo.CurrentCulture," * {0}", item));
             }
 
             throw new Exception(ErrorDescription.ToString());

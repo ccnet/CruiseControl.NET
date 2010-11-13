@@ -172,7 +172,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				foreach (string target in Targets.Split(';'))
 				{
 					if (targets != string.Empty) 
-						targets = string.Format("{0};{1}", targets, StringUtil.AutoDoubleQuoteString(target));
+						targets = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0};{1}", targets, StringUtil.AutoDoubleQuoteString(target));
 					else 
 						targets = StringUtil.AutoDoubleQuoteString(target);
 				}
@@ -207,7 +207,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         protected override bool Execute(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
-				string.Format("Executing MSBuild :BuildFile: {0}", ProjectFile));
+				string.Format(System.Globalization.CultureInfo.CurrentCulture,"Executing MSBuild :BuildFile: {0}", ProjectFile));
 
         	ProcessResult processResult = TryToRun(CreateProcessInfo(result), result);
 
@@ -235,7 +235,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			foreach (string key in properties.Keys)
 			{
 				if (count > 0) builder.Append(";");
-				builder.Append(string.Format("{0}={1}", key, StringUtil.AutoDoubleQuoteString(StringUtil.IntegrationPropertyToString(result.IntegrationProperties[key]))));
+				builder.Append(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}={1}", key, StringUtil.AutoDoubleQuoteString(StringUtil.IntegrationPropertyToString(result.IntegrationProperties[key]))));
 				count++;
 			}
 

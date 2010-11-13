@@ -339,7 +339,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 				if (PathUtils.MatchPath(pattern, strs[i], caseSensitive) != expected[i])
 				{
 					Assert.Fail(
-						String.Format("[{4}] pattern={0} str={1} caseSensitive={2} expected={3}",
+						string.Format(System.Globalization.CultureInfo.CurrentCulture,"[{4}] pattern={0} str={1} caseSensitive={2} expected={3}",
 						              pattern, strs[i], caseSensitive, expected[i], i));
 				}
 			}

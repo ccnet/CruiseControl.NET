@@ -55,8 +55,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Assert.AreEqual(task.MergeFiles.Length, expected.Length, "File count incorrect");
             for (var loop = 0; loop < expected.Length; loop++)
             {
-                Assert.AreEqual(expected[loop].FileName, task.MergeFiles[loop].FileName, string.Format("FileName on {0} does not match", loop));
-                Assert.AreEqual(expected[loop].MergeAction, task.MergeFiles[loop].MergeAction, string.Format("MergeAction on {0} does not match", loop));
+                Assert.AreEqual(expected[loop].FileName, task.MergeFiles[loop].FileName, string.Format(System.Globalization.CultureInfo.CurrentCulture,"FileName on {0} does not match", loop));
+                Assert.AreEqual(expected[loop].MergeAction, task.MergeFiles[loop].MergeAction, string.Format(System.Globalization.CultureInfo.CurrentCulture,"MergeAction on {0} does not match", loop));
             }
         }
 

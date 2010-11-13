@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		{
 			string link = result.ProjectUrl;
 			if (includeAnchorTag) link = string.Format(@"<a href=""{0}"">web page</a>", link);
-			return string.Format("CruiseControl.NET Build Results for project {0} ({1})", result.ProjectName, link);
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"CruiseControl.NET Build Results for project {0} ({1})", result.ProjectName, link);
 		}
 
 

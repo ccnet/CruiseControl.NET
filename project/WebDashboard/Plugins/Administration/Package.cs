@@ -316,7 +316,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
                 FireMessage(TraceLevel.Verbose, "Element found ('{0}'), updating", setting.Path);
                 string xpath = string.IsNullOrEmpty(setting.Filter) ? 
                     setting.Name : 
-                    string.Format("{0}[{1}]", setting.Name, setting.Filter);
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}[{1}]", setting.Name, setting.Filter);
                 if (addSettings)
                 {
                     // Otherwise see if there is an old element, if there is then overwrite it, otherwise

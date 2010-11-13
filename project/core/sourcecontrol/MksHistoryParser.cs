@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 tran.Transform(doc.CreateNavigator(), new XsltArgumentList(), writer);
                 writer.Close();
 
-                Log.Debug(string.Format("Transformed MKS Mods:\n{0}\n", transformed.ToString()));
+                Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Transformed MKS Mods:\n{0}\n", transformed.ToString()));
 
                 List<Modification> result = new List<Modification>();
                 StringReader sr = new StringReader(transformed.ToString());

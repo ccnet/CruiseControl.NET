@@ -492,7 +492,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             }
             catch (Exception error)
             {
-                MessageBox.Show(string.Format("Unable to {0}, the following error occurred:{1}{2}",
+                MessageBox.Show(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to {0}, the following error occurred:{1}{2}",
                     methodName,
                     Environment.NewLine,
                     error.Message),

@@ -96,7 +96,7 @@
             this.mocks.VerifyAll();
             Assert.IsInstanceOf<JsonFragmentResponse>(response);
             var actual = response as JsonFragmentResponse;
-            var date = string.Format("{0}, {1}, {2}, {3}, {4}, {5}",
+            var date = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}, {1}, {2}, {3}, {4}, {5}",
                 snapshot.TimeOfSnapshot.Year,
                 snapshot.TimeOfSnapshot.Month - 1,
                 snapshot.TimeOfSnapshot.Day,

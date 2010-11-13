@@ -84,16 +84,16 @@
             if (size > 1048576)
             {
                 workingSize = workingSize / 1048576;
-                return string.Format("{0:0.00}Mb", workingSize);
+                return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0:0.00}Mb", workingSize);
             }
             else if (size > 1024)
             {
                 workingSize = workingSize / 1024;
-                return string.Format("{0:0.00}Kb", workingSize);
+                return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0:0.00}Kb", workingSize);
             }
             else
             {
-                return string.Format("{0}b", workingSize);
+                return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}b", workingSize);
             }
         }
         #endregion

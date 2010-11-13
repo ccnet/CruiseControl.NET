@@ -368,7 +368,7 @@
                         parametersEl.AppendChild(dynamicValueEl);
 
                         // Generate the replacement
-                        lastReplacement = string.Format("{{{0}{1}}}",
+                        lastReplacement = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{{{0}{1}}}",
                             index++,
                             parts.Length > 2 ? ":" + parts[2].Replace("\\|", "|") : string.Empty);
                         return lastReplacement;

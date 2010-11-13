@@ -203,7 +203,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("log");
-            buffer.AddArgument("-r", string.Format("{0}:{1}", revisionId, tipId));
+            buffer.AddArgument("-r", string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}:{1}", revisionId, tipId));
             buffer.AddArgument("--template", HistoryTemplate);
             AppendCommonSwitches(buffer);
             return NewProcessInfo(buffer.ToString(), workingDirectory);

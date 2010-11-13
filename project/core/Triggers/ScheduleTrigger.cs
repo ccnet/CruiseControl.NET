@@ -145,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         {
 
             if (integrationTime.Minutes + RandomOffSetInMinutesFromTime >= 60)
-                throw new ConfigurationException(String.Format("Scheduled time {0}:{1} + randomOffSetInMinutesFromTime {2} would exceed the hour, this is not allowed", integrationTime.Hours, integrationTime.Minutes, RandomOffSetInMinutesFromTime));
+                throw new ConfigurationException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Scheduled time {0}:{1} + randomOffSetInMinutesFromTime {2} would exceed the hour, this is not allowed", integrationTime.Hours, integrationTime.Minutes, RandomOffSetInMinutesFromTime));
 
             DateTime now = dtProvider.Now;
             nextBuild = new DateTime(now.Year, now.Month, now.Day, integrationTime.Hours, integrationTime.Minutes, 0, 0);

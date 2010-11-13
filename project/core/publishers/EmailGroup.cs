@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 		public override string ToString()
 		{
-			return string.Format("EmailGroup: [name: {0}, notifications: {1}]", Name, StringUtil.GetArrayContents( Notifications) );
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"EmailGroup: [name: {0}, notifications: {1}]", Name, StringUtil.GetArrayContents( Notifications) );
 		}
 
 

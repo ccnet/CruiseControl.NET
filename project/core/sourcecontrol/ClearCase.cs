@@ -264,8 +264,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public ProcessInfo CreateTempBaselineProcessInfo(string name)
 		{
-			string args = string.Format("mkbl -view {0} -identical {1}", ViewName, name);
-			Log.Debug(string.Format("command line is: {0} {1}", Executable, args));
+			string args = string.Format(System.Globalization.CultureInfo.CurrentCulture,"mkbl -view {0} -identical {1}", ViewName, name);
+			Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"command line is: {0} {1}", Executable, args));
 			return new ProcessInfo(Executable, args);
 		}
 
@@ -287,12 +287,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			else if (result.Failed && HasFatalError(result.StandardError))
 			{
-				throw new CruiseControlException(string.Format("Source control operation failed: {0}. Process command: {1} {2}",
+				throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Source control operation failed: {0}. Process command: {1} {2}",
 				                                               result.StandardError, info.FileName, info.PublicArguments));
 			}
 			else if (result.HasErrorOutput)
 			{
-				Log.Warning(string.Format("Source control wrote output to stderr: {0}", result.StandardError));
+				Log.Warning(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Source control wrote output to stderr: {0}", result.StandardError));
 			}
 		}
 
@@ -335,7 +335,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			string fromDate = from.ToString(DATETIME_FORMAT);
 			string args = CreateHistoryArguments(fromDate);
-			Log.Debug(string.Format("cleartool commandline: {0} {1}", Executable, args));
+			Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"cleartool commandline: {0} {1}", Executable, args));
 			ProcessInfo processInfo = new ProcessInfo(Executable, args);
 			return processInfo;
 		}
@@ -347,8 +347,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <returns>the process execution info</returns>
 		public ProcessInfo CreateLabelTypeProcessInfo(string label)
 		{
-			string args = string.Format(" mklbtype -c \"CRUISECONTROL Comment\" \"{0}\"", label);
-			Log.Debug(string.Format("mklbtype: {0} {1}; [working dir: {2}]", Executable, args, ViewPath));
+			string args = string.Format(System.Globalization.CultureInfo.CurrentCulture," mklbtype -c \"CRUISECONTROL Comment\" \"{0}\"", label);
+			Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"mklbtype: {0} {1}; [working dir: {2}]", Executable, args, ViewPath));
 			return new ProcessInfo(Executable, args, ViewPath);
 		}
 
@@ -360,21 +360,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public ProcessInfo CreateMakeLabelProcessInfo(string label)
 		{
 			string args = string.Format(@" mklabel -recurse ""{0}"" ""{1}""", label, ViewPath);
-			Log.Debug(string.Format("mklabel: {0} {1}", Executable, args));
+			Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"mklabel: {0} {1}", Executable, args));
 			return new ProcessInfo(Executable, args);
 		}
 
 		public ProcessInfo CreateRemoveBaselineProcessInfo()
 		{
-			string args = string.Format("rmbl -force {0}@\\{1}", TempBaseline, ProjectVobName);
-			Log.Debug(string.Format("remove baseline: {0} {1}", Executable, args));
+			string args = string.Format(System.Globalization.CultureInfo.CurrentCulture,"rmbl -force {0}@\\{1}", TempBaseline, ProjectVobName);
+			Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"remove baseline: {0} {1}", Executable, args));
 			return new ProcessInfo(Executable, args);
 		}
 
 		public ProcessInfo CreateRenameBaselineProcessInfo(string name)
 		{
-			string args = string.Format("rename baseline:{0}@\\{1} \"{2}\"", TempBaseline, ProjectVobName, name);
-			Log.Debug(string.Format("rename baseline: {0} {1}", Executable, args));
+			string args = string.Format(System.Globalization.CultureInfo.CurrentCulture,"rename baseline:{0}@\\{1} \"{2}\"", TempBaseline, ProjectVobName, name);
+			Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"rename baseline: {0} {1}", Executable, args));
 			return new ProcessInfo(Executable, args);
 		}
 
@@ -384,7 +384,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				|| name.Length == 0
 				|| name.IndexOf(" ") > -1)
 			{
-				throw new CruiseControlException(string.Format("invalid baseline name: \"{0}\" (Does your prefix have a space in it?)", name));
+				throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"invalid baseline name: \"{0}\" (Does your prefix have a space in it?)", name));
 			}
 		}
 
@@ -430,7 +430,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			if (AutoGetSource)
 			{
 				ProcessInfo info = new ProcessInfo(Executable, BuildGetSourceArguments());
-				Log.Info(string.Format("Getting source from ClearCase: {0} {1}", info.FileName, info.PublicArguments));
+				Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Getting source from ClearCase: {0} {1}", info.FileName, info.PublicArguments));
 				Execute(info);
 			}
 		}

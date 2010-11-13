@@ -34,7 +34,7 @@
         [Test]
         public void ConvertXmlToObjectConvertsCorrectly()
         {
-            string xml = string.Format("<response xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+            string xml = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<response xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
                 "timestamp=\"{1:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" result=\"{0}\" />",
                 ResponseResult.Success,
                 DateTime.Today);
@@ -61,7 +61,7 @@
         [Test]
         public void ProcessResponseHandlesKnownMessage()
         {
-            string xml = string.Format("<response xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+            string xml = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<response xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
                 "timestamp=\"{1:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" result=\"{0}\" />",
                 ResponseResult.Success,
                 DateTime.Today);

@@ -70,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             string projectName = e.ProjectMonitor.Detail.ProjectName;
 
             CaptionAndMessage captionAndMessage = balloonMessageProvider.GetCaptionAndMessageForBuildTransition(e.BuildTransition);
-            string caption = string.Format("{0}: {1} ",
+            string caption = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}: {1} ",
                                            projectName, captionAndMessage.Caption);
 
             trayIcon.ShowBalloonTip(

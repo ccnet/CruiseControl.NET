@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 
 		public IConfiguration Load(FileInfo configFile)
 		{
-			Log.Info(String.Format("Reading configuration file \"{0}\"", configFile.FullName));
+			Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Reading configuration file \"{0}\"", configFile.FullName));
 			return PopulateProjectsFromXml(LoadConfiguration(configFile));
 		}
 

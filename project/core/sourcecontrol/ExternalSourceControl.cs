@@ -321,7 +321,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <returns>a ProcessInfo object primed to execute the specified command</returns>
         private ProcessInfo PrepCommand(string executable, string args, IIntegrationResult result)
         {
-            Log.Debug(string.Format("Preparing to run source control command: {0} {1}", Executable, args));
+            Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Preparing to run source control command: {0} {1}", Executable, args));
             ProcessInfo command = new ProcessInfo(executable, args, result.WorkingDirectory);
             SetConfiguredEnvironmentVariables(command.EnvironmentVariables, this.EnvironmentVariables);
             SetCCNetEnvironmentVariables(command.EnvironmentVariables, result.IntegrationProperties);
@@ -344,7 +344,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 Log.Error(string.Format(@"Source control command ""{0} {1}"" failed with RC={2}",
                     Executable, args, cmdResults.ExitCode));
                 if ((cmdResults.StandardError != null) && (cmdResults.StandardError !=string.Empty))
-                    Log.Error(string.Format("\tError output: {0}", cmdResults.StandardError));
+                    Log.Error(string.Format(System.Globalization.CultureInfo.CurrentCulture,"\tError output: {0}", cmdResults.StandardError));
             }
             return cmdResults;
         }

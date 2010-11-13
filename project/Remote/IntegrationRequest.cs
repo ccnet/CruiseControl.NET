@@ -99,11 +99,11 @@ namespace ThoughtWorks.CruiseControl.Remote
 		{
             if (!string.IsNullOrEmpty(UserName))
             {
-                return string.Format("{0} triggered a build ({1}) from {2}", UserName, BuildCondition, Source);
+                return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} triggered a build ({1}) from {2}", UserName, BuildCondition, Source);
             }
             else
             {
-                return string.Format("Build ({1}) triggered from {0}", Source, BuildCondition);
+                return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Build ({1}) triggered from {0}", Source, BuildCondition);
             }
 		}
 

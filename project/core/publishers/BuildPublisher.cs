@@ -182,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                         break;
 
                     default:
-                        throw new System.Exception(string.Format("unmapped cleaning method choosen {0}", CleanUpMethod));
+                        throw new System.Exception(string.Format(System.Globalization.CultureInfo.CurrentCulture,"unmapped cleaning method choosen {0}", CleanUpMethod));
                 }
             }
 

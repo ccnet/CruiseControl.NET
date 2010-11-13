@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			if (!File.Exists(sourcePath) && !Directory.Exists(sourcePath))
 			{
-				throw new IOException(string.Format("Source Path [{0}] doesn't exist", sourcePath));
+				throw new IOException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Source Path [{0}] doesn't exist", sourcePath));
 			}
 
 			if (Directory.Exists(sourcePath))

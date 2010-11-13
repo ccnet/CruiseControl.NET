@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
             {
                 LoginRequest credentials = Deserialise(request.GetText("credentials"));
                 string sessionToken = farmService.Login(request.GetText("server"), credentials);
-                return GenerateResult("success", string.Format("<session>{0}</session>", sessionToken));
+                return GenerateResult("success", string.Format(System.Globalization.CultureInfo.CurrentCulture,"<session>{0}</session>", sessionToken));
             }
             catch
             {
@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 
         private string GenerateResult(string outcome, string contents)
         {
-            string result = string.Format("<security result=\"{0}\">{1}</security>", outcome, contents);
+            string result = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<security result=\"{0}\">{1}</security>", outcome, contents);
             return result;
         }
     }

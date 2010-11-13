@@ -538,7 +538,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         public virtual RemotingFileTransfer RetrieveFileTransfer(IBuildSpecifier buildSpecifier, string fileName, string sessionToken)
         {
             var logFile = new LogFile(buildSpecifier.BuildName);
-            var fullName = string.Format("{0}\\{1}", logFile.Label, fileName);
+            var fullName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}\\{1}", logFile.Label, fileName);
             var fileTransfer = GetCruiseManager(buildSpecifier, sessionToken)
                 .RetrieveFileTransfer(buildSpecifier.ProjectSpecifier.ProjectName, fullName);
             return fileTransfer as RemotingFileTransfer;

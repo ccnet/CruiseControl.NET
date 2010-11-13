@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private static string CreateMessage(string message, string url)
 		{
-			return String.Format("Cannot connect to CruiseControl server {0}.  {1}", url, message);
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Cannot connect to CruiseControl server {0}.  {1}", url, message);
 		}
 	}
 }

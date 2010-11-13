@@ -30,8 +30,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		private static string SAMPLE_ONE_LINES = string.Format(COMMAND_OUTPUT_FORMAT, CHECKINCOMMENT, NAME, DBPATH, SCIT.ToString(), MIME_TYPE,
 		                                                       LOCALPATH, CHANGED_BY, NXN_VERSIONNUMBER);
 
-		private static string SAMPLE_TWO_LINES = string.Format("{0}\n{1}", SAMPLE_ONE_LINES, SAMPLE_ONE_LINES);
-		private static string SAMPLE_NO_CHANGES = string.Format("{0}\n{1}",string.Empty, Alienbrain.NO_CHANGE);
+		private static string SAMPLE_TWO_LINES = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}\n{1}", SAMPLE_ONE_LINES, SAMPLE_ONE_LINES);
+		private static string SAMPLE_NO_CHANGES = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}\n{1}",string.Empty, Alienbrain.NO_CHANGE);
 
 		[SetUp]
 		protected void Setup()

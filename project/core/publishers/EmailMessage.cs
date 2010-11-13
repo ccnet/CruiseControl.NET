@@ -248,7 +248,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                     subject = subject.Replace(search, Util.StringUtil.IntegrationPropertyToString(properties[key]));
                 }
 
-                return string.Format("{0}{1}", prefix, subject);
+                return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}{1}", prefix, subject);
             }
         }
 

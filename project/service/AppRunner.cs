@@ -52,18 +52,18 @@ namespace ThoughtWorks.CruiseControl.Service
                 Directory.SetCurrentDirectory(DefaultDirectory);
 
                 // Announce our presence
-                Log.Info(string.Format("CruiseControl.NET Server {0} -- .NET Continuous Integration Server", Assembly.GetExecutingAssembly().GetName().Version));
+                Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"CruiseControl.NET Server {0} -- .NET Continuous Integration Server", Assembly.GetExecutingAssembly().GetName().Version));
                 // Find out our copyright claim, if any, and display it.
                 AssemblyCopyrightAttribute[] copyrightAttributes = (AssemblyCopyrightAttribute[])Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
                 if (copyrightAttributes.Length > 0)
                 {
-                    Log.Info(string.Format("{0}  All Rights Reserved.", copyrightAttributes[0].Copyright));
+                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}  All Rights Reserved.", copyrightAttributes[0].Copyright));
                 }
-                Log.Info(string.Format(".NET Runtime Version: {0}{2}\tImage Runtime Version: {1}", Environment.Version, Assembly.GetExecutingAssembly().ImageRuntimeVersion, GetRuntime()));
-                Log.Info(string.Format("OS Version: {0}\tServer locale: {1}", Environment.OSVersion, CultureInfo.CurrentUICulture.NativeName));
+                Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,".NET Runtime Version: {0}{2}\tImage Runtime Version: {1}", Environment.Version, Assembly.GetExecutingAssembly().ImageRuntimeVersion, GetRuntime()));
+                Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"OS Version: {0}\tServer locale: {1}", Environment.OSVersion, CultureInfo.CurrentUICulture.NativeName));
                 if (!string.IsNullOrEmpty(action))
                 {
-                    Log.Info(string.Format("Reason: {0}", action));
+                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Reason: {0}", action));
                 }
 
                 if (!usesShadowCopying)
@@ -116,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.Service
             if (!configFileInfo.Exists)
             {
                 throw new Exception(
-                    string.Format("CruiseControl.NET configuration file {0} does not exist.", 
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"CruiseControl.NET configuration file {0} does not exist.", 
                         configFileInfo.FullName));
             }
         }

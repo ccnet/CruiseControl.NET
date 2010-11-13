@@ -146,8 +146,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             string query = string.Format(
                 "cm find revision where branch = 'br:/main' and revno != 'CO' "
                 + "and date between '{0}' and '{1}' ", fromtime, totime);
-            string dateformat = string.Format("--dateformat=\"{0}\" ", PlasticSCM.DATEFORMAT);
-            string format = string.Format("--format=\"{0}\"", PlasticSCM.FORMAT);
+            string dateformat = string.Format(System.Globalization.CultureInfo.CurrentCulture,"--dateformat=\"{0}\" ", PlasticSCM.DATEFORMAT);
+            string format = string.Format(System.Globalization.CultureInfo.CurrentCulture,"--format=\"{0}\"", PlasticSCM.FORMAT);
 
             ProcessInfo info = plasticscm.CreateQueryProcessInfo(from, to);
             Assert.AreEqual(query + dateformat + format, info.FileName + " " + info.Arguments);
@@ -169,8 +169,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			string query = string.Format (
 				@"c:\plastic\client\cm.exe find revision where branch = 'br:/main' and revno != 'CO' "
 				+ "and date between '{0}' and '{1}' on repository 'mainrep' ", fromtime, totime);
-            string dateformat = string.Format("--dateformat=\"{0}\" ", PlasticSCM.DATEFORMAT);
-            string format = string.Format("--format=\"{0}\"", PlasticSCM.FORMAT);
+            string dateformat = string.Format(System.Globalization.CultureInfo.CurrentCulture,"--dateformat=\"{0}\" ", PlasticSCM.DATEFORMAT);
+            string format = string.Format(System.Globalization.CultureInfo.CurrentCulture,"--format=\"{0}\"", PlasticSCM.FORMAT);
 
             ProcessInfo info = plasticscm.CreateQueryProcessInfo(from, to);
 			Assert.AreEqual (query + dateformat + format, info.FileName + " " + info.Arguments);

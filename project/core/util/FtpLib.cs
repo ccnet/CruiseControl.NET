@@ -114,7 +114,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                     {
 
                         string localTargetFolder = System.IO.Path.Combine(localFolder, currentFileOrDirectory.Name);
-                        string ftpTargetFolder = string.Format("{0}/{1}", remoteFolder, currentFileOrDirectory.Name);
+                        string ftpTargetFolder = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/{1}", remoteFolder, currentFileOrDirectory.Name);
 
                         if (!System.IO.Directory.Exists(localTargetFolder))
                         {
@@ -248,7 +248,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 }
 
                 LocalTargetFolder = System.IO.Path.Combine(localFolder, Folder);
-                FtpTargetFolder = string.Format("{0}/{1}", remoteFolder, Folder);
+                FtpTargetFolder = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/{1}", remoteFolder, Folder);
 
                 UploadFolder(FtpTargetFolder, LocalTargetFolder, recursive);
             }
@@ -304,7 +304,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                     {
 
                         LocalTargetFolder = System.IO.Path.Combine(localFolder, CurrentFileOrDirectory.Name);
-                        FtpTargetFolder = string.Format("{0}/{1}", remoteFolder, CurrentFileOrDirectory.Name);
+                        FtpTargetFolder = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/{1}", remoteFolder, CurrentFileOrDirectory.Name);
 
                         if (!System.IO.Directory.Exists(LocalTargetFolder))
                         {

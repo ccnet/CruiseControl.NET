@@ -191,7 +191,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description)
                                                                            ? Description
-                                                                           : string.Format("Executing {0}", Executable)); 
+                                                                           : string.Format(System.Globalization.CultureInfo.CurrentCulture,"Executing {0}", Executable)); 
             
 			ProcessInfo processInfo = NewProcessInfoFrom(result);
 
@@ -247,7 +247,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}
 			catch (IOException e)
 			{
-				throw new BuilderException(this, string.Format("Unable to execute: {0}\n{1}", info, e), e);
+				throw new BuilderException(this, string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to execute: {0}\n{1}", info, e), e);
 			}
 		}
 

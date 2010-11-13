@@ -398,7 +398,7 @@
             var failureCount = 0;
             for (var loop = 0; loop < tasks.Length; loop++)
             {
-                var taskName = string.Format("{0} [{1}]", tasks[loop].GetType().Name, loop);
+                var taskName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} [{1}]", tasks[loop].GetType().Name, loop);
                 logger.Debug("Starting task '{0}'", taskName);
                 try
                 {

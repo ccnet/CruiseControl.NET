@@ -332,7 +332,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
 
             // Change the password
             LogEvent(null, currentUser, SecurityEvent.ResetPassword, SecurityRight.Allow,
-                string.Format("Reset password for '{0}'", userName));
+                string.Format(System.Globalization.CultureInfo.CurrentCulture,"Reset password for '{0}'", userName));
             IAuthentication user = RetrieveUser(userName);
             if (user == null) throw new SessionInvalidException();
             user.ChangePassword(newPassword);

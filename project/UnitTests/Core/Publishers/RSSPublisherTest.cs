@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             List<Modification> modifications = new List<Modification>();
             for (int loop = 0; loop < numberOfModifications; loop++)
             {
-                modifications.Add(GenerateModification(string.Format("modification #{0}", loop + 1), "Add"));
+                modifications.Add(GenerateModification(string.Format(System.Globalization.CultureInfo.CurrentCulture,"modification #{0}", loop + 1), "Add"));
             }
             result.Modifications = modifications.ToArray();
             result.ArtifactDirectory = Path.GetTempPath();
@@ -116,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         {
             Stream resourceStream = Assembly.GetExecutingAssembly()
                 .GetManifestResourceStream(
-                    string.Format("ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Rss.{0}.xml",
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Rss.{0}.xml",
                         resourceName));
             string expected;
             using (StreamReader reader = new StreamReader(resourceStream))

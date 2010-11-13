@@ -80,7 +80,7 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
         #region server_IntegrationStarted()
         private void server_IntegrationStarted(object sender, IntegrationStartedEventArgs e)
         {
-            Log.Debug(string.Format("Checking if '{0}' can integrate", e.ProjectName));
+            Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Checking if '{0}' can integrate", e.ProjectName));
             int numberOfRequests = 0;
             string[] currentRequests = new string[0];
             lock (updateLock)
@@ -91,12 +91,12 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
             }
             if (numberOfRequests <= numberOfRequestsAllowed)
             {
-                Log.Debug(string.Format("'{0}' can integrate", e.ProjectName));
+                Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"'{0}' can integrate", e.ProjectName));
                 e.Result = IntegrationStartedEventArgs.EventResult.Continue;
             }
             else
             {
-                Log.Debug(string.Format("'{0}' is delayed - number of requests ({1}) has been exceeded ({2})", 
+                Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"'{0}' is delayed - number of requests ({1}) has been exceeded ({2})", 
                     e.ProjectName, 
                     numberOfRequestsAllowed, 
                     numberOfRequests));

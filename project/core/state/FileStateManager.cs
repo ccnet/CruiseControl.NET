@@ -129,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			}
 			catch (Exception e)
 			{
-				throw new CruiseControlException(string.Format("Unable to read the specified state file: {0}.  The path may be invalid.", stateFilePath), e);				
+				throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to read the specified state file: {0}.  The path may be invalid.", stateFilePath), e);				
 			}
 		}
 
@@ -151,7 +151,7 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			catch (SystemException e)
 			{
 				throw new CruiseControlException(
-					string.Format("Unable to save the IntegrationResult to the specified directory: {0}{1}{2}",
+					string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to save the IntegrationResult to the specified directory: {0}{1}{2}",
                         path, Environment.NewLine, buffer),
                     e);
 			}

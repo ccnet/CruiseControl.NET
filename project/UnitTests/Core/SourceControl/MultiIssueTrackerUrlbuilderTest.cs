@@ -16,8 +16,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         const string replacementString = "EndOfLine";
 
 
-        private string defaultIssueConfig = string.Format("<defaultIssueTracker><url>{0}</url></defaultIssueTracker>", UrlFromConfigFile);
-        private string regexIssueConfig = string.Format("<regexIssueTracker><find>{0}</find><replace>{1}</replace></regexIssueTracker>", searchString, replacementString);
+        private string defaultIssueConfig = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<defaultIssueTracker><url>{0}</url></defaultIssueTracker>", UrlFromConfigFile);
+        private string regexIssueConfig = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<regexIssueTracker><find>{0}</find><replace>{1}</replace></regexIssueTracker>", searchString, replacementString);
 
  
         [Test]
@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         [Test]
         public void ValuePopulation_DefaultIssue()
         {
-            string configFile = string.Format("<issueUrlBuilder type=\"multiIssueTracker\"><issueTrackers>{0}</issueTrackers></issueUrlBuilder>", defaultIssueConfig);
+            string configFile = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<issueUrlBuilder type=\"multiIssueTracker\"><issueTrackers>{0}</issueTrackers></issueUrlBuilder>", defaultIssueConfig);
 
             MultiIssueTrackerUrlBuilder multiIssue = new MultiIssueTrackerUrlBuilder();
             NetReflector.Read(configFile, multiIssue);
@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         [Test]
         public void ValuePopulation_RegExIssue()
         {
-            string configFile = string.Format("<issueUrlBuilder type=\"multiIssueTracker\"><issueTrackers>{0}</issueTrackers></issueUrlBuilder>", regexIssueConfig);
+            string configFile = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<issueUrlBuilder type=\"multiIssueTracker\"><issueTrackers>{0}</issueTrackers></issueUrlBuilder>", regexIssueConfig);
 
             MultiIssueTrackerUrlBuilder multiIssue = new MultiIssueTrackerUrlBuilder();
             NetReflector.Read(configFile, multiIssue);
@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         [Test]
         public void ValuePopulation_DefaultissueAndRegExIssue()
         {
-            string configFile = string.Format("<issueUrlBuilder type=\"multiIssueTracker\"><issueTrackers>{0}{1}</issueTrackers></issueUrlBuilder>",defaultIssueConfig, regexIssueConfig);
+            string configFile = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<issueUrlBuilder type=\"multiIssueTracker\"><issueTrackers>{0}{1}</issueTrackers></issueUrlBuilder>",defaultIssueConfig, regexIssueConfig);
 
             MultiIssueTrackerUrlBuilder multiIssue = new MultiIssueTrackerUrlBuilder();
             NetReflector.Read(configFile, multiIssue);

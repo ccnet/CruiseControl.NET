@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			IntegrationRequest request = base.Fire();
 			if (request ==  null) return null;
 
-			Log.Debug(string.Format("More than {0} seconds since last integration, checking url.", IntervalSeconds));
+			Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"More than {0} seconds since last integration, checking url.", IntervalSeconds));
 			if (HasUrlChanged())
 			{
 				return new IntegrationRequest(BuildCondition, Name, null);

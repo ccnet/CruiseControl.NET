@@ -288,7 +288,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
         private void UpdatePackagesList(PackageManifest manifest, XmlDocument packageList, bool addPackage)
         {
             XmlElement packageElement = packageList.SelectSingleNode(
-                string.Format("/packages/package[@name='{0}']",
+                string.Format(System.Globalization.CultureInfo.CurrentCulture,"/packages/package[@name='{0}']",
                 manifest.Name)) as XmlElement;
             if (packageElement == null)
             {

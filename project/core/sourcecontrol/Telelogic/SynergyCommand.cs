@@ -181,7 +181,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 						if (IsDatabaseProtected(result.StandardError, connection.Host, connection.Database))
 						{
 							// sleep the thread for timeout until the database is unprotected
-							Log.Warning(String.Format("Database {0} on Host {1} Is Protected.  Waiting 60 seconds to reconnect.", connection.Host, connection.Database));
+							Log.Warning(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Database {0} on Host {1} Is Protected.  Waiting 60 seconds to reconnect.", connection.Host, connection.Database));
 							Thread.Sleep(new TimeSpan(0, 1, 0));
 
 							// save the original timeout
@@ -502,11 +502,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 
 			if (result.Failed && failOnError)
 			{
-				string message = String.Format("Synergy source control operation failed.\r\n" + "Command: \"{0}\" {1}\r\n" + "Error Code: {2}\r\n" + "Errors:\r\n{3}\r\n{4}", processInfo.FileName, processInfo.PublicArguments, result.ExitCode, result.StandardError, result.StandardOutput);
+				string message = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Synergy source control operation failed.\r\n" + "Command: \"{0}\" {1}\r\n" + "Error Code: {2}\r\n" + "Errors:\r\n{3}\r\n{4}", processInfo.FileName, processInfo.PublicArguments, result.ExitCode, result.StandardError, result.StandardOutput);
 
 				if (result.HasErrorOutput)
 				{
-					Log.Warning(string.Format("Synergy wrote output to stderr: {0}", result.StandardError));
+					Log.Warning(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Synergy wrote output to stderr: {0}", result.StandardError));
 				}
 
 				throw(new CruiseControlException(message));

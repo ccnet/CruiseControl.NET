@@ -297,11 +297,11 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 		{
 			if( 0 != _pathOverrideViewWorkingDir.Length )
 			{
-				formatted = String.Concat(formatted," -rp ",String.Format("\"{0}\" ",_pathOverrideViewWorkingDir));
+				formatted = String.Concat(formatted," -rp ",string.Format(System.Globalization.CultureInfo.CurrentCulture,"\"{0}\" ",_pathOverrideViewWorkingDir));
 			}
 			else if( 0 != _pathOverrideFolderWorkingDir.Length )
 			{
-				formatted = String.Concat(formatted," -fp ",String.Format("\"{0}\" ",_pathOverrideFolderWorkingDir));
+				formatted = String.Concat(formatted," -fp ",string.Format(System.Globalization.CultureInfo.CurrentCulture,"\"{0}\" ",_pathOverrideFolderWorkingDir));
 			}
 		}
 

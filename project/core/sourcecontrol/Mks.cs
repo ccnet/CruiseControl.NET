@@ -145,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			
             // Modifications (includes adds and deletes!)
             ProcessInfo info = NewProcessInfoWithArgs(BuildSandboxModsCommand());
-            Log.Info(string.Format("Getting Modifications (mods): {0} {1}", info.FileName, info.Arguments));
+            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Getting Modifications (mods): {0} {1}", info.FileName, info.Arguments));
             Modification[] modifications = GetModifications(info, from.StartTime, to.StartTime);
 
             AddMemberInfoToModifiedOrAddedModifications(modifications);

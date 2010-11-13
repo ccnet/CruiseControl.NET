@@ -335,7 +335,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Modification m,
 			bool expectedResult) 
 		{
-			return string.Format("{0}/{1} should be {2}.",
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/{1} should be {2}.",
 				m.FolderName,
 				m.FileName,
 				expectedResult ? "accepted" : "rejected");

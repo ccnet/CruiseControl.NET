@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
         public static void Matches(XmlNode source, string xpath, string expectedValue)
         {
             XmlNode node = source.SelectSingleNode(xpath);
-            Assert.IsNotNull(node, string.Format("Expected to find match for xpath {0} in xml:\n {1}", xpath, source.OuterXml));
+            Assert.IsNotNull(node, string.Format(System.Globalization.CultureInfo.CurrentCulture,"Expected to find match for xpath {0} in xml:\n {1}", xpath, source.OuterXml));
             Assert.AreEqual(node.InnerText, expectedValue, "Unexpected value for xpath " + xpath);
         }
 

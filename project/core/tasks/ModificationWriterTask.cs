@@ -127,7 +127,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         	FileInfo fi = new FileInfo(Filename);
         	string dummy = Filename.Remove(Filename.Length - fi.Extension.Length, fi.Extension.Length);
-        	string newFileName = string.Format("{0}_{1}{2}", dummy, result.StartTime.ToString("yyyyMMddHHmmssfff"),
+        	string newFileName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}_{1}{2}", dummy, result.StartTime.ToString("yyyyMMddHHmmssfff"),
         	                                   fi.Extension);
 
         	return Path.Combine(result.BaseFromArtifactsDirectory(OutputPath), newFileName);

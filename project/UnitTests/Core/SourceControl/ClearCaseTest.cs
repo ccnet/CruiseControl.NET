@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			const string name = "baselinename";
 			ProcessInfo info = clearCase.CreateTempBaselineProcessInfo(name);
-			Assert.AreEqual(string.Format("{0} mkbl -view {1} -identical {2}",
+			Assert.AreEqual(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} mkbl -view {1} -identical {2}",
 			                              EXECUTABLE,
 			                              VIEWNAME,
 			                              name),
@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void CanCreateRemoveBaselineProcessInfo()
 		{
 			ProcessInfo info = clearCase.CreateRemoveBaselineProcessInfo();
-			Assert.AreEqual(string.Format("{0} rmbl -force {1}@\\{2}",
+			Assert.AreEqual(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} rmbl -force {1}@\\{2}",
 			                              EXECUTABLE,
 			                              clearCase.TempBaseline,
 			                              clearCase.ProjectVobName),
@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			const string newName = "HiImANewBaselineName";
 			ProcessInfo info = clearCase.CreateRenameBaselineProcessInfo(newName);
-			Assert.AreEqual(string.Format("{0} rename baseline:{1}@\\{2} \"{3}\"",
+			Assert.AreEqual(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} rename baseline:{1}@\\{2} \"{3}\"",
 			                              EXECUTABLE,
 			                              clearCase.TempBaseline,
 			                              clearCase.ProjectVobName,

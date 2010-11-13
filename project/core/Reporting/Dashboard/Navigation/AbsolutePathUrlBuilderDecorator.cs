@@ -33,11 +33,11 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 			get { return decoratedUrlBuilder.Extension; }
 		}
 
-		// return string.Format("{0}://{1}:{2}{3}/{4}", context.Request.Url.Scheme, context.Request.Url.Host, context.Request.Url.Port, context.Request.ApplicationPath, relativePath);
+		// return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}://{1}:{2}{3}/{4}", context.Request.Url.Scheme, context.Request.Url.Host, context.Request.Url.Port, context.Request.ApplicationPath, relativePath);
 
 		private string Decorate(string relativeUrl)
 		{
-			return string.Format("{0}{1}{2}", basePath, basePath.EndsWith("/") ? string.Empty : "/", relativeUrl);
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}{1}{2}", basePath, basePath.EndsWith("/") ? string.Empty : "/", relativeUrl);
 		}
 	}
 }

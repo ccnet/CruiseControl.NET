@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private string reference;
 
         public BadReferenceException(string reference)
-            : this(reference, string.Format("Reference '{0}' is either incorrect or missing.", reference), null)
+            : this(reference, string.Format(System.Globalization.CultureInfo.CurrentCulture,"Reference '{0}' is either incorrect or missing.", reference), null)
         {
         }
         public BadReferenceException(string reference, string s) : this(reference, s, null) { }

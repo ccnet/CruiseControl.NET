@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			ProcessResult result = executor.Execute(processInfo);
 			if (result.ExitCode != ProcessResult.SUCCESSFUL_EXIT_CODE)
 			{
-				throw new CruiseControlException(string.Format("Failed to Initialize client (exit code was {0}).\r\nStandard output was: {1}\r\nStandard error was {2}", result.ExitCode, result.StandardOutput, result.StandardError));
+				throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Failed to Initialize client (exit code was {0}).\r\nStandard output was: {1}\r\nStandard error was {2}", result.ExitCode, result.StandardOutput, result.StandardError));
 			}
 		}
 
@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		{
 			if (p4.Client == null || p4.Client == string.Empty)
 			{
-				p4.Client = string.Format("{0}-{1}-{2}", ClientPrefix, Dns.GetHostName(), projectName);
+				p4.Client = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}-{1}-{2}", ClientPrefix, Dns.GetHostName(), projectName);
 			}
 		}
 
@@ -64,13 +64,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		{
 			if (!Path.IsPathRooted(directory))
 			{
-				throw new CruiseControlException(string.Format("Working directory [{0}] does not represent an absolute path", directory));
+				throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Working directory [{0}] does not represent an absolute path", directory));
 			}
 		}
 
 		private string CreateClientSpecification(P4 p4, string workingDirectory)
 		{
-			return string.Format("Client: {0}\n\nRoot:   {1}\n\nView:\n{2}", p4.Client, workingDirectory, GenerateClientView(p4.ViewForSpecifications, p4.Client));
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Client: {0}\n\nRoot:   {1}\n\nView:\n{2}", p4.Client, workingDirectory, GenerateClientView(p4.ViewForSpecifications, p4.Client));
 		}
 
 		private string GenerateClientView(string[] view, string client)
@@ -78,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			StringBuilder builder = new StringBuilder();
 			foreach (string viewLine in view)
 			{
-				builder.Append(string.Format(" {0} {1}", viewLine, viewLine.Insert(2, client + "/")));
+				builder.Append(string.Format(System.Globalization.CultureInfo.CurrentCulture," {0} {1}", viewLine, viewLine.Insert(2, client + "/")));
 				builder.Append("\n");
 			}
 			return builder.ToString();

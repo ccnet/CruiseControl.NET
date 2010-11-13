@@ -24,7 +24,7 @@
         {
             DiagnoseSecurityRequest request = new DiagnoseSecurityRequest();
             string actual = request.ToString();
-            string expected = string.Format("<diagnoseSecurityMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+            string expected = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<diagnoseSecurityMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
                 "timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" source=\"{1}\" />",
                 request.Identifier,
                 request.SourceName,
@@ -44,7 +44,7 @@
             request.Timestamp = DateTime.Now;
             request.Projects.Add("test project");
             string actual = request.ToString();
-            string expected = string.Format("<diagnoseSecurityMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+            string expected = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<diagnoseSecurityMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
                 "timestamp=\"{4:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" server=\"{1}\" source=\"{2}\" session=\"{3}\" userName=\"{5}\">" +
                 "<project>test project</project>" +
                 "</diagnoseSecurityMessage>",

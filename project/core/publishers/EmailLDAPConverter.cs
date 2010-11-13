@@ -136,7 +136,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
             else
             {
-                Core.Util.Log.Debug(string.Format("No email adress found for user {0} in domain {1}",username,domainName));
+                Core.Util.Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"No email adress found for user {0} in domain {1}",username,domainName));
                 return null;
             }
         }

@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.Service
 
 		public override string HelpText
 		{
-			get { return string.Format("Usage: installutil [/u] [/{0}=MyCCService] ccnet.service.exe", ServiceNameSwitch); }
+			get { return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Usage: installutil [/u] [/{0}=MyCCService] ccnet.service.exe", ServiceNameSwitch); }
 		}
 
 		protected override void OnBeforeInstall(IDictionary stateSaver)

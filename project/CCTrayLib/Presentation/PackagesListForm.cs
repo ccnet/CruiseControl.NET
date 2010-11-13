@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 // Now we can do the actual monitor change
                 if (changeMonitor)
                 {
-                    Text = string.Format("Available Packages for {0} [{1}]",
+                    Text = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Available Packages for {0} [{1}]",
                         value.Detail.ProjectName,
                         value.Detail.ServerName);
                     project = value;
@@ -90,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private void listLoader_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             loadStopwatch.Stop();
-            statusLabel.Text = string.Format("Package list loaded ({0:0.00}s)",
+            statusLabel.Text = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Package list loaded ({0:0.00}s)",
                 Convert.ToDouble(loadStopwatch.ElapsedMilliseconds) / 1000);
             if (currentError == null)
             {
@@ -123,16 +123,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             if (size > 1048576)
             {
                 workingSize = workingSize / 1048576;
-                return string.Format("{0:0.00}Mb", workingSize);
+                return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0:0.00}Mb", workingSize);
             }
             else if (size > 1024)
             {
                 workingSize = workingSize / 1024;
-                return string.Format("{0:0.00}Kb", workingSize);
+                return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0:0.00}Kb", workingSize);
             }
             else
             {
-                return string.Format("{0}b", workingSize);
+                return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}b", workingSize);
             }
         }
 
@@ -171,7 +171,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                         downloadList.Add(item.Tag as PackageDetails);
                     }
                     packages = downloadList.ToArray();
-                    statusLabel.Text = string.Format("Downloading packages (0 of {0})", downloadList.Count);
+                    statusLabel.Text = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Downloading packages (0 of {0})", downloadList.Count);
                     currentError = null;
                     downloader.RunWorkerAsync();
                 }
@@ -218,7 +218,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
         private void downloader_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            statusLabel.Text = string.Format("Downloading packages ({1} of {0})", 
+            statusLabel.Text = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Downloading packages ({1} of {0})", 
                 packages.Length,
                 e.ProgressPercentage);
         }

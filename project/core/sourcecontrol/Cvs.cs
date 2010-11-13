@@ -324,7 +324,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			AppendCvsRoot(buffer);
-			buffer.AppendArgument(string.Format("tag {0}{1}", TagPrefix, ConvertIllegalCharactersInLabel(result)));
+			buffer.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"tag {0}{1}", TagPrefix, ConvertIllegalCharactersInLabel(result)));
 			return NewProcessInfoWithArgs(result, buffer.ToString());
 		}
 

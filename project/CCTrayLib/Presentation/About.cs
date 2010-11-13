@@ -13,8 +13,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         public About()
         {
             InitializeComponent();
-            this.Text = String.Format("About {0}", AssemblyTitle);
-            this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
+            this.Text = string.Format(System.Globalization.CultureInfo.CurrentCulture,"About {0}", AssemblyTitle);
+            this.labelVersion.Text = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Version {0}", AssemblyVersion);
             this.labelCopyright.Text += Environment.NewLine + Environment.NewLine + AssemblyCopyright;
         }
 

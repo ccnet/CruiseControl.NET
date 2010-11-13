@@ -435,7 +435,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Administration
             // Pass on the details
             if (!string.IsNullOrEmpty(name))
             {
-                velocityContext["Result"] = string.Format("Package '{0}' has been removed",
+                velocityContext["Result"] = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Package '{0}' has been removed",
                             name);
             }
             else

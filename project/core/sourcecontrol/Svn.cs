@@ -462,7 +462,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             }
             else
             {
-                Util.Log.Warning(string.Format("{0} is not a svn working folder", wd));
+                Util.Log.Warning(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} is not a svn working folder", wd));
             }
 
             List<Modification> modifications = new List<Modification>();
@@ -703,7 +703,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             var buffer = new PrivateArguments("log");
             buffer.Add(null, url, true);
-            buffer.Add(string.Format("-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
+            buffer.Add(string.Format(System.Globalization.CultureInfo.CurrentCulture,"-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
             buffer.Add("--verbose --xml");
             AppendCommonSwitches(buffer, url != this.TrunkUrl);
             return NewProcessInfo(buffer, to);
@@ -714,7 +714,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             var buffer = new PrivateArguments("log");
             buffer.Add(null, url, true);
-            buffer.Add(string.Format("-r {0}:HEAD", string.IsNullOrEmpty(lastRevision) ? "0" : lastRevision));
+            buffer.Add(string.Format(System.Globalization.CultureInfo.CurrentCulture,"-r {0}:HEAD", string.IsNullOrEmpty(lastRevision) ? "0" : lastRevision));
             buffer.Add("--verbose --xml");
             AppendCommonSwitches(buffer, url != this.TrunkUrl);
             return NewProcessInfo(buffer, to);
@@ -773,7 +773,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private static string TagMessage(string label)
         {
-            return string.Format("-m \"CCNET build {0}\"", label);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"-m \"CCNET build {0}\"", label);
         }
 
         private string TagSource(IIntegrationResult result)
@@ -787,7 +787,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private string TagDestination(string label)
         {
-            return string.Format("{0}/{1}", TagBaseUrl, label);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/{1}", TagBaseUrl, label);
         }
 
         private void AppendCommonSwitches(PrivateArguments buffer)

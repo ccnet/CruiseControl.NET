@@ -351,7 +351,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			var builder = new PrivateArguments();
 			builder.Add("history ", Project, true);
 			builder.Add(RecursiveCommandLineOption);
-			builder.Add(string.Format("-Vd{0}~{1}", locale.FormatCommandDate(to), locale.FormatCommandDate(from)));
+			builder.Add(string.Format(System.Globalization.CultureInfo.CurrentCulture,"-Vd{0}~{1}", locale.FormatCommandDate(to), locale.FormatCommandDate(from)));
 			AppendUsernameAndPassword(builder);
 			builder.Add("-I-Y");
             builder.Add(null, "-O@" + tempOutputFileName, true);

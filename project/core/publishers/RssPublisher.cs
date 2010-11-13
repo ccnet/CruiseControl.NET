@@ -198,7 +198,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 case 1:
                     return "1 changed file found in build";
                 default:
-                    return string.Format("{0} changed files found in build", result.Modifications.Length);
+                    return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} changed files found in build", result.Modifications.Length);
             }
         }
 

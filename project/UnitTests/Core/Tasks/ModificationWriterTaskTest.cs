@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         {
 
             IntegrationResult result = IntegrationResultMother.CreateSuccessful();
-            string newFileName = string.Format("artifactDir\\modifications_{0}.xml",result.StartTime.ToString("yyyyMMddHHmmssfff"));
+            string newFileName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"artifactDir\\modifications_{0}.xml",result.StartTime.ToString("yyyyMMddHHmmssfff"));
 
             mockIO.Expect("Save", newFileName , new IsValidXml().And(new HasChildElements(2)));
 
@@ -83,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         {
 
             IntegrationResult result = IntegrationResultMother.CreateSuccessful();
-            string newFileName = string.Format("artifactDir\\output_{0}.xml", result.StartTime.ToString("yyyyMMddHHmmssfff"));
+            string newFileName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"artifactDir\\output_{0}.xml", result.StartTime.ToString("yyyyMMddHHmmssfff"));
             mockIO.Expect("Save", newFileName, new IsValidXml().And(new HasChildElements(0)));
 
             result.ArtifactDirectory = "artifactDir";
@@ -111,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         public void ShouldRebaseDirectoryRelativeToArtifactDirWithBuildTimeAppended()
         {
             IntegrationResult result = IntegrationResultMother.CreateSuccessful();
-            string newFileName = string.Format("artifactDir\\relativePath\\modifications_{0}.xml", result.StartTime.ToString("yyyyMMddHHmmssfff"));
+            string newFileName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"artifactDir\\relativePath\\modifications_{0}.xml", result.StartTime.ToString("yyyyMMddHHmmssfff"));
 
             mockIO.Expect("Save", newFileName, new IsValidXml().And(new HasChildElements(0)));
 
@@ -139,7 +139,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         public void ShouldWriteXmlUsingUTF8EncodingWithBuildTimeAppended()
         {
             IntegrationResult result = IntegrationResultMother.CreateSuccessful();
-            string newFileName = string.Format("artifactDir\\modifications_{0}.xml", result.StartTime.ToString("yyyyMMddHHmmssfff"));
+            string newFileName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"artifactDir\\modifications_{0}.xml", result.StartTime.ToString("yyyyMMddHHmmssfff"));
 
             mockIO.Expect("Save", newFileName, new StartsWith("<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
 

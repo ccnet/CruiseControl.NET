@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 
 		private static string ExceptionMessage(string project)
 		{
-			return string.Format("The project '{0}' does not exist on the CCNet server.", project);
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"The project '{0}' does not exist on the CCNet server.", project);
 		}
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)

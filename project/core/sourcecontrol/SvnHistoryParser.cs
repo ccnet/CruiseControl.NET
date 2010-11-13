@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			catch (XmlException ex)
 			{
-				throw new CruiseControlException(string.Format("Unable to load the output from svn: {0}", logText), ex);
+				throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to load the output from svn: {0}", logText), ex);
 			}
 			return log.DocumentElement;
 		}

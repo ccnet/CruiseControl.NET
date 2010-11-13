@@ -74,13 +74,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             IntegrationResult from = IntegrationResultMother.CreateSuccessful(yesterday);
             IntegrationResult to = IntegrationResultMother.CreateSuccessful(today);
   
-            ExpectToExecuteArguments(string.Format("dir /folders /server:{0} \"{1}\" /login:{2},{3}",
+            ExpectToExecuteArguments(string.Format(System.Globalization.CultureInfo.CurrentCulture,"dir /folders /server:{0} \"{1}\" /login:{2},{3}",
                                                    fakeTfsPath,
                                                    fakeProjectPath,
                                                    fakeUsername,
                                                    fakePassword));
 
-            ExpectToExecuteArguments(string.Format("history -noprompt -server:{0} \"{1}\" -version:D{2}~D{3} -recursive -format:detailed /login:{4},{5}",
+            ExpectToExecuteArguments(string.Format(System.Globalization.CultureInfo.CurrentCulture,"history -noprompt -server:{0} \"{1}\" -version:D{2}~D{3} -recursive -format:detailed /login:{4},{5}",
                                                    fakeTfsPath,
                                                    fakeProjectPath,
                                                    FormatCommandDate(from.StartTime),
@@ -100,13 +100,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             vsts.Domain = "testDomain";
             string expectedUsername = vsts.Domain + "\\" + fakeUsername;
 
-            ExpectToExecuteArguments(string.Format("dir /folders /server:{0} \"{1}\" /login:{2},{3}",
+            ExpectToExecuteArguments(string.Format(System.Globalization.CultureInfo.CurrentCulture,"dir /folders /server:{0} \"{1}\" /login:{2},{3}",
                                                    fakeTfsPath,
                                                    fakeProjectPath,
                                                    expectedUsername,
                                                    fakePassword));
 
-            ExpectToExecuteArguments(string.Format("history -noprompt -server:{0} \"{1}\" -version:D{2}~D{3} -recursive -format:detailed /login:{4},{5}",
+            ExpectToExecuteArguments(string.Format(System.Globalization.CultureInfo.CurrentCulture,"history -noprompt -server:{0} \"{1}\" -version:D{2}~D{3} -recursive -format:detailed /login:{4},{5}",
                                                    fakeTfsPath,
                                                    fakeProjectPath,
                                                    FormatCommandDate(from.StartTime),
@@ -128,13 +128,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             vsts.Force = true;
             string expectedUsername = vsts.Domain + "\\" + fakeUsername;
 
-            ExpectToExecuteArguments(string.Format("dir /folders /server:{0} \"{1}\" /login:{2},{3}",
+            ExpectToExecuteArguments(string.Format(System.Globalization.CultureInfo.CurrentCulture,"dir /folders /server:{0} \"{1}\" /login:{2},{3}",
                                                    fakeTfsPath,
                                                    fakeProjectPath,
                                                    expectedUsername,
                                                    fakePassword));
 
-            ExpectToExecuteArguments(string.Format("workspaces /computer:{1} -server:{0} /format:detailed \"CCNET\" /login:{2},{3}",
+            ExpectToExecuteArguments(string.Format(System.Globalization.CultureInfo.CurrentCulture,"workspaces /computer:{1} -server:{0} /format:detailed \"CCNET\" /login:{2},{3}",
                                                    fakeTfsPath,
                                                    Environment.MachineName,
                                                    expectedUsername,
@@ -147,7 +147,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                                                    expectedUsername,
                                                    fakePassword));
 
-            string getCommand = string.Format("get /recursive /noprompt /force \"{0}\" /login:{1},{2}",
+            string getCommand = string.Format(System.Globalization.CultureInfo.CurrentCulture,"get /recursive /noprompt /force \"{0}\" /login:{1},{2}",
                                                    DefaultWorkingDirectory,
                                                    expectedUsername,
                                                    fakePassword);
@@ -170,13 +170,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             vsts.Domain = "testDomain";
             string expectedUsername = vsts.Domain + "\\" + fakeUsername;
 
-            ExpectToExecuteArguments(string.Format("dir /folders /server:{0} \"{1}\" /login:{2},{3}",
+            ExpectToExecuteArguments(string.Format(System.Globalization.CultureInfo.CurrentCulture,"dir /folders /server:{0} \"{1}\" /login:{2},{3}",
                                                    fakeTfsPath,
                                                    fakeProjectPath,
                                                    expectedUsername,
                                                    fakePassword));
 
-            ExpectToExecuteArguments(string.Format("workspaces /computer:{1} -server:{0} /format:detailed \"CCNET\" /login:{2},{3}",
+            ExpectToExecuteArguments(string.Format(System.Globalization.CultureInfo.CurrentCulture,"workspaces /computer:{1} -server:{0} /format:detailed \"CCNET\" /login:{2},{3}",
                                                    fakeTfsPath,
                                                    Environment.MachineName,
                                                    expectedUsername,
@@ -189,7 +189,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                                                    expectedUsername,
                                                    fakePassword));
 
-            string getCommand = string.Format("get /recursive /noprompt \"{0}\" /login:{1},{2}",
+            string getCommand = string.Format(System.Globalization.CultureInfo.CurrentCulture,"get /recursive /noprompt \"{0}\" /login:{1},{2}",
                                                    DefaultWorkingDirectory,
                                                    expectedUsername,
                                                    fakePassword);
@@ -211,13 +211,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
             vsts.AutoGetSource = true;
             vsts.Force = true;
 
-            ExpectToExecuteArguments(string.Format("dir /folders /server:{0} \"{1}\" /login:{2},{3}",
+            ExpectToExecuteArguments(string.Format(System.Globalization.CultureInfo.CurrentCulture,"dir /folders /server:{0} \"{1}\" /login:{2},{3}",
                                                    fakeTfsPath,
                                                    fakeProjectPath,
                                                    fakeUsername,
                                                    fakePassword));
 
-            ExpectToExecuteArguments(string.Format("workspaces /computer:{1} -server:{0} /format:detailed \"CCNET\" /login:{2},{3}",
+            ExpectToExecuteArguments(string.Format(System.Globalization.CultureInfo.CurrentCulture,"workspaces /computer:{1} -server:{0} /format:detailed \"CCNET\" /login:{2},{3}",
                                                    fakeTfsPath,
                                                    Environment.MachineName,
                                                    fakeUsername,
@@ -230,7 +230,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                                                    fakeUsername,
                                                    fakePassword));
 
-            string getCommand = string.Format("get /recursive /noprompt /force \"{0}\" /login:{1},{2}",
+            string getCommand = string.Format(System.Globalization.CultureInfo.CurrentCulture,"get /recursive /noprompt /force \"{0}\" /login:{1},{2}",
                                                    DefaultWorkingDirectory,
                                                    fakeUsername,
                                                    fakePassword);

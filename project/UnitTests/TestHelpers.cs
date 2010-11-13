@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests
             }
             catch (Exception error)
             {
-                Assert.Fail(string.Format("Unable to serialise: {0}", error.Message));
+                Assert.Fail(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to serialise: {0}", error.Message));
             }
 
             stream.Position = 0;
@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests
             }
             catch (Exception error)
             {
-                Assert.Fail(string.Format("Unable to deserialise: {0}", error.Message));
+                Assert.Fail(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unable to deserialise: {0}", error.Message));
             }
             return result;
         }

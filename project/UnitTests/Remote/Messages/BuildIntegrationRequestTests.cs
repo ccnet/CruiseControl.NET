@@ -60,7 +60,7 @@
         {
             BuildIntegrationRequest request = new BuildIntegrationRequest();
             string actual = request.ToString();
-            string expected = string.Format("<integrationMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+            string expected = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<integrationMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
                 "timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" source=\"{1}\" condition=\"{3}\" />",
                 request.Identifier,
                 request.SourceName,
@@ -82,7 +82,7 @@
             request.BuildCondition = BuildCondition.IfModificationExists;
             request.AddBuildValue("value1", "actual value");
             string actual = request.ToString();
-            string expected = string.Format("<integrationMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+            string expected = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<integrationMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
                 "timestamp=\"{4:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" server=\"{1}\" source=\"{2}\" session=\"{3}\" project=\"{5}\" condition=\"{6}\">" + 
                 "<buildValue name=\"value1\" value=\"actual value\" />" + 
                 "</integrationMessage>",

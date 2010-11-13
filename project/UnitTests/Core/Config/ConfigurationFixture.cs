@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
 		public static string GenerateConfigXml(string projectXml)
 		{
-			return string.Format("<cruisecontrol>{0}</cruisecontrol>", projectXml);
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"<cruisecontrol>{0}</cruisecontrol>", projectXml);
 		}
 
         public static string GenerateProjectXml(string name, string queueName, string buildXml, string sourceControlXml, string publishersXml, string historyXml)

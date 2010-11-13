@@ -87,10 +87,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
                 {
                     XPathNavigator integration = dataList.Current;
                     XPathNavigator statistic =
-                        integration.SelectSingleNode(string.Format("statistic[@name='{0}']", relevantStat));
+                        integration.SelectSingleNode(string.Format(System.Globalization.CultureInfo.CurrentCulture,"statistic[@name='{0}']", relevantStat));
 
                     string value = statistic.Value;
-                    Log.Debug(string.Format("Relevant Stat: {0}, Raw Value: {1}", relevantStat, value));
+                    Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Relevant Stat: {0}, Raw Value: {1}", relevantStat, value));
                     ordinateData.Add(GetPlottableValue(relevantStat, value));
                     abscissaData.Add(integration.GetAttribute("build-label", string.Empty));
                 }
@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
                 }
                 catch (Exception)
                 {
-                    throw new Exception(string.Format("Cannot handle value for the statistic {0}", relevantStat));
+                    throw new Exception(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Cannot handle value for the statistic {0}", relevantStat));
                 }
             }
         }

@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			string key = s.ToLower();
 			if (!values.ContainsKey(key))
 			{
-				throw new CruiseControlException(string.Format("Invalid time units specified [{0}]. I understand {1}", s, makeString(values.Keys)));
+				throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Invalid time units specified [{0}]. I understand {1}", s, makeString(values.Keys)));
 			}
 			return (TimeUnits) values[key];
 			

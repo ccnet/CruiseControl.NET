@@ -162,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             if (!queueFound)
             {
                 errorProcesser.ProcessError(new ConfigurationException(
-                    string.Format("An unused queue definition has been found: name '{0}'", this.Name)));
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"An unused queue definition has been found: name '{0}'", this.Name)));
             }
         }
     }

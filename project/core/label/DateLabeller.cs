@@ -98,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			{
 				revision = 1;
 			}
-            return string.Format("{0}.{1}.{2}.{3}",
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}.{1}.{2}.{3}",
                    now.Year.ToString(YearFormat), now.Month.ToString(MonthFormat), now.Day.ToString(DayFormat), revision.ToString(RevisionFormat));
 		}
 

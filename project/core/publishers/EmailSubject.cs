@@ -110,7 +110,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         public override string ToString()
         {
-            return string.Format("EmailSubject: [BuildResult: {0}, subject: {1}]", BuildResult, Value);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"EmailSubject: [BuildResult: {0}, subject: {1}]", BuildResult, Value);
         }
 
     }

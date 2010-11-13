@@ -160,7 +160,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
             else
             {
-                Log.Warning(string.Format("NUnit test output file {0} was not created", outputFile));
+                Log.Warning(string.Format(System.Globalization.CultureInfo.CurrentCulture,"NUnit test output file {0} was not created", outputFile));
             }
             return !nunitResult.Failed;
         }
@@ -172,7 +172,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             nunitArgument.IncludedCategories = IncludedCategories;
             string args = nunitArgument.ToString();
 
-            Log.Debug(string.Format("Running unit tests: {0} {1}", NUnitPath, args));
+            Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Running unit tests: {0} {1}", NUnitPath, args));
 
             ProcessInfo info = new ProcessInfo(NUnitPath, args, result.WorkingDirectory, Priority);
             info.TimeOut = Timeout * 1000;

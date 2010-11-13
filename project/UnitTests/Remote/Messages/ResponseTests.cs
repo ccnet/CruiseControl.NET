@@ -105,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
         {
             Response response = new Response();
             string actual = response.ToString();
-            string expected = string.Format("<response xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+            string expected = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<response xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
                 "timestamp=\"{1:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" result=\"{0}\" />",
                 response.Result,
                 response.Timestamp);
@@ -122,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote.Messages
             response.Result = ResponseResult.Success;
             response.Timestamp = DateTime.Now;
             string actual = response.ToString();
-            string expected = string.Format("<response xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+            string expected = string.Format(System.Globalization.CultureInfo.CurrentCulture,"<response xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
                 "timestamp=\"{2:yyyy-MM-ddTHH:mm:ss.FFFFFFFzzz}\" identifier=\"{0}\" result=\"{1}\">" + 
                 "<error>Error 1</error>" + 
                 "<error>Error 2</error>" + 

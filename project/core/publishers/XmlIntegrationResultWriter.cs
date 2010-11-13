@@ -78,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             // hide the milliseconds
             TimeSpan time = result.TotalIntegrationTime;
-            writer.WriteAttributeString("buildtime", string.Format("{0:d2}:{1:d2}:{2:d2}", time.Hours, time.Minutes, time.Seconds));
+            writer.WriteAttributeString("buildtime", string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0:d2}:{1:d2}:{2:d2}", time.Hours, time.Minutes, time.Seconds));
             if (result.Failed)
             {
                 writer.WriteAttributeString("error", "true");
@@ -202,7 +202,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 else
                 {
                     throw new ArgumentException(
-                                    string.Format("The IntegrationProperty type {0} is not supported yet", value.GetType()));
+                                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"The IntegrationProperty type {0} is not supported yet", value.GetType()));
                 }
             
             }

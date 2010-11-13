@@ -74,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 				if (info.FullName == s)
 					return;
 			}
-			Assert.Fail(String.Format("Element {0} not found in the list", s));
+			Assert.Fail(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Element {0} not found in the list", s));
 		}
 
 		[TearDown]

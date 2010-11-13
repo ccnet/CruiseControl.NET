@@ -126,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             var numberOfTasks = Tasks.Length;
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description)
                 ? Description
-                : string.Format("Running parallel tasks ({0} task(s))", numberOfTasks));
+                : string.Format(System.Globalization.CultureInfo.CurrentCulture,"Running parallel tasks ({0} task(s))", numberOfTasks));
             logger.Info("Starting parallel task with {0} sub-task(s)", numberOfTasks);
 
             // Initialise the arrays
@@ -144,10 +144,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 ThreadPool.QueueUserWorkItem((state) =>
                 {
                     var taskNumber = (int)state;
-                    var taskName = string.Format("{0} [{1}]", Tasks[taskNumber].GetType().Name, taskNumber);
+                    var taskName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} [{1}]", Tasks[taskNumber].GetType().Name, taskNumber);
                     try
                     {
-                        Thread.CurrentThread.Name = string.Format("{0} [Parallel-{1}]", result.ProjectName, taskNumber);
+                        Thread.CurrentThread.Name = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} [Parallel-{1}]", result.ProjectName, taskNumber);
                         logger.Debug("Starting task '{0}'", taskName);
 
                         // Start the actual task

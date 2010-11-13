@@ -224,7 +224,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
             Debug.Assert(str != null);
             Debug.Assert(innerException != null);
 
-            throw new CrontabException(string.Format("'{0}' is not a valid crontab field expression.", str), innerException);
+            throw new CrontabException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"'{0}' is not a valid crontab field expression.", str), innerException);
         }
 
         private void InternalParse(string str, CrontabFieldAccumulator acc)

@@ -44,7 +44,7 @@
 
         public override string ToString()
         {
-            return string.Format("FB Variable: {0} = {1}", Name, Value);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"FB Variable: {0} = {1}", Name, Value);
         }
 
         public FBVariable(string name, string avalue)

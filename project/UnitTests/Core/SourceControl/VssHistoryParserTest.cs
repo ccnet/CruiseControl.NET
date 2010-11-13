@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.IsTrue(parser.IsEntryDelimiter(line), "should recognize as delim");
 
 			line = "*****";
-			Assert.IsTrue(parser.IsEntryDelimiter(line) == false, string.Format("should not recognize as delim '{0}'", line));
+			Assert.IsTrue(parser.IsEntryDelimiter(line) == false, string.Format(System.Globalization.CultureInfo.CurrentCulture,"should not recognize as delim '{0}'", line));
 
 			line = "*****************  Version 4   *****************";
 			Assert.IsTrue(parser.IsEntryDelimiter(line), "should recognize as delim");

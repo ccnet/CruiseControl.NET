@@ -66,12 +66,12 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private string CreateFailedBuildLogFileName()
 		{
-			return string.Format("{0}{1}.xml", FilenamePrefix, FilenameFormattedDateString);
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}{1}.xml", FilenamePrefix, FilenameFormattedDateString);
 		}
 
 		private string CreateSuccessfulBuildLogFileName()
 		{
-			return string.Format("{0}{1}Lbuild.{2}.xml", FilenamePrefix, FilenameFormattedDateString, _label);
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}{1}Lbuild.{2}.xml", FilenamePrefix, FilenameFormattedDateString, _label);
 		}
 
 		public string FilenameFormattedDateString
@@ -213,12 +213,12 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public static string CreateUrl(string filename)
 		{
-			return string.Format("?{0}={1}", LogQueryString, filename);
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"?{0}={1}", LogQueryString, filename);
 		}
 
 		public static string CreateUrl(string filename, string projectname)
 		{
-			return string.Format("{0}&{1}={2}", CreateUrl(filename), ProjectQueryString, projectname);
+			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}&{1}={2}", CreateUrl(filename), ProjectQueryString, projectname);
 		}
 
 		public static string CreateUrl(IIntegrationResult result)

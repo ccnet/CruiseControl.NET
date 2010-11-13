@@ -148,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 
 			// Get the latest source
 			ProcessInfo info = NewProcessInfo(BuildGetSourceArguments(), result);
-			Log.Info(string.Format("Getting source from BitKeeper: {0} {1}", info.FileName, info.PublicArguments));
+			Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Getting source from BitKeeper: {0} {1}", info.FileName, info.PublicArguments));
 			Execute(info);
 
 			// Push any pending labels that failed to push due to remote side having additional revisions
@@ -177,7 +177,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 			{}
 	
 			ProcessInfo ctInfo = NewProcessInfo(BuildCloneToArguments(), result);
-			Log.Info(string.Format("Cloning source to: {0}", clonePath));
+			Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Cloning source to: {0}", clonePath));
 			Execute(ctInfo);
 		}
 

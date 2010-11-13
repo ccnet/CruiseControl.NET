@@ -81,21 +81,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
             if (space > 1073741824)
             {
                 value /= 1073741824;
-                formated = string.Format("{0:#,##0.00} Gb", value);
+                formated = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0:#,##0.00} Gb", value);
             }
             else if (space > 1048576)
             {
                 value /= 1048576;
-                formated = string.Format("{0:#,##0.00} Mb", value);
+                formated = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0:#,##0.00} Mb", value);
             }
             else if (space > 1024)
             {
                 value /= 1024;
-                formated = string.Format("{0:#,##0.00} Kb", value);
+                formated = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0:#,##0.00} Kb", value);
             }
             else
             {
-                formated = string.Format("{0:#,##0} b", space);
+                formated = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0:#,##0} b", space);
             }
 
             return formated;

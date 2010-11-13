@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         public void DrawGraph(IList ordinateData, IList abscissaData, string statisticName)
 		{
 			Bitmap bitmap = Plot(ordinateData, abscissaData);
-			bitmap.Save(Path.Combine(savePath, string.Format("{0}.{1}", statisticName, fileExtension)));
+			bitmap.Save(Path.Combine(savePath, string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}.{1}", statisticName, fileExtension)));
 		}
 
 		/// <summary>

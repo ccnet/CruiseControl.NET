@@ -271,8 +271,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 return string.Empty;
             string quotes = doubleQuotes ? "\"\"" : string.Empty;
             if (Password.Length == 0)
-				return string.Format(" {1}-id\"{0}\"{1} ", Username, quotes);
-            return string.Format(" {2}-id\"{0}\":\"{1}\"{2} ", Username, Password, quotes);
+				return string.Format(System.Globalization.CultureInfo.CurrentCulture," {1}-id\"{0}\"{1} ", Username, quotes);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture," {2}-id\"{0}\":\"{1}\"{2} ", Username, Password, quotes);
         }
 
 		private void ExecuteNonPvcsFunction(string content)
@@ -537,7 +537,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public static string GetDateString(DateTime dateToConvert, DateTimeFormatInfo format)
 		{
-			string pattern = String.Format("{0} {1}", format.ShortDatePattern, format.ShortTimePattern);
+			string pattern = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} {1}", format.ShortDatePattern, format.ShortTimePattern);
 			return dateToConvert.ToString(pattern, format);
 		}
 

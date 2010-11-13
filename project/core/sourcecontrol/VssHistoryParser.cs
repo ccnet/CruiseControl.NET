@@ -215,7 +215,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			catch (Exception e)
 			{
-				throw new CruiseControlException(String.Format("ParseFileNameOther failed on string \"{0}\", type {1}", entry, Keyword), e);
+				throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"ParseFileNameOther failed on string \"{0}\", type {1}", entry, Keyword), e);
 			}
 		}
 

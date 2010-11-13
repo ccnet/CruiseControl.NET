@@ -157,7 +157,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 }
                 catch (Exception)
                 {
-                    throw new CruiseControlException(string.Format("Error attempting to calculate column to sort. Specified column name was [{0}]", columnName));
+                    throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Error attempting to calculate column to sort. Specified column name was [{0}]", columnName));
                 }
             }
 		}

@@ -127,7 +127,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             if (string.IsNullOrEmpty(value)) return;
 			AppendSpaceIfNotEmpty();
 
-			builder.Append(string.Format("{0}{1}{2}", arg, separator, StringUtil.AutoDoubleQuoteString(value)));
+			builder.Append(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}{1}{2}", arg, separator, StringUtil.AutoDoubleQuoteString(value)));
 		}
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         ///// <returns></returns>
         //public static string HideArgument(string value)
         //{
-        //    return string.Format("<hide>{0}</hide>", value);
+        //    return string.Format(System.Globalization.CultureInfo.CurrentCulture,"<hide>{0}</hide>", value);
         //}
 
         ///// <summary>

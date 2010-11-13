@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				if (projectStatus.ConnectException == null)
 					return "Connecting...";
 
-				return string.Format("Error: {0}", projectStatus.ConnectException.Message);
+				return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Error: {0}", projectStatus.ConnectException.Message);
 			}
 
 			string message = GetTimeRemainingMessage(projectStatus);
@@ -69,11 +69,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
                 if (projectStatus.NextBuildTime.Date != DateTime.Now.Date)
                 {
-                    return string.Format("Next build check: {0:G}", projectStatus.NextBuildTime);
+                    return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Next build check: {0:G}", projectStatus.NextBuildTime);
                 }
                 else
                 {
-                    return string.Format("Next build check: {0:T}", projectStatus.NextBuildTime);
+                    return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Next build check: {0:T}", projectStatus.NextBuildTime);
                 }
 			}
 
@@ -85,10 +85,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			{
 				if (durationRemaining <= TimeSpan.Zero)
 				{
-					return string.Format("Taking {0} longer than last build", new CCTimeFormatter(durationRemaining.Negate()));
+					return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Taking {0} longer than last build", new CCTimeFormatter(durationRemaining.Negate()));
 				}
 
-				return string.Format("{0} estimated remaining", new CCTimeFormatter(durationRemaining));
+				return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} estimated remaining", new CCTimeFormatter(durationRemaining));
 			}
             }
 

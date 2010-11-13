@@ -40,17 +40,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
             // also we want the cuise server to wait for 1 minute, otherwise it starts integrating project 1 immediately
             var xdoc = new System.Xml.XmlDocument();
             xdoc.Load(ccNetConfigFile);
-            var xslt = string.Format("/cruisecontrol/project[@name='{0}']/triggers/scheduleTrigger", projectName1);
+            var xslt = string.Format(System.Globalization.CultureInfo.CurrentCulture,"/cruisecontrol/project[@name='{0}']/triggers/scheduleTrigger", projectName1);
             var scheduleTrigger = xdoc.SelectSingleNode(xslt);
 
             if (scheduleTrigger == null)
             {
-                throw new Exception(string.Format("Schedule trigger not found,via xslt {0} in configfile {1}", xslt, ccNetConfigFile));
+                throw new Exception(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Schedule trigger not found,via xslt {0} in configfile {1}", xslt, ccNetConfigFile));
             }
 
             var newIntegrationTime = System.DateTime.Now.AddSeconds(secondsToWaitFromNow).ToString("HH:mm");
             Log("--------------------------------------------------------------------------");
-            Log(string.Format("{0} is scheduled to integrate at {1}", projectName1, newIntegrationTime));
+            Log(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} is scheduled to integrate at {1}", projectName1, newIntegrationTime));
             Log("--------------------------------------------------------------------------");
 
             scheduleTrigger.Attributes["time"].Value = newIntegrationTime;
@@ -146,13 +146,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
 
         void CruiseServerIntegrationCompleted(object sender, CCNet.Remote.Events.IntegrationCompletedEventArgs e)
         {
-            Log(string.Format("Integration complete. Project {0} ", e.ProjectName));
+            Log(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Integration complete. Project {0} ", e.ProjectName));
             IntegrationCompleted[e.ProjectName] = true;
         }
 
         private void Log(string message)
         {
-            System.Diagnostics.Debug.WriteLine(string.Format("{0} {1}", DateTime.Now.ToUniversalTime(), message));
+            System.Diagnostics.Debug.WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} {1}", DateTime.Now.ToUniversalTime(), message));
         }
 
         private void CheckResponse(ThoughtWorks.CruiseControl.Remote.Messages.Response value)

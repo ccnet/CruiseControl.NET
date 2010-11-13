@@ -48,9 +48,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
         private void CheckPart(DynamicValueUtility.PropertyPart part, int position, string name, string keyName, string keyValue)
         {
-            Assert.AreEqual(name, part.Name, string.Format("Part name does not match [{0}]", position));
-            Assert.AreEqual(keyName, part.KeyName, string.Format("Part key name does not match [{0}]", position));
-            Assert.AreEqual(keyValue, part.KeyValue, string.Format("Part key value does not match [{0}]", position));
+            Assert.AreEqual(name, part.Name, string.Format(System.Globalization.CultureInfo.CurrentCulture,"Part name does not match [{0}]", position));
+            Assert.AreEqual(keyName, part.KeyName, string.Format(System.Globalization.CultureInfo.CurrentCulture,"Part key name does not match [{0}]", position));
+            Assert.AreEqual(keyValue, part.KeyValue, string.Format(System.Globalization.CultureInfo.CurrentCulture,"Part key value does not match [{0}]", position));
         }
 
         [Test]

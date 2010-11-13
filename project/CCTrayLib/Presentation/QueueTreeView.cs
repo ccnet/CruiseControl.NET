@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private string GetQueueId(TreeNode treeNode, IntegrationQueueTreeNodeTag tag)
         {
             // Identify the queue using a combination of the server name, the server type and the queue name.
-            return string.Format("{0}:{1}:{2}", treeNode.Parent.Name, treeNode.Parent.ImageIndex, tag.QueueSnapshot.QueueName);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}:{1}:{2}", treeNode.Parent.Name, treeNode.Parent.ImageIndex, tag.QueueSnapshot.QueueName);
         }
     }
 }

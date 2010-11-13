@@ -138,7 +138,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
                 }
                 else
                 {
-                    value = string.Format("{0}->{1}", client.TargetServer, client.Address);
+                    value = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}->{1}", client.TargetServer, client.Address);
                 }
 
                 return value;

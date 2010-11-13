@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         public ForceBuildPublisher(ICruiseServerClientFactory factory)
 		{
 			this.factory = factory;
-            this.ServerUri = string.Format("tcp://localhost:21234/{0}", RemoteCruiseServer.ManagerUri);
+            this.ServerUri = string.Format(System.Globalization.CultureInfo.CurrentCulture,"tcp://localhost:21234/{0}", RemoteCruiseServer.ManagerUri);
             this.IntegrationStatus = IntegrationStatus.Success;
 		}
         /// <summary>

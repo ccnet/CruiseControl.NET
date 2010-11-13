@@ -10,7 +10,7 @@ namespace Validator
         public AboutForm()
         {
             InitializeComponent();
-            versionLabel.Text = String.Format("Version {0}", AssemblyVersion);
+            versionLabel.Text = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Version {0}", AssemblyVersion);
         }
 
         public string AssemblyVersion

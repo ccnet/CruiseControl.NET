@@ -176,22 +176,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             if (!string.IsNullOrEmpty(request.FindParameterStartingWith("StopBuild")))
             {
                 farmService.Stop(projectSpecifier, sessionToken);
-                return string.Format("Stopping project {0}", projectSpecifier.ProjectName);
+                return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Stopping project {0}", projectSpecifier.ProjectName);
             }
             else if (!string.IsNullOrEmpty(request.FindParameterStartingWith("StartBuild")))
             {
                 farmService.Start(projectSpecifier, sessionToken);
-                return string.Format("Starting project {0}", projectSpecifier.ProjectName);
+                return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Starting project {0}", projectSpecifier.ProjectName);
             }
             else if (!string.IsNullOrEmpty(request.FindParameterStartingWith("ForceBuild")))
             {
                 farmService.ForceBuild(projectSpecifier, sessionToken, parameters);
-                return string.Format("Build successfully forced for {0}", projectSpecifier.ProjectName);
+                return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Build successfully forced for {0}", projectSpecifier.ProjectName);
             }
             else if (!string.IsNullOrEmpty(request.FindParameterStartingWith("AbortBuild")))
             {
                 farmService.AbortBuild(projectSpecifier, sessionToken);
-                return string.Format("Abort successfully forced for {0}", projectSpecifier.ProjectName);
+                return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Abort successfully forced for {0}", projectSpecifier.ProjectName);
             }
             else
             {
@@ -288,7 +288,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
                         else
                         {
                             throw new CruiseControlException(
-                                string.Format("unexpected URL format - found {0} REST Specifier, but no following value", specifier));
+                                string.Format(System.Globalization.CultureInfo.CurrentCulture,"unexpected URL format - found {0} REST Specifier, but no following value", specifier));
                         }
                     }
                 }

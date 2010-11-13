@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             if (State == ProjectIntegratorState.Stopping || State == ProjectIntegratorState.Stopped) throw new CruiseControlException("Project is stopping / stopped - unable to start integration");
 
-            Log.Info(string.Format("{0} forced Build for project: {1}", enforcerName, project.Name));
+            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} forced Build for project: {1}", enforcerName, project.Name));
             IntegrationRequest request = new IntegrationRequest(BuildCondition.ForceBuild, enforcerName, enforcerName);
             request.BuildValues = buildValues;
             AddToQueue(request);
@@ -113,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public void AbortBuild(string enforcerName)
         {
-            Log.Info(string.Format("{0} aborted the running Build for project: {1}", enforcerName, project.Name));
+            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} aborted the running Build for project: {1}", enforcerName, project.Name));
             project.AbortRunningBuild(enforcerName);
         }
 
@@ -190,7 +190,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     switch (eventResult)
                     {
                         case IntegrationStartedEventArgs.EventResult.Continue:
-                            Log.Info(string.Format("Project: '{0}' is first in queue: '{1}' and shall start integration.",
+                            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: '{0}' is first in queue: '{1}' and shall start integration.",
                                                    project.Name, project.QueueName));
 
                             IntegrationStatus status = IntegrationStatus.Unknown;
@@ -247,7 +247,7 @@ namespace ThoughtWorks.CruiseControl.Core
                         case IntegrationStartedEventArgs.EventResult.Delay:
                             // Log that the request has been cancelled and delay until the request is cleared - otherwise 
                             // stuck in an endless loop until the extensions allow the request through
-                            Log.Info(string.Format("An external extension has delayed an integration - project '{0}' on queue '{1}'",
+                            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"An external extension has delayed an integration - project '{0}' on queue '{1}'",
                                 project.Name,
                                 project.QueueName));
                             while (FireIntegrationStarted(ir) == IntegrationStartedEventArgs.EventResult.Delay)
@@ -257,7 +257,7 @@ namespace ThoughtWorks.CruiseControl.Core
                             break;
 
                         case IntegrationStartedEventArgs.EventResult.Cancel:
-                            Log.Info(string.Format("An external extension has cancelled an integration - project '{0}' on queue '{1}'",
+                            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"An external extension has cancelled an integration - project '{0}' on queue '{1}'",
                                 project.Name,
                                 project.QueueName));
                             RemoveCompletedRequestFromQueue();
@@ -356,7 +356,7 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 if (State != ProjectIntegratorState.Stopping)
                 {
-                    Log.Info(string.Format("WaitForExit requested for non stopping project '{0}' - stopping project", Name));
+                    Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"WaitForExit requested for non stopping project '{0}' - stopping project", Name));
                     Stop(false);
                 }
 

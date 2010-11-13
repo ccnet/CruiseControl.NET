@@ -68,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                     int queueImageIndex = IntegrationQueueNodeType.QueueEmpty.ImageIndex;
 				    if (!queue.IsEmpty)
 				    {
-                        queueNodeTitle = string.Format("{0} ({1})", queue.QueueName, queue.Requests.Count);
+                        queueNodeTitle = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} ({1})", queue.QueueName, queue.Requests.Count);
                         queueImageIndex = IntegrationQueueNodeType.QueuePopulated.ImageIndex;
 				    }
                     TreeNode queueNode = new TreeNode(queueNodeTitle, queueImageIndex, queueImageIndex);

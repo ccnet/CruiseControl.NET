@@ -166,7 +166,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 			// so we have to check how many digits we got and deal with it
 			int firstSep = date.IndexOf(sep);
 			string dateFormat = (firstSep == 4) ? "yyyy" : "yy";
-			dateFormat += string.Format("'{0}'MM'{0}'dd HH:mm:ss", sep);
+			dateFormat += string.Format(System.Globalization.CultureInfo.CurrentCulture,"'{0}'MM'{0}'dd HH:mm:ss", sep);
 			if (fileHistory != HistoryType.Pre40Verbose)
 				dateFormat += "zzz";
 

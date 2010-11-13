@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             var numberOfTasks = Tasks.Length;
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description)
                 ? Description
-                : string.Format("Running sequential tasks ({0} task(s))", numberOfTasks));
+                : string.Format(System.Globalization.CultureInfo.CurrentCulture,"Running sequential tasks ({0} task(s))", numberOfTasks));
             logger.Info("Starting sequential task with {0} sub-task(s)", numberOfTasks);
 
             // Launch each task
@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             var failureCount = 0;
             for (var loop = 0; loop < numberOfTasks; loop++)
             {
-                var taskName = string.Format("{0} [{1}]", Tasks[loop].GetType().Name, loop);
+                var taskName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} [{1}]", Tasks[loop].GetType().Name, loop);
                 logger.Debug("Starting task '{0}'", taskName);
                 try
                 {

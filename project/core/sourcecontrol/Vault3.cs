@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			_labelApplied = false;
-			Log.Info(string.Format("Checking for modifications to {0} in Vault Repository \"{1}\" between {2} and {3}", _shim.Folder, _shim.Repository, from.StartTime, to.StartTime));
+			Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Checking for modifications to {0} in Vault Repository \"{1}\" between {2} and {3}", _shim.Folder, _shim.Repository, from.StartTime, to.StartTime));
 			ProcessResult result = ExecuteWithRetries(ForHistoryProcessInfo(from, to));
 
             Modification[] modifications = ParseModifications(result, from.StartTime, to.StartTime);
@@ -74,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			else
 			{
-				Log.Info(string.Format("Applying label \"{0}\" to {1} in repository {2}.", result.Label, _shim.Folder, _shim.Repository));
+				Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Applying label \"{0}\" to {1} in repository {2}.", result.Label, _shim.Folder, _shim.Repository));
 				Execute(LabelProcessInfo(result));
 			}
 		}
@@ -90,13 +90,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				_shim.WorkingDirectory = GetVaultWorkingFolder(result);
                 if (string.IsNullOrEmpty(_shim.WorkingDirectory))
 					throw new VaultException(
-						string.Format("Vault user {0} has no working folder set for {1} in repository {2} and no working directory has been specified.",
+						string.Format(System.Globalization.CultureInfo.CurrentCulture,"Vault user {0} has no working folder set for {1} in repository {2} and no working directory has been specified.",
 						              _shim.Username, _shim.Folder, _shim.Repository));
 			}
 
 			if (_shim.ApplyLabel)
 			{
-				Log.Info(string.Format("Applying label \"{0}\" to {1} in repository {2}.", result.Label, _shim.Folder, _shim.Repository));
+				Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Applying label \"{0}\" to {1} in repository {2}.", result.Label, _shim.Folder, _shim.Repository));
 				Execute(LabelProcessInfo(result));
 				_labelApplied = true;
 			}
@@ -126,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			string value = MatchVaultElements.Match(output).Value;
 			if (value.Length == 0)
 			{
-				throw new VaultException(string.Format("The output does not contain the expected <vault> element: {0}", output));
+				throw new VaultException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"The output does not contain the expected <vault> element: {0}", output));
 			}
 			return value;
 		}
@@ -296,8 +296,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 						throw;
 					else
 					{
-						Log.Warning(string.Format("Attempt {0} of {1}: {2}", i+1, _shim.pollRetryAttempts, e.ToString()));
-						Log.Debug(string.Format("Sleeping {0} seconds", _shim.pollRetryWait));
+						Log.Warning(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Attempt {0} of {1}: {2}", i+1, _shim.pollRetryAttempts, e.ToString()));
+						Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Sleeping {0} seconds", _shim.pollRetryWait));
 						Thread.Sleep(_shim.pollRetryWait * 1000);
 					}
 				}

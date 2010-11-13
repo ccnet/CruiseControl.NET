@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private Modification[] GetModificationsFromItemHistory(IIntegrationResult from, IIntegrationResult to)
         {
-            Log.Info(string.Format("Retrieving detailed change list for {0} in Vault Repository \"{1}\" between {2} and {3}", _shim.Folder, _shim.Repository, from.StartTime, to.StartTime));
+            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Retrieving detailed change list for {0} in Vault Repository \"{1}\" between {2} and {3}", _shim.Folder, _shim.Repository, from.StartTime, to.StartTime));
             ProcessResult result = ExecuteWithRetries(ForHistoryProcessInfo(from, to));
             Modification[] itemModifications = ParseModifications(result, from.StartTime, to.StartTime);
             if (itemModifications == null || itemModifications.Length == 0)
@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private bool LookForChangesUsingVersionHistory(IIntegrationResult from, IIntegrationResult to)
         {
-            Log.Info(string.Format("Checking for modifications to {0} in Vault Repository \"{1}\" between {2} and {3}", _shim.Folder, _shim.Repository, from.StartTime, to.StartTime));
+            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Checking for modifications to {0} in Vault Repository \"{1}\" between {2} and {3}", _shim.Folder, _shim.Repository, from.StartTime, to.StartTime));
 
             bool bFoundChanges = GetFolderVersion(from, to);
 
@@ -98,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                     cleanCopyWorkingFolder = GetVaultWorkingFolder(result);
                     if (string.IsNullOrEmpty(cleanCopyWorkingFolder))
                         throw new VaultException(
-                            string.Format("Vault user {0} has no working folder set for {1} in repository {2} and no working directory has been specified.",
+                            string.Format(System.Globalization.CultureInfo.CurrentCulture,"Vault user {0} has no working folder set for {1} in repository {2} and no working directory has been specified.",
                                           _shim.Username, _shim.Folder, _shim.Repository));
                 }
                 else
@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
             Debug.Assert(_folderVersion > 0, "_folderVersion <= 0 when attempting to label.  This shouldn't happen.");
 
-            Log.Info(string.Format("Applying label \"{0}\" to version {1} of {2} in repository {3}.",
+            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Applying label \"{0}\" to version {1} of {2} in repository {3}.",
                                    result.Label, _folderVersion, _shim.Folder, _shim.Repository));
             Execute(LabelProcessInfo(result));
         }

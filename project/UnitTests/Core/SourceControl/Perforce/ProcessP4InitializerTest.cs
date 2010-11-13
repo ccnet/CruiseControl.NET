@@ -61,11 +61,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			p4.View = "//mydepot/...";
 			string projectName = "myProject";
 
-			string expectedClientName = string.Format("CCNet-{0}-{1}", Dns.GetHostName(), projectName);
+			string expectedClientName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"CCNet-{0}-{1}", Dns.GetHostName(), projectName);
 
 			ProcessInfo processInfo = new ProcessInfo("createclient");
 			ProcessInfo processInfoWithStdInContent = new ProcessInfo("createclient");
-			processInfoWithStdInContent.StandardInputContent = string.Format("Client: {0}\n\nRoot:   c:\\my\\working\\dir\n\nView:\n //mydepot/... //{0}/mydepot/...\n", expectedClientName);
+			processInfoWithStdInContent.StandardInputContent = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Client: {0}\n\nRoot:   c:\\my\\working\\dir\n\nView:\n //mydepot/... //{0}/mydepot/...\n", expectedClientName);
 
 			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "client -i");
 			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), processInfoWithStdInContent);
@@ -133,11 +133,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			p4.View = "//mydepot/...";
 			string projectName = "myProject";
 
-			string expectedClientName = string.Format("CCNet-{0}-{1}", Dns.GetHostName(), projectName);
+			string expectedClientName = string.Format(System.Globalization.CultureInfo.CurrentCulture,"CCNet-{0}-{1}", Dns.GetHostName(), projectName);
 
 			ProcessInfo processInfo = new ProcessInfo("createclient");
 			ProcessInfo processInfoWithStdInContent = new ProcessInfo("createclient");
-			processInfoWithStdInContent.StandardInputContent = string.Format("Client: {0}\n\nRoot:   c:\\my\\working\\dir\n\nView:\n //mydepot/... //{0}/mydepot/...\n", expectedClientName);
+			processInfoWithStdInContent.StandardInputContent = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Client: {0}\n\nRoot:   c:\\my\\working\\dir\n\nView:\n //mydepot/... //{0}/mydepot/...\n", expectedClientName);
 
 			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "client -i");
 			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("This is standard out", "This is standard error", 1, false), processInfoWithStdInContent);

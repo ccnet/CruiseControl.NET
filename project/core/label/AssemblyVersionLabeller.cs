@@ -124,7 +124,7 @@
                 if (int.TryParse(integrationResult.LastChangeNumber, out currentRevision))
                 {
                     Log.Debug(
-                        string.Format("[assemblyVersionLabeller] LastChangeNumber retrieved: {0}", 
+                        string.Format(System.Globalization.CultureInfo.CurrentCulture,"[assemblyVersionLabeller] LastChangeNumber retrieved: {0}", 
                         currentRevision));
                 }
                 else
