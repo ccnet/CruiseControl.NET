@@ -93,6 +93,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 	internal class VSSParserFactory
 	{
+        private VSSParserFactory ()
+        {}
+
+
 		public static VSSParser CreateParser(string entry, IVssLocale locale)
 		{
 			string vssKeyworkdLine = ReadVSSKeywordLine(entry);

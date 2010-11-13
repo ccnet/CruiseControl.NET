@@ -3,7 +3,8 @@ Imports Exortech.NetReflector
 Imports ThoughtWorks.CruiseControl.Core
 Imports ThoughtWorks.CruiseControl.Core.Config
 
-<ReflectorType("randomLabeller")> Public Class RandomLabeller
+<ReflectorType("randomLabeller")> _
+Public Class RandomLabeller
     Implements ILabeller, IConfigurationValidation
 
     Public Sub New()

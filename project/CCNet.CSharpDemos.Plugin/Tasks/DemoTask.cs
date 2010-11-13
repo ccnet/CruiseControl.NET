@@ -1,11 +1,11 @@
-﻿namespace CCNet.CSharpDemos.Plugin.Tasks
-{
-    using System;
-    using System.Linq;
-    using System.Xml;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core;
+﻿using System;
+using System.Linq;
+using System.Xml;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core;
 
+namespace CCNet.CSharpDemos.Plugin.Tasks
+{
     [ReflectorType("demoTask")]
     public class DemoTask
         : ITask

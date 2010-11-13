@@ -1,11 +1,11 @@
-﻿namespace CCNet.CSharpDemos.Plugin.SourceControl
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core;
 
+namespace CCNet.CSharpDemos.Plugin.SourceControl
+{
     [ReflectorType("fileSystemSource")]
     public class NewFileSystemSourceControl
         : ISourceControl

@@ -1,9 +1,9 @@
-﻿namespace CCNet.CSharpDemos.Plugin.Extensions
-{
-    using System;
-    using System.Linq;
-    using ThoughtWorks.CruiseControl.Remote;
+﻿using System;
+using System.Linq;
+using ThoughtWorks.CruiseControl.Remote;
 
+namespace CCNet.CSharpDemos.Plugin.Extensions
+{
     public class DoSomething
         : ICruiseServerExtension
     {

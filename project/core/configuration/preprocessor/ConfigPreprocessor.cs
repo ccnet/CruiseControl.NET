@@ -74,6 +74,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 
     internal class AttrName
     {
+        private AttrName()
+        {}
+
         public static XName AssemblyLocation = "assembly-location";
         public static XName CounterName = "counter-name";
         public static XName CountExpr = "count-expr";

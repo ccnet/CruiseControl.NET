@@ -1,13 +1,13 @@
-﻿namespace CCNet.CSharpDemos.Plugin.State
-{
-    using System;
-    using System.IO;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core;
-    using ThoughtWorks.CruiseControl.Core.State;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using ThoughtWorks.CruiseControl.Remote;
+﻿using System;
+using System.IO;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.State;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
+namespace CCNet.CSharpDemos.Plugin.State
+{
     [ReflectorType("plainTextState")]
     public class PlainTextStateManager
         : IStateManager

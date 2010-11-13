@@ -6,6 +6,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 {
     class KillUtil
     {
+
+        private  KillUtil() {}
+
         /// <summary>
         /// Default installation directory for the "Windows 2000 Service Pack 4 Support Tools" package.
         /// </summary>

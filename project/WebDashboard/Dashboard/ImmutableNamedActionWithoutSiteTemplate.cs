@@ -1,5 +1,4 @@
-﻿using System;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+﻿using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {

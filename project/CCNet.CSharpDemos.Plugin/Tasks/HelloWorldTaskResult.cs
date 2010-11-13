@@ -1,7 +1,7 @@
-﻿namespace CCNet.CSharpDemos.Plugin.Tasks
-{
-    using ThoughtWorks.CruiseControl.Core;
+﻿using ThoughtWorks.CruiseControl.Core;
 
+namespace CCNet.CSharpDemos.Plugin.Tasks
+{
     public class HelloWorldTaskResult
         : ITaskResult
     {

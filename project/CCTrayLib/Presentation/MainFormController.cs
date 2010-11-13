@@ -10,7 +10,6 @@ using ThoughtWorks.CruiseControl.CCTrayLib.Speech;
 #endif
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
-using System.Text;
 using ThoughtWorks.CruiseControl.CCTrayLib.Growl;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation

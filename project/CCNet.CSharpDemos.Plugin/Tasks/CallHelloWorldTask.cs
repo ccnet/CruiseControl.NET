@@ -1,10 +1,10 @@
-﻿namespace CCNet.CSharpDemos.Plugin.Tasks
-{
-    using System.Diagnostics;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core;
-    using ThoughtWorks.CruiseControl.Core.Tasks;
+﻿using System.Diagnostics;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 
+namespace CCNet.CSharpDemos.Plugin.Tasks
+{
     [ReflectorType("callHelloWorld")]
     public class CallHelloWorldTask
         : BaseExecutableTask

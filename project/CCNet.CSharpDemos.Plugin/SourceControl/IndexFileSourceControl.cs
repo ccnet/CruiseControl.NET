@@ -1,10 +1,10 @@
-﻿namespace CCNet.CSharpDemos.Plugin.SourceControl
-{
-    using System;
-    using System.IO;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core;
+﻿using System;
+using System.IO;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core;
 
+namespace CCNet.CSharpDemos.Plugin.SourceControl
+{
     [ReflectorType("indexFileSource")]
     public class IndexFileSourceControl
         : ISourceControl

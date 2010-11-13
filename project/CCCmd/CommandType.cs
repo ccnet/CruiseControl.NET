@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ThoughtWorks.CruiseControl.CCCmd
+﻿namespace ThoughtWorks.CruiseControl.CCCmd
 {
     public enum CommandType
     {

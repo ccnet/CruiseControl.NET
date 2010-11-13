@@ -8,10 +8,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     public interface IEmailConverter
     {
         /// <summary>
-        /// Apply the conversion from username to email address.
+        /// Apply the conversion from userName to email address.
         /// </summary>
-        /// <param name="username">The username.</param>
+        /// <param name="userName">The username.</param>
         /// <returns>The email address.</returns>
-        string Convert(string username);
+        string Convert(string userName);
     }
 }

@@ -17,6 +17,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// </summary>
     internal class Utils
     {
+        private  Utils()
+        {}
+
         /// <summary>
         /// Create a XML writer with the following settings:
         /// Indent = true;
@@ -34,8 +37,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             writer_settings.Encoding = Encoding.UTF8;
             writer_settings.ConformanceLevel = ConformanceLevel.Document;
             writer_settings.NewLineChars = "\n";
-            writer_settings.NewLineHandling = NewLineHandling.Replace;            
-            return XmlWriter.Create( url, writer_settings );
+            writer_settings.NewLineHandling = NewLineHandling.Replace;
+            return XmlWriter.Create(url, writer_settings);
         }
 
         /// <summary>
@@ -46,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// <param name="args"></param>
         internal static void ThrowAppException(string fmt, params object[] args)
         {
-            throw new ApplicationException( String.Format( fmt, args ) );
+            throw new ApplicationException(String.Format(fmt, args));
         }
 
         /// <summary>
@@ -59,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         internal static void ThrowException(ExceptionFactory factory, string fmt,
                                             params object[] args)
         {
-            throw factory( String.Format( fmt, args ) );
+            throw factory(String.Format(fmt, args));
         }
 
         /// <summary>
@@ -76,9 +79,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
                                                         XsltArgumentList args, XmlResolver resolver)
         {
             var doc = new XmlDocument();
-            using ( XmlWriter output = doc.CreateNavigator().AppendChild() )
+            using (XmlWriter output = doc.CreateNavigator().AppendChild())
             {
-                transform.Transform( input, args, output, resolver );
+                transform.Transform(input, args, output, resolver);
             }
             return doc;
         }
@@ -91,7 +94,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// <returns></returns>
         public static Stream GetAssemblyResourceStream(Type type, string resource_name)
         {
-            return type.Assembly.GetManifestResourceStream( type, resource_name );
+            return type.Assembly.GetManifestResourceStream(type, resource_name);
         }
 
         /// <summary>
@@ -101,10 +104,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// <returns></returns>
         public static Stream GetAssemblyResourceStream(string resource_name)
         {
-            Stream stream = Assembly.GetCallingAssembly().GetManifestResourceStream( resource_name );
-            if ( stream == null )
+            Stream stream = Assembly.GetCallingAssembly().GetManifestResourceStream(resource_name);
+            if (stream == null)
                 throw new ApplicationException(
-                    String.Format( "Could not find manifest resource stream: {0}", resource_name ) );
+                    String.Format("Could not find manifest resource stream: {0}", resource_name));
             return stream;
         }
 
@@ -112,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         {
             return
                 Path.Combine(
-                    Path.GetDirectoryName( assembly.Location ), rel_path );
+                    Path.GetDirectoryName(assembly.Location), rel_path);
         }
     }
 }

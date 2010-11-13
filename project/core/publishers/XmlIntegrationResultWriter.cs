@@ -213,6 +213,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private class Elements
         {
+            private  Elements()
+            {}
+
             public const string BUILD = "build";
             public const string CRUISE_ROOT = "cruisecontrol";
             public const string MODIFICATIONS = "modifications";

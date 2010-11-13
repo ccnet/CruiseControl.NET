@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -15,7 +14,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
         private readonly ILinkFactory linkFactory;
         private readonly IVelocityViewGenerator velocityViewGenerator;
         private readonly IDashboardConfiguration configuration;
-        private readonly ISessionRetriever retriever;
         private readonly ISessionStorer storer;
 
         public LoginViewBuilder(ICruiseRequest request, ILinkFactory linkFactory, 
@@ -26,7 +24,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             this.linkFactory = linkFactory;
             this.velocityViewGenerator = velocityViewGenerator;
             this.configuration = configuration;
-            this.retriever = retriever;
             this.storer = storer;
         }
 

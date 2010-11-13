@@ -1,11 +1,11 @@
-﻿namespace CCNet.CSharpDemos.Plugin.SourceControl
-{
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core;
-    using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
-    using ThoughtWorks.CruiseControl.Core.Tasks;
-    using ThoughtWorks.CruiseControl.Core.Util;
+﻿using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+using ThoughtWorks.CruiseControl.Core.Tasks;
+using ThoughtWorks.CruiseControl.Core.Util;
 
+namespace CCNet.CSharpDemos.Plugin.SourceControl
+{
     [ReflectorType("getMyCode")]
     public class GetMyCodeSourceControl
         : ProcessSourceControl

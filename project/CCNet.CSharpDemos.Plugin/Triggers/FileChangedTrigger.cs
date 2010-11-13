@@ -1,13 +1,13 @@
-﻿namespace CCNet.CSharpDemos.Plugin.Triggers
-{
-    using System;
-    using System.IO;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core;
-    using ThoughtWorks.CruiseControl.Core.Config;
-    using ThoughtWorks.CruiseControl.Core.Triggers;
-    using ThoughtWorks.CruiseControl.Remote;
+﻿using System;
+using System.IO;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Core.Triggers;
+using ThoughtWorks.CruiseControl.Remote;
 
+namespace CCNet.CSharpDemos.Plugin.Triggers
+{
     [ReflectorType("fileChangedTrigger")]
     public class FileChangedTrigger
         : ITrigger, IConfigurationValidation

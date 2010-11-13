@@ -1,12 +1,12 @@
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Resources;
+using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-    using System.Collections.Generic;
-    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-    using ThoughtWorks.CruiseControl.Remote;
-    using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
-    using ThoughtWorks.CruiseControl.WebDashboard.Resources;
-    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
-
     public class ProjectGrid : IProjectGrid
 	{
 		public ProjectGridRow[] GenerateProjectGridRows(ProjectStatusOnServer[] statusList, string forceBuildActionName,

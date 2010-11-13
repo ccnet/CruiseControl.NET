@@ -1,12 +1,12 @@
-﻿namespace CCNet.CSharpDemos.Plugin.SourceControl
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Xml.Linq;
-    using ThoughtWorks.CruiseControl.Core;
-    using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Xml.Linq;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
+namespace CCNet.CSharpDemos.Plugin.SourceControl
+{
     public class IndexFileHistoryParser
         : IHistoryParser
     {

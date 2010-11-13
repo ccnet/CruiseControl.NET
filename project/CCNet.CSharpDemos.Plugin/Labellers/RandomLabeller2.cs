@@ -1,11 +1,11 @@
-﻿namespace CCNet.CSharpDemos.Plugin.Labellers
-{
-    using System;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core;
-    using ThoughtWorks.CruiseControl.Core.Config;
-    using ThoughtWorks.CruiseControl.Core.Label;
+﻿using System;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Core.Label;
 
+namespace CCNet.CSharpDemos.Plugin.Labellers
+{
     [ReflectorType("randomLabeller2")]
     public class RandomLabeller2
         : LabellerBase, IConfigurationValidation

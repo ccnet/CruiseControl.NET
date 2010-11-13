@@ -1,10 +1,10 @@
-﻿namespace CCNet.CSharpDemos.Plugin.Tasks
-{
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core;
-    using ThoughtWorks.CruiseControl.Core.Config;
-    using ThoughtWorks.CruiseControl.Remote;
+﻿using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Remote;
 
+namespace CCNet.CSharpDemos.Plugin.Tasks
+{
     [ReflectorType("helloWorld")]
     public class HelloWorldTask
         : ITask, IConfigurationValidation

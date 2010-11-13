@@ -5,6 +5,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
     class RSSLinkBuilder
     {
 
+        private RSSLinkBuilder()
+        {}
+
         public static GeneralAbsoluteLink CreateRSSLink(ILinkFactory linkFactory, IProjectSpecifier projectSpecifier)
         {
             string MachineName;
