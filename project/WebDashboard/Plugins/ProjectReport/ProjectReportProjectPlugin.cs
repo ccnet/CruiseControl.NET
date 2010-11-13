@@ -145,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
                     return new DefaultServerSpecifier(server.Name, server.AllowForceBuild, server.AllowStartStopBuild);
                 }
             }
-            throw new Exception("Unable to find specified server");
+            throw new CruiseControlException("Unable to find specified server");
         }
 
         private ProjectStatus FindProjectStatus(IProjectSpecifier projectSpecifier, ICruiseRequest request)
@@ -158,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
                     return status.ProjectStatus;
                 }
             }
-            throw new Exception("Unable to retrieve project status");
+            throw new CruiseControlException("Unable to retrieve project status");
         }
 
         private string ForceBuildIfNecessary(IProjectSpecifier projectSpecifier, IRequest request, string sessionToken)

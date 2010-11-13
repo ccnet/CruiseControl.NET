@@ -153,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             catch (Exception e)
             {
                 Util.Log.Trace(e.ToString());
-                throw new Exception("Problem connecting to LDAP service", e);
+                throw new CruiseControlException("Problem connecting to LDAP service", e);
             }
 
             LdapSearcher.SearchRoot = Ldap;

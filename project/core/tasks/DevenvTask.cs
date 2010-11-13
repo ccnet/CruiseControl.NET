@@ -184,7 +184,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 					path = registry.GetExpectedLocalMachineSubKeyValue(VS2002_REGISTRY_PATH, VS_REGISTRY_KEY);
 					break;
 				default:
-					throw new Exception("Unknown version of Visual Studio.");
+					throw new CruiseControlException("Unknown version of Visual Studio.");
 			}
 
 			return Path.Combine(path, DEVENV_EXE);
@@ -199,7 +199,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 					return path;
 			}
 
-			throw new Exception("Unknown version of Visual Studio, or no version found.");
+			throw new CruiseControlException("Unknown version of Visual Studio, or no version found.");
 		}
 
 		/// <summary>

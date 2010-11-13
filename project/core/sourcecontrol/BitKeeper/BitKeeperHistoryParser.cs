@@ -86,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 
             Match match = regex.Match(currentLine);
             if (!match.Success)
-                throw new Exception("Unable to parse line: " + currentLine);
+                throw new CruiseControlException("Unable to parse line: " + currentLine);
 
             string filename = ParseFileName(match.Result("${filename}"));
             string folder = ParseFolderName(match.Result("${filename}"));
@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 		{
 			Match match = regex.Match(currentLine);
 			if (!match.Success)
-				throw new Exception("Unable to parse line: " + currentLine);
+				throw new CruiseControlException("Unable to parse line: " + currentLine);
 	
 			Modification mod = new Modification();
 			mod.FileName = filename;

@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
                 typeTable.Add(Directory.GetCurrentDirectory(), CONFIG_ASSEMBLY_PATTERN);
                 typeTable.InvalidNode += delegate(InvalidNodeEventArgs args)
                 {
-                    throw new Exception(args.Message);
+                    throw new CruiseControlException(args.Message);
                 };
                 reflectionReader = new NetReflectorReader(typeTable);
 
@@ -387,7 +387,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
                     }
                     else
                     {
-                        throw new Exception("Unknown security item: " + setting.OuterXml);
+                        throw new CruiseControlException("Unknown security item: " + setting.OuterXml);
                     }
                 }
             }

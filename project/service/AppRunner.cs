@@ -115,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Service
             FileInfo configFileInfo = new FileInfo(ConfigFilename);
             if (!configFileInfo.Exists)
             {
-                throw new Exception(
+                throw new CruiseControlException(
                     string.Format(System.Globalization.CultureInfo.CurrentCulture,"CruiseControl.NET configuration file {0} does not exist.", 
                         configFileInfo.FullName));
             }

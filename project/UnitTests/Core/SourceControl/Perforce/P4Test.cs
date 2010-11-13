@@ -270,7 +270,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		public void CreateGetDescribeProcessWithNoChanges()
 		{
             Assert.That(delegate { new P4().CreateDescribeProcess(""); },
-                        Throws.TypeOf<Exception>());
+                        Throws.TypeOf<CruiseControlException>());
 		}
 
 		[Test]

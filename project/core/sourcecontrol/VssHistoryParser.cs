@@ -136,7 +136,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		internal const string DELIMITER_VERSIONED_START = "*****************  ";
 
-		public VSSParser(string entry, IVssLocale locale)
+	    protected VSSParser(string entry, IVssLocale locale)
 		{
 			this.entry = entry.Replace(Convert.ToChar(160).ToString(),string.Empty);
 			this.locale = locale;

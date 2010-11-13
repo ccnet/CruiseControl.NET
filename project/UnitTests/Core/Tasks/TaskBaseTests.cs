@@ -83,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             {
                 Result = () =>
                 {
-                    throw new Exception();
+                    throw new CruiseControlException();
                 }
             };
             var result = mocks.DynamicMock<IIntegrationResult>();

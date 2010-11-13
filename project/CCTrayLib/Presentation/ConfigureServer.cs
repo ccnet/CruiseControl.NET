@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
+using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -114,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                     }
                     else
                     {
-                        throw new Exception("Unable to validate authorisation");
+                        throw new CruiseControlException("Unable to validate authorisation");
                     }
                 }
                 else

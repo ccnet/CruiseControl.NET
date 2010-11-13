@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
 using CCNet = ThoughtWorks.CruiseControl;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
@@ -45,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.IntegrationTests
 
             if (scheduleTrigger == null)
             {
-                throw new Exception(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Schedule trigger not found,via xslt {0} in configfile {1}", xslt, ccNetConfigFile));
+                throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Schedule trigger not found,via xslt {0} in configfile {1}", xslt, ccNetConfigFile));
             }
 
             var newIntegrationTime = System.DateTime.Now.AddSeconds(secondsToWaitFromNow).ToString("HH:mm");

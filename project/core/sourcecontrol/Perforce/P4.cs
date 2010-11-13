@@ -275,7 +275,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		public virtual ProcessInfo CreateDescribeProcess(string changes)
 		{
 			if (changes.Length == 0)
-				throw new Exception("Empty changes list found - this should not happen");
+				throw new CruiseControlException("Empty changes list found - this should not happen");
 
 			foreach (char c in changes)
 			{

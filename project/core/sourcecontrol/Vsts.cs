@@ -223,7 +223,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             if (!ProjectExists(from))
             {
                 Log.Error(string.Format(System.Globalization.CultureInfo.CurrentCulture,"[TFS] Project {0} is not valid on {1} TFS server", ProjectPath, Server));
-                throw new Exception("Project Name is not valid on this TFS server");
+                throw new CruiseControlException("Project Name is not valid on this TFS server");
             }
 
             Log.Debug("[TFS] Checking Team Foundation Server for Modifications");
@@ -337,7 +337,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             if (pr.HasErrorOutput && pr.Failed)
             {
                 Log.Error(pr.StandardError);
-                throw new Exception(pr.StandardError);
+                throw new CruiseControlException(pr.StandardError);
             }
         }
 
@@ -586,7 +586,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             if (registryValue == null)
             {
                 Log.Debug("[TFS] Unable to find TF.exe and it was not defined in Executable Parameter");
-                throw new Exception("Unable to find TF.exe and it was not defined in Executable Parameter");
+                throw new CruiseControlException("Unable to find TF.exe and it was not defined in Executable Parameter");
             }
 
             return Path.Combine(registryValue, TF_EXE);

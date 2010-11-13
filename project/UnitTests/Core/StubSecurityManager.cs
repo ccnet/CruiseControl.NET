@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Security;
@@ -88,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             actualCounts[4]++;
             if (getUserNameResults.Count == 0)
             {
-                throw new Exception("Unexpected call to GetUserName");
+                throw new CruiseControlException("Unexpected call to GetUserName");
             }
             else
             {
@@ -101,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             actualCounts[6]++;
             if (getDisplayNameResults.Count == 0)
             {
-                throw new Exception("Unexpected call to GetDisplayName");
+                throw new CruiseControlException("Unexpected call to GetDisplayName");
             }
             else
             {

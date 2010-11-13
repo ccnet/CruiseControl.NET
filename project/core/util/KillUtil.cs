@@ -81,12 +81,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                     break;  
                 
                 default:
-                    throw new Exception("Unknown Operating System.");
+                    throw new CruiseControlException("Unknown Operating System.");
             }
 
             if (!File.Exists(process.StartInfo.FileName))
             {
-                throw new Exception(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Kill command {0} not found on {1} OS. PID:{2}",
+                throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Kill command {0} not found on {1} OS. PID:{2}",
                                                   process.StartInfo.FileName, platform, Convert.ToString(pid)));
             }
 

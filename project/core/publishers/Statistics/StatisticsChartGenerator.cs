@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
                 }
                 catch (Exception)
                 {
-                    throw new Exception(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Cannot handle value for the statistic {0}", relevantStat));
+                    throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Cannot handle value for the statistic {0}", relevantStat));
                 }
             }
         }

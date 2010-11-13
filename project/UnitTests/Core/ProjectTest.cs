@@ -717,7 +717,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             {
                 if (failOnRun)
                 {
-                    throw new Exception("Failing on run");
+                    throw new CruiseControlException("Failing on run");
                 }
             }
         }

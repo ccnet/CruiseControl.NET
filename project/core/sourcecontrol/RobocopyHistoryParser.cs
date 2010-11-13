@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				}
 			}
 
-			throw new Exception("Failed to match regex");
+			throw new CruiseControlException("Failed to match regex");
 		}
 
 		private static readonly Regex ParseDeletedFileRegex = new Regex(@"\s+\*EXTRA File\s+(?'Date'\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})\s+(?'Path'.*)");
@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				}
 			}
 
-			throw new Exception("Failed to match regex");
+			throw new CruiseControlException("Failed to match regex");
 		}
 
 		private static readonly Regex ParseAddedFileRegex = new Regex(@"\s+New File\s+(?'Date'\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})\s+(?'Path'.*)");
@@ -134,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				}
 			}
 
-			throw new Exception("Failed to match regex");
+			throw new CruiseControlException("Failed to match regex");
 		}
 
 		private static readonly Regex ParseUpdatedFileRegex = new Regex(@"\s+Newer\s+(?'Date'\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})\s+(?'Path'.*)");
@@ -167,7 +167,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				}
 			}
 
-			throw new Exception("Failed to match regex");
+			throw new CruiseControlException("Failed to match regex");
 		}
 
 		private DateTime CreateDate(

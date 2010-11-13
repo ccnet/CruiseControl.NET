@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Text;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
@@ -50,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Security
             {
                 try
                 {
-                    if (newPassword1 != newPassword2) throw new Exception("New passwords do not match");
+                    if (newPassword1 != newPassword2) throw new CruiseControlException("New passwords do not match");
                     farmService.ChangePassword(cruiseRequest.ServerName, storer.SessionToken, oldPassword, newPassword1);
                     velocityContext["message"] = "Password has been changed";
                 }

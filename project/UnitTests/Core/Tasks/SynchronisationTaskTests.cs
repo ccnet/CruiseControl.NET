@@ -332,7 +332,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         {
             public void Run(IIntegrationResult result)
             {
-                throw new Exception("Task failed!");
+                throw new CruiseControlException("Task failed!");
             }
         }
         #endregion

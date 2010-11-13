@@ -1,4 +1,5 @@
 using System;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
@@ -87,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
                 else if (!wasOk && isOk)
                     return CCTrayLib.BuildTransition.Fixed;
 
-                throw new Exception("The universe has gone crazy.");
+                throw new CruiseControlException("The universe has gone crazy.");
             }
         }
     }

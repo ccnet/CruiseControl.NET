@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                     }
                     else
                     {
-                        throw new Exception("Exception encountered while retrieving MksHistoryParserTestData.xml");
+                        throw new CruiseControlException("Exception encountered while retrieving MksHistoryParserTestData.xml");
                     }
                 }
 
@@ -48,13 +48,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                     }
                     else
                     {
-                        throw new Exception("Exception encountered while retrieving MksHistoryParserTestDataMemberInfo.xml");
+                        throw new CruiseControlException("Exception encountered while retrieving MksHistoryParserTestDataMemberInfo.xml");
                     }
                 }
             }
             catch (Exception e)
             {
-                throw new Exception("Exception retrieving MKS test data.", e);
+                throw new CruiseControlException("Exception retrieving MKS test data.", e);
             }
         }
 

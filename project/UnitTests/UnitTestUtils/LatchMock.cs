@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Threading;
 using NMock;
+using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
 {
@@ -64,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
 			if (! signalled)
 			{
 				string msg = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Latch has not been signalled before the timeout expired! {0} never called.", signalMethods[0]);
-				throw new Exception(msg);
+				throw new CruiseControlException(msg);
 			}
 			if (ex != null)
 			{

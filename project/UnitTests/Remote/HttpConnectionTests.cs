@@ -1,4 +1,6 @@
-﻿namespace ThoughtWorks.CruiseControl.UnitTests.Remote
+﻿using ThoughtWorks.CruiseControl.Core;
+
+namespace ThoughtWorks.CruiseControl.UnitTests.Remote
 {
     using NUnit.Framework;
     using ThoughtWorks.CruiseControl.Remote;
@@ -106,7 +108,7 @@
             var errorMessage = "Oops, an error happened";
             var factory = new TestClientFactory((u, a, d) =>
             {
-                throw new Exception(errorMessage);
+                throw new CruiseControlException(errorMessage);
             });
             var connection = new HttpConnection(new Uri(url), factory);
             var completed = false;
@@ -134,7 +136,7 @@
             var errorMessage = "Oops, an error happened";
             var factory = new TestClientFactory((u, a, d) =>
             {
-                throw new Exception(errorMessage);
+                throw new CruiseControlException(errorMessage);
             });
             var connection = new HttpConnection(new Uri(url), factory);
             var completed = false;
@@ -220,7 +222,7 @@
             {
                 if (address.AbsoluteUri.StartsWith("http://error"))
                 {
-                    throw new Exception("Oops, unknown address");
+                    throw new CruiseControlException("Oops, unknown address");
                 }
                 else
                 {

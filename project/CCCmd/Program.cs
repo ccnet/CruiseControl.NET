@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Mono;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
@@ -86,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                         RunStopProject();
                         break;
                     default:
-                        throw new Exception("Unknown action: " + command.ToString());
+                        throw new CruiseControlException("Unknown action: " + command.ToString());
                 }
             }
             catch (Exception error)
@@ -185,11 +186,11 @@ namespace ThoughtWorks.CruiseControl.CCCmd
                                 }
 
                                 if (!isAllowedValue)
-                                    throw new Exception(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Parameter {0} was given value {1} which is not one of the allowed ones ({2})", parameter.Name, userProvidedValue, string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}", parameter.AllowedValues)));
+                                    throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Parameter {0} was given value {1} which is not one of the allowed ones ({2})", parameter.Name, userProvidedValue, string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}", parameter.AllowedValues)));
                             }
 
                             if (required && String.IsNullOrEmpty(convertedValueString) && String.IsNullOrEmpty(parameter.DefaultValue))
-                                throw new Exception(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Parameter {0} is required but was not provided and does not have a default value", parameter.Name));
+                                throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Parameter {0} is required but was not provided and does not have a default value", parameter.Name));
 
                             buildParameters.Add(new NameValuePair(parameter.Name, convertedValueString));
                         } 

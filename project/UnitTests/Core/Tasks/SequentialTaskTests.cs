@@ -159,7 +159,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         {
             public void Run(IIntegrationResult result)
             {
-                throw new Exception();
+                throw new CruiseControlException();
             }
         }
         #endregion

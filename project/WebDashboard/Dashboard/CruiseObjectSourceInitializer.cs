@@ -2,6 +2,7 @@ using System;
 using System.Collections.Specialized;
 using System.Web;
 using Objection;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
@@ -321,8 +322,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             {
                 ErrorDescription.AppendLine(string.Format(System.Globalization.CultureInfo.CurrentCulture," * {0}", item));
             }
-
-            throw new Exception(ErrorDescription.ToString());
+            throw new CruiseControlException(ErrorDescription.ToString());
         }
 
     }

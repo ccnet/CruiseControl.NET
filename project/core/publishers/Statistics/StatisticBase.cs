@@ -1,11 +1,8 @@
-﻿namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using Exortech.NetReflector;
-    using System.Xml.XPath;
+﻿using System.Xml.XPath;
+using Exortech.NetReflector;
 
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
+{
     /// <summary>
     /// Provides the base functionality for statistics.
     /// </summary>
@@ -29,7 +26,7 @@
         /// </summary>
         private bool include = true;
 
-        public StatisticBase()
+        protected StatisticBase()
         {
         }
 
@@ -38,7 +35,7 @@
         /// </summary>
         /// <param name="name">The name of the statistic.</param>
         /// <param name="xpath">The XML XPath to locate the values.</param>
-        public StatisticBase(string name, string xpath)
+        protected StatisticBase(string name, string xpath)
         {
             this.name = name;
             this.xpath = xpath;
