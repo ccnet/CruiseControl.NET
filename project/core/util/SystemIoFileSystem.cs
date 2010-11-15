@@ -224,6 +224,22 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         {
             return Directory.GetFiles(directory);
         }
+
+        /// <summary>
+        /// Lists all the files within a directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <param name="includeSubDirectories">
+        /// If set to <c>true</c> then files in sub directories will be included.
+        /// </param>
+        /// <returns></returns>
+        public string[] GetFilesInDirectory(string directory, bool includeSubDirectories)
+        {
+            return Directory.GetFiles(
+                directory,
+                "*.*",
+                includeSubDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+        }
         #endregion
 
         #region GetLastWriteTime()

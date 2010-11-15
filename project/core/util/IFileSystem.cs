@@ -43,6 +43,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         string[] GetFilesInDirectory(string directory);
 
         /// <summary>
+        /// Lists all the files within a directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <param name="includeSubDirectories">
+        /// If set to <c>true</c> then files in sub directories will be included.
+        /// </param>
+        /// <returns></returns>
+        string[] GetFilesInDirectory(string directory, bool includeSubDirectories);
+
+        /// <summary>
         /// Retrieves the last write time of a file.
         /// </summary>
         /// <param name="fileName"></param>

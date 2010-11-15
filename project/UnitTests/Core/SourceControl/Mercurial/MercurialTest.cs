@@ -45,7 +45,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
 
             public long GetFreeDiskSpace(string driveName) { return int.MaxValue; }
 
-            public string[] GetFilesInDirectory(string directory) { return new string[0];}
+            public string[] GetFilesInDirectory(string directory) { return new string[0]; }
+            public string[] GetFilesInDirectory(string directory, bool includeSubDirectories) { return new string[0]; }
 
             public DateTime GetLastWriteTime(string fileName) { return DateTime.MinValue; }
 
