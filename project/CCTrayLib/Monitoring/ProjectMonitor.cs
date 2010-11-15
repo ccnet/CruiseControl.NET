@@ -80,6 +80,32 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             }
         }
 
+        public string QueueName
+        {
+            get
+            {
+                if (IsConnected)
+                {
+                    return lastProjectStatus.Queue;
+                }
+                return string.Empty;
+            }
+        }
+
+
+        public int QueuePriority
+        {
+            get
+            {
+                if (IsConnected)
+                {
+                    return lastProjectStatus.QueuePriority;
+                }
+                return 0;
+            }
+        }
+
+
 		public ProjectActivity Activity
 		{
 			get

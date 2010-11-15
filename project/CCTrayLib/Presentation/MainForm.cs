@@ -22,6 +22,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private ColumnHeader colProject;
         private ColumnHeader colServer;
         private ColumnHeader colCategory;
+        private ColumnHeader colQName;
+        private ColumnHeader colQPriority;
+
+
         private ImageList iconList;
         private MainMenu mainMenu;
         private NotifyIcon trayIcon;
@@ -107,6 +111,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             colDetail.Width = (int)e.Key.GetValue("DetailColumnWidth", 250);
             colLastBuildLabel.Width = (int)e.Key.GetValue("LastBuildLabelColumnWidth", 120);
             colLastBuildTime.Width = (int)e.Key.GetValue("LastBuildTimeColumnWidth", 130);
+            colQName.Width = (int)e.Key.GetValue("QNameColumnWidth", 130);
+            colQPriority.Width = (int)e.Key.GetValue("QPriorityColumnWidth", 130);
             queueViewPanelVisible = bool.Parse(e.Key.GetValue("QueueViewPanelVisible", bool.FalseString).ToString());
             splitterQueueView.Visible = queueViewPanelVisible;
             pnlViewQueues.Visible = queueViewPanelVisible;
@@ -122,6 +128,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             e.Key.SetValue("ProjectColumnWidth", colProject.Width);
             e.Key.SetValue("ServerColumnWidth", colServer.Width);
             e.Key.SetValue("CategoryColumnWidth", colCategory.Width);
+            e.Key.SetValue("QNameColumnWidth",colQName.Width);
+            e.Key.SetValue("QPriorityColumnWidth",colQPriority.Width);
             e.Key.SetValue("ActivityColumnWidth", colActivity.Width);
             e.Key.SetValue("DetailColumnWidth", colDetail.Width);
             e.Key.SetValue("LastBuildLabelColumnWidth", colLastBuildLabel.Width);
@@ -200,6 +208,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.colProject = new System.Windows.Forms.ColumnHeader();
             this.colServer = new System.Windows.Forms.ColumnHeader();
             this.colCategory = new System.Windows.Forms.ColumnHeader();
+            this.colQName = new System.Windows.Forms.ColumnHeader();
+            this.colQPriority = new System.Windows.Forms.ColumnHeader();
             this.colActivity = new System.Windows.Forms.ColumnHeader();
             this.colDetail = new System.Windows.Forms.ColumnHeader();
             this.colLastBuildLabel = new System.Windows.Forms.ColumnHeader();
@@ -238,7 +248,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.btnStartStopProject = new System.Windows.Forms.Button();
             this.splitterQueueView = new System.Windows.Forms.Splitter();
             this.pnlViewQueues = new System.Windows.Forms.Panel();
-            this.queueTreeView = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.QueueTreeView();
             this.queueIconList = new System.Windows.Forms.ImageList(this.components);
             this.queueContextMenu = new System.Windows.Forms.ContextMenu();
             this.mnuQueueCancelPending = new System.Windows.Forms.MenuItem();
@@ -249,6 +258,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.updateProjectsButton = new System.Windows.Forms.Button();
             this.updateProjectsMessage = new System.Windows.Forms.Label();
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.queueTreeView = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.QueueTreeView();
             menuItem1 = new System.Windows.Forms.MenuItem();
             this.pnlButtons.SuspendLayout();
             this.pnlViewQueues.SuspendLayout();
@@ -274,6 +284,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.colProject,
             this.colServer,
             this.colCategory,
+            this.colQName,
+            this.colQPriority,
             this.colActivity,
             this.colDetail,
             this.colLastBuildLabel,
@@ -287,7 +299,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.lvProjects.Location = new System.Drawing.Point(203, 38);
             this.lvProjects.MultiSelect = false;
             this.lvProjects.Name = "lvProjects";
-            this.lvProjects.Size = new System.Drawing.Size(689, 293);
+            this.lvProjects.Size = new System.Drawing.Size(972, 209);
             this.lvProjects.SmallImageList = this.iconList;
             this.lvProjects.TabIndex = 0;
             this.lvProjects.UseCompatibleStateImageBehavior = false;
@@ -310,6 +322,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             this.colCategory.Text = "Category";
             this.colCategory.Width = 100;
+            // 
+            // colQName
+            // 
+            this.colQName.Text = "Q Name";
+            this.colQName.Width = 100;
+            // 
+            // colQPriority
+            // 
+            this.colQPriority.Text = "Q Priority";
+            this.colQPriority.Width = 100;
             // 
             // colActivity
             // 
@@ -524,9 +546,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.pnlButtons.Controls.Add(this.btnForceBuild);
             this.pnlButtons.Controls.Add(this.btnStartStopProject);
             this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlButtons.Location = new System.Drawing.Point(0, 331);
+            this.pnlButtons.Location = new System.Drawing.Point(0, 247);
             this.pnlButtons.Name = "pnlButtons";
-            this.pnlButtons.Size = new System.Drawing.Size(892, 45);
+            this.pnlButtons.Size = new System.Drawing.Size(1175, 45);
             this.pnlButtons.TabIndex = 1;
             // 
             // btnToggleQueueView
@@ -551,7 +573,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             this.btnStartStopProject.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStartStopProject.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnStartStopProject.Location = new System.Drawing.Point(793, 10);
+            this.btnStartStopProject.Location = new System.Drawing.Point(1076, 10);
             this.btnStartStopProject.Name = "btnStartStopProject";
             this.btnStartStopProject.Size = new System.Drawing.Size(85, 23);
             this.btnStartStopProject.TabIndex = 2;
@@ -563,7 +585,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             this.splitterQueueView.Location = new System.Drawing.Point(200, 38);
             this.splitterQueueView.Name = "splitterQueueView";
-            this.splitterQueueView.Size = new System.Drawing.Size(3, 293);
+            this.splitterQueueView.Size = new System.Drawing.Size(3, 209);
             this.splitterQueueView.TabIndex = 3;
             this.splitterQueueView.TabStop = false;
             this.splitterQueueView.Visible = false;
@@ -574,21 +596,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.pnlViewQueues.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlViewQueues.Location = new System.Drawing.Point(0, 38);
             this.pnlViewQueues.Name = "pnlViewQueues";
-            this.pnlViewQueues.Size = new System.Drawing.Size(200, 293);
+            this.pnlViewQueues.Size = new System.Drawing.Size(200, 209);
             this.pnlViewQueues.TabIndex = 4;
             this.pnlViewQueues.Visible = false;
-            // 
-            // queueTreeView
-            // 
-            this.queueTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.queueTreeView.ImageIndex = 0;
-            this.queueTreeView.ImageList = this.queueIconList;
-            this.queueTreeView.Location = new System.Drawing.Point(0, 0);
-            this.queueTreeView.Name = "queueTreeView";
-            this.queueTreeView.SelectedImageIndex = 0;
-            this.queueTreeView.Size = new System.Drawing.Size(200, 293);
-            this.queueTreeView.TabIndex = 2;
-            this.queueTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.queueTreeView_MouseUp);
             // 
             // queueIconList
             // 
@@ -617,14 +627,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.serverChangedPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.serverChangedPanel.Location = new System.Drawing.Point(0, 0);
             this.serverChangedPanel.Name = "serverChangedPanel";
-            this.serverChangedPanel.Size = new System.Drawing.Size(892, 38);
+            this.serverChangedPanel.Size = new System.Drawing.Size(1175, 38);
             this.serverChangedPanel.TabIndex = 5;
             this.serverChangedPanel.Visible = false;
             // 
             // closeUpdateButton
             // 
             this.closeUpdateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.closeUpdateButton.Location = new System.Drawing.Point(784, 3);
+            this.closeUpdateButton.Location = new System.Drawing.Point(1067, 3);
             this.closeUpdateButton.Name = "closeUpdateButton";
             this.closeUpdateButton.Size = new System.Drawing.Size(101, 28);
             this.closeUpdateButton.TabIndex = 3;
@@ -646,7 +656,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // updateProjectsButton
             // 
             this.updateProjectsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.updateProjectsButton.Location = new System.Drawing.Point(677, 3);
+            this.updateProjectsButton.Location = new System.Drawing.Point(960, 3);
             this.updateProjectsButton.Name = "updateProjectsButton";
             this.updateProjectsButton.Size = new System.Drawing.Size(101, 28);
             this.updateProjectsButton.TabIndex = 1;
@@ -662,7 +672,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.updateProjectsMessage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.updateProjectsMessage.Location = new System.Drawing.Point(42, 3);
             this.updateProjectsMessage.Name = "updateProjectsMessage";
-            this.updateProjectsMessage.Size = new System.Drawing.Size(629, 28);
+            this.updateProjectsMessage.Size = new System.Drawing.Size(912, 28);
             this.updateProjectsMessage.TabIndex = 0;
             this.updateProjectsMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -674,10 +684,22 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.trayIcon.Click += new System.EventHandler(this.trayIcon_Click);
             this.trayIcon.DoubleClick += new System.EventHandler(this.trayIcon_DoubleClick);
             // 
+            // queueTreeView
+            // 
+            this.queueTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.queueTreeView.ImageIndex = 0;
+            this.queueTreeView.ImageList = this.queueIconList;
+            this.queueTreeView.Location = new System.Drawing.Point(0, 0);
+            this.queueTreeView.Name = "queueTreeView";
+            this.queueTreeView.SelectedImageIndex = 0;
+            this.queueTreeView.Size = new System.Drawing.Size(200, 209);
+            this.queueTreeView.TabIndex = 2;
+            this.queueTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.queueTreeView_MouseUp);
+            // 
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(892, 376);
+            this.ClientSize = new System.Drawing.Size(1175, 292);
             this.Controls.Add(this.lvProjects);
             this.Controls.Add(this.splitterQueueView);
             this.Controls.Add(this.pnlViewQueues);

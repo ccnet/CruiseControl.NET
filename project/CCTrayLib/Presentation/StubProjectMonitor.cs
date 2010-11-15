@@ -37,6 +37,33 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             get { return string.Empty; }
         }
 
+        public string QueueName
+        {
+            get
+            {
+                if (IsConnected)
+                {
+                    return projectStatus.Queue;
+                }
+                return string.Empty;
+            }
+        }
+
+
+        public int QueuePriority
+        {
+            get
+            {
+                if (IsConnected)
+                {
+                    return ProjectStatus.QueuePriority;
+                }
+                return 0;
+            }
+        }
+
+
+
         public CCTrayProject Configuration
         {
             get { return _configuration; }

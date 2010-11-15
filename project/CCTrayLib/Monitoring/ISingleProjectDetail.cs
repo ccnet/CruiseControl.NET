@@ -20,7 +20,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         bool ShowForceBuildButton { get; }
         bool ShowStartStopButton { get; }
 
-        
+        string QueueName { get; }
+        int QueuePriority { get; }
 
         string ServerName { get; }	
 
