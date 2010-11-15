@@ -6,6 +6,7 @@
     using System.IO;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Util;
+    using System.Xml.Linq;
 
     /// <summary>
     /// <para>
@@ -298,10 +299,17 @@
                         }
 
                         // Copy the file and marge it if XML
-                        fileSystem.Copy(newFile, newPath);
-                        if (Path.GetExtension(newFile) == ".xml")
+                        if (fileSystem.FileExists(newFile))
                         {
-                            result.AddTaskResult(fileSystem.GenerateTaskResultFromFile(newFile));
+                            fileSystem.Copy(newFile, newPath);
+                            if (Path.GetExtension(newFile) == ".xml")
+                            {
+                                result.AddTaskResult(fileSystem.GenerateTaskResultFromFile(newFile));
+                            }
+                        }
+                        else
+                        {
+                            logger.Warning("Unable to find file: " + newFile);
                         }
                     }
                 }
@@ -435,30 +443,74 @@
         /// <returns></returns>
         private string[] ListFileDifferences(Dictionary<string, DateTime> originalList, string outputDirectory)
         {
-            string[] newList = {};
-            if (fileSystem.DirectoryExists(outputDirectory)) newList = fileSystem.GetFilesInDirectory(outputDirectory);
-
-            var differenceList = new List<string>();
-
-            // For each new file, see if it is in the old file list
-            foreach (var newFile in newList)
+            var contentsFile = Path.Combine(outputDirectory, "ReportResources.xml");
+            if (fileSystem.FileExists(contentsFile))
             {
-                if (originalList.ContainsKey(newFile))
+                using (var reader = fileSystem.Load(contentsFile))
                 {
-                    // Check if the times are different
-                    if (originalList[newFile] != fileSystem.GetLastWriteTime(newFile))
+                    XDocument document = null;
+                    try
                     {
+                        document = XDocument.Load(reader);
+                    }
+                    catch (Exception error)
+                    {
+                        throw new CruiseControlException(
+                            "Unable to load contents manifest - " + error.Message ?? string.Empty,
+                            error);
+                    }
+
+                    var rootEl = document.Element("ReportResources");
+                    if (rootEl == null)
+                    {
+                        throw new CruiseControlException("Unable to load contents manifest - unable to find root node");
+                    }
+
+                    var files = new List<string>();
+                    foreach (var fileEl in rootEl.Elements("File"))
+                    {
+                        files.Add(Path.Combine(outputDirectory, fileEl.Value));
+                    }
+
+                    foreach (var folder in rootEl.Elements("Directory"))
+                    {
+                        var fullPath = Path.Combine(outputDirectory, folder.Value);
+                        files.AddRange(fileSystem.GetFilesInDirectory(fullPath, true));
+                    }
+
+                    return files.ToArray();
+                }
+            }
+            else
+            {
+                string[] newList = { };
+                if (fileSystem.DirectoryExists(outputDirectory))
+                {
+                    newList = fileSystem.GetFilesInDirectory(outputDirectory);
+                }
+
+                var differenceList = new List<string>();
+
+                // For each new file, see if it is in the old file list
+                foreach (var newFile in newList)
+                {
+                    if (originalList.ContainsKey(newFile))
+                    {
+                        // Check if the times are different
+                        if (originalList[newFile] != fileSystem.GetLastWriteTime(newFile))
+                        {
+                            differenceList.Add(newFile);
+                        }
+                    }
+                    else
+                    {
+                        // Not in the old file, therefore it's new
                         differenceList.Add(newFile);
                     }
                 }
-                else
-                {
-                    // Not in the old file, therefore it's new
-                    differenceList.Add(newFile);
-                }
-            }
 
-            return differenceList.ToArray();
+                return differenceList.ToArray();
+            }
         }
         #endregion
 
