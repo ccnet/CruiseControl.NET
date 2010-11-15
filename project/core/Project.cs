@@ -267,7 +267,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         /// <version>1.4</version>
         /// <default>false</default>
-        [ReflectorProperty("StopProjectOnReachingMaxSourceControlRetries", Required = false)]
+        [ReflectorProperty("stopProjectOnReachingMaxSourceControlRetries", Required = false)]
         public bool StopProjectOnReachingMaxSourceControlRetries
         {
             get { return stopProjectOnReachingMaxSourceControlRetries; }
