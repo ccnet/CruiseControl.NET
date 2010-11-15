@@ -281,14 +281,24 @@
 
                     // Copy all the new files over
                     var publishDir = Path.Combine(result.BaseFromArtifactsDirectory(result.Label), "NDepend");
-                    fileSystem.EnsureFolderExists(publishDir);
+                    var oldLen = outputDirectory.Length + 1;
+                    var lastDir = string.Empty;
                     foreach (var newFile in newFiles)
                     {
-                        fileSystem.Copy(newFile, 
-                            Path.Combine(publishDir, 
-                                Path.GetFileName(newFile)));
+                        // Ensure the directory exists
+                        var newPath = Path.Combine(publishDir, newFile.Substring(oldLen));
+                        var newDir = Path.GetDirectoryName(newPath);
+                        if (lastDir != newDir)
+                        {
+                            lastDir = newDir;
+                            if (!fileSystem.DirectoryExists(newDir))
+                            {
+                                fileSystem.CreateDirectory(newDir);
+                            }
+                        }
 
-                        // Merge all XML files
+                        // Copy the file and marge it if XML
+                        fileSystem.Copy(newFile, newPath);
                         if (Path.GetExtension(newFile) == ".xml")
                         {
                             result.AddTaskResult(fileSystem.GenerateTaskResultFromFile(newFile));

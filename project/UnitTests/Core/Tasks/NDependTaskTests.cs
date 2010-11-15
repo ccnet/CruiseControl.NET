@@ -38,13 +38,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Expect.Call(fileSystem.DirectoryExists(workingDir)).Return(true).Repeat.Times(2);
             Expect.Call(fileSystem.GetFilesInDirectory(workingDir)).Return(new string[0]);
             Expect.Call(fileSystem.GetFilesInDirectory(workingDir)).Return(new string[] {
-                "workingDir\\file1.txt",
-                "workingDir\\file2.xml"
+                "workingDir\\NDependResults\\file1.txt",
+                "workingDir\\NDependResults\\file2.xml"
             });
-            Expect.Call(() => fileSystem.EnsureFolderExists("artefactDir\\1\\NDepend"));
-            Expect.Call(() => fileSystem.Copy("workingDir\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt"));
-            Expect.Call(() => fileSystem.Copy("workingDir\\file2.xml", "artefactDir\\1\\NDepend\\file2.xml"));
-            Expect.Call(fileSystem.GenerateTaskResultFromFile("workingDir\\file2.xml")).Return(mocks.DynamicMock<ITaskResult>());
+            Expect.Call(fileSystem.DirectoryExists("artefactDir\\1\\NDepend")).Return(true);
+            Expect.Call(() => fileSystem.Copy("workingDir\\NDependResults\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt"));
+            Expect.Call(() => fileSystem.Copy("workingDir\\NDependResults\\file2.xml", "artefactDir\\1\\NDepend\\file2.xml"));
+            Expect.Call(fileSystem.GenerateTaskResultFromFile("workingDir\\NDependResults\\file2.xml")).Return(mocks.DynamicMock<ITaskResult>());
             var logger = mocks.DynamicMock<ILogger>();
             var task = new NDependTask(executor, fileSystem, logger);
 
@@ -65,13 +65,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Expect.Call(fileSystem.DirectoryExists(workingDir)).Return(true).Repeat.Times(2);
             Expect.Call(fileSystem.GetFilesInDirectory(workingDir)).Return(new string[0]);
             Expect.Call(fileSystem.GetFilesInDirectory(workingDir)).Return(new string[] {
-                "workingDir\\file1.txt",
-                "workingDir\\file2.xml"
+                "workingDir\\NDependResults\\file1.txt",
+                "workingDir\\NDependResults\\file2.xml"
             });
-            Expect.Call(() => fileSystem.EnsureFolderExists("artefactDir\\1\\NDepend"));
-            Expect.Call(() => fileSystem.Copy("workingDir\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt"));
-            Expect.Call(() => fileSystem.Copy("workingDir\\file2.xml", "artefactDir\\1\\NDepend\\file2.xml"));
-            Expect.Call(fileSystem.GenerateTaskResultFromFile("workingDir\\file2.xml")).Return(mocks.DynamicMock<ITaskResult>());
+            Expect.Call(fileSystem.DirectoryExists("artefactDir\\1\\NDepend")).Return(true);
+            Expect.Call(() => fileSystem.Copy("workingDir\\NDependResults\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt"));
+            Expect.Call(() => fileSystem.Copy("workingDir\\NDependResults\\file2.xml", "artefactDir\\1\\NDepend\\file2.xml"));
+            Expect.Call(fileSystem.GenerateTaskResultFromFile("workingDir\\NDependResults\\file2.xml")).Return(mocks.DynamicMock<ITaskResult>());
             var logger = mocks.DynamicMock<ILogger>();
             var task = new NDependTask(executor, fileSystem, logger);
             task.Executable = "ndepend-app.exe";
@@ -93,13 +93,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Expect.Call(fileSystem.DirectoryExists(workingDir)).Return(true).Repeat.Times(2);
             Expect.Call(fileSystem.GetFilesInDirectory(workingDir)).Return(new string[0]);
             Expect.Call(fileSystem.GetFilesInDirectory(workingDir)).Return(new string[] {
-                "working Dir\\file1.txt",
-                "working Dir\\file2.xml"
+                "working Dir\\NDependResults\\file1.txt",
+                "working Dir\\NDependResults\\file2.xml"
             });
-            Expect.Call(() => fileSystem.EnsureFolderExists("artefact Dir\\1\\NDepend"));
-            Expect.Call(() => fileSystem.Copy("working Dir\\file1.txt", "artefact Dir\\1\\NDepend\\file1.txt"));
-            Expect.Call(() => fileSystem.Copy("working Dir\\file2.xml", "artefact Dir\\1\\NDepend\\file2.xml"));
-            Expect.Call(fileSystem.GenerateTaskResultFromFile("working Dir\\file2.xml")).Return(mocks.DynamicMock<ITaskResult>());
+            Expect.Call(fileSystem.DirectoryExists("artefact Dir\\1\\NDepend")).Return(true);
+            Expect.Call(() => fileSystem.Copy("working Dir\\NDependResults\\file1.txt", "artefact Dir\\1\\NDepend\\file1.txt"));
+            Expect.Call(() => fileSystem.Copy("working Dir\\NDependResults\\file2.xml", "artefact Dir\\1\\NDepend\\file2.xml"));
+            Expect.Call(fileSystem.GenerateTaskResultFromFile("working Dir\\NDependResults\\file2.xml")).Return(mocks.DynamicMock<ITaskResult>());
             var logger = mocks.DynamicMock<ILogger>();
             var task = new NDependTask(executor, fileSystem, logger);
             task.Executable = "ndepend-app.exe";
@@ -121,13 +121,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Expect.Call(fileSystem.DirectoryExists(workingDir)).Return(true).Repeat.Times(2);
             Expect.Call(fileSystem.GetFilesInDirectory(workingDir)).Return(new string[0]);
             Expect.Call(fileSystem.GetFilesInDirectory(workingDir)).Return(new string[] {
-                "somewhere-else\\file1.txt",
-                "somewhere-else\\file2.xml"
+                "somewhere-else\\NDependResults\\file1.txt",
+                "somewhere-else\\NDependResults\\file2.xml"
             });
-            Expect.Call(() => fileSystem.EnsureFolderExists("artefactDir\\1\\NDepend"));
-            Expect.Call(() => fileSystem.Copy("somewhere-else\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt"));
-            Expect.Call(() => fileSystem.Copy("somewhere-else\\file2.xml", "artefactDir\\1\\NDepend\\file2.xml"));
-            Expect.Call(fileSystem.GenerateTaskResultFromFile("somewhere-else\\file2.xml")).Return(mocks.DynamicMock<ITaskResult>());
+            Expect.Call(fileSystem.DirectoryExists("artefactDir\\1\\NDepend")).Return(true);
+            Expect.Call(() => fileSystem.Copy("somewhere-else\\NDependResults\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt"));
+            Expect.Call(() => fileSystem.Copy("somewhere-else\\NDependResults\\file2.xml", "artefactDir\\1\\NDepend\\file2.xml"));
+            Expect.Call(fileSystem.GenerateTaskResultFromFile("somewhere-else\\NDependResults\\file2.xml")).Return(mocks.DynamicMock<ITaskResult>());
             var logger = mocks.DynamicMock<ILogger>();
             var task = new NDependTask(executor, fileSystem, logger);
             task.BaseDirectory = "somewhere-else";
@@ -151,13 +151,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Expect.Call(fileSystem.DirectoryExists(workingDir)).Return(true).Repeat.Times(2);
             Expect.Call(fileSystem.GetFilesInDirectory(workingDir)).Return(new string[0]);
             Expect.Call(fileSystem.GetFilesInDirectory(workingDir)).Return(new string[] {
-                "workingDir\\file1.txt",
-                "workingDir\\file2.xml"
+                "workingDir\\out-dir\\file1.txt",
+                "workingDir\\out-dir\\file2.xml"
             });
-            Expect.Call(() => fileSystem.EnsureFolderExists("artefactDir\\1\\NDepend"));
-            Expect.Call(() => fileSystem.Copy("workingDir\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt"));
-            Expect.Call(() => fileSystem.Copy("workingDir\\file2.xml", "artefactDir\\1\\NDepend\\file2.xml"));
-            Expect.Call(fileSystem.GenerateTaskResultFromFile("workingDir\\file2.xml")).Return(mocks.DynamicMock<ITaskResult>());
+            Expect.Call(fileSystem.DirectoryExists("artefactDir\\1\\NDepend")).Return(true);
+            Expect.Call(() => fileSystem.Copy("workingDir\\out-dir\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt"));
+            Expect.Call(() => fileSystem.Copy("workingDir\\out-dir\\file2.xml", "artefactDir\\1\\NDepend\\file2.xml"));
+            Expect.Call(fileSystem.GenerateTaskResultFromFile("workingDir\\out-dir\\file2.xml")).Return(mocks.DynamicMock<ITaskResult>());
             var logger = mocks.DynamicMock<ILogger>();
             var task = new NDependTask(executor, fileSystem, logger);
             task.ProjectFile = "test.project";
@@ -187,19 +187,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             var fileSystem = mocks.StrictMock<IFileSystem>();
             Expect.Call(fileSystem.DirectoryExists(workingDir)).Return(true).Repeat.Times(2);
             Expect.Call(fileSystem.GetFilesInDirectory(workingDir)).Return(new string[] {
-                "workingDir\\file1.txt",
-                "workingDir\\file2.xml"
+                "workingDir\\NDependResults\\file1.txt",
+                "workingDir\\NDependResults\\file2.xml"
             });
             Expect.Call(fileSystem.GetFilesInDirectory(workingDir)).Return(new string[] {
-                "workingDir\\file1.txt",
-                "workingDir\\file2.xml"
+                "workingDir\\NDependResults\\file1.txt",
+                "workingDir\\NDependResults\\file2.xml"
             });
-            Expect.Call(() => fileSystem.EnsureFolderExists("artefactDir\\1\\NDepend"));
-            Expect.Call(() => fileSystem.Copy("workingDir\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt"));
+            Expect.Call(fileSystem.DirectoryExists("artefactDir\\1\\NDepend")).Return(true);
+            Expect.Call(() => fileSystem.Copy("workingDir\\NDependResults\\file1.txt", "artefactDir\\1\\NDepend\\file1.txt"));
             var baseTime = DateTime.Now;
-            Expect.Call(fileSystem.GetLastWriteTime("workingDir\\file1.txt")).Return(baseTime);
-            Expect.Call(fileSystem.GetLastWriteTime("workingDir\\file2.xml")).Return(baseTime).Repeat.Times(2);
-            Expect.Call(fileSystem.GetLastWriteTime("workingDir\\file1.txt")).Return(baseTime.AddMinutes(1));
+            Expect.Call(fileSystem.GetLastWriteTime("workingDir\\NDependResults\\file1.txt")).Return(baseTime);
+            Expect.Call(fileSystem.GetLastWriteTime("workingDir\\NDependResults\\file2.xml")).Return(baseTime).Repeat.Times(2);
+            Expect.Call(fileSystem.GetLastWriteTime("workingDir\\NDependResults\\file1.txt")).Return(baseTime.AddMinutes(1));
             var logger = mocks.DynamicMock<ILogger>();
             var task = new NDependTask(executor, fileSystem, logger);
 
@@ -214,8 +214,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         public void DefaultConstructorSetsFileSystemAndLogger()
         {
             var task = new NDependTask();
-            Assert.IsInstanceOfType(typeof(SystemIoFileSystem), task.FileSystem);
-            Assert.IsInstanceOfType(typeof(DefaultLogger), task.Logger);
+            Assert.IsInstanceOf<SystemIoFileSystem>(task.FileSystem);
+            Assert.IsInstanceOf<DefaultLogger>(task.Logger);
         }
         #endregion
 
