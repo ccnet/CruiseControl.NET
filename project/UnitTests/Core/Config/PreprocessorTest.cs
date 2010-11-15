@@ -348,6 +348,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             }
         }
 
+        [Test, ExpectedException(typeof(MissingIncludeException))]
+        public void TestMissingIncludeFile()
+        {
+            string filename = "TestMissingIncludeFile.xml";
+            using (XmlReader input = GetInput(filename))
+            {
+                using (XmlWriter output = GetOutput())
+                {
+                    ConfigPreprocessor preprocessor = new ConfigPreprocessor();
+                    preprocessor.PreProcess(
+                        input, output, 
+                        new FileNotFoundTestResolver(FAKE_ROOT + filename), 
+                        new Uri(FAKE_ROOT + filename));
+                }
+            }
+        }
+        
         [Test]
         public void TestScope()
         {            
@@ -503,12 +520,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
         }
 
         internal static Stream GetManifestResourceStream(string filename)
+        {
+            return GetManifestResourceStream(filename, true);
+        }
+
+        internal static Stream GetManifestResourceStream(string filename, bool assertResourceFound)
 		{
 			System.IO.Stream result = Assembly.GetExecutingAssembly().
 				GetManifestResourceStream(
 				"ThoughtWorks.CruiseControl.UnitTests.Core.Config.TestAssets." +
 				filename);
-			Assert.IsNotNull(result, "Unable to load data from assembly : " + filename);
+            if (assertResourceFound)
+            {
+                Assert.IsNotNull(result, "Unable to load data from assembly : " + filename);
+            }
 			return result;
 		}
 
@@ -558,10 +583,32 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             return stream;
         }
 
-        private string Resolve(Uri absolute_uri)
+        protected string Resolve(Uri absolute_uri)
         {
             return absolute_uri.LocalPath.Substring( _original_base_path.Length ).Replace( '\\',
                                                                                              '.' );
         }
-    }    
+    }
+
+    internal class FileNotFoundTestResolver : TestResolver
+    {
+        public FileNotFoundTestResolver(string base_path)
+            : base(base_path)
+        {
+        }
+
+        public override object GetEntity(
+            Uri absolute_uri, string role, Type of_object_to_return)
+        {
+            string relative_uri = Resolve(absolute_uri);
+            // Ignore the path and load the file from the manifest resources.
+            // Don't assert that the resource exists, we need that to fall through
+            // for testing purposes.
+            Stream stream = PreprocessorTest.GetManifestResourceStream(
+                relative_uri, false);
+            if (stream == null)
+                throw new FileNotFoundException("Test resource not found.", absolute_uri.OriginalString);
+            return stream;
+        }
+    }
 }
