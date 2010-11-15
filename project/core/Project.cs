@@ -102,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private IIntegrationResultManager integrationResultManager;
         private IIntegratable integratable;
         private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
-        private ArrayList messages = new ArrayList();
+        private List<Message> messages = new  List<Message>();
         private int maxSourceControlRetries = 5;
         private IProjectAuthorisation security = new InheritedProjectAuthorisation();
         private ParameterBase[] parameters = new ParameterBase[0];
@@ -1188,7 +1188,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 this.QueueName, 
                 this.QueuePriority);
             status.Description = this.Description;
-            status.Messages = (Message[])this.messages.ToArray(typeof(Message));
+            status.Messages = this.messages.ToArray();
             status.ShowForceBuildButton = this.ShowForceBuildButton;
             status.ShowStartStopButton = this.ShowStartStopButton;
             return status;
@@ -1211,6 +1211,13 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public void AddMessage(Message message)
         {
+            // only show the last fixer
+            var existingFixerMessage = (from m in messages where m.Kind == Message.MessageKind.Fixer select m).SingleOrDefault();
+            if (existingFixerMessage != null)
+            {
+                messages.Remove(existingFixerMessage);
+            }
+
             messages.Add(message);
         }
 
