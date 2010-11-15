@@ -832,6 +832,8 @@
     <Content Include="Themes\noteWorthy\images\top_margin.jpg" />
     <Content Include="Themes\noteWorthy\images\top_section.jpg" />
     <Content Include="Themes\noteWorthy\Manifest.xml" />
+    <Content Include="Themes\Obsess\cruisecontrol.css" />
+    <Content Include="Themes\Obsess\Manifest.xml" />
     <Content Include="xsl\ndependreport-ccnet.v2.xsl" />
     <None Include="dashboard.config" />
     <EmbeddedResource Include="Resources\Languages.fr.resx">
@@ -882,6 +884,7 @@
     <None Include="Themes\liquidBlue\templates\TopMenu.vm" />
     <None Include="Themes\noteWorthy\templates\SiteTemplate.vm" />
     <None Include="Themes\noteWorthy\templates\TopMenu.vm" />
+    <None Include="Themes\Obsess\templates\SiteTemplate.vm" />
     <None Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
