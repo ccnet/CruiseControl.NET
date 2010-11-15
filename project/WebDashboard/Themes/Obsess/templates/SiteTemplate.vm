@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>CruiseControl.NET</title>
-		<link type="text/css" rel="stylesheet" href="$applicationPath/cruisecontrol.css" />
+		<link type="text/css" rel="stylesheet" href="$applicationPath/themes/Obsess/cruisecontrol.css" />
 		<link type="text/css" rel="stylesheet" href="$applicationPath/javascript/theme/ui.all.css" />
 		<link rel="shortcut icon" href="$applicationPath/AppIcon.ico" />
 		<script src="$applicationPath/javascript/ccnet.js" type="text/javascript"></script>
