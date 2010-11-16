@@ -12,7 +12,6 @@ namespace ThoughtWorks.CruiseControl.Core
     using System.Xml;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Config;
-    using ThoughtWorks.CruiseControl.Core.Distribution;
     using ThoughtWorks.CruiseControl.Core.Label;
     using ThoughtWorks.CruiseControl.Core.Publishers;
     using ThoughtWorks.CruiseControl.Core.Publishers.Statistics;
@@ -92,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.Core
     {
         private string webUrl = DefaultUrl();
         private string queueName = string.Empty;
-        private int queuePriority ;
+        private int queuePriority;
         private ISourceControl sourceControl = new NullSourceControl();
         private ILabeller labeller = new DefaultLabeller();
         private ITask[] tasks = new ITask[] { new NullTask() };
@@ -102,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private IIntegrationResultManager integrationResultManager;
         private IIntegratable integratable;
         private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
-        private List<Message> messages = new  List<Message>();
+        private List<Message> messages = new List<Message>();
         private int maxSourceControlRetries = 5;
         private IProjectAuthorisation security = new InheritedProjectAuthorisation();
         private ParameterBase[] parameters = new ParameterBase[0];
@@ -114,7 +113,6 @@ namespace ThoughtWorks.CruiseControl.Core
         private Dictionary<ITask, ItemStatus> currentProjectItems = new Dictionary<ITask, ItemStatus>();
         private Dictionary<SourceControlOperation, ItemStatus> sourceControlOperations = new Dictionary<SourceControlOperation, ItemStatus>();
         private IConfiguration configuration;
-        private RemoteBuildRequest remoteBuildRequest;
         private bool showForceBuildButton = true;
         private bool showStartStopButton = true;
 
@@ -466,22 +464,6 @@ namespace ThoughtWorks.CruiseControl.Core
             get { return integrationResultManager.CurrentIntegration; }
         }
 
-        private IBuildMachine FindBuildMachine(string machineName)
-        {
-            if ((this.configuration != null) &&
-                (this.configuration.BuildMachines != null))
-            {
-                var machine = (from record in this.configuration.BuildMachines
-                               where record.Name == machineName
-                               select record).SingleOrDefault();
-                return machine;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         /// <summary>
         /// Starts a new integration result.
         /// </summary>
@@ -497,129 +479,74 @@ namespace ThoughtWorks.CruiseControl.Core
         public IIntegrationResult Integrate(IntegrationRequest request)
         {
             Log.Trace("Integrating {0}", Name);
+            IIntegrationResult result = null;
 
-            // Check if this project can run remotely
-            var result = RunRemoteBuild(request);
-            if (result == null)
+            lock (currentProjectStatus)
             {
+                // Build up all the child items
+                // Note: this will only build up the direct children, it doesn't handle below the initial layer
+                currentProjectItems.Clear();
+                sourceControlOperations.Clear();
+                currentProjectStatus.Status = ItemBuildStatus.Running;
+                currentProjectStatus.ChildItems.Clear();
+                currentProjectStatus.TimeCompleted = null;
+                currentProjectStatus.TimeOfEstimatedCompletion = null;
+                currentProjectStatus.TimeStarted = DateTime.Now;
+                GenerateSourceControlOperation(SourceControlOperation.CheckForModifications);
+                GenerateTaskStatuses("Pre-build tasks", PrebuildTasks);
+                GenerateSourceControlOperation(SourceControlOperation.GetSource);
+                GenerateTaskStatuses("Build tasks", Tasks);
+                GenerateTaskStatuses("Publisher tasks", Publishers);
+            }
+
+            // Start the integration
+            IDisposable impersonation = null;
+            var hasError = false;
+            try
+            {
+                if (Impersonation != null) impersonation = Impersonation.Impersonate();
+                var dynamicSourceControl = sourceControl as IParamatisedItem;
+                if (dynamicSourceControl != null)
+                {
+                    dynamicSourceControl.ApplyParameters(request.BuildValues, parameters);
+                }
+                result = integratable.Integrate(request);
+            }
+            catch (Exception error)
+            {
+                Log.Error(error);
+                hasError = true;
+                throw;
+            }
+            finally
+            {
+                if (impersonation != null) impersonation.Dispose();
+
+                // Tidy up the status
                 lock (currentProjectStatus)
                 {
-                    // Build up all the child items
-                    // Note: this will only build up the direct children, it doesn't handle below the initial layer
-                    currentProjectItems.Clear();
-                    sourceControlOperations.Clear();
-                    currentProjectStatus.Status = ItemBuildStatus.Running;
-                    currentProjectStatus.ChildItems.Clear();
-                    currentProjectStatus.TimeCompleted = null;
-                    currentProjectStatus.TimeOfEstimatedCompletion = null;
-                    currentProjectStatus.TimeStarted = DateTime.Now;
-                    GenerateSourceControlOperation(SourceControlOperation.CheckForModifications);
-                    GenerateTaskStatuses("Pre-build tasks", PrebuildTasks);
-                    GenerateSourceControlOperation(SourceControlOperation.GetSource);
-                    GenerateTaskStatuses("Build tasks", Tasks);
-                    GenerateTaskStatuses("Publisher tasks", Publishers);
-                }
-
-                // Start the integration
-                IDisposable impersonation = null;
-                var hasError = false;
-                try
-                {
-                    if (Impersonation != null) impersonation = Impersonation.Impersonate();
-                    var dynamicSourceControl = sourceControl as IParamatisedItem;
-                    if (dynamicSourceControl != null)
+                    CancelAllOutstandingItems(currentProjectStatus);
+                    currentProjectStatus.TimeCompleted = DateTime.Now;
+                    IntegrationStatus resultStatus = result == null ?
+                        (hasError ? IntegrationStatus.Exception : IntegrationStatus.Unknown) :
+                        result.Status;
+                    switch (resultStatus)
                     {
-                        dynamicSourceControl.ApplyParameters(request.BuildValues, parameters);
-                    }
-                    result = integratable.Integrate(request);
-                }
-                catch (Exception error)
-                {
-                    Log.Error(error);
-                    hasError = true;
-                    throw;
-                }
-                finally
-                {
-                    if (impersonation != null) impersonation.Dispose();
-
-                    // Tidy up the status
-                    lock (currentProjectStatus)
-                    {
-                        CancelAllOutstandingItems(currentProjectStatus);
-                        currentProjectStatus.TimeCompleted = DateTime.Now;
-                        IntegrationStatus resultStatus = result == null ?
-                            (hasError ? IntegrationStatus.Exception : IntegrationStatus.Unknown) :
-                            result.Status;
-                        switch (resultStatus)
-                        {
-                            case IntegrationStatus.Success:
-                                currentProjectStatus.Status = ItemBuildStatus.CompletedSuccess;
-                                break;
-                            case IntegrationStatus.Unknown:
-                                // This probably means the build was cancelled (i.e. no changes detected)
-                                currentProjectStatus.Status = ItemBuildStatus.Cancelled;
-                                break;
-                            default:
-                                currentProjectStatus.Status = ItemBuildStatus.CompletedFailed;
-                                break;
-                        }
+                        case IntegrationStatus.Success:
+                            currentProjectStatus.Status = ItemBuildStatus.CompletedSuccess;
+                            break;
+                        case IntegrationStatus.Unknown:
+                            // This probably means the build was cancelled (i.e. no changes detected)
+                            currentProjectStatus.Status = ItemBuildStatus.Cancelled;
+                            break;
+                        default:
+                            currentProjectStatus.Status = ItemBuildStatus.CompletedFailed;
+                            break;
                     }
                 }
             }
 
             // Finally, return the actual result
-            return result;
-        }
-
-        /// <summary>
-        /// Attempts to run this build remotely.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        /// <returns>
-        /// An <see cref="IIntegrationResult"/> if the build ran remotely; <c>null</c> otherwise.
-        /// </returns>
-        private IIntegrationResult RunRemoteBuild(IntegrationRequest request)
-        {
-            IIntegrationResult result = null;
-            if (this.RemoteMachines != null)
-            {
-                foreach (var remoteMachine in this.RemoteMachines)
-                {
-                    // Get the build machine definition and see if it can build the project
-                    var machine = this.FindBuildMachine(remoteMachine);
-                    if (machine != null)
-                    {
-                        Log.Debug("Checking remote machine " + machine.Name);
-                        if (machine.CanBuild(this))
-                        {
-                            // Initialise a new result
-                            result = this.StartNewIntegration(request);
-
-                            // Perform the remote build and store the results
-                            Log.Info("Running build on remote machine " + machine.Name);
-                            var completedEvent = new ManualResetEvent(false);
-                            ITaskResult finalResult = null;
-                            this.remoteBuildRequest = machine.StartBuild(
-                                this,
-                                result,
-                                e =>
-                                {
-                                    // Handle the build completing
-                                    this.remoteBuildRequest = null;
-                                    result.AddTaskResult(e.Result);
-                                    finalResult = e.Result;
-                                    completedEvent.Set();
-                                });
-                            completedEvent.WaitOne();
-                            Log.Info(
-                                "Build on remote machine " + machine.Name +
-                                " completed - " + (finalResult.CheckIfSuccess() ? "success" : "failure"));
-                            break;
-                        }
-                    }
-                }
-            }
             return result;
         }
 
@@ -682,7 +609,7 @@ namespace ThoughtWorks.CruiseControl.Core
             else
             {
                 sourceControlStatus = new ItemStatus(
-                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}: {1}", 
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0}: {1}",
                         SourceControl.GetType().Name,
                         operation));
                 sourceControlStatus.Status = ItemBuildStatus.Pending;
@@ -706,7 +633,7 @@ namespace ThoughtWorks.CruiseControl.Core
             foreach (ITask task in tasks)
             {
                 ItemStatus taskItem = null;
-                
+
                 var tbase = task as TaskBase;
                 if (tbase != null)
                 {
@@ -721,7 +648,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 }
 
 
-                var dummyStatusSnapshotGenerator = task as IStatusSnapshotGenerator; 
+                var dummyStatusSnapshotGenerator = task as IStatusSnapshotGenerator;
                 if (dummyStatusSnapshotGenerator != null)
                 {
                     taskItem = dummyStatusSnapshotGenerator.GenerateSnapshot();
@@ -762,7 +689,7 @@ namespace ThoughtWorks.CruiseControl.Core
         }
 
         public void Prebuild(IIntegrationResult result, Dictionary<string, string> parameterValues)
-		{
+        {
             RunTasks(result, PrebuildTasks, parameterValues);
         }
 
@@ -801,7 +728,7 @@ namespace ThoughtWorks.CruiseControl.Core
         }
 
         public void Run(IIntegrationResult result, Dictionary<string, string> parameterValues)
-		{
+        {
             RunTasks(result, tasks, parameterValues);
         }
 
@@ -815,7 +742,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     dummy.ApplyParameters(parameterValues, parameters);
                 }
 
-                RunTask(task, result,false);
+                RunTask(task, result, false);
                 if (result.Failed) break;
             }
             CancelTasks(tasksToRun);
@@ -823,16 +750,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public void AbortRunningBuild(string userName)
         {
-            AddMessage(new Message(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Build Aborted by : {0}",userName ),  Message.MessageKind.BuildAbortedBy));
-
-            if (this.remoteBuildRequest != null)
-            {
-                this.remoteBuildRequest.Cancel();
-            }
-            else
-            {
-                ProcessExecutor.KillProcessCurrentlyRunningForProject(Name);
-            }
+            AddMessage(new Message(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Build Aborted by : {0}", userName), Message.MessageKind.BuildAbortedBy));
+            ProcessExecutor.KillProcessCurrentlyRunningForProject(Name);
         }
 
         public void PublishResults(IIntegrationResult result)
@@ -842,8 +761,8 @@ namespace ThoughtWorks.CruiseControl.Core
             PublishResults(result, parameters);
         }
 
-		public void PublishResults(IIntegrationResult result, Dictionary<string, string> parameterValues)
-		{
+        public void PublishResults(IIntegrationResult result, Dictionary<string, string> parameterValues)
+        {
             // Make sure all the tasks have been cancelled
             CancelTasks(PrebuildTasks);
             CancelTasks(Tasks);
@@ -1095,7 +1014,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     new Message(
                          string.Join(
                             ", ",
-                            failedTasks.ToArray()), Message.MessageKind.FailingTasks) );               
+                            failedTasks.ToArray()), Message.MessageKind.FailingTasks));
             }
         }
 
@@ -1122,13 +1041,13 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public void Initialize()
         {
-            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Initializing Project [{0}]", Name));
+            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Initializing Project [{0}]", Name));
             SourceControl.Initialize(this);
         }
 
         public void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
         {
-            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Purging Project [{0}]", Name));
+            Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Purging Project [{0}]", Name));
             if (purgeSourceControlEnvironment)
             {
                 SourceControl.Purge(this);
@@ -1167,25 +1086,25 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public static string DefaultUrl()
         {
-            return string.Format(System.Globalization.CultureInfo.CurrentCulture,"http://{0}/ccnet", Environment.MachineName);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture, "http://{0}/ccnet", Environment.MachineName);
         }
 
         public ProjectStatus CreateProjectStatus(IProjectIntegrator integrator)
         {
             var lastIntegration = this.LastIntegration;
             ProjectStatus status = new ProjectStatus(
-                this.Name, 
-                this.Category, 
-                this.CurrentActivity, 
-                lastIntegration.Status, 
-                integrator.State, 
+                this.Name,
+                this.Category,
+                this.CurrentActivity,
+                lastIntegration.Status,
+                integrator.State,
                 this.WebURL,
-                lastIntegration.StartTime, 
+                lastIntegration.StartTime,
                 lastIntegration.Label,
                 lastIntegration.LastSuccessfulIntegrationLabel,
-                this.Triggers.NextBuild, 
-                this.CurrentBuildStage(), 
-                this.QueueName, 
+                this.Triggers.NextBuild,
+                this.CurrentBuildStage(),
+                this.QueueName,
                 this.QueuePriority);
             status.Description = this.Description;
             status.Messages = this.messages.ToArray();
@@ -1197,11 +1116,11 @@ namespace ThoughtWorks.CruiseControl.Core
         private string CurrentBuildStage()
         {
             if (CurrentActivity == ProjectActivity.Building ||
-				CurrentActivity == ProjectActivity.CheckingModifications)
-				return integrationResultManager.CurrentIntegration.BuildProgressInformation.GetBuildProgressInformation();
-                
+                CurrentActivity == ProjectActivity.CheckingModifications)
+                return integrationResultManager.CurrentIntegration.BuildProgressInformation.GetBuildProgressInformation();
+
             else
-				return string.Empty;
+                return string.Empty;
         }
 
         private IntegrationSummary LastIntegration
@@ -1320,12 +1239,12 @@ namespace ThoughtWorks.CruiseControl.Core
             }
             throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
         }
-        
+
         public void CreateLabel(IIntegrationResult result)
         {
             if (Labeller is IParamatisedItem)
             {
-                (Labeller as IParamatisedItem).ApplyParameters(result.IntegrationRequest.BuildValues, 
+                (Labeller as IParamatisedItem).ApplyParameters(result.IntegrationRequest.BuildValues,
                     parameters);
             }
             result.Label = Labeller.Generate(result);
@@ -1370,7 +1289,7 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 errorProcesser.ProcessError(
                     new ConfigurationException(
-                        string.Format(System.Globalization.CultureInfo.CurrentCulture,"Security is defined for project '{0}', but not defined at the server", this.Name)));
+                        string.Format(System.Globalization.CultureInfo.CurrentCulture, "Security is defined for project '{0}', but not defined at the server", this.Name)));
             }
 
             this.ValidateProject(errorProcesser);
@@ -1402,7 +1321,7 @@ namespace ThoughtWorks.CruiseControl.Core
             if (ContainsInvalidChars(this.Name))
             {
                 errorProcesser.ProcessWarning(
-                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project name '{0}' contains some chars that could cause problems, better use only numbers and letters",
+                    string.Format(System.Globalization.CultureInfo.CurrentCulture, "Project name '{0}' contains some chars that could cause problems, better use only numbers and letters",
                         Name));
             }
         }
@@ -1444,7 +1363,8 @@ namespace ThoughtWorks.CruiseControl.Core
             if (item == null) return;
 
             var dummy = item as IConfigurationValidation;
-            if (dummy != null)             {
+            if (dummy != null)
+            {
                 dummy.Validate(configuration, parent.Wrap(this), errorProcesser);
             }
         }
@@ -1529,7 +1449,7 @@ namespace ThoughtWorks.CruiseControl.Core
         public virtual List<PackageDetails> RetrievePackageList()
         {
             List<PackageDetails> packages = new List<PackageDetails>();
-            foreach(string packgeInfo in Directory.GetFiles(ArtifactDirectory, "*-packages.xml", SearchOption.AllDirectories))
+            foreach (string packgeInfo in Directory.GetFiles(ArtifactDirectory, "*-packages.xml", SearchOption.AllDirectories))
             {
                 packages.AddRange(LoadPackageList(packgeInfo));
             }

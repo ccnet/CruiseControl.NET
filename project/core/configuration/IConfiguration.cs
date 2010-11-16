@@ -2,7 +2,6 @@ namespace ThoughtWorks.CruiseControl.Core
 {
     using System.Collections.Generic;
     using ThoughtWorks.CruiseControl.Core.Config;
-    using ThoughtWorks.CruiseControl.Core.Distribution;
     using ThoughtWorks.CruiseControl.Core.Security;
 
     /// <summary>
@@ -32,22 +31,6 @@ namespace ThoughtWorks.CruiseControl.Core
         /// Store the security manager that is being used.
         /// </summary>
         ISecurityManager SecurityManager { get; }
-
-        #region BuildMachines
-        /// <summary>
-        /// Gets the available build machines.
-        /// </summary>
-        /// <value>The build machines.</value>
-        IList<IBuildMachine> BuildMachines { get; }
-        #endregion
-
-        #region BuildAgents
-        /// <summary>
-        /// Gets the build agents.
-        /// </summary>
-        /// <value>The build agents.</value>
-        IList<IBuildAgent> BuildAgents { get; }
-        #endregion
 
         /// <summary>
         /// Adds a project.

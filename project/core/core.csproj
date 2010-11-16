@@ -267,21 +267,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CruiseXmlWriter.cs" />
-    <Compile Include="Distribution\IBuildAgent.cs" />
-    <Compile Include="Distribution\IBuildMachine.cs" />
-    <Compile Include="Distribution\IRemoteBuildService.cs" />
-    <Compile Include="Distribution\Messages\CancelBuildRequest.cs" />
-    <Compile Include="Distribution\Messages\CancelBuildResponse.cs" />
-    <Compile Include="Distribution\Messages\CheckIfBuildCanRunRequest.cs" />
-    <Compile Include="Distribution\Messages\CheckIfBuildCanRunResponse.cs" />
-    <Compile Include="Distribution\Messages\RetrieveBuildStatusRequest.cs" />
-    <Compile Include="Distribution\Messages\RetrieveBuildStatusResponse.cs" />
-    <Compile Include="Distribution\Messages\StartBuildRequest.cs" />
-    <Compile Include="Distribution\Messages\StartBuildResponse.cs" />
-    <Compile Include="Distribution\RemoteBuildAgent.cs" />
-    <Compile Include="Distribution\RemoteBuildMachine.cs" />
-    <Compile Include="Distribution\RemoteBuildRequest.cs" />
-    <Compile Include="Distribution\RemoteBuildTaskResult.cs" />
     <Compile Include="Extensions\DiskSpaceMonitorExtension.cs" />
     <Compile Include="Extensions\IntegrationRequestThrottleExtension.cs" />
     <Compile Include="Extensions\IntegrationPerformanceCountersExtension.cs" />
