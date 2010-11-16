@@ -420,16 +420,22 @@
             }
             else
             {
+                var basePath = rootPath ?? this.BaseDirectory ?? string.Empty;
                 if (string.IsNullOrEmpty(path))
                 {
-                    actualPath = Path.Combine(rootPath, "NDependResults");
+                    actualPath = Path.Combine(basePath, "NDependResults");
                 }
                 else
                 {
-                    actualPath = Path.Combine(rootPath, path);
+                    actualPath = Path.Combine(basePath, path);
                 }
             }
-            if (doubleQuote) actualPath = StringUtil.AutoDoubleQuoteString(actualPath);
+
+            if (doubleQuote)
+            {
+                actualPath = StringUtil.AutoDoubleQuoteString(actualPath);
+            }
+
             return actualPath;
         }
         #endregion
