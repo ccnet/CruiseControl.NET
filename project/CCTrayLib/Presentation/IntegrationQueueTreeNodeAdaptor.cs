@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 return;
 
             QueueSetSnapshot queueSetSnapshot = serverMonitor.CruiseServerSnapshot.QueueSetSnapshot;
-            if (queueSetSnapshot != null && queueSetSnapshot.Queues.Count > 0)
+            if (queueSetSnapshot != null && queueSetSnapshot.Queues != null &&  queueSetSnapshot.Queues.Count > 0)
 			{
 				foreach (QueueSnapshot queue in queueSetSnapshot.Queues)
 				{
