@@ -14,6 +14,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
     public class MainForm : Form
     {
+        private const string projectcolumnwidth = "ProjectColumnWidth";
+        private const string servercolumnwidth = "ServerColumnWidth";
+        private const string categorycolumnwidth = "CategoryColumnWidth";
+        private const string activitycolumnwidth = "ActivityColumnWidth";
+        private const string detailcolumnwidth = "DetailColumnWidth";
+        private const string lastbuildlabelcolumnwidth = "LastBuildLabelColumnWidth";
+        private const string lastbuildtimecolumnwidth = "LastBuildTimeColumnWidth";
+        private const string qnamecolumnwidth = "QNameColumnWidth";
+        private const string qprioritycolumnwidth = "QPriorityColumnWidth";
+        private const string queueviewpanelvisible = "QueueViewPanelVisible";
+        private const string queueviewsplitterposition = "QueueViewSplitterPosition";
+        private const string projectviewmode = "ProjectViewMode";
         private static int WM_QUERYENDSESSION = 0x0011;
 
         private MenuItem menuFile;
@@ -104,39 +116,42 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private void OnLoadState(object sender, WindowStateEventArgs e)
         {
             // get additional state information from registry
-            colProject.Width = (int)e.Key.GetValue("ProjectColumnWidth", 160);
-            colServer.Width = (int)e.Key.GetValue("ServerColumnWidth", 100);
-            colCategory.Width = (int)e.Key.GetValue("CategoryColumnWidth", 100);
-            colActivity.Width = (int)e.Key.GetValue("ActivityColumnWidth", 132);
-            colDetail.Width = (int)e.Key.GetValue("DetailColumnWidth", 250);
-            colLastBuildLabel.Width = (int)e.Key.GetValue("LastBuildLabelColumnWidth", 120);
-            colLastBuildTime.Width = (int)e.Key.GetValue("LastBuildTimeColumnWidth", 130);
-            colQName.Width = (int)e.Key.GetValue("QNameColumnWidth", 130);
-            colQPriority.Width = (int)e.Key.GetValue("QPriorityColumnWidth", 130);
-            queueViewPanelVisible = bool.Parse(e.Key.GetValue("QueueViewPanelVisible", bool.FalseString).ToString());
+            colProject.Width = (int)e.Key.GetValue(projectcolumnwidth, 160);
+            colServer.Width = (int)e.Key.GetValue(servercolumnwidth, 100);
+            colCategory.Width = (int)e.Key.GetValue(categorycolumnwidth, 100);
+            colActivity.Width = (int)e.Key.GetValue(activitycolumnwidth, 132);
+            colDetail.Width = (int)e.Key.GetValue(detailcolumnwidth, 250);
+            colLastBuildLabel.Width = (int)e.Key.GetValue(lastbuildlabelcolumnwidth, 120);
+            colLastBuildTime.Width = (int)e.Key.GetValue(lastbuildtimecolumnwidth, 130);
+            colQName.Width = (int)e.Key.GetValue(qnamecolumnwidth, 130);
+            colQPriority.Width = (int)e.Key.GetValue(qprioritycolumnwidth, 130);
+
+            queueViewPanelVisible = bool.Parse(e.Key.GetValue(queueviewpanelvisible, bool.FalseString).ToString());
             splitterQueueView.Visible = queueViewPanelVisible;
             pnlViewQueues.Visible = queueViewPanelVisible;
             queueTreeView.Visible = queueViewPanelVisible;
             UpdateViewQueuesButtonLabel();
-            splitterQueueView.SplitPosition = (int)e.Key.GetValue("QueueViewSplitterPosition", 80);
-            lvProjects.View = (View)Enum.Parse(typeof(View), (string)e.Key.GetValue("ProjectViewMode", View.Details.ToString()));
+            splitterQueueView.SplitPosition = (int)e.Key.GetValue(queueviewsplitterposition, 80);
+            lvProjects.View = (View)Enum.Parse(typeof(View), (string)e.Key.GetValue(projectviewmode, View.Details.ToString()));
+
+
         }
 
         private void OnSaveState(object sender, WindowStateEventArgs e)
         {
             // save additional state information to registry
-            e.Key.SetValue("ProjectColumnWidth", colProject.Width);
-            e.Key.SetValue("ServerColumnWidth", colServer.Width);
-            e.Key.SetValue("CategoryColumnWidth", colCategory.Width);
-            e.Key.SetValue("QNameColumnWidth",colQName.Width);
-            e.Key.SetValue("QPriorityColumnWidth",colQPriority.Width);
-            e.Key.SetValue("ActivityColumnWidth", colActivity.Width);
-            e.Key.SetValue("DetailColumnWidth", colDetail.Width);
-            e.Key.SetValue("LastBuildLabelColumnWidth", colLastBuildLabel.Width);
-            e.Key.SetValue("LastBuildTimeColumnWidth", colLastBuildTime.Width);
-            e.Key.SetValue("QueueViewPanelVisible", queueViewPanelVisible);
-            e.Key.SetValue("QueueViewSplitterPosition", splitterQueueView.SplitPosition);
-            e.Key.SetValue("ProjectViewMode", lvProjects.View.ToString());
+            e.Key.SetValue(projectcolumnwidth, colProject.Width);
+            e.Key.SetValue(servercolumnwidth, colServer.Width);
+            e.Key.SetValue(categorycolumnwidth, colCategory.Width);
+            e.Key.SetValue(qnamecolumnwidth, colQName.Width);
+            e.Key.SetValue(qprioritycolumnwidth, colQPriority.Width);
+            e.Key.SetValue(activitycolumnwidth, colActivity.Width);
+            e.Key.SetValue(detailcolumnwidth, colDetail.Width);
+            e.Key.SetValue(lastbuildlabelcolumnwidth, colLastBuildLabel.Width);
+            e.Key.SetValue(lastbuildtimecolumnwidth, colLastBuildTime.Width);
+            e.Key.SetValue(queueviewpanelvisible, queueViewPanelVisible);
+            e.Key.SetValue(queueviewsplitterposition, splitterQueueView.SplitPosition);
+            e.Key.SetValue(projectviewmode, lvProjects.View.ToString());
         }
 
         private void CreateController()
@@ -208,13 +223,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.colProject = new System.Windows.Forms.ColumnHeader();
             this.colServer = new System.Windows.Forms.ColumnHeader();
             this.colCategory = new System.Windows.Forms.ColumnHeader();
-            this.colQName = new System.Windows.Forms.ColumnHeader();
-            this.colQPriority = new System.Windows.Forms.ColumnHeader();
             this.colActivity = new System.Windows.Forms.ColumnHeader();
             this.colDetail = new System.Windows.Forms.ColumnHeader();
             this.colLastBuildLabel = new System.Windows.Forms.ColumnHeader();
             this.colLastBuildTime = new System.Windows.Forms.ColumnHeader();
             this.colProjectStatus = new System.Windows.Forms.ColumnHeader();
+            this.colQName = new System.Windows.Forms.ColumnHeader();
+            this.colQPriority = new System.Windows.Forms.ColumnHeader();
             this.projectContextMenu = new System.Windows.Forms.ContextMenu();
             this.mnuForce = new System.Windows.Forms.MenuItem();
             this.mnuAbort = new System.Windows.Forms.MenuItem();
@@ -284,13 +299,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.colProject,
             this.colServer,
             this.colCategory,
-            this.colQName,
-            this.colQPriority,
             this.colActivity,
             this.colDetail,
             this.colLastBuildLabel,
             this.colLastBuildTime,
-            this.colProjectStatus});
+            this.colProjectStatus,
+            this.colQName,
+            this.colQPriority});
             this.lvProjects.ContextMenu = this.projectContextMenu;
             this.lvProjects.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvProjects.FullRowSelect = true;
@@ -323,16 +338,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.colCategory.Text = "Category";
             this.colCategory.Width = 100;
             // 
-            // colQName
-            // 
-            this.colQName.Text = "Q Name";
-            this.colQName.Width = 100;
-            // 
-            // colQPriority
-            // 
-            this.colQPriority.Text = "Q Priority";
-            this.colQPriority.Width = 100;
-            // 
             // colActivity
             // 
             this.colActivity.Text = "Activity";
@@ -356,6 +361,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // colProjectStatus
             // 
             this.colProjectStatus.Text = "Project Status";
+            // 
+            // colQName
+            // 
+            this.colQName.Text = "Q Name";
+            this.colQName.Width = 100;
+            // 
+            // colQPriority
+            // 
+            this.colQPriority.Text = "Q Priority";
+            this.colQPriority.Width = 100;
+
             // 
             // projectContextMenu
             // 
@@ -1112,7 +1128,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         // Implements the manual sorting of items by columns.
         private class ListViewItemComparer : IComparer
         {
-            private static string[] _columnSortTypes = new string[] { "string", "string", "string", "string", "int", "datetime", "string" };
+            private static string[] _columnSortTypes = new string[] { "string", "string", "string", "string", "int", "datetime", "string",  "datetime","string", "string", "string" };
             private int col;
             private bool ascendingOrder;
 

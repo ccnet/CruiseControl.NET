@@ -65,8 +65,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			ListViewItem item = adaptor.Create(projectMonitor);
 
 			Assert.AreEqual(10, item.SubItems.Count);
-			ListViewItem.ListViewSubItem activity = item.SubItems[5];
-			ListViewItem.ListViewSubItem label = item.SubItems[7];
+			ListViewItem.ListViewSubItem activity = item.SubItems[3];
+			ListViewItem.ListViewSubItem label = item.SubItems[5];
 
 			Assert.AreEqual("", activity.Text);
 			Assert.AreEqual("", label.Text);
@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			ProjectStatusListViewItemAdaptor adaptor = new ProjectStatusListViewItemAdaptor(detailStringFormatter);
 			ListViewItem item = adaptor.Create(projectMonitor);
 
-			ListViewItem.ListViewSubItem detail = item.SubItems[6];
+			ListViewItem.ListViewSubItem detail = item.SubItems[4];
 			Assert.AreEqual("test1", detail.Text);
 
 			mockProjectDetailStringFormatter.ExpectAndReturn("FormatDetailString", "test2", projectMonitor);

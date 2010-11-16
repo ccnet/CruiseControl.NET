@@ -16,8 +16,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
         private readonly ListViewItem.ListViewSubItem projectStatus;
         private readonly ListViewItem.ListViewSubItem serverName;
         private readonly ListViewItem.ListViewSubItem category;
-        private readonly ListViewItem.ListViewSubItem QName;
-        private readonly ListViewItem.ListViewSubItem QPriority;
+        private readonly ListViewItem.ListViewSubItem qName;
+        private readonly ListViewItem.ListViewSubItem qPriority;
 
 
         private readonly ICCTrayMultiConfiguration config = null;
@@ -35,10 +35,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             item.SubItems.Add(serverName);
             category = new ListViewItem.ListViewSubItem(item, string.Empty);
             item.SubItems.Add(category);
-            QName = new ListViewItem.ListViewSubItem(item, string.Empty);
-            item.SubItems.Add(QName);
-            QPriority = new ListViewItem.ListViewSubItem(item, string.Empty);
-            item.SubItems.Add(QPriority);
             activity = new ListViewItem.ListViewSubItem(item, string.Empty);
             item.SubItems.Add(activity);
             detail = new ListViewItem.ListViewSubItem(item, string.Empty);
@@ -49,6 +45,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             item.SubItems.Add(lastBuildTime);
             projectStatus = new ListViewItem.ListViewSubItem(item, string.Empty);
             item.SubItems.Add(projectStatus);
+            qName = new ListViewItem.ListViewSubItem(item, string.Empty);
+            item.SubItems.Add(qName);
+            qPriority = new ListViewItem.ListViewSubItem(item, string.Empty);
+            item.SubItems.Add(qPriority);
+            
         }
 
         public ListViewItem Create(IProjectMonitor projectMonitor)
@@ -95,8 +96,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 projectStatus.Text = monitor.ProjectIntegratorState;
                 activity.Text = monitor.Detail.Activity.ToString();
                 category.Text = monitor.Detail.Category;
-                QName.Text = monitor.Detail.QueueName;
-                QPriority.Text = monitor.Detail.QueuePriority.ToString("D8");
+                qName.Text = monitor.Detail.QueueName;
+                qPriority.Text = monitor.Detail.QueuePriority.ToString("D8");
+                
             }
             else
             {
