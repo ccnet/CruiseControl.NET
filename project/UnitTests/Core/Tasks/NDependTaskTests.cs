@@ -122,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         }
 
         [Test]
-        public void ExecuteFailsIfContentFailIsInvalid()
+        public void ExecuteFailsIfContentFileHasInvalidRootNode()
         {
             var workingDir = "workingDir\\NDependResults";
             var result = GenerateResultMock();
@@ -132,6 +132,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             Expect.Call(fileSystem.GetFilesInDirectory(workingDir)).Return(new string[0]);
             Expect.Call(fileSystem.FileExists("workingDir\\NDependResults\\ReportResources.xml")).Return(true);
             using (var reader = new StringReader("<garbage/>"))
+            {
+                Expect.Call(fileSystem.Load("workingDir\\NDependResults\\ReportResources.xml")).Return(reader);
+                var logger = mocks.DynamicMock<ILogger>();
+                var task = new NDependTask(executor, fileSystem, logger);
+
+                Expect.Call(result.Status).PropertyBehavior();
+                mocks.ReplayAll();
+                result.Status = IntegrationStatus.Unknown;
+                Assert.Throws<CruiseControlException>(() => task.Run(result));
+                mocks.VerifyAll();
+            }
+        }
+
+        [Test]
+        public void ExecuteFailsIfContentFileIsInvalid()
+        {
+            var workingDir = "workingDir\\NDependResults";
+            var result = GenerateResultMock();
+            var executor = GenerateExecutorMock("workingDir\\NDepend.Console", "workingDir\\NDependResults /OutDir workingDir\\NDependResults", "workingDir", 600000);
+            var fileSystem = mocks.StrictMock<IFileSystem>();
+            Expect.Call(fileSystem.DirectoryExists(workingDir)).Return(true);
+            Expect.Call(fileSystem.GetFilesInDirectory(workingDir)).Return(new string[0]);
+            Expect.Call(fileSystem.FileExists("workingDir\\NDependResults\\ReportResources.xml")).Return(true);
+            using (var reader = new StringReader("garbage"))
             {
                 Expect.Call(fileSystem.Load("workingDir\\NDependResults\\ReportResources.xml")).Return(reader);
                 var logger = mocks.DynamicMock<ILogger>();
