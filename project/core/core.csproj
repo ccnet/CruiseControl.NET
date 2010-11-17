@@ -809,6 +809,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="state\XmlProjectStateManager.cs" />
+    <Compile Include="tasks\AntsPerformanceProfilerTask.cs" />
     <Compile Include="tasks\ArtifactCleanUp.cs" />
     <Compile Include="tasks\BaseExecutableTask.cs" />
     <Compile Include="tasks\BuilderException.cs">

@@ -4205,6 +4205,15 @@
 
   <xs:complexType name="Tasks">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="antsPerformance" type="antsPerformance">
+        <xs:annotation>
+          <xs:documentation>
+            Profiles the performance of an application using Reg Gate's ANTS Performance Profiler.
+            ANTS Performance Profiler is a tool to profile the performance of an application.
+            This application is available from http://www.red\-gate.com/. Pro edition of 1.6 or later is required.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="artifactcleanup" type="artifactcleanup">
         <xs:annotation>
           <xs:documentation>
@@ -4486,6 +4495,235 @@
         </xs:annotation>
       </xs:element>
     </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="antsPerformance">
+    <xs:all>
+      <xs:element name="executable" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The executable to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="app" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The application to profile.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="appArgs" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The arguments to pass to the application.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="priority" type="ProcessPriorityClass" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The priority class of the spawned process.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="timeout" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The time\-out period in seconds for the entire task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="profilerTimeout" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The time\-out period in seconds for the profiler.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="quiet" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to disable all output or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="verbose" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to display verbose output or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="overwrite" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to overwrite any existing files or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="subProcesses" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to include sub\-processes.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="level" type="AntsTraceLevel" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The level to trace at.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="methodLevel" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Perform method level profiling.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="onlyWithSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Only profile methods that have source code.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="useSampling" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to use sampling for generating approximate results quickly.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="includeSource" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to include source code in the results.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="inlining" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to allow .NET to inline functions.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="compensate" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to get the profiler to compensate for its own overhead.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="simplify" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to simplify certain complicated stack traces.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="avoidTrivial" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to avoid trivial functions or not.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="sqlIO" type="xs:boolean" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Whether to try to record SQL and File I/O events.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="baseDir" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The base directory to use. If omitted this will default to the working directory of the project.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="xmlArgs" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            A file containing the args for the profiler in an XML specification.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="summaryScv" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The location to write the summary file to \- uses CSV format.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="summaryXml" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The location to write the summary file to \- uses XML format.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="summaryHtml" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The location to write the summary file to \- uses HTML format.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="callTreeXml" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The location to write the calltree file to \- uses XML format.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="callTreeHtml" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The location to write the calltree file to \- uses HTML format.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="data" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The location to write the data file to (requires desktop application to view).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="output" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The output analysis file.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="threshold" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The threshold level.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dynamicValues" type="DynamicValues" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            The dynamic values to use for the task.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="description" type="String" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            Description used for the visualisation of the buildstage, if left empty the process name will be shown.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
   </xs:complexType>
 
   <xs:complexType name="artifactcleanup">
@@ -8718,6 +8956,13 @@
       </xs:element>
     </xs:all>
   </xs:complexType>
+
+  <xs:simpleType name="AntsTraceLevel">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Line"/>
+      <xs:enumeration value="Method"/>
+    </xs:restriction>
+  </xs:simpleType>
 
   <xs:simpleType name="AuthCachingMode">
     <xs:restriction base="xs:string">

@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Exortech.NetReflector;
+using System.IO;
 using NUnit.Framework;
 using Rhino.Mocks;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using Rhino.Mocks.Constraints;
-using System.IO;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {

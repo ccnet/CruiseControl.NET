@@ -115,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="configuration">The entire configuration.</param>
         /// <param name="parent">The parent item for the item being validated.</param>
         /// <param name="errorProcesser">The error processer to use.</param>
-        public void Validate(IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
+        public virtual void Validate(IConfiguration configuration, ConfigurationTrace parent, IConfigurationErrorProcesser errorProcesser)
         {
             // Get the name of the executable
             var canCheck = true;

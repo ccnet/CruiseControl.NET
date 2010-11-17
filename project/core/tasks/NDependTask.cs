@@ -4,9 +4,9 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using System.Xml.Linq;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Util;
-    using System.Xml.Linq;
 
     /// <summary>
     /// <para>
