@@ -41,7 +41,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
                 MatchEvaluator evaluator = (match) =>
                 {
                     var splitPos = match.Value.IndexOf("=\"");
-                    var newValue = match.Value.Substring(0, splitPos + 2) +
+                    var prefex = match.Value.Substring(0, splitPos + 2);
+                    if (match.Value.StartsWith(prefex + "data:", StringComparison.InvariantCultureIgnoreCase) ||
+                        match.Value.StartsWith(prefex + "http://", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        return match.Value;
+                    }
+
+                    var newValue = prefex +
                         "RetrieveBuildFile.aspx?file=" +
                         prefix +
                         match.Value.Substring(splitPos + 2);
