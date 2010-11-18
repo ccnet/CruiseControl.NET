@@ -16,9 +16,11 @@
         /// Initializes a new instance of the <see cref="ActionHandlerAttribute"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
-        public ActionHandlerAttribute(string name)
+        /// <param name="targets">The targets.</param>
+        public ActionHandlerAttribute(string name, ActionHandlerTargets targets)
         {
             this.Name = name;
+            this.Targets = targets;
         }
         #endregion
 
@@ -29,6 +31,14 @@
         /// </summary>
         /// <value>The action name.</value>
         public string Name { get; private set; }
+        #endregion
+
+        #region Targets
+        /// <summary>
+        /// Gets or sets the target levels.
+        /// </summary>
+        /// <value>The targets.</value>
+        public ActionHandlerTargets Targets { get; private set; }
         #endregion
         #endregion
     }

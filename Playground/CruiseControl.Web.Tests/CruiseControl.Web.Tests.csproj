@@ -70,9 +70,13 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\Lib\Testing\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="MvcContrib.TestHelper">
       <HintPath>..\Lib\Testing\MvcContrib.TestHelper.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
     <Reference Include="nunit.framework, Version=2.5.8.10295, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\Lib\Testing\nunit.framework.dll</HintPath>
     </Reference>
@@ -80,6 +84,7 @@
       <HintPath>..\Lib\Testing\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -91,6 +96,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionHandlerAttributeTests.cs" />
+    <Compile Include="ActionHandlerFactoryTests.cs" />
+    <Compile Include="ConfigurationStoreTests.cs" />
     <Compile Include="DynamicControllerTests.cs" />
     <Compile Include="MvcApplicationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

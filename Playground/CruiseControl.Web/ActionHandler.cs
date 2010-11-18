@@ -8,12 +8,13 @@
     public abstract class ActionHandler
     {
         #region Public methods
-        #region Execute()
+        #region Generate()
         /// <summary>
-        /// Executes this handler.
+        /// Generates the result from this handler.
         /// </summary>
+        /// <param name="context">The context.</param>
         /// <returns>The result.</returns>
-        public abstract ActionResult Execute();
+        public abstract ActionResult Generate(ActionRequestContext context);
         #endregion
         #endregion
     }
