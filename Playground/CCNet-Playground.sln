@@ -1,0 +1,11 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Description = Incubation area for new CruiseControl.NET functionality.
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
