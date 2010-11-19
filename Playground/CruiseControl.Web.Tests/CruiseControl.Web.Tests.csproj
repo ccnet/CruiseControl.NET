@@ -98,7 +98,8 @@
   <ItemGroup>
     <Compile Include="ActionHandlerAttributeTests.cs" />
     <Compile Include="ActionHandlerFactoryTests.cs" />
-    <Compile Include="ConfigurationStoreTests.cs" />
+    <Compile Include="Configuration\FoldersTests.cs" />
+    <Compile Include="Configuration\ManagerTests.cs" />
     <Compile Include="DynamicControllerTests.cs" />
     <Compile Include="MvcApplicationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

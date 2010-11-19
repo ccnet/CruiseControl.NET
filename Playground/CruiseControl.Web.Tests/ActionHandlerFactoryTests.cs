@@ -1,7 +1,7 @@
 ﻿namespace CruiseControl.Web.Tests
 {
-    using NUnit.Framework;
     using System.IO;
+    using NUnit.Framework;
 
     [TestFixture]
     public class ActionHandlerFactoryTests

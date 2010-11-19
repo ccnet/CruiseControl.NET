@@ -1,8 +1,10 @@
 ﻿namespace CruiseControl.Web
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using Configuration;
     using NLog;
 
     /// <summary>
@@ -12,8 +14,8 @@
         : Controller
     {
         #region Private fields
-        private static Logger sLogger = LogManager.GetCurrentClassLogger();
-        private static string sDataFolder;
+        private static Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly string DataFolder;
         #endregion
 
         #region Constructors
@@ -22,8 +24,8 @@
         /// </summary>
         static DynamicController()
         {
-            sDataFolder = ConfigurationStore.DataDirectory;
-            sLogger.Debug("Data folder is {0}", sDataFolder);
+            DataFolder = Folders.DataDirectory;
+            Logger.Debug("Data folder is {0}", DataFolder);
         }
         #endregion
 
@@ -40,7 +42,7 @@
         public ActionResult Index(string server, string project, string build, string report)
         {
             // Generate the context
-            sLogger.Debug("Dynamically resolving request");
+            Logger.Debug("Dynamically resolving request");
             var context = this.GenerateContext(server, project, build, report);
 
             // Resolve the action handler
@@ -50,20 +52,20 @@
             ActionResult result;
             if (handler != null)
             {
-                sLogger.Debug("Generating action response");
+                Logger.Debug("Generating action response");
                 try
                 {
                     result = handler.Value.Generate(context);
                 }
                 catch (Exception error)
                 {
-                    sLogger.ErrorException("An error occurring while generating response", error);
+                    Logger.ErrorException("An error occurring while generating response", error);
                     result = Content("TODO: Display relevant error");
                 }
             }
             else
             {
-                sLogger.Debug("Generating error message");
+                Logger.Debug("Generating error message");
                 result = Content("TODO: Display relevant error");
             }
 
@@ -80,12 +82,16 @@
         /// <returns>The details of the handler if found; <c>null</c> otherwise.</returns>
         public Lazy<ActionHandler, IActionHandlerMetadata> RetrieveHandler(string actionName)
         {
-            sLogger.Debug("Retrieving action handler for {0}", actionName);
+            Logger.Debug("Retrieving action handler for {0}", actionName);
             var handler = ActionHandlerFactory
                 .Default
                 .ActionHandlers
                 .FirstOrDefault(actionHandler => string.Equals(actionHandler.Metadata.Name, actionName, StringComparison.InvariantCultureIgnoreCase));
-            sLogger.Info("Unable to find action handler for {0}", actionName);
+            if (handler == null)
+            {
+                Logger.Info("Unable to find action handler for {0}", actionName);
+            }
+
             return handler;
         }
         #endregion
@@ -101,8 +107,41 @@
         /// <returns>The <see cref="ActionRequestContext"/> for the action.</returns>
         public ActionRequestContext GenerateContext(string server, string project, string build, string report)
         {
-            sLogger.Debug("Generating request context");
-            throw new NotImplementedException();
+            Logger.Debug("Generating request context");
+
+            // Set the properties to what is received first
+            var context = new ActionRequestContext
+                              {
+                                  Server = string.IsNullOrWhiteSpace(server) ? null : server,
+                                  Project = string.IsNullOrWhiteSpace(project) ? null : project,
+                                  Build = string.IsNullOrWhiteSpace(build) ? null : build,
+                                  Report = string.IsNullOrWhiteSpace(report) ? null : report
+                              };
+            
+            // If everything is set, we are golden - just return the instance
+            if ((context.Server != null) &&
+                (context.Project != null) &&
+                (context.Build != null) &&
+                (context.Report != null))
+            {
+                Logger.Debug("Action is a build level report");
+                context.Level = ActionHandlerTargets.Build;
+                return context;
+            }
+
+            // If nothing is set, find the default root-level action and return that
+            if (!CheckLevelForAction(context, ActionHandlerTargets.Root, context.Server, () => context.Server = null))
+            {
+                if (!CheckLevelForAction(context, ActionHandlerTargets.Server, context.Project, () => context.Project = null))
+                {
+                    if (!CheckLevelForAction(context, ActionHandlerTargets.Project, context.Build, () => context.Build = null))
+                    {
+                        CheckLevelForAction(context, ActionHandlerTargets.Build, null, () => { });
+                    }
+                }
+            }
+
+            return context;
         }
         #endregion
 
@@ -113,7 +152,7 @@
         /// <param name="newLogger">The new logger.</param>
         public static void OverrideLogger(Logger newLogger)
         {
-            sLogger = newLogger;
+            Logger = newLogger;
         }
         #endregion
 
@@ -123,7 +162,72 @@
         /// </summary>
         public static void ResetLogger()
         {
-            sLogger = LogManager.GetCurrentClassLogger();
+            Logger = LogManager.GetCurrentClassLogger();
+        }
+        #endregion
+        #endregion
+
+        #region Private methods
+        #region RetrieveDefaultAction()
+        /// <summary>
+        /// Retrieves the default action for a level.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="level">The level.</param>
+        private static void RetrieveDefaultAction(ActionRequestContext context, ReportLevel level)
+        {
+            var defaultAction = level.Reports.FirstOrDefault(rep => rep.IsDefault);
+            if (defaultAction != null)
+            {
+                Logger.Debug("Action is default " + level.Target + " level report");
+                context.Report = defaultAction.ActionName;
+            }
+            else
+            {
+                Logger.Warn("Unable to find default action for " + level.Target + " level!");
+                context.Report = "!!unknownAction!!";
+            }
+        }
+        #endregion
+
+        #region CheckLevelForAction()
+        /// <summary>
+        /// Checks a level for the action.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="levelToCheck">The level to check.</param>
+        /// <param name="actionName">Name of the action.</param>
+        /// <param name="clearProperty">The clear property.</param>
+        /// <returns>
+        /// <c>true</c> if the level was matched; <c>false</c> otherwise.
+        /// </returns>
+        private static bool CheckLevelForAction(ActionRequestContext context, 
+            ActionHandlerTargets levelToCheck,
+            string actionName,
+            Action clearProperty)
+        {
+            context.Level = levelToCheck;
+            var reportLevel = Manager.Current.ReportLevels.FirstOrDefault(level => level.Target == levelToCheck) ??
+                new ReportLevel();
+            if (actionName == null)
+            {
+                RetrieveDefaultAction(context, reportLevel);
+                return true;
+            }
+
+            var action = reportLevel
+                .Reports
+                .FirstOrDefault(
+                    rep =>
+                    string.Equals(rep.ActionName, actionName, StringComparison.InvariantCultureIgnoreCase));
+            if (action != null)
+            {
+                context.Report = actionName;
+                clearProperty();
+                return true;
+            }
+
+            return false;
         }
         #endregion
         #endregion

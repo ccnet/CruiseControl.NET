@@ -82,6 +82,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
@@ -95,7 +96,12 @@
     <Compile Include="ActionHandlerTargets.cs" />
     <Compile Include="ActionRequestContext.cs" />
     <Compile Include="Actions\ServerGrid.cs" />
-    <Compile Include="ConfigurationStore.cs" />
+    <Compile Include="Configuration\Folders.cs" />
+    <Compile Include="Configuration\Manager.cs" />
+    <Compile Include="Configuration\Report.cs" />
+    <Compile Include="Configuration\ReportLevel.cs" />
+    <Compile Include="Configuration\Server.cs" />
+    <Compile Include="Configuration\Settings.cs" />
     <Compile Include="DynamicController.cs" />
     <Compile Include="ActionHandler.cs" />
     <Compile Include="Global.asax.cs">
@@ -103,6 +109,7 @@
     </Compile>
     <Compile Include="IActionHandlerMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\FileSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />

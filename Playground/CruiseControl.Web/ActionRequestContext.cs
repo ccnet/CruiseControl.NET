@@ -1,10 +1,5 @@
 ﻿namespace CruiseControl.Web
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
-
     /// <summary>
     /// The context for an action request.
     /// </summary>
@@ -41,6 +36,14 @@
         /// </summary>
         /// <value>The report.</value>
         public string Report { get; set; }
+        #endregion
+
+        #region Level
+        /// <summary>
+        /// Gets or sets the level.
+        /// </summary>
+        /// <value>The level.</value>
+        public ActionHandlerTargets Level { get; set; }
         #endregion
         #endregion
     }

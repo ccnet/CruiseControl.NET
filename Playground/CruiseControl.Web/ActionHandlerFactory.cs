@@ -4,10 +4,10 @@
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
     using System.ComponentModel.Composition.Hosting;
-    using System.Configuration;
-    using System.Reflection;
     using System.ComponentModel.Composition.Primitives;
     using System.IO;
+    using System.Reflection;
+    using Configuration;
     using NLog;
 
     /// <summary>
@@ -16,8 +16,8 @@
     public class ActionHandlerFactory
     {
         #region Private fields
-        private static readonly Logger sLogger = LogManager.GetCurrentClassLogger();
-        private static ActionHandlerFactory sDefaultFactory;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static ActionHandlerFactory DefaultFactory;
         private static readonly object FactoryLock = new object();
         #endregion
 
@@ -27,8 +27,8 @@
         /// </summary>
         static ActionHandlerFactory()
         {
-            PluginFolder = ConfigurationStore.PluginDirectory;
-            sLogger.Debug("Plug-ins folder is {0}", PluginFolder);
+            PluginFolder = Folders.PluginDirectory;
+            Logger.Debug("Plug-ins folder is {0}", PluginFolder);
         }
 
         /// <summary>
@@ -61,37 +61,37 @@
         {
             get
             {
-                if (sDefaultFactory == null)
+                if (DefaultFactory == null)
                 {
                     lock (FactoryLock)
                     {
-                        if (sDefaultFactory == null)
+                        if (DefaultFactory == null)
                         {
                             // Generate the new factory and compose it
-                            sLogger.Debug("Initialising ActionHandlerFactory");
-                            sDefaultFactory = new ActionHandlerFactory();
+                            Logger.Debug("Initialising ActionHandlerFactory");
+                            DefaultFactory = new ActionHandlerFactory();
                             ComposablePartCatalog catalog = new AssemblyCatalog(                                
                                 Assembly.GetExecutingAssembly());
                             if (!string.IsNullOrEmpty(PluginFolder) &&
                                 Directory.Exists(PluginFolder))
                             {
-                                sLogger.Debug("Loading plug-ins from {0}", PluginFolder);
+                                Logger.Debug("Loading plug-ins from {0}", PluginFolder);
                                 catalog = new AggregateCatalog(
                                     catalog,
                                     new DirectoryCatalog(PluginFolder));
                             }
 
                             var container = new CompositionContainer(catalog);
-                            container.ComposeParts(sDefaultFactory);
-                            sLogger.Debug("{0} action handler(s) found", sDefaultFactory.ActionHandlers.Count);
+                            container.ComposeParts(DefaultFactory);
+                            Logger.Debug("{0} action handler(s) found", DefaultFactory.ActionHandlers.Count);
                         }
                     }
                 }
 
-                return sDefaultFactory;
+                return DefaultFactory;
             }
 
-            set { sDefaultFactory = value; }
+            set { DefaultFactory = value; }
         }
         #endregion
 
@@ -115,8 +115,8 @@
             lock (FactoryLock)
             {
                 // Set it to null so it will be reloaded automatically
-                sLogger.Debug("Resetting ActionHandlerFactory");
-                sDefaultFactory = null;
+                Logger.Debug("Resetting ActionHandlerFactory");
+                DefaultFactory = null;
             }
         }
         #endregion
