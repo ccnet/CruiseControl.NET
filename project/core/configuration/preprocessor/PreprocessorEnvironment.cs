@@ -647,8 +647,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             {
                 throw MissingIncludeException.CreateException("Failed to include file '{0}': {1}", url.AbsoluteUri, we.Message);
             }
-            
-            return null;
         }
 
         /// <summary>
