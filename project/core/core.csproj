@@ -156,94 +156,94 @@
       <Link>CommonAssemblyInfo.cs</Link>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\ConfigurationTrace.cs" />
-    <Compile Include="configuration\ConfigurationValidationUtils.cs" />
-    <Compile Include="configuration\preprocessor\CodeEvaluator.cs" />
-    <Compile Include="configuration\preprocessor\DebuggingWriter.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\ConditionalProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\ConfigTemplateProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\CountProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\CreateElementProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\DefaultProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\DefineProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\ElementProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\EvalProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\ExpandSymbolProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\ForEachProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\ForProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\IfDefProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\IfNDefProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\IfProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\IgnoreProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\ImportProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\IncludeProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\ProcessingInstructionProcessor.cs" />
-    <Compile Include="configuration\preprocessor\ElementProcessors\ScopeProcessor.cs" />
-    <Compile Include="configuration\preprocessor\Exceptions.cs" />
-    <Compile Include="configuration\preprocessor\ConfigPreprocessor.cs" />
-    <Compile Include="configuration\preprocessor\PreprocessorEnvironment.cs" />
-    <Compile Include="configuration\preprocessor\PreprocessorSettings.cs" />
-    <Compile Include="configuration\preprocessor\SymbolicDef.cs" />
-    <Compile Include="configuration\preprocessor\Validation.cs" />
-    <Compile Include="configuration\preprocessor\XHelpers.cs" />
+    <Compile Include="Config\ConfigurationTrace.cs" />
+    <Compile Include="Config\ConfigurationValidationUtils.cs" />
+    <Compile Include="Config\Preprocessor\CodeEvaluator.cs" />
+    <Compile Include="Config\Preprocessor\DebuggingWriter.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\ConditionalProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\ConfigTemplateProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\CountProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\CreateElementProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\DefaultProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\DefineProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\ElementProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\EvalProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\ExpandSymbolProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\ForEachProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\ForProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\IfDefProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\IfNDefProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\IfProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\IgnoreProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\ImportProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\IncludeProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\ProcessingInstructionProcessor.cs" />
+    <Compile Include="Config\Preprocessor\ElementProcessors\ScopeProcessor.cs" />
+    <Compile Include="Config\Preprocessor\Exceptions.cs" />
+    <Compile Include="Config\Preprocessor\ConfigPreprocessor.cs" />
+    <Compile Include="Config\Preprocessor\PreprocessorEnvironment.cs" />
+    <Compile Include="Config\Preprocessor\PreprocessorSettings.cs" />
+    <Compile Include="Config\Preprocessor\SymbolicDef.cs" />
+    <Compile Include="Config\Preprocessor\Validation.cs" />
+    <Compile Include="Config\Preprocessor\XHelpers.cs" />
     <Compile Include="ConsoleRunnerArguments.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\CachingConfigurationService.cs">
+    <Compile Include="Config\CachingConfigurationService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\DefaultQueueConfiguration.cs" />
-    <Compile Include="configuration\IConfigurationErrorProcesser.cs" />
-    <Compile Include="configuration\IConfigurationValidation.cs" />
+    <Compile Include="Config\DefaultQueueConfiguration.cs" />
+    <Compile Include="Config\IConfigurationErrorProcesser.cs" />
+    <Compile Include="Config\IConfigurationValidation.cs" />
     <Compile Include="INetReflectorConfigurationReader.cs" />
-    <Compile Include="configuration\QueueDuplicateHandling.cs" />
-    <Compile Include="configuration\Configuration.cs">
+    <Compile Include="Config\QueueDuplicateHandling.cs" />
+    <Compile Include="Config\Configuration.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\ConfigurationException.cs">
+    <Compile Include="Config\ConfigurationException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\CruiseControlConfigSectionHandler.cs">
+    <Compile Include="Config\CruiseControlConfigSectionHandler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\DefaultConfigurationFileLoader.cs">
+    <Compile Include="Config\DefaultConfigurationFileLoader.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\DefaultConfigurationFileSaver.cs">
+    <Compile Include="Config\DefaultConfigurationFileSaver.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\FileConfigurationService.cs">
+    <Compile Include="Config\FileConfigurationService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\FileWatcherConfigurationService.cs">
+    <Compile Include="Config\FileWatcherConfigurationService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\IConfiguration.cs">
+    <Compile Include="Config\IConfiguration.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\IConfigurationFileLoader.cs">
+    <Compile Include="Config\IConfigurationFileLoader.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\IConfigurationFileSaver.cs">
+    <Compile Include="Config\IConfigurationFileSaver.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\IConfigurationService.cs">
+    <Compile Include="Config\IConfigurationService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\IQueueConfiguration.cs" />
-    <Compile Include="configuration\NetReflectorConfigurationReader.cs">
+    <Compile Include="Config\IQueueConfiguration.cs" />
+    <Compile Include="Config\NetReflectorConfigurationReader.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\preprocessor\Utils.cs" />
-    <Compile Include="configuration\ServerConfiguration.cs" />
-    <Compile Include="configuration\ServerConfigurationHandler.cs" />
-    <Compile Include="configuration\XmlValidatingLoader.cs">
+    <Compile Include="Config\Preprocessor\Utils.cs" />
+    <Compile Include="Config\ServerConfiguration.cs" />
+    <Compile Include="Config\ServerConfigurationHandler.cs" />
+    <Compile Include="Config\XmlValidatingLoader.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="configuration\XslFilesSectionHandler.cs">
+    <Compile Include="Config\XslFilesSectionHandler.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ConsoleEventHandler.cs">
@@ -363,13 +363,13 @@
     <Compile Include="LogFile.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Log\CircularArray.cs">
+    <Compile Include="Logging\CircularArray.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Log\EnumeratorDirection.cs">
+    <Compile Include="Logging\EnumeratorDirection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Log\ServerLogFileReader.cs">
+    <Compile Include="Logging\ServerLogFileReader.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DisplayLevel.cs" />
@@ -1103,7 +1103,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="util\ZipCompressionService.cs" />
-    <EmbeddedResource Include="configuration\ccnet.xsd">
+    <EmbeddedResource Include="Config\ccnet.xsd">
       <SubType>
       </SubType>
     </EmbeddedResource>
@@ -1127,7 +1127,7 @@
       <DependentUpon>VssLocale.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="configuration\ccnet.xsx">
+    <None Include="Config\ccnet.xsx">
       <DependentUpon>ccnet.xsd</DependentUpon>
     </None>
     <Content Include="..\xsl\compile.xsl">

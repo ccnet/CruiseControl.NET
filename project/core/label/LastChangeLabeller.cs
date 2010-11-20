@@ -1,10 +1,10 @@
+using System;
+using System.Text.RegularExpressions;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
+
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
-    using System;
-    using System.Text.RegularExpressions;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.Util;
-
     /// <summary>
     /// Some source control systems (e.g., AccuRev) have a concept of a "change number", which the Last Change Labeller can use to build a
     /// label. The following configuration would prefix all labels with the string 'Foo-1-', so the build of change number 213 would be

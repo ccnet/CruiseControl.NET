@@ -1,9 +1,9 @@
+using System.Collections;
+using System.Text;
+using ThoughtWorks.CruiseControl.Remote;
+
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
-    using System.Collections;
-    using System.Text;
-    using ThoughtWorks.CruiseControl.Remote;
-
     /// <summary>
     /// This class encloses all the details related to a typical message needed by a 
     /// Email Publisher

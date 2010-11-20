@@ -1,4 +1,3 @@
-
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
 	public interface ICruiseUrlBuilder

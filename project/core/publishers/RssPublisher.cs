@@ -1,12 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Xml;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Tasks;
+
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using Exortech.NetReflector;
-    using System.Xml;
-    using ThoughtWorks.CruiseControl.Core.Tasks;
-
     /// <summary>
     /// <para>
     /// This publisher generates an RSS file reporting the latest results for a Project.

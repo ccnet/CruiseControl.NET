@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol

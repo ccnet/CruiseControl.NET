@@ -1,9 +1,9 @@
+using System.IO;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Tasks;
+
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
-    using System.IO;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.Tasks;
-
     /// <summary>
     /// <para>
     /// The Build Publisher lets you copy any arbitrary files on a <b>successful</b> build.

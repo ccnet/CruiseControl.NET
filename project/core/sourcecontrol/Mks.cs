@@ -4,14 +4,14 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
+
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.Util;
-
     /// <summary>
     /// MKS Source Integrity Source Control Block.
     /// </summary>

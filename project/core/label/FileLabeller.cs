@@ -1,9 +1,9 @@
+using System;
+using System.IO;
+using Exortech.NetReflector;
+
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
-    using System;
-    using System.IO;
-    using Exortech.NetReflector;
-
     /// <summary>
     /// The File Labeller is used to generate labels based on the content of a disk file. The labeller is configured with the location of the
     /// file, and it reads the file content to generate the label for CCNet. The file is read just before the first pre-build task is executed.

@@ -1,11 +1,11 @@
+using System.Collections.Generic;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Tasks;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
+
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
-    using System.Collections.Generic;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.Tasks;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using ThoughtWorks.CruiseControl.Remote;
-
     /// <summary>
     /// <para>
     /// The ForceBuildPublisher forces a build on a local or remote build server. It uses .NET Remoting to invoke a

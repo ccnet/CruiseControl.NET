@@ -1,6 +1,5 @@
 using System;
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {

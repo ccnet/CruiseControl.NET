@@ -4,14 +4,14 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Tasks;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
+
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
-    using System;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.Tasks;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using ThoughtWorks.CruiseControl.Remote;
-
     /// <summary>
     /// A container publisher that only executes the child publishers when the 
     /// condition (e.g. build status) is met.

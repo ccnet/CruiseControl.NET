@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 		{
             queryString = GenerateQuery(queryString);
 			string url = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}{1}.{2}", CalculatePath(path), action, extension);
-			if (queryString!= null && queryString != string.Empty)
+			if (!string.IsNullOrEmpty(queryString))
 			{
 				url += string.Format(System.Globalization.CultureInfo.CurrentCulture,"?{0}", queryString);
 			}

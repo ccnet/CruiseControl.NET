@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
+﻿namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
     public interface IQuietPeriod 
     {

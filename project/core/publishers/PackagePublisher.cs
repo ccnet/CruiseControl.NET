@@ -1,16 +1,16 @@
-﻿namespace ThoughtWorks.CruiseControl.Core.Publishers
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Threading;
-    using System.Xml;
-    using Exortech.NetReflector;
-    using ICSharpCode.SharpZipLib.Zip;
-    using ThoughtWorks.CruiseControl.Core.Tasks;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using ThoughtWorks.CruiseControl.Remote;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using System.Xml;
+using Exortech.NetReflector;
+using ICSharpCode.SharpZipLib.Zip;
+using ThoughtWorks.CruiseControl.Core.Tasks;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
+namespace ThoughtWorks.CruiseControl.Core.Publishers
+{
     /// <summary>
     /// <para>
     /// Generates a ZIP file package containing the specified files.

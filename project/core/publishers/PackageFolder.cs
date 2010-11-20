@@ -1,11 +1,11 @@
-﻿namespace ThoughtWorks.CruiseControl.Core.Publishers
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using Exortech.NetReflector;
-    using ICSharpCode.SharpZipLib.Zip;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Exortech.NetReflector;
+using ICSharpCode.SharpZipLib.Zip;
 
+namespace ThoughtWorks.CruiseControl.Core.Publishers
+{
     [ReflectorType("packageFolder")]
     public class PackageFolder
         : IPackageItem

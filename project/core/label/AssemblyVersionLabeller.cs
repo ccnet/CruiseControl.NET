@@ -1,10 +1,10 @@
-﻿namespace ThoughtWorks.CruiseControl.Core.Label
-{
-    using System;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using ThoughtWorks.CruiseControl.Remote;
+﻿using System;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
+namespace ThoughtWorks.CruiseControl.Core.Label
+{
     /// <summary>
     /// Provides a valid System.Version label for your .NET assemblies that could be used to set the AssemblyVersionAttribute(). It increments
     /// the build number on every successful integration and uses the CruiseControl.NET change number, provided by source control systems like

@@ -1,15 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net.Mail;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Core.Tasks;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
+
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Net.Mail;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.Config;
-    using ThoughtWorks.CruiseControl.Core.Tasks;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using ThoughtWorks.CruiseControl.Remote;
-
     /// <summary>
     /// <para>
     /// Publishes results of integrations via email.  This implementation supports plain-text, and Html email formats.

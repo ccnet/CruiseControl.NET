@@ -1,5 +1,4 @@
-﻿using System;
-using ThoughtWorks.CruiseControl.Core.State;
+﻿using ThoughtWorks.CruiseControl.Core.State;
 
 namespace ThoughtWorks.CruiseControl.Core.Queues
 {

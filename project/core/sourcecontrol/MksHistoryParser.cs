@@ -4,18 +4,18 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Xml;
+using System.Xml.XPath;
+using System.Xml.Xsl;
+using ThoughtWorks.CruiseControl.Core.Util;
+
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Reflection;
-    using System.Text;
-    using System.Xml;
-    using System.Xml.Xsl;
-    using System.Xml.XPath;
-    using ThoughtWorks.CruiseControl.Core.Util;
-
     public class MksHistoryParser : IHistoryParser
 	{
 		public virtual Modification[] Parse(TextReader history, DateTime from, DateTime to)

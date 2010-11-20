@@ -1,10 +1,10 @@
+using System.Diagnostics;
+using System.Reflection;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
+
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol 
 {
-    using System.Diagnostics;
-    using System.Reflection;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.Util;
-
     /// <summary>
     /// SourceGear Vault Source Control Block.
     /// </summary>

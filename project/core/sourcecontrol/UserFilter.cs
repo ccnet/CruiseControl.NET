@@ -1,8 +1,8 @@
+using System;
+using Exortech.NetReflector;
+
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-    using System;
-    using Exortech.NetReflector;
-
     /// <summary>
     /// The UserFilter can be used to filter modifications on the basis of the username that committed the changes.
     /// </summary>

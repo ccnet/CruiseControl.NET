@@ -1,9 +1,9 @@
+using System.Text.RegularExpressions;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Remote;
+
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
-    using System.Text.RegularExpressions;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Remote;
-
     /// <summary>
     /// <para>
     /// By default, CCNet uses a plain incrementing build number as a build label. Some source controls (e.g. <link>Perforce Source Control

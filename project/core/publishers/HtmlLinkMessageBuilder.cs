@@ -1,4 +1,3 @@
-
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	public class HtmlLinkMessageBuilder : IMessageBuilder

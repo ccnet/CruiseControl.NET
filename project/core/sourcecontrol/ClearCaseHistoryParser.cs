@@ -1,7 +1,6 @@
 using System;
-using System.Collections;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {

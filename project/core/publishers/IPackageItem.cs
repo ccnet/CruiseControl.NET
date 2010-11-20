@@ -1,8 +1,8 @@
-﻿namespace ThoughtWorks.CruiseControl.Core.Publishers
-{
-    using System.Collections.Generic;
-    using ICSharpCode.SharpZipLib.Zip;
+﻿using System.Collections.Generic;
+using ICSharpCode.SharpZipLib.Zip;
 
+namespace ThoughtWorks.CruiseControl.Core.Publishers
+{
     /// <summary>
     /// Defines an item that can be packaged.
     /// </summary>

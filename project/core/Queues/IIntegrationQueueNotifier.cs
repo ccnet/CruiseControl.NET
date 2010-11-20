@@ -1,4 +1,3 @@
-
 namespace ThoughtWorks.CruiseControl.Core.Queues
 {
 	/// <summary>

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ThoughtWorks.CruiseControl.Core.State;
+﻿using ThoughtWorks.CruiseControl.Core.State;
 
 namespace ThoughtWorks.CruiseControl.Core.Queues
 {

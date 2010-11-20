@@ -1,11 +1,9 @@
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using System.Threading;
 
 namespace ThoughtWorks.CruiseControl.Core.Queues
 {

@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 
 		public override string ToString()
 		{
-			return ServerSpecifier.ToString() + ", " + ProjectName;
+			return ServerSpecifier + ", " + ProjectName;
 		}
 	}
 }

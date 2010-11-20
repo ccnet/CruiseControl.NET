@@ -1,11 +1,11 @@
-﻿namespace ThoughtWorks.CruiseControl.Core.Publishers
-{
-    using System.Collections.Generic;
-    using System.IO;
-    using Exortech.NetReflector;
-    using ICSharpCode.SharpZipLib.Zip;
-    using ThoughtWorks.CruiseControl.Core.Util;
+﻿using System.Collections.Generic;
+using System.IO;
+using Exortech.NetReflector;
+using ICSharpCode.SharpZipLib.Zip;
+using ThoughtWorks.CruiseControl.Core.Util;
 
+namespace ThoughtWorks.CruiseControl.Core.Publishers
+{
     /// <summary>
     /// A file to include in the package.
     /// </summary>

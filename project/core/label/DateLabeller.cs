@@ -1,9 +1,9 @@
+using System;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
+
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
-    using System;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.Util;
-
     /// <summary>
     /// The Date Labeller is used to generate labels in the format "yyyy.mm.dd.build". Using the Date Labeller makes it easy for the user to identify and communicate the date that a particular build occurred.
     /// </summary>

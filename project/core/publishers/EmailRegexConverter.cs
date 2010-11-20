@@ -1,7 +1,6 @@
 using System.Text.RegularExpressions;
 using Exortech.NetReflector;
 
-
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
     /// <summary>

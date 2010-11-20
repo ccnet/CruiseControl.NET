@@ -1,12 +1,12 @@
+using System;
+using System.Text;
+using System.Text.RegularExpressions;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
+
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
-    using System;
-    using System.Text;
-    using System.Text.RegularExpressions;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using ThoughtWorks.CruiseControl.Remote;
-
     /// <summary>
     /// The Iteration Labeller is similar to the <link>Default Labeller</link>; however, it maintains a revision number that is incremented by
     /// one for each iteration from the release start date. For example, if the release start date was June 1, 2005 and the iteration duration
