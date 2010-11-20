@@ -472,7 +472,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             var buffer = new PrivateArguments("label");
             buffer.Add("/server:", Server);
-            buffer.Add(result.Label, string.Format(System.Globalization.CultureInfo.CurrentCulture,"@{0}", ProjectPath));
+            buffer.AddQuote(result.Label, string.Format(System.Globalization.CultureInfo.CurrentCulture,"@{0}", ProjectPath));
             buffer.AddQuote(WorkingDirectory);
             buffer.Add("/recursive");
             buffer.Add("/comment:", "CCNet Build Label", true);
