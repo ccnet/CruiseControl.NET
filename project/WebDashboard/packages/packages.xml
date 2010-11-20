@@ -6,6 +6,8 @@
   <package name="Web Dashboard Administration" description="An administration console for the web dashboard." type="Plugin" file="DashboardAdmin.zip" installed="yes" />
   <package name="Project Configuration Display" description="Show the project configuration." type="Plugin" file="ProjectConfig.zip" installed="no" />
   <package name="Modification History" description="Modification history for a project." type="Plugin" file="ModificationHistory.zip" installed="no" />
+  <package name="Modifications" description="Display the modifications done in the build." type="Plugin" file="Modifications.zip" installed="no" />
+  <package name="ModificationsByChangeNumber" description="Display the modifications done in the build, grouped by the changenumber of your source control." type="Plugin" file="ModificationsGrouped.zip" installed="no" />
   <package name="Project Statistics" description="Statistics for a project." type="Plugin" file="ProjectStats.zip" installed="no" />
   <package name="NUnit Results" description="Display the results of a NUnit run." type="Plugin" file="NUnit.zip" installed="no" />
   <package name="NDepend Results" description="Display the results of a NDepend run." type="Plugin" file="NDepend.zip" installed="no" />

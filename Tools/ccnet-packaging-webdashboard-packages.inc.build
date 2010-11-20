@@ -174,7 +174,7 @@
   </target>
 
   <target name="build.level.packages" description="Generate the build level packages"
-          depends="build.nunit.package,build.ndepend.package,build.dupfinder.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.codeItRight.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.stylecop.package,build.msTest.package">
+          depends="build.nunit.package,build.ndepend.package,build.dupfinder.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.codeItRight.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.stylecop.package,build.msTest.package,build.modifications.package,build.modificationsgrouped.package">
 	</target>
 
 	<target name="build.nunit.package" description="Generates the NUnit package">
@@ -306,6 +306,33 @@
 			</fileset>
 		</zip>
 	</target>
+
+
+	<target name="build.modifications.package" description="Generates the modifications package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/Modifications.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/Modifications">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/Xsl">
+				<include name="modifications.xsl"/>
+			</fileset>
+		</zip>
+	</target>
+
+
+	<target name="build.modificationsgrouped.package" description="Generates the modifications grouped by changenumber package">
+		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+		<zip zipfile="${build.dir}/WebDashboard/packages/ModificationsGrouped.zip">
+			<fileset basedir="${src.dir}/WebDashboard/packages/Modifications">
+				<include name="*.*"/>
+			</fileset>
+			<fileset basedir="${src.dir}/Xsl">
+				<include name="modificationsByChangeNumber.xsl"/>
+			</fileset>
+		</zip>
+	</target>
+
 
 	<target name="build.fitnesse.package" description="Generates the Fitnesse package">
 		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
