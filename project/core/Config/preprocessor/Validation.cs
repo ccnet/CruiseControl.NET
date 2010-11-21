@@ -14,15 +14,15 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// Asserts that each of the given attributes exist on the given element.
         /// </summary>
         /// <param name="element">Element</param>
-        /// <param name="attr_names">Names of attributes to check for</param>
+        /// <param name="attrNames">Names of attributes to check for</param>
         /// <exception cref="InvalidMarkupException">Thrown if one or more attributes are not present</exception>
-        public static void RequireAttributes(XElement element, params XName[] attr_names)
+        public static void RequireAttributes(XElement element, params XName[] attrNames)
         {
             IEnumerable< XName > missing_attrs =
-                attr_names.Where( attr_name => element.Attribute( attr_name ) == null );
+                attrNames.Where( attr_name => element.Attribute( attr_name ) == null );
             if ( missing_attrs.Any() )
             {
-                string[] attr_list = attr_names.Select( n => n.ToString() ).ToArray();
+                string[] attr_list = attrNames.Select( n => n.ToString() ).ToArray();
                 throw InvalidMarkupException.CreateException(
                     "{0} Element '{1}' does not have required attribute(s) '{2}'",
                     element.ErrorContext(), element.Name,

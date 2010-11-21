@@ -53,17 +53,17 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// <param name="input">The input.</param>
         /// <param name="output">The output.</param>
         /// <param name="resolver">The resolver.</param>
-        /// <param name="input_uri">The input_uri.</param>
+        /// <param name="inputUri">The input_uri.</param>
         /// <returns></returns>
         /// <remarks></remarks>
         public PreprocessorEnvironment PreProcess(XmlReader input, XmlWriter output,
-                                                  XmlUrlResolver resolver, Uri input_uri)
+                                                  XmlUrlResolver resolver, Uri inputUri)
         {
             // The base URI is needed to resolve includes of relative paths, as well as to generate
             // error messages.
             // If none is given explicitly, try to use the XmlReader's BaseUri.  
             // If that doesn't exist either, use the current working directory and a fake filename.
-            Uri base_uri = input_uri ??
+            Uri base_uri = inputUri ??
                            ( String.IsNullOrEmpty( input.BaseURI )
                                  ? new Uri(
                                        Path.Combine(

@@ -91,32 +91,32 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// Returns manifest resource stream qualified by the given type and name.
         /// </summary>
         /// <param name="type">Qualifying type</param>
-        /// <param name="resource_name">Resource name</param>
+        /// <param name="resourceName">Resource name</param>
         /// <returns></returns>
-        public static Stream GetAssemblyResourceStream(Type type, string resource_name)
+        public static Stream GetAssemblyResourceStream(Type type, string resourceName)
         {
-            return type.Assembly.GetManifestResourceStream(type, resource_name);
+            return type.Assembly.GetManifestResourceStream(type, resourceName);
         }
 
         /// <summary>
         /// Returns the manifest resource stream with the given name.
         /// </summary>
-        /// <param name="resource_name"></param>
+        /// <param name="resourceName"></param>
         /// <returns></returns>
-        public static Stream GetAssemblyResourceStream(string resource_name)
+        public static Stream GetAssemblyResourceStream(string resourceName)
         {
-            Stream stream = Assembly.GetCallingAssembly().GetManifestResourceStream(resource_name);
+            Stream stream = Assembly.GetCallingAssembly().GetManifestResourceStream(resourceName);
             if (stream == null)
                 throw new ApplicationException(
-                    String.Format(CultureInfo.CurrentCulture, "Could not find manifest resource stream: {0}", resource_name));
+                    String.Format(CultureInfo.CurrentCulture, "Could not find manifest resource stream: {0}", resourceName));
             return stream;
         }
 
-        public static string ResolvePathToAssemblyLocation(string rel_path, Assembly assembly)
+        public static string ResolvePathToAssemblyLocation(string relPath, Assembly assembly)
         {
             return
                 Path.Combine(
-                    Path.GetDirectoryName(assembly.Location), rel_path);
+                    Path.GetDirectoryName(assembly.Location), relPath);
         }
     }
 }

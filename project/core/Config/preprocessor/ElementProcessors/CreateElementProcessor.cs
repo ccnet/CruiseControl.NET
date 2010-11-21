@@ -32,14 +32,14 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
             return new[] {new_element};
         }
    
-        private XAttribute _ProcessAttribute(XElement attr_element)
+        private XAttribute _ProcessAttribute(XElement attrElement)
         {
-            Validation.RequireAttributes( attr_element, AttrName.Name );
+            Validation.RequireAttributes( attrElement, AttrName.Name );
 
             // Both attribute names and values can have symbolic expansions or expression evals
             string attr_name =
-                _ProcessText( ( string ) attr_element.Attribute( AttrName.Name ) ).GetTextValue();
-            string attr_val = _ProcessText( attr_element.Value ).GetTextValue();
+                _ProcessText( ( string ) attrElement.Attribute( AttrName.Name ) ).GetTextValue();
+            string attr_val = _ProcessText( attrElement.Value ).GetTextValue();
             return new XAttribute( attr_name, attr_val );
         }
     }

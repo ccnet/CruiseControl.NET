@@ -5,23 +5,23 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
 {
     internal abstract class ConditionalProcessor : ElementProcessor
     {
-        protected ConditionalProcessor(XName target_element_name, PreprocessorEnvironment env)
-            : base( target_element_name, env )
+        protected ConditionalProcessor(XName targetElementName, PreprocessorEnvironment env)
+            : base( targetElementName, env )
         {
         }
 
         /// <summary>
         ///  Common logic for if/ifdef/ifndef/else constructs
         /// </summary>
-        /// <param name="conditional_element"></param>
+        /// <param name="conditionalElement"></param>
         /// <param name="condition"></param>
         /// <returns></returns>
-        protected IEnumerable< XNode > _ProcessConditional(XElement conditional_element,
+        protected IEnumerable< XNode > _ProcessConditional(XElement conditionalElement,
                                                            bool condition)
         {
             return condition
-                       ? _ProcessNodes( conditional_element.Nodes() )
-                       : _ProcessNextElse( conditional_element );
+                       ? _ProcessNodes( conditionalElement.Nodes() )
+                       : _ProcessNextElse( conditionalElement );
         }
 
         private IEnumerable< XNode > _ProcessNextElse(XElement element)

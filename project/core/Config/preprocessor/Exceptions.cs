@@ -165,7 +165,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// </summary>
     public abstract class PreprocessorException : ApplicationException
     {
-        internal PreprocessorException(Exception inner_ex) : this( null, inner_ex, null )
+        internal PreprocessorException(Exception innerEX) : this( null, innerEX, null )
         {
         }
 
@@ -173,8 +173,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         {
         }
 
-        internal PreprocessorException(string msg, Exception inner_ex, XmlContext ctx)
-            : base( msg, inner_ex )
+        internal PreprocessorException(string msg, Exception innerEX, XmlContext ctx)
+            : base( msg, innerEX )
         {
             Context = ctx;
         }
@@ -227,9 +227,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
                 return String.Format( CultureInfo.CurrentCulture, "File: {0} (line {1}, pos{2})", path, line, pos );
             }
 
-            internal static XmlContext CreateFrom(IXmlLineInfo line_info)
+            internal static XmlContext CreateFrom(IXmlLineInfo lineInfo)
             {
-                return new XmlContext {LineInfo = line_info};
+                return new XmlContext {LineInfo = lineInfo};
             }
         }
 
@@ -238,19 +238,19 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 
     internal class UnexpectedPreprocessorException : PreprocessorException
     {
-        private UnexpectedPreprocessorException(Exception inner_ex, string msg, XmlContext context)
-            : base( msg, inner_ex, context )
+        private UnexpectedPreprocessorException(Exception innerEX, string msg, XmlContext context)
+            : base( msg, innerEX, context )
         {
             Context = context;
         }
 
-        internal static Exception CreateException(Exception inner_ex, XmlContext context)
+        internal static Exception CreateException(Exception innerEX, XmlContext context)
         {
             return
-                new UnexpectedPreprocessorException( inner_ex,
+                new UnexpectedPreprocessorException( innerEX,
                                                      String.Format(
                                                          CultureInfo.CurrentCulture, "Unexpected exception in {0}\n{1}",
-                                                         context, inner_ex.Message ), context );
+                                                         context, innerEX.Message ), context );
         }
     }
 

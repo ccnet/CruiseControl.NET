@@ -38,12 +38,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
         /// <summary>
         /// Initializes a new instance of the <see cref="ElementProcessor" /> class.	
         /// </summary>
-        /// <param name="target_element_name">The target_element_name.</param>
+        /// <param name="targetElementName">The target_element_name.</param>
         /// <param name="env">The env.</param>
         /// <remarks></remarks>
-        protected ElementProcessor(XName target_element_name, PreprocessorEnvironment env)
+        protected ElementProcessor(XName targetElementName, PreprocessorEnvironment env)
         {
-            TargetElementName = target_element_name;
+            TargetElementName = targetElementName;
             _Env = env;
         }
 

@@ -12,11 +12,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// <summary>
         /// Initializes a new instance of the <see cref="DebuggingWriter" /> class.	
         /// </summary>
-        /// <param name="real_writer">The real_writer.</param>
+        /// <param name="realWriter">The real_writer.</param>
         /// <remarks></remarks>
-        public DebuggingWriter(XmlWriter real_writer)
+        public DebuggingWriter(XmlWriter realWriter)
         {
-            _real_writer = real_writer;
+            _real_writer = realWriter;
         }
 
         /// <summary>

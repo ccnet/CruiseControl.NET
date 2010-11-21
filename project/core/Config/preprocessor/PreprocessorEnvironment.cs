@@ -73,10 +73,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// Initializes a new instance of the <see cref="PreprocessorEnvironment" /> class.	
         /// </summary>
         /// <param name="settings">The settings.</param>
-        /// <param name="input_file_path">The input_file_path.</param>
+        /// <param name="inputFilePath">The input_file_path.</param>
         /// <param name="resolver">The resolver.</param>
         /// <remarks></remarks>
-        public PreprocessorEnvironment(PreprocessorSettings settings, Uri input_file_path,
+        public PreprocessorEnvironment(PreprocessorSettings settings, Uri inputFilePath,
                                       XmlUrlResolver resolver)
         {
             _Settings = settings;
@@ -84,8 +84,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             // Bottom-most stack frame
             _define_stack.Push( new Dictionary< string, SymbolicDef >() );
             // Record the input file as the outer-most "include"
-            _include_stack.Push( input_file_path );
-            _fileset[ input_file_path ] = true;
+            _include_stack.Push( inputFilePath );
+            _fileset[ inputFilePath ] = true;
             _resolver = resolver;
             if ( _Settings.InitialDefinitions != null )
             {
@@ -140,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             }
         }
 
-        private void _DefineTextSymbol(string name, string value, bool is_explicit)
+        private void _DefineTextSymbol(string name, string value, bool isExplicit)
         {
             if ( string.IsNullOrEmpty( name ) )
             {
@@ -153,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
                                    {
                                        Name = name,
                                        Value = new[] {new XText( value )},
-                                       IsExplicitlyDefined = is_explicit
+                                       IsExplicitlyDefined = isExplicit
                                    };
             _DefineSymbolOnStack( symbolic_def );
         }
@@ -224,27 +224,27 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// <summary>
         /// Search for the given symbol definition in the environment.
         /// </summary>
-        /// <param name="symbol_name"></param>
+        /// <param name="symbolName"></param>
         /// <returns></returns>
-        private SymbolicDef _InternalGetSymbolDef(string symbol_name)
+        private SymbolicDef _InternalGetSymbolDef(string symbolName)
         {
-            symbol_name = _CanonicalizeName( symbol_name );
+            symbolName = _CanonicalizeName( symbolName );
             // Try each stack frame.
             foreach ( var dictionary in _define_stack.ToArray() )
             {
                 SymbolicDef symbolic_def;
-                if ( dictionary.TryGetValue( symbol_name, out symbolic_def ) && !_evaluated_symbols.ContainsKey(symbolic_def))
+                if ( dictionary.TryGetValue( symbolName, out symbolic_def ) && !_evaluated_symbols.ContainsKey(symbolic_def))
                 {
                     return symbolic_def;
                 }
             }
             // If nothing is found on the stack, try the system environment variables.
-            string environment_variable = Environment.GetEnvironmentVariable( symbol_name );
+            string environment_variable = Environment.GetEnvironmentVariable( symbolName );
             if ( environment_variable != null )
             {
                 var symbolic_def2 = new SymbolicDef
                                         {
-                                            Name = symbol_name,
+                                            Name = symbolName,
                                             Value = _StringToNodeSet( environment_variable )
                                         };
                 return symbolic_def2;
@@ -262,11 +262,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// <summary>
         /// Is the given symbol defined in this environment?
         /// </summary>
-        /// <param name="symbol_name"></param>
+        /// <param name="symbolName"></param>
         /// <returns></returns>
-        private bool _IsDefined(string symbol_name)
+        private bool _IsDefined(string symbolName)
         {
-            return ( _InternalGetSymbolDef( symbol_name ) != null );
+            return ( _InternalGetSymbolDef( symbolName ) != null );
         }
 
         /// <summary>
@@ -294,10 +294,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// <summary>
         /// Define the given symbol on the current stack frame.
         /// </summary>        
-        /// <param name="symbolic_def"></param>
-        private void _DefineSymbolOnStack(SymbolicDef symbolic_def)
+        /// <param name="symbolicDef"></param>
+        private void _DefineSymbolOnStack(SymbolicDef symbolicDef)
         {
-            _define_stack.Peek().Add( _CanonicalizeName( symbolic_def.Name ), symbolic_def );
+            _define_stack.Peek().Add( _CanonicalizeName( symbolicDef.Name ), symbolicDef );
         }
 
 
@@ -571,11 +571,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// XSLT extension method that determines whether the given symbol has
         /// been defined in the preprocessor environment.
         /// </summary>
-        /// <param name="symbol_name"></param>
+        /// <param name="symbolName"></param>
         /// <returns></returns>
-        public bool IsDefined(string symbol_name)
+        public bool IsDefined(string symbolName)
         {
-            return _IsDefined( symbol_name );
+            return _IsDefined( symbolName );
         }
 
         /// <summary>

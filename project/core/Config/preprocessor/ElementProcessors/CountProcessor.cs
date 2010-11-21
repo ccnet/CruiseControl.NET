@@ -26,13 +26,13 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
             return ret_nodes;
         }
 
-        private IEnumerable< XNode > _ProcessCounterBody(XElement element, string counter_name,
-                                                         int counter_val)
+        private IEnumerable< XNode > _ProcessCounterBody(XElement element, string counterName,
+                                                         int counterVal)
         {
             return _Env.Call( () =>
                                   {
-                                      _Env.DefineTextSymbol( counter_name,
-                                                             counter_val.ToString(
+                                      _Env.DefineTextSymbol( counterName,
+                                                             counterVal.ToString(
                                                                  NumberFormatInfo
                                                                      .
                                                                      InvariantInfo ) );

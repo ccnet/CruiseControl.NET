@@ -28,10 +28,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
                     _ProcessIteration( element, iter_val, iter_name ) );
         }
 
-        private IEnumerable< XNode > _ProcessIteration(XElement element, XNode iter_val,
-                                                       string iter_name)
+        private IEnumerable< XNode > _ProcessIteration(XElement element, XNode iterVal,
+                                                       string iterName)
         {
-            XNode val = iter_val;
+            XNode val = iterVal;
             IEnumerable< XNode > results = _Env.Call( () =>
                                                           {
                                                               /* Bind the iterator symbolic name to the current value */
@@ -39,13 +39,13 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
                                                                   /* Nodeset value */
                                                               {
                                                                   _Env.DefineNodesetSymbol(
-                                                                      iter_name,
+                                                                      iterName,
                                                                       ( ( XContainer ) val ).
                                                                           Nodes() );
                                                               }
                                                               else /* Text value */
                                                               {
-                                                                  _Env.DefineTextSymbol( iter_name,
+                                                                  _Env.DefineTextSymbol( iterName,
                                                                                          val.
                                                                                              ToString
                                                                                              () );

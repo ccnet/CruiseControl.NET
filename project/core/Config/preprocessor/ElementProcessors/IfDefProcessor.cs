@@ -10,8 +10,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
         {
         }
 
-        protected IfDefProcessor(XName element_name, PreprocessorEnvironment env)
-            : base( element_name, env )
+        protected IfDefProcessor(XName elementName, PreprocessorEnvironment env)
+            : base( elementName, env )
         {
         }
 

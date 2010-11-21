@@ -15,11 +15,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// Does the element have an attribute of the given name?
         /// </summary>
         /// <param name="element">element to check</param>
-        /// <param name="attr_name">attribute to check for</param>
+        /// <param name="attrName">attribute to check for</param>
         /// <returns>true/false</returns>
-        public static bool HasAttribute(this XElement element, XName attr_name)
+        public static bool HasAttribute(this XElement element, XName attrName)
         {
-            return element.Attribute(attr_name) != null;
+            return element.Attribute(attrName) != null;
         }
 
         /// <summary>
@@ -69,11 +69,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// Returns the given element's named attribute value as a string 
         /// </summary>
         /// <param name="element">Element whose value is returned</param>
-        /// <param name="attr_name">Name of attribute to return</param>
+        /// <param name="attrName">Name of attribute to return</param>
         /// <returns>Attribute value, or empty string if no such attribute exists</returns>
-        public static string GetAttributeValue(this XElement element, XName attr_name)
+        public static string GetAttributeValue(this XElement element, XName attrName)
         {
-            XAttribute attr = element.Attribute(attr_name);
+            XAttribute attr = element.Attribute(attrName);
             return attr == null ? "" : attr.Value;
         }
 
