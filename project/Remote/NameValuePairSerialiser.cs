@@ -14,7 +14,7 @@
         : XmlMemberSerialiser
     {
         #region Private fields
-        private bool isList = false;
+        private bool isList/* = false*/;
         #endregion
 
         #region Constructors

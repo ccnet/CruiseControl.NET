@@ -68,18 +68,19 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Handle any old (pre-1.5.0) data.
         /// </summary>
         /// <param name="context"></param>
-        [OnDeserialized]
-        private void DataReceived(StreamingContext context)
-        {
-            if (_requests != null)
-            {
-                queueRequests = new List<QueuedRequestSnapshot>();
-                foreach (var queue in _requests)
-                {
-                    queueRequests.Add(queue as QueuedRequestSnapshot);
-                }
-            }
-        }
+//  COMMENTED BY CODEIT.RIGHT
+//        [OnDeserialized]
+//        private void DataReceived(StreamingContext context)
+//        {
+//            if (_requests != null)
+//            {
+//                queueRequests = new List<QueuedRequestSnapshot>();
+//                foreach (var queue in _requests)
+//                {
+//                    queueRequests.Add(queue as QueuedRequestSnapshot);
+//                }
+//            }
+//        }
         #endregion
         #endregion
     }

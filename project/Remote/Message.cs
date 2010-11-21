@@ -11,13 +11,40 @@ namespace ThoughtWorks.CruiseControl.Remote
     [XmlRoot("message")]
     public class Message
     {
+        /// <summary>
+        /// 	
+        /// </summary>
         public enum MessageKind
         {
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             NotDefined = 0,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Breakers = 1,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Fixer = 2,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             FailingTasks = 3,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             BuildStatus = 4,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             BuildAbortedBy = 5
         }
 
@@ -95,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             }
 
             //compare the values 
-            return string.Equals(this.Text, m.Text) && (this.Kind == m.Kind);
+            return string.Equals(this.Text, m.Text, StringComparison.CurrentCulture) && (this.Kind == m.Kind);
         }
 
         /// <summary>

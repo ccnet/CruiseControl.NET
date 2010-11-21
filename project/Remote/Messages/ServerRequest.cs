@@ -114,7 +114,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
 
             if (dummy != null)
             {
-                return string.Equals((dummy).identifier, identifier);
+                return string.Equals((dummy).identifier, identifier, StringComparison.CurrentCulture);
             }
             else
             {

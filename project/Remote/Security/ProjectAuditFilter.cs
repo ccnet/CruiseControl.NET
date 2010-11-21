@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// <returns></returns>
         protected override bool DoCheckFilter(AuditRecord record)
         {
-            bool include = string.Equals(this.project, record.ProjectName);
+            bool include = string.Equals(this.project, record.ProjectName, StringComparison.CurrentCulture);
             return include;
         }
     }

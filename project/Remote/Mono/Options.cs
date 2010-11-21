@@ -146,6 +146,9 @@ using NDesk.Options;
 
 namespace ThoughtWorks.CruiseControl.Remote.Mono
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class OptionValueCollection : IList, IList<string> {
 
 		List<string> values = new List<string> ();
@@ -163,12 +166,49 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 		#endregion
 
 		#region ICollection<T>
+        /// <summary>
+        /// Adds the specified item.	
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <remarks></remarks>
 		public void Add (string item)                       {values.Add (item);}
+        /// <summary>
+        /// Clears this instance.	
+        /// </summary>
+        /// <remarks></remarks>
 		public void Clear ()                                {values.Clear ();}
+        /// <summary>
+        /// Determines whether [contains] [the specified item].	
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public bool Contains (string item)                  {return values.Contains (item);}
+        /// <summary>
+        /// Copies to.	
+        /// </summary>
+        /// <param name="array">The array.</param>
+        /// <param name="arrayIndex">Index of the array.</param>
+        /// <remarks></remarks>
 		public void CopyTo (string[] array, int arrayIndex) {values.CopyTo (array, arrayIndex);}
+        /// <summary>
+        /// Removes the specified item.	
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public bool Remove (string item)                    {return values.Remove (item);}
+        /// <summary>
+        /// Gets the count.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public int Count                                    {get {return values.Count;}}
+        /// <summary>
+        /// Gets the is read only.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public bool IsReadOnly                              {get {return false;}}
 		#endregion
 
@@ -177,6 +217,11 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 		#endregion
 
 		#region IEnumerable<T>
+        /// <summary>
+        /// Gets the enumerator.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public IEnumerator<string> GetEnumerator () {return values.GetEnumerator ();}
 		#endregion
 
@@ -192,8 +237,25 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 		#endregion
 
 		#region IList<T>
+        /// <summary>
+        /// Indexes the of.	
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public int IndexOf (string item)            {return values.IndexOf (item);}
+        /// <summary>
+        /// Inserts the specified index.	
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <param name="item">The item.</param>
+        /// <remarks></remarks>
 		public void Insert (int index, string item) {values.Insert (index, item);}
+        /// <summary>
+        /// Removes at.	
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <remarks></remarks>
 		public void RemoveAt (int index)            {values.RemoveAt (index);}
 
 		private void AssertValid (int index)
@@ -205,10 +267,15 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 			if (c.Option.OptionValueType == OptionValueType.Required &&
 					index >= values.Count)
 				throw new OptionException (string.Format (
-							c.OptionSet.MessageLocalizer ("Missing required value for option '{0}'."), c.OptionName), 
+							CultureInfo.CurrentCulture, c.OptionSet.MessageLocalizer ("Missing required value for option '{0}'."), c.OptionName), 
 						c.OptionName);
 		}
 
+        /// <summary>
+        /// Gets or sets the <see cref="string" /> at the specified index.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string this [int index] {
 			get {
 				AssertValid (index);
@@ -220,22 +287,40 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 		}
 		#endregion
 
+        /// <summary>
+        /// Toes the list.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public List<string> ToList ()
 		{
 			return new List<string> (values);
 		}
 
+        /// <summary>
+        /// Toes the array.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string[] ToArray ()
 		{
 			return values.ToArray ();
 		}
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ToString ()
 		{
 			return string.Join (", ", values.ToArray ());
 		}
 	}
 
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class OptionContext {
 		private Option                option;
 		private string                name;
@@ -243,42 +328,90 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 		private OptionSet             set;
 		private OptionValueCollection c;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionContext" /> class.	
+        /// </summary>
+        /// <param name="set">The set.</param>
+        /// <remarks></remarks>
 		public OptionContext (OptionSet set)
 		{
 			this.set = set;
 			this.c   = new OptionValueCollection (this);
 		}
 
+        /// <summary>
+        /// Gets or sets the option.	
+        /// </summary>
+        /// <value>The option.</value>
+        /// <remarks></remarks>
 		public Option Option {
 			get {return option;}
 			set {option = value;}
 		}
 
+        /// <summary>
+        /// Gets or sets the name of the option.	
+        /// </summary>
+        /// <value>The name of the option.</value>
+        /// <remarks></remarks>
 		public string OptionName { 
 			get {return name;}
 			set {name = value;}
 		}
 
+        /// <summary>
+        /// Gets or sets the index of the option.	
+        /// </summary>
+        /// <value>The index of the option.</value>
+        /// <remarks></remarks>
 		public int OptionIndex {
 			get {return index;}
 			set {index = value;}
 		}
 
+        /// <summary>
+        /// Gets the option set.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public OptionSet OptionSet {
 			get {return set;}
 		}
 
+        /// <summary>
+        /// Gets the option values.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public OptionValueCollection OptionValues {
 			get {return c;}
 		}
 	}
 
+    /// <summary>
+    /// 	
+    /// </summary>
 	public enum OptionValueType {
-		None, 
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
+		None,
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		Optional,
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		Required,
 	}
 
+    /// <summary>
+    /// 	
+    /// </summary>
 	public abstract class Option {
 		string prototype, description;
 		string[] names;
@@ -286,11 +419,24 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 		int count;
 		string[] separators;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Option" /> class.	
+        /// </summary>
+        /// <param name="prototype">The prototype.</param>
+        /// <param name="description">The description.</param>
+        /// <remarks></remarks>
 		protected Option (string prototype, string description)
 			: this (prototype, description, 1)
 		{
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Option" /> class.	
+        /// </summary>
+        /// <param name="prototype">The prototype.</param>
+        /// <param name="description">The description.</param>
+        /// <param name="maxValueCount">The max value count.</param>
+        /// <remarks></remarks>
 		protected Option (string prototype, string description, int maxValueCount)
 		{
 			if (prototype == null)
@@ -313,7 +459,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 						"maxValueCount");
 			if (this.type == OptionValueType.None && maxValueCount > 1)
 				throw new ArgumentException (
-						string.Format ("Cannot provide maxValueCount of {0} for OptionValueType.None.", maxValueCount),
+						string.Format (CultureInfo.CurrentCulture, "Cannot provide maxValueCount of {0} for OptionValueType.None.", maxValueCount),
 						"maxValueCount");
 			if (Array.IndexOf (names, "<>") >= 0 && 
 					((names.Length == 1 && this.type != OptionValueType.None) ||
@@ -323,16 +469,46 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 						"prototype");
 		}
 
+        /// <summary>
+        /// Gets the prototype.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string           Prototype       {get {return prototype;}}
+        /// <summary>
+        /// Gets the description.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string           Description     {get {return description;}}
+        /// <summary>
+        /// Gets the type of the option value.	
+        /// </summary>
+        /// <value>The type of the option value.</value>
+        /// <remarks></remarks>
 		public OptionValueType  OptionValueType {get {return type;}}
+        /// <summary>
+        /// Gets the max value count.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public int              MaxValueCount   {get {return count;}}
 
+        /// <summary>
+        /// Gets the names.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string[] GetNames ()
 		{
 			return (string[]) names.Clone ();
 		}
 
+        /// <summary>
+        /// Gets the value separators.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string[] GetValueSeparators ()
 		{
 			if (separators == null)
@@ -340,6 +516,14 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 			return (string[]) separators.Clone ();
 		}
 
+        /// <summary>
+        /// Parses the specified value.	
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">The value.</param>
+        /// <param name="c">The c.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected static T Parse<T> (string value, OptionContext c)
 		{
 			Type tt = typeof (T);
@@ -356,7 +540,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 			catch (Exception e) {
 				throw new OptionException (
 						string.Format (
-							c.OptionSet.MessageLocalizer ("Could not convert string `{0}' to type {1} for option `{2}'."),
+							CultureInfo.CurrentCulture, c.OptionSet.MessageLocalizer ("Could not convert string `{0}' to type {1} for option `{2}'."),
 							value, targetType.Name, c.OptionName),
 						c.OptionName, e);
 			}
@@ -385,7 +569,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 					type = name [end];
 				else 
 					throw new ArgumentException (
-							string.Format ("Conflicting option types: '{0}' vs. '{1}'.", type, name [end]),
+							string.Format (CultureInfo.CurrentCulture, "Conflicting option types: '{0}' vs. '{1}'.", type, name [end]),
 							"prototype");
 				AddSeparators (name, end, seps);
 			}
@@ -395,7 +579,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 
 			if (count <= 1 && seps.Count != 0)
 				throw new ArgumentException (
-						string.Format ("Cannot provide key/value separators for Options taking {0} value(s).", count),
+						string.Format (CultureInfo.CurrentCulture, "Cannot provide key/value separators for Options taking {0} value(s).", count),
 						"prototype");
 			if (count > 1) {
 				if (seps.Count == 0)
@@ -417,30 +601,35 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 					case '{':
 						if (start != -1)
 							throw new ArgumentException (
-									string.Format ("Ill-formed name/value separator found in \"{0}\".", name),
+									string.Format (CultureInfo.CurrentCulture, "Ill-formed name/value separator found in \"{0}\".", name),
 									"prototype");
 						start = i+1;
 						break;
 					case '}':
 						if (start == -1)
 							throw new ArgumentException (
-									string.Format ("Ill-formed name/value separator found in \"{0}\".", name),
+									string.Format (CultureInfo.CurrentCulture, "Ill-formed name/value separator found in \"{0}\".", name),
 									"prototype");
 						seps.Add (name.Substring (start, i-start));
 						start = -1;
 						break;
 					default:
 						if (start == -1)
-							seps.Add (name [i].ToString ());
+							seps.Add (name [i].ToString (CultureInfo.CurrentCulture));
 						break;
 				}
 			}
 			if (start != -1)
 				throw new ArgumentException (
-						string.Format ("Ill-formed name/value separator found in \"{0}\".", name),
+						string.Format (CultureInfo.CurrentCulture, "Ill-formed name/value separator found in \"{0}\".", name),
 						"prototype");
 		}
 
+        /// <summary>
+        /// Invokes the specified c.	
+        /// </summary>
+        /// <param name="c">The c.</param>
+        /// <remarks></remarks>
 		public void Invoke (OptionContext c)
 		{
 			OnParseComplete (c);
@@ -449,44 +638,91 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 			c.OptionValues.Clear ();
 		}
 
+        /// <summary>
+        /// Called when [parse complete].	
+        /// </summary>
+        /// <param name="c">The c.</param>
+        /// <remarks></remarks>
 		protected abstract void OnParseComplete (OptionContext c);
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ToString ()
 		{
 			return Prototype;
 		}
 	}
 
+    /// <summary>
+    /// 	
+    /// </summary>
 	[Serializable]
 	public class OptionException : Exception {
 		private string option;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionException" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public OptionException ()
 		{
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionException" /> class.	
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="optionName">Name of the option.</param>
+        /// <remarks></remarks>
 		public OptionException (string message, string optionName)
 			: base (message)
 		{
 			this.option = optionName;
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionException" /> class.	
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="optionName">Name of the option.</param>
+        /// <param name="innerException">The inner exception.</param>
+        /// <remarks></remarks>
 		public OptionException (string message, string optionName, Exception innerException)
 			: base (message, innerException)
 		{
 			this.option = optionName;
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionException" /> class.	
+        /// </summary>
+        /// <param name="info">The info.</param>
+        /// <param name="context">The context.</param>
+        /// <remarks></remarks>
 		protected OptionException (SerializationInfo info, StreamingContext context)
 			: base (info, context)
 		{
 			this.option = info.GetString ("OptionName");
 		}
 
+        /// <summary>
+        /// Gets the name of the option.	
+        /// </summary>
+        /// <value>The name of the option.</value>
+        /// <remarks></remarks>
 		public string OptionName {
 			get {return this.option;}
 		}
 
+        /// <summary>
+        /// Gets the object data.	
+        /// </summary>
+        /// <param name="info">The info.</param>
+        /// <param name="context">The context.</param>
+        /// <remarks></remarks>
 		[SecurityPermission (SecurityAction.LinkDemand, SerializationFormatter = true)]
 		public override void GetObjectData (SerializationInfo info, StreamingContext context)
 		{
@@ -495,15 +731,32 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 		}
 	}
 
+    /// <summary>
+    /// 	
+    /// </summary>
+    /// <param name="key">The key.</param>
+    /// <param name="value">The value.</param>
 	public delegate void OptionAction<TKey, TValue> (TKey key, TValue value);
 
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class OptionSet : KeyedCollection<string, Option>
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionSet" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public OptionSet ()
 			: this (delegate (string f) {return f;})
 		{
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OptionSet" /> class.	
+        /// </summary>
+        /// <param name="localizer">The localizer.</param>
+        /// <remarks></remarks>
 		public OptionSet (Converter<string, string> localizer)
 		{
 			this.localizer = localizer;
@@ -511,10 +764,21 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 
 		Converter<string, string> localizer;
 
+        /// <summary>
+        /// Gets the message localizer.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public Converter<string, string> MessageLocalizer {
 			get {return localizer;}
 		}
 
+        /// <summary>
+        /// Gets the key for item.	
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override string GetKeyForItem (Option item)
 		{
 			if (item == null)
@@ -526,6 +790,12 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 			throw new InvalidOperationException ("Option has no names!");
 		}
 
+        /// <summary>
+        /// Gets the name of the option for.	
+        /// </summary>
+        /// <param name="option">The option.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		[Obsolete ("Use KeyedCollection.this[string]")]
 		protected Option GetOptionForName (string option)
 		{
@@ -539,12 +809,23 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 			}
 		}
 
+        /// <summary>
+        /// Inserts the item.	
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <param name="item">The item.</param>
+        /// <remarks></remarks>
 		protected override void InsertItem (int index, Option item)
 		{
 			base.InsertItem (index, item);
 			AddImpl (item);
 		}
 
+        /// <summary>
+        /// Removes the item.	
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <remarks></remarks>
 		protected override void RemoveItem (int index)
 		{
 			base.RemoveItem (index);
@@ -555,6 +836,12 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 			}
 		}
 
+        /// <summary>
+        /// Sets the item.	
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <param name="item">The item.</param>
+        /// <remarks></remarks>
 		protected override void SetItem (int index, Option item)
 		{
 			base.SetItem (index, item);
@@ -581,6 +868,12 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 			}
 		}
 
+        /// <summary>
+        /// Adds the specified option.	
+        /// </summary>
+        /// <param name="option">The option.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public new OptionSet Add (Option option)
 		{
 			base.Add (option);
@@ -604,11 +897,26 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 			}
 		}
 
+        /// <summary>
+        /// Adds the specified prototype.	
+        /// </summary>
+        /// <param name="prototype">The prototype.</param>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public OptionSet Add (string prototype, Action<string> action)
 		{
 			return Add (prototype, null, action);
 		}
 
+        /// <summary>
+        /// Adds the specified prototype.	
+        /// </summary>
+        /// <param name="prototype">The prototype.</param>
+        /// <param name="description">The description.</param>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public OptionSet Add (string prototype, string description, Action<string> action)
 		{
 			if (action == null)
@@ -619,11 +927,26 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 			return this;
 		}
 
+        /// <summary>
+        /// Adds the specified prototype.	
+        /// </summary>
+        /// <param name="prototype">The prototype.</param>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public OptionSet Add (string prototype, OptionAction<string, string> action)
 		{
 			return Add (prototype, null, action);
 		}
 
+        /// <summary>
+        /// Adds the specified prototype.	
+        /// </summary>
+        /// <param name="prototype">The prototype.</param>
+        /// <param name="description">The description.</param>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public OptionSet Add (string prototype, string description, OptionAction<string, string> action)
 		{
 			if (action == null)
@@ -670,26 +993,67 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 			}
 		}
 
+        /// <summary>
+        /// Adds the specified prototype.	
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="prototype">The prototype.</param>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public OptionSet Add<T> (string prototype, Action<T> action)
 		{
 			return Add (prototype, null, action);
 		}
 
+        /// <summary>
+        /// Adds the specified prototype.	
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="prototype">The prototype.</param>
+        /// <param name="description">The description.</param>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public OptionSet Add<T> (string prototype, string description, Action<T> action)
 		{
 			return Add (new ActionOption<T> (prototype, description, action));
 		}
 
+        /// <summary>
+        /// Adds the specified prototype.	
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="prototype">The prototype.</param>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public OptionSet Add<TKey, TValue> (string prototype, OptionAction<TKey, TValue> action)
 		{
 			return Add (prototype, null, action);
 		}
 
+        /// <summary>
+        /// Adds the specified prototype.	
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="prototype">The prototype.</param>
+        /// <param name="description">The description.</param>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public OptionSet Add<TKey, TValue> (string prototype, string description, OptionAction<TKey, TValue> action)
 		{
 			return Add (new ActionOption<TKey, TValue> (prototype, description, action));
 		}
 
+        /// <summary>
+        /// Creates the option context.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected virtual OptionContext CreateOptionContext ()
 		{
 			return new OptionContext (this);
@@ -724,6 +1088,12 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 			return r;
 		}
 #else
+        /// <summary>
+        /// Parses the specified arguments.	
+        /// </summary>
+        /// <param name="arguments">The arguments.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public List<string> Parse (IEnumerable<string> arguments)
 		{
 			OptionContext c = CreateOptionContext ();
@@ -765,6 +1135,16 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 		private readonly Regex ValueOption = new Regex (
 			@"^(?<flag>--|-|/)(?<name>[^:=]+)((?<sep>[:=])(?<value>.*))?$");
 
+        /// <summary>
+        /// Gets the option parts.	
+        /// </summary>
+        /// <param name="argument">The argument.</param>
+        /// <param name="flag">The flag.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="sep">The sep.</param>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected bool GetOptionParts (string argument, out string flag, out string name, out string sep, out string value)
 		{
 			if (argument == null)
@@ -784,6 +1164,13 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 			return true;
 		}
 
+        /// <summary>
+        /// Parses the specified argument.	
+        /// </summary>
+        /// <param name="argument">The argument.</param>
+        /// <param name="c">The c.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected virtual bool Parse (string argument, OptionContext c)
 		{
 			if (c.Option != null) {
@@ -835,7 +1222,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 				c.Option.Invoke (c);
 			else if (c.OptionValues.Count > c.Option.MaxValueCount) {
 				throw new OptionException (localizer (string.Format (
-								"Error: Found {0} option values when expecting {1}.", 
+								CultureInfo.CurrentCulture, "Error: Found {0} option values when expecting {1}.", 
 								c.OptionValues.Count, c.Option.MaxValueCount)),
 						c.OptionName);
 			}
@@ -864,12 +1251,12 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 				return false;
 			for (int i = 0; i < n.Length; ++i) {
 				Option p;
-				string opt = f + n [i].ToString ();
-				string rn = n [i].ToString ();
+				string opt = f + n [i].ToString (CultureInfo.CurrentCulture);
+				string rn = n [i].ToString (CultureInfo.CurrentCulture);
 				if (!Contains (rn)) {
 					if (i == 0)
 						return false;
-					throw new OptionException (string.Format (localizer (
+					throw new OptionException (string.Format (CultureInfo.CurrentCulture, localizer (
 									"Cannot bundle unregistered option '{0}'."), opt), opt);
 				}
 				p = this [rn];
@@ -902,6 +1289,11 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 
 		private const int OptionWidth = 29;
 
+        /// <summary>
+        /// Writes the option descriptions.	
+        /// </summary>
+        /// <param name="o">The o.</param>
+        /// <remarks></remarks>
 		public void WriteOptionDescriptions (TextWriter o)
 		{
 			foreach (Option p in this) {
@@ -996,11 +1388,11 @@ namespace ThoughtWorks.CruiseControl.Remote.Mono
 			for (int i = 0; i < nameStart.Length; ++i) {
 				int start, j = 0;
 				do {
-					start = description.IndexOf (nameStart [i], j);
+					start = description.IndexOf (nameStart [i], j, StringComparison.CurrentCulture);
 				} while (start >= 0 && j != 0 ? description [j++ - 1] == '{' : false);
 				if (start == -1)
 					continue;
-				int end = description.IndexOf ("}", start);
+				int end = description.IndexOf ("}", start, StringComparison.CurrentCulture);
 				if (end == -1)
 					continue;
 				return description.Substring (start + nameStart [i].Length, end - start - nameStart [i].Length);

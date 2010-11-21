@@ -102,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
 
             if (other != null)
             {
-                return string.Equals(other.requestIdentifier, requestIdentifier) &&
+                return string.Equals(other.requestIdentifier, requestIdentifier, StringComparison.CurrentCulture) &&
                     DateTime.Equals(other.Timestamp, Timestamp);
             }
             else

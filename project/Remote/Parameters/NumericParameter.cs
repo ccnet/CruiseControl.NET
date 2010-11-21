@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
     {
         private double myMinValue = double.MinValue;
         private double myMaxValue = double.MaxValue;
-        private bool myIsRequired = false;
+        private bool myIsRequired/* = false*/;
         
         #region Constructors
         /// <summary>

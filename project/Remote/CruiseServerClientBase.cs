@@ -398,7 +398,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Logs a user into the session and generates a session.
         /// </summary>
         /// <returns>True if the request is successful, false otherwise.</returns>
-        public virtual bool Login(List<NameValuePair> Credentials)
+        public virtual bool Login(List<NameValuePair> credentials)
         {
             throw new NotImplementedException();
         }

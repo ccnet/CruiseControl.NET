@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// A null request.
         /// </summary>
-		public static readonly IntegrationRequest NullRequest = new IntegrationRequest(BuildCondition.NoBuild, "NullRequest", null);
+		public static IntegrationRequest NullRequest = new IntegrationRequest(BuildCondition.NoBuild, "NullRequest", null);
 		private readonly BuildCondition buildCondition;
 		private readonly string source;
         private readonly DateTime requestTime;

@@ -72,9 +72,9 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         : ParameterBase
     {
         #region Private fields
-        private int myMinLength = 0;
+        private int myMinLength/* = 0*/;
         private int myMaxLength = int.MaxValue;
-        private bool myIsRequired = false;
+        private bool myIsRequired/* = false*/;
         #endregion
 
         #region Constructors

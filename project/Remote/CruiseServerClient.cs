@@ -5,6 +5,7 @@ using ThoughtWorks.CruiseControl.Remote.Messages;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using System.Xml;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -496,13 +497,13 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// Logs a user into the session and generates a session.
         /// </summary>
         /// <returns>True if the request is successful, false otherwise.</returns>
-        public override bool Login(List<NameValuePair> Credentials)
+        public override bool Login(List<NameValuePair> credentials)
         {
             SessionToken = null;
 
             // Generate the response and send it
             LoginRequest request = new LoginRequest();
-            request.Credentials.AddRange(Credentials);
+            request.Credentials.AddRange(credentials);
             request.ServerName = TargetServer;
             LoginResponse resp = ValidateResponse(
                 connection.SendMessage("Login", request))
@@ -723,7 +724,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             var request = GenerateServerRequest();
             var response = connection.SendMessage("GetFreeDiskSpace", request);
             ValidateResponse(response);
-            return Convert.ToInt64((response as DataResponse).Data);
+            return Convert.ToInt64((response as DataResponse).Data, CultureInfo.CurrentCulture);
         }
         #endregion
 
@@ -782,7 +783,7 @@ namespace ThoughtWorks.CruiseControl.Remote
                     response.ErrorMessages.Add(
                         new ErrorMessage(
                             string.Format(
-                                "Unable to translate message: '{0}' is unknown",
+                                CultureInfo.CurrentCulture, "Unable to translate message: '{0}' is unknown",
                                 messageXml.DocumentElement.Name)));
                 }
 

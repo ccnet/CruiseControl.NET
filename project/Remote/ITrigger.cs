@@ -21,6 +21,11 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// </summary>
 		DateTime NextBuild { get; }
 
+        /// <summary>
+        /// Fires this instance.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		IntegrationRequest Fire();
 	}
 }

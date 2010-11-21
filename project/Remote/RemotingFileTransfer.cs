@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 
         #region Private fields
         private byte[] fileData = { };
-        private int fileLength = 0;
+        private int fileLength/* = 0*/;
         #endregion
 
         #region Constructors

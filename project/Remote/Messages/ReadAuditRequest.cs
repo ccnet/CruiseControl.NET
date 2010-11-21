@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Messages
         : ServerRequest
     {
         #region Private fields
-        private int startRecord = 0;
+        private int startRecord/* = 0*/;
         private int numberOfRecords = int.MaxValue;
         private AuditFilterBase filter;
         #endregion

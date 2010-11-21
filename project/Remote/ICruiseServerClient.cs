@@ -158,22 +158,52 @@ namespace ThoughtWorks.CruiseControl.Remote
         #endregion
 
         #region GetExternalLinks()
+        /// <summary>
+        /// Gets the external links.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         ExternalLinksListResponse GetExternalLinks(ProjectRequest request);
         #endregion
 
         #region GetArtifactDirectory()
+        /// <summary>
+        /// Gets the artifact directory.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         DataResponse GetArtifactDirectory(ProjectRequest request);
         #endregion
 
         #region GetStatisticsDocument()
+        /// <summary>
+        /// Gets the statistics document.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         DataResponse GetStatisticsDocument(ProjectRequest request);
         #endregion
 
         #region GetModificationHistoryDocument()
+        /// <summary>
+        /// Gets the modification history document.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         DataResponse GetModificationHistoryDocument(ProjectRequest request);
         #endregion
 
         #region GetRSSFeed()
+        /// <summary>
+        /// Gets the RSS feed.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         DataResponse GetRSSFeed(ProjectRequest request);
         #endregion
 

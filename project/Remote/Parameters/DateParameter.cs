@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         private static Regex dayOfMonthRegex = new Regex("(?<=dayofmonth\\()[1-9][0-9]?(?=\\))", RegexOptions.IgnoreCase);
         private DateTime myMinValue = DateTime.MinValue;
         private DateTime myMaxValue = DateTime.MaxValue;
-        private bool myIsRequired = false;
+        private bool myIsRequired/* = false*/;
         private string myClientDefault;
         #endregion
         
@@ -280,18 +280,18 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
             {
                 var day = dayOfWeekRegex.Match(value).Value;
                 var diff = (int)DateTime.Today.DayOfWeek;
-                date = DateTime.Today.AddDays(System.Convert.ToInt32(day) - diff);
+                date = DateTime.Today.AddDays(System.Convert.ToInt32(day, CultureInfo.CurrentCulture) - diff);
                 date = CalculateOperation(value.Substring(12), date);
             }
             else if (dayOfMonthRegex.IsMatch(value))
             {
                 var day = dayOfMonthRegex.Match(value);
-                date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, System.Convert.ToInt32(day.Value));
+                date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, System.Convert.ToInt32(day.Value, CultureInfo.CurrentCulture));
                 date = CalculateOperation(value.Substring(day.Value.Length + 12), date);
             }
             else
             {
-                date = DateTime.Parse(value);
+                date = DateTime.Parse(value, CultureInfo.CurrentCulture);
             }
 
             return date;
@@ -304,7 +304,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
             DateTime date = baseDate;
             if (!string.IsNullOrEmpty(operation))
             {
-                var number = System.Convert.ToInt32(operation.Substring(1));
+                var number = System.Convert.ToInt32(operation.Substring(1), CultureInfo.CurrentCulture);
                 var op = operation.Substring(0, 1);
                 switch (op)
                 {

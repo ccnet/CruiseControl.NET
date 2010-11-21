@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Events
     public class CancelProjectEventArgs<TData>
         : ProjectEventArgs<TData>
     {
-        private bool isCanceled = false;
+        private bool isCanceled/* = false*/;
 
         /// <summary>
         /// Start a new set of event args for a project with data.

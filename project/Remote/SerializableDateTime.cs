@@ -30,6 +30,6 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <summary>
         /// The default date/time.
         /// </summary>
-		public readonly static SerializableDateTime Default = new SerializableDateTime(DateTime.MinValue);
+		public static SerializableDateTime Default = new SerializableDateTime(DateTime.MinValue);
 	}
 }

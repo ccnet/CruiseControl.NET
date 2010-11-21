@@ -6,6 +6,7 @@ using System.Xml;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 using System.Reflection;
 using System.IO;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -36,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             {
                 throw new CommunicationsException(
                     string.Format(
-                        "Unable to translate message: '{0}' is unknown",
+                        CultureInfo.CurrentCulture, "Unable to translate message: '{0}' is unknown",
                         messageXml.DocumentElement.Name));
             }
 

@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Events
     public class CancelProjectEventArgs
         : ProjectEventArgs
     {
-        private bool isCanceled = false;
+        private bool isCanceled/* = false*/;
 
         /// <summary>
         /// Start a new set of event args for a project.

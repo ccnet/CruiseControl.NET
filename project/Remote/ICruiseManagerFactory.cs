@@ -1,8 +1,17 @@
 using System;
 namespace ThoughtWorks.CruiseControl.Remote
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public interface ICruiseManagerFactory
 	{
+        /// <summary>
+        /// Gets the cruise manager.	
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         [Obsolete("")]
 		ICruiseManager GetCruiseManager(string url);
 

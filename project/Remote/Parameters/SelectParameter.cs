@@ -82,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         : ParameterBase
     {
         #region Private fields
-        private bool myIsRequired = false;
+        private bool myIsRequired/* = false*/;
         private NameValuePair[] myAllowedValues = { };
         private string myClientDefault;
         #endregion

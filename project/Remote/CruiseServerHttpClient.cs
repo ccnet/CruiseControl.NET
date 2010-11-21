@@ -4,6 +4,7 @@ using System.Text;
 using System.Net;
 using System.Xml;
 using System.Collections.Specialized;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -36,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="client">The <see cref="WebClient"/> to use.</param>
         public CruiseServerHttpClient(string serverUri, WebClient client)
         {
-            this.serverUri = serverUri.EndsWith("/") ? serverUri.Substring(0, serverUri.Length - 1) : serverUri;
+            this.serverUri = serverUri.EndsWith("/", StringComparison.CurrentCulture) ? serverUri.Substring(0, serverUri.Length - 1) : serverUri;
             this.client = client;
         }
         #endregion
@@ -343,7 +344,7 @@ namespace ThoughtWorks.CruiseControl.Remote
             var value = element.GetAttribute(attributeName);
             var dateValue = string.IsNullOrEmpty(value)
                 ? defaultValue
-                : DateTime.Parse(value);
+                : DateTime.Parse(value, CultureInfo.CurrentCulture);
             return dateValue;
         }
 
@@ -354,14 +355,15 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="attributeName"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        private TEnum RetrieveAttributeValue<TEnum>(XmlElement element, string attributeName, TEnum defaultValue)
-        {
-            var value = element.GetAttribute(attributeName);
-            var enumValue = string.IsNullOrEmpty(value)
-                ? defaultValue
-                : (TEnum)Enum.Parse(typeof(TEnum), value);
-            return enumValue;
-        }
+//  COMMENTED BY CODEIT.RIGHT
+//        private TEnum RetrieveAttributeValue<TEnum>(XmlElement element, string attributeName, TEnum defaultValue)
+//        {
+//            var value = element.GetAttribute(attributeName);
+//            var enumValue = string.IsNullOrEmpty(value)
+//                ? defaultValue
+//                : (TEnum)Enum.Parse(typeof(TEnum), value);
+//            return enumValue;
+//        }
         #endregion
 
         #region SendButtonPush()
