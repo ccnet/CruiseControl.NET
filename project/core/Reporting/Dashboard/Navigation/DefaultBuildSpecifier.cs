@@ -1,4 +1,5 @@
 
+using System;
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
     /// <summary>
@@ -25,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 			{
 				throw new CruiseControlException("Build Specifier cannot be instantiated with a null build name");
 			}
-			if (buildName == string.Empty)
+			if ((buildName != null && buildName.Length == 0))
 			{
 				throw new CruiseControlException("Build Specifier cannot be instantiated with an empty build name");
 			}

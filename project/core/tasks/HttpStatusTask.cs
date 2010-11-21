@@ -93,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 {
                     foreach (int code in this.successStatusCodes)
                     {
-                        if (result != string.Empty)
+                        if (!(result != null && result.Length == 0))
                         {
                             result = result + ",";
                         }

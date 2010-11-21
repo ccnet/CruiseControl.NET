@@ -773,7 +773,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 while ((externalsDefinition = reader.ReadLine()) != null)
                 {
                     // If this external is not a specific revision and is not an empty string
-                    if (!externalsDefinition.Contains("-r") && !externalsDefinition.Equals(string.Empty))
+                    if (!externalsDefinition.Contains("-r") && !(externalsDefinition.Length == 0))
                     {
                         int Pos = GetSubstringPosition(externalsDefinition);
 

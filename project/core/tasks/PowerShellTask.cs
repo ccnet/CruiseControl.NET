@@ -181,7 +181,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 {
                     foreach (int code in successExitCodes)
                     {
-                        if (result !=string.Empty)
+                        if (!(result != null && result.Length == 0))
                             result = result + ",";
                         result = result + code;
                     }
@@ -334,7 +334,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 foreach (Match line in lines)
                 {
                     output.Append("  <message");
-                    if (msgLevel !=string.Empty)
+                    if (!(msgLevel != null && msgLevel.Length == 0))
                         output.AppendFormat(CultureInfo.CurrentCulture, " level=\"{0}\"", msgLevel);
                     output.Append(">");
                     output.Append(XmlUtil.EncodePCDATA(line.ToString()));

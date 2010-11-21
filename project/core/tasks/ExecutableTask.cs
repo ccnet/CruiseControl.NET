@@ -176,7 +176,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 {
                     foreach (int code in successExitCodes)
                     {
-                        if (result !=string.Empty)
+                        if (!(result != null && result.Length == 0))
                             result = result + ",";
                         result = result + code;
                     }

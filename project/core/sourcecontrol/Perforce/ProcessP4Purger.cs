@@ -1,4 +1,5 @@
 using ThoughtWorks.CruiseControl.Core.Util;
+using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 {
@@ -30,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
         /// <remarks></remarks>
 		public void Purge(P4 p4, string workingDirectory)
 		{
-			if (p4.Client != null && p4.Client != string.Empty)
+			if (p4.Client != null && !(p4.Client != null && p4.Client.Length == 0))
 			{
 				Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Attempting to Delete Perforce Client Spec [{0}]", p4.Client));
 				DeleteClientSpec(p4);

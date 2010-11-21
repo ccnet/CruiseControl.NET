@@ -1,6 +1,7 @@
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 {
@@ -175,7 +176,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 			// Push any pending labels that failed to push due to remote side having additional revisions
 			Execute(NewProcessInfo(BuildPushProcessArgs(), result));
 
-			if (CloneTo != string.Empty) CloneSource(result);
+			if (!(CloneTo != null && CloneTo.Length == 0)) CloneSource(result);
 		}
 
 		private void CloneSource(IIntegrationResult result)

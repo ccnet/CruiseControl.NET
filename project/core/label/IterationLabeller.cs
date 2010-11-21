@@ -110,7 +110,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 		{
 			StringBuilder buffer = new StringBuilder();
 			buffer.Append(LabelPrefix);
-			if (LabelPrefix != string.Empty && ! LabelPrefix.EndsWith(Separator)) buffer.Append(Separator);
+			if (!(LabelPrefix != null && LabelPrefix.Length == 0) && ! LabelPrefix.EndsWith(Separator)) buffer.Append(Separator);
 			buffer.Append(CurrentIteration());
 			buffer.Append(Separator);
 			buffer.Append(suffix);

@@ -287,7 +287,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 foreach (Match line in lines)
                 {
                     sb.Append("  <message");
-                    if (msgLevel != string.Empty)
+                    if (!(msgLevel != null && msgLevel.Length == 0))
                         sb.AppendFormat(CultureInfo.CurrentCulture, " level=\"{0}\"", msgLevel);
                     sb.Append(">");
                     sb.Append(XmlUtil.EncodePCDATA(line.ToString()));

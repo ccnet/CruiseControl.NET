@@ -154,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
                 }
                 // Remove leading and trailing blanks
                 label = label.Trim();
-                if (label == string.Empty)
+                if ((label != null && label.Length == 0))
                     throw new CruiseControlException("Label only contains whitespace.");
                 return label;
             }
@@ -182,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
                         string.Format(System.Globalization.CultureInfo.CurrentCulture,"Error reading file {0}: {1}", labelFilePath, e.Message),
                         e);
                 }
-                if (ver == string.Empty)
+                if ((ver != null && ver.Length == 0))
                     throw new CruiseControlException(
                         string.Format(System.Globalization.CultureInfo.CurrentCulture,"File {0} only contains whitespace.", labelFilePath));
                 return ver;

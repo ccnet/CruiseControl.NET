@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			modification.ChangeNumber = change;
 			modification.UserName = userName;
 			modification.Type = modificationType;
-			modification.Comment = ( comment == string.Empty ? null : comment );
+			modification.Comment = ( (comment != null && comment.Length == 0) ? null : comment );
 			AssignFileInfo( modification, elementName );
 			AssignModificationTime( modification, time );
 			return modification;

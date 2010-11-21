@@ -1,4 +1,5 @@
 
+using System;
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	/// <summary>
@@ -114,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <remarks></remarks>
 		public bool HasErrorOutput
 		{
-			get { return standardError.Trim() != string.Empty; }
+			get { return !(standardError.Trim() != null && standardError.Trim().Length == 0); }
 		}
 	}
 }

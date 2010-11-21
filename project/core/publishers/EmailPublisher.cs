@@ -444,7 +444,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private static bool IsRecipientSpecified(string to)
         {
-            return to != null && to.Trim() != string.Empty;
+            return to != null && !(to.Trim() != null && to.Trim().Length == 0);
         }
 
         /// <summary>

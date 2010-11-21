@@ -1,6 +1,7 @@
 using System.Globalization;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -228,7 +229,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"stb {0}", Branch));
-			if (Repository != string.Empty)
+			if (!(Repository != null && Repository.Length == 0))
 			{
 				builder.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"-repository={0}", Repository));
 			}
@@ -252,7 +253,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 							  "and date between '{1}' and '{2}'",
 				Branch, from.StartTime.ToString(DATEFORMAT, CultureInfo.InvariantCulture), to.StartTime.ToString(DATEFORMAT, CultureInfo.InvariantCulture)));
         
-			if (Repository != string.Empty) 
+			if (!(Repository != null && Repository.Length == 0)) 
 			{
 				builder.AppendArgument(string.Format(System.Globalization.CultureInfo.CurrentCulture,"on repository '{0}'", Repository));
 			}

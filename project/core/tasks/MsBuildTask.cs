@@ -206,7 +206,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				string targets = string.Empty;
 				foreach (string target in Targets.Split(';'))
 				{
-					if (targets != string.Empty) 
+					if (!(targets != null && targets.Length == 0)) 
 						targets = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0};{1}", targets, StringUtil.AutoDoubleQuoteString(target));
 					else 
 						targets = StringUtil.AutoDoubleQuoteString(target);

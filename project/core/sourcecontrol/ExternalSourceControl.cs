@@ -288,7 +288,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </remarks>
         public override void LabelSourceControl(IIntegrationResult result)
         {
-            if (LabelOnSuccess && result.Succeeded && (result.Label != string.Empty))
+            if (LabelOnSuccess && result.Succeeded && (!(result.Label != null && result.Label.Length == 0)))
             {
                 string args = string.Format(CultureInfo.CurrentCulture, @"SETLABEL ""{0}"" ""{1}"" {2}",
                     result.Label,
@@ -343,7 +343,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             {
                 Log.Error(string.Format(CultureInfo.CurrentCulture, @"Source control command ""{0} {1}"" failed with RC={2}",
                     Executable, args, cmdResults.ExitCode));
-                if ((cmdResults.StandardError != null) && (cmdResults.StandardError !=string.Empty))
+                if ((cmdResults.StandardError != null) && (!(cmdResults.StandardError != null && cmdResults.StandardError.Length == 0)))
                     Log.Error(string.Format(System.Globalization.CultureInfo.CurrentCulture,"\tError output: {0}", cmdResults.StandardError));
             }
             return cmdResults;

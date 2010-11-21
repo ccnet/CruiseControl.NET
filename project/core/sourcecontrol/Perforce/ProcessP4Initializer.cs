@@ -3,6 +3,7 @@ using System.Net;
 using System.Text;
 using ThoughtWorks.CruiseControl.Core.Util;
 using System.Globalization;
+using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 {
@@ -56,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 		private void CreateClientNameIfOneNotSet(P4 p4, string projectName)
 		{
-			if (p4.Client == null || p4.Client == string.Empty)
+			if (p4.Client == null || (p4.Client != null && p4.Client.Length == 0))
 			{
 				p4.Client = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}-{1}-{2}", ClientPrefix, Dns.GetHostName(), projectName);
 			}

@@ -1,4 +1,5 @@
 
+using System;
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
     /// <summary>
@@ -21,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 			{
 				throw new CruiseControlException("Server Specifier cannot be instantiated with a null server name");
 			}
-			if (serverName == string.Empty)
+			if ((serverName != null && serverName.Length == 0))
 			{
 				throw new CruiseControlException("Server Specifier cannot be instantiated with an empty server name");
 			}

@@ -1,3 +1,4 @@
+using System;
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
     /// <summary>
@@ -103,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 
 		private string CalculatePath(string path)
 		{
-			if (path == null || path.Trim() == string.Empty)
+			if (path == null || (path.Trim() != null && path.Trim().Length == 0))
 			{
 				return string.Empty;
 			}

@@ -1,5 +1,6 @@
 using System.Text;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
@@ -121,13 +122,13 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 		private string GeneratePath(string serverName, string projectName, string buildName)
 		{
 			StringBuilder path = new StringBuilder();
-			if (serverName != string.Empty)
+			if (!(serverName != null && serverName.Length == 0))
 			{
                 path.AppendFormat("{0}/{1}", ServerRESTSpecifier, StringUtil.UrlEncodeName(serverName));
-				if (projectName != string.Empty)
+				if (!(projectName != null && projectName.Length == 0))
 				{
                     path.AppendFormat("/{0}/{1}", ProjectRESTSpecifier, StringUtil.UrlEncodeName(projectName));
-					if (buildName != string.Empty)
+					if (!(buildName != null && buildName.Length == 0))
 					{
                         path.AppendFormat("/{0}/{1}", BuildRESTSpecifier, StringUtil.UrlEncodeName(buildName));
 					}

@@ -143,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <remarks></remarks>
 		public static string SelectValue(XmlNode node, string xpath, string defaultValue)
 		{
-			if (node == null || node.InnerXml == null || node.InnerXml == String.Empty)
+			if (node == null || node.InnerXml == null || (node.InnerXml != null && node.InnerXml.Length == 0))
 			{
 				return defaultValue;
 			}
@@ -191,7 +191,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public static string SelectRequiredValue(XmlDocument document, string xpath)
 		{
 			XmlNode node = document.SelectSingleNode(xpath);
-			if (node == null || node.InnerXml == null || node.InnerXml == String.Empty)
+			if (node == null || node.InnerXml == null || (node.InnerXml != null && node.InnerXml.Length == 0))
 			{
 				throw new CruiseControlException("Document missing required value at xpath: " + xpath);
 			}

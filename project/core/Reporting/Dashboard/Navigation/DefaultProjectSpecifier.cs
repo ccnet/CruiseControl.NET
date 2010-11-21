@@ -1,4 +1,5 @@
 
+using System;
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
     /// <summary>
@@ -25,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 			{
 				throw new CruiseControlException("Project Specifier cannot be instantiated with a null project name");
 			}
-			if (projectName == string.Empty)
+			if ((projectName != null && projectName.Length == 0))
 			{
 				throw new CruiseControlException("Project Specifier cannot be instantiated with an empty project name");
 			}
