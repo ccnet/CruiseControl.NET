@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         private Dictionary<string, IAuthentication> loadedUsers;
         private List<IAuthentication> wildCardUsers;
         private Dictionary<string, IPermission> loadedPermissions;
-        private bool isInitialised = false;
+        private bool isInitialised/* = false*/;
         private NetReflectorTypeTable typeTable;
         private NetReflectorReader reflectionReader;
         private Dictionary<string, string> settingFileMap;

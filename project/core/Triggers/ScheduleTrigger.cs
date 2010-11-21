@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         private TimeSpan integrationTime;
         private DateTime nextBuild;
         private bool triggered;
-        private Int32 randomOffSetInMinutesFromTime = 0;
+        private Int32 randomOffSetInMinutesFromTime/* = 0*/;
         Random randomizer = new Random();
 
         /// <summary>

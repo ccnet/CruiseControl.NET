@@ -71,8 +71,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// </summary>
 		public SynergyCommand(SynergyConnectionInfo connectionInfo, SynergyProjectInfo projectInfo)
 		{
-			disposed = false;
-			isOpen = false;
+			/*disposed = false*/;
+			/*isOpen = false*/;
 			executor = new ProcessExecutor();
 			connection = connectionInfo;
 			project = projectInfo;

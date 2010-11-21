@@ -26,8 +26,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         public Vault317(VaultVersionChecker versionCheckerShim)
             : base(versionCheckerShim)
         {
-            _folderVersion = 0;
-            _lastTxID = 0;
+            /*_folderVersion = 0*/;
+            /*_lastTxID = 0*/;
         }
 
         /// <summary>

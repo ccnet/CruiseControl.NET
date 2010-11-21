@@ -164,7 +164,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("environment", Required = false)]
         public EnvironmentVariable[] EnvironmentVariables { get; set; }
 
-		private int[] successExitCodes = null;
+		private int[] successExitCodes/* = null*/;
 
         /// <summary>
         /// The exit codes that mark the script as being successful. 

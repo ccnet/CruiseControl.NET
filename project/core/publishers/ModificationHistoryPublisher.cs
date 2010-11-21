@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </summary>
         /// <remarks></remarks>
         public const string DataHistoryFileName = "HistoryData.xml";
-        private bool onlyLogWhenChangesFound = false;
+        private bool onlyLogWhenChangesFound/* = false*/;
 
 
         /// <summary>

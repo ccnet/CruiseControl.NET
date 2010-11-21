@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		// This is used to determine if CC.NET actually applied a label.  In the event of a failed integration 
 		// (when labels are turned on) the label is removed.  We want to ensure that we only remove a label
 		// we actually applied.
-		private bool _labelApplied = false;
+		private bool _labelApplied/* = false*/;
 
         /// <summary>
         /// 	

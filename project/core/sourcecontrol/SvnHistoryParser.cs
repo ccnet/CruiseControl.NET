@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// </summary>
 	public class SvnHistoryParser : IHistoryParser
 	{
-        private bool integrationStatusUnknown = false;
+        private bool integrationStatusUnknown/* = false*/;
 
         /// <summary>
         /// Gets or sets the integration status unknown.	

@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Logging
 	{
 		private const int AssumedAverageLineLength = 80;
 		private static readonly EnumeratorDirection DefaultDirection = EnumeratorDirection.Forward;
-		private int currentIndex = 0;
+		private int currentIndex/* = 0*/;
 		private object[] items;
 		private bool isFull;
 

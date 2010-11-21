@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         : TaskBase
     {
         private readonly IFileSystem fileSystem;
-        private bool deleteAfterRead = false;
+        private bool deleteAfterRead/* = false*/;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModificationReaderTask" /> class.	

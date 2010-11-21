@@ -188,7 +188,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// 	
         /// </summary>
         /// <remarks></remarks>
-		public bool IsPromotionGroup = false;
+		public bool IsPromotionGroup/* = false*/;
 
         /// <summary>
         /// The label to use as your code-base. If this is specified, this label will be called to get all code

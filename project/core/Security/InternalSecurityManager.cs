@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         private List<IAuthentication> wildCardUsers;
         private IPermission[] permissions;
         private Dictionary<string, IPermission> loadedPermissions;
-        private bool isInitialised = false;
+        private bool isInitialised/* = false*/;
         #endregion
 
         #region Public properties

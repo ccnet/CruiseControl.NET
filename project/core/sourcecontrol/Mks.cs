@@ -61,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
 		public const bool DefaultAutoDisconnect = false;
 		
-		private static int usageCount = 0;
+		private static int usageCount/* = 0*/;
 		private static object usageCountLock = new object();
 
         /// <summary>

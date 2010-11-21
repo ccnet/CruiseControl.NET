@@ -27,10 +27,10 @@ namespace ThoughtWorks.CruiseControl.Core
         private readonly IIntegrationQueue integrationQueue;
         private Thread thread;
         private ProjectIntegratorState state = ProjectIntegratorState.Unknown;
-        private int AmountOfSourceControlExceptions = 0;
+        private int AmountOfSourceControlExceptions/* = 0*/;
 
         private bool runAndStop;
-        private bool isRestarting = false;
+        private bool isRestarting/* = false*/;
 
 
         /// <summary>

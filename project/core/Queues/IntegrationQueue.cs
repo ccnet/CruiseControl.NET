@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
         private readonly IQueueConfiguration configuration;
         private readonly List<string> blockingQueueNames;
         private readonly IntegrationQueueSet parentQueueSet;
-        private bool inUse = false;
+        private bool inUse/* = false*/;
 
         private static readonly object queueLockSync = new object();
 
