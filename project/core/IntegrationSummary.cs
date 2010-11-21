@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// 	
         /// </summary>
         /// <remarks></remarks>
-		public static readonly IntegrationSummary Initial = new IntegrationSummary(IntegrationStatus.Unknown, IntegrationResult.InitialLabel, IntegrationResult.InitialLabel, DateTime.MinValue);
+		public static IntegrationSummary Initial = new IntegrationSummary(IntegrationStatus.Unknown, IntegrationResult.InitialLabel, IntegrationResult.InitialLabel, DateTime.MinValue);
 		private IntegrationStatus status;
 		private string label;
 		private string lastSuccessfulIntegrationLabel;

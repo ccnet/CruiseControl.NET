@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// 	
         /// </summary>
         /// <remarks></remarks>
-		protected readonly ProcessResult result;
+		protected ProcessResult result;
         /// <summary>
         /// 	
         /// </summary>

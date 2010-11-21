@@ -139,24 +139,24 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <remarks></remarks>
         public LdapUserInfo RetrieveUserInformation(string userNameToRetrieveFrom)
         {
-            System.DirectoryServices.DirectorySearcher LdapSearcher = new System.DirectoryServices.DirectorySearcher();
-            System.DirectoryServices.SearchResult LdapResult = default(System.DirectoryServices.SearchResult);
+            System.DirectoryServices.DirectorySearcher ldapSearcher = new System.DirectoryServices.DirectorySearcher();
+            System.DirectoryServices.SearchResult ldapResult = default(System.DirectoryServices.SearchResult);
 
             string filter = "(&(objectClass=user)(SAMAccountName=" + userNameToRetrieveFrom + "))";
 
 
-            System.DirectoryServices.DirectoryEntry Ldap = default(System.DirectoryServices.DirectoryEntry);
+            System.DirectoryServices.DirectoryEntry ldap = default(System.DirectoryServices.DirectoryEntry);
 
             try
             {
 
                 if (LdapLogonUserName == null)
                 {
-                    Ldap = new System.DirectoryServices.DirectoryEntry("LDAP://" + DomainName);
+                    ldap = new System.DirectoryServices.DirectoryEntry("LDAP://" + DomainName);
                 }
                 else
                 {
-                    Ldap = new System.DirectoryServices.DirectoryEntry("LDAP://" + DomainName, LdapLogonUserName, LdapLogonPassword);
+                    ldap = new System.DirectoryServices.DirectoryEntry("LDAP://" + DomainName, LdapLogonUserName, LdapLogonPassword);
                 }
             }
             catch (Exception e)
@@ -165,32 +165,32 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 throw new CruiseControlException("Problem connecting to LDAP service", e);
             }
 
-            LdapSearcher.SearchRoot = Ldap;
-            LdapSearcher.SearchScope = SearchScope.Subtree;
+            ldapSearcher.SearchRoot = ldap;
+            ldapSearcher.SearchScope = SearchScope.Subtree;
 
-            LdapSearcher.PropertiesToLoad.Add(LdapFieldMailAddress);
-            LdapSearcher.PropertiesToLoad.Add(LdapFieldName);
-            LdapSearcher.PropertiesToLoad.Add(LdapFieldSurName);
-            LdapSearcher.PropertiesToLoad.Add(LdapFieldCommonName);
-            LdapSearcher.PropertiesToLoad.Add(LdapFieldGivenName);
-            LdapSearcher.PropertiesToLoad.Add(LdapFieldDisplayName);
-            LdapSearcher.PropertiesToLoad.Add(LdapFieldMailNickName);
+            ldapSearcher.PropertiesToLoad.Add(LdapFieldMailAddress);
+            ldapSearcher.PropertiesToLoad.Add(LdapFieldName);
+            ldapSearcher.PropertiesToLoad.Add(LdapFieldSurName);
+            ldapSearcher.PropertiesToLoad.Add(LdapFieldCommonName);
+            ldapSearcher.PropertiesToLoad.Add(LdapFieldGivenName);
+            ldapSearcher.PropertiesToLoad.Add(LdapFieldDisplayName);
+            ldapSearcher.PropertiesToLoad.Add(LdapFieldMailNickName);
 
-            LdapSearcher.Filter = filter;
-            LdapResult = LdapSearcher.FindOne();
-            LdapSearcher.Dispose();
+            ldapSearcher.Filter = filter;
+            ldapResult = ldapSearcher.FindOne();
+            ldapSearcher.Dispose();
 
             LdapUserInfo result = new LdapUserInfo();
 
-            if ((LdapResult != null))
+            if ((ldapResult != null))
             {
-                result.CommonName = (string)LdapResult.GetDirectoryEntry().Properties[LdapFieldCommonName].Value;
-                result.DisplayName = (string)LdapResult.GetDirectoryEntry().Properties[LdapFieldDisplayName].Value;
-                result.GivenName = (string)LdapResult.GetDirectoryEntry().Properties[LdapFieldGivenName].Value;
-                result.MailAddress = (string)LdapResult.GetDirectoryEntry().Properties[LdapFieldMailAddress].Value;
-                result.MailNickName = (string)LdapResult.GetDirectoryEntry().Properties[LdapFieldMailNickName].Value;
-                result.Name = (string)LdapResult.GetDirectoryEntry().Properties[LdapFieldName].Value;
-                result.SurName = (string)LdapResult.GetDirectoryEntry().Properties[LdapFieldSurName].Value;
+                result.CommonName = (string)ldapResult.GetDirectoryEntry().Properties[LdapFieldCommonName].Value;
+                result.DisplayName = (string)ldapResult.GetDirectoryEntry().Properties[LdapFieldDisplayName].Value;
+                result.GivenName = (string)ldapResult.GetDirectoryEntry().Properties[LdapFieldGivenName].Value;
+                result.MailAddress = (string)ldapResult.GetDirectoryEntry().Properties[LdapFieldMailAddress].Value;
+                result.MailNickName = (string)ldapResult.GetDirectoryEntry().Properties[LdapFieldMailNickName].Value;
+                result.Name = (string)ldapResult.GetDirectoryEntry().Properties[LdapFieldName].Value;
+                result.SurName = (string)ldapResult.GetDirectoryEntry().Properties[LdapFieldSurName].Value;
             }
 
             return result;

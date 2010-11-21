@@ -103,26 +103,26 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// <returns>The email address.</returns>
         public string Convert(string username)
         {           
-            string LDAPPath = @"LDAP://" + domainName;
-            string LDAPFilter = @"(&(objectClass=user)(SAMAccountName=" + username + "))";
-            string[] LDAPProperties = { ldap_Mail, ldap_QueryField };
+            string ldapPath = @"LDAP://" + domainName;
+            string ldapFilter = @"(&(objectClass=user)(SAMAccountName=" + username + "))";
+            string[] ldapProperties = { ldap_Mail, ldap_QueryField };
 
             System.DirectoryServices.DirectoryEntry domain;
             if (ldap_LogOnUser.Length > 0 )
             {
-                domain = new System.DirectoryServices.DirectoryEntry(LDAPPath,ldap_LogOnUser,ldap_LogOnPassword.PrivateValue);
+                domain = new System.DirectoryServices.DirectoryEntry(ldapPath,ldap_LogOnUser,ldap_LogOnPassword.PrivateValue);
             }
             else
             {
-                domain = new System.DirectoryServices.DirectoryEntry(LDAPPath);
+                domain = new System.DirectoryServices.DirectoryEntry(ldapPath);
             }
             
 
             System.DirectoryServices.DirectorySearcher searcher = new System.DirectoryServices.DirectorySearcher(domain);
             System.DirectoryServices.SearchResult result;
 
-            searcher.Filter = LDAPFilter;
-            searcher.PropertiesToLoad.AddRange(LDAPProperties);
+            searcher.Filter = ldapFilter;
+            searcher.PropertiesToLoad.AddRange(ldapProperties);
             
             result = searcher.FindOne();
 

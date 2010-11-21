@@ -205,18 +205,18 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 			private void Kill()
 			{
-				const int WAIT_FOR_KILLED_PROCESS_TIMEOUT = 10000;
+				const int waitForKilledProcessTimeout = 10000;
 
-				Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Sending kill to process {0} and waiting {1} seconds for it to exit.", process.Id, WAIT_FOR_KILLED_PROCESS_TIMEOUT / 1000));
+				Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Sending kill to process {0} and waiting {1} seconds for it to exit.", process.Id, waitForKilledProcessTimeout / 1000));
 				CancelEventsAndWait();
 				try
 				{
 					KillUtil.KillPid(process.Id);
-					if (!process.WaitForExit(WAIT_FOR_KILLED_PROCESS_TIMEOUT))
+					if (!process.WaitForExit(waitForKilledProcessTimeout))
 						throw new CruiseControlException(
 							string.Format(CultureInfo.CurrentCulture, @"The killed process {0} did not terminate within the allotted timeout period {1}.  The process or one of its child processes may not have died.  This may create problems when trying to re-execute the process.  It may be necessary to reboot the server to recover.",
 								process.Id,
-								WAIT_FOR_KILLED_PROCESS_TIMEOUT));
+								waitForKilledProcessTimeout));
 					Log.Warning(string.Format(System.Globalization.CultureInfo.CurrentCulture,"The process has been killed: {0}", process.Id));
 				}
 				catch (InvalidOperationException)

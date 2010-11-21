@@ -264,22 +264,22 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         public static string LoadStatistics(string artifactDirectory)
         {            
             string documentLocation = Path.Combine(artifactDirectory, XmlFileName);
-            System.Text.StringBuilder Result = new System.Text.StringBuilder();
+            System.Text.StringBuilder result = new System.Text.StringBuilder();
 
             if (File.Exists(documentLocation))
             {
                 System.IO.StreamReader sr = new StreamReader(documentLocation);
                 
-                Result.AppendLine("<statistics>");
-                Result.AppendLine(sr.ReadToEnd());
+                result.AppendLine("<statistics>");
+                result.AppendLine(sr.ReadToEnd());
                 sr.Close();
                                
-                Result.AppendLine(AppendCurrentDateElement());
+                result.AppendLine(AppendCurrentDateElement());
                
-                Result.AppendLine("</statistics>");
+                result.AppendLine("</statistics>");
 
             }
-            return Result.ToString();
+            return result.ToString();
         }
 
         private static string AppendCurrentDateElement()

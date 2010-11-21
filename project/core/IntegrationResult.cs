@@ -666,16 +666,16 @@ namespace ThoughtWorks.CruiseControl.Core
 
         private ArrayList GetModifiers()
         {
-            ArrayList Result = new ArrayList();
+            ArrayList result = new ArrayList();
 
             foreach (Modification mod in Modifications)
             {
-                if (!Result.Contains(mod.UserName))
+                if (!result.Contains(mod.UserName))
                 {
-                    Result.Add(mod.UserName);
+                    result.Add(mod.UserName);
                 }
             }
-            return Result;
+            return result;
         }
 
         #region Clone()

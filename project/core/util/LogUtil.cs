@@ -206,19 +206,19 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         private static string GetCallingClassName()
         {
-            StackTrace Stack = default(StackTrace);
-            StackFrame CurrentFrame = default(StackFrame);
+            StackTrace stack = default(StackTrace);
+            StackFrame currentFrame = default(StackFrame);
             string myAssemblyName = null;
             string myClassName = null;
             string myMethodName = null;
 
             try
             {
-                Stack = new StackTrace();
-                CurrentFrame = Stack.GetFrame(2);
-                myAssemblyName = CurrentFrame.GetMethod().ReflectedType.Assembly.FullName.Split(',')[0];
-                myClassName = CurrentFrame.GetMethod().ReflectedType.ToString();
-                myMethodName = CurrentFrame.GetMethod().Name;
+                stack = new StackTrace();
+                currentFrame = stack.GetFrame(2);
+                myAssemblyName = currentFrame.GetMethod().ReflectedType.Assembly.FullName.Split(',')[0];
+                myClassName = currentFrame.GetMethod().ReflectedType.ToString();
+                myMethodName = currentFrame.GetMethod().Name;
             }
             catch
             {

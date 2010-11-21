@@ -222,9 +222,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private bool BuildLogFolderSet(IIntegrationResult result)
 		{
-			string BuildLogFolder = result.BuildLogDirectory;
+			string buildLogFolder = result.BuildLogDirectory;
 
-			if (string.IsNullOrEmpty(BuildLogFolder))
+			if (string.IsNullOrEmpty(buildLogFolder))
 			{
 				Log.Debug(
 					"Cleaning up the artifact folder not possible because the buildlog folder is NULL. \n Check that the XML Log publisher is before the Artifacts Cleanup publisher in the config.");

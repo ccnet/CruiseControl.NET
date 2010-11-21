@@ -60,9 +60,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Saving modification history");                
 
-            string DataHistoryFile = System.IO.Path.Combine(result.ArtifactDirectory, DataHistoryFileName);
+            string dataHistoryFile = System.IO.Path.Combine(result.ArtifactDirectory, DataHistoryFileName);
 
-            WriteModifications(DataHistoryFile, result);
+            WriteModifications(dataHistoryFile, result);
 
             return true;
         }
@@ -74,27 +74,27 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             fs.Seek(0, System.IO.SeekOrigin.End);
 
             System.IO.StreamWriter sw = new System.IO.StreamWriter(fs);
-            System.Xml.XmlTextWriter CurrentBuildInfoWriter = new System.Xml.XmlTextWriter(sw);
-            CurrentBuildInfoWriter.Formatting = System.Xml.Formatting.Indented;
+            System.Xml.XmlTextWriter currentBuildInfoWriter = new System.Xml.XmlTextWriter(sw);
+            currentBuildInfoWriter.Formatting = System.Xml.Formatting.Indented;
 
-            CurrentBuildInfoWriter.WriteStartElement("Build");
-            WriteXMLAttributeAndValue(CurrentBuildInfoWriter, "BuildDate", Util.DateUtil.FormatDate(result.EndTime));
-            WriteXMLAttributeAndValue(CurrentBuildInfoWriter, "Success", result.Succeeded.ToString(CultureInfo.CurrentCulture));
-            WriteXMLAttributeAndValue(CurrentBuildInfoWriter, "Label", result.Label);
+            currentBuildInfoWriter.WriteStartElement("Build");
+            WriteXMLAttributeAndValue(currentBuildInfoWriter, "BuildDate", Util.DateUtil.FormatDate(result.EndTime));
+            WriteXMLAttributeAndValue(currentBuildInfoWriter, "Success", result.Succeeded.ToString(CultureInfo.CurrentCulture));
+            WriteXMLAttributeAndValue(currentBuildInfoWriter, "Label", result.Label);
 
             if (result.Modifications.Length > 0)
             {                
-                CurrentBuildInfoWriter.WriteStartElement("modifications");
+                currentBuildInfoWriter.WriteStartElement("modifications");
 
                 for (int i = 0; i < result.Modifications.Length; i++)
                 {
-                    result.Modifications[i].ToXml(CurrentBuildInfoWriter);
+                    result.Modifications[i].ToXml(currentBuildInfoWriter);
                 }
                 
-                CurrentBuildInfoWriter.WriteEndElement();                
+                currentBuildInfoWriter.WriteEndElement();                
             }
 
-            CurrentBuildInfoWriter.WriteEndElement();
+            currentBuildInfoWriter.WriteEndElement();
             sw.WriteLine();
 
             sw.Flush();

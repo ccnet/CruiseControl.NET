@@ -286,10 +286,14 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
         {
             var writer = new StringWriter(CultureInfo.InvariantCulture);
 
-            _minutes.Format(writer, true); writer.Write(' ');
-            _hours.Format(writer, true); writer.Write(' ');
-            _days.Format(writer, true); writer.Write(' ');
-            _months.Format(writer, true); writer.Write(' ');
+            _minutes.Format(writer, true);
+            writer.Write(' ');
+            _hours.Format(writer, true);
+            writer.Write(' ');
+            _days.Format(writer, true);
+            writer.Write(' ');
+            _months.Format(writer, true);
+            writer.Write(' ');
             _daysOfWeek.Format(writer, true);
 
             return writer.ToString();

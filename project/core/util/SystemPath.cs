@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// 	
         /// </summary>
         /// <remarks></remarks>
-		public static readonly SystemPath Temp = new SystemPath(Path.GetTempPath());
+		public static SystemPath Temp = new SystemPath(Path.GetTempPath());
 		
 		private readonly string path;
 

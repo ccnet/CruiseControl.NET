@@ -224,16 +224,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         public void UploadFolder(string remoteFolder, string localFolder, bool recursive)
         {
 
-            string[] LocalFiles = null;
+            string[] localFiles = null;
 
-            LocalFiles = System.IO.Directory.GetFiles(localFolder, "*.*");
+            localFiles = System.IO.Directory.GetFiles(localFolder, "*.*");
             this.ftpServer.ChangeWorkingDirectory(remoteFolder);
 
 
             // remove the local folder value, so we can work relative
-            for (int i = 0; i <= LocalFiles.Length - 1; i++)
+            for (int i = 0; i <= localFiles.Length - 1; i++)
             {
-                LocalFiles[i] = LocalFiles[i].Remove(0, localFolder.Length + 1);
+                localFiles[i] = localFiles[i].Remove(0, localFolder.Length + 1);
             }
 
 
@@ -242,18 +242,18 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             EnterpriseDT.Net.Ftp.FTPFile[] ftpServerFileInfo = this.ftpServer.GetFileInfos();
 
 
-            foreach (var LocalFile in LocalFiles)
+            foreach (var localFile in localFiles)
             {
-                if (!FileExistsAtFtp(ftpServerFileInfo, LocalFile))
+                if (!FileExistsAtFtp(ftpServerFileInfo, localFile))
                 {
-                    this.ftpServer.UploadFile(System.IO.Path.Combine(localFolder, LocalFile), LocalFile);
+                    this.ftpServer.UploadFile(System.IO.Path.Combine(localFolder, localFile), localFile);
                 }
                 else
                 {
-                    if (FileIsDifferentAtFtp(ftpServerFileInfo, LocalFile, localFolder))
+                    if (FileIsDifferentAtFtp(ftpServerFileInfo, localFile, localFolder))
                     {
-                        this.ftpServer.DeleteFile(LocalFile);
-                        this.ftpServer.UploadFile(System.IO.Path.Combine(localFolder, LocalFile), LocalFile);
+                        this.ftpServer.DeleteFile(localFile);
+                        this.ftpServer.UploadFile(System.IO.Path.Combine(localFolder, localFile), localFile);
                     }
 
                 }
@@ -263,36 +263,36 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             if (!recursive) return;
 
             //upload folders
-            string[] Folders = null;
+            string[] folders = null;
 
-            string LocalTargetFolder = null;
-            string FtpTargetFolder = null;
+            string localTargetFolder = null;
+            string ftpTargetFolder = null;
 
 
-            Folders = System.IO.Directory.GetDirectories(localFolder);
+            folders = System.IO.Directory.GetDirectories(localFolder);
 
             // remove the local folder value, so we can work relative
-            for (int i = 0; i <= Folders.Length - 1; i++)
+            for (int i = 0; i <= folders.Length - 1; i++)
             {
-                Folders[i] = Folders[i].Remove(0, localFolder.Length + 1);
+                folders[i] = folders[i].Remove(0, localFolder.Length + 1);
             }
 
 
-            foreach (var Folder in Folders)
+            foreach (var folder in folders)
             {
                 //explicit set the folder back, because of recursive calls
                 this.ftpServer.ChangeWorkingDirectory(remoteFolder);
 
 
-                if (!FolderExistsAtFtp(ftpServerFileInfo, Folder))
+                if (!FolderExistsAtFtp(ftpServerFileInfo, folder))
                 {
-                    this.ftpServer.CreateDirectory(Folder);
+                    this.ftpServer.CreateDirectory(folder);
                 }
 
-                LocalTargetFolder = System.IO.Path.Combine(localFolder, Folder);
-                FtpTargetFolder = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/{1}", remoteFolder, Folder);
+                localTargetFolder = System.IO.Path.Combine(localFolder, folder);
+                ftpTargetFolder = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/{1}", remoteFolder, folder);
 
-                UploadFolder(FtpTargetFolder, LocalTargetFolder, recursive);
+                UploadFolder(ftpTargetFolder, localTargetFolder, recursive);
             }
         }
 
@@ -346,12 +346,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         {
             this.ftpServer.ChangeWorkingDirectory(remoteFolder);
 
-            EnterpriseDT.Net.Ftp.FTPFile[] FtpServerFileInfo = this.ftpServer.GetFileInfos();
+            EnterpriseDT.Net.Ftp.FTPFile[] ftpServerFileInfo = this.ftpServer.GetFileInfos();
 
-            string LocalTargetFolder = null;
-            string FtpTargetFolder = null;
-            bool DownloadFile = false;
-            string LocalFile = null;
+            string localTargetFolder = null;
+            string ftpTargetFolder = null;
+            bool downloadFile = false;
+            string localFile = null;
             System.IO.FileInfo fi = default(System.IO.FileInfo);
 
             if (!System.IO.Directory.Exists(localFolder))
@@ -360,68 +360,68 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 System.IO.Directory.CreateDirectory(localFolder);
             }
 
-            foreach (EnterpriseDT.Net.Ftp.FTPFile CurrentFileOrDirectory in FtpServerFileInfo)
+            foreach (EnterpriseDT.Net.Ftp.FTPFile currentFileOrDirectory in ftpServerFileInfo)
             {
                 if (recursive)
                 {
-                    if (CurrentFileOrDirectory.Dir && CurrentFileOrDirectory.Name != "." && CurrentFileOrDirectory.Name != "..")
+                    if (currentFileOrDirectory.Dir && currentFileOrDirectory.Name != "." && currentFileOrDirectory.Name != "..")
                     {
 
-                        LocalTargetFolder = System.IO.Path.Combine(localFolder, CurrentFileOrDirectory.Name);
-                        FtpTargetFolder = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/{1}", remoteFolder, CurrentFileOrDirectory.Name);
+                        localTargetFolder = System.IO.Path.Combine(localFolder, currentFileOrDirectory.Name);
+                        ftpTargetFolder = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}/{1}", remoteFolder, currentFileOrDirectory.Name);
 
-                        if (!System.IO.Directory.Exists(LocalTargetFolder))
+                        if (!System.IO.Directory.Exists(localTargetFolder))
                         {
-                            Log.Trace("creating {0}", LocalTargetFolder);
-                            System.IO.Directory.CreateDirectory(LocalTargetFolder);
+                            Log.Trace("creating {0}", localTargetFolder);
+                            System.IO.Directory.CreateDirectory(localTargetFolder);
                         }
 
-                        GetTheList(mods, LocalTargetFolder, FtpTargetFolder, recursive);
+                        GetTheList(mods, localTargetFolder, ftpTargetFolder, recursive);
 
                         //set the ftp working folder back to the correct value
                         this.ftpServer.ChangeWorkingDirectory(remoteFolder);
                     }
                 }
 
-                if (!CurrentFileOrDirectory.Dir)
+                if (!currentFileOrDirectory.Dir)
                 {
-                    DownloadFile = false;
+                    downloadFile = false;
                     Modification m = new Modification();
 
-                    LocalFile = System.IO.Path.Combine(localFolder, CurrentFileOrDirectory.Name);
+                    localFile = System.IO.Path.Combine(localFolder, currentFileOrDirectory.Name);
 
 
                     // check file existence
-                    if (!System.IO.File.Exists(LocalFile))
+                    if (!System.IO.File.Exists(localFile))
                     {
-                        DownloadFile = true;
+                        downloadFile = true;
                         m.Type = "added";
                     }
                     else
                     {
                         //check file size
-                        fi = new System.IO.FileInfo(LocalFile);
-                        if (CurrentFileOrDirectory.Size != fi.Length)
+                        fi = new System.IO.FileInfo(localFile);
+                        if (currentFileOrDirectory.Size != fi.Length)
                         {
-                            DownloadFile = true;
+                            downloadFile = true;
                             m.Type = "Updated";
                         }
                         else
                         {
                             //check modification time
-                            if (CurrentFileOrDirectory.LastModified != fi.CreationTime)
+                            if (currentFileOrDirectory.LastModified != fi.CreationTime)
                             {
-                                DownloadFile = true;
+                                downloadFile = true;
                                 m.Type = "Updated";
                             }
                         }
                     }
 
-                    if (DownloadFile)
+                    if (downloadFile)
                     {                        
-                        m.FileName = CurrentFileOrDirectory.Name;
+                        m.FileName = currentFileOrDirectory.Name;
                         m.FolderName = remoteFolder;
-                        m.ModifiedTime = CurrentFileOrDirectory.LastModified;
+                        m.ModifiedTime = currentFileOrDirectory.LastModified;
                         
                         mods.Add(m);
                     }
@@ -432,43 +432,43 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         private bool FileExistsAtFtp(EnterpriseDT.Net.Ftp.FTPFile[] ftpServerFileInfo, string localFileName)
         {
 
-            bool Found = false;
+            bool found = false;
 
-            foreach (EnterpriseDT.Net.Ftp.FTPFile CurrentFileOrDirectory in ftpServerFileInfo)
+            foreach (EnterpriseDT.Net.Ftp.FTPFile currentFileOrDirectory in ftpServerFileInfo)
             {
-                if (!CurrentFileOrDirectory.Dir && CurrentFileOrDirectory.Name.ToLower() == localFileName.ToLower())
+                if (!currentFileOrDirectory.Dir && currentFileOrDirectory.Name.ToLower() == localFileName.ToLower())
                 {
-                    Found = true;
+                    found = true;
                 }
             }
 
-            return Found;
+            return found;
         }
 
         private bool FolderExistsAtFtp(EnterpriseDT.Net.Ftp.FTPFile[] ftpServerFileInfo, string localFileName)
         {
 
-            bool Found = false;
+            bool found = false;
             string updatedFolderName = null;
 
-            foreach (EnterpriseDT.Net.Ftp.FTPFile CurrentFileOrDirectory in ftpServerFileInfo)
+            foreach (EnterpriseDT.Net.Ftp.FTPFile currentFileOrDirectory in ftpServerFileInfo)
             {
-                if (CurrentFileOrDirectory.Name.EndsWith("/"))
+                if (currentFileOrDirectory.Name.EndsWith("/"))
                 {
-                    updatedFolderName = CurrentFileOrDirectory.Name.Remove(CurrentFileOrDirectory.Name.Length - 1, 1);
+                    updatedFolderName = currentFileOrDirectory.Name.Remove(currentFileOrDirectory.Name.Length - 1, 1);
                 }
                 else
                 {
-                    updatedFolderName = CurrentFileOrDirectory.Name;
+                    updatedFolderName = currentFileOrDirectory.Name;
                 }
 
-                if (CurrentFileOrDirectory.Dir && updatedFolderName.ToLower() == localFileName.ToLower())
+                if (currentFileOrDirectory.Dir && updatedFolderName.ToLower() == localFileName.ToLower())
                 {
-                    Found = true;
+                    found = true;
                 }
             }
 
-            return Found;
+            return found;
         }
 
         private bool FileIsDifferentAtFtp(EnterpriseDT.Net.Ftp.FTPFile[] ftpServerFileInfo, string localFile, string localFolder)
@@ -477,13 +477,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             System.IO.FileInfo fi = default(System.IO.FileInfo);
 
 
-            foreach (EnterpriseDT.Net.Ftp.FTPFile CurrentFileOrDirectory in ftpServerFileInfo)
+            foreach (EnterpriseDT.Net.Ftp.FTPFile currentFileOrDirectory in ftpServerFileInfo)
             {
-                if (!CurrentFileOrDirectory.Dir && CurrentFileOrDirectory.Name.ToLower() == localFile.ToLower())
+                if (!currentFileOrDirectory.Dir && currentFileOrDirectory.Name.ToLower() == localFile.ToLower())
                 {
                     fi = new System.IO.FileInfo(System.IO.Path.Combine(localFolder, localFile));
 
-                    if (fi.Length != CurrentFileOrDirectory.Size || fi.LastWriteTime > CurrentFileOrDirectory.LastModified)
+                    if (fi.Length != currentFileOrDirectory.Size || fi.LastWriteTime > currentFileOrDirectory.LastModified)
                     {
                         isDifferent = true;
                     }

@@ -42,10 +42,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         public Impersonation(string domainName, string userName, string password)
         {
             // Use the standard logon provider.
-            const int LOGON32_PROVIDER_DEFAULT = 0;
+            const int logoN32ProviderDefault = 0;
             
             // Create a primary token.
-            const int LOGON32_LOGON_INTERACTIVE = 2;
+            const int logoN32LogonInteractive = 2;
             
             this.tokenHandle = IntPtr.Zero;
             
@@ -54,8 +54,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                                 userName,
                                 domainName,
                                 password,
-                                LOGON32_LOGON_INTERACTIVE,
-                                LOGON32_PROVIDER_DEFAULT,
+                                logoN32LogonInteractive,
+                                logoN32ProviderDefault,
                                 ref this.tokenHandle);
             
             if (false == returnValue)

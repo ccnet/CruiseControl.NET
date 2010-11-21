@@ -222,8 +222,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// </remarks>
 		public static string EncodeCDATA(string text)
 		{
-			Regex CDataCloseTag = new Regex(@"\]\]>");
-			return CDataCloseTag.Replace(text, @"] ]>");
+			Regex cDataCloseTag = new Regex(@"\]\]>");
+			return cDataCloseTag.Replace(text, @"] ]>");
 		}
 
         /// <summary>

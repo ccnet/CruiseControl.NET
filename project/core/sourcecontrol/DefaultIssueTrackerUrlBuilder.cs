@@ -82,33 +82,33 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 {
                     if (mod.Comment.IndexOf(' ') != 0)
                     {
-                        string SearchingComment = mod.Comment.Split(' ')[0];
-                        int EndPosition = SearchingComment.Length - 1;
-                        char CurrentChar = SearchingComment[EndPosition];
-                        string Result = string.Empty;
-                        bool NumericPartFound = false;
+                        string searchingComment = mod.Comment.Split(' ')[0];
+                        int endPosition = searchingComment.Length - 1;
+                        char currentChar = searchingComment[endPosition];
+                        string result = string.Empty;
+                        bool numericPartFound = false;
 
                         //eliminate non numeric characters at the end (ex type  [ccnet-1500])
-                        while (EndPosition > 0 && !char.IsNumber(CurrentChar))
+                        while (endPosition > 0 && !char.IsNumber(currentChar))
                         {
-                            EndPosition--;
-                            CurrentChar = SearchingComment[EndPosition];
+                            endPosition--;
+                            currentChar = searchingComment[endPosition];
                         }
 
 
                         //while last position is numeric add to result
-                        while (EndPosition >= 0 && char.IsNumber(CurrentChar))
+                        while (endPosition >= 0 && char.IsNumber(currentChar))
                         {
-                            Result = Result.Insert(0, CurrentChar.ToString(CultureInfo.CurrentCulture));
-                            EndPosition--;
-                            if (EndPosition >= 0) CurrentChar = SearchingComment[EndPosition];
+                            result = result.Insert(0, currentChar.ToString(CultureInfo.CurrentCulture));
+                            endPosition--;
+                            if (endPosition >= 0) currentChar = searchingComment[endPosition];
 
-                            NumericPartFound = true;
+                            numericPartFound = true;
                         }
 
-                        if (NumericPartFound)
+                        if (numericPartFound)
                         {
-                            mod.IssueUrl = string.Format(CultureInfo.CurrentCulture, _url, Result);
+                            mod.IssueUrl = string.Format(CultureInfo.CurrentCulture, _url, result);
                         }
                     }
                 }

@@ -116,6 +116,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// 	
         /// </summary>
         /// <remarks></remarks>
-        public static readonly XNamespace PreProcessor = XNamespace.Get("urn:ccnet.config.builder");
+        public static XNamespace PreProcessor = XNamespace.Get("urn:ccnet.config.builder");
     }
 }

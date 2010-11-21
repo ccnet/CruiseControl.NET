@@ -56,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             IConfigurationErrorProcesser errorProcesser)
 		{
             Configuration configuration = new Configuration();
-            string ConflictingXMLNode = string.Empty;
+            string conflictingXmlNode = string.Empty;
             List<string> projectNames = new List<string>();
 
             // Validate the document element
@@ -75,11 +75,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             {
                 foreach (XmlNode node in document.DocumentElement)
                 {
-                    ConflictingXMLNode = string.Empty;                    
+                    conflictingXmlNode = string.Empty;                    
 
                     if (!(node.NodeType == XmlNodeType.Comment || node.NodeType == XmlNodeType.Text))
                     {
-                        ConflictingXMLNode = "Conflicting project data : " + node.OuterXml;
+                        conflictingXmlNode = "Conflicting project data : " + node.OuterXml;
 
                         object loadedItem = ParseElement(node);
                         if (loadedItem is IProject)
@@ -111,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
                 actualErrorProcesser.ProcessError(new ConfigurationException("\nUnable to instantiate CruiseControl projects from configuration document." +
                     "\nConfiguration document is likely missing Xml nodes required for properly populating CruiseControl configuration.\n"
                     + ex.Message +
-                    "\n " + ConflictingXMLNode, ex));
+                    "\n " + conflictingXmlNode, ex));
             }
             finally
             {

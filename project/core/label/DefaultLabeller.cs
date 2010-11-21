@@ -139,11 +139,11 @@ namespace ThoughtWorks.CruiseControl.Core.Label
             }
 
             // prefix and postfix are present, do some extra checking
-            MatchCollection NumericParts = Regex.Matches(label, @"\D*?(\d{1,9})\D*");
+            MatchCollection numericParts = Regex.Matches(label, @"\D*?(\d{1,9})\D*");
 
-            if (NumericParts.Count == 1)
+            if (numericParts.Count == 1)
             {
-                int newLabel = int.Parse(NumericParts[0].ToString(), CultureInfo.CurrentCulture);
+                int newLabel = int.Parse(numericParts[0].ToString(), CultureInfo.CurrentCulture);
                 newLabel++;
                 return newLabel.ToString(LabelFormat, CultureInfo.CurrentCulture);
             }
@@ -157,11 +157,11 @@ namespace ThoughtWorks.CruiseControl.Core.Label
             label = label.Replace(LabelPrefix, string.Empty);
             label = label.Replace(LabelPostfix, string.Empty);
 
-            NumericParts = Regex.Matches(label, @"\D*?(\d{1,9})\D*");
+            numericParts = Regex.Matches(label, @"\D*?(\d{1,9})\D*");
 
-            if (NumericParts.Count == 1)
+            if (numericParts.Count == 1)
             {
-                int newLabel = int.Parse(NumericParts[0].ToString(), CultureInfo.CurrentCulture);
+                int newLabel = int.Parse(numericParts[0].ToString(), CultureInfo.CurrentCulture);
                 newLabel++;
                 return newLabel.ToString(LabelFormat, CultureInfo.CurrentCulture);
             }

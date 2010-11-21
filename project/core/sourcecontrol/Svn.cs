@@ -775,18 +775,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                     // If this external is not a specific revision and is not an empty string
                     if (!externalsDefinition.Contains("-r") && !(externalsDefinition.Length == 0))
                     {
-                        int Pos = GetSubstringPosition(externalsDefinition);
+                        int pos = GetSubstringPosition(externalsDefinition);
 
-                        if (Pos > 0)
+                        if (pos > 0)
                         {
-                            externalsDefinition = externalsDefinition.Substring(Pos);
+                            externalsDefinition = externalsDefinition.Substring(pos);
                         }
 
-                        Pos = externalsDefinition.IndexOf(" ");
+                        pos = externalsDefinition.IndexOf(" ");
 
-                        if (Pos > 0)
+                        if (pos > 0)
                         {
-                            externalsDefinition = externalsDefinition.Substring(0, Pos);
+                            externalsDefinition = externalsDefinition.Substring(0, pos);
                         }
 
                         if (!externalDirectories.Contains(externalsDefinition))

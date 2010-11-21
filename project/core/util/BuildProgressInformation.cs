@@ -90,9 +90,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             {
                 try
                 {
-                    using (StreamReader FileReader = new StreamReader(this._listenerFile))
+                    using (StreamReader fileReader = new StreamReader(this._listenerFile))
                     {
-                        this._buildInformation = FileReader.ReadToEnd();
+                        this._buildInformation = fileReader.ReadToEnd();
                     }
                 }
                 catch
@@ -114,11 +114,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// </summary>        
         private void RemoveListenerFile()
         {
-            const int MaxAmountOfRetries = 10;
-            int RetryCounter = 0;
+            const int maxAmountOfRetries = 10;
+            int retryCounter = 0;
 
 
-            while (System.IO.File.Exists(this._listenerFile) && (RetryCounter <= MaxAmountOfRetries))
+            while (System.IO.File.Exists(this._listenerFile) && (retryCounter <= maxAmountOfRetries))
             {
                 try
                 {
@@ -126,12 +126,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 }
                 catch (Exception e)
                 {
-                    RetryCounter += 1;
+                    retryCounter += 1;
                     System.Threading.Thread.Sleep(200);
 
-                    if (RetryCounter > MaxAmountOfRetries)
+                    if (retryCounter > maxAmountOfRetries)
                         throw new CruiseControlException(
-                            string.Format(System.Globalization.CultureInfo.CurrentCulture,"Failed to delete {0} after {1} attempts", this._listenerFile, RetryCounter), e);
+                            string.Format(System.Globalization.CultureInfo.CurrentCulture,"Failed to delete {0} after {1} attempts", this._listenerFile, retryCounter), e);
                 }
             }
         }
@@ -146,19 +146,19 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         private string GetQueueDataAsXml()
         {
-            System.Text.StringBuilder ListenData = new StringBuilder();
+            System.Text.StringBuilder listenData = new StringBuilder();
 
-            ListenData.AppendLine("<data>");
+            listenData.AppendLine("<data>");
             
             foreach( BuildProgressInformationData bpi in Progress)
             {
-                ListenData.AppendLine(
+                listenData.AppendLine(
                     string.Format(System.Globalization.CultureInfo.CurrentCulture,"<Item Time=\"{0}\" Data=\"{1}\" />", bpi.At ?? string.Empty, bpi.Information ?? string.Empty));
             }
 
-            ListenData.AppendLine("</data>");
+            listenData.AppendLine("</data>");
 
-            return ListenData.ToString();
+            return listenData.ToString();
         }
 
 

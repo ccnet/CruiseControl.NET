@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Reading Modifications");                
 
 
-        	System.Collections.ArrayList AllModifications = new System.Collections.ArrayList();
+        	System.Collections.ArrayList allModifications = new System.Collections.ArrayList();
             
 
             foreach (string file in GetModificationFiles(result))
@@ -115,19 +115,19 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 reader.Close();
                 System.Collections.ArrayList currentModification = new System.Collections.ArrayList((Modification[])dummy);
 
-                AllModifications.AddRange(currentModification);
+                allModifications.AddRange(currentModification);
 
                 if (deleteAfterRead) filesToDelete.Add(file);
             }
             
-            Modification[] newMods = new Modification[result.Modifications.Length + AllModifications.Count];
+            Modification[] newMods = new Modification[result.Modifications.Length + allModifications.Count];
 
             //copy existing modifications
             result.Modifications.CopyTo(newMods, 0);
 
             // copy modifications read from the file(s)
             int modificationCounter = result.Modifications.Length;
-            foreach (Modification mod in AllModifications)
+            foreach (Modification mod in allModifications)
             {
                 newMods[modificationCounter] = mod;
                 modificationCounter++;
