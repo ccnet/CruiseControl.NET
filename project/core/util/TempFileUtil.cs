@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	/// Utility class for managing temp files and folders.
 	/// Uses your system's temp folder.
 	/// </summary>
-	public class TempFileUtil
+	public static class TempFileUtil
 	{
         /// <summary>
         /// Creates the temp dir.	

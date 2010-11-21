@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// <summary>
     /// 	
     /// </summary>
-    public class UndefinedSymbolException : EvaluationException
+    public sealed class UndefinedSymbolException : EvaluationException
     {
         internal UndefinedSymbolException(string msg) : base(msg)
         {
@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// <summary>
     /// 	
     /// </summary>
-    public class CyclicalEvaluationException : EvaluationException
+    public sealed class CyclicalEvaluationException : EvaluationException
     {
         internal CyclicalEvaluationException(string msg)
             : base(msg)
@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// <summary>
     /// 	
     /// </summary>
-    public class ExplicitDefinitionRequiredException : EvaluationException
+    public sealed class ExplicitDefinitionRequiredException : EvaluationException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ExplicitDefinitionRequiredException" /> class.	
@@ -86,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// <summary>
     /// 	
     /// </summary>
-    public class ImportException : PreprocessorException
+    public sealed class ImportException : PreprocessorException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ImportException" /> class.	
@@ -107,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// <summary>
     /// Exception for preprocessor constant definition problems
     /// </summary>
-    public class DefinitionException : PreprocessorException
+    public sealed class DefinitionException : PreprocessorException
     {
         internal DefinitionException(string msg) : base( msg )
         {
@@ -122,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// <summary>
     /// 	
     /// </summary>
-    public class InvalidMarkupException : PreprocessorException
+    public sealed class InvalidMarkupException : PreprocessorException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidMarkupException" /> class.	
@@ -142,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// <summary>
     /// 	
     /// </summary>
-    public class MissingIncludeException : PreprocessorException
+    public sealed class MissingIncludeException : PreprocessorException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MissingIncludeException" /> class.	
@@ -236,7 +236,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         #endregion
     }
 
-    internal class UnexpectedPreprocessorException : PreprocessorException
+    internal sealed class UnexpectedPreprocessorException : PreprocessorException
     {
         private UnexpectedPreprocessorException(Exception innerEX, string msg, XmlContext context)
             : base( msg, innerEX, context )

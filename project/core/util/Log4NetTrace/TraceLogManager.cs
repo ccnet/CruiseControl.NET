@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Log4NetTrace
     /// <summary>
     /// 	
     /// </summary>
-	public class TraceLogManager
+	public sealed class TraceLogManager
 	{
 		#region Static Member Variables
 

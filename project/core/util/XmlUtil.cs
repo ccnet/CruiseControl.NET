@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
     /// <summary>
     /// Handy XMl routines
     /// </summary>
-	public class XmlUtil
+	public static class XmlUtil
 	{
         /// <summary>
         /// Creates the document.	

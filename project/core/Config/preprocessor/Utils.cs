@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     /// <summary>
     /// Internal static utility methods
     /// </summary>
-    internal class Utils
+    internal sealed class Utils
     {
         private  Utils()
         {}

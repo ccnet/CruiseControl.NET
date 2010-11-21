@@ -131,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 	}
 
-	internal class VSSParserFactory
+	internal sealed class VSSParserFactory
 	{
         private VSSParserFactory ()
         {}

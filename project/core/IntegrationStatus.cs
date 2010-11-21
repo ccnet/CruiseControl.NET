@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core
     /// <summary>
     /// 	
     /// </summary>
-	public class IntegrationStatusParser
+	public static class IntegrationStatusParser
 	{
         /// <summary>
         /// Parses the specified value.	

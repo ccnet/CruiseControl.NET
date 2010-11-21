@@ -94,7 +94,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         }
     }
 
-    internal class AttrName
+    internal sealed class AttrName
     {
         private AttrName()
         {}

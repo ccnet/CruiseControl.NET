@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
     /// <summary>
     /// 	
     /// </summary>
-	public class ReflectionUtil
+	public sealed class ReflectionUtil
 	{
 		/// <summary>
 		/// Utility class is not intended for instantiation.

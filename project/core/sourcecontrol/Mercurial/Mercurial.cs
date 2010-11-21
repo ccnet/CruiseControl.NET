@@ -262,15 +262,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
             return -1;
         }
 
-        private ProcessInfo GetModificationsFlowGetFullLog(string workingDirectory)
-        {
-            ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-            buffer.AddArgument("log");
-            buffer.AddArgument("--template", HistoryTemplate);
-            AppendCommonSwitches(buffer);
-            return NewProcessInfo(buffer.ToString(), workingDirectory);
-        }
-
         private ProcessInfo GetModificationsFlowFindRevisionNumber(string workingDirectory)
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();

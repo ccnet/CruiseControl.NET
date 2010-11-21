@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 	/// <remarks>
 	///     <seealso href="https://support.telelogic.com/en/synergy/docs/docs_63/help_w/wwhelp/wwhimpl/common/html/wwhelp.htm?context=cmsynergy%26file=genl_descri5.html#wp763272" />
 	/// </remarks>
-	public class SynergyCommandBuilder
+	public static class SynergyCommandBuilder
 	{
 		/// <summary>
 		///     Command to check if the session is still alive.
