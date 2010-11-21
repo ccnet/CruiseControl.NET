@@ -22,11 +22,36 @@ using log4net;
 
 namespace ThoughtWorks.CruiseControl.Core.Util.Log4NetTrace
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public interface ITraceLog : ILog
 	{
+        /// <summary>
+        /// Traces the specified message.	
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <remarks></remarks>
 		void Trace(object message);
+        /// <summary>
+        /// Traces the specified message.	
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="exception">The exception.</param>
+        /// <remarks></remarks>
 		void Trace(object message, Exception exception);
-		void TraceFormat(string format, params object[] args); 
+        /// <summary>
+        /// Traces the format.	
+        /// </summary>
+        /// <param name="format">The format.</param>
+        /// <param name="args">The args.</param>
+        /// <remarks></remarks>
+		void TraceFormat(string format, params object[] args);
+        /// <summary>
+        /// Gets the is trace enabled.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		bool IsTraceEnabled { get; }
 	}
 }

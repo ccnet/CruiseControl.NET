@@ -4,6 +4,9 @@ using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class ProcessArgumentBuilder
 	{
         //private static Regex hiddenTextRegex = new Regex("<hide>[^<]*</hide>");

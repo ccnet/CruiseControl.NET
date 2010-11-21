@@ -24,6 +24,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			return TransformResults(list, document);
 		}
 
+        /// <summary>
+        /// Transforms the results.	
+        /// </summary>
+        /// <param name="xslFiles">The XSL files.</param>
+        /// <param name="document">The document.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string TransformResults(IList xslFiles, XPathDocument document)
 		{
 			StringBuilder builder = new StringBuilder();

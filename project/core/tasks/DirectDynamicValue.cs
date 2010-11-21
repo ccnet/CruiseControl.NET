@@ -69,7 +69,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         private string parameterName;
         private string defaultValue;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DirectDynamicValue" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public DirectDynamicValue() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DirectDynamicValue" /> class.	
+        /// </summary>
+        /// <param name="parameter">The parameter.</param>
+        /// <param name="property">The property.</param>
+        /// <remarks></remarks>
         public DirectDynamicValue(string parameter, string property)
         {
             propertyName = property;

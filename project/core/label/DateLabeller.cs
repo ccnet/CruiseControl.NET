@@ -83,6 +83,12 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         [ReflectorProperty("revisionFormat", Required = false)]
         public string RevisionFormat { get; set; }
 
+        /// <summary>
+        /// Generates the specified integration result.	
+        /// </summary>
+        /// <param name="integrationResult">The integration result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string Generate(IIntegrationResult integrationResult)
 		{
 			DateTime now = dateTimeProvider.Now;

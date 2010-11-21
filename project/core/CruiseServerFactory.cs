@@ -10,6 +10,9 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class CruiseServerFactory : ICruiseServerFactory
 	{
 		private static readonly string RemotingConfigurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
@@ -64,6 +67,13 @@ namespace ThoughtWorks.CruiseControl.Core
 			return new RemoteCruiseServer(CreateLocal(configFile), RemotingConfigurationFile);
 		}
 
+        /// <summary>
+        /// Creates the specified remote.	
+        /// </summary>
+        /// <param name="remote">The remote.</param>
+        /// <param name="configFile">The config file.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ICruiseServer Create(bool remote, string configFile)
 		{
 			return (remote) ? CreateRemote(configFile) : CreateLocal(configFile);

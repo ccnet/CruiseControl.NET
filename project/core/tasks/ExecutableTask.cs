@@ -81,12 +81,29 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	public class ExecutableTask
         : BaseExecutableTask
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const int DEFAULT_BUILD_TIMEOUT = 600;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const ProcessPriorityClass DEFAULT_PRIORITY = ProcessPriorityClass.Normal;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExecutableTask" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public ExecutableTask() : this(new ProcessExecutor())
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExecutableTask" /> class.	
+        /// </summary>
+        /// <param name="executor">The executor.</param>
+        /// <remarks></remarks>
 		public ExecutableTask(ProcessExecutor executor)
 		{
 			this.executor = executor;
@@ -229,36 +246,73 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             return !processResult.Failed;
 		}
 
+        /// <summary>
+        /// Gets the process filename.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override string GetProcessFilename()
 		{
 			return Executable;
 		}
 
+        /// <summary>
+        /// Gets the process arguments.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override string GetProcessArguments(IIntegrationResult result)
 		{
 			return BuildArgs;
 		}
 
+        /// <summary>
+        /// Gets the process base directory.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override string GetProcessBaseDirectory(IIntegrationResult result)
 		{
 			return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
 		}
 
+        /// <summary>
+        /// Gets the process success codes.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override int[] GetProcessSuccessCodes()
 		{
 			return successExitCodes;
 		}
 
+        /// <summary>
+        /// Gets the process timeout.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override int GetProcessTimeout()
 		{
 			return BuildTimeoutSeconds*1000;
 		}
 
+        /// <summary>
+        /// Gets the process priority class.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override ProcessPriorityClass GetProcessPriorityClass()
         {
             return this.Priority;
         }
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ToString()
 		{
 			return string.Format(@" BaseDirectory: {0}, Executable: {1}", ConfiguredBaseDirectory, Executable);

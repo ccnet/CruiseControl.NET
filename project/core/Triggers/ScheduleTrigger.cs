@@ -180,6 +180,10 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
             return Array.IndexOf(WeekDays, nextIntegrationDay) >= 0;
         }
 
+        /// <summary>
+        /// Integrations the completed.	
+        /// </summary>
+        /// <remarks></remarks>
         public virtual void IntegrationCompleted()
         {
             if (triggered)
@@ -189,6 +193,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
             triggered = false;
         }
 
+        /// <summary>
+        /// Gets the next build.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public DateTime NextBuild
         {
             get
@@ -201,6 +210,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
             }
         }
 
+        /// <summary>
+        /// Fires this instance.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public IntegrationRequest Fire()
         {
             DateTime now = dtProvider.Now;

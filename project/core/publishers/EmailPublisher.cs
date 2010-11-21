@@ -129,10 +129,19 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private string[] xslFiles;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmailPublisher" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public EmailPublisher()
             : this(new HtmlLinkMessageBuilder(false))
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmailPublisher" /> class.	
+        /// </summary>
+        /// <param name="messageBuilder">The message builder.</param>
+        /// <remarks></remarks>
         public EmailPublisher(IMessageBuilder messageBuilder)
         {
             this.messageBuilder = messageBuilder;
@@ -140,12 +149,22 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             this.IndexedEmailGroups = new Dictionary<string, EmailGroup>();
         }
 
+        /// <summary>
+        /// Gets or sets the email gateway.	
+        /// </summary>
+        /// <value>The email gateway.</value>
+        /// <remarks></remarks>
         public EmailGateway EmailGateway
         {
             get { return emailGateway; }
             set { emailGateway = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the message builder.	
+        /// </summary>
+        /// <value>The message builder.</value>
+        /// <remarks></remarks>
         public IMessageBuilder MessageBuilder
         {
             get { return messageBuilder; }
@@ -398,6 +417,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { subjectPrefix = value; }
         }
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override bool Execute(IIntegrationResult result)
         {
             if (result.Status == IntegrationStatus.Unknown) return false;
@@ -422,6 +447,16 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return to != null && to.Trim() != string.Empty;
         }
 
+        /// <summary>
+        /// Sends the message.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <param name="replyto">The replyto.</param>
+        /// <param name="subject">The subject.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="workingFolder">The working folder.</param>
+        /// <remarks></remarks>
         public virtual void SendMessage(string from, string to, string replyto, string subject, string message, string workingFolder)
         {
             try
@@ -437,6 +472,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
         }
 
+        /// <summary>
+        /// Gets the mail message.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <param name="replyto">The replyto.</param>
+        /// <param name="subject">The subject.</param>
+        /// <param name="messageText">The message text.</param>
+        /// <param name="workingFolder">The working folder.</param>
+        /// <param name="attachments">The attachments.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected static MailMessage GetMailMessage(string from, string to, string replyto, string subject, string messageText, string workingFolder, string[] attachments)
         {
             MailMessage mailMessage = new MailMessage();
@@ -465,6 +512,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return mailMessage;
         }
 
+        /// <summary>
+        /// Creates the message.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string CreateMessage(IIntegrationResult result)
         {
             // TODO Add culprit to message text -- especially if modifier is not an email user

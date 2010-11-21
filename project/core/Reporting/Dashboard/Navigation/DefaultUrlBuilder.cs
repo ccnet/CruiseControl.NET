@@ -1,33 +1,67 @@
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class DefaultUrlBuilder : IUrlBuilder
 	{
 		private string extension;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public static readonly string DEFAULT_EXTENSION = "aspx";
         private ISessionStorer sessionStore;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultUrlBuilder" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public DefaultUrlBuilder()
 		{
 			extension = DEFAULT_EXTENSION;
 		}
 
+        /// <summary>
+        /// Gets or sets the session storer.	
+        /// </summary>
+        /// <value>The session storer.</value>
+        /// <remarks></remarks>
         public ISessionStorer SessionStorer
         {
             get { return sessionStore; }
             set { sessionStore = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the extension.	
+        /// </summary>
+        /// <value>The extension.</value>
+        /// <remarks></remarks>
 		public string Extension
 		{
 			set { this.extension = value; }
 			get { return extension; }
 		}
 
+        /// <summary>
+        /// Builds the URL.	
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string BuildUrl(string action)
 		{
 			return BuildUrl(action, null, null);
 		}
 
+        /// <summary>
+        /// Builds the URL.	
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <param name="queryString">The query string.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string BuildUrl(string action, string queryString)
 		{
 			return BuildUrl(action, queryString, null);

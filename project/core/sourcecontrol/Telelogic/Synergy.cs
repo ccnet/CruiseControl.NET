@@ -153,9 +153,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public Synergy() : this(new SynergyConnectionInfo(), new SynergyProjectInfo())
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Synergy" /> class.	
+        /// </summary>
+        /// <param name="connection">The connection.</param>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
 		public Synergy(SynergyConnectionInfo connection, SynergyProjectInfo project) : this(connection, project, new SynergyCommand(connection, project), new SynergyParser())
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Synergy" /> class.	
+        /// </summary>
+        /// <param name="connection">The connection.</param>
+        /// <param name="project">The project.</param>
+        /// <param name="command">The command.</param>
+        /// <param name="parser">The parser.</param>
+        /// <remarks></remarks>
 		public Synergy(SynergyConnectionInfo connection, SynergyProjectInfo project, ISynergyCommand command, SynergyParser parser)
 		{
 			this.connection = connection;
@@ -246,6 +260,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 			command.Dispose();
 		}
 
+        /// <summary>
+        /// Initializes the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
         public override void Initialize(IProject project)
 		{}
 

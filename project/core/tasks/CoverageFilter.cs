@@ -94,11 +94,35 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         public enum NCoverItemType
         {
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Default,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Assembly,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Namespace,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Class,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Method,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Document
         }
         #endregion

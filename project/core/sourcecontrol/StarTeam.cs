@@ -58,6 +58,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		//stcmd hist -nologo -x -is -filter IO -p "userid:password@host:port/project/path" "files"		
 		internal readonly static string HISTORY_COMMAND_FORMAT = "hist -nologo -x -is -filter IO -p \"{0}:{1}@{2}:{3}/{4}/{5}\" ";
 		internal readonly static string GET_SOURCE_COMMAND_FORMAT = "co -nologo -ts -x -is -q -f NCO -p \"{0}:{1}@{2}:{3}/{4}/{5}\" ";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public CultureInfo Culture = CultureInfo.CurrentCulture;
 
 		private string _executable;		
@@ -89,6 +93,10 @@ Status:(?<file_status>.+)
 		private string fileHistoryRegEx = @"(?m:Revision: (?<file_revision>\S+) View: (?<view_name>.+) Branch Revision: (?<branch_revision>\S+)
 Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\d\d:\d\d (A|P)M).*\n(?s:(?<change_comment>.*?))-{28})";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StarTeam" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public StarTeam(): base(new StarTeamHistoryParser(null))
 		{
 			_executable = "stcmd.exe";
@@ -259,12 +267,26 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 			set { fileHistoryRegEx = value; }
 		}
 
+        /// <summary>
+        /// Creates the history process info.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
 		{
 			string args = BuildHistoryProcessArgs(from, to);
 			return new ProcessInfo(Executable, args);
 		}
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
             Modification[] modifications = GetModifications(CreateHistoryProcessInfo(from.StartTime, to.StartTime), from.StartTime, to.StartTime);
@@ -272,10 +294,20 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
             return modifications;
         }
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void LabelSourceControl(IIntegrationResult result)
 		{
 		}
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void GetSource(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask("Getting source from StarTeam");
@@ -288,6 +320,12 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 			}
 		}
 
+        /// <summary>
+        /// Formats the command date.	
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string FormatCommandDate(DateTime date)
 		{
 			return date.ToString(Culture.DateTimeFormat);
@@ -322,6 +360,11 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 			return formatted;
 		}
 
+        /// <summary>
+        /// Gets the source process args.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string GetSourceProcessArgs()
 		{			
 			string formatted = string.Format(

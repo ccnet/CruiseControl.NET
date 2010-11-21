@@ -119,20 +119,61 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	public class NAntTask
         : BaseExecutableTask
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const int DefaultBuildTimeout = 600;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string logFilename = "nant-results-{0}.xml";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public readonly Guid LogFileId = Guid.NewGuid();
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string defaultExecutable = "nant";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DefaultLogger = "NAnt.Core.XmlLogger";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DefaultListener = "NAnt.Core.DefaultLogger";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const bool DefaultNoLogo = true;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const ProcessPriorityClass DefaultPriority = ProcessPriorityClass.Normal;
 
 	    private readonly IFileDirectoryDeleter fileDirectoryDeleter = new IoService();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NAntTask" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public NAntTask(): 
 			this(new ProcessExecutor()){}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NAntTask" /> class.	
+        /// </summary>
+        /// <param name="executor">The executor.</param>
+        /// <remarks></remarks>
 		public NAntTask(ProcessExecutor executor)
 		{
 			this.executor = executor;
@@ -283,16 +324,32 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             return !processResult.Failed;
 		}
 
+        /// <summary>
+        /// Gets the process filename.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override string GetProcessFilename()
 		{
 			return Executable;
 		}
 
+        /// <summary>
+        /// Gets the process timeout.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override int GetProcessTimeout()
 		{
 			return BuildTimeoutSeconds * 1000;
 		}
 
+        /// <summary>
+        /// Gets the process arguments.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override string GetProcessArguments(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
@@ -307,11 +364,22 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return buffer.ToString();
 		}
 
+        /// <summary>
+        /// Gets the process base directory.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override string GetProcessBaseDirectory(IIntegrationResult result)
 		{
 			return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
 		}
 
+        /// <summary>
+        /// Gets the process priority class.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override ProcessPriorityClass GetProcessPriorityClass()
         {
             return this.Priority;
@@ -338,12 +406,22 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}
 		}
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ToString()
 		{
 			string baseDirectory = ConfiguredBaseDirectory ??string.Empty;
 			return string.Format(@" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", baseDirectory, string.Join(", ", Targets), Executable, BuildFile);
 		}
 
+        /// <summary>
+        /// Gets or sets the targets for presentation.	
+        /// </summary>
+        /// <value>The targets for presentation.</value>
+        /// <remarks></remarks>
 		public string TargetsForPresentation
 		{
 			get

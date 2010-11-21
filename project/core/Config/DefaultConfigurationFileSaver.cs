@@ -4,16 +4,30 @@ using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class DefaultConfigurationFileSaver : IConfigurationFileSaver
 	{
 		private readonly IProjectSerializer projectSerializer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultConfigurationFileSaver" /> class.	
+        /// </summary>
+        /// <param name="projectSerializer">The project serializer.</param>
+        /// <remarks></remarks>
 		public DefaultConfigurationFileSaver(IProjectSerializer projectSerializer)
 		{
 			this.projectSerializer = projectSerializer;
 		}
 
 		// ToDo - overwrites? Exceptions? Schema?
+        /// <summary>
+        /// Saves the specified config.	
+        /// </summary>
+        /// <param name="config">The config.</param>
+        /// <param name="configFile">The config file.</param>
+        /// <remarks></remarks>
 		public void Save(IConfiguration config, FileInfo configFile)
 		{
 			XmlDocument doc = new XmlDocument();

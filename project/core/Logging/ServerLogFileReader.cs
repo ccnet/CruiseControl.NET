@@ -3,32 +3,62 @@ using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Logging
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public class ServerLogFileReader
     {
         private const int DefaultMaxLines = 80;
         private string filename;
         private int maxLines;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServerLogFileReader" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public ServerLogFileReader()
             : this(ReadFilenameFromConfig(), ReadMaxLinesFromConfig())
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServerLogFileReader" /> class.	
+        /// </summary>
+        /// <param name="filename">The filename.</param>
+        /// <param name="maxLines">The max lines.</param>
+        /// <remarks></remarks>
         public ServerLogFileReader(string filename, int maxLines)
         {
             this.filename = filename;
             this.maxLines = maxLines;
         }
 
+        /// <summary>
+        /// Reads this instance.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string Read()
         {
             return Read(EnumeratorDirection.Forward);
         }
 
+        /// <summary>
+        /// Reads the specified direction.	
+        /// </summary>
+        /// <param name="direction">The direction.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string Read(EnumeratorDirection direction)
         {
             return Read(direction, null);
         }
 
+        /// <summary>
+        /// Reads the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string Read(string project)
         {
             return Read(EnumeratorDirection.Forward, '[' + project);

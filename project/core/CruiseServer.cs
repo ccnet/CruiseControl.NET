@@ -50,6 +50,17 @@ namespace ThoughtWorks.CruiseControl.Core
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CruiseServer" /> class.	
+        /// </summary>
+        /// <param name="configurationService">The configuration service.</param>
+        /// <param name="projectIntegratorListFactory">The project integrator list factory.</param>
+        /// <param name="projectSerializer">The project serializer.</param>
+        /// <param name="stateManager">The state manager.</param>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="executionEnvironment">The execution environment.</param>
+        /// <param name="extensionList">The extension list.</param>
+        /// <remarks></remarks>
         public CruiseServer(IConfigurationService configurationService,
                             IProjectIntegratorListFactory projectIntegratorListFactory,
                             IProjectSerializer projectSerializer,
@@ -690,6 +701,12 @@ namespace ThoughtWorks.CruiseControl.Core
         #endregion
 
         #region GetProject()
+        /// <summary>
+        /// Gets the project.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public DataResponse GetProject(ProjectRequest request)
         {
             string data = null;
@@ -708,6 +725,12 @@ namespace ThoughtWorks.CruiseControl.Core
         #endregion
 
         #region GetServerVersion()
+        /// <summary>
+        /// Gets the server version.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public DataResponse GetServerVersion(ServerRequest request)
         {
             string data = null;
@@ -733,6 +756,12 @@ namespace ThoughtWorks.CruiseControl.Core
         #endregion
 
         #region GetExternalLinks()
+        /// <summary>
+        /// Gets the external links.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public ExternalLinksListResponse GetExternalLinks(ProjectRequest request)
         {
             List<ExternalLink> data = new List<ExternalLink>();
@@ -749,6 +778,12 @@ namespace ThoughtWorks.CruiseControl.Core
         #endregion
 
         #region GetArtifactDirectory()
+        /// <summary>
+        /// Gets the artifact directory.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public DataResponse GetArtifactDirectory(ProjectRequest request)
         {
             string data = null;
@@ -765,6 +800,12 @@ namespace ThoughtWorks.CruiseControl.Core
         #endregion
 
         #region GetStatisticsDocument()
+        /// <summary>
+        /// Gets the statistics document.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public DataResponse GetStatisticsDocument(ProjectRequest request)
         {
             string data = null;
@@ -781,6 +822,12 @@ namespace ThoughtWorks.CruiseControl.Core
         #endregion
 
         #region GetModificationHistoryDocument()
+        /// <summary>
+        /// Gets the modification history document.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public DataResponse GetModificationHistoryDocument(ProjectRequest request)
         {
             string data = null;
@@ -797,6 +844,12 @@ namespace ThoughtWorks.CruiseControl.Core
         #endregion
 
         #region GetRSSFeed()
+        /// <summary>
+        /// Gets the RSS feed.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public DataResponse GetRSSFeed(ProjectRequest request)
         {
             string data = null;

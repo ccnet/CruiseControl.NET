@@ -94,9 +94,25 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         public enum NCoverMetric
         {
-            SymbolCoverage, 
-            BranchCoverage, 
-            MethodCoverage, 
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
+            SymbolCoverage,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
+            BranchCoverage,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
+            MethodCoverage,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             CyclomaticComplexity
         }
         #endregion
@@ -107,10 +123,30 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         public enum NCoverItemType
         {
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Default,
-            View, 
-            Module, 
-            Namespace, 
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
+            View,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
+            Module,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
+            Namespace,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Class
         }
         #endregion

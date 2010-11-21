@@ -3,10 +3,18 @@ using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public class IoService : IFileDirectoryDeleter
     {
         private readonly IExecutionEnvironment executionEnvironment = new ExecutionEnvironment();
 
+        /// <summary>
+        /// Deletes the including read only objects.	
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <remarks></remarks>
         public void DeleteIncludingReadOnlyObjects(string path)
         {
             try

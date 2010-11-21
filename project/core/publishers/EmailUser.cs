@@ -74,6 +74,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         [ReflectorProperty("group", Required = false)]
         public string Group { get; set; }
 
+        /// <summary>
+        /// Equalses the specified obj.	
+        /// </summary>
+        /// <param name="obj">The obj.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override bool Equals(Object obj)
 		{
 			if (obj == null || obj.GetType() != GetType())
@@ -84,11 +90,21 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			return (user.Name == Name && user.Address == Address && user.Group == Group);
 		}
 
+        /// <summary>
+        /// Gets the hash code.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override int GetHashCode()
 		{
 			return String.Concat(Name, Address, Group).GetHashCode();
 		}
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ToString()
 		{
 			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Email User: {0} {1} {2}", Name, Address, Group);

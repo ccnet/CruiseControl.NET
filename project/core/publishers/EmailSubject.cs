@@ -38,6 +38,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     public class EmailSubject
     {
 
+        /// <summary>
+        /// 	
+        /// </summary>
         public enum BuildResultType
         {
             /// <summary>
@@ -70,6 +73,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmailSubject" /> class.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <param name="value">The value.</param>
+        /// <remarks></remarks>
         public EmailSubject(BuildResultType result, string value )
 		{
             Value = value;
@@ -92,6 +101,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         [ReflectorProperty("buildResult")]
         public BuildResultType BuildResult { get; set; }
 
+        /// <summary>
+        /// Equalses the specified o.	
+        /// </summary>
+        /// <param name="o">The o.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override bool Equals(Object o)
         {
             if (o == null || o.GetType() != GetType())
@@ -102,11 +117,21 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return BuildResult == g.BuildResult;
         }
 
+        /// <summary>
+        /// Gets the hash code.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override int GetHashCode()
         {
             return BuildResult.ToString().GetHashCode();
         }
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override string ToString()
         {
             return string.Format(System.Globalization.CultureInfo.CurrentCulture,"EmailSubject: [BuildResult: {0}, subject: {1}]", BuildResult, Value);

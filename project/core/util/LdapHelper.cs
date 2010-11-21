@@ -6,6 +6,9 @@ using System.DirectoryServices;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public class LdapHelper : ILdapService
     {
         //Ldap explanation
@@ -128,6 +131,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 
 
+        /// <summary>
+        /// Retrieves the user information.	
+        /// </summary>
+        /// <param name="userNameToRetrieveFrom">The user name to retrieve from.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public LdapUserInfo RetrieveUserInformation(string userNameToRetrieveFrom)
         {
             System.DirectoryServices.DirectorySearcher LdapSearcher = new System.DirectoryServices.DirectorySearcher();

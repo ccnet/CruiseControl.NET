@@ -26,6 +26,13 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 
         private static readonly object queueLockSync = new object();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntegrationQueue" /> class.	
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="parentQueueSet">The parent queue set.</param>
+        /// <remarks></remarks>
 		public IntegrationQueue(string name, IQueueConfiguration configuration, IntegrationQueueSet parentQueueSet)
 		{
 			this.name = name;
@@ -35,6 +42,11 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
             this.blockingQueueNames = new List<string>();
 		}
 
+        /// <summary>
+        /// Gets the name.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string Name
 		{
 			get { return name; }
@@ -237,6 +249,12 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			return (IIntegrationQueueItem[]) ToArray(typeof (IIntegrationQueueItem));
 		}
 
+        /// <summary>
+        /// Gets the next request.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public IntegrationRequest GetNextRequest(IProject project)
 		{
             lock (this)
@@ -253,12 +271,24 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
                 return null;
             }
 		}
-	
+
+        /// <summary>
+        /// Determines whether [has item on queue] [the specified project].	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public bool HasItemOnQueue(IProject project)
 		{
 			return HasItemOnQueue(project, /* pendingItemsOnly*/ false);
 		}
-		
+
+        /// <summary>
+        /// Determines whether [has item pending on queue] [the specified project].	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public bool HasItemPendingOnQueue(IProject project)
 		{
 			return HasItemOnQueue(project, /* pendingItemsOnly*/ true);

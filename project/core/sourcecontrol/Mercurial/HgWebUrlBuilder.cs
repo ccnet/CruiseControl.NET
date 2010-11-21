@@ -25,6 +25,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         [ReflectorProperty("url")]
         public string Url { get; set; }
 
+        /// <summary>
+        /// Setups the modification.	
+        /// </summary>
+        /// <param name="modifications">The modifications.</param>
+        /// <remarks></remarks>
         public void SetupModification(Modification[] modifications)
         {
             foreach (Modification modification in modifications)

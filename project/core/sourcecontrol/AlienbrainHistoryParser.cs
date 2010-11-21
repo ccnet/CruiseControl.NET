@@ -5,11 +5,30 @@ using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public class AlienbrainHistoryParser : IHistoryParser
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public static readonly string FILE_REGEX = ".*|.*|.*|.*|.*|.*|.*|.*";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public static readonly char DELIMITER = '|';
 
+        /// <summary>
+        /// Parses the specified history.	
+        /// </summary>
+        /// <param name="history">The history.</param>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public Modification[] Parse(TextReader history, DateTime from, DateTime to)
 		{
 			string historyLog = history.ReadToEnd();
@@ -41,6 +60,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 
 		// strip carriage return, new line, and all leading and trailing characters from parameters
+        /// <summary>
+        /// Alls the modification params.	
+        /// </summary>
+        /// <param name="matchedLine">The matched line.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string[] AllModificationParams(string matchedLine)
 		{
 			matchedLine = matchedLine.Replace("\n",string.Empty);
@@ -54,6 +79,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 
 		// #CheckInComment#|#Name#|#DbPath#|#SCIT#|#Mime Type#|#LocalPath#|#Changed By#|#NxN_VersionNumber#
+        /// <summary>
+        /// Parses the modification.	
+        /// </summary>
+        /// <param name="modificationParams">The modification params.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public Modification ParseModification(string[] modificationParams)
 		{
 			Modification modification = new Modification();

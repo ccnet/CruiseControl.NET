@@ -60,10 +60,19 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         private readonly IExecutionEnvironment executionEnvironment;
         #endregion
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExternalFileSecurityManager" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public ExternalFileSecurityManager()
             : this(new ExecutionEnvironment())
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExternalFileSecurityManager" /> class.	
+        /// </summary>
+        /// <param name="executionEnvironment">The execution environment.</param>
+        /// <remarks></remarks>
         public ExternalFileSecurityManager(IExecutionEnvironment executionEnvironment)
         {
             this.executionEnvironment = executionEnvironment;

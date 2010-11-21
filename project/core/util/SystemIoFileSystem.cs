@@ -8,8 +8,17 @@ using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class SystemIoFileSystem : IFileSystem
 	{
+        /// <summary>
+        /// Copies the specified source path.	
+        /// </summary>
+        /// <param name="sourcePath">The source path.</param>
+        /// <param name="destPath">The dest path.</param>
+        /// <remarks></remarks>
 		public void Copy(string sourcePath, string destPath)
 		{
 			if (!File.Exists(sourcePath) && !Directory.Exists(sourcePath))
@@ -60,6 +69,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			File.Copy(sourcePath, destPath, true);
 		}
 
+        /// <summary>
+        /// Saves the specified file.	
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="content">The content.</param>
+        /// <remarks></remarks>
 		public void Save(string file, string content)
 		{
 			using (StreamWriter stream = File.CreateText(file))
@@ -143,6 +158,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             }
         }
 
+        /// <summary>
+        /// Loads the specified file.	
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public TextReader Load(string file)
 		{
 			using (TextReader reader = new StreamReader(file))
@@ -151,11 +172,23 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 		}
 
+        /// <summary>
+        /// Files the exists.	
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public bool FileExists(string file)
 		{
 			return File.Exists(file);
 		}
 
+        /// <summary>
+        /// Directories the exists.	
+        /// </summary>
+        /// <param name="folder">The folder.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public bool DirectoryExists(string folder)
 		{
 			return Directory.Exists(folder);

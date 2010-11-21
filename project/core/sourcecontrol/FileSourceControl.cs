@@ -37,10 +37,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     {
         private readonly IFileSystem fileSystem;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileSourceControl" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public FileSourceControl()
             : this(new SystemIoFileSystem())
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileSourceControl" /> class.	
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <remarks></remarks>
         public FileSourceControl(IFileSystem fileSystem)
         {
             this.fileSystem = fileSystem;
@@ -70,6 +79,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("autoGetSource", Required = false)]
         public bool AutoGetSource { get; set; }
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
             DirectoryInfo root = new DirectoryInfo(from.BaseFromWorkingDirectory(RepositoryRoot));
@@ -134,9 +150,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return result;
         }
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public override void LabelSourceControl(IIntegrationResult result)
         { }
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public override void GetSource(IIntegrationResult result)
         {
             result.BuildProgressInformation.SignalStartRunTask("Getting source from FileSourceControl");
@@ -145,9 +171,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 fileSystem.Copy(RepositoryRoot, result.WorkingDirectory);
         }
 
+        /// <summary>
+        /// Initializes the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
         public override void Initialize(IProject project)
         { }
 
+        /// <summary>
+        /// Purges the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
         public override void Purge(IProject project)
         { }
     }

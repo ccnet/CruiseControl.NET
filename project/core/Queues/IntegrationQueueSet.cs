@@ -11,6 +11,11 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	{
 		private readonly SortedList queueSet = new SortedList();
 
+        /// <summary>
+        /// Gets the <see cref="IIntegrationQueue" /> with the specified queue name.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public IIntegrationQueue this[string queueName]
 		{
 			get
@@ -22,6 +27,12 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			}
 		}
 
+        /// <summary>
+        /// Adds the specified queue name.	
+        /// </summary>
+        /// <param name="queueName">Name of the queue.</param>
+        /// <param name="config">The config.</param>
+        /// <remarks></remarks>
 		public void Add(string queueName, IQueueConfiguration config)
 		{
 			lock (this)
@@ -33,6 +44,10 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			}
 		}
 
+        /// <summary>
+        /// Clears this instance.	
+        /// </summary>
+        /// <remarks></remarks>
 		public void Clear()
 		{
 			lock (this)
@@ -41,6 +56,11 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			}
 		}
 
+        /// <summary>
+        /// Gets the queue names.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string[] GetQueueNames()
 		{
 			lock (this)
@@ -51,6 +71,11 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			}
 		}
 
+        /// <summary>
+        /// Gets the integration queue snapshot.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public QueueSetSnapshot GetIntegrationQueueSnapshot()
 		{
 			lock (this)

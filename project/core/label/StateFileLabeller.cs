@@ -22,9 +22,18 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 	{
 		private readonly IStateManager stateManager;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StateFileLabeller" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public StateFileLabeller() : this(new FileStateManager())
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StateFileLabeller" /> class.	
+        /// </summary>
+        /// <param name="stateManager">The state manager.</param>
+        /// <remarks></remarks>
 		public StateFileLabeller(IStateManager stateManager)
 		{
 			this.stateManager = stateManager;
@@ -38,6 +47,12 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         [ReflectorProperty("project")]
         public string Project { get; set; }
 
+        /// <summary>
+        /// Generates the specified integration result.	
+        /// </summary>
+        /// <param name="integrationResult">The integration result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string Generate(IIntegrationResult integrationResult)
 		{
 			return stateManager.LoadState(Project).LastSuccessfulIntegrationLabel;

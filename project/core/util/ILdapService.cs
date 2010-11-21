@@ -10,6 +10,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
     public interface ILdapService
     {
 
+        /// <summary>
+        /// Gets or sets the name of the domain.	
+        /// </summary>
+        /// <value>The name of the domain.</value>
+        /// <remarks></remarks>
         string DomainName { get; set; }
 
 

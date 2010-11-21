@@ -23,6 +23,12 @@ namespace ThoughtWorks.CruiseControl.Core.State
 		/// <param name="result"></param>
 		void SaveState(IIntegrationResult result);
 
+        /// <summary>
+        /// Determines whether [has previous state] [the specified project].	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		bool HasPreviousState(string project);
 	}
 }

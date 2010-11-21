@@ -11,6 +11,11 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         private string projectName;
         private IProjectAuthorisation projectSecurity;
 
+        /// <summary>
+        /// Gets or sets the name.	
+        /// </summary>
+        /// <value>The name.</value>
+        /// <remarks></remarks>
         [ReflectorProperty("name")]
         public string Name
         {
@@ -18,6 +23,11 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             set { projectName = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the security.	
+        /// </summary>
+        /// <value>The security.</value>
+        /// <remarks></remarks>
         [ReflectorProperty("authorisation", InstanceTypeKey = "type")]
         public IProjectAuthorisation Security
         {

@@ -71,8 +71,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		#region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FinalBuilderTask" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public FinalBuilderTask() : this(new Registry(), new ProcessExecutor()) {}
-		
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FinalBuilderTask" /> class.	
+        /// </summary>
+        /// <param name="registry">The registry.</param>
+        /// <param name="executor">The executor.</param>
+        /// <remarks></remarks>
 		public FinalBuilderTask(IRegistry registry, ProcessExecutor executor)
 		{
 			_executor = executor;
@@ -169,6 +179,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("Timeout", Required = false)]
         public int Timeout { get; set; }
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override bool Execute(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : 
@@ -189,6 +205,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		#region Methods
 
+        /// <summary>
+        /// Attempts to execute.	
+        /// </summary>
+        /// <param name="info">The info.</param>
+        /// <param name="projectName">Name of the project.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected ProcessResult AttemptToExecute(ProcessInfo info, string projectName)
 		{
 			try
@@ -264,6 +287,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return args.ToString();
 		}
 
+        /// <summary>
+        /// Gets the FB version.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public int GetFBVersion()
         {
             if (_fbversion == FinalBuilderVersion.FBUnknown) // Try and autodetect FB Version from project file name
@@ -280,7 +308,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             return (int)_fbversion;
         }
-		
+
+        /// <summary>
+        /// Gets the FB path.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string GetFBPath()
 		{
             int fbversion = GetFBVersion();			

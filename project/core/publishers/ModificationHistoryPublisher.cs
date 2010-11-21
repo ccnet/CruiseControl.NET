@@ -25,6 +25,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     public class ModificationHistoryPublisher 
         : TaskBase
     {
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string DataHistoryFileName = "HistoryData.xml";
         private bool onlyLogWhenChangesFound = false;
 
@@ -43,6 +47,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { onlyLogWhenChangesFound = value; }
         }
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override bool Execute(IIntegrationResult result)
         {
             if ((OnlyLogWhenChangesFound) & (result.Modifications.Length == 0)) return true;
@@ -99,8 +109,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             xmlWriter.WriteStartAttribute(attributeName);
             xmlWriter.WriteValue(attributeValue);
         }
-       
 
+
+        /// <summary>
+        /// Loads the history.	
+        /// </summary>
+        /// <param name="artifactDirectory">The artifact directory.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static string LoadHistory(string artifactDirectory)
         {
             string result = string.Empty;

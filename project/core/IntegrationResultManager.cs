@@ -5,6 +5,9 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public class IntegrationResultManager : IIntegrationResultManager
     {
         private readonly Project project;
@@ -12,11 +15,21 @@ namespace ThoughtWorks.CruiseControl.Core
         private IIntegrationResult currentIntegration;
         private IntegrationSummary lastIntegration;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntegrationResultManager" /> class.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
         public IntegrationResultManager(Project project)
         {
             this.project = project;
         }
 
+        /// <summary>
+        /// Gets the last integration result.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public IIntegrationResult LastIntegrationResult
         {
             get
@@ -30,6 +43,11 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Gets the last integration.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public IntegrationSummary LastIntegration
         {
             get
@@ -42,6 +60,11 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Gets the current integration.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public IIntegrationResult CurrentIntegration
         {
             get
@@ -57,6 +80,12 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Starts the new integration.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public IIntegrationResult StartNewIntegration(IntegrationRequest request)
         {
             IntegrationResult newResult = new IntegrationResult(project.Name, project.WorkingDirectory, project.ArtifactDirectory, request, LastIntegration);
@@ -67,6 +96,10 @@ namespace ThoughtWorks.CruiseControl.Core
             return currentIntegration = newResult;
         }
 
+        /// <summary>
+        /// Finishes the integration.	
+        /// </summary>
+        /// <remarks></remarks>
         public void FinishIntegration()
         {
             try

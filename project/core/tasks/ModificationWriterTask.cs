@@ -96,16 +96,31 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     {
         private readonly IFileSystem fileSystem;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModificationWriterTask" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public ModificationWriterTask()
             : this(new SystemIoFileSystem())
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModificationWriterTask" /> class.	
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <remarks></remarks>
         public ModificationWriterTask(IFileSystem fileSystem)
         {
             this.fileSystem = fileSystem;
             this.Filename = "modifications.xml";
         }
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override bool Execute(IIntegrationResult result)
         {
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Writing Modifications");                

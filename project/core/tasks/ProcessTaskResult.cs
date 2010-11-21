@@ -4,11 +4,27 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class ProcessTaskResult : ITaskResult
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		protected readonly ProcessResult result;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 	    protected bool ignoreStandardOutputOnSuccess;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProcessTaskResult" /> class.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public ProcessTaskResult(ProcessResult result)
             : this(result, false)
         {
@@ -33,6 +49,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}
 		}
 
+        /// <summary>
+        /// Gets the data.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public virtual string Data
 		{
 			get 
@@ -48,6 +69,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
 		}
 
+        /// <summary>
+        /// Writes to.	
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <remarks></remarks>
 		public virtual void WriteTo(XmlWriter writer)
 		{
 			writer.WriteStartElement("task");

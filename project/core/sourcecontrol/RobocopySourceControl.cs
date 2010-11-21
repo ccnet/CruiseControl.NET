@@ -42,9 +42,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private static readonly int[] successExitCodes = GenerateExitCodes();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RobocopySourceControl" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public RobocopySourceControl() : this(new RobocopyHistoryParser(), new ProcessExecutor())
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RobocopySourceControl" /> class.	
+        /// </summary>
+        /// <param name="parser">The parser.</param>
+        /// <param name="executor">The executor.</param>
+        /// <remarks></remarks>
         public RobocopySourceControl(IHistoryParser parser, ProcessExecutor executor)
             : base(parser, executor)
         {
@@ -94,6 +104,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("additionalArguments", Required = false)]
         public string AdditionalArguments { get; set; }
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			string destinationDirectory = from.BaseFromWorkingDirectory(WorkingDirectory);
@@ -109,9 +126,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return modifications;
 		}
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void LabelSourceControl(IIntegrationResult result)
 		{}
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void GetSource(IIntegrationResult result)
 		{
 			if (AutoGetSource)

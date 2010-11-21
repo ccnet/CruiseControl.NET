@@ -5,8 +5,19 @@ using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public class MercurialHistoryParser : IHistoryParser
     {
+        /// <summary>
+        /// Parses the specified history.	
+        /// </summary>
+        /// <param name="history">The history.</param>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public Modification[] Parse(TextReader history, DateTime from, DateTime to)
         {
             string mods = "<modifications><array>" + history.ReadToEnd() + "</array></modifications>";

@@ -5,8 +5,19 @@ using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class PlasticSCMHistoryParser : IHistoryParser
 	{
+        /// <summary>
+        /// Parses the specified input.	
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public Modification[] Parse(TextReader input, DateTime from, DateTime to)
 		{
             var mods = new List<Modification>();

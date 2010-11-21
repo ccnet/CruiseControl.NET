@@ -9,6 +9,9 @@ using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class CvsHistoryParser : IHistoryParser
 	{
 		/// <summary>
@@ -41,6 +44,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private string currentLine;
 
+        /// <summary>
+        /// Parses the specified CVS log.	
+        /// </summary>
+        /// <param name="cvsLog">The CVS log.</param>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public Modification[] Parse(TextReader cvsLog, DateTime from, DateTime to)
 		{
             var mods = new List<Modification>();

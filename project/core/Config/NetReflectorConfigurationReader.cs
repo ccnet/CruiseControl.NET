@@ -21,6 +21,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		private readonly NetReflectorTypeTable typeTable;
 		private NetReflectorReader reader;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetReflectorConfigurationReader" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public NetReflectorConfigurationReader()
 		{
 			typeTable = new NetReflectorTypeTable();

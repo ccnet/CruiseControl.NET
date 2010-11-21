@@ -51,25 +51,72 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     [ReflectorType("alienbrain")]
 	public class Alienbrain : ProcessSourceControl
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public static readonly string NO_CHANGE = "No files or folders found!";
 
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string AB_REGISTRY_PATH = @"SOFTWARE\NxN\alienbrain";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string AB_REGISTRY_KEY = "InstallDir";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string AB_COMMMAND_PATH = @"Client\Application\Tools";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string AB_EXE = "ab.exe";
 
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string BRANCH_COMMAND_TEMPLATE = @"setactivebranch ""{0}"" -s ""{1}"" -d ""{2}"" -u ""{3}"" -p ""{4}""";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string MODIFICATIONS_COMMAND_TEMPLATE = @"find ""{0}"" -s ""{1}"" -d ""{2}"" -u ""{3}"" -p ""{4}"" -regex ""SCIT > {5} AND SCIT < {6}""  -format ""#CheckInComment#|#Name#|#DbPath#|#SCIT#|#Mime Type#|#LocalPath#|#Changed By#|#NxN_VersionNumber#""";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string LABEL_COMMAND_TEMPLATE = @"setlabel ""{0}"" -s ""{1}"" -d ""{2}"" -u ""{3}"" -p ""{4}"" -name ""{5}"" -comment ""This label is brought to you by CruiseControl.NET""";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string GET_COMMAND_TEMPLATE = @"getlatest ""{0}"" -s ""{1}"" -d ""{2}"" -u ""{3}"" -p ""{4}"" -localpath ""{5}"" -overwritewritable replace -overwritecheckedout replace -response:GetLatest.PathInvalid y -response:GetLatest.Writable y -response:GetLatest.CheckedOut y";
 
 		private IRegistry registry;
 		private string executable;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Alienbrain" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public Alienbrain() : this(new AlienbrainHistoryParser(), new ProcessExecutor(), new Registry())
 		{
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Alienbrain" /> class.	
+        /// </summary>
+        /// <param name="parser">The parser.</param>
+        /// <param name="executor">The executor.</param>
+        /// <param name="registry">The registry.</param>
+        /// <remarks></remarks>
 		public Alienbrain(IHistoryParser parser, ProcessExecutor executor, IRegistry registry) : base(parser, executor)
 		{
 			this.registry = registry;
@@ -185,6 +232,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		// I had to bake something here because Alienbrain return ERRORLEVEL 1 when nothing is found
 		// that caused an exception in CruiseControl.NET that think that the process failed (not pretty in the logs)
 		// So I'm checking the result to see if there is changes, if not I return nothing
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			ProcessInfo processInfo = CreateModificationProcess(MODIFICATIONS_COMMAND_TEMPLATE, from.StartTime, to.StartTime);
@@ -202,6 +256,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void LabelSourceControl(IIntegrationResult result)
 		{
 			if (LabelOnSuccess && result.Succeeded)
@@ -214,6 +273,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		}
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void GetSource(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask("Getting source from AlienBrain");
@@ -253,6 +317,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+        /// <summary>
+        /// Determines whether the specified process info has changes.	
+        /// </summary>
+        /// <param name="processInfo">The process info.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public bool HasChanges(ProcessInfo processInfo)
 		{
 			ProcessResult result = Execute(processInfo);
@@ -260,23 +330,49 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 
 		// Process Creations
+        /// <summary>
+        /// Creates the modification process.	
+        /// </summary>
+        /// <param name="processCommand">The process command.</param>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ProcessInfo CreateModificationProcess(string processCommand, DateTime from, DateTime to)
 		{
 			var arguments = String.Format(processCommand, Project, Server, Database, Username, Password.PrivateValue, from.ToFileTime(), to.ToFileTime());
 			return new ProcessInfo(Executable, arguments);
 		}
 
+        /// <summary>
+        /// Creates the label process.	
+        /// </summary>
+        /// <param name="processCommand">The process command.</param>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ProcessInfo CreateLabelProcess(string processCommand, IIntegrationResult result)
 		{
 			string arguments = String.Format(processCommand, Project, Server, Database, Username, Password.PrivateValue, result.Label);
 			return new ProcessInfo(Executable, arguments);
 		}
 
+        /// <summary>
+        /// Creates the get process.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ProcessInfo CreateGetProcess()
 		{
 			return CreateGetProcess(Project);
 		}
 
+        /// <summary>
+        /// Creates the get process.	
+        /// </summary>
+        /// <param name="filename">The filename.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ProcessInfo CreateGetProcess(string filename)
 		{
 			// @"getlatest ""{0}"" -s ""{1}"" -d ""{2}"" -u ""{3}"" -p ""{4}"" -localpath ""{5}"" -overwritewritable replace -overwritecheckedout replace -response:GetLatest.PathInvalid y -response:GetLatest.Writable y -response:GetLatest.CheckedOut y"
@@ -291,6 +387,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return new ProcessInfo(Executable, args);
 		}
 
+        /// <summary>
+        /// Creates the branch process.	
+        /// </summary>
+        /// <param name="processCommand">The process command.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ProcessInfo CreateBranchProcess(string processCommand)
 		{
 			string arguments = String.Format(processCommand, Branch, Server, Database, Username, Password.PrivateValue);

@@ -4,6 +4,9 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class QuietPeriod : IQuietPeriod
 	{
 		private readonly TimeSpan GracePeriodInWhichItIsNotWorthApplyingTheQuietPeriod = TimeSpan.FromMilliseconds(100);
@@ -12,18 +15,36 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private readonly DateTimeProvider dtProvider;
 
 		private TimeSpan modificationDelay = TimeSpan.Zero;
-		
+
+        /// <summary>
+        /// Gets or sets the modification delay seconds.	
+        /// </summary>
+        /// <value>The modification delay seconds.</value>
+        /// <remarks></remarks>
 		public double ModificationDelaySeconds
 		{
 			get { return modificationDelay.TotalSeconds; }
 			set { modificationDelay = TimeSpan.FromSeconds(value); }
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuietPeriod" /> class.	
+        /// </summary>
+        /// <param name="dtProvider">The dt provider.</param>
+        /// <remarks></remarks>
 		public QuietPeriod(DateTimeProvider dtProvider)
 		{
 			this.dtProvider = dtProvider;
 		}
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="sourceControl">The source control.</param>
+        /// <param name="lastBuild">The last build.</param>
+        /// <param name="thisBuild">The this build.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public Modification[] GetModifications(ISourceControl sourceControl, IIntegrationResult lastBuild, IIntegrationResult thisBuild)
 		{
 			for (;;)

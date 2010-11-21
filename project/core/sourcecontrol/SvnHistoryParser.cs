@@ -17,6 +17,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
         private bool integrationStatusUnknown = false;
 
+        /// <summary>
+        /// Gets or sets the integration status unknown.	
+        /// </summary>
+        /// <value>The integration status unknown.</value>
+        /// <remarks></remarks>
         public bool IntegrationStatusUnknown
         {
             set { integrationStatusUnknown = value; }

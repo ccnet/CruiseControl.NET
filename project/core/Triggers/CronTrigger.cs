@@ -54,11 +54,20 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         private bool triggered;
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CronTrigger" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public CronTrigger()
             : this(new DateTimeProvider())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CronTrigger" /> class.	
+        /// </summary>
+        /// <param name="dtProvider">The dt provider.</param>
+        /// <remarks></remarks>
         public CronTrigger(DateTimeProvider dtProvider)
         {
             this.dtProvider = dtProvider;
@@ -70,6 +79,10 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 
         #region ITrigger
 
+        /// <summary>
+        /// Integrations the completed.	
+        /// </summary>
+        /// <remarks></remarks>
         public void IntegrationCompleted()
         {
             if (triggered)
@@ -80,6 +93,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 
         }
 
+        /// <summary>
+        /// Gets the next build.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public DateTime NextBuild
         {
             get
@@ -92,6 +110,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
             }
         }
 
+        /// <summary>
+        /// Fires this instance.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public IntegrationRequest Fire()
         {
             schedule = NCrontab.CrontabSchedule.Parse(CronExpression);

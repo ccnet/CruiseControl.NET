@@ -13,20 +13,66 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     public abstract class BaseExecutableTask
         : TaskBase, IConfigurationValidation
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		protected ProcessExecutor executor;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		protected BuildProgressInformation buildProgressInformation;
 
+        /// <summary>
+        /// Gets the process filename.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected abstract string GetProcessFilename();
+        /// <summary>
+        /// Gets the process arguments.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected abstract string GetProcessArguments(IIntegrationResult result);
+        /// <summary>
+        /// Gets the process base directory.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected abstract string GetProcessBaseDirectory(IIntegrationResult result);
+        /// <summary>
+        /// Gets the process priority class.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected abstract ProcessPriorityClass GetProcessPriorityClass();
+        /// <summary>
+        /// Gets the process timeout.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected abstract int GetProcessTimeout();
 
+        /// <summary>
+        /// Gets the process success codes.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected virtual int[] GetProcessSuccessCodes()
 		{
 			return null;
 		}
 
+        /// <summary>
+        /// Creates the process info.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected virtual ProcessInfo CreateProcessInfo(IIntegrationResult result)
 		{
 			ProcessInfo info = new ProcessInfo(GetProcessFilename(), GetProcessArguments(result), GetProcessBaseDirectory(result),GetProcessPriorityClass(), GetProcessSuccessCodes());
@@ -41,6 +87,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return info;
 		}
 
+        /// <summary>
+        /// Tries to run.	
+        /// </summary>
+        /// <param name="info">The info.</param>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected ProcessResult TryToRun(ProcessInfo info, IIntegrationResult result)
 		{
 			buildProgressInformation = result.BuildProgressInformation;

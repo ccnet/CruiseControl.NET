@@ -36,6 +36,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		private string executable;
 		private string workingDirectory;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SynergyConnectionInfo" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public SynergyConnectionInfo()
 		{
 			Executable = "ccm.exe";
@@ -243,6 +247,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
         [ReflectorProperty("timeout", Required = false)]
         public int Timeout { get; set; }
 
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public IFormatProvider FormatProvider = CultureInfo.CurrentCulture;
 		
 		/// <summary>

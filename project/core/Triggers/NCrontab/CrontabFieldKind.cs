@@ -29,13 +29,36 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
 {
     using System;
 
+    /// <summary>
+    /// 	
+    /// </summary>
     [ Serializable ]
     public enum CrontabFieldKind
     {
-        Minute, 
-        Hour, 
-        Day, 
-        Month, 
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
+        Minute,
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
+        Hour,
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
+        Day,
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
+        Month,
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         DayOfWeek   
     }
 }

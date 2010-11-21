@@ -9,6 +9,9 @@ using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public class UndefinedSymbolException : EvaluationException
     {
         internal UndefinedSymbolException(string msg) : base(msg)
@@ -20,6 +23,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         }
     }
 
+    /// <summary>
+    /// 	
+    /// </summary>
     public class CyclicalEvaluationException : EvaluationException
     {
         internal CyclicalEvaluationException(string msg)
@@ -54,8 +60,16 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         }
     }
 
+    /// <summary>
+    /// 	
+    /// </summary>
     public class ExplicitDefinitionRequiredException : EvaluationException
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExplicitDefinitionRequiredException" /> class.	
+        /// </summary>
+        /// <param name="msg">The MSG.</param>
+        /// <remarks></remarks>
         public ExplicitDefinitionRequiredException(string msg)
             : base( msg )
         {
@@ -68,8 +82,16 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
     }
 
 
+    /// <summary>
+    /// 	
+    /// </summary>
     public class ImportException : PreprocessorException
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImportException" /> class.	
+        /// </summary>
+        /// <param name="msg">The MSG.</param>
+        /// <remarks></remarks>
         public ImportException(string msg)
             : base( msg )
         {
@@ -96,8 +118,16 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         }
     }
 
+    /// <summary>
+    /// 	
+    /// </summary>
     public class InvalidMarkupException : PreprocessorException
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InvalidMarkupException" /> class.	
+        /// </summary>
+        /// <param name="msg">The MSG.</param>
+        /// <remarks></remarks>
         public InvalidMarkupException(string msg) : base( msg )
         {
         }
@@ -108,8 +138,16 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         }
     }
 
+    /// <summary>
+    /// 	
+    /// </summary>
     public class MissingIncludeException : PreprocessorException
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MissingIncludeException" /> class.	
+        /// </summary>
+        /// <param name="msg">The MSG.</param>
+        /// <remarks></remarks>
         public MissingIncludeException(string msg)
             : base(msg)
         {
@@ -140,19 +178,42 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             Context = ctx;
         }
 
+        /// <summary>
+        /// Gets or sets the context.	
+        /// </summary>
+        /// <value>The context.</value>
+        /// <remarks></remarks>
         public XmlContext Context { get; internal set; }
 
         #region Nested type: XmlContext
 
+        /// <summary>
+        /// 	
+        /// </summary>
         public class XmlContext
         {
             internal XmlContext()
             {
             }
 
+            /// <summary>
+            /// Gets or sets the line info.	
+            /// </summary>
+            /// <value>The line info.</value>
+            /// <remarks></remarks>
             public IXmlLineInfo LineInfo { get; internal set; }
+            /// <summary>
+            /// Gets or sets the path.	
+            /// </summary>
+            /// <value>The path.</value>
+            /// <remarks></remarks>
             public string Path { get; internal set; }
 
+            /// <summary>
+            /// Toes the string.	
+            /// </summary>
+            /// <returns></returns>
+            /// <remarks></remarks>
             public override string ToString()
             {
                 string path = Path ?? "Unknown";

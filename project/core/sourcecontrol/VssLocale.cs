@@ -16,6 +16,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private CultureInfo serverCulture;
 		private ResourceManager manager;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VssLocale" /> class.	
+        /// </summary>
+        /// <param name="cultureInfo">The culture info.</param>
+        /// <remarks></remarks>
 		public VssLocale(CultureInfo cultureInfo)
 		{
 			localCulture = serverCulture = cultureInfo;
@@ -27,46 +32,91 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return manager.GetString(key, serverCulture);	
 		}
 
+        /// <summary>
+        /// Gets the comment keyword.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string CommentKeyword
 		{
 			get { return GetKeyword("Comment"); }
 		}
 
+        /// <summary>
+        /// Gets the checked in keyword.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string CheckedInKeyword
 		{
 			get { return GetKeyword("CheckedIn"); }
 		}
 
+        /// <summary>
+        /// Gets the added keyword.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string AddedKeyword
 		{
 			get { return GetKeyword("Added"); }
 		}
 
+        /// <summary>
+        /// Gets the deleted keyword.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string DeletedKeyword
 		{
 			get { return GetKeyword("Deleted"); }
 		}
 
+        /// <summary>
+        /// Gets the destroyed keyword.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string DestroyedKeyword
 		{
 			get { return GetKeyword("Destroyed"); }
 		}
 
+        /// <summary>
+        /// Gets the user keyword.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string UserKeyword
 		{
 			get { return GetKeyword("User"); }
 		}
 
+        /// <summary>
+        /// Gets the date keyword.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string DateKeyword
 		{
 			get { return GetKeyword("Date"); }
 		}
 
+        /// <summary>
+        /// Gets the time keyword.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string TimeKeyword
 		{
 			get { return GetKeyword("Time"); }
 		}
 
+        /// <summary>
+        /// Gets or sets the server culture.	
+        /// </summary>
+        /// <value>The server culture.</value>
+        /// <remarks></remarks>
 		public string ServerCulture
 		{
 			get { return serverCulture.Name; }
@@ -81,6 +131,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return dateTimeFormatInfo;
 		}
 
+        /// <summary>
+        /// Parses the date time.	
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <param name="time">The time.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public DateTime ParseDateTime(string date, string time)
 		{
 			// vss gives am and pm as a and p, so we append an m
@@ -116,11 +173,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return string.Concat(date.ToString("d", info), ";", date.ToString(info.LongTimePattern, info));
 		}
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ToString()
 		{
 			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"VssLocale: local culture = {0}, server culture = {1}", localCulture.DisplayName, serverCulture.DisplayName);
 		}
 
+        /// <summary>
+        /// Equalses the specified obj.	
+        /// </summary>
+        /// <param name="obj">The obj.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override bool Equals(object obj)
 		{
             var dummy = obj as IVssLocale;
@@ -129,6 +197,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return false;
 		}
 
+        /// <summary>
+        /// Gets the hash code.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override int GetHashCode()
 		{
 			return serverCulture.GetHashCode();

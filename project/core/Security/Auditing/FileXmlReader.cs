@@ -34,9 +34,18 @@ namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
         private string auditFile = "SecurityAudit.xml";
 		private readonly IExecutionEnvironment executionEnvironment;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileXmlReader" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public FileXmlReader() : this(new ExecutionEnvironment())
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileXmlReader" /> class.	
+        /// </summary>
+        /// <param name="executionEnvironment">The execution environment.</param>
+        /// <remarks></remarks>
 		public FileXmlReader(IExecutionEnvironment executionEnvironment)
 		{
 			this.executionEnvironment = executionEnvironment;

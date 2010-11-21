@@ -39,9 +39,25 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
     [ReflectorType("hg")]
     public class Mercurial : ProcessSourceControl
     {
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string DefaultExecutable = "hg";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string DefaultTagCommitMessage = "Tagging successful build {0}";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string HistoryTemplate = "<modification><node>{node|short}</node><author>{author|user}</author><date>{date|rfc822date}</date><desc>{desc|escape}</desc><rev>{rev}</rev><email>{author|email|obfuscate}</email><files>{files}</files></modification>";
 
         private readonly IFileSystem _fileSystem;
@@ -149,6 +165,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         [ReflectorProperty("webUrlBuilder", InstanceTypeKey = "type", Required = false)]
         public IModificationUrlBuilder UrlBuilder { get; set; }
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
             GetBuildProgressInformation(to).SignalStartRunTask("Checking modifications from Mercurial");
@@ -256,6 +279,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
             return NewProcessInfo(buffer.ToString(), workingDirectory);
         }
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public override void LabelSourceControl(IIntegrationResult result)
         {
             GetBuildProgressInformation(result).SignalStartRunTask("Mercurial: tag current build");
@@ -275,6 +303,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
             ProcessExecutor.ProcessOutput -= ProcessExecutor_ProcessOutput;
         }
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public override void GetSource(IIntegrationResult result)
         {
             GetBuildProgressInformation(result).SignalStartRunTask("Getting source from Mercurial");

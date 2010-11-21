@@ -312,6 +312,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 			return CreateProcessInfo(connection, arguments);
 		}
 
+        /// <summary>
+        /// Formats the command date.	
+        /// </summary>
+        /// <param name="startDate">The start date.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static string FormatCommandDate(DateTime startDate)
 		{
 			return startDate.ToString("yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);

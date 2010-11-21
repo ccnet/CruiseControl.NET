@@ -12,6 +12,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 	public class Statistic
         : StatisticBase
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Statistic" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public Statistic()
         {
         }

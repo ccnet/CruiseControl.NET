@@ -80,7 +80,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         private NameValuePair[] parameterValues;
         private string formatValue;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReplacementDynamicValue" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public ReplacementDynamicValue() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReplacementDynamicValue" /> class.	
+        /// </summary>
+        /// <param name="format">The format.</param>
+        /// <param name="property">The property.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <remarks></remarks>
         public ReplacementDynamicValue(string format, string property, params NameValuePair[] parameters)
         {
             this.formatValue = format;

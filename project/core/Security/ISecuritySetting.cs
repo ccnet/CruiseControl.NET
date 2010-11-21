@@ -1,5 +1,8 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Security
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public interface ISecuritySetting
     {
         /// <summary>

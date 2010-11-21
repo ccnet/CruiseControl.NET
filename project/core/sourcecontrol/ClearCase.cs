@@ -109,11 +109,24 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class ClearCase : ProcessSourceControl
 	{
 		private const string _TEMPORARY_BASELINE_PREFIX = "CruiseControl.NETTemporaryBaseline_";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DATETIME_FORMAT = "dd-MMM-yyyy.HH:mm:ss";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ClearCase" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public ClearCase() : base(new ClearCaseHistoryParser())
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ClearCase" /> class.	
+        /// </summary>
+        /// <param name="executor">The executor.</param>
+        /// <remarks></remarks>
         public ClearCase(ProcessExecutor executor)
             : base(new ClearCaseHistoryParser(), executor)
         {
@@ -205,8 +218,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("branch", Required = false)]
         public string Branch { get; set; }
 
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public string TempBaseline;
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
             Modification[] modifications = base.GetModifications(CreateHistoryProcessInfo(from.StartTime, to.StartTime), from.StartTime, to.StartTime);
@@ -253,6 +277,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+        /// <summary>
+        /// Deletes the temporary label.	
+        /// </summary>
+        /// <remarks></remarks>
 		public void DeleteTemporaryLabel()
 		{
 			if (UseBaseline)
@@ -262,6 +290,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+        /// <summary>
+        /// Creates the temp baseline process info.	
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ProcessInfo CreateTempBaselineProcessInfo(string name)
 		{
 			string args = string.Format(System.Globalization.CultureInfo.CurrentCulture,"mkbl -view {0} -identical {1}", ViewName, name);
@@ -331,6 +365,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+        /// <summary>
+        /// Creates the history process info.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
 		{
 			string fromDate = from.ToString(DATETIME_FORMAT);
@@ -364,6 +405,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new ProcessInfo(Executable, args);
 		}
 
+        /// <summary>
+        /// Creates the remove baseline process info.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ProcessInfo CreateRemoveBaselineProcessInfo()
 		{
 			string args = string.Format(System.Globalization.CultureInfo.CurrentCulture,"rmbl -force {0}@\\{1}", TempBaseline, ProjectVobName);
@@ -371,6 +417,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new ProcessInfo(Executable, args);
 		}
 
+        /// <summary>
+        /// Creates the rename baseline process info.	
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ProcessInfo CreateRenameBaselineProcessInfo(string name)
 		{
 			string args = string.Format(System.Globalization.CultureInfo.CurrentCulture,"rename baseline:{0}@\\{1} \"{2}\"", TempBaseline, ProjectVobName, name);
@@ -378,6 +430,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new ProcessInfo(Executable, args);
 		}
 
+        /// <summary>
+        /// Validates the name of the baseline.	
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <remarks></remarks>
 		public void ValidateBaselineName(string name)
 		{
 			if (name == null
@@ -422,6 +479,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void GetSource(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask("Getting source from ClearCase");

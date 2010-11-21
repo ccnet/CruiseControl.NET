@@ -2,6 +2,9 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public interface IIntegratable
     {
         /// <summary>

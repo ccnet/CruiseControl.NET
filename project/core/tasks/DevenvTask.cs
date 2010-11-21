@@ -54,18 +54,70 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	public class DevenvTask
 				: TaskBase
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string LogFilename = "devenv-results-{0}.xml";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public readonly Guid LogFileId = Guid.NewGuid();
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string VS2010_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\10.0";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string VS2008_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\9.0";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string VS2005_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\8.0";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string VS2003_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\7.1";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string VS2002_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\7.0";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string VS_REGISTRY_KEY = @"InstallDir";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DEVENV_EXE = "devenv.com";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const int DEFAULT_BUILD_TIMEOUT = 600;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DEFAULT_BUILDTYPE = "rebuild";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DEFAULT_PROJECT = "";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const ProcessPriorityClass DEFAULT_PRIORITY = ProcessPriorityClass.Normal;
 
 		private readonly IRegistry registry;
@@ -73,9 +125,19 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		private string executable;
 		private string version;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DevenvTask" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public DevenvTask() :
 			this(new Registry(), new ProcessExecutor()) { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DevenvTask" /> class.	
+        /// </summary>
+        /// <param name="registry">The registry.</param>
+        /// <param name="executor">The executor.</param>
+        /// <remarks></remarks>
 		public DevenvTask(IRegistry registry, ProcessExecutor executor)
 		{
 			this.registry = registry;
@@ -255,6 +317,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("priority", Required = false)]
 		public ProcessPriorityClass Priority { get; set; }
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override bool Execute(IIntegrationResult result)
 		{
 			result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format(System.Globalization.CultureInfo.CurrentCulture,"Executing Devenv :{0}", GetArguments(result)));

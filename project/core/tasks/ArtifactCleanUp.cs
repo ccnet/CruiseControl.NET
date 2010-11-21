@@ -110,6 +110,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			set { cleanUpValue = value; }
 		}
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override bool Execute(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Cleaning up");                

@@ -17,6 +17,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         private static readonly Regex urlEncodeRegex = new Regex("[^a-zA-Z0-9\\.\\-_~]", RegexOptions.Compiled);
 
         // public for testing only
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string DEFAULT_DELIMITER = ",";
 
         /// <summary>
@@ -148,6 +152,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Removes the nulls.	
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static string RemoveNulls(string input)
         {
             return NullStringRegex.Replace(input, string.Empty).TrimStart();
@@ -193,16 +203,35 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return value;
         }
 
+        /// <summary>
+        /// Removes the trailing path delimeter.	
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static string RemoveTrailingPathDelimeter(string directory)
         {
             return string.IsNullOrEmpty(directory) ? string.Empty : directory.TrimEnd(new char[] { Path.DirectorySeparatorChar });
         }
 
+        /// <summary>
+        /// Integrations the property to string.	
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static string IntegrationPropertyToString(object value)
         {
             return IntegrationPropertyToString(value, DEFAULT_DELIMITER);
         }
 
+        /// <summary>
+        /// Integrations the property to string.	
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="delimiter">The delimiter.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static string IntegrationPropertyToString(object value, string delimiter)
         {
             if (value == null)
@@ -272,6 +301,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Arrays to new line separated string.	
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static string ArrayToNewLineSeparatedString(string[] input)
         {
             StringBuilder sb = new StringBuilder();
@@ -285,6 +320,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return sb.ToString();
         }
 
+        /// <summary>
+        /// News the line separated string to array.	
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static string[] NewLineSeparatedStringToArray(string input)
         {
             if (string.IsNullOrEmpty(input))

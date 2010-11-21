@@ -17,8 +17,18 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	/// </summary>
 	public class ProcessExecutor
 	{
+        /// <summary>
+        /// Occurs when [process output].	
+        /// </summary>
+        /// <remarks></remarks>
 		public event EventHandler<ProcessOutputEventArgs> ProcessOutput;
 
+        /// <summary>
+        /// Executes the specified process info.	
+        /// </summary>
+        /// <param name="processInfo">The process info.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public virtual ProcessResult Execute(ProcessInfo processInfo)
 		{
 			string projectName = Thread.CurrentThread.Name;
@@ -33,6 +43,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 		}
 
+        /// <summary>
+        /// Kills the process currently running for project.	
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <remarks></remarks>
 		public static void KillProcessCurrentlyRunningForProject(string name)
 		{
 			ProcessMonitor monitor = ProcessMonitor.ForProject(name);
@@ -46,6 +61,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 		}
 
+        /// <summary>
+        /// Raises the <see cref="E:ProcessOutput" /> event.	
+        /// </summary>
+        /// <param name="eventArgs">The <see cref="ProcessOutputEventArgs" /> instance containing the event data.</param>
+        /// <remarks></remarks>
 		protected virtual void OnProcessOutput(ProcessOutputEventArgs eventArgs)
 		{
 			EventHandler<ProcessOutputEventArgs> handler = this.ProcessOutput;

@@ -9,6 +9,11 @@ namespace ThoughtWorks.CruiseControl.Core
 	[TypeConverter(typeof (ExpandableObjectConverter))]
 	public interface IModificationUrlBuilder
 	{
+        /// <summary>
+        /// Setups the modification.	
+        /// </summary>
+        /// <param name="modifications">The modifications.</param>
+        /// <remarks></remarks>
 		void SetupModification(Modification[] modifications);
 	}
 }

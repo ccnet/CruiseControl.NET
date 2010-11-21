@@ -49,6 +49,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("simulateFailureMessage", Required = false)]
         public string SimulateFailureMessage { get; set; }
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override bool Execute(IIntegrationResult result)
         {
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Executing null task");

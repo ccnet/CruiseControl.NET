@@ -4,6 +4,9 @@ using System.Text;
 
 namespace ThoughtWorks.CruiseControl.Core.Logging
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class CircularArray : IEnumerable
 	{
 		private const int AssumedAverageLineLength = 80;
@@ -12,17 +15,32 @@ namespace ThoughtWorks.CruiseControl.Core.Logging
 		private object[] items;
 		private bool isFull;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CircularArray" /> class.	
+        /// </summary>
+        /// <param name="capacity">The capacity.</param>
+        /// <remarks></remarks>
 		public CircularArray(int capacity)
 		{
 			this.items = new object[capacity];
 		}
 
+        /// <summary>
+        /// Adds the specified item.	
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <remarks></remarks>
 		public void Add(object item)
 		{
 			items[currentIndex] = item;
 			currentIndex = IncrementIndex(currentIndex);
 		}
 
+        /// <summary>
+        /// Gets the <see cref="object" /> at the specified index.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public object this[int index]
 		{
 			get { return items[index]; }
@@ -35,11 +53,22 @@ namespace ThoughtWorks.CruiseControl.Core.Logging
 			return nextIndex;
 		}
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ToString()
 		{
 			return ToString(DefaultDirection);
 		}
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <param name="direction">The direction.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string ToString(EnumeratorDirection direction)
 		{
 			StringBuilder builder = new StringBuilder(items.GetUpperBound(0)*AssumedAverageLineLength);
@@ -52,6 +81,11 @@ namespace ThoughtWorks.CruiseControl.Core.Logging
 			return builder.ToString();
 		}
 
+        /// <summary>
+        /// Gets the enumerator.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public IEnumerator GetEnumerator()
 		{
 			return new CircularArrayEnumerator(this, DefaultDirection);

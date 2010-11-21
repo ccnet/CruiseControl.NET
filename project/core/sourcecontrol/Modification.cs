@@ -12,18 +12,67 @@ namespace ThoughtWorks.CruiseControl.Core
     [XmlRoot("modification")]
     public class Modification : IComparable
     {
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public string Type = "unknown";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public string FileName;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public string FolderName;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public DateTime ModifiedTime;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public string UserName;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public string ChangeNumber;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public string Version = string.Empty;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public string Comment;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public string Url;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public string IssueUrl;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public string EmailAddress;
 
+        /// <summary>
+        /// Toes the XML.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string ToXml()
         {
             StringWriter writer = new StringWriter();
@@ -31,6 +80,11 @@ namespace ThoughtWorks.CruiseControl.Core
             return writer.ToString();
         }
 
+        /// <summary>
+        /// Toes the XML.	
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <remarks></remarks>
         public void ToXml(XmlWriter writer)
         {
             writer.WriteStartElement("modification");
@@ -48,22 +102,44 @@ namespace ThoughtWorks.CruiseControl.Core
             writer.WriteEndElement();
         }
 
+        /// <summary>
+        /// Compares to.	
+        /// </summary>
+        /// <param name="o">The o.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public int CompareTo(Object o)
         {
             Modification modification = (Modification)o;
             return ModifiedTime.CompareTo(modification.ModifiedTime);
         }
 
+        /// <summary>
+        /// Gets the hash code.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override int GetHashCode()
         {
             return ToString().GetHashCode();
         }
 
+        /// <summary>
+        /// Equalses the specified obj.	
+        /// </summary>
+        /// <param name="obj">The obj.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override bool Equals(object obj)
         {
             return ReflectionUtil.ReflectionEquals(this, obj);
         }
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override string ToString()
         {
             return ReflectionUtil.ReflectionToString(this);

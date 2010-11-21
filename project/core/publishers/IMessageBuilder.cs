@@ -1,5 +1,8 @@
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public interface IMessageBuilder
 	{
 
@@ -9,6 +12,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         System.Collections.IList xslFiles { get; set; }
 
 
+        /// <summary>
+        /// Builds the message.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		string BuildMessage(IIntegrationResult result);
 	}
 }

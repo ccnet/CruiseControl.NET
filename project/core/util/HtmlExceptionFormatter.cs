@@ -10,11 +10,21 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	{
 		private Exception _exception;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HtmlExceptionFormatter" /> class.	
+        /// </summary>
+        /// <param name="exception">The exception.</param>
+        /// <remarks></remarks>
 		public HtmlExceptionFormatter(Exception exception)
 		{
 			this._exception = exception;
 		}
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ToString()
 		{
 			string message = _exception.Message.Replace(Environment.NewLine, "<br/>");

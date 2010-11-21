@@ -5,10 +5,23 @@ using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public interface IProjectIntegrator
 	{
+        /// <summary>
+        /// Gets the project.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		IProject Project { get; }
 
+        /// <summary>
+        /// Gets the name.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		string Name { get; }
 
 		/// <summary>
@@ -43,6 +56,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		ProjectIntegratorState State { get; }
 
+        /// <summary>
+        /// Gets the integration repository.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		IIntegrationRepository IntegrationRepository { get; }
 
 		/// <summary>

@@ -13,6 +13,9 @@ using System.Diagnostics;
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
     // TODO: Replace using this class with the ILogger interface and the IoC container.
+    /// <summary>
+    /// 	
+    /// </summary>
 	public static class Log
 	{
 		private static ITraceLog logger = TraceLogManager.GetLogger("CruiseControl.NET");
@@ -178,11 +181,23 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             if (loggingEnabled && logger.IsTraceEnabled) logger.TraceFormat(string.Concat(GetCallingClassName(), message), args);
         }
 
+        /// <summary>
+        /// Starts the trace.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static TraceBlock StartTrace()
         {
             return new TraceBlock(logger, GetCallingClassName());
         }
 
+        /// <summary>
+        /// Starts the trace.	
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="args">The args.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static TraceBlock StartTrace(string message, params object[] args)
         {
             return new TraceBlock(logger, GetCallingClassName(), string.Format(message, args));

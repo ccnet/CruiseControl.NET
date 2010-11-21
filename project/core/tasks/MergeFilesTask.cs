@@ -137,6 +137,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         public ILogger Logger { get; set; }
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override bool Execute(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Merging Files");

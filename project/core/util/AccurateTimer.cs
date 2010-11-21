@@ -32,6 +32,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			QueryPerformanceFrequency(out frequency);
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccurateTimer" /> class.	
+        /// </summary>
+        /// <param name="activityName">Name of the activity.</param>
+        /// <remarks></remarks>
 		public AccurateTimer(string activityName)
 		{
 			this.activityName = activityName;
@@ -54,6 +59,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			Trace.WriteLine(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Done: {0} took {1} ms", activityName, durationInMs));
 		}
 
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources	
+        /// </summary>
+        /// <remarks></remarks>
 		public void Dispose()
 		{
 			End();

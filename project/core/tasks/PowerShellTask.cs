@@ -42,18 +42,52 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	public class PowerShellTask 
         : TaskBase
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const int DefaultBuildTimeOut = 600;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string PowerShellExe = "powershell.exe";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string regkeypowershell1 = @"SOFTWARE\Microsoft\PowerShell\1\PowerShellEngine";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string regkeypowershell2 = @"SOFTWARE\Microsoft\PowerShell\2\PowerShellEngine";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string regkeyholder = @"ApplicationBase";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public static string DefaultScriptsDirectory = System.Environment.GetEnvironmentVariable("USERPROFILE") + @"\Documents\WindowsPowerShell\";
 
         private string executable;
 		private ProcessExecutor executor;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PowerShellTask" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public PowerShellTask() : this(new Registry(), new ProcessExecutor()) { }
-		
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PowerShellTask" /> class.	
+        /// </summary>
+        /// <param name="registry">The registry.</param>
+        /// <param name="executor">The executor.</param>
+        /// <remarks></remarks>
 		public PowerShellTask(IRegistry registry, ProcessExecutor executor)
 		{
             this.Registry = registry;
@@ -239,6 +273,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             return result.BaseFromWorkingDirectory(ConfiguredScriptsDirectory);
 		}
 
+        /// <summary>
+        /// Attempts to execute.	
+        /// </summary>
+        /// <param name="info">The info.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected ProcessResult AttemptToExecute(ProcessInfo info)
 		{
 			try
@@ -251,6 +291,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}
 		}
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ToString()
 		{
 			return string.Format(@" BaseDirectory: {0}, PowerShell: {1}", ConfiguredScriptsDirectory, PowerShellExe);

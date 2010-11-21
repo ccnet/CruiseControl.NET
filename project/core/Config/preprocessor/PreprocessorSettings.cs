@@ -3,6 +3,9 @@ using System.Xml.Linq;
 
 namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public class PreprocessorSettings
     {
         /// <summary>

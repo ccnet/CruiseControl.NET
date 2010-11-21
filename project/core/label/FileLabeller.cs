@@ -129,6 +129,9 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 
         #region Nested type: FileReader
 
+        /// <summary>
+        /// 	
+        /// </summary>
         public class FileReader
         {
             /// <summary>

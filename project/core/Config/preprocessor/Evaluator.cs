@@ -103,6 +103,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             return ( T ) Convert.ChangeType( EvalToObject( expression ), typeof ( T ) );
         }
 
+        /// <summary>
+        /// Strings as literal.	
+        /// </summary>
+        /// <param name="theString">The string.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static string StringAsLiteral(string theString)
         {
             var expression = new CodePrimitiveExpression( theString );

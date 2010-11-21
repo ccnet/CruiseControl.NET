@@ -36,6 +36,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     public class XmlLogPublisher
         : TaskBase, IMergeTask
     {
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public static readonly string DEFAULT_LOG_SUBDIRECTORY = "buildlogs";
 
         /// <summary>
@@ -47,6 +51,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         public string ConfiguredLogDirectory { get; set; }
 
 		// This is only public because of a nasty hack which I (MR) put in the code. To be made private later...
+        /// <summary>
+        /// Logs the directory.	
+        /// </summary>
+        /// <param name="artifactDirectory">The artifact directory.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string LogDirectory(string artifactDirectory)
 		{
             if (string.IsNullOrEmpty(ConfiguredLogDirectory))
@@ -63,6 +73,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			}
 		}
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override bool Execute(IIntegrationResult result)
         {         
             // only deal with known integration status

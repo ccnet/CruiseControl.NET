@@ -37,6 +37,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
     [ReflectorType("bitkeeper")]
 	public class BitKeeper : ProcessSourceControl
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DefaultExecutable = @"C:\Program Files\BitKeeper\bk.exe";
 
         #region Constructors
@@ -122,6 +126,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
         [ReflectorProperty("cloneTo", Required = false)]
         public string CloneTo { get; set; }
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			ProcessResult result = Execute(NewProcessInfo(BuildHistoryProcessArgs(), to));
@@ -130,6 +141,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
             return modifications;
 		}
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void LabelSourceControl(IIntegrationResult result)
 		{
 			if (TagOnSuccess && result.Succeeded)
@@ -139,6 +155,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 			}
 		}
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void GetSource(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask("Getting source from BitKeeper");

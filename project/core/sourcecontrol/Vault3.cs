@@ -20,20 +20,43 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		// we actually applied.
 		private bool _labelApplied = false;
 
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		protected VaultVersionChecker _shim;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vault3" /> class.	
+        /// </summary>
+        /// <param name="versionCheckerShim">The version checker shim.</param>
+        /// <remarks></remarks>
 		public Vault3(VaultVersionChecker versionCheckerShim) : base(new VaultHistoryParser())
 		{
 			_shim = versionCheckerShim;
 			this.Timeout = _shim.Timeout;
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vault3" /> class.	
+        /// </summary>
+        /// <param name="versionCheckerShim">The version checker shim.</param>
+        /// <param name="historyParser">The history parser.</param>
+        /// <param name="executor">The executor.</param>
+        /// <remarks></remarks>
 		public Vault3(VaultVersionChecker versionCheckerShim, IHistoryParser historyParser, ProcessExecutor executor) : base(historyParser, executor)
 		{
 			this._shim = versionCheckerShim;
 			this.Timeout = _shim.Timeout;
 		}
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			_labelApplied = false;
@@ -79,6 +102,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void GetSource(IIntegrationResult result)
 		{
 			if (!_shim.AutoGetSource) return;
@@ -177,6 +205,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return ProcessInfoFor(builder, result);
 		}
 
+        /// <summary>
+        /// Fors the history process info.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected ProcessInfo ForHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to)
 		{
 			ProcessInfo info = ProcessInfoFor(BuildHistoryProcessArgs(from.StartTime, to.StartTime), from);
@@ -184,6 +219,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return info;
 		}
 
+        /// <summary>
+        /// Processes the info for.	
+        /// </summary>
+        /// <param name="args">The args.</param>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected ProcessInfo ProcessInfoFor(PrivateArguments args, IIntegrationResult result)
 		{
 			return new ProcessInfo(_shim.Executable, args, result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
@@ -203,6 +245,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return builder;
 		}
 
+        /// <summary>
+        /// Adds the common optional arguments.	
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <remarks></remarks>
         protected void AddCommonOptionalArguments(PrivateArguments builder)
 		{
 			builder.AddIf(!string.IsNullOrEmpty(_shim.Host), "-host ", _shim.Host);
@@ -305,8 +352,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			throw new CruiseControlException("This should never happen.  Failed to execute within the loop, there's probably an off-by-one error above.");
 		}
 
+        /// <summary>
+        /// 	
+        /// </summary>
 		public class VaultException : CruiseControlException
 		{
+            /// <summary>
+            /// Initializes a new instance of the <see cref="VaultException" /> class.	
+            /// </summary>
+            /// <param name="message">The message.</param>
+            /// <remarks></remarks>
 			public VaultException(string message) : base(message)
 			{}
 		}

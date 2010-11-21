@@ -31,6 +31,9 @@ using log4net.Repository.Hierarchy;
  */
 namespace ThoughtWorks.CruiseControl.Core.Util.Log4NetTrace
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class TraceLogManager
 	{
 		#region Static Member Variables

@@ -6,6 +6,9 @@ using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class VssHistoryParser : IHistoryParser
 	{
 		private const string DELIMITER_VERSIONED_START = "*****************  ";
@@ -16,17 +19,36 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private IVssLocale locale;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VssHistoryParser" /> class.	
+        /// </summary>
+        /// <param name="locale">The locale.</param>
+        /// <remarks></remarks>
 		public VssHistoryParser(IVssLocale locale)
 		{
 			this.locale = locale;
 		}
 
+        /// <summary>
+        /// Parses the specified history.	
+        /// </summary>
+        /// <param name="history">The history.</param>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public Modification[] Parse(TextReader history, DateTime from, DateTime to)
 		{
 			string[] entries = this.ReadAllEntries(history);
 			return ParseModifications(entries);
 		}
 
+        /// <summary>
+        /// Parses the modifications.	
+        /// </summary>
+        /// <param name="entries">The entries.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public Modification[] ParseModifications(string[] entries)
 		{
 			// not every entry will yield a valid modification so we can't use
@@ -46,6 +68,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return modifications.ToArray();
 		}
 
+        /// <summary>
+        /// Reads all entries.	
+        /// </summary>
+        /// <param name="history">The history.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string[] ReadAllEntries(TextReader history)
 		{
             var entries = new List<string>();
@@ -72,6 +100,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return entries.ToArray();
 		}
 
+        /// <summary>
+        /// Determines whether [is entry delimiter] [the specified line].	
+        /// </summary>
+        /// <param name="line">The line.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public bool IsEntryDelimiter(string line)
 		{
 			return IsEndOfFile(line) || 
@@ -84,6 +118,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return line == null;
 		}
 
+        /// <summary>
+        /// Gets or sets the locale.	
+        /// </summary>
+        /// <value>The locale.</value>
+        /// <remarks></remarks>
 		public IVssLocale Locale
 		{
 			get { return locale; }
@@ -126,16 +165,33 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 	}
 
+    /// <summary>
+    /// 	
+    /// </summary>
 	public abstract class VSSParser
 	{
 		private Regex REGEX_USER_DATE_LINE;
 		private static readonly Regex REGEX_FILE_NAME = new Regex(@"\*+([\w\s\.-]+)", RegexOptions.Multiline);
 
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		protected string entry;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		protected IVssLocale locale;
 
 		internal const string DELIMITER_VERSIONED_START = "*****************  ";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VSSParser" /> class.	
+        /// </summary>
+        /// <param name="entry">The entry.</param>
+        /// <param name="locale">The locale.</param>
+        /// <remarks></remarks>
 	    protected VSSParser(string entry, IVssLocale locale)
 		{
 			this.entry = entry.Replace(Convert.ToChar(160).ToString(),string.Empty);
@@ -145,6 +201,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			this.locale = locale;
 		}
 
+        /// <summary>
+        /// Parses this instance.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public virtual Modification Parse()
 		{
 			Modification mod = new Modification();
@@ -156,10 +217,25 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return mod;
 		}
 
+        /// <summary>
+        /// Gets the keyword.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public abstract string Keyword { get; }
 
+        /// <summary>
+        /// Parses the name of the file.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public abstract string ParseFileName();
 
+        /// <summary>
+        /// Parses the username and date.	
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <remarks></remarks>
 		public void ParseUsernameAndDate(Modification mod)
 		{
 			Match match = REGEX_USER_DATE_LINE.Match(entry);
@@ -175,6 +251,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			mod.ModifiedTime = locale.ParseDateTime(date, time);
 		}
 
+        /// <summary>
+        /// Parses the comment.	
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <remarks></remarks>
 		public void ParseComment(Modification mod)
 		{
 			string comment = locale.CommentKeyword + ":";
@@ -185,6 +266,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+        /// <summary>
+        /// Parses the name of the folder.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public virtual string ParseFolderName()
 		{
 			string checkedin = locale.CheckedInKeyword;
@@ -206,6 +292,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return folderName;
 		}
 
+        /// <summary>
+        /// Parses the file name other.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected string ParseFileNameOther()
 		{
 			try
@@ -223,6 +314,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+        /// <summary>
+        /// Parses the first name of the line.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string ParseFirstLineName()
 		{
 			Match match = REGEX_FILE_NAME.Match(entry);
@@ -230,29 +326,62 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 	}
 
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class CheckInParser : VSSParser
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CheckInParser" /> class.	
+        /// </summary>
+        /// <param name="entry">The entry.</param>
+        /// <param name="locale">The locale.</param>
+        /// <remarks></remarks>
 		public CheckInParser(string entry, IVssLocale locale) : base(entry, locale)
 		{
 		}
 
+        /// <summary>
+        /// Gets the keyword.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public override string Keyword
 		{
 			get { return locale.CheckedInKeyword; }
 		}
 
+        /// <summary>
+        /// Parses the name of the file.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ParseFileName()
 		{
 			return ParseFirstLineName();
 		}
 	}
 
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class AddedParser : VSSParser
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddedParser" /> class.	
+        /// </summary>
+        /// <param name="entry">The entry.</param>
+        /// <param name="locale">The locale.</param>
+        /// <remarks></remarks>
 		public AddedParser(string entry, IVssLocale locale) : base(entry, locale)
 		{
 		}
 
+        /// <summary>
+        /// Parses this instance.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override Modification Parse()
 		{
 			Modification mod = base.Parse();
@@ -262,16 +391,31 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				return mod;
 		}
 
+        /// <summary>
+        /// Gets the keyword.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public override string Keyword
 		{
 			get { return locale.AddedKeyword; }
 		}
 
+        /// <summary>
+        /// Parses the name of the file.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ParseFileName()
 		{
 			return ParseFileNameOther();
 		}
 
+        /// <summary>
+        /// Parses the name of the folder.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ParseFolderName()
 		{
 			if (entry.StartsWith(DELIMITER_VERSIONED_START))
@@ -281,22 +425,46 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 	}
 
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class DeletedParser : VSSParser
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeletedParser" /> class.	
+        /// </summary>
+        /// <param name="entry">The entry.</param>
+        /// <param name="locale">The locale.</param>
+        /// <remarks></remarks>
 		public DeletedParser(string entry, IVssLocale locale) : base(entry, locale)
 		{
 		}
 
+        /// <summary>
+        /// Gets the keyword.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public override string Keyword
 		{
 			get { return locale.DeletedKeyword; }
 		}
 
+        /// <summary>
+        /// Parses the name of the file.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ParseFileName()
 		{
 			return ParseFileNameOther();
 		}
 
+        /// <summary>
+        /// Parses the name of the folder.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ParseFolderName()
 		{
 			if (entry.StartsWith(DELIMITER_VERSIONED_START))
@@ -306,22 +474,46 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 	}
 
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class DestroyedParser : VSSParser
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DestroyedParser" /> class.	
+        /// </summary>
+        /// <param name="entry">The entry.</param>
+        /// <param name="locale">The locale.</param>
+        /// <remarks></remarks>
 		public DestroyedParser(string entry, IVssLocale locale) : base(entry, locale)
 		{
 		}
 
+        /// <summary>
+        /// Gets the keyword.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public override string Keyword
 		{
 			get { return locale.DestroyedKeyword; }
 		}
 
+        /// <summary>
+        /// Parses the name of the file.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ParseFileName()
 		{
 			return ParseFileNameOther();
 		}
 
+        /// <summary>
+        /// Parses the name of the folder.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ParseFolderName()
 		{
 			if (entry.StartsWith(DELIMITER_VERSIONED_START))
@@ -331,22 +523,46 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 	}
 
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class NullParser : VSSParser
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NullParser" /> class.	
+        /// </summary>
+        /// <param name="entry">The entry.</param>
+        /// <param name="locale">The locale.</param>
+        /// <remarks></remarks>
 		public NullParser(string entry, IVssLocale locale) : base(entry, locale)
 		{
 		}
 
+        /// <summary>
+        /// Gets the keyword.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public override string Keyword
 		{
 			get { return null; }
 		}
 
+        /// <summary>
+        /// Parses this instance.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override Modification Parse()
 		{
 			return null;
 		}
 
+        /// <summary>
+        /// Parses the name of the file.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ParseFileName()
 		{
 			return null;

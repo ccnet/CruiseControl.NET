@@ -36,18 +36,44 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("plasticscm")]
 	public class PlasticSCM : ProcessSourceControl
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DefaultPlasticExecutable = "cm";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const char DELIMITER = '?';
 
 		//Format used in the query to Plastic SCM
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DATEFORMAT = "dd/MM/yyyy HH:mm:ss";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public static string FORMAT = DELIMITER + "{item}" + DELIMITER + "{owner}" + DELIMITER + "{date}" + DELIMITER + "{changeset}";
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlasticSCM" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public PlasticSCM() : this(new PlasticSCMHistoryParser(), new ProcessExecutor())
 		{
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlasticSCM" /> class.	
+        /// </summary>
+        /// <param name="parser">The parser.</param>
+        /// <param name="executor">The executor.</param>
+        /// <remarks></remarks>
 		public PlasticSCM(IHistoryParser parser, ProcessExecutor executor)
 			: base(parser, executor)
 		{
@@ -125,6 +151,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("forced", Required = false)]
         public bool Forced { get; set; }
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			// Without the stb if the selector is pointing to a different repository
@@ -137,6 +170,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return modifications;
 		}
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void LabelSourceControl(IIntegrationResult result)
 		{
 			if (LabelOnSuccess && result.Succeeded)
@@ -147,6 +185,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void GetSource(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask("Getting source from PlasticSCM");
@@ -158,6 +201,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             }
 		}
 
+        /// <summary>
+        /// News the get source process info.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ProcessInfo NewGetSourceProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
@@ -169,6 +218,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return NewProcessInfoWithArgs(result, builder.ToString());
 		}
 
+        /// <summary>
+        /// Goes to branch process info.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ProcessInfo GoToBranchProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
@@ -181,6 +236,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return NewProcessInfoWithArgs(result, builder.ToString());
 		}
 
+        /// <summary>
+        /// Creates the query process info.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ProcessInfo CreateQueryProcessInfo(IIntegrationResult from, IIntegrationResult to)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
@@ -201,6 +263,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return NewProcessInfoWithArgs(from, builder.ToString());
 		}
 
+        /// <summary>
+        /// Creates the label process info.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ProcessInfo CreateLabelProcessInfo(IIntegrationResult result)
 		{
 			string labelName = LabelPrefix + result.Label;
@@ -209,6 +277,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return NewProcessInfoWithArgs(result, buffer.ToString());
 		}
 
+        /// <summary>
+        /// Labels the process info.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ProcessInfo LabelProcessInfo(IIntegrationResult result)
 		{
 			string labelName = LabelPrefix + result.Label;

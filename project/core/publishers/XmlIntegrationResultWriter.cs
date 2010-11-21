@@ -7,15 +7,28 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public class XmlIntegrationResultWriter : IDisposable
     {
         private XmlFragmentWriter writer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlIntegrationResultWriter" /> class.	
+        /// </summary>
+        /// <param name="textWriter">The text writer.</param>
+        /// <remarks></remarks>
         public XmlIntegrationResultWriter(TextWriter textWriter)
         {
             writer = new XmlFragmentWriter(textWriter);
         }
 
+        /// <summary>
+        /// Writes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public void Write(IIntegrationResult result)
         {
             writer.WriteStartElement(Elements.CRUISE_ROOT);
@@ -71,6 +84,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
         }
 
+        /// <summary>
+        /// Writes the build element.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public void WriteBuildElement(IIntegrationResult result)
         {
             writer.WriteStartElement(Elements.BUILD);
@@ -110,6 +128,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             writer.Close();
         }
 
+        /// <summary>
+        /// Writes the modifications.	
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <remarks></remarks>
         public void WriteModifications(Modification[] mods)
         {
             writer.WriteStartElement(Elements.MODIFICATIONS);
@@ -226,6 +249,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             public const string IntegrationProps = "integrationProperties";
         }
 
+        /// <summary>
+        /// Sets the formatting.	
+        /// </summary>
+        /// <value>The formatting.</value>
+        /// <remarks></remarks>
         public Formatting Formatting
         {
             set { writer.Formatting = value; }

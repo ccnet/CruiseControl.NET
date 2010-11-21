@@ -5,14 +5,60 @@ using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public interface IFileSystem
     {
+        /// <summary>
+        /// Copies the specified source path.	
+        /// </summary>
+        /// <param name="sourcePath">The source path.</param>
+        /// <param name="destPath">The dest path.</param>
+        /// <remarks></remarks>
         void Copy(string sourcePath, string destPath);
+        /// <summary>
+        /// Saves the specified file.	
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="content">The content.</param>
+        /// <remarks></remarks>
         void Save(string file, string content);
+        /// <summary>
+        /// Atomics the save.	
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="content">The content.</param>
+        /// <remarks></remarks>
         void AtomicSave(string file, string content);
+        /// <summary>
+        /// Atomics the save.	
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="encoding">The encoding.</param>
+        /// <remarks></remarks>
         void AtomicSave(string file, string content, Encoding encoding);
+        /// <summary>
+        /// Loads the specified file.	
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         TextReader Load(string file);
+        /// <summary>
+        /// Files the exists.	
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         bool FileExists(string file);
+        /// <summary>
+        /// Directories the exists.	
+        /// </summary>
+        /// <param name="folder">The folder.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         bool DirectoryExists(string folder);
 
         /// <summary>

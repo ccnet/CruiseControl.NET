@@ -4,6 +4,9 @@
     using System.Security.Cryptography;
     using System.Text;
 
+    /// <summary>
+    /// 	
+    /// </summary>
     public class DefaultCryptoFunctions
         : ICryptoFunctions
     {

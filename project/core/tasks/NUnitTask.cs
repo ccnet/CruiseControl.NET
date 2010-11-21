@@ -51,15 +51,32 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     public class NUnitTask
         : TaskBase
     {
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string DefaultPath = @"nunit-console";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const int DefaultTimeout = 600;
         private const string DefaultOutputFile = "nunit-results.xml";
         private readonly ProcessExecutor executor;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NUnitTask" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public NUnitTask()
             : this(new ProcessExecutor())
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NUnitTask" /> class.	
+        /// </summary>
+        /// <param name="exec">The exec.</param>
+        /// <remarks></remarks>
         public NUnitTask(ProcessExecutor exec)
         {
             executor = exec;
@@ -144,6 +161,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         #endregion
         #endregion
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override bool Execute(IIntegrationResult result)
         {
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Executing NUnit");

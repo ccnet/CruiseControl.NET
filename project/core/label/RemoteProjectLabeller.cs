@@ -23,9 +23,18 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 	{
 		private IRemotingService remotingService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RemoteProjectLabeller" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public RemoteProjectLabeller() : this(new RemotingServiceAdapter())
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RemoteProjectLabeller" /> class.	
+        /// </summary>
+        /// <param name="service">The service.</param>
+        /// <remarks></remarks>
 		public RemoteProjectLabeller(IRemotingService service)
 		{
 			remotingService = service;
@@ -48,6 +57,12 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         [ReflectorProperty("project")]
         public string ProjectName { get; set; }
 
+        /// <summary>
+        /// Generates the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string Generate(IIntegrationResult result)
 		{
 			ICruiseManager manager = (ICruiseManager) remotingService.Connect(typeof (ICruiseManager), ServerUri);

@@ -255,6 +255,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             return Path.Combine(integrationResult.ArtifactDirectory, CsvFileName);
         }
 
+        /// <summary>
+        /// Loads the statistics.	
+        /// </summary>
+        /// <param name="artifactDirectory">The artifact directory.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static string LoadStatistics(string artifactDirectory)
         {            
             string documentLocation = Path.Combine(artifactDirectory, XmlFileName);

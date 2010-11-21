@@ -59,6 +59,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		private Modification modificationTemplate;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccuRevHistoryParser" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public AccuRevHistoryParser()
 		{
 		}

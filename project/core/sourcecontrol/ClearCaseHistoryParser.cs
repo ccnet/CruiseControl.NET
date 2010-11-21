@@ -24,12 +24,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// Carriage return (\n) may be used in comments and so is not available to us.
 		/// </summary>
 		public readonly static string END_OF_LINE_DELIMITER = "@#@#@#@#@#@#@#@#@#@#@#@";
-		
+
+        /// <summary>
+        /// Parses the specified history.	
+        /// </summary>
+        /// <param name="history">The history.</param>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public Modification[] Parse( TextReader history, DateTime from, DateTime to )
 		{
 			return ParseStream( history );
 		}
 
+        /// <summary>
+        /// Assigns the file info.	
+        /// </summary>
+        /// <param name="modification">The modification.</param>
+        /// <param name="file">The file.</param>
+        /// <remarks></remarks>
 		public void AssignFileInfo( Modification modification, string file )
 		{
 			int separatorLocation = file.LastIndexOf( Path.DirectorySeparatorChar.ToString() );
@@ -45,6 +59,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+        /// <summary>
+        /// Assigns the modification time.	
+        /// </summary>
+        /// <param name="modification">The modification.</param>
+        /// <param name="time">The time.</param>
+        /// <remarks></remarks>
 		public void AssignModificationTime( Modification modification, string time )
 		{
 			try
@@ -57,6 +77,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+        /// <summary>
+        /// Creates the new modification.	
+        /// </summary>
+        /// <param name="userName">Name of the user.</param>
+        /// <param name="time">The time.</param>
+        /// <param name="elementName">Name of the element.</param>
+        /// <param name="modificationType">Type of the modification.</param>
+        /// <param name="comment">The comment.</param>
+        /// <param name="change">The change.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public Modification CreateNewModification(
 			string userName,
 			string time,
@@ -75,6 +106,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return modification;
 		}
 
+        /// <summary>
+        /// Parses the entry.	
+        /// </summary>
+        /// <param name="line">The line.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public Modification ParseEntry( string line )
 		{
 			string[] tokens = TokenizeEntry( line );
@@ -137,6 +174,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 
 
+        /// <summary>
+        /// Tokenizes the entry.	
+        /// </summary>
+        /// <param name="line">The line.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string[] TokenizeEntry( string line )
 		{
             var items = new List<string>();

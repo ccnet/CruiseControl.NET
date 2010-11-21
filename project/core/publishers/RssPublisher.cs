@@ -51,6 +51,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return Path.Combine(artifactDirectory, RssFilename);
         }
 
+        /// <summary>
+        /// Loads the RSS data document.	
+        /// </summary>
+        /// <param name="artifactDirectory">The artifact directory.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static string LoadRSSDataDocument(string artifactDirectory)
         {
             string result = string.Empty;
@@ -63,6 +69,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return result;
         }
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override bool Execute(IIntegrationResult result)
         {
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Making RSS feed");

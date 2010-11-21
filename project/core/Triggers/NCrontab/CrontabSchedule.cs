@@ -73,6 +73,12 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
         // Source: http://www.adminschoice.com/docs/crontab.htm
         //
 
+        /// <summary>
+        /// Parses the specified expression.	
+        /// </summary>
+        /// <param name="expression">The expression.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static CrontabSchedule Parse(string expression)
         {
             if (expression == null)
@@ -102,6 +108,13 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
             _daysOfWeek = CrontabField.DaysOfWeek(fields[4]);
         }
 
+        /// <summary>
+        /// Gets the next occurrences.	
+        /// </summary>
+        /// <param name="baseTime">The base time.</param>
+        /// <param name="endTime">The end time.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public IEnumerable<DateTime> GetNextOccurrences(DateTime baseTime, DateTime endTime)
         {
             for (var occurrence = GetNextOccurrence(baseTime, endTime);
@@ -112,11 +125,24 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
             }
         }
 
+        /// <summary>
+        /// Gets the next occurrence.	
+        /// </summary>
+        /// <param name="baseTime">The base time.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public DateTime GetNextOccurrence(DateTime baseTime)
         {
             return GetNextOccurrence(baseTime, DateTime.MaxValue);
         }
 
+        /// <summary>
+        /// Gets the next occurrence.	
+        /// </summary>
+        /// <param name="baseTime">The base time.</param>
+        /// <param name="endTime">The end time.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public DateTime GetNextOccurrence(DateTime baseTime, DateTime endTime) 
         {
             const int nil = -1;
@@ -251,6 +277,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
             return GetNextOccurrence(new DateTime(year, month, day, 23, 59, 0, 0, baseTime.Kind), endTime);
         }
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override string ToString()
         {
             var writer = new StringWriter(CultureInfo.InvariantCulture);

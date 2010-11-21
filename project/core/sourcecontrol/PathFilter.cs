@@ -50,6 +50,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             get { return caseSensitive; }
             set { caseSensitive = value; } 
         }
+        /// <summary>
+        /// Accepts the specified modification.	
+        /// </summary>
+        /// <param name="modification">The modification.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public bool Accept(Modification modification)
 		{
 			if (modification.FolderName == null || modification.FileName == null)
@@ -60,6 +66,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return PathUtils.MatchPath(Pattern, path, caseSensitive);
 		}
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ToString()
 		{
 			return "PathFilter " + Pattern;

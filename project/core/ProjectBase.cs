@@ -7,9 +7,20 @@ using System.ComponentModel;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public abstract class ProjectBase: INotifyPropertyChanged
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public static readonly string DefaultWorkingSubDirectory = "WorkingDirectory";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public static readonly string DefaultArtifactSubDirectory = "Artifacts";
 
 		private string name;
@@ -22,9 +33,18 @@ namespace ThoughtWorks.CruiseControl.Core
         private DisplayLevel askForForceBuildReason = DisplayLevel.None;
 		private readonly IExecutionEnvironment executionEnvironment;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProjectBase" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		protected ProjectBase() : this(new ExecutionEnvironment())
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProjectBase" /> class.	
+        /// </summary>
+        /// <param name="executionEnvironment">The execution environment.</param>
+        /// <remarks></remarks>
 		protected ProjectBase(IExecutionEnvironment executionEnvironment)
 		{
 			this.executionEnvironment = executionEnvironment;
@@ -152,6 +172,11 @@ namespace ThoughtWorks.CruiseControl.Core
 
         #endregion
 
+        /// <summary>
+        /// Gets the working directory.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string WorkingDirectory
 		{
 			get
@@ -164,6 +189,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
+        /// <summary>
+        /// Gets the artifact directory.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string ArtifactDirectory
 		{
 			get

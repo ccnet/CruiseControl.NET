@@ -42,17 +42,32 @@
             set { _value = value; }
         }
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override string ToString()
         {
             return string.Format(System.Globalization.CultureInfo.CurrentCulture,"FB Variable: {0} = {1}", Name, Value);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FBVariable" /> class.	
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="avalue">The avalue.</param>
+        /// <remarks></remarks>
         public FBVariable(string name, string avalue)
         {
             _name = name;
             _value = avalue;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FBVariable" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public FBVariable() { }
 
     }

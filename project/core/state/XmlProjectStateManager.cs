@@ -32,6 +32,12 @@ namespace ThoughtWorks.CruiseControl.Core.State
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlProjectStateManager" /> class.	
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="executionEnvironment">The execution environment.</param>
+        /// <remarks></remarks>
 		public XmlProjectStateManager(IFileSystem fileSystem, IExecutionEnvironment executionEnvironment)
 		{
 			this.fileSystem = fileSystem;
@@ -42,6 +48,11 @@ namespace ThoughtWorks.CruiseControl.Core.State
 		}
         #endregion
 
+        /// <summary>
+        /// Gets the name of the persistance file.	
+        /// </summary>
+        /// <value>The name of the persistance file.</value>
+        /// <remarks></remarks>
 		public string PersistanceFileName
 		{
 			get { return persistanceFileName; }

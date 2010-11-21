@@ -35,11 +35,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("actions")]
         public string[] Actions { get; set; }
 
+        /// <summary>
+        /// Accepts the specified m.	
+        /// </summary>
+        /// <param name="m">The m.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public bool Accept(Modification m)
 		{
 			return Array.IndexOf(Actions, m.Type) >= 0;
 		}
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override string ToString()
         {
             return "ActionFilter";

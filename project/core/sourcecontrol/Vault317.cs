@@ -18,6 +18,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         private CultureInfo culture = CultureInfo.CurrentCulture;
         private readonly IFileDirectoryDeleter fileDirectoryDeleter = new IoService();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vault317" /> class.	
+        /// </summary>
+        /// <param name="versionCheckerShim">The version checker shim.</param>
+        /// <remarks></remarks>
         public Vault317(VaultVersionChecker versionCheckerShim)
             : base(versionCheckerShim)
         {
@@ -35,6 +40,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             : base(versionCheckerShim, historyParser, executor)
         { }
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
 
@@ -82,6 +94,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return bFoundChanges;
         }
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public override void GetSource(IIntegrationResult result)
         {
             result.BuildProgressInformation.SignalStartRunTask("Getting source from Vault");
@@ -114,6 +131,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             Execute(GetSourceProcessInfo(result));
         }
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public override void LabelSourceControl(IIntegrationResult result)
         {
             // only apply label if it's turned on and the integration was a success

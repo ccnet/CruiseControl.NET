@@ -7,18 +7,38 @@ using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class VaultHistoryParser : IHistoryParser
 	{
 		private CultureInfo culture;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VaultHistoryParser" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public VaultHistoryParser() : this(CultureInfo.CurrentCulture)
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VaultHistoryParser" /> class.	
+        /// </summary>
+        /// <param name="culture">The culture.</param>
+        /// <remarks></remarks>
 		public VaultHistoryParser(CultureInfo culture)
 		{
 			this.culture = culture;
 		}
 
+        /// <summary>
+        /// Parses the specified history.	
+        /// </summary>
+        /// <param name="history">The history.</param>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public Modification[] Parse(TextReader history, DateTime from, DateTime to)
 		{
             var mods = new List<Modification>();

@@ -6,12 +6,27 @@ using Exortech.NetReflector.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public class TimeoutSerializer : XmlMemberSerialiser
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeoutSerializer" /> class.	
+        /// </summary>
+        /// <param name="info">The info.</param>
+        /// <param name="attribute">The attribute.</param>
+        /// <remarks></remarks>
         public TimeoutSerializer(ReflectorMember info, ReflectorPropertyAttribute attribute)
             : base(info, attribute)
         { }
 
+        /// <summary>
+        /// Writes the specified writer.	
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="target">The target.</param>
+        /// <remarks></remarks>
         public override void Write(XmlWriter writer, object target)
         {
             if (target == null) return;
@@ -24,6 +39,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             }
         }
 
+        /// <summary>
+        /// Reads the specified node.	
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <param name="types">The types.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override object Read(XmlNode node, NetReflectorTypeTable types)
         {
             if (node == null)

@@ -3,15 +3,28 @@ using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class WildCardPath
 	{
 		private string pathPattern;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WildCardPath" /> class.	
+        /// </summary>
+        /// <param name="pathPattern">The path pattern.</param>
+        /// <remarks></remarks>
 		public WildCardPath(string pathPattern)
 		{
 			this.pathPattern = pathPattern;
 		}
 
+        /// <summary>
+        /// Gets the files.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public FileInfo[] GetFiles()
 		{
 			FileInfo[] files = new FileInfo[0];

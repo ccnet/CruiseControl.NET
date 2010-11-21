@@ -51,10 +51,19 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private readonly ICruiseServerClientFactory factory;
         private string BuildForcerName="BuildForcer";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ForceBuildPublisher" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public ForceBuildPublisher()
             : this(new CruiseServerClientFactory())
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ForceBuildPublisher" /> class.	
+        /// </summary>
+        /// <param name="factory">The factory.</param>
+        /// <remarks></remarks>
         public ForceBuildPublisher(ICruiseServerClientFactory factory)
 		{
 			this.factory = factory;
@@ -130,6 +139,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </summary>
         public ILogger Logger { get; set; }
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override bool Execute(IIntegrationResult result)
 		{
 			if (IntegrationStatus != result.Status) return false;

@@ -241,6 +241,12 @@ namespace ThoughtWorks.CruiseControl.Core
         #endregion
 
         #region GetExternalLinks()
+        /// <summary>
+        /// Gets the external links.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public virtual ExternalLinksListResponse GetExternalLinks(ProjectRequest request)
         {
             return cruiseServer.GetExternalLinks(request);
@@ -248,6 +254,12 @@ namespace ThoughtWorks.CruiseControl.Core
         #endregion
 
         #region GetArtifactDirectory()
+        /// <summary>
+        /// Gets the artifact directory.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public virtual DataResponse GetArtifactDirectory(ProjectRequest request)
         {
             return cruiseServer.GetArtifactDirectory(request);
@@ -255,6 +267,12 @@ namespace ThoughtWorks.CruiseControl.Core
         #endregion
 
         #region GetStatisticsDocument()
+        /// <summary>
+        /// Gets the statistics document.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public virtual DataResponse GetStatisticsDocument(ProjectRequest request)
         {
             return cruiseServer.GetStatisticsDocument(request);
@@ -262,6 +280,12 @@ namespace ThoughtWorks.CruiseControl.Core
         #endregion
 
         #region GetModificationHistoryDocument()
+        /// <summary>
+        /// Gets the modification history document.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public virtual DataResponse GetModificationHistoryDocument(ProjectRequest request)
         {
             return cruiseServer.GetModificationHistoryDocument(request);
@@ -269,6 +293,12 @@ namespace ThoughtWorks.CruiseControl.Core
         #endregion
 
         #region GetRSSFeed()
+        /// <summary>
+        /// Gets the RSS feed.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public virtual DataResponse GetRSSFeed(ProjectRequest request)
         {
             return cruiseServer.GetRSSFeed(request);

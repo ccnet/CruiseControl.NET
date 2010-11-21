@@ -39,6 +39,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return Regex.IsMatch(modification.Comment, Pattern);
         }
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override string ToString()
         {
             return "commentFilter " + Pattern;

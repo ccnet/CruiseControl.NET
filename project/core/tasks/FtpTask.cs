@@ -31,6 +31,9 @@
     [ReflectorType("ftp")]
     public class FtpTask : TaskBase
     {
+        /// <summary>
+        /// 	
+        /// </summary>
         public enum FtpAction
         {
             /// <summary>
@@ -136,6 +139,12 @@
 
 
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override bool Execute(IIntegrationResult result)
         {
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : GetDescription());

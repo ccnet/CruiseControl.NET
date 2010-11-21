@@ -115,17 +115,56 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		private	Timeout timeout = Timeout.DefaultTimeout;
 
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DefaultExecutable = @"C:\Program Files\SourceGear\Vault Client\vault.exe";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DefaultHistoryArgs = "-excludeactions label,obliterate -rowlimit 0";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DefaultFolder = "$";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DefaultFileTime = "checkin";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const int DefaultPollRetryWait = 5;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const int DefaultPollRetryAttempts = 5;
 
+        /// <summary>
+        /// 	
+        /// </summary>
 		public enum EForcedVaultVersion
 		{
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
 			None,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
 			Vault3,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
 			Vault317
 		}
 
@@ -347,16 +386,32 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("pollRetryAttempts", Required = false)]
         public int pollRetryAttempts { get; set; }
 
+        /// <summary>
+        /// Gets the vault source control.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public Vault3 VaultSourceControl
 		{
 			get { return _vaultSourceControl; }
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VaultVersionChecker" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public VaultVersionChecker()
         {
             this.InitialiseDefaults();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VaultVersionChecker" /> class.	
+        /// </summary>
+        /// <param name="historyParser">The history parser.</param>
+        /// <param name="executor">The executor.</param>
+        /// <param name="forceVersion">The force version.</param>
+        /// <remarks></remarks>
 		public VaultVersionChecker(IHistoryParser historyParser, ProcessExecutor executor, EForcedVaultVersion forceVersion)
 		{
             this.InitialiseDefaults();
@@ -390,30 +445,57 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             this.pollRetryAttempts = DefaultPollRetryAttempts;
         }
 
+        /// <summary>
+        /// Initializes the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
         public override void Initialize(IProject project)
 		{
 			GetCorrectVaultInstance();
 			VaultSourceControl.Initialize(project);
 		}
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			GetCorrectVaultInstance();
 			return VaultSourceControl.GetModifications(from, to);
 		}
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public override void LabelSourceControl(IIntegrationResult result)
 		{
 			GetCorrectVaultInstance();
 			VaultSourceControl.LabelSourceControl(result);
 		}
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public override void GetSource(IIntegrationResult result)
 		{
 			GetCorrectVaultInstance();
 			VaultSourceControl.GetSource(result);
 		}
 
+        /// <summary>
+        /// Purges the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
         public override void Purge(IProject project)
 		{
 			GetCorrectVaultInstance();

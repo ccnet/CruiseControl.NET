@@ -6,6 +6,9 @@ using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class BitKeeperHistoryParser : IHistoryParser
 	{
         private enum HistoryType
@@ -24,6 +27,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 		private string currentLine = string.Empty;
         private HistoryType fileHistory = HistoryType.Unknown;
 
+        /// <summary>
+        /// Parses the specified bk log.	
+        /// </summary>
+        /// <param name="bkLog">The bk log.</param>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public Modification[] Parse(TextReader bkLog, DateTime from, DateTime to)
 		{
 			// Read to the first ChangeSet. The first entry in the log

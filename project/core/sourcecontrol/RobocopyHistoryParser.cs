@@ -6,8 +6,19 @@ using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class RobocopyHistoryParser : IHistoryParser
 	{
+        /// <summary>
+        /// Parses the specified reader.	
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public Modification[] Parse(TextReader reader, DateTime from, DateTime to)
 		{
             var mods = new List<Modification>();

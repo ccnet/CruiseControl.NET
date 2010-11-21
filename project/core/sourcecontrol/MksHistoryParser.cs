@@ -16,8 +16,19 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public class MksHistoryParser : IHistoryParser
 	{
+        /// <summary>
+        /// Parses the specified history.	
+        /// </summary>
+        /// <param name="history">The history.</param>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public virtual Modification[] Parse(TextReader history, DateTime from, DateTime to)
 		{
             XPathDocument doc = new XPathDocument(history);
@@ -82,6 +93,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		    throw new CruiseControlException("Failed to create XmlWriter for transforming MKS modifications report.");
 		}
 
+        /// <summary>
+        /// Parses the member info and add to modification.	
+        /// </summary>
+        /// <param name="modification">The modification.</param>
+        /// <param name="reader">The reader.</param>
+        /// <remarks></remarks>
         public virtual void ParseMemberInfoAndAddToModification(Modification modification, StringReader reader)
         {
             XPathDocument doc = new XPathDocument(reader);

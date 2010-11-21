@@ -4,8 +4,18 @@ using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class Registry : IRegistry
 	{
+        /// <summary>
+        /// Gets the local machine sub key value.	
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string GetLocalMachineSubKeyValue(string path, string name)
 		{
 			using (RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(path))
@@ -19,6 +29,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 		}
 
+        /// <summary>
+        /// Gets the expected local machine sub key value.	
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string GetExpectedLocalMachineSubKeyValue(string path, string name)
 		{
 			string value = GetLocalMachineSubKeyValue(path, name);

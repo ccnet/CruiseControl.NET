@@ -25,6 +25,9 @@ using log4net.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Util.Log4NetTrace
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class TraceLogImpl : LogImpl, ITraceLog
 	{
 		/// <summary>
@@ -43,6 +46,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Log4NetTrace
 		private Level m_levelTrace;
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TraceLogImpl" /> class.	
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <remarks></remarks>
         public TraceLogImpl(log4net.Core.ILogger logger)
             : base(logger)
 		{
@@ -60,16 +68,33 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Log4NetTrace
 
 		#region Implementation of ITraceLog
 
+        /// <summary>
+        /// Traces the specified message.	
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <remarks></remarks>
 		public void Trace(object message)
 		{
 			Logger.Log(ThisDeclaringType, m_levelTrace, message, null);
 		}
 
+        /// <summary>
+        /// Traces the specified message.	
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="exception">The exception.</param>
+        /// <remarks></remarks>
 		public void Trace(object message, System.Exception exception)
 		{
 			Logger.Log(ThisDeclaringType, m_levelTrace, message, exception);
 		}
 
+        /// <summary>
+        /// Traces the format.	
+        /// </summary>
+        /// <param name="format">The format.</param>
+        /// <param name="args">The args.</param>
+        /// <remarks></remarks>
 		public void TraceFormat(string format, params object[] args)
 		{
 			if (IsTraceEnabled)
@@ -78,6 +103,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Log4NetTrace
 			}
 		}
 
+        /// <summary>
+        /// Traces the format.	
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="format">The format.</param>
+        /// <param name="args">The args.</param>
+        /// <remarks></remarks>
 		public void TraceFormat(IFormatProvider provider, string format, params object[] args)
 		{
 			if (IsTraceEnabled)
@@ -86,6 +118,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Log4NetTrace
 			}
 		}
 
+        /// <summary>
+        /// Gets the is trace enabled.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public bool IsTraceEnabled
 		{
 			get { return Logger.IsEnabledFor(m_levelTrace); }

@@ -49,20 +49,61 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	[ReflectorType("gendarme")]
 	public class GendarmeTask : BaseExecutableTask
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string defaultExecutable = "gendarme";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string logFilename = "gendarme-results.xml";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const int defaultLimit = -1;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const bool defaultQuiet = false;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const bool defaultVerbose = false;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const bool defaultFailBuildOnFoundDefects = false;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const int defaultVerifyTimeout = 0;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const ProcessPriorityClass defaultPriority = ProcessPriorityClass.Normal;
 
         private readonly IFileDirectoryDeleter fileDirectoryDeleter = new IoService();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GendarmeTask" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public GendarmeTask(): 
 			this(new ProcessExecutor()){}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GendarmeTask" /> class.	
+        /// </summary>
+        /// <param name="executor">The executor.</param>
+        /// <remarks></remarks>
 		public GendarmeTask(ProcessExecutor executor)
 		{
 			this.executor = executor;
@@ -226,11 +267,22 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		#region BaseExecutableTask overrides
 
+        /// <summary>
+        /// Gets the process filename.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override string GetProcessFilename()
 		{
 			return Executable;
 		}
 
+        /// <summary>
+        /// Gets the process arguments.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override string GetProcessArguments(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
@@ -252,21 +304,43 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return buffer.ToString();
 		}
 
+        /// <summary>
+        /// Gets the process base directory.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override string GetProcessBaseDirectory(IIntegrationResult result)
 		{
 			return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
 		}
 
+        /// <summary>
+        /// Gets the process timeout.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override int GetProcessTimeout()
 		{
 			return VerifyTimeoutSeconds * 1000;
 		}
 
+        /// <summary>
+        /// Gets the process priority class.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override ProcessPriorityClass GetProcessPriorityClass()
         {
             return this.Priority;
         }
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override bool Execute(IIntegrationResult result)
 		{
             string gendarmeOutputFile = GetGendarmeOutputFile(result);

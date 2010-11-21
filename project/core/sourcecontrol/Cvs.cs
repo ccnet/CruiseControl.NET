@@ -43,16 +43,36 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     [ReflectorType("cvs")]
 	public class Cvs : ProcessSourceControl
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DefaultCvsExecutable = "cvs";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
 		private readonly IFileSystem fileSystem;
         private readonly IExecutionEnvironment executionEnvironment;
         private BuildProgressInformation _buildProgressInformation;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Cvs" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public Cvs() : this(new CvsHistoryParser(), new ProcessExecutor(), new SystemIoFileSystem(), new ExecutionEnvironment())
 		{
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Cvs" /> class.	
+        /// </summary>
+        /// <param name="parser">The parser.</param>
+        /// <param name="executor">The executor.</param>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="executionEnvironment">The execution environment.</param>
+        /// <remarks></remarks>
         public Cvs(IHistoryParser parser, ProcessExecutor executor, IFileSystem fileSystem, IExecutionEnvironment executionEnvironment)
             : base(parser, executor)
 		{
@@ -182,11 +202,24 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("suppressRevisionHeader", Required = false)]
         public bool SuppressRevisionHeader { get; set; }
 
+        /// <summary>
+        /// Formats the command date.	
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string FormatCommandDate(DateTime date)
 		{
 			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
 		}
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			Modification[] modifications = GetModifications(CreateLogProcessInfo(from), from.StartTime, to.StartTime);
@@ -198,6 +231,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return modifications;
         }
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void LabelSourceControl(IIntegrationResult result)
 		{
 			if (LabelOnSuccess && result.Succeeded)
@@ -206,6 +244,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void GetSource(IIntegrationResult result)
 		{
             GetBuildProgressInformation(result).SignalStartRunTask("Getting source from CVS");

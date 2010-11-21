@@ -9,7 +9,15 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	/// </summary>
 	public class ProcessResult
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const int SUCCESSFUL_EXIT_CODE = 0;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const int TIMED_OUT_EXIT_CODE = -1;
 
 		private readonly string standardOutput;
@@ -18,11 +26,28 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		private readonly bool timedOut;
 		private readonly bool failed;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProcessResult" /> class.	
+        /// </summary>
+        /// <param name="standardOutput">The standard output.</param>
+        /// <param name="standardError">The standard error.</param>
+        /// <param name="errorCode">The error code.</param>
+        /// <param name="timedOut">The timed out.</param>
+        /// <remarks></remarks>
 		public ProcessResult(string standardOutput, string standardError, int errorCode, bool timedOut)
 			: this(standardOutput, standardError, errorCode, timedOut, errorCode != SUCCESSFUL_EXIT_CODE)
 		{
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProcessResult" /> class.	
+        /// </summary>
+        /// <param name="standardOutput">The standard output.</param>
+        /// <param name="standardError">The standard error.</param>
+        /// <param name="errorCode">The error code.</param>
+        /// <param name="timedOut">The timed out.</param>
+        /// <param name="failed">The failed.</param>
+        /// <remarks></remarks>
 		public ProcessResult(string standardOutput, string standardError, int errorCode, bool timedOut, bool failed)
 		{
 			this.standardOutput = (standardOutput ??string.Empty);
@@ -32,31 +57,61 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			this.failed = failed;
 		}
 
+        /// <summary>
+        /// Gets the standard output.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string StandardOutput
 		{
 			get { return standardOutput; }
 		}
 
+        /// <summary>
+        /// Gets the standard error.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string StandardError
 		{
 			get { return standardError; }
 		}
 
+        /// <summary>
+        /// Gets the exit code.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public int ExitCode
 		{
 			get { return errorCode; }
 		}
 
+        /// <summary>
+        /// Gets the timed out.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public bool TimedOut
 		{
 			get { return timedOut; }
 		}
 
+        /// <summary>
+        /// Gets the failed.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public bool Failed
 		{
 			get { return failed; }	
 		}
 
+        /// <summary>
+        /// Gets the has error output.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public bool HasErrorOutput
 		{
 			get { return standardError.Trim() != string.Empty; }

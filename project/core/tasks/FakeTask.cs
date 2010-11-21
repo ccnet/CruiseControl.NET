@@ -46,10 +46,30 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     [ReflectorType("fake")]
     public class FakeTask : BaseExecutableTask
     {
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string defaultExecutable = "FAKE.exe";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const int DefaultBuildTimeout = 600;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string logFilename = "fake-results-{0}.xml";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public readonly Guid LogFileId = Guid.NewGuid();
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const ProcessPriorityClass DefaultPriority = ProcessPriorityClass.Normal;
 
         private readonly IFileDirectoryDeleter fileDirectoryDeleter = new IoService();
@@ -95,9 +115,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("buildFile", Required = false)]
         public string BuildFile { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FakeTask" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public FakeTask(): 
 			this(new ProcessExecutor()){}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FakeTask" /> class.	
+        /// </summary>
+        /// <param name="executor">The executor.</param>
+        /// <remarks></remarks>
         public FakeTask(ProcessExecutor executor)
 		{
 			this.executor = executor;
@@ -142,11 +171,22 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         #region Overrides of BaseExecutableTask
 
+        /// <summary>
+        /// Gets the process filename.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override string GetProcessFilename()
         {
             return Executable;
         }
 
+        /// <summary>
+        /// Gets the process arguments.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override string GetProcessArguments(IIntegrationResult result)
         {
             var buffer = new ProcessArgumentBuilder();
@@ -156,16 +196,32 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             return buffer.ToString();
         }
 
+        /// <summary>
+        /// Gets the process base directory.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override string GetProcessBaseDirectory(IIntegrationResult result)
         {
             return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
         }
 
+        /// <summary>
+        /// Gets the process priority class.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override ProcessPriorityClass GetProcessPriorityClass()
         {
             return Priority;
         }
 
+        /// <summary>
+        /// Gets the process timeout.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override int GetProcessTimeout()
         {
             return BuildTimeoutSeconds * 1000;
@@ -186,6 +242,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
         }
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override string ToString()
         {
             string baseDirectory = ConfiguredBaseDirectory ?? string.Empty;

@@ -447,6 +447,11 @@ namespace ThoughtWorks.CruiseControl.Core
         public string[] RemoteMachines { get; set; }
 
         // Move this ideally
+        /// <summary>
+        /// Gets or sets the activity.	
+        /// </summary>
+        /// <value>The activity.</value>
+        /// <remarks></remarks>
         public ProjectActivity Activity
         {
             get { return currentActivity; }
@@ -454,11 +459,21 @@ namespace ThoughtWorks.CruiseControl.Core
 
         }
 
+        /// <summary>
+        /// Gets the current activity.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public ProjectActivity CurrentActivity
         {
             get { return currentActivity; }
         }
 
+        /// <summary>
+        /// Gets the current result.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public IIntegrationResult CurrentResult
         {
             get { return integrationResultManager.CurrentIntegration; }
@@ -476,6 +491,12 @@ namespace ThoughtWorks.CruiseControl.Core
             return this.integratable.StartNewIntegration(request);
         }
 
+        /// <summary>
+        /// Integrates the specified request.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public IIntegrationResult Integrate(IntegrationRequest request)
         {
             Log.Trace("Integrating {0}", Name);
@@ -671,16 +692,29 @@ namespace ThoughtWorks.CruiseControl.Core
             if (groupItem.ChildItems.Count > 0) currentProjectStatus.AddChild(groupItem);
         }
 
+        /// <summary>
+        /// Notifies the state of the pending.	
+        /// </summary>
+        /// <remarks></remarks>
         public void NotifyPendingState()
         {
             currentActivity = ProjectActivity.Pending;
         }
 
+        /// <summary>
+        /// Notifies the state of the sleeping.	
+        /// </summary>
+        /// <remarks></remarks>
         public void NotifySleepingState()
         {
             currentActivity = ProjectActivity.Sleeping;
         }
 
+        /// <summary>
+        /// Prebuilds the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public void Prebuild(IIntegrationResult result)
         {
             var parameters = new Dictionary<string, string>();
@@ -688,11 +722,22 @@ namespace ThoughtWorks.CruiseControl.Core
             Prebuild(result, parameters);
         }
 
+        /// <summary>
+        /// Prebuilds the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <param name="parameterValues">The parameter values.</param>
+        /// <remarks></remarks>
         public void Prebuild(IIntegrationResult result, Dictionary<string, string> parameterValues)
         {
             RunTasks(result, PrebuildTasks, parameterValues);
         }
 
+        /// <summary>
+        /// Validates the parameters.	
+        /// </summary>
+        /// <param name="parameterValues">The parameter values.</param>
+        /// <remarks></remarks>
         public virtual void ValidateParameters(Dictionary<string, string> parameterValues)
         {
             Log.Debug("Validating parameters");
@@ -720,6 +765,11 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Runs the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public void Run(IIntegrationResult result)
         {
             var parameters = new Dictionary<string, string>();
@@ -727,6 +777,12 @@ namespace ThoughtWorks.CruiseControl.Core
             Run(result, parameters);
         }
 
+        /// <summary>
+        /// Runs the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <param name="parameterValues">The parameter values.</param>
+        /// <remarks></remarks>
         public void Run(IIntegrationResult result, Dictionary<string, string> parameterValues)
         {
             RunTasks(result, tasks, parameterValues);
@@ -748,12 +804,22 @@ namespace ThoughtWorks.CruiseControl.Core
             CancelTasks(tasksToRun);
         }
 
+        /// <summary>
+        /// Aborts the running build.	
+        /// </summary>
+        /// <param name="userName">Name of the user.</param>
+        /// <remarks></remarks>
         public void AbortRunningBuild(string userName)
         {
             AddMessage(new Message(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Build Aborted by : {0}", userName), Message.MessageKind.BuildAbortedBy));
             ProcessExecutor.KillProcessCurrentlyRunningForProject(Name);
         }
 
+        /// <summary>
+        /// Publishes the results.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public void PublishResults(IIntegrationResult result)
         {
             var parameters = new Dictionary<string, string>();
@@ -761,6 +827,12 @@ namespace ThoughtWorks.CruiseControl.Core
             PublishResults(result, parameters);
         }
 
+        /// <summary>
+        /// Publishes the results.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <param name="parameterValues">The parameter values.</param>
+        /// <remarks></remarks>
         public void PublishResults(IIntegrationResult result, Dictionary<string, string> parameterValues)
         {
             // Make sure all the tasks have been cancelled
@@ -1039,12 +1111,23 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Initializes this instance.	
+        /// </summary>
+        /// <remarks></remarks>
         public void Initialize()
         {
             Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Initializing Project [{0}]", Name));
             SourceControl.Initialize(this);
         }
 
+        /// <summary>
+        /// Purges the specified purge working directory.	
+        /// </summary>
+        /// <param name="purgeWorkingDirectory">The purge working directory.</param>
+        /// <param name="purgeArtifactDirectory">The purge artifact directory.</param>
+        /// <param name="purgeSourceControlEnvironment">The purge source control environment.</param>
+        /// <remarks></remarks>
         public void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
         {
             Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Purging Project [{0}]", Name));
@@ -1062,33 +1145,64 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Gets the statistics.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public string Statistics
         {
             get { return StatisticsPublisher.LoadStatistics(ArtifactDirectory); }
         }
 
+        /// <summary>
+        /// Gets the modification history.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public string ModificationHistory
         {
             get { return ModificationHistoryPublisher.LoadHistory(ArtifactDirectory); }
         }
 
 
+        /// <summary>
+        /// Gets the RSS feed.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public string RSSFeed
         {
             get { return RssPublisher.LoadRSSDataDocument(ArtifactDirectory); }
         }
 
 
+        /// <summary>
+        /// Gets the integration repository.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public IIntegrationRepository IntegrationRepository
         {
             get { return this; }
         }
 
+        /// <summary>
+        /// Defaults the URL.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static string DefaultUrl()
         {
             return string.Format(System.Globalization.CultureInfo.CurrentCulture, "http://{0}/ccnet", Environment.MachineName);
         }
 
+        /// <summary>
+        /// Creates the project status.	
+        /// </summary>
+        /// <param name="integrator">The integrator.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public ProjectStatus CreateProjectStatus(IProjectIntegrator integrator)
         {
             var lastIntegration = this.LastIntegration;
@@ -1128,6 +1242,11 @@ namespace ThoughtWorks.CruiseControl.Core
             get { return integrationResultManager.LastIntegration; }
         }
 
+        /// <summary>
+        /// Adds the message.	
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <remarks></remarks>
         public void AddMessage(Message message)
         {
             // only show the last fixer
@@ -1140,6 +1259,12 @@ namespace ThoughtWorks.CruiseControl.Core
             messages.Add(message);
         }
 
+        /// <summary>
+        /// Gets the build log.	
+        /// </summary>
+        /// <param name="buildName">Name of the build.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string GetBuildLog(string buildName)
         {
             string logDirectory = GetLogDirectory();
@@ -1175,6 +1300,11 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Gets the build names.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string[] GetBuildNames()
         {
             string logDirectory = GetLogDirectory();
@@ -1192,6 +1322,12 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Gets the most recent build names.	
+        /// </summary>
+        /// <param name="buildCount">The build count.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string[] GetMostRecentBuildNames(int buildCount)
         {
             string[] buildNames = GetBuildNames();
@@ -1203,6 +1339,11 @@ namespace ThoughtWorks.CruiseControl.Core
             return (string[])buildNamesToReturn.ToArray(typeof(string));
         }
 
+        /// <summary>
+        /// Gets the name of the latest build.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string GetLatestBuildName()
         {
             string[] buildNames = GetBuildNames();
@@ -1240,6 +1381,11 @@ namespace ThoughtWorks.CruiseControl.Core
             throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
         }
 
+        /// <summary>
+        /// Creates the label.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public void CreateLabel(IIntegrationResult result)
         {
             if (Labeller is IParamatisedItem)
@@ -1573,6 +1719,10 @@ namespace ThoughtWorks.CruiseControl.Core
             return parameterList;
         }
 
+        /// <summary>
+        /// Clears the not needed messages.	
+        /// </summary>
+        /// <remarks></remarks>
         public void ClearNotNeededMessages()
         {
             ClearMessages(Message.MessageKind.Breakers);

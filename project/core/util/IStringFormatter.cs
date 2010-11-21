@@ -5,6 +5,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	/// </summary>
 	public interface IStringFormatter
 	{
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		string ToString();
 	}
 }

@@ -17,8 +17,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		internal static readonly string FileHistorySeparator = "----------------------------";
 
 //		DateTimeFormatInfo dfi;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public CultureInfo Culture = CultureInfo.CurrentCulture;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StarTeamHistoryParser" /> class.	
+        /// </summary>
+        /// <param name="starTeamRegExProvider">The star team reg ex provider.</param>
+        /// <remarks></remarks>
 		public StarTeamHistoryParser(IStarTeamRegExProvider starTeamRegExProvider)
 		{
 			this.starTeamRegExProvider = starTeamRegExProvider;

@@ -68,10 +68,19 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 	    private TimeSpan endTime = new TimeSpan(23, 59, 59);
 		private DayOfWeek[] weekDays = (DayOfWeek[]) DayOfWeek.GetValues(typeof (DayOfWeek));
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FilterTrigger" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public FilterTrigger() : this(new DateTimeProvider())
 		{
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FilterTrigger" /> class.	
+        /// </summary>
+        /// <param name="dtProvider">The dt provider.</param>
+        /// <remarks></remarks>
 		public FilterTrigger(DateTimeProvider dtProvider)
 		{
 			this.dtProvider = dtProvider;
@@ -146,11 +155,20 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			}
 		}
 
+        /// <summary>
+        /// Integrations the completed.	
+        /// </summary>
+        /// <remarks></remarks>
 		public void IntegrationCompleted()
 		{
 			InnerTrigger.IntegrationCompleted();
 		}
 
+        /// <summary>
+        /// Gets the next build.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public DateTime NextBuild
 		{
 			get
@@ -166,6 +184,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			}
 		}
 
+        /// <summary>
+        /// Fires this instance.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public IntegrationRequest Fire()
 		{
 			DateTime now = dtProvider.Now;

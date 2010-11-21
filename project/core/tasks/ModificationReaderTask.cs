@@ -61,9 +61,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         private readonly IFileSystem fileSystem;
         private bool deleteAfterRead = false;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModificationReaderTask" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public ModificationReaderTask()
             : this(new SystemIoFileSystem()){ }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModificationReaderTask" /> class.	
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <remarks></remarks>
         public ModificationReaderTask(IFileSystem fileSystem)
         {
             this.fileSystem = fileSystem;
@@ -82,6 +91,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             set { deleteAfterRead = value; }
         }
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override bool Execute(IIntegrationResult result)
         {
             List<string> filesToDelete = new List<string>();

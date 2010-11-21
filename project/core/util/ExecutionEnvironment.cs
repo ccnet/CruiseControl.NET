@@ -5,10 +5,18 @@ using System.Runtime.InteropServices;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public sealed class ExecutionEnvironment : IExecutionEnvironment
 	{
 		private static bool? isRunningOnWindows;
 
+        /// <summary>
+        /// Gets the directory separator.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public char DirectorySeparator
 		{
 			get { return Path.DirectorySeparatorChar; }
@@ -83,19 +91,64 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		}
 	}
 
+    /// <summary>
+    /// 	
+    /// </summary>
 	public interface IExecutionEnvironment
 	{
+        /// <summary>
+        /// Gets the directory separator.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		char DirectorySeparator { get; }
+        /// <summary>
+        /// Gets the is running on windows.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		bool IsRunningOnWindows { get; }
+        /// <summary>
+        /// Gets the runtime directory.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		string RuntimeDirectory { get; }
+        /// <summary>
+        /// Gets the default program data folder.	
+        /// </summary>
+        /// <param name="application">The application.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		string GetDefaultProgramDataFolder(ApplicationType application);
+        /// <summary>
+        /// Ensures the path is rooted.	
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		string EnsurePathIsRooted(string path);
 	}
 
+    /// <summary>
+    /// 	
+    /// </summary>
 	public enum ApplicationType
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		Unknown = 0,
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		Server = 1,
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		WebDashboard = 2
 	}
 }

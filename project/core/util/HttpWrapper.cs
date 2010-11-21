@@ -9,6 +9,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	/// </summary>
 	public class HttpWrapper
 	{
+        /// <summary>
+        /// Gets the last modified time for.	
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="previousModifiedTime">The previous modified time.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public virtual DateTime GetLastModifiedTimeFor(Uri url, DateTime previousModifiedTime)
 		{
 			HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);

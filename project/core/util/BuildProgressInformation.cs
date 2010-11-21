@@ -5,6 +5,9 @@ using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public class BuildProgressInformation
     {
         private string _listenerFile;
@@ -16,6 +19,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         private const Int32 MaxItemsInQueue = 10;
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BuildProgressInformation" /> class.	
+        /// </summary>
+        /// <param name="artifactDirectory">The artifact directory.</param>
+        /// <param name="projectName">Name of the project.</param>
+        /// <remarks></remarks>
         public BuildProgressInformation(string artifactDirectory, string projectName)
         {
             this._listenerFile = System.IO.Path.Combine(artifactDirectory, StringUtil.RemoveInvalidCharactersFromFileName(projectName) + "_ListenFile.xml");
@@ -50,6 +59,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         }
 
 
+        /// <summary>
+        /// Adds the task information.	
+        /// </summary>
+        /// <param name="information">The information.</param>
+        /// <remarks></remarks>
         public virtual void AddTaskInformation(string information)
         {
             lock (lockObject)
@@ -59,6 +73,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         }
 
 
+        /// <summary>
+        /// Gets the build progress information.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public virtual string GetBuildProgressInformation()
         {
             lock (lockObject)

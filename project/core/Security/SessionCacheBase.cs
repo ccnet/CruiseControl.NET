@@ -15,6 +15,11 @@ namespace ThoughtWorks.CruiseControl.Core.Security
         private int durationInMinutes = 10;
         private SessionExpiryMode expiryMode = SessionExpiryMode.Sliding;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SessionCacheBase" /> class.	
+        /// </summary>
+        /// <param name="clock">The clock.</param>
+        /// <remarks></remarks>
         protected SessionCacheBase(IClock clock)
         {
             this.clock = clock;
@@ -65,6 +70,12 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             return sessionToken;
         }
 
+        /// <summary>
+        /// Adds to cache internal.	
+        /// </summary>
+        /// <param name="sessionToken">The session token.</param>
+        /// <param name="session">The session.</param>
+        /// <remarks></remarks>
         protected virtual void AddToCacheInternal(string sessionToken, SessionDetails session)
         {
             lock (this)
@@ -174,12 +185,33 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             }
         }
 
+        /// <summary>
+        /// 	
+        /// </summary>
         protected class SessionDetails
         {
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             public string UserName;
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             public DateTime ExpiryTime;
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             public Dictionary<string, object> Values = new Dictionary<string, object>();
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="SessionDetails" /> class.	
+            /// </summary>
+            /// <param name="userName">Name of the user.</param>
+            /// <param name="expiry">The expiry.</param>
+            /// <remarks></remarks>
             public SessionDetails(string userName, DateTime expiry)
             {
                 this.UserName = userName;

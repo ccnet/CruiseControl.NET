@@ -6,6 +6,9 @@ using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class P4HistoryParser : IHistoryParser
 	{
 		private static Regex modRegex = new Regex(@"info1: (?<folder>//.*)/(?<file>.*)#(?<revision>\d+) (?<type>\w+)");

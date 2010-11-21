@@ -12,6 +12,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
     public class FirstMatch 
         : StatisticBase
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FirstMatch" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public FirstMatch()
 		{
 		}

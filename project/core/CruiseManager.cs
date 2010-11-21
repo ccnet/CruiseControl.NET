@@ -19,16 +19,31 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		private readonly ICruiseServer cruiseServer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CruiseManager" /> class.	
+        /// </summary>
+        /// <param name="cruiseServer">The cruise server.</param>
+        /// <remarks></remarks>
         public CruiseManager(ICruiseServer cruiseServer)
 		{
 			this.cruiseServer = cruiseServer;
 		}
 
+        /// <summary>
+        /// Gets the actual server.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public ICruiseServer ActualServer
         {
             get { return this.cruiseServer; }
         }
 
+        /// <summary>
+        /// Initializes the lifetime service.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override object InitializeLifetimeService()
 		{
             return null;
@@ -56,12 +71,24 @@ namespace ThoughtWorks.CruiseControl.Core
             ValidateResponse(resp);
         }
 
+        /// <summary>
+        /// Aborts the build.	
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="enforcerName">Name of the enforcer.</param>
+        /// <remarks></remarks>
         public void AbortBuild(string projectName, string enforcerName)
 		{
             Response resp = cruiseServer.AbortBuild(GenerateProjectRequest(projectName));
             ValidateResponse(resp);
 		}
-		
+
+        /// <summary>
+        /// Requests the specified project name.	
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="integrationRequest">The integration request.</param>
+        /// <remarks></remarks>
 		public void Request(string projectName, IntegrationRequest integrationRequest)
 		{
             BuildIntegrationRequest request = new BuildIntegrationRequest(null, projectName);
@@ -70,18 +97,34 @@ namespace ThoughtWorks.CruiseControl.Core
             ValidateResponse(resp);
 		}
 
+        /// <summary>
+        /// Starts the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
 		public void Start(string project)
 		{
             Response resp = cruiseServer.Start(GenerateProjectRequest(project));
             ValidateResponse(resp);
 		}
 
+        /// <summary>
+        /// Stops the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
 		public void Stop(string project)
 		{
             Response resp = cruiseServer.Stop(GenerateProjectRequest(project));
             ValidateResponse(resp);
 		}
 
+        /// <summary>
+        /// Sends the message.	
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="message">The message.</param>
+        /// <remarks></remarks>
 		public void SendMessage(string projectName, Message message)
 		{
             MessageRequest request = new MessageRequest();
@@ -92,6 +135,11 @@ namespace ThoughtWorks.CruiseControl.Core
             ValidateResponse(resp);
         }
 
+        /// <summary>
+        /// Waits for exit.	
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <remarks></remarks>
         public void WaitForExit(string projectName)
         {
             Response resp = cruiseServer.WaitForExit(GenerateProjectRequest(projectName));
@@ -236,6 +284,12 @@ namespace ThoughtWorks.CruiseControl.Core
             ValidateResponse(resp);
 		}
 
+        /// <summary>
+        /// Gets the external links.	
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ExternalLink[] GetExternalLinks(string projectName)
 		{
             ExternalLinksListResponse resp = cruiseServer.GetExternalLinks(GenerateProjectRequest(projectName));
@@ -243,6 +297,12 @@ namespace ThoughtWorks.CruiseControl.Core
             return resp.ExternalLinks.ToArray();
 		}
 
+        /// <summary>
+        /// Gets the artifact directory.	
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string GetArtifactDirectory(string projectName)
 		{
             DataResponse resp = cruiseServer.GetArtifactDirectory(GenerateProjectRequest(projectName));
@@ -250,6 +310,12 @@ namespace ThoughtWorks.CruiseControl.Core
             return resp.Data;
 		}
 
+        /// <summary>
+        /// Gets the statistics document.	
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string GetStatisticsDocument(string projectName)
 		{
             DataResponse resp = cruiseServer.GetStatisticsDocument(GenerateProjectRequest(projectName));
@@ -257,6 +323,12 @@ namespace ThoughtWorks.CruiseControl.Core
             return resp.Data;
 		}
 
+        /// <summary>
+        /// Gets the modification history document.	
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string GetModificationHistoryDocument(string projectName)
         {
             DataResponse resp = cruiseServer.GetModificationHistoryDocument(GenerateProjectRequest(projectName));
@@ -264,6 +336,12 @@ namespace ThoughtWorks.CruiseControl.Core
             return resp.Data;
         }
 
+        /// <summary>
+        /// Gets the RSS feed.	
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string GetRSSFeed(string projectName)
         {
             DataResponse resp = cruiseServer.GetRSSFeed(GenerateProjectRequest(projectName));

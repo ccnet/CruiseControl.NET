@@ -4,6 +4,9 @@ using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public abstract class PermissionBase
         : Permissions, IConfigurationValidation
     {
@@ -119,6 +122,13 @@ namespace ThoughtWorks.CruiseControl.Core.Security
 
         #region Protected methods
         #region CheckUserActual()
+        /// <summary>
+        /// Checks the user actual.	
+        /// </summary>
+        /// <param name="manager">The manager.</param>
+        /// <param name="userName">Name of the user.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected abstract bool CheckUserActual(ISecurityManager manager, string userName);
         #endregion
 

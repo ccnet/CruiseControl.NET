@@ -12,8 +12,16 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		private ControlEventHandler handler;
 		private ExecutionEnvironment environment = new ExecutionEnvironment();
+        /// <summary>
+        /// Occurs when [on console event].	
+        /// </summary>
+        /// <remarks></remarks>
 		public event EventHandler OnConsoleEvent;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConsoleEventHandler" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public ConsoleEventHandler()
 		{
 			if (environment.IsRunningOnWindows)

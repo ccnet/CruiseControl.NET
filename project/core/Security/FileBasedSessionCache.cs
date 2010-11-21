@@ -34,9 +34,20 @@ namespace ThoughtWorks.CruiseControl.Core.Security
 		private readonly IExecutionEnvironment executionEnvironment;
         private string storeLocation;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileBasedSessionCache" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public FileBasedSessionCache() : this(new SystemIoFileSystem(), new ExecutionEnvironment(), new SystemClock())
 		{ }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileBasedSessionCache" /> class.	
+        /// </summary>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="executionEnvironment">The execution environment.</param>
+        /// <param name="clock">The clock.</param>
+        /// <remarks></remarks>
 		public FileBasedSessionCache(IFileSystem fileSystem, IExecutionEnvironment executionEnvironment, IClock clock) : base(clock)
 		{
 			this.fileSystem = fileSystem;
@@ -67,6 +78,10 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             }
         }
 
+        /// <summary>
+        /// Initialises this instance.	
+        /// </summary>
+        /// <remarks></remarks>
         public override void Initialise()
         {
             base.Initialise();
@@ -101,6 +116,12 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             }
         }
 
+        /// <summary>
+        /// Adds to cache.	
+        /// </summary>
+        /// <param name="userName">Name of the user.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override string AddToCache(string userName)
         {
             string sessionToken = base.AddToCache(userName);
@@ -108,6 +129,11 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             return sessionToken;
         }
 
+        /// <summary>
+        /// Removes from cache.	
+        /// </summary>
+        /// <param name="sessionToken">The session token.</param>
+        /// <remarks></remarks>
         public override void RemoveFromCache(string sessionToken)
         {
             base.RemoveFromCache(sessionToken);
@@ -115,12 +141,24 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             if (File.Exists(sessionFile)) File.Delete(sessionFile);
         }
 
+        /// <summary>
+        /// Stores the session value.	
+        /// </summary>
+        /// <param name="sessionToken">The session token.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        /// <remarks></remarks>
         public override void StoreSessionValue(string sessionToken, string key, object value)
         {
             base.StoreSessionValue(sessionToken, key, value);
             SaveSession(sessionToken);
         }
 
+        /// <summary>
+        /// Saves the session.	
+        /// </summary>
+        /// <param name="sessionToken">The session token.</param>
+        /// <remarks></remarks>
         protected virtual void SaveSession(string sessionToken)
         {
             SessionDetails details = RetrieveSessionDetails(sessionToken);
@@ -162,6 +200,12 @@ namespace ThoughtWorks.CruiseControl.Core.Security
             sessionXml.Save(sessionFile);
         }
 
+        /// <summary>
+        /// Generates the name of the file.	
+        /// </summary>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected virtual string GenerateFileName(string sessionToken)
         {
             string sessionFile = Path.Combine(storeLocation, sessionToken + ".session");

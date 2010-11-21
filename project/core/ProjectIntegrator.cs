@@ -33,6 +33,12 @@ namespace ThoughtWorks.CruiseControl.Core
         private bool isRestarting = false;
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProjectIntegrator" /> class.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="integrationQueue">The integration queue.</param>
+        /// <remarks></remarks>
         public ProjectIntegrator(IProject project, IIntegrationQueue integrationQueue)
         {
             trigger = project.Triggers;
@@ -46,27 +52,51 @@ namespace ThoughtWorks.CruiseControl.Core
                 Directory.CreateDirectory(project.ArtifactDirectory);
         }
 
+        /// <summary>
+        /// Gets the name.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public string Name
         {
             get { return project.Name; }
         }
 
+        /// <summary>
+        /// Gets the project.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public IProject Project
         {
             get { return project; }
         }
 
+        /// <summary>
+        /// Gets the state.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public ProjectIntegratorState State
         {
             get { return state; }
         }
 
+        /// <summary>
+        /// Gets the integration repository.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public IIntegrationRepository IntegrationRepository
         {
             get { return project.IntegrationRepository; }
         }
 
         // TODO: should not start if stopping (ie. not stopped)
+        /// <summary>
+        /// Starts this instance.	
+        /// </summary>
+        /// <remarks></remarks>
         public void Start()
         {
             lock (this)
@@ -99,6 +129,12 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Forces the build.	
+        /// </summary>
+        /// <param name="enforcerName">Name of the enforcer.</param>
+        /// <param name="buildValues">The build values.</param>
+        /// <remarks></remarks>
         public void ForceBuild(string enforcerName, Dictionary<string, string> buildValues)
         {
             if (State == ProjectIntegratorState.Stopping || State == ProjectIntegratorState.Stopped) throw new CruiseControlException("Project is stopping / stopped - unable to start integration");
@@ -111,12 +147,22 @@ namespace ThoughtWorks.CruiseControl.Core
             Start();
         }
 
+        /// <summary>
+        /// Aborts the build.	
+        /// </summary>
+        /// <param name="enforcerName">Name of the enforcer.</param>
+        /// <remarks></remarks>
         public void AbortBuild(string enforcerName)
         {
             Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} aborted the running Build for project: {1}", enforcerName, project.Name));
             project.AbortRunningBuild(enforcerName);
         }
 
+        /// <summary>
+        /// Requests the specified request.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <remarks></remarks>
         public void Request(IntegrationRequest request)
         {
             if (State == ProjectIntegratorState.Stopping || State == ProjectIntegratorState.Stopped) throw new CruiseControlException("Project is stopping / stopped - unable to start integration");
@@ -125,6 +171,10 @@ namespace ThoughtWorks.CruiseControl.Core
             Start();
         }
 
+        /// <summary>
+        /// Cancels the pending request.	
+        /// </summary>
+        /// <remarks></remarks>
         public void CancelPendingRequest()
         {
             integrationQueue.RemovePendingRequest(project);
@@ -350,6 +400,10 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Waits for exit.	
+        /// </summary>
+        /// <remarks></remarks>
         public void WaitForExit()
         {
             if (thread != null && thread.IsAlive)

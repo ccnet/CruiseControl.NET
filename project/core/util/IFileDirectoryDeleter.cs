@@ -1,5 +1,8 @@
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public interface IFileDirectoryDeleter
 	{
 		/// <summary>

@@ -7,8 +7,19 @@ using System.Xml.Xsl;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class XslTransformer : ITransformer
 	{
+        /// <summary>
+        /// Transforms the specified input.	
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="xslFilename">The XSL filename.</param>
+        /// <param name="xsltArgs">The XSLT args.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string Transform(string input, string xslFilename, Hashtable xsltArgs)
 		{
 			XslCompiledTransform transform = NewXslTransform(xslFilename);
@@ -28,6 +39,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 		}
 
+        /// <summary>
+        /// Transforms to XML.	
+        /// </summary>
+        /// <param name="xslFilename">The XSL filename.</param>
+        /// <param name="document">The document.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string TransformToXml(string xslFilename, XPathDocument document)
 		{
             XslCompiledTransform transform = NewXslTransform(xslFilename);

@@ -17,9 +17,25 @@ namespace ThoughtWorks.CruiseControl.Core
     public class RemoteCruiseServer 
         : CruiseServerEventsBase, ICruiseServer, IDisposable
     {
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string ManagerUri = "CruiseManager.rem";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string DefaultManagerUri = "tcp://localhost:21234/" + ManagerUri;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string ServerClientUri = "CruiseServerClient.rem";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string DefaultServerClientUri = "tcp://localhost:21234/" + ServerClientUri;
 
         private readonly bool disableRemoting;
@@ -27,11 +43,24 @@ namespace ThoughtWorks.CruiseControl.Core
         private bool disposed;
         private IExecutionEnvironment environment = new ExecutionEnvironment();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RemoteCruiseServer" /> class.	
+        /// </summary>
+        /// <param name="server">The server.</param>
+        /// <param name="remotingConfigurationFile">The remoting configuration file.</param>
+        /// <remarks></remarks>
         public RemoteCruiseServer(ICruiseServer server, string remotingConfigurationFile)
             : this(server, remotingConfigurationFile, false)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RemoteCruiseServer" /> class.	
+        /// </summary>
+        /// <param name="server">The server.</param>
+        /// <param name="remotingConfigurationFile">The remoting configuration file.</param>
+        /// <param name="disableRemoting">The disable remoting.</param>
+        /// <remarks></remarks>
         public RemoteCruiseServer(ICruiseServer server, string remotingConfigurationFile, bool disableRemoting)
         {
             // Store the server instance and wire up the events so they are passed on
@@ -120,6 +149,10 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources	
+        /// </summary>
+        /// <remarks></remarks>
         public void Dispose()
         {
             lock (this)

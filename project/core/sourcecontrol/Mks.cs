@@ -39,18 +39,44 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     [ReflectorType("mks")]
 	public class Mks : ProcessSourceControl
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DefaultExecutable = "si.exe";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const int DefaultPort = 8722;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const bool DefaultAutoGetSource = true;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const bool DefaultAutoDisconnect = false;
 		
 		private static int usageCount = 0;
 		private static object usageCountLock = new object();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Mks" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public Mks() : this(new MksHistoryParser(), new ProcessExecutor())
 		{
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Mks" /> class.	
+        /// </summary>
+        /// <param name="parser">The parser.</param>
+        /// <param name="executor">The executor.</param>
+        /// <remarks></remarks>
 		public Mks(IHistoryParser parser, ProcessExecutor executor) : base(parser, executor)
 		{
             this.Executable = DefaultExecutable;
@@ -139,6 +165,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("sandboxfile")]
         public string SandboxFile { get; set; }
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			IncreaseUsageCount();
@@ -160,6 +193,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		    return modifications;		   
 		}
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void LabelSourceControl(IIntegrationResult result)
 		{
 			IncreaseUsageCount();
@@ -173,6 +211,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			DecreaseUsageCount();
 		}
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void GetSource(IIntegrationResult result)
 		{
 			IncreaseUsageCount();

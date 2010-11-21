@@ -32,12 +32,25 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         : DefaultLabeller
 	{
 		private readonly DateTimeProvider dateTimeProvider;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const int InitialLabel = 1;
 		private const int DaysInWeek = 7;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IterationLabeller" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public IterationLabeller() : this(new DateTimeProvider())
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IterationLabeller" /> class.	
+        /// </summary>
+        /// <param name="dateTimeProvider">The date time provider.</param>
+        /// <remarks></remarks>
 		public IterationLabeller(DateTimeProvider dateTimeProvider)
 		{
 			this.dateTimeProvider = dateTimeProvider;
@@ -69,6 +82,12 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         [ReflectorProperty("separator", Required = false)]
         public string Separator { get; set; }
 
+        /// <summary>
+        /// Generates the specified integration result.	
+        /// </summary>
+        /// <param name="integrationResult">The integration result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string Generate(IIntegrationResult integrationResult)
 		{
 			IntegrationSummary lastIntegration = integrationResult.LastIntegration;

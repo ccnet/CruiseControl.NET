@@ -39,6 +39,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     public class BuildPublisher
         : TaskBase
     {
+        /// <summary>
+        /// 	
+        /// </summary>
         public enum CleanupPolicy
         {
             /// <summary>

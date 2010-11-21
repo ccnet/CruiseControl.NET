@@ -198,6 +198,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
 
+        /// <summary>
+        /// Gets the subject.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public string Subject
         {
             get

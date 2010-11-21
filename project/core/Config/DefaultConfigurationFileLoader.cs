@@ -6,9 +6,20 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class DefaultConfigurationFileLoader : IConfigurationFileLoader
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string XsdSchemaResourceName = "ThoughtWorks.CruiseControl.Core.Config.ccnet.xsd";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string PreprocessorXsltResourceName = "ThoughtWorks.CruiseControl.Core.Config.preprocessor.xslt";
 
 		private ValidationEventHandler handler;
@@ -18,21 +29,41 @@ namespace ThoughtWorks.CruiseControl.Core.Config
                 IgnoreWhitespace = true
             });
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultConfigurationFileLoader" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 	    public DefaultConfigurationFileLoader() : this(new NetReflectorConfigurationReader())
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultConfigurationFileLoader" /> class.	
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <remarks></remarks>
         public DefaultConfigurationFileLoader(INetReflectorConfigurationReader reader)
 		{
 			this.reader = reader;
 			handler = new ValidationEventHandler(HandleSchemaEvent);
 		}
 
+        /// <summary>
+        /// Loads the specified config file.	
+        /// </summary>
+        /// <param name="configFile">The config file.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public IConfiguration Load(FileInfo configFile)
 		{
 			Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Reading configuration file \"{0}\"", configFile.FullName));
 			return PopulateProjectsFromXml(LoadConfiguration(configFile));
 		}
 
+        /// <summary>
+        /// Adds the subfile loaded handler.	
+        /// </summary>
+        /// <param name="handler">The handler.</param>
+        /// <remarks></remarks>
 	    public void AddSubfileLoadedHandler (
 	        ConfigurationSubfileLoadedHandler handler)
 	    {
@@ -40,6 +71,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 	    }
 
 	    // TODO - this should be private - update tests and make it so
+        /// <summary>
+        /// Loads the configuration.	
+        /// </summary>
+        /// <param name="configFile">The config file.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public XmlDocument LoadConfiguration(FileInfo configFile)
 		{
 			VerifyConfigFileExists(configFile);

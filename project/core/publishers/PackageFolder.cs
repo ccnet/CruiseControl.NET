@@ -6,6 +6,9 @@ using ICSharpCode.SharpZipLib.Zip;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     [ReflectorType("packageFolder")]
     public class PackageFolder
         : IPackageItem

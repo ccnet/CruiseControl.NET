@@ -212,10 +212,30 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// </remarks>
 		public class SynergyTaskInfo
 		{
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
 			public string DisplayName = String.Empty;
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
 			public int TaskNumber = int.MinValue;
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
 			public string TaskSynopsis = String.Empty;
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
 			public DateTime CompletionDate = DateTime.MinValue;
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
 			public string Resolver = String.Empty;
 		}
 	}

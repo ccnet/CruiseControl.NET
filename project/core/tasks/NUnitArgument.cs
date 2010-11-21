@@ -2,13 +2,34 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class NUnitArgument
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public  string[] assemblies;
 		private readonly string outputfile;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public string[] IncludedCategories;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public string[] ExcludedCategories;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NUnitArgument" /> class.	
+        /// </summary>
+        /// <param name="assemblies">The assemblies.</param>
+        /// <param name="outputfile">The outputfile.</param>
+        /// <remarks></remarks>
 		public NUnitArgument(string[] assemblies, string outputfile)
 		{
 			if (assemblies == null || assemblies.Length == 0)
@@ -19,6 +40,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			this.outputfile = outputfile;
 		}
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ToString()
 		{
 			ProcessArgumentBuilder argsBuilder = new ProcessArgumentBuilder();

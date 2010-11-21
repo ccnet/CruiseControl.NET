@@ -26,6 +26,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
         /// </summary>
         private bool include = true;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StatisticBase" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         protected StatisticBase()
         {
         }
@@ -110,12 +114,23 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             return nav.Evaluate(xpath);
         }
 
+        /// <summary>
+        /// Equalses the specified obj.	
+        /// </summary>
+        /// <param name="obj">The obj.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override bool Equals(object obj)
         {
             var o = (StatisticBase)obj;
             return name.Equals(o.Name);
         }
 
+        /// <summary>
+        /// Gets the hash code.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override int GetHashCode()
         {
             return name.GetHashCode();

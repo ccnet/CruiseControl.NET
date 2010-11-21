@@ -30,18 +30,42 @@ using System.Runtime.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     [ Serializable ]
     public class CrontabException : Exception
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CrontabException" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public CrontabException() :
             base("Crontab error.") {} // TODO: Fix message and add it to resource.
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CrontabException" /> class.	
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <remarks></remarks>
         public CrontabException(string message) : 
             base(message) {}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CrontabException" /> class.	
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="innerException">The inner exception.</param>
+        /// <remarks></remarks>
         public CrontabException(string message, Exception innerException) :
             base(message, innerException) {}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CrontabException" /> class.	
+        /// </summary>
+        /// <param name="info">The info.</param>
+        /// <param name="context">The context.</param>
+        /// <remarks></remarks>
         protected CrontabException(SerializationInfo info, StreamingContext context) : 
             base(info, context) {}
     }

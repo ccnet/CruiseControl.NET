@@ -33,6 +33,10 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
     [ReflectorType("intervalTrigger")]
 	public class IntervalTrigger : ITrigger
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const double DefaultIntervalSeconds = 60;
 		private readonly DateTimeProvider dateTimeProvider;
 		private string name;
@@ -122,6 +126,10 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         [ReflectorProperty("buildCondition", Required = false)]
         public BuildCondition BuildCondition { get; set; }
 
+        /// <summary>
+        /// Integrations the completed.	
+        /// </summary>
+        /// <remarks></remarks>
 		public virtual void IntegrationCompleted()
 		{
             isInitialInterval = false;
@@ -129,6 +137,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			IncrementNextBuildTime();
 		}
 
+        /// <summary>
+        /// Increments the next build time.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected DateTime IncrementNextBuildTime()
 		{
 		    double delaySeconds;
@@ -140,11 +153,21 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
             return nextBuildTime = dateTimeProvider.Now.AddSeconds(delaySeconds);
 		}
 
+        /// <summary>
+        /// Gets the next build.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public DateTime NextBuild
 		{
 			get {  return nextBuildTime;}
 		}
 
+        /// <summary>
+        /// Fires this instance.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public virtual IntegrationRequest Fire()
 		{
 			BuildCondition buildCondition = ShouldRunIntegration();

@@ -72,6 +72,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		private readonly IP4Initializer p4Initializer;
 		private readonly IP4ProcessInfoCreator processInfoCreator;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="P4" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public P4()
 		{
 			processExecutor = new ProcessExecutor();
@@ -81,6 +85,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
             this.InitialiseDefaults();
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="P4" /> class.	
+        /// </summary>
+        /// <param name="processExecutor">The process executor.</param>
+        /// <param name="initializer">The initializer.</param>
+        /// <param name="p4Purger">The p4 purger.</param>
+        /// <param name="processInfoCreator">The process info creator.</param>
+        /// <remarks></remarks>
 		public P4(ProcessExecutor processExecutor, IP4Initializer initializer, IP4Purger p4Purger, IP4ProcessInfoCreator processInfoCreator)
 		{
 			this.processExecutor = processExecutor;
@@ -267,11 +279,24 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			return offsetDate.ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
 		}
 
+        /// <summary>
+        /// Creates the change list process.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public virtual ProcessInfo CreateChangeListProcess(DateTime from, DateTime to)
 		{
 			return processInfoCreator.CreateProcessInfo(this, BuildModificationsCommandArguments(from, to));
 		}
 
+        /// <summary>
+        /// Creates the describe process.	
+        /// </summary>
+        /// <param name="changes">The changes.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public virtual ProcessInfo CreateDescribeProcess(string changes)
 		{
 			if (changes.Length == 0)
@@ -286,6 +311,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			return processInfoCreator.CreateProcessInfo(this, "describe -s " + changes);
 		}
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			P4HistoryParser parser = new P4HistoryParser();
@@ -411,6 +443,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			return processInfo;
 		}
 
+        /// <summary>
+        /// Gets the view for specifications.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public virtual string[] ViewForSpecifications
 		{
 			get
@@ -439,6 +476,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			}
 		}
 
+        /// <summary>
+        /// Gets the view for display.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string ViewForDisplay
 		{
 			get { return View.Replace(",", Environment.NewLine); }
@@ -449,6 +491,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			return processInfoCreator.CreateProcessInfo(this, "labelsync -l " + label);
 		}
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public override void GetSource(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask("Getting source from Perforce");
@@ -473,6 +520,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			return commandline;
 		}
 
+        /// <summary>
+        /// Executes the specified process.	
+        /// </summary>
+        /// <param name="process">The process.</param>
+        /// <param name="description">The description.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected virtual string Execute(ProcessInfo process, string description)
 		{
             Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Perforce {0}: {1} {2}", description, process.FileName, process.PublicArguments));
@@ -490,6 +544,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
             return result.StandardOutput.Trim() + Environment.NewLine + result.StandardError.Trim();
 		}
 
+        /// <summary>
+        /// Initializes the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
         public override void Initialize(IProject project)
 		{
             if (string.IsNullOrEmpty(WorkingDirectory))
@@ -502,6 +561,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			}
 		}
 
+        /// <summary>
+        /// Purges the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
         public override void Purge(IProject project)
 		{
             if (string.IsNullOrEmpty(WorkingDirectory))

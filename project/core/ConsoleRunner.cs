@@ -7,18 +7,31 @@ namespace ThoughtWorks.CruiseControl.Core
     using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Remote.Messages;
 
+    /// <summary>
+    /// 	
+    /// </summary>
     public class ConsoleRunner
 	{
 		private readonly ConsoleRunnerArguments args;
 		private readonly ICruiseServerFactory serverFactory;
 		private ICruiseServer server;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConsoleRunner" /> class.	
+        /// </summary>
+        /// <param name="args">The args.</param>
+        /// <param name="serverFactory">The server factory.</param>
+        /// <remarks></remarks>
 		public ConsoleRunner(ConsoleRunnerArguments args, ICruiseServerFactory serverFactory)
 		{
 			this.args = args;
 			this.serverFactory = serverFactory;
 		}
 
+        /// <summary>
+        /// Runs this instance.	
+        /// </summary>
+        /// <remarks></remarks>
 		public void Run()
 		{
 			Console.WriteLine("CruiseControl.NET Server {0} -- .NET Continuous Integration Server", Assembly.GetExecutingAssembly().GetName().Version);
@@ -56,6 +69,10 @@ namespace ThoughtWorks.CruiseControl.Core
 			LaunchServer();
 		}
 
+        /// <summary>
+        /// Stops this instance.	
+        /// </summary>
+        /// <remarks></remarks>
         public void Stop()
         {
             server.Stop();

@@ -17,7 +17,16 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     {
         private string userName;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserName" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public UserName() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserName" /> class.	
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <remarks></remarks>
         public UserName(string name)
         {
             userName = name;

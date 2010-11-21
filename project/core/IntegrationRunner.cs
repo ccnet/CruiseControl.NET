@@ -7,12 +7,26 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public class IntegrationRunner : IIntegratable
     {
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public IIntegrationRunnerTarget target;
         private readonly IIntegrationResultManager resultManager;
         private readonly IQuietPeriod quietPeriod;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntegrationRunner" /> class.	
+        /// </summary>
+        /// <param name="resultManager">The result manager.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="quietPeriod">The quiet period.</param>
+        /// <remarks></remarks>
         public IntegrationRunner(IIntegrationResultManager resultManager, IIntegrationRunnerTarget target, IQuietPeriod quietPeriod)
         {
             this.target = target;
@@ -43,6 +57,12 @@ namespace ThoughtWorks.CruiseControl.Core
             return result;
         }
 
+        /// <summary>
+        /// Integrates the specified request.	
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public IIntegrationResult Integrate(IntegrationRequest request)
         {
             Log.Trace();
@@ -227,6 +247,11 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Posts the build.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public virtual void PostBuild(IIntegrationResult result)
         {
             resultManager.FinishIntegration();

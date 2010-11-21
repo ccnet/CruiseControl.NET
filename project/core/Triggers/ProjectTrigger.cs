@@ -45,6 +45,10 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
     [ReflectorType("projectTrigger")]
 	public class ProjectTrigger : ITrigger
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DefaultServerUri = RemoteCruiseServer.DefaultManagerUri;
 		private const int DefaultIntervalSeconds = 5;
 
@@ -113,6 +117,10 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         [ReflectorProperty("triggerFirstTime", Required = false)]
         public bool TriggerFirstTime { get; set; }
 
+        /// <summary>
+        /// Integrations the completed.	
+        /// </summary>
+        /// <remarks></remarks>
 		public void IntegrationCompleted()
 		{
 			lastStatus = currentStatus;
@@ -134,6 +142,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			throw new NoSuchProjectException(Project);
 		}
 
+        /// <summary>
+        /// Gets the next build.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public DateTime NextBuild
 		{
 			get
@@ -142,6 +155,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			}
 		}
 
+        /// <summary>
+        /// Fires this instance.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public IntegrationRequest Fire()
 		{
 			IntegrationRequest request = InnerTrigger.Fire();

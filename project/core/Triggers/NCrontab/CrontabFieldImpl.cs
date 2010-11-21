@@ -40,15 +40,44 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
 
     #endregion
 
+    /// <summary>
+    /// 	
+    /// </summary>
+    /// <param name="start">The start.</param>
+    /// <param name="end">The end.</param>
+    /// <param name="interval">The interval.</param>
     public delegate void CrontabFieldAccumulator(int start, int end, int interval);
 
+    /// <summary>
+    /// 	
+    /// </summary>
     [ Serializable ]
     public sealed class CrontabFieldImpl : IObjectReference
     {
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public static readonly CrontabFieldImpl Minute    = new CrontabFieldImpl(CrontabFieldKind.Minute, 0, 59, null);
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public static readonly CrontabFieldImpl Hour      = new CrontabFieldImpl(CrontabFieldKind.Hour, 0, 23, null);
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public static readonly CrontabFieldImpl Day       = new CrontabFieldImpl(CrontabFieldKind.Day, 1, 31, null);
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public static readonly CrontabFieldImpl Month     = new CrontabFieldImpl(CrontabFieldKind.Month, 1, 12, new[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" });
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public static readonly CrontabFieldImpl DayOfWeek = new CrontabFieldImpl(CrontabFieldKind.DayOfWeek, 0, 6, new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" });
 
         private static readonly CrontabFieldImpl[] _fieldByKind = new[] { Minute, Hour, Day, Month, DayOfWeek };
@@ -61,6 +90,12 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
         private readonly int _maxValue;
         private readonly string[] _names;
 
+        /// <summary>
+        /// Froms the kind.	
+        /// </summary>
+        /// <param name="kind">The kind.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static CrontabFieldImpl FromKind(CrontabFieldKind kind)
         {
             if (!Enum.IsDefined(typeof(CrontabFieldKind), kind))
@@ -86,31 +121,64 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
             _names = names;
         }
 
+        /// <summary>
+        /// Gets the kind.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public CrontabFieldKind Kind
         {
             get { return _kind; }
         }
 
+        /// <summary>
+        /// Gets the min value.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public int MinValue
         {
             get { return _minValue; }
         }
 
+        /// <summary>
+        /// Gets the max value.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public int MaxValue
         {
             get { return _maxValue; }
         }
 
+        /// <summary>
+        /// Gets the value count.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public int ValueCount
         {
             get { return _maxValue - _minValue + 1; }
         }
 
+        /// <summary>
+        /// Formats the specified field.	
+        /// </summary>
+        /// <param name="field">The field.</param>
+        /// <param name="writer">The writer.</param>
+        /// <remarks></remarks>
         public void Format(ICrontabField field, TextWriter writer)
         {
             Format(field, writer, false);
         }
 
+        /// <summary>
+        /// Formats the specified field.	
+        /// </summary>
+        /// <param name="field">The field.</param>
+        /// <param name="writer">The writer.</param>
+        /// <param name="noNames">The no names.</param>
+        /// <remarks></remarks>
         public void Format(ICrontabField field, TextWriter writer, bool noNames)
         {
             if (field == null)
@@ -197,6 +265,12 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
             }
         }
 
+        /// <summary>
+        /// Parses the specified STR.	
+        /// </summary>
+        /// <param name="str">The STR.</param>
+        /// <param name="acc">The acc.</param>
+        /// <remarks></remarks>
         public void Parse(string str, CrontabFieldAccumulator acc)
         {
             if (acc == null)

@@ -145,21 +145,41 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return acceptedModifications.ToArray();
 		}
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public override void LabelSourceControl(IIntegrationResult result)
 		{
 			_realScProvider.LabelSourceControl(result);
 		}
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public override void GetSource(IIntegrationResult result)
 		{
 			_realScProvider.GetSource(result);
 		}
 
+        /// <summary>
+        /// Initializes the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
         public override void Initialize(IProject project)
 		{
             _realScProvider.Initialize(project);
 		}
 
+        /// <summary>
+        /// Purges the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
         public override void Purge(IProject project)
 		{
              _realScProvider.Purge(project);

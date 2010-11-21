@@ -170,10 +170,25 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     [ReflectorType("svn")]
     public class Svn : ProcessSourceControl
     {
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string DefaultExecutable = "svn";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public static readonly string UtcXmlDateFormat = "yyyy-MM-ddTHH:mm:ssZ";
 		private BuildProgressInformation _buildProgressInformation;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Svn" /> class.	
+        /// </summary>
+        /// <param name="executor">The executor.</param>
+        /// <param name="parser">The parser.</param>
+        /// <param name="fileSystem">The file system.</param>
+        /// <remarks></remarks>
         public Svn(ProcessExecutor executor, IHistoryParser parser, IFileSystem fileSystem)
             : base(parser, executor)
         {
@@ -191,6 +206,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             this.CleanUp = false;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Svn" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public Svn()
             : this(new ProcessExecutor(), new SvnHistoryParser(), new SystemIoFileSystem())
         {
@@ -365,6 +384,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         // Non-private for testing only.
         internal int latestRevision;
 
+        /// <summary>
+        /// Formats the command date.	
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string FormatCommandDate(DateTime date)
         {
             return date.ToUniversalTime().ToString(UtcXmlDateFormat, CultureInfo.InvariantCulture);
@@ -432,6 +457,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             }
         }
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
             var revisionData = NameValuePair.ToDictionary(from.SourceControlData);
@@ -531,6 +563,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return mods;
         }
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public override void LabelSourceControl(IIntegrationResult result)
         {
             if (TagOnSuccess && result.Succeeded)
@@ -587,6 +624,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         }
 
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public override void GetSource(IIntegrationResult result)
         {
             result.BuildProgressInformation.SignalStartRunTask("Getting source from SVN");

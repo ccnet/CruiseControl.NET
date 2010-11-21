@@ -128,10 +128,30 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("vss")]
 	public class Vss : ProcessSourceControl
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DefaultProject = "$/";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string SS_DIR_KEY = "SSDIR";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string SS_REGISTRY_PATH = @"Software\\Microsoft\\SourceSafe";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string SS_REGISTRY_KEY = "SCCServerPath";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string SS_EXE = "ss.exe";
 		private const string RecursiveCommandLineOption = "-R";
 
@@ -141,12 +161,24 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string tempLabel;
 		private IVssLocale locale;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vss" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public Vss() : this(new VssLocale(CultureInfo.CurrentCulture))
 		{}
 
 		private Vss(IVssLocale locale) : this(locale, new VssHistoryParser(locale), new ProcessExecutor(), new Registry())
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vss" /> class.	
+        /// </summary>
+        /// <param name="locale">The locale.</param>
+        /// <param name="historyParser">The history parser.</param>
+        /// <param name="executor">The executor.</param>
+        /// <param name="registry">The registry.</param>
+        /// <remarks></remarks>
 		public Vss(IVssLocale locale, IHistoryParser historyParser, ProcessExecutor executor, IRegistry registry) : base(historyParser, executor)
 		{
 			this.registry = registry;
@@ -271,7 +303,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("cleanCopy", Required = false)]
         public bool CleanCopy { get; set; }
 
-            
+
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 	    public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
             string tempOutputFileName = Path.GetTempFileName();
@@ -308,6 +347,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             
 		}
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void LabelSourceControl(IIntegrationResult result)
 		{
 			if (! ApplyLabel) return;
@@ -316,6 +360,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			tempLabel = null;
 		}
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void GetSource(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask("Getting source from VSS");

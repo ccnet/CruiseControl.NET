@@ -15,13 +15,26 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         private readonly PreprocessorSettings _settings;
         private PreprocessorEnvironment _env;
 
+        /// <summary>
+        /// Occurs when [subfile loaded].	
+        /// </summary>
+        /// <remarks></remarks>
         public event ConfigurationSubfileLoadedHandler SubfileLoaded;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigPreprocessor" /> class.	
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <remarks></remarks>
         public ConfigPreprocessor(PreprocessorSettings settings)
         {
             _settings = settings;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigPreprocessor" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public ConfigPreprocessor() : this( new PreprocessorSettings
                                           {
                                               ExplicitDeclarationRequired = false,
@@ -34,6 +47,15 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         }
 
 
+        /// <summary>
+        /// Pres the process.	
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="output">The output.</param>
+        /// <param name="resolver">The resolver.</param>
+        /// <param name="input_uri">The input_uri.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public PreprocessorEnvironment PreProcess(XmlReader input, XmlWriter output,
                                                   XmlUrlResolver resolver, Uri input_uri)
         {

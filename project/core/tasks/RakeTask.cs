@@ -60,8 +60,20 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	public class RakeTask
         : BaseExecutableTask
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const int DefaultBuildTimeout = 600;
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DefaultExecutable = @"rake";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const ProcessPriorityClass DefaultPriority = ProcessPriorityClass.Normal;
 
         #region Constructors
@@ -177,6 +189,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("trace", Required = false)]
         public bool Trace { get; set; }
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override bool Execute(IIntegrationResult result)
 		{
 			ProcessInfo processInfo = CreateProcessInfo(result);
@@ -205,6 +223,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             return (!processResult.Failed);
 		}
 
+        /// <summary>
+        /// Gets the process arguments.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override string GetProcessArguments(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder args = new ProcessArgumentBuilder();
@@ -226,26 +250,52 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return args.ToString();
 		}
 
+        /// <summary>
+        /// Gets the process base directory.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override string GetProcessBaseDirectory(IIntegrationResult result)
 		{
 			return result.BaseFromWorkingDirectory(BaseDirectory);
 		}
 
+        /// <summary>
+        /// Gets the process timeout.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override int GetProcessTimeout()
 		{
 			return BuildTimeoutSeconds*1000;
 		}
 
+        /// <summary>
+        /// Gets the process filename.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override string GetProcessFilename()
 		{
 			return Executable;
 		}
 
+        /// <summary>
+        /// Gets the process priority class.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override ProcessPriorityClass GetProcessPriorityClass()
         {
             return this.Priority;
         }
 
+        /// <summary>
+        /// Gets or sets the targets for presentation.	
+        /// </summary>
+        /// <value>The targets for presentation.</value>
+        /// <remarks></remarks>
 		public string TargetsForPresentation
 		{
 			get

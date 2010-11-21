@@ -11,10 +11,20 @@ namespace ThoughtWorks.CruiseControl.Core.Util
     /// </summary>
     public class XmlFragmentWriter : XmlTextWriter
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlFragmentWriter" /> class.	
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <remarks></remarks>
         public XmlFragmentWriter(TextWriter writer) : base(writer)
         {
         }
 
+        /// <summary>
+        /// Writes the node.	
+        /// </summary>
+        /// <param name="xml">The XML.</param>
+        /// <remarks></remarks>
         public void WriteNode(string xml)
         {
             xml = StripIllegalCharacters(xml);
@@ -50,6 +60,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return XmlReader.Create(new StringReader(xml), xmlReaderSettings);
         }
 
+        /// <summary>
+        /// Writes the node.	
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="defattr">The defattr.</param>
+        /// <remarks></remarks>
         public override void WriteNode(XmlReader reader, bool defattr)
         {
             StringWriter buffer = new StringWriter();
@@ -71,11 +87,22 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             base.WriteNode(reader, defattr);
         }
 
+        /// <summary>
+        /// Writes the processing instruction.	
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="text">The text.</param>
+        /// <remarks></remarks>
         public override void WriteProcessingInstruction(string name, string text)
         {
             // no-op
         }
 
+        /// <summary>
+        /// Writes the C data.	
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <remarks></remarks>
         public override void WriteCData(string text)
         {
             base.WriteCData(XmlUtil.EncodeCDATA(text));

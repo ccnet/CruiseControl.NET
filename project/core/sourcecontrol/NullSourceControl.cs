@@ -66,6 +66,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             }
 		}
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public void LabelSourceControl(IIntegrationResult result) 
 		{
             if (FailLabelSourceControl)
@@ -74,6 +79,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             }
 		}
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public void GetSource(IIntegrationResult result)
 		{
             if (FailGetSource)
@@ -83,10 +93,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			
 		}
 
+        /// <summary>
+        /// Initializes the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
 		public void Initialize(IProject project)
 		{
 		}
 
+        /// <summary>
+        /// Purges the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
 		public void Purge(IProject project)
 		{
 		}

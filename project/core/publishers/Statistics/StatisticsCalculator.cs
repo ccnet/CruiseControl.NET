@@ -2,8 +2,17 @@ using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class StatisticsCalculator
 	{
+        /// <summary>
+        /// Variances the specified list.	
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public double Variance(double[] list)
 		{
 			try
@@ -22,6 +31,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			}
 		}
 
+        /// <summary>
+        /// Means the specified list.	
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public double Mean(double[] list)
 		{
 			try
@@ -39,6 +54,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			}
 		}
 
+        /// <summary>
+        /// Standards the deviation.	
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public double StandardDeviation(double[] list)
 		{
 			return Math.Sqrt(Variance(list));

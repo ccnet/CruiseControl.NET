@@ -19,6 +19,10 @@ namespace ThoughtWorks.CruiseControl.Core
     [Serializable]
     public class IntegrationResult : IIntegrationResult
     {
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public const string InitialLabel = "UNKNOWN";
 
         // immutable properties
@@ -48,6 +52,11 @@ namespace ThoughtWorks.CruiseControl.Core
         private Exception sourceControlError;
 
 
+        /// <summary>
+        /// Gets the build progress information.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         [XmlIgnore]
         public BuildProgressInformation BuildProgressInformation
         {
@@ -55,10 +64,23 @@ namespace ThoughtWorks.CruiseControl.Core
         }
 
         // Default constructor required for serialization
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntegrationResult" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public IntegrationResult()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntegrationResult" /> class.	
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="workingDirectory">The working directory.</param>
+        /// <param name="artifactDirectory">The artifact directory.</param>
+        /// <param name="request">The request.</param>
+        /// <param name="lastIntegration">The last integration.</param>
+        /// <remarks></remarks>
         public IntegrationResult(string projectName, string workingDirectory, string artifactDirectory, IntegrationRequest request, IntegrationSummary lastIntegration)
         {
             ProjectName = projectName;
@@ -75,24 +97,44 @@ namespace ThoughtWorks.CruiseControl.Core
             this.label = this.LastIntegration.Label;
         }
 
+        /// <summary>
+        /// Gets or sets the name of the project.	
+        /// </summary>
+        /// <value>The name of the project.</value>
+        /// <remarks></remarks>
         public string ProjectName
         {
             get { return projectName; }
             set { projectName = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the project URL.	
+        /// </summary>
+        /// <value>The project URL.</value>
+        /// <remarks></remarks>
         public string ProjectUrl
         {
             get { return projectUrl; }
             set { projectUrl = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the build condition.	
+        /// </summary>
+        /// <value>The build condition.</value>
+        /// <remarks></remarks>
         public BuildCondition BuildCondition
         {
             get { return request.BuildCondition; }
             set { request = new IntegrationRequest(value, "reloaded from state file", null); }
         }
 
+        /// <summary>
+        /// Gets or sets the label.	
+        /// </summary>
+        /// <value>The label.</value>
+        /// <remarks></remarks>
         public string Label
         {
             get { return label; }
@@ -135,12 +177,22 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Gets or sets the working directory.	
+        /// </summary>
+        /// <value>The working directory.</value>
+        /// <remarks></remarks>
         public string WorkingDirectory
         {
             get { return workingDirectory; }
             set { workingDirectory = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the artifact directory.	
+        /// </summary>
+        /// <value>The artifact directory.</value>
+        /// <remarks></remarks>
         public string ArtifactDirectory
         {
             get { return artifactDirectory; }
@@ -148,6 +200,11 @@ namespace ThoughtWorks.CruiseControl.Core
         }
 
 
+        /// <summary>
+        /// Gets or sets the build log directory.	
+        /// </summary>
+        /// <value>The build log directory.</value>
+        /// <remarks></remarks>
         public string BuildLogDirectory
         {
             get { return buildLogDirectory; }
@@ -155,11 +212,21 @@ namespace ThoughtWorks.CruiseControl.Core
         }
 
 
+        /// <summary>
+        /// Gets the integration artifact directory.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public string IntegrationArtifactDirectory
         {
             get { return Path.Combine(ArtifactDirectory, Label); }
         }
 
+        /// <summary>
+        /// Gets the listener file.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public string ListenerFile
         {
             get
@@ -169,6 +236,11 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Gets or sets the status.	
+        /// </summary>
+        /// <value>The status.</value>
+        /// <remarks></remarks>
         public IntegrationStatus Status
         {
             get { return status; }
@@ -193,6 +265,11 @@ namespace ThoughtWorks.CruiseControl.Core
             set { endTime = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the modifications.	
+        /// </summary>
+        /// <value>The modifications.</value>
+        /// <remarks></remarks>
         [XmlIgnore]
         public virtual Modification[] Modifications
         {
@@ -200,6 +277,11 @@ namespace ThoughtWorks.CruiseControl.Core
             set { modifications = value; }
         }
 
+        /// <summary>
+        /// Gets the last modification date.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         public DateTime LastModificationDate
         {
             get
@@ -237,6 +319,11 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Determines whether this instance is initial.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool IsInitial()
         {
             return Label == InitialLabel;
@@ -275,6 +362,11 @@ namespace ThoughtWorks.CruiseControl.Core
         }
 
         // Exceptions cannot be serialised because of permission attributes
+        /// <summary>
+        /// Gets or sets the exception result.	
+        /// </summary>
+        /// <value>The exception result.</value>
+        /// <remarks></remarks>
         [XmlIgnore]
         public Exception ExceptionResult
         {
@@ -287,17 +379,32 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Gets the task results.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         [XmlIgnore]
         public IList TaskResults
         {
             get { return taskResults; }
         }
 
+        /// <summary>
+        /// Adds the task result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public void AddTaskResult(string result)
         {
             AddTaskResult(new DataTaskResult(result));
         }
 
+        /// <summary>
+        /// Adds the task result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public void AddTaskResult(ITaskResult result)
         {
             taskResults.Add(result);
@@ -307,21 +414,42 @@ namespace ThoughtWorks.CruiseControl.Core
             Status = result.CheckIfSuccess() ? IntegrationStatus.Success : IntegrationStatus.Failure;
         }
 
+        /// <summary>
+        /// Marks the start time.	
+        /// </summary>
+        /// <remarks></remarks>
         public void MarkStartTime()
         {
             StartTime = DateTime.Now;
         }
 
+        /// <summary>
+        /// Marks the end time.	
+        /// </summary>
+        /// <remarks></remarks>
         public void MarkEndTime()
         {
             EndTime = DateTime.Now;
         }
 
+        /// <summary>
+        /// Determines whether this instance has modifications.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool HasModifications()
         {
             return Modifications.Length > 0;
         }
 
+        /// <summary>
+        /// Creates the initial integration result.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="workingDirectory">The working directory.</param>
+        /// <param name="artifactDirectory">The artifact directory.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public static IntegrationResult CreateInitialIntegrationResult(string project, string workingDirectory, string artifactDirectory)
         {
             IntegrationRequest initialRequest = new IntegrationRequest(BuildCondition.ForceBuild, "Initial Build", null);
@@ -341,11 +469,23 @@ namespace ThoughtWorks.CruiseControl.Core
             return BuildCondition.ForceBuild == BuildCondition || HasModifications();
         }
 
+        /// <summary>
+        /// Bases from artifacts directory.	
+        /// </summary>
+        /// <param name="pathToBase">The path to base.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string BaseFromArtifactsDirectory(string pathToBase)
         {
             return string.IsNullOrEmpty(pathToBase) ? ArtifactDirectory : Path.Combine(ArtifactDirectory, pathToBase);
         }
 
+        /// <summary>
+        /// Bases from working directory.	
+        /// </summary>
+        /// <param name="pathToBase">The path to base.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string BaseFromWorkingDirectory(string pathToBase)
         {
             return string.IsNullOrEmpty(pathToBase) ? WorkingDirectory : Path.Combine(WorkingDirectory, pathToBase);
@@ -368,18 +508,33 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Gets the last integration.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         [XmlIgnore]
         public IntegrationSummary LastIntegration
         {
             get { return lastIntegration; }
         }
 
+        /// <summary>
+        /// Gets or sets the last integration status.	
+        /// </summary>
+        /// <value>The last integration status.</value>
+        /// <remarks></remarks>
         public IntegrationStatus LastIntegrationStatus
         {
             get { return lastIntegration.Status; }
             set { lastIntegration = new IntegrationSummary(value, lastIntegration.Label, LastSuccessfulIntegrationLabel, lastIntegration.StartTime); }		// used only for loading IntegrationResult from state file - to be removed
         }
 
+        /// <summary>
+        /// Gets or sets the last successful integration label.	
+        /// </summary>
+        /// <value>The last successful integration label.</value>
+        /// <remarks></remarks>
         public string LastSuccessfulIntegrationLabel
         {
             get { return (Succeeded || lastIntegration.LastSuccessfulIntegrationLabel == null) ? Label : lastIntegration.LastSuccessfulIntegrationLabel; }
@@ -395,12 +550,22 @@ namespace ThoughtWorks.CruiseControl.Core
             set { failureUsers = value; }
         }
 
+        /// <summary>
+        /// Gets the integration request.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         [XmlIgnore]
         public IntegrationRequest IntegrationRequest
         {
             get { return request; }
         }
 
+        /// <summary>
+        /// Gets the integration properties.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         [XmlIgnore]
         public IDictionary IntegrationProperties
         {
@@ -427,6 +592,12 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+        /// <summary>
+        /// Equalses the specified obj.	
+        /// </summary>
+        /// <param name="obj">The obj.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override bool Equals(object obj)
         {
             IntegrationResult other = obj as IntegrationResult;
@@ -439,11 +610,21 @@ namespace ThoughtWorks.CruiseControl.Core
                    StartTime == other.StartTime;
         }
 
+        /// <summary>
+        /// Gets the hash code.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override int GetHashCode()
         {
             return (ProjectName + Label + StartTime.Ticks).GetHashCode();
         }
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override string ToString()
         {
             return string.Format(System.Globalization.CultureInfo.CurrentCulture,"Project: {0}, Status: {1}, Label: {2}, StartTime: {3}", ProjectName, Status, Label, StartTime);

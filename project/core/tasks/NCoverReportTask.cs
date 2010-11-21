@@ -672,8 +672,20 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         public enum NCoverReportFilter
         {
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Default,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Assembly,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Namespace
         }
         #endregion
@@ -684,24 +696,100 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         public enum NCoverReportType
         {
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             FullCoverageReport,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Summary,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             UncoveredCodeSections,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             SymbolSourceCode,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             SymbolSourceCodeClass,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             SymbolSourceCodeClassMethod,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             MethodSourceCode,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             MethodSourceCodeClass,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             MethodSourceCodeClassMethod,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             SymbolModule,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             SymbolModuleNamespace,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             SymbolModuleNamespaceClass,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             SymbolModuleNamespaceClassMethod,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             SymbolCCModuleClassFailedCoverageTop,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             SymbolCCModuleClassCoverageTop,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             MethodModuleNamespaceClass,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             MethodModuleNamespaceClassMethod,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             MethodCCModuleClassFailedCoverageTop,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             MethodCCModuleClassCoverageTop
         }
         #endregion
@@ -712,16 +800,60 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         public enum NCoverSortBy
         {
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             None,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Name,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             ClassLine,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             CoveragePercentageAscending,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             CoveragePercentageDescending,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             UnvisitedSequencePointsAscending,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             UnvisitedSequencePointsDescending,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             VisitCountAscending,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             VisitCountDescending,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             FunctionCoverageAscending,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             FunctionCoverageDescending
         }
         #endregion
@@ -732,9 +864,25 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         public enum NCoverMergeMode
         {
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Default,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             KeepSourceFilters,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Destructive,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             AppendFilters
         }
         #endregion

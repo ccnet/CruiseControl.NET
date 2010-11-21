@@ -6,6 +6,9 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class GitHistoryParser : IHistoryParser
 	{
 		private static readonly Regex modificationList =

@@ -60,6 +60,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         #endregion
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vsts" /> class.	
+        /// </summary>
+        /// <param name="executor">The executor.</param>
+        /// <param name="parser">The parser.</param>
+        /// <param name="registry">The registry.</param>
+        /// <remarks></remarks>
         public Vsts(ProcessExecutor executor, IHistoryParser parser, IRegistry registry)
             : base(parser, executor)
         {
@@ -67,6 +74,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             this.executor = executor;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vsts" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public Vsts() :
             this(new ProcessExecutor(), new VstsHistoryParser(), new Registry()) { }
 
@@ -218,6 +229,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         #region ISourceControl Implementation
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
             if (!ProjectExists(from))
@@ -236,6 +254,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             return ParseModifications(result, from.StartTime, to.StartTime);
         }
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public override void LabelSourceControl(IIntegrationResult result)
         {
             if (ApplyLabel && result.Succeeded)
@@ -244,6 +267,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             }
         }
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
         public override void GetSource(IIntegrationResult result)
         {
             if (!AutoGetSource || !ProjectExists(result)) return;

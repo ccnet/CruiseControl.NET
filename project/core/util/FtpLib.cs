@@ -11,6 +11,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         private BuildProgressInformation bpi;
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FtpLib" /> class.	
+        /// </summary>
+        /// <param name="callingTask">The calling task.</param>
+        /// <param name="buildProgressInformation">The build progress information.</param>
+        /// <remarks></remarks>
         public FtpLib(Tasks.TaskBase callingTask, BuildProgressInformation buildProgressInformation)
         {
             this.callingTask = callingTask;
@@ -29,6 +35,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         }
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FtpLib" /> class.	
+        /// </summary>
+        /// <param name="buildProgressInformation">The build progress information.</param>
+        /// <remarks></remarks>
         public FtpLib(BuildProgressInformation buildProgressInformation)
         {
             bpi = buildProgressInformation;
@@ -40,6 +51,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             this.ftpServer.CommandSent += HandleMessages;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FtpLib" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public FtpLib()
         {
             this.ftpServer = new EnterpriseDT.Net.Ftp.FTPConnection();
@@ -50,6 +65,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         }
 
+        /// <summary>
+        /// Gets or sets the time difference.	
+        /// </summary>
+        /// <value>The time difference.</value>
+        /// <remarks></remarks>
         public System.TimeSpan TimeDifference
         {
             get
@@ -65,6 +85,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 
 
+        /// <summary>
+        /// Logs the in.	
+        /// </summary>
+        /// <param name="serverName">Name of the server.</param>
+        /// <param name="userName">Name of the user.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="activeConnectionMode">The active connection mode.</param>
+        /// <remarks></remarks>
         public void LogIn(string serverName, string userName, string password, bool activeConnectionMode)
         {
 
@@ -91,6 +119,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             }
         }
 
+        /// <summary>
+        /// Downloads the folder.	
+        /// </summary>
+        /// <param name="localFolder">The local folder.</param>
+        /// <param name="remoteFolder">The remote folder.</param>
+        /// <param name="recursive">The recursive.</param>
+        /// <remarks></remarks>
         public void DownloadFolder(string localFolder, string remoteFolder, bool recursive)
         {
 
@@ -179,6 +214,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             }
         }
 
+        /// <summary>
+        /// Uploads the folder.	
+        /// </summary>
+        /// <param name="remoteFolder">The remote folder.</param>
+        /// <param name="localFolder">The local folder.</param>
+        /// <param name="recursive">The recursive.</param>
+        /// <remarks></remarks>
         public void UploadFolder(string remoteFolder, string localFolder, bool recursive)
         {
 
@@ -254,21 +296,43 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             }
         }
 
+        /// <summary>
+        /// Dises the connect.	
+        /// </summary>
+        /// <remarks></remarks>
         public void DisConnect()
         {
             this.ftpServer.Close();
         }
 
+        /// <summary>
+        /// Determines whether this instance is connected.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool IsConnected()
         {
             return this.ftpServer.IsConnected;
         }
 
+        /// <summary>
+        /// Currents the working folder.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string CurrentWorkingFolder()
         {
             return this.ftpServer.ServerDirectory;
         }
 
+        /// <summary>
+        /// Lists the new or updated files at FTP site.	
+        /// </summary>
+        /// <param name="localFolder">The local folder.</param>
+        /// <param name="remoteFolder">The remote folder.</param>
+        /// <param name="recursive">The recursive.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public Modification[] ListNewOrUpdatedFilesAtFtpSite(string localFolder, string remoteFolder, bool recursive)
         {
             System.Collections.Generic.List<Modification> mods = new System.Collections.Generic.List<Modification>();

@@ -6,8 +6,17 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public class CruiseXmlWriter
     {
+        /// <summary>
+        /// Writes the specified cruise server snapshots.	
+        /// </summary>
+        /// <param name="cruiseServerSnapshots">The cruise server snapshots.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string Write(IEnumerable<CruiseServerSnapshot> cruiseServerSnapshots)
         {
             StringWriter stringWriter = new StringWriter();
@@ -32,6 +41,12 @@ namespace ThoughtWorks.CruiseControl.Core
             return stringWriter.ToString();
         }
 
+        /// <summary>
+        /// Writes the specified project status.	
+        /// </summary>
+        /// <param name="projectStatus">The project status.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string Write(ProjectStatus projectStatus)
         {
             return Write(new CruiseServerSnapshot[] { new CruiseServerSnapshot(new ProjectStatus[] { projectStatus }, new QueueSetSnapshot()) });

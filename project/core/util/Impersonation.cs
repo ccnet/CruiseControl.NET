@@ -109,6 +109,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         private static extern bool CloseHandle(IntPtr handle);
 
         // Make sure revert has been called.
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources	
+        /// </summary>
+        /// <remarks></remarks>
         public void Dispose()
         {
             Revert();

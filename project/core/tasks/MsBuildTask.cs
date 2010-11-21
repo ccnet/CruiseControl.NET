@@ -49,15 +49,38 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     public class MsBuildTask
         : BaseExecutableTask
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string LogFilename = "msbuild-results-{0}.xml";
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
         public readonly Guid LogFileId = Guid.NewGuid();
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const int DefaultTimeout = 600;
         private IShadowCopier shadowCopier;
 		private readonly IExecutionEnvironment executionEnvironment;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MsBuildTask" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public MsBuildTask() : this(new ProcessExecutor(), new ExecutionEnvironment(), new DefaultShadowCopier())
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MsBuildTask" /> class.	
+        /// </summary>
+        /// <param name="executor">The executor.</param>
+        /// <param name="executionEnvironment">The execution environment.</param>
+        /// <param name="shadowCopier">The shadow copier.</param>
+        /// <remarks></remarks>
 		public MsBuildTask(ProcessExecutor executor, IExecutionEnvironment executionEnvironment, IShadowCopier shadowCopier)
 		{
 			this.executor = executor;
@@ -155,11 +178,22 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         #endregion
 
+        /// <summary>
+        /// Gets the process filename.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override string GetProcessFilename()
 		{
 			return string.IsNullOrEmpty(Executable) ? GetDefaultExecutable() : Executable;
 		}
 
+        /// <summary>
+        /// Gets the process arguments.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override string GetProcessArguments(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder b = new ProcessArgumentBuilder();
@@ -186,11 +220,22 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return b.ToString();
 		}
 
+        /// <summary>
+        /// Gets the process base directory.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override string GetProcessBaseDirectory(IIntegrationResult result)
 		{
 			return result.BaseFromWorkingDirectory(WorkingDirectory);
 		}
 
+        /// <summary>
+        /// Gets the process timeout.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		protected override int GetProcessTimeout()
 		{
 			return Timeout * 1000;
@@ -204,6 +249,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             return this.Priority;
         }
 
+        /// <summary>
+        /// Executes the specified result.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected override bool Execute(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :

@@ -676,9 +676,25 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         public enum NCoverLogLevel
         {
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Default,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             None,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Normal,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Verbose
         }
         #endregion

@@ -32,8 +32,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	/// </summary>
 	public class SurroundHistoryParser : IHistoryParser
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string TO_SSCM_DATE_FORMAT = "yyyyMMddHHmmss";
 
+        /// <summary>
+        /// Parses the specified SSCM log.	
+        /// </summary>
+        /// <param name="sscmLog">The SSCM log.</param>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public Modification[] Parse(TextReader sscmLog, DateTime from, DateTime to)
 		{
 			string line = sscmLog.ReadLine();

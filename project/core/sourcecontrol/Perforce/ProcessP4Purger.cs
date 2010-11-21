@@ -2,17 +2,32 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class ProcessP4Purger : IP4Purger
 	{
 		private readonly IP4ProcessInfoCreator infoCreator;
 		private readonly ProcessExecutor executor;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProcessP4Purger" /> class.	
+        /// </summary>
+        /// <param name="executor">The executor.</param>
+        /// <param name="infoCreator">The info creator.</param>
+        /// <remarks></remarks>
 		public ProcessP4Purger(ProcessExecutor executor, IP4ProcessInfoCreator infoCreator)
 		{
 			this.executor = executor;
 			this.infoCreator = infoCreator;
 		}
 
+        /// <summary>
+        /// Purges the specified p4.	
+        /// </summary>
+        /// <param name="p4">The p4.</param>
+        /// <param name="workingDirectory">The working directory.</param>
+        /// <remarks></remarks>
 		public void Purge(P4 p4, string workingDirectory)
 		{
 			if (p4.Client != null && p4.Client != string.Empty)

@@ -11,6 +11,9 @@ using System.Collections.Generic;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class IntegrationQueueManager
         : IQueueManager
 	{
@@ -20,6 +23,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		private readonly IntegrationQueueSet integrationQueues = new IntegrationQueueSet();
         private readonly IProjectStateManager stateManager;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntegrationQueueManager" /> class.	
+        /// </summary>
+        /// <param name="projectIntegratorListFactory">The project integrator list factory.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="stateManager">The state manager.</param>
+        /// <remarks></remarks>
 		public IntegrationQueueManager(IProjectIntegratorListFactory projectIntegratorListFactory,
 		                               IConfiguration configuration,
                                        IProjectStateManager stateManager)
@@ -39,6 +49,10 @@ namespace ThoughtWorks.CruiseControl.Core
             return new CruiseServerSnapshot(projectStatuses, queueSetSnapshot);
 		}
 
+        /// <summary>
+        /// Starts all projects.	
+        /// </summary>
+        /// <remarks></remarks>
 		public void StartAllProjects()
 		{
 			foreach (IProjectIntegrator integrator in projectIntegrators)
@@ -52,6 +66,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
+        /// <summary>
+        /// Stops all projects.	
+        /// </summary>
+        /// <param name="restarting">The restarting.</param>
+        /// <remarks></remarks>
         public void StopAllProjects(bool restarting)
 		{
 			foreach (IProjectIntegrator integrator in projectIntegrators)
@@ -63,6 +82,10 @@ namespace ThoughtWorks.CruiseControl.Core
 			integrationQueues.Clear();
 		}
 
+        /// <summary>
+        /// Aborts this instance.	
+        /// </summary>
+        /// <remarks></remarks>
 		public void Abort()
 		{
 			foreach (IProjectIntegrator integrator in projectIntegrators)
@@ -74,6 +97,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			integrationQueues.Clear();
 		}
 
+        /// <summary>
+        /// Gets the project statuses.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public ProjectStatus[] GetProjectStatuses()
 		{
 			ArrayList projectStatusList = new ArrayList();
@@ -85,6 +113,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			return (ProjectStatus[]) projectStatusList.ToArray(typeof (ProjectStatus));
 		}
 
+        /// <summary>
+        /// Gets the integrator.	
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public IProjectIntegrator GetIntegrator(string projectName)
 		{
             if (string.IsNullOrEmpty(projectName))
@@ -98,38 +132,76 @@ namespace ThoughtWorks.CruiseControl.Core
 			return integrator;
 		}
 
+        /// <summary>
+        /// Forces the build.	
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="enforcerName">Name of the enforcer.</param>
+        /// <param name="buildValues">The build values.</param>
+        /// <remarks></remarks>
         public void ForceBuild(string projectName, string enforcerName, Dictionary<string, string> buildValues)
 		{
             GetIntegrator(projectName).ForceBuild(enforcerName, buildValues);
 		}
 
+        /// <summary>
+        /// Waits for exit.	
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <remarks></remarks>
 		public void WaitForExit(string projectName)
 		{
 			GetIntegrator(projectName).WaitForExit();
 		}
 
+        /// <summary>
+        /// Requests the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="request">The request.</param>
+        /// <remarks></remarks>
 		public void Request(string project, IntegrationRequest request)
 		{
 			GetIntegrator(project).Request(request);
 		}
 
+        /// <summary>
+        /// Cancels the pending request.	
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <remarks></remarks>
 		public void CancelPendingRequest(string projectName)
 		{
 			GetIntegrator(projectName).CancelPendingRequest();
 		}
 
+        /// <summary>
+        /// Stops the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
 		public void Stop(string project)
 		{
             stateManager.RecordProjectAsStopped(project);
 			GetIntegrator(project).Stop(false);
 		}
 
+        /// <summary>
+        /// Starts the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
 		public void Start(string project)
 		{
             stateManager.RecordProjectAsStartable(project);
 			GetIntegrator(project).Start();
 		}
 
+        /// <summary>
+        /// Restarts the specified configuration.	
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <remarks></remarks>
 		public void Restart(IConfiguration configuration)
 		{
 		    StopAllProjects(true);

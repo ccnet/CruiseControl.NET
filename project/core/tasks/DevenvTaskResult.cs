@@ -4,11 +4,24 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class DevenvTaskResult : ProcessTaskResult
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DevenvTaskResult" /> class.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public DevenvTaskResult(ProcessResult result) : 
 			base(result){}
 
+        /// <summary>
+        /// Gets the data.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public override string Data
 		{
 			get { return TransformDevenvOutput(result.StandardOutput, result.StandardError); }

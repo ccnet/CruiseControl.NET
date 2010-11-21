@@ -33,20 +33,57 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         private NotificationType[] notifications = { EmailGroup.NotificationType.Always };
 
+        /// <summary>
+        /// 	
+        /// </summary>
 		public enum NotificationType
 		{
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
 			Always,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
 			Change,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
 			Failed,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
 			Success,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Fixed,
+            /// <summary>
+            /// 	
+            /// </summary>
+            /// <remarks></remarks>
             Exception
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmailGroup" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public EmailGroup()
 		{
 		}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmailGroup" /> class.	
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="notifications">The notifications.</param>
+        /// <remarks></remarks>
 		public EmailGroup(string name, NotificationType[] notifications)
 		{
 			Name = name;
@@ -74,6 +111,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
 
+        /// <summary>
+        /// Equalses the specified o.	
+        /// </summary>
+        /// <param name="o">The o.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override bool Equals(Object o)
 		{
 			if (o == null || o.GetType() != GetType())
@@ -84,17 +127,33 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			return Name == g.Name ;
 		}
 
+        /// <summary>
+        /// Gets the hash code.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override int GetHashCode()
 		{
             return Name.GetHashCode() & StringUtil.GetArrayContents(Notifications).GetHashCode() ; 
 		}
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override string ToString()
 		{
 			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"EmailGroup: [name: {0}, notifications: {1}]", Name, StringUtil.GetArrayContents( Notifications) );
 		}
 
 
+        /// <summary>
+        /// Determines whether the specified to search has notification.	
+        /// </summary>
+        /// <param name="toSearch">To search.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public bool HasNotification(NotificationType toSearch)
         {
             bool found = false;

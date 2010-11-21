@@ -12,6 +12,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
     /// </summary>
 	public class XmlUtil
 	{
+        /// <summary>
+        /// Creates the document.	
+        /// </summary>
+        /// <param name="xml">The XML.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static XmlDocument CreateDocument(string xml)
 		{
 			XmlDocument document = new XmlDocument();
@@ -19,11 +25,24 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return document;
 		}
 
+        /// <summary>
+        /// Creates the document element.	
+        /// </summary>
+        /// <param name="xml">The XML.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static XmlElement CreateDocumentElement(string xml)
 		{
 			return CreateDocument(xml).DocumentElement;
 		}
 
+        /// <summary>
+        /// Gets the first element.	
+        /// </summary>
+        /// <param name="doc">The doc.</param>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static XmlElement GetFirstElement(XmlDocument doc, string name)
 		{
 			XmlNodeList list = doc.GetElementsByTagName(name);
@@ -34,6 +53,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return (XmlElement) list.Item(0);
 		}
 
+        /// <summary>
+        /// Gets the single element.	
+        /// </summary>
+        /// <param name="doc">The doc.</param>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static XmlElement GetSingleElement(XmlDocument doc, string name)
 		{
 			XmlNodeList list = doc.GetElementsByTagName(name);
@@ -48,11 +74,26 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return (XmlElement) list.Item(0);
 		}
 
+        /// <summary>
+        /// Gets the single element value.	
+        /// </summary>
+        /// <param name="doc">The doc.</param>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static string GetSingleElementValue(XmlDocument doc, string name)
 		{
 			return GetSingleElementValue(doc, name,string.Empty);
 		}
 
+        /// <summary>
+        /// Gets the single element value.	
+        /// </summary>
+        /// <param name="doc">The doc.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static string GetSingleElementValue(XmlDocument doc, string name, string defaultValue)
 		{
 			XmlElement element = GetSingleElement(doc, name);
@@ -66,11 +107,23 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 		}
 
+        /// <summary>
+        /// Generates the outer XML.	
+        /// </summary>
+        /// <param name="xmlContent">Content of the XML.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static string GenerateOuterXml(string xmlContent)
 		{
 			return CreateDocument(xmlContent).OuterXml;
 		}
 
+        /// <summary>
+        /// Generates the indented outer XML.	
+        /// </summary>
+        /// <param name="xmlContent">Content of the XML.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static string GenerateIndentedOuterXml(string xmlContent)
 		{
 			StringWriter buffer = new StringWriter();
@@ -80,6 +133,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return buffer.ToString();
 		}
 
+        /// <summary>
+        /// Selects the value.	
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <param name="xpath">The xpath.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static string SelectValue(XmlNode node, string xpath, string defaultValue)
 		{
 			if (node == null || node.InnerXml == null || node.InnerXml == String.Empty)
@@ -94,17 +155,39 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return node.InnerText;
 		}
 
+        /// <summary>
+        /// Selects the value.	
+        /// </summary>
+        /// <param name="document">The document.</param>
+        /// <param name="xpath">The xpath.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static string SelectValue(XmlDocument document, string xpath, string defaultValue)
 		{
 			XmlNode node = document.SelectSingleNode(xpath);
 			return SelectValue(node, xpath, defaultValue);
 		}
 
+        /// <summary>
+        /// Selects the node.	
+        /// </summary>
+        /// <param name="xml">The XML.</param>
+        /// <param name="xpath">The xpath.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static XmlNode SelectNode(string xml, string xpath)
 		{
 			return CreateDocument(xml).SelectSingleNode(xpath);
 		}
 
+        /// <summary>
+        /// Selects the required value.	
+        /// </summary>
+        /// <param name="document">The document.</param>
+        /// <param name="xpath">The xpath.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static string SelectRequiredValue(XmlDocument document, string xpath)
 		{
 			XmlNode node = document.SelectSingleNode(xpath);
@@ -115,6 +198,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return node.InnerText;
 		}
 
+        /// <summary>
+        /// Selects the required value.	
+        /// </summary>
+        /// <param name="xml">The XML.</param>
+        /// <param name="xpath">The xpath.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static string SelectRequiredValue(string xml, string xpath)
 		{
 			return SelectRequiredValue(CreateDocument(xml), xpath);
@@ -136,6 +226,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return CDataCloseTag.Replace(text, @"] ]>");
 		}
 
+        /// <summary>
+        /// Strings the serialize.	
+        /// </summary>
+        /// <param name="obj">The obj.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static string StringSerialize(object obj)
 		{
 			XmlSerializer serializer = new XmlSerializer(obj.GetType());
@@ -153,6 +249,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return writer2.ToString();
 		}
 
+        /// <summary>
+        /// Adds the child.	
+        /// </summary>
+        /// <param name="parent">The parent.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static XmlElement AddChild(XmlNode parent, string name, string value)
 		{
 			if (value == null) return null;
@@ -163,6 +267,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return child;
 		}
 
+        /// <summary>
+        /// Adds the child.	
+        /// </summary>
+        /// <param name="parent">The parent.</param>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static XmlElement AddChild(XmlNode parent, string name)
 		{
 			XmlDocument document = (parent is XmlDocument) ? (XmlDocument) parent : parent.OwnerDocument;
@@ -171,6 +282,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return node;
 		}
 
+        /// <summary>
+        /// Writes the non null element string.	
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        /// <remarks></remarks>
 		public static void WriteNonNullElementString(XmlWriter writer, string name, string value)
 		{
 			if (value != null)
@@ -179,6 +297,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 		}
 
+        /// <summary>
+        /// Verifies the XML is well formed.	
+        /// </summary>
+        /// <param name="actual">The actual.</param>
+        /// <remarks></remarks>
 		public static void VerifyXmlIsWellFormed(string actual)
 		{
 			XmlDocument document = new XmlDocument();

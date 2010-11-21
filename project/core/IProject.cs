@@ -85,14 +85,39 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment);
 
+        /// <summary>
+        /// Gets the external links.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		ExternalLink[] ExternalLinks { get; }
 
+        /// <summary>
+        /// Gets the statistics.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		string Statistics { get; }
 
+        /// <summary>
+        /// Gets the modification history.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         string ModificationHistory { get; }
 
+        /// <summary>
+        /// Gets the RSS feed.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         string RSSFeed { get; }
 
+        /// <summary>
+        /// Gets the integration repository.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		IIntegrationRepository IntegrationRepository { get; }
 
 		/// <summary>
@@ -107,12 +132,32 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// An item with priority 1 will be inserted before an item of priority 2.
 		/// </summary>
 		int QueuePriority { get; }
-		
+
+        /// <summary>
+        /// Initializes this instance.	
+        /// </summary>
+        /// <remarks></remarks>
 		void Initialize();
-		
+
+        /// <summary>
+        /// Creates the project status.	
+        /// </summary>
+        /// <param name="integrator">The integrator.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		ProjectStatus CreateProjectStatus(IProjectIntegrator integrator);
+        /// <summary>
+        /// Gets the current activity.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         ProjectActivity CurrentActivity { get; }
 
+        /// <summary>
+        /// Aborts the running build.	
+        /// </summary>
+        /// <param name="userName">Name of the user.</param>
+        /// <remarks></remarks>
 		void AbortRunningBuild(string userName);
 		
         /// <summary>

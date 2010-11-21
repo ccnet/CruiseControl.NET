@@ -42,6 +42,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     [ReflectorType("surround")]
 	public class Surround : ProcessSourceControl
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string TO_SSCM_DATE_FORMAT = "yyyyMMddHHmmss";
 		private const string DefaultServerConnection = "127.0.0.1:4900";
 		private const string DefaultServerLogin = "Administrator:";
@@ -133,6 +137,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("recursive", Required = false)]
         public int Recursive { get; set; }
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			string command = string.Format(System.Globalization.CultureInfo.CurrentCulture,"cc {0} -d{1}:{2} {3} -b{4} -p{5} {6} -z{7} -y{8}",
@@ -156,14 +167,29 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new ProcessInfo(Executable, command);
 		}
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void LabelSourceControl(IIntegrationResult result)
 		{}
 
+        /// <summary>
+        /// Initializes the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
 		public override void Initialize(IProject project)
 		{
 			Execute(CreateSSCMProcessInfo("workdir " + WorkingDirectory + " " + Repository + " -z" + ServerConnect + " -y" + ServerLogin));
 		}
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void GetSource(IIntegrationResult result)
 		{
 			Log.Info("Getting source from Surround SCM");

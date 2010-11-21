@@ -5,6 +5,9 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class HtmlDetailsMessageBuilder : IMessageBuilder
 	{
 		private static readonly SystemPath HtmlCSSFile = new SystemPath(@"xsl\cruisecontrol.css");
@@ -14,11 +17,20 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HtmlDetailsMessageBuilder" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public HtmlDetailsMessageBuilder()
         {
         }
 
 
+        /// <summary>
+        /// Gets or sets the XSL files.	
+        /// </summary>
+        /// <value>The XSL files.</value>
+        /// <remarks></remarks>
         public System.Collections.IList xslFiles
         {
             get
@@ -32,6 +44,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
 
+        /// <summary>
+        /// Builds the message.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string BuildMessage(IIntegrationResult result)
 		{
 			StringBuilder message = new StringBuilder(10000);

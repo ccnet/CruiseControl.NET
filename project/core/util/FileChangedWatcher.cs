@@ -6,6 +6,9 @@ using System.Timers;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class FileChangedWatcher : IFileWatcher
 	{
 		private List<FileSystemWatcher> watchers= new List< FileSystemWatcher >( );
@@ -16,6 +19,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// </summary>
 	    private FileSystemEventArgs firstArgs = null;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileChangedWatcher" /> class.	
+        /// </summary>
+        /// <param name="filenames">The filenames.</param>
+        /// <remarks></remarks>
 		public FileChangedWatcher(params string[] filenames)
 		{
             for( int idx = 0; idx < filenames.Length; ++idx )
@@ -27,8 +35,17 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			timer.Elapsed += HandleTimerElapsed;
 		}
 
+        /// <summary>
+        /// Occurs when [on file changed].	
+        /// </summary>
+        /// <remarks></remarks>
 	    public event FileSystemEventHandler OnFileChanged;
 
+        /// <summary>
+        /// Adds the watcher.	
+        /// </summary>
+        /// <param name="filename">The filename.</param>
+        /// <remarks></remarks>
 	    public void AddWatcher (string filename)
 	    {
 	        FileSystemWatcher watcher = new FileSystemWatcher();

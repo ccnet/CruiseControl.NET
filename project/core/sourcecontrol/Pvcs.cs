@@ -65,9 +65,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string tempFile =string.Empty;
 		private string tempLabel =string.Empty;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Pvcs" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public Pvcs() : this(new PvcsHistoryParser(), new ProcessExecutor())
 		{}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Pvcs" /> class.	
+        /// </summary>
+        /// <param name="parser">The parser.</param>
+        /// <param name="executor">The executor.</param>
+        /// <remarks></remarks>
         public Pvcs(IHistoryParser parser, ProcessExecutor executor)
             : base(parser, executor)
         {
@@ -174,6 +184,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         public bool ManuallyAdjustForDaylightSavings { get; set; }
 
 		//TODO: Support Promotion Groups -- [ReflectorProperty("isPromotionGroup", Required=false)]
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public bool IsPromotionGroup = false;
 
         /// <summary>
@@ -195,31 +209,64 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+        /// <summary>
+        /// Sets the current time zone.	
+        /// </summary>
+        /// <value>The current time zone.</value>
+        /// <remarks></remarks>
 		public TimeZone CurrentTimeZone
 		{
 			set { currentTimeZone = value; }
 		}
 
+        /// <summary>
+        /// Gets the error file.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string ErrorFile
 		{
 			get { return errorFile = TempFileNameIfBlank(errorFile); }
 		}
 
+        /// <summary>
+        /// Gets the log file.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string LogFile
 		{
 			get { return logFile = TempFileNameIfBlank(logFile); }
 		}
 
+        /// <summary>
+        /// Gets the temp file.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public string TempFile
 		{
 			get { return tempFile = TempFileNameIfBlank(tempFile); }
 		}
 
+        /// <summary>
+        /// Labels the or promotion input.	
+        /// </summary>
+        /// <param name="label">The label.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string LabelOrPromotionInput(string label)
 		{
 			return (label.Length == 0) ?string.Empty : (IsPromotionGroup == false ? "-v" : "-g") + label;
 		}
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			baseModifications = null;
@@ -310,36 +357,80 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new ProcessInfo(executable, arguments);
 		}
 
+        /// <summary>
+        /// Creates the pcli contents for get.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string CreatePcliContentsForGet()
 		{
 			return string.Format(GET_INSTRUCTIONS_TEMPLATE, ErrorFile, LogFile, Project, GetLogin(false), GetRecursiveValue(), Workspace, LabelOrPromotionInput(tempLabel), Subproject);
 		}
 
+        /// <summary>
+        /// Creates the pcli contents for creating V log.	
+        /// </summary>
+        /// <param name="beforedate">The beforedate.</param>
+        /// <param name="afterdate">The afterdate.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string CreatePcliContentsForCreatingVLog(string beforedate, string afterdate)
 		{
 			return string.Format(VLOG_INSTRUCTIONS_TEMPLATE, ErrorFile, LogFile, Project, GetLogin(false), GetRecursiveValue(), beforedate, afterdate, Subproject);
 		}
 
+        /// <summary>
+        /// Creates the pcli contents for creating vlog by label.	
+        /// </summary>
+        /// <param name="label">The label.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string CreatePcliContentsForCreatingVlogByLabel(string label)
 		{
 			return string.Format(VLOG_LABEL_INSTRUCTIONS_TEMPLATE, ErrorFile, LogFile, Project, GetLogin(false), GetRecursiveValue(), label, Subproject);
 		}
 
+        /// <summary>
+        /// Creates the pcli contents for deleting label.	
+        /// </summary>
+        /// <param name="label">The label.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string CreatePcliContentsForDeletingLabel(string label)
 		{
 			return string.Format(DELETE_LABEL_TEMPLATE, ErrorFile, LogFile, Project, GetLogin(false), GetRecursiveValue(), LabelOrPromotionInput(label), Subproject);
 		}
 
+        /// <summary>
+        /// Creates the pcli contents for labeling.	
+        /// </summary>
+        /// <param name="label">The label.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string CreatePcliContentsForLabeling(string label)
 		{
 			return string.Format(APPLY_LABEL_TEMPLATE, LogFile, ErrorFile, GetLogin(false), label, TempFile);
 		}
 
+        /// <summary>
+        /// Creates the individual label string.	
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <param name="label">The label.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string CreateIndividualLabelString(Modification mod, string label)
 		{
 			return string.Format(INDIVIDUAL_LABEL_REVISION_TEMPLATE, GetVersion(mod, label), GetUncPathPrefix(mod), mod.FolderName, mod.FileName);
 		}
 
+        /// <summary>
+        /// Creates the individual get string.	
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <param name="fileLocation">The file location.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string CreateIndividualGetString(Modification mod, string fileLocation)
 		{
 			return string.Format(INDIVIDUAL_GET_REVISION_TEMPLATE, GetVersion(mod,string.Empty), GetUncPathPrefix(mod), mod.FolderName, mod.FileName, fileLocation);
@@ -362,6 +453,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new StreamReader(stream);
 		}
 
+        /// <summary>
+        /// Adjusts for day light savings bug.	
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public DateTime AdjustForDayLightSavingsBug(DateTime date)
 		{
 			if (currentTimeZone.IsDaylightSavingTime(DateTime.Now))
@@ -379,6 +476,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		#region GetSource Logic
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void GetSource(IIntegrationResult result)
 		{
             result.BuildProgressInformation.SignalStartRunTask("Getting source from Pvcs");
@@ -450,6 +552,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ExecuteNonPvcsFunction(content.ToString());
 		}
 
+        /// <summary>
+        /// Gets the exe filename.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public string GetExeFilename()
 		{
 			string dir = Path.GetDirectoryName(Executable);
@@ -460,6 +567,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		#region LabelSourceControl Logic
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void LabelSourceControl(IIntegrationResult result)
 		{
 			// If no changes or LabelOnSuccess is false exit
@@ -530,22 +642,48 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		#endregion
 
+        /// <summary>
+        /// Gets the date string.	
+        /// </summary>
+        /// <param name="dateToConvert">The date to convert.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static string GetDateString(DateTime dateToConvert)
 		{
 			return GetDateString(dateToConvert, CultureInfo.CurrentCulture.DateTimeFormat);
 		}
 
+        /// <summary>
+        /// Gets the date string.	
+        /// </summary>
+        /// <param name="dateToConvert">The date to convert.</param>
+        /// <param name="format">The format.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static string GetDateString(DateTime dateToConvert, DateTimeFormatInfo format)
 		{
 			string pattern = string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0} {1}", format.ShortDatePattern, format.ShortTimePattern);
 			return dateToConvert.ToString(pattern, format);
 		}
 
+        /// <summary>
+        /// Gets the date.	
+        /// </summary>
+        /// <param name="dateToParse">The date to parse.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static DateTime GetDate(string dateToParse)
 		{
 			return GetDate(dateToParse, CultureInfo.CurrentCulture);
 		}
 
+        /// <summary>
+        /// Gets the date.	
+        /// </summary>
+        /// <param name="dateToParse">The date to parse.</param>
+        /// <param name="format">The format.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public static DateTime GetDate(string dateToParse, IFormatProvider format)
 		{
 			try

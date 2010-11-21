@@ -30,10 +30,19 @@ namespace ThoughtWorks.CruiseControl.Core.Security
     public class InMemorySessionCache
         : SessionCacheBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InMemorySessionCache" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
         public InMemorySessionCache() : this(new SystemClock())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InMemorySessionCache" /> class.	
+        /// </summary>
+        /// <param name="clock">The clock.</param>
+        /// <remarks></remarks>
         public InMemorySessionCache(IClock clock) : base(clock)
         {
         }

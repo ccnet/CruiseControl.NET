@@ -11,8 +11,18 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	/// </summary>
 	public interface IIntegrationQueue : IList
 	{
+        /// <summary>
+        /// Gets the name.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		string Name { get; }
 
+        /// <summary>
+        /// Gets the is blocked.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
         bool IsBlocked { get; }
 
         /// <summary>
@@ -54,9 +64,27 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		/// <returns>Array of current queued integrations on the queue.</returns>
 		IIntegrationQueueItem[] GetQueuedIntegrations();
 
+        /// <summary>
+        /// Gets the next request.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		IntegrationRequest GetNextRequest(IProject project);
-		
+
+        /// <summary>
+        /// Determines whether [has item on queue] [the specified project].	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		bool HasItemOnQueue(IProject project);
+        /// <summary>
+        /// Determines whether [has item pending on queue] [the specified project].	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		bool HasItemPendingOnQueue(IProject project);
 
         /// <summary>

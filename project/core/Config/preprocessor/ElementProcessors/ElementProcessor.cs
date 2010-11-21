@@ -35,18 +35,40 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
         /// </summary>
         private readonly Regex _space_matcher = new Regex( @"\s\s\s*" );
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElementProcessor" /> class.	
+        /// </summary>
+        /// <param name="target_element_name">The target_element_name.</param>
+        /// <param name="env">The env.</param>
+        /// <remarks></remarks>
         protected ElementProcessor(XName target_element_name, PreprocessorEnvironment env)
         {
             TargetElementName = target_element_name;
             _Env = env;
         }
 
+        /// <summary>
+        /// Gets or sets the _ env.	
+        /// </summary>
+        /// <value>The _ env.</value>
+        /// <remarks></remarks>
         protected PreprocessorEnvironment _Env { get; private set; }
 
         #region IElementProcessor Members
 
+        /// <summary>
+        /// Processes the specified node.	
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public abstract IEnumerable< XNode > Process(XNode node);
 
+        /// <summary>
+        /// Gets or sets the name of the target element.	
+        /// </summary>
+        /// <value>The name of the target element.</value>
+        /// <remarks></remarks>
         public XName TargetElementName { get; protected set; }
 
         #endregion
@@ -71,6 +93,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
         }
 
 
+        /// <summary>
+        /// _s the process text.	
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected IEnumerable< XNode > _ProcessText(string value)
         {
             IEnumerable< XNode > result = _Env.EvalTextSymbols( value );
@@ -78,6 +106,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
         }
 
 
+        /// <summary>
+        /// _s the define from attributes.	
+        /// </summary>
+        /// <param name="element">The element.</param>
+        /// <remarks></remarks>
         protected void _DefineFromAttributes(XElement element)
         {
             foreach ( XAttribute attr in element.Attributes() )
@@ -86,6 +119,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
             }
         }
 
+        /// <summary>
+        /// _s the assume element.	
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected static XElement _AssumeElement(XNode node)
         {
             try

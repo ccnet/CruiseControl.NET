@@ -288,11 +288,22 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
                 _maxValueSet = i;
         }
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public override string ToString()
         {
             return ToString(null);
         }
 
+        /// <summary>
+        /// Toes the string.	
+        /// </summary>
+        /// <param name="format">The format.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         public string ToString(string format)
         {
             var writer = new StringWriter(CultureInfo.InvariantCulture);
@@ -313,11 +324,22 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
             return writer.ToString();
         }
 
+        /// <summary>
+        /// Formats the specified writer.	
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <remarks></remarks>
         public void Format(TextWriter writer)
         {
             Format(writer, false);
         }
 
+        /// <summary>
+        /// Formats the specified writer.	
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="noNames">The no names.</param>
+        /// <remarks></remarks>
         public void Format(TextWriter writer, bool noNames)
         {
             _impl.Format(this, writer, noNames);

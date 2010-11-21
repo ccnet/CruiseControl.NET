@@ -69,6 +69,13 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 
 
         // Methods
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PreprocessorEnvironment" /> class.	
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <param name="input_file_path">The input_file_path.</param>
+        /// <param name="resolver">The resolver.</param>
+        /// <remarks></remarks>
         public PreprocessorEnvironment(PreprocessorSettings settings, Uri input_file_path,
                                       XmlUrlResolver resolver)
         {
@@ -151,6 +158,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             _DefineSymbolOnStack( symbolic_def );
         }
 
+        /// <summary>
+        /// _s the get as node set.	
+        /// </summary>
+        /// <param name="values">The values.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected static IEnumerable< XNode > _GetAsNodeSet(IEnumerable values)
         {
             return
@@ -158,6 +171,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
                     .ToList();
         }
 
+        /// <summary>
+        /// _s the get as node set.	
+        /// </summary>
+        /// <param name="values">The values.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected static IEnumerable< XNode > _GetAsNodeSet(params string[] values)
         {
             return _GetAsNodeSet( ( IEnumerable ) values );
@@ -391,6 +410,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             }
         }
 
+        /// <summary>
+        /// _s the process.	
+        /// </summary>
+        /// <param name="nodes">The nodes.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         protected IEnumerable< XNode > _Process(IEnumerable< XNode > nodes)
         {
             IEnumerable< XNode > processed_val =

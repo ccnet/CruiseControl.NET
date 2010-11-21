@@ -29,7 +29,17 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <param name="result"></param>
         void GetSource(IIntegrationResult result);
 
+        /// <summary>
+        /// Initializes the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
 		void Initialize(IProject project);
+        /// <summary>
+        /// Purges the specified project.	
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <remarks></remarks>
 		void Purge(IProject project);
 	}
 }

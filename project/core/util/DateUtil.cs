@@ -9,6 +9,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	public class DateUtil
 	{
 		// Format dates according to ISO 8601 format
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public const string DateOutputFormat = "yyyy-MM-dd HH:mm:ss";
 
 

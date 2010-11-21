@@ -27,10 +27,30 @@
 
 namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public interface ICrontabField
     {
+        /// <summary>
+        /// Gets the first.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
         int GetFirst();
+        /// <summary>
+        /// Nexts the specified start.	
+        /// </summary>
+        /// <param name="start">The start.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         int Next(int start);
+        /// <summary>
+        /// Determines whether [contains] [the specified value].	
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
         bool Contains(int value);
     }
 }

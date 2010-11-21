@@ -12,16 +12,33 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 	/// </summary>
 	public class ProcessP4Initializer : IP4Initializer
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		public static readonly string ClientPrefix = "CCNet";
 		private readonly IP4ProcessInfoCreator processInfoCreator;
 		private readonly ProcessExecutor executor;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProcessP4Initializer" /> class.	
+        /// </summary>
+        /// <param name="executor">The executor.</param>
+        /// <param name="processInfoCreator">The process info creator.</param>
+        /// <remarks></remarks>
 		public ProcessP4Initializer(ProcessExecutor executor, IP4ProcessInfoCreator processInfoCreator)
 		{
 			this.executor = executor;
 			this.processInfoCreator = processInfoCreator;
 		}
 
+        /// <summary>
+        /// Initializes the specified p4.	
+        /// </summary>
+        /// <param name="p4">The p4.</param>
+        /// <param name="project">The project.</param>
+        /// <param name="workingDirectory">The working directory.</param>
+        /// <remarks></remarks>
 		public void Initialize(P4 p4, string project, string workingDirectory)
 		{
 			CheckWorkingDirectoryIsValid(workingDirectory);

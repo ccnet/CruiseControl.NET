@@ -82,6 +82,10 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			set { triggers = value; }
 		}
 
+        /// <summary>
+        /// Integrations the completed.	
+        /// </summary>
+        /// <remarks></remarks>
 		public void IntegrationCompleted()
 		{
 			foreach (ITrigger trigger in triggers)
@@ -90,6 +94,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			}
 		}
 
+        /// <summary>
+        /// Gets the next build.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public DateTime NextBuild
 		{
 			get
@@ -104,6 +113,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			}
 		}
 
+        /// <summary>
+        /// Fires this instance.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public IntegrationRequest Fire()
 		{
 			IntegrationRequest request = null;
@@ -122,21 +136,43 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			return request;
 		}
 
+        /// <summary>
+        /// Copies to.	
+        /// </summary>
+        /// <param name="array">The array.</param>
+        /// <param name="index">The index.</param>
+        /// <remarks></remarks>
 		public void CopyTo(Array array, int index)
 		{
 			throw new NotImplementedException();
 		}
 
+        /// <summary>
+        /// Gets the count.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public int Count
 		{
 			get { throw new NotImplementedException(); }
 		}
 
+        /// <summary>
+        /// Gets the sync root.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public object SyncRoot
 		{
 			get { throw new NotImplementedException(); }
 		}
 
+        /// <summary>
+        /// Adds the specified value.	
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public int Add(object value)
 		{
 			ArrayList t = new ArrayList(triggers);
@@ -145,66 +181,134 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			return triggers.Length;
 		}
 
+        /// <summary>
+        /// Determines whether [contains] [the specified value].	
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public bool Contains(object value)
 		{
 			throw new NotImplementedException();
 		}
 
+        /// <summary>
+        /// Clears this instance.	
+        /// </summary>
+        /// <remarks></remarks>
 		public void Clear()
 		{
 			throw new NotImplementedException();
 		}
 
+        /// <summary>
+        /// Indexes the of.	
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public int IndexOf(object value)
 		{
 			throw new NotImplementedException();
 		}
 
+        /// <summary>
+        /// Inserts the specified index.	
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <param name="value">The value.</param>
+        /// <remarks></remarks>
 		public void Insert(int index, object value)
 		{
 			throw new NotImplementedException();
 		}
 
+        /// <summary>
+        /// Removes the specified value.	
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <remarks></remarks>
 		public void Remove(object value)
 		{
 			throw new NotImplementedException();
 		}
 
+        /// <summary>
+        /// Removes at.	
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <remarks></remarks>
 		public void RemoveAt(int index)
 		{
 			throw new NotImplementedException();
 		}
 
+        /// <summary>
+        /// Gets the is read only.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public bool IsReadOnly
 		{
 			get { throw new NotImplementedException(); }
 		}
 
+        /// <summary>
+        /// Gets the size of the is fixed.	
+        /// </summary>
+        /// <value>The size of the is fixed.</value>
+        /// <remarks></remarks>
 		public bool IsFixedSize
 		{
 			get { throw new NotImplementedException(); }
 		}
 
+        /// <summary>
+        /// Gets or sets the <see cref="object" /> at the specified index.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public object this[int index]
 		{
 			get { throw new NotImplementedException(); }
 			set { throw new NotImplementedException(); }
 		}
 
+        /// <summary>
+        /// Gets the is synchronized.	
+        /// </summary>
+        /// <value></value>
+        /// <remarks></remarks>
 		public bool IsSynchronized
 		{
 			get { throw new NotImplementedException(); }
 		}
 
+        /// <summary>
+        /// Gets the enumerator.	
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public IEnumerator GetEnumerator()
 		{
 			return triggers.GetEnumerator();
 		}
 	}
 
+    /// <summary>
+    /// 	
+    /// </summary>
 	public enum Operator
 	{
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		Or,
+        /// <summary>
+        /// 	
+        /// </summary>
+        /// <remarks></remarks>
 		And
 	}
 }

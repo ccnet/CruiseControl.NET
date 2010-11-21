@@ -232,8 +232,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         [ReflectorProperty("workingDirectory", Required = false)]
         public string WorkingDirectory { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Git" /> class.	
+        /// </summary>
+        /// <remarks></remarks>
 		public Git() : this(new GitHistoryParser(), new ProcessExecutor(), new SystemIoFileSystem(), new IoService()) { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Git" /> class.	
+        /// </summary>
+        /// <param name="historyParser">The history parser.</param>
+        /// <param name="executor">The executor.</param>
+        /// <param name="fileSystem">The file system.</param>
+        /// <param name="fileDirectoryDeleter">The file directory deleter.</param>
+        /// <remarks></remarks>
 		public Git(IHistoryParser historyParser, ProcessExecutor executor, IFileSystem fileSystem, IFileDirectoryDeleter fileDirectoryDeleter)
 			: base(historyParser, executor)
 		{
@@ -246,6 +258,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             this.TagNameFormat = "CCNet-Build-{0}";
 		}
 
+        /// <summary>
+        /// Gets the modifications.	
+        /// </summary>
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			// fetch lates changes from the remote repository
@@ -264,6 +283,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return ParseModifications(GitLogHistory(Branch, from, to), from.StartTime, to.StartTime);
 		}
 
+        /// <summary>
+        /// Gets the source.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void GetSource(IIntegrationResult result)
 		{
 			if (!AutoGetSource)
@@ -280,6 +304,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			GitClean(result);
 		}
 
+        /// <summary>
+        /// Labels the source control.	
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <remarks></remarks>
 		public override void LabelSourceControl(IIntegrationResult result)
 		{
 			if (!TagOnSuccess || result.Failed)

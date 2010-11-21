@@ -5,6 +5,9 @@ using System.Xml.XPath;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
+    /// <summary>
+    /// 	
+    /// </summary>
     public class StatisticsBuilder
     {
         /// <summary>

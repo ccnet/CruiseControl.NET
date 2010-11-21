@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+    /// <summary>
+    /// 	
+    /// </summary>
 	public class ReflectionUtil
 	{
 		/// <summary>
