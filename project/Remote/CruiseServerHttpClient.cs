@@ -325,6 +325,24 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="attributeName"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
+        private TEnum RetrieveAttributeValue<TEnum>(XmlElement element, string attributeName, TEnum defaultValue)
+        {
+            var value = element.GetAttribute(attributeName);
+            if (string.IsNullOrEmpty(value))
+            {
+                return defaultValue;
+            }
+
+            return (TEnum)Enum.Parse(typeof(TEnum), value);
+        }
+
+        /// <summary>
+        /// Retrieves an attribute value.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="attributeName"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
         private string RetrieveAttributeValue(XmlElement element, string attributeName, string defaultValue)
         {
             var value = element.GetAttribute(attributeName);
