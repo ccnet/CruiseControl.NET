@@ -65,9 +65,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Log4NetTrace
 			Logger.Log(ThisDeclaringType, m_levelTrace, message, null);
 		}
 
-		public void Trace(object message, System.Exception t)
+		public void Trace(object message, System.Exception exception)
 		{
-			Logger.Log(ThisDeclaringType, m_levelTrace, message, t);
+			Logger.Log(ThisDeclaringType, m_levelTrace, message, exception);
 		}
 
 		public void TraceFormat(string format, params object[] args)

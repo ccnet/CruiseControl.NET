@@ -36,12 +36,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <summary>
         /// Returns the largest of the 2 passed dates
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
+        /// <param name="dateOne"></param>
+        /// <param name="dateTwo"></param>
         /// <returns></returns>
-		public static DateTime MaxDate(DateTime a, DateTime b)
+		public static DateTime MaxDate(DateTime dateOne, DateTime dateTwo)
 		{
-			return (a > b) ? a : b;
+			return (dateOne > dateTwo) ? dateOne : dateTwo;
 		}
 
 		/// <summary>

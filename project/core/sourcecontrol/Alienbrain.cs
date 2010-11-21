@@ -253,9 +253,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		public bool HasChanges(ProcessInfo p)
+		public bool HasChanges(ProcessInfo processInfo)
 		{
-			ProcessResult result = Execute(p);
+			ProcessResult result = Execute(processInfo);
 			return !result.StandardOutput.TrimEnd().EndsWith(NO_CHANGE);
 		}
 

@@ -3,6 +3,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
     /// <title>Modification Filters</title>
 	public interface IModificationFilter
 	{
-		bool Accept(Modification m);
+		bool Accept(Modification modification);
 	}
 }

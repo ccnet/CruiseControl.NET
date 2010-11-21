@@ -4,7 +4,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
 {
     public enum ControllerType { CM11, CM17A }
 
-    public enum HouseCode { A=1, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P }
+    public enum HouseCode {A=1, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P }
 
     [Flags]
     public enum Function

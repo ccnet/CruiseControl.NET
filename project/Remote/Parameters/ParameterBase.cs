@@ -29,14 +29,14 @@ namespace ThoughtWorks.CruiseControl.Remote.Parameters
         /// <summary>
         /// Initialise a new instance of a <see cref="ParameterBase"/>.
         /// </summary>
-        public ParameterBase()
+        protected ParameterBase()
         {
         }
 
         /// <summary>
         /// Initialise an instance of a <see cref="ParameterBase"/> with a name.
         /// </summary>
-        public ParameterBase(string name)
+        protected ParameterBase(string name)
         {
             myName = name;
         }

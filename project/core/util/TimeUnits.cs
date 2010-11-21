@@ -35,12 +35,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return name;
 		}
 
-		public static TimeUnits Parse(string s)
+		public static TimeUnits Parse(string input)
 		{
-			string key = s.ToLower();
+			string key = input.ToLower();
 			if (!values.ContainsKey(key))
 			{
-				throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Invalid time units specified [{0}]. I understand {1}", s, makeString(values.Keys)));
+				throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Invalid time units specified [{0}]. I understand {1}", input, MakeString(values.Keys)));
 			}
 			return (TimeUnits) values[key];
 			
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return this.factor.CompareTo(other.factor);
 		}		
 		
-		private static string makeString(ICollection c)
+		private static string MakeString(ICollection c)
 		{
 			StringBuilder sb = new StringBuilder();
 			ArrayList list = new ArrayList(c);

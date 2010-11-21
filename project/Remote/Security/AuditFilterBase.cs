@@ -20,13 +20,13 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// <summary>
         /// Starts a new blank filter.
         /// </summary>
-        public AuditFilterBase() { }
+        protected AuditFilterBase() { }
 
         /// <summary>
         /// Starts a new filter with an inner filter.
         /// </summary>
         /// <param name="inner">The inner filter.</param>
-        public AuditFilterBase(AuditFilterBase inner)
+        protected AuditFilterBase(AuditFilterBase inner)
         {
             this.innerFilter = inner;
         }

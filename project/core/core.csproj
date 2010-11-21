@@ -158,7 +158,7 @@
     </Compile>
     <Compile Include="Config\ConfigurationTrace.cs" />
     <Compile Include="Config\ConfigurationValidationUtils.cs" />
-    <Compile Include="Config\Preprocessor\CodeEvaluator.cs" />
+    <Compile Include="Config\Preprocessor\Evaluator.cs" />
     <Compile Include="Config\Preprocessor\DebuggingWriter.cs" />
     <Compile Include="Config\Preprocessor\ElementProcessors\ConditionalProcessor.cs" />
     <Compile Include="Config\Preprocessor\ElementProcessors\ConfigTemplateProcessor.cs" />

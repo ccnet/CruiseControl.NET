@@ -22,12 +22,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <summary>
         /// Checks if the 2 strings are equal, ignoring casing
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
+        /// <param name="stringOne"></param>
+        /// <param name="stringTwo"></param>
         /// <returns></returns>
-        public static bool EqualsIgnoreCase(string a, string b)
+        public static bool EqualsIgnoreCase(string stringOne, string stringTwo)
         {
-            return CaseInsensitiveComparer.Default.Compare(a, b) == 0;
+            return CaseInsensitiveComparer.Default.Compare(stringOne, stringTwo) == 0;
         }
 
         /// <summary>
@@ -148,9 +148,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return sb.ToString();
         }
 
-        public static string RemoveNulls(string s)
+        public static string RemoveNulls(string input)
         {
-            return NullStringRegex.Replace(s, string.Empty).TrimStart();
+            return NullStringRegex.Replace(input, string.Empty).TrimStart();
         }
 
         /// <summary>
@@ -307,13 +307,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <summary>
         /// returns the elements of the array as a string, delimited with the default delimitor
         /// </summary>
-        /// <param name="x"></param>
+        /// <param name="array"></param>
         /// <returns></returns>
-        public static string GetArrayContents(Array x)
+        public static string GetArrayContents(Array array)
         {
             System.Text.StringBuilder result = new System.Text.StringBuilder();
 
-            foreach (object o in x)
+            foreach (object o in array)
             {
                 result.AppendFormat("{0}{1} ", o.ToString(), DEFAULT_DELIMITER);
             }

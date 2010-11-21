@@ -10,9 +10,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	{
 		private Exception _exception;
 
-		public HtmlExceptionFormatter(Exception e)
+		public HtmlExceptionFormatter(Exception exception)
 		{
-			this._exception = e;
+			this._exception = exception;
 		}
 
 		public override string ToString()

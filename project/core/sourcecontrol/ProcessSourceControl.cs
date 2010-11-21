@@ -13,11 +13,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		protected IHistoryParser historyParser;
 		private Timeout timeout = Timeout.DefaultTimeout;
 
-		public ProcessSourceControl(IHistoryParser historyParser) : this(historyParser, new ProcessExecutor())
+	    protected ProcessSourceControl(IHistoryParser historyParser) : this(historyParser, new ProcessExecutor())
 		{
 		}
 
-		public ProcessSourceControl(IHistoryParser historyParser, ProcessExecutor executor)
+	    protected ProcessSourceControl(IHistoryParser historyParser, ProcessExecutor executor)
 		{
 			this.executor = executor;
 			this.historyParser = historyParser;

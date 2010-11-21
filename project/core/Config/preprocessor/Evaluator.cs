@@ -103,9 +103,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             return ( T ) Convert.ChangeType( EvalToObject( expression ), typeof ( T ) );
         }
 
-        public static string StringAsLiteral(string s)
+        public static string StringAsLiteral(string theString)
         {
-            var expression = new CodePrimitiveExpression( s );
+            var expression = new CodePrimitiveExpression( theString );
             var sb = new StringBuilder();
             var options = new CodeGeneratorOptions();
             using ( TextWriter writer = new StringWriter( sb ) )

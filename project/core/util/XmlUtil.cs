@@ -136,11 +136,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return CDataCloseTag.Replace(text, @"] ]>");
 		}
 
-		public static string StringSerialize(object o)
+		public static string StringSerialize(object obj)
 		{
-			XmlSerializer serializer = new XmlSerializer(o.GetType());
+			XmlSerializer serializer = new XmlSerializer(obj.GetType());
 			StringWriter writer1 = new StringWriter();
-			serializer.Serialize(writer1, o);
+			serializer.Serialize(writer1, obj);
 
 			StringReader reader = new StringReader(writer1.ToString());
 			StringWriter writer2 = new StringWriter();

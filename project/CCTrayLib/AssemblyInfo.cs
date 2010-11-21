@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Runtime.InteropServices;
 //
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -7,3 +8,4 @@ using System.Reflection;
 [assembly : AssemblyTitle("CC.NET SysTray Watcher Lib")]
 [assembly : AssemblyDescription("")]
 [assembly : AssemblyConfiguration("")]
+[assembly: ComVisibleAttribute(false)]

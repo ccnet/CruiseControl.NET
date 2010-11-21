@@ -9,8 +9,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 	[Serializable]
 	public class ConfigurationException : CruiseControlException
 	{
-		public ConfigurationException(string s) : base(s) {}
-		public ConfigurationException(string s, Exception e) : base(s, e) {}
+		public ConfigurationException(string message) : base(message) {}
+		public ConfigurationException(string message, Exception exception) : base(message, exception) {}
 		protected ConfigurationException(SerializationInfo info, StreamingContext context)
 			:base (info, context) {}
 	}
@@ -21,8 +21,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 	[Serializable]
 	public class ConfigurationFileMissingException : ConfigurationException
 	{
-		public ConfigurationFileMissingException(string s) : base(s) {}
-		public ConfigurationFileMissingException(string s, Exception e) : base(s, e) {}
+		public ConfigurationFileMissingException(string message) : base(message) {}
+		public ConfigurationFileMissingException(string message, Exception exception) : base(message, exception) {}
 		protected ConfigurationFileMissingException(SerializationInfo info, StreamingContext context)
 			: base(info, context) {}
 	}
