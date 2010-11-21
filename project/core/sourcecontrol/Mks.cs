@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -271,7 +272,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private void ExecuteWithLogging(ProcessInfo processInfo, string comment)
 		{
-			Log.Info(string.Format(comment + " : {0} {1}", processInfo.FileName, processInfo.PublicArguments));
+			Log.Info(string.Format(CultureInfo.CurrentCulture, comment + " : {0} {1}", processInfo.FileName, processInfo.PublicArguments));
 			Execute(processInfo);
 		}
 

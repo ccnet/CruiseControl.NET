@@ -2,6 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
@@ -78,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 
             IntegrationSummary lastIntegration = resultFromThisBuild.LastIntegration;
 
-            string firstSuffix = AllowDuplicateSubsequentLabels ? string.Empty : "." + INITIAL_SUFFIX_NUMBER.ToString();
+            string firstSuffix = AllowDuplicateSubsequentLabels ? string.Empty : "." + INITIAL_SUFFIX_NUMBER.ToString(CultureInfo.CurrentCulture);
 
             if (changeNumber != 0)
             {
@@ -104,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
             Match match = Regex.Match(label, @"(.*\d+)\.(\d+)$");
             if (match.Success && match.Groups.Count >= 3)
             {
-                current = Int32.Parse(match.Groups[2].Value);
+                current = Int32.Parse(match.Groups[2].Value, CultureInfo.CurrentCulture);
                 label = match.Groups[1].Value;
             }
             return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}.{1}", label, current + 1);

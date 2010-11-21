@@ -83,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			string folderName = null;
 			string fileName = null;
 			StringBuilder nameBuilder = new StringBuilder(255);
-			ushort modTypeID = ushort.Parse(node.Attributes["type"].Value);
+			ushort modTypeID = ushort.Parse(node.Attributes["type"].Value, CultureInfo.CurrentCulture);
 			int index;
 			
 			nameBuilder.Append(node.Attributes["name"].InnerText);

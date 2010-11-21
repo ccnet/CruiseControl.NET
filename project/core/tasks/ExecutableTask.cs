@@ -1,3 +1,4 @@
+using System.Globalization;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     using System;
@@ -197,7 +198,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 				for (int i = 0; i < codes.Length; ++i)
 				{
-					successExitCodes[i] = Int32.Parse(codes[i]);
+					successExitCodes[i] = Int32.Parse(codes[i], CultureInfo.CurrentCulture);
 				}
 			}
 		}
@@ -315,7 +316,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <remarks></remarks>
 		public override string ToString()
 		{
-			return string.Format(@" BaseDirectory: {0}, Executable: {1}", ConfiguredBaseDirectory, Executable);
+			return string.Format(CultureInfo.CurrentCulture, @" BaseDirectory: {0}, Executable: {1}", ConfiguredBaseDirectory, Executable);
 		}
 
 		/// <summary>

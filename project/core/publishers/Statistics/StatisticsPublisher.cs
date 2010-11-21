@@ -153,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			integration.AppendFormat("<integration build-label=\"{0}\" status=\"{1}\" day=\"{2}\" month=\"{3}\" year=\"{4}\">",
 										integrationResult.Label,
 										integrationResult.Status.ToString(),
-										now.Day.ToString(), now.ToString("MMM", CultureInfo.InvariantCulture), now.Year.ToString());
+										now.Day.ToString(CultureInfo.CurrentCulture), now.ToString("MMM", CultureInfo.InvariantCulture), now.Year.ToString(CultureInfo.CurrentCulture));
 
             integration.AppendLine(ToXml(stats));
 
@@ -287,7 +287,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             DateTime now = DateTime.Now;
 
             return string.Format(System.Globalization.CultureInfo.CurrentCulture,"<timestamp day=\"{0}\" month=\"{1}\" year=\"{2}\" />",
-                now.Day.ToString(), now.ToString("MMM"), now.Year.ToString());
+                now.Day.ToString(CultureInfo.CurrentCulture), now.ToString("MMM", CultureInfo.CurrentCulture), now.Year.ToString(CultureInfo.CurrentCulture));
         }
     }
 }

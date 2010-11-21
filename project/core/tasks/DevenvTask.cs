@@ -1,3 +1,4 @@
+using System.Globalization;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	using System;
@@ -373,25 +374,25 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			if (SolutionFile.StartsWith("\""))
 				sb.Append(SolutionFile);
 			else
-				sb.AppendFormat("\"{0}\"", SolutionFile);
+				sb.AppendFormat(CultureInfo.CurrentCulture, "\"{0}\"", SolutionFile);
 
-			sb.AppendFormat(" /{0}", BuildType);
+			sb.AppendFormat(CultureInfo.CurrentCulture, " /{0}", BuildType);
 
 			if (Configuration.StartsWith("\""))
-				sb.AppendFormat(" {0}", Configuration);
+				sb.AppendFormat(CultureInfo.CurrentCulture, " {0}", Configuration);
 			else
-				sb.AppendFormat(" \"{0}\"", Configuration);
+				sb.AppendFormat(CultureInfo.CurrentCulture, " \"{0}\"", Configuration);
 
 			if (!string.IsNullOrEmpty(Project))
 			{
 				if (Project.StartsWith("\""))
-					sb.AppendFormat(" /project {0}", Project);
+					sb.AppendFormat(CultureInfo.CurrentCulture, " /project {0}", Project);
 				else
-					sb.AppendFormat(" /project \"{0}\"", Project);
+					sb.AppendFormat(CultureInfo.CurrentCulture, " /project \"{0}\"", Project);
 			}
 
 			// always create an out file, will be merged into build log later
-			sb.AppendFormat(" /out \"{0}\"", DevEnvOutputFile(result));
+			sb.AppendFormat(CultureInfo.CurrentCulture, " /out \"{0}\"", DevEnvOutputFile(result));
 
 			return sb.ToString();
 		}
@@ -399,7 +400,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private string DevEnvOutputFile(IIntegrationResult result)
 		{
-			return Path.Combine(result.ArtifactDirectory, string.Format(LogFilename, LogFileId));
+			return Path.Combine(result.ArtifactDirectory, string.Format(CultureInfo.CurrentCulture, LogFilename, LogFileId));
 		}
 
 	}

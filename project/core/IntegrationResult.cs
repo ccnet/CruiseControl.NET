@@ -10,6 +10,7 @@ using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using System.Xml;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -168,7 +169,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 try
                 {
                     string tempNumericLabel = Regex.Replace(Label, @".*?(\d+$)", "$1");
-                    return int.Parse(tempNumericLabel);
+                    return int.Parse(tempNumericLabel, CultureInfo.CurrentCulture);
                 }
                 catch (FormatException)
                 {

@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Xsl;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 {
@@ -49,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         /// <param name="args"></param>
         internal static void ThrowAppException(string fmt, params object[] args)
         {
-            throw new ApplicationException(String.Format(fmt, args));
+            throw new ApplicationException(String.Format(CultureInfo.CurrentCulture, fmt, args));
         }
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         internal static void ThrowException(ExceptionFactory factory, string fmt,
                                             params object[] args)
         {
-            throw factory(String.Format(fmt, args));
+            throw factory(String.Format(CultureInfo.CurrentCulture, fmt, args));
         }
 
         /// <summary>
@@ -107,7 +108,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             Stream stream = Assembly.GetCallingAssembly().GetManifestResourceStream(resource_name);
             if (stream == null)
                 throw new ApplicationException(
-                    String.Format("Could not find manifest resource stream: {0}", resource_name));
+                    String.Format(CultureInfo.CurrentCulture, "Could not find manifest resource stream: {0}", resource_name));
             return stream;
         }
 

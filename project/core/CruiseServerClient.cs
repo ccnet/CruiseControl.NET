@@ -10,6 +10,7 @@ using ThoughtWorks.CruiseControl.Remote.Messages;
 using ThoughtWorks.CruiseControl.Core.Security;
 using System.Security.Cryptography;
 using System.Text;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -469,7 +470,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 {
                     throw new CruiseControlException(
                         string.Format(
-                            "Unable to locate action '{0}'",
+                            CultureInfo.CurrentCulture, "Unable to locate action '{0}'",
                             action));
                 }
 
@@ -815,7 +816,7 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 throw new CruiseControlException(
                     string.Format(
-                        "Unable to locate action '{0}'",
+                        CultureInfo.CurrentCulture, "Unable to locate action '{0}'",
                         action));
             }
 
@@ -825,7 +826,7 @@ namespace ThoughtWorks.CruiseControl.Core
             {
                 throw new CruiseControlException(
                     string.Format(
-                        "Unable to translate message: '{0}' is unknown",
+                        CultureInfo.CurrentCulture, "Unable to translate message: '{0}' is unknown",
                         messageXml.DocumentElement.Name));
             }
 

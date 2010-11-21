@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -87,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             if (!File.Exists(process.StartInfo.FileName))
             {
                 throw new CruiseControlException(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Kill command {0} not found on {1} OS. PID:{2}",
-                                                  process.StartInfo.FileName, platform, Convert.ToString(pid)));
+                                                  process.StartInfo.FileName, platform, Convert.ToString(pid, CultureInfo.CurrentCulture)));
             }
 
             process.Start();

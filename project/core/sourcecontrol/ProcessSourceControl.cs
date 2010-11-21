@@ -3,6 +3,7 @@ using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -99,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			else if (result.Failed)
 			{
                 var message = string.Format(
-                    "Source control operation failed: {0}. Process command: {1} {2}",
+                    CultureInfo.CurrentCulture, "Source control operation failed: {0}. Process command: {1} {2}",
                     result.StandardError,
                     processInfo.FileName,
                     processInfo.PublicArguments);

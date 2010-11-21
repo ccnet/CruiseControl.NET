@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
@@ -120,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 		{
 			string iterationPtn = @".*?((\d+)" + Separator.Replace(".", @"\.") + "(\\d+$)).*";
 			string iterationLabel = Regex.Replace(label, iterationPtn, "$2");
-			int numericIteration = int.Parse(iterationLabel);
+			int numericIteration = int.Parse(iterationLabel, CultureInfo.CurrentCulture);
 			if (numericIteration < CurrentIteration())
 			{
 				return InitialLabel;
@@ -128,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			else
 			{
 				string numericLabel = Regex.Replace(label, @".*?(\d+$)", "$1");
-				int newLabel = int.Parse(numericLabel);
+				int newLabel = int.Parse(numericLabel, CultureInfo.CurrentCulture);
 				return newLabel + 1;
 			}
 		}

@@ -2,6 +2,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 {
@@ -73,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		{
 			if (!  ( (view.StartsWith("//") || view.StartsWith(@"""//")) && (view.EndsWith("/...") || view.EndsWith(@"/...""")) ) )
 			{
-				throw new CruiseControlException(string.Format(@"[{0}] is not a valid view - it should start with '//' and end with '/...'", view));
+				throw new CruiseControlException(string.Format(CultureInfo.CurrentCulture, @"[{0}] is not a valid view - it should start with '//' and end with '/...'", view));
 			}
 		}
 

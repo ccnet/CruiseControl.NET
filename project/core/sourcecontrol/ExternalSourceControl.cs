@@ -240,7 +240,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </remarks>
         public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
         {
-            string args = string.Format(@"GETMODS ""{0}"" ""{1}"" {2}",
+            string args = string.Format(CultureInfo.CurrentCulture, @"GETMODS ""{0}"" ""{1}"" {2}",
                 FormatCommandDate(to.StartTime),
                 FormatCommandDate(from.StartTime),
                 ArgString);
@@ -268,7 +268,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
             if (AutoGetSource)
             {
-                string args = string.Format(@"GETSOURCE ""{0}"" ""{1}"" {2}",
+                string args = string.Format(CultureInfo.CurrentCulture, @"GETSOURCE ""{0}"" ""{1}"" {2}",
                     result.WorkingDirectory,
                     FormatCommandDate(result.StartTime),
                     ArgString);
@@ -290,7 +290,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             if (LabelOnSuccess && result.Succeeded && (result.Label != string.Empty))
             {
-                string args = string.Format(@"SETLABEL ""{0}"" ""{1}"" {2}",
+                string args = string.Format(CultureInfo.CurrentCulture, @"SETLABEL ""{0}"" ""{1}"" {2}",
                     result.Label,
                     FormatCommandDate(result.StartTime),
                     ArgString);
@@ -341,7 +341,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             ProcessResult cmdResults = Execute(command);
             if (cmdResults.Failed)
             {
-                Log.Error(string.Format(@"Source control command ""{0} {1}"" failed with RC={2}",
+                Log.Error(string.Format(CultureInfo.CurrentCulture, @"Source control command ""{0} {1}"" failed with RC={2}",
                     Executable, args, cmdResults.ExitCode));
                 if ((cmdResults.StandardError != null) && (cmdResults.StandardError !=string.Empty))
                     Log.Error(string.Format(System.Globalization.CultureInfo.CurrentCulture,"\tError output: {0}", cmdResults.StandardError));

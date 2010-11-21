@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -617,9 +618,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             buffer.AppendIf(!string.IsNullOrEmpty(SettingsFile), "//cr \"{0}\"", RootPath(SettingsFile, false));
             buffer.AppendIf(Register, "//reg");
             buffer.AppendIf(!string.IsNullOrEmpty(WorkingDirectory), "//w \"{0}\"", RootPath(WorkingDirectory, false));
-            buffer.AppendIf(ApplicationLoadWait > 0, "//wal {0}", ApplicationLoadWait.ToString());
+            buffer.AppendIf(ApplicationLoadWait > 0, "//wal {0}", ApplicationLoadWait.ToString(CultureInfo.CurrentCulture));
             buffer.AppendIf(CoverIis, "//iis");
-            buffer.AppendIf(ServiceTimeout > 0, "//st {0}", ServiceTimeout.ToString());
+            buffer.AppendIf(ServiceTimeout > 0, "//st {0}", ServiceTimeout.ToString(CultureInfo.CurrentCulture));
             buffer.AppendIf(!string.IsNullOrEmpty(WindowsService), "//svc {0}", WindowsService);
 
             return buffer.ToString();

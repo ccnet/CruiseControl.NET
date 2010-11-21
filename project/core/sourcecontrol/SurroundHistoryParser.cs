@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public Modification[] Parse(TextReader sscmLog, DateTime from, DateTime to)
 		{
 			string line = sscmLog.ReadLine();
-			int totalLines = int.Parse(line.Split('-')[1]);
+			int totalLines = int.Parse(line.Split('-')[1], CultureInfo.CurrentCulture);
 
             var modList = new List<Modification>(totalLines);
 			for (int i = 0; i < totalLines; i++)

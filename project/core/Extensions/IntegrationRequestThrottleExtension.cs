@@ -4,6 +4,7 @@ using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Events;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Extensions
 {
@@ -30,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
         {
             foreach (XmlElement itemEl in extensionConfig.Items)
             {
-                if (itemEl.Name == "limit") numberOfRequestsAllowed = Convert.ToInt32(itemEl.InnerText);
+                if (itemEl.Name == "limit") numberOfRequestsAllowed = Convert.ToInt32(itemEl.InnerText, CultureInfo.CurrentCulture);
             }
 
             server.IntegrationStarted += new EventHandler<IntegrationStartedEventArgs>(server_IntegrationStarted);

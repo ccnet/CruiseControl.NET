@@ -84,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
                 catch (Exception ex)
                 {
                     string msg = "Unable to parse daily schedule integration time: {0}.  The integration time should be specified in the format: {1}.";
-                    throw new ConfigurationException(string.Format(msg, value, CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern), ex);
+                    throw new ConfigurationException(string.Format(CultureInfo.CurrentCulture, msg, value, CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern), ex);
                 }
             }
         }

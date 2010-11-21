@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Tasks;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -149,7 +150,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private XmlElement CreateTextElement(XmlDocument document, string name, string text, params object[] values)
         {
             XmlElement element = CreateElement(document, name);
-            element.InnerText = string.Format(text, values);
+            element.InnerText = string.Format(CultureInfo.CurrentCulture, text, values);
             return element;
         }
 
@@ -186,7 +187,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             integrationElement.AppendChild(CreateTextElement(
                 integrationElement.OwnerDocument, "guid", System.Guid.NewGuid().ToString()));
             integrationElement.AppendChild(CreateTextElement(
-                integrationElement.OwnerDocument, "pubDate", System.DateTime.Now.ToString("r")));
+                integrationElement.OwnerDocument, "pubDate", System.DateTime.Now.ToString("r", CultureInfo.CurrentCulture)));
 
             if (result.HasModifications())
             {
@@ -252,13 +253,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 {
                     alreadyAdded.Add(modificationChecksum);
 
-                    mods.WriteLine(string.Format(modificationHeaderFormat,
+                    mods.WriteLine(string.Format(CultureInfo.CurrentCulture, modificationHeaderFormat,
                                                  modification.UserName,
                                                  modification.Comment));
 
                     if (!string.IsNullOrEmpty(modification.IssueUrl))
                     {
-                        mods.WriteLine(string.Format(issueLinkFormat,
+                        mods.WriteLine(string.Format(CultureInfo.CurrentCulture, issueLinkFormat,
                                                      modification.IssueUrl));
                     }
                 }
@@ -283,13 +284,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
                 if (previousModificationChecksum != modificationChecksum)
                 {
-                    mods.WriteLine(string.Format(changesetHeader,
+                    mods.WriteLine(string.Format(CultureInfo.CurrentCulture, changesetHeader,
                                                  modification.UserName,
                                                  modification.Comment));
                 }
 
                 mods.WriteLine(
-                    string.Format(modificationLine,
+                    string.Format(CultureInfo.CurrentCulture, modificationLine,
                                   modification.Type,
                                   modification.FolderName,
                                   modification.FileName

@@ -1,6 +1,7 @@
 
 using Microsoft.Win32;
 using System;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -41,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			string value = GetLocalMachineSubKeyValue(path, name);
 			if (value == null)
 			{
-				throw new CruiseControlException(string.Format(@"Registry key or value name not found: HKEY_LOCAL_MACHINE\{0}\{1}", path, name)); 
+				throw new CruiseControlException(string.Format(CultureInfo.CurrentCulture, @"Registry key or value name not found: HKEY_LOCAL_MACHINE\{0}\{1}", path, name)); 
 			}
 			return value;
 		}

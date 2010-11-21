@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -340,7 +341,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
 		public ProcessInfo CreateModificationProcess(string processCommand, DateTime from, DateTime to)
 		{
-			var arguments = String.Format(processCommand, Project, Server, Database, Username, Password.PrivateValue, from.ToFileTime(), to.ToFileTime());
+			var arguments = String.Format(CultureInfo.CurrentCulture, processCommand, Project, Server, Database, Username, Password.PrivateValue, from.ToFileTime(), to.ToFileTime());
 			return new ProcessInfo(Executable, arguments);
 		}
 
@@ -353,7 +354,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
 		public ProcessInfo CreateLabelProcess(string processCommand, IIntegrationResult result)
 		{
-			string arguments = String.Format(processCommand, Project, Server, Database, Username, Password.PrivateValue, result.Label);
+			string arguments = String.Format(CultureInfo.CurrentCulture, processCommand, Project, Server, Database, Username, Password.PrivateValue, result.Label);
 			return new ProcessInfo(Executable, arguments);
 		}
 
@@ -395,7 +396,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
 		public ProcessInfo CreateBranchProcess(string processCommand)
 		{
-			string arguments = String.Format(processCommand, Branch, Server, Database, Username, Password.PrivateValue);
+			string arguments = String.Format(CultureInfo.CurrentCulture, processCommand, Branch, Server, Database, Username, Password.PrivateValue);
 			return new ProcessInfo(Executable, arguments);
 		}
 	}

@@ -1,3 +1,4 @@
+using System.Globalization;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     using System;
@@ -314,7 +315,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private string MsBuildOutputFile(IIntegrationResult result)
 		{
-            return Path.Combine(result.ArtifactDirectory, string.Format(LogFilename, LogFileId));
+            return Path.Combine(result.ArtifactDirectory, string.Format(CultureInfo.CurrentCulture, LogFilename, LogFileId));
 		}
 
 		private static string CheckAndQuoteLoggerSetting(string logger)

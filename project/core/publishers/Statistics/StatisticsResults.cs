@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
@@ -98,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
                         {
                             writer.WriteStartElement("statistic");
                             writer.WriteAttributeString("name", statisticResult.StatName);
-                            writer.WriteString(Convert.ToString(statisticResult.Value));
+                            writer.WriteString(Convert.ToString(statisticResult.Value, CultureInfo.CurrentCulture));
                             writer.WriteEndElement();
                         });
             writer.WriteEndElement();

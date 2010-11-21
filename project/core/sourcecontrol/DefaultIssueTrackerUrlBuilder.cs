@@ -1,5 +1,6 @@
 using System;
 using Exortech.NetReflector;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -98,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                         //while last position is numeric add to result
                         while (EndPosition >= 0 && char.IsNumber(CurrentChar))
                         {
-                            Result = Result.Insert(0, CurrentChar.ToString());
+                            Result = Result.Insert(0, CurrentChar.ToString(CultureInfo.CurrentCulture));
                             EndPosition--;
                             if (EndPosition >= 0) CurrentChar = SearchingComment[EndPosition];
 
@@ -107,7 +108,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
                         if (NumericPartFound)
                         {
-                            mod.IssueUrl = string.Format(_url, Result);
+                            mod.IssueUrl = string.Format(CultureInfo.CurrentCulture, _url, Result);
                         }
                     }
                 }

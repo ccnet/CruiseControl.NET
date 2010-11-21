@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Exortech.NetReflector;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -75,11 +76,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             builder.Append(Metric);
             if (MinValue >= 0)
             {
-                builder.AppendFormat(":{0}", MinValue);
+                builder.AppendFormat(CultureInfo.CurrentCulture, ":{0}", MinValue);
                 if ((ItemType != NCoverItemType.Default) || !string.IsNullOrEmpty(Pattern))
                 {
-                    builder.AppendFormat(":{0}", ItemType == NCoverItemType.Default ? NCoverItemType.Default : ItemType);
-                    if (!string.IsNullOrEmpty(Pattern)) builder.AppendFormat(":{0}", Pattern);
+                    builder.AppendFormat(CultureInfo.CurrentCulture, ":{0}", ItemType == NCoverItemType.Default ? NCoverItemType.Default : ItemType);
+                    if (!string.IsNullOrEmpty(Pattern)) builder.AppendFormat(CultureInfo.CurrentCulture, ":{0}", Pattern);
                 }
             }
             return builder.ToString();

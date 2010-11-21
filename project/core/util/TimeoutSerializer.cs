@@ -3,6 +3,7 @@ using System;
 using System.Xml;
 using Exortech.NetReflector;
 using Exortech.NetReflector.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -68,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             {
                 try
                 {
-                    timeout = new Timeout(Int32.Parse(a.Value));
+                    timeout = new Timeout(Int32.Parse(a.Value, CultureInfo.CurrentCulture));
                 }
                 catch (Exception)
                 {
@@ -88,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                         {
                             units = TimeUnits.Parse(unitsString);
                         }
-                        timeout = new Timeout(Int32.Parse(e.InnerText), units);
+                        timeout = new Timeout(Int32.Parse(e.InnerText, CultureInfo.CurrentCulture), units);
                     }
                     catch (Exception)
                     {

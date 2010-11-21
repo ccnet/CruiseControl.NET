@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -46,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
 		public void AssignFileInfo( Modification modification, string file )
 		{
-			int separatorLocation = file.LastIndexOf( Path.DirectorySeparatorChar.ToString() );
+			int separatorLocation = file.LastIndexOf( Path.DirectorySeparatorChar.ToString(CultureInfo.CurrentCulture) );
 			if ( separatorLocation > - 1 )
 			{
 				modification.FolderName = file.Substring( 0, separatorLocation );
@@ -69,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			try
 			{
-				modification.ModifiedTime = DateTime.Parse( time );
+				modification.ModifiedTime = DateTime.Parse( time, CultureInfo.CurrentCulture );
 			}
 			catch ( FormatException )
 			{

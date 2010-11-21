@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {  
@@ -29,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             StringBuilder changeSet = new StringBuilder(null);
             var mods = new List<Modification>();
             
-            if (vstsLog.Peek() != -1 && Convert.ToChar(vstsLog.Peek()) == Convert.ToChar("-"))
+            if (vstsLog.Peek() != -1 && Convert.ToChar(vstsLog.Peek()) == Convert.ToChar("-", CultureInfo.CurrentCulture))
             {                
                 while ((logFileLine = vstsLog.ReadLine()) != null)
                 {
@@ -82,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
             string changeNumber = ChangeSet.Groups["changenumber"].Value;
             string author = ChangeSet.Groups["author"].Value;
-            DateTime changeTime = DateTime.Parse(ChangeSet.Groups["date"].Value);           
+            DateTime changeTime = DateTime.Parse(ChangeSet.Groups["date"].Value, CultureInfo.CurrentCulture);           
             string comment = ChangeSet.Groups["comment"].Value.Trim();
 
             var mods = new List<Modification>();

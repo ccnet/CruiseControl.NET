@@ -1,6 +1,7 @@
 
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -24,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			if (string.IsNullOrEmpty(value)) return;
 
 			AppendSpaceIfNotEmpty();
-			builder.AppendFormat(format, value);
+			builder.AppendFormat(CultureInfo.CurrentCulture, format, value);
 		}
 
         ///// <summary>

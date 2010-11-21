@@ -1,5 +1,6 @@
 using System;
 using Exortech.NetReflector;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -47,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			foreach (Modification mod in modifications)
 			{
-				mod.Url = String.Format(_url, mod.FolderName.Length == 0 ? mod.FileName : mod.FolderName + "/" + mod.FileName);
+				mod.Url = String.Format(CultureInfo.CurrentCulture, _url, mod.FolderName.Length == 0 ? mod.FileName : mod.FolderName + "/" + mod.FileName);
 			}
 		}
 	}

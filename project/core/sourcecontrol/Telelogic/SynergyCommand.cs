@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 {
@@ -169,7 +170,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 
 				if (result.TimedOut)
 				{
-					message = String.Format(@"Synergy connection timed out after {0} seconds.", connection.Timeout);
+					message = String.Format(CultureInfo.CurrentCulture, @"Synergy connection timed out after {0} seconds.", connection.Timeout);
 					throw(new CruiseControlException(message));
 				}
 
@@ -399,7 +400,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 			const string template = @"(?im:(@\s+{0}[\s\S]*Database:\s+{1}))";
 			string pattern;
 
-			pattern = String.Format(template, Regex.Escape(sessionId), Regex.Escape(database));
+			pattern = String.Format(CultureInfo.CurrentCulture, template, Regex.Escape(sessionId), Regex.Escape(database));
 			grep = new Regex(pattern, RegexOptions.CultureInvariant);
 
 			return (grep.IsMatch(status));
@@ -427,7 +428,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 			string pattern;
 			bool isProtected;
 
-			pattern = String.Format(template, Regex.Escape(database), Regex.Escape(host));
+			pattern = String.Format(CultureInfo.CurrentCulture, template, Regex.Escape(database), Regex.Escape(host));
 
 			grep = new Regex(pattern, RegexOptions.CultureInvariant);
 			isProtected = grep.IsMatch(status);
@@ -496,7 +497,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 			ProcessResult result = executor.Execute(processInfo);
 			if (result.TimedOut)
 			{
-				string message = String.Format(@"Synergy source control operation has timed out after {0} seconds. Process command: ""{1}"" {2}", connection.Timeout, processInfo.FileName, processInfo.PublicArguments);
+				string message = String.Format(CultureInfo.CurrentCulture, @"Synergy source control operation has timed out after {0} seconds. Process command: ""{1}"" {2}", connection.Timeout, processInfo.FileName, processInfo.PublicArguments);
 				throw(new CruiseControlException(message));
 			}
 

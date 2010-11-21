@@ -329,7 +329,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			try
 			{
 				CreatePVCSInstructionFile(filename, content);
-				string arguments = string.Format(@"/c ""{0}""", filename);
+				string arguments = string.Format(CultureInfo.CurrentCulture, @"/c ""{0}""", filename);
 				Execute(CreatePVCSProcessInfo("cmd.exe", arguments));
 			}
 			finally
@@ -364,7 +364,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
 		public string CreatePcliContentsForGet()
 		{
-			return string.Format(GET_INSTRUCTIONS_TEMPLATE, ErrorFile, LogFile, Project, GetLogin(false), GetRecursiveValue(), Workspace, LabelOrPromotionInput(tempLabel), Subproject);
+			return string.Format(CultureInfo.CurrentCulture, GET_INSTRUCTIONS_TEMPLATE, ErrorFile, LogFile, Project, GetLogin(false), GetRecursiveValue(), Workspace, LabelOrPromotionInput(tempLabel), Subproject);
 		}
 
         /// <summary>
@@ -376,7 +376,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
 		public string CreatePcliContentsForCreatingVLog(string beforedate, string afterdate)
 		{
-			return string.Format(VLOG_INSTRUCTIONS_TEMPLATE, ErrorFile, LogFile, Project, GetLogin(false), GetRecursiveValue(), beforedate, afterdate, Subproject);
+			return string.Format(CultureInfo.CurrentCulture, VLOG_INSTRUCTIONS_TEMPLATE, ErrorFile, LogFile, Project, GetLogin(false), GetRecursiveValue(), beforedate, afterdate, Subproject);
 		}
 
         /// <summary>
@@ -387,7 +387,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
 		public string CreatePcliContentsForCreatingVlogByLabel(string label)
 		{
-			return string.Format(VLOG_LABEL_INSTRUCTIONS_TEMPLATE, ErrorFile, LogFile, Project, GetLogin(false), GetRecursiveValue(), label, Subproject);
+			return string.Format(CultureInfo.CurrentCulture, VLOG_LABEL_INSTRUCTIONS_TEMPLATE, ErrorFile, LogFile, Project, GetLogin(false), GetRecursiveValue(), label, Subproject);
 		}
 
         /// <summary>
@@ -398,7 +398,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
 		public string CreatePcliContentsForDeletingLabel(string label)
 		{
-			return string.Format(DELETE_LABEL_TEMPLATE, ErrorFile, LogFile, Project, GetLogin(false), GetRecursiveValue(), LabelOrPromotionInput(label), Subproject);
+			return string.Format(CultureInfo.CurrentCulture, DELETE_LABEL_TEMPLATE, ErrorFile, LogFile, Project, GetLogin(false), GetRecursiveValue(), LabelOrPromotionInput(label), Subproject);
 		}
 
         /// <summary>
@@ -409,7 +409,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
 		public string CreatePcliContentsForLabeling(string label)
 		{
-			return string.Format(APPLY_LABEL_TEMPLATE, LogFile, ErrorFile, GetLogin(false), label, TempFile);
+			return string.Format(CultureInfo.CurrentCulture, APPLY_LABEL_TEMPLATE, LogFile, ErrorFile, GetLogin(false), label, TempFile);
 		}
 
         /// <summary>
@@ -421,7 +421,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
 		public string CreateIndividualLabelString(Modification mod, string label)
 		{
-			return string.Format(INDIVIDUAL_LABEL_REVISION_TEMPLATE, GetVersion(mod, label), GetUncPathPrefix(mod), mod.FolderName, mod.FileName);
+			return string.Format(CultureInfo.CurrentCulture, INDIVIDUAL_LABEL_REVISION_TEMPLATE, GetVersion(mod, label), GetUncPathPrefix(mod), mod.FolderName, mod.FileName);
 		}
 
         /// <summary>
@@ -433,7 +433,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
 		public string CreateIndividualGetString(Modification mod, string fileLocation)
 		{
-			return string.Format(INDIVIDUAL_GET_REVISION_TEMPLATE, GetVersion(mod,string.Empty), GetUncPathPrefix(mod), mod.FolderName, mod.FileName, fileLocation);
+			return string.Format(CultureInfo.CurrentCulture, INDIVIDUAL_GET_REVISION_TEMPLATE, GetVersion(mod,string.Empty), GetUncPathPrefix(mod), mod.FolderName, mod.FileName, fileLocation);
 		}
 
 		private string GetUncPathPrefix(Modification mod)
@@ -541,7 +541,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			content.Append("@echo off \r\necho Create all necessary folders first\r\n");
 			foreach (string key in folders.Keys)
 			{
-				content.AppendFormat("IF NOT EXIST \"{0}\" mkdir \"{0}\\\" >NUL \r\n", folders[key]);
+				content.AppendFormat(CultureInfo.CurrentCulture, "IF NOT EXIST \"{0}\" mkdir \"{0}\\\" >NUL \r\n", folders[key]);
 			}
 
 			content.Append("\r\necho Get all of the files by version number and archive location \r\n");

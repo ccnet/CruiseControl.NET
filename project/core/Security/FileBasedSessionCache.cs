@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Security
 {
@@ -99,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
                         string sessionToken = sessionXml.DocumentElement.GetAttribute("token");
                         string userName = sessionXml.DocumentElement.GetAttribute("userName");
                         string expiryTime = sessionXml.DocumentElement.GetAttribute("expiry");
-                        SessionDetails session = new SessionDetails(userName, DateTime.Parse(expiryTime));
+                        SessionDetails session = new SessionDetails(userName, DateTime.Parse(expiryTime, CultureInfo.CurrentCulture));
                         foreach (XmlElement value in sessionXml.SelectNodes("//value"))
                         {
                             string valueKey = value.GetAttribute("key");
@@ -178,7 +179,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security
                 sessionXml.AppendChild(sessionRoot);
             }
             sessionRoot.SetAttribute("userName", details.UserName);
-            sessionRoot.SetAttribute("expiry", details.ExpiryTime.ToString("o"));
+            sessionRoot.SetAttribute("expiry", details.ExpiryTime.ToString("o", CultureInfo.CurrentCulture));
 
             // Wipe the existing values
             valuesNode = sessionXml.SelectSingleNode("values") as XmlElement;

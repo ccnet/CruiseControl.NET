@@ -445,7 +445,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             else
             {
                 // Delete the obstructions
-                Log.Info(obstructions.Count.ToString() + " obstruction(s) found - deleting");
+                Log.Info(obstructions.Count.ToString(CultureInfo.CurrentCulture) + " obstruction(s) found - deleting");
                 var basePath = Path.GetFullPath(result.BaseFromWorkingDirectory(this.WorkingDirectory)); ;
                 foreach (var obstruction in obstructions)
                 {
@@ -544,7 +544,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 // Set the latest revision - this always need to be done just in case an external has triggered a build
                 if (repositoryUrl == TrunkUrl)
                 {
-                    latestRevision = int.Parse(lastRepositoryRevision ?? "0");
+                    latestRevision = int.Parse(lastRepositoryRevision ?? "0", CultureInfo.CurrentCulture);
                     revisionData[lastRepositoryRevisionName] = lastRepositoryRevision;
                 }
             }
@@ -851,7 +851,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
         private static void AppendRevision(PrivateArguments buffer, int revision)
         {
-            buffer.AddIf(revision > 0, "--revision ", revision.ToString());
+            buffer.AddIf(revision > 0, "--revision ", revision.ToString(CultureInfo.CurrentCulture));
         }
 
         private ProcessInfo NewProcessInfo(PrivateArguments args, IIntegrationResult result)

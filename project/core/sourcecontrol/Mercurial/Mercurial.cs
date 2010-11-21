@@ -1,3 +1,4 @@
+using System.Globalization;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 {
     using System;
@@ -360,7 +361,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         {
             ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
             buffer.AddArgument("tag");
-            buffer.AddArgument("-m", string.Format(TagCommitMessage, result.Label));
+            buffer.AddArgument("-m", string.Format(CultureInfo.CurrentCulture, TagCommitMessage, result.Label));
             AppendCommonSwitches(buffer);
             buffer.AddArgument(result.Label);
             return NewProcessInfo(buffer.ToString(), result.BaseFromWorkingDirectory(WorkingDirectory));

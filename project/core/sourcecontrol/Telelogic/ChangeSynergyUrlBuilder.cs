@@ -172,18 +172,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 			{
 				// cache the information that doesn't change between tasks;
 				// the format item "{{0}}" will be escaped to "{0}"
-				taskUrl = String.Format(trustedUrl, Url, HttpUtility.UrlEncode(Role), HttpUtility.UrlEncode(Database), HttpUtility.UrlEncode(username), HttpUtility.UrlEncode(obfuscatedPassword));
+				taskUrl = String.Format(CultureInfo.CurrentCulture, trustedUrl, Url, HttpUtility.UrlEncode(Role), HttpUtility.UrlEncode(Database), HttpUtility.UrlEncode(username), HttpUtility.UrlEncode(obfuscatedPassword));
 			}
 			else
 			{
 				// we have to first UrlEncode any of the redirection url querystring parameters
-				taskQuery = String.Format(loginQuery, HttpUtility.UrlEncode(Role), HttpUtility.UrlEncode(Database));
+				taskQuery = String.Format(CultureInfo.CurrentCulture, loginQuery, HttpUtility.UrlEncode(Role), HttpUtility.UrlEncode(Database));
 
 				// then UrlEncode the resulting redirection querystring
 				taskQuery = HttpUtility.UrlEncode(taskQuery);
 
 				// create the login url
-				taskUrl = String.Format(loginUrl, Url, HttpUtility.UrlEncode(Role), HttpUtility.UrlEncode(Database));
+				taskUrl = String.Format(CultureInfo.CurrentCulture, loginUrl, Url, HttpUtility.UrlEncode(Role), HttpUtility.UrlEncode(Database));
 
 				// Concatenate the login url and redirection url querystring.
 				// Append the "{0}", as UrlEncode would encode it as "%7b0%7d"
@@ -192,7 +192,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 
 			foreach (Modification modification in modifications)
 			{
-				modification.Url = String.Format(taskUrl, modification.ChangeNumber);
+				modification.Url = String.Format(CultureInfo.CurrentCulture, taskUrl, modification.ChangeNumber);
 			}
 		}
 

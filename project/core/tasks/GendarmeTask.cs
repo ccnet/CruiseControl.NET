@@ -3,6 +3,7 @@ using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -289,7 +290,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			buffer.AppendIf(!string.IsNullOrEmpty(ConfigFile), "--config {0}", StringUtil.AutoDoubleQuoteString(ConfigFile));
 			buffer.AppendIf(!string.IsNullOrEmpty(RuleSet), "--set {0}", RuleSet);
 			buffer.AppendIf(!string.IsNullOrEmpty(IgnoreFile), "--ignore {0}", StringUtil.AutoDoubleQuoteString(IgnoreFile));
-			buffer.AppendIf(Limit > 0, "--limit {0}", Limit.ToString());
+			buffer.AppendIf(Limit > 0, "--limit {0}", Limit.ToString(CultureInfo.CurrentCulture));
 			buffer.AppendIf(!string.IsNullOrEmpty(Severity), "--severity {0}", Severity);
 			buffer.AppendIf(!string.IsNullOrEmpty(Confidence), "--confidence {0}", Confidence);
 			buffer.AppendIf(Quiet, "--quiet");

@@ -1,5 +1,6 @@
 using System;
 using Exortech.NetReflector;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
 {
@@ -50,8 +51,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial
         /// <remarks></remarks>
         public DateTime ModifiedTime
         {
-            get { return DateTime.Parse(ModificationTime); }
-            set { ModificationTime = value.ToString(); }
+            get { return DateTime.Parse(ModificationTime, CultureInfo.CurrentCulture); }
+            set { ModificationTime = value.ToString(CultureInfo.CurrentCulture); }
         }
 
         /// <summary>

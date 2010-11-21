@@ -1,6 +1,7 @@
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Tasks;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -233,7 +234,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             foreach (string folder in Directory.GetDirectories(targetFolder))
             {
                 if (folder != buildLogDirectory)
-                    sortNames.Add(Directory.GetCreationTime(folder).ToString(dateFormat) + folder);
+                    sortNames.Add(Directory.GetCreationTime(folder).ToString(dateFormat, CultureInfo.CurrentCulture) + folder);
             }
 
             sortNames.Sort();

@@ -270,7 +270,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			    string command = "update";
 				PossiblyLogIn(result);
                 var lastChangeNumber = Modification.GetLastChangeNumber(mods);
-			    int lastChange = int.Parse(lastChangeNumber ?? "0");
+			    int lastChange = int.Parse(lastChangeNumber ?? "0", CultureInfo.CurrentCulture);
                 if (lastChange != 0) command = command + " -t " + lastChange;
                 RunCommand(command, result);
 			}

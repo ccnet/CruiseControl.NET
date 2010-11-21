@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -305,7 +306,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		internal string CreateTemporaryBaselineName()
 		{
-			return _TEMPORARY_BASELINE_PREFIX + DateTime.Now.ToString("MM-dd-yyyy-HH-mm-ss");
+			return _TEMPORARY_BASELINE_PREFIX + DateTime.Now.ToString("MM-dd-yyyy-HH-mm-ss", CultureInfo.CurrentCulture);
 		}
 
 		// This is a HACK.  ProcessSourceControl.Execute doesn't allow the flexibility ClearCase needs
@@ -374,7 +375,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
 		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
 		{
-			string fromDate = from.ToString(DATETIME_FORMAT);
+			string fromDate = from.ToString(DATETIME_FORMAT, CultureInfo.CurrentCulture);
 			string args = CreateHistoryArguments(fromDate);
 			Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"cleartool commandline: {0} {1}", Executable, args));
 			ProcessInfo processInfo = new ProcessInfo(Executable, args);
@@ -400,7 +401,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <returns>the process execution info</returns>
 		public ProcessInfo CreateMakeLabelProcessInfo(string label)
 		{
-			string args = string.Format(@" mklabel -recurse ""{0}"" ""{1}""", label, ViewPath);
+			string args = string.Format(CultureInfo.CurrentCulture, @" mklabel -recurse ""{0}"" ""{1}""", label, ViewPath);
 			Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"mklabel: {0} {1}", Executable, args));
 			return new ProcessInfo(Executable, args);
 		}
@@ -499,7 +500,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private string BuildGetSourceArguments()
 		{
-			return string.Format(@"update -force -overwrite ""{0}""", ViewPath);
+			return string.Format(CultureInfo.CurrentCulture, @"update -force -overwrite ""{0}""", ViewPath);
 		}
 	}
 }

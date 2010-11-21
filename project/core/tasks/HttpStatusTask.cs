@@ -4,6 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System.Globalization;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     using System;
@@ -97,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                             result = result + ",";
                         }
 
-                        result = result + code.ToString();
+                        result = result + code.ToString(CultureInfo.CurrentCulture);
                     }
                 }
 
@@ -118,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
                 for (int i = 0; i < codes.Length; ++i)
                 {
-                    this.successStatusCodes[i] = Int32.Parse(codes[i].Trim());
+                    this.successStatusCodes[i] = Int32.Parse(codes[i].Trim(), CultureInfo.CurrentCulture);
                 }
             }
         }
@@ -247,7 +248,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     HttpRequestStatus status = this.GetRequestStatus(this.RequestSettings);
                     if (status.Success)
                     {
-                        Log.Debug("Checking returned status code ({0}) against success status codes: {1}", ((int)status.StatusCode).ToString(), this.SuccessStatusCodes);
+                        Log.Debug("Checking returned status code ({0}) against success status codes: {1}", ((int)status.StatusCode).ToString(CultureInfo.CurrentCulture), this.SuccessStatusCodes);
                         for (int i = 0; i < this.successStatusCodes.Length; i++)
                         {
                             if ((int)status.StatusCode == this.successStatusCodes[i])
@@ -309,7 +310,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             writer.WriteEndElement();
             writer.Close();
             result.AddTaskResult(taskResult);
-            Log.Debug("HttpStatusTask finished, return value: {0}", taskResult.Success.ToString());
+            Log.Debug("HttpStatusTask finished, return value: {0}", taskResult.Success.ToString(CultureInfo.CurrentCulture));
             return taskResult.Success;
         }
         #endregion

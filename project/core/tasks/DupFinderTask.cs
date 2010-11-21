@@ -4,6 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 using System;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -350,8 +351,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         {
             var buffer = new ProcessArgumentBuilder();
             buffer.AppendIf(this.Recurse, "-r");
-            buffer.AppendArgument("-t" + this.Threshold.ToString());
-            buffer.AppendArgument("-w" + this.Width.ToString());
+            buffer.AppendArgument("-t" + this.Threshold.ToString(CultureInfo.CurrentCulture));
+            buffer.AppendArgument("-w" + this.Width.ToString(CultureInfo.CurrentCulture));
             buffer.AppendArgument("-oConsole");
 
             // Add the focus
@@ -464,8 +465,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                         {
                             // Calculate the lines to read
                             var parent = node.ParentNode as XmlElement;
-                            var firstLine = Convert.ToInt32(node.GetAttribute("LineNumber"));
-                            var blockLength = Convert.ToInt32(parent.GetAttribute("Length"));
+                            var firstLine = Convert.ToInt32(node.GetAttribute("LineNumber"), CultureInfo.CurrentCulture);
+                            var blockLength = Convert.ToInt32(parent.GetAttribute("Length"), CultureInfo.CurrentCulture);
                             var lastLine = firstLine + blockLength;
 
                             // Move to the first line
@@ -511,8 +512,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </returns>
         protected int CompareFileNodes(XmlElement firstNode, XmlElement secondNode)
         {
-            var firstLine = Convert.ToInt32(firstNode.GetAttribute("LineNumber"));
-            var secondLine = Convert.ToInt32(secondNode.GetAttribute("LineNumber"));
+            var firstLine = Convert.ToInt32(firstNode.GetAttribute("LineNumber"), CultureInfo.CurrentCulture);
+            var secondLine = Convert.ToInt32(secondNode.GetAttribute("LineNumber"), CultureInfo.CurrentCulture);
             return firstLine - secondLine;
         }
         #endregion

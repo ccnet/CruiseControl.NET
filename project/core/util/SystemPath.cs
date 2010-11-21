@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -52,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		private string Convert(string newpath, IExecutionEnvironment environment)
 		{
-			return Regex.Replace(newpath, @"[/\\]", environment.DirectorySeparator.ToString());	
+			return Regex.Replace(newpath, @"[/\\]", environment.DirectorySeparator.ToString(CultureInfo.CurrentCulture));	
 		}
 
         /// <summary>

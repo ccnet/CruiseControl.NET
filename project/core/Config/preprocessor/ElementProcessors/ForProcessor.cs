@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor.ElementProcessors
             if ( !Int32.TryParse( _Env.EvalExprAsString( expr ), out val ) )
             {
                 throw new InvalidCastException(
-                    String.Format( "Expression '{0}' does not evaluate to an integer", expr ) );
+                    String.Format( CultureInfo.CurrentCulture, "Expression '{0}' does not evaluate to an integer", expr ) );
             }
             return val;
         }

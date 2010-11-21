@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -161,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     }
                     actualParameters.Add(actualValue);
                 }
-                string parameterValue = string.Format(this.formatValue, 
+                string parameterValue = string.Format(CultureInfo.CurrentCulture, this.formatValue, 
                     actualParameters.ToArray());
                 property.ChangeProperty(parameterValue);
             }

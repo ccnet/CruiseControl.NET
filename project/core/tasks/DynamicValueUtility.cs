@@ -1,4 +1,5 @@
-﻿namespace ThoughtWorks.CruiseControl.Core.Tasks
+﻿using System.Globalization;
+namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     using System;
     using System.Collections;
@@ -420,7 +421,7 @@
                             }
 
                             // Add the node as an indexed node
-                            propertyName.Insert(0, "." + nodeName + "[" + position.ToString() + "]");
+                            propertyName.Insert(0, "." + nodeName + "[" + position.ToString(CultureInfo.CurrentCulture) + "]");
                         }
                         else
                         {
@@ -619,7 +620,7 @@
                             };
                     if (property.PropertyType.GetElementType() != value.GetType())
                     {
-                        actualValue = Convert.ChangeType(value, property.PropertyType.GetElementType());
+                        actualValue = Convert.ChangeType(value, property.PropertyType.GetElementType(), CultureInfo.CurrentCulture);
                     }
                 }
                 else
@@ -654,7 +655,7 @@
                         // Finally, if all else fails, use the standard convert
                         if (!converted)
                     {
-                        actualValue = Convert.ChangeType(value, property.PropertyType);
+                        actualValue = Convert.ChangeType(value, property.PropertyType, CultureInfo.CurrentCulture);
                         }
                     }
                 }
@@ -676,7 +677,7 @@
                 {
                     if (property.FieldType.GetElementType() != value.GetType())
                     {
-                        actualValue = Convert.ChangeType(value, property.FieldType);
+                        actualValue = Convert.ChangeType(value, property.FieldType, CultureInfo.CurrentCulture);
                     }
                     Array array = property.GetValue(mySource) as Array;
                     array.SetValue(actualValue, myArrayIndex);
@@ -685,7 +686,7 @@
                 {
                     if (property.FieldType != value.GetType())
                     {
-                        actualValue = Convert.ChangeType(value, property.FieldType);
+                        actualValue = Convert.ChangeType(value, property.FieldType, CultureInfo.CurrentCulture);
                     }
                     property.SetValue(mySource, actualValue);
                 }

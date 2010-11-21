@@ -1,3 +1,4 @@
+using System.Globalization;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     using System.Collections.Generic;
@@ -145,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 {
                     Log.Warning(
                         string.Format(
-                            "Unable to delete file '{0}' - {1}",
+                            CultureInfo.CurrentCulture, "Unable to delete file '{0}' - {1}",
                             file,
                             error.Message));
                 }

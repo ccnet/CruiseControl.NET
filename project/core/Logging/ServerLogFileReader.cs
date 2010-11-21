@@ -1,5 +1,6 @@
 using System.Configuration;
 using System.IO;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Logging
 {
@@ -104,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Logging
         private static int ReadMaxLinesFromConfig()
         {
             string linesToReadConfig = ConfigurationManager.AppSettings["ServerLogFileLines"];
-            return (linesToReadConfig != null) ? int.Parse(ConfigurationManager.AppSettings["ServerLogFileLines"]) : DefaultMaxLines;
+            return (linesToReadConfig != null) ? int.Parse(ConfigurationManager.AppSettings["ServerLogFileLines"], CultureInfo.CurrentCulture) : DefaultMaxLines;
         }
     }
 }

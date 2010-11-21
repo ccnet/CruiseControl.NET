@@ -2,6 +2,7 @@
 using System;
 using System.Text;
 using System.IO;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -170,7 +171,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         public string At
         {
-            get { return at.ToString("yyyy-MM-dd HH:mm:ss"); }
+            get { return at.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.CurrentCulture); }
         }
 
         public string Information

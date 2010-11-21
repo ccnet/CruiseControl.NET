@@ -1,3 +1,4 @@
+using System.Globalization;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     using System;
@@ -198,7 +199,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
                     for (int i = 0; i < codes.Length; ++i)
                     {
-                        successExitCodes[i] = Int32.Parse(codes[i]);
+                        successExitCodes[i] = Int32.Parse(codes[i], CultureInfo.CurrentCulture);
                     }
                 }
                 else
@@ -298,7 +299,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <remarks></remarks>
 		public override string ToString()
 		{
-			return string.Format(@" BaseDirectory: {0}, PowerShell: {1}", ConfiguredScriptsDirectory, PowerShellExe);
+			return string.Format(CultureInfo.CurrentCulture, @" BaseDirectory: {0}, PowerShell: {1}", ConfiguredScriptsDirectory, PowerShellExe);
 		}
 
         /// <summary>
@@ -334,7 +335,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 {
                     output.Append("  <message");
                     if (msgLevel !=string.Empty)
-                        output.AppendFormat(" level=\"{0}\"", msgLevel);
+                        output.AppendFormat(CultureInfo.CurrentCulture, " level=\"{0}\"", msgLevel);
                     output.Append(">");
                     output.Append(XmlUtil.EncodePCDATA(line.ToString()));
                     output.Append("</message>");

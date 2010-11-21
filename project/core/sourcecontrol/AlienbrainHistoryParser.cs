@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -91,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			modification.Comment = modificationParams[0];
 			modification.FileName = modificationParams[1];
 			modification.FolderName = "ab:/" + modificationParams[2].Replace("/" + modificationParams[1],string.Empty);
-			modification.ModifiedTime = DateTime.FromFileTime(long.Parse(modificationParams[3]));
+			modification.ModifiedTime = DateTime.FromFileTime(long.Parse(modificationParams[3], CultureInfo.CurrentCulture));
 			modification.Type = modificationParams[4];
 			modification.Url = modificationParams[5];
 			modification.UserName = modificationParams[6];

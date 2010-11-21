@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
 using Exortech.NetReflector;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -110,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                         commentElement.InnerText = modification.Comment;
                         modificationElement.AppendChild(commentElement);
                     }
-                    modificationElement.SetAttribute("time", modification.ModifiedTime.ToString("s"));
+                    modificationElement.SetAttribute("time", modification.ModifiedTime.ToString("s", CultureInfo.CurrentCulture));
                     changes.Add(modification.ChangeNumber, modificationElement);
                 }
 

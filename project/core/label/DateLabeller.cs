@@ -1,6 +1,7 @@
 using System;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
@@ -105,7 +106,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 				revision = 1;
 			}
             return string.Format(System.Globalization.CultureInfo.CurrentCulture,"{0}.{1}.{2}.{3}",
-                   now.Year.ToString(YearFormat), now.Month.ToString(MonthFormat), now.Day.ToString(DayFormat), revision.ToString(RevisionFormat));
+                   now.Year.ToString(YearFormat, CultureInfo.CurrentCulture), now.Month.ToString(MonthFormat, CultureInfo.CurrentCulture), now.Day.ToString(DayFormat, CultureInfo.CurrentCulture), revision.ToString(RevisionFormat, CultureInfo.CurrentCulture));
 		}
 
 		private Version ParseVersion(DateTime date, IntegrationSummary lastIntegrationSummary)

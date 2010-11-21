@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
@@ -100,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
             IntegrationSummary lastIntegration = integrationResult.LastIntegration;
             if (integrationResult == null || lastIntegration.IsInitial())
             {
-				return LabelPrefix + InitialBuildLabel.ToString(LabelFormat) + LabelPostfix;
+				return LabelPrefix + InitialBuildLabel.ToString(LabelFormat, CultureInfo.CurrentCulture) + LabelPostfix;
             }
             else if (ShouldIncrementLabel(lastIntegration))
             {
@@ -122,18 +123,18 @@ namespace ThoughtWorks.CruiseControl.Core.Label
             if (LabelPostfix.Length == 0 && LabelPrefix.Length > 0)
             {
                 string numericLabel = Regex.Replace(label, @".*?(\d+$)", "$1");
-                int newLabel = int.Parse(numericLabel);
+                int newLabel = int.Parse(numericLabel, CultureInfo.CurrentCulture);
                 newLabel++;
-                return newLabel.ToString(LabelFormat);
+                return newLabel.ToString(LabelFormat, CultureInfo.CurrentCulture);
 
             }
 
             if (LabelPrefix.Length == 0 && LabelPostfix.Length >= 0)
             {
                 string numericLabel = Regex.Replace(label, @"\D*?(\d{1,9}).*", "$1");
-                int newLabel = int.Parse(numericLabel);
+                int newLabel = int.Parse(numericLabel, CultureInfo.CurrentCulture);
                 newLabel++;
-                return newLabel.ToString(LabelFormat);
+                return newLabel.ToString(LabelFormat, CultureInfo.CurrentCulture);
 
             }
 
@@ -142,9 +143,9 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 
             if (NumericParts.Count == 1)
             {
-                int newLabel = int.Parse(NumericParts[0].ToString());
+                int newLabel = int.Parse(NumericParts[0].ToString(), CultureInfo.CurrentCulture);
                 newLabel++;
-                return newLabel.ToString(LabelFormat);
+                return newLabel.ToString(LabelFormat, CultureInfo.CurrentCulture);
             }
 
 
@@ -160,9 +161,9 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 
             if (NumericParts.Count == 1)
             {
-                int newLabel = int.Parse(NumericParts[0].ToString());
+                int newLabel = int.Parse(NumericParts[0].ToString(), CultureInfo.CurrentCulture);
                 newLabel++;
-                return newLabel.ToString(LabelFormat);
+                return newLabel.ToString(LabelFormat, CultureInfo.CurrentCulture);
             }
 
             throw new CruiseControlException("Unable to determine numeric part in label, pre and postfix may not contain multiple numeric parts");

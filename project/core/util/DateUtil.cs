@@ -1,5 +1,6 @@
 
 using System;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -23,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <returns></returns>
 		public static string FormatDate(DateTime date)
 		{
-			return date.ToString(DateOutputFormat);
+			return date.ToString(DateOutputFormat, CultureInfo.CurrentCulture);
 		}
 
         /// <summary>

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -112,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					{
 						if (i > otherLen)
 							continue;
-						if (Convert.ToInt32(currentVersion[i]) > Convert.ToInt32(originalVersion[i]))
+						if (Convert.ToInt32(currentVersion[i], CultureInfo.CurrentCulture) > Convert.ToInt32(originalVersion[i], CultureInfo.CurrentCulture))
 						{
 							allFiles[compareMod.FolderName + compareMod.FileName] = mod;
 							break;

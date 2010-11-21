@@ -145,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 						}
 						else
 						{
-							modification.ChangeNumber = info.TaskNumber.ToString();
+							modification.ChangeNumber = info.TaskNumber.ToString(CultureInfo.CurrentCulture);
 							modification.ModifiedTime = info.CompletionDate;
 							if (null != info.TaskSynopsis)
 								modification.Comment = info.TaskSynopsis;

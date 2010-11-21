@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -23,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         {
             if ((values != null) && (values.Length > 0))
             {
-                Log.Debug(string.Format(message, values));
+                Log.Debug(string.Format(CultureInfo.CurrentCulture, message, values));
             }
             else
             {
@@ -42,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         {
             if ((values != null) && (values.Length > 0))
             {
-                Log.Info(string.Format(message, values));
+                Log.Info(string.Format(CultureInfo.CurrentCulture, message, values));
             }
             else
             {
@@ -61,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         {
             if ((values != null) && (values.Length > 0))
             {
-                Log.Warning(string.Format(message, values));
+                Log.Warning(string.Format(CultureInfo.CurrentCulture, message, values));
             }
             else
             {
@@ -89,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         {
             if ((values != null) && (values.Length > 0))
             {
-                Log.Error(string.Format(message, values));
+                Log.Error(string.Format(CultureInfo.CurrentCulture, message, values));
             }
             else
             {

@@ -451,7 +451,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private string CreateTemporaryLabelName(DateTime time)
 		{
-			return "CCNETUNVERIFIED" + time.ToString("MMddyyyyHHmmss");
+			return "CCNETUNVERIFIED" + time.ToString("MMddyyyyHHmmss", CultureInfo.CurrentCulture);
 		}
 
 		private string GetExecutableFromRegistry()

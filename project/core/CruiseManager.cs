@@ -7,6 +7,7 @@ using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Security;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
 using ThoughtWorks.CruiseControl.Remote.Messages;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -357,7 +358,7 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             DataResponse resp = cruiseServer.GetFreeDiskSpace(GenerateServerRequest());
             ValidateResponse(resp);
-            return Convert.ToInt64(resp.Data);
+            return Convert.ToInt64(resp.Data, CultureInfo.CurrentCulture);
         }
 
         #region RetrieveFileTransfer()

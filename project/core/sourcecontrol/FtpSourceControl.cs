@@ -1,5 +1,6 @@
 ﻿using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -147,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
         public override void GetSource(IIntegrationResult result)
         {
-            Util.Log.Info(result.HasModifications().ToString());
+            Util.Log.Info(result.HasModifications().ToString(CultureInfo.CurrentCulture));
 
 
             ftp = new FtpLib(result.BuildProgressInformation);

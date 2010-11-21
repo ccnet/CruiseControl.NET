@@ -4,6 +4,7 @@ using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -248,8 +249,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             {
                 var parts = inputNode.NamespaceURI.Split('/');
                 var version = new Version(
-                    Convert.ToInt32(parts[parts.Length - 2]),
-                    Convert.ToInt32(parts[parts.Length - 1]));
+                    Convert.ToInt32(parts[parts.Length - 2], CultureInfo.CurrentCulture),
+                    Convert.ToInt32(parts[parts.Length - 1], CultureInfo.CurrentCulture));
                 node = this.UpgradeConfiguration(version, node);
             }
 

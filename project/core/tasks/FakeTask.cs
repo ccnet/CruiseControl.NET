@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -250,12 +251,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         public override string ToString()
         {
             string baseDirectory = ConfiguredBaseDirectory ?? string.Empty;
-            return string.Format(@" BaseDirectory: {0}, Executable: {1}, BuildFile: {2}", baseDirectory, Executable, BuildFile);
+            return string.Format(CultureInfo.CurrentCulture, @" BaseDirectory: {0}, Executable: {1}, BuildFile: {2}", baseDirectory, Executable, BuildFile);
         }
 
         private string GetFakeOutputFile(IIntegrationResult result)
         {
-            return Path.Combine(result.ArtifactDirectory, string.Format(logFilename, LogFileId));
+            return Path.Combine(result.ArtifactDirectory, string.Format(CultureInfo.CurrentCulture, logFilename, LogFileId));
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Globalization;
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
     /// <summary>
@@ -26,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		public string BuildMessage(IIntegrationResult result)
 		{
 			string link = result.ProjectUrl;
-			if (includeAnchorTag) link = string.Format(@"<a href=""{0}"">web page</a>", link);
+			if (includeAnchorTag) link = string.Format(CultureInfo.CurrentCulture, @"<a href=""{0}"">web page</a>", link);
 			return string.Format(System.Globalization.CultureInfo.CurrentCulture,"CruiseControl.NET Build Results for project {0} ({1})", result.ProjectName, link);
 		}
 

@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
             if (!Enum.IsDefined(typeof(CrontabFieldKind), kind))
             {
                 throw new ArgumentException(string.Format(
-                    "Invalid crontab field kind. Valid values are {0}.",
+                    CultureInfo.CurrentCulture, "Invalid crontab field kind. Valid values are {0}.",
                     string.Join(", ", Enum.GetNames(typeof(CrontabFieldKind)))), "kind");
             }
 
@@ -395,8 +395,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
             if (_names == null)
             {
                 throw new CrontabException(string.Format(
-                    "'{0}' is not a valid value for this crontab field. It must be a numeric value between {1} and {2} (all inclusive).",
-                    str, _minValue.ToString(), _maxValue.ToString()));
+                    CultureInfo.CurrentCulture, "'{0}' is not a valid value for this crontab field. It must be a numeric value between {1} and {2} (all inclusive).",
+                    str, _minValue.ToString(CultureInfo.CurrentCulture), _maxValue.ToString()));
             }
 
             for (var i = 0; i < _names.Length; i++)
@@ -406,7 +406,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
             }
 
             throw new CrontabException(string.Format(
-                "'{0}' is not a known value name. Use one of the following: {1}.", 
+                CultureInfo.CurrentCulture, "'{0}' is not a known value name. Use one of the following: {1}.", 
                 str, string.Join(", ", _names)));
         }
 

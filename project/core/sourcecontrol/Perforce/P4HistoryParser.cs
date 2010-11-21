@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 {
@@ -89,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 						change = changeMatch.Groups["change"].Value;
 						email = changeMatch.Groups["email"].Value;
 						user = changeMatch.Groups["user"].Value;
-						date = DateTime.Parse(changeMatch.Groups["date"].Value);
+						date = DateTime.Parse(changeMatch.Groups["date"].Value, CultureInfo.CurrentCulture);
 						// TODO this is necessary, could someone explain why?
 						comment =string.Empty;
 					}

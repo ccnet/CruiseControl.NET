@@ -1,3 +1,4 @@
+using System.Globalization;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     using System;
@@ -414,7 +415,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public override string ToString()
 		{
 			string baseDirectory = ConfiguredBaseDirectory ??string.Empty;
-			return string.Format(@" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", baseDirectory, string.Join(", ", Targets), Executable, BuildFile);
+			return string.Format(CultureInfo.CurrentCulture, @" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", baseDirectory, string.Join(", ", Targets), Executable, BuildFile);
 		}
 
         /// <summary>
@@ -436,7 +437,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private string GetNantOutputFile(IIntegrationResult result)
 		{
-            return Path.Combine(result.ArtifactDirectory, string.Format(logFilename, LogFileId));
+            return Path.Combine(result.ArtifactDirectory, string.Format(CultureInfo.CurrentCulture, logFilename, LogFileId));
 		}
 	}
 }

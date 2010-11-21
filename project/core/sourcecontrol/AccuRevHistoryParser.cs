@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -152,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				GroupCollection tokens = parsed.Groups;
 				modificationTemplate.ChangeNumber = tokens[1].ToString();
 				modificationTemplate.Type = tokens[2].ToString();
-				modificationTemplate.ModifiedTime = DateTime.Parse(tokens[3].ToString());
+				modificationTemplate.ModifiedTime = DateTime.Parse(tokens[3].ToString(), CultureInfo.CurrentCulture);
 				modificationTemplate.UserName = tokens[4].ToString();
             }
 			else

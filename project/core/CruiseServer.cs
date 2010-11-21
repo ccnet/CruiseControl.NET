@@ -1,3 +1,4 @@
+using System.Globalization;
 namespace ThoughtWorks.CruiseControl.Core
 {
     using System;
@@ -108,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.Core
             }
             else
             {
-                this.cacheTime = TimeSpan.FromSeconds(Convert.ToDouble(cacheTimeInConfig));
+                this.cacheTime = TimeSpan.FromSeconds(Convert.ToDouble(cacheTimeInConfig, CultureInfo.CurrentCulture));
                 if (this.cacheTime.TotalSeconds < 5)
                 {
                     // If the cache time is less then 5s then turn off caching
@@ -117,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 }
                 else
                 {
-                    Log.Info("Log cache time set to " + this.cacheTime.TotalSeconds.ToString() + " seconds");
+                    Log.Info("Log cache time set to " + this.cacheTime.TotalSeconds.ToString(CultureInfo.CurrentCulture) + " seconds");
                 }
             }
         }
@@ -910,7 +911,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     }
 
                     var fileSystem = new SystemIoFileSystem();
-                    data = fileSystem.GetFreeDiskSpace(drive).ToString();
+                    data = fileSystem.GetFreeDiskSpace(drive).ToString(CultureInfo.CurrentCulture);
                 }));
 
             response.Data = data;
@@ -1902,7 +1903,7 @@ namespace ThoughtWorks.CruiseControl.Core
                     {
                         var size = buildLog.Length;
                         buildLog = this.CompressLogData(buildLog);
-                        Log.Debug("Build log compressed - from " + size.ToString() + " to " + buildLog.Length.ToString());
+                        Log.Debug("Build log compressed - from " + size.ToString(CultureInfo.CurrentCulture) + " to " + buildLog.Length.ToString(CultureInfo.CurrentCulture));
                     }
 
                     return buildLog;

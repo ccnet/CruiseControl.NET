@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -508,7 +509,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             {
                 buffer.AppendArgument("//sct {0}", threshold.ToParamString());
             }
-            buffer.AppendIf(NumberToReport > 0, "//smf {0}", NumberToReport.ToString());
+            buffer.AppendIf(NumberToReport > 0, "//smf {0}", NumberToReport.ToString(CultureInfo.CurrentCulture));
             buffer.AppendIf(!string.IsNullOrEmpty(TrendOutputFile), "//at \"{0}\"", RootPath(TrendOutputFile, false));
             buffer.AppendArgument("//bi \"{0}\"", string.IsNullOrEmpty(BuildId) ? result.Label : BuildId);
             buffer.AppendIf(!string.IsNullOrEmpty(HideElements), "//hi \"{0}\"", HideElements);
@@ -516,7 +517,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             GenerateReportList(buffer);
             buffer.AppendIf(!string.IsNullOrEmpty(ProjectName), "//p \"{0}\"", ProjectName);
             buffer.AppendIf(SortBy != NCoverSortBy.None, "//so \"{0}\"", SortBy.ToString());
-            buffer.AppendIf(TopUncoveredAmount > 0, "//tu \"{0}\"", TopUncoveredAmount.ToString());
+            buffer.AppendIf(TopUncoveredAmount > 0, "//tu \"{0}\"", TopUncoveredAmount.ToString(CultureInfo.CurrentCulture));
             buffer.AppendIf(MergeMode != NCoverMergeMode.Default, "//mfm \"{0}\"", MergeMode.ToString());
             buffer.AppendIf(!string.IsNullOrEmpty(MergeFile), "//s \"{0}\"", RootPath(MergeFile, false));
             buffer.AppendIf(!string.IsNullOrEmpty(WorkingDirectory), "//w \"{0}\"", RootPath(WorkingDirectory, false));

@@ -2,6 +2,7 @@
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -314,8 +315,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			if (!TagOnSuccess || result.Failed)
 				return;
 
-			string tagName = string.Format(TagNameFormat, result.Label);
-			string commitMessage = string.Format(TagCommitMessage, result.Label);
+			string tagName = string.Format(CultureInfo.CurrentCulture, TagNameFormat, result.Label);
+			string commitMessage = string.Format(CultureInfo.CurrentCulture, TagCommitMessage, result.Label);
 
 			if (CommitBuildModifications)
 			{
@@ -508,8 +509,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AddArgument("--date-order");
 			buffer.AddArgument("--name-status");
             buffer.AddArgument("-c"); // CCNET-1854: detect merge commits
-			buffer.AddArgument(string.Concat("--after=", from.StartTime.ToUniversalTime().ToString("R")));
-			buffer.AddArgument(string.Concat("--before=", to.StartTime.ToUniversalTime().ToString("R")));
+			buffer.AddArgument(string.Concat("--after=", from.StartTime.ToUniversalTime().ToString("R", CultureInfo.CurrentCulture)));
+			buffer.AddArgument(string.Concat("--before=", to.StartTime.ToUniversalTime().ToString("R", CultureInfo.CurrentCulture)));
 			buffer.AddArgument(string.Concat("--pretty=format:", '"', historyFormat, '"'));
 
 			return Execute(NewProcessInfo(buffer.ToString(), to));

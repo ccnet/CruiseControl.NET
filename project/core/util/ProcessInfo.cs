@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -284,7 +285,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public override string ToString()
 		{
 			return string.Format(
-				"FileName: [{0}] -- Arguments: [{1}] -- WorkingDirectory: [{2}] -- StandardInputContent: [{3}] -- Timeout: [{4}]",
+				CultureInfo.CurrentCulture, "FileName: [{0}] -- Arguments: [{1}] -- WorkingDirectory: [{2}] -- StandardInputContent: [{3}] -- Timeout: [{4}]",
 			    FileName, Arguments, WorkingDirectory, StandardInputContent, TimeOut);
 		}
 	}

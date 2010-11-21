@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			while( (line = input.ReadLine()) != null )
 			{
-				if( !line.StartsWith(PlasticSCM.DELIMITER.ToString()))
+				if( !line.StartsWith(PlasticSCM.DELIMITER.ToString(CultureInfo.CurrentCulture)))
 					continue;
 				// path date user changeset
 				string[] data = line.Split(PlasticSCM.DELIMITER);

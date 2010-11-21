@@ -1,5 +1,6 @@
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Tasks;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -78,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             CurrentBuildInfoWriter.WriteStartElement("Build");
             WriteXMLAttributeAndValue(CurrentBuildInfoWriter, "BuildDate", Util.DateUtil.FormatDate(result.EndTime));
-            WriteXMLAttributeAndValue(CurrentBuildInfoWriter, "Success", result.Succeeded.ToString());
+            WriteXMLAttributeAndValue(CurrentBuildInfoWriter, "Success", result.Succeeded.ToString(CultureInfo.CurrentCulture));
             WriteXMLAttributeAndValue(CurrentBuildInfoWriter, "Label", result.Label);
 
             if (result.Modifications.Length > 0)

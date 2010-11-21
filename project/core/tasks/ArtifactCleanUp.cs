@@ -1,3 +1,4 @@
+using System.Globalization;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     using System;
@@ -161,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			foreach (string folder in Directory.GetDirectories(result.ArtifactDirectory))
 			{
 				if (folder != result.BuildLogDirectory)
-					sortNames.Add(Directory.GetCreationTime(folder).ToString(dateFormat) + folder);
+					sortNames.Add(Directory.GetCreationTime(folder).ToString(dateFormat, CultureInfo.CurrentCulture) + folder);
 			}
 
 			sortNames.Sort();

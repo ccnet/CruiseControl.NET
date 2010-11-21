@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers.NCrontab
             if (fields.Length != 5)
             {
                 throw new CrontabException(string.Format(
-                    "'{0}' is not a valid crontab expression. It must contain at least 5 components of a schedule "
+                    CultureInfo.CurrentCulture, "'{0}' is not a valid crontab expression. It must contain at least 5 components of a schedule "
                     + "(in the sequence of minutes, hours, days, months, days of week).", 
                     expression));
             }

@@ -1,3 +1,4 @@
+using System.Globalization;
 namespace ThoughtWorks.CruiseControl.Core
 {
     using System;
@@ -1639,9 +1640,9 @@ namespace ThoughtWorks.CruiseControl.Core
                     PackageDetails details = new PackageDetails(packageFileName);
                     details.Name = packageElement.GetAttribute("name");
                     details.BuildLabel = packageElement.GetAttribute("label");
-                    details.DateTime = DateTime.Parse(packageElement.GetAttribute("time"));
-                    details.NumberOfFiles = Convert.ToInt32(packageElement.GetAttribute("files"));
-                    details.Size = Convert.ToInt64(packageElement.GetAttribute("size"));
+                    details.DateTime = DateTime.Parse(packageElement.GetAttribute("time"), CultureInfo.CurrentCulture);
+                    details.NumberOfFiles = Convert.ToInt32(packageElement.GetAttribute("files"), CultureInfo.CurrentCulture);
+                    details.Size = Convert.ToInt64(packageElement.GetAttribute("size"), CultureInfo.CurrentCulture);
                     packages.Add(details);
                 }
             }

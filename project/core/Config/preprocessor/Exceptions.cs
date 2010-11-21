@@ -6,6 +6,7 @@ Created: 2008.03.24
 using System;
 using System.Reflection;
 using System.Xml;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 {
@@ -34,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         }
         internal static Exception CreateException(string msg, params object[] args)
         {
-            return new CyclicalEvaluationException(String.Format(msg, args));
+            return new CyclicalEvaluationException(String.Format(CultureInfo.CurrentCulture, msg, args));
         }
     }
     /// <summary>
@@ -48,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 
         internal static Exception CreateException(string msg, params object[] args)
         {
-            return new EvaluationException( String.Format( msg, args ) );
+            return new EvaluationException( String.Format( CultureInfo.CurrentCulture, msg, args ) );
         }
 
         internal static Exception CreateException(string expr, Exception cause)
@@ -77,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 
         internal new static Exception CreateException(string msg, params object[] args)
         {
-            return new ExplicitDefinitionRequiredException( String.Format( msg, args ) );
+            return new ExplicitDefinitionRequiredException( String.Format( CultureInfo.CurrentCulture, msg, args ) );
         }
     }
 
@@ -99,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 
         internal static Exception CreateException(string msg, params object[] args)
         {
-            return new ImportException( String.Format( msg, args ) );
+            return new ImportException( String.Format( CultureInfo.CurrentCulture, msg, args ) );
         }
     }
 
@@ -114,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 
         internal static Exception CreateException(string msg, params object[] args)
         {
-            return new EvaluationException( String.Format( msg, args ) );
+            return new EvaluationException( String.Format( CultureInfo.CurrentCulture, msg, args ) );
         }
     }
 
@@ -134,7 +135,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 
         internal static Exception CreateException(string msg, params object[] args)
         {
-            return new InvalidMarkupException( String.Format( msg, args ) );
+            return new InvalidMarkupException( String.Format( CultureInfo.CurrentCulture, msg, args ) );
         }
     }
 
@@ -155,7 +156,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 
         internal static Exception CreateException(string msg, params object[] args)
         {
-            return new MissingIncludeException(String.Format(msg, args));
+            return new MissingIncludeException(String.Format(CultureInfo.CurrentCulture, msg, args));
         }
     }
 
@@ -220,10 +221,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
                 string line = "Unknown", pos = "Unknown";
                 if ( LineInfo != null && LineInfo.HasLineInfo() )
                 {
-                    line = LineInfo.LineNumber.ToString();
-                    pos = LineInfo.LinePosition.ToString();
+                    line = LineInfo.LineNumber.ToString(CultureInfo.CurrentCulture);
+                    pos = LineInfo.LinePosition.ToString(CultureInfo.CurrentCulture);
                 }
-                return String.Format( "File: {0} (line {1}, pos{2})", path, line, pos );
+                return String.Format( CultureInfo.CurrentCulture, "File: {0} (line {1}, pos{2})", path, line, pos );
             }
 
             internal static XmlContext CreateFrom(IXmlLineInfo line_info)
@@ -248,7 +249,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             return
                 new UnexpectedPreprocessorException( inner_ex,
                                                      String.Format(
-                                                         "Unexpected exception in {0}\n{1}",
+                                                         CultureInfo.CurrentCulture, "Unexpected exception in {0}\n{1}",
                                                          context, inner_ex.Message ), context );
         }
     }

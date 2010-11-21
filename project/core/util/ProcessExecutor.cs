@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -112,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					hasExited = WaitHandle.WaitAll(new WaitHandle[] { errorStreamClosed, outputStreamClosed, processExited }, processInfo.TimeOut, true);
 					hasTimedOut = !hasExited;
 					if (hasTimedOut) Log.Warning(string.Format(
-                        "Process timed out: {0} {1}.  Process id: {2}. This process will now be killed.", 
+                        CultureInfo.CurrentCulture, "Process timed out: {0} {1}.  Process id: {2}. This process will now be killed.", 
                         processInfo.FileName, 
                         processInfo.PublicArguments, 
                         process.Id));
@@ -121,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				{
 					// Thread aborted. This is the server trying to exit. Abort needs to continue.
 					Log.Info(string.Format(
-						"Thread aborted while waiting for '{0} {1}' to exit. Process id: {2}. This process will now be killed.", 
+						CultureInfo.CurrentCulture, "Thread aborted while waiting for '{0} {1}' to exit. Process id: {2}. This process will now be killed.", 
                         processInfo.FileName,
                         processInfo.PublicArguments, 
                         process.Id));
@@ -132,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					// If one of the output handlers catches an exception, it will interrupt this thread to wake it.
 					// The finally block handles clean-up.
 					Log.Debug(string.Format(
-						"Process interrupted: {0} {1}.  Process id: {2}. This process will now be killed.", 
+						CultureInfo.CurrentCulture, "Process interrupted: {0} {1}.  Process id: {2}. This process will now be killed.", 
                         processInfo.FileName,
                         processInfo.PublicArguments, 
                         process.Id));
@@ -213,7 +214,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					KillUtil.KillPid(process.Id);
 					if (!process.WaitForExit(WAIT_FOR_KILLED_PROCESS_TIMEOUT))
 						throw new CruiseControlException(
-							string.Format(@"The killed process {0} did not terminate within the allotted timeout period {1}.  The process or one of its child processes may not have died.  This may create problems when trying to re-execute the process.  It may be necessary to reboot the server to recover.",
+							string.Format(CultureInfo.CurrentCulture, @"The killed process {0} did not terminate within the allotted timeout period {1}.  The process or one of its child processes may not have died.  This may create problems when trying to re-execute the process.  It may be necessary to reboot the server to recover.",
 								process.Id,
 								WAIT_FOR_KILLED_PROCESS_TIMEOUT));
 					Log.Warning(string.Format(System.Globalization.CultureInfo.CurrentCulture,"The process has been killed: {0}", process.Id));

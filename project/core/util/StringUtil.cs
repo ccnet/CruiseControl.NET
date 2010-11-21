@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -287,7 +288,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
                 {
                     sb.Append("  <message");
                     if (msgLevel != string.Empty)
-                        sb.AppendFormat(" level=\"{0}\"", msgLevel);
+                        sb.AppendFormat(CultureInfo.CurrentCulture, " level=\"{0}\"", msgLevel);
                     sb.Append(">");
                     sb.Append(XmlUtil.EncodePCDATA(line.ToString()));
                     sb.Append("</message>");

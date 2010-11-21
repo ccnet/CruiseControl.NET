@@ -7,6 +7,7 @@ using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Security;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
@@ -168,7 +169,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
                 errorProcesser.ProcessError(
                     new CruiseControlException(
                         string.Format(
-                            "A duplicate project name ({0})has been found - projects must be unique per server",
+                            CultureInfo.CurrentCulture, "A duplicate project name ({0})has been found - projects must be unique per server",
                             projectName)));
             }
             else
@@ -277,7 +278,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 
             public void ProcessError(string message, params object[] args)
             {
-                throw new ConfigurationException(string.Format(message,args)) ;
+                throw new ConfigurationException(string.Format(CultureInfo.CurrentCulture, message,args)) ;
             }
 
             public void ProcessWarning(string message, params object[] args)

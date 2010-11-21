@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Exortech.NetReflector;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -75,11 +76,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             builder.Append(Data);
             if (ItemType != NCoverItemType.Default)
             {
-                builder.AppendFormat(":{0}", ItemType);
+                builder.AppendFormat(CultureInfo.CurrentCulture, ":{0}", ItemType);
                 if (IsRegex || IsInclude)
                 {
-                    builder.AppendFormat(":{0}", IsRegex ? "true" : "false");
-                    builder.AppendFormat(":{0}", IsInclude ? "true" : "false");
+                    builder.AppendFormat(CultureInfo.CurrentCulture, ":{0}", IsRegex ? "true" : "false");
+                    builder.AppendFormat(CultureInfo.CurrentCulture, ":{0}", IsInclude ? "true" : "false");
                 }
             }
             return builder.ToString();

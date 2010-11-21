@@ -5,6 +5,7 @@ using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote.Security;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
 {
@@ -110,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
             XmlDocument document = new XmlDocument();
             document.LoadXml(dataLine);
             AuditRecord record = new AuditRecord();
-            record.TimeOfEvent = DateTime.Parse(ReadDataValue(document, "dateTime"));
+            record.TimeOfEvent = DateTime.Parse(ReadDataValue(document, "dateTime"), CultureInfo.CurrentCulture);
             record.ProjectName = ReadDataValue(document, "project");
             record.UserName = ReadDataValue(document, "user");
             record.EventType = ReadDataValue<SecurityEvent>(document, "type", SecurityEvent.Unknown);

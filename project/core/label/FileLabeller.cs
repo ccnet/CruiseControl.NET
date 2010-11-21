@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Exortech.NetReflector;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
@@ -120,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
             {
                 if (splits.Length > 1)
                 {
-                    lastLabelSuffix = Int32.Parse(splits[splits.Length - 1]) + 1;
+                    lastLabelSuffix = Int32.Parse(splits[splits.Length - 1], CultureInfo.CurrentCulture) + 1;
                 }
                 return "-" + lastLabelSuffix;
             }

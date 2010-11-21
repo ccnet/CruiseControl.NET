@@ -4,6 +4,7 @@ using System.Threading;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -86,12 +87,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					if (_labelApplied)
 					{
 						Log.Info(string.Format(
-							"Integration failed.  Removing label \"{0}\" from {1} in repository {2}.", result.Label, _shim.Folder, _shim.Repository));
+							CultureInfo.CurrentCulture, "Integration failed.  Removing label \"{0}\" from {1} in repository {2}.", result.Label, _shim.Folder, _shim.Repository));
 						Execute(RemoveLabelProcessInfo(result));
 					}
 					else
 						Log.Debug(string.Format(
-							"Integration failed, but a label was never successfully applied to {0} in repository {1}, so skipping removal.",
+							CultureInfo.CurrentCulture, "Integration failed, but a label was never successfully applied to {0} in repository {1}, so skipping removal.",
 							_shim.Folder, _shim.Repository));
 				}
 			}
@@ -239,8 +240,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             var builder = new PrivateArguments();
 			builder.Add("history ", _shim.Folder);
 			builder.Add(_shim.HistoryArgs);
-			builder.Add("-begindate ", from.ToString("s"));
-			builder.Add("-enddate ", to.ToString("s"));
+			builder.Add("-begindate ", from.ToString("s", CultureInfo.CurrentCulture));
+			builder.Add("-enddate ", to.ToString("s", CultureInfo.CurrentCulture));
 			AddCommonOptionalArguments(builder);
             return builder;
 		}
@@ -312,7 +313,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			catch (XmlException)
 			{
 				var message = string.Format(
-					"Unable to parse vault XML output for vault command: [{0}].  Vault Output: [{1}]", 
+					CultureInfo.CurrentCulture, "Unable to parse vault XML output for vault command: [{0}].  Vault Output: [{1}]", 
                     info.PublicArguments, 
                     result.StandardOutput);
                 throw new VaultException(message);

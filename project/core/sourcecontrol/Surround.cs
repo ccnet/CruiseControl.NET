@@ -1,5 +1,6 @@
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -148,8 +149,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			string command = string.Format(System.Globalization.CultureInfo.CurrentCulture,"cc {0} -d{1}:{2} {3} -b{4} -p{5} {6} -z{7} -y{8}",
 			                               File,
-			                               from.StartTime.ToString(TO_SSCM_DATE_FORMAT),
-			                               to.StartTime.ToString(TO_SSCM_DATE_FORMAT),
+			                               from.StartTime.ToString(TO_SSCM_DATE_FORMAT, CultureInfo.CurrentCulture),
+			                               to.StartTime.ToString(TO_SSCM_DATE_FORMAT, CultureInfo.CurrentCulture),
 			                               (Recursive == 0) ?string.Empty : "-r",
 			                               Branch,
 			                               Repository,

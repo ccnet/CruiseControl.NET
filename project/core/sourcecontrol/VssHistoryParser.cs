@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -194,9 +195,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// <remarks></remarks>
 	    protected VSSParser(string entry, IVssLocale locale)
 		{
-			this.entry = entry.Replace(Convert.ToChar(160).ToString(),string.Empty);
+			this.entry = entry.Replace(Convert.ToChar(160).ToString(CultureInfo.CurrentCulture),string.Empty);
 			this.locale = locale;
-			string regex = string.Format(@"{0}:(.+){1}:(.+){2}:(.+)$", locale.UserKeyword, locale.DateKeyword, locale.TimeKeyword);
+			string regex = string.Format(CultureInfo.CurrentCulture, @"{0}:(.+){1}:(.+){2}:(.+)$", locale.UserKeyword, locale.DateKeyword, locale.TimeKeyword);
 			REGEX_USER_DATE_LINE = new Regex(regex, RegexOptions.Multiline);
 			this.locale = locale;
 		}

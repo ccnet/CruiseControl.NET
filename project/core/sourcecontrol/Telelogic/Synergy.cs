@@ -1,3 +1,4 @@
+using System.Globalization;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 {
     using System;
@@ -398,7 +399,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 			    DateTime currentReconfigureTime = GetReconfigureTime();
 			    if (currentReconfigureTime != project.LastReconfigureTime)
 			    {
-				    string message = String.Format(@"Invalid project state.  Cannot add tasks to shared folder '{0}' because " + @"the integration project '{1}' was internally reconfigured at '{2}' " + @"and externally reconfigured at '{3}'.  Projects cannot be reconfigured " + @"during an integration run.", project.TaskFolder, project.ProjectSpecification, project.LastReconfigureTime, currentReconfigureTime);
+				    string message = String.Format(CultureInfo.CurrentCulture, @"Invalid project state.  Cannot add tasks to shared folder '{0}' because " + @"the integration project '{1}' was internally reconfigured at '{2}' " + @"and externally reconfigured at '{3}'.  Projects cannot be reconfigured " + @"during an integration run.", project.TaskFolder, project.ProjectSpecification, project.LastReconfigureTime, currentReconfigureTime);
 				    throw(new CruiseControlException(message));
 			    }
 

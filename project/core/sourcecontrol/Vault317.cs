@@ -74,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
             var modList = new List<Modification>(itemModifications.Length);
             foreach (Modification mod in itemModifications)
             {
-                if (int.Parse(mod.ChangeNumber) <= _lastTxID)
+                if (int.Parse(mod.ChangeNumber, CultureInfo.CurrentCulture) <= _lastTxID)
                     modList.Add(mod);
             }
 
@@ -219,13 +219,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 // get the new most recent folder version
                 XmlAttribute versionAttr = (XmlAttribute)folderVersionNode.Attributes.GetNamedItem("version");
                 Debug.Assert(versionAttr != null, "version attribute not found in version history");
-                _folderVersion = long.Parse(versionAttr.Value);
+                _folderVersion = long.Parse(versionAttr.Value, CultureInfo.CurrentCulture);
                 Log.Debug("Most recent folder version: " + _folderVersion);
 
                 // get the new most recent TxId
                 XmlAttribute txIdAttr = (XmlAttribute)folderVersionNode.Attributes.GetNamedItem("txid");
                 Debug.Assert(txIdAttr != null, "txid attribute not found in version history");
-                _lastTxID = long.Parse(txIdAttr.Value);
+                _lastTxID = long.Parse(txIdAttr.Value, CultureInfo.CurrentCulture);
                 Log.Debug("Most recent TxID: " + _lastTxID);
             }
 
@@ -245,12 +245,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 // use folderVersion when possible because it's faster and more accurate
                 if (_folderVersion != 0)
                 {
-                    builder.Add("-beginversion ", (_folderVersion + 1).ToString());
+                    builder.Add("-beginversion ", (_folderVersion + 1).ToString(CultureInfo.CurrentCulture));
                 }
                 else
                 {
-                    builder.Add("-begindate ", from.StartTime.ToString("s"));
-                    builder.Add("-enddate ", to.StartTime.ToString("s"));
+                    builder.Add("-begindate ", from.StartTime.ToString("s", CultureInfo.CurrentCulture));
+                    builder.Add("-enddate ", to.StartTime.ToString("s", CultureInfo.CurrentCulture));
                 }
             }
 
@@ -265,7 +265,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         {
             var builder = new PrivateArguments();
 
-            builder.Add("getversion ", _folderVersion.ToString());
+            builder.Add("getversion ", _folderVersion.ToString(CultureInfo.CurrentCulture));
             builder.Add(null, _shim.Folder, true);
 
             if (!string.IsNullOrEmpty(_shim.WorkingDirectory))

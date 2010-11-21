@@ -137,7 +137,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <remarks></remarks>
 		public string FilenameFormattedDateString
 		{
-			get { return _date.ToString(FilenameDateFormat); }
+			get { return _date.ToString(FilenameDateFormat, CultureInfo.CurrentCulture); }
 		}
 
 		/// <summary>
@@ -153,11 +153,11 @@ namespace ThoughtWorks.CruiseControl.Core
 
             if (!filename.StartsWith(FilenamePrefix))
                 throw new ArgumentException(string.Format(
-                                                "{0} does not start with {1}.", filename, FilenamePrefix), "filename");
+                                                CultureInfo.CurrentCulture, "{0} does not start with {1}.", filename, FilenamePrefix), "filename");
 
 			if (filename.Length < FilenamePrefix.Length + FilenameDateFormat.Length)
 				throw new ArgumentException(string.Format(
-					"{0} does not start with {1} followed by a date in {2} format",
+					CultureInfo.CurrentCulture, "{0} does not start with {1} followed by a date in {2} format",
                     filename, FilenamePrefix, FilenameDateFormat), "filename");
 		}
 
@@ -257,7 +257,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private static int GetNumericBuildNumber(string buildlabel)
 		{
-			return Int32.Parse(Regex.Replace(buildlabel, @"\D", string.Empty));
+			return Int32.Parse(Regex.Replace(buildlabel, @"\D", string.Empty), CultureInfo.CurrentCulture);
 		}
 
         /// <summary>

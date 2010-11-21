@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -52,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			IList<Modification> result = new List<Modification>();
 
 			string hash = commitMatch.Groups["Hash"].Value;
-			DateTime modifiedTime = DateTime.Parse(commitMatch.Groups["Time"].Value);
+			DateTime modifiedTime = DateTime.Parse(commitMatch.Groups["Time"].Value, CultureInfo.CurrentCulture);
 			string username = commitMatch.Groups["Author"].Value;
 			string emailAddress = commitMatch.Groups["Mail"].Value;
 			string comment = commitMatch.Groups["Message"].Value.TrimEnd('\r', '\n');

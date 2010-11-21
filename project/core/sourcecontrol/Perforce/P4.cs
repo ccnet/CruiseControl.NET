@@ -336,7 +336,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 				{
 					foreach (Modification mod in mods)
 					{
-						mod.Url = string.Format(P4WebURLFormat, mod.ChangeNumber);
+						mod.Url = string.Format(CultureInfo.CurrentCulture, P4WebURLFormat, mod.ChangeNumber);
 					}
 				}
                 FillIssueUrl(mods);
@@ -360,7 +360,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 				try
 				{
-					int.Parse(result.Label);
+					int.Parse(result.Label, CultureInfo.CurrentCulture);
 					throw new CruiseControlException("Perforce cannot handle purely numeric labels - you must use a label prefix for your project");
 				}
 				catch (FormatException)
@@ -536,7 +536,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
             {
                 string errorMessage =
                     string.Format(
-                        "Perforce {0} failed: {1} {2}\r\nError output from process was: \r\n{3}",
+                        CultureInfo.CurrentCulture, "Perforce {0} failed: {1} {2}\r\nError output from process was: \r\n{3}",
                         description, process.FileName, process.PublicArguments, errorSummary);
                 Log.Error(errorMessage);
                 throw new CruiseControlException(errorMessage);

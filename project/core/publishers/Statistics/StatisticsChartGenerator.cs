@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
@@ -122,7 +123,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             if (relevantStat == "Duration" && Regex.IsMatch(value, "[0-9]+:[0-9]+:[0-9]+"))
             {
                 string[] parts = value.Split(':');
-                value = Convert.ToInt32(parts[0]) * 3600 + Convert.ToInt32(parts[1]) * 60 + parts[2];
+                value = Convert.ToInt32(parts[0], CultureInfo.CurrentCulture) * 3600 + Convert.ToInt32(parts[1], CultureInfo.CurrentCulture) * 60 + parts[2];
             }
             return value;
         }

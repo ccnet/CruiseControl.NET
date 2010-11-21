@@ -1,3 +1,4 @@
+using System.Globalization;
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
     using System;
@@ -298,7 +299,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             {
                 try
                 {
-                    return Byte.Parse(ProjectFile.Substring(ProjectFile.Length - 1, 1));
+                    return Byte.Parse(ProjectFile.Substring(ProjectFile.Length - 1, 1), CultureInfo.CurrentCulture);
                 }
                 catch
                 {
@@ -317,7 +318,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public string GetFBPath()
 		{
             int fbversion = GetFBVersion();			
-			string keyName = String.Format(@"SOFTWARE\VSoft\FinalBuilder\{0}.0", fbversion); // Works for FB 3 through 5, should work for future versions
+			string keyName = String.Format(CultureInfo.CurrentCulture, @"SOFTWARE\VSoft\FinalBuilder\{0}.0", fbversion); // Works for FB 3 through 5, should work for future versions
 	
 			string executableDir = _registry.GetLocalMachineSubKeyValue(keyName, "Location");
             if (string.IsNullOrEmpty((executableDir)))

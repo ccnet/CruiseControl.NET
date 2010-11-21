@@ -1,5 +1,6 @@
 
 using System.Xml;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -120,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			{
 				writer.WriteAttributeString("units", unit.ToString());
 			}
-			writer.WriteString(timeout.ToString());
+			writer.WriteString(timeout.ToString(CultureInfo.CurrentCulture));
 			writer.WriteEndElement();
 		}
 

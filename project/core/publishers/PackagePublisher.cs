@@ -8,6 +8,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -318,9 +319,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             var packageFile = new FileInfo(fileName);
             packageElement.SetAttribute("file", fileName);
             packageElement.SetAttribute("label", result.Label);
-            packageElement.SetAttribute("time", DateTime.Now.ToString("s"));
-            packageElement.SetAttribute("files", numberOfFiles.ToString());
-            packageElement.SetAttribute("size", packageFile.Length.ToString());
+            packageElement.SetAttribute("time", DateTime.Now.ToString("s", CultureInfo.CurrentCulture));
+            packageElement.SetAttribute("files", numberOfFiles.ToString(CultureInfo.CurrentCulture));
+            packageElement.SetAttribute("size", packageFile.Length.ToString(CultureInfo.CurrentCulture));
 
             // Save the updated list
             var listDir = Path.GetDirectoryName(listFile);
@@ -387,7 +388,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                     {
                         Log.Warning(
                             string.Format(
-                                "Unable to delete file '{0}', delaying before retry",
+                                CultureInfo.CurrentCulture, "Unable to delete file '{0}', delaying before retry",
                                 actualFile));
                         Thread.Sleep(1000);
                     }

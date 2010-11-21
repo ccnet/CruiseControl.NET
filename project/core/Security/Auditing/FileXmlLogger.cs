@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote.Security;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
 {
@@ -71,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Core.Security.Auditing
             XmlDocument auditXml = new XmlDocument();
             XmlElement xmlRoot = auditXml.CreateElement("event");
             auditXml.AppendChild(xmlRoot);
-            AddXmlElement(auditXml, xmlRoot, "dateTime", DateTime.Now.ToString("o"));
+            AddXmlElement(auditXml, xmlRoot, "dateTime", DateTime.Now.ToString("o", CultureInfo.CurrentCulture));
             if (!string.IsNullOrEmpty(projectName)) AddXmlElement(auditXml, xmlRoot, "project", projectName);
             if (!string.IsNullOrEmpty(userName)) AddXmlElement(auditXml, xmlRoot, "user", userName);
             AddXmlElement(auditXml, xmlRoot, "type", eventType.ToString());

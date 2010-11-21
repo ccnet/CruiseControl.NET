@@ -6,6 +6,7 @@ using log4net;
 using log4net.Config;
 using ThoughtWorks.CruiseControl.Core.Util.Log4NetTrace;
 using System.Diagnostics;
+using System.Globalization;
 
 // This attribute tells log4net to use the settings in the app.config file for configuration
 [assembly: XmlConfigurator()]
@@ -67,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="args"></param>
         public static void Info(string message, params object[] args)
 		{
-			if (loggingEnabled) logger.Info(string.Format(message,args));
+			if (loggingEnabled) logger.Info(string.Format(CultureInfo.CurrentCulture, message,args));
 		}
 
         /// <summary>
@@ -95,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="args"></param>
         public static void Debug(string message, params object[] args)
         {
-            if (loggingEnabled) logger.Debug(string.Format(message,args));
+            if (loggingEnabled) logger.Debug(string.Format(CultureInfo.CurrentCulture, message,args));
         }
 
         /// <summary>
@@ -114,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="args"></param>
         public static void Warning(string message, params object[] args)
         {
-            if (loggingEnabled) logger.Warn(string.Format(message,args));
+            if (loggingEnabled) logger.Warn(string.Format(CultureInfo.CurrentCulture, message,args));
         }
 
         /// <summary>
@@ -142,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="args"></param>
         public static void Error(string message, params object[] args)
         {
-            logger.Error(string.Format(message,args));
+            logger.Error(string.Format(CultureInfo.CurrentCulture, message,args));
         }
 
         /// <summary>
@@ -200,7 +201,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <remarks></remarks>
         public static TraceBlock StartTrace(string message, params object[] args)
         {
-            return new TraceBlock(logger, GetCallingClassName(), string.Format(message, args));
+            return new TraceBlock(logger, GetCallingClassName(), string.Format(CultureInfo.CurrentCulture, message, args));
         }
 
         private static string GetCallingClassName()

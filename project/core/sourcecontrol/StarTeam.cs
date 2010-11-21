@@ -346,7 +346,7 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 		internal string BuildHistoryProcessArgs(DateTime from, DateTime to)
 		{			
 			string formatted =  string.Format(
-				HISTORY_COMMAND_FORMAT,
+				CultureInfo.CurrentCulture, HISTORY_COMMAND_FORMAT,
 				Username,
 				Password,
 				Host,
@@ -368,7 +368,7 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 		public string GetSourceProcessArgs()
 		{			
 			string formatted = string.Format(
-				GET_SOURCE_COMMAND_FORMAT,
+				CultureInfo.CurrentCulture, GET_SOURCE_COMMAND_FORMAT,
 				Username,
 				Password,
 				Host,
