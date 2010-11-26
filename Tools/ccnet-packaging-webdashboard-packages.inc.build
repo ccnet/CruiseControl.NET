@@ -324,7 +324,7 @@
 	<target name="build.modificationsgrouped.package" description="Generates the modifications grouped by changenumber package">
 		<mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
 		<zip zipfile="${build.dir}/WebDashboard/packages/ModificationsGrouped.zip">
-			<fileset basedir="${src.dir}/WebDashboard/packages/Modifications">
+			<fileset basedir="${src.dir}/WebDashboard/packages/ModificationsGrouped">
 				<include name="*.*"/>
 			</fileset>
 			<fileset basedir="${src.dir}/Xsl">
