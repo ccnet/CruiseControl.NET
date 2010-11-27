@@ -1,7 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 version="1.0">
- <xsl:output method="html"/>
+ <xsl:output method="html"/> 
+
  <xsl:template match="/">
    <xsl:apply-templates select="/cruisecontrol/build/*[local-name()='TestRun']" />
  </xsl:template>
@@ -66,9 +67,10 @@ version="1.0">
      </table>
    </xsl:if>
 
+  
    <xsl:apply-templates select="*[local-name()='Results']">
-
    </xsl:apply-templates>
+   
  </xsl:template>
 
  <xsl:template match="*[local-name()='RunInfo']">
@@ -85,8 +87,9 @@ version="1.0">
    <h2>Test Results</h2>
    <table border="1" cellPadding="2" cellSpacing="0" width="98%">
      <thead style="text-align: center; font-size: large; font-weight:bold;background-color:#33CCFF">
+       <td>Test List Name</td>
        <td>Test Name</td>
-	   <td>Test Result</td>
+	     <td>Test Result</td>
        <td>Test Duration</td>
 	 </thead>
      <tr>
@@ -134,14 +137,19 @@ version="1.0">
    <xsl:apply-templates select="./*[local-name()='InnerResults']/*" />
 
    <tr>
-     <td colspan="3" style="text-align: center; font-weight: bold;">
+     <td colspan="4" style="text-align: center; font-weight: bold;">
            End of composite test :  <xsl:value-of select="@testName "/>
      </td>
    </tr>
  </xsl:template>
 
  <xsl:template match="*[local-name()='UnitTestResult']">
+		<xsl:variable name="tstid" select="@testListId" />
+		<xsl:variable name="tstListName" select="/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='TestLists']/*[local-name()='TestList'][@id=$tstid]/@name" />
    <tr>
+     <td>
+	 	    <xsl:value-of select="$tstListName"/>
+		 </td>
      <td>
        <xsl:value-of select="@testName"/>
      </td>
@@ -171,17 +179,17 @@ version="1.0">
        <xsl:value-of select="@duration"/>
      </td>
    </tr>
-               <xsl:apply-templates select="./*[local-name()='Output']/*[local-name()='ErrorInfo']" />
- </xsl:template>
+      <xsl:apply-templates select="./*[local-name()='Output']/*[local-name()='ErrorInfo']" />
+      </xsl:template>
 
- <xsl:template match="*[local-name()='ErrorInfo']">
+      <xsl:template match="*[local-name()='ErrorInfo']">
        <tr>
                <td colspan="3" bgcolor="#FF9900">
                        <b><xsl:value-of select="./*[local-name()='Message']" /></b><br />
                        <xsl:value-of select="./*[local-name()='StackTrace']" />
                </td>
        </tr>
- </xsl:template>
+      </xsl:template>
 
  <xsl:template match="*[local-name()='TestResult']">
    <tr>
@@ -201,7 +209,7 @@ version="1.0">
        </xsl:when>
        <xsl:when test="@outcome = 'Inconclusive'">
          <td style="text-align: center; font-weight: bold; background-color: yellow; color: black;">
-<xsl:value-of select="@outcome"/>
+           <xsl:value-of select="@outcome"/>
          </td>
        </xsl:when>
        <xsl:otherwise>
