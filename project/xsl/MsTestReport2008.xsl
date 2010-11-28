@@ -148,8 +148,8 @@ version="1.0">
 		<xsl:variable name="tstListName" select="/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='TestLists']/*[local-name()='TestList'][@id=$tstid]/@name" />
    <tr>
      <td>
-	 	    <xsl:value-of select="$tstListName"/>
-		 </td>
+	 	<xsl:value-of select="$tstListName"/>
+	</td>
      <td>
        <xsl:value-of select="@testName"/>
      </td>
@@ -192,7 +192,12 @@ version="1.0">
       </xsl:template>
 
  <xsl:template match="*[local-name()='TestResult']">
+		<xsl:variable name="tstid" select="@testListId" />
+		<xsl:variable name="tstListName" select="/cruisecontrol/build/*[local-name()='TestRun']/*[local-name()='TestLists']/*[local-name()='TestList'][@id=$tstid]/@name" />
    <tr>
+     <td>
+	 	<xsl:value-of select="$tstListName"/>
+	</td>
      <td>
        <xsl:value-of select="@testName"/>
      </td>
