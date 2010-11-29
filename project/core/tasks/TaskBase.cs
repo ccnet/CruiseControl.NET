@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Parameters;
-using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -18,6 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         private IDynamicValue[] myDynamicValues = new IDynamicValue[0];
         private ItemStatus currentStatus;
         private List<TimeSpan> elapsedTimes = new List<TimeSpan>();
+        private EnvironmentVariable[] myEnvironmentVariables = new EnvironmentVariable[0]; 
         #endregion
 
         #region Public properties
@@ -72,6 +74,22 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <value><c>true</c> if the task was successful; otherwise, <c>false</c>.</value>
         public bool WasSuccessful { get; private set; }
         #endregion
+
+
+        /// <summary>                                                                                              
+        /// A set of environment variables set for commands that are executed.                                     
+        /// </summary>                                                                                             
+        /// <remarks>                                                                                              
+        /// Each variable should be specified as <code>&lt;variable name="name" value="value"/&gt;</code>.         
+        /// </remarks>                                                                                             
+        [ReflectorProperty("environment", Required = false)]
+        public EnvironmentVariable[] EnvironmentVariables
+        {
+            get { return myEnvironmentVariables; }
+            set { myEnvironmentVariables = value; }
+        }
+
+        
         #endregion
 
         #region Public methods

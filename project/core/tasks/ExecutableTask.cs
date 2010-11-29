@@ -1,13 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Globalization;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
+
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.Diagnostics;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.Util;
-
     /// <summary>
     /// <para>
     /// The Executable Task lets you invoke any command line executable. It doesn't offer as much specific
@@ -151,13 +151,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         [ReflectorProperty("buildArgs", Required = false)]
         public string BuildArgs { get; set; }
 
-		/// <summary>
-		/// A set of environment variables set for commands that are executed.
-		/// </summary>
-        /// <version>1.0</version>
-        /// <default>None</default>
-        [ReflectorProperty("environment", Required = false)]
-        public EnvironmentVariable[] EnvironmentVariables { get; set; }
+        ///// <summary>
+        ///// A set of environment variables set for commands that are executed.
+        ///// </summary>
+        ///// <version>1.0</version>
+        ///// <default>None</default>
+        //[ReflectorProperty("environment", Required = false)]
+        //public EnvironmentVariable[] EnvironmentVariables { get; set; }
 
 		private int[] successExitCodes;
 
@@ -222,7 +222,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format(System.Globalization.CultureInfo.CurrentCulture,"Executing {0}", Executable));
 
 			ProcessInfo info = CreateProcessInfo(result);
-			SetConfiguredEnvironmentVariables(info.EnvironmentVariables, EnvironmentVariables);
 
 			ProcessResult processResult = TryToRun(info, result);
 
@@ -319,18 +318,5 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return string.Format(CultureInfo.CurrentCulture, @" BaseDirectory: {0}, Executable: {1}", ConfiguredBaseDirectory, Executable);
 		}
 
-		/// <summary>
-        /// Pass the project's environment variables to the process.
-        /// </summary>
-        /// <param name="variablePool">The collection of environment variables to be updated.</param>
-        /// <param name="varsToSet">An array of environment variables to set.</param>
-        /// <remarks>
-        /// Any variable without a value will be set to an empty string.
-        /// </remarks>
-        private static void SetConfiguredEnvironmentVariables(StringDictionary variablePool, IEnumerable<EnvironmentVariable> varsToSet)
-        {
-            foreach (EnvironmentVariable item in varsToSet)
-                variablePool[item.name] = item.value;
-        }
     }
 }

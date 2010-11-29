@@ -1,12 +1,12 @@
+using System;
+using System.Collections;
+using System.Diagnostics;
+using System.IO;
+using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Core.Util;
+
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
-    using System.Collections;
-    using System.Diagnostics;
-    using System.IO;
-    using ThoughtWorks.CruiseControl.Core.Config;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using System;
-
     /// <summary>
     /// Base task to execute external functionality.
     /// </summary>
@@ -78,6 +78,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			ProcessInfo info = new ProcessInfo(GetProcessFilename(), GetProcessArguments(result), GetProcessBaseDirectory(result),GetProcessPriorityClass(), GetProcessSuccessCodes());
 			info.TimeOut = GetProcessTimeout();
 
+            foreach (EnvironmentVariable item in EnvironmentVariables)
+                info.EnvironmentVariables[item.name] = item.value;
+
+
 			IDictionary properties = result.IntegrationProperties;
 			foreach (string key in properties.Keys)
 			{
@@ -132,15 +136,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         }
 
         #region Public properties
-        #region IOSystem
         /// <summary>
         /// Gets or sets the IO system to use.
         /// </summary>
         /// <value>The IO system.</value>
         public IFileSystem IOSystem { get; set; }
-        #endregion
 
-        #region IOSystemActual
         /// <summary>
         /// Gets the actual IO system to use.
         /// </summary>
@@ -157,7 +158,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 return this.IOSystem;
             }
         }
-        #endregion
         #endregion
 
         #region Public methods
