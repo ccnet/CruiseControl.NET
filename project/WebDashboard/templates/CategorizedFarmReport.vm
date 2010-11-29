@@ -1,0 +1,89 @@
+﻿<span>
+  <div style="margin-bottom: 5px; text-align: right">
+  <a id="showAll" style="cursor:pointer;color:blue; text-decoration:underline;" onclick="$('.showLink').hide(); $('.hideLink').show(); $('.statusTable').show()">Show All</a>
+  <a id="hideAll" style="margin-right:25px;cursor:pointer;color:blue; text-decoration:underline;" onclick="$('.showLink').show(); $('.hideLink').hide(); $('.statusTable').hide()">Hide All</a>
+  </div>
+  #set ($categoryId = 0)
+  #foreach ($category in $categories)
+  #set ($categoryId = $categoryId + 1)
+  <div style="padding: 1px; background: white;"></div>
+  <div style="padding: 5px; margin-right: 0.5px; background: $category.CategoryColor; color: white;">
+    <span style="font-size: 150%; font-weight: bold; font-family: verdana,helvetica,arial,san-serif;">$category.Name</span>
+    <span>
+    <a id="showGrid$categoryId" class="showLink"
+       style="color: white; text-decoration: underline; cursor: pointer; #if( $category.Display) display: none; #end"
+       onclick="$('#showGrid$categoryId').hide(); $('#hideGrid$categoryId').show(); $('#statusGrid$categoryId').show()">show</a>
+    <a id="hideGrid$categoryId" class="hideLink"
+       style="color: white; text-decoration: underline; cursor: pointer; #if( !$category.Display) display: none; #end"
+       onclick="$('#showGrid$categoryId').show(); $('#hideGrid$categoryId').hide(); $('#statusGrid$categoryId').hide()">hide</a>
+    </span>
+  </div>
+
+  <table id="statusGrid$categoryId" class="SortableGrid statusTable"
+         style="#if( !$category.Display) display: none; #end ">
+	<thead>
+	   <tr class="ProjectGridHeader">
+		  <th class="left">Server</th>
+		  <th class="left">Project Name</th>
+		  <th>Last Build Status</th>
+		  <th>Last Build Time</th>
+		  <th>Next Build Time</th>
+		  <th>Last Build Label</th>
+		  <th>CCNet Status</th>
+		  <th>Activity</th>
+		  <th class="{sorter:false}">Messages</th>
+		  <th class="{sorter:false}">Admin</th>
+		</tr>	
+	</thead>    
+    #foreach ($row in $category.Rows)
+    <tr>
+    <td>$row.ServerName</td>
+    <td>
+      <a href="$row.Url" title="$row.Description">$row.Name</a>
+    </td>
+    <td class="$row.BuildStatusHtmlColor">$row.BuildStatus</td>
+    <td>$row.LastBuildDate</td>
+    <td>$row.NextBuildTime</td>
+    <td>$row.LastBuildLabel</td>
+    <td class="status$row.Status">$row.Status</td>
+    <td class="activity$row.Activity">$row.Activity.ToString()</td>
+    <td>
+      <ul>
+        #if ($projectGridRow.Breakers.Length > 0)
+        <li>Breakers : $projectGridRow.Breakers</li>
+        #end
+        #if ($projectGridRow.Fixer.Length > 0)
+        <li>$projectGridRow.Fixer</li>
+        #end
+        #if ($projectGridRow.FailingTasks.Length > 0)
+        <li>Failing Tasks : $projectGridRow.FailingTasks</li>
+        #end
+      </ul>
+    </td>
+    <td>
+      <form method="post" style="margin-bottom:0px;">
+        <input type="hidden" name="projectName" value="$row.Name" />
+        <input type="hidden" name="serverName" value="$row.ServerName" />
+        <font color="Black">
+          #if ($row.allowForceBuild)
+          #if ($row.ForceAbortBuildButtonValue == "Force")
+          <input type="button" name="$row.ForceAbortBuildButtonName"
+                 value="$row.ForceAbortBuildButtonValue"
+                 onclick="checkForParams(this, '$row.ParametersUrl')"/>
+          #else
+          <input type="submit" name="$row.ForceAbortBuildButtonName"
+                 value="$row.ForceAbortBuildButtonValue"/>
+          #end
+          #end
+          #if ($projectGridRow.AllowStartStopBuild)
+          <input type="submit" name="$row.StartStopButtonName"
+                 value="$row.StartStopButtonValue"/>
+          #end
+        </font>
+      </form>
+    </td>
+  </tr>
+	#end
+	</table> 
+#end 
+</span>

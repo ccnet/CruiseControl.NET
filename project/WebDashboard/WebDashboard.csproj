@@ -519,6 +519,7 @@
     <Compile Include="Plugins\CCTray\CCTrayDownloadPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\FarmReport\CategorizedFarmReportFarmPlugin.cs" />
     <Compile Include="Plugins\FarmReport\XmlProjectParametersReportAction.cs" />
     <Compile Include="Plugins\FarmReport\XmlServerReportAction.cs" />
     <Compile Include="Plugins\FarmReport\FarmReportFarmPlugin.cs">
