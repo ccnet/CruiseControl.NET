@@ -341,9 +341,34 @@
             task.Validate(null, trace, errorProcesser);
             this.mocks.VerifyAll();
         }
+
+				[Test]
+				public void ShouldFailIfProcessTimesOut()
+				{
+					var executorStub = mocks.StrictMock<ProcessExecutor>();
+					SetupResult.For(executorStub.Execute(null)).IgnoreArguments().Return(ProcessResultFixture.CreateTimedOutResult());
+
+					var task = CreateTask(executorStub);
+					var result = IntegrationResultMother.CreateUnknown();
+
+					mocks.ReplayAll();
+					task.Run(result);
+					mocks.VerifyAll();
+
+					Assert.That(result.Status, Is.EqualTo(IntegrationStatus.Failure));
+					Assert.That(result.TaskOutput, Is.StringMatching("Command line '.*' timed out after \\d+ seconds"));
+				}
         #endregion
 
         #region Private methods
+				private AntsPerformanceProfilerTask CreateTask(ProcessExecutor executor)
+				{
+					var fileSystem = mocks.DynamicMock<IFileSystem>();
+					var logger = mocks.DynamicMock<ILogger>();
+
+					return new AntsPerformanceProfilerTask(executor, fileSystem, logger);
+				}
+
         private IIntegrationResult GenerateResultMock()
         {
             return GenerateResultMock(defaultWorkingDir, "artefactDir");

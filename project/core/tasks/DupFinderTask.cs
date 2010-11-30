@@ -268,7 +268,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             // Run the executable
             this.logger.Info("Executing DupFinder");
-            var processResult = TryToRun(CreateProcessInfo(result), result);
+            var info = this.CreateProcessInfo(result);
+            var processResult = this.TryToRun(info, result);
+            if (processResult.TimedOut)
+            {
+                result.AddTaskResult(MakeTimeoutBuildResult(info));
+            }
 
             if (this.ShortenFileNames || this.IncludeCode)
             {
@@ -299,7 +304,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             // Add the result
             result.AddTaskResult(new ProcessTaskResult(processResult, false));
-            return !processResult.Failed;
+            return processResult.Succeeded;
         }
         #endregion
 

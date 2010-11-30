@@ -222,38 +222,47 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Run the specified PowerShell and add its output to the build results.
         /// </summary>
         /// <param name="result">the IIntegrationResult object for the build</param>
-        protected override bool Execute(IIntegrationResult result)
-		{
-            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description)
-                                                                           ? Description
-                                                                           : string.Format(System.Globalization.CultureInfo.CurrentCulture,"Executing {0}", Executable)); 
-            
-			ProcessInfo processInfo = NewProcessInfoFrom(result);
+				protected override bool Execute(IIntegrationResult result)
+				{
+					result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description)
+																																				 ? Description
+																																				 : string.Format(System.Globalization.CultureInfo.CurrentCulture, "Executing {0}", Executable));
 
-			ProcessResult processResult = AttemptToExecute(processInfo);
+					ProcessInfo processInfo = NewProcessInfoFrom(result);
 
-            if (!StringUtil.IsWhitespace(processResult.StandardOutput) || !StringUtil.IsWhitespace(processResult.StandardError))
-            {
-                // The PowerShell produced some output.  We need to transform it into an XML build report 
-                // fragment so the rest of CC.Net can process it.
-                ProcessResult newResult = new ProcessResult(
-                    MakeBuildResult(processResult.StandardOutput,string.Empty), 
-                    MakeBuildResult(processResult.StandardError, "Error"), 
-                    processResult.ExitCode, 
-                    processResult.TimedOut,
-					processResult.Failed);
+					ProcessResult processResult = AttemptToExecute(processInfo);
 
-                processResult = newResult;
-            }
-            result.AddTaskResult(new ProcessTaskResult(processResult));
+					if (!StringUtil.IsWhitespace(processResult.StandardOutput) || !StringUtil.IsWhitespace(processResult.StandardError))
+					{
+						// The PowerShell produced some output.  We need to transform it into an XML build report 
+						// fragment so the rest of CC.Net can process it.
+						ProcessResult newResult = new ProcessResult(
+								MakeBuildResult(processResult.StandardOutput, string.Empty),
+								MakeBuildResult(processResult.StandardError, "Error"),
+								processResult.ExitCode,
+								processResult.TimedOut,
+								processResult.Failed);
 
-			if (processResult.TimedOut)
-			{
-				throw new BuilderException(this, "Command Line Build timed out (after " + BuildTimeoutSeconds + " seconds)");
-			}
+						processResult = newResult;
+					}
+					result.AddTaskResult(new ProcessTaskResult(processResult));
 
-            return !processResult.Failed;
-		}
+					if (processResult.TimedOut)
+						result.AddTaskResult(MakeTimeoutBuildResult(processInfo));
+
+					return processResult.Succeeded;
+				}
+
+				private static string MakeTimeoutBuildResult(ProcessInfo info)
+				{
+					string message = string.Format(CultureInfo.CurrentCulture,
+															"Command line '{0} {1}' timed out after {2} seconds.",
+															info.FileName,
+															info.Arguments,
+															info.TimeOut / 1000);
+					return StringUtil.MakeBuildResult(message, string.Empty);
+				}
+
 
 		private ProcessInfo NewProcessInfoFrom(IIntegrationResult result)
 		{

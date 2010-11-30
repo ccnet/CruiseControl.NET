@@ -256,24 +256,25 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="result">The result.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-        protected override bool Execute(IIntegrationResult result)
-		{
-            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
-				string.Format(System.Globalization.CultureInfo.CurrentCulture,"Executing MSBuild :BuildFile: {0}", ProjectFile));
+				protected override bool Execute(IIntegrationResult result)
+				{
+					result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
+						string.Format(System.Globalization.CultureInfo.CurrentCulture, "Executing MSBuild :BuildFile: {0}", ProjectFile));
 
-        	ProcessResult processResult = TryToRun(CreateProcessInfo(result), result);
+					var info = CreateProcessInfo(result);
+					ProcessResult processResult = TryToRun(info, result);
 
-			string buildOutputFile = MsBuildOutputFile(result);
-			if (File.Exists(buildOutputFile))
-				result.AddTaskResult(new FileTaskResult(buildOutputFile));
+					string buildOutputFile = MsBuildOutputFile(result);
+					if (File.Exists(buildOutputFile))
+						result.AddTaskResult(new FileTaskResult(buildOutputFile));
 
-            result.AddTaskResult(new ProcessTaskResult(processResult, true));
+					result.AddTaskResult(new ProcessTaskResult(processResult, true));
 
-			if (processResult.TimedOut)
-				throw new BuilderException(this, "MSBuild process timed out (after " + Timeout + " seconds)");
+					if (processResult.TimedOut)
+						result.AddTaskResult(MakeTimeoutBuildResult(info));
 
-            return !processResult.Failed;
-		}
+					return processResult.Succeeded;
+				}
 
 		private static string GetPropertyArgs(IIntegrationResult result)
 		{

@@ -190,25 +190,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void TimedOutExecutionShouldFailBuild()
 		{
-			try
-			{
-				AddDefaultAssemblyToCheck(task);
-				ExpectToExecuteAndReturn(TimedOutProcessResult());
-				task.Run(result);
-			}
-			catch (BuilderException)
-			{
-			}
-			Assert.AreEqual(IntegrationStatus.Exception, result.Status);
-		}
-
-		[Test]
-		public void TimedOutExecutionShouldCauseBuilderException()
-		{
 			AddDefaultAssemblyToCheck(task);
 			ExpectToExecuteAndReturn(TimedOutProcessResult());
-            Assert.That(delegate { task.Run(result); },
-                        Throws.TypeOf<BuilderException>());
+			task.Run(result);
+
+			Assert.That(result.Status, Is.EqualTo(IntegrationStatus.Failure));
+			Assert.That(result.TaskOutput, Is.StringMatching("Command line '.*' timed out after \\d+ seconds"));
 		}
 
 		[Test]

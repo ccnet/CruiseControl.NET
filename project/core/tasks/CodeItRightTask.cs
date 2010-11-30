@@ -195,7 +195,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : "Running CodeItRight analysis");
 
             // Run the executable
-			var processResult = TryToRun(CreateProcessInfo(result), result);
+            var info = this.CreateProcessInfo(result);
+            var processResult = this.TryToRun(info, result);
 
             // Need to start a new result as CodeItRight returns the number of violation
             processResult = new ProcessResult(
@@ -205,8 +206,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 processResult.TimedOut,
                 processResult.ExitCode < 0);
             result.AddTaskResult(new ProcessTaskResult(processResult));
+            if (processResult.TimedOut)
+            {
+                result.AddTaskResult(MakeTimeoutBuildResult(info));
+            }
 
-            if (!processResult.Failed)
+            if (processResult.Succeeded)
             {
                 var xmlFile = result.BaseFromWorkingDirectory("codeitright.xml");
                 result.AddTaskResult(
@@ -214,7 +219,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
 
             // Check the failure threshold
-            var failed = processResult.Failed;
+            var failed = !processResult.Succeeded;
             if (!failed && (this.FailureThreshold != Severity.None))
             {
                 var xmlFile = result.BaseFromWorkingDirectory("codeitright.xml");

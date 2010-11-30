@@ -99,11 +99,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		}
 
 		[Test]
-		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
+		public void TimedOutExecutionShouldFailBuild()
 		{
 			ExpectToExecuteAndReturn(TimedOutProcessResult());
-			Assert.That(delegate { builder.Run(result); },
-                        Throws.TypeOf<BuilderException>());
+			builder.Run(result);
+
+			Assert.That(result.Status, Is.EqualTo(IntegrationStatus.Failure));
+			Assert.That(result.TaskOutput, Is.StringMatching("Command line '.*' timed out after \\d+ seconds"));
 		}
 		
 		[Test]

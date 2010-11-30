@@ -233,16 +233,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         }
 
         [Test]
-        public void ShouldThrowBuilderExceptionIfProcessTimesOut()
+        public void ShouldFailBuildIfProcessTimesOut()
         {
-            ProcessResult processResult = new ProcessResult(string.Empty, string.Empty, ProcessResult.TIMED_OUT_EXIT_CODE, true);
+						ProcessResult processResult = ProcessResultFixture.CreateTimedOutResult();
             mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] { new IsAnything() });
             mytask.BuildTimeoutSeconds = 2;
             mytask.Executable = POWERSHELL_PATH;
             mytask.Script = "MyScript.ps1";
 
-            Assert.That(delegate { mytask.Run(IntegrationResult()); },
-                        Throws.TypeOf<BuilderException>());
+						var result = IntegrationResult();
+						mytask.Run(result);
+
+						Assert.That(result.Status, Is.EqualTo(IntegrationStatus.Failure));
+						Assert.That(result.TaskOutput, Is.StringMatching("Command line '.*' timed out after \\d+ seconds"));
         }
 
         [Test]

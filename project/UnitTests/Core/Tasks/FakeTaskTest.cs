@@ -80,6 +80,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             mocks.VerifyAll();
         }
 
+				[Test]
+				public void ShouldFailIfProcessTimesOut()
+				{
+					ExecutorShouldTimeOut(executor);
+					mocks.ReplayAll();
+
+					var task = new FakeTask(executor);
+
+					var result = IntegrationResultMother.CreateUnknown();
+					task.Run(result);
+					
+					mocks.VerifyAll();
+					Assert.That(result.Status, Is.EqualTo(IntegrationStatus.Failure));
+					Assert.That(result.TaskOutput, Is.StringMatching("Command line '.*' timed out after \\d+ seconds"));
+				}
+
         private IIntegrationResult GenerateResultMock(string workingDir, string artefactDir)
         {
             var buildInfo = mocks.DynamicMock<BuildProgressInformation>(string.Empty, string.Empty);
@@ -107,5 +123,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                     return new ProcessResult(string.Empty, string.Empty, 0, false);
                 }));
         }
-    }
+
+				private void ExecutorShouldTimeOut(ProcessExecutor executor)
+				{
+					Expect.Call(executor.Execute(null))
+							.IgnoreArguments()
+							.Return(ProcessResultFixture.CreateTimedOutResult());
+				}
+		}
 }

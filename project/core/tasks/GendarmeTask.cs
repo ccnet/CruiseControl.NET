@@ -342,30 +342,30 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="result">The result.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-        protected override bool Execute(IIntegrationResult result)
-		{
-            string gendarmeOutputFile = GetGendarmeOutputFile(result);
-            //delete old nant output logfile, if exist
-            fileDirectoryDeleter.DeleteIncludingReadOnlyObjects(gendarmeOutputFile);
+				protected override bool Execute(IIntegrationResult result)
+				{
+					string gendarmeOutputFile = GetGendarmeOutputFile(result);
+					//delete old nant output logfile, if exist
+					fileDirectoryDeleter.DeleteIncludingReadOnlyObjects(gendarmeOutputFile);
 
-            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
-				"Executing Gendarme to verifiy assemblies.");
+					result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
+			"Executing Gendarme to verifiy assemblies.");
 
-			ProcessResult processResult = TryToRun(CreateProcessInfo(result), result);
+					var info = CreateProcessInfo(result);
+					ProcessResult processResult = TryToRun(CreateProcessInfo(result), result);
 
+					if (File.Exists(gendarmeOutputFile))
+					{
+						result.AddTaskResult(new FileTaskResult(gendarmeOutputFile));
+					}
 
-            if (File.Exists(gendarmeOutputFile))
-            {
-                result.AddTaskResult(new FileTaskResult(gendarmeOutputFile));
-            }
+					result.AddTaskResult(new ProcessTaskResult(processResult, true));
 
-            result.AddTaskResult(new ProcessTaskResult(processResult, true));
+					if (processResult.TimedOut)
+						result.AddTaskResult(MakeTimeoutBuildResult(info));
 
-			if (processResult.TimedOut)
-				throw new BuilderException(this, string.Concat("Gendarme process timed out (after ", VerifyTimeoutSeconds, " seconds)"));
-
-            return !processResult.Failed;
-		}
+					return processResult.Succeeded;
+				}
 
 		/// <summary>
 		/// Gendarme returns the following codes:

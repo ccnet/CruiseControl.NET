@@ -451,38 +451,43 @@
         /// Run the task.
         /// </summary>
         /// <param name="result"></param>
-        protected override bool Execute(IIntegrationResult result)
-        {
-            this.logger.Debug("Starting ANTS Performance Profiler task");
-            result.BuildProgressInformation
-                .SignalStartRunTask(!string.IsNullOrEmpty(this.Description) ? this.Description : "Executing ANTS Performance Profiler");
+				protected override bool Execute(IIntegrationResult result)
+				{
+					this.logger.Debug("Starting ANTS Performance Profiler task");
+					result.BuildProgressInformation
+							.SignalStartRunTask(!string.IsNullOrEmpty(this.Description) ? this.Description : "Executing ANTS Performance Profiler");
 
-            // Make sure there is a root directory
-            this.rootPath = this.BaseDirectory;
-            if (string.IsNullOrEmpty(this.rootPath))
-            {
-                this.rootPath = result.WorkingDirectory;
-            }
+					// Make sure there is a root directory
+					this.rootPath = this.BaseDirectory;
+					if (string.IsNullOrEmpty(this.rootPath))
+					{
+						this.rootPath = result.WorkingDirectory;
+					}
 
-            // Run the executable
-			var processResult = this.TryToRun(this.CreateProcessInfo(result), result);
-            result.AddTaskResult(new ProcessTaskResult(processResult, false));
+					// Run the executable
+					var info = this.CreateProcessInfo(result);
+					var processResult = this.TryToRun(info, result);
+					result.AddTaskResult(new ProcessTaskResult(processResult, false));
+                    if (processResult.TimedOut)
+                    {
+                        result.AddTaskResult(MakeTimeoutBuildResult(info));
+                    }
 
-            // Publish the results
-            if (this.PublishFiles) // && !processResult.Failed) - TODO: only publish files if successful
-            {
-                var publishDir = Path.Combine(result.BaseFromArtifactsDirectory(result.Label), "AntsPerformance");
-                this.PublishFile(string.IsNullOrEmpty(this.OutputFile) ? defaultOutput : this.OutputFile, publishDir);
-                this.PublishFile(this.SummaryCsvFile, publishDir);
-                this.PublishFile(this.SummaryXmlFile, publishDir);
-                this.PublishFile(this.SummaryHtmlFile, publishDir);
-                this.PublishFile(this.CallTreeXmlFile, publishDir);
-                this.PublishFile(this.CallTreeHtmlFile, publishDir);
-                this.PublishFile(this.DataFile, publishDir);
-            }
+					// Publish the results
+					if (this.PublishFiles) // && !processResult.Failed) - TODO: only publish files if successful
+					{
+						var publishDir = Path.Combine(result.BaseFromArtifactsDirectory(result.Label), "AntsPerformance");
+						this.PublishFile(string.IsNullOrEmpty(this.OutputFile) ? defaultOutput : this.OutputFile, publishDir);
+						this.PublishFile(this.SummaryCsvFile, publishDir);
+						this.PublishFile(this.SummaryXmlFile, publishDir);
+						this.PublishFile(this.SummaryHtmlFile, publishDir);
+						this.PublishFile(this.CallTreeXmlFile, publishDir);
+						this.PublishFile(this.CallTreeHtmlFile, publishDir);
+						this.PublishFile(this.DataFile, publishDir);
+					}
 
-            return !processResult.Failed;
-        }
+					return processResult.Succeeded;
+				}
         #endregion
 
         #region GetProcessFilename()

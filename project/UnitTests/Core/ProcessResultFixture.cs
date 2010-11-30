@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		public static ProcessResult CreateTimedOutResult()
 		{
-			return new ProcessResult("timed out",string.Empty, ProcessResult.TIMED_OUT_EXIT_CODE, true);
+			return new ProcessResult("timed out", string.Empty, ProcessResult.SUCCESSFUL_EXIT_CODE, true);
 		}
 
 		public static ProcessResult CreateNonZeroExitCodeResult()

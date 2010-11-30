@@ -155,17 +155,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
                 string.Format(System.Globalization.CultureInfo.CurrentCulture,"Executing FAKE - {0}", ToString()));
 
-            var processResult = TryToRun(CreateProcessInfo(result), result);
+						var info = CreateProcessInfo(result);
+            var processResult = TryToRun(info, result);
 
             if (File.Exists(fakeOutputFile))
                 result.AddTaskResult(new FileTaskResult(fakeOutputFile));
 
             result.AddTaskResult(new ProcessTaskResult(processResult, true));
 
-            if (processResult.TimedOut)
-                throw new BuilderException(this, string.Concat("FAKE process timed out (after ", BuildTimeoutSeconds, " seconds)"));
+						if (processResult.TimedOut)
+							result.AddTaskResult(MakeTimeoutBuildResult(info));
 
-            return !processResult.Failed;
+            return processResult.Succeeded;
         }
 
         #endregion

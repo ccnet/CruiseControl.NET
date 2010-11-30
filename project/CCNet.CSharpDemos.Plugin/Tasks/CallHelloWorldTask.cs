@@ -42,13 +42,18 @@ namespace CCNet.CSharpDemos.Plugin.Tasks
             return 300;
         }
 
-        protected override bool Execute(IIntegrationResult result)
-        {
-            var processResult = this.TryToRun(
-                this.CreateProcessInfo(result),
-                result);
-            result.AddTaskResult(new ProcessTaskResult(processResult));
-            return !processResult.Failed;
-        }
-    }
+				protected override bool Execute(IIntegrationResult result)
+				{
+					var info = this.CreateProcessInfo(result);
+					var processResult = this.TryToRun(
+							info,
+							result);
+
+					result.AddTaskResult(new ProcessTaskResult(processResult));
+					if (processResult.TimedOut)
+						result.AddTaskResult(MakeTimeoutBuildResult(info));
+
+					return processResult.Succeeded;
+				}
+		}
 }

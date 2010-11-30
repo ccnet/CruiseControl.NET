@@ -217,34 +217,35 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Run the specified executable and add its output to the build results.
         /// </summary>
         /// <param name="result">the IIntegrationResult object for the build</param>
-        protected override bool Execute(IIntegrationResult result)
-		{
-            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format(System.Globalization.CultureInfo.CurrentCulture,"Executing {0}", Executable));
+				protected override bool Execute(IIntegrationResult result)
+				{
+					result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format(System.Globalization.CultureInfo.CurrentCulture, "Executing {0}", Executable));
 
-			ProcessInfo info = CreateProcessInfo(result);
+					ProcessInfo info = CreateProcessInfo(result);
 
-			ProcessResult processResult = TryToRun(info, result);
+					ProcessResult processResult = TryToRun(info, result);
 
-            if (!StringUtil.IsWhitespace(processResult.StandardOutput) || !StringUtil.IsWhitespace(processResult.StandardError))
-            {
-                // The executable produced some output.  We need to transform it into an XML build report 
-                // fragment so the rest of CC.Net can process it.
-                ProcessResult newResult = new ProcessResult(
-                    StringUtil.MakeBuildResult(processResult.StandardOutput,string.Empty),
-					StringUtil.MakeBuildResult(processResult.StandardError, "Error"), 
-                    processResult.ExitCode, 
-                    processResult.TimedOut,
-					processResult.Failed);
+					if (!StringUtil.IsWhitespace(processResult.StandardOutput) || !StringUtil.IsWhitespace(processResult.StandardError))
+					{
+						// The executable produced some output.  We need to transform it into an XML build report 
+						// fragment so the rest of CC.Net can process it.
+						ProcessResult newResult = new ProcessResult(
+								StringUtil.MakeBuildResult(processResult.StandardOutput, string.Empty),
+								StringUtil.MakeBuildResult(processResult.StandardError, "Error"),
+								processResult.ExitCode,
+								processResult.TimedOut,
+								processResult.Failed);
 
-                processResult = newResult;
-            }
-            result.AddTaskResult(new ProcessTaskResult(processResult));
+						processResult = newResult;
+					}
 
-        	if (processResult.TimedOut)
-        		throw new BuilderException(this, "Command Line Build timed out (after " + BuildTimeoutSeconds + " seconds)");
+					result.AddTaskResult(new ProcessTaskResult(processResult));
 
-            return !processResult.Failed;
-		}
+					if (processResult.TimedOut)
+						result.AddTaskResult(MakeTimeoutBuildResult(info));
+
+					return processResult.Succeeded;
+				}
 
         /// <summary>
         /// Gets the process filename.	

@@ -511,16 +511,21 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             if (string.IsNullOrEmpty(rootPath)) rootPath = result.WorkingDirectory;
 
             // Run the executable
-			var processResult = TryToRun(CreateProcessInfo(result), result);
-            result.AddTaskResult(new ProcessTaskResult(processResult));
+            var info = this.CreateProcessInfo(result);
+            var processResult = this.TryToRun(info, result);
+            result.AddTaskResult(new ProcessTaskResult(processResult, false));
+            if (processResult.TimedOut)
+            {
+                result.AddTaskResult(MakeTimeoutBuildResult(info));
+            }
 
-            if (Publish && !processResult.Failed)
+            if (Publish && processResult.Succeeded)
             {
                 var coverageFile = string.IsNullOrEmpty(CoverageFile) ? "coverage.xml" : CoverageFile;
                 result.AddTaskResult(new FileTaskResult(RootPath(coverageFile, false)));
             }
 
-            return !processResult.Failed;
+            return processResult.Succeeded;
         }
         #endregion
 

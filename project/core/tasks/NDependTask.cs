@@ -268,10 +268,15 @@
             var oldFiles = GenerateOriginalFileList(outputDirectory);
 
             // Run the executable
-			var processResult = TryToRun(CreateProcessInfo(result), result);
-            result.AddTaskResult(new ProcessTaskResult(processResult, true));
-
-            if (Publish && !processResult.Failed)
+            var info = this.CreateProcessInfo(result);
+            var processResult = this.TryToRun(info, result);
+            result.AddTaskResult(new ProcessTaskResult(processResult, false));
+            if (processResult.TimedOut)
+            {
+                result.AddTaskResult(MakeTimeoutBuildResult(info));
+            }
+            
+            if (Publish && processResult.Succeeded)
             {
                 // Check for any new files
                 var newFiles = ListFileDifferences(oldFiles, outputDirectory);
@@ -315,7 +320,7 @@
                 }
             }
 
-            return !processResult.Failed;
+            return processResult.Succeeded;
         }
         #endregion
 

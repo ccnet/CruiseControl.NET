@@ -108,6 +108,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			get { return failed; }	
 		}
 
+		/// <summary>
+		/// Returns true if the task completed without failing or timing out.
+		/// </summary>
+		/// <value></value>
+		/// <remarks></remarks>
+		public bool Succeeded
+		{
+			get { return !(failed || timedOut); }
+		}
+
         /// <summary>
         /// Gets the has error output.	
         /// </summary>

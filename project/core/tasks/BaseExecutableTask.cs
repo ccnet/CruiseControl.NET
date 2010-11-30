@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -120,6 +121,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				// remove Stdout monitoring
 				executor.ProcessOutput -= ProcessExecutor_ProcessOutput;
 			}
+		}
+
+		protected static string MakeTimeoutBuildResult(ProcessInfo info)
+		{
+			string message = string.Format(CultureInfo.CurrentCulture, 
+													"Command line '{0} {1}' timed out after {2} seconds.", 
+													info.FileName,
+                                                    info.PublicArguments, 
+													info.TimeOut / 1000);
+            Log.Warning(message);
+			return StringUtil.MakeBuildResult(message, string.Empty);
 		}
 
 		private void ProcessExecutor_ProcessOutput(object sender, ProcessOutputEventArgs e)

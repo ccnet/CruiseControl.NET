@@ -269,5 +269,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			Verify();
 		}
+
+		[Test]
+		public void ShouldFailIfProcessTimesOut()
+		{
+			ExpectToExecuteAndReturn(TimedOutProcessResult());
+
+			IIntegrationResult result = IntegrationResult();
+			task.Run(result);
+
+			Assert.That(result.Status, Is.EqualTo(IntegrationStatus.Failure));
+			Assert.That(result.TaskOutput, Is.StringMatching("Command line '.*' timed out after \\d+ seconds"));
+
+			Verify();
+		}
 	}
 }

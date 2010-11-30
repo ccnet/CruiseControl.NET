@@ -195,33 +195,33 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="result">The result.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-		protected override bool Execute(IIntegrationResult result)
-		{
-			ProcessInfo processInfo = CreateProcessInfo(result);
-            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format(System.Globalization.CultureInfo.CurrentCulture,"Executing Rake: {0}", processInfo.PublicArguments));
-			ProcessResult processResult = TryToRun(processInfo, result);
+				protected override bool Execute(IIntegrationResult result)
+				{
+					ProcessInfo processInfo = CreateProcessInfo(result);
+					result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : string.Format(System.Globalization.CultureInfo.CurrentCulture, "Executing Rake: {0}", processInfo.PublicArguments));
+					ProcessResult processResult = TryToRun(processInfo, result);
 
-            if (!StringUtil.IsWhitespace(processResult.StandardOutput) || !StringUtil.IsWhitespace(processResult.StandardError))
-			{
-				// The executable produced some output.  We need to transform it into an XML build report 
-				// fragment so the rest of CC.Net can process it.
-				ProcessResult newResult = new ProcessResult(
-					StringUtil.MakeBuildResult(processResult.StandardOutput,string.Empty),
-					StringUtil.MakeBuildResult(processResult.StandardError, "Error"),
-					processResult.ExitCode,
-					processResult.TimedOut,
-					processResult.Failed);
+					if (!StringUtil.IsWhitespace(processResult.StandardOutput) || !StringUtil.IsWhitespace(processResult.StandardError))
+					{
+						// The executable produced some output.  We need to transform it into an XML build report 
+						// fragment so the rest of CC.Net can process it.
+						ProcessResult newResult = new ProcessResult(
+							StringUtil.MakeBuildResult(processResult.StandardOutput, string.Empty),
+							StringUtil.MakeBuildResult(processResult.StandardError, "Error"),
+							processResult.ExitCode,
+							processResult.TimedOut,
+							processResult.Failed);
 
-				processResult = newResult;
-			}
+						processResult = newResult;
+					}
 
-			result.AddTaskResult(new ProcessTaskResult(processResult));
+					result.AddTaskResult(new ProcessTaskResult(processResult));
 
-			if (processResult.TimedOut)
-				throw new BuilderException(this, "Command Line Build timed out (after " + BuildTimeoutSeconds + " seconds)");
+					if (processResult.TimedOut)
+						result.AddTaskResult(MakeTimeoutBuildResult(processInfo));
 
-            return (!processResult.Failed);
-		}
+					return processResult.Succeeded;
+				}
 
         /// <summary>
         /// Gets the process arguments.	

@@ -302,28 +302,28 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		/// StdOut from nant.exe is redirected and stored.
 		/// </summary>
 		/// <param name="result">For storing build output.</param>
-        protected override bool Execute(IIntegrationResult result)
-		{
-            string nantOutputFile = GetNantOutputFile(result);
-            //delete old nant output logfile, if exist
-		    fileDirectoryDeleter.DeleteIncludingReadOnlyObjects(nantOutputFile);
+				protected override bool Execute(IIntegrationResult result)
+				{
+					string nantOutputFile = GetNantOutputFile(result);
+					//delete old nant output logfile, if exist
+					fileDirectoryDeleter.DeleteIncludingReadOnlyObjects(nantOutputFile);
 
-            result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description : 
-                string.Format(System.Globalization.CultureInfo.CurrentCulture,"Executing Nant :BuildFile: {0} Targets: {1} ", BuildFile, string.Join(", ", Targets)));
+					result.BuildProgressInformation.SignalStartRunTask(!string.IsNullOrEmpty(Description) ? Description :
+							string.Format(System.Globalization.CultureInfo.CurrentCulture, "Executing Nant :BuildFile: {0} Targets: {1} ", BuildFile, string.Join(", ", Targets)));
 
-			ProcessResult processResult = TryToRun(CreateProcessInfo(result), result);
-            
-            if (File.Exists(nantOutputFile))
-                result.AddTaskResult(new FileTaskResult(nantOutputFile));
+					var info = CreateProcessInfo(result);
+					ProcessResult processResult = TryToRun(info, result);
 
-		    result.AddTaskResult(new ProcessTaskResult(processResult, true));
+					if (File.Exists(nantOutputFile))
+						result.AddTaskResult(new FileTaskResult(nantOutputFile));
 
-		    // is this right?? or should this break the build
-			if (processResult.TimedOut)
-				throw new BuilderException(this, "NAnt process timed out (after " + BuildTimeoutSeconds + " seconds)");
+					result.AddTaskResult(new ProcessTaskResult(processResult, true));
 
-            return !processResult.Failed;
-		}
+					if (processResult.TimedOut)
+						result.AddTaskResult(MakeTimeoutBuildResult(info));
+
+					return processResult.Succeeded;
+				}
 
         /// <summary>
         /// Gets the process filename.	

@@ -98,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <returns><c>true</c> if the result was successful, <c>false</c> otherwise.</returns>
         public bool CheckIfSuccess()
         {
-            return !result.Failed;
+            return !(result.Failed || result.TimedOut);
         }
         #endregion
         #endregion

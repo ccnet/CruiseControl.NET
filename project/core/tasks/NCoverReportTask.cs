@@ -409,11 +409,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             var oldFiles = GenerateOriginalFileList(outputDirectory);
 
             // Run the executable
-			var processResult = TryToRun(CreateProcessInfo(result), result);
-            result.AddTaskResult(new ProcessTaskResult(processResult));
+            var info = this.CreateProcessInfo(result);
+            var processResult = this.TryToRun(info, result);
+            result.AddTaskResult(new ProcessTaskResult(processResult, false));
+            if (processResult.TimedOut)
+            {
+                result.AddTaskResult(MakeTimeoutBuildResult(info));
+            }
 
             // Check for any new files and copy them to the artefact folder
-            if (!processResult.Failed)
+            if (processResult.Succeeded)
             {
                 outputDirectory.Refresh();
                 var newFiles = ListFileDifferences(oldFiles, outputDirectory);
@@ -433,7 +438,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 }
             }
 
-            return !processResult.Failed;
+            return processResult.Succeeded;
         }
         #endregion
 
