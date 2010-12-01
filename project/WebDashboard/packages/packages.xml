@@ -1,6 +1,6 @@
 ﻿<packages>
   <package name="Server Information Display" description="Display the information on the server." type="Plugin" file="ServerInfo.zip" installed="no" />
-  <package name="Server Log Display" description="Display the server log." type="Plugin" file="ServerLog.zip" installed="yes" />
+  <package name="Server Log Display" description="Display the server log." type="Plugin" file="ServerLog.zip" installed="no" />
   <package name="Server Configuration Display" description="Display the configuration for all the projects on a server." type="Plugin" file="ServerConfig.zip" installed="no" />
   <package name="Queue Status Display" description="Display the status of the queues." type="Plugin" file="QueueStatus.zip" installed="no" />
   <package name="Web Dashboard Administration" description="An administration console for the web dashboard." type="Plugin" file="DashboardAdmin.zip" installed="yes" />
