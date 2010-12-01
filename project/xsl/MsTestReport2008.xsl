@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
  <xsl:output method="html"/> 
 
  <xsl:template match="/">
@@ -28,6 +27,7 @@ version="1.0">
        </xsl:otherwise>
      </xsl:choose>
    </p>
+   
    <table border="1" cellSpacing="0" cellPadding="5" >
      <thead style="text-align: center;">
        <td>Number of Tests</td>
@@ -36,6 +36,8 @@ version="1.0">
        <td style="background-color: yellow; color:black;">Inconclusive</td>
        <td style="background-color: red; color: black;">Aborted</td>
        <td style="background-color: darkblue; color: white;">Timeout</td>
+			 <td style="background-color: darkblue; color: white;">Started at</td>
+			 <td style="background-color: darkblue; color: white;">Stopped at</td>
      </thead>
      <tr style="text-align: center;">
        <td>
@@ -55,6 +57,16 @@ version="1.0">
        </td>
        <td>
          <xsl:value-of select="*[local-name()='ResultSummary']//*[local-name()='Counters']/@timeout" />
+       </td>
+       <td>
+          <xsl:call-template name="formatDateTime">
+                <xsl:with-param name="dateTime" select="*[local-name()='Times']/@creation" />
+           </xsl:call-template>
+       </td>
+       <td>
+          <xsl:call-template name="formatDateTime">
+                <xsl:with-param name="dateTime" select="*[local-name()='Times']/@finish" />
+           </xsl:call-template>
        </td>
      </tr>
    </table>
@@ -103,8 +115,7 @@ version="1.0">
      <td colspan="3">
      <center>
        <b>Composite Test : <xsl:value-of select="@testName "/></b><br />
-       <table border="1" style="text-align: center;"
-       cellSpacing="0" cellpadding="5" >
+       <table border="1" style="text-align: center;" cellSpacing="0" cellpadding="5" >
          <thead>
            <td style="background-color: forestGreen; color:white">Passed</td>
            <td style="background-color: fireBrick; color:white;">Failed</td>
@@ -184,7 +195,7 @@ version="1.0">
 
       <xsl:template match="*[local-name()='ErrorInfo']">
        <tr>
-               <td colspan="3" bgcolor="#FF9900">
+               <td colspan="4" bgcolor="#FF9900">
                        <b><xsl:value-of select="./*[local-name()='Message']" /></b><br />
                        <xsl:value-of select="./*[local-name()='StackTrace']" />
                </td>
@@ -228,4 +239,19 @@ version="1.0">
      </td>
    </tr>
  </xsl:template>
+
+ 
+ <xsl:template name="formatDateTime">
+	        <xsl:param name="dateTime" />
+	        <xsl:variable name="date" select="substring-before($dateTime, 'T')" />
+	        <xsl:variable name="year" select="substring-before($date, '-')" />
+	        <xsl:variable name="month" select="substring-before(substring-after($date, '-'), '-')" />
+	        <xsl:variable name="day" select="substring-after(substring-after($date, '-'), '-')" />
+
+					<xsl:variable name="alltime" select="substring-after($dateTime, 'T')" />
+					<xsl:variable name="time" select="substring-before($alltime, '.')" />
+
+	        <xsl:value-of select="concat($day, '-', $month, '-', $year, ' ',$time)" />
+	</xsl:template>
+
  </xsl:stylesheet>
