@@ -9,7 +9,6 @@ namespace ThoughtWorks.CruiseControl.Core
     using System.Linq;
     using System.Runtime;
     using System.Text;
-    using System.Threading;
     using System.Xml;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Config;
@@ -447,6 +446,14 @@ namespace ThoughtWorks.CruiseControl.Core
         [ReflectorProperty("remoteTargets", Required = false)]
         public string[] RemoteMachines { get; set; }
 
+        /// <summary>
+        /// A data store for project information.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>none</default>
+        [ReflectorProperty("data", InstanceTypeKey = "type", Required = false)]
+        public IDataStore DataStore { get; set; }
+
         // Move this ideally
         /// <summary>
         /// Gets or sets the activity.	
@@ -566,6 +573,12 @@ namespace ThoughtWorks.CruiseControl.Core
                             break;
                     }
                 }
+            }
+
+            // Store the project status so it can be used by other parts of the system
+            if (this.DataStore != null)
+            {
+                this.DataStore.StoreProjectSnapshot(result, this.GenerateSnapshot());
             }
 
             // Finally, return the actual result

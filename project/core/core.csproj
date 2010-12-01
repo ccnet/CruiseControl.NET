@@ -198,6 +198,7 @@
     <Compile Include="Config\DefaultQueueConfiguration.cs" />
     <Compile Include="Config\IConfigurationErrorProcesser.cs" />
     <Compile Include="Config\IConfigurationValidation.cs" />
+    <Compile Include="IDataStore.cs" />
     <Compile Include="INetReflectorConfigurationReader.cs" />
     <Compile Include="Config\QueueDuplicateHandling.cs" />
     <Compile Include="Config\Configuration.cs">
@@ -554,6 +555,7 @@
     <Compile Include="Security\RemotingChannelSecurityInformation.cs" />
     <Compile Include="Security\SecureMessagesChannel.cs" />
     <Compile Include="sourcecontrol\IQuitePeriod.cs" />
+    <Compile Include="Storage\XmlFolderDataStore.cs" />
     <Compile Include="SystemClock.cs" />
     <Compile Include="SourceControlOperation.cs" />
     <Compile Include="Security\ActiveDirectoryAuthentication.cs" />
