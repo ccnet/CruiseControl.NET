@@ -229,5 +229,14 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <returns></returns>
         List<PackageDetails> RetrievePackageList(string buildName);
         #endregion
+
+        #region RetrieveBuildFinalStatus()
+        /// <summary>
+        /// Retrieves the final status of a build.
+        /// </summary>
+        /// <param name="buildName">Name of the build.</param>
+        /// <returns>The final status if found; <c>null</c> otherwise.</returns>
+        ItemStatus RetrieveBuildFinalStatus(string buildName);
+        #endregion
     }
 }

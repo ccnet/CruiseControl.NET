@@ -550,6 +550,32 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         //    Assert.AreEqual("1.0", result.Label);
         //}
 
+        [Test]
+        public void RetrieveBuildFinalStatusReturnsNullIfThereIsNoDataStore()
+        {
+            var project = new Project();
+            var status = project.RetrieveBuildFinalStatus("testBuild");
+        }
+
+        [Test]
+        public void RetrieveBuildFinalStatusReturnsDataStoreResult()
+        {
+            var dataStoreMock = this.mocks.StrictMock<IDataStore>();
+            var project = new Project
+                {
+                    DataStore = dataStoreMock
+                };
+            var buildName = "testBuild";
+            var expected = new ItemStatus();
+            Expect.Call(dataStoreMock.LoadProjectSnapshot(project, buildName)).Return(expected);
+
+            this.mocks.ReplayAll();
+            var actual = project.RetrieveBuildFinalStatus(buildName);
+
+            this.mocks.VerifyAll();
+            Assert.AreSame(expected, actual);
+        }
+
 		private class AddTaskResultConstraint : BaseConstraint
 		{
 			public override bool Eval(object val)

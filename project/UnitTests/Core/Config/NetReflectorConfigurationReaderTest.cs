@@ -306,6 +306,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                 return packages;
             }
             #endregion
+
+            public ItemStatus RetrieveBuildFinalStatus(string buildName)
+            {
+                return null;
+            }
         }
 	}
 }

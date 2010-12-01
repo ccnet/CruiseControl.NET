@@ -16,6 +16,16 @@
         /// <param name="snapshot">The project snapshot.</param>
         void StoreProjectSnapshot(IIntegrationResult result, ItemStatus snapshot);
         #endregion
+
+        #region LoadProjectSnapshot()
+        /// <summary>
+        /// Loads the project snapshot for a build.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="buildName">Name of the build.</param>
+        /// <returns>The project snapshot.</returns>
+        ItemStatus LoadProjectSnapshot(IProject project, string buildName);
+        #endregion
         #endregion
     }
 }

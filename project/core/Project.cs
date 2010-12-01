@@ -1637,6 +1637,25 @@ namespace ThoughtWorks.CruiseControl.Core
         }
         #endregion
 
+        #region RetrieveBuildFinalStatus()
+        /// <summary>
+        /// Retrieves the final status of a build.
+        /// </summary>
+        /// <param name="buildName">Name of the build.</param>
+        /// <returns>The final status if found; <c>null</c> otherwise.</returns>
+        public ItemStatus RetrieveBuildFinalStatus(string buildName)
+        {
+            if (this.DataStore == null)
+            {
+                return null;
+            }
+
+            Log.Debug("Retrieving final status for build [" + buildName + "]");
+            var snapshot = this.DataStore.LoadProjectSnapshot(this, buildName);
+            return snapshot;
+        }
+        #endregion
+
         #region LoadPackageList()
         private List<PackageDetails> LoadPackageList(string fileName)
         {

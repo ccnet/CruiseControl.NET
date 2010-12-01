@@ -1,9 +1,10 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Storage
 {
     using System.IO;
+    using System.Xml.Serialization;
+    using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Util;
     using ThoughtWorks.CruiseControl.Remote;
-    using Exortech.NetReflector;
 
     /// <summary>
     /// Stores project data in XML files in a folder.
@@ -12,6 +13,10 @@
     public class XmlFolderDataStore
         : IDataStore
     {
+        #region Private fields
+        private static XmlSerializer serialiser = new XmlSerializer(typeof(ProjectStatusSnapshot));
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlFolderDataStore"/> class.
@@ -70,8 +75,7 @@
         /// <param name="snapshot">The project snapshot.</param>
         public void StoreProjectSnapshot(IIntegrationResult result, ItemStatus snapshot)
         {
-            Log.Debug("Initialising folder");
-            var dirPath = this.RootFolder(result, this.SnapshotsFolder);
+            var dirPath = this.RootFolder(result.ArtifactDirectory, this.SnapshotsFolder);
             Log.Info("Writing snapshot to [" + dirPath + "]");
 
             var logFile = new LogFile(result);
@@ -91,6 +95,36 @@
             }
         }
         #endregion
+
+        #region LoadProjectSnapshot()
+        /// <summary>
+        /// Loads the project snapshot for a build.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="buildName">Name of the build.</param>
+        /// <returns>The project snapshot.</returns>
+        public ItemStatus LoadProjectSnapshot(IProject project, string buildName)
+        {
+            var dirPath = this.RootFolder(project.ArtifactDirectory, this.SnapshotsFolder);
+            Log.Info("Loading snapshot from [" + dirPath + "]");
+
+            var snapshotPath = Path.Combine(
+                this.RootFolder(project.ArtifactDirectory, this.SnapshotsFolder),
+                Path.ChangeExtension(buildName, "snapshot"));
+            if (!this.FileSystem.FileExists(snapshotPath))
+            {
+                Log.Debug("Unable to find snapshot file [" + snapshotPath + "]");
+                return null;
+            }
+
+            using (var stream = this.FileSystem.OpenInputStream(snapshotPath))
+            {
+                Log.Debug("Loading snapshot file [" + snapshotPath + "]");
+                var snapshot = serialiser.Deserialize(stream) as ProjectStatusSnapshot;
+                return snapshot;
+            }
+        }
+        #endregion
         #endregion
 
         #region Private methods
@@ -98,10 +132,10 @@
         /// <summary>
         /// Roots a folder.
         /// </summary>
-        /// <param name="result">The result to use.</param>
+        /// <param name="artefactsFolder">The artefacts folder.</param>
         /// <param name="folder">The folder to root.</param>
         /// <returns>The rooted folder.</returns>
-        private string RootFolder(IIntegrationResult result, string folder)
+        private string RootFolder(string artefactsFolder, string folder)
         {
             if (Path.IsPathRooted(folder))
             {
@@ -114,11 +148,12 @@
                     return Path.Combine(this.BaseFolder, folder);
                 }
 
-                return result.BaseFromArtifactsDirectory(
-                        Path.Combine(this.BaseFolder, folder));
+                return Path.Combine(
+                    artefactsFolder,
+                    Path.Combine(this.BaseFolder, folder));
             }
 
-            return result.BaseFromArtifactsDirectory(folder);
+            return Path.Combine(artefactsFolder, folder);
         }
         #endregion
         #endregion
