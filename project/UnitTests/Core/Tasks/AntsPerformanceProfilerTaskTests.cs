@@ -10,6 +10,7 @@
     using ThoughtWorks.CruiseControl.Core.Tasks;
     using ThoughtWorks.CruiseControl.Core.Util;
     using ThoughtWorks.CruiseControl.Remote;
+    using System;
 
     [TestFixture]
     public class AntsPerformanceProfilerTaskTests
@@ -52,18 +53,88 @@
         }
 
         [Test]
+        public void RunsWithDefaultParametersForServiceProfile()
+        {
+            var appName = "WinService";
+            var result = GenerateResultMock();
+            var executablePath = Path.Combine(defaultWorkingDir, "Profile");
+            var executor = GenerateExecutorMock(
+                executablePath,
+                this.defaultExecutableArgs + " /service:" + appName,
+                defaultWorkingDir,
+                600000);
+            var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
+            var logger = mocks.DynamicMock<ILogger>();
+            var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
+            task.Service = appName;
+
+            Expect.Call(result.Status).PropertyBehavior();
+            mocks.ReplayAll();
+            result.Status = IntegrationStatus.Unknown;
+            task.Run(result);
+            mocks.VerifyAll();
+        }
+
+        [Test]
+        public void RunsWithDefaultParametersForComPlusProfile()
+        {
+            var appName = "ComPlusService";
+            var result = GenerateResultMock();
+            var executablePath = Path.Combine(defaultWorkingDir, "Profile");
+            var executor = GenerateExecutorMock(
+                executablePath,
+                this.defaultExecutableArgs + " /complus:" + appName,
+                defaultWorkingDir,
+                600000);
+            var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
+            var logger = mocks.DynamicMock<ILogger>();
+            var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
+            task.ComPlus = appName;
+
+            Expect.Call(result.Status).PropertyBehavior();
+            mocks.ReplayAll();
+            result.Status = IntegrationStatus.Unknown;
+            task.Run(result);
+            mocks.VerifyAll();
+        }
+
+        [Test]
+        public void RunsWithDefaultParametersForSilverlightProfile()
+        {
+            var appName = "http://somewhere/silverlight.html";
+            var result = GenerateResultMock();
+            var executablePath = Path.Combine(defaultWorkingDir, "Profile");
+            var executor = GenerateExecutorMock(
+                executablePath,
+                this.defaultExecutableArgs + " /silverlight:" + appName,
+                defaultWorkingDir,
+                600000);
+            var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
+            var logger = mocks.DynamicMock<ILogger>();
+            var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
+            task.Silverlight = appName;
+
+            Expect.Call(result.Status).PropertyBehavior();
+            mocks.ReplayAll();
+            result.Status = IntegrationStatus.Unknown;
+            task.Run(result);
+            mocks.VerifyAll();
+        }
+
+        [Test]
         public void RunsWithDefaultParametersForAppProfile()
         {
             var appName = "testApp.exe";
             var result = GenerateResultMock();
+            var executablePath = Path.Combine(defaultWorkingDir, "Profile");
             var executor = GenerateExecutorMock(
-                Path.Combine(defaultWorkingDir, "Profile"),
+                executablePath,
                 this.defaultExecutableArgs + " /e:" + Path.Combine(defaultWorkingDir, appName),
-                defaultWorkingDir, 
+                defaultWorkingDir,
                 600000);
-            var fileSystem = mocks.StrictMock<IFileSystem>();
+            var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
             var logger = mocks.DynamicMock<ILogger>();
-            var task = new AntsPerformanceProfilerTask(executor, fileSystem, logger) { PublishFiles = false };
+            var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Application = appName;
 
             Expect.Call(result.Status).PropertyBehavior();
@@ -79,16 +150,17 @@
             var baseDir = "aDirSomewhere";
             var appName = "testApp.exe";
             var result = GenerateResultMock();
+            var executablePath = Path.Combine(baseDir, "Profile");
             var executor = GenerateExecutorMock(
-                Path.Combine(baseDir, "Profile"),
+                executablePath,
                 "/wd:" + baseDir +
                     " /out:" + Path.Combine(baseDir, "AntsPerformanceAnalysis.txt") +
                     " /t:120 /ml /f /is:on /in:on /comp:on /simp:on /notriv:on /e:" + Path.Combine(baseDir, appName),
                 baseDir,
                 600000);
-            var fileSystem = mocks.StrictMock<IFileSystem>();
+            var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
             var logger = mocks.DynamicMock<ILogger>();
-            var task = new AntsPerformanceProfilerTask(executor, fileSystem, logger) { PublishFiles = false };
+            var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Application = appName;
             task.BaseDirectory = baseDir;
 
@@ -104,20 +176,21 @@
         {
             var appName = "testApp.exe";
             var result = GenerateResultMock();
+            var executablePath = Path.Combine(defaultWorkingDir, "Profile");
             var executor = GenerateExecutorMock(
-                Path.Combine(defaultWorkingDir, "Profile"),
+                executablePath,
                 this.defaultExecutableArgs + " /e:" + Path.Combine(defaultWorkingDir, appName) +
-                    " /csv:" + Path.Combine(defaultWorkingDir, "summary.csv") + 
-                    " /xml:" + Path.Combine(defaultWorkingDir, "summary.xml") + 
-                    " /h:" + Path.Combine(defaultWorkingDir, "summary.html") + 
-                    " /calltree:" + Path.Combine(defaultWorkingDir, "calltree.xml") + 
-                    " /cth:" + Path.Combine(defaultWorkingDir, "calltree.html") + 
+                    " /csv:" + Path.Combine(defaultWorkingDir, "summary.csv") +
+                    " /xml:" + Path.Combine(defaultWorkingDir, "summary.xml") +
+                    " /h:" + Path.Combine(defaultWorkingDir, "summary.html") +
+                    " /calltree:" + Path.Combine(defaultWorkingDir, "calltree.xml") +
+                    " /cth:" + Path.Combine(defaultWorkingDir, "calltree.html") +
                     " /data:" + Path.Combine(defaultWorkingDir, "data.out"),
                 defaultWorkingDir,
                 600000);
-            var fileSystem = mocks.StrictMock<IFileSystem>();
+            var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
             var logger = mocks.DynamicMock<ILogger>();
-            var task = new AntsPerformanceProfilerTask(executor, fileSystem, logger) { PublishFiles = false };
+            var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Application = appName;
             task.SummaryCsvFile = "summary.csv";
             task.SummaryXmlFile = "summary.xml";
@@ -138,8 +211,9 @@
         {
             var appName = "testApp.exe";
             var result = GenerateResultMock();
+            var executablePath = Path.Combine(defaultWorkingDir, "Profile");
             var executor = GenerateExecutorMock(
-                Path.Combine(defaultWorkingDir, "Profile"),
+                executablePath,
                 this.defaultExecutableArgs + " /e:" + Path.Combine(defaultWorkingDir, appName) +
                     " /csv:" + Path.Combine(defaultWorkingDir, "summary.csv") +
                     " /xml:" + Path.Combine(defaultWorkingDir, "summary.xml") +
@@ -149,18 +223,18 @@
                     " /data:" + Path.Combine(defaultWorkingDir, "data.out"),
                 defaultWorkingDir,
                 600000);
-            var fileSystem = mocks.StrictMock<IFileSystem>();
+            var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
 
-            ExpectFileCheckAndCopy(fileSystem, "AntsPerformanceAnalysis.txt");
-            ExpectFileCheckAndCopy(fileSystem, "summary.csv");
-            ExpectFileCheckAndCopy(fileSystem, "summary.xml");
-            ExpectFileCheckAndCopy(fileSystem, "summary.html");
-            ExpectFileCheckAndCopy(fileSystem, "calltree.xml");
-            ExpectFileCheckAndCopy(fileSystem, "calltree.html");
-            ExpectFileCheckAndCopy(fileSystem, "data.out");
+            ExpectFileCheckAndCopy(fileSystemMock, "AntsPerformanceAnalysis.txt");
+            ExpectFileCheckAndCopy(fileSystemMock, "summary.csv");
+            ExpectFileCheckAndCopy(fileSystemMock, "summary.xml");
+            ExpectFileCheckAndCopy(fileSystemMock, "summary.html");
+            ExpectFileCheckAndCopy(fileSystemMock, "calltree.xml");
+            ExpectFileCheckAndCopy(fileSystemMock, "calltree.html");
+            ExpectFileCheckAndCopy(fileSystemMock, "data.out");
 
             var logger = mocks.DynamicMock<ILogger>();
-            var task = new AntsPerformanceProfilerTask(executor, fileSystem, logger);
+            var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger);
             task.Application = appName;
             task.SummaryCsvFile = "summary.csv";
             task.SummaryXmlFile = "summary.xml";
@@ -192,8 +266,9 @@
             var baseDir = "aDirSomewhere";
             var appName = "testApp.exe";
             var result = GenerateResultMock();
+            var executablePath = Path.Combine(baseDir, "Profile");
             var executor = GenerateExecutorMock(
-                Path.Combine(baseDir, "Profile"),
+                executablePath,
                 "/wd:" + baseDir +
                     " /out:" + Path.Combine(baseDir, "AntsPerformanceAnalysis.txt") +
                     " /t:120 /ml /f /is:on /in:on /comp:on /simp:on /notriv:on /e:" + Path.Combine(baseDir, appName) +
@@ -205,9 +280,9 @@
                     " /data:" + Path.Combine(baseDir, "data.out"),
                 baseDir,
                 600000);
-            var fileSystem = mocks.StrictMock<IFileSystem>();
+            var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
             var logger = mocks.DynamicMock<ILogger>();
-            var task = new AntsPerformanceProfilerTask(executor, fileSystem, logger) { PublishFiles = false };
+            var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Application = appName;
             task.BaseDirectory = baseDir;
             task.SummaryCsvFile = "summary.csv";
@@ -229,18 +304,19 @@
         {
             var appName = "testApp.exe";
             var result = GenerateResultMock();
+            var executablePath = Path.Combine(defaultWorkingDir, "Profile");
             var executor = GenerateExecutorMock(
-                Path.Combine(defaultWorkingDir, "Profile"),
-                "/wd:" + defaultWorkingDir + 
+                executablePath,
+                "/wd:" + defaultWorkingDir +
                     " /out:" + Path.Combine(defaultWorkingDir, "somewhereElse.txt") +
-                    " /t:240 /ll /ows /sm /sp /rs /is:off /in:off /comp:off /simp:off /notriv:off /e:" + Path.Combine(defaultWorkingDir, appName) + 
+                    " /t:240 /ll /ows /sm /sp /rs /is:off /in:off /comp:off /simp:off /notriv:off /e:" + Path.Combine(defaultWorkingDir, appName) +
                     " /args:args /q /v /argfile:" + Path.Combine(defaultWorkingDir, "args.xml") +
                     " /threshold:10",
-                defaultWorkingDir, 
+                defaultWorkingDir,
                 600000);
-            var fileSystem = mocks.StrictMock<IFileSystem>();
+            var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
             var logger = mocks.DynamicMock<ILogger>();
-            var task = new AntsPerformanceProfilerTask(executor, fileSystem, logger) { PublishFiles = false };
+            var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Application = appName;
             task.Quiet = true;
             task.Verbose = true;
@@ -273,15 +349,16 @@
         {
             var appName = "testApp.exe";
             var result = GenerateResultMock();
+            var executablePath = Path.Combine(defaultWorkingDir, "Profile");
             var executor = GenerateExecutorMock(
-                Path.Combine(defaultWorkingDir, "Profile"),
-                this.defaultExecutableArgs + " /e:" + Path.Combine(defaultWorkingDir, appName) + 
+                executablePath,
+                this.defaultExecutableArgs + " /e:" + Path.Combine(defaultWorkingDir, appName) +
                 " /argfile:\"" + Path.Combine(defaultWorkingDir, "args config.xml") + "\"",
                 defaultWorkingDir,
                 600000);
-            var fileSystem = mocks.StrictMock<IFileSystem>();
+            var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
             var logger = mocks.DynamicMock<ILogger>();
-            var task = new AntsPerformanceProfilerTask(executor, fileSystem, logger) { PublishFiles = false };
+            var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Application = appName;
             task.XmlArgsFile = "args config.xml";
 
@@ -297,14 +374,15 @@
         {
             var appName = "testApp.exe";
             var result = GenerateResultMock();
+            var executablePath = Path.Combine(defaultWorkingDir, "Profile");
             var executor = GenerateExecutorMock(
-                Path.Combine(defaultWorkingDir, "Profile"),
+                executablePath,
                 this.defaultExecutableArgs + " /e:" + Path.Combine(defaultWorkingDir, appName) + " /argfile:c:\\args.xml",
                 defaultWorkingDir,
                 600000);
-            var fileSystem = mocks.StrictMock<IFileSystem>();
+            var fileSystemMock = this.InitialiseFileSystemMock(executablePath);
             var logger = mocks.DynamicMock<ILogger>();
-            var task = new AntsPerformanceProfilerTask(executor, fileSystem, logger) { PublishFiles = false };
+            var task = new AntsPerformanceProfilerTask(executor, fileSystemMock, logger) { PublishFiles = false };
             task.Application = appName;
             task.XmlArgsFile = "c:\\args.xml";
 
@@ -342,32 +420,35 @@
             this.mocks.VerifyAll();
         }
 
-				[Test]
-				public void ShouldFailIfProcessTimesOut()
-				{
-					var executorStub = mocks.StrictMock<ProcessExecutor>();
-					SetupResult.For(executorStub.Execute(null)).IgnoreArguments().Return(ProcessResultFixture.CreateTimedOutResult());
+        [Test]
+        public void ShouldFailIfProcessTimesOut()
+        {
+            var executorStub = mocks.StrictMock<ProcessExecutor>();
+            SetupResult.For(executorStub.Execute(null)).IgnoreArguments().Return(ProcessResultFixture.CreateTimedOutResult());
 
-					var task = CreateTask(executorStub);
-					var result = IntegrationResultMother.CreateUnknown();
+            var task = CreateTask(executorStub);
+            var result = IntegrationResultMother.CreateUnknown();
 
-					mocks.ReplayAll();
-					task.Run(result);
-					mocks.VerifyAll();
+            mocks.ReplayAll();
+            task.Run(result);
+            mocks.VerifyAll();
 
-					Assert.That(result.Status, Is.EqualTo(IntegrationStatus.Failure));
-					Assert.That(result.TaskOutput, Is.StringMatching("Command line '.*' timed out after \\d+ seconds"));
-				}
+            Assert.That(result.Status, Is.EqualTo(IntegrationStatus.Failure));
+            Assert.That(result.TaskOutput, Is.StringMatching("Command line '.*' timed out after \\d+ seconds"));
+        }
         #endregion
 
         #region Private methods
-				private AntsPerformanceProfilerTask CreateTask(ProcessExecutor executor)
-				{
-					var fileSystem = mocks.DynamicMock<IFileSystem>();
-					var logger = mocks.DynamicMock<ILogger>();
+        private AntsPerformanceProfilerTask CreateTask(ProcessExecutor executor)
+        {
+            var fileSystemMock = this.InitialiseFileSystemMock("Profile");
+            SetupResult.For(fileSystemMock.FileExists(string.Empty))
+                .IgnoreArguments()
+                .Return(false);
+            var logger = mocks.DynamicMock<ILogger>();
 
-					return new AntsPerformanceProfilerTask(executor, fileSystem, logger);
-				}
+            return new AntsPerformanceProfilerTask(executor, fileSystemMock, logger);
+        }
 
         private IIntegrationResult GenerateResultMock()
         {
@@ -402,6 +483,15 @@
                     return new ProcessResult(string.Empty, string.Empty, 0, false);
                 }));
             return executor;
+        }
+
+        private IFileSystem InitialiseFileSystemMock(string executablePath)
+        {
+            var fileSystemMock = mocks.StrictMock<IFileSystem>();
+            SetupResult.For(fileSystemMock.FileExists(executablePath)).Return(true);
+            SetupResult.For(fileSystemMock.GetFileVersion(executablePath))
+                .Return(new Version(6, 1));
+            return fileSystemMock;
         }
         #endregion
     }

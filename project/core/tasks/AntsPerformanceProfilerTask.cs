@@ -106,6 +106,36 @@
         public string Application { get; set; }
         #endregion
 
+        #region Service
+        /// <summary>
+        /// The name of the windows service to profile.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>none</default>
+        [ReflectorProperty("service", Required = false)]
+        public string Service { get; set; }
+        #endregion
+
+        #region ComPlus
+        /// <summary>
+        /// The name of the COM+ service to profile.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>none</default>
+        [ReflectorProperty("comPlus", Required = false)]
+        public string ComPlus { get; set; }
+        #endregion
+
+        #region Silverlight
+        /// <summary>
+        /// The URL of a site containing a silverlight application to profile.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>none</default>
+        [ReflectorProperty("silverlight", Required = false)]
+        public string Silverlight { get; set; }
+        #endregion
+
         #region ApplicationArguments
         /// <summary>
         /// The arguments to pass to the application. 
@@ -451,43 +481,75 @@
         /// Run the task.
         /// </summary>
         /// <param name="result"></param>
-				protected override bool Execute(IIntegrationResult result)
-				{
-					this.logger.Debug("Starting ANTS Performance Profiler task");
-					result.BuildProgressInformation
-							.SignalStartRunTask(!string.IsNullOrEmpty(this.Description) ? this.Description : "Executing ANTS Performance Profiler");
+        protected override bool Execute(IIntegrationResult result)
+        {
+            this.logger.Debug("Starting ANTS Performance Profiler task");
+            result.BuildProgressInformation
+                    .SignalStartRunTask(!string.IsNullOrEmpty(this.Description) ? this.Description : "Executing ANTS Performance Profiler");
 
-					// Make sure there is a root directory
-					this.rootPath = this.BaseDirectory;
-					if (string.IsNullOrEmpty(this.rootPath))
-					{
-						this.rootPath = result.WorkingDirectory;
-					}
+            // Make sure there is a root directory
+            this.rootPath = this.BaseDirectory;
+            if (string.IsNullOrEmpty(this.rootPath))
+            {
+                this.rootPath = result.WorkingDirectory;
+            }
 
-					// Run the executable
-					var info = this.CreateProcessInfo(result);
-					var processResult = this.TryToRun(info, result);
-					result.AddTaskResult(new ProcessTaskResult(processResult, false));
-                    if (processResult.TimedOut)
-                    {
-                        result.AddTaskResult(MakeTimeoutBuildResult(info));
-                    }
+            // Run the executable
+            var info = this.CreateProcessInfo(result);
+            var processResult = this.TryToRun(info, result);
+            result.AddTaskResult(new ProcessTaskResult(processResult, false));
+            if (processResult.TimedOut)
+            {
+                result.AddTaskResult(MakeTimeoutBuildResult(info));
+            }
 
-					// Publish the results
-					if (this.PublishFiles) // && !processResult.Failed) - TODO: only publish files if successful
-					{
-						var publishDir = Path.Combine(result.BaseFromArtifactsDirectory(result.Label), "AntsPerformance");
-						this.PublishFile(string.IsNullOrEmpty(this.OutputFile) ? defaultOutput : this.OutputFile, publishDir);
-						this.PublishFile(this.SummaryCsvFile, publishDir);
-						this.PublishFile(this.SummaryXmlFile, publishDir);
-						this.PublishFile(this.SummaryHtmlFile, publishDir);
-						this.PublishFile(this.CallTreeXmlFile, publishDir);
-						this.PublishFile(this.CallTreeHtmlFile, publishDir);
-						this.PublishFile(this.DataFile, publishDir);
-					}
+            // Publish the results
+            if (this.PublishFiles) // && !processResult.Failed) - TODO: only publish files if successful
+            {
+                var publishDir = Path.Combine(result.BaseFromArtifactsDirectory(result.Label), "AntsPerformance");
+                this.PublishFile(string.IsNullOrEmpty(this.OutputFile) ? defaultOutput : this.OutputFile, publishDir);
+                this.PublishFile(this.SummaryCsvFile, publishDir);
+                this.PublishFile(this.SummaryXmlFile, publishDir);
+                this.PublishFile(this.SummaryHtmlFile, publishDir);
+                this.PublishFile(this.CallTreeXmlFile, publishDir);
+                this.PublishFile(this.CallTreeHtmlFile, publishDir);
+                this.PublishFile(this.DataFile, publishDir);
+            }
 
-					return processResult.Succeeded;
-				}
+            return processResult.Succeeded;
+        }
+        #endregion
+
+        #region
+        /// <summary>
+        /// Gets the valid success codes.
+        /// </summary>
+        /// <returns>The valid success codes.</returns>
+        /// <remarks>
+        /// Due to a bug in the profiler this returns 1. According to the documentation this is a
+        /// general failure, so other errors may occur and be falsely missed.
+        /// </remarks>
+        protected override int[] GetProcessSuccessCodes()
+        {
+            var fileName = this.GetProcessFilename();
+            var fileExists = this.FileSystem.FileExists(fileName);
+            if (!fileExists)
+            {
+                fileName += ".exe";
+                fileExists = this.FileSystem.FileExists(fileName);
+            }
+
+            if (fileExists)
+            {
+                var version = this.FileSystem.GetFileVersion(fileName);
+                Logger.Debug("Profiler version is " + version);
+
+                // TODO: When Red Gate fix the profiler, add an override here to return null for the
+                // newer versions
+            }
+
+            return new[] { 1 };
+        }
         #endregion
 
         #region GetProcessFilename()
@@ -560,6 +622,9 @@
             buffer.AppendArgument("/comp:{0}", GenerateOnOff(this.Compensate));
             buffer.AppendArgument("/simp:{0}", GenerateOnOff(this.SimplifyStackTraces));
             buffer.AppendArgument("/notriv:{0}", GenerateOnOff(this.AvoidTrivial));
+            buffer.AppendIf(!string.IsNullOrEmpty(this.Service), "/service:{0}", this.QuoteSpaces(this.Service));
+            buffer.AppendIf(!string.IsNullOrEmpty(this.ComPlus), "/complus:{0}", this.QuoteSpaces(this.ComPlus));
+            buffer.AppendIf(!string.IsNullOrEmpty(this.Silverlight), "/silverlight:{0}", this.QuoteSpaces(this.Silverlight));
             buffer.AppendIf(!string.IsNullOrEmpty(this.Application), "/e:{0}", this.RootPath(this.Application, true));
             buffer.AppendIf(!string.IsNullOrEmpty(this.ApplicationArguments), "/args:{0}", this.ApplicationArguments);
             buffer.AppendIf(this.Quiet, "/q");
@@ -660,7 +725,10 @@
         /// <returns>The string with quotes if needed.</returns>
         protected string QuoteSpaces(string value)
         {
-            if (value.Contains(" ") && !value.StartsWith("\"") && !value.EndsWith("\""))
+            if ((value != null) && 
+                value.Contains(" ") && 
+                !value.StartsWith("\"") && 
+                !value.EndsWith("\""))
             {
                 return "\"" + value + "\"";
             }

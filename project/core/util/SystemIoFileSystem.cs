@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -381,6 +382,22 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         public IEnumerable<string> GetFilesInDirectory(string path, string pattern, SearchOption searchOption)
         {
             return Directory.GetFiles(path, pattern, searchOption);
+        }
+
+        /// <summary>
+        /// Gets the version of a file.
+        /// </summary>
+        /// <param name="filePath">The full path to the file.</param>
+        /// <returns>The version number of the file it it exists; <c>null</c> otherwise.</returns>
+        public Version GetFileVersion(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                return null;
+            }
+
+            var fileInfo = FileVersionInfo.GetVersionInfo(filePath);
+            return new Version(fileInfo.FileVersion);
         }
     }
 }

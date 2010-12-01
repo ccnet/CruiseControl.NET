@@ -166,5 +166,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// <param name="searchOption">The search option.</param>
         /// <returns>The files in the directory that match the pattern.</returns>
         IEnumerable<string> GetFilesInDirectory(string path, string pattern, SearchOption searchOption);
+
+        /// <summary>
+        /// Gets the version of a file.
+        /// </summary>
+        /// <param name="filePath">The full path to the file.</param>
+        /// <returns>The version number of the file it it exists; <c>null</c> otherwise.</returns>
+        Version GetFileVersion(string filePath);
     }
 }

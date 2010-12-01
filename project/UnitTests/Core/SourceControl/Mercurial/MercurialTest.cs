@@ -105,6 +105,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Mercurial
             {
                 throw new NotImplementedException();
             }
+
+            public Version GetFileVersion(string filePath)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [Test]
