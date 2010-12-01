@@ -1,13 +1,9 @@
+using System.Collections;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.Core.Util;
+
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-    using System;
-    using System.Collections;
-    using System.Web;
-    using System.Web.Caching;
-    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using System.Configuration;
-
     public class BuildRequestTransformer 
         : IBuildLogTransformer
 	{

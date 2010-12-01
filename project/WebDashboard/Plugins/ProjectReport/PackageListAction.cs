@@ -1,13 +1,13 @@
-﻿namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
-{
-    using System.Collections;
-    using System.Collections.Generic;
-    using ThoughtWorks.CruiseControl.WebDashboard.IO;
-    using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-    using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-    using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+﻿using System.Collections;
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
+namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
+{
     /// <summary>
     /// Display a list of all the generated packages.
     /// </summary>

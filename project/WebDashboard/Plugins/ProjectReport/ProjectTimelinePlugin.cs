@@ -1,8 +1,8 @@
-﻿namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
-{
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+﻿using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
+namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
+{
     /// <title>Project Timeline Plugin</title>
     /// <version>1.5</version>
     /// <summary>

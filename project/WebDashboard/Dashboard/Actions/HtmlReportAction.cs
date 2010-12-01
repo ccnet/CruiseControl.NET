@@ -1,13 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.Collections;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
-using ThoughtWorks.CruiseControl.Remote;
-using System.Text.RegularExpressions;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-using System.Collections;
+using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
 {

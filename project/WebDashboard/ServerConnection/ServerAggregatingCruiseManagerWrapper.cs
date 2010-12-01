@@ -1,18 +1,18 @@
+using System;
+using System.Collections.Generic;
+using System.Net.Sockets;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Remote.Messages;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
+using ThoughtWorks.CruiseControl.Remote.Security;
+using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
+
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Net.Sockets;
-    using ThoughtWorks.CruiseControl.Core;
-    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using ThoughtWorks.CruiseControl.Remote;
-    using ThoughtWorks.CruiseControl.Remote.Messages;
-    using ThoughtWorks.CruiseControl.Remote.Parameters;
-    using ThoughtWorks.CruiseControl.Remote.Security;
-    using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
-
-	public class ServerAggregatingCruiseManagerWrapper : ICruiseManagerWrapper, IFarmService
+    public class ServerAggregatingCruiseManagerWrapper : ICruiseManagerWrapper, IFarmService
 	{
         private readonly ICruiseServerClientFactory clientFactory;
 		private readonly IRemoteServicesConfiguration configuration;
@@ -138,7 +138,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 
         public ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier serverSpecifier, string sessionToken)
 				{
-			return GetProjectStatusListAndCaptureExceptions(new IServerSpecifier[] {serverSpecifier}, sessionToken);
+			return GetProjectStatusListAndCaptureExceptions(new[] {serverSpecifier}, sessionToken);
 			}
 
         private ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier[] serverSpecifiers, string sessionToken)
@@ -308,7 +308,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 
         public CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions(IServerSpecifier serverSpecifier, string sessionToken)
         {
-            return GetCruiseServerSnapshotListAndExceptions(new IServerSpecifier[] { serverSpecifier }, sessionToken);
+            return GetCruiseServerSnapshotListAndExceptions(new[] { serverSpecifier }, sessionToken);
         }
 
         public string Login(string server, LoginRequest credentials)
@@ -416,7 +416,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         public virtual List<SecurityCheckDiagnostics> DiagnoseSecurityPermissions(IProjectSpecifier projectSpecifier, string sessionToken, string userName)
         {
             var response = GetCruiseManager(projectSpecifier, sessionToken)
-                .DiagnoseSecurityPermissions(userName, new string[] {
+                .DiagnoseSecurityPermissions(userName, new[] {
                     projectSpecifier.ProjectName
                 });
             return response;
@@ -432,7 +432,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         public virtual List<SecurityCheckDiagnostics> DiagnoseSecurityPermissions(IServerSpecifier serverSpecifier, string sessionToken, string userName)
         {
             var response = GetCruiseManager(serverSpecifier, sessionToken)
-                .DiagnoseSecurityPermissions(userName, new string [] {
+                .DiagnoseSecurityPermissions(userName, new[] {
                     string.Empty
                 });
             return response;

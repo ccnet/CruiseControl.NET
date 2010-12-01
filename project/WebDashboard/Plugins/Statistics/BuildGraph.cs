@@ -1,14 +1,14 @@
+using System;
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Resources;
+
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
 {
-    using System;
-    using System.Collections.Generic;
-    using ThoughtWorks.CruiseControl.Core;
-    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-    using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-    using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
-    using ThoughtWorks.CruiseControl.WebDashboard.Resources;
-
-	/// <summary>
+    /// <summary>
 	/// Provides functions for making a graph of the specified builds.
     /// These are HTML tables, so should not be browser specific.
 	/// </summary>
@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
                 }
                 else
                 {
-                    currentBuildDayInfo = foundDates[currentBuildInfo.BuildDate()] as GraphBuildDayInfo;
+                    currentBuildDayInfo = foundDates[currentBuildInfo.BuildDate()];
                     currentBuildDayInfo.AddBuild(currentBuildInfo);
 
                     foundDates[currentBuildInfo.BuildDate()] = currentBuildDayInfo;
@@ -142,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
 
             foreach (DateTime BuildDate in dateSorter)
             {
-                currentBuildDayInfo = foundDates[BuildDate] as GraphBuildDayInfo;
+                currentBuildDayInfo = foundDates[BuildDate];
                 result.Add(currentBuildDayInfo);            
 
                 if (currentBuildDayInfo.AmountOfBuilds > myHighestAmountPerDay) 
@@ -277,7 +277,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
             //retrieves a specific build in this day
             public GraphBuildInfo Build(Int32 index)
             {
-                return myBuilds[index] as GraphBuildInfo;
+                return myBuilds[index];
             }
 
             // adds a build to this day

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
+﻿namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
     /// <summary>
     /// An action that does not use the site template.

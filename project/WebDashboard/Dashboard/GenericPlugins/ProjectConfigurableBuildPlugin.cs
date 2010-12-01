@@ -1,10 +1,10 @@
+using System.Collections.Generic;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 {
-    using System.Collections.Generic;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core;
-    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-
     public abstract class ProjectConfigurableBuildPlugin : IBuildPlugin
 	{
         private List<string> includedProjects = new List<string>();

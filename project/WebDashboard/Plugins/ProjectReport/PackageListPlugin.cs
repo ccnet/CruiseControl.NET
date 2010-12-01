@@ -1,8 +1,8 @@
-﻿namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
-{
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+﻿using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
+namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
+{
     /// <summary>
     /// Display any available packages for a build.
     /// </summary>

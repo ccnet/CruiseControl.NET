@@ -3,8 +3,6 @@ using System.Web;
 using System.Web.Caching;
 using Objection;
 using Objection.NetReflectorPlugin;
-using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 {

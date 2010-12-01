@@ -1,15 +1,14 @@
-﻿namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
-{
-    using System;
-    using System.Linq;
-    using System.Text;
-    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-    using ThoughtWorks.CruiseControl.Remote;
-    using ThoughtWorks.CruiseControl.WebDashboard.IO;
-    using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-    using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+﻿using System;
+using System.Linq;
+using System.Text;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
+namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
+{
     /// <summary>
     /// Returns an XML fragment containing the current status of the project.
     /// </summary>
@@ -111,7 +110,7 @@
         }
 
         /// <summary>
-        /// Convert a <see cref="String"/> to a JSON safe version.
+        /// Convert a <see cref="string"/> to a JSON safe version.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>

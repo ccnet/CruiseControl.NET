@@ -1,12 +1,12 @@
-﻿namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
-{
-    using System.IO;
-    using ThoughtWorks.CruiseControl.Remote;
-    using ThoughtWorks.CruiseControl.WebDashboard.IO;
-    using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-    using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+﻿using System.IO;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
+namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
+{
     /// <summary>
     /// Downloads a file from the server to the client.
     /// </summary>

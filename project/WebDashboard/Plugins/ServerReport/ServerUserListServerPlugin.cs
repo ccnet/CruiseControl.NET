@@ -1,19 +1,19 @@
-﻿namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Web;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-    using ThoughtWorks.CruiseControl.Remote.Security;
-    using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-    using ThoughtWorks.CruiseControl.WebDashboard.IO;
-    using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-    using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-    using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Web;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.Remote.Security;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
+namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
+{
     /// <title>User List Server Plugin</title>
     /// <version>1.5</version>
     /// <summary>

@@ -1,10 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.Core.Util;
+
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-    using ThoughtWorks.CruiseControl.Core.Util;
-
     public class PathMappingMultiTransformer : IMultiTransformer
 	{
 		private readonly IMultiTransformer transformer;

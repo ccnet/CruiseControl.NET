@@ -1,8 +1,8 @@
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-    using System.Collections.Generic;
-    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-
     public class DefaultLinkListFactory : ILinkListFactory
 	{
 		private readonly ILinkFactory linkFactory;

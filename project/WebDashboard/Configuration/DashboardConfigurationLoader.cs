@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Xml;
 using Exortech.NetReflector;
 using Objection.NetReflectorPlugin;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 

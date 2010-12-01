@@ -1,15 +1,15 @@
+using System.Collections;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
-    using System.Collections;
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-    using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-    using ThoughtWorks.CruiseControl.WebDashboard.IO;
-    using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-    using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-    using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
-
     /// <title>Project Status Plugin</title>
     /// <version>1.0</version>
     /// <summary>

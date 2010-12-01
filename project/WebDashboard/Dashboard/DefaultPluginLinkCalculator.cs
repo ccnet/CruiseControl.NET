@@ -1,9 +1,9 @@
+using System.Collections.Generic;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
+
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-    using System.Collections.Generic;
-    using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-    using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
-
     public class DefaultPluginLinkCalculator : IPluginLinkCalculator
 	{
 		private readonly ILinkFactory LinkFactory;
