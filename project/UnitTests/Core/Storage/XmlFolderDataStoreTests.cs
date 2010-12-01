@@ -33,7 +33,8 @@
         {
             const string xml = @"<xmlFolderData />";
             var dataStore = NetReflector.Read(xml) as XmlFolderDataStore;
-            Assert.AreEqual("snapshots", dataStore.Folder);
+            Assert.AreEqual(string.Empty, dataStore.BaseFolder);
+            Assert.AreEqual("snapshots", dataStore.SnapshotsFolder);
         }
         #endregion
 
@@ -50,9 +51,9 @@
             var snapShotMock = InitialiseSnapshotMock(expected);
             var fileSystemMock = InitialiseFileSystemMock(snapshotFile, outputStream);
             var dataStore = new XmlFolderDataStore
-            {
-                FileSystem = fileSystemMock
-            };
+                {
+                    FileSystem = fileSystemMock
+                };
             this.mocks.ReplayAll();
 
             // Act
@@ -76,10 +77,10 @@
             var snapShotMock = InitialiseSnapshotMock(expected);
             var fileSystemMock = InitialiseFileSystemMock(snapshotFile, outputStream);
             var dataStore = new XmlFolderDataStore
-            {
-                FileSystem = fileSystemMock,
-                Folder = folder
-            };
+                {
+                    FileSystem = fileSystemMock,
+                    SnapshotsFolder = folder
+                };
             this.mocks.ReplayAll();
 
             // Act
@@ -104,7 +105,60 @@
             var dataStore = new XmlFolderDataStore
                 {
                     FileSystem = fileSystemMock,
-                    Folder = snapshotsDir
+                    SnapshotsFolder = snapshotsDir
+                };
+            this.mocks.ReplayAll();
+
+            // Act
+            dataStore.StoreProjectSnapshot(resultMock, snapShotMock);
+
+            // Assert
+            this.mocks.VerifyAll();
+            VerifyOutput(expected, outputStream);
+        }
+
+        [Test]
+        public void StoreProjectSnapshotStoresTheSnapShotAsXmlInRelativeBaseFolder()
+        {
+            // Arrange
+            var expected = "<projectSnapshot/>";
+            var folder = "somewhereElse";
+            var snapshotsDir = Path.Combine(Path.Combine("workingDir", folder), "snapshots");
+            var snapshotFile = Path.Combine(snapshotsDir, "log20100101120000Lbuild.1.0.snapshot");
+            var outputStream = new MemoryStream();
+            var resultMock = InitialiseResultMock(snapshotsDir, Path.Combine(folder, "snapshots"));
+            var snapShotMock = InitialiseSnapshotMock(expected);
+            var fileSystemMock = InitialiseFileSystemMock(snapshotFile, outputStream);
+            var dataStore = new XmlFolderDataStore
+                {
+                    FileSystem = fileSystemMock,
+                    BaseFolder = folder
+                };
+            this.mocks.ReplayAll();
+
+            // Act
+            dataStore.StoreProjectSnapshot(resultMock, snapShotMock);
+
+            // Assert
+            this.mocks.VerifyAll();
+            VerifyOutput(expected, outputStream);
+        }
+
+        [Test]
+        public void StoreProjectSnapshotStoresTheSnapShotAsXmlInAbsoluteBaseFolder()
+        {
+            // Arrange
+            var expected = "<projectSnapshot/>";
+            var snapshotsDir = Path.GetTempPath();
+            var snapshotFile = Path.Combine(Path.Combine(snapshotsDir, "snapshots"), "log20100101120000Lbuild.1.0.snapshot");
+            var outputStream = new MemoryStream();
+            var resultMock = InitialiseResultMock("nowhere", defaultFolder);
+            var snapShotMock = InitialiseSnapshotMock(expected);
+            var fileSystemMock = InitialiseFileSystemMock(snapshotFile, outputStream);
+            var dataStore = new XmlFolderDataStore
+                {
+                    FileSystem = fileSystemMock,
+                    BaseFolder = snapshotsDir
                 };
             this.mocks.ReplayAll();
 

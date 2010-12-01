@@ -18,15 +18,16 @@
         /// </summary>
         public XmlFolderDataStore()
         {
-            this.Folder = "snapshots";
+            this.BaseFolder = string.Empty;
+            this.SnapshotsFolder = "snapshots";
             this.FileSystem = new SystemIoFileSystem();
         }
         #endregion
 
         #region Public properties
-        #region Folder
+        #region BaseFolder
         /// <summary>
-        /// The folder to store the XML in.
+        /// The base folder to store the XML in.
         /// </summary>
         /// <version>1.6</version>
         /// <default>snapshots</default>
@@ -34,8 +35,21 @@
         /// If this is not an absolute folder then it will be rooted in the project's
         /// artefacts folder.
         /// </remarks>
-        [ReflectorProperty("folder", Required = false)]
-        public string Folder { get; set; }
+        [ReflectorProperty("base", Required = false)]
+        public string BaseFolder { get; set; }
+        #endregion
+
+        #region SnapshotsFolder
+        /// <summary>
+        /// The folder to store snapshots.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>snapshots</default>
+        /// <remarks>
+        /// If this is not an absolute folder then it will be relative to the base folder.
+        /// </remarks>
+        [ReflectorProperty("snapshot", Required = false)]
+        public string SnapshotsFolder { get; set; }
         #endregion
 
         #region FileSystem
@@ -57,9 +71,7 @@
         public void StoreProjectSnapshot(IIntegrationResult result, ItemStatus snapshot)
         {
             Log.Debug("Initialising folder");
-            var dirPath = Path.IsPathRooted(this.Folder) ?
-                this.Folder :
-                result.BaseFromArtifactsDirectory(this.Folder);
+            var dirPath = this.RootFolder(result, this.SnapshotsFolder);
             Log.Info("Writing snapshot to [" + dirPath + "]");
 
             var logFile = new LogFile(result);
@@ -77,6 +89,36 @@
                     Log.Debug("Snapshot written");
                 }
             }
+        }
+        #endregion
+        #endregion
+
+        #region Private methods
+        #region RootFolder()
+        /// <summary>
+        /// Roots a folder.
+        /// </summary>
+        /// <param name="result">The result to use.</param>
+        /// <param name="folder">The folder to root.</param>
+        /// <returns>The rooted folder.</returns>
+        private string RootFolder(IIntegrationResult result, string folder)
+        {
+            if (Path.IsPathRooted(folder))
+            {
+                return folder;
+            }
+            else if (!string.IsNullOrEmpty(this.BaseFolder))
+            {
+                if (Path.IsPathRooted(this.BaseFolder))
+                {
+                    return Path.Combine(this.BaseFolder, folder);
+                }
+
+                return result.BaseFromArtifactsDirectory(
+                        Path.Combine(this.BaseFolder, folder));
+            }
+
+            return result.BaseFromArtifactsDirectory(folder);
         }
         #endregion
         #endregion
