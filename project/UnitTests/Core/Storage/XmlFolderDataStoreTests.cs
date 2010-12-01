@@ -48,7 +48,7 @@
             var outputStream = new MemoryStream();
             var resultMock = InitialiseResultMock(snapshotsDir, defaultFolder);
             var snapShotMock = InitialiseSnapshotMock(expected);
-            var fileSystemMock = InitialiseFileSystemMock(snapshotsDir, snapshotFile, outputStream);
+            var fileSystemMock = InitialiseFileSystemMock(snapshotFile, outputStream);
             var dataStore = new XmlFolderDataStore
             {
                 FileSystem = fileSystemMock
@@ -74,7 +74,7 @@
             var outputStream = new MemoryStream();
             var resultMock = InitialiseResultMock(snapshotsDir, folder);
             var snapShotMock = InitialiseSnapshotMock(expected);
-            var fileSystemMock = InitialiseFileSystemMock(snapshotsDir, snapshotFile, outputStream);
+            var fileSystemMock = InitialiseFileSystemMock(snapshotFile, outputStream);
             var dataStore = new XmlFolderDataStore
             {
                 FileSystem = fileSystemMock,
@@ -100,7 +100,7 @@
             var outputStream = new MemoryStream();
             var resultMock = InitialiseResultMock("nowhere", defaultFolder);
             var snapShotMock = InitialiseSnapshotMock(expected);
-            var fileSystemMock = InitialiseFileSystemMock(snapshotsDir, snapshotFile, outputStream);
+            var fileSystemMock = InitialiseFileSystemMock(snapshotFile, outputStream);
             var dataStore = new XmlFolderDataStore
                 {
                     FileSystem = fileSystemMock,
@@ -147,10 +147,10 @@
             return resultMock;
         }
 
-        private IFileSystem InitialiseFileSystemMock(string snapshotsDir, string snapshotFile, MemoryStream outputStream)
+        private IFileSystem InitialiseFileSystemMock(string snapshotFile, MemoryStream outputStream)
         {
             var fileSystemMock = this.mocks.StrictMock<IFileSystem>();
-            Expect.Call(() => fileSystemMock.EnsureFolderExists(snapshotsDir));
+            Expect.Call(() => fileSystemMock.EnsureFolderExists(snapshotFile));
             Expect.Call(fileSystemMock.OpenOutputStream(snapshotFile))
                 .Return(outputStream);
             return fileSystemMock;
