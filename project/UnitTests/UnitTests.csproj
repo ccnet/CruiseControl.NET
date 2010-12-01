@@ -358,6 +358,7 @@
     <Compile Include="Core\Publishers\PackagePublisherTests.cs" />
     <Compile Include="Core\Label\AssemblyVersionLabellerTest.cs" />
     <Compile Include="Core\SourceControl\VstsTest.cs" />
+    <Compile Include="Core\Storage\JsonFolderDataStoreTests.cs" />
     <Compile Include="Core\Storage\XmlFolderDataStoreTests.cs" />
     <Compile Include="Core\Tasks\AntsPerformanceProfilerTaskTests.cs" />
     <Compile Include="Core\Tasks\CruiseServerControlTaskTests.cs" />

@@ -11,13 +11,21 @@
     using ThoughtWorks.CruiseControl.Core.Storage;
     using ThoughtWorks.CruiseControl.Core.Util;
     using ThoughtWorks.CruiseControl.Remote;
+    using System.Reflection;
 
     [TestFixture]
-    public class XmlFolderDataStoreTests
+    public class JsonFolderDataStoreTests
     {
         #region Private fields
         private MockRepository mocks;
         private readonly string defaultFolder = "snapshots";
+        private readonly string defaultJson = "{\"TimeOfSnapshot\":\"\\/Date(1262347260000)\\/\"," +
+            "\"Identifier\":\"8a3c688e-abcd-44d9-b15c-b1339bbd776d\"," +
+            "\"Name\":\"TestProject\"," + 
+            "\"Status\":2," +
+            "\"TimeStarted\":\"\\/Date(1262347200000)\\/\"," +
+            "\"TimeCompleted\":\"\\/Date(1262347260000)\\/\"," +
+            "\"ChildItems\":[]}";
         #endregion
 
         #region Setup
@@ -33,8 +41,8 @@
         [Test]
         public void ShouldLoadMinimalValuesFromConfiguration()
         {
-            const string xml = @"<xmlFolderData />";
-            var dataStore = NetReflector.Read(xml) as XmlFolderDataStore;
+            const string xml = @"<jsonFolderData />";
+            var dataStore = NetReflector.Read(xml) as JsonFolderDataStore;
             Assert.AreEqual(string.Empty, dataStore.BaseFolder);
             Assert.AreEqual(defaultFolder, dataStore.SnapshotsFolder);
         }
@@ -45,14 +53,13 @@
         public void StoreProjectSnapshotStoresTheSnapShotAsXml()
         {
             // Arrange
-            var expected = "<projectSnapshot/>";
             var snapshotsDir = Path.Combine("workingDir", defaultFolder);
             var snapshotFile = Path.Combine(snapshotsDir, "log20100101120000Lbuild.1.0.snapshot");
             var outputStream = new MemoryStream();
             var resultMock = InitialiseResultMock("workingDir");
-            var snapShotMock = InitialiseSnapshotMock(expected);
+            var snapShotMock = InitialiseSnapshot();
             var fileSystemMock = InitialiseFileSystemMockForOutput(snapshotFile, outputStream);
-            var dataStore = new XmlFolderDataStore
+            var dataStore = new JsonFolderDataStore
                 {
                     FileSystem = fileSystemMock
                 };
@@ -63,22 +70,21 @@
 
             // Assert
             this.mocks.VerifyAll();
-            VerifyOutput(expected, outputStream);
+            VerifyOutput(defaultJson, outputStream);
         }
 
         [Test]
         public void StoreProjectSnapshotStoresTheSnapShotAsXmlInRelativeFolder()
         {
             // Arrange
-            var expected = "<projectSnapshot/>";
             var folder = "somewhereElse";
             var snapshotsDir = Path.Combine("workingDir", folder);
             var snapshotFile = Path.Combine(snapshotsDir, "log20100101120000Lbuild.1.0.snapshot");
             var outputStream = new MemoryStream();
             var resultMock = InitialiseResultMock("workingDir");
-            var snapShotMock = InitialiseSnapshotMock(expected);
+            var snapShotMock = InitialiseSnapshot();
             var fileSystemMock = InitialiseFileSystemMockForOutput(snapshotFile, outputStream);
-            var dataStore = new XmlFolderDataStore
+            var dataStore = new JsonFolderDataStore
                 {
                     FileSystem = fileSystemMock,
                     SnapshotsFolder = folder
@@ -90,21 +96,20 @@
 
             // Assert
             this.mocks.VerifyAll();
-            VerifyOutput(expected, outputStream);
+            VerifyOutput(defaultJson, outputStream);
         }
 
         [Test]
         public void StoreProjectSnapshotStoresTheSnapShotAsXmlInAbsoluteFolder()
         {
             // Arrange
-            var expected = "<projectSnapshot/>";
             var snapshotsDir = Path.GetTempPath();
             var snapshotFile = Path.Combine(snapshotsDir, "log20100101120000Lbuild.1.0.snapshot");
             var outputStream = new MemoryStream();
             var resultMock = InitialiseResultMock("workingDir");
-            var snapShotMock = InitialiseSnapshotMock(expected);
+            var snapShotMock = InitialiseSnapshot();
             var fileSystemMock = InitialiseFileSystemMockForOutput(snapshotFile, outputStream);
-            var dataStore = new XmlFolderDataStore
+            var dataStore = new JsonFolderDataStore
                 {
                     FileSystem = fileSystemMock,
                     SnapshotsFolder = snapshotsDir
@@ -116,22 +121,21 @@
 
             // Assert
             this.mocks.VerifyAll();
-            VerifyOutput(expected, outputStream);
+            VerifyOutput(defaultJson, outputStream);
         }
 
         [Test]
         public void StoreProjectSnapshotStoresTheSnapShotAsXmlInRelativeBaseFolder()
         {
             // Arrange
-            var expected = "<projectSnapshot/>";
             var folder = "somewhereElse";
             var snapshotsDir = Path.Combine(Path.Combine("workingDir", folder), defaultFolder);
             var snapshotFile = Path.Combine(snapshotsDir, "log20100101120000Lbuild.1.0.snapshot");
             var outputStream = new MemoryStream();
             var resultMock = InitialiseResultMock("workingDir");
-            var snapShotMock = InitialiseSnapshotMock(expected);
+            var snapShotMock = InitialiseSnapshot();
             var fileSystemMock = InitialiseFileSystemMockForOutput(snapshotFile, outputStream);
-            var dataStore = new XmlFolderDataStore
+            var dataStore = new JsonFolderDataStore
                 {
                     FileSystem = fileSystemMock,
                     BaseFolder = folder
@@ -143,21 +147,20 @@
 
             // Assert
             this.mocks.VerifyAll();
-            VerifyOutput(expected, outputStream);
+            VerifyOutput(defaultJson, outputStream);
         }
 
         [Test]
         public void StoreProjectSnapshotStoresTheSnapShotAsXmlInAbsoluteBaseFolder()
         {
             // Arrange
-            var expected = "<projectSnapshot/>";
             var snapshotsDir = Path.GetTempPath();
             var snapshotFile = Path.Combine(Path.Combine(snapshotsDir, defaultFolder), "log20100101120000Lbuild.1.0.snapshot");
             var outputStream = new MemoryStream();
             var resultMock = InitialiseResultMock("workingDir");
-            var snapShotMock = InitialiseSnapshotMock(expected);
+            var snapShotMock = InitialiseSnapshot();
             var fileSystemMock = InitialiseFileSystemMockForOutput(snapshotFile, outputStream);
-            var dataStore = new XmlFolderDataStore
+            var dataStore = new JsonFolderDataStore
                 {
                     FileSystem = fileSystemMock,
                     BaseFolder = snapshotsDir
@@ -169,7 +172,7 @@
 
             // Assert
             this.mocks.VerifyAll();
-            VerifyOutput(expected, outputStream);
+            VerifyOutput(defaultJson, outputStream);
         }
         #endregion
 
@@ -179,18 +182,12 @@
         {
             // Arrange
             var logFile = "log20100101120000Lbuild.1.0";
-            var projectSnapshot = "<projectStatusSnapshot xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" name=\"UnitTest\" status=\"CompletedSuccess\">" +
-                    "<timeStarted>2010-01-01T12:00:00.00000+00:00</timeStarted>" +
-                    "<timeCompleted>2010-01-01T12:00:01.00000+00:00</timeCompleted>" +
-                    "<childItems />" +
-                    "<timeOfSnapshot>2010-01-01T12:00:01.00000+00:00</timeOfSnapshot>" +
-                "</projectStatusSnapshot>";
             var snapshotsDir = Path.Combine("workingDir", defaultFolder);
             var snapshotFile = Path.Combine(snapshotsDir, logFile + ".snapshot");
             var outputStream = new MemoryStream();
-            var fileSystemMock = InitialiseFileSystemMockForInput(snapshotFile, projectSnapshot);
+            var fileSystemMock = InitialiseFileSystemMockForInput(snapshotFile, defaultJson);
             var projectMock = InitialiseProjectMock("workingDir");
-            var dataStore = new XmlFolderDataStore
+            var dataStore = new JsonFolderDataStore
                 {
                     FileSystem = fileSystemMock
                 };
@@ -202,9 +199,9 @@
             // Assert
             this.mocks.VerifyAll();
             Assert.IsNotNull(snapshot);
-            Assert.AreEqual("UnitTest", snapshot.Name);
+            Assert.AreEqual("TestProject", snapshot.Name);
             Assert.AreEqual(
-                DateTime.Parse("2010-01-01T12:00:00.00000+00:00", CultureInfo.InvariantCulture), 
+                DateTime.Parse("2010-01-01T12:00:00.00000+00:00", CultureInfo.InvariantCulture).ToUniversalTime(), 
                 snapshot.TimeStarted);
             Assert.AreEqual(ItemBuildStatus.CompletedSuccess, snapshot.Status);
         }
@@ -219,7 +216,7 @@
             var outputStream = new MemoryStream();
             var fileSystemMock = InitialiseFileSystemMockForInput(snapshotFile, null);
             var projectMock = InitialiseProjectMock("workingDir");
-            var dataStore = new XmlFolderDataStore
+            var dataStore = new JsonFolderDataStore
                 {
                     FileSystem = fileSystemMock
                 };
@@ -289,11 +286,20 @@
             return fileSystemMock;
         }
 
-        private ItemStatus InitialiseSnapshotMock(string expected)
+        private ItemStatus InitialiseSnapshot()
         {
-            var snapShotMock = this.mocks.StrictMock<ItemStatus>();
-            Expect.Call(snapShotMock.ToString()).Return(expected);
-            return snapShotMock;
+            var snapShot = new ProjectStatusSnapshot
+                {
+                    Name = "TestProject",
+                    TimeStarted = DateTime.Parse("2010-01-01T12:00:00.00000+00:00", CultureInfo.InvariantCulture).ToUniversalTime(),
+                    TimeCompleted = DateTime.Parse("2010-01-01T12:01:00.00000+00:00", CultureInfo.InvariantCulture).ToUniversalTime(),
+                    TimeOfSnapshot = DateTime.Parse("2010-01-01T12:01:00.00000+00:00", CultureInfo.InvariantCulture).ToUniversalTime(),
+                    Status = ItemBuildStatus.CompletedSuccess
+                };
+            var idField = typeof(ItemStatus)
+                .GetField("identifier", BindingFlags.NonPublic | BindingFlags.Instance);
+            idField.SetValue(snapShot, new Guid("8A3C688E-ABCD-44d9-B15C-B1339BBD776D"));
+            return snapShot;
         }
 
         private IProject InitialiseProjectMock(string artefactDir)

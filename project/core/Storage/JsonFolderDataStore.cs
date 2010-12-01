@@ -5,16 +5,20 @@
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Util;
     using ThoughtWorks.CruiseControl.Remote;
+    using Newtonsoft.Json;
 
     /// <summary>
-    /// Stores project data in XML files in a folder.
+    /// Stores project data in JSON files in a folder.
     /// </summary>
-    [ReflectorType("xmlFolderData")]
-    public class XmlFolderDataStore
+    [ReflectorType("jsonFolderData")]
+    public class JsonFolderDataStore
         : BaseFolderDataStore, IDataStore
     {
         #region Private fields
-        private static readonly XmlSerializer serialiser = new XmlSerializer(typeof(ProjectStatusSnapshot));
+        private static readonly JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
         #endregion
 
         #region Public methods
@@ -27,21 +31,22 @@
         public void StoreProjectSnapshot(IIntegrationResult result, ItemStatus snapshot)
         {
             var dirPath = this.RootFolder(result.ArtifactDirectory, this.SnapshotsFolder);
-            Log.Info("Writing snapshot (XML) to [" + dirPath + "]");
+            Log.Info("Writing snapshot (JSON) to [" + dirPath + "]");
 
             var logFile = new LogFile(result);
             var filePath = Path.ChangeExtension(
                 Path.Combine(dirPath, logFile.Filename),
                 "snapshot");
             this.FileSystem.EnsureFolderExists(filePath);
-            Log.Debug("Creating new snapshot (XML) [" + filePath + "]");
+            Log.Debug("Creating new snapshot (JSON) [" + filePath + "]");
             using (var stream = this.FileSystem.OpenOutputStream(filePath))
             {
                 using (var writer = new StreamWriter(stream))
                 {
-                    Log.Debug("Writing snapshot (XML)");
-                    writer.Write(snapshot.ToString());
-                    Log.Debug("Snapshot (XML) written");
+                    Log.Debug("Writing snapshot (JSON)");
+                    var json = JsonConvert.SerializeObject(snapshot, Formatting.None, settings);
+                    writer.Write(json);
+                    Log.Debug("Snapshot (JSON) written");
                 }
             }
         }
@@ -57,22 +62,26 @@
         public ItemStatus LoadProjectSnapshot(IProject project, string buildName)
         {
             var dirPath = this.RootFolder(project.ArtifactDirectory, this.SnapshotsFolder);
-            Log.Info("Loading snapshot (XML) from [" + dirPath + "]");
+            Log.Info("Loading snapshot (JSON) from [" + dirPath + "]");
 
             var snapshotPath = Path.Combine(
                 this.RootFolder(project.ArtifactDirectory, this.SnapshotsFolder),
                 Path.ChangeExtension(buildName, "snapshot"));
             if (!this.FileSystem.FileExists(snapshotPath))
             {
-                Log.Debug("Unable to find snapshot (XML) file [" + snapshotPath + "]");
+                Log.Debug("Unable to find snapshot (JSON) file [" + snapshotPath + "]");
                 return null;
             }
 
             using (var stream = this.FileSystem.OpenInputStream(snapshotPath))
             {
-                Log.Debug("Loading snapshot (XML) file [" + snapshotPath + "]");
-                var snapshot = serialiser.Deserialize(stream) as ProjectStatusSnapshot;
-                return snapshot;
+                using (var reader = new StreamReader(stream))
+                {
+                    Log.Debug("Loading snapshot (JSON) file [" + snapshotPath + "]");
+                    var json = reader.ReadToEnd();
+                    var snapshot = JsonConvert.DeserializeObject<ProjectStatusSnapshot>(json, settings);
+                    return snapshot;
+                }
             }
         }
         #endregion
