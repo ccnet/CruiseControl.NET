@@ -153,8 +153,17 @@ namespace ThoughtWorks.CruiseControl.Remote
         DataResponse GetLog(BuildRequest request);
         #endregion
 
+        #region GetFinalBuildStatus()
+        /// <summary>
+        /// Gets the final status for a build.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>The <see cref="StatusSnapshotResponse"/> for the build.</returns>
+        StatusSnapshotResponse GetFinalBuildStatus(BuildRequest request);
+        #endregion
+
         #region GetServerLog()
-		/// <summary>
+        /// <summary>
 		/// Returns a log of recent build server activity. How much information that is returned is configured on the build server.
 		/// </summary>
         DataResponse GetServerLog(ServerRequest request);

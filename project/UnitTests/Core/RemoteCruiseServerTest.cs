@@ -9,6 +9,7 @@ using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Events;
+using ThoughtWorks.CruiseControl.Remote.Messages;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -318,6 +319,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             }
 
             Assert.IsTrue(eventFired);
+            mocks.VerifyAll();
+        }
+
+        [Test]
+        public void GetFinalBuildStatusPassesOnCall()
+        {
+            var mocks = new MockRepository();
+            var innerServer = mocks.DynamicMock<ICruiseServer>();
+            var request = new BuildRequest();
+            var response = new StatusSnapshotResponse();
+            Expect.Call(innerServer.GetFinalBuildStatus(request))
+                .Return(response);
+            mocks.ReplayAll();
+
+            var configFile = this.CreateTemporaryConfigurationFile();
+            using (var server = new RemoteCruiseServer(innerServer, configFile, true))
+            {
+                var actual = server.GetFinalBuildStatus(request);
+                Assert.AreSame(response, actual);
+            }
+
             mocks.VerifyAll();
         }
 

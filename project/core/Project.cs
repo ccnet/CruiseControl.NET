@@ -1187,8 +1187,18 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <remarks></remarks>
         public string RSSFeed
         {
-            get { return RssPublisher.LoadRSSDataDocument(ArtifactDirectory); }
+            get
+            {
+                if (this.RssFeedLoader != null)
+                {
+                    return this.RssFeedLoader();
+                }
+
+                return RssPublisher.LoadRSSDataDocument(ArtifactDirectory);
+            }
         }
+
+        public Func<string> RssFeedLoader { get; set; }
 
 
         /// <summary>

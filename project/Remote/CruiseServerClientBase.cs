@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ThoughtWorks.CruiseControl.Remote.Security;
-using ThoughtWorks.CruiseControl.Remote.Parameters;
-using ThoughtWorks.CruiseControl.Remote.Messages;
 using System.ComponentModel;
+using ThoughtWorks.CruiseControl.Remote.Messages;
+using ThoughtWorks.CruiseControl.Remote.Parameters;
+using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -263,6 +261,19 @@ namespace ThoughtWorks.CruiseControl.Remote
         }
         #endregion
 
+        #region GetFinalBuildStatus()
+        /// <summary>
+        /// Gets the final build status.
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="buildName">Name of the build.</param>
+        /// <returns>The final project status for the build.</returns>
+        public virtual ProjectStatusSnapshot GetFinalBuildStatus(string projectName, string buildName)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
         #region GetServerLog()
         /// <summary>
         /// Returns a log of recent build server activity. How much information that is returned is configured on the build server.
@@ -271,9 +282,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         {
             throw new NotImplementedException();
         }
-        #endregion
 
-        #region GetServerLog()
         /// <summary>
         /// Returns a log of recent build server activity for a specific project. How much information that is returned is configured on the build server.
         /// </summary>

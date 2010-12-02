@@ -16,6 +16,8 @@ using ThoughtWorks.CruiseControl.UnitTests.Remote;
 using System.IO;
 using ThoughtWorks.CruiseControl.Remote.Messages;
 using NMock.Constraints;
+using ThoughtWorks.CruiseControl.Core.Security;
+using ThoughtWorks.CruiseControl.Remote.Security;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -858,10 +860,122 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             Assert.IsNull(transfer);
         }
 
+        [Test]
+        public void GetFinalBuildStatusRequiresViewProjectPermission()
+        {
+            var securityManagerMock = this.InitialiaseSecurityManagerMock(false, true);
+            var request = new BuildRequest("1234", "Project 1")
+                {
+                    BuildName = "Build #1"
+                };
+            this.mocks.ReplayAll();
+
+            server.SecurityManager = securityManagerMock;
+            var actual = server.GetFinalBuildStatus(request);
+
+            this.mocks.VerifyAll();
+            Assert.AreEqual(ResponseResult.Failure, actual.Result);
+            Assert.AreEqual("Permission to execute 'ViewProject' has been denied.", actual.ErrorMessages[0].Message);
+        }
+
+        [Test]
+        public void GetFinalBuildStatusReturnsWarningIfNoStatus()
+        {
+            var securityManagerMock = this.InitialiaseSecurityManagerMock(true, true);
+            var request = new BuildRequest("1234", "Project 1")
+                {
+                    BuildName = "Build #1"
+                };
+            this.mocks.ReplayAll();
+
+            server.SecurityManager = securityManagerMock;
+            var actual = server.GetFinalBuildStatus(request);
+
+            this.mocks.VerifyAll();
+            Assert.AreEqual(ResponseResult.Warning, actual.Result);
+            Assert.AreEqual("Build status does not exist", actual.ErrorMessages[0].Message);
+        }
+
+        [Test]
+        public void GetFinalBuildStatusReturnsStatus()
+        {
+            var securityManagerMock = this.InitialiaseSecurityManagerMock(true, true);
+            var request = new BuildRequest("1234", "Project 1")
+                {
+                    BuildName = "Build #1"
+                };
+            var dataStoreMock = this.mocks.StrictMock<IDataStore>();
+            SetupResult.For(dataStoreMock.LoadProjectSnapshot(project1, "Build #1"))
+                .Return(new ProjectStatusSnapshot { Name = "Project 1" });
+            this.mocks.ReplayAll();
+
+            project1.DataStore = dataStoreMock;
+            server.SecurityManager = securityManagerMock;
+            var actual = server.GetFinalBuildStatus(request);
+
+            this.mocks.VerifyAll();
+            Assert.AreEqual(ResponseResult.Success, actual.Result);
+            Assert.AreEqual("Project 1", actual.Snapshot.Name);
+        }
+
+        [Test]
+        public void GetRSSFeedRequiresViewProjectPermission()
+        {
+            var securityManagerMock = this.InitialiaseSecurityManagerMock(false, false);
+            var request = new ProjectRequest("1234", "Project 1");
+            this.mocks.ReplayAll();
+
+            server.SecurityManager = securityManagerMock;
+            var actual = server.GetRSSFeed(request);
+
+            this.mocks.VerifyAll();
+            Assert.AreEqual(ResponseResult.Failure, actual.Result);
+            Assert.AreEqual("Permission to execute 'ViewProject' has been denied.", actual.ErrorMessages[0].Message);
+        }
+
+        [Test]
+        public void GetRSSFeedReturnsStatus()
+        {
+            var securityManagerMock = this.InitialiaseSecurityManagerMock(true, false);
+            var request = new ProjectRequest("1234", "Project 1");
+            var dataStoreMock = this.mocks.StrictMock<IDataStore>();
+            SetupResult.For(dataStoreMock.LoadProjectSnapshot(project1, "Build #1"))
+                .Return(new ProjectStatusSnapshot { Name = "Project 1" });
+            this.mocks.ReplayAll();
+
+            project1.RssFeedLoader = () => "RSS-Feed";
+            server.SecurityManager = securityManagerMock;
+            var actual = server.GetRSSFeed(request);
+
+            this.mocks.VerifyAll();
+            Assert.AreEqual(ResponseResult.Success, actual.Result);
+            Assert.AreEqual("RSS-Feed", actual.Data);
+        }
+
         private ProjectRequest GenerateProjectRequest(string projectName)
         {
             var request = new ProjectRequest(null, projectName);
             return request;
+        }
+
+        private ISecurityManager InitialiaseSecurityManagerMock(bool isAllowed, bool expectLogging)
+        {
+            var securityManagerMock = this.mocks.StrictMock<ISecurityManager>();
+            SetupResult.For(securityManagerMock.Channel).Return(null);
+            SetupResult.For(securityManagerMock.RequiresSession).Return(true);
+            SetupResult.For(securityManagerMock.GetUserName("1234")).Return("johnDoe");
+            SetupResult.For(securityManagerMock.GetDisplayName("1234", null)).Return("John Doe");
+            SetupResult.For(securityManagerMock.GetDefaultRight(SecurityPermission.ViewProject))
+                .Return(SecurityRight.Inherit);
+            SetupResult.For(securityManagerMock.CheckServerPermission("johnDoe", SecurityPermission.ViewProject))
+                .Return(isAllowed);
+            if (expectLogging)
+            {
+                Expect.Call(() => securityManagerMock.LogEvent(null, null, SecurityEvent.GetFinalBuildStatus, SecurityRight.Allow, null))
+                    .IgnoreArguments();
+            }
+
+            return securityManagerMock;
         }
     }
 

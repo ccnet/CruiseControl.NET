@@ -81,5 +81,9 @@ namespace ThoughtWorks.CruiseControl.Remote.Security
         /// An update project event.
         /// </summary>
         UpdateProject,
+        /// <summary>
+        /// A request to get the final build status.
+        /// </summary>
+        GetFinalBuildStatus,
     }
 }

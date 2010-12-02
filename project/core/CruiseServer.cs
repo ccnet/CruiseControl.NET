@@ -152,7 +152,8 @@ namespace ThoughtWorks.CruiseControl.Core
         /// </summary>
         public ISecurityManager SecurityManager
         {
-            get { return securityManager; }
+            get { return this.securityManager; }
+            set { this.securityManager = value; }
         }
         #endregion
 
@@ -566,6 +567,39 @@ namespace ThoughtWorks.CruiseControl.Core
 
             // Perform a garbage collection to reduce the amount of memory held
             GC.Collect();
+            return response;
+        }
+        #endregion
+
+        #region GetFinalBuildStatus()
+        /// <summary>
+        /// Gets the final status for a build.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>The <see cref="SnapshotResponse"/> for the build.</returns>
+        public virtual StatusSnapshotResponse GetFinalBuildStatus(BuildRequest request)
+        {
+            ItemStatus snapshot = null;
+            var response = new StatusSnapshotResponse(RunProjectRequest(
+                request,
+                SecurityPermission.ViewProject,
+                SecurityEvent.GetFinalBuildStatus,
+                (req, res) =>
+                {
+                    var project = this.GetIntegrator(req.ProjectName).Project;
+                    snapshot = project.RetrieveBuildFinalStatus(request.BuildName);
+                }));
+            if (response.Result == ResponseResult.Success)
+            {
+                response.Snapshot = snapshot as ProjectStatusSnapshot;
+                if (response.Snapshot == null)
+                {
+                    response.Result = ResponseResult.Warning;
+                    response.ErrorMessages.Add(
+                        new ErrorMessage("Build status does not exist"));
+                }
+            }
+
             return response;
         }
         #endregion

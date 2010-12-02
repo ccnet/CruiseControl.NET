@@ -317,6 +317,35 @@ namespace ThoughtWorks.CruiseControl.Remote
         }
         #endregion
 
+        #region GetFinalBuildStatus()
+        /// <summary>
+        /// Gets the final build status.
+        /// </summary>
+        /// <param name="projectName">Name of the project.</param>
+        /// <param name="buildName">Name of the build.</param>
+        /// <returns>The final project status for the build.</returns>
+        public override ProjectStatusSnapshot GetFinalBuildStatus(string projectName, string buildName)
+        {
+            if (string.IsNullOrEmpty(projectName))
+            {
+                throw new ArgumentNullException("projectName");
+            }
+
+            if (string.IsNullOrEmpty(buildName))
+            {
+                throw new ArgumentNullException("buildName");
+            }
+
+            var request = new BuildRequest(SessionToken, projectName);
+            request.BuildName = buildName;
+            request.ServerName = TargetServer;
+            var resp = ValidateResponse(
+                connection.SendMessage("GetFinalBuildStatus", request))
+                as StatusSnapshotResponse;
+            return resp.Snapshot;
+        }
+        #endregion
+
         #region GetServerLog()
         /// <summary>
         /// Returns a log of recent build server activity. How much information that is returned is configured on the build server.
@@ -672,6 +701,8 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <returns>The current status snapshot.</returns>
         public override ProjectStatusSnapshot TakeStatusSnapshot(string projectName)
         {
+            if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
+
             var request = GenerateProjectRequest(projectName);
             var response = connection.SendMessage("TakeStatusSnapshot", request);
             ValidateResponse(response);
@@ -704,6 +735,7 @@ namespace ThoughtWorks.CruiseControl.Remote
         public override IFileTransfer RetrieveFileTransfer(string projectName, string fileName)
         {
             if (string.IsNullOrEmpty(projectName)) throw new ArgumentNullException("projectName");
+            if (string.IsNullOrEmpty(fileName)) throw new ArgumentNullException("fileName");
 
             var request = new FileTransferRequest(SessionToken, projectName, fileName);
             request.ServerName = TargetServer;

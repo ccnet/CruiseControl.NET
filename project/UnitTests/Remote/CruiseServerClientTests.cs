@@ -66,6 +66,15 @@
 
         #region ForceBuild()
         [Test]
+        public void ForceBuildWithParametersSendsRequest()
+        {
+            var client = new CruiseServerClient(
+                new ServerStub("ForceBuild", typeof(BuildIntegrationRequest), "Project #1"));
+            var parameters = new List<NameValuePair>();
+            client.ForceBuild("Project #1", parameters);
+        }
+
+        [Test]
         public void ForceBuildSendsRequest()
         {
             CruiseServerClient client = new CruiseServerClient(new ServerStub("ForceBuild", typeof(ProjectRequest), "Project #1"));
@@ -197,6 +206,98 @@
                 new ServerStub("GetLog", typeof(BuildRequest), "Project #1", response));
             string result = client.GetLog("Project #1", "Build #1");
             Assert.AreEqual(response.Data, result);
+        }
+        #endregion
+
+        #region GetFinalBuildStatus()
+        [Test]
+        public void GetFinalBuildStatus()
+        {
+            var response = new StatusSnapshotResponse();
+            response.Result = ResponseResult.Success;
+            response.Snapshot = new ProjectStatusSnapshot();
+            var client = new CruiseServerClient(
+                new ServerStub("GetFinalBuildStatus", typeof(BuildRequest), "Project #1", response));
+            var result = client.GetFinalBuildStatus("Project #1", "Build #1");
+            Assert.AreSame(response.Snapshot, result);
+        }
+
+        [Test]
+        public void GetFinalBuildStatusFailsIfProjectNameNotSet()
+        {
+            var client = new CruiseServerClient(
+                new ServerStub("GetFinalBuildStatus", typeof(BuildRequest)));
+            var exception = Assert.Throws<ArgumentNullException>(() =>
+                client.GetFinalBuildStatus(null, null));
+            Assert.AreEqual("projectName", exception.ParamName);
+        }
+
+        [Test]
+        public void GetFinalBuildStatusFailsIfBuildNameNotSet()
+        {
+            var client = new CruiseServerClient(
+                new ServerStub("GetFinalBuildStatus", typeof(BuildRequest)));
+            var exception = Assert.Throws<ArgumentNullException>(() =>
+                client.GetFinalBuildStatus("Project #1", null));
+            Assert.AreEqual("buildName", exception.ParamName);
+        }
+        #endregion
+
+        #region TakeStatusSnapshot()
+        [Test]
+        public void TakeStatusSnapshot()
+        {
+            var response = new StatusSnapshotResponse();
+            response.Result = ResponseResult.Success;
+            response.Snapshot = new ProjectStatusSnapshot();
+            var client = new CruiseServerClient(
+                new ServerStub("TakeStatusSnapshot", typeof(ProjectRequest), "Project #1", response));
+            var result = client.TakeStatusSnapshot("Project #1");
+            Assert.AreSame(response.Snapshot, result);
+        }
+
+        [Test]
+        public void TakeStatusSnapshotFailsIfProjectNameNotSet()
+        {
+            var client = new CruiseServerClient(
+                new ServerStub("TakeStatusSnapshot", typeof(BuildRequest)));
+            var exception = Assert.Throws<ArgumentNullException>(() =>
+                client.TakeStatusSnapshot(null));
+            Assert.AreEqual("projectName", exception.ParamName);
+        }
+        #endregion
+
+        #region RetrieveFileTransfer()
+        [Test]
+        public void RetrieveFileTransfer()
+        {
+            var response = new FileTransferResponse();
+            response.Result = ResponseResult.Success;
+            response.FileTransfer = this.mocks.StrictMock<IFileTransfer>();
+            var client = new CruiseServerClient(
+                new ServerStub("RetrieveFileTransfer", typeof(FileTransferRequest), "Project #1", response));
+            var result = client.RetrieveFileTransfer("Project #1", "Build #1");
+            Assert.AreSame(response.FileTransfer, result);
+        }
+
+        [Test]
+        public void RetrieveFileTransferFailsIfProjectNameNotSet()
+        {
+            var client = new CruiseServerClient(
+                new ServerStub("RetrieveFileTransfer", typeof(BuildRequest)));
+            var exception = Assert.Throws<ArgumentNullException>(() =>
+                client.RetrieveFileTransfer(null, null));
+            Assert.AreEqual("projectName", exception.ParamName);
+        }
+
+        [Test]
+        public void RetrieveFileTransferFailsIfFileNameNotSet()
+        {
+            var client = new CruiseServerClient(
+                new ServerStub("RetrieveFileTransfer", typeof(BuildRequest)));
+            var exception = Assert.Throws<ArgumentNullException>(() =>
+                client.RetrieveFileTransfer("Project #1", null));
+            Assert.AreEqual("fileName", exception.ParamName);
         }
         #endregion
 
@@ -500,6 +601,20 @@
 
             CruiseServerClient client = new CruiseServerClient(connection);
             Assert.IsTrue(client.IsBusy);
+        }
+        #endregion
+
+        #region Address
+        [Test]
+        public void AddressReturnsUnderlyingConnectionAddress()
+        {
+            var address = "http://testing";
+            var connection = mocks.DynamicMock<IServerConnection>();
+            SetupResult.For(connection.Address).Return(address);
+            mocks.ReplayAll();
+
+            CruiseServerClient client = new CruiseServerClient(connection);
+            Assert.AreEqual(address, client.Address);
         }
         #endregion
         #endregion
