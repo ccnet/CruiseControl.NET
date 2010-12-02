@@ -191,6 +191,18 @@ namespace ThoughtWorks.CruiseControl.Core
         }
         #endregion
 
+        #region GetFinalBuildStatus()
+        /// <summary>
+        /// Gets the final status for a build.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>The <see cref="SnapshotResponse"/> for the build.</returns>
+        public virtual StatusSnapshotResponse GetFinalBuildStatus(BuildRequest request)
+        {
+            return cruiseServer.GetFinalBuildStatus(request);
+        }
+        #endregion
+
         #region GetServerLog()
         /// <summary>
         /// Returns a log of recent build server activity. How much information that is returned is configured on the build server.

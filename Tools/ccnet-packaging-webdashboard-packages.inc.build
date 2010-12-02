@@ -174,7 +174,7 @@
   </target>
 
   <target name="build.level.packages" description="Generate the build level packages"
-          depends="build.nunit.package,build.ndepend.package,build.dupfinder.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.codeItRight.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.stylecop.package,build.msTest.package,build.modifications.package,build.modificationsgrouped.package">
+          depends="build.nunit.package,build.ndepend.package,build.dupfinder.package,build.nant.package,build.msbuild.package,build.fxcop.package,build.ncover.package,build.codeItRight.package,build.simian.package,build.fitnesse.package,build.gendarme.package,build.stylecop.package,build.msTest.package,build.modifications.package,build.modificationsgrouped.package,build.finalstatus.package">
 	</target>
 
 	<target name="build.nunit.package" description="Generates the NUnit package">
@@ -202,6 +202,18 @@
 			</fileset>
 		</zip>
 	</target>
+
+  <target name="build.finalstatus.package" description="Generates the final build status package">
+    <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>
+    <zip zipfile="${build.dir}/WebDashboard/packages/FinalBuildStatus.zip">
+      <fileset basedir="${src.dir}/WebDashboard/packages/FinalBuildStatus">
+        <include name="*.*"/>
+      </fileset>
+      <fileset basedir="${src.dir}/WebDashboard/Templates">
+        <include name="FinalBuildStatus.vm"/>
+      </fileset>
+    </zip>
+  </target>
 
   <target name="build.dupfinder.package" description="Generates the duplicate finder package">
     <mkdir dir="${build.dir}/WebDashboard/packages/" verbose="${nant.verbosity}"/>

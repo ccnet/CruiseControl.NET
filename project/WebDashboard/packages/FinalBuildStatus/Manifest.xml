@@ -1,0 +1,19 @@
+﻿<package>
+  <name>Final Build Status</name>
+  <description>Display the final status of the project at the end of a build.</description>
+  <type>Plugin</type>
+  <folders>
+    <folder>
+      <location>Templates</location>
+      <files>
+        <file>FinalBuildStatus.vm</file>
+      </files>
+    </folder>
+  </folders>
+  <configuration>
+    <setting>
+      <path>/dashboard/plugins/buildPlugins</path>
+      <name>finalBuildStatusPlugin</name>
+    </setting>
+  </configuration>
+</package>

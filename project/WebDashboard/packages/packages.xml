@@ -29,4 +29,5 @@
   <package name="Project Timeline" description="Display a timeline of project builds." type="Plugin" file="ProjectTimeline.zip" installed="no" />
   <package name="StyleCop Results" description="Display the results of a StyleCop report." type="Plugin" file="StyleCop.zip" installed="no" />
   <package name="CodeIt.Right Analysis" description="Display the results of a CodeIt.Right Analysis." type="Plugin" file="CodeItRight.zip" installed="no" />
+  <package name="Final Build Status" description="Display the final status of the project at the end of a build." type="Plugin" file="FinalBuild.zip" installed="no" />
 </packages>

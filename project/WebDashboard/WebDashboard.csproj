@@ -503,6 +503,7 @@
     <Compile Include="Plugins\BuildReport\BuildReportXslFilename.cs" />
     <Compile Include="Plugins\BuildReport\BuildReportXslFilenameSerialiser.cs" />
     <Compile Include="Plugins\BuildReport\BuildReportXslFilenameSerialiserFactory.cs" />
+    <Compile Include="Plugins\BuildReport\FinalBuildStatusPlugin.cs" />
     <Compile Include="Plugins\BuildReport\HtmlBuildLogAction.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -789,6 +790,7 @@
     <Content Include="javascript\Timeline\timeline-api.js" />
     <Content Include="javascript\Timeline\timeline-bundle.css" />
     <Content Include="javascript\Timeline\timeline-bundle.js" />
+    <Content Include="packages\FinalBuildStatus\Manifest.xml" />
     <Content Include="packages\ProjectTimeline\Manifest.xml" />
     <Content Include="packages\DupFinder\Manifest.xml" />
     <Content Include="packages\MSTest\Manifest.xml" />
@@ -857,6 +859,7 @@
     <None Include="templates\EditProjectNantBuilder.vm" />
     <None Include="templates\EditProjectP4.vm" />
     <None Include="templates\FarmSideBar.vm" />
+    <None Include="templates\FinalBuildStatus.vm" />
     <None Include="templates\HtmlReport.vm" />
     <None Include="templates\LoggedIn.vm" />
     <None Include="templates\LoggedOut.vm" />

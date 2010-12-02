@@ -609,5 +609,27 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
             }
         }
         #endregion
+
+        #region GetFinalBuildStatus()
+        /// <summary>
+        /// Gets the final build status.
+        /// </summary>
+        /// <param name="buildSpecifier">The build specifier.</param>
+        /// <param name="sessionId">The session id.</param>
+        /// <returns>The final project status for the build.</returns>
+        public ProjectStatusSnapshot GetFinalBuildStatus(IBuildSpecifier buildSpecifier, string sessionId)
+        {
+            try
+            {
+                var response = GetCruiseManager(buildSpecifier, sessionId)
+                    .GetFinalBuildStatus(buildSpecifier.ProjectSpecifier.ProjectName, buildSpecifier.BuildName);
+                return response;
+            }
+            catch (NotImplementedException)
+            {
+                return null;
+            }
+        }
+        #endregion
     }
 }

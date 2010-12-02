@@ -1,0 +1,73 @@
+﻿<!-- FinalBuildStatus.vm: Start -->
+<style type="text/css">
+  .itemHeader{
+  font-weight: bold;
+  border-bottom: 1px solid #BBB;
+  cursor: pointer;
+  }
+  .itemStatus{
+  font-weight: normal;
+  }
+  .itemChildren{
+  margin-left: 20px;
+  }
+  .itemDetails{
+  display:none;
+  }
+  .itemDetails table{
+  margin: 0;
+  padding: 0;
+  }
+  .itemDetails th{
+  text-align: left;
+  }
+</style>
+<script type="text/javascript">
+  jQuery(function(){
+    jQuery('h3.itemHeader').click(function() {
+      var item = jQuery(this).parent().children('div.itemDetails');
+      var title = jQuery(this).children('span.itemName').text();
+      item.dialog({modal: true, title: title});
+    });
+  });
+</script>
+
+#macro( displayItem $item )
+<div class="item">
+  <h3 class="itemHeader">
+    <img src="$applicationPath/images/${item.status}.png" />
+    <span class="itemName">$item.Name</span>
+    <span class="itemStatus"> [$item.Status]</span>
+  </h3>
+  <div class="itemDetails">
+    <table>
+      <tr>
+        <th>$translations.Translate("Name"):</th>
+        <td>$item.Name</td>
+      </tr>
+      <tr>
+        <th>$translations.Translate("Status"):</th>
+        <td>$item.Status</td>
+      </tr>
+      <tr>
+        <th>$translations.Translate("Time Started"):</th>
+        <td>$item.TimeStarted</td>
+      </tr>
+      <tr>
+        <th>$translations.Translate("Time Completed"):</th>
+        <td>$item.TimeCompleted</td>
+      </tr>
+    </table>
+  </div>
+  <div class="itemChildren">
+    #foreach($child in $item.ChildItems )
+    #displayItem( $child )
+    #end
+  </div>
+</div>
+#end
+
+<div>
+  #displayItem( $status )
+</div>
+<!-- FinalBuildStatus.vm: End -->

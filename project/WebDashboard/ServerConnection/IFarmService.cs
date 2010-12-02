@@ -159,5 +159,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
         /// <returns>The identifier of the other site.</returns>
         string GetLinkedSiteId(IProjectSpecifier projectSpecifier, string sessionId, string siteName);
         #endregion
+
+        #region GetFinalBuildStatus()
+        /// <summary>
+        /// Gets the final build status.
+        /// </summary>
+        /// <param name="buildSpecifier">The build specifier.</param>
+        /// <param name="sessionId">The session id.</param>
+        /// <returns>The final project status for the build.</returns>
+        ProjectStatusSnapshot GetFinalBuildStatus(IBuildSpecifier buildSpecifier, string sessionId);
+        #endregion
     }
 }

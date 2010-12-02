@@ -7788,6 +7788,29 @@
     </xs:complexContent>
   </xs:complexType>
 
+  <xs:complexType name="jsonFolderData">
+    <xs:complexContent>
+      <xs:extension base="dataStore">
+        <xs:all>
+          <xs:element name="base" type="xs:string" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The folder to store the JSON in.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="snapshot" type="xs:string" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                The folder to store snapshots.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:all>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
   <xs:complexType name="Triggers">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:element name="filterTrigger" type="filterTrigger">
