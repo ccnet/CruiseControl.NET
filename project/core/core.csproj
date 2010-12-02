@@ -111,10 +111,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\NetReflector.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="NPlot">
       <Name>NPlot</Name>
       <HintPath>..\..\lib\NPlot.dll</HintPath>
@@ -560,7 +556,6 @@
     <Compile Include="Security\SecureMessagesChannel.cs" />
     <Compile Include="sourcecontrol\IQuitePeriod.cs" />
     <Compile Include="Storage\BaseFolderDataStore.cs" />
-    <Compile Include="Storage\JsonFolderDataStore.cs" />
     <Compile Include="Storage\XmlFolderDataStore.cs" />
     <Compile Include="SystemClock.cs" />
     <Compile Include="SourceControlOperation.cs" />
