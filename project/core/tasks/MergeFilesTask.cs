@@ -3,6 +3,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     using System.IO;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Util;
+    using System.Xml.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
 
     /// <summary>
     /// <para>
@@ -187,20 +191,32 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                             case MergeFileInfo.MergeActionType.CData:
                                 // Add the file to the merge list
                                 actualLogger.Info("Merging file '{0}'", fileInfo);
-                                result.BuildProgressInformation.AddTaskInformation(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Merging file '{0}'", fileInfo));
-                                result.AddTaskResult(new FileTaskResult(fileInfo, mergeFile.DeleteAfterMerge, actualFileSystem)
-                                                         {WrapInCData = (mergeFile.MergeAction == MergeFileInfo.MergeActionType.CData)});
+                                result.BuildProgressInformation.AddTaskInformation(string.Format(CultureInfo.CurrentCulture,"Merging file '{0}'", fileInfo));
+                                result.AddTaskResult(
+                                    new FileTaskResult(fileInfo, mergeFile.DeleteAfterMerge, actualFileSystem)
+                                        {
+                                            WrapInCData = (mergeFile.MergeAction == MergeFileInfo.MergeActionType.CData)
+                                        });
                                 break;
+
                             case MergeFileInfo.MergeActionType.Copy:
                                 // Copy the file to the target folder
                                 actualFileSystem.EnsureFolderExists(targetFolder);
                                 actualLogger.Info("Copying file '{0}' to '{1}'", fileInfo.Name, targetFolder);
-                                result.BuildProgressInformation.AddTaskInformation(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Copying file '{0}' to '{1}'", fileInfo.Name, targetFolder));
+                                result.BuildProgressInformation.AddTaskInformation(string.Format(CultureInfo.CurrentCulture,"Copying file '{0}' to '{1}'", fileInfo.Name, targetFolder));
                                 actualFileSystem.Copy(fileInfo.FullName, Path.Combine(targetFolder, fileInfo.Name));
                                 break;
+
+                            case MergeFileInfo.MergeActionType.IndexCopy:
+                                // Copy the file to the target folder
+                                actualFileSystem.EnsureFolderExists(targetFolder);
+                                actualLogger.Info("Reading index file '{0}' for copy", fileInfo.Name);
+                                this.CopyFromIndex(fileInfo.Name, targetFolder, actualFileSystem, actualLogger, result);
+                                break;
+
                             default:
                                 throw new CruiseControlException(
-                                    string.Format(System.Globalization.CultureInfo.CurrentCulture,"Unknown file merge action '{0}'", mergeFile.MergeAction));
+                                    string.Format(CultureInfo.CurrentCulture,"Unknown file merge action '{0}'", mergeFile.MergeAction));
                         }
                     }
                     else
@@ -212,5 +228,71 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
             return true;
 		}
+
+        private void CopyFromIndex(
+            string indexFile, 
+            string targetFolder, 
+            IFileSystem fileSystem, 
+            ILogger logger, 
+            IIntegrationResult result)
+        {
+            var basePath = Path.GetDirectoryName(indexFile);
+            using (var reader = fileSystem.Load(indexFile))
+            {
+                XDocument document = null;
+                try
+                {
+                    document = XDocument.Load(reader);
+                }
+                catch (Exception error)
+                {
+                    throw new CruiseControlException(
+                        "Unable to load index file - " + error.Message ?? string.Empty,
+                        error);
+                }
+
+                var rootEl = document.Element("ReportResources");
+                if (rootEl == null)
+                {
+                    throw new CruiseControlException("Unable to load contents manifest - unable to find root node");
+                }
+
+                var files = new List<string>();
+                foreach (var fileEl in rootEl.Elements("File"))
+                {
+                    var fullPath = fileEl.Value;
+                    if (!Path.IsPathRooted(fullPath))
+                    {
+                        fullPath = Path.Combine(basePath, fileEl.Value);
+                    }
+
+                    files.Add(fullPath);
+                }
+
+                foreach (var folder in rootEl.Elements("Directory"))
+                {
+                    var fullPath = folder.Value;
+                    if (!Path.IsPathRooted(fullPath))
+                    {
+                        fullPath = Path.Combine(basePath, fullPath);
+                    }
+
+                    files.AddRange(fileSystem.GetFilesInDirectory(fullPath, true));
+                }
+
+                var baseLength = basePath.Length;
+                foreach (var file in files)
+                {
+                    logger.Info("Copying file '{0}' to '{1}'", file, targetFolder);
+                    var targetFile = file.StartsWith(basePath) ?
+                        file.Substring(baseLength) :
+                        Path.GetFileName(file);
+                    result.BuildProgressInformation.AddTaskInformation(
+                        string.Format(CultureInfo.CurrentCulture, "Copying file '{0}' to '{1}'", targetFile, targetFolder));
+                    fileSystem.Copy(file, Path.Combine(targetFolder, targetFile));
+                }
+            }
+
+        }
 	}
 }

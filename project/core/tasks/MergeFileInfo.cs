@@ -70,6 +70,10 @@
             /// Merge the data in a CData section.
             /// </summary>
             CData,
+            /// <summary>
+            /// The file is an index file for selecting which files to copy.
+            /// </summary>
+            IndexCopy,
         }
         #endregion
     }
