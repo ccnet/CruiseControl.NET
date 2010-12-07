@@ -39,7 +39,12 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <remarks></remarks>
 		public IProjectIntegrator this[string projectName]
 		{
-			get { return integrators[projectName]; }
+			get
+			{
+                if (!integrators.ContainsKey(projectName)) return null;
+
+			    return integrators[projectName];
+			}
 		}
 
         /// <summary>
