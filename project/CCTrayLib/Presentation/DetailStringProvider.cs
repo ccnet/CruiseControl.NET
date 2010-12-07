@@ -24,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // search from the end, to get the most recent messages of the specified kind.
 		    bool breakerFound = false;
 		    bool breakingTaskFound = false;
+		    bool aborterFound = false;
 
             for (int i = projectStatus.Messages.Length - 1; i >= 0; i--)
             {
@@ -33,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                     {
                         if (projectStatus.CurrentMessage != projectStatus.Messages[i].Text)
                         {
-                            if (message.Length > 0) message += " - ";
+                            if (message.Length > 0) message += " - Breaker(s) ";
                             message += projectStatus.Messages[i].Text;
                         }
 
@@ -51,6 +52,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                             message += projectStatus.Messages[i].Text;
                         }
                         breakingTaskFound = true;
+                    }
+                }
+
+
+                if (projectStatus.Messages[i].Kind == Message.MessageKind.BuildAbortedBy)
+                {
+                    if (!aborterFound)
+                    {
+                        if (projectStatus.CurrentMessage != projectStatus.Messages[i].Text)
+                        {
+                            if (message.Length > 0) message += " - Aborted By :";
+                            message += projectStatus.Messages[i].Text;
+                        }
+                        aborterFound = true;
                     }
                 }
             }

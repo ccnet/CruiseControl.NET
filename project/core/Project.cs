@@ -825,7 +825,7 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <remarks></remarks>
         public void AbortRunningBuild(string userName)
         {
-            AddMessage(new Message(string.Format(System.Globalization.CultureInfo.CurrentCulture, "Build Aborted by : {0}", userName), Message.MessageKind.BuildAbortedBy));
+            AddMessage(new Message(userName, Message.MessageKind.BuildAbortedBy));
             ProcessExecutor.KillProcessCurrentlyRunningForProject(Name);
         }
 
