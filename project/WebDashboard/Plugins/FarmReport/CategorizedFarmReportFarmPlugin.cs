@@ -1,18 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-using ThoughtWorks.CruiseControl.WebDashboard.Resources;
-using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
-using Exortech.NetReflector;
-
-namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
+﻿namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+    using ThoughtWorks.CruiseControl.WebDashboard.IO;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+    using ThoughtWorks.CruiseControl.WebDashboard.Resources;
+    using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+
     [ReflectorType("categorizedFarmReportFarmPlugin")]
     public class CategorizedFarmReportFarmPlugin : IPlugin, ICruiseAction
     {
@@ -31,8 +30,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
         {
             this.farmService = farmService;
             this.projectGrid = projectGrid;
-            this.viewGenerator = viewGenerator;            
-
+            this.viewGenerator = viewGenerator;
+            this.LinkDescription = "Categorized Farm Report";
             this.baseAction = new ImmutableNamedAction(BaseActionName, this);
         }
 
@@ -51,10 +50,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
         /// Gets the text that appears in the Dashboard UI to link to this 
         /// plugin.
         /// </summary>
-        public string LinkDescription
-        {
-            get { return "Categorized Farm Report"; }
-        }
+        [ReflectorProperty("description", Required = false)]
+        public string LinkDescription { get; set; }
 
         public IResponse Execute(ICruiseRequest request)
         {
@@ -89,12 +86,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
             return viewGenerator.GenerateView("CategorizedFarmReport.vm", velocityContext);
         }
 
-        private class CategoryInformation
+        public class CategoryInformation
         {
-            private string Name { get; set; }
-            private IList<ProjectGridRow> Rows { get; set; }
-            private string CategoryColor { get; set; }
-            private bool Display { get; set; }
+            public string Name { get; set; }
+            public IList<ProjectGridRow> Rows { get; set; }
+            public string CategoryColor { get; set; }
+            public bool Display { get; set; }
 
             public CategoryInformation(string name)
             {

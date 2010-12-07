@@ -852,6 +852,7 @@
     <None Include="templates\BuildLog.vm" />
     <None Include="templates\BuildRows.vm" />
     <None Include="templates\BuildSideBar.vm" />
+    <None Include="templates\CategorizedFarmReport.vm" />
     <None Include="templates\ChangePasswordAction.vm" />
     <None Include="templates\EditProjectCommandLineBuilder.vm" />
     <None Include="templates\EditProjectCVS.vm" />

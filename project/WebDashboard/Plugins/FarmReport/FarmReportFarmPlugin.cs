@@ -1,13 +1,13 @@
-using System;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 {
-	// ToDo - Test!
+    using System;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+    using ThoughtWorks.CruiseControl.WebDashboard.IO;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+    using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+
+    // ToDo - Test!
 	[ReflectorType("farmReportFarmPlugin")]
 	public class FarmReportFarmPlugin : ICruiseAction, IPlugin
 	{
@@ -16,6 +16,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 		private readonly IProjectGridAction projectGridAction;
         private readonly ProjectParametersAction parametersAction;
         private ProjectGridSortColumn? sortColumn;
+        private readonly CategorizedFarmReportFarmPlugin categorizedView;
 
         #region Public properties
         #region DefaultSortColumn
@@ -48,13 +49,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
         [ReflectorProperty("successBar", Required = false)]
         public IndicatorBarLocation SuccessIndicatorBarLocation { get; set; }
         #endregion
+
+        #region UseCategories
+        [ReflectorProperty("categories", Required = false)]
+        public bool UseCategories { get; set; }
+        #endregion
         #endregion
 
-        public FarmReportFarmPlugin(IProjectGridAction projectGridAction, ProjectParametersAction parametersAction)
+        public FarmReportFarmPlugin(
+            IProjectGridAction projectGridAction, 
+            ProjectParametersAction parametersAction,
+            CategorizedFarmReportFarmPlugin categorizedView)
 		{
 			this.projectGridAction = projectGridAction;
             this.parametersAction = parametersAction;
             this.SuccessIndicatorBarLocation = IndicatorBarLocation.Bottom;
+            this.categorizedView = categorizedView;
 		}
 
 		public IResponse Execute(ICruiseRequest request)
@@ -73,7 +83,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 		{
             get
             {
-                return new INamedAction[] { new ImmutableNamedAction(ACTION_NAME, this),
+                var action = this.UseCategories ? 
+                    (ICruiseAction)categorizedView : 
+                    (ICruiseAction)this;
+                return new INamedAction[] { new ImmutableNamedAction(ACTION_NAME, action),
                         new ImmutableNamedActionWithoutSiteTemplate(ProjectParametersAction.ActionName, parametersAction)
                     };
             }
