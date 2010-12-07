@@ -165,7 +165,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             // Check whether the package should be generated
             if (AlwaysPackage || (result.Status == IntegrationStatus.Success))
             {
-                var logMessage = string.Format(System.Globalization.CultureInfo.CurrentCulture,"Building package '{0}'", PackageName);
+                var logMessage = string.Format(CultureInfo.CurrentCulture, "Building package '{0}'", PackageName);
                 result.BuildProgressInformation.SignalStartRunTask(logMessage);
                 Log.Info(logMessage);
 
@@ -306,7 +306,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             // See if the entry already exists
             XmlElement packageElement = listXml.SelectSingleNode(
-                string.Format(System.Globalization.CultureInfo.CurrentCulture,"/packages/package[@name='{0}']", PackageName)) as XmlElement;
+                string.Format(CultureInfo.CurrentCulture, "/packages/package[@name='{0}']", PackageName)) as XmlElement;
             if (packageElement == null)
             {
                 packageElement = listXml.CreateElement("package");
@@ -346,21 +346,36 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// </remarks>
         private string MoveFile(IIntegrationResult result, string tempFile)
         {
-            string actualFile = Path.Combine(result.Label, PackageName);
-            if (!actualFile.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase)) actualFile += ".zip";
+            string actualFile = EnsureFileExtension(Path.Combine(result.Label, PackageName), ".zip");
             actualFile = result.BaseFromArtifactsDirectory(actualFile);
-            if (File.Exists(actualFile)) DeleteFileWithRetry(actualFile);
+            if (File.Exists(actualFile))
+            {
+                DeleteFileWithRetry(actualFile);
+            }
+
             string actualFolder = Path.GetDirectoryName(actualFile);
-            if (!Directory.Exists(actualFolder)) Directory.CreateDirectory(actualFolder);
+            if (!Directory.Exists(actualFolder))
+            {
+                Directory.CreateDirectory(actualFolder);
+            }
+
             File.Move(tempFile, actualFile);
 
             if (!string.IsNullOrEmpty(OutputDirectory))
             {
                 // Copy the file to the output directory (so it can be used by other tasks)
                 var basePath = OutputDirectory;
-                if (!Path.IsPathRooted(basePath)) basePath = Path.Combine(result.ArtifactDirectory, basePath);
-                Log.Info(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Copying file to '{0}'", basePath));
-                File.Copy(actualFile, Path.Combine(basePath, PackageName), true);
+                if (!Path.IsPathRooted(basePath))
+                {
+                    basePath = Path.Combine(result.ArtifactDirectory, basePath);
+                }
+
+                Log.Info(string.Format(
+                    CultureInfo.CurrentCulture,"Copying file to '{0}'", basePath));
+                File.Copy(
+                    actualFile, 
+                    EnsureFileExtension(Path.Combine(basePath, PackageName), ".zip"), 
+                    true);
             }
 
             return actualFile;
@@ -418,6 +433,25 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             zipStream.PutNextEntry(entry);
             manifest.Save(zipStream);
             zipStream.CloseEntry();
+        }
+        #endregion
+
+        #region EnsureFileExtension()
+        /// <summary>
+        /// Ensures the file extension.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="extension">The extension.</param>
+        /// <returns>The filename with the extension.</returns>
+        private static string EnsureFileExtension(string fileName, string extension)
+        {
+            var actualFile = fileName;
+            if (!actualFile.EndsWith(extension, StringComparison.InvariantCultureIgnoreCase))
+            {
+                actualFile += extension;
+            }
+
+            return actualFile;
         }
         #endregion
         #endregion
