@@ -115,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Core
         private IConfiguration configuration;
         private bool showForceBuildButton = true;
         private bool showStartStopButton = true;
-
+        private IExecutionEnvironment currentExecutionEnvironment;
 
         #region Constructors
         /// <summary>
@@ -485,6 +485,24 @@ namespace ThoughtWorks.CruiseControl.Core
         public IIntegrationResult CurrentResult
         {
             get { return integrationResultManager.CurrentIntegration; }
+        }
+
+        /// <summary>
+        /// Gets or sets the current execution environment.
+        /// </summary>
+        /// <value>The current execution environment.</value>
+        public IExecutionEnvironment CurrentExecutionEnvironment
+        {
+            get
+            {
+                if (this.currentExecutionEnvironment == null)
+                {
+                    this.currentExecutionEnvironment = new ExecutionEnvironment();
+                }
+
+                return this.currentExecutionEnvironment;
+            }
+            set { this.currentExecutionEnvironment = value; }
         }
 
         /// <summary>
@@ -1291,34 +1309,42 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <remarks></remarks>
         public string GetBuildLog(string buildName)
         {
-            string logDirectory = GetLogDirectory();
-            if (string.IsNullOrEmpty(logDirectory)) return string.Empty;
-
-            // Check that there is sufficient memory to load the log into memory
-            var filepath = Path.Combine(logDirectory, buildName);
-            var fileInfo = new FileInfo(filepath);
-            if (fileInfo.Length > 1048576)
+            var logDirectory = GetLogDirectory();
+            if (string.IsNullOrEmpty(logDirectory))
             {
-                // Since the file is over one Mb, check if there is enough free memory to load the data
-                // Note: We are actually checking to see if there is twice the amount of memory required, this is because often the 
-                // data will need to be copied somewhere else, which means the string will exist in memory at least twice (hopefully
-                // GC will clean up if it is needed more than twice)
-                var fileSizeInMB = Convert.ToInt32(fileInfo.Length / 524288);
-                try
+                return string.Empty;
+            }
+
+            var filepath = Path.Combine(logDirectory, buildName);
+
+            // Only run this check in a windows environment as MemoryFailPoint has not been implemented in Mono
+            if (this.CurrentExecutionEnvironment.IsRunningOnWindows)
+            {
+                // Check that there is sufficient memory to load the log into memory
+                var fileInfo = new FileInfo(filepath);
+                if (fileInfo.Length > 1048576)
                 {
-                    using (new MemoryFailPoint(fileSizeInMB))
+                    // Since the file is over one Mb, check if there is enough free memory to load the data
+                    // Note: We are actually checking to see if there is twice the amount of memory required, this is because often the 
+                    // data will need to be copied somewhere else, which means the string will exist in memory at least twice (hopefully
+                    // GC will clean up if it is needed more than twice)
+                    var fileSizeInMB = Convert.ToInt32(fileInfo.Length / 524288);
+                    try
                     {
+                        using (new MemoryFailPoint(fileSizeInMB))
+                        {
+                        }
                     }
-                }
-                catch (InsufficientMemoryException error)
-                {
-                    // Much nicer to handle an InsufficientMemoryException exception than an OutOfMemoryException - OOM tends to kill
-                    // things!
-                    throw new CruiseControlException("Insufficient memory to retrieve log: " + error.Message, error);
+                    catch (InsufficientMemoryException error)
+                    {
+                        // Much nicer to handle an InsufficientMemoryException exception than an OutOfMemoryException - OOM tends to kill
+                        // things!
+                        throw new CruiseControlException("Insufficient memory to retrieve log: " + error.Message, error);
+                    }
                 }
             }
 
-            using (StreamReader sr = new StreamReader(filepath))
+            using (var sr = new StreamReader(filepath))
             {
                 return sr.ReadToEnd();
             }
