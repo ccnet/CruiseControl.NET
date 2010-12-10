@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         {
             this.dtProvider = dtProvider;
             this.BuildCondition = BuildCondition.IfModificationExists;
-            this.StartDate = DateTime.Now;
+            this.StartDate = dtProvider.Now;
             this.EndDate = DateTime.MaxValue;
         }
 

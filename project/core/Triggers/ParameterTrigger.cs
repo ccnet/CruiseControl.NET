@@ -35,11 +35,6 @@
     [ReflectorType("parameterTrigger")]
     public class ParameterTrigger : ITrigger
     {
-        #region Private fields
-        private ITrigger innerTrigger;
-        private NameValuePair[] parameters = new NameValuePair[0];
-        #endregion
-
         #region Constructors
         /// <summary>
         /// Initialise a new blank instance of <see cref="ParameterTrigger"/>.
@@ -57,11 +52,7 @@
         /// <version>1.5</version>
         /// <default>n/a</default>
         [ReflectorProperty("trigger", InstanceTypeKey = "type")]
-        public ITrigger InnerTrigger
-        {
-            get { return innerTrigger; }
-            set { innerTrigger = value; }
-        }
+        public ITrigger InnerTrigger { get; set; }
         #endregion
 
         #region Parameters
@@ -71,11 +62,7 @@
         /// <version>1.5</version>
         /// <default>n/a</default>
         [ReflectorProperty("parameters")]
-        public NameValuePair[] Parameters
-        {
-            get { return parameters; }
-            set { parameters = value; }
-        }
+        public NameValuePair[] Parameters { get; set; }
         #endregion
 
         #region NextBuild
@@ -84,7 +71,7 @@
         /// </summary>
         public DateTime NextBuild
         {
-            get { return innerTrigger.NextBuild; }
+            get { return this.InnerTrigger.NextBuild; }
         }
         #endregion
         #endregion
@@ -96,7 +83,7 @@
         /// </summary>
         public void IntegrationCompleted()
         {
-            innerTrigger.IntegrationCompleted();
+            this.InnerTrigger.IntegrationCompleted();
         }
         #endregion
 
@@ -107,12 +94,13 @@
         /// <returns></returns>
         public IntegrationRequest Fire()
         {
-            IntegrationRequest request = innerTrigger.Fire();
+            var request = this.InnerTrigger.Fire();
             if (request != null)
             {
-                List<NameValuePair> values = new List<NameValuePair>(parameters);
+                var values = new List<NameValuePair>(this.Parameters ?? new NameValuePair[0]);
                 request.BuildValues = NameValuePair.ToDictionary(values);
             }
+
             return request;
         }
         #endregion

@@ -49,6 +49,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             Expect.Call(() => client.ForceBuild("project", null))
                 .Constraints(Rhino.Mocks.Constraints.Is.Equal("project"),
                     Rhino.Mocks.Constraints.Is.TypeOf<List<NameValuePair>>());
+            Expect.Call(client.SessionToken).SetPropertyAndIgnoreArgument();
             mocks.ReplayAll();
 
 			ForceBuildPublisher publisher = new ForceBuildPublisher(factory);

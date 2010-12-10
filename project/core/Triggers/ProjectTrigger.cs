@@ -1,11 +1,14 @@
-using System;
-using System.Net.Sockets;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
-
 namespace ThoughtWorks.CruiseControl.Core.Triggers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net.Sockets;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.util;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using ThoughtWorks.CruiseControl.Remote;
+
     /// <summary>
     /// <para>
     /// The Project Trigger is used to trigger a build when the specified dependent project has completed its build. This trigger can help you split your 
@@ -52,23 +55,24 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		public const string DefaultServerUri = RemoteCruiseServer.DefaultManagerUri;
 		private const int DefaultIntervalSeconds = 5;
 
-		private readonly ICruiseManagerFactory managerFactory;
+        private readonly ICruiseServerClientFactory factory;
 		private ProjectStatus lastStatus;
 		private ProjectStatus currentStatus;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectTrigger"/> class.
         /// </summary>
-		public ProjectTrigger() : this(new RemoteCruiseManagerFactory())
+        public ProjectTrigger()
+            : this(new CruiseServerClientFactory())
 		{}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectTrigger"/> class.
         /// </summary>
-        /// <param name="managerFactory">The manager factory.</param>
-		public ProjectTrigger(ICruiseManagerFactory managerFactory)
+        /// <param name="factory">The factory.</param>
+        public ProjectTrigger(ICruiseServerClientFactory factory)
 		{
-			this.managerFactory = managerFactory;
+			this.factory = factory;
             this.ServerUri = DefaultServerUri;
             this.TriggerStatus = IntegrationStatus.Success;
             this.InnerTrigger = ProjectTrigger.NewIntervalTrigger();
@@ -118,6 +122,19 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
         public bool TriggerFirstTime { get; set; }
 
         /// <summary>
+        /// The security credentials to pass through to the remote server.
+        /// </summary>
+        /// <version>1.6</version>
+        /// <default>None</default>
+        /// <remarks>
+        /// These are only needed if the remote project has security applied. If credentials are passed to the remote
+        /// server, then the enforcerName will be ignored.
+        /// Valid security tokens are: "username" and "password" (this list may be expanded in future).
+        /// </remarks>
+        [ReflectorProperty("security", Required = false)]
+        public NameValuePair[] SecurityCredentials { get; set; }
+
+        /// <summary>
         /// Integrations the completed.	
         /// </summary>
         /// <remarks></remarks>
@@ -130,16 +147,47 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		private ProjectStatus GetCurrentProjectStatus()
 		{
 			Log.Debug("Retrieving ProjectStatus from server: " + ServerUri);
-			ProjectStatus[] currentStatuses = managerFactory.GetCruiseManager(ServerUri).GetProjectStatus();
-			foreach (ProjectStatus projectStatus in currentStatuses)
-			{
-				if (projectStatus.Name == Project)
-				{
-                    Log.Debug("Found status for dependent project {0} is {1}",projectStatus.Name,projectStatus.BuildStatus);
-					return projectStatus;
-				}
-			}
-			throw new NoSuchProjectException(Project);
+            var client = factory.GenerateClient(ServerUri);
+            var loggedIn = false;
+            if ((SecurityCredentials != null) && (SecurityCredentials.Length > 0))
+            {
+                Log.Debug("Logging in");
+                if (client.Login(new List<NameValuePair>(SecurityCredentials)))
+                {
+                    loggedIn = true;
+                    Log.Debug("Logged on server, session token is " + client.SessionToken);
+                }
+                else
+                {
+                    Log.Warning("Unable to login to remote server");
+                }
+            }
+            else if (RemoteServerUri.IsLocal(this.ServerUri))
+            {
+                Log.Debug("Sending local server bypass");
+                client.SessionToken = SecurityOverride.SessionIdentifier;
+            }
+
+            try
+            {
+                var currentStatuses = client.GetProjectStatus();
+                var project = currentStatuses.FirstOrDefault(p => p.Name == Project);
+                if (project != null)
+                {
+                    Log.Debug("Found status for dependent project {0} is {1}", project.Name, project.BuildStatus);
+                    return project;
+                }
+
+                throw new NoSuchProjectException(Project);
+            }
+            finally
+            {
+                if (loggedIn)
+                {
+                    Log.Debug("Logging out");
+                    client.Logout();
+                }
+            }
 		}
 
         /// <summary>

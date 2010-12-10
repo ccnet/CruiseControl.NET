@@ -1,11 +1,13 @@
-using System.Collections.Generic;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Tasks;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
-
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    using System.Collections.Generic;
+    using System.Globalization;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Tasks;
+    using ThoughtWorks.CruiseControl.Core.util;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using ThoughtWorks.CruiseControl.Remote;
+
     /// <summary>
     /// <para>
     /// The ForceBuildPublisher forces a build on a local or remote build server. It uses .NET Remoting to invoke a
@@ -67,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         public ForceBuildPublisher(ICruiseServerClientFactory factory)
 		{
 			this.factory = factory;
-            this.ServerUri = string.Format(System.Globalization.CultureInfo.CurrentCulture,"tcp://localhost:21234/{0}", RemoteCruiseServer.ManagerUri);
+            this.ServerUri = string.Format(CultureInfo.CurrentCulture,"tcp://localhost:21234/{0}", RemoteCruiseServer.ManagerUri);
             this.IntegrationStatus = IntegrationStatus.Success;
 		}
         /// <summary>
@@ -167,6 +169,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 {
                     logger.Warning("Unable to login to remote server");
                 }
+            }
+            else if (RemoteServerUri.IsLocal(this.ServerUri))
+            {
+                logger.Debug("Sending local server bypass");
+                client.SessionToken = SecurityOverride.SessionIdentifier;
             }
 
             logger.Info("Sending ForceBuild request to '{0}' on '{1}'", Project, ServerUri);

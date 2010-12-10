@@ -5,6 +5,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Triggers;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Config;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 {
@@ -198,5 +199,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 
         }
 
+        [Test]
+        public void TimeFailsWithInvalidDate()
+        {
+            var trigger = new ScheduleTrigger();
+            Assert.Throws<ConfigurationException>(() => trigger.Time = "plain wrong!");
+        }
 	}
 }

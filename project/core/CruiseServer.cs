@@ -434,8 +434,12 @@ namespace ThoughtWorks.CruiseControl.Core
                 delegate
                     {
                     snapshot = integrationQueueManager.GetCruiseServerSnapshot();
-                    snapshot.ProjectStatuses = FilterProjects(request.SessionToken,
-                        snapshot.ProjectStatuses);
+                    if (request.SessionToken != SecurityOverride.SessionIdentifier)
+                    {
+                        snapshot.ProjectStatuses = this.FilterProjects(
+                            request.SessionToken, 
+                            snapshot.ProjectStatuses);
+                    }
                 }));
             response.Snapshot = snapshot;
             return response;
@@ -456,7 +460,10 @@ namespace ThoughtWorks.CruiseControl.Core
                 delegate
                     {
                     data = integrationQueueManager.GetProjectStatuses();
-                    data = FilterProjects(request.SessionToken, data);
+                    if (request.SessionToken != SecurityOverride.SessionIdentifier)
+                    {
+                        data = this.FilterProjects(request.SessionToken, data);
+                    }
                 }));
             if (data != null) response.Projects.AddRange(data);
             return response;
@@ -1503,9 +1510,9 @@ namespace ThoughtWorks.CruiseControl.Core
         private ProjectStatus[] FilterProjects(string sessionToken,
             ProjectStatus[] projects)
         {
-            List<ProjectStatus> allowedProjects = new List<ProjectStatus>();
-            string userName = securityManager.GetUserName(sessionToken);
-            bool defaultIsAllowed = (securityManager.GetDefaultRight(SecurityPermission.ViewProject) == SecurityRight.Allow);
+            var allowedProjects = new List<ProjectStatus>();
+            var userName = securityManager.GetUserName(sessionToken);
+            var defaultIsAllowed = (securityManager.GetDefaultRight(SecurityPermission.ViewProject) == SecurityRight.Allow);
             foreach (ProjectStatus project in projects)
             {
                 IProjectIntegrator projectIntegrator = GetIntegrator(project.Name);
