@@ -360,6 +360,9 @@
     <Compile Include="Core\SourceControl\VstsTest.cs" />
     <Compile Include="Core\Storage\XmlFolderDataStoreTests.cs" />
     <Compile Include="Core\Tasks\AntsPerformanceProfilerTaskTests.cs" />
+    <Compile Include="Core\Tasks\Conditions\AndTaskConditionTests.cs" />
+    <Compile Include="Core\Tasks\Conditions\MockCondition.cs" />
+    <Compile Include="Core\Tasks\Conditions\OrTaskConditionTests.cs" />
     <Compile Include="Core\Tasks\CruiseServerControlTaskTests.cs" />
     <Compile Include="Core\Tasks\FakeTaskTest.cs" />
     <Compile Include="Core\Triggers\CronTriggerTest.cs" />

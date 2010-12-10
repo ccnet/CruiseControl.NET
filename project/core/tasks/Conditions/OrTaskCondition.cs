@@ -100,10 +100,24 @@
             ConfigurationTrace parent, 
             IConfigurationErrorProcesser errorProcesser)
         {
-            if (this.Conditions.Length == 0)
+            if ((this.Conditions == null) || (this.Conditions.Length == 0))
             {
                 errorProcesser
                     .ProcessError("Validation failed for orCondition - at least one child condition must be supplied");
+            }
+            else
+            {
+                foreach (var condition in this.Conditions)
+                {
+                    var child = condition as IConfigurationValidation;
+                    if (child != null)
+                    {
+                        child.Validate(
+                            configuration,
+                            parent.Wrap(this),
+                            errorProcesser);
+                    }
+                }
             }
         }
         #endregion
