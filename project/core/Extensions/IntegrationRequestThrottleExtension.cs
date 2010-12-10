@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Remote.Events;
-using System.Globalization;
-
-namespace ThoughtWorks.CruiseControl.Core.Extensions
+﻿namespace ThoughtWorks.CruiseControl.Core.Extensions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Xml;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.Remote.Events;
+
     /// <summary>
     /// A server extension to throttle the number of concurrent integrations.
     /// </summary>
@@ -15,9 +15,28 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
         : ICruiseServerExtension
     {
         #region Private fields
-        private int numberOfRequestsAllowed = 5;
         private List<string> requests = new List<string>();
         private object updateLock = new object();
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntegrationRequestThrottleExtension"/> class.
+        /// </summary>
+        public IntegrationRequestThrottleExtension()
+        {
+            this.NumberOfRequestsAllowed = 5;
+        }
+        #endregion
+
+        #region Public properties
+        #region NumberOfRequestsAllowed
+        /// <summary>
+        /// Gets or sets the number of requests allowed.
+        /// </summary>
+        /// <value>The number of requests allowed.</value>
+        public int NumberOfRequestsAllowed { get; set; }
+        #endregion
         #endregion
 
         #region Public methods
@@ -29,13 +48,18 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
         /// <param name="server">The server that this extension is for.</param>
         public void Initialise(ICruiseServer server, ExtensionConfiguration extensionConfig)
         {
-            foreach (XmlElement itemEl in extensionConfig.Items)
+            foreach (var itemEl in extensionConfig.Items ?? new XmlElement[0])
             {
-                if (itemEl.Name == "limit") numberOfRequestsAllowed = Convert.ToInt32(itemEl.InnerText, CultureInfo.CurrentCulture);
+                if (itemEl.Name == "limit")
+                {
+                    this.NumberOfRequestsAllowed = Convert.ToInt32(
+                        itemEl.InnerText, 
+                        CultureInfo.CurrentCulture);
+                }
             }
 
-            server.IntegrationStarted += new EventHandler<IntegrationStartedEventArgs>(server_IntegrationStarted);
-            server.IntegrationCompleted += new EventHandler<IntegrationCompletedEventArgs>(server_IntegrationCompleted);
+            server.IntegrationStarted += server_IntegrationStarted;
+            server.IntegrationCompleted += server_IntegrationCompleted;
         }
         #endregion
 
@@ -69,40 +93,63 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
 
         #region Private methods
         #region server_IntegrationCompleted()
+        /// <summary>
+        /// Handles the IntegrationCompleted event of the server control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="ThoughtWorks.CruiseControl.Remote.Events.IntegrationCompletedEventArgs"/> instance containing the event data.</param>
         private void server_IntegrationCompleted(object sender, IntegrationCompletedEventArgs e)
         {
             lock (updateLock)
             {
-                if (requests.Contains(e.ProjectName)) requests.Remove(e.ProjectName);
+                if (requests.Contains(e.ProjectName))
+                {
+                    requests.Remove(e.ProjectName);
+                }
             }
         }
         #endregion
 
         #region server_IntegrationStarted()
+        /// <summary>
+        /// Handles the IntegrationStarted event of the server control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="ThoughtWorks.CruiseControl.Remote.Events.IntegrationStartedEventArgs"/> instance containing the event data.</param>
         private void server_IntegrationStarted(object sender, IntegrationStartedEventArgs e)
         {
-            Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Checking if '{0}' can integrate", e.ProjectName));
+            Log.Debug(string.Format(
+                CultureInfo.CurrentCulture,
+                "Checking if '{0}' can integrate", 
+                e.ProjectName));
             int numberOfRequests = 0;
             string[] currentRequests = new string[0];
             lock (updateLock)
             {
-                if (!requests.Contains(e.ProjectName)) requests.Add(e.ProjectName);
+                if (!requests.Contains(e.ProjectName))
+                {
+                    requests.Add(e.ProjectName);
+                }
+
                 numberOfRequests = requests.Count;
                 currentRequests = requests.ToArray();
             }
-            if (numberOfRequests <= numberOfRequestsAllowed)
+
+            if (numberOfRequests <= this.NumberOfRequestsAllowed)
             {
-                Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"'{0}' can integrate", e.ProjectName));
+                Log.Debug(string.Format(CultureInfo.CurrentCulture,"'{0}' can integrate", e.ProjectName));
                 e.Result = IntegrationStartedEventArgs.EventResult.Continue;
             }
             else
             {
-                Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"'{0}' is delayed - number of requests ({1}) has been exceeded ({2})", 
-                    e.ProjectName, 
-                    numberOfRequestsAllowed, 
+                Log.Debug(string.Format(
+                    CultureInfo.CurrentCulture,
+                    "'{0}' is delayed - number of requests ({1}) has been exceeded ({2})", 
+                    e.ProjectName,
+                    this.NumberOfRequestsAllowed, 
                     numberOfRequests));
                 bool isAllowed = false;
-                for (int loop = 0; loop < numberOfRequestsAllowed; loop++)
+                for (int loop = 0; loop < this.NumberOfRequestsAllowed; loop++)
                 {
                     if (currentRequests[loop] == e.ProjectName)
                     {
