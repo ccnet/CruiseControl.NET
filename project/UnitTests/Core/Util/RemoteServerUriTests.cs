@@ -1,11 +1,8 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using NUnit.Framework;
-    using ThoughtWorks.CruiseControl.Core.util;
+    using ThoughtWorks.CruiseControl.Core.Util;
 
     [TestFixture]
     public class RemoteServerUriTests

@@ -5,7 +5,6 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
     using System.Linq;
     using System.Net.Sockets;
     using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Core.util;
     using ThoughtWorks.CruiseControl.Core.Util;
     using ThoughtWorks.CruiseControl.Remote;
 

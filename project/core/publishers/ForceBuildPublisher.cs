@@ -4,7 +4,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     using System.Globalization;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Tasks;
-    using ThoughtWorks.CruiseControl.Core.util;
     using ThoughtWorks.CruiseControl.Core.Util;
     using ThoughtWorks.CruiseControl.Remote;
 

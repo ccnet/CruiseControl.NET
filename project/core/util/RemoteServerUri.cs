@@ -1,4 +1,4 @@
-﻿namespace ThoughtWorks.CruiseControl.Core.util
+﻿namespace ThoughtWorks.CruiseControl.Core.Util
 {
     using System;
 
