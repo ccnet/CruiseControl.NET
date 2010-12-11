@@ -372,6 +372,8 @@
     <Compile Include="Core\Tasks\Conditions\LastBuildStatusTaskConditionTests.cs" />
     <Compile Include="Core\Tasks\Conditions\MockCondition.cs" />
     <Compile Include="Core\Tasks\Conditions\OrTaskConditionTests.cs" />
+    <Compile Include="Core\Tasks\CoverageFilterTests.cs" />
+    <Compile Include="Core\Tasks\CoverageThresholdTests.cs" />
     <Compile Include="Core\Tasks\CruiseServerControlTaskTests.cs" />
     <Compile Include="Core\Tasks\FakeTaskTest.cs" />
     <Compile Include="Core\Triggers\CronTriggerTest.cs" />
