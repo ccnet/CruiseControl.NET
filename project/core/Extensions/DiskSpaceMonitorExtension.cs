@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Events;
+using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.Extensions
 {
@@ -51,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
                 };
             }
 
-            foreach (var element in extensionConfig.Items)
+            foreach (var element in extensionConfig.Items ?? new XmlElement[0])
             {
                 if (element.Name == "drive")
                 {

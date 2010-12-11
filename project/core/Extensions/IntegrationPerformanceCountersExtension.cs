@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Globalization;
 
 namespace ThoughtWorks.CruiseControl.Core.Extensions
 {
@@ -11,6 +12,24 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
     public class IntegrationPerformanceCountersExtension
         : ICruiseServerExtension
     {
+        #region Constants
+        public const string CategoryName = "CruiseControl.NET Integrations";
+        public const string NumberCompletedCounter = "Number of Completed Integrations";
+        public const string NumberFailedCounter = "Number of Failed Integrations";
+        public const string AverageTimeCounter = "Average Integration Time";
+        public const string NumberTotalCounter = "Total Number of Integrations";
+        #endregion
+
+        #region Public properties
+        #region PerformanceCounters
+        /// <summary>
+        /// Gets or sets the performance counters.
+        /// </summary>
+        /// <value>The performance counters.</value>
+        public IPerformanceCounters PerformanceCounters { get; set; }
+        #endregion
+        #endregion
+
         #region Public methods
         #region Initialise()
         /// <summary>
@@ -20,52 +39,23 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
         /// <param name="server">The server that this extension is for.</param>
         public void Initialise(ICruiseServer server, ExtensionConfiguration extensionConfig)
         {
-            if (!PerformanceCounterCategory.Exists("CruiseControl.NET"))
-            {
-                Log.Info("Initialising new performance counters for integration requests");
-                var collection = new CounterCreationDataCollection();
-
-                // Number of integrations completed counter
-                var numberOfCompletedIntegrations = new CounterCreationData();
-                numberOfCompletedIntegrations.CounterType = PerformanceCounterType.NumberOfItems32;
-                numberOfCompletedIntegrations.CounterName = "Number of Completed Integrations";
-                collection.Add(numberOfCompletedIntegrations);
-
-                // Number of integrations failed counter
-                var numberOfFailedIntegrations = new CounterCreationData();
-                numberOfFailedIntegrations.CounterType = PerformanceCounterType.NumberOfItems32;
-                numberOfFailedIntegrations.CounterName = "Number of Failed Integrations";
-                collection.Add(numberOfFailedIntegrations);
-
-                // Integration time counter
-                var integrationElapsedTime = new CounterCreationData();
-                integrationElapsedTime.CounterType = PerformanceCounterType.AverageTimer32;
-                integrationElapsedTime.CounterName = "Integration Time";
-                collection.Add(integrationElapsedTime);
-
-                // Integration count counter
-                var averageIntegrations = new CounterCreationData();
-                averageIntegrations.CounterType = PerformanceCounterType.AverageBase;
-                averageIntegrations.CounterName = "Average number of integrations";
-                collection.Add(averageIntegrations);
-
-                // Create the category
-                PerformanceCounterCategory.Create("CruiseControl.NET",
-                    "Performance counters for CruiseControl.NET",
-                    collection);
-            }
+            var counters = this.PerformanceCounters ?? new DefaultPerformanceCounters();
+            counters.EnsureCategoryExists(
+                CategoryName,
+                "Performance counters for CruiseControl.NET",
+                new CounterCreationData(NumberCompletedCounter, string.Empty, PerformanceCounterType.NumberOfItems32),
+                new CounterCreationData(NumberFailedCounter, string.Empty, PerformanceCounterType.NumberOfItems32),
+                new CounterCreationData(AverageTimeCounter, string.Empty, PerformanceCounterType.AverageTimer32),
+                new CounterCreationData(NumberTotalCounter, string.Empty, PerformanceCounterType.AverageBase));
 
             // Retrieve the counters
             Log.Debug("Initialising performance monitoring - integration requests");
-            var numberOfCompletedIntegrationsCounter = new PerformanceCounter("CruiseControl.NET", "Number of Completed Integrations", false);
-            var numberOfFailedIntegrationsCounter = new PerformanceCounter("CruiseControl.NET", "Number of Failed Integrations", false);
-            var integrationElapsedTimeCounter = new PerformanceCounter("CruiseControl.NET", "Integration Time", false);
-            var averageIntegrationsCounter = new PerformanceCounter("CruiseControl.NET", "Average number of integrations", false);
             var stopwatches = new Dictionary<string, Stopwatch>();
 
             server.IntegrationStarted += (o, e) =>
             {
-                Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Starting stopwatch for '{0}'", e.ProjectName));
+                Log.Debug(
+                    string.Format(CultureInfo.CurrentCulture,"Starting stopwatch for '{0}'", e.ProjectName));
 
                 // Start a stopwatch for the project
                 if (stopwatches.ContainsKey(e.ProjectName))
@@ -79,9 +69,11 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
                     stopwatch.Start();
                 }
             };
+
             server.IntegrationCompleted += (o, e) =>
             {
-                Log.Debug(string.Format(System.Globalization.CultureInfo.CurrentCulture,"Performance logging for '{0}'", e.ProjectName));
+                Log.Debug(
+                    string.Format(CultureInfo.CurrentCulture,"Performance logging for '{0}'", e.ProjectName));
 
                 // Stop the stopwatch and record the elapsed time
                 if (stopwatches.ContainsKey(e.ProjectName))
@@ -89,18 +81,18 @@ namespace ThoughtWorks.CruiseControl.Core.Extensions
                     var stopwatch = stopwatches[e.ProjectName];
                     stopwatch.Stop();
                     stopwatches.Remove(e.ProjectName);
-                    averageIntegrationsCounter.Increment();
-                    integrationElapsedTimeCounter.IncrementBy(stopwatch.ElapsedTicks);
+                    counters.IncrementCounter(CategoryName, NumberTotalCounter);
+                    counters.IncrementCounter(CategoryName, AverageTimeCounter, stopwatch.ElapsedMilliseconds);
                 }
 
                 // Record the result
                 if (e.Status == IntegrationStatus.Success)
                 {
-                    numberOfCompletedIntegrationsCounter.Increment();
+                    counters.IncrementCounter(CategoryName, NumberCompletedCounter);
                 }
                 else
                 {
-                    numberOfFailedIntegrationsCounter.Increment();
+                    counters.IncrementCounter(CategoryName, NumberFailedCounter);
                 }
             };
         }

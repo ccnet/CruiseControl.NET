@@ -899,9 +899,11 @@
     <Compile Include="Triggers\NCrontab\ICrontabField.cs" />
     <Compile Include="Triggers\RollUpTrigger.cs" />
     <Compile Include="util\DefaultCryptoFunctions.cs" />
+    <Compile Include="util\DefaultPerformanceCounters.cs" />
     <Compile Include="util\DefaultWebFunctions.cs" />
     <Compile Include="util\ICompressionService.cs" />
     <Compile Include="util\ICryptoFunctions.cs" />
+    <Compile Include="util\IPerformanceCounters.cs" />
     <Compile Include="util\IPrivateData.cs" />
     <Compile Include="util\IWebFunctions.cs" />
     <Compile Include="util\PrivateArguments.cs" />

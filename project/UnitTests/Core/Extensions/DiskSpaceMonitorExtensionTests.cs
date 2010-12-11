@@ -1,23 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Extensions;
-using ThoughtWorks.CruiseControl.Remote;
-using System.Xml;
-using Rhino.Mocks;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote.Events;
-
-namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
+﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
 {
+    using System;
+    using System.Xml;
+    using NUnit.Framework;
+    using Rhino.Mocks;
+    using ThoughtWorks.CruiseControl.Core.Extensions;
+    using ThoughtWorks.CruiseControl.Core.Util;
+    using ThoughtWorks.CruiseControl.Remote;
+    using ThoughtWorks.CruiseControl.Remote.Events;
+
     /// <summary>
     /// Test the disk space monitor.
     /// </summary>
     [TestFixture]
     public class DiskSpaceMonitorExtensionTests
     {
-        private MockRepository mocks = new MockRepository();
+        private MockRepository mocks;
+
+        [SetUp]
+        public void Setup()
+        {
+            this.mocks = new MockRepository();
+        }
 
         [Test]
         public void InitialiseLoadsTheSpaceCorrectlyForGb()
@@ -198,6 +202,34 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
             var args = new IntegrationStartedEventArgs(null, "Project 1");
             eventRaiser.Raise(null, args);
             Assert.AreEqual(IntegrationStartedEventArgs.EventResult.Cancel, args.Result);
+        }
+
+        [Test]
+        public void StartAndStopDoesNothing()
+        {
+            var extension = new DiskSpaceMonitorExtension();
+            var serverMock = this.mocks.StrictMock<ICruiseServer>();
+            var config = new ExtensionConfiguration();
+
+            this.mocks.ReplayAll();
+            extension.Start();
+            extension.Stop();
+
+            this.mocks.VerifyAll();
+        }
+
+        [Test]
+        public void StartAndAbortDoesNothing()
+        {
+            var extension = new DiskSpaceMonitorExtension();
+            var serverMock = this.mocks.StrictMock<ICruiseServer>();
+            var config = new ExtensionConfiguration();
+
+            this.mocks.ReplayAll();
+            extension.Start();
+            extension.Abort();
+
+            this.mocks.VerifyAll();
         }
 
         private XmlElement CreateSizeElement(string unit, int size, string drive)

@@ -350,6 +350,7 @@
     <Compile Include="Core\Config\ServerConfigurationHandlerTest.cs" />
     <Compile Include="Core\CruiseServerClientTests.cs" />
     <Compile Include="Core\CruiseServerCompressionTests.cs" />
+    <Compile Include="Core\Extensions\IntegrationPerformanceCountersExtensionTests.cs" />
     <Compile Include="Core\Extensions\DiskSpaceMonitorExtensionTests.cs" />
     <Compile Include="Core\Extensions\IntegrationRequestThrottleExtensionTests.cs" />
     <Compile Include="Core\Publishers\ConditionalPublisherTests.cs" />

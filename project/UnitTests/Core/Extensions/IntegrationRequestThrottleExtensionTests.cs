@@ -1,14 +1,10 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Extensions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using NUnit.Framework;
-    using ThoughtWorks.CruiseControl.Core.Extensions;
-using Rhino.Mocks;
-    using ThoughtWorks.CruiseControl.Remote;
     using System.Xml;
+    using NUnit.Framework;
+    using Rhino.Mocks;
+    using ThoughtWorks.CruiseControl.Core.Extensions;
+    using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Remote.Events;
 
     [TestFixture]
