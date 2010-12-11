@@ -362,6 +362,7 @@
     <Compile Include="Core\SourceControl\VstsTest.cs" />
     <Compile Include="Core\Storage\XmlFolderDataStoreTests.cs" />
     <Compile Include="Core\Tasks\AntsPerformanceProfilerTaskTests.cs" />
+    <Compile Include="Core\Tasks\CommentTaskTests.cs" />
     <Compile Include="Core\Tasks\Conditions\AndTaskConditionTests.cs" />
     <Compile Include="Core\Tasks\Conditions\BuildConditionTaskConditionTests.cs" />
     <Compile Include="Core\Tasks\Conditions\FileExistsTaskConditionTests.cs" />
