@@ -66,13 +66,9 @@
         /// <returns>The <see cref="ILogger"/> to use.</returns>
         protected ILogger RetrieveLogger()
         {
-            if (this.Logger == null)
-            {
-                this.Logger = new DefaultLogger();
-            }
-
-            return this.Logger;
+            return this.Logger ?? (this.Logger = new DefaultLogger());
         }
+
         #endregion
 
         #region LogDescriptionOrMessage()

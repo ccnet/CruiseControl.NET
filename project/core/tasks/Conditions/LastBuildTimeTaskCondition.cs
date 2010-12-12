@@ -1,9 +1,8 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
 {
-    using Exortech.NetReflector;
-    using ThoughtWorks.CruiseControl.Remote;
-    using ThoughtWorks.CruiseControl.Core.Util;
     using System;
+    using Exortech.NetReflector;
+    using ThoughtWorks.CruiseControl.Core.Util;
 
     /// <title>Last Build Time Condition</title>
     /// <version>1.6</version>
@@ -63,18 +62,16 @@
         {
             this.LogDescriptionOrMessage(
                 "Checking last build time - checking build was at least " +
-                (this.Time.Millis / 1000) + "s ago");
+                (this.Time.Millis/1000) + "s ago");
             if (result.IsInitial())
             {
                 // There is no previous build - assume that the condition passes
                 return true;
             }
-            else
-            {
-                var checkTime = DateTime.Now.AddMilliseconds(-this.Time.Millis);
-                var isTrue = checkTime > result.LastIntegration.StartTime;
-                return isTrue;
-            }
+
+            var checkTime = DateTime.Now.AddMilliseconds(-this.Time.Millis);
+            var isTrue = checkTime > result.LastIntegration.StartTime;
+            return isTrue;
         }
         #endregion
         #endregion

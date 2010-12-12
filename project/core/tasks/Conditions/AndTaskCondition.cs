@@ -1,6 +1,7 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
 {
     using System.Globalization;
+    using System.Linq;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Config;
 
@@ -107,16 +108,12 @@
             }
             else
             {
-                foreach (var condition in this.Conditions)
+                foreach (var child in this.Conditions.OfType<IConfigurationValidation>())
                 {
-                    var child = condition as IConfigurationValidation;
-                    if (child != null)
-                    {
-                        child.Validate(
-                            configuration,
-                            parent.Wrap(this),
-                            errorProcesser);
-                    }
+                    child.Validate(
+                        configuration,
+                        parent.Wrap(this),
+                        errorProcesser);
                 }
             }
         }

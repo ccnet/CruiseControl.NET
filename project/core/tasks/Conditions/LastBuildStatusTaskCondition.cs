@@ -53,7 +53,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
         #endregion
 
         #region Protected methods
-
         #region Evaluate()
 
         /// <summary>
@@ -71,14 +70,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
                 // There is no previous build - assume that the condition fails
                 return false;
             }
-            else
-            {
-                return Status == result.LastBuildStatus;
-            }
+            return Status == result.LastBuildStatus;
         }
-
         #endregion
-
         #endregion
     }
 }

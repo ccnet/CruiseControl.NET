@@ -1,6 +1,5 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
 {
-    using System.Globalization;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Remote;
 
@@ -66,7 +65,7 @@
         /// </returns>
         protected override bool Evaluate(IIntegrationResult result)
         {
-            this.LogDescriptionOrMessage("Checking status - matching to " + this.Status.ToString());
+            this.LogDescriptionOrMessage("Checking status - matching to " + this.Status);
             return this.Status == result.Status;
         }
         #endregion

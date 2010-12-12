@@ -110,22 +110,17 @@
         {
             this.LogDescriptionOrMessage("Checking value comparison condition - " + this.Value1 + " with " + this.Value2);
 
-            var evaluation = false;
             switch (this.EvaluationType)
             {
                 case Evaluation.Equal:
-                    evaluation = string.Compare(this.Value1, this.Value2, this.IgnoreCase, CultureInfo.InvariantCulture) == 0;
-                    break;
+                    return string.Compare(this.Value1, this.Value2, this.IgnoreCase, CultureInfo.InvariantCulture) == 0;
 
                 case Evaluation.NotEqual:
-                    evaluation = string.Compare(this.Value1, this.Value2, this.IgnoreCase, CultureInfo.InvariantCulture) != 0;
-                    break;
+                    return string.Compare(this.Value1, this.Value2, this.IgnoreCase, CultureInfo.InvariantCulture) != 0;
 
                 default:
-                    throw new ArgumentOutOfRangeException("Unhandled evaluation type");
+                    throw new InvalidOperationException("Unhandled evaluation type");
             }
-
-            return evaluation;
         }
         #endregion
         #endregion

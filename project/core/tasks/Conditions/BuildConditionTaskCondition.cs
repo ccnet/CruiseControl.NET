@@ -1,6 +1,5 @@
 ﻿namespace ThoughtWorks.CruiseControl.Core.Tasks.Conditions
 {
-    using System.Globalization;
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Remote;
 
@@ -66,7 +65,7 @@
         /// </returns>
         protected override bool Evaluate(IIntegrationResult result)
         {
-            this.LogDescriptionOrMessage("Checking build condition - matching to " + this.BuildCondition.ToString());
+            this.LogDescriptionOrMessage("Checking build condition - matching to " + this.BuildCondition);
             return this.BuildCondition == result.BuildCondition;
         }
         #endregion

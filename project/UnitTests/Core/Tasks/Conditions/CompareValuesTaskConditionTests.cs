@@ -80,7 +80,7 @@
             var result = this.mocks.StrictMock<IIntegrationResult>();
 
             this.mocks.ReplayAll();
-            Assert.Throws<ArgumentOutOfRangeException>(() => condition.Eval(result));
+            Assert.Throws<InvalidOperationException>(() => condition.Eval(result));
 
             this.mocks.VerifyAll();
         }

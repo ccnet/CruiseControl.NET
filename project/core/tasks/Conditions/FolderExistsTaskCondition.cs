@@ -2,7 +2,6 @@
 {
     using Exortech.NetReflector;
     using ThoughtWorks.CruiseControl.Core.Util;
-    using ThoughtWorks.CruiseControl.Remote;
 
     /// <title>Folder Exists Condition</title>
     /// <version>1.6</version>
