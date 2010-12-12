@@ -1,6 +1,5 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks.Conditions
 {
-    using System;
     using NUnit.Framework;
     using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core;
@@ -20,7 +19,6 @@
         [Test]
         public void EvaluateReturnsTrueIfConditionIsMatched()
         {
-            Func<IIntegrationResult, bool> evalFunc = ir => true;
             var condition = new LastBuildStatusTaskCondition
                 {
                     Status = IntegrationStatus.Success
@@ -39,7 +37,6 @@
         [Test]
         public void EvaluateReturnsFalseIfConditionIsNotMatched()
         {
-            Func<IIntegrationResult, bool> evalFunc = ir => true;
             var condition = new LastBuildStatusTaskCondition
             {
                 Status = IntegrationStatus.Success,
@@ -59,7 +56,6 @@
         [Test]
         public void EvaluateReturnsFalseIfNoPreviousBuilds()
         {
-            Func<IIntegrationResult, bool> evalFunc = ir => true;
             var condition = new LastBuildStatusTaskCondition
                 {
                     Status = IntegrationStatus.Success

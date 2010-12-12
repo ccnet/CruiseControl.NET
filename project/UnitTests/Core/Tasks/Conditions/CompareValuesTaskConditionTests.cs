@@ -5,10 +5,8 @@
     using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.Core.Tasks.Conditions;
-    using ThoughtWorks.CruiseControl.Core.Util;
-    using ThoughtWorks.CruiseControl.Remote;
 
-    public class LastBuildTimeTaskConditionTests
+    public class CompareValuesTaskConditionTests
     {
         private MockRepository mocks;
 
@@ -19,16 +17,14 @@
         }
 
         [Test]
-        public void EvaluateReturnsTrueIfBeyondTime()
+        public void EvaluateReturnsTrueIfValuesMatch()
         {
-            var condition = new LastBuildTimeTaskCondition
+            var condition = new CompareValuesTaskCondition
                 {
-                    Time = new Timeout(1000)
+                    Value1 = "test",
+                    Value2 = "test"
                 };
-            var status = new IntegrationSummary(IntegrationStatus.Success, "1", "1", DateTime.Now.AddHours(-1));
             var result = this.mocks.StrictMock<IIntegrationResult>();
-            Expect.Call(result.IsInitial()).Return(false);
-            Expect.Call(result.LastIntegration).Return(status);
 
             this.mocks.ReplayAll();
             var actual = condition.Eval(result);
@@ -38,17 +34,14 @@
         }
 
         [Test]
-        public void EvaluateReturnsFalseIfWithinTime()
+        public void EvaluateReturnsFalseIfValuesDontMatch()
         {
-            var condition = new LastBuildTimeTaskCondition
+            var condition = new CompareValuesTaskCondition
                 {
-                    Time = new Timeout(1000),
-                    Description = "Not equal test"
+                    Value1 = "test1",
+                    Value2 = "test2"
                 };
-            var status = new IntegrationSummary(IntegrationStatus.Success, "1", "1", DateTime.Now);
             var result = this.mocks.StrictMock<IIntegrationResult>();
-            Expect.Call(result.IsInitial()).Return(false);
-            Expect.Call(result.LastIntegration).Return(status);
 
             this.mocks.ReplayAll();
             var actual = condition.Eval(result);
@@ -58,20 +51,38 @@
         }
 
         [Test]
-        public void EvaluateReturnsTrueIfNoPreviousBuilds()
+        public void EvaluateReturnsTrueIfValuesDontMatchAndTypeIsNotEqual()
         {
-            var condition = new LastBuildTimeTaskCondition
+            var condition = new CompareValuesTaskCondition
                 {
-                    Time = new Timeout(1000)
+                    Value1 = "test1",
+                    Value2 = "test2",
+                    EvaluationType = CompareValuesTaskCondition.Evaluation.NotEqual
                 };
             var result = this.mocks.StrictMock<IIntegrationResult>();
-            Expect.Call(result.IsInitial()).Return(true);
 
             this.mocks.ReplayAll();
             var actual = condition.Eval(result);
 
             this.mocks.VerifyAll();
             Assert.IsTrue(actual);
+        }
+
+        [Test]
+        public void EvaluateFailsIfTypeIsUnknown()
+        {
+            var condition = new CompareValuesTaskCondition
+            {
+                Value1 = "test1",
+                Value2 = "test2",
+                EvaluationType = (CompareValuesTaskCondition.Evaluation)99
+            };
+            var result = this.mocks.StrictMock<IIntegrationResult>();
+
+            this.mocks.ReplayAll();
+            Assert.Throws<ArgumentOutOfRangeException>(() => condition.Eval(result));
+
+            this.mocks.VerifyAll();
         }
     }
 }

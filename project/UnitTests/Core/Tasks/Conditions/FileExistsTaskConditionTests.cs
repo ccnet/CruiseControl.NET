@@ -1,11 +1,9 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks.Conditions
 {
-    using System;
     using NUnit.Framework;
     using Rhino.Mocks;
     using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.Core.Tasks.Conditions;
-    using ThoughtWorks.CruiseControl.Remote;
     using ThoughtWorks.CruiseControl.Core.Util;
 
     public class FileExistsTaskConditionTests
@@ -21,7 +19,6 @@
         [Test]
         public void EvaluateReturnsTrueIfConditionIsMatched()
         {
-            Func<IIntegrationResult, bool> evalFunc = ir => true;
             var fileSystemMock = this.mocks.StrictMock<IFileSystem>();
             var condition = new FileExistsTaskCondition
                 {
@@ -42,7 +39,6 @@
         [Test]
         public void EvaluateReturnsFalseIfConditionIsNotMatched()
         {
-            Func<IIntegrationResult, bool> evalFunc = ir => true;
             var fileSystemMock = this.mocks.StrictMock<IFileSystem>();
             var condition = new FileExistsTaskCondition
                 {

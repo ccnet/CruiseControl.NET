@@ -1,12 +1,12 @@
 ﻿namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks.Conditions
 {
+    using System;
     using NUnit.Framework;
     using Rhino.Mocks;
+    using ThoughtWorks.CruiseControl.Core;
     using ThoughtWorks.CruiseControl.Core.Config;
     using ThoughtWorks.CruiseControl.Core.Tasks;
     using ThoughtWorks.CruiseControl.Core.Tasks.Conditions;
-    using ThoughtWorks.CruiseControl.Core;
-    using System;
 
     public class OrTaskConditionTests
     {
