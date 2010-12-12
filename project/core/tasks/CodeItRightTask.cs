@@ -51,12 +51,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         private const string DefaultExecutable = "SubMain.CodeItRight.Cmd";
         #endregion
 
+        #region Private fields
+        private readonly IFileSystem fileSystem;
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CodeItRightTask"/> class.
         /// </summary>
         public CodeItRightTask()
-            : this(new ProcessExecutor())
+            : this(new ProcessExecutor(), new SystemIoFileSystem())
         {
         }
 
@@ -64,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// Initializes a new instance of the <see cref="CodeItRightTask"/> class.
         /// </summary>
         /// <param name="executor">The executor.</param>
-        public CodeItRightTask(ProcessExecutor executor)
+        public CodeItRightTask(ProcessExecutor executor, IFileSystem fileSystem)
         {
             this.executor = executor;
             this.Executable = CodeItRightTask.DefaultExecutable;
@@ -72,6 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             this.ReportingThreshold = Severity.None;
             this.FailureThreshold = Severity.None;
             this.Priority = ProcessPriorityClass.Normal;
+            this.fileSystem = fileSystem;
         }
         #endregion
 
@@ -215,7 +220,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             {
                 var xmlFile = result.BaseFromWorkingDirectory("codeitright.xml");
                 result.AddTaskResult(
-                    new FileTaskResult(xmlFile, true));
+                    fileSystem.GenerateTaskResultFromFile(xmlFile, true));
             }
 
             // Check the failure threshold
@@ -224,9 +229,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             {
                 var xmlFile = result.BaseFromWorkingDirectory("codeitright.xml");
                 var document = new XmlDocument();
-                if (File.Exists(xmlFile))
+                if (this.fileSystem.FileExists(xmlFile))
                 {
-                    document.Load(xmlFile);
+                    using (var stream = this.fileSystem.OpenInputStream(xmlFile))
+                    {
+                        document.Load(stream);
+                    }
+
                     for (var level = (int)Severity.CriticalError; level >= (int)this.FailureThreshold; level--)
                     {
                         failed = CodeItRightTask.CheckReportForSeverity(document, (Severity)level);

@@ -113,6 +113,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         ITaskResult GenerateTaskResultFromFile(string fileName);
 
         /// <summary>
+        /// Generates a task result from a file.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="deleteAfterMerge">If set to <c>true</c> the file will be deleted after a merge.</param>
+        /// <returns></returns>
+        ITaskResult GenerateTaskResultFromFile(string fileName, bool deleteAfterMerge);
+
+        /// <summary>
         /// Opens an output stream for saving data.
         /// </summary>
         /// <param name="fileName"></param>
