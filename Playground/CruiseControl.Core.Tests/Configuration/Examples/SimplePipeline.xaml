@@ -1,0 +1,6 @@
+﻿<Server xmlns="urn:cruisecontrol:server" Version="2.0">
+    <Pipeline Name="Pipeline1">
+        <Project Name="Project1" />
+        <Project Name="Project2" />
+    </Pipeline>
+</Server>

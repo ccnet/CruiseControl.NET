@@ -1,0 +1,6 @@
+﻿<Server xmlns="urn:cruisecontrol:server" Version="2.0">
+    <Queue Name="Queue1">
+        <Project Name="Project1" />
+        <Project Name="Project2" />
+    </Queue>
+</Server>
