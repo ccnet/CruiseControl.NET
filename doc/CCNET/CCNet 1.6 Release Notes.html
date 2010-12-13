@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 1.6 Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 1.6 Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 13, 2010 by <font color="#0050B2">williams</font>.
+				    </div>
+
+				    <h2><a name="CCNet1.6ReleaseNotes-Highlightsofthe1.6release"></a>Highlights of the 1.6 release</h2>
+<p>This is mainly a bug fix release on the 1.5 version, that one had enough new features <img class="emoticon" src="images/icons/emoticons/smile.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></p>
+
+
+<h3><a name="CCNet1.6ReleaseNotes-Newitems"></a>New items</h3>
+
+<p><a href="Conditional Task.html" title="Conditional Task">Conditional Task</a><br/>
+<a href="FAKE Task.html" title="FAKE Task">FAKE - F# Make Task</a><br/>
+<a href="Queue Configuration.html" title="Queue Configuration">Queue section can have its own project definitions</a><br/>
+<a href="Cron Trigger.html" title="Cron Trigger">Cron trigger</a></p>
+
+<h3><a name="CCNet1.6ReleaseNotes-BugFixes"></a>Bug Fixes</h3>
+
+<p>A lot <img class="emoticon" src="images/icons/emoticons/smile.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></p>
+
+<p>vsts related<br/>
+dashboard related<br/>
+cctray related<br/>
+....</p>
+
+<h2><a name="CCNet1.6ReleaseNotes-ReleaseNotesCruiseControl.NETVersion1.6"></a>Release Notes - CruiseControl .NET - Version 1.6</h2>
+
+
+<h4><a name="CCNet1.6ReleaseNotes-Bug"></a>Bug</h4>
+
+<ul>
+	<li>CCNET\-381 &#45; DefaultLabeller configuration changes not applied to failed build</li>
+	<li>CCNET\-761 &#45; XML Fix Build Option not Implimented and ForceBuild XML not wired to CCTray</li>
+	<li>CCNET\-882 &#45; VSS SourceControl GET command should use &#45;I-Y</li>
+	<li>CCNET\-984 &#45; Bad interactions with Subversion between lastChangeLabeller, tagOnSuccess and forced builds</li>
+	<li>CCNET\-1053 &#45; Exception when Vault workingDirectory doesn't exist during check for modifications</li>
+	<li>CCNET\-1074 &#45; Default labeller sometimes generates duplicate labels</li>
+	<li>CCNET\-1221 &#45; Configuration problem : entering empty labeller tag in ccnet.config results into crash iso reporting an error that is meaningfull</li>
+	<li>CCNET\-1255 &#45; StopAllProjects never ends</li>
+	<li>CCNET\-1406 &#45; CCNET-1309 for 1.4.3 doesn't seem to fix svn relative externals</li>
+	<li>CCNET\-1493 &#45; MSBuild Task &amp; Assembly Version &amp; ClickOnce Deployments</li>
+	<li>CCNET\-1494 &#45; Installer does not check for pre-requisites (e.g. .NET version installed)</li>
+	<li>CCNET\-1539 &#45; NDepend report does not show images</li>
+	<li>CCNET\-1563 &#45; Projects stay in Stopped state after a config update</li>
+	<li>CCNET\-1619 &#45; ParallelTaskTests fails randomly</li>
+	<li>CCNET\-1634 &#45; CCValidator - .NET runtime error on Win2003 x64</li>
+	<li>CCNET\-1675 &#45; program files folder locked down in windows 7 : move the log files to another folder : update config of log4net</li>
+	<li>CCNET\-1704 &#45; "View Statistics" breaks with error  "Missing/Invalid statistics reports" when statistics publisher saves malformed report.xml due to XML fragments in build error message</li>
+	<li>CCNET\-1710 &#45; The new Team Foundation Server (vsts) source control solution in 1.5.0 CTP does not supply the login credentials for all calls resulting in 'not authorized' errors</li>
+	<li>CCNET\-1741 &#45; VSTS doesn't pass credentials as specified in the sourcecontrol block</li>
+	<li>CCNET\-1768 &#45; The custom template feature does not work</li>
+	<li>CCNET\-1774 &#45; Receive an unauthorized access exception when connecting to TFS</li>
+	<li>CCNET\-1786 &#45; VSTS Source Control is broken</li>
+	<li>CCNET\-1787 &#45; scheduleTrigger often does not detect modifications</li>
+	<li>CCNET\-1803 &#45; Incorrect filename when outputDir specified for package publisher</li>
+	<li>CCNET\-1805 &#45; Vsts.GetSource Broken Due to Malformed Server Name</li>
+	<li>CCNET\-1807 &#45; dashboard admin does not show errors when it has no OS security rights to modify dashboard.config</li>
+	<li>CCNET\-1808 &#45; Dashboard admin package shows X themes installed, while there can be only 1 installed : the latest one</li>
+	<li>CCNET\-1864 &#45; null pointer exception while loading config file with includes</li>
+	<li>CCNET\-1868 &#45; Source control operation has timed out (v 1.5.0.6237)</li>
+	<li>CCNET\-1872 &#45; display status window from tray icon not displayed the right way.</li>
+	<li>CCNET\-1873 &#45; nunit details are not shown, also visible on ccnet live</li>
+	<li>CCNET\-1874 &#45; using a dynamic value for the password on the SVN source control block causes a cast exception</li>
+	<li>CCNET\-1876 &#45; CCValidator crash on Windows 7 x64</li>
+	<li>CCNET\-1882 &#45; Dashboard v1.5 homepage has a javascript error</li>
+	<li>CCNET\-1891 &#45; FxCop 1.36 does not report file names correctly</li>
+	<li>CCNET\-1895 &#45; Different information in the Web Dashboard, CCTray and the balloon notification about who is fixing the build.</li>
+	<li>CCNET\-1900 &#45; Wrong path for checkout from cvs repository</li>
+	<li>CCNET\-1901 &#45; build results XML get corrupted</li>
+	<li>CCNET\-1903 &#45; GetWorkSpaceProcessInfo in vsts.cs does not handle the Force member</li>
+	<li>CCNET\-1912 &#45; TFS Label does not specify scope</li>
+	<li>CCNET\-1915 &#45; CCTray Window not displayed when double click on tray icon after started, not until you've clicked it twice. (patch included)</li>
+	<li>CCNET\-1917 &#45;  Problems with schedule trigger - calculation of the next build time</li>
+	<li>CCNET\-1918 &#45; MSBuild task does not give console output error messages for report generators to use</li>
+	<li>CCNET\-1936 &#45; CCValidator - Unexpected Error with missing directories</li>
+	<li>CCNET\-1938 &#45; FTP Task always uploads all files</li>
+	<li>CCNET\-1939 &#45; Crash due to invalid XML which CCValidator passes</li>
+	<li>CCNET\-1944 &#45; PowerShell should display the description given in the configuration</li>
+	<li>CCNET\-1945 &#45; CruiseControl.NET 1.5 TFS Server not found error</li>
+	<li>CCNET\-1957 &#45; MsTestReport.xsl and MsTestSummary.xsl do not work with MSTest 10</li>
+	<li>CCNET\-1960 &#45; Directory does not exist: exception with vault clean build</li>
+	<li>CCNET\-1963 &#45; UnitTests.xsl and UnitTestDetails.xsl don't count suite-level errors</li>
+	<li>CCNET\-1974 &#45; Non-empty <img class="emoticon" src="images/icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> "buildlogs" folder becomes deleted by Artifacts Cleanup publisher when there was a problem writing a current xml log</li>
+	<li>CCNET\-1978 &#45; missing CSS file reference in the Obsess theme</li>
+	<li>CCNET\-1990 &#45; Who forced the build?</li>
+	<li>CCNET\-1991 &#45; Preprocessor and whitespace : breaking change in 1.5 and 1.6</li>
+	<li>CCNET\-1994 &#45; package builder does not set filedate within the zipfile to the last changed date.</li>
+	<li>CCNET\-1996 &#45; CCNET console doesn't see custom plugins in own folder</li>
+	<li>CCNET\-1997 &#45; ProjectTrigger does not find project on local server</li>
+	<li>CCNET\-2002 &#45; cctray null ref exception</li>
+	<li>CCNET\-2003 &#45; "preCondition" attribute in Web.config is not supported by IIS 5.1 on Windows XP</li>
+	<li>CCNET\-2004 &#45; "View Server Log" does not work anymore due to new log-file location</li>
+	<li>CCNET\-2006 &#45; VSTS labeling breaks if there is a space in the project path</li>
+</ul>
+
+
+<h4><a name="CCNet1.6ReleaseNotes-Improvement"></a>Improvement</h4>
+
+<ul>
+	<li>CCNET\-130 &#45; Ability to specify which user to run source control tasks and nant tasks as</li>
+	<li>CCNET\-144 &#45; Allow 'Server State Directory' to be configured</li>
+	<li>CCNET\-374 &#45; Make ccnet plugin name configurable</li>
+	<li>CCNET\-1211 &#45; If build is aborted, build shows as failed for no reason</li>
+	<li>CCNET\-1460 &#45; create a symbol server / source server publisher</li>
+	<li>CCNET\-1500 &#45; ability to specify integration properties as parameters to the exec task via ccnet.config</li>
+	<li>CCNET\-1502 &#45; Evaluate InstallJammer as cross platform installer</li>
+	<li>CCNET\-1508 &#45; CLONE &#45;Remove ColoredConsoleAppender from ccnet.exe.config in zip distribution</li>
+	<li>CCNET\-1534 &#45; set console appender to colored console appender in the setup.exe for ccnet.console</li>
+	<li>CCNET\-1542 &#45; pre processor improvements</li>
+	<li>CCNET\-1558 &#45; Configuratio validator should help user to report bugs</li>
+	<li>CCNET\-1564 &#45; Inconsistent timeout properties.</li>
+	<li>CCNET\-1577 &#45; task build up should display task description iso taskname</li>
+	<li>CCNET\-1628 &#45; Make integration properties available everywhere</li>
+	<li>CCNET\-1684 &#45; VSTS.cs does not use base functionality well and has extra wated code</li>
+	<li>CCNET\-1792 &#45; WebDashboard's RSS Feed is missing links to specific builds</li>
+	<li>CCNET\-1827 &#45; Show user name when a build is aborted</li>
+	<li>CCNET\-1858 &#45; new functionality in pre-processor and rework to using LINQ</li>
+	<li>CCNET\-1860 &#45; Queue/QueuePriority Columns in CCTray</li>
+	<li>CCNET\-1861 &#45; IOService do not support deleting paths longer then 260 chars</li>
+	<li>CCNET\-1875 &#45; set integration tests in unique namespace</li>
+	<li>CCNET\-1881 &#45; must be able to pass user and pasword to console runner when specifying a single project to build</li>
+	<li>CCNET\-1885 &#45; Make tasks Name-able</li>
+	<li>CCNET\-1887 &#45; VSTS plugin does not work when username/password/domain is specified in config and machine is not in domain</li>
+	<li>CCNET\-1902 &#45; Force build should not work when project is stopped</li>
+	<li>CCNET\-1905 &#45; include cccmd in the setup, just like cc console</li>
+	<li>CCNET\-1911 &#45; Svn: TagOnSuccess TagWorkingCopy - save version number generated by ccnetLabel when tagged</li>
+	<li>CCNET\-1916 &#45; better reporting of DevEnvTask, logfiles not displayed because logger  not apply for task. (patch included)</li>
+	<li>CCNET\-1922 &#45; Support git submodules in source control block</li>
+	<li>CCNET\-1929 &#45; CCCmd Allow to specify the parameters for a forced build</li>
+	<li>CCNET\-1933 &#45; CCCmd Allow to output XML when using the retrieve command</li>
+	<li>CCNET\-1949 &#45; Stylesheet Tweak for FxCop 10.0 (.Net 4 / VS 2010)</li>
+	<li>CCNET\-1964 &#45; TFS project build using CCNet and MSBuild</li>
+	<li>CCNET\-1980 &#45; Add Modification Change Number Support to MKS Source Implementation</li>
+	<li>CCNET\-1985 &#45; Sometimes nunit-agent.exe processes remain running after using &lt;nunit&gt; task</li>
+	<li>CCNET\-1993 &#45; CruiseControlexception should incluce CCNet version</li>
+	<li>CCNET\-2000 &#45; gewtting error ThoughtWorks.CruiseControl.Core.Tasks.BuilderException: Command Line Build timed out (after 600 seconds)  while executing .xml through bat file</li>
+	<li>CCNET\-2005 &#45; move Q related columns to the end of the list, and foresee a way to hide them</li>
+	<li>CCNET\-2009 &#45; Add support for project hierarchies</li>
+	<li>CCNET\-2010 &#45; Modifications by changelist</li>
+	<li>CCNET\-2013 &#45; show test list name on mstest page</li>
+	<li>CCNET\-2014 &#45; show timings in mstest page</li>
+</ul>
+
+
+<h4><a name="CCNet1.6ReleaseNotes-NewFeature"></a>New Feature</h4>
+
+<ul>
+	<li>CCNET\-1023 &#45; SourceGear Vault extra arguments for getversion</li>
+	<li>CCNET\-1299 &#45; Each task should support the setting of envirnoment variables</li>
+	<li>CCNET\-1340 &#45; Per Project Configuration option to HIDE the FORCE/STOP build buttons.</li>
+	<li>CCNET\-1506 &#45; fixedtime trigger : Cron trigger</li>
+	<li>CCNET\-1921 &#45; Implement a task for FAKE - F# Make</li>
+	<li>CCNET\-1923 &#45; Create trigger based on URLTrigger to support Accurev's CCTrigger pattern</li>
+	<li>CCNET\-1968 &#45; Vsts has the problem with standard output encoding for Russian language (Comment block)</li>
+</ul>
+
+
+<h4><a name="CCNet1.6ReleaseNotes-Task"></a>Task</h4>
+
+<ul>
+	<li>CCNET\-236 &#45; History Parser Tests should handle user-selected culture settings</li>
+	<li>CCNET\-1830 &#45; Unable to connect to Team Foundation Server 2010</li>
+	<li>CCNET\-1975 &#45; Delete workspace or workfold mapping in TFS.</li>
+</ul>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Dec 13, 2010 21:22</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

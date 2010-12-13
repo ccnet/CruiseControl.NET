@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 06, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+					    This page last changed on Jul 12, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
 				    </div>
 
 				    <h1><a name="GitSourceControlBlock-GitSourceControlBlock"></a>Git Source Control Block</h1>
@@ -39,6 +39,7 @@
   <span class="code-tag">&lt;repository&gt;</span>git://github.com/rails/rails.git<span class="code-tag">&lt;/repository&gt;</span>
   <span class="code-tag">&lt;branch&gt;</span>master<span class="code-tag">&lt;/branch&gt;</span>
   <span class="code-tag">&lt;autoGetSource&gt;</span>true<span class="code-tag">&lt;/autoGetSource&gt;</span>
+  <span class="code-tag">&lt;fetchSubmodules&gt;</span>true<span class="code-tag">&lt;/fetchSubmodules&gt;</span>
   <span class="code-tag">&lt;executable&gt;</span>git<span class="code-tag">&lt;/executable&gt;</span>
   <span class="code-tag">&lt;tagOnSuccess&gt;</span>false<span class="code-tag">&lt;/tagOnSuccess&gt;</span>
   <span class="code-tag">&lt;commitBuildModifications&gt;</span>false<span class="code-tag">&lt;/commitBuildModifications&gt;</span>
@@ -137,6 +138,14 @@
 <td class='confluenceTd'> 1.5 </td>
 </tr>
 <tr>
+<td class='confluenceTd'> fetchSubmodules </td>
+<td class='confluenceTd'> Indicates that CruiseControl.NET should initialize and fetch git submodules.   </td>
+<td class='confluenceTd'> Boolean </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
 <td class='confluenceTd'> issueUrlBuilder </td>
 <td class='confluenceTd'> Converts the comment (or parts from it) into an url pointing to the issue for this build. See <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> for more details.   </td>
 <td class='confluenceTd'> <a href="IssueUrlBuilder.html" title="IssueUrlBuilder">IssueUrlBuilder</a> </td>
@@ -198,14 +207,14 @@
 
 <h4><a name="GitSourceControlBlock-Howdoesthiswork%3F"></a>How does this work?</h4>
 <p> <b>Local repository initialization</b><br/>
-The Git Source Control Block will check whenever the specified working directory exist or not. If it does not exist a "git clone" command is issued to create and setup the local repository. Also the configuration settings "user.name" and "user.email" for the local repository will be set with "git config" if both are provided.  <br/>
+The Git Source Control Block will check whenever the specified working directory exist or not. If it does not exist a "git clone" command is issued to create and setup the local repository. Also the configuration settings "user.name" and "user.email" for the local repository will be set with "git config" if both are provided. If 'fetchSubmodules' is set to 'true' git submodules will be initialized.  <br/>
 If the working directory exists but is not a git repository (e.g. the .git directory is missing) it will be deleted and the "git clone" and configuration instructions described above will be issued.  <br/>
 If the working directory is already the root of an existing git repository no initialization is done.  <br/>
  <b>Checking for modifications</b><br/>
 One the repository is initialized the "git fetch origin" command is issued to fetch the remote changes. In the next step the sha&#45;1 hash of the specified remote branch and the local checkout is compared. If they're identical Cruise Control.NET will expect that there are no changes.  <br/>
 If the 2 sha&#45;1 hashes are different a "git log &#45;&#45;name&#45;status &#45;c &#45;&#45;before=... &#45;&#45;after=..." command is issued to get a list of the new commits and their changes.  <br/>
  <b>Getting the source</b><br/>
-Once Cruise Control.NET has modifications detected and the 'autoGetSource' property is set to 'true' the "git checkout &#45;f origin/$NameOfTheBranch" command is issued. Also the "git clean &#45;f &#45;d &#45;x" command to get a clean working copy to start a new build.  <br/>
+Once Cruise Control.NET has modifications detected and the 'autoGetSource' property is set to 'true' the "git checkout &#45;f origin/$NameOfTheBranch" command is issued. Also the "git clean &#45;f &#45;d &#45;x" command to get a clean working copy to start a new build. If 'fetchSubmodules' is set to 'true' git submodules will be fetched and updated.  <br/>
  <b>Tagging a successful build</b><br/>
 After a successful build and when the 'tagOnSuccess' property is set to 'true' the "git &#45;a &#45;m 'tagCommitMessage' tag 'build label'" command is issued and a "git push origin tag 'name of the tag'" to push the tag to the remote repository.  <br/>
 If 'commitBuildModifications' is set to 'true' then all modified files will be committed before tagging with a "git commit &#45;&#45;all &#45;&#45;allow&#45;empty &#45;m 'tagCommitMessage'". If you also set 'commitUntrackedFiles' to 'true' all untracked files that are not ignored by .gitignores will be added to the git index before committing and tagging with a "git add &#45;&#45;all" command.  </p>
@@ -225,8 +234,8 @@ If 'commitBuildModifications' is set to 'true' then all modified files will be c
 
 
 <div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
-<p>Documentation generated on Tuesday, 6 Apr 2010 at 9:32:02 PM<br/>
-Using assembly version 1.6.7109.1</p></td></tr></table></div>
+<p>Documentation generated on Monday, 12 Jul 2010 at 4:23:19 PM<br/>
+Using assembly version 1.6.7444.2</p></td></tr></table></div>
 
 				    
                     			    </td>
@@ -237,7 +246,7 @@ Using assembly version 1.6.7109.1</p></td></tr></table></div>
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on May 02, 2010 20:17</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Dec 13, 2010 21:22</font></td>
 		    </tr>
 	    </table>
     </body>

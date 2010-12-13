@@ -16,7 +16,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Oct 14, 2009 by <font color="#0050B2">williams</font>.
+					    This page last changed on Nov 01, 2010 by <font color="#0050B2">williams</font>.
 				    </div>
 
 				    <p>The CCNet configuration preprocessor acts on the ccnet.config file.  Preprocessor directives are specified in the XML namespace "urn:ccnet.config.builder" to distinguish them from ordinary configuration markup.  Any markup not in the preprocessor's namespace are passed through unchanged.</p>
@@ -447,6 +447,149 @@ Changing a certain folder is also more easy / safe.</p>
 </ul>
 
 
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Version 1.6 and higher only from now on</b><br />
+<p>The configuration options below are for CCNet 1.6 and higher only.</p></td></tr></table></div> 
+
+<h2><a name="ConfigurationPreprocessor-Conditionalstatements%3A"></a>Conditional statements :</h2>
+
+
+<h4><a name="ConfigurationPreprocessor-IFDEF%2FIFNDEFdirectives"></a>IFDEF / IFNDEF directives</h4>
+
+<p>The <b>&lt;cb:ifdef&gt;</b> / <b>&lt;cb:ifndef&gt;</b> constructs are used during evaluation to conditionally include processing of their contained elements based on the existence/absence of a defined name.</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define some_symbol_name=<span class="code-quote">"some_symbol_value"</span> /&gt;
+
+
+  &lt;cb:ifdef name=<span class="code-quote">"some_symbol_name"</span>&gt;
+    &lt;output&gt;Value of some_symbol_name is $(some_symbol_name)&lt;/output&gt;
+  &lt;/cb:ifdef&gt;
+  &lt;cb:<span class="code-keyword">else</span>&gt;
+    &lt;output&gt;This will not appear because the symbol is defined&lt;/output&gt;
+  &lt;/cb:<span class="code-keyword">else</span>&gt;
+
+  &lt;cb:ifndef name=<span class="code-quote">"some_symbol_name"</span>&gt;
+    &lt;output&gt;This will not appear in the output since some_symbol_name is defined&lt;/output&gt;
+  &lt;/cb:ifndef&gt;
+  &lt;cb:<span class="code-keyword">else</span>&gt;
+    &lt;output&gt;This will appear because it is in the (optional) <span class="code-keyword">else</span> clause&lt;/output&gt;
+  &lt;/cb:<span class="code-keyword">else</span>&gt;</pre>
+</div></div>
+
+<h4><a name="ConfigurationPreprocessor-IF%2FELSEdirectives"></a>IF / ELSE directives</h4>
+
+<p>The <b>&lt;cb:if&gt;</b> / <b>&lt;cb:else&gt;</b> constructs evaluate a JSCRIPT.NET boolean expression, and perform branching depending on the value of the expression.</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define testval=<span class="code-quote">"gibberish"</span> testval2=<span class="code-quote">"40"</span>/&gt;
+
+  &lt;cb:<span class="code-keyword">if</span> expr=<span class="code-quote">"'$(testval)'=='gobbeldygook'"</span>&gt;
+    This will not appear, since the expression evaluates to <span class="code-keyword">false</span>
+  &lt;/cb:<span class="code-keyword">if</span>&gt;
+  &lt;cb:<span class="code-keyword">else</span>&gt;
+    This will appear in the output.
+  &lt;/cb:<span class="code-keyword">else</span>&gt;
+
+  &lt;cb:<span class="code-keyword">if</span> expr=<span class="code-quote">"$(testval2) &amp;lt; 50"</span>&gt;
+    This will appear, since testval2 is less than 50
+  &lt;/cb:<span class="code-keyword">if</span>&gt;
+  &lt;cb:<span class="code-keyword">else</span>&gt;
+    This will not appear in the output.
+  &lt;/cb:<span class="code-keyword">else</span>&gt;</pre>
+</div></div>
+
+<h4><a name="ConfigurationPreprocessor-EVALdirective"></a>EVAL  directive</h4>
+
+<p>Evaluates the given JSCRIPT.NET expression (of any type). The pp:eval tag is replaced with the result of the evaluation.</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;!-- outputs 54--&gt;
+  &lt;cb:eval expr=<span class="code-quote">"9*6"</span>/&gt;
+
+
+  &lt;!-- outputs 6. When referencing preprocessor variables in an expression, the value of
+  the variables is substituted into the expression before it is submitted <span class="code-keyword">for</span> evaluation.
+  Therefore, the below expression is submitted to the JSCRIPT.NET runtime as <span class="code-quote">"18/3"</span>
+  --&gt;
+  &lt;cb:define a=<span class="code-quote">"3"</span> b=<span class="code-quote">"18"</span>/&gt;
+  &lt;cb:eval expr=<span class="code-quote">"$(b)/$(a)"</span>/&gt;
+
+
+  &lt;!-- outputs the current date/time --&gt;
+  &lt;cb:eval expr=<span class="code-quote">"<span class="code-keyword">new</span> Date()"</span>/&gt;
+
+
+  &lt;!--
+   Since the preprocessor replaces variable references with their values before submitting the expression
+   to the JSCRIPT.NET engine, it is necessary take special steps to treat variables as strings. In the
+   example below, the preprocessor will expand the value of $(str) before submitting the expression, therefore
+   it is necessary to <span class="code-keyword">do</span> two things:
+    1. Enclose the variable reference in single quotes, making it a string literal in the JSCRIPT.NET language.
+       You need to <span class="code-keyword">do</span> <span class="code-keyword">this</span> yourself, as in the example below.
+    2. Escape any funny characters (such as embedded single quotes) so that the string literal is properly-formed.
+       You achieve <span class="code-keyword">this</span> by adding a :js (<span class="code-keyword">for</span> JSCRIPT) format specifier after the variable name. This causes
+       the preprocessor to <span class="code-keyword">do</span> the proper escaping <span class="code-keyword">for</span> you.
+
+   This example outputs the value of str, converted to upper <span class="code-keyword">case</span>. Literally, the JSCRIPT.NET expression
+   which is evaluated is:
+        'a string with \'things\' which may need to be <span class="code-quote">"escaped"</span>'.ToUpper()
+
+    Attributes:
+    expr: A JSCRIPT.NET expression
+  --&gt;
+
+  &lt;cb:define str=<span class="code-quote">"a string with 'things' which may need to be &amp;quot;escaped&amp;quot;"</span>/&gt;
+
+  &lt;cb:eval expr=<span class="code-quote">"'$(str:js)'.ToUpper()"</span>/&gt;</pre>
+</div></div>
+
+<h4><a name="ConfigurationPreprocessor-FORloop"></a>FOR loop</h4>
+
+<p>Loops over a range of values and emits the loop body on each iteration.</p>
+
+<p>Attributes:</p>
+
+<p><b>counter-name</b>: The name for the counter variable. Within the body of the loop, this variable can be referenced just like any other preprocessor variable.<br/>
+<b>init-expr</b>: JSCRIPT.NET expression whose value will be assigned to the counter variable before the first iteration.<br/>
+<b>test-expr</b>: JSCRIPT.NET boolean expression which will determine whether the loop should terminate.</p>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Note in the example below that it is necessary to refer to the counter variable as $<img class="emoticon" src="images/icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> rather than just i.</p></td></tr></table></div>
+<p><b>count-expr</b>: JSCRIPT.NET expression that is evaluated after every loop iteration. The value is assigned to the counter variable. In a typical counting loop, this would increment the counter by 1.</p>
+<div class='panelMacro'><table class='noteMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Note that in the example below, it is necessary to refer to the counter variable as $<img class="emoticon" src="images/icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> rather than just i. Note also that the value of count-expr is only the RIGHT HAND SIDE of<br/>
+of the assignment (i.e. it does not say $<img class="emoticon" src="images/icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> =(i+1))</p></td></tr></table></div>
+<p><b>Scope</b>:An implicit scope is introduced in the body of the loop, therefore any local definitions will only exist within the loop body.</p>
+
+<p>This example will emit:<br/>
+&lt;hello attr="0"/&gt;<br/>
+&lt;hello attr="1"/&gt;<br/>
+&lt;hello attr="2"/&gt;</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:<span class="code-keyword">for</span> counter-name=<span class="code-quote">"i"</span> init-expr=<span class="code-quote">"0"</span> test-expr=<span class="code-quote">"$(i)&amp;lt;3"</span> count-expr=<span class="code-quote">"$(i)+1"</span>&gt;
+    &lt;hello attr=<span class="code-quote">"$(i)"</span>/&gt;
+  &lt;/cb:<span class="code-keyword">for</span>&gt;</pre>
+</div></div>
+
+<h4><a name="ConfigurationPreprocessor-ELEMENTandATTRIBUTEdirectives"></a>ELEMENT and ATTRIBUTE directives</h4>
+
+<p>These emit XML elements, with (optional) attributes. This is just like the XSLT xsl:element/xsl:attribute mechanism. The only reason to use it rather than literal XML markup is if you wish for your element or attribute NAMES to be calculated.<br/>
+Both &lt;cb:element&gt; and &lt;cb:attribute&gt; have two attributes:<br/>
+<b>name</b>: Name of emitted element/attribute<br/>
+<b>namespace</b> (optional): XML namespace of emitted element/attribute</p>
+
+<p>This example will emit:<br/>
+&lt;myel myattr1="myattrval1" myattr2="myattrval2"&gt;myelval&lt;/myel&gt;</p>
+<div class="code panel" style="border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-java">&lt;cb:define elname=<span class="code-quote">"myel"</span> elval=<span class="code-quote">"myelval"</span> attrname=<span class="code-quote">"myattr"</span> attrval=<span class="code-quote">"myattrval"</span>/&gt;
+
+  &lt;cb:element name=<span class="code-quote">"$(elname)"</span>&gt;
+
+    &lt;cb:attribute name=<span class="code-quote">"$(attrname)1"</span>&gt;$(attrval)1&lt;/pp:attribute&gt;
+
+    &lt;cb:attribute name=<span class="code-quote">"$(attrname)2"</span>&gt;$(attrval)2&lt;/pp:attribute&gt;
+
+    $(elval)
+
+  &lt;/cb:element&gt;</pre>
+</div></div>
+
 <h2><a name="ConfigurationPreprocessor-CommonProblems"></a>Common Problems</h2>
 
 
@@ -467,7 +610,7 @@ Changing a certain folder is also more easy / safe.</p>
 				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on May 02, 2010 20:17</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Dec 13, 2010 21:22</font></td>
 		    </tr>
 	    </table>
     </body>

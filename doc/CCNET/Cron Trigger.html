@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>CruiseControl.NET : Cron Trigger</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Cron Trigger
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jul 14, 2010 by <font color="#0050B2">ccnet-doc-gen</font>.
+				    </div>
+
+				    <h1><a name="CronTrigger-CronTrigger"></a>Cron Trigger</h1>
+
+<p>A crontab expression are a very compact way to express a recurring schedule. A single expression is composed of 5 space&#45;delimited fields :   MINUTES HOURS DAYS MONTHS DAYS&#45;OF&#45;WEEK</p>
+<ul>
+	<li>A single wildcard (&#42;), which covers all values for the field. So a &#42; in days means all days of a month (which varies with month and year).</li>
+	<li>A single value, e.g. 5. Naturally, the set of values that are valid for each field varies.</li>
+	<li>A comma&#45;delimited list of values, e.g. 1,2,3,4. The list can be unordered as in 3,4,2,6,1.</li>
+	<li>A range where the minimum and maximum are separated by a dash, e.g. 1&#45;10. You can also specify these in the wrong order and they will be fixed. So 10&#45;5 will be treated as 5&#45;10.</li>
+	<li>An interval specification using a slash, e.g. &#42;/4. This means every 4th value of the field. You can also use it in a range, as in 1&#45;6/2.</li>
+	<li>You can also mix all of the above, as in: 1&#45;5,10,12,20&#45;30/5</li>
+</ul>
+
+
+<h2><a name="CronTrigger-Version"></a>Version</h2>
+
+<p>Available from version 1.6</p>
+
+<h2><a name="CronTrigger-Examples"></a>Examples</h2>
+
+<p>1st januari of each year  <div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;cronTrigger&gt;</span>
+  <span class="code-tag">&lt;cronExpression&gt;</span>* * 1 1 *<span class="code-tag">&lt;/cronExpression&gt;</span>
+<span class="code-tag">&lt;/cronTrigger&gt;</span></pre>
+</div></div></p>
+
+<p>12th of every month at 8 am  <div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;cronTrigger&gt;</span>
+  <span class="code-tag">&lt;cronExpression&gt;</span>0 8 12 * *<span class="code-tag">&lt;/cronExpression&gt;</span>
+<span class="code-tag">&lt;/cronTrigger&gt;</span></pre>
+</div></div></p>
+
+<p>Every 5 minutes between 06:00 and 18:00  <div class="code panel" style="border-style: solid;border-width: 1px;"><div class="codeContent panelContent">
+<pre class="code-xml"><span class="code-tag">&lt;cronTrigger&gt;</span>
+  <span class="code-tag">&lt;cronExpression&gt;</span>0/5 6-18 * * *<span class="code-tag">&lt;/cronExpression&gt;</span>
+<span class="code-tag">&lt;/cronTrigger&gt;</span></pre>
+</div></div></p>
+
+
+<h2><a name="CronTrigger-ConfigurationElements"></a>Configuration Elements</h2>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Version </th>
+</tr>
+<tr>
+<td class='confluenceTd'> buildCondition </td>
+<td class='confluenceTd'> The condition that should be used to launch the integration. By default, this value is  <b>IfModificationExists</b>, meaning that an integration will only be triggered if modifications have been detected. Set this attribute to  <b>ForceBuild</b> in order to ensure that a build should be launched regardless of whether new modifications are detected.   </td>
+<td class='confluenceTd'> String - one of:
+<ul>
+	<li>NoBuild</li>
+	<li>IfModificationExists</li>
+	<li>ForceBuild</li>
+</ul>
+</td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> IfModificationExists </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> cronExpression </td>
+<td class='confluenceTd'> The expression in Cron format when to trigger the build see <a href="http://code.google.com/p/ncrontab/wiki/CrontabExpression">http://code.google.com/p/ncrontab/wiki/CrontabExpression</a> for an example   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> Yes </td>
+<td class='confluenceTd'>&nbsp;</td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> name </td>
+<td class='confluenceTd'> The name of the trigger. This name is passed to external tools as a means to identify the trigger that requested the build.   </td>
+<td class='confluenceTd'> String </td>
+<td class='confluenceTd'> No </td>
+<td class='confluenceTd'> ScheduleTrigger </td>
+<td class='confluenceTd'> 1.6 </td>
+</tr>
+</tbody></table>
+
+<div class='panelMacro'><table class='infoMacro'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b>Automatically Generated</b><br />
+<p>Documentation generated on Wednesday, 14 Jul 2010 at 9:07:03 PM<br/>
+Using assembly version 1.6.7451.1</p></td></tr></table></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="http://confluence.public.thoughtworks.org//images/border/border_bottom.gif"><img src="images/border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Dec 13, 2010 21:22</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>
