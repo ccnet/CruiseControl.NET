@@ -1,12 +1,12 @@
 ﻿namespace CruiseControl.Core
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using System.ComponentModel;
     using System.Globalization;
 
+    /// <summary>
+    /// Handles the conversion to <see cref="Version"/> instances.
+    /// </summary>
     public class VersionTypeConverter
         : TypeConverter
     {
@@ -42,11 +42,6 @@
         /// <exception cref="T:System.NotSupportedException">The conversion cannot be performed. </exception>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            if (value == null)
-            {
-                return new Version();
-            }
-
             if (value is string)
             {
                 return new Version((string)value);

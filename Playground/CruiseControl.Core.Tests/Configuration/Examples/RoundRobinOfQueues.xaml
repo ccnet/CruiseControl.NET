@@ -1,12 +1,12 @@
-﻿<Server xmlns="urn:cruisecontrol:server" Version="2.0">
-    <RoundRobin Name="RoundRobin" AllowedActive="2">
-        <Queue Name="Queue1">
-            <Project Name="Project1" />
-            <Project Name="Project2" />
-        </Queue>
-        <Queue Name="Queue2">
-            <Project Name="Project3" />
-            <Project Name="Project4" />
-        </Queue>
-    </RoundRobin>
+﻿<Server Version="2.0" xmlns="urn:cruisecontrol:server">
+  <RoundRobin Name="RoundRobin">
+    <Queue Name="Queue1">
+      <Project Name="Project1" />
+      <Project Name="Project2" />
+    </Queue>
+    <Queue Name="Queue2">
+      <Project Name="Project3" />
+      <Project Name="Project4" />
+    </Queue>
+  </RoundRobin>
 </Server>

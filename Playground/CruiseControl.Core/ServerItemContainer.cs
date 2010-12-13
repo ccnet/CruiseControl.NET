@@ -2,6 +2,9 @@
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Defines that a <see cref="ServerItem"/> contains children.
+    /// </summary>
     public interface IServerItemContainer
     {
         #region Public properties

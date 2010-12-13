@@ -1,6 +1,6 @@
-﻿<Server xmlns="urn:cruisecontrol:server" Version="2.0">
-    <Gate Name="Gate1">
-        <Project Name="Project1" />
-        <Project Name="Project2" />
-    </Gate>
+﻿<Server Version="2.0" xmlns="urn:cruisecontrol:server">
+  <Gate Name="Gate1">
+    <Project Name="Project1" />
+    <Project Name="Project2" />
+  </Gate>
 </Server>

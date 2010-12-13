@@ -1,7 +1,7 @@
 ﻿namespace CruiseControl.Core
 {
     /// <summary>
-    /// An item for the server.
+    /// An item of server configuration - this is typically a structure item.
     /// </summary>
     public abstract class ServerItem
     {
@@ -30,6 +30,19 @@
         /// </summary>
         /// <value>The name.</value>
         public string Name { get; set; }
+        #endregion
+
+        #region ItemType
+        /// <summary>
+        /// Gets the type of the item.
+        /// </summary>
+        /// <value>
+        /// The type of the item.
+        /// </value>
+        public virtual string ItemType
+        {
+            get { return this.GetType().Name; }
+        }
         #endregion
         #endregion
 

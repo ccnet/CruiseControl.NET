@@ -1,9 +1,10 @@
 ﻿namespace CruiseControl.Core.Structure
 {
-    using System.Collections.Generic;
-    using System.Windows.Markup;
     using System;
 
+    /// <summary>
+    /// A pipeline of integrations - will trigger additional integrations to build projects.
+    /// </summary>
     public class Pipeline
         : ServerItemContainerBase
     {
@@ -12,7 +13,6 @@
         /// Initializes a new instance of the <see cref="Pipeline"/> class.
         /// </summary>
         public Pipeline()
-            : base()
         {
         }
 

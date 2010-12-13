@@ -1,14 +1,18 @@
 ﻿namespace CruiseControl.Core
 {
     using System.Collections.Generic;
+    using System.ComponentModel;
 
+    /// <summary>
+    /// The base task implementation - provides common functionality for tasks.
+    /// </summary>
     public abstract class Task
     {
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Task"/> class.
         /// </summary>
-        public Task()
+        protected Task()
         {
         }
 
@@ -16,7 +20,7 @@
         /// Initializes a new instance of the <see cref="Task"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
-        public Task(string name)
+        protected Task(string name)
         {
             this.Name = name;
         }
@@ -36,6 +40,7 @@
         /// Gets or sets the parent task.
         /// </summary>
         /// <value>The parent.</value>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Task Parent { get; set; }
         #endregion
 
@@ -44,6 +49,7 @@
         /// Gets or sets the owning project.
         /// </summary>
         /// <value>The project.</value>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Project Project { get; set; }
         #endregion
         #endregion

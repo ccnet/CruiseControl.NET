@@ -1,10 +1,9 @@
 ﻿namespace CruiseControl.Core.Tests
 {
     using CruiseControl.Core.Tasks;
-    using NUnit.Framework;
+    using CruiseControl.Core.Tests.Stubs;
     using Moq;
-    using System.Diagnostics;
-using System;
+    using NUnit.Framework;
 
     public class ProjectTests
     {
@@ -69,24 +68,12 @@ using System;
             Assert.IsFalse(wasStarted);
             hostMock.Verify();
         }
-        #endregion
 
-        #region Private classes
-        private class ProjectStub
-            : Project
+        [Test]
+        public void ItemTypeIsProject()
         {
-            public Action<IntegrationContext> OnIntegration { get; set; }
-            public override void Integrate(IntegrationContext context)
-            {
-                if (this.OnIntegration != null)
-                {
-                    this.OnIntegration(context);
-                }
-                else
-                {
-                    base.Integrate(context);
-                }
-            }
+            var project = new Project();
+            Assert.AreEqual("Project", project.ItemType);
         }
         #endregion
     }

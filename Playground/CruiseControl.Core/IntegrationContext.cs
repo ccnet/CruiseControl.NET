@@ -1,11 +1,12 @@
 ﻿namespace CruiseControl.Core
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-using System.Threading;
+    using System.Threading;
 
+    /// <summary>
+    /// The context for performing an integration - provides functionality for co-ordination
+    /// between threads.
+    /// </summary>
     public class IntegrationContext
     {
         #region Private fields

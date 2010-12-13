@@ -1,10 +1,13 @@
 ﻿namespace CruiseControl.Core
 {
-    using System.Collections.Generic;
-    using System.Windows.Markup;
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Windows.Markup;
 
+    /// <summary>
+    /// The root configuration node.
+    /// </summary>
     [ContentProperty("Children")]
     public class Server
         : IServerItemContainer

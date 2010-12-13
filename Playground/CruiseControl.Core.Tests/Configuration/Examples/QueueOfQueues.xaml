@@ -1,12 +1,12 @@
-﻿<Server xmlns="urn:cruisecontrol:server" Version="2.0">
-    <Queue Name="Queue3" AllowedActive="2">
-        <Queue Name="Queue1">
-            <Project Name="Project1" />
-            <Project Name="Project2" />
-        </Queue>
-        <Queue Name="Queue2">
-            <Project Name="Project3" />
-            <Project Name="Project4" />
-        </Queue>
+﻿<Server Version="2.0" xmlns="urn:cruisecontrol:server">
+  <Queue AllowedActive="2" Name="Queue3">
+    <Queue Name="Queue1">
+      <Project Name="Project1" />
+      <Project Name="Project2" />
     </Queue>
+    <Queue Name="Queue2">
+      <Project Name="Project3" />
+      <Project Name="Project4" />
+    </Queue>
+  </Queue>
 </Server>

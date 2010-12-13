@@ -3,6 +3,9 @@
     using System.Collections.Generic;
     using System.Windows.Markup;
 
+    /// <summary>
+    /// A base implementation of a server item that has children.
+    /// </summary>
     [ContentProperty("Children")]
     public abstract class ServerItemContainerBase
         : ServerItem, IServerItemContainer

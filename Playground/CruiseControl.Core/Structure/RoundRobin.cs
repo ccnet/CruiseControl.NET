@@ -1,9 +1,11 @@
 ﻿namespace CruiseControl.Core.Structure
 {
-    using System.Collections.Generic;
-    using System.Windows.Markup;
     using System;
+    using System.ComponentModel;
 
+    /// <summary>
+    /// Schedules integration requests in a round-robin manner.
+    /// </summary>
     public class RoundRobin
         : ServerItemContainerBase
     {
@@ -12,7 +14,6 @@
         /// Initializes a new instance of the <see cref="RoundRobin"/> class.
         /// </summary>
         public RoundRobin()
-            : base()
         {
         }
 
@@ -33,6 +34,7 @@
         /// Gets or sets the number of allowed active children.
         /// </summary>
         /// <value>The allowed active.</value>
+        [DefaultValue(null)]
         public int? AllowedActive { get; set; }
         #endregion
         #endregion

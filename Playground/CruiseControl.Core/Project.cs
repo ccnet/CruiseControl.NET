@@ -1,8 +1,9 @@
 ﻿namespace CruiseControl.Core
 {
-    using System.Windows.Markup;
-    using System.Collections.Generic;
     using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Windows.Markup;
 
     /// <summary>
     /// A project.
@@ -24,6 +25,7 @@
         /// Initializes a new instance of the <see cref="Project"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
+        /// <param name="tasks">The tasks.</param>
         public Project(string name, params Task[] tasks)
             : base(name)
         {
@@ -45,6 +47,7 @@
         /// Gets or sets the host for the project.
         /// </summary>
         /// <value>The host.</value>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ServerItem Host { get; set; }
         #endregion
         #endregion

@@ -1,8 +1,11 @@
 ﻿namespace CruiseControl.Core.Tasks
 {
-    using System.Windows.Markup;
     using System.Collections.Generic;
+    using System.Windows.Markup;
 
+    /// <summary>
+    /// Outputs a comment to the logs.
+    /// </summary>
     [ContentProperty("Text")]
     public class Comment
         : Task

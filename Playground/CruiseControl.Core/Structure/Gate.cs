@@ -1,9 +1,10 @@
 ﻿namespace CruiseControl.Core.Structure
 {
-    using System.Collections.Generic;
-    using System.Windows.Markup;
     using System;
 
+    /// <summary>
+    /// An integration gate - will accumulate integration requests until released.
+    /// </summary>
     public class Gate
         : ServerItemContainerBase
     {
@@ -12,7 +13,6 @@
         /// Initializes a new instance of the <see cref="Gate"/> class.
         /// </summary>
         public Gate()
-            : base()
         {
         }
 
