@@ -364,6 +364,7 @@
     <Compile Include="Core\Tasks\AntsPerformanceProfilerTaskTests.cs" />
     <Compile Include="Core\Tasks\CodeItRightTaskTests.cs" />
     <Compile Include="Core\Tasks\CommentTaskTests.cs" />
+    <Compile Include="Core\Tasks\ConditionalTaskTests.cs" />
     <Compile Include="Core\Tasks\Conditions\AndTaskConditionTests.cs" />
     <Compile Include="Core\Tasks\Conditions\BuildConditionTaskConditionTests.cs" />
     <Compile Include="Core\Tasks\Conditions\CompareValuesTaskConditionTests.cs" />
@@ -380,6 +381,8 @@
     <Compile Include="Core\Tasks\CoverageThresholdTests.cs" />
     <Compile Include="Core\Tasks\CruiseServerControlTaskTests.cs" />
     <Compile Include="Core\Tasks\FakeTaskTest.cs" />
+    <Compile Include="Core\Tasks\MockTask.cs" />
+    <Compile Include="Core\Tasks\XmlTaskResultTests.cs" />
     <Compile Include="Core\Triggers\CronTriggerTest.cs" />
     <Compile Include="Core\Triggers\ParameterTriggerTests.cs" />
     <Compile Include="Core\Triggers\RollUpTriggerTest.cs" />

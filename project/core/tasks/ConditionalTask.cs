@@ -47,8 +47,8 @@
         private IEnumerable<ParameterBase> parameterDefinitions;
         private ItemStatus mainStatus;
         private ItemStatus elseStatus;
-        private Dictionary<ITask, ItemStatus> taskStatuses = new Dictionary<ITask, ItemStatus>();
-        private Dictionary<ITask, ItemStatus> elseTaskStatuses = new Dictionary<ITask, ItemStatus>();
+        private readonly Dictionary<ITask, ItemStatus> taskStatuses = new Dictionary<ITask, ItemStatus>();
+        private readonly Dictionary<ITask, ItemStatus> elseTaskStatuses = new Dictionary<ITask, ItemStatus>();
         #endregion
 
         #region Constructors
@@ -111,14 +111,14 @@
         /// <summary>
         /// Applies the input parameters to the task.
         /// </summary>
-        /// <param name="parameters">The parameters to apply.</param>
-        /// <param name="parameterDefinitions">The original parameter definitions.</param>
-        public override void ApplyParameters(Dictionary<string, string> parameters, 
-            IEnumerable<ParameterBase> parameterDefinitions)
+        /// <param name="parametersToApply">The parameters to apply.</param>
+        /// <param name="parameterDefinitionsToUse">The parameter definitions to use.</param>
+        public override void ApplyParameters(Dictionary<string, string> parametersToApply, 
+            IEnumerable<ParameterBase> parameterDefinitionsToUse)
         {
-            this.parameters = parameters;
-            this.parameterDefinitions = parameterDefinitions;
-            base.ApplyParameters(parameters, parameterDefinitions);
+            this.parameters = parametersToApply;
+            this.parameterDefinitions = parameterDefinitionsToUse;
+            base.ApplyParameters(parametersToApply, parameterDefinitionsToUse);
         }
         #endregion
 
@@ -133,7 +133,7 @@
         {
             // Validate the conditions
             var trace = parent.Wrap(this);
-            foreach (var condition in this.TaskConditions)
+            foreach (var condition in this.TaskConditions ?? new ITaskCondition[0])
             {
                 var validation = condition as IConfigurationValidation;
                 if (validation != null)
@@ -190,25 +190,25 @@
             var logger = this.Logger ?? new DefaultLogger();
             logger.Debug("Checking conditions");
             var conditionsPassed = this.EvaluateConditions(logger, result);
-            var successful = true;
+            bool successful;
 
             // Run the required tasks
             if (conditionsPassed)
             {
                 logger.Info("Conditions passed - running tasks");
                 this.elseStatus.Status = ItemBuildStatus.Cancelled;
-                this.CancelTasks(this.elseTaskStatuses);
+                CancelTasks(this.elseTaskStatuses);
                 successful = this.RunTasks(this.Tasks, logger, result);
-                this.CancelTasks(this.taskStatuses);
+                CancelTasks(this.taskStatuses);
                 this.mainStatus.Status = successful ? ItemBuildStatus.CompletedSuccess : ItemBuildStatus.CompletedFailed;
             }
             else
             {
                 logger.Info("Conditions did not pass - running else tasks");
                 this.mainStatus.Status = ItemBuildStatus.Cancelled;
-                this.CancelTasks(this.taskStatuses);
+                CancelTasks(this.taskStatuses);
                 successful = this.RunTasks(this.ElseTasks, logger, result);
-                this.CancelTasks(this.elseTaskStatuses);
+                CancelTasks(this.elseTaskStatuses);
                 this.elseStatus.Status = successful ? ItemBuildStatus.CompletedSuccess : ItemBuildStatus.CompletedFailed;
             }
 
@@ -309,9 +309,9 @@
             this.CurrentStatus.AddChild(groupStatus);
             if (tasks != null)
             {
-                foreach (ITask task in tasks)
+                foreach (var task in tasks)
                 {
-                    ItemStatus taskItem = null;
+                    ItemStatus taskItem;
                     var tbase = task as TaskBase;
                     if (tbase != null)
                     {
@@ -326,8 +326,10 @@
                     }
                     else
                     {
-                        taskItem = new ItemStatus(task.GetType().Name);
-                        taskItem.Status = newStatus;
+                        taskItem = new ItemStatus(task.GetType().Name)
+                                       {
+                                           Status = newStatus
+                                       };
                     }
 
                     // Only add the item if it has been initialised
@@ -348,7 +350,7 @@
         /// Cancels any pending tasks.
         /// </summary>
         /// <param name="taskStatuses">The task statuses.</param>
-        private void CancelTasks(Dictionary<ITask, ItemStatus> taskStatuses)
+        private static void CancelTasks(Dictionary<ITask, ItemStatus> taskStatuses)
         {
             foreach (var status in taskStatuses)
             {

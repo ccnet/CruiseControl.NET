@@ -42,12 +42,22 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     return this.CachedData;
                 }
 
+                if (this.Writer == null)
+                {
+                    throw new InvalidOperationException("Cannot access Data before writer has been initialised");
+                }
+
                 if (this.Writer.WriteState != WriteState.Closed)
                 {
                     this.Writer.Close();
                 }
 
-                this.CachedData = Encoding.UTF8.GetString(this.BackingStream.ToArray());
+                this.BackingStream.Seek(0, SeekOrigin.Begin);
+                using (var streamReader = new StreamReader(this.BackingStream))
+                {
+                    this.CachedData = streamReader.ReadToEnd();
+                }
+
                 this.BackingStream.Dispose();
                 this.Writer = null;
                 this.BackingStream = null;
@@ -99,7 +109,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             if (this.Writer == null)
             {
                 this.BackingStream = new MemoryStream();
-                var settings = new XmlWriterSettings() { Indent = true, CloseOutput = false, ConformanceLevel = ConformanceLevel.Fragment, OmitXmlDeclaration = true };
+                var settings = new XmlWriterSettings
+                                   {
+                                       Encoding = Encoding.UTF8,
+                                       Indent = true,
+                                       CloseOutput = false,
+                                       ConformanceLevel = ConformanceLevel.Fragment,
+                                       OmitXmlDeclaration = true
+                                   };
                 this.Writer = XmlWriter.Create(this.BackingStream, settings);
             }
 
