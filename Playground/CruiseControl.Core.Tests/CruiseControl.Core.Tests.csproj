@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="Configuration\ExampleTests.cs" />
     <Compile Include="IntegrationContextTests.cs" />
-    <Compile Include="IntegrationRequestTests.cs" />
     <Compile Include="ProjectTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Structure\QueueTests.cs" />

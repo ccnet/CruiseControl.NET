@@ -40,6 +40,26 @@
         /// <value><c>true</c> if context was cancelled; otherwise, <c>false</c>.</value>
         public bool WasCancelled { get; private set; }
         #endregion
+
+        #region IsLocked
+        /// <summary>
+        /// Gets a value indicating whether this instance is locked.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is locked; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsLocked { get; private set; }
+        #endregion
+
+        #region IsCompleted
+        /// <summary>
+        /// Gets a value indicating whether this instance is completed.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is completed; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsCompleted { get; private set; }
+        #endregion
         #endregion
 
         #region Public events
@@ -48,6 +68,13 @@
         /// Occurs when this context has been completed.
         /// </summary>
         public event EventHandler Completed;
+        #endregion
+
+        #region Released
+        /// <summary>
+        /// Occurs when this context has been released.
+        /// </summary>
+        public event EventHandler Released;
         #endregion
         #endregion
 
@@ -58,6 +85,7 @@
         /// </summary>
         public void Lock()
         {
+            this.IsLocked = true;
             this.eventHandle.Reset();
         }
         #endregion
@@ -68,7 +96,12 @@
         /// </summary>
         public void Release()
         {
+            this.IsLocked = false;
             this.eventHandle.Set();
+            if (this.Released != null)
+            {
+                this.Released(this, EventArgs.Empty);
+            }
         }
         #endregion
 
@@ -102,6 +135,7 @@
         /// </summary>
         public void Complete()
         {
+            this.IsCompleted = true;
             if (this.Completed != null)
             {
                 this.Completed(this, EventArgs.Empty);

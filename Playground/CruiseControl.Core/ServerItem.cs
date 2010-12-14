@@ -1,5 +1,7 @@
 ﻿namespace CruiseControl.Core
 {
+    using System.ComponentModel;
+
     /// <summary>
     /// An item of server configuration - this is typically a structure item.
     /// </summary>
@@ -39,10 +41,20 @@
         /// <value>
         /// The type of the item.
         /// </value>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual string ItemType
         {
             get { return this.GetType().Name; }
         }
+        #endregion
+        
+        #region Host
+        /// <summary>
+        /// Gets or sets the host for the project.
+        /// </summary>
+        /// <value>The host.</value>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public ServerItem Host { get; set; }
         #endregion
         #endregion
 

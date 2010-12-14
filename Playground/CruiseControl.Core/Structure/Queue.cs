@@ -5,6 +5,7 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Threading;
+    using NLog;
 
     /// <summary>
     /// Schedules integrations based on their position in the queue.
@@ -13,9 +14,11 @@
         : ServerItemContainerBase
     {
         #region Private fields
-        private readonly IList<IntegrationRequest> pendingRequests = new List<IntegrationRequest>();
-        private readonly IList<IntegrationRequest> activeRequests = new List<IntegrationRequest>();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly IList<IntegrationContext> pendingRequests = new List<IntegrationContext>();
+        private readonly IList<IntegrationContext> activeRequests = new List<IntegrationContext>();
         private readonly ReaderWriterLockSlim interleave = new ReaderWriterLockSlim();
+        private IntegrationContext currentContext;
         #endregion
 
         #region Constructors
@@ -46,74 +49,6 @@
         [DefaultValue(null)]
         public int? AllowedActive { get; set; }
         #endregion
-
-        #region PendingRequests
-        /// <summary>
-        /// Gets the pending requests.
-        /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public IEnumerable<IntegrationRequest> PendingRequests
-        {
-            get
-            {
-                var locked = false;
-                try
-                {
-                    locked = this.interleave.TryEnterReadLock(TimeSpan.FromSeconds(5));
-                    if (locked)
-                    {
-                        return this.pendingRequests;
-                    }
-                    else
-                    {
-                        // TODO: Replace with custom exception
-                        throw new Exception("Unable to retrieve pending requests - unable to acquire lock");
-                    }
-                }
-                finally
-                {
-                    if (locked)
-                    {
-                        this.interleave.ExitReadLock();
-                    }
-                }
-            }
-        }
-        #endregion
-
-        #region ActiveRequests
-        /// <summary>
-        /// Gets the active requests.
-        /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public IEnumerable<IntegrationRequest> ActiveRequests
-        {
-            get
-            {
-                var locked = false;
-                try
-                {
-                    locked = this.interleave.TryEnterReadLock(TimeSpan.FromSeconds(5));
-                    if (locked)
-                    {
-                        return this.activeRequests;
-                    }
-                    else
-                    {
-                        // TODO: Replace with custom exception
-                        throw new Exception("Unable to retrieve active requests - unable to acquire lock");
-                    }
-                }
-                finally
-                {
-                    if (locked)
-                    {
-                        this.interleave.ExitReadLock();
-                    }
-                }
-            }
-        }
-        #endregion
         #endregion
 
         #region Public methods
@@ -127,21 +62,32 @@
             var locked = false;
             try
             {
+                logger.Debug("Adding integration request for '{0}' to '{1}'", context.Item.Name, this.Name);
                 locked = this.interleave.TryEnterWriteLock(TimeSpan.FromSeconds(5));
                 if (locked)
                 {
-                    if (this.activeRequests.Count <= this.AllowedActive.GetValueOrDefault(1))
+                    if ((this.activeRequests.Count < this.AllowedActive.GetValueOrDefault(1)) &&
+                        this.AskHost())
                     {
-                        this.activeRequests.Add(
-                            new IntegrationRequest(context));
+                        logger.Info("Activating '{0}' in '{1}'", context.Item.Name, this.Name);
+                        this.activeRequests.Add(context);
                         context.Completed += OnIntegrationCompleted;
                     }
                     else
                     {
-                        this.pendingRequests.Add(
-                            new IntegrationRequest(context));
+                        logger.Info("Adding '{0}' to pending in '{1}'", context.Item.Name, this.Name);
+                        this.pendingRequests.Add(context);
                         context.Lock();
                     }
+                }
+                else
+                {
+                    var message = "Unable to add new request to '" +
+                        this.Name +
+                        "' - unable to acquire lock";
+                    logger.Error(message);
+                    // TODO: Replace with custom exception
+                    throw new Exception(message);
                 }
             }
             finally
@@ -149,6 +95,78 @@
                 if (locked)
                 {
                     this.interleave.ExitWriteLock();
+                }
+            }
+        }
+        #endregion
+
+        #region GetPendingRequests()
+        /// <summary>
+        /// Gets the pending requests.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IntegrationContext> GetPendingRequests()
+        {
+            var locked = false;
+            try
+            {
+                logger.Debug("Getting pending requests for '{0}'", this.Name);
+                locked = this.interleave.TryEnterReadLock(TimeSpan.FromSeconds(5));
+                if (locked)
+                {
+                    return this.pendingRequests.ToArray();
+                }
+                else
+                {
+                    var message = "Unable to retrieve pending requests from '" +
+                        this.Name +
+                        "' - unable to acquire lock";
+                    logger.Error(message);
+                    // TODO: Replace with custom exception
+                    throw new Exception(message);
+                }
+            }
+            finally
+            {
+                if (locked)
+                {
+                    this.interleave.ExitReadLock();
+                }
+            }
+        }
+        #endregion
+
+        #region GetActiveRequests()
+        /// <summary>
+        /// Gets the active requests.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IntegrationContext> GetActiveRequests()
+        {
+            var locked = false;
+            try
+            {
+                logger.Debug("Getting active requests for '{0}'", this.Name);
+                locked = this.interleave.TryEnterReadLock(TimeSpan.FromSeconds(5));
+                if (locked)
+                {
+                    return this.activeRequests.ToArray();
+                }
+                else
+                {
+                    var message = "Unable to retrieve active requests from '" +
+                        this.Name +
+                        "' - unable to acquire lock";
+                    logger.Error(message);
+                    // TODO: Replace with custom exception
+                    throw new Exception(message);
+                }
+            }
+            finally
+            {
+                if (locked)
+                {
+                    this.interleave.ExitReadLock();
                 }
             }
         }
@@ -165,24 +183,40 @@
         private void OnIntegrationCompleted(object sender, EventArgs e)
         {
             var context = sender as IntegrationContext;
+            if ((this.currentContext != null) && !this.currentContext.IsCompleted)
+            {
+                this.currentContext.Complete();
+                this.currentContext = null;
+            }
+
+            IntegrationContext nextRequest = null;
             var locked = false;
             try
             {
                 locked = this.interleave.TryEnterWriteLock(TimeSpan.FromSeconds(5));
                 if (locked)
                 {
-                    var request = this.activeRequests
-                        .Single(r => ReferenceEquals(context, r.Context));
+                    logger.Debug("Removing '{0}' from '{1}'", context.Item.Name, this.Name);
                     context.Completed -= OnIntegrationCompleted;
-                    this.activeRequests.Remove(request);
+                    this.activeRequests.Remove(context);
 
-                    if (this.pendingRequests.Count > 0)
+                    if ((this.pendingRequests.Count > 0) && this.AskHost())
                     {
-                        var nextRequest = this.pendingRequests[0];
+                        nextRequest = this.pendingRequests[0];
+                        this.pendingRequests.Remove(nextRequest);
+                        logger.Info("Activating '{0}' in '{1}'", nextRequest.Item.Name, this.Name);
                         this.activeRequests.Add(nextRequest);
-                        nextRequest.Context.Completed += OnIntegrationCompleted;
-                        nextRequest.Context.Release();
+                        nextRequest.Completed += OnIntegrationCompleted;
                     }
+                }
+                else
+                {
+                    var message = "Unable to update queue '" +
+                        this.Name +
+                        "' - unable to acquire lock";
+                    logger.Error(message);
+                    // TODO: Replace with custom exception
+                    throw new Exception(message);
                 }
             }
             finally
@@ -192,6 +226,106 @@
                     this.interleave.ExitWriteLock();
                 }
             }
+
+            // Release the next request
+            if (nextRequest != null)
+            {
+                nextRequest.Release();
+            }
+        }
+        #endregion
+
+        #region OnContextReleased()
+        /// <summary>
+        /// Called when the current context has been released.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void OnContextReleased(object sender, EventArgs e)
+        {
+            var integrate = !this.currentContext.WasCancelled;
+            var locked = false;
+            IntegrationContext nextRequest = null;
+            try
+            {
+                locked = this.interleave.TryEnterWriteLock(TimeSpan.FromSeconds(5));
+                if (locked)
+                {
+                    if (this.pendingRequests.Count > 0)
+                    {
+                        nextRequest = this.pendingRequests[0];
+                        this.pendingRequests.Remove(nextRequest);
+                        if (integrate)
+                        {
+                            logger.Info("Activating '{0}' in '{1}'", nextRequest.Item.Name, this.Name);
+                            this.activeRequests.Add(nextRequest);
+                            nextRequest.Completed += OnIntegrationCompleted;
+                        }
+                    }
+                }
+                else
+                {
+                    var message = "Unable to update queue '" +
+                        this.Name +
+                        "' - unable to acquire lock";
+                    logger.Error(message);
+                    // TODO: Replace with custom exception
+                    throw new Exception(message);
+                }
+            }
+            finally
+            {
+                if (locked)
+                {
+                    this.interleave.ExitWriteLock();
+                }
+            }
+
+            // Release or cancel the next request
+            if (nextRequest != null)
+            {
+                if (integrate)
+                {
+                    nextRequest.Release();
+                }
+                else
+                {
+                    logger.Info("Cancelling '{0}' in '{1}'", nextRequest.Item.Name, this.Name);
+                    nextRequest.Cancel();
+                }
+            }
+        }
+        #endregion
+
+        #region AskHost()
+        /// <summary>
+        /// Asks the host if an integration can start.
+        /// </summary>
+        /// <returns>
+        /// <c>true</c> if the integration can start; <c>false</c> otherwise.
+        /// </returns>
+        private bool AskHost()
+        {
+            var integrate = this.Host == null;
+            if (!integrate && (this.currentContext == null))
+            {
+                this.currentContext = new IntegrationContext(this);
+                this.Host.AskToIntegrate(this.currentContext);
+                if (this.currentContext.IsLocked)
+                {
+                    this.currentContext.Released += OnContextReleased;
+                }
+                else
+                {
+                    integrate = !this.currentContext.WasCancelled;
+                    if (!integrate)
+                    {
+                        this.currentContext = null;
+                    }
+                }
+            }
+
+            return integrate;
         }
         #endregion
         #endregion

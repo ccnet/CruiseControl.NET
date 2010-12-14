@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Windows.Markup;
 
     /// <summary>
@@ -40,15 +39,6 @@
         /// </summary>
         /// <value>The tasks.</value>
         public IList<Task> Tasks { get; private set; }
-        #endregion
-
-        #region Host
-        /// <summary>
-        /// Gets or sets the host for the project.
-        /// </summary>
-        /// <value>The host.</value>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public ServerItem Host { get; set; }
         #endregion
         #endregion
 
