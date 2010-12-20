@@ -85,11 +85,9 @@
     <Compile Include="Tasks\Comment.cs" />
     <Compile Include="Xaml\ConfigurationService.cs" />
     <Compile Include="Xaml\CoreModule.cs" />
-    <Compile Include="Xaml\DynamicPropertyXamlMember.cs" />
     <Compile Include="Xaml\CoreXamlSchemaContext.cs" />
     <Compile Include="Xaml\CoreXamlType.cs" />
     <Compile Include="Xaml\CoreXamlTypeInvoker.cs" />
-    <Compile Include="Xaml\DynamicPropertyXamlMemberInvoker.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

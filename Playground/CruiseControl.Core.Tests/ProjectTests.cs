@@ -112,6 +112,33 @@
         }
 
         [Test]
+        public void IntegrateSkipsTasksWhoseConditionsFail()
+        {
+            var conditionMock = new Mock<TaskCondition>(MockBehavior.Strict);
+            conditionMock.Setup(c => c.Evaluate(It.IsAny<TaskExecutionContext>()))
+                .Returns(false);
+            var initialised = false;
+            var ran = false;
+            var cleanedUp = false;
+            var dummy = new TaskStub
+                            {
+                                OnInitialiseAction = () => initialised = true,
+                                OnRunAction = c =>
+                                                  {
+                                                      ran = true;
+                                                      return null;
+                                                  },
+                                OnCleanUpAction = () => cleanedUp = true
+                            };
+            dummy.Conditions.Add(conditionMock.Object);
+            var project = new Project("test", dummy);
+            project.Integrate();
+            Assert.IsTrue(initialised);
+            Assert.IsFalse(ran);
+            Assert.IsTrue(cleanedUp);
+        }
+
+        [Test]
         public void AskToIntegrateDoesNothingWithNoHost()
         {
             var project = new Project();
