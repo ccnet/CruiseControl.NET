@@ -42,18 +42,20 @@
         /// The type of the item.
         /// </value>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual string ItemType
         {
             get { return this.GetType().Name; }
         }
         #endregion
-        
+
         #region Host
         /// <summary>
         /// Gets or sets the host for the project.
         /// </summary>
         /// <value>The host.</value>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public ServerItem Host { get; set; }
         #endregion
         #endregion
@@ -65,6 +67,16 @@
         /// </summary>
         /// <param name="context">The context to use.</param>
         public abstract void AskToIntegrate(IntegrationContext context);
+        #endregion
+
+        #region Validate()
+        /// <summary>
+        /// Validates the this item after it has been loaded.
+        /// </summary>
+        /// <param name="host">The host.</param>
+        public virtual void Validate()
+        {
+        }
         #endregion
         #endregion
     }

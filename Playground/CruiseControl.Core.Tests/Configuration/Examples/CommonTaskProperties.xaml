@@ -1,0 +1,18 @@
+﻿<Server Version="2.0"
+        xmlns="urn:cruisecontrol:server"
+        xmlns:tasks="urn:cruisecontrol:server:tasks"
+        xmlns:conditions="urn:cruisecontrol:server:tasks:conditions"
+        xmlns:failure="urn:cruisecontrol:server:tasks:failure">
+  <Project Name="SampleProject">
+    <tasks:Comment Name="TestComment">
+      <tasks:Comment.Text>A Test Comment</tasks:Comment.Text>
+      <tasks:Comment.Description>A demonstration task to show common properties</tasks:Comment.Description>
+      <tasks:Comment.Conditions>
+        <conditions:HasModifications />
+      </tasks:Comment.Conditions>
+      <tasks:Comment.FailureActions>
+        <failure:RetryTask />
+      </tasks:Comment.FailureActions>
+    </tasks:Comment>
+  </Project>
+</Server>

@@ -185,6 +185,7 @@
             var context = sender as IntegrationContext;
             if ((this.currentContext != null) && !this.currentContext.IsCompleted)
             {
+                logger.Debug("Telling host integration has completed in '{0}'", this.Name);
                 this.currentContext.Complete();
                 this.currentContext = null;
             }
@@ -310,6 +311,7 @@
             if (!integrate && (this.currentContext == null))
             {
                 this.currentContext = new IntegrationContext(this);
+                logger.Debug("Asking host if '{0}' can integrate", this.Name);
                 this.Host.AskToIntegrate(this.currentContext);
                 if (this.currentContext.IsLocked)
                 {

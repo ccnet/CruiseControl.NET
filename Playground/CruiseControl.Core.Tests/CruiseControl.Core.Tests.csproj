@@ -51,6 +51,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Structure\QueueTests.cs" />
     <Compile Include="Stubs\ProjectStub.cs" />
+    <Compile Include="Stubs\TaskStub.cs" />
+    <Compile Include="TaskTests.cs" />
+    <Compile Include="VersionTypeConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CruiseControl.Core\CruiseControl.Core.csproj">
@@ -93,7 +96,26 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\Examples\SimpleSourceControlExample.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\Examples\ComplexSourceControlExample.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\Examples\ScmProject.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\Examples\CommonTaskProperties.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

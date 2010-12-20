@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ninject">
+      <HintPath>..\Lib\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,12 +46,36 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IntegrationContext.cs" />
+    <Compile Include="IntegrationStatus.cs" />
+    <Compile Include="Interfaces\IFileSystem.cs" />
     <Compile Include="Project.cs" />
+    <Compile Include="ProjectState.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="ServerItem.cs" />
     <Compile Include="ServerItemContainer.cs" />
+    <Compile Include="SourceControlBlock.cs" />
+    <Compile Include="SourceControl\Subversion.cs" />
     <Compile Include="Structure\Gate.cs" />
+    <Compile Include="Structure\ScmProject.cs" />
     <Compile Include="Task.cs" />
+    <Compile Include="TaskCondition.cs" />
+    <Compile Include="TaskFailureAction.cs" />
+    <Compile Include="Tasks\Conditions\HasModifications.cs" />
+    <Compile Include="Tasks\Conditions\Status.cs" />
+    <Compile Include="TaskExecutionContext.cs" />
+    <Compile Include="TaskState.cs" />
+    <Compile Include="Tasks\FailureActions\FailIntegration.cs" />
+    <Compile Include="Tasks\FailureActions\IgnoreFailure.cs" />
+    <Compile Include="Tasks\FailureActions\RetryTask.cs" />
+    <Compile Include="Tasks\GetSource.cs" />
+    <Compile Include="Tasks\ApplyLastChangeLabel.cs" />
+    <Compile Include="Tasks\Nant.cs" />
+    <Compile Include="Tasks\SendEmail.cs" />
+    <Compile Include="Tasks\Sequence.cs" />
+    <Compile Include="Tasks\SourceControlTask.cs" />
+    <Compile Include="Trigger.cs" />
+    <Compile Include="Triggers\SourceControlChange.cs" />
+    <Compile Include="Utilities\FileSystem.cs" />
     <Compile Include="VersionTypeConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Structure\Pipeline.cs" />
@@ -56,6 +83,13 @@
     <Compile Include="Structure\RoundRobin.cs" />
     <Compile Include="Structure\ServerItemContainerBase.cs" />
     <Compile Include="Tasks\Comment.cs" />
+    <Compile Include="Xaml\ConfigurationService.cs" />
+    <Compile Include="Xaml\CoreModule.cs" />
+    <Compile Include="Xaml\DynamicPropertyXamlMember.cs" />
+    <Compile Include="Xaml\CoreXamlSchemaContext.cs" />
+    <Compile Include="Xaml\CoreXamlType.cs" />
+    <Compile Include="Xaml\CoreXamlTypeInvoker.cs" />
+    <Compile Include="Xaml\DynamicPropertyXamlMemberInvoker.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

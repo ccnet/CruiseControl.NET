@@ -22,9 +22,7 @@
         /// </returns>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
-            var canConvert = sourceType == typeof(string) ?
-                true :
-                base.CanConvertFrom(context, sourceType);
+            var canConvert = sourceType == typeof(string);
             return canConvert;
         }
         #endregion
@@ -47,7 +45,7 @@
                 return new Version((string)value);
             }
 
-            return base.ConvertFrom(context, culture, value);
+            throw new NotSupportedException();
         }
         #endregion
         #endregion

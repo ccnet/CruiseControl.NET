@@ -50,15 +50,18 @@
         #endregion
 
         #region Public methods
-        #region Execute()
+        #region OnRun()
         /// <summary>
         /// Executes this task.
         /// </summary>
-        /// <returns>The child tasks to execute.</returns>
-        public override IEnumerable<Task> Execute()
+        /// <param name="context">The context.</param>
+        /// <returns>
+        /// The child tasks to execute.
+        /// </returns>
+        protected override IEnumerable<Task> OnRun(TaskExecutionContext context)
         {
             // TODO: Implement this task
-            yield break;
+            return null;
         }
         #endregion
         #endregion

@@ -8,6 +8,7 @@
     using CruiseControl.Core;
     using CruiseControl.Core.Structure;
     using CruiseControl.Core.Tasks;
+    using CruiseControl.Core.Xaml;
     using NUnit.Framework;
 
     [TestFixture]
@@ -16,11 +17,8 @@
         [Test]
         public void ReadSingleProject()
         {
-            Server configuration;
-            using (var stream = RetrieveExampleFile("SingleProject"))
-            {
-                configuration = XamlServices.Load(stream) as Server;
-            }
+            var configuration = LoadConfiguration(
+                RetrieveExampleFile("SingleProject"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -39,13 +37,62 @@
         }
 
         [Test]
+        public void ReadSimpleSourceControlExample()
+        {
+            var configuration = LoadConfiguration(
+                RetrieveExampleFile("SimpleSourceControlExample"));
+
+            Assert.IsNotNull(configuration);
+            Assert.AreEqual("2.0", configuration.Version.ToString(2));
+            this.VerifyChildren(
+                configuration.Children,
+                new Project("CCNetvNext"));
+        }
+
+        [Test]
+        public void ReadScmProject()
+        {
+            var configuration = LoadConfiguration(
+                            RetrieveExampleFile("ScmProject"));
+
+            Assert.IsNotNull(configuration);
+            Assert.AreEqual("2.0", configuration.Version.ToString(2));
+            this.VerifyChildren(
+                configuration.Children,
+                new ScmProject("OldStyle"));
+        }
+
+        [Test]
+        public void ReadComplexSourceControlExample()
+        {
+            var configuration = LoadConfiguration(
+                            RetrieveExampleFile("ComplexSourceControlExample"));
+
+            Assert.IsNotNull(configuration);
+            Assert.AreEqual("2.0", configuration.Version.ToString(2));
+            this.VerifyChildren(
+                configuration.Children,
+                new Project("CCNetvNext"));
+        }
+
+        [Test]
+        public void ReadCommonTaskProperties()
+        {
+            var configuration = LoadConfiguration(
+                            RetrieveExampleFile("CommonTaskProperties"));
+
+            Assert.IsNotNull(configuration);
+            Assert.AreEqual("2.0", configuration.Version.ToString(2));
+            this.VerifyChildren(
+                configuration.Children,
+                new Project("SampleProject"));
+        }
+
+        [Test]
         public void ReadSimpleQueue()
         {
-            Server configuration;
-            using (var stream = RetrieveExampleFile("SimpleQueue"))
-            {
-                configuration = XamlServices.Load(stream) as Server;
-            }
+            var configuration = LoadConfiguration(
+                            RetrieveExampleFile("SimpleQueue"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -67,11 +114,8 @@
         [Test]
         public void ReadSimpleGate()
         {
-            Server configuration;
-            using (var stream = RetrieveExampleFile("SimpleGate"))
-            {
-                configuration = XamlServices.Load(stream) as Server;
-            }
+            var configuration = LoadConfiguration(
+                            RetrieveExampleFile("SimpleGate"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -93,11 +137,8 @@
         [Test]
         public void ReadSimplePipeline()
         {
-            Server configuration;
-            using (var stream = RetrieveExampleFile("SimplePipeline"))
-            {
-                configuration = XamlServices.Load(stream) as Server;
-            }
+            var configuration = LoadConfiguration(
+                            RetrieveExampleFile("SimplePipeline"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -119,11 +160,8 @@
         [Test]
         public void ReadPipelineWithGates()
         {
-            Server configuration;
-            using (var stream = RetrieveExampleFile("PipelineWithGates"))
-            {
-                configuration = XamlServices.Load(stream) as Server;
-            }
+            var configuration = LoadConfiguration(
+                            RetrieveExampleFile("PipelineWithGates"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -148,11 +186,8 @@
         [Test]
         public void ReadQueueOfQueues()
         {
-            Server configuration;
-            using (var stream = RetrieveExampleFile("QueueOfQueues"))
-            {
-                configuration = XamlServices.Load(stream) as Server;
-            }
+            var configuration = LoadConfiguration(
+                            RetrieveExampleFile("QueueOfQueues"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -178,11 +213,8 @@
         [Test]
         public void ReadRoundRobinOfQueues()
         {
-            Server configuration;
-            using (var stream = RetrieveExampleFile("RoundRobinOfQueues"))
-            {
-                configuration = XamlServices.Load(stream) as Server;
-            }
+            var configuration = LoadConfiguration(
+                            RetrieveExampleFile("RoundRobinOfQueues"));
 
             Assert.IsNotNull(configuration);
             Assert.AreEqual("2.0", configuration.Version.ToString(2));
@@ -217,6 +249,7 @@
             Assert.AreEqual(expected.Length, actual.Count);
             for (var loop = 0; loop < actual.Count && loop < expected.Length; loop++)
             {
+                Assert.AreEqual(expected[loop].GetType().FullName, actual[loop].GetType().FullName, "Type do not match for item #" + loop);
                 Assert.AreEqual(expected[loop].Name, actual[loop].Name, "Names do not match for item #" + loop);
                 var container = expected[loop] as IServerItemContainer;
                 if (container != null)
@@ -244,6 +277,13 @@
                     Assert.AreEqual(expected, xaml);
                 }
             }
+        }
+
+        private static Server LoadConfiguration(Stream stream)
+        {
+            var service = new ConfigurationService();
+            var config = service.Load(stream);
+            return config;
         }
     }
 }
