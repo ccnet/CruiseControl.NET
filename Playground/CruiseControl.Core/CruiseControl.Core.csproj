@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\CruiseControlException.cs" />
+    <Compile Include="Exceptions\ConfigurationException.cs" />
     <Compile Include="IntegrationContext.cs" />
     <Compile Include="IntegrationStatus.cs" />
     <Compile Include="Interfaces\IFileSystem.cs" />

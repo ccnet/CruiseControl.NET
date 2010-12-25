@@ -76,6 +76,12 @@
         /// <param name="host">The host.</param>
         public virtual void Validate()
         {
+            ///everything must have a name
+            if (string.IsNullOrEmpty(this.Name))
+            {
+                throw new Exceptions.ConfigurationException("The {0} has no name specified.",this.ItemType);
+            }
+
         }
         #endregion
         #endregion
