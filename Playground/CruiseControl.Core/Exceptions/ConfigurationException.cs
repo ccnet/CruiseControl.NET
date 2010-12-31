@@ -1,22 +1,17 @@
-using System;
-using System.Runtime.Serialization;
-
 namespace CruiseControl.Core.Exceptions
 {
+    using System;
+    using System.Runtime.Serialization;
+
     /// <summary>
     /// There is an error detected in the configuration.
     /// </summary>
     [Serializable]
-    public class ConfigurationException : CruiseControlException
+    public class ConfigurationException
+        : CruiseControlException
     {
-        private const string configurationProblemData = "Ay_Caramba";
+        private const string ConfigurationProblemData = "Ay_Caramba";
         private readonly string configurationProblem;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConfigurationException" /> class.	
-        /// </summary>
-        /// <remarks></remarks>
-        public ConfigurationException() : base(string.Empty) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationException" /> class.	
@@ -29,26 +24,24 @@ namespace CruiseControl.Core.Exceptions
             this.configurationProblem = configurationProblem;
         }
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationException" /> class.	
         /// </summary>
         /// <param name="configurationProblem">The problem in the configuration</param>
         /// <param name="args">variables in the error string</param>
         public ConfigurationException(string configurationProblem, params string[] args)
-            : base(string.Format(configurationProblem,args))
+            : base(string.Format(configurationProblem, args))
         {
             this.configurationProblem = string.Format(configurationProblem, args);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConfigurationException" /> class.	
+        /// Initializes a new instance of the <see cref="ConfigurationException"/> class.
         /// </summary>
-        /// <param name="requestedProject">The requested project.</param>
-        /// <param name="e">The e.</param>
-        /// <remarks></remarks>
-        public ConfigurationException(string configurationProblem, Exception e)
-            : base(configurationProblem, e)
+        /// <param name="configurationProblem">The configuration problem.</param>
+        /// <param name="innerException">The inner exception.</param>
+        public ConfigurationException(string configurationProblem, Exception innerException)
+            : base(configurationProblem, innerException)
         {
             this.configurationProblem = configurationProblem;
         }
@@ -58,21 +51,18 @@ namespace CruiseControl.Core.Exceptions
         /// </summary>
         /// <param name="info">The info.</param>
         /// <param name="context">The context.</param>
-        /// <remarks></remarks>
         public ConfigurationException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            this.configurationProblem = info.GetString(configurationProblemData);
+            this.configurationProblem = info.GetString(ConfigurationProblemData);
         }
 
         /// <summary>
-        /// Gets the requested project.	
+        /// Gets the configuration problem.
         /// </summary>
-        /// <value></value>
-        /// <remarks></remarks>
         public string ConfigurationProblem
         {
-            get { return configurationProblem; }
+            get { return this.configurationProblem; }
         }
 
         /// <summary>
@@ -84,7 +74,7 @@ namespace CruiseControl.Core.Exceptions
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
-            info.AddValue(configurationProblemData, configurationProblem);
+            info.AddValue(ConfigurationProblemData, configurationProblem);
         }
     }
 }

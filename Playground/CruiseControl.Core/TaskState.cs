@@ -6,6 +6,16 @@
     public enum TaskState
     {
         /// <summary>
+        /// The task has been loaded.
+        /// </summary>
+        Loaded,
+
+        /// <summary>
+        /// The has been loaded.
+        /// </summary>
+        Validated,
+
+        /// <summary>
         /// The task is pending.
         /// </summary>
         Pending,

@@ -16,6 +16,15 @@
         /// </returns>
         public abstract bool Evaluate(TaskExecutionContext context);
         #endregion
+
+        #region Validate()
+        /// <summary>
+        /// Validates this condition.
+        /// </summary>
+        public virtual void Validate()
+        {
+        }
+        #endregion
         #endregion
     }
 }

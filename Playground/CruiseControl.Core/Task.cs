@@ -8,6 +8,7 @@
     /// The base task implementation - provides common functionality for tasks.
     /// </summary>
     public abstract class Task
+        : ProjectItem
     {
         #region Private fields
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -19,7 +20,7 @@
         /// </summary>
         protected Task()
         {
-            this.State = TaskState.Unknown;
+            this.State = TaskState.Loaded;
             this.Conditions = new List<TaskCondition>();
             this.FailureActions = new List<TaskFailureAction>();
         }
@@ -36,14 +37,6 @@
         #endregion
 
         #region Public properties
-        #region Name
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        /// <value>The name.</value>
-        public string Name { get; set; }
-        #endregion
-
         #region Description
         /// <summary>
         /// Gets or sets the description.
@@ -77,16 +70,6 @@
         public Task Parent { get; set; }
         #endregion
 
-        #region Project
-        /// <summary>
-        /// Gets or sets the owning project.
-        /// </summary>
-        /// <value>The project.</value>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public Project Project { get; set; }
-        #endregion
-
         #region State
         /// <summary>
         /// Gets the current state of the task.
@@ -103,7 +86,9 @@
         /// </summary>
         public void Validate()
         {
+            logger.Debug("Validating task '{0}'", this.NameOrType);
             this.OnValidate();
+            this.State = TaskState.Validated;
         }
         #endregion
         #region Initialise()
@@ -112,7 +97,7 @@
         /// </summary>
         public void Initialise()
         {
-            logger.Debug("Validating task '{0}'", this.NameOrType);
+            logger.Debug("Initialising task '{0}'", this.NameOrType);
             this.State = TaskState.Pending;
             this.OnInitialise();
         }
@@ -126,19 +111,11 @@
         /// <returns>
         ///   <c>true</c> if this instance can run; otherwise, <c>false</c>.
         /// </returns>
-        public virtual bool CanRun(TaskExecutionContext context)
+        public bool CanRun(TaskExecutionContext context)
         {
             logger.Debug("Checking conditions for task '{0}'", this.NameOrType);
             this.State = TaskState.CheckingConditions;
-            var canExecute = true;
-            foreach (var condition in this.Conditions ?? new TaskCondition[0])
-            {
-                canExecute = condition.Evaluate(context);
-                if (!canExecute)
-                {
-                    break;
-                }
-            }
+            var canExecute = this.OnCanRun(context);
 
             return canExecute;
         }
@@ -169,10 +146,12 @@
         /// <summary>
         /// Skips this instance.
         /// </summary>
-        public virtual void Skip()
+        /// <param name="context">The context.</param>
+        public virtual void Skip(TaskExecutionContext context)
         {
             logger.Debug("Task '{0}' has been skipped", this.NameOrType);
             this.State = TaskState.Skipped;
+            this.OnSkip(context);
         }
         #endregion
 
@@ -189,27 +168,13 @@
                     this.State = TaskState.Skipped;
                     break;
 
+                case TaskState.CheckingConditions:
                 case TaskState.Executing:
                     this.State = TaskState.Terminated;
                     break;
             }
 
             this.OnCleanUp();
-        }
-        #endregion
-        #endregion
-
-        #region Protected methods
-        #region NameOrType
-        /// <summary>
-        /// Gets the name or type.
-        /// </summary>
-        /// <value>
-        /// The name or type of this task.
-        /// </value>
-        protected string NameOrType
-        {
-            get { return this.Name ?? this.GetType().Name; }
         }
         #endregion
         #endregion
@@ -223,12 +188,37 @@
         {
         }
         #endregion
+
         #region OnInitialise()
         /// <summary>
         /// Called when this task is being initialised.
         /// </summary>
         protected virtual void OnInitialise()
         {
+        }
+        #endregion
+
+        #region OnCanRun()
+        /// <summary>
+        /// Called when the task is being checked whether it can run.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns>
+        /// <c>true</c> if the task can run; <c>false</c> otherwise.
+        /// </returns>
+        protected virtual bool OnCanRun(TaskExecutionContext context)
+        {
+            var canExecute = true;
+            foreach (var condition in this.Conditions ?? new TaskCondition[0])
+            {
+                canExecute = condition.Evaluate(context);
+                if (!canExecute)
+                {
+                    break;
+                }
+            }
+
+            return canExecute;
         }
         #endregion
 
@@ -241,6 +231,16 @@
         /// The child tasks to execute.
         /// </returns>
         protected abstract IEnumerable<Task> OnRun(TaskExecutionContext context);
+        #endregion
+
+        #region OnSkip()
+        /// <summary>
+        /// Called when this task has been skipped.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        protected virtual void OnSkip(TaskExecutionContext context)
+        {
+        }
         #endregion
 
         #region OnCleanUp()

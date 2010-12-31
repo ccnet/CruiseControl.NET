@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Windows.Markup;
+    using NLog;
 
     /// <summary>
     /// Outputs a comment to the logs.
@@ -10,6 +11,10 @@
     public class Comment
         : Task
     {
+        #region Private fields
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Comment"/> class.
@@ -60,7 +65,8 @@
         /// </returns>
         protected override IEnumerable<Task> OnRun(TaskExecutionContext context)
         {
-            // TODO: Implement this task
+            logger.Info("Adding comment to the build log");
+            context.AddEntryToBuildLog(this.Text);
             return null;
         }
         #endregion

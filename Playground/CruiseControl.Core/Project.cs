@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Threading;
     using System.Windows.Markup;
@@ -223,7 +225,7 @@
                 }
                 else
                 {
-                    task.Skip();
+                    task.Skip(context);
                 }
             }
         }
@@ -298,9 +300,51 @@
         private void InitialiseProperties(IEnumerable<Task> tasks)
         {
             this.State = ProjectState.Stopped;
-            this.Tasks = new List<Task>(tasks);
-            this.SourceControl = new List<SourceControlBlock>();
-            this.Triggers = new List<Trigger>();
+            this.Tasks = this.InitialiseCollection(tasks);
+            this.SourceControl = this.InitialiseCollection<SourceControlBlock>(null);
+            this.Triggers = this.InitialiseCollection<Trigger>(null);
+        }
+        #endregion
+
+        #region InitialiseCollection()
+        /// <summary>
+        /// Initialises a collection.
+        /// </summary>
+        /// <typeparam name="TItem">The type of the item.</typeparam>
+        /// <param name="items">The items.</param>
+        /// <returns>The initialised collection.</returns>
+        private ObservableCollection<TItem> InitialiseCollection<TItem>(IEnumerable<TItem> items)
+            where TItem : ProjectItem
+        {
+            var actualItems = items ?? new TItem[0];
+            var collection = new ObservableCollection<TItem>(actualItems);
+            foreach (var item in actualItems)
+            {
+                item.Project = this;
+            }
+
+            collection.CollectionChanged += this.UpdateProjectItem;
+            return collection;
+        }
+        #endregion
+
+        #region UpdateProjectItem()
+        /// <summary>
+        /// Updates the project item.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
+        private void UpdateProjectItem(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            foreach (ProjectItem child in e.OldItems ?? new ProjectItem[0])
+            {
+                child.Project = null;
+            }
+
+            foreach (ProjectItem child in e.NewItems ?? new ProjectItem[0])
+            {
+                child.Project = this;
+            }
         }
         #endregion
         #endregion

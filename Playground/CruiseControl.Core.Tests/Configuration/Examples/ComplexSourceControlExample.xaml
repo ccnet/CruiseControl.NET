@@ -6,12 +6,12 @@
         xmlns:scm="urn:cruisecontrol:server:sourcecontrol">
   <Project Name="CCNetvNext">
     <Project.Tasks>
-      <tasks:GetSource Revert="True" Use="vNext" />
+      <tasks:GetSource Use="vNext" />
       <tasks:Sequence>
         <tasks:Sequence.Conditions>
           <conditions:HasModifications />
         </tasks:Sequence.Conditions>
-        <tasks:GetSource Revert="False" Use="trunk" />
+        <tasks:GetSource Use="trunk" />
         <tasks:Nant BuildFile="ccnet.build" TimeOut="0:0:10" />
         <tasks:ApplyLastChangeLabel Prefix="2.0." Use="vNext">
           <tasks:ApplyLastChangeLabel.Conditions>

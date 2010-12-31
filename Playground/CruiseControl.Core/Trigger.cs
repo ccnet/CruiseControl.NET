@@ -1,17 +1,10 @@
 ﻿namespace CruiseControl.Core
 {
+    /// <summary>
+    /// Defines a trigger for an integration.
+    /// </summary>
     public abstract class Trigger
+        : ProjectItem
     {
-        #region Public properties
-        #region
-        /// <summary>
-        /// Gets or sets the name of the source control.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
-        public string Name { get; set; }
-        #endregion
-        #endregion
     }
 }

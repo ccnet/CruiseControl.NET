@@ -51,13 +51,17 @@
     <Compile Include="Exceptions\ConfigurationException.cs" />
     <Compile Include="IntegrationContext.cs" />
     <Compile Include="IntegrationStatus.cs" />
+    <Compile Include="Interfaces\GetModificationsParameters.cs" />
     <Compile Include="Interfaces\IFileSystem.cs" />
+    <Compile Include="Interfaces\LabelParameters.cs" />
+    <Compile Include="ProjectItem.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="ProjectState.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="ServerItem.cs" />
     <Compile Include="ServerItemContainer.cs" />
     <Compile Include="SourceControlBlock.cs" />
+    <Compile Include="Interfaces\GetSourceParameters.cs" />
     <Compile Include="SourceControl\Subversion.cs" />
     <Compile Include="Structure\Gate.cs" />
     <Compile Include="Structure\ScmProject.cs" />

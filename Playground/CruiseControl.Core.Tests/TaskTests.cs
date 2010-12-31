@@ -12,6 +12,26 @@
     {
         #region Tests
         [Test]
+        public void NewTaskHasAStateOfLoaded()
+        {
+            var task = new TaskStub();
+            Assert.AreEqual(TaskState.Loaded, task.State);
+        }
+
+        [Test]
+        public void ValidateSetsStateAndFiresOnValidate()
+        {
+            var validated = false;
+            var task = new TaskStub
+                           {
+                               OnValidateAction = () => validated = true
+                           };
+            task.Validate();
+            Assert.AreEqual(TaskState.Validated, task.State);
+            Assert.IsTrue(validated);
+        }
+
+        [Test]
         public void CanExecuteReturnsTrueWithNoConditions()
         {
             var context = new TaskExecutionContext();
@@ -67,7 +87,7 @@
         public void SkipSetsStateToSkipped()
         {
             var task = new TaskStub();
-            task.Skip();
+            task.Skip(null);
             Assert.AreEqual(TaskState.Skipped, task.State);
         }
 
